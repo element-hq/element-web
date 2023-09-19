@@ -23,7 +23,7 @@ export const VoiceBroadcastRecordingConnectionError: React.FC = () => {
     return (
         <div className="mx_VoiceBroadcastRecordingConnectionError">
             <WarningIcon className="mx_Icon mx_Icon_16" />
-            {_t("Connection error - Recording paused")}
+            {_t("voice_broadcast|connection_error")}
         </div>
     );
 };

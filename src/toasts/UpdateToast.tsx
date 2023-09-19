@@ -46,11 +46,11 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
     }
 
     let onAccept;
-    let acceptLabel = _t("What's new?");
+    let acceptLabel = _t("update|see_changes_button");
     if (releaseNotes) {
         onAccept = () => {
             Modal.createDialog(QuestionDialog, {
-                title: _t("What's New"),
+                title: _t("update|release_notes_toast_title"),
                 description: <pre>{releaseNotes}</pre>,
                 button: _t("action|update"),
                 onFinished: (update) => {
@@ -80,9 +80,9 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
     const brand = SdkConfig.get().brand;
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: _t("Update %(brand)s", { brand }),
+        title: _t("update|toast_title", { brand }),
         props: {
-            description: _t("New version of %(brand)s is available", { brand }),
+            description: _t("update|toast_description", { brand }),
             acceptLabel,
             onAccept,
             rejectLabel: _t("action|dismiss"),

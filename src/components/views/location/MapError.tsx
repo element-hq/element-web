@@ -39,7 +39,7 @@ export const MapError: React.FC<MapErrorProps> = ({ error, isMinimised, classNam
     >
         <WarningBadge className="mx_MapError_icon" />
         <Heading className="mx_MapError_heading" size="3">
-            {_t("Unable to load map")}
+            {_t("location_sharing|failed_load_map")}
         </Heading>
         <p className="mx_MapError_message">{getLocationShareErrorMessage(error)}</p>
         {onFinished && (

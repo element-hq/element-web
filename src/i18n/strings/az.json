@@ -1,5 +1,4 @@
 {
-    "Waiting for response from server": "Serverdən cavabın gözlənməsi",
     "Operation failed": "Əməliyyatın nasazlığı",
     "Failed to verify email address: make sure you clicked the link in the email": "Email-i yoxlamağı bacarmadı: əmin olun ki, siz məktubda istinaddakı ünvana keçdiniz",
     "You cannot place a call with yourself.": "Siz özünə zəng vura bilmirsiniz.",
@@ -54,7 +53,6 @@
     "Authentication": "Müəyyənləşdirilmə",
     "Failed to set display name": "Görünüş adını təyin etmək bacarmadı",
     "Notification targets": "Xəbərdarlıqlar üçün qurğular",
-    "On": "Qoşmaq",
     "not specified": "qeyd edilmədi",
     "Unban": "Blokdan çıxarmaq",
     "Failed to ban user": "İstifadəçini bloklamağı bacarmadı",
@@ -65,7 +63,6 @@
     "Invited": "Dəvət edilmişdir",
     "Filter room members": "İştirakçılara görə axtarış",
     "You do not have permission to post to this room": "Siz bu otağa yaza bilmirsiniz",
-    "Command error": "Komandanın səhvi",
     "Join Room": "Otağa girmək",
     "Upload avatar": "Avatar-ı yükləmək",
     "Forget room": "Otağı unutmaq",
@@ -86,7 +83,6 @@
     "Decrypt %(text)s": "Şifrini açmaq %(text)s",
     "Download %(text)s": "Yükləmək %(text)s",
     "Sign in with": "Seçmək",
-    "What's New": "Nə dəyişdi",
     "Create new room": "Otağı yaratmaq",
     "Home": "Başlanğıc",
     "%(items)s and %(lastItem)s": "%(items)s və %(lastItem)s",
@@ -172,7 +168,8 @@
         "attachment": "Əlavə",
         "emoji": "Smaylar",
         "unnamed_room": "Adı açıqlanmayan otaq",
-        "identity_server": "Eyniləşdirmənin serveri"
+        "identity_server": "Eyniləşdirmənin serveri",
+        "on": "Qoşmaq"
     },
     "action": {
         "continue": "Davam etmək",
@@ -212,7 +209,8 @@
             "rule_suppress_notices": "Botla göndərilmiş mesajlar"
         },
         "appearance": {
-            "timeline_image_size_default": "Varsayılan olaraq"
+            "timeline_image_size_default": "Varsayılan olaraq",
+            "image_size_default": "Varsayılan olaraq"
         }
     },
     "timeline": {
@@ -276,11 +274,13 @@
         "discardsession": "Şifrəli bir otaqda mövcud qrup sessiyasını ləğv etməyə məcbur edir",
         "me": "Hərəkətlərin nümayişi",
         "op": "Bir istifadəçinin güc səviyyəsini müəyyənləşdirin",
-        "deop": "Verilmiş ID-lə istifadəçidən operatorun səlahiyyətlərini çıxardır"
+        "deop": "Verilmiş ID-lə istifadəçidən operatorun səlahiyyətlərini çıxardır",
+        "command_error": "Komandanın səhvi"
     },
     "bug_reporting": {
         "collecting_information": "Proqramın versiyası haqqında məlumatın yığılması",
-        "collecting_logs": "Jurnalların bir yığım"
+        "collecting_logs": "Jurnalların bir yığım",
+        "waiting_for_server": "Serverdən cavabın gözlənməsi"
     },
     "voip": {
         "hangup": "Bitirmək",
@@ -303,5 +303,8 @@
         "footer_powered_by_matrix": "Matrix tərəfindən təchiz edilmişdir",
         "unsupported_auth_msisdn": "Bu server telefon nömrəsinin köməyi ilə müəyyənləşdirilməni dəstəkləmir.",
         "register_action": "Hesab Aç"
+    },
+    "update": {
+        "release_notes_toast_title": "Nə dəyişdi"
     }
 }

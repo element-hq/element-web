@@ -27,15 +27,11 @@ interface Props {
 
 export const ConfirmListenBroadcastStopCurrentDialog: React.FC<Props> = ({ onFinished }) => {
     return (
-        <BaseDialog title={_t("Listen to live broadcast?")} hasCancel={true} onFinished={onFinished}>
-            <p>
-                {_t(
-                    "If you start listening to this live broadcast, your current live broadcast recording will be ended.",
-                )}
-            </p>
+        <BaseDialog title={_t("voice_broadcast|confirm_listen_title")} hasCancel={true} onFinished={onFinished}>
+            <p>{_t("voice_broadcast|confirm_listen_description")}</p>
             <DialogButtons
                 onPrimaryButtonClick={() => onFinished(true)}
-                primaryButton={_t("Yes, end my recording")}
+                primaryButton={_t("voice_broadcast|confirm_listen_affirm")}
                 cancelButton={_t("action|no")}
                 onCancel={() => onFinished(false)}
             />

@@ -26,15 +26,12 @@ export const positionFailureMessage = (code: number): string | undefined => {
     const brand = SdkConfig.get().brand;
     switch (code) {
         case 1:
-            return _t(
-                "%(brand)s was denied permission to fetch your location. Please allow location access in your browser settings.",
-                { brand },
-            );
+            return _t("location_sharing|failed_permission", { brand });
         case 2:
-            return _t("Failed to fetch your location. Please try again later.");
+            return _t("location_sharing|failed_generic");
         case 3:
-            return _t("Timed out trying to fetch your location. Please try again later.");
+            return _t("location_sharing|failed_timeout");
         case 4:
-            return _t("Unknown error fetching location. Please try again later.");
+            return _t("location_sharing|failed_unknown");
     }
 };

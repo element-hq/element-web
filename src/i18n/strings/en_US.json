@@ -22,7 +22,6 @@
     "Banned users": "Banned users",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
     "Change Password": "Change Password",
-    "Command error": "Command error",
     "Commands": "Commands",
     "Confirm password": "Confirm password",
     "Cryptography": "Cryptography",
@@ -56,7 +55,6 @@
     "For security, this session has been signed out. Please sign in again.": "For security, this session has been signed out. Please sign in again.",
     "Historical": "Historical",
     "Import E2E room keys": "Import E2E room keys",
-    "Incorrect username and/or password.": "Incorrect username and/or password.",
     "Incorrect verification code": "Incorrect verification code",
     "Invalid Email Address": "Invalid Email Address",
     "Invalid file%(extra)s": "Invalid file%(extra)s",
@@ -97,10 +95,8 @@
     "Room %(roomId)s not visible": "Room %(roomId)s not visible",
     "Rooms": "Rooms",
     "Search failed": "Search failed",
-    "Server error": "Server error",
     "Server may be unavailable, overloaded, or search timed out :(": "Server may be unavailable, overloaded, or search timed out :(",
     "Server may be unavailable, overloaded, or you hit a bug.": "Server may be unavailable, overloaded, or you hit a bug.",
-    "Server unavailable, overloaded, or something else went wrong.": "Server unavailable, overloaded, or something else went wrong.",
     "Session ID": "Session ID",
     "Signed Out": "Signed Out",
     "This email address is already in use": "This email address is already in use",
@@ -184,9 +180,6 @@
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?",
     "URL Previews": "URL Previews",
     "Drop file here to upload": "Drop file here to upload",
-    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s changed the room avatar to <img/>",
-    "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s removed the room avatar.",
-    "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s changed the avatar for %(roomName)s",
     "Admin Tools": "Admin Tools",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
     "Create new room": "Create new room",
@@ -221,15 +214,10 @@
     "Notification targets": "Notification targets",
     "Today": "Today",
     "Friday": "Friday",
-    "What's New": "What's New",
-    "On": "On",
     "Changelog": "Changelog",
-    "Waiting for response from server": "Waiting for response from server",
     "This Room": "This Room",
-    "Noisy": "Noisy",
     "Unavailable": "Unavailable",
     "Source URL": "Source URL",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
     "No update available.": "No update available.",
     "Tuesday": "Tuesday",
     "Search…": "Search…",
@@ -240,15 +228,12 @@
     "Wednesday": "Wednesday",
     "Send": "Send",
     "All messages": "All messages",
-    "What's new?": "What's new?",
     "Invite to this room": "Invite to this room",
     "You cannot delete this message. (%(code)s)": "You cannot delete this message. (%(code)s)",
     "Thursday": "Thursday",
     "Yesterday": "Yesterday",
     "Error encountered (%(errorDetail)s).": "Error encountered (%(errorDetail)s).",
     "Low Priority": "Low Priority",
-    "Off": "Off",
-    "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
     "Permission Required": "Permission Required",
     "You do not have permission to start a conference call in this room": "You do not have permission to start a conference call in this room",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
@@ -286,9 +271,6 @@
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirm adding this email address by using Single Sign On to prove your identity.",
     "Use Single Sign On to continue": "Use Single Sign On to continue",
     "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait while we resynchronize with the server!",
-    "Unrecognised command: %(commandText)s": "Unrecognized command: %(commandText)s",
-    "Add some details to help people recognise it.": "Add some details to help people recognize it.",
-    "A private space to organise your rooms": "A private space to organize your rooms",
     "Message search initialisation failed": "Message search initialization failed",
     "The call was answered on another device.": "The call was answered on another device.",
     "Answered Elsewhere": "Answered Elsewhere",
@@ -317,7 +299,9 @@
         "microphone": "Microphone",
         "emoji": "Emoji",
         "someone": "Someone",
-        "unnamed_room": "Unnamed Room"
+        "unnamed_room": "Unnamed Room",
+        "on": "On",
+        "off": "Off"
     },
     "action": {
         "continue": "Continue",
@@ -368,7 +352,8 @@
     "bug_reporting": {
         "send_logs": "Send logs",
         "collecting_information": "Collecting app version information",
-        "collecting_logs": "Collecting logs"
+        "collecting_logs": "Collecting logs",
+        "waiting_for_server": "Waiting for response from server"
     },
     "time": {
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss left",
@@ -387,11 +372,13 @@
             "rule_message": "Messages in group chats",
             "rule_invite_for_me": "When I'm invited to a room",
             "rule_call": "Call invitation",
-            "rule_suppress_notices": "Messages sent by bot"
+            "rule_suppress_notices": "Messages sent by bot",
+            "noisy": "Noisy"
         },
         "appearance": {
             "heading": "Customize your appearance",
-            "timeline_image_size_default": "Default"
+            "timeline_image_size_default": "Default",
+            "image_size_default": "Default"
         }
     },
     "timeline": {
@@ -444,6 +431,11 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s changed the power level of %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s"
+        },
+        "m.room.avatar": {
+            "lightbox_title": "%(senderDisplayName)s changed the avatar for %(roomName)s",
+            "removed": "%(senderDisplayName)s removed the room avatar.",
+            "changed_img": "%(senderDisplayName)s changed the room avatar to <img/>"
         }
     },
     "slash_command": {
@@ -478,7 +470,11 @@
         "discardsession": "Forces the current outbound group session in an encrypted room to be discarded",
         "me": "Displays action",
         "op": "Define the power level of a user",
-        "deop": "Deops user with given id"
+        "deop": "Deops user with given id",
+        "server_error": "Server error",
+        "command_error": "Command error",
+        "server_error_detail": "Server unavailable, overloaded, or something else went wrong.",
+        "unknown_command_detail": "Unrecognized command: %(commandText)s"
     },
     "presence": {
         "online": "Online",
@@ -514,7 +510,8 @@
         "forgot_password_email_required": "The email address linked to your account must be entered.",
         "sign_in_or_register": "Sign In or Create Account",
         "sign_in_or_register_description": "Use your account or create a new one to continue.",
-        "register_action": "Create Account"
+        "register_action": "Create Account",
+        "incorrect_credentials": "Incorrect username and/or password."
     },
     "export_chat": {
         "messages": "Messages"
@@ -523,5 +520,17 @@
         "help_about": {
             "brand_version": "%(brand)s version:"
         }
+    },
+    "room_list": {
+        "failed_remove_tag": "Failed to remove tag %(tagName)s from room",
+        "failed_add_tag": "Failed to add tag %(tagName)s to room"
+    },
+    "create_space": {
+        "add_details_prompt": "Add some details to help people recognize it.",
+        "personal_space_description": "A private space to organize your rooms"
+    },
+    "update": {
+        "see_changes_button": "What's new?",
+        "release_notes_toast_title": "What's New"
     }
 }

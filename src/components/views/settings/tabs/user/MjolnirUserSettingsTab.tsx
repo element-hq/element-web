@@ -275,7 +275,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                         description={_t(
                             "Your personal ban list holds all the users/servers you personally don't want to see messages from. After ignoring your first user/server, a new room will show up in your room list named '%(myBanList)s' - stay in this room to keep the ban list in effect.",
                             {
-                                myBanList: _t("My Ban List"),
+                                myBanList: _t("labs_mjolnir|room_name"),
                             },
                         )}
                     >

@@ -85,7 +85,7 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
     const bufferingLine = showBuffering && bufferingPosition === "line" && (
         <div className="mx_VoiceBroadcastHeader_line">
             <Spinner w={14} h={14} />
-            {_t("Buffering…")}
+            {_t("voice_broadcast|buffering")}
         </div>
     );
 
@@ -98,7 +98,7 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
         <AccessibleTooltipButton
             className={microphoneLineClasses}
             onClick={onMicrophoneLineClick}
-            title={_t("Change input device")}
+            title={_t("voip|change_input_device")}
         >
             <MicrophoneIcon className="mx_Icon mx_Icon_16" />
             <span>{microphoneLabel}</span>

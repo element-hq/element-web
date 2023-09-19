@@ -20,7 +20,6 @@
     "This Room": "Aquesta sala",
     "All Rooms": "Totas les salas",
     "Search…": "Cercar…",
-    "Server error": "Error servidor",
     "Sun": "Dg",
     "Mon": "Dl",
     "Tue": "Dm",
@@ -77,12 +76,10 @@
     "exists": "existís",
     "Authentication": "Autentificacion",
     "Restore from Backup": "Restablir a partir de l'archiu",
-    "Off": "Atudat",
     "Display Name": "Nom d'afichatge",
     "Profile": "Perfil",
     "Account": "Compte",
     "General": "General",
-    "Composer": "Compositor",
     "Unignore": "Ignorar pas",
     "Security & Privacy": "Seguretat e vida privada",
     "Audio Output": "Sortida àudio",
@@ -184,7 +181,8 @@
         "trusted": "Fisable",
         "not_trusted": "Pas securizat",
         "system_alerts": "Alèrtas sistèma",
-        "feedback": "Comentaris"
+        "feedback": "Comentaris",
+        "off": "Atudat"
     },
     "action": {
         "continue": "Contunhar",
@@ -303,7 +301,8 @@
         "category_actions": "Accions",
         "category_admin": "Admin",
         "category_advanced": "Avançat",
-        "category_other": "Autre"
+        "category_other": "Autre",
+        "server_error": "Error servidor"
     },
     "voip": {
         "hangup": "Penjar",
@@ -331,7 +330,11 @@
     "settings": {
         "appearance": {
             "font_size": "Talha de poliça",
-            "timeline_image_size_default": "Predefinit"
+            "timeline_image_size_default": "Predefinit",
+            "image_size_default": "Predefinit"
+        },
+        "preferences": {
+            "composer_heading": "Compositor"
         }
     },
     "auth": {

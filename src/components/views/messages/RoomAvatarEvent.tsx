@@ -39,7 +39,7 @@ export default class RoomAvatarEvent extends React.Component<IProps> {
         if (!httpUrl) return;
 
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
-        const text = _t("%(senderDisplayName)s changed the avatar for %(roomName)s", {
+        const text = _t("timeline|m.room.avatar|lightbox_title", {
             senderDisplayName: ev.sender && ev.sender.name ? ev.sender.name : ev.getSender(),
             roomName: room ? room.name : "",
         });
@@ -56,11 +56,7 @@ export default class RoomAvatarEvent extends React.Component<IProps> {
         const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
         if (!ev.getContent().url || ev.getContent().url.trim().length === 0) {
-            return (
-                <div className="mx_TextualEvent">
-                    {_t("%(senderDisplayName)s removed the room avatar.", { senderDisplayName })}
-                </div>
-            );
+            return <div className="mx_TextualEvent">{_t("timeline|m.room.avatar|removed", { senderDisplayName })}</div>;
         }
 
         const room = MatrixClientPeg.safeGet().getRoom(ev.getRoomId());
@@ -73,7 +69,7 @@ export default class RoomAvatarEvent extends React.Component<IProps> {
         return (
             <>
                 {_t(
-                    "%(senderDisplayName)s changed the room avatar to <img/>",
+                    "timeline|m.room.avatar|changed_img",
                     { senderDisplayName: senderDisplayName },
                     {
                         img: () => (

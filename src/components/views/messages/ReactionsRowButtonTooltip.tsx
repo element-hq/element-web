@@ -60,7 +60,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
             tooltipLabel = (
                 <div>
                     {_t(
-                        "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>",
+                        "timeline|reactions|tooltip",
                         {
                             shortName,
                         },

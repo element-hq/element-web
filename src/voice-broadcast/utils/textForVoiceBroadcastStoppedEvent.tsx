@@ -41,9 +41,9 @@ export const textForVoiceBroadcastStoppedEvent = (event: MatrixEvent, client: Ma
         };
 
         if (ownUserId && ownUserId === event.getSender()) {
-            return _t("You ended a <a>voice broadcast</a>", {}, templateTags);
+            return _t("timeline|io.element.voice_broadcast_info|you", {}, templateTags);
         }
 
-        return _t("%(senderName)s ended a <a>voice broadcast</a>", { senderName: getSenderName(event) }, templateTags);
+        return _t("timeline|io.element.voice_broadcast_info|user", { senderName: getSenderName(event) }, templateTags);
     };
 };

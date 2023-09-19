@@ -243,7 +243,7 @@ function textForTopicEvent(ev: MatrixEvent): (() => string) | null {
 
 function textForRoomAvatarEvent(ev: MatrixEvent): (() => string) | null {
     const senderDisplayName = ev?.sender?.name || ev.getSender();
-    return () => _t("timeline|m.room.avatar", { senderDisplayName });
+    return () => _t("timeline|m.room.avatar|changed", { senderDisplayName });
 }
 
 function textForRoomNameEvent(ev: MatrixEvent): (() => string) | null {
@@ -821,7 +821,7 @@ function textForMjolnirEvent(event: MatrixEvent): (() => string) | null {
 
 export function textForLocationEvent(event: MatrixEvent): () => string {
     return () =>
-        _t("timeline|m.location", {
+        _t("timeline|m.location|full", {
             senderName: getSenderName(event),
         });
 }

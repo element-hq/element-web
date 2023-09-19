@@ -110,11 +110,6 @@
     "Straight rows of keys are easy to guess": "Zulk’n aneengeslootn riksje toetsn es gemakkelik te roadn",
     "Short keyboard patterns are easy to guess": "Korte patroonn ip ’t toetsenbord wordn gemakkelik geroadn",
     "Please contact your homeserver administrator.": "Gelieve contact ip te neemn me den beheerder van je thuusserver.",
-    "Mirror local video feed": "Lokoale videoanvoer ook elders ipsloan (spiegeln)",
-    "Send analytics data": "Statistische gegeevns (analytics) verstuurn",
-    "Enable widget screenshots on supported widgets": "Widget-schermafdrukkn inschoakeln ip oundersteunde widgets",
-    "Show hidden events in timeline": "Verborgn gebeurtenissn ip de tydslyn weregeevn",
-    "Waiting for response from server": "Wachtn ip antwoord van de server",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Beveiligde berichtn me deze gebruuker zyn eind-tout-eind-versleuterd en kunn nie door derdn wordn geleezn.",
     "Got It": "’k Snappen ’t",
     "Verify this user by confirming the following emoji appear on their screen.": "Verifieert deze gebruuker deur te bevestign da zyn/heur scherm de volgende emoji toogt.",
@@ -211,9 +206,6 @@
     "Back up your keys before signing out to avoid losing them.": "Makt een back-up van je sleuters vooraleer da je jen afmeldt vo ze nie kwyt te speeln.",
     "Start using Key Backup": "Begint me de sleuterback-up te gebruukn",
     "Notification targets": "Meldiengsbestemmiengn",
-    "Off": "Uut",
-    "On": "An",
-    "Noisy": "Lawoaierig",
     "Unable to verify phone number.": "Kostege de telefongnumero nie verifieern.",
     "Incorrect verification code": "Onjuste verificoasjecode",
     "Verification code": "Verificoasjecode",
@@ -231,9 +223,6 @@
     "General": "Algemeen",
     "Check for update": "Controleern ip updates",
     "Notifications": "Meldiengn",
-    "Composer": "Ipsteller",
-    "Room list": "Gesprekslyste",
-    "Autocomplete delay (ms)": "Vertroagienge vo ’t automatisch anvulln (ms)",
     "Unignore": "Nie mi negeern",
     "<not supported>": "<nie oundersteund>",
     "Import E2E room keys": "E2E-gesprekssleuters importeern",
@@ -306,9 +295,6 @@
     "The conversation continues here.": "’t Gesprek goat hier verder.",
     "This room has been replaced and is no longer active.": "Dit gesprek is vervangn gewist en is nie langer actief.",
     "You do not have permission to post to this room": "J’èt geen toestemmienge voor in dit gesprek te postn",
-    "Server error": "Serverfoute",
-    "Server unavailable, overloaded, or something else went wrong.": "De server is ounbereikboar of overbelast, of der is etwat anders foutgegoan.",
-    "Command error": "Ipdrachtfoute",
     "%(duration)ss": "%(duration)ss",
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)su",
@@ -385,20 +371,12 @@
     "Invalid file%(extra)s": "Oungeldig bestand %(extra)s",
     "Error decrypting image": "Foute by ’t ountsleutern van ’t fotootje",
     "Error decrypting video": "Foute by ’t ountsleutern van ’t filmtje",
-    "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>èt gereageerd me %(shortName)s</reactedWith>",
-    "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s èt den avatar van %(roomName)s veranderd",
-    "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s èt de gespreksavatar verwyderd.",
-    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s èt de gespreksavatar angepast noa <img/>",
-    "This room is a continuation of another conversation.": "Dit gesprek es e voortzettienge van een ander gesprek.",
-    "Click here to see older messages.": "Klikt hier voor oudere berichtn te bekykn.",
     "Copied!": "Gekopieerd!",
     "Failed to copy": "Kopieern mislukt",
     "Add an Integration": "Voegt een integroasje toe",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Je goa sebiet noar en derdepartywebsite gebracht wordn zoda je den account ku legitimeern vo gebruuk me %(integrationsUrl)s. Wil je verdergoan?",
     "edited": "bewerkt",
     "Something went wrong!": "’t Es etwa misgegoan!",
-    "What's New": "Wuk es ’t er nieuw",
-    "What's new?": "Wuk es ’t er nieuw?",
     "Error encountered (%(errorDetail)s).": "’t Es e foute ipgetreedn (%(errorDetail)s).",
     "No update available.": "Geen update beschikboar.",
     "Delete Widget": "Widget verwydern",
@@ -584,7 +562,6 @@
     "Identity server URL does not appear to be a valid identity server": "De identiteitsserver-URL lykt geen geldige identiteitsserver te zyn",
     "General failure": "Algemene foute",
     "Please <a>contact your service administrator</a> to continue using this service.": "Gelieve <a>contact ip te neemn me je dienstbeheerder</a> vo deze dienst te bluuvn gebruukn.",
-    "Incorrect username and/or password.": "Verkeerde gebruukersnoame en/of paswoord.",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Zy je dervan bewust da je jen anmeldt by de %(hs)s-server, nie by matrix.org.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Je ku geen verbindienge moakn me de thuusserver via HTTP wanneer dat der een HTTPS-URL in je browserbalk stoat. Gebruukt HTTPS of <a>schoakelt ounveilige scripts in</a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Geen verbindienge met de thuusserver - controleer je verbindienge, zorgt dervoorn dan ’t <a>SSL-certificoat van de thuusserver</a> vertrouwd is en dat der geen browserextensies verzoekn blokkeern.",
@@ -617,8 +594,6 @@
     "Set up Secure Messages": "Beveiligde berichtn instelln",
     "Recovery Method Removed": "Herstelmethode verwyderd",
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "A je de herstelmethode nie è verwyderd, is ’t meuglik dat der een anvaller toegank tout jen account probeert te verkrygn. Wyzigt ounmiddellik jen accountpaswoord en stelt e nieuwe herstelmethode in in d’instelliengn.",
-    "Failed to remove tag %(tagName)s from room": "Verwydern van %(tagName)s-label van gesprek is mislukt",
-    "Failed to add tag %(tagName)s to room": "Toevoegn van %(tagName)s-label an gesprek is mislukt",
     "Uploaded sound": "Ipgeloadn-geluud",
     "Sounds": "Geluudn",
     "Notification sound": "Meldiengsgeluud",
@@ -650,7 +625,6 @@
     "Terms of Service": "Gebruuksvoorwoardn",
     "Service": "Dienst",
     "Summary": "Soamnvattienge",
-    "This account has been deactivated.": "Deezn account is gedeactiveerd gewist.",
     "Clear personal data": "Persoonlike gegeevns wissn",
     "Checking server": "Server wor gecontroleerd",
     "Disconnect from the identity server <idserver />?": "Wil je de verbindienge me den identiteitsserver <idserver /> verbreekn?",
@@ -659,7 +633,6 @@
     "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "De verbindienge me jen identiteitsserver verbreekn goat dervoorn zorgn da je nie mi deur andere gebruukers gevoundn goa kunn wordn, en dat andere menschn je nie via e-mail of telefong goan kunn uutnodign.",
     "Discovery": "Ountdekkienge",
     "Deactivate account": "Account deactiveern",
-    "Always show the window menu bar": "De veinstermenubalk alsan toogn",
     "Unable to revoke sharing for email address": "Kostege ’t deeln vo dat e-mailadresse hier nie intrekkn",
     "Unable to share email address": "Kostege ’t e-mailadresse nie deeln",
     "Discovery options will appear once you have added an email above.": "Ountdekkiengsopties goan verschynn a j’een e-mailadresse toegevoegd ghed èt.",
@@ -719,7 +692,9 @@
         "stickerpack": "Stickerpakket",
         "system_alerts": "Systeemmeldiengn",
         "identity_server": "Identiteitsserver",
-        "integration_manager": "Integroasjebeheerder"
+        "integration_manager": "Integroasjebeheerder",
+        "on": "An",
+        "off": "Uut"
     },
     "action": {
         "continue": "Verdergoan",
@@ -806,7 +781,8 @@
         "github_issue": "GitHub-meldienge",
         "before_submitting": "Vooraleer da je logboekn indient, moe j’e <a>meldienge openn ip GitHub</a> woarin da je je probleem beschryft.",
         "collecting_information": "App-versieinformoasje wor verzoameld",
-        "collecting_logs": "Logboekn worden verzoameld"
+        "collecting_logs": "Logboekn worden verzoameld",
+        "waiting_for_server": "Wachtn ip antwoord van de server"
     },
     "settings": {
         "use_12_hour_format": "Tyd in 12-uursformoat weregeevn (bv. 2:30pm)",
@@ -834,13 +810,27 @@
             "rule_suppress_notices": "Berichtn verzoundn deur e robot",
             "rule_tombstone": "Wanneer da gesprekkn ipgewoardeerd wordn",
             "rule_encrypted_room_one_to_one": "Versleuterde berichtn in twigesprekkn",
-            "show_message_desktop_notification": "Bericht toogn in bureaubladmeldienge"
+            "show_message_desktop_notification": "Bericht toogn in bureaubladmeldienge",
+            "noisy": "Lawoaierig"
         },
         "appearance": {
-            "timeline_image_size_default": "Standoard"
+            "timeline_image_size_default": "Standoard",
+            "image_size_default": "Standoard"
         },
         "inline_url_previews_room_account": "URL-voorvertoniengn in dit gesprek inschoakeln (geldt alleene vo joun)",
-        "inline_url_previews_room": "URL-voorvertoniengn standoard vo de gebruukers in dit gesprek inschoakeln"
+        "inline_url_previews_room": "URL-voorvertoniengn standoard vo de gebruukers in dit gesprek inschoakeln",
+        "preferences": {
+            "room_list_heading": "Gesprekslyste",
+            "composer_heading": "Ipsteller",
+            "autocomplete_delay": "Vertroagienge vo ’t automatisch anvulln (ms)",
+            "always_show_menu_bar": "De veinstermenubalk alsan toogn"
+        },
+        "voip": {
+            "mirror_local_feed": "Lokoale videoanvoer ook elders ipsloan (spiegeln)"
+        },
+        "security": {
+            "send_analytics": "Statistische gegeevns (analytics) verstuurn"
+        }
     },
     "devtools": {
         "event_type": "Gebeurtenistype",
@@ -850,7 +840,9 @@
         "toolbox": "Gereedschap",
         "developer_tools": "Ountwikkeliengsgereedschap",
         "category_room": "Gesprek",
-        "category_other": "Overige"
+        "category_other": "Overige",
+        "widget_screenshots": "Widget-schermafdrukkn inschoakeln ip oundersteunde widgets",
+        "show_hidden_events": "Verborgn gebeurtenissn ip de tydslyn weregeevn"
     },
     "timeline": {
         "m.room.topic": "%(senderDisplayName)s èt ’t ounderwerp gewyzigd noa ‘%(topic)s’.",
@@ -995,6 +987,18 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s èt ’t machtsniveau van %(powerLevelDiffText)s gewyzigd.",
             "user_from_to": "%(userId)s van %(fromPowerLevel)s noa %(toPowerLevel)s"
+        },
+        "reactions": {
+            "tooltip": "<reactors/><reactedWith>èt gereageerd me %(shortName)s</reactedWith>"
+        },
+        "m.room.avatar": {
+            "lightbox_title": "%(senderDisplayName)s èt den avatar van %(roomName)s veranderd",
+            "removed": "%(senderDisplayName)s èt de gespreksavatar verwyderd.",
+            "changed_img": "%(senderDisplayName)s èt de gespreksavatar angepast noa <img/>"
+        },
+        "m.room.create": {
+            "continuation": "Dit gesprek es e voortzettienge van een ander gesprek.",
+            "see_older_messages": "Klikt hier voor oudere berichtn te bekykn."
         }
     },
     "slash_command": {
@@ -1026,7 +1030,10 @@
         "discardsession": "Forceert de huudige uutwoartsche groepssessie in e versleuterd gesprek vo verworpn te wordn",
         "me": "Toogt actie",
         "op": "Bepoal ’t machtsniveau van e gebruuker",
-        "deop": "Ountmachtigt de gebruuker me de gegeevn ID"
+        "deop": "Ountmachtigt de gebruuker me de gegeevn ID",
+        "server_error": "Serverfoute",
+        "command_error": "Ipdrachtfoute",
+        "server_error_detail": "De server is ounbereikboar of overbelast, of der is etwat anders foutgegoan."
     },
     "presence": {
         "online_for": "Online vo %(duration)s",
@@ -1091,7 +1098,9 @@
         "soft_logout_intro_password": "Voert je paswoord in vo jen an te meldn en den toegank tou jen account te herkrygn.",
         "soft_logout_intro_sso": "Meldt jen heran en herkrygt den toegank tou jen account.",
         "soft_logout_intro_unsupported_auth": "Je ku je nie anmeldn me jen account. Nimt contact ip me de beheerder van je thuusserver vo meer informoasje.",
-        "register_action": "Account anmoakn"
+        "register_action": "Account anmoakn",
+        "account_deactivated": "Deezn account is gedeactiveerd gewist.",
+        "incorrect_credentials": "Verkeerde gebruukersnoame en/of paswoord."
     },
     "export_chat": {
         "messages": "Berichtn"
@@ -1105,5 +1114,13 @@
             "title": "Hulp & Info",
             "versions": "Versies"
         }
+    },
+    "room_list": {
+        "failed_remove_tag": "Verwydern van %(tagName)s-label van gesprek is mislukt",
+        "failed_add_tag": "Toevoegn van %(tagName)s-label an gesprek is mislukt"
+    },
+    "update": {
+        "see_changes_button": "Wuk es ’t er nieuw?",
+        "release_notes_toast_title": "Wuk es ’t er nieuw"
     }
 }

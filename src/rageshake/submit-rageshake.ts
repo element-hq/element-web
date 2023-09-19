@@ -363,7 +363,7 @@ function submitReport(endpoint: string, body: FormData, progressCallback: (str: 
         req.timeout = 5 * 60 * 1000;
         req.onreadystatechange = function (): void {
             if (req.readyState === XMLHttpRequest.LOADING) {
-                progressCallback(_t("Waiting for response from server"));
+                progressCallback(_t("bug_reporting|waiting_for_server"));
             } else if (req.readyState === XMLHttpRequest.DONE) {
                 // on done
                 if (req.status < 200 || req.status >= 400) {

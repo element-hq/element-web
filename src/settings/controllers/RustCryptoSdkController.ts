@@ -21,6 +21,6 @@ export default class RustCryptoSdkController extends SettingController {
     public get settingDisabled(): boolean | string {
         // Currently this can only be changed via config.json. In future, we'll allow the user to *enable* this setting
         // via labs, which will migrate their existing device to the rust-sdk implementation.
-        return _t("Can currently only be enabled via config.json");
+        return _t("labs|rust_crypto_disabled_notice");
     }
 }

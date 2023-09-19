@@ -31,15 +31,9 @@ import Modal from "../../Modal";
 
 const showStopBroadcastingDialog = async (): Promise<boolean> => {
     const { finished } = Modal.createDialog(QuestionDialog, {
-        title: _t("Stop live broadcasting?"),
-        description: (
-            <p>
-                {_t(
-                    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.",
-                )}
-            </p>
-        ),
-        button: _t("Yes, stop broadcast"),
+        title: _t("voice_broadcast|confirm_stop_title"),
+        description: <p>{_t("voice_broadcast|confirm_stop_description")}</p>,
+        button: _t("voice_broadcast|confirm_stop_affirm"),
     });
     const [confirmed] = await finished;
     return !!confirmed;

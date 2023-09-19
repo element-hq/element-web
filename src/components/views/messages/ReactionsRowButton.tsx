@@ -125,7 +125,7 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
 
             const reactors = formatCommaSeparatedList(senders, 6);
             if (content) {
-                label = _t("%(reactors)s reacted with %(content)s", {
+                label = _t("timeline|reactions|label", {
                     reactors,
                     content: customReactionName || content,
                 });

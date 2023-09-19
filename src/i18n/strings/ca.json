@@ -105,10 +105,6 @@
     "Filter room members": "Filtra els membres de la sala",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (autoritat %(powerLevelNumber)s)",
     "You do not have permission to post to this room": "No tens permís per enviar res en aquesta sala",
-    "Server error": "Error de servidor",
-    "Mirror local video feed": "Remet el flux de vídeo local",
-    "Server unavailable, overloaded, or something else went wrong.": "El servidor no està disponible, està sobrecarregat o alguna altra cosa no ha funcionat correctament.",
-    "Command error": "Error en l'ordre",
     "%(duration)ss": "%(duration)ss",
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)sh",
@@ -153,9 +149,6 @@
     "Invalid file%(extra)s": "Fitxer invàlid%(extra)s",
     "Error decrypting image": "Error desxifrant imatge",
     "Error decrypting video": "Error desxifrant video",
-    "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s ha canviat l'avatar de %(roomName)s",
-    "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s ha eliminat l'avatar de la sala.",
-    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s ha canviat l'avatar de la sala a <img/>",
     "Copied!": "Copiat!",
     "Failed to copy": "No s'ha pogut copiar",
     "Add an Integration": "Afegeix una integració",
@@ -223,28 +216,22 @@
     "Uploading %(filename)s": "Pujant %(filename)s",
     "Import E2E room keys": "Importar claus E2E de sala",
     "Cryptography": "Criptografia",
-    "Incorrect username and/or password.": "Usuari i/o contrasenya incorrectes.",
     "Session ID": "ID de la sessió",
     "Export room keys": "Exporta les claus de la sala",
     "Confirm passphrase": "Introduïu una contrasenya",
     "Import room keys": "Importa les claus de la sala",
     "Email": "Correu electrònic",
     "Sunday": "Diumenge",
-    "Failed to add tag %(tagName)s to room": "No s'ha pogut afegir l'etiqueta %(tagName)s a la sala",
     "Notification targets": "Objectius de les notificacions",
     "Today": "Avui",
     "Friday": "Divendres",
-    "What's New": "Novetats",
-    "On": "Engegat",
     "Changelog": "Registre de canvis",
-    "Waiting for response from server": "S'està esperant una resposta del servidor",
     "Failed to send logs: ": "No s'han pogut enviar els logs: ",
     "This Room": "Aquesta sala",
     "Unavailable": "No disponible",
     "Source URL": "URL origen",
     "Filter results": "Resultats del filtre",
     "No update available.": "No hi ha cap actualització disponible.",
-    "Noisy": "Sorollós",
     "Search…": "Cerca…",
     "Tuesday": "Dimarts",
     "Preparing to send logs": "Preparant l'enviament de logs",
@@ -253,7 +240,6 @@
     "All Rooms": "Totes les sales",
     "Wednesday": "Dimecres",
     "All messages": "Tots els missatges",
-    "What's new?": "Què hi ha de nou?",
     "Invite to this room": "Convida a aquesta sala",
     "You cannot delete this message. (%(code)s)": "No podeu eliminar aquest missatge. (%(code)s)",
     "Thursday": "Dijous",
@@ -261,8 +247,6 @@
     "Yesterday": "Ahir",
     "Error encountered (%(errorDetail)s).": "S'ha trobat un error (%(errorDetail)s).",
     "Low Priority": "Baixa prioritat",
-    "Off": "Apagat",
-    "Failed to remove tag %(tagName)s from room": "No s'ha pogut esborrar l'etiqueta %(tagName)s de la sala",
     "Thank you!": "Gràcies!",
     "Permission Required": "Es necessita permís",
     "You do not have permission to start a conference call in this room": "No tens permís per iniciar una conferència telefònica en aquesta sala",
@@ -304,7 +288,6 @@
     "Avoid years that are associated with you": "Eviteu anys que es puguin relacionar amb vós",
     "Avoid dates and years that are associated with you": "Eviteu dates i anys que estiguin associats amb vós",
     "Please contact your homeserver administrator.": "Si us plau contacteu amb l'administrador del vostre homeserver.",
-    "Send analytics data": "Envia dades d'anàlisi",
     "Email addresses": "Adreces de correu electrònic",
     "Phone numbers": "Números de telèfon",
     "Language and region": "Idioma i regió",
@@ -413,7 +396,9 @@
         "someone": "Algú",
         "unnamed_room": "Sala sense nom",
         "identity_server": "Servidor d'identitat",
-        "integration_manager": "Gestor d'integracions"
+        "integration_manager": "Gestor d'integracions",
+        "on": "Engegat",
+        "off": "Apagat"
     },
     "action": {
         "continue": "Continua",
@@ -475,7 +460,8 @@
         "submit_debug_logs": "Enviar logs de depuració",
         "send_logs": "Envia els registres",
         "collecting_information": "S'està recollint la informació de la versió de l'aplicació",
-        "collecting_logs": "S'estan recopilant els registres"
+        "collecting_logs": "S'estan recopilant els registres",
+        "waiting_for_server": "S'està esperant una resposta del servidor"
     },
     "settings": {
         "use_12_hour_format": "Mostra les marques de temps en format de 12 hores (p.e. 2:30pm)",
@@ -495,15 +481,23 @@
             "rule_invite_for_me": "Quan sóc convidat a una sala",
             "rule_call": "Invitació de trucada",
             "rule_suppress_notices": "Missatges enviats pel bot",
-            "show_message_desktop_notification": "Mostra els missatges amb notificacions d'escriptori"
+            "show_message_desktop_notification": "Mostra els missatges amb notificacions d'escriptori",
+            "noisy": "Sorollós"
         },
         "appearance": {
             "subheading": "La configuració d'aspecte només afecta aquesta sessió %(brand)s.",
             "custom_theme_error_downloading": "Error baixant informació de tema.",
-            "timeline_image_size_default": "Predeterminat"
+            "timeline_image_size_default": "Predeterminat",
+            "image_size_default": "Predeterminat"
         },
         "inline_url_previews_room_account": "Activa la vista prèvia d'URL d'aquesta sala (no afecta altres usuaris)",
-        "inline_url_previews_room": "Activa per defecte la vista prèvia d'URL per als participants d'aquesta sala"
+        "inline_url_previews_room": "Activa per defecte la vista prèvia d'URL per als participants d'aquesta sala",
+        "voip": {
+            "mirror_local_feed": "Remet el flux de vídeo local"
+        },
+        "security": {
+            "send_analytics": "Envia dades d'anàlisi"
+        }
     },
     "devtools": {
         "event_type": "Tipus d'esdeveniment",
@@ -653,6 +647,11 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s ha canviat el nivell d'autoritat de %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s de %(fromPowerLevel)s a %(toPowerLevel)s"
+        },
+        "m.room.avatar": {
+            "lightbox_title": "%(senderDisplayName)s ha canviat l'avatar de %(roomName)s",
+            "removed": "%(senderDisplayName)s ha eliminat l'avatar de la sala.",
+            "changed_img": "%(senderDisplayName)s ha canviat l'avatar de la sala a <img/>"
         }
     },
     "slash_command": {
@@ -683,7 +682,10 @@
         "me": "Mostra l'acció",
         "join": "S'uneix a la sala amb l'adreça indicada",
         "op": "Defineix el nivell d'autoritat d'un usuari",
-        "deop": "Degrada l'usuari amb l'id donat"
+        "deop": "Degrada l'usuari amb l'id donat",
+        "server_error": "Error de servidor",
+        "command_error": "Error en l'ordre",
+        "server_error_detail": "El servidor no està disponible, està sobrecarregat o alguna altra cosa no ha funcionat correctament."
     },
     "presence": {
         "online_for": "En línia durant %(duration)s",
@@ -722,7 +724,8 @@
         "incorrect_password": "Contrasenya incorrecta",
         "sign_in_or_register": "Inicia sessió o Crea un compte",
         "sign_in_or_register_description": "Utilitza el teu compte o crea'n un de nou per continuar.",
-        "register_action": "Crea un compte"
+        "register_action": "Crea un compte",
+        "incorrect_credentials": "Usuari i/o contrasenya incorrectes."
     },
     "export_chat": {
         "messages": "Missatges"
@@ -731,5 +734,13 @@
         "help_about": {
             "brand_version": "Versió de %(brand)s:"
         }
+    },
+    "room_list": {
+        "failed_remove_tag": "No s'ha pogut esborrar l'etiqueta %(tagName)s de la sala",
+        "failed_add_tag": "No s'ha pogut afegir l'etiqueta %(tagName)s a la sala"
+    },
+    "update": {
+        "see_changes_button": "Què hi ha de nou?",
+        "release_notes_toast_title": "Novetats"
     }
 }

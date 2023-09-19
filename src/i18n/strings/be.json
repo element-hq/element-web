@@ -3,19 +3,16 @@
     "All messages": "Усе паведамленні",
     "Notification targets": "Мэты апавяшчэння",
     "Favourite": "Улюбёнае",
-    "Failed to add tag %(tagName)s to room": "Не атрымалася дадаць %(tagName)s ў пакоі",
     "Notifications": "Апавяшчэнні",
     "Low Priority": "Нізкі прыярытэт",
-    "Noisy": "Шумна",
-    "On": "Уключыць",
-    "Off": "Выключыць",
     "Invite to this room": "Запрасіць у гэты пакой",
-    "Failed to remove tag %(tagName)s from room": "Не ўдалося выдаліць %(tagName)s з пакоя",
     "Operation failed": "Не атрымалася выканаць аперацыю",
     "Source URL": "URL-адрас крыніцы",
     "common": {
         "error": "Памылка",
-        "mute": "Без гуку"
+        "mute": "Без гуку",
+        "on": "Уключыць",
+        "off": "Выключыць"
     },
     "action": {
         "leave": "Пакінуць",
@@ -28,5 +25,14 @@
     },
     "auth": {
         "footer_powered_by_matrix": "працуе на Matrix"
+    },
+    "room_list": {
+        "failed_remove_tag": "Не ўдалося выдаліць %(tagName)s з пакоя",
+        "failed_add_tag": "Не атрымалася дадаць %(tagName)s ў пакоі"
+    },
+    "settings": {
+        "notifications": {
+            "noisy": "Шумна"
+        }
     }
 }

@@ -24,50 +24,32 @@ import Modal from "../../Modal";
 
 const showAlreadyRecordingDialog = (): void => {
     Modal.createDialog(InfoDialog, {
-        title: _t("Can't start a new voice broadcast"),
-        description: (
-            <p>
-                {_t(
-                    "You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.",
-                )}
-            </p>
-        ),
+        title: _t("voice_broadcast|failed_already_recording_title"),
+        description: <p>{_t("voice_broadcast|failed_already_recording_description")}</p>,
         hasCloseButton: true,
     });
 };
 
 const showInsufficientPermissionsDialog = (): void => {
     Modal.createDialog(InfoDialog, {
-        title: _t("Can't start a new voice broadcast"),
-        description: (
-            <p>
-                {_t(
-                    "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.",
-                )}
-            </p>
-        ),
+        title: _t("voice_broadcast|failed_insufficient_permission_title"),
+        description: <p>{_t("voice_broadcast|failed_insufficient_permission_description")}</p>,
         hasCloseButton: true,
     });
 };
 
 const showOthersAlreadyRecordingDialog = (): void => {
     Modal.createDialog(InfoDialog, {
-        title: _t("Can't start a new voice broadcast"),
-        description: (
-            <p>
-                {_t(
-                    "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.",
-                )}
-            </p>
-        ),
+        title: _t("voice_broadcast|failed_others_already_recording_title"),
+        description: <p>{_t("voice_broadcast|failed_others_already_recording_description")}</p>,
         hasCloseButton: true,
     });
 };
 
 const showNoConnectionDialog = (): void => {
     Modal.createDialog(InfoDialog, {
-        title: _t("Connection error"),
-        description: <p>{_t("Unfortunately we're unable to start a recording right now. Please try again later.")}</p>,
+        title: _t("voice_broadcast|failed_no_connection_title"),
+        description: <p>{_t("voice_broadcast|failed_no_connection_description")}</p>,
         hasCloseButton: true,
     });
 };

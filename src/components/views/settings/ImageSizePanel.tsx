@@ -60,7 +60,7 @@ export default class ImageSizePanel extends React.Component<IProps, IState> {
                             checked={this.state.size === ImageSize.Normal}
                             onChange={this.onSizeChange}
                         >
-                            {_t("Default")}
+                            {_t("settings|appearance|image_size_default")}
                         </StyledRadioButton>
                     </label>
                     <label>
@@ -71,7 +71,7 @@ export default class ImageSizePanel extends React.Component<IProps, IState> {
                             checked={this.state.size === ImageSize.Large}
                             onChange={this.onSizeChange}
                         >
-                            {_t("Large")}
+                            {_t("settings|appearance|image_size_large")}
                         </StyledRadioButton>
                     </label>
                 </div>

@@ -86,8 +86,8 @@ export class Mjolnir {
         let personalRoomId = SettingsStore.getValue("mjolnirPersonalRoom");
         if (!personalRoomId) {
             const resp = await MatrixClientPeg.safeGet().createRoom({
-                name: _t("My Ban List"),
-                topic: _t("This is your list of users/servers you have blocked - don't leave the room!"),
+                name: _t("labs_mjolnir|room_name"),
+                topic: _t("labs_mjolnir|room_topic"),
                 preset: Preset.PrivateChat,
             });
             personalRoomId = resp["room_id"];

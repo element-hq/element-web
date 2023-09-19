@@ -152,33 +152,33 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
 
         let crawlerState;
         if (this.state.currentRoom === null) {
-            crawlerState = _t("Not currently indexing messages for any room.");
+            crawlerState = _t("settings|security|message_search_indexing_idle");
         } else {
-            crawlerState = _t("Currently indexing: %(currentRoom)s", { currentRoom: this.state.currentRoom });
+            crawlerState = _t("settings|security|message_search_indexing", { currentRoom: this.state.currentRoom });
         }
 
         const doneRooms = Math.max(0, this.state.roomCount - this.state.crawlingRoomsCount);
 
         const eventIndexingSettings = (
             <div>
-                {_t("%(brand)s is securely caching encrypted messages locally for them to appear in search results:", {
+                {_t("settings|security|message_search_intro", {
                     brand,
                 })}
                 <div className="mx_SettingsTab_subsectionText">
                     {crawlerState}
                     <br />
-                    {_t("Space used:")} {formatBytes(this.state.eventIndexSize, 0)}
+                    {_t("settings|security|message_search_space_used")} {formatBytes(this.state.eventIndexSize, 0)}
                     <br />
-                    {_t("Indexed messages:")} {formatCountLong(this.state.eventCount)}
+                    {_t("settings|security|message_search_indexed_messages")} {formatCountLong(this.state.eventCount)}
                     <br />
-                    {_t("Indexed rooms:")}{" "}
-                    {_t("%(doneRooms)s out of %(totalRooms)s", {
+                    {_t("settings|security|message_search_indexed_rooms")}{" "}
+                    {_t("settings|security|message_search_room_progress", {
                         doneRooms: formatCountLong(doneRooms),
                         totalRooms: formatCountLong(this.state.roomCount),
                     })}{" "}
                     <br />
                     <Field
-                        label={_t("Message downloading sleep time(ms)")}
+                        label={_t("settings|security|message_search_sleep_time")}
                         type="number"
                         value={this.state.crawlerSleepTime.toString()}
                         onChange={this.onCrawlerSleepTimeChange}

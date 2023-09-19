@@ -91,7 +91,7 @@ describe("ThreadPanel", () => {
             expect(found).toHaveLength(2);
             const foundButton = screen.queryByRole("menuitemradio", { checked: true });
             expect(foundButton?.textContent).toEqual(
-                `${_t("All threads")}${_t("Shows all threads from current room")}`,
+                `${_t("threads|all_threads")}${_t("threads|all_threads_description")}`,
             );
             expect(foundButton).toMatchSnapshot();
         });
@@ -147,8 +147,8 @@ describe("ThreadPanel", () => {
             const found = screen.queryAllByRole("menuitemradio");
             expect(found).toHaveLength(2);
 
-            const allThreadsContent = `${_t("All threads")}${_t("Shows all threads from current room")}`;
-            const myThreadsContent = `${_t("My threads")}${_t("Shows all threads you've participated in")}`;
+            const allThreadsContent = `${_t("threads|all_threads")}${_t("threads|all_threads_description")}`;
+            const myThreadsContent = `${_t("threads|my_threads")}${_t("threads|my_threads_description")}`;
 
             const allThreadsOption = found.find((it) => it.textContent === allThreadsContent);
             const myThreadsOption = found.find((it) => it.textContent === myThreadsContent);

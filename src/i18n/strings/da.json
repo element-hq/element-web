@@ -81,18 +81,12 @@
     "Notification targets": "Meddelelsesmål",
     "Today": "I dag",
     "Friday": "Fredag",
-    "What's New": "Hvad er nyt",
-    "On": "Tændt",
     "Changelog": "Ændringslog",
-    "Waiting for response from server": "Venter på svar fra server",
-    "Off": "Slukket",
     "This Room": "Dette rum",
     "Unavailable": "Utilgængelig",
     "Source URL": "Kilde URL",
-    "Failed to add tag %(tagName)s to room": "Kunne ikke tilføje tag(s): %(tagName)s til rummet",
     "Filter results": "Filtrér resultater",
     "No update available.": "Ingen opdatering tilgængelig.",
-    "Noisy": "Støjende",
     "Search…": "Søg…",
     "Tuesday": "Tirsdag",
     "Saturday": "Lørdag",
@@ -100,14 +94,12 @@
     "Invite to this room": "Inviter til dette rum",
     "Send": "Send",
     "All messages": "Alle beskeder",
-    "What's new?": "Hvad er nyt?",
     "All Rooms": "Alle rum",
     "You cannot delete this message. (%(code)s)": "Du kan ikke slette denne besked. (%(code)s)",
     "Thursday": "Torsdag",
     "Yesterday": "I går",
     "Error encountered (%(errorDetail)s).": "En fejl er opstået (%(errorDetail)s).",
     "Low Priority": "Lav prioritet",
-    "Failed to remove tag %(tagName)s from room": "Kunne ikke fjerne tag(s): %(tagName)s fra rummet",
     "Wednesday": "Onsdag",
     "Thank you!": "Tak!",
     "Logs sent": "Logfiler sendt",
@@ -228,7 +220,6 @@
     "Local address": "Lokal adresse",
     "This room has no local addresses": "Dette rum har ingen lokal adresse",
     "The conversation continues here.": "Samtalen fortsætter her.",
-    "Message deleted on %(date)s": "Besked slettet d. %(date)s",
     "France": "Frankrig",
     "Finland": "Finland",
     "Egypt": "Egypten",
@@ -502,7 +493,6 @@
     "Unable to transfer call": "Kan ikke omstille opkald",
     "There was an error looking up the phone number": "Der opstod en fejl ved at slå telefonnummeret op",
     "Unable to look up phone number": "Kan ikke slå telefonnummer op",
-    "Incorrect username and/or password.": "Forkert brugernavn og/eller adgangskode.",
     "Your password has been reset.": "Din adgangskode er blevet nulstillet.",
     "Your password was successfully changed.": "Din adgangskode blev ændret.",
     "New Password": "Ny adgangskode",
@@ -525,7 +515,9 @@
         "someone": "Nogen",
         "encrypted": "Krypteret",
         "matrix": "Matrix",
-        "unnamed_room": "Unavngivet rum"
+        "unnamed_room": "Unavngivet rum",
+        "on": "Tændt",
+        "off": "Slukket"
     },
     "action": {
         "continue": "Fortsæt",
@@ -577,7 +569,8 @@
         "submit_debug_logs": "Indsend debug-logfiler",
         "send_logs": "Send logs",
         "collecting_information": "Indsamler app versionsoplysninger",
-        "collecting_logs": "Indsamler logfiler"
+        "collecting_logs": "Indsamler logfiler",
+        "waiting_for_server": "Venter på svar fra server"
     },
     "time": {
         "date_at_time": "%(date)s om %(time)s"
@@ -592,11 +585,13 @@
             "rule_invite_for_me": "Når jeg bliver inviteret til et rum",
             "rule_call": "Opkalds invitation",
             "rule_suppress_notices": "Beskeder sendt af en bot",
-            "show_message_desktop_notification": "Vis besked i skrivebordsnotifikation"
+            "show_message_desktop_notification": "Vis besked i skrivebordsnotifikation",
+            "noisy": "Støjende"
         },
         "appearance": {
             "custom_theme_success": "Tema tilføjet!",
-            "timeline_image_size_default": "Standard"
+            "timeline_image_size_default": "Standard",
+            "image_size_default": "Standard"
         }
     },
     "devtools": {
@@ -691,6 +686,9 @@
             "updated_rule_rooms": "%(senderName)s opdaterede den regel der banner rum som matcher %(glob)s på grund af %(reason)s",
             "updated_rule_servers": "%(senderName)s opdaterede den regel der banner servere der matcher %(glob)s på grund af %(reason)s",
             "updated_rule": "%(senderName)s opdaterede en ban-regel der matcher %(glob)s på grund af %(reason)s"
+        },
+        "redacted": {
+            "tooltip": "Besked slettet d. %(date)s"
         }
     },
     "slash_command": {
@@ -785,13 +783,16 @@
         "forgot_password_email_required": "Den emailadresse, der tilhører til din adgang, skal indtastes.",
         "sign_in_or_register": "Log ind eller Opret bruger",
         "sign_in_or_register_description": "Brug din konto eller opret en ny for at fortsætte.",
-        "register_action": "Opret brugerkonto"
+        "register_action": "Opret brugerkonto",
+        "incorrect_credentials": "Forkert brugernavn og/eller adgangskode."
     },
     "export_chat": {
         "messages": "Beskeder"
     },
     "room_list": {
-        "show_less": "Vis mindre"
+        "show_less": "Vis mindre",
+        "failed_remove_tag": "Kunne ikke fjerne tag(s): %(tagName)s fra rummet",
+        "failed_add_tag": "Kunne ikke tilføje tag(s): %(tagName)s til rummet"
     },
     "onboarding": {
         "send_dm": "Send en Direkte Besked",
@@ -803,5 +804,9 @@
     },
     "feedback": {
         "comment_label": "Kommentar"
+    },
+    "update": {
+        "see_changes_button": "Hvad er nyt?",
+        "release_notes_toast_title": "Hvad er nyt"
     }
 }

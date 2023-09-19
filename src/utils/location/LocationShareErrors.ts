@@ -26,13 +26,11 @@ export enum LocationShareError {
 export const getLocationShareErrorMessage = (errorType?: LocationShareError): string => {
     switch (errorType) {
         case LocationShareError.MapStyleUrlNotConfigured:
-            return _t("This homeserver is not configured to display maps.");
+            return _t("location_sharing|MapStyleUrlNotConfigured");
         case LocationShareError.WebGLNotEnabled:
-            return _t("WebGL is required to display maps, please enable it in your browser settings.");
+            return _t("location_sharing|WebGLNotEnabled");
         case LocationShareError.MapStyleUrlNotReachable:
         default:
-            return _t(
-                "This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.",
-            );
+            return _t("location_sharing|MapStyleUrlNotReachable");
     }
 };

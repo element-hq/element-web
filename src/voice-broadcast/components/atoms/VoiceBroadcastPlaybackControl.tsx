@@ -35,17 +35,17 @@ export const VoiceBroadcastPlaybackControl: React.FC<Props> = ({ onClick, state 
         case VoiceBroadcastPlaybackState.Stopped:
             controlIcon = <PlayIcon className="mx_Icon mx_Icon_16" />;
             className = "mx_VoiceBroadcastControl-play";
-            controlLabel = _t("play voice broadcast");
+            controlLabel = _t("voice_broadcast|play");
             break;
         case VoiceBroadcastPlaybackState.Paused:
             controlIcon = <PlayIcon className="mx_Icon mx_Icon_16" />;
             className = "mx_VoiceBroadcastControl-play";
-            controlLabel = _t("resume voice broadcast");
+            controlLabel = _t("voice_broadcast|resume");
             break;
         case VoiceBroadcastPlaybackState.Buffering:
         case VoiceBroadcastPlaybackState.Playing:
             controlIcon = <PauseIcon className="mx_Icon mx_Icon_12" />;
-            controlLabel = _t("pause voice broadcast");
+            controlLabel = _t("voice_broadcast|pause");
             break;
     }
 

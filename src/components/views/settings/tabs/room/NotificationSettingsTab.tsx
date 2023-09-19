@@ -243,7 +243,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                     className: "mx_NotificationSettingsTab_noneEntry",
                                     label: (
                                         <>
-                                            {_t("Off")}
+                                            {_t("common|off")}
                                             <div className="mx_NotificationSettingsTab_microCopy">
                                                 {_t("You won't get any notifications")}
                                             </div>

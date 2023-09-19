@@ -99,7 +99,7 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
                 mxEvent={this.props.mxEvent}
                 mapId={this.mapId}
                 onError={this.onError}
-                tooltip={_t("Expand map")}
+                tooltip={_t("location_sharing|expand_map")}
                 onClick={this.onClick}
             />
         );
@@ -108,11 +108,11 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
 
 export const LocationBodyFallbackContent: React.FC<{ event: MatrixEvent; error: Error }> = ({ error, event }) => {
     const errorType = error?.message as LocationShareError;
-    const message = `${_t("Unable to load map")}: ${getLocationShareErrorMessage(errorType)}`;
+    const message = `${_t("location_sharing|failed_load_map")}: ${getLocationShareErrorMessage(errorType)}`;
 
     const locationFallback = isSelfLocation(event.getContent())
-        ? _t("Shared their location: ") + event.getContent()?.body
-        : _t("Shared a location: ") + event.getContent()?.body;
+        ? _t("timeline|m.location|self_location") + event.getContent()?.body
+        : _t("timeline|m.location|location") + event.getContent()?.body;
 
     return (
         <div className="mx_EventTile_body mx_MLocationBody">

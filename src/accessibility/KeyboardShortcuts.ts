@@ -207,7 +207,7 @@ if (IS_MAC) {
 
 export const CATEGORIES: Record<CategoryName, ICategory> = {
     [CategoryName.COMPOSER]: {
-        categoryLabel: _td("Composer"),
+        categoryLabel: _td("settings|preferences|composer_heading"),
         settingNames: [
             KeyBindingAction.SendMessage,
             KeyBindingAction.NewLine,

@@ -76,13 +76,13 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
                 className="mx_VoiceBroadcastControl-recording"
                 onClick={toggleRecording}
                 icon={<RecordIcon className="mx_Icon mx_Icon_12" />}
-                label={_t("resume voice broadcast")}
+                label={_t("voice_broadcast|resume")}
             />
         ) : (
             <VoiceBroadcastControl
                 onClick={toggleRecording}
                 icon={<PauseIcon className="mx_Icon mx_Icon_12" />}
-                label={_t("pause voice broadcast")}
+                label={_t("voice_broadcast|pause")}
             />
         );
 
@@ -94,7 +94,7 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
                 {toggleControl}
                 <AccessibleTooltipButton
                     onClick={(): void => setShowDeviceSelect(true)}
-                    title={_t("Change input device")}
+                    title={_t("voip|change_input_device")}
                 >
                     <MicrophoneIcon className="mx_Icon mx_Icon_16 mx_Icon_alert" />
                 </AccessibleTooltipButton>

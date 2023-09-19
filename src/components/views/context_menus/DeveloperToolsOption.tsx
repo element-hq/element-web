@@ -40,7 +40,7 @@ export const DeveloperToolsOption: React.FC<Props> = ({ onFinished, roomId }) =>
                 );
                 onFinished();
             }}
-            label={_t("Developer tools")}
+            label={_t("devtools|title")}
             iconClassName="mx_IconizedContextMenu_developerTools"
         />
     );

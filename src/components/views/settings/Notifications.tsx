@@ -783,9 +783,9 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         }
 
         const VectorStateToLabel = {
-            [VectorState.On]: _t("On"),
-            [VectorState.Off]: _t("Off"),
-            [VectorState.Loud]: _t("Noisy"),
+            [VectorState.On]: _t("common|on"),
+            [VectorState.Off]: _t("common|off"),
+            [VectorState.Loud]: _t("settings|notifications|noisy"),
         };
 
         const makeRadio = (r: IVectorPushRule, s: VectorState): JSX.Element => (

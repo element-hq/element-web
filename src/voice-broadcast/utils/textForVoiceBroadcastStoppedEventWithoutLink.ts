@@ -24,8 +24,8 @@ export const textForVoiceBroadcastStoppedEventWithoutLink = (event: MatrixEvent)
     const ownUserId = MatrixClientPeg.get()?.getUserId();
 
     if (ownUserId && ownUserId === event.getSender()) {
-        return _t("You ended a voice broadcast", {});
+        return _t("event_preview|io.element.voice_broadcast_info|you", {});
     }
 
-    return _t("%(senderName)s ended a voice broadcast", { senderName: getSenderName(event) });
+    return _t("event_preview|io.element.voice_broadcast_info|user", { senderName: getSenderName(event) });
 };

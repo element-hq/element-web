@@ -51,7 +51,11 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
         };
 
         seekBackwardButton = (
-            <SeekButton icon={Back30sIcon} label={_t("30s backward")} onClick={onSeekBackwardButtonClick} />
+            <SeekButton
+                icon={Back30sIcon}
+                label={_t("voice_broadcast|30s_backward")}
+                onClick={onSeekBackwardButtonClick}
+            />
         );
 
         const onSeekForwardButtonClick = (): void => {
@@ -59,7 +63,11 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
         };
 
         seekForwardButton = (
-            <SeekButton icon={Forward30sIcon} label={_t("30s forward")} onClick={onSeekForwardButtonClick} />
+            <SeekButton
+                icon={Forward30sIcon}
+                label={_t("voice_broadcast|30s_forward")}
+                onClick={onSeekForwardButtonClick}
+            />
         );
     }
 

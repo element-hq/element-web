@@ -223,9 +223,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
                     </>
                 ),
             feedbackLabel: "video-room-feedback",
-            feedbackSubheading: _td(
-                "Thank you for trying the beta, please go into as much detail as you can so we can improve it.",
-            ),
+            feedbackSubheading: _td("labs|video_rooms_feedbackSubheading"),
             image: require("../../res/img/betas/video_rooms.png"),
             requiresRefresh: true,
         },
@@ -241,12 +239,9 @@ export const SETTINGS: { [setting: string]: ISetting } = {
             caption: () => (
                 <>
                     <p>
-                        {_t(
-                            "Introducing a simpler way to change your notification settings. Customize your %(brand)s, just the way you like.",
-                            {
-                                brand: SdkConfig.get().brand,
-                            },
-                        )}
+                        {_t("labs|notification_settings_beta_caption", {
+                            brand: SdkConfig.get().brand,
+                        })}
                     </p>
                 </>
             ),
@@ -265,9 +260,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         labsGroup: LabGroup.Moderation,
         displayName: _td("labs|report_to_moderators"),
-        description: _td(
-            "In rooms that support moderation, the “Report” button will let you report abuse to room moderators.",
-        ),
+        description: _td("labs|report_to_moderators_description"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -376,7 +369,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
             defaultWatchManager,
             [["org.matrix.msc2285.stable"]],
             "v1.4",
-            _td("Your server doesn't support disabling sending read receipts."),
+            _td("settings|send_read_receipts_unsupported"),
             true,
         ),
     },
@@ -493,7 +486,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         controller: new FontSizeController(),
     },
     "useCustomFontSize": {
-        displayName: _td("Use custom size"),
+        displayName: _td("settings|appearance|custom_font_size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
     },
@@ -511,7 +504,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "MessageComposerInput.showPollsButton": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Show polls button"),
+        displayName: _td("settings|preferences|show_polls_button"),
         default: true,
     },
     "MessageComposerInput.insertTrailingColon": {
@@ -557,7 +550,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "useCompactLayout": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("Use a more compact 'Modern' layout"),
+        displayName: _td("settings|preferences|compact_modern"),
         default: false,
         controller: new IncompatibleController("layout", false, (v: Layout) => v !== Layout.Group),
     },
@@ -633,7 +626,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "Pill.shouldShowPillAvatar": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Show avatars in user, room and event mentions"),
+        displayName: _td("settings|preferences|show_avatars_pills"),
         default: true,
         invertedSettingName: "Pill.shouldHidePillAvatar",
     },
@@ -676,7 +669,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "MessageComposerInput.surroundWith": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Surround selected text when typing special characters"),
+        displayName: _td("settings|preferences|surround_text"),
         default: false,
     },
     "MessageComposerInput.autoReplaceEmoji": {
@@ -692,7 +685,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "VideoView.flipVideoHorizontally": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Mirror local video feed"),
+        displayName: _td("settings|voip|mirror_local_feed"),
         default: false,
     },
     "theme": {
@@ -723,8 +716,8 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td("Allow Peer-to-Peer for 1:1 calls"),
-        description: _td("When enabled, the other party might be able to see your IP address"),
+        displayName: _td("settings|voip|allow_p2p"),
+        description: _td("settings|voip|allow_p2p_description"),
         default: true,
         invertedSettingName: "webRtcForceTURN",
     },
@@ -742,17 +735,17 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "webrtc_audio_autoGainControl": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("Automatic gain control"),
+        displayName: _td("settings|voip|auto_gain_control"),
         default: true,
     },
     "webrtc_audio_echoCancellation": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("Echo cancellation"),
+        displayName: _td("settings|voip|echo_cancellation"),
         default: true,
     },
     "webrtc_audio_noiseSuppression": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("Noise suppression"),
+        displayName: _td("settings|voip|noise_suppression"),
         default: true,
     },
     "language": {
@@ -799,14 +792,12 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "pseudonymousAnalyticsOptIn": {
         supportedLevels: [SettingLevel.ACCOUNT],
-        displayName: _td("Send analytics data"),
+        displayName: _td("settings|security|send_analytics"),
         default: null,
     },
     "deviceClientInformationOptIn": {
         supportedLevels: [SettingLevel.ACCOUNT],
-        displayName: _td(
-            "Record the client name, version, and url to recognise sessions more easily in session manager",
-        ),
+        displayName: _td("settings|security|record_session_details"),
         default: false,
     },
     "FTUE.useCaseSelection": {
@@ -831,8 +822,8 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.DEVICE],
         supportedLevelsAreOrdered: true,
         displayName: {
-            "default": _td("Never send encrypted messages to unverified sessions from this session"),
-            "room-device": _td("Never send encrypted messages to unverified sessions in this room from this session"),
+            "default": _td("settings|security|strict_encryption"),
+            "room-device": _td("room_settings|security|strict_encryption"),
         },
         default: false,
         controller: new UIFeatureController(UIFeature.AdvancedEncryption),
@@ -879,7 +870,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "enableWidgetScreenshots": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Enable widget screenshots on supported widgets"),
+        displayName: _td("devtools|widget_screenshots"),
         default: false,
     },
     "promptBeforeInviteUnknownUsers": {
@@ -901,27 +892,25 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "FTUE.userOnboardingButton": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Show shortcut to welcome checklist above the room list"),
+        displayName: _td("settings|preferences|show_checklist_shortcuts"),
         default: true,
     },
     "showHiddenEventsInTimeline": {
-        displayName: _td("Show hidden events in timeline"),
+        displayName: _td("devtools|show_hidden_events"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
     },
     "lowBandwidth": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td("Low bandwidth mode"),
-        description: _td("Requires compatible homeserver."),
+        displayName: _td("devtools|low_bandwidth_mode"),
+        description: _td("devtools|low_bandwidth_mode_description"),
         default: false,
         controller: new ReloadOnChangeController(),
         shouldWarn: true,
     },
     "fallbackICEServerAllowed": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        description: _td(
-            "Only applies if your homeserver does not offer one. Your IP address would be shared during a call.",
-        ),
+        description: _td("settings|voip|enable_fallback_ice_server_description"),
         // This is a tri-state value, where `null` means "prompt the user".
         default: null,
     },
@@ -940,12 +929,12 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "enableEventIndexing": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("Enable message search in encrypted rooms"),
+        displayName: _td("settings|security|enable_message_search"),
         default: true,
     },
     "crawlerSleepTime": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("How fast should messages be downloaded."),
+        displayName: _td("settings|security|message_search_sleep_time"),
         default: 3000,
     },
     "showCallButtonsInComposer": {
@@ -957,7 +946,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "e2ee.manuallyVerifyAllSessions": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("Manually verify all remote sessions"),
+        displayName: _td("settings|security|manually_verify_all_sessions"),
         default: false,
         controller: new OrderedMultiController([
             // Apply the feature controller first to ensure that the setting doesn't
@@ -972,7 +961,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         // with a per-room override.
         supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.DEVICE],
         supportedLevelsAreOrdered: true,
-        displayName: _td("IRC display name width"),
         default: 80,
     },
     "layout": {
@@ -1019,24 +1007,24 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         default: true,
     },
     "developerMode": {
-        displayName: _td("Developer mode"),
+        displayName: _td("devtools|developer_mode"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
     },
     "automaticErrorReporting": {
-        displayName: _td("Automatically send debug logs on any error"),
+        displayName: _td("labs|automatic_debug_logs"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
         controller: new ReloadOnChangeController(),
     },
     "automaticDecryptionErrorReporting": {
-        displayName: _td("Automatically send debug logs on decryption errors"),
+        displayName: _td("labs|automatic_debug_logs_decryption"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
         controller: new ReloadOnChangeController(),
     },
     "automaticKeyBackNotEnabledReporting": {
-        displayName: _td("Automatically send debug logs when key backup is not functioning"),
+        displayName: _td("labs|automatic_debug_logs_key_backup"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: false,
     },
@@ -1157,17 +1145,17 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "Electron.alwaysShowMenuBar": {
         supportedLevels: [SettingLevel.PLATFORM],
-        displayName: _td("Always show the window menu bar"),
+        displayName: _td("settings|preferences|always_show_menu_bar"),
         default: false,
     },
     "Electron.showTrayIcon": {
         supportedLevels: [SettingLevel.PLATFORM],
-        displayName: _td("Show tray icon and minimise window to it on close"),
+        displayName: _td("settings|preferences|enable_tray_icon"),
         default: true,
     },
     "Electron.enableHardwareAcceleration": {
         supportedLevels: [SettingLevel.PLATFORM],
-        displayName: _td("Enable hardware acceleration"),
+        displayName: _td("settings|preferences|enable_hardware_acceleration"),
         default: true,
     },
 };

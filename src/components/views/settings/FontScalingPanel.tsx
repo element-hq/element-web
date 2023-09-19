@@ -46,7 +46,7 @@ interface IState {
 }
 
 export default class FontScalingPanel extends React.Component<IProps, IState> {
-    private readonly MESSAGE_PREVIEW_TEXT = _t("Hey you. You're the best!");
+    private readonly MESSAGE_PREVIEW_TEXT = _t("common|preview_message");
 
     private unmounted = false;
 
@@ -89,19 +89,19 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         const max = FontWatcher.MAX_SIZE;
 
         if (isNaN(parsedSize)) {
-            return { valid: false, feedback: _t("Size must be a number") };
+            return { valid: false, feedback: _t("settings|appearance|font_size_nan") };
         }
 
         if (!(min <= parsedSize && parsedSize <= max)) {
             return {
                 valid: false,
-                feedback: _t("Custom font size can only be between %(min)s pt and %(max)s pt", { min, max }),
+                feedback: _t("settings|appearance|font_size_limit", { min, max }),
             };
         }
 
         SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, parseInt(value!, 10));
 
-        return { valid: true, feedback: _t("Use between %(min)s pt and %(max)s pt", { min, max }) };
+        return { valid: true, feedback: _t("settings|appearance|font_size_valid", { min, max }) };
     };
 
     public render(): React.ReactNode {

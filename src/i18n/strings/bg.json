@@ -25,14 +25,12 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(day)s %(monthName)s %(fullYear)s, %(weekDayName)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s %(time)s",
-    "Failed to remove tag %(tagName)s from room": "Неуспешно премахване на %(tagName)s етикет от стаята",
     "unknown error code": "неизвестен код за грешка",
     "Failed to forget room %(errCode)s": "Неуспешно забравяне на стаята %(errCode)s",
     "Favourite": "Любим",
     "Notifications": "Известия",
     "Rooms": "Стаи",
     "Unnamed room": "Стая без име",
-    "Failed to add tag %(tagName)s to room": "Неуспешно добавяне на %(tagName)s етикет в стаята",
     "This email address is already in use": "Този имейл адрес е вече зает",
     "This phone number is already in use": "Този телефонен номер е вече зает",
     "Failed to verify email address: make sure you clicked the link in the email": "Неуспешно потвърждаване на имейл адреса: уверете се, че сте кликнали върху връзката в имейла",
@@ -71,7 +69,6 @@
     "Your browser does not support the required cryptography extensions": "Вашият браузър не поддържа необходимите разширения за шифроване",
     "Not a valid %(brand)s keyfile": "Невалиден файл с ключ за %(brand)s",
     "Authentication check failed: incorrect password?": "Неуспешна автентикация: неправилна парола?",
-    "Mirror local video feed": "Показвай ми огледално моя видео образ",
     "Incorrect verification code": "Неправилен код за потвърждение",
     "Phone": "Телефон",
     "No display name": "Няма име",
@@ -103,9 +100,6 @@
     "Filter room members": "Филтриране на членовете",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (ниво на достъп %(powerLevelNumber)s)",
     "You do not have permission to post to this room": "Нямате разрешение да публикувате в тази стая",
-    "Server error": "Сървърна грешка",
-    "Server unavailable, overloaded, or something else went wrong.": "Сървърът е недостъпен, претоварен или нещо друго се обърка.",
-    "Command error": "Грешка в командата",
     "%(duration)ss": "%(duration)sсек",
     "%(duration)sm": "%(duration)sмин",
     "%(duration)sh": "%(duration)sч",
@@ -150,9 +144,6 @@
     "Invalid file%(extra)s": "Невалиден файл%(extra)s",
     "Error decrypting image": "Грешка при разшифроване на снимка",
     "Error decrypting video": "Грешка при разшифроване на видео",
-    "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s промени аватара на %(roomName)s",
-    "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s премахна аватара на стаята.",
-    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s промени аватара на стаята на <img/>",
     "Copied!": "Копирано!",
     "Failed to copy": "Неуспешно копиране",
     "Add an Integration": "Добавяне на интеграция",
@@ -235,7 +226,6 @@
     "A new password must be entered.": "Трябва да бъде въведена нова парола.",
     "New passwords must match each other.": "Новите пароли трябва да съвпадат една с друга.",
     "Return to login screen": "Връщане към страницата за влизане в профила",
-    "Incorrect username and/or password.": "Неправилно потребителско име и/или парола.",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Моля, обърнете внимание, че влизате в %(hs)s сървър, а не в matrix.org.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Не е възможно свързване към Home сървъра чрез HTTP, когато има HTTPS адрес в лентата на браузъра Ви. Или използвайте HTTPS или <a>включете функция небезопасни скриптове</a>.",
     "Commands": "Команди",
@@ -262,16 +252,13 @@
     "Notification targets": "Устройства, получаващи известия",
     "Today": "Днес",
     "Friday": "Петък",
-    "On": "Вкл.",
     "Changelog": "Списък на промените",
-    "Waiting for response from server": "Изчакване на отговор от сървъра",
     "Failed to send logs: ": "Неуспешно изпращане на логове: ",
     "This Room": "В тази стая",
     "Unavailable": "Не е наличен",
     "Source URL": "URL на източника",
     "Filter results": "Филтриране на резултати",
     "No update available.": "Няма нова версия.",
-    "Noisy": "Шумно",
     "Search…": "Търсене…",
     "Tuesday": "Вторник",
     "Preparing to send logs": "Подготовка за изпращане на логове",
@@ -280,7 +267,6 @@
     "All Rooms": "Във всички стаи",
     "Wednesday": "Сряда",
     "All messages": "Всички съобщения",
-    "What's new?": "Какво ново?",
     "Invite to this room": "Покани в тази стая",
     "You cannot delete this message. (%(code)s)": "Това съобщение не може да бъде изтрито. (%(code)s)",
     "Thursday": "Четвъртък",
@@ -288,8 +274,6 @@
     "Yesterday": "Вчера",
     "Error encountered (%(errorDetail)s).": "Възникна грешка (%(errorDetail)s).",
     "Low Priority": "Нисък приоритет",
-    "What's New": "Какво ново",
-    "Off": "Изкл.",
     "Thank you!": "Благодарим!",
     "Missing roomId.": "Липсва идентификатор на стая.",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Не може да се зареди събитието, на което е отговорено. Или не съществува или нямате достъп да го видите.",
@@ -298,8 +282,6 @@
     "Send Logs": "Изпрати логове",
     "We encountered an error trying to restore your previous session.": "Възникна грешка при възстановяване на предишната Ви сесия.",
     "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Изчистване на запазените данни в браузъра може да поправи проблема, но ще Ви изкара от профила и ще направи шифрованите съобщения нечетими.",
-    "Enable widget screenshots on supported widgets": "Включи скрийншоти за поддържащи ги приспособления",
-    "Send analytics data": "Изпращане на статистически данни",
     "Muted Users": "Заглушени потребители",
     "Can't leave Server Notices room": "Не може да напуснете стая \"Server Notices\"",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Тази стая се използва за важни съобщения от сървъра, така че не можете да я напуснете.",
@@ -337,8 +319,6 @@
     "Please contact your homeserver administrator.": "Моля, свържете се със сървърния администратор.",
     "This room has been replaced and is no longer active.": "Тази стая е била заменена и вече не е активна.",
     "The conversation continues here.": "Разговора продължава тук.",
-    "This room is a continuation of another conversation.": "Тази стая е продължение на предишен разговор.",
-    "Click here to see older messages.": "Кликнете тук за да видите предишните съобщения.",
     "Failed to upgrade room": "Неуспешно обновяване на стаята",
     "The room upgrade could not be completed": "Обновяването на тази стая не можа да бъде завършено",
     "Upgrade this room to version %(version)s": "Обновете тази стая до версия %(version)s",
@@ -429,9 +409,6 @@
     "Phone numbers": "Телефонни номера",
     "Language and region": "Език и регион",
     "Account management": "Управление на акаунта",
-    "Composer": "Въвеждане на съобщения",
-    "Room list": "Списък със стаи",
-    "Autocomplete delay (ms)": "Забавяне преди подсказки (милисекунди)",
     "Roles & Permissions": "Роли и привилегии",
     "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.": "Промени в настройките за четене на историята касаят само за нови съобщения. Видимостта на съществуващата история не се променя.",
     "Security & Privacy": "Сигурност и поверителност",
@@ -579,7 +556,6 @@
     "No homeserver URL provided": "Не е указан адрес на сървър",
     "Unexpected error resolving homeserver configuration": "Неочаквана грешка в намирането на сървърната конфигурация",
     "The user's homeserver does not support the version of the room.": "Сървърът на потребителя не поддържа версията на стаята.",
-    "Show hidden events in timeline": "Покажи скрити събития по времевата линия",
     "View older messages in %(roomName)s.": "Виж по-стари съобщения в %(roomName)s.",
     "Join the conversation with an account": "Присъедини се към разговор с акаунт",
     "Sign Up": "Регистриране",
@@ -602,7 +578,6 @@
     "Set a new custom sound": "Настрой нов собствен звук",
     "Browse": "Избор",
     "This room has already been upgraded.": "Тази стая вече е била обновена.",
-    "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>реагира с %(shortName)s</reactedWith>",
     "edited": "редактирано",
     "Rotate Left": "Завърти наляво",
     "Rotate Right": "Завърти надясно",
@@ -651,7 +626,6 @@
     "Terms of Service": "Условия за ползване",
     "Service": "Услуга",
     "Summary": "Обобщение",
-    "This account has been deactivated.": "Този акаунт е деактивиран.",
     "Call failed due to misconfigured server": "Неуспешен разговор поради неправилно конфигуриран сървър",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Попитайте администратора на сървъра ви (<code>%(homeserverDomain)s</code>) да конфигурира TURN сървър, за да може разговорите да работят надеждно.",
     "Checking server": "Проверка на сървъра",
@@ -666,7 +640,6 @@
     "Enter a new identity server": "Въведете нов сървър за самоличност",
     "Discovery": "Откриване",
     "Deactivate account": "Деактивиране на акаунт",
-    "Always show the window menu bar": "Винаги показвай менютата на прозореца",
     "Unable to revoke sharing for email address": "Неуспешно оттегляне на споделянето на имейл адреса",
     "Unable to share email address": "Неуспешно споделяне на имейл адрес",
     "Discovery options will appear once you have added an email above.": "Опциите за откриване ще се покажат след като добавите имейл адрес по-горе.",
@@ -718,8 +691,6 @@
     "Italics": "Наклонено",
     "Explore rooms": "Открий стаи",
     "Verify the link in your inbox": "Потвърдете линка във вашата пощенска кутия",
-    "Read Marker lifetime (ms)": "Живот на маркера за прочитане (мсек)",
-    "Read Marker off-screen lifetime (ms)": "Живот на маркера за прочитане извън екрана (мсек)",
     "e.g. my-room": "например my-room",
     "Hide advanced": "Скрий разширени настройки",
     "Show advanced": "Покажи разширени настройки",
@@ -762,8 +733,6 @@
     "%(name)s cancelled": "%(name)s отказа",
     "%(name)s wants to verify": "%(name)s иска да извърши потвърждение",
     "You sent a verification request": "Изпратихте заявка за потвърждение",
-    "My Ban List": "Моя списък с блокирания",
-    "This is your list of users/servers you have blocked - don't leave the room!": "Това е списък с хора/сървъри, които сте блокирали - не напускайте стаята!",
     "Cannot connect to integration manager": "Неуспешна връзка с мениджъра на интеграции",
     "The integration manager is offline or it cannot reach your homeserver.": "Мениджъра на интеграции е офлайн или не може да се свърже със сървъра ви.",
     "Error upgrading room": "Грешка при обновяване на стаята",
@@ -861,11 +830,6 @@
     "Not Trusted": "Недоверено",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) влезе в нова сесия без да я потвърди:",
     "Ask this user to verify their session, or manually verify it below.": "Поискайте от този потребител да потвърди сесията си, или я потвърдете ръчно по-долу.",
-    "Never send encrypted messages to unverified sessions from this session": "Никога не изпращай шифровани съобщения към непотвърдени сесии от тази сесия",
-    "Never send encrypted messages to unverified sessions in this room from this session": "Никога не изпращай шифровани съобщения към непотвърдени сесии в тази стая от тази сесия",
-    "Enable message search in encrypted rooms": "Включи търсенето на съобщения в шифровани стаи",
-    "How fast should messages be downloaded.": "Колко бързо да се изтеглят съобщенията.",
-    "Manually verify all remote sessions": "Ръчно потвърждаване на всички отдалечени сесии",
     "New login. Was this you?": "Нов вход. Вие ли бяхте това?",
     "%(name)s is requesting verification": "%(name)s изпрати запитване за верификация",
     "Waiting for %(displayName)s to verify…": "Изчакване на %(displayName)s да потвърди…",
@@ -909,11 +873,6 @@
     "Encrypted by a deleted session": "Шифровано от изтрита сесия",
     "Scroll to most recent messages": "Отиди до най-скорошните съобщения",
     "Reject & Ignore user": "Откажи и игнорирай потребителя",
-    "Unknown Command": "Непозната команда",
-    "Unrecognised command: %(commandText)s": "Неразпозната команда: %(commandText)s",
-    "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "Може да използвате <code>/help</code> за да видите наличните команди. Или пък искахте да изпратите това като съобщение?",
-    "Hint: Begin your message with <code>//</code> to start it with a slash.": "Съвет: Започнете съобщението си с <code>//</code> за да изпратите съобщение започващо с наклонена черта.",
-    "Send as message": "Изпрати като съобщение",
     "Mark all as read": "Маркирай всичко като прочетено",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Възникна грешка при обновяване на алтернативните адреси на стаята. Или не е позволено от сървъра или се е случила временна грешка.",
     "Local address": "Локален адрес",
@@ -961,7 +920,6 @@
     "Enter a server name": "Въведете име на сървър",
     "Looks good": "Изглежда добре",
     "Can't find this server or its room list": "Сървърът или списъка със стаи не може да бъде намерен",
-    "All rooms": "Всички стаи",
     "Your server": "Вашият сървър",
     "Add a new server": "Добави нов сървър",
     "Enter the name of a new server you want to explore.": "Въведете името на новия сървър, който искате да прегледате.",
@@ -990,9 +948,6 @@
     "We couldn't invite those users. Please check the users you want to invite and try again.": "Не можахме да поканим тези потребители. Проверете потребителите, които искате да поканите и опитайте пак.",
     "Recently Direct Messaged": "Скорошни директни чатове",
     "IRC display name width": "Ширина на IRC името",
-    "Size must be a number": "Размера трябва да е число",
-    "Custom font size can only be between %(min)s pt and %(max)s pt": "Собствения размер на шрифта може да бъде единствено между %(min)s pt и %(max)s pt",
-    "Use between %(min)s pt and %(max)s pt": "Изберете между %(min)s pt и %(max)s pt",
     "You've successfully verified your device!": "Успешно потвърдихте устройството си!",
     "To continue, use Single Sign On to prove your identity.": "За да продължите, използвайте Single Sign On за да потвърдите самоличността си.",
     "Confirm to continue": "Потвърдете за да продължите",
@@ -1050,18 +1005,7 @@
     "Create key backup": "Създай резервно копие на ключовете",
     "This session is encrypting history using the new recovery method.": "Тази сесия шифрова историята използвайки новия метод за възстановяване.",
     "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Ако сте направили това без да искате, може да настройте защитени съобщения за тази сесия, което ще зашифрова наново историята на съобщенията използвайки новия метод за възстановяване.",
-    "If disabled, messages from encrypted rooms won't appear in search results.": "Ако е изключено, съобщения от шифровани стаи няма да се показват в резултатите от търсения.",
-    "Not currently indexing messages for any room.": "В момента не се индексират съобщения в нито една стая.",
-    "Currently indexing: %(currentRoom)s": "В момента се индексира: %(currentRoom)s",
-    "%(brand)s is securely caching encrypted messages locally for them to appear in search results:": "%(brand)s кешира шифровани съобщения локално по сигурен начин, за да може те да се появяват в резултати от търсения:",
-    "Space used:": "Използвано пространство:",
-    "Indexed messages:": "Индексирани съобщения:",
-    "Indexed rooms:": "Индексирани стаи:",
-    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s от %(totalRooms)s",
-    "Message downloading sleep time(ms)": "Период на пауза между свалянията на съобщения (ms)",
     "No recently visited rooms": "Няма наскоро-посетени стаи",
-    "Use custom size": "Използвай собствен размер",
-    "Hey you. You're the best!": "Хей, ти. Върхът си!",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "Автентичността на това шифровано съобщение не може да бъде гарантирана на това устройство.",
     "Message preview": "Преглед на съобщението",
     "Room options": "Настройки на стаята",
@@ -1113,7 +1057,6 @@
     "Use the <a>Desktop app</a> to see all encrypted files": "Използвайте <a>Desktop приложението</a> за да видите всички шифровани файлове",
     "Click to view edits": "Кликнете за да видите редакциите",
     "Edited at %(date)s": "Редактирано на %(date)s",
-    "Message deleted on %(date)s": "Съобщението изтрито на %(date)s",
     "Video conference started by %(senderName)s": "Видео конференцията беше стартирана от %(senderName)s",
     "Video conference updated by %(senderName)s": "Видео конференцията беше обновена от %(senderName)s",
     "Video conference ended by %(senderName)s": "Видео конференцията беше прекратена от %(senderName)s",
@@ -1148,8 +1091,6 @@
     "Cross-signing is not set up.": "Кръстосаното-подписване не е настроено.",
     "Cross-signing is ready for use.": "Кръстосаното-подписване е готово за използване.",
     "Your server isn't responding to some <a>requests</a>.": "Сървърът ви не отговаря на някои <a>заявки</a>.",
-    "New version of %(brand)s is available": "Налична е нова версия на %(brand)s",
-    "Update %(brand)s": "Обнови %(brand)s",
     "Enable desktop notifications": "Включете уведомления на работния плот",
     "Don't miss a reply": "Не пропускайте отговор",
     "Save your Security Key": "Запази ключа за сигурност",
@@ -1425,19 +1366,13 @@
     "Space options": "Опции на пространството",
     "Workspace: <networkLink/>": "Работна област: <networkLink/>",
     "Channel: <channelLink/>": "Канал: <channelLink/>",
-    "Open space for anyone, best for communities": "Открийте пространство за всеки, най-добро за общности",
     "Add existing room": "Добави съществуваща стая",
     "Leave space": "Напусни пространство",
     "Invite with email or username": "Покани чрез имейл или потребителско име",
     "Invite people": "Покани хора",
     "Share invite link": "Сподели връзка с покана",
     "Click to copy": "Натиснете за копиране",
-    "Please enter a name for the space": "Моля, въведете име на пространството",
     "Create a space": "Създаване на пространство",
-    "Add some details to help people recognise it.": "Добавете някои подробности, за да помогнете на хората да го разпознаят.",
-    "Invite only, best for yourself or teams": "Само с покана, най-добро за вас самият или отбори",
-    "Your public space": "Вашето публично пространство",
-    "Your private space": "Вашето лично пространство",
     "You can change these anytime.": "Можете да ги промените по всяко време.",
     "unknown person": "",
     "Spaces": "Пространства",
@@ -1542,7 +1477,11 @@
         "identity_server": "Сървър за самоличност",
         "integration_manager": "Мениджър на интеграции",
         "qr_code": "QR код",
-        "feedback": "Обратна връзка"
+        "feedback": "Обратна връзка",
+        "all_rooms": "Всички стаи",
+        "preview_message": "Хей, ти. Върхът си!",
+        "on": "Вкл.",
+        "off": "Изкл."
     },
     "action": {
         "continue": "Продължи",
@@ -1716,7 +1655,8 @@
         "collecting_logs": "Събиране на логове",
         "uploading_logs": "Качване на логове",
         "downloading_logs": "Изтегляне на логове",
-        "create_new_issue": "Моля, <newIssueLink>отворете нов проблем</newIssueLink> в GitHub за да проучим проблема."
+        "create_new_issue": "Моля, <newIssueLink>отворете нов проблем</newIssueLink> в GitHub за да проучим проблема.",
+        "waiting_for_server": "Изчакване на отговор от сървъра"
     },
     "time": {
         "date_at_time": "%(date)s в %(time)s",
@@ -1773,7 +1713,8 @@
             "rule_encrypted_room_one_to_one": "Шифровани съобщения в 1-на-1 чатове",
             "enable_desktop_notifications_session": "Включи уведомления на работния плот за тази сесия",
             "show_message_desktop_notification": "Показване на съдържание в известията на работния плот",
-            "enable_audible_notifications_session": "Включи звукови уведомления за тази сесия"
+            "enable_audible_notifications_session": "Включи звукови уведомления за тази сесия",
+            "noisy": "Шумно"
         },
         "appearance": {
             "heading": "Настройте изгледа",
@@ -1788,10 +1729,41 @@
             "custom_theme_add_button": "Добави тема",
             "font_size": "Размер на шрифта",
             "custom_font_description": "Настройте името на шрифт инсталиран в системата и %(brand)s ще се опита да го използва.",
-            "timeline_image_size_default": "По подразбиране"
+            "timeline_image_size_default": "По подразбиране",
+            "custom_font_size": "Използвай собствен размер",
+            "font_size_nan": "Размера трябва да е число",
+            "font_size_limit": "Собствения размер на шрифта може да бъде единствено между %(min)s pt и %(max)s pt",
+            "font_size_valid": "Изберете между %(min)s pt и %(max)s pt",
+            "image_size_default": "По подразбиране"
         },
         "inline_url_previews_room_account": "Включване на URL прегледи за тази стая (засяга само Вас)",
-        "inline_url_previews_room": "Включване по подразбиране на URL прегледи за участници в тази стая"
+        "inline_url_previews_room": "Включване по подразбиране на URL прегледи за участници в тази стая",
+        "security": {
+            "message_search_disable_warning": "Ако е изключено, съобщения от шифровани стаи няма да се показват в резултатите от търсения.",
+            "message_search_indexing_idle": "В момента не се индексират съобщения в нито една стая.",
+            "message_search_indexing": "В момента се индексира: %(currentRoom)s",
+            "message_search_intro": "%(brand)s кешира шифровани съобщения локално по сигурен начин, за да може те да се появяват в резултати от търсения:",
+            "message_search_space_used": "Използвано пространство:",
+            "message_search_indexed_messages": "Индексирани съобщения:",
+            "message_search_indexed_rooms": "Индексирани стаи:",
+            "message_search_room_progress": "%(doneRooms)s от %(totalRooms)s",
+            "message_search_sleep_time": "Колко бързо да се изтеглят съобщенията.",
+            "send_analytics": "Изпращане на статистически данни",
+            "strict_encryption": "Никога не изпращай шифровани съобщения към непотвърдени сесии от тази сесия",
+            "enable_message_search": "Включи търсенето на съобщения в шифровани стаи",
+            "manually_verify_all_sessions": "Ръчно потвърждаване на всички отдалечени сесии"
+        },
+        "preferences": {
+            "room_list_heading": "Списък със стаи",
+            "composer_heading": "Въвеждане на съобщения",
+            "autocomplete_delay": "Забавяне преди подсказки (милисекунди)",
+            "rm_lifetime": "Живот на маркера за прочитане (мсек)",
+            "rm_lifetime_offscreen": "Живот на маркера за прочитане извън екрана (мсек)",
+            "always_show_menu_bar": "Винаги показвай менютата на прозореца"
+        },
+        "voip": {
+            "mirror_local_feed": "Показвай ми огледално моя видео образ"
+        }
     },
     "devtools": {
         "event_type": "Вид на събитие",
@@ -1801,7 +1773,9 @@
         "toolbox": "Инструменти",
         "developer_tools": "Инструменти за разработчика",
         "category_room": "Стая",
-        "category_other": "Други"
+        "category_other": "Други",
+        "widget_screenshots": "Включи скрийншоти за поддържащи ги приспособления",
+        "show_hidden_events": "Покажи скрити събития по времевата линия"
     },
     "create_room": {
         "title_public_room": "Създай публична стая",
@@ -2004,6 +1978,21 @@
             "changed_rule_rooms": "%(senderName)s промени правило блокиращо достъпа до стаи отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
             "changed_rule_servers": "%(senderName)s промени правило блокиращо достъпа до сървъри отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
             "changed_rule_glob": "%(senderName)s промени правило блокиращо достъпа до неща отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s"
+        },
+        "reactions": {
+            "tooltip": "<reactors/><reactedWith>реагира с %(shortName)s</reactedWith>"
+        },
+        "redacted": {
+            "tooltip": "Съобщението изтрито на %(date)s"
+        },
+        "m.room.avatar": {
+            "lightbox_title": "%(senderDisplayName)s промени аватара на %(roomName)s",
+            "removed": "%(senderDisplayName)s премахна аватара на стаята.",
+            "changed_img": "%(senderDisplayName)s промени аватара на стаята на <img/>"
+        },
+        "m.room.create": {
+            "continuation": "Тази стая е продължение на предишен разговор.",
+            "see_older_messages": "Кликнете тук за да видите предишните съобщения."
         }
     },
     "slash_command": {
@@ -2055,7 +2044,15 @@
         "join": "Присъединява се към стая с дадения адрес",
         "failed_find_user": "Неуспешно намиране на потребител в стаята",
         "op": "Променя нивото на достъп на потребителя",
-        "deop": "Отнема правата на потребител с даден идентификатор"
+        "deop": "Отнема правата на потребител с даден идентификатор",
+        "server_error": "Сървърна грешка",
+        "command_error": "Грешка в командата",
+        "server_error_detail": "Сървърът е недостъпен, претоварен или нещо друго се обърка.",
+        "unknown_command": "Непозната команда",
+        "unknown_command_detail": "Неразпозната команда: %(commandText)s",
+        "unknown_command_help": "Може да използвате <code>/help</code> за да видите наличните команди. Или пък искахте да изпратите това като съобщение?",
+        "unknown_command_hint": "Съвет: Започнете съобщението си с <code>//</code> за да изпратите съобщение започващо с наклонена черта.",
+        "unknown_command_button": "Изпрати като съобщение"
     },
     "presence": {
         "online_for": "Онлайн от %(duration)s",
@@ -2127,6 +2124,9 @@
             "ban": "Блокиране на потребители",
             "redact": "Премахвай съобщения изпратени от други",
             "notifications.room": "Уведомяване на всички"
+        },
+        "security": {
+            "strict_encryption": "Никога не изпращай шифровани съобщения към непотвърдени сесии в тази стая от тази сесия"
         }
     },
     "encryption": {
@@ -2192,7 +2192,9 @@
         "create_account_prompt": "Вие сте нов тук? <a>Създайте профил</a>",
         "sign_in_or_register": "Влезте или Създайте профил",
         "sign_in_or_register_description": "Използвайте профила си или създайте нов за да продължите.",
-        "register_action": "Създай профил"
+        "register_action": "Създай профил",
+        "account_deactivated": "Този акаунт е деактивиран.",
+        "incorrect_credentials": "Неправилно потребителско име и/или парола."
     },
     "export_chat": {
         "messages": "Съобщения"
@@ -2209,7 +2211,9 @@
             "one": "Покажи още %(count)s"
         },
         "show_less": "Покажи по-малко",
-        "notification_options": "Настройки за уведомление"
+        "notification_options": "Настройки за уведомление",
+        "failed_remove_tag": "Неуспешно премахване на %(tagName)s етикет от стаята",
+        "failed_add_tag": "Неуспешно добавяне на %(tagName)s етикет в стаята"
     },
     "report_content": {
         "missing_reason": "Въведете защо докладвате.",
@@ -2243,5 +2247,23 @@
         "pro_type": "ПРОФЕСИОНАЛЕН СЪВЕТ: Ако ще съобщавате за проблем, изпратете и <debugLogsLink>логове за разработчици</debugLogsLink> за да ни помогнете да открием проблема.",
         "existing_issue_link": "Първо прегледайте <existingIssuesLink>съществуващите проблеми в Github</existingIssuesLink>. Няма подобни? <newIssueLink>Създайте нов</newIssueLink>.",
         "send_feedback_action": "Изпрати обратна връзка"
+    },
+    "create_space": {
+        "name_required": "Моля, въведете име на пространството",
+        "public_description": "Открийте пространство за всеки, най-добро за общности",
+        "private_description": "Само с покана, най-добро за вас самият или отбори",
+        "public_heading": "Вашето публично пространство",
+        "private_heading": "Вашето лично пространство",
+        "add_details_prompt": "Добавете някои подробности, за да помогнете на хората да го разпознаят."
+    },
+    "labs_mjolnir": {
+        "room_name": "Моя списък с блокирания",
+        "room_topic": "Това е списък с хора/сървъри, които сте блокирали - не напускайте стаята!"
+    },
+    "update": {
+        "see_changes_button": "Какво ново?",
+        "release_notes_toast_title": "Какво ново",
+        "toast_title": "Обнови %(brand)s",
+        "toast_description": "Налична е нова версия на %(brand)s"
     }
 }

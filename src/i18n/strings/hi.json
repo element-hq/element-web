@@ -67,10 +67,6 @@
     "Your browser does not support the required cryptography extensions": "आपका ब्राउज़र आवश्यक क्रिप्टोग्राफी एक्सटेंशन का समर्थन नहीं करता है",
     "Authentication check failed: incorrect password?": "प्रमाणीकरण जांच विफल: गलत पासवर्ड?",
     "Please contact your homeserver administrator.": "कृपया अपने होमसर्वर व्यवस्थापक से संपर्क करें।",
-    "Mirror local video feed": "स्थानीय वीडियो फ़ीड को आईना करें",
-    "Send analytics data": "विश्लेषण डेटा भेजें",
-    "Enable widget screenshots on supported widgets": "समर्थित विजेट्स पर विजेट स्क्रीनशॉट सक्षम करें",
-    "Waiting for response from server": "सर्वर से प्रतिक्रिया की प्रतीक्षा कर रहा है",
     "Incorrect verification code": "गलत सत्यापन कोड",
     "Phone": "फ़ोन",
     "No display name": "कोई प्रदर्शन नाम नहीं",
@@ -115,9 +111,6 @@
     "A word by itself is easy to guess": "सिर्फ एक शब्द अनुमान लगाना आसान है",
     "Names and surnames by themselves are easy to guess": "खुद के नाम और उपनाम अनुमान लगाना आसान है",
     "Common names and surnames are easy to guess": "सामान्य नाम और उपनाम अनुमान लगाना आसान है",
-    "Off": "बंद",
-    "On": "चालू",
-    "Noisy": "शोरगुल",
     "Drop file here to upload": "अपलोड करने के लिए यहां फ़ाइल ड्रॉप करें",
     "This event could not be displayed": "यह घटना प्रदर्शित नहीं की जा सकी",
     "Unban": "अप्रतिबंधित करें",
@@ -143,9 +136,6 @@
     "This room has been replaced and is no longer active.": "इस रूम को बदल दिया गया है और अब सक्रिय नहीं है।",
     "The conversation continues here.": "वार्तालाप यहां जारी है।",
     "You do not have permission to post to this room": "आपको इस रूम में पोस्ट करने की अनुमति नहीं है",
-    "Server error": "सर्वर त्रुटि",
-    "Server unavailable, overloaded, or something else went wrong.": "सर्वर अनुपलब्ध, अधिभारित, या कुछ और गलत हो गया।",
-    "Command error": "कमांड त्रुटि",
     "%(duration)ss": "%(duration)s सेकंड",
     "%(duration)sm": "%(duration)s मिनट",
     "%(duration)sh": "%(duration)s घंटा",
@@ -257,8 +247,6 @@
     "Check for update": "अपडेट के लिये जांचें",
     "Notifications": "सूचनाएं",
     "Scissors": "कैंची",
-    "Room list": "कक्ष सूचि",
-    "Autocomplete delay (ms)": "स्वत: पूर्ण विलंब (ms)",
     "<not supported>": "<समर्थित नहीं>",
     "Import E2E room keys": "E2E कक्ष की चाबियां आयात करें",
     "Cryptography": "क्रिप्टोग्राफी",
@@ -484,7 +472,9 @@
         "camera": "कैमरा",
         "microphone": "माइक्रोफ़ोन",
         "someone": "कोई",
-        "unnamed_room": "अनाम रूम"
+        "unnamed_room": "अनाम रूम",
+        "on": "चालू",
+        "off": "बंद"
     },
     "action": {
         "continue": "आगे बढ़ें",
@@ -527,7 +517,8 @@
         "submit_debug_logs": "डिबग लॉग जमा करें",
         "title": "बग रिपोर्टिंग",
         "collecting_information": "ऐप संस्करण जानकारी एकत्रित कर रहा हैं",
-        "collecting_logs": "लॉग एकत्रित कर रहा हैं"
+        "collecting_logs": "लॉग एकत्रित कर रहा हैं",
+        "waiting_for_server": "सर्वर से प्रतिक्रिया की प्रतीक्षा कर रहा है"
     },
     "time": {
         "date_at_time": "%(date)s %(time)s पर",
@@ -561,13 +552,25 @@
             "rule_call": "कॉल आमंत्रण",
             "rule_suppress_notices": "रोबॉट द्वारा भेजे गए संदेश",
             "rule_encrypted_room_one_to_one": "एक एक के साथ चैट में एन्क्रिप्टेड संदेश",
-            "show_message_desktop_notification": "डेस्कटॉप अधिसूचना में संदेश दिखाएं"
+            "show_message_desktop_notification": "डेस्कटॉप अधिसूचना में संदेश दिखाएं",
+            "noisy": "शोरगुल"
         },
         "appearance": {
-            "timeline_image_size_default": "डिफ़ॉल्ट"
+            "timeline_image_size_default": "डिफ़ॉल्ट",
+            "image_size_default": "डिफ़ॉल्ट"
         },
         "inline_url_previews_room_account": "इस रूम के लिए यूआरएल पूर्वावलोकन सक्षम करें (केवल आपको प्रभावित करता है)",
-        "inline_url_previews_room": "इस रूम में प्रतिभागियों के लिए डिफ़ॉल्ट रूप से यूआरएल पूर्वावलोकन सक्षम करें"
+        "inline_url_previews_room": "इस रूम में प्रतिभागियों के लिए डिफ़ॉल्ट रूप से यूआरएल पूर्वावलोकन सक्षम करें",
+        "preferences": {
+            "room_list_heading": "कक्ष सूचि",
+            "autocomplete_delay": "स्वत: पूर्ण विलंब (ms)"
+        },
+        "voip": {
+            "mirror_local_feed": "स्थानीय वीडियो फ़ीड को आईना करें"
+        },
+        "security": {
+            "send_analytics": "विश्लेषण डेटा भेजें"
+        }
     },
     "timeline": {
         "m.room.topic": "%(senderDisplayName)s ने विषय को \"%(topic)s\" में बदल दिया।",
@@ -645,7 +648,10 @@
         "discardsession": "एक एन्क्रिप्टेड रूम में मौजूदा आउटबाउंड समूह सत्र को त्यागने के लिए मजबूर करता है",
         "me": "कार्रवाई प्रदर्शित करता है",
         "op": "उपयोगकर्ता के पावर स्तर को परिभाषित करें",
-        "deop": "दिए गए आईडी के साथ उपयोगकर्ता को देओप्स करना"
+        "deop": "दिए गए आईडी के साथ उपयोगकर्ता को देओप्स करना",
+        "server_error": "सर्वर त्रुटि",
+        "command_error": "कमांड त्रुटि",
+        "server_error_detail": "सर्वर अनुपलब्ध, अधिभारित, या कुछ और गलत हो गया।"
     },
     "presence": {
         "online_for": "%(duration)s के लिए ऑनलाइन",
@@ -697,5 +703,8 @@
             "title": "सहायता और के बारे में",
             "versions": "संस्करण"
         }
+    },
+    "devtools": {
+        "widget_screenshots": "समर्थित विजेट्स पर विजेट स्क्रीनशॉट सक्षम करें"
     }
 }

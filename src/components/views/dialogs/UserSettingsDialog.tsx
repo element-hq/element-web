@@ -113,7 +113,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         tabs.push(
             new Tab(
                 UserTab.Keyboard,
-                _td("Keyboard"),
+                _td("settings|keyboard|title"),
                 "mx_UserSettingsDialog_keyboardIcon",
                 <KeyboardUserSettingsTab />,
                 "UserSettingsKeyboard",

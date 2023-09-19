@@ -18,7 +18,6 @@
     "Change Password": "పాస్వర్డ్ మార్చండి",
     "You cannot place a call with yourself.": "మీకు మీరే కాల్ చేయలేరు.",
     "You need to be able to invite users to do that.": "మీరు దీన్ని చేయడానికి వినియోగదారులను ఆహ్వానించగలరు.",
-    "Command error": "కమాండ్ లోపం",
     "Commands": "కమ్మండ్స్",
     "Confirm password": "పాస్వర్డ్ని నిర్ధారించండి",
     "Cryptography": "క్రిప్టోగ్రఫీ",
@@ -67,11 +66,8 @@
     "Notification targets": "తాఖీదు లక్ష్యాలు",
     "Today": "ఈ రోజు",
     "Friday": "శుక్రువారం",
-    "On": "వేయుము",
     "Changelog": "మార్పు వివరణ",
     "Source URL": "మూల URL",
-    "Noisy": "శబ్దం",
-    "Failed to add tag %(tagName)s to room": "%(tagName)s ను బొందు జోడించడంలో విఫలమైంది",
     "No update available.": "ఏ నవీకరణ అందుబాటులో లేదు.",
     "Tuesday": "మంగళవారం",
     "Monday": "సోమవారం",
@@ -85,8 +81,6 @@
     "Yesterday": "నిన్న",
     "Error encountered (%(errorDetail)s).": "లోపం సంభవించింది (%(errorDetail)s).",
     "Low Priority": "తక్కువ ప్రాధాన్యత",
-    "Off": "ఆపు",
-    "Failed to remove tag %(tagName)s from room": "గది నుండి బొందు %(tagName)s తొలగించడంలో విఫలమైంది",
     "Saturday": "శనివారం",
     "This email address is already in use": "ఈ ఇమెయిల్ అడ్రస్ ఇప్పటికే వాడుకం లో ఉంది",
     "This phone number is already in use": "ఈ ఫోన్ నంబర్ ఇప్పటికే వాడుకం లో ఉంది",
@@ -99,7 +93,9 @@
         "warning": "హెచ్చరిక",
         "attachment": "జోడింపు",
         "camera": "కెమెరా",
-        "microphone": "మైక్రోఫోన్"
+        "microphone": "మైక్రోఫోన్",
+        "on": "వేయుము",
+        "off": "ఆపు"
     },
     "action": {
         "continue": "కొనసాగించు",
@@ -131,10 +127,12 @@
             "rule_room_one_to_one": "సందేశాలు నుండి ఒకరికి ఒకటి మాటామంతి",
             "rule_message": "సమూహ మాటామంతిలో సందేశాలు",
             "rule_call": "మాట్లాడడానికి ఆహ్వానం",
-            "rule_suppress_notices": "బాట్ పంపిన సందేశాలు"
+            "rule_suppress_notices": "బాట్ పంపిన సందేశాలు",
+            "noisy": "శబ్దం"
         },
         "appearance": {
-            "timeline_image_size_default": "డిఫాల్ట్"
+            "timeline_image_size_default": "డిఫాల్ట్",
+            "image_size_default": "డిఫాల్ట్"
         }
     },
     "timeline": {
@@ -147,7 +145,8 @@
         "ban": "ఇచ్చిన ఐడి తో వినియోగదారుని నిషేధించారు",
         "category_admin": "అడ్మిన్",
         "category_advanced": "ఆధునిక",
-        "deop": "ఇచ్చిన ID తో వినియోగదారుని విడదీస్తుంది"
+        "deop": "ఇచ్చిన ID తో వినియోగదారుని విడదీస్తుంది",
+        "command_error": "కమాండ్ లోపం"
     },
     "Advanced": "ఆధునిక",
     "voip": {
@@ -156,5 +155,9 @@
     "auth": {
         "sso": "సింగిల్ సైన్ ఆన్",
         "unsupported_auth_msisdn": "ఈ సర్వర్ ఫోన్ నంబర్తో ప్రామాణీకరణకు మద్దతు ఇవ్వదు."
+    },
+    "room_list": {
+        "failed_remove_tag": "గది నుండి బొందు %(tagName)s తొలగించడంలో విఫలమైంది",
+        "failed_add_tag": "%(tagName)s ను బొందు జోడించడంలో విఫలమైంది"
     }
 }

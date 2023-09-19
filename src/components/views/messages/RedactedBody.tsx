@@ -38,7 +38,7 @@ const RedactedBody = React.forwardRef<any, IBodyProps>(({ mxEvent }, ref) => {
     const fullDate = unsigned.redacted_because
         ? formatFullDate(new Date(unsigned.redacted_because.origin_server_ts), showTwelveHour)
         : undefined;
-    const titleText = fullDate ? _t("Message deleted on %(date)s", { date: fullDate }) : undefined;
+    const titleText = fullDate ? _t("timeline|redacted|tooltip", { date: fullDate }) : undefined;
 
     return (
         <span className="mx_RedactedBody" ref={ref} title={titleText}>

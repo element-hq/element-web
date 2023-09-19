@@ -10,15 +10,10 @@
     "Notification targets": "നോട്ടിഫിക്കേഷന്‍ ടാര്‍ഗെറ്റുകള്‍",
     "Today": "ഇന്ന്",
     "Friday": "വെള്ളി",
-    "What's New": "പുതിയ വിശേഷങ്ങള്‍",
-    "On": "ഓണ്‍",
     "Changelog": "മാറ്റങ്ങളുടെ നാള്‍വഴി",
-    "Waiting for response from server": "സെര്‍വറില്‍ നിന്നുള്ള പ്രതികരണത്തിന് കാക്കുന്നു",
     "This Room": "ഈ മുറി",
-    "Noisy": "ഉച്ചത്തില്‍",
     "Unavailable": "ലഭ്യമല്ല",
     "Source URL": "സോഴ്സ് യു ആര്‍ എല്‍",
-    "Failed to add tag %(tagName)s to room": "റൂമിന് %(tagName)s എന്ന ടാഗ് ആഡ് ചെയ്യുവാന്‍ സാധിച്ചില്ല",
     "No update available.": "അപ്ഡേറ്റുകള്‍ ലഭ്യമല്ല.",
     "Tuesday": "ചൊവ്വ",
     "Unnamed room": "പേരില്ലാത്ത റൂം",
@@ -29,15 +24,12 @@
     "You cannot delete this message. (%(code)s)": "നിങ്ങള്‍ക്ക് ഈ സന്ദേശം നീക്കം ചെയ്യാനാകില്ല. (%(code)s)",
     "Send": "അയയ്ക്കുക",
     "All messages": "എല്ലാ സന്ദേശങ്ങളും",
-    "What's new?": "എന്തൊക്കെ പുതിയ വിശേഷങ്ങള്‍ ?",
     "Invite to this room": "ഈ റൂമിലേക്ക് ക്ഷണിക്കുക",
     "Thursday": "വ്യാഴം",
     "Search…": "തിരയുക…",
     "Yesterday": "ഇന്നലെ",
     "Error encountered (%(errorDetail)s).": "എറര്‍ നേരിട്ടു (%(errorDetail)s).",
     "Low Priority": "താഴ്ന്ന പരിഗണന",
-    "Off": "ഓഫ്",
-    "Failed to remove tag %(tagName)s from room": "റൂമില്‍ നിന്നും %(tagName)s ടാഗ് നീക്കം ചെയ്യുവാന്‍ സാധിച്ചില്ല",
     "Explore rooms": "മുറികൾ കണ്ടെത്തുക",
     "common": {
         "error": "എറര്‍",
@@ -47,7 +39,9 @@
         "camera": "ക്യാമറ",
         "microphone": "മൈക്രോഫോൺ",
         "identity_server": "തിരിച്ചറിയൽ സെർവർ",
-        "integration_manager": "സംയോജക മാനേജർ"
+        "integration_manager": "സംയോജക മാനേജർ",
+        "on": "ഓണ്‍",
+        "off": "ഓഫ്"
     },
     "action": {
         "continue": "മുന്നോട്ട്",
@@ -70,7 +64,8 @@
     "bug_reporting": {
         "send_logs": "നാള്‍വഴി അയയ്ക്കുക",
         "collecting_information": "ആപ്പ് പതിപ്പു വിവരങ്ങള്‍ ശേഖരിക്കുന്നു",
-        "collecting_logs": "നാള്‍വഴി ശേഖരിക്കുന്നു"
+        "collecting_logs": "നാള്‍വഴി ശേഖരിക്കുന്നു",
+        "waiting_for_server": "സെര്‍വറില്‍ നിന്നുള്ള പ്രതികരണത്തിന് കാക്കുന്നു"
     },
     "settings": {
         "notifications": {
@@ -79,11 +74,20 @@
             "rule_message": "ഗ്രൂപ്പ് ചാറ്റുകളിലെ സന്ദേശങ്ങള്‍ക്ക്",
             "rule_invite_for_me": "ഞാന്‍ ഒരു റൂമിലേക്ക് ക്ഷണിക്കപ്പെടുമ്പോള്‍",
             "rule_call": "വിളിയ്ക്കുന്നു",
-            "rule_suppress_notices": "ബോട്ട് അയയ്ക്കുന്ന സന്ദേശങ്ങള്‍ക്ക്"
+            "rule_suppress_notices": "ബോട്ട് അയയ്ക്കുന്ന സന്ദേശങ്ങള്‍ക്ക്",
+            "noisy": "ഉച്ചത്തില്‍"
         }
     },
     "auth": {
         "footer_powered_by_matrix": "മാട്രിക്സില്‍ പ്രവര്‍ത്തിക്കുന്നു",
         "register_action": "അക്കൗണ്ട് സൃഷ്ടിക്കുക"
+    },
+    "room_list": {
+        "failed_remove_tag": "റൂമില്‍ നിന്നും %(tagName)s ടാഗ് നീക്കം ചെയ്യുവാന്‍ സാധിച്ചില്ല",
+        "failed_add_tag": "റൂമിന് %(tagName)s എന്ന ടാഗ് ആഡ് ചെയ്യുവാന്‍ സാധിച്ചില്ല"
+    },
+    "update": {
+        "see_changes_button": "എന്തൊക്കെ പുതിയ വിശേഷങ്ങള്‍ ?",
+        "release_notes_toast_title": "പുതിയ വിശേഷങ്ങള്‍"
     }
 }

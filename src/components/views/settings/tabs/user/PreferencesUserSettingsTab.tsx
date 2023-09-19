@@ -147,7 +147,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             <SettingsTab data-testid="mx_PreferencesUserSettingsTab">
                 <SettingsSection heading={_t("common|preferences")}>
                     {roomListSettings.length > 0 && (
-                        <SettingsSubsection heading={_t("Room list")}>
+                        <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
                             {this.renderGroup(roomListSettings)}
                         </SettingsSubsection>
                     )}
@@ -157,9 +157,9 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     </SettingsSubsection>
 
                     <SettingsSubsection
-                        heading={_t("Keyboard shortcuts")}
+                        heading={_t("settings|preferences|keyboard_heading")}
                         description={_t(
-                            "To view all keyboard shortcuts, <a>click here</a>.",
+                            "settings|preferences|keyboard_view_shortcuts_button",
                             {},
                             {
                                 a: (sub) => (
@@ -173,26 +173,26 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("Displaying time")}>
+                    <SettingsSubsection heading={_t("settings|preferences|time_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.TIME_SETTINGS)}
                     </SettingsSubsection>
 
                     <SettingsSubsection
                         heading={_t("common|presence")}
-                        description={_t("Share your activity and status with others.")}
+                        description={_t("settings|preferences|presence_description")}
                     >
                         {this.renderGroup(PreferencesUserSettingsTab.PRESENCE_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("Composer")}>
+                    <SettingsSubsection heading={_t("settings|preferences|composer_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("Code blocks")}>
+                    <SettingsSubsection heading={_t("settings|preferences|code_blocks_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("Images, GIFs and videos")}>
+                    <SettingsSubsection heading={_t("settings|preferences|media_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
                     </SettingsSubsection>
 
@@ -200,7 +200,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         {this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("Room directory")}>
+                    <SettingsSubsection heading={_t("settings|preferences|room_directory_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.ROOM_DIRECTORY_SETTINGS)}
                     </SettingsSubsection>
 
@@ -212,7 +212,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                             name="Electron.enableHardwareAcceleration"
                             level={SettingLevel.PLATFORM}
                             hideIfCannotSet
-                            label={_t("Enable hardware acceleration (restart %(appName)s to take effect)", {
+                            label={_t("settings|preferences|Electron.enableHardwareAcceleration", {
                                 appName: SdkConfig.get().brand,
                             })}
                         />
@@ -221,19 +221,19 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         <SettingsFlag name="Electron.warnBeforeExit" level={SettingLevel.PLATFORM} hideIfCannotSet />
 
                         <Field
-                            label={_t("Autocomplete delay (ms)")}
+                            label={_t("settings|preferences|autocomplete_delay")}
                             type="number"
                             value={this.state.autocompleteDelay}
                             onChange={this.onAutocompleteDelayChange}
                         />
                         <Field
-                            label={_t("Read Marker lifetime (ms)")}
+                            label={_t("settings|preferences|rm_lifetime")}
                             type="number"
                             value={this.state.readMarkerInViewThresholdMs}
                             onChange={this.onReadMarkerInViewThresholdMs}
                         />
                         <Field
-                            label={_t("Read Marker off-screen lifetime (ms)")}
+                            label={_t("settings|preferences|rm_lifetime_offscreen")}
                             type="number"
                             value={this.state.readMarkerOutOfViewThresholdMs}
                             onChange={this.onReadMarkerOutOfViewThresholdMs}

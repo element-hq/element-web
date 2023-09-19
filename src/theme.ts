@@ -78,7 +78,7 @@ export function isHighContrastTheme(theme: string): boolean {
 export function enumerateThemes(): { [key: string]: string } {
     const BUILTIN_THEMES = {
         "light": _t("common|light"),
-        "light-high-contrast": _t("Light high contrast"),
+        "light-high-contrast": _t("theme|light_high_contrast"),
         "dark": _t("common|dark"),
     };
     const customThemes = SettingsStore.getValue("custom_themes") || [];

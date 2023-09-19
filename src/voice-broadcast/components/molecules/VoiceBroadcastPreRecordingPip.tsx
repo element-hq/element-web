@@ -75,7 +75,7 @@ export const VoiceBroadcastPreRecordingPip: React.FC<Props> = ({ voiceBroadcastP
                 disabled={state.disableStartButton}
             >
                 <LiveIcon className="mx_Icon mx_Icon_16" />
-                {_t("Go live")}
+                {_t("voice_broadcast|go_live")}
             </AccessibleButton>
             {state.showDeviceSelect && (
                 <DevicesContextMenu

@@ -104,7 +104,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s de %(fullYear)s às %(time)s",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Uma conexão com o servidor local via HTTP não pode ser estabelecida se a barra de endereços do navegador contiver um endereço HTTPS. Use HTTPS ou, em vez disso, permita ao navegador executar <a>scripts não seguros</a>.",
     "Change Password": "Alterar senha",
-    "Command error": "Erro de comando",
     "Decrypt %(text)s": "Descriptografar %(text)s",
     "Download %(text)s": "Baixar %(text)s",
     "Failed to ban user": "Não foi possível banir o usuário",
@@ -119,9 +118,7 @@
     "not specified": "não especificado",
     "No more results": "Não há mais resultados",
     "Search failed": "Busca falhou",
-    "Server error": "Erro no servidor",
     "Server may be unavailable, overloaded, or search timed out :(": "O servidor pode estar indisponível, sobrecarregado, ou a busca ultrapassou o tempo limite :(",
-    "Server unavailable, overloaded, or something else went wrong.": "O servidor pode estar indisponível, sobrecarregado, ou alguma outra coisa não funcionou.",
     "This room has no local addresses": "Esta sala não tem endereços locais",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Não foi possível carregar um trecho específico da conversa desta sala, porque parece que você não tem permissão para ler a mensagem em questão.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Não foi possível carregar um trecho específico da conversa desta sala.",
@@ -161,12 +158,8 @@
     "Drop file here to upload": "Arraste um arquivo aqui para enviar",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Este processo faz com que você possa importar as chaves de criptografia que tinha previamente exportado de outro cliente Matrix. Você poderá então descriptografar todas as mensagens que o outro cliente pôde criptografar.",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será redirecionado para um site de terceiros para poder autenticar a sua conta, tendo em vista usar o serviço %(integrationsUrl)s. Deseja prosseguir?",
-    "Incorrect username and/or password.": "Nome de usuário e/ou senha incorreto.",
     "Invited": "Convidada(o)",
     "Verified key": "Chave confirmada",
-    "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s removeu a foto da sala.",
-    "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s alterou a foto da sala %(roomName)s",
-    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s alterou a foto da sala para <img/>",
     "No Microphones detected": "Não foi detectado nenhum microfone",
     "No Webcams detected": "Nenhuma câmera detectada",
     "No media permissions": "Não tem permissões para acessar a mídia",
@@ -215,7 +208,6 @@
     "You are now ignoring %(userId)s": "Agora você está bloqueando %(userId)s",
     "Unignored user": "Usuário desbloqueado",
     "Send": "Enviar",
-    "Mirror local video feed": "Espelhar o feed de vídeo local",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Você não poderá desfazer essa alteração, já que está rebaixando sua própria permissão. Se você for a última pessoa nesta sala, será impossível recuperar a permissão atual.",
     "Unignore": "Desbloquear",
     "Jump to read receipt": "Ir para a confirmação de leitura",
@@ -254,36 +246,28 @@
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Note que você está se conectando ao servidor %(hs)s, e não ao servidor matrix.org.",
     "Notify the whole room": "Notifica a sala inteira",
     "Room Notification": "Notificação da sala",
-    "Failed to remove tag %(tagName)s from room": "Falha ao remover a tag %(tagName)s da sala",
-    "Failed to add tag %(tagName)s to room": "Falha ao adicionar a tag %(tagName)s para a sala",
     "Sunday": "Domingo",
     "Notification targets": "Aparelhos notificados",
     "Today": "Hoje",
     "Friday": "Sexta-feira",
-    "What's New": "Novidades",
-    "On": "Ativado",
     "Changelog": "Registro de alterações",
-    "Waiting for response from server": "Aguardando a resposta do servidor",
     "This Room": "Esta sala",
     "Unavailable": "Indisponível",
     "Source URL": "Link do código-fonte",
     "Filter results": "Filtrar resultados",
     "No update available.": "Nenhuma atualização disponível.",
-    "Noisy": "Ativado com som",
     "Tuesday": "Terça-feira",
     "Search…": "Buscar…",
     "Saturday": "Sábado",
     "Monday": "Segunda-feira",
     "Invite to this room": "Convidar para esta sala",
     "All messages": "Todas as mensagens novas",
-    "What's new?": "O que há de novidades?",
     "All Rooms": "Todas as salas",
     "You cannot delete this message. (%(code)s)": "Você não pode apagar esta mensagem. (%(code)s)",
     "Thursday": "Quinta-feira",
     "Yesterday": "Ontem",
     "Error encountered (%(errorDetail)s).": "Erro encontrado (%(errorDetail)s).",
     "Low Priority": "Baixa prioridade",
-    "Off": "Desativado",
     "Wednesday": "Quarta-feira",
     "Thank you!": "Obrigado!",
     "Permission Required": "Permissão necessária",
@@ -321,8 +305,6 @@
     "Straight rows of keys are easy to guess": "Linhas retas de teclas são fáceis de adivinhar",
     "Short keyboard patterns are easy to guess": "Padrões de teclado curtos são fáceis de adivinhar",
     "Please contact your homeserver administrator.": "Por favor, entre em contato com o administrador do seu homeserver.",
-    "Send analytics data": "Enviar dados analíticos",
-    "Enable widget screenshots on supported widgets": "Ativar capturas de tela do widget em widgets suportados",
     "Delete Backup": "Remover backup",
     "Unable to load key backup status": "Não foi possível carregar o status do backup da chave",
     "This event could not be displayed": "Este evento não pôde ser exibido",
@@ -340,8 +322,6 @@
     "Add some now": "Adicione alguns agora",
     "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "Em salas criptografadas, como esta, as pré-visualizações de links estão desativadas por padrão para garantir que o seu servidor local (onde as visualizações são geradas) não possa coletar informações sobre os links que você vê nesta sala.",
     "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Quando alguém inclui um link em uma mensagem, a pré-visualização do link pode ser exibida para fornecer mais informações sobre esse link, como o título, a descrição e uma imagem do site.",
-    "This room is a continuation of another conversation.": "Esta sala é uma continuação de outra conversa.",
-    "Click here to see older messages.": "Clique aqui para ver as mensagens mais antigas.",
     "Please review and accept all of the homeserver's policies": "Por favor, revise e aceite todas as políticas do homeserver",
     "Please review and accept the policies of this homeserver:": "Por favor, revise e aceite as políticas deste servidor local:",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Não é possível carregar o evento que foi respondido, ele não existe ou você não tem permissão para visualizá-lo.",
@@ -494,9 +474,6 @@
     "Language and region": "Idioma e região",
     "Account management": "Gerenciamento da Conta",
     "General": "Geral",
-    "Composer": "Campo de texto",
-    "Room list": "Lista de salas",
-    "Autocomplete delay (ms)": "Atraso no preenchimento automático (ms)",
     "Ignored users": "Usuários bloqueados",
     "Bulk options": "Opções em massa",
     "Accept all %(invitedRooms)s invites": "Aceite todos os convites de %(invitedRooms)s",
@@ -561,16 +538,7 @@
     "Verify this session": "Confirmar esta sessão",
     "Other users may not trust it": "Outras(os) usuárias(os) podem não confiar nela",
     "New login. Was this you?": "Novo login. Foi você?",
-    "Use custom size": "Usar tamanho personalizado",
-    "Never send encrypted messages to unverified sessions from this session": "Nunca envie mensagens criptografadas a partir desta sessão para sessões não confirmadas",
-    "Never send encrypted messages to unverified sessions in this room from this session": "Nunca envie mensagens criptografadas a partir desta sessão para sessões não confirmadas nessa sala",
-    "Show hidden events in timeline": "Mostrar eventos ocultos nas conversas",
-    "Enable message search in encrypted rooms": "Ativar busca de mensagens em salas criptografadas",
-    "How fast should messages be downloaded.": "Com qual rapidez as mensagens devem ser baixadas.",
-    "Manually verify all remote sessions": "Verificar manualmente todas as sessões remotas",
     "IRC display name width": "Largura do nome e sobrenome nas mensagens",
-    "My Ban List": "Minha lista de banidos",
-    "This is your list of users/servers you have blocked - don't leave the room!": "Esta é a sua lista de usuárias(os)/servidores que você bloqueou - não saia da sala!",
     "Waiting for %(displayName)s to verify…": "Aguardando %(displayName)s confirmar…",
     "Cancelling…": "Cancelando…",
     "Lock": "Cadeado",
@@ -625,7 +593,6 @@
     "The authenticity of this encrypted message can't be guaranteed on this device.": "A autenticidade desta mensagem criptografada não pode ser garantida neste aparelho.",
     "Start chatting": "Começar a conversa",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Atualizar esta sala irá fechar a instância atual da sala e criar uma sala atualizada com o mesmo nome.",
-    "Hint: Begin your message with <code>//</code> to start it with a slash.": "Dica: Inicie sua mensagem com <code>//</code> para iniciar com uma barra.",
     "Start Verification": "Iniciar confirmação",
     "Messages in this room are end-to-end encrypted.": "As mensagens nesta sala estão criptografadas de ponta a ponta.",
     "Messages in this room are not end-to-end encrypted.": "As mensagens nesta sala não estão criptografadas de ponta a ponta.",
@@ -680,9 +647,6 @@
     "Create key backup": "Criar backup de chave",
     "This session is encrypting history using the new recovery method.": "Esta sessão está criptografando o histórico de mensagens usando a nova opção de recuperação.",
     "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Se você fez isso acidentalmente, você pode configurar Mensagens Seguras nesta sessão, o que vai re-criptografar o histórico de mensagens desta sessão com uma nova opção de recuperação.",
-    "If disabled, messages from encrypted rooms won't appear in search results.": "Se desativado, as mensagens de salas criptografadas não aparecerão em resultados de buscas.",
-    "%(brand)s is securely caching encrypted messages locally for them to appear in search results:": "%(brand)s está armazenando de forma segura as mensagens criptografadas localmente, para que possam aparecer nos resultados das buscas:",
-    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s de %(totalRooms)s",
     "Click the button below to confirm adding this phone number.": "Clique no botão abaixo para confirmar a adição deste número de telefone.",
     "Forget Room": "Esquecer Sala",
     "Favourited": "Favoritado",
@@ -694,8 +658,6 @@
     "%(name)s declined": "%(name)s recusou",
     "%(name)s cancelled": "%(name)s cancelou",
     "You sent a verification request": "Você enviou uma solicitação de confirmação",
-    "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>reagiu com %(shortName)s</reactedWith>",
-    "Message deleted on %(date)s": "Mensagem apagada em %(date)s",
     "Edited at %(date)s": "Editado em %(date)s",
     "Click to view edits": "Clicar para ver edições",
     "Edited at %(date)s. Click to view edits.": "Editado em %(date)s. Clique para ver edições.",
@@ -720,7 +682,6 @@
     "This address is already in use": "Este endereço já está em uso",
     "Enter a server name": "Digite um nome de servidor",
     "Can't find this server or its room list": "Não foi possível encontrar este servidor ou sua lista de salas",
-    "All rooms": "Todas as salas",
     "Your server": "Seu servidor",
     "Add a new server": "Adicionar um novo servidor",
     "Server name": "Nome do servidor",
@@ -796,17 +757,10 @@
     "Enter a new identity server": "Digite um novo servidor de identidade",
     "Manage integrations": "Gerenciar integrações",
     "New version available. <a>Update now.</a>": "Nova versão disponível. <a>Atualize agora.</a>",
-    "Hey you. You're the best!": "Ei, você aí. Você é incrível!",
-    "Size must be a number": "O tamanho deve ser um número",
-    "Custom font size can only be between %(min)s pt and %(max)s pt": "O tamanho da fonte personalizada só pode estar entre %(min)s pt e %(max)s pt",
-    "Use between %(min)s pt and %(max)s pt": "Use entre %(min)s pt e %(max)s pt",
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Concorde com os Termos de Serviço do servidor de identidade (%(serverName)s), para que você possa ser descoberto por endereço de e-mail ou por número de celular.",
     "Discovery": "Contatos",
     "Deactivate account": "Desativar minha conta",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Para relatar um problema de segurança relacionado à tecnologia Matrix, leia a <a>Política de Divulgação de Segurança</a> da Matrix.org.",
-    "Always show the window menu bar": "Mostrar a barra de menu na janela",
-    "Read Marker lifetime (ms)": "Duração do marcador de leitura (ms)",
-    "Read Marker off-screen lifetime (ms)": "Vida útil do marcador de leitura fora da tela (ms)",
     "Send %(eventType)s events": "Enviar eventos de %(eventType)s",
     "Roles & Permissions": "Cargos e permissões",
     "Select the roles required to change various parts of the room": "Selecione os cargos necessários para alterar várias partes da sala",
@@ -834,10 +788,6 @@
     "Reject & Ignore user": "Recusar e bloquear usuário",
     "You're previewing %(roomName)s. Want to join it?": "Você está visualizando %(roomName)s. Deseja participar?",
     "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s não pode ser visualizado. Deseja participar?",
-    "Unknown Command": "Comando desconhecido",
-    "Unrecognised command: %(commandText)s": "Comando não reconhecido: %(commandText)s",
-    "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "Você pode usar <code>/help</code> para listar os comandos disponíveis. Você quis enviar isso como uma mensagem?",
-    "Send as message": "Enviar como mensagem",
     "Room Topic": "Descrição da sala",
     "Resend %(unsentCount)s reaction(s)": "Reenviar %(unsentCount)s reações",
     "Switch to light mode": "Alternar para o modo claro",
@@ -990,9 +940,7 @@
     "Your password has been reset.": "Sua senha foi alterada.",
     "Invalid base_url for m.homeserver": "base_url inválido para m.homeserver",
     "Invalid base_url for m.identity_server": "base_url inválido para m.identity_server",
-    "This account has been deactivated.": "Esta conta foi desativada.",
     "Success!": "Pronto!",
-    "Space used:": "Espaço usado:",
     "Change notification settings": "Alterar configuração de notificações",
     "Your server isn't responding to some <a>requests</a>.": "Seu servidor não está respondendo a algumas <a>solicitações</a>.",
     "Ban list rules - %(roomName)s": "Regras da lista de banidos - %(roomName)s",
@@ -1137,11 +1085,6 @@
     "Confirm Security Phrase": "Confirme a frase de segurança",
     "Unable to set up secret storage": "Não foi possível definir o armazenamento secreto",
     "Recovery Method Removed": "Opção de recuperação removida",
-    "Not currently indexing messages for any room.": "Atualmente, mensagens de nenhuma sala estão sendo armazenadas.",
-    "Currently indexing: %(currentRoom)s": "Armazenando no momento: %(currentRoom)s",
-    "Indexed messages:": "Mensagens armazenadas:",
-    "Indexed rooms:": "Salas armazenadas:",
-    "Message downloading sleep time(ms)": "Tempo de espera entre o download de mensagens (ms)",
     "The call could not be established": "Não foi possível iniciar a chamada",
     "You can only pin up to %(count)s widgets": {
         "other": "Você pode fixar até %(count)s widgets"
@@ -1160,8 +1103,6 @@
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Convide alguém a partir do nome, e-mail ou nome de usuário (por exemplo: <userId/>) ou <a>compartilhe esta sala</a>.",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "Comece uma conversa, a partir do nome, e-mail ou nome de usuário de alguém (por exemplo: <userId/>).",
     "Invite by email": "Convidar por e-mail",
-    "New version of %(brand)s is available": "Uma nova versão do %(brand)s está disponível",
-    "Update %(brand)s": "Atualizar o %(brand)s",
     "Jordan": "Jordânia",
     "Japan": "Japão",
     "Jamaica": "Jamaica",
@@ -1486,10 +1427,7 @@
     "Empty room": "Sala vazia",
     "Suggested Rooms": "Salas sugeridas",
     "Add existing room": "Adicionar sala existente",
-    "Skip for now": "Ignorar por enquanto",
-    "Welcome to <name/>": "Boas-vindas ao <name/>",
     "This homeserver has been blocked by its administrator.": "Este servidor local foi bloqueado pelo seu administrador.",
-    "Failed to create initial space rooms": "Falha ao criar salas de espaço iniciais",
     "%(count)s members": {
         "one": "%(count)s integrante",
         "other": "%(count)s integrantes"
@@ -1513,12 +1451,8 @@
     "Share your public space": "Compartilhar o seu espaço público",
     "Share invite link": "Compartilhar link de convite",
     "Click to copy": "Clique para copiar",
-    "Your private space": "O seu espaço privado",
-    "Your public space": "O seu espaço público",
-    "Open space for anyone, best for communities": "Abra espaços para todos, especialmente para comunidades",
     "Create a space": "Criar um espaço",
     "Decrypted event source": "Fonte de evento descriptografada",
-    "Invite by username": "Convidar por nome de usuário",
     "Original event source": "Fonte do evento original",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Seu %(brand)s não permite que você use o gerenciador de integrações para fazer isso. Entre em contato com o administrador.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Se você usar esse widget, os dados poderão ser compartilhados <helpIcon /> com %(widgetDomain)s & seu gerenciador de integrações.",
@@ -1551,14 +1485,8 @@
         "one": "& %(count)s mais"
     },
     "Upgrade required": "Atualização necessária",
-    "Anyone can find and join.": "Todos podem encontrar e entrar.",
-    "Only invited people can join.": "Apenas pessoas convidadas podem entrar.",
-    "Private (invite only)": "Privado (convite apenas)",
     "You have no ignored users.": "Você não tem usuários ignorados.",
     "Space information": "Informações do espaço",
-    "Images, GIFs and videos": "Imagens, GIFs e vídeos",
-    "Code blocks": "Blocos de código",
-    "Keyboard shortcuts": "Teclas de atalho do teclado",
     "Mentions & keywords": "Menções e palavras-chave",
     "Global": "Global",
     "New keyword": "Nova palavra-chave",
@@ -1572,8 +1500,6 @@
     "Show all rooms": "Mostrar todas as salas",
     "You can change these anytime.": "Você pode mudá-los a qualquer instante.",
     "Address": "Endereço",
-    "e.g. my-space": "e.g. meu-espaco",
-    "Please enter a name for the space": "Por favor entre o nome do espaço",
     "Connecting": "Conectando",
     "unknown person": "pessoa desconhecida",
     "%(deviceId)s from %(ip)s": "%(deviceId)s de %(ip)s",
@@ -1587,9 +1513,7 @@
     "Guests can join a space without having an account.": "Convidados podem se juntar a um espaço sem ter uma conta.",
     "Failed to update the history visibility of this space": "Falha ao atualizar a visibilidade do histórico deste espaço",
     "Failed to update the guest access of this space": "Falha ao atualizar o acesso de convidados a este espaço",
-    "Add some details to help people recognise it.": "Adicione alguns detalhes para ajudar as pessoas a reconhecê-lo.",
     "To join a space you'll need an invite.": "Para se juntar a um espaço você precisará de um convite.",
-    "Invite only, best for yourself or teams": "Somente convite, melhor para si mesmo(a) ou para equipes",
     "Delete avatar": "Remover foto de perfil",
     "More": "Mais",
     "Show sidebar": "Exibir a barra lateral",
@@ -1631,7 +1555,6 @@
     "Application window": "Janela da aplicação",
     "Share entire screen": "Compartilhe a tela inteira",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Falha na inicialização da pesquisa por mensagem, confire <a>suas configurações</a> para mais informações",
-    "%(reactors)s reacted with %(content)s": "%(reactors)s reagiram com %(content)s",
     "Add reaction": "Adicionar reação",
     "Error processing voice message": "Erro ao processar a mensagem de voz",
     "Error processing audio message": "Erro ao processar a mensagem de áudio",
@@ -1672,9 +1595,7 @@
     "MB": "MB",
     "In reply to <a>this message</a>": "Em resposta a <a>esta mensagem</a>",
     "Export chat": "Exportar conversa",
-    "Light high contrast": "Claro (alto contraste)",
     "Space selection": "Seleção de Espaços",
-    "Use a more compact 'Modern' layout": "Usar um layout \"moderno\" mais compacto",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s e %(count)s outro",
         "other": "%(spaceName)s e %(count)s outros"
@@ -1684,7 +1605,6 @@
     "Moderation": "Moderação",
     "Developer": "Desenvolvedor",
     "Messaging": "Mensagens",
-    "Other rooms": "Outras salas",
     "That's fine": "Isso é bom",
     "You cannot place calls without a connection to the server.": "Você não pode fazer chamadas sem uma conexão com o servidor.",
     "Connectivity to the server has been lost": "A conectividade com o servidor foi perdida",
@@ -1692,9 +1612,6 @@
     "Search %(spaceName)s": "Pesquisar %(spaceName)s",
     "Pin to sidebar": "Fixar na barra lateral",
     "Quick settings": "Configurações rápidas",
-    "Developer mode": "Modo desenvolvedor",
-    "Automatically send debug logs on any error": "Enviar automaticamente logs de depuração em qualquer erro",
-    "Surround selected text when typing special characters": "Circule o texto selecionado ao digitar caracteres especiais",
     "Click the button below to confirm signing out these devices.": {
         "one": "Clique no botão abaixo para confirmar a desconexão deste dispositivo.",
         "other": "Clique no botão abaixo para confirmar a desconexão de outros dispositivos."
@@ -1790,9 +1707,6 @@
     "Spaces to show": "Espaços para mostrar",
     "Sidebar": "Barra lateral",
     "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "Compartilhe dados anônimos para nos ajudar a identificar problemas. Nada pessoal. Sem terceiros.",
-    "Displaying time": "Exibindo tempo",
-    "To view all keyboard shortcuts, <a>click here</a>.": "Para ver todos os atalhos do teclado, <a>clique aqui</a>.",
-    "Show tray icon and minimise window to it on close": "Mostrar o ícone da bandeja e minimizar a janela ao fechar",
     "Updating spaces... (%(progress)s out of %(count)s)": {
         "one": "Atualizando espaço...",
         "other": "Atualizando espaços... (%(progress)s de %(count)s)"
@@ -1804,7 +1718,6 @@
     "Loading new room": "Carregando nova sala",
     "Upgrading room": "Atualizando sala",
     "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Esta sala está em alguns espaços dos quais você não é administrador. Nesses espaços, a sala antiga ainda será exibida, mas as pessoas serão solicitadas a ingressar na nova.",
-    "Large": "Grande",
     "Deselect all": "Desmarcar todos",
     "Select all": "Selecionar tudo",
     "Sign out devices": {
@@ -1812,7 +1725,6 @@
         "other": "Desconectar dispositivos"
     },
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s e %(space2Name)s",
-    "Show:": "Exibir:",
     "Leave some rooms": "Sair de algumas salas",
     "Leave all rooms": "Sair de todas as salas",
     "Don't leave any rooms": "Não saia de nenhuma sala",
@@ -1849,8 +1761,6 @@
     "Rename session": "Renomear sessão",
     "Other sessions": "Outras sessões",
     "Sessions": "Sessões",
-    "Keyboard": "Teclado",
-    "Enable hardware acceleration": "Habilitar aceleração de hardware",
     "User is already in the space": "O usuário já está no espaço",
     "User is already in the room": "O usuário já está na sala",
     "User does not exist": "O usuário não existe",
@@ -1883,10 +1793,6 @@
     "The person who invited you has already left.": "A pessoa que o convidou já saiu.",
     "There was an error joining.": "Ocorreu um erro ao entrar.",
     "Unknown room": "Sala desconhecida",
-    "Location not available": "Local não disponível",
-    "Find my location": "Encontrar minha localização",
-    "Exit fullscreen": "Sair da tela cheia",
-    "Enter fullscreen": "Entrar em tela cheia",
     "User may or may not exist": "O usuário pode ou não existir",
     "User is already invited to the room": "O usuário já foi convidado para a sala",
     "User is already invited to the space": "O usuário já foi convidado para o espaço",
@@ -1911,25 +1817,10 @@
         "one": "Confirme a saída deste dispositivo"
     },
     "Current session": "Sessão atual",
-    "Developer tools": "Ferramentas de desenvolvimento",
-    "Yes, stop broadcast": "Sim, interromper a transmissão",
-    "Stop live broadcasting?": "Parar a transmissão ao vivo?",
-    "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Outra pessoa já está gravando uma transmissão de voz. Aguarde o término da transmissão de voz para iniciar uma nova.",
-    "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.": "Você não tem as permissões necessárias para iniciar uma transmissão de voz nesta sala. Entre em contato com um administrador de sala para atualizar suas permissões.",
-    "You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.": "Você já está gravando uma transmissão de voz. Encerre sua transmissão de voz atual para iniciar uma nova.",
-    "Can't start a new voice broadcast": "Não é possível iniciar uma nova transmissão de voz",
-    "%(senderName)s ended a voice broadcast": "%(senderName)s encerrou uma transmissão de voz",
-    "You ended a voice broadcast": "Você encerrou uma transmissão de voz",
-    "%(senderName)s ended a <a>voice broadcast</a>": "%(senderName)s encerrou uma <a>transmissão de voz</a>",
-    "You ended a <a>voice broadcast</a>": "Você encerrou uma <a>transmissão de voz</a>",
     "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.": "Você não pode iniciar uma chamada porque está gravando uma transmissão ao vivo. Termine sua transmissão ao vivo para iniciar uma chamada.",
     "Can’t start a call": "Não é possível iniciar uma chamada",
-    "Unfortunately we're unable to start a recording right now. Please try again later.": "Infelizmente, não podemos iniciar uma gravação agora. Por favor, tente novamente mais tarde.",
-    "Connection error": "Erro de conexão",
     "Failed to read events": "Falha ao ler evento",
     "Failed to send event": "Falha ao enviar evento",
-    "If you start listening to this live broadcast, your current live broadcast recording will be ended.": "Se você começar a ouvir esta tramissão ao vivo, a gravação desta transmissão, será encerrada.",
-    "Listen to live broadcast?": "Ouvir transmissão ao vivo?",
     "%(senderName)s started a voice broadcast": "%(senderName)s iniciou uma transmissão de voz",
     "Text": "Texto",
     "Edit link": "Editar ligação",
@@ -2017,7 +1908,12 @@
         "identity_server": "Servidor de identidade",
         "integration_manager": "Gerenciador de integrações",
         "qr_code": "Código QR",
-        "feedback": "Fale conosco"
+        "feedback": "Fale conosco",
+        "all_rooms": "Todas as salas",
+        "orphan_rooms": "Outras salas",
+        "preview_message": "Ei, você aí. Você é incrível!",
+        "on": "Ativado",
+        "off": "Desativado"
     },
     "action": {
         "continue": "Continuar",
@@ -2104,7 +2000,9 @@
         "refresh": "Recarregar",
         "mention": "Mencionar",
         "submit": "Enviar",
-        "send_report": "Enviar relatório"
+        "send_report": "Enviar relatório",
+        "enter_fullscreen": "Entrar em tela cheia",
+        "exit_fullscreeen": "Sair da tela cheia"
     },
     "a11y": {
         "user_menu": "Menu do usuário",
@@ -2136,7 +2034,8 @@
         "group_themes": "Temas",
         "group_encryption": "Criptografia",
         "group_experimental": "Experimental",
-        "group_developer": "Desenvolvedor"
+        "group_developer": "Desenvolvedor",
+        "automatic_debug_logs": "Enviar automaticamente logs de depuração em qualquer erro"
     },
     "keyboard": {
         "home": "Home",
@@ -2225,7 +2124,8 @@
         "collecting_logs": "Coletando logs",
         "uploading_logs": "Enviando relatórios",
         "downloading_logs": "Baixando relatórios",
-        "create_new_issue": "Por favor, <newIssueLink>crie um novo bilhete de erro</newIssueLink> no GitHub para que possamos investigar esta falha."
+        "create_new_issue": "Por favor, <newIssueLink>crie um novo bilhete de erro</newIssueLink> no GitHub para que possamos investigar esta falha.",
+        "waiting_for_server": "Aguardando a resposta do servidor"
     },
     "time": {
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
@@ -2322,7 +2222,8 @@
             "enable_email_notifications": "Habilita notificação por emails para %(email)s",
             "enable_desktop_notifications_session": "Ativar notificações na área de trabalho nesta sessão",
             "show_message_desktop_notification": "Mostrar a mensagem na notificação da área de trabalho",
-            "enable_audible_notifications_session": "Ativar o som de notificações nesta sessão"
+            "enable_audible_notifications_session": "Ativar o som de notificações nesta sessão",
+            "noisy": "Ativado com som"
         },
         "appearance": {
             "layout_irc": "IRC (experimental)",
@@ -2342,10 +2243,54 @@
             "custom_font_description": "Defina o nome de uma fonte instalada no seu sistema e o %(brand)s tentará usá-la.",
             "timeline_image_size": "Tamanho da imagem na linha do tempo",
             "timeline_image_size_default": "Padrão",
-            "timeline_image_size_large": "Grande"
+            "timeline_image_size_large": "Grande",
+            "custom_font_size": "Usar tamanho personalizado",
+            "font_size_nan": "O tamanho deve ser um número",
+            "font_size_limit": "O tamanho da fonte personalizada só pode estar entre %(min)s pt e %(max)s pt",
+            "font_size_valid": "Use entre %(min)s pt e %(max)s pt",
+            "image_size_default": "Padrão",
+            "image_size_large": "Grande"
         },
         "inline_url_previews_room_account": "Ativar, para esta sala, a visualização de links (só afeta você)",
-        "inline_url_previews_room": "Ativar, para todos os participantes desta sala, a visualização de links"
+        "inline_url_previews_room": "Ativar, para todos os participantes desta sala, a visualização de links",
+        "security": {
+            "message_search_disable_warning": "Se desativado, as mensagens de salas criptografadas não aparecerão em resultados de buscas.",
+            "message_search_indexing_idle": "Atualmente, mensagens de nenhuma sala estão sendo armazenadas.",
+            "message_search_indexing": "Armazenando no momento: %(currentRoom)s",
+            "message_search_intro": "%(brand)s está armazenando de forma segura as mensagens criptografadas localmente, para que possam aparecer nos resultados das buscas:",
+            "message_search_space_used": "Espaço usado:",
+            "message_search_indexed_messages": "Mensagens armazenadas:",
+            "message_search_indexed_rooms": "Salas armazenadas:",
+            "message_search_room_progress": "%(doneRooms)s de %(totalRooms)s",
+            "message_search_sleep_time": "Com qual rapidez as mensagens devem ser baixadas.",
+            "send_analytics": "Enviar dados analíticos",
+            "strict_encryption": "Nunca envie mensagens criptografadas a partir desta sessão para sessões não confirmadas",
+            "enable_message_search": "Ativar busca de mensagens em salas criptografadas",
+            "manually_verify_all_sessions": "Verificar manualmente todas as sessões remotas"
+        },
+        "preferences": {
+            "room_list_heading": "Lista de salas",
+            "keyboard_heading": "Teclas de atalho do teclado",
+            "keyboard_view_shortcuts_button": "Para ver todos os atalhos do teclado, <a>clique aqui</a>.",
+            "time_heading": "Exibindo tempo",
+            "composer_heading": "Campo de texto",
+            "code_blocks_heading": "Blocos de código",
+            "media_heading": "Imagens, GIFs e vídeos",
+            "autocomplete_delay": "Atraso no preenchimento automático (ms)",
+            "rm_lifetime": "Duração do marcador de leitura (ms)",
+            "rm_lifetime_offscreen": "Vida útil do marcador de leitura fora da tela (ms)",
+            "compact_modern": "Usar um layout \"moderno\" mais compacto",
+            "surround_text": "Circule o texto selecionado ao digitar caracteres especiais",
+            "always_show_menu_bar": "Mostrar a barra de menu na janela",
+            "enable_tray_icon": "Mostrar o ícone da bandeja e minimizar a janela ao fechar",
+            "enable_hardware_acceleration": "Habilitar aceleração de hardware"
+        },
+        "voip": {
+            "mirror_local_feed": "Espelhar o feed de vídeo local"
+        },
+        "keyboard": {
+            "title": "Teclado"
+        }
     },
     "devtools": {
         "event_type": "Tipo do Evento",
@@ -2375,7 +2320,11 @@
         "developer_tools": "Ferramentas do desenvolvedor",
         "room_id": "ID da sala: %(roomId)s",
         "category_room": "Sala",
-        "category_other": "Outros"
+        "category_other": "Outros",
+        "widget_screenshots": "Ativar capturas de tela do widget em widgets suportados",
+        "show_hidden_events": "Mostrar eventos ocultos nas conversas",
+        "developer_mode": "Modo desenvolvedor",
+        "title": "Ferramentas de desenvolvimento"
     },
     "export_chat": {
         "html": "HTML",
@@ -2464,7 +2413,12 @@
             "kick": "%(senderName)s removeu %(targetName)s"
         },
         "m.room.topic": "%(senderDisplayName)s alterou a descrição para \"%(topic)s\".",
-        "m.room.avatar": "%(senderDisplayName)s mudou a foto da sala.",
+        "m.room.avatar": {
+            "changed": "%(senderDisplayName)s mudou a foto da sala.",
+            "lightbox_title": "%(senderDisplayName)s alterou a foto da sala %(roomName)s",
+            "removed": "%(senderDisplayName)s removeu a foto da sala.",
+            "changed_img": "%(senderDisplayName)s alterou a foto da sala para <img/>"
+        },
         "m.room.name": {
             "remove": "%(senderDisplayName)s apagou o nome da sala.",
             "change": "%(senderDisplayName)s alterou o nome da sala de %(oldRoomName)s para %(newRoomName)s.",
@@ -2530,7 +2484,9 @@
             "removed": "O widget %(widgetName)s foi removido por %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s atualizou o layout da sala",
-        "m.location": "%(senderName)s compartilhou sua localização",
+        "m.location": {
+            "full": "%(senderName)s compartilhou sua localização"
+        },
         "self_redaction": "Mensagem apagada",
         "redaction": "Mensagem apagada por %(name)s",
         "m.poll.start": "%(senderName)s começou uma enquete - %(pollQuestion)s",
@@ -2669,7 +2625,22 @@
             "changed_rule_glob": "%(senderName)s alterou uma regra que bania o que correspondia a %(oldGlob)s para corresponder a %(newGlob)s devido à %(reason)s"
         },
         "encrypted_historical_messages_unavailable": "As mensagens criptografadas antes deste ponto não estão disponíveis.",
-        "historical_messages_unavailable": "Você não pode ver as mensagens anteriores"
+        "historical_messages_unavailable": "Você não pode ver as mensagens anteriores",
+        "io.element.voice_broadcast_info": {
+            "you": "Você encerrou uma <a>transmissão de voz</a>",
+            "user": "%(senderName)s encerrou uma <a>transmissão de voz</a>"
+        },
+        "reactions": {
+            "label": "%(reactors)s reagiram com %(content)s",
+            "tooltip": "<reactors/><reactedWith>reagiu com %(shortName)s</reactedWith>"
+        },
+        "redacted": {
+            "tooltip": "Mensagem apagada em %(date)s"
+        },
+        "m.room.create": {
+            "continuation": "Esta sala é uma continuação de outra conversa.",
+            "see_older_messages": "Clique aqui para ver as mensagens mais antigas."
+        }
     },
     "slash_command": {
         "spoiler": "Envia esta mensagem como spoiler",
@@ -2732,7 +2703,15 @@
         "failed_find_room": "Falha no comando: Não foi possível encontrar sala %(roomId)s",
         "failed_find_user": "Não encontrei este(a) usuário(a) na sala",
         "op": "Define o nível de permissões de um usuário",
-        "deop": "Retira o nível de moderador do usuário com o ID informado"
+        "deop": "Retira o nível de moderador do usuário com o ID informado",
+        "server_error": "Erro no servidor",
+        "command_error": "Erro de comando",
+        "server_error_detail": "O servidor pode estar indisponível, sobrecarregado, ou alguma outra coisa não funcionou.",
+        "unknown_command": "Comando desconhecido",
+        "unknown_command_detail": "Comando não reconhecido: %(commandText)s",
+        "unknown_command_help": "Você pode usar <code>/help</code> para listar os comandos disponíveis. Você quis enviar isso como uma mensagem?",
+        "unknown_command_hint": "Dica: Inicie sua mensagem com <code>//</code> para iniciar com uma barra.",
+        "unknown_command_button": "Enviar como mensagem"
     },
     "presence": {
         "online_for": "Online há %(duration)s",
@@ -2764,7 +2743,11 @@
         },
         "m.emote": "* %(senderName)s %(emote)s",
         "m.text": "%(senderName)s: %(message)s",
-        "m.sticker": "%(senderName)s: %(stickerName)s"
+        "m.sticker": "%(senderName)s: %(stickerName)s",
+        "io.element.voice_broadcast_info": {
+            "you": "Você encerrou uma transmissão de voz",
+            "user": "%(senderName)s encerrou uma transmissão de voz"
+        }
     },
     "voip": {
         "disable_microphone": "Silenciar microfone",
@@ -2834,6 +2817,12 @@
             "ban": "Banir usuários",
             "redact": "Remover mensagens enviadas por outros",
             "notifications.room": "Notificar todos"
+        },
+        "security": {
+            "strict_encryption": "Nunca envie mensagens criptografadas a partir desta sessão para sessões não confirmadas nessa sala",
+            "join_rule_invite": "Privado (convite apenas)",
+            "join_rule_invite_description": "Apenas pessoas convidadas podem entrar.",
+            "join_rule_public_description": "Todos podem encontrar e entrar."
         }
     },
     "encryption": {
@@ -2923,7 +2912,9 @@
         "server_picker_required": "Digite um servidor local",
         "server_picker_custom": "Outro servidor local",
         "server_picker_explainer": "Use o seu servidor local Matrix preferido, ou hospede o seu próprio servidor.",
-        "server_picker_learn_more": "Sobre os servidores locais"
+        "server_picker_learn_more": "Sobre os servidores locais",
+        "account_deactivated": "Esta conta foi desativada.",
+        "incorrect_credentials": "Nome de usuário e/ou senha incorreto."
     },
     "room_list": {
         "sort_unread_first": "Mostrar salas não lidas em primeiro",
@@ -2937,7 +2928,9 @@
             "one": "Mostrar %(count)s a mais"
         },
         "show_less": "Mostrar menos",
-        "notification_options": "Alterar notificações"
+        "notification_options": "Alterar notificações",
+        "failed_remove_tag": "Falha ao remover a tag %(tagName)s da sala",
+        "failed_add_tag": "Falha ao adicionar a tag %(tagName)s para a sala"
     },
     "report_content": {
         "missing_reason": "Por favor, descreva porque você está reportando.",
@@ -3030,5 +3023,54 @@
         "pro_type": "DICA: se você nos informar um erro, envie <debugLogsLink> relatórios de erro </debugLogsLink> para nos ajudar a rastrear o problema.",
         "existing_issue_link": "Por favor, consulte os <existingIssuesLink> erros conhecidos no Github </existingIssuesLink> antes de enviar o seu. Se ninguém tiver mencionado o seu erro, <newIssueLink> informe-nos sobre um erro novo </newIssueLink>.",
         "send_feedback_action": "Enviar comentário"
+    },
+    "create_space": {
+        "name_required": "Por favor entre o nome do espaço",
+        "name_placeholder": "e.g. meu-espaco",
+        "public_description": "Abra espaços para todos, especialmente para comunidades",
+        "private_description": "Somente convite, melhor para si mesmo(a) ou para equipes",
+        "public_heading": "O seu espaço público",
+        "private_heading": "O seu espaço privado",
+        "add_details_prompt": "Adicione alguns detalhes para ajudar as pessoas a reconhecê-lo.",
+        "failed_create_initial_rooms": "Falha ao criar salas de espaço iniciais",
+        "skip_action": "Ignorar por enquanto",
+        "invite_teammates_by_username": "Convidar por nome de usuário"
+    },
+    "space": {
+        "landing_welcome": "Boas-vindas ao <name/>"
+    },
+    "threads": {
+        "show_thread_filter": "Exibir:"
+    },
+    "location_sharing": {
+        "find_my_location": "Encontrar minha localização",
+        "location_not_available": "Local não disponível"
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Não é possível iniciar uma nova transmissão de voz",
+        "failed_insufficient_permission_title": "Não é possível iniciar uma nova transmissão de voz",
+        "failed_others_already_recording_title": "Não é possível iniciar uma nova transmissão de voz",
+        "failed_already_recording_description": "Você já está gravando uma transmissão de voz. Encerre sua transmissão de voz atual para iniciar uma nova.",
+        "failed_insufficient_permission_description": "Você não tem as permissões necessárias para iniciar uma transmissão de voz nesta sala. Entre em contato com um administrador de sala para atualizar suas permissões.",
+        "failed_others_already_recording_description": "Outra pessoa já está gravando uma transmissão de voz. Aguarde o término da transmissão de voz para iniciar uma nova.",
+        "failed_no_connection_title": "Erro de conexão",
+        "failed_no_connection_description": "Infelizmente, não podemos iniciar uma gravação agora. Por favor, tente novamente mais tarde.",
+        "confirm_stop_title": "Parar a transmissão ao vivo?",
+        "confirm_stop_affirm": "Sim, interromper a transmissão",
+        "confirm_listen_title": "Ouvir transmissão ao vivo?",
+        "confirm_listen_description": "Se você começar a ouvir esta tramissão ao vivo, a gravação desta transmissão, será encerrada."
+    },
+    "labs_mjolnir": {
+        "room_name": "Minha lista de banidos",
+        "room_topic": "Esta é a sua lista de usuárias(os)/servidores que você bloqueou - não saia da sala!"
+    },
+    "theme": {
+        "light_high_contrast": "Claro (alto contraste)"
+    },
+    "update": {
+        "see_changes_button": "O que há de novidades?",
+        "release_notes_toast_title": "Novidades",
+        "toast_title": "Atualizar o %(brand)s",
+        "toast_description": "Uma nova versão do %(brand)s está disponível"
     }
 }

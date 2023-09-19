@@ -120,11 +120,11 @@ export function messageForLoginError(
         );
     } else if (err.httpStatus === 401 || err.httpStatus === 403) {
         if (err.errcode === "M_USER_DEACTIVATED") {
-            return _t("This account has been deactivated.");
+            return _t("auth|account_deactivated");
         } else if (SdkConfig.get("disable_custom_urls")) {
             return (
                 <div>
-                    <div>{_t("Incorrect username and/or password.")}</div>
+                    <div>{_t("auth|incorrect_credentials")}</div>
                     <div className="mx_Login_smallError">
                         {_t("Please note you are logging into the %(hs)s server, not matrix.org.", {
                             hs: serverConfig.hsName,
@@ -133,7 +133,7 @@ export function messageForLoginError(
                 </div>
             );
         } else {
-            return _t("Incorrect username and/or password.");
+            return _t("auth|incorrect_credentials");
         }
     } else {
         return messageForConnectionError(err, serverConfig);

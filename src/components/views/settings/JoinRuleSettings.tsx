@@ -184,8 +184,8 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
     const definitions: IDefinition<JoinRule>[] = [
         {
             value: JoinRule.Invite,
-            label: _t("Private (invite only)"),
-            description: _t("Only invited people can join."),
+            label: _t("room_settings|security|join_rule_invite"),
+            description: _t("room_settings|security|join_rule_invite_description"),
             checked:
                 joinRule === JoinRule.Invite || (joinRule === JoinRule.Restricted && !restrictedAllowRoomIds?.length),
         },
@@ -194,7 +194,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
             label: _t("common|public"),
             description: (
                 <>
-                    {_t("Anyone can find and join.")}
+                    {_t("room_settings|security|join_rule_public_description")}
                     {aliasWarning}
                 </>
             ),

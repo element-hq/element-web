@@ -84,7 +84,7 @@ const QuickSettingsButton: React.FC<{
                         }}
                         kind="danger_outline"
                     >
-                        {_t("Developer tools")}
+                        {_t("devtools|title")}
                     </AccessibleButton>
                 )}
 
