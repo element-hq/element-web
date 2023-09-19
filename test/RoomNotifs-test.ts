@@ -27,7 +27,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { mkEvent, mkRoom, muteRoom, stubClient, upsertRoomStateEvents } from "./test-utils";
+import { mkEvent, mkRoom, mkRoomMember, muteRoom, stubClient, upsertRoomStateEvents } from "./test-utils";
 import {
     getRoomNotifsState,
     RoomNotifState,
@@ -36,6 +36,7 @@ import {
 } from "../src/RoomNotifs";
 import { NotificationColor } from "../src/stores/notifications/NotificationColor";
 import SettingsStore from "../src/settings/SettingsStore";
+import { MatrixClientPeg } from "../src/MatrixClientPeg";
 
 describe("RoomNotifs test", () => {
     let client: jest.Mocked<MatrixClient>;
@@ -278,6 +279,21 @@ describe("RoomNotifs test", () => {
         it("indicates the user has been invited to a channel", async () => {
             room.updateMyMembership("invite");
 
+            const { color, symbol, count } = determineUnreadState(room);
+
+            expect(symbol).toBe("!");
+            expect(color).toBe(NotificationColor.Red);
+            expect(count).toBeGreaterThan(0);
+        });
+
+        it("indicates the user knock has been denied", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                return name === "feature_ask_to_join";
+            });
+            const roomMember = mkRoomMember(room.roomId, MatrixClientPeg.get()!.getSafeUserId(), "leave", true, {
+                membership: "knock",
+            });
+            jest.spyOn(room, "getMember").mockReturnValue(roomMember);
             const { color, symbol, count } = determineUnreadState(room);
 
             expect(symbol).toBe("!");

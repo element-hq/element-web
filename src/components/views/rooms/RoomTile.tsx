@@ -51,6 +51,8 @@ import { useHasRoomLiveVoiceBroadcast } from "../../../voice-broadcast";
 import { RoomTileSubtitle } from "./RoomTileSubtitle";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
+import { isKnockDenied } from "../../../utils/membership";
+import SettingsStore from "../../../settings/SettingsStore";
 
 interface Props {
     room: Room;
@@ -120,7 +122,12 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
     };
 
     private get showContextMenu(): boolean {
-        return this.props.tag !== DefaultTagID.Invite && shouldShowComponent(UIComponent.RoomOptionsMenu);
+        return (
+            this.props.tag !== DefaultTagID.Invite &&
+            this.props.room.getMyMembership() !== "knock" &&
+            !isKnockDenied(this.props.room) &&
+            shouldShowComponent(UIComponent.RoomOptionsMenu)
+        );
     }
 
     private get showMessagePreview(): boolean {
@@ -378,6 +385,9 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
     public render(): React.ReactElement {
         const classes = classNames({
             mx_RoomTile: true,
+            mx_RoomTile_sticky:
+                SettingsStore.getValue("feature_ask_to_join") &&
+                (this.props.room.getMyMembership() === "knock" || isKnockDenied(this.props.room)),
             mx_RoomTile_selected: this.state.selected,
             mx_RoomTile_hasMenuOpen: !!(this.state.generalMenuPosition || this.state.notificationsMenuPosition),
             mx_RoomTile_minimized: this.props.isMinimized,

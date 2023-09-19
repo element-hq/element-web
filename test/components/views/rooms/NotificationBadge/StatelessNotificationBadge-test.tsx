@@ -27,4 +27,12 @@ describe("StatelessNotificationBadge", () => {
         );
         expect(container.querySelector(".mx_NotificationBadge_highlighted")).not.toBe(null);
     });
+
+    it("has knock style", () => {
+        const { container } = render(
+            <StatelessNotificationBadge symbol="!" count={0} color={NotificationColor.Red} knocked={true} />,
+        );
+        expect(container.querySelector(".mx_NotificationBadge_dot")).not.toBeInTheDocument();
+        expect(container.querySelector(".mx_NotificationBadge_knocked")).toBeInTheDocument();
+    });
 });

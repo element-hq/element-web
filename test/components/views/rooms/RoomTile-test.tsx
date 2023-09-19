@@ -54,6 +54,8 @@ import { SDKContext } from "../../../../src/contexts/SDKContext";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../src/settings/UIFeature";
 import { MessagePreviewStore } from "../../../../src/stores/room-list/MessagePreviewStore";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -160,8 +162,9 @@ describe("RoomTile", () => {
     describe("when message previews are not enabled", () => {
         it("should render the room", () => {
             mocked(shouldShowComponent).mockReturnValue(true);
-            const renderResult = renderRoomTile();
-            expect(renderResult.container).toMatchSnapshot();
+            const { container } = renderRoomTile();
+            expect(container).toMatchSnapshot();
+            expect(container.querySelector(".mx_RoomTile_sticky")).not.toBeInTheDocument();
         });
 
         it("does not render the room options context menu when UIComponent customisations disable room options", () => {
@@ -176,6 +179,31 @@ describe("RoomTile", () => {
             renderRoomTile();
             expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.RoomOptionsMenu);
             expect(screen.queryByRole("button", { name: "Room options" })).toBeInTheDocument();
+        });
+
+        it("does not render the room options context menu when knocked to the room", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                return name === "feature_ask_to_join";
+            });
+            mocked(shouldShowComponent).mockReturnValue(true);
+            jest.spyOn(room, "getMyMembership").mockReturnValue("knock");
+            const { container } = renderRoomTile();
+            expect(container.querySelector(".mx_RoomTile_sticky")).toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "Room options" })).not.toBeInTheDocument();
+        });
+
+        it("does not render the room options context menu when knock has been denied", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                return name === "feature_ask_to_join";
+            });
+            mocked(shouldShowComponent).mockReturnValue(true);
+            const roomMember = mkRoomMember(room.roomId, MatrixClientPeg.get()!.getSafeUserId(), "leave", true, {
+                membership: "knock",
+            });
+            jest.spyOn(room, "getMember").mockReturnValue(roomMember);
+            const { container } = renderRoomTile();
+            expect(container.querySelector(".mx_RoomTile_sticky")).toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "Room options" })).not.toBeInTheDocument();
         });
 
         describe("when a call starts", () => {

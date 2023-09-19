@@ -464,14 +464,26 @@ export function mkMembership(
     return e;
 }
 
-export function mkRoomMember(roomId: string, userId: string, membership = "join"): RoomMember {
+export function mkRoomMember(
+    roomId: string,
+    userId: string,
+    membership = "join",
+    isKicked = false,
+    prevMemberContent: Partial<IContent> = {},
+): RoomMember {
     return {
         userId,
         membership,
         name: userId,
         rawDisplayName: userId,
         roomId,
-        events: {},
+        events: {
+            member: {
+                getSender: () => undefined,
+                getPrevContent: () => prevMemberContent,
+            },
+        },
+        isKicked: () => isKicked,
         getAvatarUrl: () => {},
         getMxcAvatarUrl: () => {},
         getDMInviter: () => {},
@@ -597,6 +609,8 @@ export function mkStubRoom(
             roomId: roomId,
             getAvatarUrl: () => "mxc://avatar.url/image.png",
             getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
+            events: {},
+            isKicked: () => false,
         }),
         getMembers: jest.fn().mockReturnValue([]),
         getMembersWithMembership: jest.fn().mockReturnValue([]),

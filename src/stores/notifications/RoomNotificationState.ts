@@ -22,6 +22,7 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import * as RoomNotifs from "../../RoomNotifs";
 import { NotificationState } from "./NotificationState";
+import SettingsStore from "../../settings/SettingsStore";
 
 export class RoomNotificationState extends NotificationState implements IDestroyable {
     public constructor(public readonly room: Room) {
@@ -92,10 +93,12 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         const { color, symbol, count } = RoomNotifs.determineUnreadState(this.room);
         const muted =
             RoomNotifs.getRoomNotifsState(this.room.client, this.room.roomId) === RoomNotifs.RoomNotifState.Mute;
+        const knocked = SettingsStore.getValue("feature_ask_to_join") && this.room.getMyMembership() === "knock";
         this._color = color;
         this._symbol = symbol;
         this._count = count;
         this._muted = muted;
+        this._knocked = knocked;
 
         // finally, publish an update if needed
         this.emitIfUpdated(snapshot);

@@ -30,7 +30,12 @@ import {
     ListAlgorithm,
     SortAlgorithm,
 } from "./models";
-import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } from "../../../utils/membership";
+import {
+    EffectiveMembership,
+    getEffectiveMembership,
+    getEffectiveMembershipTag,
+    splitRoomsByMembership,
+} from "../../../utils/membership";
 import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
 import { VisibilityProvider } from "../filters/VisibilityProvider";
@@ -543,8 +548,9 @@ export class Algorithm extends EventEmitter {
     public getTagsForRoom(room: Room): TagID[] {
         const tags: TagID[] = [];
 
-        const membership = getEffectiveMembership(room.getMyMembership());
-        if (!membership) return []; // peeked room has no tags
+        if (!getEffectiveMembership(room.getMyMembership())) return []; // peeked room has no tags
+
+        const membership = getEffectiveMembershipTag(room);
 
         if (membership === EffectiveMembership.Invite) {
             tags.push(DefaultTagID.Invite);

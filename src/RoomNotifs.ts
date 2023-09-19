@@ -27,7 +27,7 @@ import type { IPushRule, Room, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { NotificationColor } from "./stores/notifications/NotificationColor";
 import { getUnsentMessages } from "./components/structures/RoomStatusBar";
 import { doesRoomHaveUnreadMessages, doesRoomOrThreadHaveUnreadMessages } from "./Unread";
-import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
+import { EffectiveMembership, getEffectiveMembership, isKnockDenied } from "./utils/membership";
 import SettingsStore from "./settings/SettingsStore";
 
 export enum RoomNotifState {
@@ -237,6 +237,10 @@ export function determineUnreadState(
     }
 
     if (getEffectiveMembership(room.getMyMembership()) === EffectiveMembership.Invite) {
+        return { symbol: "!", count: 1, color: NotificationColor.Red };
+    }
+
+    if (SettingsStore.getValue("feature_ask_to_join") && isKnockDenied(room)) {
         return { symbol: "!", count: 1, color: NotificationColor.Red };
     }
 

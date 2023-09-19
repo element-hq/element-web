@@ -25,7 +25,7 @@ import defaultDispatcher, { MatrixDispatcher } from "../../dispatcher/dispatcher
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { FILTER_CHANGED, IFilterCondition } from "./filters/IFilterCondition";
 import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
-import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
+import { EffectiveMembership, getEffectiveMembership, getEffectiveMembershipTag } from "../../utils/membership";
 import RoomListLayoutStore from "./RoomListLayoutStore";
 import { MarkedExecution } from "../../utils/MarkedExecution";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
@@ -308,7 +308,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
     public async onDispatchMyMembership(membershipPayload: any): Promise<void> {
         // TODO: Type out the dispatcher types so membershipPayload is not any
         const oldMembership = getEffectiveMembership(membershipPayload.oldMembership);
-        const newMembership = getEffectiveMembership(membershipPayload.membership);
+        const newMembership = getEffectiveMembershipTag(membershipPayload.room, membershipPayload.membership);
         if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
             // If we're joining an upgraded room, we'll want to make sure we don't proliferate
             // the dead room in the list.

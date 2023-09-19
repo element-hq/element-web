@@ -27,6 +27,7 @@ interface Props {
     symbol: string | null;
     count: number;
     color: NotificationColor;
+    knocked?: boolean;
     onMouseOver?: (ev: MouseEvent) => void;
     onMouseLeave?: (ev: MouseEvent) => void;
     children?: ReactNode;
@@ -45,12 +46,13 @@ export function StatelessNotificationBadge({
     symbol,
     count,
     color,
+    knocked,
     ...props
 }: XOR<Props, ClickableProps>): JSX.Element {
     const hideBold = useSettingValue("feature_hidebold");
 
     // Don't show a badge if we don't need to
-    if (color === NotificationColor.None || (hideBold && color == NotificationColor.Bold)) {
+    if ((color === NotificationColor.None || (hideBold && color == NotificationColor.Bold)) && !knocked) {
         return <></>;
     }
 
@@ -64,9 +66,10 @@ export function StatelessNotificationBadge({
 
     const classes = classNames({
         mx_NotificationBadge: true,
-        mx_NotificationBadge_visible: isEmptyBadge ? true : hasUnreadCount,
+        mx_NotificationBadge_visible: isEmptyBadge || knocked ? true : hasUnreadCount,
         mx_NotificationBadge_highlighted: color >= NotificationColor.Red,
-        mx_NotificationBadge_dot: isEmptyBadge,
+        mx_NotificationBadge_dot: isEmptyBadge && !knocked,
+        mx_NotificationBadge_knocked: knocked,
         mx_NotificationBadge_2char: symbol && symbol.length > 0 && symbol.length < 3,
         mx_NotificationBadge_3char: symbol && symbol.length > 2,
     });
