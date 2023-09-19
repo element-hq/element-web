@@ -282,9 +282,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     };
 
     private showPlaceholder(): void {
-        // escape single quotes
-        const placeholder = this.props.placeholder?.replace(/'/g, "\\'");
-        this.editorRef.current?.style.setProperty("--placeholder", `'${placeholder}'`);
+        this.editorRef.current?.style.setProperty("--placeholder", `'${CSS.escape(this.props.placeholder ?? "")}'`);
         this.editorRef.current?.classList.add("mx_BasicMessageComposer_inputEmpty");
     }
 
