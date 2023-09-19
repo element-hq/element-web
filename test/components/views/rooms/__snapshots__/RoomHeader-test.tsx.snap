@@ -35,28 +35,28 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
     >
       <button
+        aria-label="There's no one here to call"
         class="_icon-button_1segd_17"
         data-state="closed"
         disabled=""
         style="--cpd-icon-button-size: 32px;"
-        title="There's no one here to call"
       >
         <div />
       </button>
       <button
+        aria-label="There's no one here to call"
         class="_icon-button_1segd_17"
         data-state="closed"
         disabled=""
         style="--cpd-icon-button-size: 32px;"
-        title="There's no one here to call"
       >
         <div />
       </button>
       <button
+        aria-label="Threads"
         class="_icon-button_1segd_17"
         data-state="closed"
         style="--cpd-icon-button-size: 32px;"
-        title="Threads"
       >
         <div />
       </button>

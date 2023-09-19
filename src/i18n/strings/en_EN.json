@@ -1413,10 +1413,10 @@
         "explore_rooms": "Explore Public Rooms",
         "create_room": "Create a Group Chat"
     },
-    "Ongoing call": "Ongoing call",
-    "You do not have permission to start video calls": "You do not have permission to start video calls",
-    "There's no one here to call": "There's no one here to call",
     "You do not have permission to start voice calls": "You do not have permission to start voice calls",
+    "You do not have permission to start video calls": "You do not have permission to start video calls",
+    "Ongoing call": "Ongoing call",
+    "There's no one here to call": "There's no one here to call",
     "chat_effects": {
         "confetti_description": "Sends the given message with confetti",
         "confetti_message": "sends confetti",
