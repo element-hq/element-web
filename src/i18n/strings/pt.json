@@ -801,6 +801,8 @@
     "auth": {
         "sso": "Single Sign On",
         "sso_or_username_password": "%(ssoButtons)s Ou %(usernamePassword)s",
+        "sign_in_instead_prompt": "Já tem uma conta? <a>Entre aqui</a>",
+        "server_picker_title_registration": "Hospedar conta em",
         "sign_in_instead": "Já tem uma conta? <a>Entre aqui</a>",
         "server_picker_title": "Hospedar conta em",
         "footer_powered_by_matrix": "potenciado por Matrix",

@@ -2528,7 +2528,8 @@
     },
     "auth": {
         "sso": "Vienas Prisijungimas",
-        "sign_in_instead": "Jau turite paskyrą? <a>Prisijunkite čia</a>",
+        "server_picker_title_registration": "Kurti paskyrą serveryje",
+        "sign_in_instead_prompt": "Jau turite paskyrą? <a>Prisijunkite čia</a>",
         "log_in_new_account": "<a>Prisijunkite</a> prie naujos paskyros.",
         "registration_successful": "Registracija sėkminga",
         "server_picker_title": "Prisijunkite prie savo namų serverio",

@@ -1627,7 +1627,7 @@
         "continue_with_idp": "Fortsett med %(provider)s",
         "sso": "Single Sign On",
         "sso_or_username_password": "%(ssoButtons)s eller %(usernamePassword)s",
-        "sign_in_instead": "Har du allerede en konto? <a>Logg på</a>",
+        "sign_in_instead_prompt": "Har du allerede en konto? <a>Logg på</a>",
         "account_clash_previous_account": "Fortsett med tidligere konto",
         "registration_successful": "Registreringen var vellykket",
         "footer_powered_by_matrix": "Drevet av Matrix",

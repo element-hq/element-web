@@ -3646,6 +3646,8 @@
         "reset_password_title": "パスワードを再設定",
         "continue_with_sso": "以下のサービスにより続行%(ssoButtons)s",
         "sso_or_username_password": "%(ssoButtons)sあるいは、以下に入力して登録%(usernamePassword)s",
+        "server_picker_title_registration": "アカウントを以下のホームサーバーでホスト",
+        "sign_in_instead_prompt": "サインイン",
         "sign_in_instead": "サインイン",
         "account_clash": "新しいアカウント（%(newAccountId)s）が登録されましたが、あなたは別のアカウント（%(loggedInUserId)s）でログインしています。",
         "account_clash_previous_account": "以前のアカウントで続行",

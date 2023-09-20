@@ -1811,7 +1811,7 @@
         "sso": "Vienotā pieteikšanās",
         "continue_with_sso": "Turpināt ar %(ssoButtons)s",
         "sso_or_username_password": "%(ssoButtons)s vai %(usernamePassword)s",
-        "sign_in_instead": "Jau ir konts? <a>Pierakstieties šeit</a>",
+        "sign_in_instead_prompt": "Jau ir konts? <a>Pierakstieties šeit</a>",
         "account_clash": "Jūsu jaunais konts (%(newAccountId)s) ir reģistrēts, bet jūs jau esat pierakstījies citā kontā (%(loggedInUserId)s).",
         "account_clash_previous_account": "Turpināt ar iepriekšējo kontu",
         "log_in_new_account": "<a>Pierakstīties</a> jaunajā kontā.",

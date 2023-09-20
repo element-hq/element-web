@@ -2141,7 +2141,7 @@
         "sso": "Single Sign On",
         "continue_with_sso": "Продължаване с %(ssoButtons)s",
         "sso_or_username_password": "%(ssoButtons)s Или %(usernamePassword)s",
-        "sign_in_instead": "Вече имате профил? <a>Влезте от тук</a>",
+        "sign_in_instead_prompt": "Вече имате профил? <a>Влезте от тук</a>",
         "account_clash": "Новият ви профил (%(newAccountId)s) е регистриран, но вече сте влезли с друг профил (%(loggedInUserId)s).",
         "account_clash_previous_account": "Продължи с предишния профил",
         "log_in_new_account": "<a>Влезте</a> в новия си профил.",

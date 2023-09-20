@@ -789,6 +789,8 @@
     },
     "auth": {
         "sso": "Single Sign On",
+        "sign_in_instead_prompt": "An bhfuil cuntas agat cheana? <a>Sínigh isteach anseo</a>",
+        "server_picker_title_registration": "Óstáil cuntas ar",
         "sign_in_instead": "An bhfuil cuntas agat cheana? <a>Sínigh isteach anseo</a>",
         "server_picker_title": "Óstáil cuntas ar",
         "failed_query_registration_methods": "Ní féidir iarratas a dhéanamh faoi modhanna cláraithe tacaithe.",
