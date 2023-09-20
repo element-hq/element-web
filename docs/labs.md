@@ -134,6 +134,10 @@ This setting is (currently) _sticky_ to a user's session: it only takes effect w
 
 Refactors visually the room header and room sidebar
 
+## Enable the notifications panel in the room header (`feature_notifications`)
+
+Unreliable in encrypted rooms.
+
 ## Knock rooms (`feature_ask_to_join`) [In Development]
 
 Enables knock feature for rooms. This allows users to ask to join a room.
