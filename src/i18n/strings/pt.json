@@ -1,32 +1,21 @@
 {
-    "Account": "Conta",
-    "New passwords don't match": "As novas palavras-passe não coincidem",
     "A new password must be entered.": "Deve ser introduzida uma nova palavra-passe.",
     "Are you sure you want to reject the invitation?": "Você tem certeza que deseja rejeitar este convite?",
-    "Confirm password": "Confirmar palavra-passe",
-    "Cryptography": "Criptografia",
-    "Current password": "Palavra-passe atual",
     "Deactivate Account": "Desativar conta",
     "Default": "Padrão",
-    "Export E2E room keys": "Exportar chaves ponta-a-ponta da sala",
     "Failed to change password. Is your password correct?": "Falha ao alterar a palavra-passe. A sua palavra-passe está correta?",
     "Failed to reject invitation": "Falha ao tentar rejeitar convite",
     "Failed to unban": "Não foi possível desfazer o banimento",
     "Favourite": "Favorito",
     "Filter room members": "Filtrar integrantes da sala",
     "Forget room": "Esquecer sala",
-    "For security, this session has been signed out. Please sign in again.": "Por questões de segurança, esta sessão foi encerrada. Por gentileza conecte-se novamente.",
     "Historical": "Histórico",
-    "Import E2E room keys": "Importar chave de criptografia ponta-a-ponta (E2E) da sala",
     "Invalid Email Address": "Endereço de email inválido",
-    "Sign in with": "Quero entrar",
     "Low priority": "Baixa prioridade",
     "Moderator": "Moderador/a",
     "New passwords must match each other.": "Novas palavras-passe devem coincidir.",
     "Notifications": "Notificações",
     "<not supported>": "<não suportado>",
-    "Passwords can't be empty": "As palavras-passe não podem estar vazias",
-    "Phone": "Telefone",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Por favor verifique seu email e clique no link enviado. Quando finalizar este processo, clique para continuar.",
     "Profile": "Perfil",
     "Reject invitation": "Rejeitar convite",
@@ -34,9 +23,7 @@
     "Rooms": "Salas",
     "Server may be unavailable, overloaded, or you hit a bug.": "O servidor pode estar indisponível ou sobrecarregado, ou então você encontrou uma falha no sistema.",
     "Session ID": "Identificador de sessão",
-    "Signed Out": "Deslogar",
     "This doesn't appear to be a valid email address": "Este não aparenta ser um endereço de email válido",
-    "This room is not accessible by remote Matrix servers": "Esta sala não é acessível para servidores Matrix remotos",
     "Unable to add email address": "Não foi possível adicionar endereço de email",
     "Unable to remove contact information": "Não foi possível remover informação de contato",
     "Unable to verify email address.": "Não foi possível verificar o endereço de email.",
@@ -96,7 +83,6 @@
     "Are you sure?": "Você tem certeza?",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s de %(fullYear)s às %(time)s",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Não consigo conectar ao servidor padrão através de HTTP quando uma URL HTTPS está na barra de endereços do seu navegador. Use HTTPS ou então <a>habilite scripts não seguros no seu navegador</a>.",
-    "Change Password": "Alterar Palavra-Passe",
     "Decrypt %(text)s": "Descriptografar %(text)s",
     "Download %(text)s": "Baixar %(text)s",
     "Failed to ban user": "Não foi possível banir o/a usuário/a",
@@ -120,7 +106,6 @@
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Você não poderá desfazer esta mudança, pois estará dando a este(a) usuário(a) o mesmo nível de permissões que você.",
     "Authentication": "Autenticação",
     "An error has occurred.": "Ocorreu um erro.",
-    "Email": "Email",
     "Email address": "Endereço de email",
     "Error decrypting attachment": "Erro ao descriptografar o anexo",
     "Invalid file%(extra)s": "Arquivo inválido %(extra)s",
@@ -141,8 +126,6 @@
     "Unknown error": "Erro desconhecido",
     "Unable to restore session": "Não foi possível restaurar a sessão",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Se você já usou antes uma versão mais recente do %(brand)s, a sua sessão pode ser incompatível com esta versão. Feche esta janela e tente abrir com a versão mais recente.",
-    "Token incorrect": "Token incorreto",
-    "Please enter the code it contains:": "Por favor, entre com o código que está na mensagem:",
     "Error decrypting image": "Erro ao descriptografar a imagem",
     "Error decrypting video": "Erro ao descriptografar o vídeo",
     "Add an Integration": "Adicionar uma integração",
@@ -170,8 +153,6 @@
         "other": "(~%(count)s resultados)",
         "one": "(~%(count)s resultado)"
     },
-    "Start authentication": "Iniciar autenticação",
-    "New Password": "Nova Palavra-Passe",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Não foi possível conectar ao Servidor de Base. Por favor, confira sua conectividade à internet, garanta que o <a>certificado SSL do Servidor de Base</a> é confiável, e que uma extensão do navegador não esteja bloqueando as requisições de rede.",
     "Home": "Início",
     "Something went wrong!": "Algo deu errado!",
@@ -185,11 +166,9 @@
     "You do not have permission to do that in this room.": "Não tem permissão para fazer isso nesta sala.",
     "Copied!": "Copiado!",
     "Failed to copy": "Falha ao copiar",
-    "Check for update": "Procurar atualizações",
     "Your browser does not support the required cryptography extensions": "O seu navegador não suporta as extensões de criptografia necessárias",
     "Not a valid %(brand)s keyfile": "Não é um ficheiro de chaves %(brand)s válido",
     "Authentication check failed: incorrect password?": "Erro de autenticação: palavra-passe incorreta?",
-    "Do you want to set an email address?": "Deseja definir um endereço de e-mail?",
     "This will allow you to reset your password and receive notifications.": "Isto irá permitir-lhe redefinir a sua palavra-passe e receber notificações.",
     "Ignored user": "Utilizador ignorado",
     "Unignore": "Deixar de ignorar",
@@ -206,7 +185,6 @@
     "Unavailable": "Indisponível",
     "Source URL": "URL fonte",
     "Filter results": "Filtrar resultados",
-    "No update available.": "Nenhuma atualização disponível.",
     "Tuesday": "Terça-feira",
     "Search…": "Pesquisar…",
     "Unnamed room": "Sala sem nome",
@@ -219,7 +197,6 @@
     "You cannot delete this message. (%(code)s)": "Não pode apagar esta mensagem. (%(code)s)",
     "Thursday": "Quinta-feira",
     "Yesterday": "Ontem",
-    "Error encountered (%(errorDetail)s).": "Erro encontrado (%(errorDetail)s).",
     "Low Priority": "Baixa prioridade",
     "Wednesday": "Quarta-feira",
     "Thank you!": "Obrigado!",
@@ -393,7 +370,6 @@
     "Mali": "Mali",
     "<userName/> wants to chat": "<userName/> quer falar",
     "Start a conversation with someone using their name or username (like <userId/>).": "Comece uma conversa com alguém a partir do nome ou nome de utilizador (por exemplo: <userId/>).",
-    "Use an email address to recover your account": "Usar um endereço de email para recuperar a sua conta",
     "Malta": "Malta",
     "Lebanon": "Líbano",
     "Marshall Islands": "Ilhas Marshall",
@@ -424,7 +400,6 @@
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Enviámos-lhe um email para confirmar o seu endereço. Por favor siga as instruções no email e depois clique no botão abaixo.",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Apenas um aviso, se não adicionar um email e depois esquecer a sua palavra-passe, poderá <b>perder permanentemente o acesso à sua conta</b>.",
     "Create account": "Criar conta",
-    "To create your account, open the link in the email we just sent to %(emailAddress)s.": "Para criar a sua conta, abra a ligação no email que acabámos de enviar para %(emailAddress)s.",
     "Invite with email or username": "Convidar com email ou nome de utilizador",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Convide alguém a partir do nome, endereço de email, nome de utilizador (como <userId/>) ou <a>partilhe este espaço</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Convide alguém a partir do nome, email ou nome de utilizador (como <userId/>) ou <a>partilhe esta sala</a>.",
@@ -558,7 +533,6 @@
     "Luxembourg": "Luxemburgo",
     "St. Pierre & Miquelon": "São Pedro e Miquelon",
     "Join millions for free on the largest public server": "Junte-se a milhões gratuitamente no maior servidor público",
-    "Enter username": "Introduza um nome de utilizador",
     "Failed to send event": "Falha no envio do evento",
     "Failed to read events": "Falha ao ler eventos",
     "Setting up keys": "A configurar chaves",
@@ -681,6 +655,14 @@
         },
         "sessions": {
             "session_id": "Identificador de sessão"
+        },
+        "security": {
+            "export_megolm_keys": "Exportar chaves ponta-a-ponta da sala",
+            "import_megolm_keys": "Importar chave de criptografia ponta-a-ponta (E2E) da sala",
+            "cryptography_section": "Criptografia"
+        },
+        "general": {
+            "account_section": "Conta"
         }
     },
     "devtools": {
@@ -804,7 +786,27 @@
         "phone_label": "Telefone",
         "email_help_text": "Adicione um email para poder repôr a palavra-passe.",
         "email_phone_discovery_text": "Use email ou telefone para, opcionalmente, ser detectável por contactos existentes.",
-        "email_discovery_text": "Use email para, opcionalmente, ser detectável por contactos existentes."
+        "email_discovery_text": "Use email para, opcionalmente, ser detectável por contactos existentes.",
+        "session_logged_out_title": "Deslogar",
+        "session_logged_out_description": "Por questões de segurança, esta sessão foi encerrada. Por gentileza conecte-se novamente.",
+        "change_password_mismatch": "As novas palavras-passe não coincidem",
+        "change_password_empty": "As palavras-passe não podem estar vazias",
+        "set_email_prompt": "Deseja definir um endereço de e-mail?",
+        "change_password_confirm_label": "Confirmar palavra-passe",
+        "change_password_current_label": "Palavra-passe atual",
+        "change_password_new_label": "Nova Palavra-Passe",
+        "change_password_action": "Alterar Palavra-Passe",
+        "email_field_label": "Email",
+        "uia": {
+            "email": "Para criar a sua conta, abra a ligação no email que acabámos de enviar para %(emailAddress)s.",
+            "msisdn_token_incorrect": "Token incorreto",
+            "msisdn_token_prompt": "Por favor, entre com o código que está na mensagem:",
+            "fallback_button": "Iniciar autenticação"
+        },
+        "username_field_required_invalid": "Introduza um nome de utilizador",
+        "msisdn_field_label": "Telefone",
+        "identifier_label": "Quero entrar",
+        "reset_password_email_field_description": "Usar um endereço de email para recuperar a sua conta"
     },
     "export_chat": {
         "messages": "Mensagens"
@@ -827,7 +829,10 @@
     },
     "update": {
         "see_changes_button": "O que há de novo?",
-        "release_notes_toast_title": "Novidades"
+        "release_notes_toast_title": "Novidades",
+        "error_encountered": "Erro encontrado (%(errorDetail)s).",
+        "no_update": "Nenhuma atualização disponível.",
+        "check_action": "Procurar atualizações"
     },
     "composer": {
         "autocomplete": {
@@ -863,6 +868,9 @@
             "user_url_previews_default_on": "Você <a>habilitou</a> pré-visualizações de links por padrão.",
             "user_url_previews_default_off": "Você <a>desabilitou</a> pré-visualizações de links por padrão.",
             "url_previews_section": "Pré-visualização de links"
+        },
+        "advanced": {
+            "unfederated": "Esta sala não é acessível para servidores Matrix remotos"
         }
     }
 }

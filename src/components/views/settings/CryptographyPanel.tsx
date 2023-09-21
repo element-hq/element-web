@@ -52,10 +52,10 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
             importExportButtons = (
                 <div className="mx_CryptographyPanel_importExportButtons">
                     <AccessibleButton kind="primary" onClick={this.onExportE2eKeysClicked}>
-                        {_t("Export E2E room keys")}
+                        {_t("settings|security|export_megolm_keys")}
                     </AccessibleButton>
                     <AccessibleButton kind="primary" onClick={this.onImportE2eKeysClicked}>
-                        {_t("Import E2E room keys")}
+                        {_t("settings|security|import_megolm_keys")}
                     </AccessibleButton>
                 </div>
             );
@@ -73,17 +73,17 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
         }
 
         return (
-            <SettingsSubsection heading={_t("Cryptography")}>
+            <SettingsSubsection heading={_t("settings|security|cryptography_section")}>
                 <SettingsSubsectionText>
                     <table className="mx_CryptographyPanel_sessionInfo">
                         <tr>
-                            <th scope="row">{_t("Session ID:")}</th>
+                            <th scope="row">{_t("settings|security|session_id")}</th>
                             <td>
                                 <code>{deviceId}</code>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">{_t("Session key:")}</th>
+                            <th scope="row">{_t("settings|security|session_key")}</th>
                             <td>
                                 <code>
                                     <b>{identityKey}</b>

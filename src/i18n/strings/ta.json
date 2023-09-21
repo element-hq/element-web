@@ -26,7 +26,6 @@
     "Saturday": "சனி",
     "Today": "இன்று",
     "Yesterday": "நேற்று",
-    "No update available.": "எந்த புதுப்பிப்பும் இல்லை.",
     "Thank you!": "உங்களுக்கு நன்றி",
     "Rooms": "அறைகள்",
     "This email address is already in use": "இந்த மின்னஞ்சல் முகவரி முன்னதாகவே பயன்பாட்டில் உள்ளது",
@@ -166,7 +165,8 @@
     },
     "update": {
         "see_changes_button": "புதிதாக என்ன?",
-        "release_notes_toast_title": "புதிதாக வந்தவை"
+        "release_notes_toast_title": "புதிதாக வந்தவை",
+        "no_update": "எந்த புதுப்பிப்பும் இல்லை."
     },
     "space": {
         "context_menu": {

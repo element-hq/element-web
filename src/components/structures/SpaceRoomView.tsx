@@ -487,7 +487,7 @@ const validateEmailRules = withValidation({
         {
             key: "email",
             test: ({ value }) => !value || Email.looksValid(value),
-            invalid: () => _t("Doesn't look like a valid email address"),
+            invalid: () => _t("auth|email_field_label_invalid"),
         },
     ],
 });
@@ -509,7 +509,7 @@ const SpaceSetupPrivateInvite: React.FC<{
                 name={name}
                 type="text"
                 label={_t("Email address")}
-                placeholder={_t("Email")}
+                placeholder={_t("auth|email_field_label")}
                 value={emailAddresses[i]}
                 onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setEmailAddress(i, ev.target.value)}
                 ref={fieldRefs[i]}

@@ -179,7 +179,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             tabs.push(
                 new Tab(
                     UserTab.Mjolnir,
-                    _td("Ignored users"),
+                    _td("labs_mjolnir|title"),
                     "mx_UserSettingsDialog_mjolnirIcon",
                     <MjolnirUserSettingsTab />,
                     "UserSettingMjolnir",

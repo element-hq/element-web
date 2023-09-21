@@ -267,7 +267,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
     };
 
     private validateEmailRules = withValidation({
-        description: () => _t("Use an email address to recover your account"),
+        description: () => _t("auth|reset_password_email_field_description"),
         hideDescriptionIfValid: true,
         rules: [
             {
@@ -275,12 +275,12 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 test(this: RegistrationForm, { value, allowEmpty }) {
                     return allowEmpty || !this.authStepIsRequired("m.login.email.identity") || !!value;
                 },
-                invalid: () => _t("Enter email address (required on this homeserver)"),
+                invalid: () => _t("auth|reset_password_email_field_required_invalid"),
             },
             {
                 key: "email",
                 test: ({ value }) => !value || Email.looksValid(value),
-                invalid: () => _t("Doesn't look like a valid email address"),
+                invalid: () => _t("auth|email_field_label_invalid"),
             },
         ],
     });
@@ -324,7 +324,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
     };
 
     private validatePhoneNumberRules = withValidation({
-        description: () => _t("Other users can invite you to rooms using your contact details"),
+        description: () => _t("auth|msisdn_field_description"),
         hideDescriptionIfValid: true,
         rules: [
             {
@@ -332,12 +332,12 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 test(this: RegistrationForm, { value, allowEmpty }) {
                     return allowEmpty || !this.authStepIsRequired("m.login.msisdn") || !!value;
                 },
-                invalid: () => _t("Enter phone number (required on this homeserver)"),
+                invalid: () => _t("auth|registration_msisdn_field_required_invalid"),
             },
             {
                 key: "email",
                 test: ({ value }) => !value || phoneNumberLooksValid(value),
-                invalid: () => _t("That phone number doesn't look quite right, please check and try again"),
+                invalid: () => _t("auth|msisdn_field_number_invalid"),
             },
         ],
     });
@@ -380,7 +380,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             {
                 key: "required",
                 test: ({ value, allowEmpty }) => allowEmpty || !!value,
-                invalid: () => _t("Enter username"),
+                invalid: () => _t("auth|username_field_required_invalid"),
             },
             {
                 key: "safeLocalpart",
@@ -451,7 +451,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         if (!this.showEmail()) {
             return null;
         }
-        const emailLabel = this.authStepIsRequired("m.login.email.identity") ? _td("Email") : _td("Email (optional)");
+        const emailLabel = this.authStepIsRequired("m.login.email.identity")
+            ? _td("auth|email_field_label")
+            : _td("Email (optional)");
         return (
             <EmailField
                 fieldRef={(field) => (this[RegistrationField.Email] = field)}

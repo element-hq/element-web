@@ -1,7 +1,6 @@
 {
     "AM": "AM",
     "PM": "PM",
-    "Account": "Account",
     "No Microphones detected": "No Microphones detected",
     "No Webcams detected": "No Webcams detected",
     "No media permissions": "No media permissions",
@@ -19,20 +18,14 @@
     "Are you sure you want to leave the room '%(roomName)s'?": "Are you sure you want to leave the room '%(roomName)s'?",
     "Are you sure you want to reject the invitation?": "Are you sure you want to reject the invitation?",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
-    "Change Password": "Change Password",
-    "Confirm password": "Confirm password",
-    "Cryptography": "Cryptography",
-    "Current password": "Current password",
     "Custom level": "Custom level",
     "Deactivate Account": "Deactivate Account",
     "Decrypt %(text)s": "Decrypt %(text)s",
     "Default": "Default",
     "Delete widget": "Delete widget",
     "Download %(text)s": "Download %(text)s",
-    "Email": "Email",
     "Email address": "Email address",
     "Error decrypting attachment": "Error decrypting attachment",
-    "Export E2E room keys": "Export E2E room keys",
     "Failed to ban user": "Failed to ban user",
     "Failed to change password. Is your password correct?": "Failed to change password. Is your password correct?",
     "Failed to change power level": "Failed to change power level",
@@ -49,14 +42,11 @@
     "Favourite": "Favorite",
     "Filter room members": "Filter room members",
     "Forget room": "Forget room",
-    "For security, this session has been signed out. Please sign in again.": "For security, this session has been signed out. Please sign in again.",
     "Historical": "Historical",
-    "Import E2E room keys": "Import E2E room keys",
     "Incorrect verification code": "Incorrect verification code",
     "Invalid Email Address": "Invalid Email Address",
     "Invalid file%(extra)s": "Invalid file%(extra)s",
     "Invited": "Invited",
-    "Sign in with": "Sign in with",
     "Join Room": "Join Room",
     "Jump to first unread message.": "Jump to first unread message.",
     "Unignore": "Unignore",
@@ -68,15 +58,12 @@
     "Missing room_id in request": "Missing room_id in request",
     "Missing user_id in request": "Missing user_id in request",
     "Moderator": "Moderator",
-    "New passwords don't match": "New passwords don't match",
     "New passwords must match each other.": "New passwords must match each other.",
     "not specified": "not specified",
     "Notifications": "Notifications",
     "<not supported>": "<not supported>",
     "No more results": "No more results",
     "Operation failed": "Operation failed",
-    "Passwords can't be empty": "Passwords can't be empty",
-    "Phone": "Phone",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Please check your email and click on the link it contains. Once this is done, click continue.",
     "Power level must be positive integer.": "Power level must be positive integer.",
     "Profile": "Profile",
@@ -91,14 +78,12 @@
     "Server may be unavailable, overloaded, or search timed out :(": "Server may be unavailable, overloaded, or search timed out :(",
     "Server may be unavailable, overloaded, or you hit a bug.": "Server may be unavailable, overloaded, or you hit a bug.",
     "Session ID": "Session ID",
-    "Signed Out": "Signed Out",
     "This email address is already in use": "This email address is already in use",
     "This email address was not found": "This email address was not found",
     "This room has no local addresses": "This room has no local addresses",
     "This room is not recognised.": "This room is not recognized.",
     "This doesn't appear to be a valid email address": "This doesn't appear to be a valid email address",
     "This phone number is already in use": "This phone number is already in use",
-    "This room is not accessible by remote Matrix servers": "This room is not accessible by remote Matrix servers",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Tried to load a specific point in this room's timeline, but was unable to find it.",
     "Unable to add email address": "Unable to add email address",
@@ -160,8 +145,6 @@
     "Unknown error": "Unknown error",
     "Unable to restore session": "Unable to restore session",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.",
-    "Token incorrect": "Token incorrect",
-    "Please enter the code it contains:": "Please enter the code it contains:",
     "Error decrypting image": "Error decrypting image",
     "Error decrypting video": "Error decrypting video",
     "Add an Integration": "Add an Integration",
@@ -173,7 +156,6 @@
     "No display name": "No display name",
     "%(roomName)s does not exist.": "%(roomName)s does not exist.",
     "%(roomName)s is not accessible at this time.": "%(roomName)s is not accessible at this time.",
-    "Start authentication": "Start authentication",
     "Uploading %(filename)s": "Uploading %(filename)s",
     "Uploading %(filename)s and %(count)s others": {
         "one": "Uploading %(filename)s and %(count)s other",
@@ -184,14 +166,11 @@
         "one": "(~%(count)s result)",
         "other": "(~%(count)s results)"
     },
-    "New Password": "New Password",
     "Something went wrong!": "Something went wrong!",
     "Your browser does not support the required cryptography extensions": "Your browser does not support the required cryptography extensions",
     "Not a valid %(brand)s keyfile": "Not a valid %(brand)s keyfile",
     "Authentication check failed: incorrect password?": "Authentication check failed: incorrect password?",
-    "Do you want to set an email address?": "Do you want to set an email address?",
     "This will allow you to reset your password and receive notifications.": "This will allow you to reset your password and receive notifications.",
-    "Check for update": "Check for update",
     "Unable to create widget.": "Unable to create widget.",
     "You are not in this room.": "You are not in this room.",
     "You do not have permission to do that in this room.": "You do not have permission to do that in this room.",
@@ -203,7 +182,6 @@
     "This Room": "This Room",
     "Unavailable": "Unavailable",
     "Source URL": "Source URL",
-    "No update available.": "No update available.",
     "Tuesday": "Tuesday",
     "Search…": "Search…",
     "Unnamed room": "Unnamed room",
@@ -217,7 +195,6 @@
     "You cannot delete this message. (%(code)s)": "You cannot delete this message. (%(code)s)",
     "Thursday": "Thursday",
     "Yesterday": "Yesterday",
-    "Error encountered (%(errorDetail)s).": "Error encountered (%(errorDetail)s).",
     "Low Priority": "Low Priority",
     "Permission Required": "Permission Required",
     "You do not have permission to start a conference call in this room": "You do not have permission to start a conference call in this room",
@@ -367,6 +344,14 @@
         },
         "sessions": {
             "session_id": "Session ID"
+        },
+        "security": {
+            "export_megolm_keys": "Export E2E room keys",
+            "import_megolm_keys": "Import E2E room keys",
+            "cryptography_section": "Cryptography"
+        },
+        "general": {
+            "account_section": "Account"
         }
     },
     "timeline": {
@@ -500,7 +485,24 @@
         "sign_in_or_register_description": "Use your account or create a new one to continue.",
         "register_action": "Create Account",
         "incorrect_credentials": "Incorrect username and/or password.",
-        "phone_label": "Phone"
+        "phone_label": "Phone",
+        "session_logged_out_title": "Signed Out",
+        "session_logged_out_description": "For security, this session has been signed out. Please sign in again.",
+        "change_password_mismatch": "New passwords don't match",
+        "change_password_empty": "Passwords can't be empty",
+        "set_email_prompt": "Do you want to set an email address?",
+        "change_password_confirm_label": "Confirm password",
+        "change_password_current_label": "Current password",
+        "change_password_new_label": "New Password",
+        "change_password_action": "Change Password",
+        "email_field_label": "Email",
+        "uia": {
+            "msisdn_token_incorrect": "Token incorrect",
+            "msisdn_token_prompt": "Please enter the code it contains:",
+            "fallback_button": "Start authentication"
+        },
+        "msisdn_field_label": "Phone",
+        "identifier_label": "Sign in with"
     },
     "export_chat": {
         "messages": "Messages"
@@ -520,7 +522,10 @@
     },
     "update": {
         "see_changes_button": "What's new?",
-        "release_notes_toast_title": "What's New"
+        "release_notes_toast_title": "What's New",
+        "error_encountered": "Error encountered (%(errorDetail)s).",
+        "no_update": "No update available.",
+        "check_action": "Check for update"
     },
     "composer": {
         "autocomplete": {
@@ -556,6 +561,9 @@
             "user_url_previews_default_on": "You have <a>enabled</a> URL previews by default.",
             "user_url_previews_default_off": "You have <a>disabled</a> URL previews by default.",
             "url_previews_section": "URL Previews"
+        },
+        "advanced": {
+            "unfederated": "This room is not accessible by remote Matrix servers"
         }
     }
 }

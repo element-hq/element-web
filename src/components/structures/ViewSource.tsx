@@ -93,7 +93,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
                     </details>
                     <details className="mx_ViewSource_details">
                         <summary>
-                            <span className="mx_ViewSource_heading">{_t("Original event source")}</span>
+                            <span className="mx_ViewSource_heading">{_t("devtools|original_event_source")}</span>
                         </summary>
                         <CopyableText getTextToCopy={copyOriginalFunc}>
                             <SyntaxHighlight language="json">{stringify(originalEventSource)}</SyntaxHighlight>
@@ -104,7 +104,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
         } else {
             return (
                 <>
-                    <div className="mx_ViewSource_heading">{_t("Original event source")}</div>
+                    <div className="mx_ViewSource_heading">{_t("devtools|original_event_source")}</div>
                     <CopyableText getTextToCopy={copyOriginalFunc}>
                         <SyntaxHighlight language="json">{stringify(originalEventSource)}</SyntaxHighlight>
                     </CopyableText>

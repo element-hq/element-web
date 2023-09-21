@@ -358,7 +358,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         return (
             <SettingsTab>
                 {warning}
-                <SettingsSection heading={_t("Encryption")}>
+                <SettingsSection heading={_t("settings|security|encryption_section")}>
                     {secureBackup}
                     {eventIndex}
                     {crossSigning}

@@ -7,12 +7,9 @@
     "A new password must be entered.": "Der skal indtastes en ny adgangskode.",
     "Session ID": "Sessions ID",
     "Warning!": "Advarsel!",
-    "Account": "Konto",
     "Are you sure you want to reject the invitation?": "Er du sikker på du vil afvise invitationen?",
-    "Cryptography": "Kryptografi",
     "Deactivate Account": "Deaktiver brugerkonto",
     "Default": "Standard",
-    "Export E2E room keys": "Eksporter E2E rum nøgler",
     "Failed to change password. Is your password correct?": "Kunne ikke ændre adgangskoden. Er din adgangskode rigtig?",
     "Failed to reject invitation": "Kunne ikke afvise invitationen",
     "Failed to unban": "Var ikke i stand til at ophæve forbuddet",
@@ -84,7 +81,6 @@
     "Unavailable": "Utilgængelig",
     "Source URL": "Kilde URL",
     "Filter results": "Filtrér resultater",
-    "No update available.": "Ingen opdatering tilgængelig.",
     "Search…": "Søg…",
     "Tuesday": "Tirsdag",
     "Saturday": "Lørdag",
@@ -96,7 +92,6 @@
     "You cannot delete this message. (%(code)s)": "Du kan ikke slette denne besked. (%(code)s)",
     "Thursday": "Torsdag",
     "Yesterday": "I går",
-    "Error encountered (%(errorDetail)s).": "En fejl er opstået (%(errorDetail)s).",
     "Low Priority": "Lav prioritet",
     "Wednesday": "Onsdag",
     "Thank you!": "Tak!",
@@ -173,15 +168,10 @@
     "Verification code": "Verifikationskode",
     "Headphones": "Hovedtelefoner",
     "Show more": "Vis mere",
-    "Passwords don't match": "Adgangskoderne matcher ikke",
-    "Confirm password": "Bekræft adgangskode",
-    "Enter password": "Indtast adgangskode",
     "Add a new server": "Tilføj en ny server",
     "Change notification settings": "Skift notifikations indstillinger",
     "Profile picture": "Profil billede",
     "Checking server": "Tjekker server",
-    "Change Password": "Skift adgangskode",
-    "Current password": "Nuværende adgangskode",
     "Profile": "Profil",
     "Local address": "Lokal adresse",
     "This room has no local addresses": "Dette rum har ingen lokal adresse",
@@ -461,7 +451,6 @@
     "Unable to look up phone number": "Kan ikke slå telefonnummer op",
     "Your password has been reset.": "Din adgangskode er blevet nulstillet.",
     "Your password was successfully changed.": "Din adgangskode blev ændret.",
-    "New Password": "Ny adgangskode",
     "Set a new custom sound": "Sæt en ny brugerdefineret lyd",
     "Empty room": "Tomt rum",
     "common": {
@@ -561,6 +550,13 @@
         },
         "sessions": {
             "session_id": "Sessions ID"
+        },
+        "security": {
+            "export_megolm_keys": "Eksporter E2E rum nøgler",
+            "cryptography_section": "Kryptografi"
+        },
+        "general": {
+            "account_section": "Konto"
         }
     },
     "devtools": {
@@ -756,7 +752,13 @@
         "sign_in_or_register": "Log ind eller Opret bruger",
         "sign_in_or_register_description": "Brug din konto eller opret en ny for at fortsætte.",
         "register_action": "Opret brugerkonto",
-        "incorrect_credentials": "Forkert brugernavn og/eller adgangskode."
+        "incorrect_credentials": "Forkert brugernavn og/eller adgangskode.",
+        "change_password_confirm_label": "Bekræft adgangskode",
+        "change_password_confirm_invalid": "Adgangskoderne matcher ikke",
+        "change_password_current_label": "Nuværende adgangskode",
+        "change_password_new_label": "Ny adgangskode",
+        "change_password_action": "Skift adgangskode",
+        "password_field_label": "Indtast adgangskode"
     },
     "export_chat": {
         "messages": "Beskeder"
@@ -812,7 +814,9 @@
     },
     "update": {
         "see_changes_button": "Hvad er nyt?",
-        "release_notes_toast_title": "Hvad er nyt"
+        "release_notes_toast_title": "Hvad er nyt",
+        "error_encountered": "En fejl er opstået (%(errorDetail)s).",
+        "no_update": "Ingen opdatering tilgængelig."
     },
     "space": {
         "context_menu": {

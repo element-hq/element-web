@@ -214,7 +214,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                 test({ value, allowEmpty }) {
                     return allowEmpty || !!value;
                 },
-                invalid: () => _t("Enter username"),
+                invalid: () => _t("auth|username_field_required_invalid"),
             },
         ],
     });
@@ -236,12 +236,12 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                 test({ value, allowEmpty }): boolean {
                     return allowEmpty || !!value;
                 },
-                invalid: (): string => _t("Enter phone number"),
+                invalid: (): string => _t("auth|msisdn_field_required_invalid"),
             },
             {
                 key: "number",
                 test: ({ value }): boolean => !value || PHONE_NUMBER_REGEX.test(value),
-                invalid: (): string => _t("That phone number doesn't look quite right, please check and try again"),
+                invalid: (): string => _t("auth|msisdn_field_number_invalid"),
             },
         ],
     });
@@ -259,7 +259,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                 test({ value, allowEmpty }): boolean {
                     return allowEmpty || !!value;
                 },
-                invalid: (): string => _t("Enter password"),
+                invalid: (): string => _t("auth|password_field_label"),
             },
         ],
     });
@@ -341,7 +341,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         autoComplete="tel-national"
                         key="phone_input"
                         type="text"
-                        label={_t("Phone")}
+                        label={_t("auth|msisdn_field_label")}
                         value={this.props.phoneNumber}
                         prefixComponent={phoneCountry}
                         onChange={this.onPhoneNumberChanged}
@@ -378,7 +378,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                     kind="link"
                     onClick={this.onForgotPasswordClick}
                 >
-                    {_t("Forgot password?")}
+                    {_t("auth|reset_password_button")}
                 </AccessibleButton>
             );
         }
@@ -396,7 +396,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         if (!SdkConfig.get().disable_3pid_login) {
             loginType = (
                 <div className="mx_Login_type_container">
-                    <label className="mx_Login_type_label">{_t("Sign in with")}</label>
+                    <label className="mx_Login_type_label">{_t("auth|identifier_label")}</label>
                     <Field
                         element="select"
                         value={this.state.loginType}
@@ -410,7 +410,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                             {_t("Email address")}
                         </option>
                         <option key={LoginField.Password} value={LoginField.Password}>
-                            {_t("Phone")}
+                            {_t("auth|msisdn_field_label")}
                         </option>
                     </Field>
                 </div>

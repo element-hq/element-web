@@ -1607,8 +1607,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
 
             Modal.createDialog(ErrorDialog, {
-                title: _t("Signed Out"),
-                description: _t("For security, this session has been signed out. Please sign in again."),
+                title: _t("auth|session_logged_out_title"),
+                description: _t("auth|session_logged_out_description"),
             });
 
             dis.dispatch({
@@ -1619,19 +1619,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             Modal.createDialog(
                 QuestionDialog,
                 {
-                    title: _t("Terms and Conditions"),
+                    title: _t("terms|tac_title"),
                     description: (
                         <div>
-                            <p>
-                                {" "}
-                                {_t(
-                                    "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.",
-                                    { homeserverDomain: cli.getDomain() },
-                                )}
-                            </p>
+                            <p> {_t("terms|tac_description", { homeserverDomain: cli.getDomain() })}</p>
                         </div>
                     ),
-                    button: _t("Review terms and conditions"),
+                    button: _t("terms|tac_button"),
                     cancelButton: _t("action|dismiss"),
                     onFinished: (confirmed) => {
                         if (confirmed) {
@@ -1672,11 +1666,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             switch (type) {
                 case "CRYPTO_WARNING_OLD_VERSION_DETECTED":
                     Modal.createDialog(ErrorDialog, {
-                        title: _t("Old cryptography data detected"),
-                        description: _t(
-                            "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.",
-                            { brand: SdkConfig.get().brand },
-                        ),
+                        title: _t("encryption|old_version_detected_title"),
+                        description: _t("encryption|old_version_detected_description", {
+                            brand: SdkConfig.get().brand,
+                        }),
                     });
                     break;
             }
@@ -1732,7 +1725,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             } else if (request.pending) {
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: "verifreq_" + request.transactionId,
-                    title: _t("Verification requested"),
+                    title: _t("encryption|verification_requested_toast_title"),
                     icon: "verification",
                     props: { request },
                     component: VerificationRequestToast,

@@ -68,17 +68,8 @@
     "Authentication check failed: incorrect password?": "प्रमाणीकरण जांच विफल: गलत पासवर्ड?",
     "Please contact your homeserver administrator.": "कृपया अपने होमसर्वर व्यवस्थापक से संपर्क करें।",
     "Incorrect verification code": "गलत सत्यापन कोड",
-    "Phone": "फ़ोन",
     "No display name": "कोई प्रदर्शन नाम नहीं",
-    "New passwords don't match": "नए पासवर्ड मेल नहीं खाते हैं",
-    "Passwords can't be empty": "पासवर्ड खाली नहीं हो सकते हैं",
     "Warning!": "चेतावनी!",
-    "Export E2E room keys": "E2E रूम कुंजी निर्यात करें",
-    "Do you want to set an email address?": "क्या आप एक ईमेल पता सेट करना चाहते हैं?",
-    "Current password": "वर्तमान पासवर्ड",
-    "New Password": "नया पासवर्ड",
-    "Confirm password": "पासवर्ड की पुष्टि कीजिये",
-    "Change Password": "पासवर्ड बदलें",
     "Authentication": "प्रमाणीकरण",
     "Failed to set display name": "प्रदर्शन नाम सेट करने में विफल",
     "Delete Backup": "बैकअप हटाएं",
@@ -116,11 +107,6 @@
     "%(duration)sd": "%(duration)s दिन",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "फ़ाइल '%(fileName)s' अपलोड के लिए इस होमस्वर के आकार की सीमा से अधिक है",
     "Unrecognised address": "अपरिचित पता",
-    "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "इस उपयोगकर्ता के सुरक्षित संदेश एंड-टू-एंड एन्क्रिप्टेड हैं और तीसरे पक्ष द्वारा पढ़ने में सक्षम नहीं हैं।",
-    "Got It": "समझ गया",
-    "Verify this user by confirming the following emoji appear on their screen.": "इस उपयोगकर्ता की पुष्टि करें कि उनकी स्क्रीन पर निम्नलिखित इमोजी दिखाई देते हैं।",
-    "Verify this user by confirming the following number appears on their screen.": "निम्न स्क्रीन पर दिखाई देने वाली संख्या की पुष्टि करके इस उपयोगकर्ता को सत्यापित करें।",
-    "Unable to find a supported verification method.": "समर्थित सत्यापन विधि खोजने में असमर्थ।",
     "Dog": "कुत्ता",
     "Cat": "बिल्ली",
     "Lion": "शेर",
@@ -200,26 +186,18 @@
     "Phone Number": "फ़ोन नंबर",
     "Profile picture": "प्रोफ़ाइल फोटो",
     "Display Name": "प्रदर्शित होने वाला नाम",
-    "This room is not accessible by remote Matrix servers": "यह रूम रिमोट मैट्रिक्स सर्वर द्वारा सुलभ नहीं है",
     "Room information": "रूम जानकारी",
-    "Room version": "रूम का संस्करण",
-    "Room version:": "रूम का संस्करण:",
     "General": "सामान्य",
     "Room Addresses": "रूम का पता",
     "Failed to change password. Is your password correct?": "पासवर्ड बदलने में विफल। क्या आपका पासवर्ड सही है?",
     "Profile": "प्रोफाइल",
-    "Account": "अकाउंट",
     "Email addresses": "ईमेल पता",
     "Phone numbers": "फोन नंबर",
-    "Language and region": "भाषा और क्षेत्र",
     "Account management": "खाता प्रबंधन",
     "Deactivate Account": "खाता निष्क्रिय करें",
-    "Check for update": "अपडेट के लिये जांचें",
     "Notifications": "सूचनाएं",
     "Scissors": "कैंची",
     "<not supported>": "<समर्थित नहीं>",
-    "Import E2E room keys": "E2E कक्ष की चाबियां आयात करें",
-    "Cryptography": "क्रिप्टोग्राफी",
     "Ignored users": "अनदेखी उपयोगकर्ताओं",
     "Bulk options": "थोक विकल्प",
     "Reject all %(invitedRooms)s invites": "सभी %(invitedRooms)s की आमंत्रण को अस्वीकार करें",
@@ -533,11 +511,18 @@
             "mirror_local_feed": "स्थानीय वीडियो फ़ीड को आईना करें"
         },
         "security": {
-            "send_analytics": "विश्लेषण डेटा भेजें"
+            "send_analytics": "विश्लेषण डेटा भेजें",
+            "export_megolm_keys": "E2E रूम कुंजी निर्यात करें",
+            "import_megolm_keys": "E2E कक्ष की चाबियां आयात करें",
+            "cryptography_section": "क्रिप्टोग्राफी"
         },
         "preferences": {
             "room_list_heading": "कक्ष सूचि",
             "autocomplete_delay": "स्वत: पूर्ण विलंब (ms)"
+        },
+        "general": {
+            "account_section": "अकाउंट",
+            "language_section": "भाषा और क्षेत्र"
         }
     },
     "timeline": {
@@ -658,14 +643,27 @@
         "verification": {
             "other_party_cancelled": "दूसरे पक्ष ने सत्यापन रद्द कर दिया।",
             "complete_title": "सत्यापित!",
-            "complete_description": "आपने इस उपयोगकर्ता को सफलतापूर्वक सत्यापित कर लिया है।"
+            "complete_description": "आपने इस उपयोगकर्ता को सफलतापूर्वक सत्यापित कर लिया है।",
+            "explainer": "इस उपयोगकर्ता के सुरक्षित संदेश एंड-टू-एंड एन्क्रिप्टेड हैं और तीसरे पक्ष द्वारा पढ़ने में सक्षम नहीं हैं।",
+            "complete_action": "समझ गया",
+            "sas_emoji_caption_user": "इस उपयोगकर्ता की पुष्टि करें कि उनकी स्क्रीन पर निम्नलिखित इमोजी दिखाई देते हैं।",
+            "sas_caption_user": "निम्न स्क्रीन पर दिखाई देने वाली संख्या की पुष्टि करके इस उपयोगकर्ता को सत्यापित करें।",
+            "unsupported_method": "समर्थित सत्यापन विधि खोजने में असमर्थ।"
         }
     },
     "auth": {
         "sso": "केवल हस्ताक्षर के ऊपर",
         "footer_powered_by_matrix": "मैट्रिक्स द्वारा संचालित",
         "register_action": "खाता बनाएं",
-        "phone_label": "फ़ोन"
+        "phone_label": "फ़ोन",
+        "change_password_mismatch": "नए पासवर्ड मेल नहीं खाते हैं",
+        "change_password_empty": "पासवर्ड खाली नहीं हो सकते हैं",
+        "set_email_prompt": "क्या आप एक ईमेल पता सेट करना चाहते हैं?",
+        "change_password_confirm_label": "पासवर्ड की पुष्टि कीजिये",
+        "change_password_current_label": "वर्तमान पासवर्ड",
+        "change_password_new_label": "नया पासवर्ड",
+        "change_password_action": "पासवर्ड बदलें",
+        "msisdn_field_label": "फ़ोन"
     },
     "setting": {
         "help_about": {
@@ -727,6 +725,17 @@
         "general": {
             "publish_toggle": "इस कमरे को %(domain)s के कमरे की निर्देशिका में जनता के लिए प्रकाशित करें?",
             "url_previews_section": "URL पूर्वावलोकन"
+        },
+        "advanced": {
+            "unfederated": "यह रूम रिमोट मैट्रिक्स सर्वर द्वारा सुलभ नहीं है",
+            "room_version_section": "रूम का संस्करण",
+            "room_version": "रूम का संस्करण:"
         }
+    },
+    "update": {
+        "check_action": "अपडेट के लिये जांचें"
+    },
+    "labs_mjolnir": {
+        "title": "अनदेखी उपयोगकर्ताओं"
     }
 }

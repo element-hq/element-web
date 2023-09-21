@@ -2335,7 +2335,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     className="mx_RoomView_auxPanel_hiddenHighlights"
                     onClick={this.onHiddenHighlightsClick}
                 >
-                    {_t("You have %(count)s unread notifications in a prior version of this room.", {
+                    {_t("room|unread_notifications_predecessor", {
                         count: hiddenHighlightCount,
                     })}
                 </AccessibleButton>

@@ -33,16 +33,16 @@ function installUpdate(): void {
 function getStatusText(status: UpdateCheckStatus, errorDetail?: string): ReactNode {
     switch (status) {
         case UpdateCheckStatus.Error:
-            return _t("Error encountered (%(errorDetail)s).", { errorDetail });
+            return _t("update|error_encountered", { errorDetail });
         case UpdateCheckStatus.Checking:
-            return _t("Checking for an update…");
+            return _t("update|checking");
         case UpdateCheckStatus.NotAvailable:
-            return _t("No update available.");
+            return _t("update|no_update");
         case UpdateCheckStatus.Downloading:
-            return _t("Downloading update…");
+            return _t("update|downloading");
         case UpdateCheckStatus.Ready:
             return _t(
-                "New version available. <a>Update now.</a>",
+                "update|new_version_available",
                 {},
                 {
                     a: (sub) => (
@@ -86,7 +86,7 @@ const UpdateCheckButton: React.FC = () => {
     return (
         <React.Fragment>
             <AccessibleButton onClick={onCheckForUpdateClick} kind="primary" disabled={busy}>
-                {_t("Check for update")}
+                {_t("update|check_action")}
             </AccessibleButton>
             {suffix}
         </React.Fragment>

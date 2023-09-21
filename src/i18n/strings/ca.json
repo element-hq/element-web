@@ -1,5 +1,4 @@
 {
-    "Account": "Compte",
     "No Microphones detected": "No s'ha detectat cap micròfon",
     "No Webcams detected": "No s'ha detectat cap càmera web",
     "Create new room": "Crea una sala nova",
@@ -73,16 +72,7 @@
     "Not a valid %(brand)s keyfile": "El fitxer no és un fitxer de claus de %(brand)s vàlid",
     "Authentication check failed: incorrect password?": "Ha fallat l'autenticació: heu introduït correctament la contrasenya?",
     "Incorrect verification code": "El codi de verificació és incorrecte",
-    "Phone": "Telèfon",
     "No display name": "Sense nom visible",
-    "New passwords don't match": "Les noves contrasenyes no coincideixen",
-    "Passwords can't be empty": "Les contrasenyes no poden estar buides",
-    "Export E2E room keys": "Exporta les claus E2E de la sala",
-    "Do you want to set an email address?": "Voleu establir una adreça de correu electrònic?",
-    "Current password": "Contrasenya actual",
-    "New Password": "Nova contrasenya",
-    "Confirm password": "Confirma la contrasenya",
-    "Change Password": "Canvia la contrasenya",
     "Authentication": "Autenticació",
     "Failed to set display name": "No s'ha pogut establir el nom visible",
     "Unban": "Retira l'expulsió",
@@ -123,7 +113,6 @@
     "%(roomName)s is not accessible at this time.": "La sala %(roomName)s no és accessible en aquest moment.",
     "Failed to unban": "No s'ha pogut expulsar",
     "Banned by %(displayName)s": "Expulsat per %(displayName)s",
-    "This room is not accessible by remote Matrix servers": "Aquesta sala no és accessible per a servidors de Matrix remots",
     "Jump to first unread message.": "Salta al primer missatge no llegit.",
     "not specified": "sense especificar",
     "This room has no local addresses": "Aquesta sala no té adreces locals",
@@ -136,11 +125,6 @@
     "Copied!": "Copiat!",
     "Failed to copy": "No s'ha pogut copiar",
     "Add an Integration": "Afegeix una integració",
-    "Token incorrect": "Token incorrecte",
-    "A text message has been sent to %(msisdn)s": "S'ha enviat un missatge de text a %(msisdn)s",
-    "Please enter the code it contains:": "Introdueix el codi que conté:",
-    "Start authentication": "Inicia l'autenticació",
-    "Sign in with": "Inicieu sessió amb",
     "Email address": "Correu electrònic",
     "<a>In reply to</a> <pill>": "<a>En resposta a</a> <pill>",
     "Something went wrong!": "Alguna cosa ha anat malament!",
@@ -177,9 +161,6 @@
     "Are you sure you want to reject the invitation?": "Esteu segur que voleu rebutjar la invitació?",
     "Failed to reject invitation": "No s'ha pogut rebutjar la invitació",
     "Are you sure you want to leave the room '%(roomName)s'?": "Esteu segur que voleu sortir de la sala '%(roomName)s'?",
-    "For security, this session has been signed out. Please sign in again.": "Per seguretat, aquesta sessió s'ha tancat. Torna a iniciar la sessió.",
-    "Old cryptography data detected": "S'han detectat dades de criptografia antigues",
-    "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "S'han detectat dades d'una versió antiga del %(brand)s. Això haurà provocat que el xifratge d'extrem a extrem no funcioni correctament a la versió anterior. Els missatges xifrats d'extrem a extrem que s'han intercanviat recentment mentre s'utilitzava la versió anterior no es poden desxifrar en aquesta versió. També pot provocar que els missatges intercanviats amb aquesta versió fallin. Si teniu problemes, sortiu de la sessió i torneu a entrar-hi. Per poder llegir l'historial dels missatges xifrats, exporteu i torneu a importar les vostres claus.",
     "Connectivity to the server has been lost.": "S'ha perdut la connectivitat amb el servidor.",
     "Sent messages will be stored until your connection has returned.": "Els missatges enviats s'emmagatzemaran fins que la vostra connexió hagi tornat.",
     "You seem to be uploading files, are you sure you want to quit?": "Sembla que s'està pujant fitxers, esteu segur que voleu sortir?",
@@ -191,18 +172,14 @@
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "S'ha intentat carregar un punt específic dins la línia de temps d'aquesta sala, però no teniu permís per veure el missatge en qüestió.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "S'ha intentat carregar un punt específic de la línia de temps d'aquesta sala, però no s'ha pogut trobar.",
     "Failed to load timeline position": "No s'ha pogut carregar aquesta posició de la línia de temps",
-    "Signed Out": "Sessió tancada",
     "Uploading %(filename)s and %(count)s others": {
         "other": "Pujant %(filename)s i %(count)s més"
     },
     "Uploading %(filename)s": "Pujant %(filename)s",
-    "Import E2E room keys": "Importar claus E2E de sala",
-    "Cryptography": "Criptografia",
     "Session ID": "ID de la sessió",
     "Export room keys": "Exporta les claus de la sala",
     "Confirm passphrase": "Introduïu una contrasenya",
     "Import room keys": "Importa les claus de la sala",
-    "Email": "Correu electrònic",
     "Sunday": "Diumenge",
     "Notification targets": "Objectius de les notificacions",
     "Today": "Avui",
@@ -213,7 +190,6 @@
     "Unavailable": "No disponible",
     "Source URL": "URL origen",
     "Filter results": "Resultats del filtre",
-    "No update available.": "No hi ha cap actualització disponible.",
     "Search…": "Cerca…",
     "Tuesday": "Dimarts",
     "Preparing to send logs": "Preparant l'enviament de logs",
@@ -227,7 +203,6 @@
     "Thursday": "Dijous",
     "Logs sent": "Logs enviats",
     "Yesterday": "Ahir",
-    "Error encountered (%(errorDetail)s).": "S'ha trobat un error (%(errorDetail)s).",
     "Low Priority": "Baixa prioritat",
     "Thank you!": "Gràcies!",
     "Permission Required": "Es necessita permís",
@@ -246,7 +221,6 @@
     "Please contact your homeserver administrator.": "Si us plau contacteu amb l'administrador del vostre homeserver.",
     "Email addresses": "Adreces de correu electrònic",
     "Phone numbers": "Números de telèfon",
-    "Language and region": "Idioma i regió",
     "Phone Number": "Número de telèfon",
     "We encountered an error trying to restore your previous session.": "Hem trobat un error en intentar recuperar la teva sessió prèvia.",
     "Upload Error": "Error de pujada",
@@ -254,7 +228,6 @@
     "%(brand)s encountered an error during upload of:": "%(brand)s ha trobat un error durant la pujada de:",
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "S'ha produït un error en actualitzar l'adreça principal de la sala. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
     "Error upgrading room": "Error actualitzant sala",
-    "Error unsubscribing from list": "Error en cancel·lar subscripció de la llista",
     "Error changing power level requirement": "Error en canviar requisit del nivell d'autoritat",
     "Error changing power level": "Error en canviar nivell d'autoritat",
     "Error updating main address": "Error actualitzant adreça principal",
@@ -263,9 +236,6 @@
     "There was an error removing that address. It may no longer exist or a temporary error occurred.": "S'ha produït un error en eliminar l'adreça. Pot ser que ja no existeixi o que s'hagi produït un error temporal.",
     "There was an error creating that address. It may not be allowed by the server or a temporary failure occurred.": "S'ha produït un error en crear l'adreça. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "S'ha produït un error en actualitzar l'adreça alternativa de la sala. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
-    "Error removing ignored user/server": "Error eliminant usuari/servidor ignorat",
-    "Error subscribing to list": "Error subscrivint-se a la llista",
-    "Error adding ignored user/server": "Error afegint usuari/servidor ignorat",
     "Unexpected server error trying to leave the room": "Error de servidor inesperat intentant sortir de la sala",
     "Error leaving room": "Error sortint de la sala",
     "Unexpected error resolving identity server configuration": "Error inesperat resolent la configuració del servidor d'identitat",
@@ -303,7 +273,6 @@
     "Confirm by comparing the following with the User Settings in your other session:": "Confirma comparant el següent amb la configuració d'usuari de la teva altra sessió:",
     "Room settings": "Configuració de sala",
     "Change notification settings": "Canvia la configuració de notificacions",
-    "⚠ These settings are meant for advanced users.": "⚠ Aquesta configuració està pensada per usuaris avançats.",
     "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, enllaça aquest correu electrònic amb el teu compte a Configuració.",
     "Use an identity server in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, utilitza un servidor d'identitat a Configuració.",
     "Share this email in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, comparteix aquest correu electrònic a Configuració.",
@@ -452,10 +421,17 @@
             "mirror_local_feed": "Remet el flux de vídeo local"
         },
         "security": {
-            "send_analytics": "Envia dades d'anàlisi"
+            "send_analytics": "Envia dades d'anàlisi",
+            "export_megolm_keys": "Exporta les claus E2E de la sala",
+            "import_megolm_keys": "Importar claus E2E de sala",
+            "cryptography_section": "Criptografia"
         },
         "sessions": {
             "session_id": "ID de la sessió"
+        },
+        "general": {
+            "account_section": "Compte",
+            "language_section": "Idioma i regió"
         }
     },
     "devtools": {
@@ -694,6 +670,9 @@
             "default_url_previews_on": "Les previsualitzacions dels URL estan habilitades per defecte per als membres d'aquesta sala.",
             "default_url_previews_off": "Les previsualitzacions dels URL estan inhabilitades per defecte per als membres d'aquesta sala.",
             "url_previews_section": "Previsualitzacions dels URL"
+        },
+        "advanced": {
+            "unfederated": "Aquesta sala no és accessible per a servidors de Matrix remots"
         }
     },
     "auth": {
@@ -705,7 +684,25 @@
         "sign_in_or_register_description": "Utilitza el teu compte o crea'n un de nou per continuar.",
         "register_action": "Crea un compte",
         "incorrect_credentials": "Usuari i/o contrasenya incorrectes.",
-        "phone_label": "Telèfon"
+        "phone_label": "Telèfon",
+        "session_logged_out_title": "Sessió tancada",
+        "session_logged_out_description": "Per seguretat, aquesta sessió s'ha tancat. Torna a iniciar la sessió.",
+        "change_password_mismatch": "Les noves contrasenyes no coincideixen",
+        "change_password_empty": "Les contrasenyes no poden estar buides",
+        "set_email_prompt": "Voleu establir una adreça de correu electrònic?",
+        "change_password_confirm_label": "Confirma la contrasenya",
+        "change_password_current_label": "Contrasenya actual",
+        "change_password_new_label": "Nova contrasenya",
+        "change_password_action": "Canvia la contrasenya",
+        "email_field_label": "Correu electrònic",
+        "uia": {
+            "msisdn_token_incorrect": "Token incorrecte",
+            "msisdn": "S'ha enviat un missatge de text a %(msisdn)s",
+            "msisdn_token_prompt": "Introdueix el codi que conté:",
+            "fallback_button": "Inicia l'autenticació"
+        },
+        "msisdn_field_label": "Telèfon",
+        "identifier_label": "Inicieu sessió amb"
     },
     "export_chat": {
         "messages": "Missatges"
@@ -749,7 +746,9 @@
     },
     "update": {
         "see_changes_button": "Què hi ha de nou?",
-        "release_notes_toast_title": "Novetats"
+        "release_notes_toast_title": "Novetats",
+        "error_encountered": "S'ha trobat un error (%(errorDetail)s).",
+        "no_update": "No hi ha cap actualització disponible."
     },
     "room_list": {
         "failed_remove_tag": "No s'ha pogut esborrar l'etiqueta %(tagName)s de la sala",
@@ -766,5 +765,16 @@
         "context_menu": {
             "explore": "Explora sales"
         }
+    },
+    "encryption": {
+        "old_version_detected_title": "S'han detectat dades de criptografia antigues",
+        "old_version_detected_description": "S'han detectat dades d'una versió antiga del %(brand)s. Això haurà provocat que el xifratge d'extrem a extrem no funcioni correctament a la versió anterior. Els missatges xifrats d'extrem a extrem que s'han intercanviat recentment mentre s'utilitzava la versió anterior no es poden desxifrar en aquesta versió. També pot provocar que els missatges intercanviats amb aquesta versió fallin. Si teniu problemes, sortiu de la sessió i torneu a entrar-hi. Per poder llegir l'historial dels missatges xifrats, exporteu i torneu a importar les vostres claus."
+    },
+    "labs_mjolnir": {
+        "error_adding_ignore": "Error afegint usuari/servidor ignorat",
+        "error_adding_list_title": "Error subscrivint-se a la llista",
+        "error_removing_ignore": "Error eliminant usuari/servidor ignorat",
+        "error_removing_list_title": "Error en cancel·lar subscripció de la llista",
+        "advanced_warning": "⚠ Aquesta configuració està pensada per usuaris avançats."
     }
 }

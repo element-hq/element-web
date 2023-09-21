@@ -65,16 +65,8 @@
     "Not a valid %(brand)s keyfile": "Ikkje ei gyldig %(brand)s-nykelfil",
     "Authentication check failed: incorrect password?": "Authentiseringsforsøk mislukkast: feil passord?",
     "Incorrect verification code": "Urett stadfestingskode",
-    "Phone": "Telefon",
     "No display name": "Ingen visningsnamn",
-    "New passwords don't match": "Dei nye passorda samsvarar ikkje",
-    "Passwords can't be empty": "Passordsfelta kan ikkje vera tomme",
     "Warning!": "Åtvaring!",
-    "Do you want to set an email address?": "Vil du setja ei epostadresse?",
-    "Current password": "Gjeldande passord",
-    "New Password": "Nytt passord",
-    "Confirm password": "Stadfest passord",
-    "Change Password": "Endra passord",
     "Authentication": "Authentisering",
     "Failed to set display name": "Fekk ikkje til å setja visningsnamn",
     "Notification targets": "Varselmål",
@@ -145,14 +137,8 @@
     "Error decrypting video": "Noko gjekk gale med videodekrypteringa",
     "Copied!": "Kopiert!",
     "Failed to copy": "Noko gjekk gale med kopieringa",
-    "A text message has been sent to %(msisdn)s": "Ei tekstmelding vart send til %(msisdn)s",
-    "Please enter the code it contains:": "Ver venleg og skriv koden den inneheld inn:",
-    "Start authentication": "Start authentisering",
-    "Sign in with": "Logg inn med",
     "Email address": "Epostadresse",
     "Something went wrong!": "Noko gjekk gale!",
-    "Error encountered (%(errorDetail)s).": "Noko gjekk gale (%(errorDetail)s).",
-    "No update available.": "Inga oppdatering er tilgjengeleg.",
     "Delete Widget": "Slett Widgeten",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Å sletta ein widget fjernar den for alle brukarane i rommet. Er du sikker på at du vil sletta denne widgeten?",
     "Delete widget": "Slett widgeten",
@@ -210,13 +196,6 @@
     "Are you sure you want to leave the room '%(roomName)s'?": "Er du sikker på at du vil forlate rommet '%(roomName)s'?",
     "Can't leave Server Notices room": "Kan ikkje forlate Systemvarsel-rommet",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Dette rommet er for viktige meldingar frå Heimtenaren, så du kan ikkje forlate det.",
-    "Signed Out": "Logga Ut",
-    "For security, this session has been signed out. Please sign in again.": "Av sikkerheitsgrunnar har denne øykta vorte logga ut. Ver venleg og logg inn att.",
-    "Terms and Conditions": "Vilkår og Føresetnader",
-    "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "For å framleis bruka %(homeserverDomain)s sin heimtenar må du sjå over og seia deg einig i våre Vilkår og Føresetnader.",
-    "Review terms and conditions": "Sjå over Vilkår og Føresetnader",
-    "Old cryptography data detected": "Gamal kryptografidata vart oppdagen",
-    "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "Data frå ein eldre versjon av %(brand)s er oppdaga. Dette kan ha gjort at ende-til-ende kryptering feilar i den eldre versjonen. Krypterte meldingar som er utveksla med den gamle versjonen er kanskje ikkje dekrypterbare i denne versjonen. Dette kan forårsake at meldingar utveksla mot denne versjonen vil feile. Opplever du problem med dette, kan du logge inn og ut igjen. For å behalde meldingshistorikk, eksporter og importer nøklane dine på nytt.",
     "Invite to this room": "Inviter til dette rommet",
     "Notifications": "Varsel",
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Du kan ikkje senda meldingar før du les over og godkjenner våre <consentLink>bruksvilkår</consentLink>.",
@@ -237,9 +216,6 @@
     "Uploading %(filename)s": "Lastar opp %(filename)s",
     "Unable to remove contact information": "Klarte ikkje å fjerna kontaktinfo",
     "<not supported>": "<ikkje støtta>",
-    "Import E2E room keys": "Hent E2E-romnøklar inn",
-    "Cryptography": "Kryptografi",
-    "Check for update": "Sjå etter oppdateringar",
     "Reject all %(invitedRooms)s invites": "Kanseller alle invitasjonar frå %(invitedRooms)s",
     "No media permissions": "Ingen mediatilgang",
     "You may need to manually permit %(brand)s to access your microphone/webcam": "Det kan henda at du må gje %(brand)s tilgang til mikrofonen/nettkameraet for hand",
@@ -248,8 +224,6 @@
     "No Webcams detected": "Ingen Nettkamera funne",
     "Default Device": "Eininga som brukast i utgangspunktet",
     "Audio Output": "Ljodavspeling",
-    "Email": "Epost",
-    "Account": "Brukar",
     "A new password must be entered.": "Du må skriva eit nytt passord inn.",
     "New passwords must match each other.": "Dei nye passorda må vera like.",
     "Return to login screen": "Gå attende til innlogging",
@@ -261,12 +235,9 @@
     "Passphrase must not be empty": "Passfrasefeltet kan ikkje stå tomt",
     "Enter passphrase": "Skriv inn passfrase",
     "Confirm passphrase": "Stadfest passfrase",
-    "Export E2E room keys": "Hent E2E-romnøklar ut",
     "Jump to read receipt": "Hopp til lesen-lappen",
     "Filter room members": "Filtrer rommedlemmar",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Du held på å verta teken til ei tredje-partisside so du kan godkjenna brukaren din til bruk med %(integrationsUrl)s. Vil du gå fram?",
-    "Token incorrect": "Teiknet er gale",
-    "This room is not accessible by remote Matrix servers": "Rommet er ikkje tilgjengeleg for andre Matrix-heimtenarar",
     "Add an Integration": "Legg tillegg til",
     "Popout widget": "Popp widget ut",
     "Custom level": "Tilpassa nivå",
@@ -290,10 +261,6 @@
     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Meldinga di vart ikkje send, for denne heimetenaren har nådd grensa for maksimalt aktive brukarar pr. månad. Kontakt <a>systemadministratoren</a> for å vidare nytte denne tenesta.",
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Denne meldingen vart ikkje send fordi heimetenaren har nådd grensa for tilgjengelege systemressursar. Kontakt <a>systemadministratoren</a> for å vidare nytta denne tenesta.",
     "Add room": "Legg til rom",
-    "You have %(count)s unread notifications in a prior version of this room.": {
-        "other": "Du har %(count)s uleste varslingar i ein tidligare versjon av dette rommet.",
-        "one": "Du har %(count)s ulest varsel i ein tidligare versjon av dette rommet."
-    },
     "Could not load user profile": "Klarde ikkje å laste brukarprofilen",
     "Your password has been reset.": "Passodet ditt vart nullstilt.",
     "Invalid homeserver discovery response": "Feil svar frå heimetenaren (discovery response)",
@@ -419,7 +386,6 @@
     "Show more": "Vis meir",
     "Display Name": "Visningsnamn",
     "Invalid theme schema.": "",
-    "Language and region": "Språk og region",
     "General": "Generelt",
     "Room information": "Rominformasjon",
     "Room Addresses": "Romadresser",
@@ -430,17 +396,13 @@
     "Upload completed": "Opplasting fullført",
     "Cancelled signature upload": "Kansellerte opplasting av signatur",
     "Room Settings - %(roomName)s": "Rominnstillingar - %(roomName)s",
-    "Upgrade this room to the recommended room version": "Oppgrader dette rommet til anbefalt romversjon",
     "Your theme": "Ditt tema",
     "Failed to upgrade room": "Fekk ikkje til å oppgradere rom",
     "Use Single Sign On to continue": "Bruk Single-sign-on for å fortsette",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Stadfest at du legger til denne e-postadressa, ved å bruka Single-sign-on for å stadfeste identiteten din.",
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Kontoen din har ein kryss-signert identitet det hemmelege lageret, økta di stolar ikkje på denne enno.",
-    "in secret storage": "i hemmeleg lager",
     "Secret storage public key:": "Public-nøkkel for hemmeleg lager:",
     "Ignored users": "Ignorerte brukarar",
-    "Server or user ID to ignore": "Tenar eller brukar-ID for å ignorere",
-    "If this isn't what you want, please use a different tool to ignore users.": "Om det ikkje var dette du ville, bruk eit anna verktøy til å ignorera brukarar.",
     "Enter the name of a new server you want to explore.": "Skriv inn namn på ny tenar du ynskjer å utforske.",
     "Command Help": "Kommandohjelp",
     "To help us prevent this in future, please <a>send us logs</a>.": "For å bistå med å forhindre dette i framtida, gjerne <a>send oss loggar</a>.",
@@ -454,7 +416,6 @@
     "Click the button below to confirm adding this phone number.": "Trykk på knappen nedanfor for å legge til dette telefonnummeret.",
     "%(name)s is requesting verification": "%(name)s spør etter verifikasjon",
     "Later": "Seinare",
-    "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Sikre meldingar med denne brukaren er ende-til-ende krypterte og kan ikkje lesast av tredjepart.",
     "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Er du sikker? Alle dine krypterte meldingar vil gå tapt viss nøklane dine ikkje er sikkerheitskopierte.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Krypterte meldingar er sikra med ende-til-ende kryptering. Berre du og mottakar(ane) har nøklane for å lese desse meldingane.",
     "wait and try again later": "vent og prøv om att seinare",
@@ -478,7 +439,6 @@
     "All settings": "Alle innstillingar",
     "Delete Backup": "Slett sikkerheitskopi",
     "Restore from Backup": "Gjenopprett frå sikkerheitskopi",
-    "Encryption": "Kryptografi",
     "Change notification settings": "Endra varslingsinnstillingar",
     "Enable desktop notifications": "Aktiver skrivebordsvarsel",
     "Video conference started by %(senderName)s": "Videokonferanse starta av %(senderName)s",
@@ -517,14 +477,8 @@
     "End Poll": "Avslutt røysting",
     "Sorry, the poll did not end. Please try again.": "Røystinga vart ikkje avslutta. Prøv på nytt.",
     "Failed to end poll": "Avslutning av røysting gjekk gale",
-    "Failed to post poll": "Oppretting av røysting gjekk gale",
     "The poll has ended. Top answer: %(topAnswer)s": "Røystinga er ferdig. Flest stemmer: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Røystinga er ferdig. Ingen røyster vart mottekne.",
-    "What is your poll question or topic?": "Kva handlar røystinga om ?",
-    "Sorry, the poll you tried to create was not posted.": "Røystinga du prøvde å oppretta vart ikkje publisert.",
-    "Edit poll": "Endra røysting",
-    "Create Poll": "Opprett røysting",
-    "Create poll": "Opprett røysting",
     "Sorry, you can't edit a poll after votes have been cast.": "Beklagar, du kan ikkje endra ei røysting som er i gang.",
     "Can't edit poll": "Røystinga kan ikkje endrast",
     "Poll": "Røysting",
@@ -538,7 +492,6 @@
     "Not a valid identity server (status code %(code)s)": "Ikkje ein gyldig identietstenar (statuskode %(code)s)",
     "Identity server URL must be HTTPS": "URL for identitetstenar må vera HTTPS",
     "Review to ensure your account is safe": "Undersøk dette for å gjere kontoen trygg",
-    "Results are only revealed when you end the poll": "Resultatet blir synleg når du avsluttar røystinga",
     "Results will be visible when the poll is ended": "Resultata vil bli synlege når røystinga er ferdig",
     "Hide sidebar": "Gøym sidestolpen",
     "Show sidebar": "Vis sidestolpen",
@@ -547,7 +500,6 @@
     "Expand quotes": "Utvid sitat",
     "Deactivate account": "Avliv brukarkontoen",
     "Enter a new identity server": "Skriv inn ein ny identitetstenar",
-    "Verify this device by confirming the following number appears on its screen.": "Verifiser denne eininga ved å stadfeste det følgjande talet når det kjem til syne på skjermen.",
     "Quick settings": "Hurtigval",
     "More options": "Fleire val",
     "Pin to sidebar": "Fest til sidestolpen",
@@ -805,7 +757,12 @@
             "send_analytics": "Send statistikkdata",
             "strict_encryption": "Aldri send krypterte meldingar til ikkje-verifiserte sesjonar frå denne sesjonen",
             "enable_message_search": "Aktiver søk etter meldingar i krypterte rom",
-            "manually_verify_all_sessions": "Manuelt verifiser alle eksterne økter"
+            "manually_verify_all_sessions": "Manuelt verifiser alle eksterne økter",
+            "cross_signing_in_4s": "i hemmeleg lager",
+            "export_megolm_keys": "Hent E2E-romnøklar ut",
+            "import_megolm_keys": "Hent E2E-romnøklar inn",
+            "cryptography_section": "Kryptografi",
+            "encryption_section": "Kryptografi"
         },
         "preferences": {
             "room_list_heading": "Romkatalog",
@@ -829,6 +786,10 @@
             "confirm_sign_out_body": {
                 "one": "Trykk på knappen under for å stadfesta utlogging frå denne eininga."
             }
+        },
+        "general": {
+            "account_section": "Brukar",
+            "language_section": "Språk og region"
         }
     },
     "devtools": {
@@ -1139,6 +1100,10 @@
             "url_preview_encryption_warning": "I krypterte rom, slik som denne, er URL-førehandsvisingar skrudd av i utgangspunktet for å forsikra at heimtenaren din (der førehandsvisinger lagast) ikkje kan samla informasjon om lenkjer som du ser i dette rommet.",
             "url_preview_explainer": "Når nokon legg ein URL med i meldinga si, kan ei URL-førehandsvising visast for å gje meir info om lenkja slik som tittelen, skildringa, og eit bilete frå nettsida.",
             "url_previews_section": "URL-førehandsvisingar"
+        },
+        "advanced": {
+            "unfederated": "Rommet er ikkje tilgjengeleg for andre Matrix-heimtenarar",
+            "room_upgrade_button": "Oppgrader dette rommet til anbefalt romversjon"
         }
     },
     "auth": {
@@ -1167,7 +1132,25 @@
         "register_action": "Opprett konto",
         "incorrect_credentials": "Feil brukarnamn og/eller passord.",
         "account_deactivated": "Denne kontoen har blitt deaktivert.",
-        "phone_label": "Telefon"
+        "phone_label": "Telefon",
+        "session_logged_out_title": "Logga Ut",
+        "session_logged_out_description": "Av sikkerheitsgrunnar har denne øykta vorte logga ut. Ver venleg og logg inn att.",
+        "change_password_mismatch": "Dei nye passorda samsvarar ikkje",
+        "change_password_empty": "Passordsfelta kan ikkje vera tomme",
+        "set_email_prompt": "Vil du setja ei epostadresse?",
+        "change_password_confirm_label": "Stadfest passord",
+        "change_password_current_label": "Gjeldande passord",
+        "change_password_new_label": "Nytt passord",
+        "change_password_action": "Endra passord",
+        "email_field_label": "Epost",
+        "uia": {
+            "msisdn_token_incorrect": "Teiknet er gale",
+            "msisdn": "Ei tekstmelding vart send til %(msisdn)s",
+            "msisdn_token_prompt": "Ver venleg og skriv koden den inneheld inn:",
+            "fallback_button": "Start authentisering"
+        },
+        "msisdn_field_label": "Telefon",
+        "identifier_label": "Logg inn med"
     },
     "export_chat": {
         "messages": "Meldingar"
@@ -1210,17 +1193,27 @@
     },
     "update": {
         "see_changes_button": "Kva er nytt?",
-        "release_notes_toast_title": "Kva er nytt"
+        "release_notes_toast_title": "Kva er nytt",
+        "error_encountered": "Noko gjekk gale (%(errorDetail)s).",
+        "no_update": "Inga oppdatering er tilgjengeleg.",
+        "check_action": "Sjå etter oppdateringar"
     },
     "location_sharing": {
         "expand_map": "Utvid kart"
     },
     "labs_mjolnir": {
         "room_name": "Mi blokkeringsliste",
-        "room_topic": "Dette er di liste over brukarar/tenarar du har blokkert - ikkje forlat rommet!"
+        "room_topic": "Dette er di liste over brukarar/tenarar du har blokkert - ikkje forlat rommet!",
+        "title": "Ignorerte brukarar",
+        "personal_new_label": "Tenar eller brukar-ID for å ignorere",
+        "lists_description_2": "Om det ikkje var dette du ville, bruk eit anna verktøy til å ignorera brukarar."
     },
     "room": {
-        "drop_file_prompt": "Slipp ein fil her for å lasta opp"
+        "drop_file_prompt": "Slipp ein fil her for å lasta opp",
+        "unread_notifications_predecessor": {
+            "other": "Du har %(count)s uleste varslingar i ein tidligare versjon av dette rommet.",
+            "one": "Du har %(count)s ulest varsel i ein tidligare versjon av dette rommet."
+        }
     },
     "file_panel": {
         "guest_note": "Du må <a>melda deg inn</a> for å bruka denne funksjonen",
@@ -1230,5 +1223,27 @@
         "context_menu": {
             "explore": "Utforsk romma"
         }
+    },
+    "terms": {
+        "tac_title": "Vilkår og Føresetnader",
+        "tac_description": "For å framleis bruka %(homeserverDomain)s sin heimtenar må du sjå over og seia deg einig i våre Vilkår og Føresetnader.",
+        "tac_button": "Sjå over Vilkår og Føresetnader"
+    },
+    "encryption": {
+        "old_version_detected_title": "Gamal kryptografidata vart oppdagen",
+        "old_version_detected_description": "Data frå ein eldre versjon av %(brand)s er oppdaga. Dette kan ha gjort at ende-til-ende kryptering feilar i den eldre versjonen. Krypterte meldingar som er utveksla med den gamle versjonen er kanskje ikkje dekrypterbare i denne versjonen. Dette kan forårsake at meldingar utveksla mot denne versjonen vil feile. Opplever du problem med dette, kan du logge inn og ut igjen. For å behalde meldingshistorikk, eksporter og importer nøklane dine på nytt.",
+        "verification": {
+            "explainer": "Sikre meldingar med denne brukaren er ende-til-ende krypterte og kan ikkje lesast av tredjepart.",
+            "sas_caption_self": "Verifiser denne eininga ved å stadfeste det følgjande talet når det kjem til syne på skjermen."
+        }
+    },
+    "poll": {
+        "create_poll_title": "Opprett røysting",
+        "create_poll_action": "Opprett røysting",
+        "edit_poll_title": "Endra røysting",
+        "failed_send_poll_title": "Oppretting av røysting gjekk gale",
+        "failed_send_poll_description": "Røystinga du prøvde å oppretta vart ikkje publisert.",
+        "topic_heading": "Kva handlar røystinga om ?",
+        "notes": "Resultatet blir synleg når du avsluttar røystinga"
     }
 }

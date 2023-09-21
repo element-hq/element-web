@@ -18,7 +18,6 @@
     "Sun": "Asa",
     "Add Phone Number": "Rnu uṭṭun n utilifun",
     "Add Email Address": "Rnu tasna imayl",
-    "exists": "illa",
     "Santa": "Santa",
     "Pizza": "Tapizzat",
     "Corn": "Akbal",
@@ -43,8 +42,6 @@
     "Algeria": "Dzayer",
     "Albania": "Albanya",
     "Afghanistan": "Afɣanistan",
-    "Phone": "Atilifun",
-    "Email": "Imayl",
     "Send": "Azen",
     "edited": "infel",
     "Copied!": "inɣel!",
@@ -53,7 +50,6 @@
     "Re-join": "als-lkem",
     "%(duration)sd": "%(duration)sas",
     "None": "Walu",
-    "Account": "Amiḍan",
     "Algorithm:": "Talguritmit:",
     "Profile": "Ifres",
     "Folder": "Asdaw",
@@ -165,11 +161,21 @@
     },
     "auth": {
         "register_action": "senflul amiḍan",
-        "phone_label": "Atilifun"
+        "phone_label": "Atilifun",
+        "email_field_label": "Imayl",
+        "msisdn_field_label": "Atilifun"
     },
     "room_settings": {
         "permissions": {
             "permissions_section": "Tisirag"
+        }
+    },
+    "settings": {
+        "security": {
+            "cross_signing_homeserver_support_exists": "illa"
+        },
+        "general": {
+            "account_section": "Amiḍan"
         }
     }
 }

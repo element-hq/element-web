@@ -14,7 +14,6 @@
     "This Room": "ഈ മുറി",
     "Unavailable": "ലഭ്യമല്ല",
     "Source URL": "സോഴ്സ് യു ആര്‍ എല്‍",
-    "No update available.": "അപ്ഡേറ്റുകള്‍ ലഭ്യമല്ല.",
     "Tuesday": "ചൊവ്വ",
     "Unnamed room": "പേരില്ലാത്ത റൂം",
     "Saturday": "ശനി",
@@ -28,7 +27,6 @@
     "Thursday": "വ്യാഴം",
     "Search…": "തിരയുക…",
     "Yesterday": "ഇന്നലെ",
-    "Error encountered (%(errorDetail)s).": "എറര്‍ നേരിട്ടു (%(errorDetail)s).",
     "Low Priority": "താഴ്ന്ന പരിഗണന",
     "Explore rooms": "മുറികൾ കണ്ടെത്തുക",
     "common": {
@@ -88,7 +86,9 @@
     },
     "update": {
         "see_changes_button": "എന്തൊക്കെ പുതിയ വിശേഷങ്ങള്‍ ?",
-        "release_notes_toast_title": "പുതിയ വിശേഷങ്ങള്‍"
+        "release_notes_toast_title": "പുതിയ വിശേഷങ്ങള്‍",
+        "error_encountered": "എറര്‍ നേരിട്ടു (%(errorDetail)s).",
+        "no_update": "അപ്ഡേറ്റുകള്‍ ലഭ്യമല്ല."
     },
     "space": {
         "context_menu": {

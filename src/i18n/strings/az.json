@@ -42,14 +42,6 @@
     "You are no longer ignoring %(userId)s": "Siz %(userId)s blokdan çıxardınız",
     "Reason": "Səbəb",
     "Incorrect verification code": "Təsdiq etmənin səhv kodu",
-    "Phone": "Telefon",
-    "New passwords don't match": "Yeni şifrlər uyğun gəlmir",
-    "Passwords can't be empty": "Şifrələr boş ola bilməz",
-    "Export E2E room keys": "Şifrləmənin açarlarının ixracı",
-    "Current password": "Cari şifrə",
-    "New Password": "Yeni şifrə",
-    "Confirm password": "Yeni şifrə təsdiq edin",
-    "Change Password": "Şifrəni dəyişdirin",
     "Authentication": "Müəyyənləşdirilmə",
     "Failed to set display name": "Görünüş adını təyin etmək bacarmadı",
     "Notification targets": "Xəbərdarlıqlar üçün qurğular",
@@ -78,7 +70,6 @@
     "Today": "Bu gün",
     "Decrypt %(text)s": "Şifrini açmaq %(text)s",
     "Download %(text)s": "Yükləmək %(text)s",
-    "Sign in with": "Seçmək",
     "Create new room": "Otağı yaratmaq",
     "Home": "Başlanğıc",
     "%(items)s and %(lastItem)s": "%(items)s və %(lastItem)s",
@@ -93,7 +84,6 @@
     "Reject invitation": "Dəvəti rədd etmək",
     "Are you sure you want to reject the invitation?": "Siz əminsiniz ki, siz dəvəti rədd etmək istəyirsiniz?",
     "Failed to reject invitation": "Dəvəti rədd etməyi bacarmadı",
-    "For security, this session has been signed out. Please sign in again.": "Təhlükəsizliyin təmin olunması üçün sizin sessiyanız başa çatmışdır idi. Zəhmət olmasa, yenidən girin.",
     "Notifications": "Xəbərdarlıqlar",
     "Connectivity to the server has been lost.": "Serverlə əlaqə itirilmişdir.",
     "Sent messages will be stored until your connection has returned.": "Hələ ki serverlə əlaqə bərpa olmayacaq, göndərilmiş mesajlar saxlanacaq.",
@@ -102,11 +92,7 @@
     "Failed to load timeline position": "Xronologiyadan nişanı yükləməyi bacarmadı",
     "Unable to remove contact information": "Əlaqə məlumatlarının silməyi bacarmadı",
     "<not supported>": "<dəstəklənmir>",
-    "Import E2E room keys": "Şifrləmənin açarlarının idxalı",
-    "Cryptography": "Kriptoqrafiya",
-    "Email": "E-poçt",
     "Profile": "Profil",
-    "Account": "Hesab",
     "A new password must be entered.": "Yeni parolu daxil edin.",
     "New passwords must match each other.": "Yeni şifrələr uyğun olmalıdır.",
     "Return to login screen": "Girişin ekranına qayıtmaq",
@@ -205,6 +191,14 @@
         "appearance": {
             "timeline_image_size_default": "Varsayılan olaraq",
             "image_size_default": "Varsayılan olaraq"
+        },
+        "security": {
+            "export_megolm_keys": "Şifrləmənin açarlarının ixracı",
+            "import_megolm_keys": "Şifrləmənin açarlarının idxalı",
+            "cryptography_section": "Kriptoqrafiya"
+        },
+        "general": {
+            "account_section": "Hesab"
         }
     },
     "timeline": {
@@ -297,7 +291,17 @@
         "footer_powered_by_matrix": "Matrix tərəfindən təchiz edilmişdir",
         "unsupported_auth_msisdn": "Bu server telefon nömrəsinin köməyi ilə müəyyənləşdirilməni dəstəkləmir.",
         "register_action": "Hesab Aç",
-        "phone_label": "Telefon"
+        "phone_label": "Telefon",
+        "session_logged_out_description": "Təhlükəsizliyin təmin olunması üçün sizin sessiyanız başa çatmışdır idi. Zəhmət olmasa, yenidən girin.",
+        "change_password_mismatch": "Yeni şifrlər uyğun gəlmir",
+        "change_password_empty": "Şifrələr boş ola bilməz",
+        "change_password_confirm_label": "Yeni şifrə təsdiq edin",
+        "change_password_current_label": "Cari şifrə",
+        "change_password_new_label": "Yeni şifrə",
+        "change_password_action": "Şifrəni dəyişdirin",
+        "email_field_label": "E-poçt",
+        "msisdn_field_label": "Telefon",
+        "identifier_label": "Seçmək"
     },
     "update": {
         "release_notes_toast_title": "Nə dəyişdi"

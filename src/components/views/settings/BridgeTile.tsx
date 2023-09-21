@@ -89,7 +89,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
             creator = (
                 <li>
                     {_t(
-                        "This bridge was provisioned by <user />.",
+                        "labs|bridge_state_creator",
                         {},
                         {
                             user: () => (
@@ -109,7 +109,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         const bot = (
             <li>
                 {_t(
-                    "This bridge is managed by <user />.",
+                    "labs|bridge_state_manager",
                     {},
                     {
                         user: () => (
@@ -154,7 +154,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
                 );
             }
             networkItem = _t(
-                "Workspace: <networkLink/>",
+                "labs|bridge_state_workspace",
                 {},
                 {
                     networkLink: () => networkLink,
@@ -181,7 +181,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
                         {networkItem}
                         <span className="mx_RoomSettingsDialog_channel">
                             {_t(
-                                "Channel: <channelLink/>",
+                                "labs|bridge_state_channel",
                                 {},
                                 {
                                     channelLink: () => channelLink,

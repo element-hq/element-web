@@ -444,7 +444,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             <SettingsTab>
                 <SettingsSection heading={_t("room_settings|security|title")}>
                     <SettingsFieldset
-                        legend={_t("Encryption")}
+                        legend={_t("settings|security|encryption_section")}
                         description={
                             isEncryptionForceDisabled && !isEncrypted
                                 ? undefined

@@ -106,7 +106,7 @@ const EncryptionInfo: React.FC<IProps> = ({
     return (
         <React.Fragment>
             <div data-testid="encryption-info-description" className="mx_UserInfo_container">
-                <h3>{_t("Encryption")}</h3>
+                <h3>{_t("settings|security|encryption_section")}</h3>
                 {description}
             </div>
             <div className="mx_UserInfo_container">

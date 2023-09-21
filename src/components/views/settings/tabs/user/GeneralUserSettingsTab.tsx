@@ -402,14 +402,18 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                         href={this.state.externalAccountManagementUrl}
                         data-testid="external-account-management-link"
                     >
-                        {_t("Manage account")}
+                        {_t("settings|general|oidc_manage_button")}
                     </AccessibleButton>
                 </>
             );
         }
         return (
             <>
-                <SettingsSubsection heading={_t("Account")} stretchContent data-testid="accountSection">
+                <SettingsSubsection
+                    heading={_t("settings|general|account_section")}
+                    stretchContent
+                    data-testid="accountSection"
+                >
                     {externalAccountManagement}
                     {passwordChangeSection}
                 </SettingsSubsection>
@@ -421,7 +425,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     private renderLanguageSection(): JSX.Element {
         // TODO: Convert to new-styled Field
         return (
-            <SettingsSubsection heading={_t("Language and region")} stretchContent>
+            <SettingsSubsection heading={_t("settings|general|language_section")} stretchContent>
                 <LanguageDropdown
                     className="mx_GeneralUserSettingsTab_section_languageInput"
                     onOptionChange={this.onLanguageChange}
@@ -433,7 +437,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
     private renderSpellCheckSection(): JSX.Element {
         const heading = (
-            <SettingsSubsectionHeading heading={_t("Spell check")}>
+            <SettingsSubsectionHeading heading={_t("settings|general|spell_check_section")}>
                 <ToggleSwitch checked={!!this.state.spellCheckEnabled} onChange={this.onSpellCheckEnabledChange} />
             </SettingsSubsectionHeading>
         );

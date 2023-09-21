@@ -99,7 +99,7 @@ export default function RoomTopic({ room, ...props }: IProps): JSX.Element {
                                     dis.dispatch({ action: "open_room_settings" });
                                 }}
                             >
-                                {_t("Edit topic")}
+                                {_t("room|edit_topic")}
                             </AccessibleButton>
                         )}
                     </div>
@@ -119,7 +119,7 @@ export default function RoomTopic({ room, ...props }: IProps): JSX.Element {
             onClick={onClick}
             dir="auto"
             tooltipTargetClassName={className}
-            label={_t("Click to read topic")}
+            label={_t("room|read_topic")}
             alignment={Alignment.Bottom}
             ignoreHover={ignoreHover}
         >

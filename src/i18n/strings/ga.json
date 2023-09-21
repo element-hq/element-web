@@ -1,5 +1,4 @@
 {
-    "Sign in with": "Sínigh isteach le",
     "Show more": "Taispeáin níos mó",
     "All settings": "Gach Socrú",
     "Are you sure you want to reject the invitation?": "An bhfuil tú cinnte gur mian leat an cuireadh a dhiúltú?",
@@ -21,7 +20,6 @@
     "Failed to verify email address: make sure you clicked the link in the email": "Níor cinntíodh an seoladh ríomhphoist: déan cinnte gur chliceáil tú an nasc sa ríomhphost",
     "Reject & Ignore user": "Diúltaigh ⁊ Neamaird do úsáideoir",
     "Ignored users": "Úsáideoirí neamhairde",
-    "Ignored/Blocked": "Neamhairde/Tachta",
     "Unrecognised address": "Seoladh nár aithníodh",
     "Verified key": "Eochair deimhnithe",
     "Unignored user": "Úsáideoir leis aird",
@@ -225,8 +223,6 @@
     "Favourited": "Roghnaithe",
     "Ok": "Togha",
     "Accepting…": "ag Glacadh leis…",
-    "Cancelling…": "ag Cealú…",
-    "exists": "a bheith ann",
     "Bridges": "Droichid",
     "Later": "Níos deireanaí",
     "Lock": "Glasáil",
@@ -235,8 +231,6 @@
     "Italics": "Iodálach",
     "Discovery": "Aimsiú",
     "Success!": "Rath!",
-    "Phone": "Guthán",
-    "Email": "Ríomhphost",
     "Home": "Tús",
     "Favourite": "Cuir mar ceanán",
     "Removing…": "ag Baint…",
@@ -267,23 +261,15 @@
     "%(duration)ss": "%(duration)ss",
     "Delete Backup": "Scrios cúltaca",
     "Email Address": "Seoladh Ríomhphoist",
-    "Change Password": "Athraigh focal faire",
-    "Confirm password": "Deimhnigh focal faire",
-    "New Password": "Focal Faire Nua",
-    "Current password": "Focal faire reatha",
     "Light bulb": "Bolgán solais",
     "Thumbs up": "Ordógí suas",
-    "Got It": "Tuigthe",
     "Invited": "Le cuireadh",
     "Demote": "Bain ceadanna",
-    "Encryption": "Criptiúchán",
     "Unban": "Bain an cosc",
     "Browse": "Brabhsáil",
     "Sounds": "Fuaimeanna",
-    "Cryptography": "Cripteagrafaíocht",
     "Notifications": "Fógraí",
     "General": "Ginearálta",
-    "Account": "Cuntas",
     "Profile": "Próifíl",
     "Authentication": "Fíordheimhniú",
     "Warning!": "Aire!",
@@ -388,7 +374,6 @@
     "Sign out and remove encryption keys?": "Sínigh amach agus scrios eochracha criptiúcháin?",
     "Clear Storage and Sign Out": "Scrios Stóras agus Sínigh Amach",
     "Are you sure you want to sign out?": "An bhfuil tú cinnte go dteastaíonn uait sínigh amach?",
-    "Signed Out": "Sínithe Amach",
     "Create account": "Déan cuntas a chruthú",
     "Deactivate Account": "Cuir cuntas as feidhm",
     "Account management": "Bainistíocht cuntais",
@@ -425,8 +410,6 @@
     "Notification sound": "Fuaim fógra",
     "Uploaded sound": "Fuaim uaslódáilte",
     "Room Addresses": "Seoltaí Seomra",
-    "Room version:": "Leagan seomra:",
-    "Room version": "Leagan seomra",
     "Too Many Calls": "Barraíocht Glaonna",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
@@ -456,7 +439,6 @@
     "Failed to change power level": "Níor éiríodh leis an leibhéal cumhachta a hathrú",
     "Failed to change password. Is your password correct?": "Níor éiríodh leis do phasfhocal a hathrú. An bhfuil do phasfhocal ceart?",
     "Failed to ban user": "Níor éiríodh leis an úsáideoir a thoirmeasc",
-    "Export E2E room keys": "Easpórtáil eochracha an tseomra le criptiú ó dheireadh go deireadh",
     "Error decrypting attachment": "Earráid le ceangaltán a dhíchriptiú",
     "Enter passphrase": "Iontráil pasfrása",
     "Email address": "Seoladh ríomhphoist",
@@ -654,6 +636,15 @@
         },
         "preferences": {
             "composer_heading": "Eagarthóir"
+        },
+        "security": {
+            "cross_signing_homeserver_support_exists": "a bheith ann",
+            "export_megolm_keys": "Easpórtáil eochracha an tseomra le criptiú ó dheireadh go deireadh",
+            "cryptography_section": "Cripteagrafaíocht",
+            "encryption_section": "Criptiúchán"
+        },
+        "general": {
+            "account_section": "Cuntas"
         }
     },
     "devtools": {
@@ -772,11 +763,17 @@
         },
         "general": {
             "url_previews_section": "Réamhamhairc URL"
+        },
+        "advanced": {
+            "room_version_section": "Leagan seomra",
+            "room_version": "Leagan seomra:"
         }
     },
     "encryption": {
         "verification": {
-            "complete_title": "Deimhnithe!"
+            "complete_title": "Deimhnithe!",
+            "complete_action": "Tuigthe",
+            "cancelling": "ag Cealú…"
         }
     },
     "emoji": {
@@ -799,7 +796,15 @@
         "create_account_prompt": "Céaduaire? <a>Cruthaigh cuntas</a>",
         "sign_in_or_register": "Sínigh Isteach nó Déan cuntas a chruthú",
         "register_action": "Déan cuntas a chruthú",
-        "phone_label": "Guthán"
+        "phone_label": "Guthán",
+        "session_logged_out_title": "Sínithe Amach",
+        "change_password_confirm_label": "Deimhnigh focal faire",
+        "change_password_current_label": "Focal faire reatha",
+        "change_password_new_label": "Focal Faire Nua",
+        "change_password_action": "Athraigh focal faire",
+        "email_field_label": "Ríomhphost",
+        "msisdn_field_label": "Guthán",
+        "identifier_label": "Sínigh isteach le"
     },
     "export_chat": {
         "messages": "Teachtaireachtaí"
@@ -851,5 +856,9 @@
         "intro": {
             "enable_encryption_prompt": "Tosaigh criptiú sna socruithe."
         }
+    },
+    "labs_mjolnir": {
+        "ban_reason": "Neamhairde/Tachta",
+        "title": "Úsáideoirí neamhairde"
     }
 }

@@ -37,9 +37,9 @@ interface IProps extends Omit<IInputProps, "onValidate" | "label" | "element"> {
 
 class PassphraseConfirmField extends PureComponent<IProps> {
     public static defaultProps = {
-        label: _td("Confirm password"),
-        labelRequired: _td("Confirm password"),
-        labelInvalid: _td("Passwords don't match"),
+        label: _td("auth|change_password_confirm_label"),
+        labelRequired: _td("auth|change_password_confirm_label"),
+        labelInvalid: _td("auth|change_password_confirm_invalid"),
     };
 
     private validate = withValidation({

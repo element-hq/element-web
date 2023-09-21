@@ -1,7 +1,5 @@
 {
-    "Account": "บัญชี",
     "No Microphones detected": "ไม่พบไมโครโฟน",
-    "Change Password": "เปลี่ยนรหัสผ่าน",
     "Default": "ค่าเริ่มต้น",
     "Default Device": "อุปกรณ์เริ่มต้น",
     "Decrypt %(text)s": "ถอดรหัส %(text)s",
@@ -27,11 +25,7 @@
     "Are you sure?": "คุณแน่ใจหรือไม่?",
     "Are you sure you want to leave the room '%(roomName)s'?": "คุณแน่ใจหรือว่าต้องการจะออกจากห้อง '%(roomName)s'?",
     "Are you sure you want to reject the invitation?": "คุณแน่ใจหรือว่าต้องการจะปฏิเสธคำเชิญ?",
-    "Confirm password": "ยืนยันรหัสผ่าน",
-    "Cryptography": "วิทยาการเข้ารหัส",
-    "Current password": "รหัสผ่านปัจจุบัน",
     "Deactivate Account": "ปิดการใช้งานบัญชี",
-    "Email": "อีเมล",
     "Email address": "ที่อยู่อีเมล",
     "Error decrypting attachment": "การถอดรหัสไฟล์แนบผิดพลาด",
     "Failed to ban user": "การแบนผู้ใช้ล้มเหลว",
@@ -50,18 +44,14 @@
     "Invalid Email Address": "ที่อยู่อีเมลไม่ถูกต้อง",
     "Invalid file%(extra)s": "ไฟล์ %(extra)s ไม่ถูกต้อง",
     "Invited": "เชิญแล้ว",
-    "Sign in with": "เข้าสู่ระบบด้วย",
     "Join Room": "เข้าร่วมห้อง",
     "Jump to first unread message.": "ข้ามไปยังข้อความแรกที่ยังไม่ได้อ่าน",
     "Missing user_id in request": "ไม่พบ user_id ในคำขอ",
     "Moderator": "ผู้ช่วยดูแล",
-    "New passwords don't match": "รหัสผ่านใหม่ไม่ตรงกัน",
     "New passwords must match each other.": "รหัสผ่านใหม่ทั้งสองช่องต้องตรงกัน",
     "not specified": "ไม่ได้ระบุ",
     "<not supported>": "<ไม่รองรับ>",
     "No more results": "ไม่มีผลลัพธ์อื่น",
-    "Passwords can't be empty": "รหัสผ่านต้องไม่ว่าง",
-    "Phone": "โทรศัพท์",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "กรุณาเช็คอีเมลและคลิกลิงก์ข้างใน หลังจากนั้น คลิกดำเนินการต่อ",
     "Reject invitation": "ปฏิเสธคำเชิญ",
     "Return to login screen": "กลับไปยังหน้าลงชื่อเข้าใช้",
@@ -71,15 +61,12 @@
     "Search failed": "การค้นหาล้มเหลว",
     "Server may be unavailable, overloaded, or search timed out :(": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือการค้นหาหมดเวลา :(",
     "Server may be unavailable, overloaded, or you hit a bug.": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือเจอจุดบกพร่อง",
-    "Signed Out": "ออกจากระบบแล้ว",
     "This email address is already in use": "ที่อยู่อีเมลถูกใช้แล้ว",
     "This email address was not found": "ไม่พบที่อยู่อีเมล",
     "This phone number is already in use": "หมายเลขโทรศัพท์นี้ถูกใช้งานแล้ว",
     "Create new room": "สร้างห้องใหม่",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "ไม่สามารถเชื่อมต่อไปยังเซิร์ฟเวอร์บ้านผ่านทาง HTTP ได้เนื่องจาก URL ที่อยู่บนเบราว์เซอร์เป็น HTTPS กรุณาใช้ HTTPS หรือ<a>เปิดใช้งานสคริปต์ที่ไม่ปลอดภัย</a>.",
-    "Export E2E room keys": "ส่งออกกุญแจถอดรหัส E2E",
     "Failed to change power level": "การเปลี่ยนระดับอำนาจล้มเหลว",
-    "Import E2E room keys": "นำเข้ากุญแจถอดรหัส E2E",
     "Unable to add email address": "ไมาสามารถเพิ่มที่อยู่อีเมล",
     "Unable to verify email address.": "ไม่สามารถยืนยันที่อยู่อีเมล",
     "Unban": "ปลดแบน",
@@ -114,7 +101,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "New Password": "รหัสผ่านใหม่",
     "Export room keys": "ส่งออกกุณแจห้อง",
     "Confirm passphrase": "ยืนยันรหัสผ่าน",
     "Import room keys": "นำเข้ากุณแจห้อง",
@@ -148,7 +134,6 @@
     "Unavailable": "ไม่มี",
     "Send": "ส่ง",
     "Source URL": "URL ต้นฉบับ",
-    "No update available.": "ไม่มีอัปเดตที่ใหม่กว่า",
     "Tuesday": "วันอังคาร",
     "Search…": "ค้นหา…",
     "Unnamed room": "ห้องที่ไม่มีชื่อ",
@@ -161,7 +146,6 @@
     "You cannot delete this message. (%(code)s)": "คุณไม่สามารถลบข้อความนี้ได้ (%(code)s)",
     "Thursday": "วันพฤหัสบดี",
     "Yesterday": "เมื่อวานนี้",
-    "Error encountered (%(errorDetail)s).": "เกิดข้อผิดพลาด (%(errorDetail)s)",
     "Low Priority": "ความสำคัญต่ำ",
     "Explore rooms": "สำรวจห้อง",
     "Add Email Address": "เพิ่มที่อยู่อีเมล",
@@ -447,6 +431,14 @@
                 "one": "ออกจากระบบอุปกรณ์",
                 "other": "ออกจากระบบอุปกรณ์"
             }
+        },
+        "security": {
+            "export_megolm_keys": "ส่งออกกุญแจถอดรหัส E2E",
+            "import_megolm_keys": "นำเข้ากุญแจถอดรหัส E2E",
+            "cryptography_section": "วิทยาการเข้ารหัส"
+        },
+        "general": {
+            "account_section": "บัญชี"
         }
     },
     "timeline": {
@@ -518,7 +510,17 @@
         "server_picker_explainer": "ใช้ Matrix โฮมเซิร์ฟเวอร์ที่คุณต้องการหากคุณมี หรือโฮสต์ของคุณเอง",
         "server_picker_learn_more": "เกี่ยวกับโฮมเซิร์ฟเวอร์",
         "incorrect_credentials": "ชื่อผู้ใช้และ/หรือรหัสผ่านไม่ถูกต้อง",
-        "phone_label": "โทรศัพท์"
+        "phone_label": "โทรศัพท์",
+        "session_logged_out_title": "ออกจากระบบแล้ว",
+        "change_password_mismatch": "รหัสผ่านใหม่ไม่ตรงกัน",
+        "change_password_empty": "รหัสผ่านต้องไม่ว่าง",
+        "change_password_confirm_label": "ยืนยันรหัสผ่าน",
+        "change_password_current_label": "รหัสผ่านปัจจุบัน",
+        "change_password_new_label": "รหัสผ่านใหม่",
+        "change_password_action": "เปลี่ยนรหัสผ่าน",
+        "email_field_label": "อีเมล",
+        "msisdn_field_label": "โทรศัพท์",
+        "identifier_label": "เข้าสู่ระบบด้วย"
     },
     "setting": {
         "help_about": {
@@ -534,7 +536,9 @@
     },
     "update": {
         "see_changes_button": "มีอะไรใหม่?",
-        "release_notes_toast_title": "มีอะไรใหม่"
+        "release_notes_toast_title": "มีอะไรใหม่",
+        "error_encountered": "เกิดข้อผิดพลาด (%(errorDetail)s)",
+        "no_update": "ไม่มีอัปเดตที่ใหม่กว่า"
     },
     "file_panel": {
         "guest_note": "คุณต้อง<a>ลงทะเบียน</a>เพื่อใช้ฟังก์ชันนี้"

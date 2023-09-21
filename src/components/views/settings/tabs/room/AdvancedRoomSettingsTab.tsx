@@ -111,7 +111,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
 
         let unfederatableSection: JSX.Element | undefined;
         if (room.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent()["m.federate"] === false) {
-            unfederatableSection = <div>{_t("This room is not accessible by remote Matrix servers")}</div>;
+            unfederatableSection = <div>{_t("room_settings|advanced|unfederated")}</div>;
         }
 
         let roomUpgradeButton;
@@ -120,7 +120,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
                 <div>
                     <p className="mx_SettingsTab_warningText">
                         {_t(
-                            "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.",
+                            "room_settings|advanced|room_upgrade_warning",
                             {},
                             {
                                 b: (sub) => <b>{sub}</b>,
@@ -130,8 +130,8 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
                     </p>
                     <AccessibleButton onClick={this.upgradeRoom} kind="primary">
                         {isSpace
-                            ? _t("Upgrade this space to the recommended room version")
-                            : _t("Upgrade this room to the recommended room version")}
+                            ? _t("room_settings|advanced|space_upgrade_button")
+                            : _t("room_settings|advanced|room_upgrade_button")}
                     </AccessibleButton>
                 </div>
             );
@@ -141,9 +141,9 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
         if (this.state.oldRoomId) {
             let copy: string;
             if (isSpace) {
-                copy = _t("View older version of %(spaceName)s.", { spaceName: room.name ?? this.state.oldRoomId });
+                copy = _t("room_settings|advanced|space_predecessor", { spaceName: room.name ?? this.state.oldRoomId });
             } else {
-                copy = _t("View older messages in %(roomName)s.", { roomName: room.name ?? this.state.oldRoomId });
+                copy = _t("room_settings|advanced|room_predecessor", { roomName: room.name ?? this.state.oldRoomId });
             }
 
             oldRoomLink = (
@@ -158,16 +158,16 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
                 <SettingsSection heading={_t("Advanced")}>
                     <SettingsSubsection heading={room.isSpaceRoom() ? _t("Space information") : _t("Room information")}>
                         <div>
-                            <span>{_t("Internal room ID")}</span>
+                            <span>{_t("room_settings|advanced|room_id")}</span>
                             <CopyableText getTextToCopy={() => this.props.room.roomId}>
                                 {this.props.room.roomId}
                             </CopyableText>
                         </div>
                         {unfederatableSection}
                     </SettingsSubsection>
-                    <SettingsSubsection heading={_t("Room version")}>
+                    <SettingsSubsection heading={_t("room_settings|advanced|room_version_section")}>
                         <div>
-                            <span>{_t("Room version:")}</span>&nbsp;
+                            <span>{_t("room_settings|advanced|room_version")}</span>&nbsp;
                             {room.getVersion()}
                         </div>
                         {oldRoomLink}

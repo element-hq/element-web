@@ -49,7 +49,6 @@
     "Notifications": "Notificacions",
     "Ok": "Validar",
     "Set up": "Parametrar",
-    "Cancelling…": "Anullacion…",
     "Fish": "Pes",
     "Butterfly": "Parpalhòl",
     "Tree": "Arborescéncia",
@@ -68,17 +67,10 @@
     "Headphones": "Escotadors",
     "Folder": "Dorsièr",
     "Show more": "Ne veire mai",
-    "Current password": "Senhal actual",
-    "New Password": "Senhal novèl",
-    "Confirm password": "Confirmar lo senhal",
-    "Change Password": "Modificar senhal",
-    "not found": "pas trobat",
-    "exists": "existís",
     "Authentication": "Autentificacion",
     "Restore from Backup": "Restablir a partir de l'archiu",
     "Display Name": "Nom d'afichatge",
     "Profile": "Perfil",
-    "Account": "Compte",
     "General": "General",
     "Unignore": "Ignorar pas",
     "Audio Output": "Sortida àudio",
@@ -86,7 +78,6 @@
     "Sounds": "Sons",
     "Browse": "Percórrer",
     "Unban": "Reabilitar",
-    "Encryption": "Chiframent",
     "Phone Number": "Numèro de telefòn",
     "Unencrypted": "Pas chifrat",
     "Italics": "Italicas",
@@ -123,10 +114,6 @@
     "Email address": "Adreça de corrièl",
     "Upload files": "Mandar de fichièrs",
     "Home": "Dorsièr personal",
-    "Enter password": "Sasissètz lo senhal",
-    "Email": "Corrièl",
-    "Phone": "Telefòn",
-    "Passwords don't match": "Los senhals correspondon pas",
     "Unknown error": "Error desconeguda",
     "Search failed": "La recèrca a fracassat",
     "Success!": "Capitada !",
@@ -331,13 +318,29 @@
         },
         "preferences": {
             "composer_heading": "Compositor"
+        },
+        "security": {
+            "cross_signing_not_found": "pas trobat",
+            "cross_signing_homeserver_support_exists": "existís",
+            "encryption_section": "Chiframent"
+        },
+        "general": {
+            "account_section": "Compte"
         }
     },
     "auth": {
         "sso": "Autentificacion unica",
         "incorrect_password": "Senhal incorrècte",
         "register_action": "Crear un compte",
-        "phone_label": "Telefòn"
+        "phone_label": "Telefòn",
+        "change_password_confirm_label": "Confirmar lo senhal",
+        "change_password_confirm_invalid": "Los senhals correspondon pas",
+        "change_password_current_label": "Senhal actual",
+        "change_password_new_label": "Senhal novèl",
+        "change_password_action": "Modificar senhal",
+        "email_field_label": "Corrièl",
+        "password_field_label": "Sasissètz lo senhal",
+        "msisdn_field_label": "Telefòn"
     },
     "export_chat": {
         "messages": "Messatges"
@@ -371,6 +374,11 @@
         },
         "security": {
             "title": "Seguretat e vida privada"
+        }
+    },
+    "encryption": {
+        "verification": {
+            "cancelling": "Anullacion…"
         }
     }
 }

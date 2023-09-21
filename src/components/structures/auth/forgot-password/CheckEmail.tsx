@@ -53,7 +53,7 @@ export const CheckEmail: React.FC<CheckEmailProps> = ({
     return (
         <>
             <EMailPromptIcon className="mx_AuthBody_emailPromptIcon--shifted" />
-            <h1>{_t("Check your email to continue")}</h1>
+            <h1>{_t("auth|uia|email_auth_header")}</h1>
             <div className="mx_AuthBody_text">
                 <p>{_t("auth|check_email_explainer", { email: email }, { b: (t) => <b>{t}</b> })}</p>
                 <div className="mx_AuthBody_did-not-receive">

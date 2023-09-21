@@ -366,18 +366,28 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                     <table className="mx_SecureBackupPanel_statusList">
                         <tr>
                             <th scope="row">{_t("Backup key stored:")}</th>
-                            <td>{backupKeyStored === true ? _t("in secret storage") : _t("not stored")}</td>
+                            <td>
+                                {backupKeyStored === true
+                                    ? _t("settings|security|cross_signing_in_4s")
+                                    : _t("not stored")}
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">{_t("Backup key cached:")}</th>
                             <td>
-                                {backupKeyCached ? _t("cached locally") : _t("not found locally")}
+                                {backupKeyCached
+                                    ? _t("settings|security|cross_signing_cached")
+                                    : _t("settings|security|cross_signing_not_cached")}
                                 {backupKeyWellFormedText}
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">{_t("Secret storage public key:")}</th>
-                            <td>{secretStorageKeyInAccount ? _t("in account data") : _t("not found")}</td>
+                            <td>
+                                {secretStorageKeyInAccount
+                                    ? _t("in account data")
+                                    : _t("settings|security|cross_signing_not_found")}
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">{_t("Secret storage:")}</th>
