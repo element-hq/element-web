@@ -103,7 +103,7 @@ export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room
     const classes = classNames("mx_Pill", {
         mx_AtRoomPill: type === PillType.AtRoomMention,
         mx_RoomPill: type === PillType.RoomMention,
-        mx_SpacePill: type === "space",
+        mx_SpacePill: type === "space" || targetRoom?.isSpaceRoom(),
         mx_UserPill: type === PillType.UserMention,
         mx_UserPill_me: resourceId === MatrixClientPeg.safeGet().getUserId(),
         mx_EventPill: type === PillType.EventInOtherRoom || type === PillType.EventInSameRoom,
