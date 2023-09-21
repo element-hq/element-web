@@ -87,7 +87,6 @@
     "Current password": "Dabartinis slaptažodis",
     "New Password": "Naujas slaptažodis",
     "Failed to set display name": "Nepavyko nustatyti rodomo vardo",
-    "Drop file here to upload": "Norėdami įkelti, vilkite failą čia",
     "Failed to mute user": "Nepavyko nutildyti vartotojo",
     "Are you sure?": "Ar tikrai?",
     "Admin Tools": "Administratoriaus įrankiai",
@@ -98,11 +97,7 @@
     "Upload avatar": "Įkelti pseudoportretą",
     "%(roomName)s does not exist.": "%(roomName)s neegzistuoja.",
     "%(roomName)s is not accessible at this time.": "%(roomName)s šiuo metu nėra pasiekiamas.",
-    "Muted Users": "Nutildyti naudotojai",
-    "Anyone": "Bet kas",
-    "Permissions": "Leidimai",
     "This room has no local addresses": "Šis kambarys neturi jokių vietinių adresų",
-    "URL Previews": "URL nuorodų peržiūros",
     "Error decrypting attachment": "Klaida iššifruojant priedą",
     "Decrypt %(text)s": "Iššifruoti %(text)s",
     "Download %(text)s": "Atsisiųsti %(text)s",
@@ -146,9 +141,6 @@
     "New passwords must match each other.": "Nauji slaptažodžiai privalo sutapti.",
     "Return to login screen": "Grįžti į prisijungimą",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Atkreipkite dėmesį, kad jūs jungiatės prie %(hs)s serverio, o ne matrix.org.",
-    "Commands": "Komandos",
-    "Notify the whole room": "Pranešti visam kambariui",
-    "Users": "Naudotojai",
     "Session ID": "Seanso ID",
     "Passphrases must match": "Slaptafrazės privalo sutapti",
     "Passphrase must not be empty": "Slaptafrazė negali būti tuščia",
@@ -185,14 +177,8 @@
     "Demote": "Pažeminti",
     "Share Link to User": "Dalintis nuoroda į vartotoją",
     "The conversation continues here.": "Pokalbis tęsiasi čia.",
-    "Banned users": "Užblokuoti vartotojai",
     "This room is not accessible by remote Matrix servers": "Šis kambarys nėra pasiekiamas nuotoliniams Matrix serveriams",
-    "Who can read history?": "Kas gali skaityti istoriją?",
     "Only room administrators will see this warning": "Šį įspėjimą matys tik kambario administratoriai",
-    "You have <a>enabled</a> URL previews by default.": "Jūs <a>įjungėte</a> URL nuorodų peržiūras kaip numatytasias.",
-    "You have <a>disabled</a> URL previews by default.": "Jūs <a>išjungėte</a> URL nuorodų peržiūras kaip numatytasias.",
-    "URL previews are enabled by default for participants in this room.": "URL nuorodų peržiūros šio kambario dalyviams yra įjungtos kaip numatytosios.",
-    "URL previews are disabled by default for participants in this room.": "URL nuorodų peržiūros šio kambario dalyviams yra išjungtos kaip numatytosios.",
     "Invalid file%(extra)s": "Neteisingas failas %(extra)s",
     "Token incorrect": "Neteisingas prieigos raktas",
     "Sign in with": "Prisijungti naudojant",
@@ -222,7 +208,6 @@
     "You do not have permission to post to this room": "Jūs neturite leidimų rašyti šiame kambaryje",
     "Failed to unban": "Nepavyko atblokuoti",
     "not specified": "nenurodyta",
-    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "Šifruotuose kambariuose, tokiuose kaip šis, URL nuorodų peržiūros pagal numatymą yra išjungtos, kad būtų užtikrinta, jog jūsų serveris (kur yra generuojamos peržiūros) negali rinkti informacijos apie jūsų šiame kambaryje peržiūrėtas nuorodas.",
     "Home": "Pradžia",
     "And %(count)s more...": {
         "other": "Ir dar %(count)s..."
@@ -235,7 +220,6 @@
     "Unknown server error": "Nežinoma serverio klaida",
     "Delete Backup": "Ištrinti Atsarginę Kopiją",
     "Set up": "Nustatyti",
-    "Publish this room to the public in %(domain)s's room directory?": "Paskelbti šį kambarį viešai %(domain)s kambarių kataloge?",
     "Start authentication": "Pradėti tapatybės nustatymą",
     "Preparing to send logs": "Ruošiamasi išsiųsti žurnalus",
     "Incompatible Database": "Nesuderinama duomenų bazė",
@@ -318,13 +302,11 @@
     "Upload Error": "Įkėlimo klaida",
     "This room is not public. You will not be able to rejoin without an invite.": "Šis kambarys nėra viešas. Jūs negalėsite prisijungti iš naujo be pakvietimo.",
     "Are you sure you want to leave the room '%(roomName)s'?": "Ar tikrai norite išeiti iš kambario %(roomName)s?",
-    "%(creator)s created and configured the room.": "%(creator)s sukūrė ir sukonfigūravo kambarį.",
     "General failure": "Bendras triktis",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (galia %(powerLevelNumber)s)",
     "Enter username": "Įveskite vartotojo vardą",
     "Create account": "Sukurti paskyrą",
     "Change identity server": "Pakeisti tapatybės serverį",
-    "Select the roles required to change various parts of the room": "Pasirinkite įvairių kambario dalių keitimui reikalingas roles",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Jūs neturėsite galimybės atšaukti šio keitimo, kadangi jūs žeminate savo privilegijas kambaryje. Jei jūs esate paskutinis privilegijuotas vartotojas kambaryje, atgauti privilegijas bus neįmanoma.",
     "Failed to change power level": "Nepavyko pakeisti galios lygio",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Jūs neturėsite galimybės atšaukti šio keitimo, kadangi jūs paaukštinate vartotoją, suteikdami tokį patį galios lygį, kokį turite jūs.",
@@ -390,7 +372,6 @@
     "Confirm your identity by entering your account password below.": "Patvirtinkite savo tapatybę žemiau įvesdami savo paskyros slaptažodį.",
     "Use an email address to recover your account": "Naudokite el. pašto adresą, kad prireikus galėtumėte atgauti paskyrą",
     "Passwords don't match": "Slaptažodžiai nesutampa",
-    "Use lowercase letters, numbers, dashes and underscores only": "Naudokite tik mažąsias raides, brūkšnelius ir pabraukimus",
     "That matches!": "Tai sutampa!",
     "That doesn't match.": "Tai nesutampa.",
     "Your password has been reset.": "Jūsų slaptažodis buvo iš naujo nustatytas.",
@@ -399,11 +380,8 @@
     "Verify your other session using one of the options below.": "Patvirtinkite savo kitą seansą naudodami vieną iš žemiau esančių parinkčių.",
     "Restore from Backup": "Atkurti iš Atsarginės Kopijos",
     "Cryptography": "Kriptografija",
-    "Security & Privacy": "Saugumas ir Privatumas",
     "Voice & Video": "Garsas ir Vaizdas",
-    "Enable encryption?": "Įjungti šifravimą?",
     "Encryption": "Šifravimas",
-    "Once enabled, encryption cannot be disabled.": "Įjungus šifravimą jo nebus galima išjungti.",
     "Deactivate user?": "Deaktyvuoti vartotoją?",
     "Deactivate user": "Deaktyvuoti vartotoją",
     "Failed to deactivate user": "Nepavyko deaktyvuoti vartotojo",
@@ -428,7 +406,6 @@
     "Encryption not enabled": "Šifravimas neįjungtas",
     "More options": "Daugiau parinkčių",
     "Are you sure you want to deactivate your account? This is irreversible.": "Ar tikrai norite deaktyvuoti savo paskyrą? Tai yra negrįžtama.",
-    "Verify session": "Patvirtinti seansą",
     "Are you sure you want to sign out?": "Ar tikrai norite atsijungti?",
     "Are you sure you want to reject the invitation?": "Ar tikrai norite atmesti pakvietimą?",
     "Nice, strong password!": "Puiku, stiprus slaptažodis!",
@@ -583,7 +560,6 @@
     "Create a new room with the same name, description and avatar": "Sukurti naują kambarį su tuo pačiu pavadinimu, aprašymu ir pseudoportretu",
     "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Kambario atnaujinimas yra sudėtingas veiksmas ir paprastai rekomenduojamas, kai kambarys nestabilus dėl klaidų, trūkstamų funkcijų ar saugos spragų.",
     "To help us prevent this in future, please <a>send us logs</a>.": "Norėdami padėti mums išvengti to ateityje, <a>atsiųskite mums žurnalus</a>.",
-    "Emoji Autocomplete": "Jaustukų automatinis užbaigimas",
     "Failed to reject invitation": "Nepavyko atmesti pakvietimo",
     "Can't leave Server Notices room": "Negalima išeiti iš Serverio Pranešimų kambario",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Šis kambarys yra naudojamas svarbioms žinutėms iš serverio, tad jūs negalite iš jo išeiti.",
@@ -684,12 +660,6 @@
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "Serverio administratorius išjungė visapusį šifravimą, kaip numatytą, privačiuose kambariuose ir Tiesioginėse Žinutėse.",
     "Notification sound": "Pranešimo garsas",
     "Sounds": "Garsai",
-    "Privileged Users": "Privilegijuoti Nariai",
-    "Roles & Permissions": "Rolės ir Leidimai",
-    "Members only (since the point in time of selecting this option)": "Tik nariai (nuo šios parinkties pasirinkimo momento)",
-    "Members only (since they were invited)": "Tik nariai (nuo jų pakvietimo)",
-    "Members only (since they joined)": "Tik nariai (nuo jų prisijungimo)",
-    "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.": "Kas gali skaityti istoriją nustatymų pakeitimai bus taikomi tik būsimoms šio kambario žinutėms. Esamos istorijos matomumas nepakis.",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "Šiame įrenginyje negalima užtikrinti šios užšifruotos žinutės autentiškumo.",
     "Unencrypted": "Neužšifruota",
     "Encrypted by an unverified session": "Užšifruota nepatvirtinto seanso",
@@ -707,7 +677,6 @@
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Pakviesti ką nors naudojant jų vardą, vartotojo vardą (pvz.: <userId/>) arba <a>bendrinti šį kambarį</a>.",
     "Share Room Message": "Bendrinti Kambario Žinutę",
     "Share Room": "Bendrinti Kambarį",
-    "Use bots, bridges, widgets and sticker packs": "Naudoti botus, tiltus, valdiklius ir lipdukų pakuotes",
     "Add widgets, bridges & bots": "Pridėti valdiklius, tiltus ir botus",
     "Edit widgets, bridges & bots": "Redaguoti valdiklius, tiltus ir botus",
     "Widgets": "Valdikliai",
@@ -717,8 +686,6 @@
     "Hide Widgets": "Slėpti Valdiklius",
     "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s dabar naudoja 3-5 kartus mažiau atminties, įkeliant vartotojų informaciją tik prireikus. Palaukite, kol mes iš naujo sinchronizuosime su serveriu!",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Jūs būsite nukreipti į trečiosios šalies svetainę, kad galėtumėte patvirtinti savo paskyrą naudojimui su %(integrationsUrl)s. Ar norite tęsti?",
-    "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Įjungus kambario šifravimą jo išjungti negalima. Žinutės, siunčiamos šifruotame kambaryje, nėra matomos serverio. Jas gali matyti tik kambario dalyviai. Įjungus šifravimą, daugelis botų ir tiltų gali veikti netinkamai. <a>Sužinoti daugiau apie šifravimą.</a>",
-    "You must join the room to see its files": "Norėdami pamatyti jo failus, turite prisijungti prie kambario",
     "Join millions for free on the largest public server": "Prisijunkite prie milijonų didžiausiame viešame serveryje nemokamai",
     "Join the conference from the room information card on the right": "Prisijunkite prie konferencijos kambario informacijos kortelėje dešinėje",
     "Join the conference at the top of this room": "Prisijunkite prie konferencijos šio kambario viršuje",
@@ -729,7 +696,6 @@
     "Join Room": "Prisijungti prie kambario",
     "Subscribing to a ban list will cause you to join it!": "Užsiprenumeravus draudimų sąrašą, būsite prie jo prijungtas!",
     "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Jūs ignoravote šį vartotoją, todėl jo žinutė yra paslėpta. <a>Rodyti vistiek.</a>",
-    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Kai kas nors į savo žinutę įtraukia URL, gali būti rodoma URL peržiūra, suteikianti daugiau informacijos apie tą nuorodą, tokios kaip pavadinimas, aprašymas ir vaizdas iš svetainės.",
     "Show Widgets": "Rodyti Valdiklius",
     "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Neleisti vartotojams kalbėti senoje kambario versijoje ir paskelbti pranešimą, kuriame vartotojams patariama persikelti į naują kambarį",
     "Update any local room aliases to point to the new room": "Atnaujinkite vietinių kambarių slapyvardžius, kad nurodytumėte į naująjį kambarį",
@@ -813,8 +779,6 @@
     "You are currently ignoring:": "Šiuo metu ignoruojate:",
     "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Ar tikrai? Jūs prarasite savo šifruotas žinutes, jei jūsų raktams nebus tinkamai sukurtos atsarginės kopijos.",
     "Your keys are <b>not being backed up from this session</b>.": "Jūsų raktams <b>nėra daromos atsarginės kopijos iš šio seanso</b>.",
-    "Notification Autocomplete": "Pranešimo Automatinis Užbaigimas",
-    "Room Notification": "Kambario Pranešimas",
     "You have %(count)s unread notifications in a prior version of this room.": {
         "one": "Jūs turite %(count)s neperskaitytą pranešimą ankstesnėje šio kambario versijoje.",
         "other": "Jūs turite %(count)s neperskaitytus(-ų) pranešimus(-ų) ankstesnėje šio kambario versijoje."
@@ -845,9 +809,6 @@
     "Use a secret phrase only you know, and optionally save a Security Key to use for backup.": "Naudokite slaptafrazę, kurią žinote tik jūs ir pasirinktinai išsaugokite Apsaugos Raktą, naudoti kaip atsarginę kopiją.",
     "Enter a Security Phrase": "Įveskite Slaptafrazę",
     "Security Phrase": "Slaptafrazė",
-    "%(creator)s created this DM.": "%(creator)s sukūrė šį tiesioginio susirašymo kambarį.",
-    "Only the two of you are in this conversation, unless either of you invites anyone to join.": "Šiame pokalbyje esate tik jūs dviese, nebent kuris nors iš jūsų pakvies ką nors prisijungti.",
-    "This is the beginning of your direct message history with <displayName/>.": "Tai yra jūsų tiesioginių žinučių su <displayName/> istorijos pradžia.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Nepavyksta prisijungti prie serverio - patikrinkite savo ryšį, įsitikinkite, kad jūsų <a>serverio SSL sertifikatas</a> yra patikimas ir, kad naršyklės plėtinys neužblokuoja užklausų.",
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Anksčiau šiame seanse naudojote naujesnę %(brand)s versiją. Norėdami vėl naudoti šią versiją su visapusiu šifravimu, turėsite atsijungti ir prisijungti iš naujo.",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Tam, kad neprarastumėte savo pokalbių istorijos, prieš atsijungdami turite eksportuoti kambario raktus. Norėdami tai padaryti, turėsite grįžti į naujesnę %(brand)s versiją",
@@ -998,10 +959,6 @@
     "This widget would like to:": "Šis valdiklis norėtų:",
     "Approve widget permissions": "Patvirtinti valdiklio leidimus",
     "Verification Request": "Patikrinimo Užklausa",
-    "Document": "Dokumentas",
-    "Summary": "Santrauka",
-    "Service": "Paslauga",
-    "To continue you need to accept the terms of this service.": "Norėdami tęsti, turite sutikti su šios paslaugos sąlygomis.",
     "Be found by phone or email": "Tapkite randami telefonu arba el. paštu",
     "Find others by phone or email": "Ieškokite kitų telefonu arba el. paštu",
     "Save Changes": "Išsaugoti Pakeitimus",
@@ -1063,7 +1020,6 @@
     "Click the button below to confirm your identity.": "Spustelėkite toliau esantį mygtuką, kad patvirtintumėte savo tapatybę.",
     "Confirm to continue": "Patvirtinkite, kad tęstumėte",
     "Incoming Verification Request": "Įeinantis Patikrinimo Prašymas",
-    "Terms of Service": "Paslaugų Teikimo Sąlygos",
     "Search for rooms or people": "Ieškoti kambarių ar žmonių",
     "Message preview": "Žinutės peržiūra",
     "Sent": "Išsiųsta",
@@ -1147,16 +1103,6 @@
         "other": "& %(count)s daugiau"
     },
     "Upgrade required": "Reikalingas atnaujinimas",
-    "Click the button below to confirm signing out these devices.": {
-        "other": "Spustelėkite mygtuką žemiau kad patvirtinti šių įrenginių atjungimą.",
-        "one": "Spustelėkite mygtuką žemiau kad patvirtinti šio įrenginio atjungimą."
-    },
-    "Deselect all": "Nuimti pasirinkimą nuo visko",
-    "Select all": "Pasirinkti viską",
-    "Sign out devices": {
-        "other": "Atjungti įrenginius",
-        "one": "Atjungti įrenginį"
-    },
     "Decide who can view and join %(spaceName)s.": "Nuspręskite kas gali peržiūrėti ir prisijungti prie %(spaceName)s.",
     "Channel: <channelLink/>": "Kanalas: <channelLink/>",
     "Visibility": "Matomumas",
@@ -1283,47 +1229,9 @@
     "Something went wrong with your invite to %(roomName)s": "Kažkas nepavyko su jūsų kvietimu į %(roomName)s",
     "You were banned by %(memberName)s": "Jus užblokavo %(memberName)s",
     "You were banned from %(roomName)s by %(memberName)s": "%(memberName)s uždraudė jums lankytis %(roomName)s",
-    "No unverified sessions found.": "Nepatvirtintų sesijų nerasta.",
-    "No verified sessions found.": "Patvirtintų sesijų nerasta.",
-    "Inactive sessions": "Neaktyvios sesijos",
-    "Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.": "Patvirtinkite savo sesijas didesniam saugumui, arba atsijunkite iš tų sesijų kurių neatpažįstate ar nebenaudojate.",
-    "Unverified sessions": "Nepatvirtintos sesijos",
-    "For best security, sign out from any session that you don't recognize or use anymore.": "Geriausiam saugumui, atsijunkite iš bet kurios sesijos, kurios neatpažįstate arba nebenaudojate.",
-    "Verified sessions": "Patvirtintos sesijos",
-    "Verify or sign out from this session for best security and reliability.": "Geriausiam saugumui ir patikimumui, patvirtinkite arba atsijunkite iš šios sesijos.",
-    "Unverified session": "Nepatvirtinta sesija",
-    "This session is ready for secure messaging.": "Ši sesija paruošta saugiam žinučių siuntimui.",
-    "Verified session": "Patvirtinta sesija",
-    "Inactive for %(inactiveAgeDays)s+ days": "Neaktyvus %(inactiveAgeDays)s+ dienas",
-    "Sign out of this session": "Atsijungti iš šios sesijos",
-    "Session details": "Sesijos detalės",
-    "IP address": "IP adresas",
-    "Last activity": "Paskutinė veikla",
-    "Rename session": "Pervadinti sesiją",
-    "Confirm signing out these devices": {
-        "one": "Patvirtinkite šio įrenginio atjungimą",
-        "other": "Patvirtinkite šių įrenginių atjungimą"
-    },
-    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
-        "one": "Patvirtinkite atsijungimą iš šio prietaiso naudodami vienkartinį prisijungimą, kad įrodytumėte savo tapatybę.",
-        "other": "Patvirtinkite atsijungimą iš šių įrenginių naudodami vienkartinį prisijungimą, kad įrodytumėte savo tapatybę."
-    },
-    "Current session": "Dabartinė sesija",
     "Unable to revoke sharing for email address": "Nepavyksta atšaukti el. pašto adreso bendrinimo",
-    "People with supported clients will be able to join the room without having a registered account.": "Žmonės su palaikomais klientais galės prisijungti prie kambario neturėdami registruotos paskyros.",
-    "To avoid these issues, create a <a>new public room</a> for the conversation you plan to have.": "Kad išvengtumėte šių problemų, sukurkite <a>naują viešą kambarį</a> planuojamam pokalbiui.",
-    "<b>It's not recommended to make encrypted rooms public.</b> It will mean anyone can find and join the room, so anyone can read messages. You'll get none of the benefits of encryption. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Nepatartina šifruotus kambarius padaryti viešais.</b> Tai reiškia, kad bet kas gali rasti kambarį ir prie jo prisijungti, taigi bet kas gali skaityti žinutes. Jūs negausite jokių šifravimo privalumų. Užšifravus žinutes viešame kambaryje, žinučių priėmimas ir siuntimas taps lėtesnis.",
-    "Are you sure you want to make this encrypted room public?": "Ar tikrai norite, padaryti šį užšifruotą kambarį viešu?",
     "Unknown failure": "Nežinomas sutrikimas",
     "Failed to update the join rules": "Nepavyko atnaujinti prisijungimo taisyklių",
-    "Decide who can join %(roomName)s.": "Nuspręskite, kas gali prisijungti prie %(roomName)s.",
-    "To link to this room, please add an address.": "Norėdami pateikti nuorodą į šį kambarį, pridėkite adresą.",
-    "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "Kad išvengtumėte šių problemų, planuojamam pokalbiui sukurkite <a>naują šifruotą kambarį</a>.",
-    "<b>It's not recommended to add encryption to public rooms.</b> Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Į viešuosius kambarius nerekomenduojama įtraukti šifravimo.</b> Kiekvienas gali rasti viešąjį kambarį ir prie jo prisijungti, todėl bet kas gali skaityti jame esančias žinutes. Jūs negausite jokių šifravimo privalumų ir vėliau negalėsite jo išjungti. Užšifravus žinutes viešajame kambaryje, žinučių gavimas ir siuntimas taps lėtesnis.",
-    "Are you sure you want to add encryption to this public room?": "Ar tikrai norite įtraukti šifravimą į šį viešąjį kambarį?",
-    "Select the roles required to change various parts of the space": "Pasirinkti roles, reikalingas įvairioms erdvės dalims keisti",
-    "Send %(eventType)s events": "Siųsti %(eventType)s įvykius",
-    "No users have specific privileges in this room": "Šiame kambaryje nėra naudotojų, turinčių konkrečias privilegijas",
     "Banned by %(displayName)s": "Užblokuotas nuo %(displayName)s",
     "You won't get any notifications": "Negausite jokių pranešimų",
     "Get notified only with mentions and keywords as set up in your <a>settings</a>": "Gaukite pranešimus tik apie paminėjimus ir raktinius žodžius, kaip nustatyta jūsų <a>nustatymuose</a>",
@@ -1350,7 +1258,6 @@
     "Spaces to show": "Kurias erdves rodyti",
     "Sidebar": "Šoninė juosta",
     "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.": "Kad užtikrintumėte geriausią saugumą, patikrinkite savo sesijas ir atsijunkite iš bet kurios sesijos, kurios neatpažįstate arba nebenaudojate.",
-    "Other sessions": "Kitos sesijos",
     "Sessions": "Sesijos",
     "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "Bendrinti anoniminius duomenis, kurie padės mums nustatyti problemas. Nieko asmeniško. Jokių trečiųjų šalių.",
     "You have no ignored users.": "Nėra ignoruojamų naudotojų.",
@@ -1486,7 +1393,6 @@
     "Public room": "Viešas kambarys",
     "Public space": "Vieša erdvė",
     "Video room": "Vaizdo kambarys",
-    "Video rooms are a beta feature": "Vaizdo kambariai yra beta funkcija",
     "No recently visited rooms": "Nėra neseniai lankytų kambarių",
     "Recently visited rooms": "Neseniai lankyti kambariai",
     "Replying": "Atsakoma",
@@ -1500,18 +1406,6 @@
     "%(members)s and more": "%(members)s ir daugiau",
     "View message": "Žiūrėti žinutę",
     "Message didn't send. Click for info.": "Žinutė nebuvo išsiųsta. Spustelėkite norėdami gauti informacijos.",
-    "End-to-end encryption isn't enabled": "Visapusis šifravimas nėra įjungtas",
-    "Enable encryption in settings.": "Įjunkite šifravimą nustatymuose.",
-    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.": "Jūsų asmeninės žinutės paprastai yra šifruojamos, tačiau šis kambarys nėra šifruojamas. Paprastai taip nutinka dėl nepalaikomo įrenginio arba naudojamo metodo, pvz., kvietimai el. paštu.",
-    "This is the start of <roomName/>.": "Tai yra <roomName/> pradžia.",
-    "Add a photo, so people can easily spot your room.": "Pridėkite nuotrauką, kad žmonės galėtų lengvai pastebėti jūsų kambarį.",
-    "Invite to just this room": "Pakviesti tik į šį kambarį",
-    "%(displayName)s created this room.": "%(displayName)s sukūrė šį kambarį.",
-    "You created this room.": "Jūs sukūrėte šį kambarį.",
-    "<a>Add a topic</a> to help people know what it is about.": "<a>Pridėkite temą</a>, kad žmonės žinotų, apie ką tai yra.",
-    "Topic: %(topic)s ": "Tema: %(topic)s ",
-    "Topic: %(topic)s (<a>edit</a>)": "Tema: %(topic)s (<a>redaguoti</a>)",
-    "Send your first message to invite <displayName/> to chat": "Siųskite pirmąją žinutę kad pakviestumėte <displayName/> į pokalbį",
     "Insert link": "Įterpti nuorodą",
     "Italics": "Kursyvas",
     "Poll": "Apklausa",
@@ -1533,15 +1427,6 @@
     "View in room": "Peržiūrėti kambaryje",
     "From a thread": "Iš temos",
     "Edit message": "Redaguoti žinutę",
-    "Security recommendations": "Saugumo rekomendacijos",
-    "Filter devices": "Filtruoti įrenginius",
-    "Inactive for %(inactiveAgeDays)s days or longer": "Neaktyvus %(inactiveAgeDays)s dienas ar ilgiau",
-    "Inactive": "Neaktyvus",
-    "Not ready for secure messaging": "Neparuošta saugiam žinučių siuntimui",
-    "Ready for secure messaging": "Paruošta saugiam žinučių siuntimui",
-    "All": "Visi",
-    "No sessions found.": "Jokių sesijų nerasta.",
-    "No inactive sessions found.": "Neaktyvių sesijų nerasta.",
     "Latvia": "Latvija",
     "Japan": "Japonija",
     "Italy": "Italija",
@@ -1564,7 +1449,6 @@
     "Unable to copy a link to the room to the clipboard.": "Nepavyko nukopijuoti nuorodos į kambarį į iškarpinę.",
     "Unable to copy room link": "Nepavyko nukopijuoti kambario nurodos",
     "Copy room link": "Kopijuoti kambario nuorodą",
-    "Manage & explore rooms": "Valdyti & tyrinėti kambarius",
     "Live": "Gyvai",
     "common": {
         "about": "Apie",
@@ -1640,7 +1524,9 @@
         "orphan_rooms": "Kiti kambariai",
         "on": "Įjungta",
         "off": "Išjungta",
-        "all_rooms": "Visi kambariai"
+        "all_rooms": "Visi kambariai",
+        "deselect_all": "Nuimti pasirinkimą nuo visko",
+        "select_all": "Pasirinkti viską"
     },
     "action": {
         "continue": "Tęsti",
@@ -1765,7 +1651,8 @@
         "leave_beta": "Palikti beta versiją",
         "automatic_debug_logs_key_backup": "Automatiškai siųsti derinimo žurnalus, kai neveikia atsarginė raktų kopija",
         "automatic_debug_logs_decryption": "Automatiškai siųsti derinimo žurnalus apie iššifravimo klaidas",
-        "automatic_debug_logs": "Automatiškai siųsti derinimo žurnalus esant bet kokiai klaidai"
+        "automatic_debug_logs": "Automatiškai siųsti derinimo žurnalus esant bet kokiai klaidai",
+        "video_rooms_beta": "Vaizdo kambariai yra beta funkcija"
     },
     "keyboard": {
         "home": "Pradžia",
@@ -1808,7 +1695,15 @@
         "placeholder_reply_encrypted": "Siųsti šifruotą atsakymą…",
         "placeholder_reply": "Siųsti atsakymą…",
         "placeholder_encrypted": "Siųsti šifruotą žinutę…",
-        "placeholder": "Siųsti žinutę…"
+        "placeholder": "Siųsti žinutę…",
+        "autocomplete": {
+            "command_description": "Komandos",
+            "emoji_a11y": "Jaustukų automatinis užbaigimas",
+            "@room_description": "Pranešti visam kambariui",
+            "notification_description": "Kambario Pranešimas",
+            "notification_a11y": "Pranešimo Automatinis Užbaigimas",
+            "user_description": "Naudotojai"
+        }
     },
     "Bold": "Pusjuodis",
     "Code": "Kodas",
@@ -2018,6 +1913,54 @@
         },
         "keyboard": {
             "title": "Klaviatūra"
+        },
+        "sessions": {
+            "rename_form_heading": "Pervadinti sesiją",
+            "session_id": "Seanso ID",
+            "last_activity": "Paskutinė veikla",
+            "ip": "IP adresas",
+            "details_heading": "Sesijos detalės",
+            "sign_out": "Atsijungti iš šios sesijos",
+            "inactive_days": "Neaktyvus %(inactiveAgeDays)s+ dienas",
+            "verified_sessions": "Patvirtintos sesijos",
+            "unverified_sessions": "Nepatvirtintos sesijos",
+            "unverified_session": "Nepatvirtinta sesija",
+            "inactive_sessions": "Neaktyvios sesijos",
+            "device_verified_description": "Ši sesija paruošta saugiam žinučių siuntimui.",
+            "verified_session": "Patvirtinta sesija",
+            "device_unverified_description": "Geriausiam saugumui ir patikimumui, patvirtinkite arba atsijunkite iš šios sesijos.",
+            "verify_session": "Patvirtinti seansą",
+            "verified_sessions_list_description": "Geriausiam saugumui, atsijunkite iš bet kurios sesijos, kurios neatpažįstate arba nebenaudojate.",
+            "unverified_sessions_list_description": "Patvirtinkite savo sesijas didesniam saugumui, arba atsijunkite iš tų sesijų kurių neatpažįstate ar nebenaudojate.",
+            "no_verified_sessions": "Patvirtintų sesijų nerasta.",
+            "no_unverified_sessions": "Nepatvirtintų sesijų nerasta.",
+            "no_inactive_sessions": "Neaktyvių sesijų nerasta.",
+            "no_sessions": "Jokių sesijų nerasta.",
+            "filter_all": "Visi",
+            "filter_verified_description": "Paruošta saugiam žinučių siuntimui",
+            "filter_unverified_description": "Neparuošta saugiam žinučių siuntimui",
+            "filter_inactive": "Neaktyvus",
+            "filter_inactive_description": "Neaktyvus %(inactiveAgeDays)s dienas ar ilgiau",
+            "filter_label": "Filtruoti įrenginius",
+            "other_sessions_heading": "Kitos sesijos",
+            "current_session": "Dabartinė sesija",
+            "confirm_sign_out_sso": {
+                "one": "Patvirtinkite atsijungimą iš šio prietaiso naudodami vienkartinį prisijungimą, kad įrodytumėte savo tapatybę.",
+                "other": "Patvirtinkite atsijungimą iš šių įrenginių naudodami vienkartinį prisijungimą, kad įrodytumėte savo tapatybę."
+            },
+            "confirm_sign_out": {
+                "one": "Patvirtinkite šio įrenginio atjungimą",
+                "other": "Patvirtinkite šių įrenginių atjungimą"
+            },
+            "confirm_sign_out_body": {
+                "other": "Spustelėkite mygtuką žemiau kad patvirtinti šių įrenginių atjungimą.",
+                "one": "Spustelėkite mygtuką žemiau kad patvirtinti šio įrenginio atjungimą."
+            },
+            "confirm_sign_out_continue": {
+                "other": "Atjungti įrenginius",
+                "one": "Atjungti įrenginį"
+            },
+            "security_recommendations": "Saugumo rekomendacijos"
         }
     },
     "devtools": {
@@ -2310,7 +2253,9 @@
         "m.room.create": {
             "continuation": "Šis kambarys yra kito pokalbio pratęsimas.",
             "see_older_messages": "Spustelėkite čia, norėdami matyti senesnes žinutes."
-        }
+        },
+        "creation_summary_dm": "%(creator)s sukūrė šį tiesioginio susirašymo kambarį.",
+        "creation_summary_room": "%(creator)s sukūrė ir sukonfigūravo kambarį."
     },
     "slash_command": {
         "shrug": "Prideda ¯\\_(ツ)_/¯ prie paprasto teksto žinutės",
@@ -2463,13 +2408,52 @@
             "kick": "Pašalinti naudotojus",
             "ban": "Užblokuoti naudotojus",
             "redact": "Pašalinti kitų siųstas žinutes",
-            "notifications.room": "Pranešti visiems"
+            "notifications.room": "Pranešti visiems",
+            "no_privileged_users": "Šiame kambaryje nėra naudotojų, turinčių konkrečias privilegijas",
+            "privileged_users_section": "Privilegijuoti Nariai",
+            "muted_users_section": "Nutildyti naudotojai",
+            "banned_users_section": "Užblokuoti vartotojai",
+            "send_event_type": "Siųsti %(eventType)s įvykius",
+            "title": "Rolės ir Leidimai",
+            "permissions_section": "Leidimai",
+            "permissions_section_description_space": "Pasirinkti roles, reikalingas įvairioms erdvės dalims keisti",
+            "permissions_section_description_room": "Pasirinkite įvairių kambario dalių keitimui reikalingas roles"
         },
         "security": {
             "strict_encryption": "Niekada nesiųsti šifruotų žinučių nepatvirtintiems seansams šiame kambaryje iš šio seanso",
             "join_rule_invite": "Privatus (tik su pakvietimu)",
             "join_rule_invite_description": "Tik pakviesti žmonės gali prisijungti.",
-            "join_rule_public_description": "Bet kas gali rasti ir prisijungti."
+            "join_rule_public_description": "Bet kas gali rasti ir prisijungti.",
+            "enable_encryption_public_room_confirm_title": "Ar tikrai norite įtraukti šifravimą į šį viešąjį kambarį?",
+            "enable_encryption_public_room_confirm_description_1": "<b>Į viešuosius kambarius nerekomenduojama įtraukti šifravimo.</b> Kiekvienas gali rasti viešąjį kambarį ir prie jo prisijungti, todėl bet kas gali skaityti jame esančias žinutes. Jūs negausite jokių šifravimo privalumų ir vėliau negalėsite jo išjungti. Užšifravus žinutes viešajame kambaryje, žinučių gavimas ir siuntimas taps lėtesnis.",
+            "enable_encryption_public_room_confirm_description_2": "Kad išvengtumėte šių problemų, planuojamam pokalbiui sukurkite <a>naują šifruotą kambarį</a>.",
+            "enable_encryption_confirm_title": "Įjungti šifravimą?",
+            "enable_encryption_confirm_description": "Įjungus kambario šifravimą jo išjungti negalima. Žinutės, siunčiamos šifruotame kambaryje, nėra matomos serverio. Jas gali matyti tik kambario dalyviai. Įjungus šifravimą, daugelis botų ir tiltų gali veikti netinkamai. <a>Sužinoti daugiau apie šifravimą.</a>",
+            "public_without_alias_warning": "Norėdami pateikti nuorodą į šį kambarį, pridėkite adresą.",
+            "join_rule_description": "Nuspręskite, kas gali prisijungti prie %(roomName)s.",
+            "encrypted_room_public_confirm_title": "Ar tikrai norite, padaryti šį užšifruotą kambarį viešu?",
+            "encrypted_room_public_confirm_description_1": "<b>Nepatartina šifruotus kambarius padaryti viešais.</b> Tai reiškia, kad bet kas gali rasti kambarį ir prie jo prisijungti, taigi bet kas gali skaityti žinutes. Jūs negausite jokių šifravimo privalumų. Užšifravus žinutes viešame kambaryje, žinučių priėmimas ir siuntimas taps lėtesnis.",
+            "encrypted_room_public_confirm_description_2": "Kad išvengtumėte šių problemų, sukurkite <a>naują viešą kambarį</a> planuojamam pokalbiui.",
+            "history_visibility": {},
+            "history_visibility_warning": "Kas gali skaityti istoriją nustatymų pakeitimai bus taikomi tik būsimoms šio kambario žinutėms. Esamos istorijos matomumas nepakis.",
+            "history_visibility_legend": "Kas gali skaityti istoriją?",
+            "guest_access_warning": "Žmonės su palaikomais klientais galės prisijungti prie kambario neturėdami registruotos paskyros.",
+            "title": "Saugumas ir Privatumas",
+            "encryption_permanent": "Įjungus šifravimą jo nebus galima išjungti.",
+            "history_visibility_shared": "Tik nariai (nuo šios parinkties pasirinkimo momento)",
+            "history_visibility_invited": "Tik nariai (nuo jų pakvietimo)",
+            "history_visibility_joined": "Tik nariai (nuo jų prisijungimo)",
+            "history_visibility_world_readable": "Bet kas"
+        },
+        "general": {
+            "publish_toggle": "Paskelbti šį kambarį viešai %(domain)s kambarių kataloge?",
+            "user_url_previews_default_on": "Jūs <a>įjungėte</a> URL nuorodų peržiūras kaip numatytasias.",
+            "user_url_previews_default_off": "Jūs <a>išjungėte</a> URL nuorodų peržiūras kaip numatytasias.",
+            "default_url_previews_on": "URL nuorodų peržiūros šio kambario dalyviams yra įjungtos kaip numatytosios.",
+            "default_url_previews_off": "URL nuorodų peržiūros šio kambario dalyviams yra išjungtos kaip numatytosios.",
+            "url_preview_encryption_warning": "Šifruotuose kambariuose, tokiuose kaip šis, URL nuorodų peržiūros pagal numatymą yra išjungtos, kad būtų užtikrinta, jog jūsų serveris (kur yra generuojamos peržiūros) negali rinkti informacijos apie jūsų šiame kambaryje peržiūrėtas nuorodas.",
+            "url_preview_explainer": "Kai kas nors į savo žinutę įtraukia URL, gali būti rodoma URL peržiūra, suteikianti daugiau informacijos apie tą nuorodą, tokios kaip pavadinimas, aprašymas ir vaizdas iš svetainės.",
+            "url_previews_section": "URL nuorodų peržiūros"
         }
     },
     "encryption": {
@@ -2552,7 +2536,9 @@
         "server_picker_custom": "Kitas namų serveris",
         "server_picker_explainer": "Naudokite pageidaujamą Matrix namų serverį, jei tokį turite, arba talpinkite savo.",
         "server_picker_learn_more": "Apie namų serverius",
-        "incorrect_credentials": "Neteisingas vartotojo vardas ir/arba slaptažodis."
+        "incorrect_credentials": "Neteisingas vartotojo vardas ir/arba slaptažodis.",
+        "registration_username_validation": "Naudokite tik mažąsias raides, brūkšnelius ir pabraukimus",
+        "phone_label": "Telefonas"
     },
     "room_list": {
         "sort_unread_first": "Pirmiausia rodyti kambarius su neperskaitytomis žinutėmis",
@@ -2692,5 +2678,41 @@
         "public_heading": "Jūsų vieša erdvė",
         "private_heading": "Jūsų privati erdvė",
         "add_details_prompt": "Pridėkite šiek tiek detalių, kad žmonės galėtų ją atpažinti."
+    },
+    "room": {
+        "drop_file_prompt": "Norėdami įkelti, vilkite failą čia",
+        "intro": {
+            "send_message_start_dm": "Siųskite pirmąją žinutę kad pakviestumėte <displayName/> į pokalbį",
+            "start_of_dm_history": "Tai yra jūsų tiesioginių žinučių su <displayName/> istorijos pradžia.",
+            "dm_caption": "Šiame pokalbyje esate tik jūs dviese, nebent kuris nors iš jūsų pakvies ką nors prisijungti.",
+            "topic_edit": "Tema: %(topic)s (<a>redaguoti</a>)",
+            "topic": "Tema: %(topic)s ",
+            "no_topic": "<a>Pridėkite temą</a>, kad žmonės žinotų, apie ką tai yra.",
+            "you_created": "Jūs sukūrėte šį kambarį.",
+            "user_created": "%(displayName)s sukūrė šį kambarį.",
+            "room_invite": "Pakviesti tik į šį kambarį",
+            "no_avatar_label": "Pridėkite nuotrauką, kad žmonės galėtų lengvai pastebėti jūsų kambarį.",
+            "start_of_room": "Tai yra <roomName/> pradžia.",
+            "private_unencrypted_warning": "Jūsų asmeninės žinutės paprastai yra šifruojamos, tačiau šis kambarys nėra šifruojamas. Paprastai taip nutinka dėl nepalaikomo įrenginio arba naudojamo metodo, pvz., kvietimai el. paštu.",
+            "enable_encryption_prompt": "Įjunkite šifravimą nustatymuose.",
+            "unencrypted_warning": "Visapusis šifravimas nėra įjungtas"
+        }
+    },
+    "file_panel": {
+        "peek_note": "Norėdami pamatyti jo failus, turite prisijungti prie kambario"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Žvalgyti kambarius",
+            "manage_and_explore": "Valdyti & tyrinėti kambarius"
+        }
+    },
+    "terms": {
+        "integration_manager": "Naudoti botus, tiltus, valdiklius ir lipdukų pakuotes",
+        "tos": "Paslaugų Teikimo Sąlygos",
+        "intro": "Norėdami tęsti, turite sutikti su šios paslaugos sąlygomis.",
+        "column_service": "Paslauga",
+        "column_summary": "Santrauka",
+        "column_document": "Dokumentas"
     }
 }

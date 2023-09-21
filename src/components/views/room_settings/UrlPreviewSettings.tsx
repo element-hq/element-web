@@ -53,7 +53,7 @@ export default class UrlPreviewSettings extends React.Component<IProps> {
             const accountEnabled = SettingsStore.getValueAt(SettingLevel.ACCOUNT, "urlPreviewsEnabled");
             if (accountEnabled) {
                 previewsForAccount = _t(
-                    "You have <a>enabled</a> URL previews by default.",
+                    "room_settings|general|user_url_previews_default_on",
                     {},
                     {
                         a: (sub) => (
@@ -65,7 +65,7 @@ export default class UrlPreviewSettings extends React.Component<IProps> {
                 );
             } else {
                 previewsForAccount = _t(
-                    "You have <a>disabled</a> URL previews by default.",
+                    "room_settings|general|user_url_previews_default_off",
                     {},
                     {
                         a: (sub) => (
@@ -87,16 +87,14 @@ export default class UrlPreviewSettings extends React.Component<IProps> {
                     />
                 );
             } else {
-                let str = _td("URL previews are enabled by default for participants in this room.");
+                let str = _td("room_settings|general|default_url_previews_on");
                 if (!SettingsStore.getValueAt(SettingLevel.ROOM, "urlPreviewsEnabled", roomId, /*explicit=*/ true)) {
-                    str = _td("URL previews are disabled by default for participants in this room.");
+                    str = _td("room_settings|general|default_url_previews_off");
                 }
                 previewsForRoom = <div>{_t(str)}</div>;
             }
         } else {
-            previewsForAccount = _t(
-                "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.",
-            );
+            previewsForAccount = _t("room_settings|general|url_preview_encryption_warning");
         }
 
         const previewsForRoomAccount = // in an e2ee room we use a special key to enforce per-room opt-in
@@ -110,17 +108,13 @@ export default class UrlPreviewSettings extends React.Component<IProps> {
 
         const description = (
             <>
-                <p>
-                    {_t(
-                        "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.",
-                    )}
-                </p>
+                <p>{_t("room_settings|general|url_preview_explainer")}</p>
                 <p>{previewsForAccount}</p>
             </>
         );
 
         return (
-            <SettingsFieldset legend={_t("URL Previews")} description={description}>
+            <SettingsFieldset legend={_t("room_settings|general|url_previews_section")} description={description}>
                 {previewsForRoom}
                 {previewsForRoomAccount}
             </SettingsFieldset>

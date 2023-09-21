@@ -72,11 +72,7 @@
     "Banned by %(displayName)s": "%(displayName)s bloklanıb",
     "unknown error code": "naməlum səhv kodu",
     "Failed to forget room %(errCode)s": "Otağı unutmağı bacarmadı: %(errCode)s",
-    "No users have specific privileges in this room": "Heç bir istifadəçi bu otaqda xüsusi hüquqlara malik deyil",
-    "Banned users": "Bloklanmış istifadəçilər",
     "Favourite": "Seçilmiş",
-    "Who can read history?": "Kim tarixi oxuya bilər?",
-    "Permissions": "Girişin hüquqları",
     "Sunday": "Bazar",
     "Friday": "Cümə",
     "Today": "Bu gün",
@@ -114,8 +110,6 @@
     "A new password must be entered.": "Yeni parolu daxil edin.",
     "New passwords must match each other.": "Yeni şifrələr uyğun olmalıdır.",
     "Return to login screen": "Girişin ekranına qayıtmaq",
-    "Commands": "Komandalar",
-    "Users": "İstifadəçilər",
     "Confirm passphrase": "Şifrəni təsdiqləyin",
     "This email address is already in use": "Bu e-mail ünvanı istifadə olunur",
     "This phone number is already in use": "Bu telefon nömrəsi artıq istifadə olunur",
@@ -302,9 +296,31 @@
     "auth": {
         "footer_powered_by_matrix": "Matrix tərəfindən təchiz edilmişdir",
         "unsupported_auth_msisdn": "Bu server telefon nömrəsinin köməyi ilə müəyyənləşdirilməni dəstəkləmir.",
-        "register_action": "Hesab Aç"
+        "register_action": "Hesab Aç",
+        "phone_label": "Telefon"
     },
     "update": {
         "release_notes_toast_title": "Nə dəyişdi"
+    },
+    "composer": {
+        "autocomplete": {
+            "command_description": "Komandalar",
+            "user_description": "İstifadəçilər"
+        }
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Otaqları kəşf edin"
+        }
+    },
+    "room_settings": {
+        "permissions": {
+            "no_privileged_users": "Heç bir istifadəçi bu otaqda xüsusi hüquqlara malik deyil",
+            "banned_users_section": "Bloklanmış istifadəçilər",
+            "permissions_section": "Girişin hüquqları"
+        },
+        "security": {
+            "history_visibility_legend": "Kim tarixi oxuya bilər?"
+        }
     }
 }

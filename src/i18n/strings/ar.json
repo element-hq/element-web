@@ -279,15 +279,6 @@
     "%(duration)sh": "%(duration)sس",
     "%(duration)sm": "%(duration)sد",
     "%(duration)ss": "%(duration)sث",
-    "This is the start of <roomName/>.": "هذه بداية <roomName/>.",
-    "Add a photo, so people can easily spot your room.": "أضف صورة ، حتى يسهل على الناس تمييز غرفتك.",
-    "You created this room.": "أنت أنشأت هذه الغرفة.",
-    "%(displayName)s created this room.": "%(displayName)s أنشأ هذه الغرفة.",
-    "<a>Add a topic</a> to help people know what it is about.": "<a>أضف موضوعاً</a> ليُعرف ما يدور حوله الحديث.",
-    "Topic: %(topic)s ": "الموضوع: %(topic)s ",
-    "Topic: %(topic)s (<a>edit</a>)": "الموضوع: %(topic)s (<a>عدل</a>)",
-    "This is the beginning of your direct message history with <displayName/>.": "هذه هي بداية محفوظات رسائلك المباشرة باسم <displayName/>.",
-    "Only the two of you are in this conversation, unless either of you invites anyone to join.": "أنتما فقط في هذه المحادثة ، إلا إذا دعا أي منكما أي شخص للانضمام.",
     "Italics": "مائل",
     "You do not have permission to post to this room": "ليس لديك إذن للنشر في هذه الغرفة",
     "This room has been replaced and is no longer active.": "تم استبدال هذه الغرفة ولم تعد نشطة.",
@@ -456,13 +447,6 @@
     "Start Verification": "ابدأ التحقق",
     "Accepting…": "جارٍ القبول …",
     "Waiting for %(displayName)s to accept…": "بانتظار %(displayName)s ليقبل …",
-    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "عندما يضع شخص ما عنوان URL في رسالته ، يمكن عرض معاينة عنوان URL لإعطاء مزيد من المعلومات حول هذا الرابط مثل العنوان والوصف وصورة من موقع الويب.",
-    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "في الغرف المشفرة ، مثل هذه الغرفة ، يتم تعطيل معاينات URL أصلاً للتأكد من أن خادمك الوسيط (حيث يتم إنشاء المعاينات) لا يمكنه جمع معلومات حول الروابط التي تراها في هذه الغرفة.",
-    "URL previews are disabled by default for participants in this room.": "معاينات URL معطلة بشكل أصلي للمشاركين في هذه الغرفة.",
-    "URL previews are enabled by default for participants in this room.": "يتم تمكين معاينات URL أصلًا للمشاركين في هذه الغرفة.",
-    "You have <a>disabled</a> URL previews by default.": "لقد <a> عطلت </a> معاينات عناوين URL بشكل أصلي.",
-    "You have <a>enabled</a> URL previews by default.": "لقد قمت <a> بتمكين </a> معاينات URL بشكل أصلي.",
-    "Publish this room to the public in %(domain)s's room directory?": "هل تريد نشر هذه الغرفة للملأ في دليل غرف %(domain)s؟",
     "Room avatar": "صورة الغرفة",
     "Room Topic": "موضوع الغرفة",
     "Room Name": "اسم الغرفة",
@@ -527,7 +511,6 @@
     "You have verified this user. This user has verified all of their sessions.": "لقد تحققت من هذا المستخدم. لقد تحقق هذا المستخدم من جميع اتصالاته.",
     "You have not verified this user.": "أنت لم تتحقق من هذا المستخدم.",
     "This user has not verified all of their sessions.": "هذا المستخدم لم يتحقق من جميع اتصالاته.",
-    "Drop file here to upload": "قم بإسقاط الملف هنا ليُرفَع",
     "Phone Number": "رقم الهاتف",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "تم إرسال رسالة نصية إلى +%(msisdn)s. الرجاء إدخال رمز التحقق الذي فيها.",
     "Remove %(phone)s?": "حذف %(phone)s؟",
@@ -552,25 +535,6 @@
     "Your email address hasn't been verified yet": "لم يتم التحقق من عنوان بريدك الإلكتروني حتى الآن",
     "Unable to share email address": "تعذرت مشاركة البريد الإلتكروني",
     "Unable to revoke sharing for email address": "تعذر إبطال مشاركة عنوان البريد الإلكتروني",
-    "Once enabled, encryption cannot be disabled.": "لا يمكن تعطيل التشفير بعد تمكينه.",
-    "Security & Privacy": "الأمان والخصوصية",
-    "Who can read history?": "من يستطيع قراءة التاريخ؟",
-    "Members only (since they joined)": "الأعضاء فقط (منذ انضمامهم)",
-    "Members only (since they were invited)": "الأعضاء فقط (منذ أن تمت دعوتهم)",
-    "Members only (since the point in time of selecting this option)": "الأعضاء فقط (منذ اللحظة التي حدد فيها هذا الخيار)",
-    "Anyone": "أي أحد",
-    "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.": "ستنطبق التغييرات على من يمكنه قراءة السجل على الرسائل المستقبلية في هذه الغرفة فقط. رؤية التاريخ الحالي لن تتغير.",
-    "To link to this room, please add an address.": "للربط لهذه الغرفة ، يرجى إضافة عنوان.",
-    "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "لا يمكن العدول عن التشفير بعد تمكينه للغرفة. التشفير يحجب حتى الخادم من رؤية رسائل الغرفة، فقط أعضاؤها هم من يرونها. قد يمنع تمكين التشفير العديد من الروبوتات والجسور من العمل بشكل صحيح. <a> اعرف المزيد حول التشفير. </a>",
-    "Enable encryption?": "تمكين التشفير؟",
-    "Select the roles required to change various parts of the room": "حدد الأدوار المطلوبة لتغيير أجزاء مختلفة من الغرفة",
-    "Permissions": "الصلاحيات",
-    "Roles & Permissions": "الأدوار والصلاحيات",
-    "Send %(eventType)s events": "إرسال أحداث من نوع %(eventType)s",
-    "Banned users": "المستخدمون المحظورون",
-    "Muted Users": "المستخدمون المكتومون",
-    "Privileged Users": "المستخدمون المميزون",
-    "No users have specific privileges in this room": "لا يوجد مستخدمين لديهم امتيازات خاصة في هذه الغرفة",
     "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "تعذر تغيير مستوى قوة المستخدم. تأكد من أن لديك صلاحيات كافية وحاول مرة أخرى.",
     "Error changing power level": "تعذر تغيير مستوى القوة",
     "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "تعذر تغيير مستوى قوة الغرفة. تأكد من أن لديك صلاحيات كافية وحاول مرة أخرى.",
@@ -584,7 +548,6 @@
     "Sounds": "الأصوات",
     "Uploaded sound": "صوت تمام الرفع",
     "Room Addresses": "عناوين الغرف",
-    "URL Previews": "معاينة الروابط",
     "Bridges": "الجسور",
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "تعمل هذه الغرفة على توصيل الرسائل بالمنصات التالية. <a> اعرف المزيد. </a>",
     "Room version:": "إصدار الغرفة:",
@@ -1305,10 +1268,40 @@
             "state_default": "تغيير الإعدادات",
             "ban": "حظر المستخدمين",
             "redact": "حذف رسائل الآخرين",
-            "notifications.room": "إشعار الجميع"
+            "notifications.room": "إشعار الجميع",
+            "no_privileged_users": "لا يوجد مستخدمين لديهم امتيازات خاصة في هذه الغرفة",
+            "privileged_users_section": "المستخدمون المميزون",
+            "muted_users_section": "المستخدمون المكتومون",
+            "banned_users_section": "المستخدمون المحظورون",
+            "send_event_type": "إرسال أحداث من نوع %(eventType)s",
+            "title": "الأدوار والصلاحيات",
+            "permissions_section": "الصلاحيات",
+            "permissions_section_description_room": "حدد الأدوار المطلوبة لتغيير أجزاء مختلفة من الغرفة"
         },
         "security": {
-            "strict_encryption": "لا ترسل أبدًا رسائل مشفرة إلى اتصالات التي لم يتم التحقق منها في هذه الغرفة من هذا الاتصال"
+            "strict_encryption": "لا ترسل أبدًا رسائل مشفرة إلى اتصالات التي لم يتم التحقق منها في هذه الغرفة من هذا الاتصال",
+            "enable_encryption_confirm_title": "تمكين التشفير؟",
+            "enable_encryption_confirm_description": "لا يمكن العدول عن التشفير بعد تمكينه للغرفة. التشفير يحجب حتى الخادم من رؤية رسائل الغرفة، فقط أعضاؤها هم من يرونها. قد يمنع تمكين التشفير العديد من الروبوتات والجسور من العمل بشكل صحيح. <a> اعرف المزيد حول التشفير. </a>",
+            "public_without_alias_warning": "للربط لهذه الغرفة ، يرجى إضافة عنوان.",
+            "history_visibility": {},
+            "history_visibility_warning": "ستنطبق التغييرات على من يمكنه قراءة السجل على الرسائل المستقبلية في هذه الغرفة فقط. رؤية التاريخ الحالي لن تتغير.",
+            "history_visibility_legend": "من يستطيع قراءة التاريخ؟",
+            "title": "الأمان والخصوصية",
+            "encryption_permanent": "لا يمكن تعطيل التشفير بعد تمكينه.",
+            "history_visibility_shared": "الأعضاء فقط (منذ اللحظة التي حدد فيها هذا الخيار)",
+            "history_visibility_invited": "الأعضاء فقط (منذ أن تمت دعوتهم)",
+            "history_visibility_joined": "الأعضاء فقط (منذ انضمامهم)",
+            "history_visibility_world_readable": "أي أحد"
+        },
+        "general": {
+            "publish_toggle": "هل تريد نشر هذه الغرفة للملأ في دليل غرف %(domain)s؟",
+            "user_url_previews_default_on": "لقد قمت <a> بتمكين </a> معاينات URL بشكل أصلي.",
+            "user_url_previews_default_off": "لقد <a> عطلت </a> معاينات عناوين URL بشكل أصلي.",
+            "default_url_previews_on": "يتم تمكين معاينات URL أصلًا للمشاركين في هذه الغرفة.",
+            "default_url_previews_off": "معاينات URL معطلة بشكل أصلي للمشاركين في هذه الغرفة.",
+            "url_preview_encryption_warning": "في الغرف المشفرة ، مثل هذه الغرفة ، يتم تعطيل معاينات URL أصلاً للتأكد من أن خادمك الوسيط (حيث يتم إنشاء المعاينات) لا يمكنه جمع معلومات حول الروابط التي تراها في هذه الغرفة.",
+            "url_preview_explainer": "عندما يضع شخص ما عنوان URL في رسالته ، يمكن عرض معاينة عنوان URL لإعطاء مزيد من المعلومات حول هذا الرابط مثل العنوان والوصف وصورة من موقع الويب.",
+            "url_previews_section": "معاينة الروابط"
         }
     },
     "encryption": {
@@ -1476,5 +1469,24 @@
     "labs_mjolnir": {
         "room_name": "قائمة الحظر",
         "room_topic": "هذه قائمتك للمستخدمين / الخوادم التي حظرت - لا تغادر الغرفة!"
+    },
+    "room": {
+        "drop_file_prompt": "قم بإسقاط الملف هنا ليُرفَع",
+        "intro": {
+            "start_of_dm_history": "هذه هي بداية محفوظات رسائلك المباشرة باسم <displayName/>.",
+            "dm_caption": "أنتما فقط في هذه المحادثة ، إلا إذا دعا أي منكما أي شخص للانضمام.",
+            "topic_edit": "الموضوع: %(topic)s (<a>عدل</a>)",
+            "topic": "الموضوع: %(topic)s ",
+            "no_topic": "<a>أضف موضوعاً</a> ليُعرف ما يدور حوله الحديث.",
+            "you_created": "أنت أنشأت هذه الغرفة.",
+            "user_created": "%(displayName)s أنشأ هذه الغرفة.",
+            "no_avatar_label": "أضف صورة ، حتى يسهل على الناس تمييز غرفتك.",
+            "start_of_room": "هذه بداية <roomName/>."
+        }
+    },
+    "space": {
+        "context_menu": {
+            "explore": "استكشِف الغرف"
+        }
     }
 }

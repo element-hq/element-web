@@ -132,12 +132,8 @@
     "Language and region": "Språk og område",
     "General": "Generelt",
     "None": "Ingen",
-    "Security & Privacy": "Sikkerhet og personvern",
     "Browse": "Bla",
     "Unban": "Opphev utestengelse",
-    "Banned users": "Bannlyste brukere",
-    "Permissions": "Tillatelser",
-    "Anyone": "Alle",
     "Encryption": "Kryptering",
     "Unable to verify phone number.": "Klarte ikke å verifisere telefonnummeret.",
     "Verification code": "Verifikasjonskode",
@@ -169,10 +165,6 @@
     "An error has occurred.": "En feil har oppstått.",
     "Email address": "E-postadresse",
     "Share Room Message": "Del rommelding",
-    "Terms of Service": "Vilkår for bruk",
-    "Service": "Tjeneste",
-    "Summary": "Oppsummering",
-    "Document": "Dokument",
     "Cancel All": "Avbryt alt",
     "Home": "Hjem",
     "Email": "E-post",
@@ -182,8 +174,6 @@
     "Explore rooms": "Se alle rom",
     "Your password has been reset.": "Passordet ditt har blitt tilbakestilt.",
     "Create account": "Opprett konto",
-    "Commands": "Kommandoer",
-    "Users": "Brukere",
     "Success!": "Suksess!",
     "Set up": "Sett opp",
     "Identity server has no terms of service": "Identitetstjeneren har ingen brukervilkår",
@@ -249,14 +239,10 @@
     "Room version": "Romversjon",
     "Room version:": "Romversjon:",
     "Room Addresses": "Rom-adresser",
-    "URL Previews": "URL-forhåndsvisninger",
     "Sounds": "Lyder",
     "Notification sound": "Varslingslyd",
     "Set a new custom sound": "Velg en ny selvvalgt lyd",
     "Banned by %(displayName)s": "Bannlyst av %(displayName)s",
-    "Roles & Permissions": "Roller og tillatelser",
-    "Enable encryption?": "Vil du skru på kryptering?",
-    "Drop file here to upload": "Slipp ned en fil her for å laste opp",
     "Edit message": "Rediger meldingen",
     "Unencrypted": "Ukryptert",
     "Deactivate user?": "Vil du deaktivere brukeren?",
@@ -321,7 +307,6 @@
     "Sign in with": "Logg inn med",
     "Passwords don't match": "Passordene samsvarer ikke",
     "Email (optional)": "E-post (valgfritt)",
-    "Phone (optional)": "Telefonnummer (valgfritt)",
     "Upload avatar": "Last opp en avatar",
     "Terms and Conditions": "Betingelser og vilkår",
     "Add room": "Legg til et rom",
@@ -353,15 +338,6 @@
     "Enter a new identity server": "Skriv inn en ny identitetstjener",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "For å rapportere inn et Matrix-relatert sikkerhetsproblem, vennligst less Matrix.org sine <a>Retningslinjer for sikkerhetspublisering</a>.",
     "Import E2E room keys": "Importer E2E-romnøkler",
-    "Privileged Users": "Priviligerte brukere",
-    "Send %(eventType)s events": "Send %(eventType)s-hendelser",
-    "Select the roles required to change various parts of the room": "Velg rollene som kreves for å endre på diverse deler av rommet",
-    "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.": "Endringer for hvem som kan lese historikken, vil kun bli benyttet for fremtidige meldinger i dette rommet. Synligheten til den eksisterende historikken vil forbli uendret.",
-    "Members only (since the point in time of selecting this option)": "Kun medlemmer (f.o.m. da denne innstillingen ble valgt)",
-    "Members only (since they were invited)": "Kun medlemmer (f.o.m. da de ble invitert)",
-    "Members only (since they joined)": "Kun medlemmer (f.o.m. de ble med)",
-    "Once enabled, encryption cannot be disabled.": "Dersom dette først har blitt skrudd på, kan kryptering aldri bli skrudd av.",
-    "Who can read history?": "Hvem kan lese historikken?",
     "Scroll to most recent messages": "Hopp bort til de nyeste meldingene",
     "Share Link to User": "Del en lenke til brukeren",
     "Filter room members": "Filtrer rommets medlemmer",
@@ -375,10 +351,6 @@
     "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "Velg adresser for dette rommet slik at brukere kan finne dette rommet gjennom hjemmetjeneren din (%(localDomain)s)",
     "Room Name": "Rommets navn",
     "Room Topic": "Rommets tema",
-    "Publish this room to the public in %(domain)s's room directory?": "Vil du publisere dette rommet til offentligheten i %(domain)s sitt rom-arkiv?",
-    "You have <a>enabled</a> URL previews by default.": "Du har <a>skrudd på</a> URL-forhåndsvisninger som standard.",
-    "You have <a>disabled</a> URL previews by default.": "Du har <a>skrudd av</a> URL-forhåndsvisninger som standard.",
-    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Når noen legger til en URL i meldingene deres, kan en URL-forhåndsvisning bli vist for å gi mere informasjonen om den lenken, f.eks. tittelen, beskrivelsen, og et bilde fra nettstedet.",
     "Encryption not enabled": "Kryptering er ikke skrudd på",
     "Something went wrong!": "Noe gikk galt!",
     "No update available.": "Ingen oppdateringer er tilgjengelige.",
@@ -395,17 +367,13 @@
     "Show advanced": "Vis avansert",
     "Recent Conversations": "Nylige samtaler",
     "Room Settings - %(roomName)s": "Rominnstillinger - %(roomName)s",
-    "To continue you need to accept the terms of this service.": "For å gå videre må du akseptere brukervilkårene til denne tjenesten.",
     "Confirm your identity by entering your account password below.": "Bekreft identiteten din ved å skrive inn kontopassordet ditt nedenfor.",
     "Use an email address to recover your account": "Bruk en E-postadresse til å gjenopprette kontoen din",
     "Enter email address (required on this homeserver)": "Skriv inn en E-postadresse (Påkrevd på denne hjemmetjeneren)",
     "Doesn't look like a valid email address": "Det ser ikke ut som en gyldig E-postadresse",
     "Password is allowed, but unsafe": "Passordet er tillatt, men er ikke trygt",
     "Nice, strong password!": "Strålende, passordet er sterkt!",
-    "Use lowercase letters, numbers, dashes and underscores only": "Bruk kun småbokstaver, numre, streker og understreker",
-    "You must join the room to see its files": "Du må bli med i rommet for å se filene dens",
     "Signed Out": "Avlogget",
-    "%(creator)s created and configured the room.": "%(creator)s opprettet og satte opp rommet.",
     "Export room keys": "Eksporter romnøkler",
     "Import room keys": "Importer romnøkler",
     "Go to Settings": "Gå til Innstillinger",
@@ -438,7 +406,6 @@
     "Failed to copy": "Mislyktes i å kopiere",
     "Submit logs": "Send inn loggføringer",
     "Clear all data": "Tøm alle data",
-    "Verify session": "Verifiser økten",
     "Upload completed": "Opplasting fullført",
     "Unable to upload": "Mislyktes i å laste opp",
     "Remove for everyone": "Fjern for alle",
@@ -448,9 +415,6 @@
     "User signing private key:": "Brukersignert privat nøkkel:",
     "Secret storage public key:": "Offentlig nøkkel for hemmelig lagring:",
     "Homeserver feature support:": "Hjemmetjener-funksjonsstøtte:",
-    "URL previews are enabled by default for participants in this room.": "URL-forhåndsvisninger er skrudd på som standard for deltakerene i dette rommet.",
-    "URL previews are disabled by default for participants in this room.": "URL-forhåndsvisninger er skrudd av som standard for deltakerene i dette rommet.",
-    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "I krypterte rom som denne, er URL-forhåndsvisninger skrudd av som standard for å sikre at hjemmetjeneren din (der forhåndsvisningene blir generert) ikke kan samle inn informasjon om lenkene som du ser i dette rommet.",
     "Confirm adding email": "Bekreft tillegging av E-postadresse",
     "Confirm adding phone number": "Bekreft tillegging av telefonnummer",
     "Setting up keys": "Setter opp nøkler",
@@ -471,7 +435,6 @@
     "You have not ignored anyone.": "Du har ikke ignorert noen.",
     "You are not subscribed to any lists": "Du er ikke abonnert på noen lister",
     "Uploaded sound": "Lastet opp lyd",
-    "Muted Users": "Dempede brukere",
     "Incorrect verification code": "Ugyldig verifiseringskode",
     "Unable to add email address": "Klarte ikke å legge til E-postadressen",
     "Close preview": "Lukk forhåndsvisning",
@@ -527,7 +490,6 @@
     "Santa": "Julenisse",
     "wait and try again later": "vent og prøv igjen senere",
     "eg: @bot:* or example.org": "f.eks.: @bot:* eller example.org",
-    "To link to this room, please add an address.": "For å lenke til dette rommet, vennligst legg til en adresse.",
     "Remove %(phone)s?": "Vil du fjerne %(phone)s?",
     "Message preview": "Meldingsforhåndsvisning",
     "This room has no local addresses": "Dette rommet har ikke noen lokale adresser",
@@ -567,11 +529,8 @@
     "Review terms and conditions": "Gå gjennom betingelser og vilkår",
     "Jump to first invite.": "Hopp til den første invitasjonen.",
     "You seem to be uploading files, are you sure you want to quit?": "Du ser til å laste opp filer, er du sikker på at du vil avslutte?",
-    "Switch to light mode": "Bytt til lys modus",
-    "Switch to dark mode": "Bytt til mørk modus",
     "Switch theme": "Bytt tema",
     "All settings": "Alle innstillinger",
-    "Emoji Autocomplete": "Auto-fullfør emojier",
     "Confirm encryption setup": "Bekreft krypteringsoppsett",
     "Create key backup": "Opprett nøkkelsikkerhetskopi",
     "Set up Secure Messages": "Sett opp sikre meldinger",
@@ -610,8 +569,6 @@
     "Unable to revoke sharing for phone number": "Klarte ikke trekke tilbake deling for telefonnummer",
     "Unable to revoke sharing for email address": "Klarte ikke å trekke tilbake deling for denne e-postadressen",
     "Put a link back to the old room at the start of the new room so people can see old messages": "Legg inn en lenke tilbake til det gamle rommet i starten av det nye rommet slik at folk kan finne eldre meldinger",
-    "Add a photo, so people can easily spot your room.": "Legg til et bilde så folk lettere kan finne rommet ditt.",
-    "<a>Add a topic</a> to help people know what it is about.": "<a>Legg til et tema</a> for hjelpe folk å forstå hva dette handler om.",
     "Invite people": "Inviter personer",
     "You do not have permission to invite people to this room.": "Du har ikke tilgang til å invitere personer til dette rommet.",
     "Click the button below to confirm adding this email address.": "Klikk på knappen under for å bekrefte at du vil legge til denne e-postadressen.",
@@ -677,7 +634,6 @@
     "No results found": "Ingen resultater ble funnet",
     "Public space": "Offentlig område",
     "Private space": "Privat område",
-    "Suggested": "Anbefalte",
     "%(deviceId)s from %(ip)s": "%(deviceId)s fra %(ip)s",
     "Leave Space": "Forlat området",
     "Save Changes": "Lagre endringer",
@@ -705,8 +661,6 @@
     "Uruguay": "Uruguay",
     "Remember this": "Husk dette",
     "Move right": "Gå til høyre",
-    "Notify the whole room": "Varsle hele rommet",
-    "You created this room.": "Du opprettet dette rommet.",
     "Security Phrase": "Sikkerhetsfrase",
     "Open dial pad": "Åpne nummerpanelet",
     "Enter email address": "Legg inn e-postadresse",
@@ -1202,7 +1156,13 @@
         "placeholder_reply_encrypted": "Send et kryptert svar …",
         "placeholder_reply": "Send et svar …",
         "placeholder_encrypted": "Send en kryptert beskjed …",
-        "placeholder": "Send en melding …"
+        "placeholder": "Send en melding …",
+        "autocomplete": {
+            "command_description": "Kommandoer",
+            "emoji_a11y": "Auto-fullfør emojier",
+            "@room_description": "Varsle hele rommet",
+            "user_description": "Brukere"
+        }
     },
     "Bold": "Fet",
     "Code": "Kode",
@@ -1308,6 +1268,10 @@
             "autocomplete_delay": "Autofullføringsforsinkelse (ms)",
             "rm_lifetime": "Lesemarkørens visningstid (ms)",
             "rm_lifetime_offscreen": "Lesemarkørens visningstid utenfor skjermen (ms)"
+        },
+        "sessions": {
+            "session_id": "Økt-ID",
+            "verify_session": "Verifiser økten"
         }
     },
     "devtools": {
@@ -1493,7 +1457,8 @@
         },
         "m.room.create": {
             "see_older_messages": "Klikk for å se eldre meldinger."
-        }
+        },
+        "creation_summary_room": "%(creator)s opprettet og satte opp rommet."
     },
     "slash_command": {
         "shrug": "Føyer til ¯\\_(ツ)_/¯ på en råtekstmelding",
@@ -1592,10 +1557,38 @@
             "invite": "Inviter brukere",
             "state_default": "Endre innstillinger",
             "ban": "Bannlys brukere",
-            "notifications.room": "Varsle alle"
+            "notifications.room": "Varsle alle",
+            "privileged_users_section": "Priviligerte brukere",
+            "muted_users_section": "Dempede brukere",
+            "banned_users_section": "Bannlyste brukere",
+            "send_event_type": "Send %(eventType)s-hendelser",
+            "title": "Roller og tillatelser",
+            "permissions_section": "Tillatelser",
+            "permissions_section_description_room": "Velg rollene som kreves for å endre på diverse deler av rommet"
         },
         "security": {
-            "strict_encryption": "Aldri send krypterte meldinger til uverifiserte økter i dette rommet fra denne økten"
+            "strict_encryption": "Aldri send krypterte meldinger til uverifiserte økter i dette rommet fra denne økten",
+            "enable_encryption_confirm_title": "Vil du skru på kryptering?",
+            "public_without_alias_warning": "For å lenke til dette rommet, vennligst legg til en adresse.",
+            "history_visibility": {},
+            "history_visibility_warning": "Endringer for hvem som kan lese historikken, vil kun bli benyttet for fremtidige meldinger i dette rommet. Synligheten til den eksisterende historikken vil forbli uendret.",
+            "history_visibility_legend": "Hvem kan lese historikken?",
+            "title": "Sikkerhet og personvern",
+            "encryption_permanent": "Dersom dette først har blitt skrudd på, kan kryptering aldri bli skrudd av.",
+            "history_visibility_shared": "Kun medlemmer (f.o.m. da denne innstillingen ble valgt)",
+            "history_visibility_invited": "Kun medlemmer (f.o.m. da de ble invitert)",
+            "history_visibility_joined": "Kun medlemmer (f.o.m. de ble med)",
+            "history_visibility_world_readable": "Alle"
+        },
+        "general": {
+            "publish_toggle": "Vil du publisere dette rommet til offentligheten i %(domain)s sitt rom-arkiv?",
+            "user_url_previews_default_on": "Du har <a>skrudd på</a> URL-forhåndsvisninger som standard.",
+            "user_url_previews_default_off": "Du har <a>skrudd av</a> URL-forhåndsvisninger som standard.",
+            "default_url_previews_on": "URL-forhåndsvisninger er skrudd på som standard for deltakerene i dette rommet.",
+            "default_url_previews_off": "URL-forhåndsvisninger er skrudd av som standard for deltakerene i dette rommet.",
+            "url_preview_encryption_warning": "I krypterte rom som denne, er URL-forhåndsvisninger skrudd av som standard for å sikre at hjemmetjeneren din (der forhåndsvisningene blir generert) ikke kan samle inn informasjon om lenkene som du ser i dette rommet.",
+            "url_preview_explainer": "Når noen legger til en URL i meldingene deres, kan en URL-forhåndsvisning bli vist for å gi mere informasjonen om den lenken, f.eks. tittelen, beskrivelsen, og et bilde fra nettstedet.",
+            "url_previews_section": "URL-forhåndsvisninger"
         }
     },
     "encryption": {
@@ -1642,7 +1635,10 @@
         "server_picker_invalid_url": "Ugyldig URL",
         "server_picker_learn_more": "Om hjemmetjenere",
         "incorrect_credentials": "Feil brukernavn og/eller passord.",
-        "account_deactivated": "Denne kontoen har blitt deaktivert."
+        "account_deactivated": "Denne kontoen har blitt deaktivert.",
+        "registration_username_validation": "Bruk kun småbokstaver, numre, streker og understreker",
+        "phone_label": "Telefon",
+        "phone_optional_label": "Telefonnummer (valgfritt)"
     },
     "room_list": {
         "show_previews": "Vis forhåndsvisninger av meldinger",
@@ -1728,5 +1724,33 @@
         "share_heading": "Del %(name)s",
         "personal_space": "Bare meg selv",
         "invite_teammates_by_username": "Inviter etter brukernavn"
+    },
+    "user_menu": {
+        "switch_theme_light": "Bytt til lys modus",
+        "switch_theme_dark": "Bytt til mørk modus"
+    },
+    "space": {
+        "suggested": "Anbefalte",
+        "context_menu": {
+            "explore": "Se alle rom"
+        }
+    },
+    "room": {
+        "drop_file_prompt": "Slipp ned en fil her for å laste opp",
+        "intro": {
+            "no_topic": "<a>Legg til et tema</a> for hjelpe folk å forstå hva dette handler om.",
+            "you_created": "Du opprettet dette rommet.",
+            "no_avatar_label": "Legg til et bilde så folk lettere kan finne rommet ditt."
+        }
+    },
+    "file_panel": {
+        "peek_note": "Du må bli med i rommet for å se filene dens"
+    },
+    "terms": {
+        "tos": "Vilkår for bruk",
+        "intro": "For å gå videre må du akseptere brukervilkårene til denne tjenesten.",
+        "column_service": "Tjeneste",
+        "column_summary": "Oppsummering",
+        "column_document": "Dokument"
     }
 }

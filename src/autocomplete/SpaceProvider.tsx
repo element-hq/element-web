@@ -38,7 +38,7 @@ export default class SpaceProvider extends RoomProvider {
             <div
                 className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"
                 role="listbox"
-                aria-label={_t("Space Autocomplete")}
+                aria-label={_t("composer|autocomplete|space_a11y")}
             >
                 {completions}
             </div>

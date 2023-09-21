@@ -29,9 +29,6 @@
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Irakurri zure e-maila eta egin klik dakarren estekan. Behin eginda, egin klik Jarraitu botoian.",
     "This email address is already in use": "E-mail helbide hau erabilita dago",
     "This phone number is already in use": "Telefono zenbaki hau erabilita dago",
-    "Who can read history?": "Nork irakurri dezake historiala?",
-    "Anyone": "Edonork",
-    "Banned users": "Debekatutako erabiltzaileak",
     "This room has no local addresses": "Gela honek ez du tokiko helbiderik",
     "Session ID": "Saioaren IDa",
     "Export E2E room keys": "Esportatu E2E geletako gakoak",
@@ -55,7 +52,6 @@
     "Are you sure you want to leave the room '%(roomName)s'?": "Ziur '%(roomName)s' gelatik atera nahi duzula?",
     "Are you sure you want to reject the invitation?": "Ziur gonbidapena baztertu nahi duzula?",
     "Change Password": "Aldatu pasahitza",
-    "Commands": "Aginduak",
     "Confirm password": "Berretsi pasahitza",
     "Current password": "Oraingo pasahitza",
     "Custom level": "Maila pertsonalizatua",
@@ -91,12 +87,9 @@
     "<not supported>": "<euskarririk gabe>",
     "No display name": "Pantaila izenik ez",
     "No more results": "Emaitza gehiagorik ez",
-    "No users have specific privileges in this room": "Ez dago gela honetan baimen zehatzik duen erabiltzailerik",
     "Server may be unavailable, overloaded, or you hit a bug.": "Agian zerbitzaria ez dago eskuragarri, edo gainezka dago, edo akats bat aurkitu duzu.",
     "Passwords can't be empty": "Pasahitzak ezin dira hutsik egon",
-    "Permissions": "Baimenak",
     "Power level must be positive integer.": "Botere maila osoko zenbaki positibo bat izan behar da.",
-    "Privileged Users": "Baimenak dituzten erabiltzaileak",
     "Profile": "Profila",
     "Reason": "Arrazoia",
     "Reject invitation": "Baztertu gonbidapena",
@@ -127,12 +120,8 @@
     "Upload avatar": "Igo abatarra",
     "Upload Failed": "Igoerak huts egin du",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",
-    "Users": "Erabiltzaileak",
     "Verified key": "Egiaztatutako gakoa",
     "You cannot place a call with yourself.": "Ezin diozu zure buruari deitu.",
-    "You have <a>disabled</a> URL previews by default.": "Lehenetsita URLak aurreikustea <a>desgaitu</a> duzu.",
-    "You have <a>enabled</a> URL previews by default.": "Lehenetsita URLak aurreikustea <a>gaitu</a> duzu.",
-    "You must <a>register</a> to use this functionality": "Funtzionaltasun hau erabiltzeko <a>erregistratu</a>",
     "You need to be able to invite users to do that.": "Erabiltzaileak gonbidatzeko baimena behar duzu hori egiteko.",
     "You need to be logged in.": "Saioa hasi duzu.",
     "You seem to be in a call, are you sure you want to quit?": "Badirudi dei batean zaudela, ziur irten nahi duzula?",
@@ -172,7 +161,6 @@
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Prozesu honek zifratutako gelatan jaso dituzun mezuentzako gakoak tokiko fitxategi batera esportatzea ahalbidetzen dizu. Fitxategia beste Matrix bezero batean inportatu dezakezu, bezero hori ere mezuak deszifratzeko gai izan dadin.",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Prozesu honek aurretik beste Matrix bezero batetik esportatu dituzun zifratze gakoak inportatzea ahalbidetzen dizu. Gero beste bezeroak deszifratu zitzakeen mezuak deszifratu ahal izango dituzu.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Esportatutako fitxategia pasaesaldi batez babestuko da. Pasaesaldia bertan idatzi behar duzu, fitxategia deszifratzeko.",
-    "You must join the room to see its files": "Gelara elkartu behar zara bertako fitxategiak ikusteko",
     "Failed to invite": "Huts egin du ganbidapenak",
     "Confirm Removal": "Berretsi kentzea",
     "Unknown error": "Errore ezezaguna",
@@ -183,8 +171,6 @@
     "Error decrypting image": "Errorea audioa deszifratzean",
     "Error decrypting video": "Errorea bideoa deszifratzean",
     "Add an Integration": "Gehitu integrazioa",
-    "URL Previews": "URL-en aurrebistak",
-    "Drop file here to upload": "Jaregin fitxategia hona igotzeko",
     "Check for update": "Bilatu ekuneraketa",
     "Something went wrong!": "Zerk edo zerk huts egin du!",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Kanpo webgune batetara eramango zaizu zure kontua %(integrationsUrl)s helbidearekin erabiltzeko egiaztatzeko. Jarraitu nahi duzu?",
@@ -198,7 +184,6 @@
         "one": "eta beste bat…"
     },
     "Delete widget": "Ezabatu trepeta",
-    "Publish this room to the public in %(domain)s's room directory?": "Argitaratu gela hau publikora %(domain)s domeinuko gelen direktorioan?",
     "AM": "AM",
     "PM": "PM",
     "Unable to create widget.": "Ezin izan da trepeta sortu.",
@@ -219,15 +204,8 @@
     "%(duration)sh": "%(duration)s h",
     "%(duration)sd": "%(duration)s e",
     "Unnamed room": "Izen gabeko gela",
-    "Members only (since the point in time of selecting this option)": "Kideek besterik ez (aukera hau hautatzen den unetik)",
-    "Members only (since they were invited)": "Kideek besterik ez (gonbidatu zaienetik)",
-    "Members only (since they joined)": "Kideek besterik ez (elkartu zirenetik)",
     "Old cryptography data detected": "Kriptografia datu zaharrak atzeman dira",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Kontuan izan %(hs)s zerbitzarira elkartu zarela, ez matrix.org.",
-    "Notify the whole room": "Jakinarazi gela osoari",
-    "Room Notification": "Gela jakinarazpena",
-    "URL previews are enabled by default for participants in this room.": "URLen aurrebistak gaituta daude gela honetako partaideentzat.",
-    "URL previews are disabled by default for participants in this room.": "URLen aurrebistak desgaituta daude gela honetako partaideentzat.",
     "A text message has been sent to %(msisdn)s": "Testu mezu bat bidali da hona: %(msisdn)s",
     "Jump to read receipt": "Saltatu irakurragirira",
     "collapse": "tolestu",
@@ -282,7 +260,6 @@
     "We encountered an error trying to restore your previous session.": "Errore bat aurkitu dugu zure aurreko saioa berrezartzen saiatzean.",
     "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Zure nabigatzailearen biltegiratzea garbitzeak arazoa konpon lezake, baina saioa amaituko da eta zifratutako txaten historiala ezin izango da berriro irakurri.",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Ezin izan da erantzundako gertaera kargatu, edo ez dago edo ez duzu ikusteko baimenik.",
-    "Muted Users": "Mutututako erabiltzaileak",
     "Terms and Conditions": "Termino eta baldintzak",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "%(homeserverDomain)s hasiera-zerbitzaria erabiltzen jarraitzeko gure termino eta baldintzak irakurri eta onartu behar dituzu.",
     "Review terms and conditions": "Irakurri termino eta baldintzak",
@@ -297,8 +274,6 @@
     "Link to selected message": "Esteka hautatutako mezura",
     "No Audio Outputs detected": "Ez da audio irteerarik antzeman",
     "Audio Output": "Audio irteera",
-    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "Zifratutako gelatan, honetan esaterako, URL-en aurrebistak lehenetsita desgaituta daude zure hasiera-zerbitzariak gela honetan ikusten dituzun estekei buruzko informaziorik jaso ez dezan, hasiera-zerbitzarian sortzen baitira aurrebistak.",
-    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Norbaitek mezu batean URL bat jartzen duenean, URL aurrebista bat erakutsi daiteke estekaren informazio gehiago erakusteko, adibidez webgunearen izenburua, deskripzioa eta irudi bat.",
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Ezin duzu mezurik bidali <consentLink>gure termino eta baldintzak</consentLink> irakurri eta onartu arte.",
     "Demote yourself?": "Jaitsi zure burua mailaz?",
     "Demote": "Jaitzi mailaz",
@@ -413,7 +388,6 @@
     "Room Topic": "Gelaren mintzagaia",
     "This homeserver would like to make sure you are not a robot.": "Hasiera-zerbitzari honek robota ez zarela egiaztatu nahi du.",
     "Email (optional)": "E-mail (aukerakoa)",
-    "Phone (optional)": "Telefonoa (aukerakoa)",
     "Join millions for free on the largest public server": "Elkartu milioika pertsonekin dohain hasiera zerbitzari publiko handienean",
     "Couldn't load page": "Ezin izan da orria kargatu",
     "General": "Orokorra",
@@ -422,10 +396,7 @@
     "Phone numbers": "Telefono zenbakiak",
     "Language and region": "Hizkuntza eta eskualdea",
     "Account management": "Kontuen kudeaketa",
-    "Roles & Permissions": "Rolak eta baimenak",
-    "Security & Privacy": "Segurtasuna eta pribatutasuna",
     "Encryption": "Zifratzea",
-    "Once enabled, encryption cannot be disabled.": "Behin gaituta, zifratzea ezin da desgaitu.",
     "Ignored users": "Ezikusitako erabiltzaileak",
     "Voice & Video": "Ahotsa eta bideoa",
     "Main address": "Helbide nagusia",
@@ -470,7 +441,6 @@
     "Room information": "Gelako informazioa",
     "Room version": "Gela bertsioa",
     "Room version:": "Gela bertsioa:",
-    "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.": "Historiala nork irakurri dezakeen aldatzea gelak honetara aurrerantzean bidalitako mezuei besterik ez zaie aplikatuko. Badagoen historialaren ikusgaitasuna ez da aldatuko.",
     "Bulk options": "Aukera masiboak",
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Egiaztatu erabiltzaile hau fidagarritzat markatzeko. Honek bakea ematen dizu muturretik muturrerako zifratutako mezuak erabiltzean.",
     "Incoming Verification Request": "Jasotako egiaztaketa eskaria",
@@ -485,10 +455,6 @@
     "The user must be unbanned before they can be invited.": "Erabiltzaileari debekua kendu behar zaio gonbidatu aurretik.",
     "Scissors": "Artaziak",
     "Accept all %(invitedRooms)s invites": "Onartu %(invitedRooms)s gelako gonbidapen guztiak",
-    "Send %(eventType)s events": "Bidali %(eventType)s gertaerak",
-    "Select the roles required to change various parts of the room": "Hautatu gelaren hainbat atal aldatzeko behar diren rolak",
-    "Enable encryption?": "Gaitu zifratzea?",
-    "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Behin aktibatuta, ezin zaio gelari zifratzea kendu. Zerbitzariak ezin ditu zifratutako gela batetara bidalitako mezuak ikusi, gelako partaideek besterik ezin dituzte ikusi. Zifratzea aktibatzeak bot eta zubi batzuk ongi ez funtzionatzea ekarri dezake. <a>Ikasi gehiago zifratzeari buruz.</a>",
     "Error updating main address": "Errorea helbide nagusia eguneratzean",
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "Errore bat gertatu da gelaren helbide nagusia eguneratzean. Agian zerbitzariak ez du hau baimentzen, edo une bateko hutsegitea izan da.",
     "Power level": "Botere maila",
@@ -561,7 +527,6 @@
     "Passwords don't match": "Pasahitzak ez datoz bat",
     "Other users can invite you to rooms using your contact details": "Beste erabiltzaileek geletara gonbidatu zaitzakete zure kontaktu-xehetasunak erabiliz",
     "Enter phone number (required on this homeserver)": "Sartu telefono zenbakia (hasiera zerbitzari honetan beharrezkoa)",
-    "Use lowercase letters, numbers, dashes and underscores only": "Erabili letra xeheak, zenbakiak, gidoiak eta azpimarrak, besterik ez",
     "Enter username": "Sartu erabiltzaile-izena",
     "Some characters not allowed": "Karaktere batzuk ez dira onartzen",
     "Add room": "Gehitu gela",
@@ -593,10 +558,6 @@
     "Failed to re-authenticate due to a homeserver problem": "Berriro autentifikatzean huts egin du hasiera-zerbitzariaren arazo bat dela eta",
     "Find others by phone or email": "Aurkitu besteak telefonoa edo e-maila erabiliz",
     "Be found by phone or email": "Izan telefonoa edo e-maila erabiliz aurkigarria",
-    "Use bots, bridges, widgets and sticker packs": "Erabili botak, zubiak, trepetak eta eranskailu multzoak",
-    "Terms of Service": "Erabilera baldintzak",
-    "Service": "Zerbitzua",
-    "Summary": "Laburpena",
     "Call failed due to misconfigured server": "Deiak huts egin du zerbitzaria gaizki konfiguratuta dagoelako",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Eskatu zure hasiera-zerbitzariaren administratzaileari (<code>%(homeserverDomain)s</code>) TURN zerbitzari bat konfiguratu dezala deiek ondo funtzionatzeko.",
     "Checking server": "Zerbitzaria egiaztatzen",
@@ -670,15 +631,8 @@
     "Close dialog": "Itxi elkarrizketa-koadroa",
     "Hide advanced": "Ezkutatu aurreratua",
     "Show advanced": "Erakutsi aurreratua",
-    "To continue you need to accept the terms of this service.": "Jarraitzeko erabilera baldintzak onartu behar dituzu.",
-    "Document": "Dokumentua",
     "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Captcha-ren gako publikoa falta da hasiera-zerbitzariaren konfigurazioan. Eman honen berri hasiera-zerbitzariaren administratzaileari.",
-    "%(creator)s created and configured the room.": "%(creator)s erabiltzaileak gela sortu eta konfiguratu du.",
     "Explore rooms": "Arakatu gelak",
-    "Emoji Autocomplete": "Emoji osatze automatikoa",
-    "Notification Autocomplete": "Jakinarazpen osatze automatikoa",
-    "Room Autocomplete": "Gela osatze automatikoa",
-    "User Autocomplete": "Erabiltzaile osatze automatikoa",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Zure <b>datu pribatuak kendu</b> beharko zenituzke <idserver /> identitate-zerbitzaritik deskonektatu aurretik. Zoritxarrez <idserver /> identitate-zerbitzaria lineaz kanpo dago eta ezin da atzitu.",
     "You should:": "Hau egin beharko zenuke:",
     "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "egiaztatu zure nabigatzailearen gehigarriren batek ez duela identitate-zerbitzaria blokeatzen (esaterako Privacy Badger)",
@@ -691,7 +645,6 @@
     "Cancel search": "Ezeztatu bilaketa",
     "Jump to first unread room.": "Jauzi irakurri gabeko lehen gelara.",
     "Jump to first invite.": "Jauzi lehen gonbidapenera.",
-    "Command Autocomplete": "Aginduak auto-osatzea",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Ekintza honek lehenetsitako <server /> identitate-zerbitzaria atzitzea eskatzen du, e-mail helbidea edo telefono zenbakia balioztatzeko, baina zerbitzariak ez du erabilera baldintzarik.",
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
     "Message Actions": "Mezu-ekintzak",
@@ -838,7 +791,6 @@
     "The encryption used by this room isn't supported.": "Gela honetan erabilitako zifratzea ez da onartzen.",
     "Clear all data in this session?": "Garbitu saio honetako datu guztiak?",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Saio honetako datuak garbitzea behin betirako da. Zifratutako mezuak galdu egingo dira gakoen babes-kopia egin ez bada.",
-    "Verify session": "Egiaztatu saioa",
     "Session name": "Saioaren izena",
     "Session key": "Saioaren gakoa",
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Erabiltzaile hau egiaztatzean bere saioa fidagarritzat joko da, eta zure saioak beretzat fidagarritzat ere.",
@@ -959,7 +911,6 @@
     "Please verify the room ID or address and try again.": "Egiaztatu gelaren ID-a edo helbidea eta saiatu berriro.",
     "Room ID or address of ban list": "Debeku zerrendaren gelaren IDa edo helbidea",
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "Zure zerbitzariko administratzaileak muturretik muturrerako zifratzea desgaitu du lehenetsita gela probatuetan eta mezu zuzenetan.",
-    "To link to this room, please add an address.": "Gela hau estekatzeko, gehitu helbide bat.",
     "No recently visited rooms": "Ez dago azkenaldian bisitatutako gelarik",
     "Message preview": "Mezu-aurrebista",
     "Room options": "Gelaren aukerak",
@@ -972,8 +923,6 @@
     "This address is available to use": "Gelaren helbide hau erabilgarri dago",
     "This address is already in use": "Gelaren helbide hau erabilita dago",
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "%(brand)s bertsio berriago bat erabili duzu saio honekin. Berriro bertsio hau muturretik muturrerako zifratzearekin erabiltzeko, saioa amaitu eta berriro hasi beharko duzu.",
-    "Switch to light mode": "Aldatu modu argira",
-    "Switch to dark mode": "Aldatu modu ilunera",
     "Switch theme": "Aldatu azala",
     "All settings": "Ezarpen guztiak",
     "Use a different passphrase?": "Erabili pasa-esaldi desberdin bat?",
@@ -1191,7 +1140,18 @@
         "placeholder_reply_encrypted": "Bidali zifratutako erantzun bat…",
         "placeholder_reply": "Bidali erantzuna…",
         "placeholder_encrypted": "Bidali zifratutako mezu bat…",
-        "placeholder": "Bidali mezua…"
+        "placeholder": "Bidali mezua…",
+        "autocomplete": {
+            "command_description": "Aginduak",
+            "command_a11y": "Aginduak auto-osatzea",
+            "emoji_a11y": "Emoji osatze automatikoa",
+            "@room_description": "Jakinarazi gela osoari",
+            "notification_description": "Gela jakinarazpena",
+            "notification_a11y": "Jakinarazpen osatze automatikoa",
+            "room_a11y": "Gela osatze automatikoa",
+            "user_description": "Erabiltzaileak",
+            "user_a11y": "Erabiltzaile osatze automatikoa"
+        }
     },
     "Bold": "Lodia",
     "Code": "Kodea",
@@ -1310,6 +1270,10 @@
             "rm_lifetime": "Orri-markagailuaren biziraupena (ms)",
             "rm_lifetime_offscreen": "Orri-markagailuaren biziraupena pantailaz kanpo (ms)",
             "always_show_menu_bar": "Erakutsi beti leihoaren menu barra"
+        },
+        "sessions": {
+            "session_id": "Saioaren IDa",
+            "verify_session": "Egiaztatu saioa"
         }
     },
     "devtools": {
@@ -1528,7 +1492,8 @@
             "lightbox_title": "%(senderDisplayName)s erabiltzaileak %(roomName)s gelaren abatarra aldatu du",
             "removed": "%(senderDisplayName)s erabiltzaileak gelaren abatarra ezabatu du.",
             "changed_img": "%(senderDisplayName)s erabiltzaileak gelaren abatarra aldatu du beste honetara: <img/>"
-        }
+        },
+        "creation_summary_room": "%(creator)s erabiltzaileak gela sortu eta konfiguratu du."
     },
     "slash_command": {
         "shrug": "¯\\_(ツ)_/¯ jartzen du testu soileko mezu baten aurrean",
@@ -1629,10 +1594,40 @@
             "invite": "Gonbidatu erabiltzaileak",
             "state_default": "Aldatu ezarpenak",
             "ban": "Debekatu erabiltzaileak",
-            "notifications.room": "Jakinarazi denei"
+            "notifications.room": "Jakinarazi denei",
+            "no_privileged_users": "Ez dago gela honetan baimen zehatzik duen erabiltzailerik",
+            "privileged_users_section": "Baimenak dituzten erabiltzaileak",
+            "muted_users_section": "Mutututako erabiltzaileak",
+            "banned_users_section": "Debekatutako erabiltzaileak",
+            "send_event_type": "Bidali %(eventType)s gertaerak",
+            "title": "Rolak eta baimenak",
+            "permissions_section": "Baimenak",
+            "permissions_section_description_room": "Hautatu gelaren hainbat atal aldatzeko behar diren rolak"
         },
         "security": {
-            "strict_encryption": "Ez bidali inoiz zifratutako mezuak egiaztatu gabeko saioetara gela honetan saio honetatik"
+            "strict_encryption": "Ez bidali inoiz zifratutako mezuak egiaztatu gabeko saioetara gela honetan saio honetatik",
+            "enable_encryption_confirm_title": "Gaitu zifratzea?",
+            "enable_encryption_confirm_description": "Behin aktibatuta, ezin zaio gelari zifratzea kendu. Zerbitzariak ezin ditu zifratutako gela batetara bidalitako mezuak ikusi, gelako partaideek besterik ezin dituzte ikusi. Zifratzea aktibatzeak bot eta zubi batzuk ongi ez funtzionatzea ekarri dezake. <a>Ikasi gehiago zifratzeari buruz.</a>",
+            "public_without_alias_warning": "Gela hau estekatzeko, gehitu helbide bat.",
+            "history_visibility": {},
+            "history_visibility_warning": "Historiala nork irakurri dezakeen aldatzea gelak honetara aurrerantzean bidalitako mezuei besterik ez zaie aplikatuko. Badagoen historialaren ikusgaitasuna ez da aldatuko.",
+            "history_visibility_legend": "Nork irakurri dezake historiala?",
+            "title": "Segurtasuna eta pribatutasuna",
+            "encryption_permanent": "Behin gaituta, zifratzea ezin da desgaitu.",
+            "history_visibility_shared": "Kideek besterik ez (aukera hau hautatzen den unetik)",
+            "history_visibility_invited": "Kideek besterik ez (gonbidatu zaienetik)",
+            "history_visibility_joined": "Kideek besterik ez (elkartu zirenetik)",
+            "history_visibility_world_readable": "Edonork"
+        },
+        "general": {
+            "publish_toggle": "Argitaratu gela hau publikora %(domain)s domeinuko gelen direktorioan?",
+            "user_url_previews_default_on": "Lehenetsita URLak aurreikustea <a>gaitu</a> duzu.",
+            "user_url_previews_default_off": "Lehenetsita URLak aurreikustea <a>desgaitu</a> duzu.",
+            "default_url_previews_on": "URLen aurrebistak gaituta daude gela honetako partaideentzat.",
+            "default_url_previews_off": "URLen aurrebistak desgaituta daude gela honetako partaideentzat.",
+            "url_preview_encryption_warning": "Zifratutako gelatan, honetan esaterako, URL-en aurrebistak lehenetsita desgaituta daude zure hasiera-zerbitzariak gela honetan ikusten dituzun estekei buruzko informaziorik jaso ez dezan, hasiera-zerbitzarian sortzen baitira aurrebistak.",
+            "url_preview_explainer": "Norbaitek mezu batean URL bat jartzen duenean, URL aurrebista bat erakutsi daiteke estekaren informazio gehiago erakusteko, adibidez webgunearen izenburua, deskripzioa eta irudi bat.",
+            "url_previews_section": "URL-en aurrebistak"
         }
     },
     "encryption": {
@@ -1687,7 +1682,10 @@
         "sign_in_or_register_description": "Erabili zure kontua edo sortu berri bat jarraitzeko.",
         "register_action": "Sortu kontua",
         "incorrect_credentials": "Erabiltzaile-izen edo pasahitz okerra.",
-        "account_deactivated": "Kontu hau desaktibatuta dago."
+        "account_deactivated": "Kontu hau desaktibatuta dago.",
+        "registration_username_validation": "Erabili letra xeheak, zenbakiak, gidoiak eta azpimarrak, besterik ez",
+        "phone_label": "Telefonoa",
+        "phone_optional_label": "Telefonoa (aukerakoa)"
     },
     "export_chat": {
         "messages": "Mezuak"
@@ -1768,5 +1766,29 @@
     "labs_mjolnir": {
         "room_name": "Nire debeku-zerrenda",
         "room_topic": "Hau blokeatu dituzun erabiltzaile edo zerbitzarien zerrenda da, ez atera gelatik!"
+    },
+    "user_menu": {
+        "switch_theme_light": "Aldatu modu argira",
+        "switch_theme_dark": "Aldatu modu ilunera"
+    },
+    "room": {
+        "drop_file_prompt": "Jaregin fitxategia hona igotzeko"
+    },
+    "file_panel": {
+        "guest_note": "Funtzionaltasun hau erabiltzeko <a>erregistratu</a>",
+        "peek_note": "Gelara elkartu behar zara bertako fitxategiak ikusteko"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Arakatu gelak"
+        }
+    },
+    "terms": {
+        "integration_manager": "Erabili botak, zubiak, trepetak eta eranskailu multzoak",
+        "tos": "Erabilera baldintzak",
+        "intro": "Jarraitzeko erabilera baldintzak onartu behar dituzu.",
+        "column_service": "Zerbitzua",
+        "column_summary": "Laburpena",
+        "column_document": "Dokumentua"
     }
 }

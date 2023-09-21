@@ -64,5 +64,10 @@
     },
     "keyboard": {
         "dismiss_read_marker_and_jump_bottom": "გააუქმეთ წაკითხული მარკერი და გადადით ქვემოთ"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "ოთახების დათავლიერება"
+        }
     }
 }

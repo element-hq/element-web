@@ -1,10 +1,7 @@
 {
     "Sign in with": "Sínigh isteach le",
     "Show more": "Taispeáin níos mó",
-    "Switch to dark mode": "Athraigh go mód dorcha",
-    "Switch to light mode": "Athraigh go mód geal",
     "All settings": "Gach Socrú",
-    "Security & Privacy": "Slándáil ⁊ Príobháideachas",
     "Are you sure you want to reject the invitation?": "An bhfuil tú cinnte gur mian leat an cuireadh a dhiúltú?",
     "Are you sure you want to leave the room '%(roomName)s'?": "An bhfuil tú cinnte gur mian leat an seomra '%(roomName)s' a fhágáil?",
     "Are you sure?": "An bhfuil tú cinnte?",
@@ -235,18 +232,13 @@
     "Lock": "Glasáil",
     "Unencrypted": "Gan chriptiú",
     "None": "Níl aon cheann",
-    "Document": "Cáipéis",
     "Italics": "Iodálach",
     "Discovery": "Aimsiú",
     "Success!": "Rath!",
-    "Users": "Úsáideoirí",
-    "Commands": "Ordú",
     "Phone": "Guthán",
     "Email": "Ríomhphost",
     "Home": "Tús",
     "Favourite": "Cuir mar ceanán",
-    "Summary": "Achoimre",
-    "Service": "Seirbhís",
     "Removing…": "ag Baint…",
     "Changelog": "Loga na n-athruithe",
     "Unavailable": "Níl sé ar fáil",
@@ -285,8 +277,6 @@
     "Invited": "Le cuireadh",
     "Demote": "Bain ceadanna",
     "Encryption": "Criptiúchán",
-    "Anyone": "Aon duine",
-    "Permissions": "Ceadanna",
     "Unban": "Bain an cosc",
     "Browse": "Brabhsáil",
     "Sounds": "Fuaimeanna",
@@ -422,7 +412,6 @@
     "Connecting": "Ag Ceangal",
     "Sending": "Ag Seoladh",
     "Avatar": "Abhatár",
-    "Suggested": "Moltaí",
     "The file '%(fileName)s' failed to upload.": "Níor éirigh leis an gcomhad '%(fileName)s' a uaslódáil.",
     "You do not have permission to start a conference call in this room": "Níl cead agat glao comhdhála a thosú sa seomra seo",
     "You cannot place a call with yourself.": "Ní féidir leat glaoch ort féin.",
@@ -433,13 +422,8 @@
     "Unnamed room": "Seomra gan ainm",
     "Admin Tools": "Uirlisí Riaracháin",
     "Demote yourself?": "Tabhair ísliú céime duit féin?",
-    "Enable encryption?": "Cumasaigh criptiú?",
-    "Banned users": "Úsáideoirí toirmiscthe",
-    "Muted Users": "Úsáideoirí Fuaim",
-    "Privileged Users": "Úsáideoirí Pribhléideacha",
     "Notification sound": "Fuaim fógra",
     "Uploaded sound": "Fuaim uaslódáilte",
-    "URL Previews": "Réamhamhairc URL",
     "Room Addresses": "Seoltaí Seomra",
     "Room version:": "Leagan seomra:",
     "Room version": "Leagan seomra",
@@ -463,7 +447,6 @@
     },
     "No answer": "Gan freagair",
     "Unknown failure: %(reason)s": "Teip anaithnid: %(reason)s",
-    "Enable encryption in settings.": "Tosaigh criptiú sna socruithe.",
     "Cross-signing is ready but keys are not backed up.": "Tá tras-sínigh réidh ach ní dhéantar cóip chúltaca d'eochracha.",
     "Failed to reject invitation": "Níorbh fhéidir an cuireadh a dhiúltú",
     "Failed to reject invite": "Níorbh fhéidir an cuireadh a dhiúltú",
@@ -644,7 +627,11 @@
     "composer": {
         "format_bold": "Trom",
         "format_strikethrough": "Líne a chur trí",
-        "format_inline_code": "Cód"
+        "format_inline_code": "Cód",
+        "autocomplete": {
+            "command_description": "Ordú",
+            "user_description": "Úsáideoirí"
+        }
     },
     "Bold": "Trom",
     "Code": "Cód",
@@ -772,7 +759,19 @@
             "invite": "Tabhair cuirí d'úsáideoirí",
             "state_default": "Athraigh socruithe",
             "ban": "Toirmisc úsáideoirí",
-            "notifications.room": "Tabhair fógraí do gach duine"
+            "notifications.room": "Tabhair fógraí do gach duine",
+            "privileged_users_section": "Úsáideoirí Pribhléideacha",
+            "muted_users_section": "Úsáideoirí Fuaim",
+            "banned_users_section": "Úsáideoirí toirmiscthe",
+            "permissions_section": "Ceadanna"
+        },
+        "security": {
+            "enable_encryption_confirm_title": "Cumasaigh criptiú?",
+            "title": "Slándáil ⁊ Príobháideachas",
+            "history_visibility_world_readable": "Aon duine"
+        },
+        "general": {
+            "url_previews_section": "Réamhamhairc URL"
         }
     },
     "encryption": {
@@ -799,7 +798,8 @@
         "forgot_password_prompt": "An nDearna tú dearmad ar do fhocal faire?",
         "create_account_prompt": "Céaduaire? <a>Cruthaigh cuntas</a>",
         "sign_in_or_register": "Sínigh Isteach nó Déan cuntas a chruthú",
-        "register_action": "Déan cuntas a chruthú"
+        "register_action": "Déan cuntas a chruthú",
+        "phone_label": "Guthán"
     },
     "export_chat": {
         "messages": "Teachtaireachtaí"
@@ -831,5 +831,25 @@
     },
     "update": {
         "see_changes_button": "Cad é nua?"
+    },
+    "user_menu": {
+        "switch_theme_light": "Athraigh go mód geal",
+        "switch_theme_dark": "Athraigh go mód dorcha"
+    },
+    "space": {
+        "suggested": "Moltaí",
+        "context_menu": {
+            "explore": "Breathnaigh thart ar na seomraí"
+        }
+    },
+    "terms": {
+        "column_service": "Seirbhís",
+        "column_summary": "Achoimre",
+        "column_document": "Cáipéis"
+    },
+    "room": {
+        "intro": {
+            "enable_encryption_prompt": "Tosaigh criptiú sna socruithe."
+        }
     }
 }

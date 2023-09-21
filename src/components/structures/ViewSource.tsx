@@ -79,14 +79,16 @@ export default class ViewSource extends React.Component<IProps, IState> {
                 <>
                     <details open className="mx_ViewSource_details">
                         <summary>
-                            <span className="mx_ViewSource_heading">{_t("Decrypted event source")}</span>
+                            <span className="mx_ViewSource_heading">
+                                {_t("devtools|view_source_decrypted_event_source")}
+                            </span>
                         </summary>
                         {decryptedEventSource ? (
                             <CopyableText getTextToCopy={copyDecryptedFunc}>
                                 <SyntaxHighlight language="json">{stringify(decryptedEventSource)}</SyntaxHighlight>
                             </CopyableText>
                         ) : (
-                            <div>{_t("Decrypted source unavailable")}</div>
+                            <div>{_t("devtools|view_source_decrypted_event_source_unavailable")}</div>
                         )}
                     </details>
                     <details className="mx_ViewSource_details">

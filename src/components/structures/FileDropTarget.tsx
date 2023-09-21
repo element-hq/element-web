@@ -119,7 +119,7 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
                     className="mx_FileDropTarget_image"
                     alt=""
                 />
-                {_t("Drop file here to upload")}
+                {_t("room|drop_file_prompt")}
             </div>
         );
     }

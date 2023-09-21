@@ -82,7 +82,6 @@
     "Change Password": "Смяна на парола",
     "Authentication": "Автентикация",
     "Failed to set display name": "Неуспешно задаване на име",
-    "Drop file here to upload": "Пуснете файла тук, за да се качи",
     "Unban": "Отблокирай",
     "Failed to ban user": "Неуспешно блокиране на потребителя",
     "Failed to mute user": "Неуспешно заглушаване на потребителя",
@@ -118,25 +117,10 @@
     "%(roomName)s is not accessible at this time.": "%(roomName)s не е достъпна към този момент.",
     "Failed to unban": "Неуспешно отблокиране",
     "Banned by %(displayName)s": "Блокиран от %(displayName)s",
-    "Privileged Users": "Потребители с привилегии",
-    "No users have specific privileges in this room": "Никой няма специфични привилегии в тази стая",
-    "Banned users": "Блокирани потребители",
     "This room is not accessible by remote Matrix servers": "Тази стая не е достъпна за отдалечени Matrix сървъри",
-    "Publish this room to the public in %(domain)s's room directory?": "Публично публикуване на тази стая в директорията на %(domain)s?",
-    "Who can read history?": "Кой може да чете историята?",
-    "Anyone": "Всеки",
-    "Members only (since the point in time of selecting this option)": "Само членове (от момента на избиране на тази опция)",
-    "Members only (since they were invited)": "Само членове (от момента, в който те са поканени)",
-    "Members only (since they joined)": "Само членове (от момента, в който са се присъединили)",
-    "Permissions": "Разрешения",
     "Jump to first unread message.": "Отиди до първото непрочетено съобщение.",
     "not specified": "неопределен",
     "This room has no local addresses": "Тази стая няма локални адреси",
-    "You have <a>enabled</a> URL previews by default.": "Вие сте <a>включили</a> URL прегледи по подразбиране.",
-    "You have <a>disabled</a> URL previews by default.": "Вие сте <a>изключили</a> URL прегледи по подразбиране.",
-    "URL previews are enabled by default for participants in this room.": "URL прегледи са включени по подразбиране за участниците в тази стая.",
-    "URL previews are disabled by default for participants in this room.": "URL прегледи са изключени по подразбиране за участниците в тази стая.",
-    "URL Previews": "URL прегледи",
     "Error decrypting attachment": "Грешка при разшифроване на прикачен файл",
     "Decrypt %(text)s": "Разшифровай %(text)s",
     "Download %(text)s": "Изтегли %(text)s",
@@ -185,8 +169,6 @@
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Беше направен опит да се зареди конкретна точка в хронологията на тази стая, но не я намери.",
     "Unable to remove contact information": "Неуспешно премахване на информацията за контакти",
     "This will allow you to reset your password and receive notifications.": "Това ще Ви позволи да възстановите Вашата парола и да получавате известия.",
-    "You must <a>register</a> to use this functionality": "Трябва да се <a>регистрирате</a>, за да използвате тази функционалност",
-    "You must join the room to see its files": "Трябва да се присъедините към стаята, за да видите файловете, които съдържа",
     "Reject invitation": "Отхвърли поканата",
     "Are you sure you want to reject the invitation?": "Сигурни ли сте, че искате да отхвърлите поканата?",
     "Failed to reject invitation": "Неуспешно отхвърляне на поканата",
@@ -228,10 +210,6 @@
     "Return to login screen": "Връщане към страницата за влизане в профила",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Моля, обърнете внимание, че влизате в %(hs)s сървър, а не в matrix.org.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Не е възможно свързване към Home сървъра чрез HTTP, когато има HTTPS адрес в лентата на браузъра Ви. Или използвайте HTTPS или <a>включете функция небезопасни скриптове</a>.",
-    "Commands": "Команди",
-    "Notify the whole room": "Извести всички в стаята",
-    "Room Notification": "Известие за стая",
-    "Users": "Потребители",
     "Session ID": "Идентификатор на сесията",
     "Passphrases must match": "Паролите трябва да съвпадат",
     "Passphrase must not be empty": "Паролата не трябва да е празна",
@@ -282,7 +260,6 @@
     "Send Logs": "Изпрати логове",
     "We encountered an error trying to restore your previous session.": "Възникна грешка при възстановяване на предишната Ви сесия.",
     "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Изчистване на запазените данни в браузъра може да поправи проблема, но ще Ви изкара от профила и ще направи шифрованите съобщения нечетими.",
-    "Muted Users": "Заглушени потребители",
     "Can't leave Server Notices room": "Не може да напуснете стая \"Server Notices\"",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Тази стая се използва за важни съобщения от сървъра, така че не можете да я напуснете.",
     "Terms and Conditions": "Правила и условия",
@@ -297,8 +274,6 @@
     "Link to selected message": "Създай връзка към избраното съобщение",
     "No Audio Outputs detected": "Не са открити аудио изходи",
     "Audio Output": "Аудио изходи",
-    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "В шифровани стаи като тази, по подразбиране URL прегледите са изключени, за да се подсигури че сървърът (където става генерирането на прегледите) не може да събира информация за връзките споделени в стаята.",
-    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Когато се сподели URL връзка в съобщение, може да бъде показан URL преглед даващ повече информация за връзката (заглавие, описание и картинка от уебсайта).",
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Не можете да изпращате съобщения докато не прегледате и се съгласите с <consentLink>нашите правила и условия</consentLink>.",
     "Demote yourself?": "Понижете себе си?",
     "Demote": "Понижение",
@@ -382,11 +357,7 @@
     "Phone numbers": "Телефонни номера",
     "Language and region": "Език и регион",
     "Account management": "Управление на акаунта",
-    "Roles & Permissions": "Роли и привилегии",
-    "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.": "Промени в настройките за четене на историята касаят само за нови съобщения. Видимостта на съществуващата история не се променя.",
-    "Security & Privacy": "Сигурност и поверителност",
     "Encryption": "Шифроване",
-    "Once enabled, encryption cannot be disabled.": "Веднъж включено, шифроването не може да бъде изключено.",
     "Ignored users": "Игнорирани потребители",
     "Bulk options": "Масови действия",
     "Missing media permissions, click the button below to request.": "Липсва достъп до медийните устройства. Кликнете бутона по-долу за да поискате такъв.",
@@ -399,7 +370,6 @@
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Потвърди потребителя и го маркирай като доверен. Доверяването на потребители Ви дава допълнително спокойствие при използване на съобщения шифровани от край-до-край.",
     "Incoming Verification Request": "Входяща заявка за потвърждение",
     "Email (optional)": "Имейл (незадължително)",
-    "Phone (optional)": "Телефон (незадължително)",
     "Join millions for free on the largest public server": "Присъединете се безплатно към милиони други на най-големия публичен сървър",
     "Create account": "Създай акаунт",
     "Recovery Method Removed": "Методът за възстановяване беше премахнат",
@@ -490,10 +460,6 @@
     "Could not load user profile": "Неуспешно зареждане на потребителския профил",
     "The user must be unbanned before they can be invited.": "Трябва да се махне блокирането на потребителя преди да може да бъде поканен пак.",
     "Accept all %(invitedRooms)s invites": "Приеми всички %(invitedRooms)s покани",
-    "Send %(eventType)s events": "Изпрати %(eventType)s събития",
-    "Select the roles required to change various parts of the room": "Изберете ролите необходими за промяна на различни части от стаята",
-    "Enable encryption?": "Включване на шифроване?",
-    "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Веднъж включено, шифроването за стаята не може да бъде изключено. Съобщенията изпратени в шифрована стая не могат да бъдат прочетени от сървърът, а само от участниците в стаята. Включването на шифроване може да попречи на много ботове или мостове към други мрежи да работят правилно. <a>Научете повече за шифроването.</a>",
     "Power level": "Ниво на достъп",
     "The file '%(fileName)s' failed to upload.": "Файлът '%(fileName)s' не можа да бъде качен.",
     "Upgrade this room to the recommended room version": "Обнови тази стая до препоръчаната версия на стаята",
@@ -581,7 +547,6 @@
     "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Може да възстановите паролата си, но някои функции няма да са достъпни докато сървъра за самоличност е офлайн. Ако продължавате да виждате това предупреждение, проверете конфигурацията или се свържете с администратора на сървъра.",
     "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Може да влезете в профила си, но някои функции няма да са достъпни докато сървъра за самоличност е офлайн. Ако продължавате да виждате това предупреждение, проверете конфигурацията или се свържете с администратора на сървъра.",
     "Unexpected error resolving identity server configuration": "Неочаквана грешка при откриване на конфигурацията на сървъра за самоличност",
-    "Use lowercase letters, numbers, dashes and underscores only": "Използвайте само малки букви, цифри, тирета и подчерта",
     "Upload all": "Качи всички",
     "Edited at %(date)s. Click to view edits.": "Редактирано на %(date)s. Кликнете за да видите редакциите.",
     "Message edits": "Редакции на съобщение",
@@ -595,10 +560,6 @@
     "Clear personal data": "Изчисти личните данни",
     "Find others by phone or email": "Открийте други по телефон или имейл",
     "Be found by phone or email": "Бъдете открит по телефон или имейл",
-    "Use bots, bridges, widgets and sticker packs": "Използвайте ботове, връзки с други мрежи, приспособления и стикери",
-    "Terms of Service": "Условия за ползване",
-    "Service": "Услуга",
-    "Summary": "Обобщение",
     "Call failed due to misconfigured server": "Неуспешен разговор поради неправилно конфигуриран сървър",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Попитайте администратора на сървъра ви (<code>%(homeserverDomain)s</code>) да конфигурира TURN сървър, за да може разговорите да работят надеждно.",
     "Checking server": "Проверка на сървъра",
@@ -685,17 +646,9 @@
     "Message Actions": "Действия със съобщението",
     "Show image": "Покажи снимката",
     "Cancel search": "Отмени търсенето",
-    "To continue you need to accept the terms of this service.": "За да продължите, трябва да приемете условията за ползване.",
-    "Document": "Документ",
     "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Липсва публичния ключ за catcha в конфигурацията на сървъра. Съобщете това на администратора на сървъра.",
-    "%(creator)s created and configured the room.": "%(creator)s създаде и настрой стаята.",
     "Jump to first unread room.": "Отиди до първата непрочетена стая.",
     "Jump to first invite.": "Отиди до първата покана.",
-    "Command Autocomplete": "Подсказка за команди",
-    "Emoji Autocomplete": "Подсказка за емоджита",
-    "Notification Autocomplete": "Подсказка за уведомления",
-    "Room Autocomplete": "Подсказка за стаи",
-    "User Autocomplete": "Подсказка за потребители",
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
     "You verified %(name)s": "Потвърдихте %(name)s",
     "You cancelled verifying %(name)s": "Отказахте потвърждаването за %(name)s",
@@ -911,7 +864,6 @@
     "Are you sure you want to deactivate your account? This is irreversible.": "Сигурни ли сте, че искате да деактивирате профила си? Това е необратимо.",
     "Confirm account deactivation": "Потвърдете деактивирането на профила",
     "There was a problem communicating with the server. Please try again.": "Имаше проблем при комуникацията със сървъра. Опитайте пак.",
-    "Verify session": "Потвърди сесията",
     "Session name": "Име на сесията",
     "Session key": "Ключ за сесията",
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Верифицирането на този потребител ще маркира сесията им като доверена при вас, както и вашата като доверена при тях.",
@@ -945,7 +897,6 @@
     "New version available. <a>Update now.</a>": "Налична е нова версия. <a>Обновете сега.</a>",
     "Please verify the room ID or address and try again.": "Проверете идентификатора или адреса на стаята и опитайте пак.",
     "Room ID or address of ban list": "Идентификатор или адрес на стая списък за блокиране",
-    "To link to this room, please add an address.": "За да споделите тази стая, добавете адрес.",
     "Error creating address": "Неуспешно създаване на адрес",
     "There was an error creating that address. It may not be allowed by the server or a temporary failure occurred.": "Възникна грешка при създаването на този адрес. Или не е позволен от сървъра или е временен проблем.",
     "You don't have permission to delete the address.": "Нямате права да изтриете адреса.",
@@ -962,8 +913,6 @@
     "Confirm your identity by entering your account password below.": "Потвърдете самоличността си чрез въвеждане на паролата за профила по-долу.",
     "Sign in with SSO": "Влезте със SSO",
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "Администраторът на сървъра е изключил шифроване от край-до-край по подразбиране за лични стаи и за директни съобщения.",
-    "Switch to light mode": "Смени на светъл режим",
-    "Switch to dark mode": "Смени на тъмен режим",
     "Switch theme": "Смени темата",
     "All settings": "Всички настройки",
     "Confirm encryption setup": "Потвърждение на настройки за шифроване",
@@ -1075,10 +1024,6 @@
     "Enter a Security Phrase": "Въведете фраза за сигурност",
     "Generate a Security Key": "Генерирай ключ за сигурност",
     "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Предпазете се от загуба на достъп до шифрованите съобщения и данни като направите резервно копие на ключовете за шифроване върху сървъра.",
-    "Attach files from chat or just drag and drop them anywhere in a room.": "Прикачете файлове от чата или ги издърпайте и пуснете в стаята.",
-    "No files visible in this room": "Няма видими файлове в тази стая",
-    "%(creator)s created this DM.": "%(creator)s създаде този директен чат.",
-    "You have no visible notifications.": "Нямате видими уведомления.",
     "There was a problem communicating with the homeserver, please try again later.": "Възникна проблем при комуникацията със Home сървъра, моля опитайте отново по-късно.",
     "This session has detected that your Security Phrase and key for Secure Messages have been removed.": "Тази сесия откри, че вашата фраза за сигурност и ключ за защитени съобщения бяха премахнати.",
     "A new Security Phrase and key for Secure Messages have been detected.": "Новa фраза за сигурност и ключ за защитени съобщения бяха открити.",
@@ -1335,7 +1280,6 @@
     "Afghanistan": "Афганистан",
     "United States": "Съединените щати",
     "United Kingdom": "Обединеното кралство",
-    "Manage & explore rooms": "Управление и откриване на стаи",
     "Space options": "Опции на пространството",
     "Workspace: <networkLink/>": "Работна област: <networkLink/>",
     "Channel: <channelLink/>": "Канал: <channelLink/>",
@@ -1603,7 +1547,18 @@
         "placeholder_reply_encrypted": "Изпрати шифрован отговор…",
         "placeholder_reply": "Изпрати отговор…",
         "placeholder_encrypted": "Изпрати шифровано съобщение…",
-        "placeholder": "Изпрати съобщение…"
+        "placeholder": "Изпрати съобщение…",
+        "autocomplete": {
+            "command_description": "Команди",
+            "command_a11y": "Подсказка за команди",
+            "emoji_a11y": "Подсказка за емоджита",
+            "@room_description": "Извести всички в стаята",
+            "notification_description": "Известие за стая",
+            "notification_a11y": "Подсказка за уведомления",
+            "room_a11y": "Подсказка за стаи",
+            "user_description": "Потребители",
+            "user_a11y": "Подсказка за потребители"
+        }
     },
     "Bold": "Удебелено",
     "Code": "Код",
@@ -1736,6 +1691,10 @@
             "rm_lifetime": "Живот на маркера за прочитане (мсек)",
             "rm_lifetime_offscreen": "Живот на маркера за прочитане извън екрана (мсек)",
             "always_show_menu_bar": "Винаги показвай менютата на прозореца"
+        },
+        "sessions": {
+            "session_id": "Идентификатор на сесията",
+            "verify_session": "Потвърди сесията"
         }
     },
     "devtools": {
@@ -1966,7 +1925,9 @@
             "lightbox_title": "%(senderDisplayName)s промени аватара на %(roomName)s",
             "removed": "%(senderDisplayName)s премахна аватара на стаята.",
             "changed_img": "%(senderDisplayName)s промени аватара на стаята на <img/>"
-        }
+        },
+        "creation_summary_dm": "%(creator)s създаде този директен чат.",
+        "creation_summary_room": "%(creator)s създаде и настрой стаята."
     },
     "slash_command": {
         "spoiler": "Изпраща даденото съобщение като спойлер",
@@ -2096,10 +2057,40 @@
             "state_default": "Промяна на настройките",
             "ban": "Блокиране на потребители",
             "redact": "Премахвай съобщения изпратени от други",
-            "notifications.room": "Уведомяване на всички"
+            "notifications.room": "Уведомяване на всички",
+            "no_privileged_users": "Никой няма специфични привилегии в тази стая",
+            "privileged_users_section": "Потребители с привилегии",
+            "muted_users_section": "Заглушени потребители",
+            "banned_users_section": "Блокирани потребители",
+            "send_event_type": "Изпрати %(eventType)s събития",
+            "title": "Роли и привилегии",
+            "permissions_section": "Разрешения",
+            "permissions_section_description_room": "Изберете ролите необходими за промяна на различни части от стаята"
         },
         "security": {
-            "strict_encryption": "Никога не изпращай шифровани съобщения към непотвърдени сесии в тази стая от тази сесия"
+            "strict_encryption": "Никога не изпращай шифровани съобщения към непотвърдени сесии в тази стая от тази сесия",
+            "enable_encryption_confirm_title": "Включване на шифроване?",
+            "enable_encryption_confirm_description": "Веднъж включено, шифроването за стаята не може да бъде изключено. Съобщенията изпратени в шифрована стая не могат да бъдат прочетени от сървърът, а само от участниците в стаята. Включването на шифроване може да попречи на много ботове или мостове към други мрежи да работят правилно. <a>Научете повече за шифроването.</a>",
+            "public_without_alias_warning": "За да споделите тази стая, добавете адрес.",
+            "history_visibility": {},
+            "history_visibility_warning": "Промени в настройките за четене на историята касаят само за нови съобщения. Видимостта на съществуващата история не се променя.",
+            "history_visibility_legend": "Кой може да чете историята?",
+            "title": "Сигурност и поверителност",
+            "encryption_permanent": "Веднъж включено, шифроването не може да бъде изключено.",
+            "history_visibility_shared": "Само членове (от момента на избиране на тази опция)",
+            "history_visibility_invited": "Само членове (от момента, в който те са поканени)",
+            "history_visibility_joined": "Само членове (от момента, в който са се присъединили)",
+            "history_visibility_world_readable": "Всеки"
+        },
+        "general": {
+            "publish_toggle": "Публично публикуване на тази стая в директорията на %(domain)s?",
+            "user_url_previews_default_on": "Вие сте <a>включили</a> URL прегледи по подразбиране.",
+            "user_url_previews_default_off": "Вие сте <a>изключили</a> URL прегледи по подразбиране.",
+            "default_url_previews_on": "URL прегледи са включени по подразбиране за участниците в тази стая.",
+            "default_url_previews_off": "URL прегледи са изключени по подразбиране за участниците в тази стая.",
+            "url_preview_encryption_warning": "В шифровани стаи като тази, по подразбиране URL прегледите са изключени, за да се подсигури че сървърът (където става генерирането на прегледите) не може да събира информация за връзките споделени в стаята.",
+            "url_preview_explainer": "Когато се сподели URL връзка в съобщение, може да бъде показан URL преглед даващ повече информация за връзката (заглавие, описание и картинка от уебсайта).",
+            "url_previews_section": "URL прегледи"
         }
     },
     "encryption": {
@@ -2167,7 +2158,10 @@
         "sign_in_or_register_description": "Използвайте профила си или създайте нов за да продължите.",
         "register_action": "Създай профил",
         "incorrect_credentials": "Неправилно потребителско име и/или парола.",
-        "account_deactivated": "Този акаунт е деактивиран."
+        "account_deactivated": "Този акаунт е деактивиран.",
+        "registration_username_validation": "Използвайте само малки букви, цифри, тирета и подчерта",
+        "phone_label": "Телефон",
+        "phone_optional_label": "Телефон (незадължително)"
     },
     "export_chat": {
         "messages": "Съобщения"
@@ -2271,5 +2265,35 @@
         "public_heading": "Вашето публично пространство",
         "private_heading": "Вашето лично пространство",
         "add_details_prompt": "Добавете някои подробности, за да помогнете на хората да го разпознаят."
+    },
+    "user_menu": {
+        "switch_theme_light": "Смени на светъл режим",
+        "switch_theme_dark": "Смени на тъмен режим"
+    },
+    "notif_panel": {
+        "empty_description": "Нямате видими уведомления."
+    },
+    "room": {
+        "drop_file_prompt": "Пуснете файла тук, за да се качи"
+    },
+    "file_panel": {
+        "guest_note": "Трябва да се <a>регистрирате</a>, за да използвате тази функционалност",
+        "peek_note": "Трябва да се присъедините към стаята, за да видите файловете, които съдържа",
+        "empty_heading": "Няма видими файлове в тази стая",
+        "empty_description": "Прикачете файлове от чата или ги издърпайте и пуснете в стаята."
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Открий стаи",
+            "manage_and_explore": "Управление и откриване на стаи"
+        }
+    },
+    "terms": {
+        "integration_manager": "Използвайте ботове, връзки с други мрежи, приспособления и стикери",
+        "tos": "Условия за ползване",
+        "intro": "За да продължите, трябва да приемете условията за ползване.",
+        "column_service": "Услуга",
+        "column_summary": "Обобщение",
+        "column_document": "Документ"
     }
 }

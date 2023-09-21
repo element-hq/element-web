@@ -10,15 +10,12 @@
     "%(items)s and %(lastItem)s": "%(items)s un %(lastItem)s",
     "A new password must be entered.": "Nepieciešams ievadīt jauno paroli.",
     "An error has occurred.": "Notikusi kļūda.",
-    "Anyone": "Ikviens",
     "Are you sure?": "Vai tiešām to vēlaties?",
     "Are you sure you want to leave the room '%(roomName)s'?": "Vai tiešām vēlaties pamest istabu: '%(roomName)s'?",
     "Are you sure you want to reject the invitation?": "Vai tiešām vēlaties noraidīt šo uzaicinājumu?",
-    "Banned users": "Lietotāji, kuriem liegta pieeja",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Neizdodas savienoties ar bāzes serveri. Pārbaudi tīkla savienojumu un pārliecinies, ka <a> bāzes servera SSL sertifikāts</a> ir uzticams, kā arī pārlūkā instalētie paplašinājumi nebloķē pieprasījumus.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Neizdodas savienoties ar bāzes serveri izmantojot HTTP protokolu, kad pārlūka adreses laukā norādīts HTTPS protokols. Tā vietā izmanto HTTPS vai <a>iespējo nedrošos skriptus</a>.",
     "Change Password": "Nomainīt paroli",
-    "Commands": "Komandas",
     "Confirm password": "Apstipriniet paroli",
     "Cryptography": "Kriptogrāfija",
     "Current password": "Pašreizējā parole",
@@ -72,13 +69,10 @@
     "<not supported>": "<netiek atbalstīts>",
     "No display name": "Nav parādāmā vārda",
     "No more results": "Vairāk nekādu rezultātu nav",
-    "No users have specific privileges in this room": "Šajā istabā nav lietotāju ar īpašām privilēģijām",
     "Operation failed": "Darbība neizdevās",
     "Passwords can't be empty": "Paroles nevar būt tukšas",
-    "Permissions": "Atļaujas",
     "Phone": "Telefons",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Lūdzu, pārbaudi savu epastu un noklikšķini tajā esošo saiti. Tiklīdz tas ir izdarīts, klikšķini \"turpināt\".",
-    "Privileged Users": "Priviliģētie lietotāji",
     "Profile": "Profils",
     "Reason": "Iemesls",
     "Reject invitation": "Noraidīt uzaicinājumu",
@@ -127,18 +121,13 @@
     "Unban": "Atcelt pieejas liegumu",
     "unknown error code": "nezināms kļūdas kods",
     "Create new room": "Izveidot jaunu istabu",
-    "You have <a>enabled</a> URL previews by default.": "URL priekšskatījumi pēc noklusējuma jums ir<a>iespējoti</a> .",
     "Upload avatar": "Augšupielādēt avataru",
     "Upload Failed": "Augšupielāde (nosūtīšana) neizdevās",
-    "Users": "Lietotāji",
     "Verification Pending": "Gaida verifikāciju",
     "Verified key": "Verificēta atslēga",
     "Warning!": "Brīdinājums!",
-    "Who can read history?": "Kas var lasīt vēsturi?",
     "You cannot place a call with yourself.": "Nav iespējams piezvanīt sev.",
     "You do not have permission to post to this room": "Tev nav vajadzīgo atļauju, lai rakstītu ziņas šajā istabā",
-    "You have <a>disabled</a> URL previews by default.": "URL priekšskatījumi pēc noklusējuma jums ir <a>atspējoti</a>.",
-    "You must <a>register</a> to use this functionality": "Lai izmantotu šo funkcionalitāti, Tev ir <a>jāreģistrējas</a>",
     "You need to be able to invite users to do that.": "Lai to darītu, Tev ir jāspēj uzaicināt lietotājus.",
     "You need to be logged in.": "Tev ir jāpierakstās.",
     "You seem to be in a call, are you sure you want to quit?": "Izskatās, ka atrodies zvana režīmā. Vai tiešām vēlies iziet?",
@@ -174,7 +163,6 @@
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Šī darbība ļauj Tev uz lokālo failu eksportēt atslēgas priekš tām ziņām, kuras Tu saņēmi šifrētās istabās. Tu varēsi importēt šo failu citā Matrix klientā, lai tajā būtu iespējams lasīt šīs ziņas atšifrētas.",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Šis process ļaus Tev importēt šifrēšanas atslēgas, kuras Tu iepriekš eksportēji no cita Matrix klienta. Tas ļaus Tev atšifrēt čata vēsturi.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Eksporta fails būs aizsargāts ar frāzveida paroli. Tā ir jāievada šeit, lai atšifrētu failu.",
-    "You must join the room to see its files": "Tev ir jāpievienojas istabai, lai redzētu tās failus",
     "Failed to invite": "Neizdevās uzaicināt",
     "Confirm Removal": "Apstipriniet dzēšanu",
     "Unknown error": "Nezināma kļūda",
@@ -185,8 +173,6 @@
     "Error decrypting image": "Kļūda atšifrējot attēlu",
     "Error decrypting video": "Kļūda atšifrējot video",
     "Add an Integration": "Pievienot integrāciju",
-    "URL Previews": "URL priekšskatījumi",
-    "Drop file here to upload": "Ievelc šeit failu augšupielādei",
     "Check for update": "Pārbaudīt atjauninājumus",
     "Something went wrong!": "Kaut kas nogāja greizi!",
     "Your browser does not support the required cryptography extensions": "Jūsu pārlūks neatbalsta vajadzīgos kriptogrāfijas paplašinājumus",
@@ -198,7 +184,6 @@
         "one": "un vēl viens cits..."
     },
     "Delete widget": "Dzēst vidžetu",
-    "Publish this room to the public in %(domain)s's room directory?": "Publicēt šo istabu publiskajā %(domain)s katalogā?",
     "AM": "AM",
     "PM": "PM",
     "Unable to create widget.": "Neizdevās izveidot widžetu.",
@@ -221,11 +206,6 @@
     "%(duration)sd": "%(duration)s dienas",
     "Replying": "Atbildot uz",
     "Banned by %(displayName)s": "%(displayName)s liedzis pieeju",
-    "Members only (since the point in time of selecting this option)": "Tikai dalībnieki (no šī parametra iestatīšanas brīža)",
-    "Members only (since they were invited)": "Tikai dalībnieki (no to uzaicināšanas brīža)",
-    "Members only (since they joined)": "Tikai dalībnieki (kopš pievienošanās)",
-    "URL previews are enabled by default for participants in this room.": "URL priekšskatījumi šīs istabas dalībniekiem pēc noklusējuma ir iespējoti.",
-    "URL previews are disabled by default for participants in this room.": "ULR priekšskatījumi šīs istabas dalībniekiem pēc noklusējuma ir atspējoti.",
     "Copied!": "Nokopēts!",
     "Failed to copy": "Nokopēt neizdevās",
     "A text message has been sent to %(msisdn)s": "Teksta ziņa tika nosūtīta uz %(msisdn)s",
@@ -241,8 +221,6 @@
     "Old cryptography data detected": "Tika uzieti novecojuši šifrēšanas dati",
     "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "Uzieti dati no vecākas %(brand)s versijas. Tas novedīs pie \"end-to-end\" šifrēšanas problēmām vecākajā versijā. Šajā versijā nevar tikt atšifrēti ziņojumi, kuri radīti izmantojot vecākajā versijā \"end-to-end\" šifrētas ziņas. Tas var arī novest pie ziņapmaiņas, kas veikta ar šo versiju, neizdošanās. Ja rodas ķibeles, izraksties un par jaunu pieraksties sistēmā. Lai saglabātu ziņu vēsturi, eksportē un tad importē savas šifrēšanas atslēgas.",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Lūdzu ņem vērā, ka Tu pieraksties %(hs)s serverī, nevis matrix.org serverī.",
-    "Notify the whole room": "Paziņot visai istabai",
-    "Room Notification": "Istabas paziņojums",
     "%(items)s and %(count)s others": {
         "one": "%(items)s un viens cits",
         "other": "%(items)s un %(count)s citus"
@@ -303,19 +281,12 @@
         "one": "%(count)s sesija",
         "other": "%(count)s sesijas"
     },
-    "Once enabled, encryption cannot be disabled.": "Šifrēšana nevar tikt atspējota, ja reiz tikusi iespējota.",
     "Encryption not enabled": "Šifrēšana nav iespējota",
-    "Only the two of you are in this conversation, unless either of you invites anyone to join.": "Tikai jūs abi esat šajā sarakstē, ja vien kāds no jums neuzaicina citus pievienoties.",
-    "This is the beginning of your direct message history with <displayName/>.": "Šis ir sākums jūsu tiešās sarakstes vēsturei ar <displayName/>.",
     "Use the <a>Desktop app</a> to search encrypted messages": "Izmantojiet <a>lietotni</a>, lai veiktu šifrētu ziņu meklēšanu",
-    "%(creator)s created this DM.": "%(creator)s uzsāka šo tiešo saraksti.",
     "None": "Neviena",
     "Room options": "Istabas opcijas",
     "All settings": "Visi iestatījumi",
-    "Security & Privacy": "Drošība un konfidencialitāte",
     "Change notification settings": "Mainīt paziņojumu iestatījumus",
-    "Switch to dark mode": "Pārslēgt tumšo režīmu",
-    "Switch to light mode": "Pārslēgt gaišo režīmu",
     "Favourited": "Izlasē",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Saziņa ar šo lietotāju ir nodrošināta ar pilnīgu šifrēšanu un nav nolasāma trešajām pusēm.",
     "Encrypted by a deleted session": "Šifrēts ar dzēstu sesiju",
@@ -335,7 +306,6 @@
     "Lebanon": "Libāna",
     "Bangladesh": "Bangladeša",
     "Albania": "Albānija",
-    "Muted Users": "Apklusinātie lietotāji",
     "Confirm to continue": "Apstipriniet, lai turpinātu",
     "Confirm account deactivation": "Apstipriniet konta deaktivizēšanu",
     "Enter username": "Ievadiet lietotājvārdu",
@@ -363,8 +333,6 @@
     "Server Options": "Servera parametri",
     "<userName/> invited you": "<userName/> uzaicināja jūs",
     "<userName/> wants to chat": "<userName/> vēlas sarakstīties",
-    "Add a photo, so people can easily spot your room.": "Pievienojiet foto, lai padarītu istabu vieglāk pamanāmu citiem cilvēkiem.",
-    "<a>Add a topic</a> to help people know what it is about.": "<a>Pievienot tematu</a>, lai dotu cilvēkiem priekšstatu.",
     "You do not have permission to invite people to this room.": "Jums nav atļaujas uzaicināt cilvēkus šajā istabā.",
     "Afghanistan": "Afganistāna",
     "United States": "Amerikas Savienotās Valstis",
@@ -388,7 +356,6 @@
     "You accepted": "Jūs akceptējāt",
     "Rotate Right": "Rotēt pa labi",
     "Rotate Left": "Rotēt pa kreisi",
-    "%(displayName)s created this room.": "%(displayName)s izveidoja šo istabu.",
     "IRC display name width": "IRC parādāmā vārda platums",
     "%(displayName)s cancelled verification.": "%(displayName)s atcēla verificēšanu.",
     "Your display name": "Jūsu parādāmais vārds",
@@ -404,10 +371,7 @@
     "Phone numbers": "Tālruņa numuri",
     "Email Address": "Epasta adrese",
     "Email addresses": "Epasta adreses",
-    "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.": "Izmaiņas attiecībā uz to, kas var lasīt vēsturi, attieksies tikai uz nākamajiem ziņām šajā istabā. Esošās vēstures redzamība nemainīsies.",
-    "Enable encryption?": "Iespējot šifrēšanu?",
     "Encryption": "Šifrēšana",
-    "Roles & Permissions": "Lomas un atļaujas",
     "Room version:": "Istabas versija:",
     "The server does not support the room version specified.": "Serveris neatbalsta norādīto istabas versiju.",
     "Browse": "Pārlūkot",
@@ -415,8 +379,6 @@
     "Uploaded sound": "Augšupielādētie skaņas signāli",
     "Sounds": "Skaņas signāli",
     "Set a new custom sound": "Iestatīt jaunu pielāgotu skaņas signālu",
-    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "Šifrētās istabās, ieskaitot arī šo, URL priekšskatījumi pēc noklusējuma ir atspējoti, lai nodrošinātu, ka jūsu bāzes serveris, kurā notiek priekšskatījumu ģenerēšana, nevar apkopot informāciju par saitēm, kuras redzat šajā istabā.",
-    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Kad kāds savā ziņā ievieto URL, priekšskatījums ar virsrakstu, aprakstu un vietnes attēlu var tikt parādīts, tādējādi sniedzot vairāk informācijas par šo vietni.",
     "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "Iestatiet istabai adresi, lai lietotāji var atrast šo istabu jūsu bāzes serverī (%(localDomain)s)",
     "Local Addresses": "Lokālās adreses",
     "New published address (e.g. #alias:server)": "Jauna publiska adrese (piemēram, #alias:server)",
@@ -435,11 +397,6 @@
     "General failure": "Vispārīga kļūda",
     "General": "Vispārīgi",
     "Recently Direct Messaged": "Nesenās tiešās sarakstes",
-    "Topic: %(topic)s (<a>edit</a>)": "Temats: %(topic)s (<a>redigēt</a>)",
-    "Topic: %(topic)s ": "Temats: %(topic)s ",
-    "This is the start of <roomName/>.": "Šis ir <roomName/> istabas pats sākums.",
-    "You created this room.": "Jūs izveidojāt šo istabu.",
-    "%(creator)s created and configured the room.": "%(creator)s izveidoja un nokonfigurēja istabu.",
     "e.g. my-room": "piem., mana-istaba",
     "Room address": "Istabas adrese",
     "Show advanced": "Rādīt papildu iestatījumus",
@@ -476,11 +433,6 @@
     "Go back to set it again.": "Atgriezties, lai iestatītu atkārtoti.",
     "That doesn't match.": "Nesakrīt.",
     "That matches!": "Sakrīt!",
-    "User Autocomplete": "Lietotāju automātiska pabeigšana",
-    "Room Autocomplete": "Istabu automātiska pabeigšana",
-    "Notification Autocomplete": "Paziņojumu automātiska pabeigšana",
-    "Emoji Autocomplete": "Emocijzīmju automātiska pabeigšana",
-    "Command Autocomplete": "Komandu automātiska pabeigšana",
     "Clear personal data": "Dzēst personas datus",
     "Failed to re-authenticate due to a homeserver problem": "Bāzes servera problēmas dēļ atkārtoti autentificēties neizdevās",
     "Create account": "Izveidot kontu",
@@ -492,11 +444,6 @@
     },
     "Couldn't load page": "Neizdevās ielādēt lapu",
     "Sign in with SSO": "Pierakstieties, izmantojot SSO",
-    "Use email to optionally be discoverable by existing contacts.": "Izmantojiet epasta adresi, lai pēc izvēles jūs varētu atrast esošie kontakti.",
-    "Use email or phone to optionally be discoverable by existing contacts.": "Izmantojiet epasta adresi vai tālruņa numuru, lai pēc izvēles jūs varētu atrast esošie kontakti.",
-    "Add an email to be able to reset your password.": "Pievienojiet epasta adresi, lai varētu atiestatīt paroli.",
-    "Phone (optional)": "Tālruņa numurs (izvēles)",
-    "Use lowercase letters, numbers, dashes and underscores only": "Izmantojiet tikai mazos burtus, ciparus, domuzīmes un pasvītrojumus",
     "Enter phone number (required on this homeserver)": "Ievadiet tālruņa numuru (obligāts šajā bāzes serverī)",
     "Other users can invite you to rooms using your contact details": "Citi lietotāji var jūs uzaicināt uz istabām, izmantojot jūsu kontaktinformāciju",
     "Enter email address (required on this homeserver)": "Ievadiet epasta adresi (obligāta šajā bāzes serverī)",
@@ -589,13 +536,9 @@
     "American Samoa": "Amerikāņu Samoa",
     "Algeria": "Alžīrija",
     "Original event source": "Oriģinālais notikuma pirmkods",
-    "Decrypted event source": "Atšifrēt notikuma pirmkods",
     "You don't have permission": "Jums nav atļaujas",
-    "Attach files from chat or just drag and drop them anywhere in a room.": "Pievienojiet failus no čata vai vienkārši velciet un nometiet tos jebkur istabā.",
-    "No files visible in this room": "Šajā istabā nav redzamu failu",
     "Remove for everyone": "Dzēst visiem",
     "Share User": "Dalīties ar lietotāja kontaktdatiem",
-    "Verify session": "Verificēt sesiju",
     "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Verificējot šo ierīci, tā tiks atzīmēta kā uzticama, un ierīci verificējušie lietotāji tai uzticēsies.",
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Verificējot šo lietotāju, tā sesija tiks atzīmēta kā uzticama, kā arī jūsu sesija viņiem tiks atzīmēta kā uzticama.",
     "Removing…": "Dzēš…",
@@ -941,15 +884,11 @@
     "Join the discussion": "Pievienoties diskusijai",
     "Forget this room": "Aizmirst šo istabu",
     "Explore public rooms": "Pārlūkot publiskas istabas",
-    "Enable encryption in settings.": "Iespējot šifrēšanu iestatījumos.",
     "Show %(count)s other previews": {
         "one": "Rādīt %(count)s citu priekšskatījumu",
         "other": "Rādīt %(count)s citus priekšskatījumus"
     },
     "Access": "Piekļuve",
-    "People with supported clients will be able to join the room without having a registered account.": "Cilvēki ar atbalstītām lietotnēm varēs pievienoties istabai bez reģistrēta konta.",
-    "Decide who can join %(roomName)s.": "Nosakiet, kas var pievienoties %(roomName)s.",
-    "Select the roles required to change various parts of the room": "Izvēlieties lomas, kas nepieciešamas, lai mainītu dažādus istabas parametrus",
     "Enter a new identity server": "Ievadiet jaunu identitāšu serveri",
     "Mentions & keywords": "Pieminēšana un atslēgvārdi",
     "New keyword": "Jauns atslēgvārds",
@@ -968,7 +907,6 @@
         "other": "Pamatojoties uz %(count)s balsīm"
     },
     "No votes cast": "Nav balsojumu",
-    "Proxy URL (optional)": "Proxy URL (izvēles)",
     "Write an option": "Uzrakstiet variantu",
     "Add option": "Pievienot variantu",
     "Option %(number)s": "Variants %(number)s",
@@ -1052,8 +990,6 @@
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Lai nezaudētu čata vēsturi, pirms izrakstīšanās no konta jums ir jāeksportē istabas atslēgas. Lai to izdarītu, jums būs jāatgriežas jaunākajā %(brand)s versijā",
     "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Pārtraukt lietotāju runāšanu vecajā istabas versijā un publicēt ziņojumu, kurā lietotājiem tiek ieteikts pāriet uz jauno istabu",
     "Put a link back to the old room at the start of the new room so people can see old messages": "Jaunās istabas sākumā ievietojiet saiti uz veco istabu, lai cilvēki varētu apskatīt vecās ziņas",
-    "To avoid these issues, create a <a>new public room</a> for the conversation you plan to have.": "Lai izvairītos no šīm problēmām, izveidojiet <a>jaunu publisku istabu</a> plānotajai sarunai.",
-    "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "Lai izvairītos no šīm problēmām, izveidojiet <a>jaunu šifrētu istabu</a> plānotajai sarunai.",
     "Automatically invite members from this room to the new one": "Automātiski uzaicināt dalībniekus no šīs istabas uz jauno",
     "Want to add a new room instead?": "Vai tā vietā vēlaties pievienot jaunu istabu?",
     "New video room": "Jauna video istaba",
@@ -1068,8 +1004,6 @@
     "Recent searches": "Nesenie meklējumi",
     "To search messages, look for this icon at the top of a room <icon/>": "Lai meklētu ziņas, istabas augšpusē meklējiet šo ikonu <icon/>",
     "Other searches": "Citi meklējumi",
-    "<b>It's not recommended to make encrypted rooms public.</b> It will mean anyone can find and join the room, so anyone can read messages. You'll get none of the benefits of encryption. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Šifrētas istabas nav ieteicams padarīt publiski pieejamas.</b> Tas nozīmē, ka jebkurš var atrast istabu un pievienoties tai, tātad jebkurš var lasīt ziņojumus. Jūs negūsiet nevienu no šifrēšanas priekšrocībām. Šifrējot ziņojumus publiskā telpā, ziņojumu saņemšana un nosūtīšana kļūs lēnāka.",
-    "<b>It's not recommended to add encryption to public rooms.</b> Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Nav ieteicams pievienot šifrēšanu publiskām istabām .</b> Jebkurš var atrast un pievienoties publiskām istabām, tāpēc ikviens var lasīt tajās esošās ziņas. Jūs negūsiet nekādas šifrēšanas priekšrocības, un vēlāk to nevarēsiet izslēgt. Šifrējot ziņojumus publiskā telpā, ziņojumu saņemšana un sūtīšana kļūs lēnāka.",
     "Public rooms": "Publiskas istabas",
     "If you can't find the room you're looking for, ask for an invite or create a new room.": "Ja nevarat atrast meklēto istabu, palūdziet uzaicinājumu vai izveidojiet jaunu istabu.",
     "If you can't see who you're looking for, send them your invite link below.": "Ja neredzat meklēto personu, nosūtiet tai uzaicinājuma saiti zemāk.",
@@ -1094,7 +1028,6 @@
     "Who will you chat to the most?": "Ar ko jūs sarakstīsieties visvairāk?",
     "Start new chat": "Uzsākt jaunu čatu",
     "Start a group chat": "Uzsākt grupas čatu",
-    "Send your first message to invite <displayName/> to chat": "Nosūtiet savu pirmo ziņu, lai uzaicinātu <displayName/> uz čatu",
     "Messages in this chat will be end-to-end encrypted.": "Ziņām šajā istabā tiek piemērota pilnīga šifrēšana.",
     "Export chat": "Eksportēt čatu",
     "Back to chat": "Atgriezties uz čatu",
@@ -1237,7 +1170,8 @@
         "video_rooms_faq1_question": "Kā izveidot video istabu?",
         "group_profile": "Profils",
         "group_rooms": "Istabas",
-        "group_encryption": "Šifrēšana"
+        "group_encryption": "Šifrēšana",
+        "sliding_sync_proxy_url_optional_label": "Proxy URL (izvēles)"
     },
     "keyboard": {
         "home": "Mājup",
@@ -1252,7 +1186,18 @@
         "placeholder_reply_encrypted": "Sūtīt šifrētu atbildi…",
         "placeholder_reply": "Nosūtīt atbildi…",
         "placeholder_encrypted": "Sūtīt šifrētu ziņu…",
-        "placeholder": "Nosūtīt ziņu…"
+        "placeholder": "Nosūtīt ziņu…",
+        "autocomplete": {
+            "command_description": "Komandas",
+            "command_a11y": "Komandu automātiska pabeigšana",
+            "emoji_a11y": "Emocijzīmju automātiska pabeigšana",
+            "@room_description": "Paziņot visai istabai",
+            "notification_description": "Istabas paziņojums",
+            "notification_a11y": "Paziņojumu automātiska pabeigšana",
+            "room_a11y": "Istabu automātiska pabeigšana",
+            "user_description": "Lietotāji",
+            "user_a11y": "Lietotāju automātiska pabeigšana"
+        }
     },
     "Code": "Kods",
     "power_level": {
@@ -1372,6 +1317,10 @@
             "show_polls_button": "Rādīt aptauju pogu",
             "surround_text": "Iekļaut iezīmēto tekstu, rakstot speciālās rakstzīmes",
             "always_show_menu_bar": "Vienmēr parādīt loga izvēlnes joslu"
+        },
+        "sessions": {
+            "session_id": "Sesijas ID",
+            "verify_session": "Verificēt sesiju"
         }
     },
     "devtools": {
@@ -1383,7 +1332,8 @@
         "developer_tools": "Izstrādātāja rīki",
         "category_room": "Istaba",
         "category_other": "Citi",
-        "show_hidden_events": "Rādīt slēptos notikumus laika skalā"
+        "show_hidden_events": "Rādīt slēptos notikumus laika skalā",
+        "view_source_decrypted_event_source": "Atšifrēt notikuma pirmkods"
     },
     "export_chat": {
         "creator_summary": "%(creatorName)s izveidoja šo istabu.",
@@ -1652,7 +1602,9 @@
             "lightbox_title": "%(senderDisplayName)s nomainīja %(roomName)s istabas avataru",
             "removed": "%(senderDisplayName)s dzēsa istabas avataru.",
             "changed_img": "%(senderDisplayName)s nomainīja istabas avataru uz <img/>"
-        }
+        },
+        "creation_summary_dm": "%(creator)s uzsāka šo tiešo saraksti.",
+        "creation_summary_room": "%(creator)s izveidoja un nokonfigurēja istabu."
     },
     "slash_command": {
         "spoiler": "Nosūta norādīto ziņu kā spoileri",
@@ -1772,13 +1724,46 @@
             "state_default": "Mainīt iestatījumus",
             "ban": "Pieejas liegumi lietotājiem",
             "redact": "Dzēst citu sūtītas ziņas",
-            "notifications.room": "Apziņot visus"
+            "notifications.room": "Apziņot visus",
+            "no_privileged_users": "Šajā istabā nav lietotāju ar īpašām privilēģijām",
+            "privileged_users_section": "Priviliģētie lietotāji",
+            "muted_users_section": "Apklusinātie lietotāji",
+            "banned_users_section": "Lietotāji, kuriem liegta pieeja",
+            "title": "Lomas un atļaujas",
+            "permissions_section": "Atļaujas",
+            "permissions_section_description_room": "Izvēlieties lomas, kas nepieciešamas, lai mainītu dažādus istabas parametrus"
         },
         "security": {
             "strict_encryption": "Nesūtīt šifrētas ziņas no šīs sesijas neverificētām sesijām šajā istabā",
             "join_rule_invite": "Privāta (tikai ar ielūgumiem)",
             "join_rule_invite_description": "Tikai uzaicināti cilvēki var pievienoties.",
-            "join_rule_public_description": "Ikviens var atrast un pievienoties."
+            "join_rule_public_description": "Ikviens var atrast un pievienoties.",
+            "enable_encryption_public_room_confirm_description_1": "<b>Nav ieteicams pievienot šifrēšanu publiskām istabām .</b> Jebkurš var atrast un pievienoties publiskām istabām, tāpēc ikviens var lasīt tajās esošās ziņas. Jūs negūsiet nekādas šifrēšanas priekšrocības, un vēlāk to nevarēsiet izslēgt. Šifrējot ziņojumus publiskā telpā, ziņojumu saņemšana un sūtīšana kļūs lēnāka.",
+            "enable_encryption_public_room_confirm_description_2": "Lai izvairītos no šīm problēmām, izveidojiet <a>jaunu šifrētu istabu</a> plānotajai sarunai.",
+            "enable_encryption_confirm_title": "Iespējot šifrēšanu?",
+            "join_rule_description": "Nosakiet, kas var pievienoties %(roomName)s.",
+            "encrypted_room_public_confirm_description_1": "<b>Šifrētas istabas nav ieteicams padarīt publiski pieejamas.</b> Tas nozīmē, ka jebkurš var atrast istabu un pievienoties tai, tātad jebkurš var lasīt ziņojumus. Jūs negūsiet nevienu no šifrēšanas priekšrocībām. Šifrējot ziņojumus publiskā telpā, ziņojumu saņemšana un nosūtīšana kļūs lēnāka.",
+            "encrypted_room_public_confirm_description_2": "Lai izvairītos no šīm problēmām, izveidojiet <a>jaunu publisku istabu</a> plānotajai sarunai.",
+            "history_visibility": {},
+            "history_visibility_warning": "Izmaiņas attiecībā uz to, kas var lasīt vēsturi, attieksies tikai uz nākamajiem ziņām šajā istabā. Esošās vēstures redzamība nemainīsies.",
+            "history_visibility_legend": "Kas var lasīt vēsturi?",
+            "guest_access_warning": "Cilvēki ar atbalstītām lietotnēm varēs pievienoties istabai bez reģistrēta konta.",
+            "title": "Drošība un konfidencialitāte",
+            "encryption_permanent": "Šifrēšana nevar tikt atspējota, ja reiz tikusi iespējota.",
+            "history_visibility_shared": "Tikai dalībnieki (no šī parametra iestatīšanas brīža)",
+            "history_visibility_invited": "Tikai dalībnieki (no to uzaicināšanas brīža)",
+            "history_visibility_joined": "Tikai dalībnieki (kopš pievienošanās)",
+            "history_visibility_world_readable": "Ikviens"
+        },
+        "general": {
+            "publish_toggle": "Publicēt šo istabu publiskajā %(domain)s katalogā?",
+            "user_url_previews_default_on": "URL priekšskatījumi pēc noklusējuma jums ir<a>iespējoti</a> .",
+            "user_url_previews_default_off": "URL priekšskatījumi pēc noklusējuma jums ir <a>atspējoti</a>.",
+            "default_url_previews_on": "URL priekšskatījumi šīs istabas dalībniekiem pēc noklusējuma ir iespējoti.",
+            "default_url_previews_off": "ULR priekšskatījumi šīs istabas dalībniekiem pēc noklusējuma ir atspējoti.",
+            "url_preview_encryption_warning": "Šifrētās istabās, ieskaitot arī šo, URL priekšskatījumi pēc noklusējuma ir atspējoti, lai nodrošinātu, ka jūsu bāzes serveris, kurā notiek priekšskatījumu ģenerēšana, nevar apkopot informāciju par saitēm, kuras redzat šajā istabā.",
+            "url_preview_explainer": "Kad kāds savā ziņā ievieto URL, priekšskatījums ar virsrakstu, aprakstu un vietnes attēlu var tikt parādīts, tādējādi sniedzot vairāk informācijas par šo vietni.",
+            "url_previews_section": "URL priekšskatījumi"
         }
     },
     "encryption": {
@@ -1836,7 +1821,13 @@
         "register_action": "Izveidot kontu",
         "server_picker_learn_more": "Par bāzes serveriem",
         "incorrect_credentials": "Nepareizs lietotājvārds un/vai parole.",
-        "account_deactivated": "Šis konts ir deaktivizēts."
+        "account_deactivated": "Šis konts ir deaktivizēts.",
+        "registration_username_validation": "Izmantojiet tikai mazos burtus, ciparus, domuzīmes un pasvītrojumus",
+        "phone_label": "Telefons",
+        "phone_optional_label": "Tālruņa numurs (izvēles)",
+        "email_help_text": "Pievienojiet epasta adresi, lai varētu atiestatīt paroli.",
+        "email_phone_discovery_text": "Izmantojiet epasta adresi vai tālruņa numuru, lai pēc izvēles jūs varētu atrast esošie kontakti.",
+        "email_discovery_text": "Izmantojiet epasta adresi, lai pēc izvēles jūs varētu atrast esošie kontakti."
     },
     "room_list": {
         "sort_unread_first": "Rādīt istabas ar nelasītām ziņām augšpusē",
@@ -1955,7 +1946,10 @@
         "show_thread_filter": "Rādīt:"
     },
     "space": {
-        "landing_welcome": "Laipni lūdzam uz <name/>"
+        "landing_welcome": "Laipni lūdzam uz <name/>",
+        "context_menu": {
+            "explore": "Pārlūkot istabas"
+        }
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Šis bāzes serveris nav konfigurēts karšu attēlošanai.",
@@ -1982,5 +1976,31 @@
         "private_space_description": "Privāta vieta jums un jūsu komandas dalībniekiem",
         "setup_rooms_community_description": "Izveidojam katram no tiem savu istabu!",
         "setup_rooms_private_description": "Mēs izveidosim istabas katram no tiem."
+    },
+    "user_menu": {
+        "switch_theme_light": "Pārslēgt gaišo režīmu",
+        "switch_theme_dark": "Pārslēgt tumšo režīmu"
+    },
+    "room": {
+        "drop_file_prompt": "Ievelc šeit failu augšupielādei",
+        "intro": {
+            "send_message_start_dm": "Nosūtiet savu pirmo ziņu, lai uzaicinātu <displayName/> uz čatu",
+            "start_of_dm_history": "Šis ir sākums jūsu tiešās sarakstes vēsturei ar <displayName/>.",
+            "dm_caption": "Tikai jūs abi esat šajā sarakstē, ja vien kāds no jums neuzaicina citus pievienoties.",
+            "topic_edit": "Temats: %(topic)s (<a>redigēt</a>)",
+            "topic": "Temats: %(topic)s ",
+            "no_topic": "<a>Pievienot tematu</a>, lai dotu cilvēkiem priekšstatu.",
+            "you_created": "Jūs izveidojāt šo istabu.",
+            "user_created": "%(displayName)s izveidoja šo istabu.",
+            "no_avatar_label": "Pievienojiet foto, lai padarītu istabu vieglāk pamanāmu citiem cilvēkiem.",
+            "start_of_room": "Šis ir <roomName/> istabas pats sākums.",
+            "enable_encryption_prompt": "Iespējot šifrēšanu iestatījumos."
+        }
+    },
+    "file_panel": {
+        "guest_note": "Lai izmantotu šo funkcionalitāti, Tev ir <a>jāreģistrējas</a>",
+        "peek_note": "Tev ir jāpievienojas istabai, lai redzētu tās failus",
+        "empty_heading": "Šajā istabā nav redzamu failu",
+        "empty_description": "Pievienojiet failus no čata vai vienkārši velciet un nometiet tos jebkur istabā."
     }
 }

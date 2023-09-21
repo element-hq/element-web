@@ -27,7 +27,7 @@ interface Props extends React.ComponentProps<typeof AccessibleTooltipButton> {
 }
 
 export const DeviceExpandDetailsButton: React.FC<Props> = ({ isExpanded, onClick, ...rest }) => {
-    const label = isExpanded ? _t("Hide details") : _t("Show details");
+    const label = isExpanded ? _t("settings|sessions|hide_details") : _t("settings|sessions|show_details");
     return (
         <AccessibleTooltipButton
             {...rest}

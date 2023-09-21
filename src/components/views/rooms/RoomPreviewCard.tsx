@@ -162,7 +162,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
             <>
                 <RoomAvatar room={room} size="50px" viewAvatarOnClick />
                 <div className="mx_RoomPreviewCard_video" />
-                <BetaPill onClick={viewLabs} tooltipTitle={_t("Video rooms are a beta feature")} />
+                <BetaPill onClick={viewLabs} tooltipTitle={_t("labs|video_rooms_beta")} />
             </>
         );
     } else if (room.isSpaceRoom()) {

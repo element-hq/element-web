@@ -85,7 +85,6 @@
     "Change Password": "Canvia la contrasenya",
     "Authentication": "Autenticació",
     "Failed to set display name": "No s'ha pogut establir el nom visible",
-    "Drop file here to upload": "Deixa anar el fitxer aquí per pujar-lo",
     "Unban": "Retira l'expulsió",
     "This room is not public. You will not be able to rejoin without an invite.": "Aquesta sala no és pública. No podreu tronar a entrar sense invitació.",
     "Failed to ban user": "No s'ha pogut expulsar l'usuari",
@@ -124,25 +123,10 @@
     "%(roomName)s is not accessible at this time.": "La sala %(roomName)s no és accessible en aquest moment.",
     "Failed to unban": "No s'ha pogut expulsar",
     "Banned by %(displayName)s": "Expulsat per %(displayName)s",
-    "Privileged Users": "Usuaris amb privilegis",
-    "No users have specific privileges in this room": "Cap usuari té privilegis específics en aquesta sala",
-    "Banned users": "Usuaris expulsats",
     "This room is not accessible by remote Matrix servers": "Aquesta sala no és accessible per a servidors de Matrix remots",
-    "Publish this room to the public in %(domain)s's room directory?": "Vols publicar aquesta sala al directori de sales públiques de %(domain)s?",
-    "Who can read history?": "Qui pot llegir l'historial?",
-    "Anyone": "Qualsevol",
-    "Members only (since the point in time of selecting this option)": "Només els membres (a partir del punt en què seleccioneu aquesta opció)",
-    "Members only (since they were invited)": "Només els membres (a partir del punt en què hi són convidats)",
-    "Members only (since they joined)": "Només els membres (a partir del punt en què entrin a la sala)",
-    "Permissions": "Permisos",
     "Jump to first unread message.": "Salta al primer missatge no llegit.",
     "not specified": "sense especificar",
     "This room has no local addresses": "Aquesta sala no té adreces locals",
-    "You have <a>enabled</a> URL previews by default.": "Heu <a>habilitat</a> les previsualitzacions per defecte dels URL.",
-    "You have <a>disabled</a> URL previews by default.": "Heu <a>inhabilitat</a> les previsualitzacions per defecte dels URL.",
-    "URL previews are enabled by default for participants in this room.": "Les previsualitzacions dels URL estan habilitades per defecte per als membres d'aquesta sala.",
-    "URL previews are disabled by default for participants in this room.": "Les previsualitzacions dels URL estan inhabilitades per defecte per als membres d'aquesta sala.",
-    "URL Previews": "Previsualitzacions dels URL",
     "Error decrypting attachment": "Error desxifrant fitxer adjunt",
     "Decrypt %(text)s": "Desxifra %(text)s",
     "Download %(text)s": "Baixa %(text)s",
@@ -188,8 +172,6 @@
     "Unable to verify email address.": "No s'ha pogut verificar el correu electrònic.",
     "This will allow you to reset your password and receive notifications.": "Això us permetrà restablir la vostra contrasenya i rebre notificacions.",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Si anteriorment heu utilitzat un versió de %(brand)s més recent, la vostra sessió podría ser incompatible amb aquesta versió. Tanqueu aquesta finestra i torneu a la versió més recent.",
-    "You must <a>register</a> to use this functionality": "Per poder utilitzar aquesta funcionalitat has de <a>registrar-te</a>",
-    "You must join the room to see its files": "Per poder veure els fitxers de la sala t'hi has d'unir",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Estàs a punt de ser redirigit a una web de tercers per autenticar el teu compte i poder ser utilitzat amb %(integrationsUrl)s. Vols continuar?",
     "Reject invitation": "Rebutja la invitació",
     "Are you sure you want to reject the invitation?": "Esteu segur que voleu rebutjar la invitació?",
@@ -471,6 +453,9 @@
         },
         "security": {
             "send_analytics": "Envia dades d'anàlisi"
+        },
+        "sessions": {
+            "session_id": "ID de la sessió"
         }
     },
     "devtools": {
@@ -688,7 +673,27 @@
     },
     "room_settings": {
         "permissions": {
-            "state_default": "Canvia la configuració"
+            "state_default": "Canvia la configuració",
+            "no_privileged_users": "Cap usuari té privilegis específics en aquesta sala",
+            "privileged_users_section": "Usuaris amb privilegis",
+            "banned_users_section": "Usuaris expulsats",
+            "permissions_section": "Permisos"
+        },
+        "security": {
+            "history_visibility": {},
+            "history_visibility_legend": "Qui pot llegir l'historial?",
+            "history_visibility_shared": "Només els membres (a partir del punt en què seleccioneu aquesta opció)",
+            "history_visibility_invited": "Només els membres (a partir del punt en què hi són convidats)",
+            "history_visibility_joined": "Només els membres (a partir del punt en què entrin a la sala)",
+            "history_visibility_world_readable": "Qualsevol"
+        },
+        "general": {
+            "publish_toggle": "Vols publicar aquesta sala al directori de sales públiques de %(domain)s?",
+            "user_url_previews_default_on": "Heu <a>habilitat</a> les previsualitzacions per defecte dels URL.",
+            "user_url_previews_default_off": "Heu <a>inhabilitat</a> les previsualitzacions per defecte dels URL.",
+            "default_url_previews_on": "Les previsualitzacions dels URL estan habilitades per defecte per als membres d'aquesta sala.",
+            "default_url_previews_off": "Les previsualitzacions dels URL estan inhabilitades per defecte per als membres d'aquesta sala.",
+            "url_previews_section": "Previsualitzacions dels URL"
         }
     },
     "auth": {
@@ -699,7 +704,8 @@
         "sign_in_or_register": "Inicia sessió o Crea un compte",
         "sign_in_or_register_description": "Utilitza el teu compte o crea'n un de nou per continuar.",
         "register_action": "Crea un compte",
-        "incorrect_credentials": "Usuari i/o contrasenya incorrectes."
+        "incorrect_credentials": "Usuari i/o contrasenya incorrectes.",
+        "phone_label": "Telèfon"
     },
     "export_chat": {
         "messages": "Missatges"
@@ -748,5 +754,17 @@
     "room_list": {
         "failed_remove_tag": "No s'ha pogut esborrar l'etiqueta %(tagName)s de la sala",
         "failed_add_tag": "No s'ha pogut afegir l'etiqueta %(tagName)s a la sala"
+    },
+    "room": {
+        "drop_file_prompt": "Deixa anar el fitxer aquí per pujar-lo"
+    },
+    "file_panel": {
+        "guest_note": "Per poder utilitzar aquesta funcionalitat has de <a>registrar-te</a>",
+        "peek_note": "Per poder veure els fitxers de la sala t'hi has d'unir"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Explora sales"
+        }
     }
 }

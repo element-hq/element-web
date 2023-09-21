@@ -813,7 +813,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                 initialTabId: UserTab.Labs,
             });
         const betaPill = isVideoRoom ? (
-            <BetaPill onClick={viewLabs} tooltipTitle={_t("Video rooms are a beta feature")} />
+            <BetaPill onClick={viewLabs} tooltipTitle={_t("labs|video_rooms_beta")} />
         ) : null;
 
         return (

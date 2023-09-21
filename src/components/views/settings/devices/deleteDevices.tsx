@@ -53,20 +53,20 @@ export const deleteDevicesWithInteractiveAuth = async (
         const dialogAesthetics = {
             [SSOAuthEntry.PHASE_PREAUTH]: {
                 title: _t("Use Single Sign On to continue"),
-                body: _t("Confirm logging out these devices by using Single Sign On to prove your identity.", {
+                body: _t("settings|sessions|confirm_sign_out_sso", {
                     count: numDevices,
                 }),
                 continueText: _t("auth|sso"),
                 continueKind: "primary",
             },
             [SSOAuthEntry.PHASE_POSTAUTH]: {
-                title: _t("Confirm signing out these devices", {
+                title: _t("settings|sessions|confirm_sign_out", {
                     count: numDevices,
                 }),
-                body: _t("Click the button below to confirm signing out these devices.", {
+                body: _t("settings|sessions|confirm_sign_out_body", {
                     count: numDevices,
                 }),
-                continueText: _t("Sign out devices", { count: numDevices }),
+                continueText: _t("settings|sessions|confirm_sign_out_continue", { count: numDevices }),
                 continueKind: "danger",
             },
         };

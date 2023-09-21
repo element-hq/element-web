@@ -75,7 +75,6 @@
     "Change Password": "Промени лозинку",
     "Authentication": "Идентификација",
     "Failed to set display name": "Нисам успео да поставим приказно име",
-    "Drop file here to upload": "Превуци датотеку овде да би је отпремио",
     "Unban": "Скини забрану",
     "Failed to ban user": "Неуспех при забрањивању приступа кориснику",
     "Failed to mute user": "Неуспех при пригушивању корисника",
@@ -116,26 +115,11 @@
     "Banned by %(displayName)s": "Приступ забранио %(displayName)s",
     "unknown error code": "непознати код грешке",
     "Failed to forget room %(errCode)s": "Нисам успео да заборавим собу %(errCode)s",
-    "Privileged Users": "Овлашћени корисници",
-    "No users have specific privileges in this room": "Нема корисника са посебним овлашћењима у овој соби",
-    "Banned users": "Корисници са забраном приступа",
     "This room is not accessible by remote Matrix servers": "Ова соба није доступна са удаљених Матрикс сервера",
     "Favourite": "Омиљено",
-    "Publish this room to the public in %(domain)s's room directory?": "Објавити ову собу у јавној фасцикли соба на домену %(domain)s?",
-    "Who can read history?": "Ко може читати историјат?",
-    "Anyone": "Било ко",
-    "Members only (since the point in time of selecting this option)": "Само чланови (од тренутка бирања ове опције)",
-    "Members only (since they were invited)": "Само чланови (од тренутка позивања)",
-    "Members only (since they joined)": "Само чланови (од приступања)",
-    "Permissions": "Овлашћења",
     "Jump to first unread message.": "Скочи на прву непрочитану поруку.",
     "not specified": "није наведено",
     "This room has no local addresses": "Ова соба нема локалних адреса",
-    "You have <a>enabled</a> URL previews by default.": "<a>Укључили</a> сте да се УРЛ прегледи подразумевају.",
-    "You have <a>disabled</a> URL previews by default.": "<a>Искључили</a> сте да се УРЛ прегледи подразумевају.",
-    "URL previews are enabled by default for participants in this room.": "УРЛ прегледи су подразумевано укључени за чланове ове собе.",
-    "URL previews are disabled by default for participants in this room.": "УРЛ прегледи су подразумевано искључени за чланове ове собе.",
-    "URL Previews": "УРЛ прегледи",
     "Error decrypting attachment": "Грешка при дешифровању прилога",
     "Decrypt %(text)s": "Дешифруј %(text)s",
     "Download %(text)s": "Преузми %(text)s",
@@ -182,8 +166,6 @@
     "Unable to add email address": "Не могу да додам мејл адресу",
     "Unable to verify email address.": "Не могу да проверим мејл адресу.",
     "This will allow you to reset your password and receive notifications.": "Ово омогућава поновно постављање лозинке и примање обавештења.",
-    "You must <a>register</a> to use this functionality": "Морате се <a>регистровати</a> да бисте користили ову могућност",
-    "You must join the room to see its files": "Морате приступити соби да бисте видели њене датотеке",
     "Reject invitation": "Одбиј позивницу",
     "Are you sure you want to reject the invitation?": "Да ли сте сигурни да желите одбити позивницу?",
     "Failed to reject invitation": "Нисам успео да одбијем позивницу",
@@ -232,10 +214,6 @@
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Знајте да се пријављујете на сервер %(hs)s, не на matrix.org.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Не могу да се повежем на сервер преко ХТТП када је ХТТПС УРЛ у траци вашег прегледача. Или користите HTTPS или <a>омогућите небезбедне скрипте</a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Не могу да се повежем на домаћи сервер. Проверите вашу интернет везу, постарајте се да је <a>ССЛ сертификат сервера</a> од поверења и да проширење прегледача не блокира захтеве.",
-    "Commands": "Наредбе",
-    "Notify the whole room": "Обавести све у соби",
-    "Room Notification": "Собно обавештење",
-    "Users": "Корисници",
     "Session ID": "ИД сесије",
     "Passphrases must match": "Фразе се морају подударати",
     "Passphrase must not be empty": "Фразе не смеју бити празне",
@@ -281,7 +259,6 @@
     "Clear Storage and Sign Out": "Очисти складиште и одјави ме",
     "We encountered an error trying to restore your previous session.": "Наишли смо на грешку приликом повраћаја ваше претходне сесије.",
     "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Чишћење складишта вашег прегледача може решити проблем али ће вас то одјавити и учинити шифровани историјат ћаскања нечитљивим.",
-    "Muted Users": "Утишани корисници",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Не могу да учитам догађај на који је послат одговор, или не постоји или немате овлашћење да га погледате.",
     "Can't leave Server Notices room": "Не могу да напустим собу са напоменама сервера",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Ова соба се користи за важне поруке са сервера. Не можете напустити ову собу.",
@@ -326,11 +303,7 @@
     "General": "Опште",
     "Discovery": "Откриће",
     "None": "Ништа",
-    "Security & Privacy": "Безбедност и приватност",
-    "Roles & Permissions": "Улоге и дозволе",
-    "Enable encryption?": "Омогућити шифровање?",
     "Encryption": "Шифровање",
-    "Once enabled, encryption cannot be disabled.": "Након омогућавања, шифровање се не можете онемогућити.",
     "Discovery options will appear once you have added an email above.": "Опције откривања појавиће се након што додате мејл адресу изнад.",
     "Discovery options will appear once you have added a phone number above.": "Опције откривања појавиће се након што додате број телефона изнад.",
     "Email Address": "Е-адреса",
@@ -358,15 +331,7 @@
     "The encryption used by this room isn't supported.": "Начин шифровања унутар ове собе није подржан.",
     "Widgets do not use message encryption.": "Виџети не користе шифровање порука.",
     "Room Settings - %(roomName)s": "Подешавања собе - %(roomName)s",
-    "Terms of Service": "Услови коришћења",
-    "To continue you need to accept the terms of this service.": "За наставак, морате прихватити услове коришћења ове услуге.",
-    "Service": "Услуга",
-    "Summary": "Сажетак",
-    "Document": "Документ",
     "Resend %(unsentCount)s reaction(s)": "Поново пошаљи укупно %(unsentCount)s реакција",
-    "%(creator)s created and configured the room.": "Корисник %(creator)s је направио и подесио собу.",
-    "Switch to light mode": "Пребаци на светлу тему",
-    "Switch to dark mode": "Пребаци на тамну тему",
     "All settings": "Сва подешавања",
     "General failure": "Општа грешка",
     "Got It": "Разумем",
@@ -779,11 +744,6 @@
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Уверите се да имате стабилну интернет везу или контактирајте администратора сервера",
     "Couldn't load page": "Учитавање странице није успело",
     "Sign in with SSO": "Пријавите се помоћу SSO",
-    "Use email to optionally be discoverable by existing contacts.": "Користите е-пошту да бисте је по жељи могли открити постојећи контакти.",
-    "Use email or phone to optionally be discoverable by existing contacts.": "Користите е-пошту или телефон да би вас постојећи контакти опционално могли открити.",
-    "Add an email to be able to reset your password.": "Додајте е-пошту да бисте могли да ресетујете лозинку.",
-    "Phone (optional)": "Телефон (необавезно)",
-    "Use lowercase letters, numbers, dashes and underscores only": "Користите само мала слова, бројеве, цртице и доње црте",
     "Enter phone number (required on this homeserver)": "Унесите број телефона (захтева на овом кућном серверу)",
     "Other users can invite you to rooms using your contact details": "Други корисници могу да вас позову у собе користећи ваше контакт податке",
     "Enter email address (required on this homeserver)": "Унесите адресу е-поште (захтева на овом кућном серверу)",
@@ -972,7 +932,13 @@
         "placeholder_reply_encrypted": "Пошаљи шифровани одговор…",
         "placeholder_reply": "Пошаљи одговор…",
         "placeholder_encrypted": "Пошаљи шифровану поруку…",
-        "placeholder": "Пошаљи поруку…"
+        "placeholder": "Пошаљи поруку…",
+        "autocomplete": {
+            "command_description": "Наредбе",
+            "@room_description": "Обавести све у соби",
+            "notification_description": "Собно обавештење",
+            "user_description": "Корисници"
+        }
     },
     "Code": "Код",
     "power_level": {
@@ -1044,6 +1010,9 @@
         },
         "voip": {
             "mirror_local_feed": "Копирај довод локалног видеа"
+        },
+        "sessions": {
+            "session_id": "ИД сесије"
         }
     },
     "devtools": {
@@ -1243,7 +1212,8 @@
             "lightbox_title": "%(senderDisplayName)s измени аватар собе %(roomName)s",
             "removed": "%(senderDisplayName)s уклони аватар собе.",
             "changed_img": "%(senderDisplayName)s промени аватар собе у <img/>"
-        }
+        },
+        "creation_summary_room": "Корисник %(creator)s је направио и подесио собу."
     },
     "slash_command": {
         "shrug": "Придодаје ¯\\_(ツ)_/¯ обичној поруци",
@@ -1333,7 +1303,32 @@
             "m.room.avatar": "Промените аватар собе",
             "m.room.name": "Промени назив собе",
             "m.room.encryption": "Омогући шифровање собе",
-            "state_default": "Промени подешавања"
+            "state_default": "Промени подешавања",
+            "no_privileged_users": "Нема корисника са посебним овлашћењима у овој соби",
+            "privileged_users_section": "Овлашћени корисници",
+            "muted_users_section": "Утишани корисници",
+            "banned_users_section": "Корисници са забраном приступа",
+            "title": "Улоге и дозволе",
+            "permissions_section": "Овлашћења"
+        },
+        "security": {
+            "enable_encryption_confirm_title": "Омогућити шифровање?",
+            "history_visibility": {},
+            "history_visibility_legend": "Ко може читати историјат?",
+            "title": "Безбедност и приватност",
+            "encryption_permanent": "Након омогућавања, шифровање се не можете онемогућити.",
+            "history_visibility_shared": "Само чланови (од тренутка бирања ове опције)",
+            "history_visibility_invited": "Само чланови (од тренутка позивања)",
+            "history_visibility_joined": "Само чланови (од приступања)",
+            "history_visibility_world_readable": "Било ко"
+        },
+        "general": {
+            "publish_toggle": "Објавити ову собу у јавној фасцикли соба на домену %(domain)s?",
+            "user_url_previews_default_on": "<a>Укључили</a> сте да се УРЛ прегледи подразумевају.",
+            "user_url_previews_default_off": "<a>Искључили</a> сте да се УРЛ прегледи подразумевају.",
+            "default_url_previews_on": "УРЛ прегледи су подразумевано укључени за чланове ове собе.",
+            "default_url_previews_off": "УРЛ прегледи су подразумевано искључени за чланове ове собе.",
+            "url_previews_section": "УРЛ прегледи"
         }
     },
     "encryption": {
@@ -1357,7 +1352,13 @@
         "sign_in_or_register": "Пријавите се или направите налог",
         "sign_in_or_register_description": "Користите постојећи или направите нови да наставите.",
         "register_action": "Направи налог",
-        "incorrect_credentials": "Нетачно корисничко име и/или лозинка."
+        "incorrect_credentials": "Нетачно корисничко име и/или лозинка.",
+        "registration_username_validation": "Користите само мала слова, бројеве, цртице и доње црте",
+        "phone_label": "Телефон",
+        "phone_optional_label": "Телефон (необавезно)",
+        "email_help_text": "Додајте е-пошту да бисте могли да ресетујете лозинку.",
+        "email_phone_discovery_text": "Користите е-пошту или телефон да би вас постојећи контакти опционално могли открити.",
+        "email_discovery_text": "Користите е-пошту да бисте је по жељи могли открити постојећи контакти."
     },
     "export_chat": {
         "messages": "Поруке"
@@ -1458,5 +1459,28 @@
         "release_notes_toast_title": "Шта је ново",
         "toast_title": "Ажурирај %(brand)s",
         "toast_description": "Доступна је нова верзија %(brand)s"
+    },
+    "user_menu": {
+        "switch_theme_light": "Пребаци на светлу тему",
+        "switch_theme_dark": "Пребаци на тамну тему"
+    },
+    "room": {
+        "drop_file_prompt": "Превуци датотеку овде да би је отпремио"
+    },
+    "file_panel": {
+        "guest_note": "Морате се <a>регистровати</a> да бисте користили ову могућност",
+        "peek_note": "Морате приступити соби да бисте видели њене датотеке"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Истражи собе"
+        }
+    },
+    "terms": {
+        "tos": "Услови коришћења",
+        "intro": "За наставак, морате прихватити услове коришћења ове услуге.",
+        "column_service": "Услуга",
+        "column_summary": "Сажетак",
+        "column_document": "Документ"
     }
 }

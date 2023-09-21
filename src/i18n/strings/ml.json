@@ -89,5 +89,10 @@
     "update": {
         "see_changes_button": "എന്തൊക്കെ പുതിയ വിശേഷങ്ങള്‍ ?",
         "release_notes_toast_title": "പുതിയ വിശേഷങ്ങള്‍"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "മുറികൾ കണ്ടെത്തുക"
+        }
     }
 }

@@ -14,5 +14,10 @@
     },
     "auth": {
         "register_action": "Creu Cyfrif"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Archwilio Ystafelloedd"
+        }
     }
 }

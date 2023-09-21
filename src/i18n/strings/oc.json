@@ -81,13 +81,11 @@
     "Account": "Compte",
     "General": "General",
     "Unignore": "Ignorar pas",
-    "Security & Privacy": "Seguretat e vida privada",
     "Audio Output": "Sortida àudio",
     "Bridges": "Bridges",
     "Sounds": "Sons",
     "Browse": "Percórrer",
     "Unban": "Reabilitar",
-    "Permissions": "Permissions",
     "Encryption": "Chiframent",
     "Phone Number": "Numèro de telefòn",
     "Unencrypted": "Pas chifrat",
@@ -123,10 +121,6 @@
     "An error has occurred.": "Una error s'es producha.",
     "Session name": "Nom de session",
     "Email address": "Adreça de corrièl",
-    "Terms of Service": "Terms of Service",
-    "Service": "Servici",
-    "Summary": "Resumit",
-    "Document": "Document",
     "Upload files": "Mandar de fichièrs",
     "Home": "Dorsièr personal",
     "Enter password": "Sasissètz lo senhal",
@@ -135,8 +129,6 @@
     "Passwords don't match": "Los senhals correspondon pas",
     "Unknown error": "Error desconeguda",
     "Search failed": "La recèrca a fracassat",
-    "Commands": "Comandas",
-    "Users": "Utilizaires",
     "Success!": "Capitada !",
     "Explore rooms": "Percórrer las salas",
     "Click the button below to confirm adding this email address.": "Clicatz sus lo boton aicí dejós per confirmar l'adicion de l'adreça e-mail.",
@@ -268,7 +260,11 @@
         "placeholder_reply_encrypted": "Enviar una responsa chifrada …",
         "placeholder_reply": "Enviar una responsa…",
         "placeholder_encrypted": "Enviar un messatge chifrat…",
-        "placeholder": "Enviar un messatge…"
+        "placeholder": "Enviar un messatge…",
+        "autocomplete": {
+            "command_description": "Comandas",
+            "user_description": "Utilizaires"
+        }
     },
     "Bold": "Gras",
     "power_level": {
@@ -340,7 +336,8 @@
     "auth": {
         "sso": "Autentificacion unica",
         "incorrect_password": "Senhal incorrècte",
-        "register_action": "Crear un compte"
+        "register_action": "Crear un compte",
+        "phone_label": "Telefòn"
     },
     "export_chat": {
         "messages": "Messatges"
@@ -355,6 +352,25 @@
     "setting": {
         "help_about": {
             "versions": "Versions"
+        }
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Percórrer las salas"
+        }
+    },
+    "terms": {
+        "tos": "Terms of Service",
+        "column_service": "Servici",
+        "column_summary": "Resumit",
+        "column_document": "Document"
+    },
+    "room_settings": {
+        "permissions": {
+            "permissions_section": "Permissions"
+        },
+        "security": {
+            "title": "Seguretat e vida privada"
         }
     }
 }

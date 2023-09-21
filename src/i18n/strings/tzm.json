@@ -18,7 +18,6 @@
     "Sun": "Asa",
     "Add Phone Number": "Rnu uṭṭun n utilifun",
     "Add Email Address": "Rnu tasna imayl",
-    "Permissions": "Tisirag",
     "exists": "illa",
     "Santa": "Santa",
     "Pizza": "Tapizzat",
@@ -165,6 +164,12 @@
         "sort_by_alphabet": "A-Ẓ"
     },
     "auth": {
-        "register_action": "senflul amiḍan"
+        "register_action": "senflul amiḍan",
+        "phone_label": "Atilifun"
+    },
+    "room_settings": {
+        "permissions": {
+            "permissions_section": "Tisirag"
+        }
     }
 }

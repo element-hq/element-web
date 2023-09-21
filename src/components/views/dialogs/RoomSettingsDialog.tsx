@@ -163,7 +163,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
         tabs.push(
             new Tab(
                 RoomSettingsTab.Security,
-                _td("Security & Privacy"),
+                _td("room_settings|security|title"),
                 "mx_RoomSettingsDialog_securityIcon",
                 <SecurityRoomSettingsTab room={this.state.room} closeSettingsFn={() => this.props.onFinished(true)} />,
                 "RoomSettingsSecurityPrivacy",
@@ -172,7 +172,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
         tabs.push(
             new Tab(
                 RoomSettingsTab.Roles,
-                _td("Roles & Permissions"),
+                _td("room_settings|permissions|title"),
                 "mx_RoomSettingsDialog_rolesIcon",
                 <RolesRoomSettingsTab room={this.state.room} />,
                 "RoomSettingsRolesPermissions",

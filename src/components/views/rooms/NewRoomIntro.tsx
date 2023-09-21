@@ -46,14 +46,14 @@ function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): 
 
 const determineIntroMessage = (room: Room, encryptedSingle3rdPartyInvite: boolean): TranslationKey => {
     if (room instanceof LocalRoom) {
-        return _td("Send your first message to invite <displayName/> to chat");
+        return _td("room|intro|send_message_start_dm");
     }
 
     if (encryptedSingle3rdPartyInvite) {
-        return _td("Once everyone has joined, you’ll be able to chat");
+        return _td("room|intro|encrypted_3pid_dm_pending_join");
     }
 
-    return _td("This is the beginning of your direct message history with <displayName/>.");
+    return _td("room|intro|start_of_dm_history");
 };
 
 const NewRoomIntro: React.FC = () => {
@@ -78,7 +78,7 @@ const NewRoomIntro: React.FC = () => {
             !encryptedSingle3rdPartyInvite &&
             room.getJoinedMemberCount() + room.getInvitedMemberCount() === 2
         ) {
-            caption = _t("Only the two of you are in this conversation, unless either of you invites anyone to join.");
+            caption = _t("room|intro|dm_caption");
         }
 
         const member = room?.getMember(dmPartner);
@@ -133,7 +133,7 @@ const NewRoomIntro: React.FC = () => {
         let topicText;
         if (canAddTopic && topic) {
             topicText = _t(
-                "Topic: %(topic)s (<a>edit</a>)",
+                "room|intro|topic_edit",
                 { topic },
                 {
                     a: (sub) => (
@@ -144,10 +144,10 @@ const NewRoomIntro: React.FC = () => {
                 },
             );
         } else if (topic) {
-            topicText = _t("Topic: %(topic)s ", { topic });
+            topicText = _t("room|intro|topic", { topic });
         } else if (canAddTopic) {
             topicText = _t(
-                "<a>Add a topic</a> to help people know what it is about.",
+                "room|intro|no_topic",
                 {},
                 {
                     a: (sub) => (
@@ -164,9 +164,9 @@ const NewRoomIntro: React.FC = () => {
 
         let createdText: string;
         if (creator === cli.getUserId()) {
-            createdText = _t("You created this room.");
+            createdText = _t("room|intro|you_created");
         } else {
-            createdText = _t("%(displayName)s created this room.", {
+            createdText = _t("room|intro|user_created", {
                 displayName: creatorName,
             });
         }
@@ -200,7 +200,7 @@ const NewRoomIntro: React.FC = () => {
                                 defaultDispatcher.dispatch({ action: "view_invite", roomId });
                             }}
                         >
-                            {_t("Invite to just this room")}
+                            {_t("room|intro|room_invite")}
                         </AccessibleButton>
                     )}
                 </div>
@@ -228,7 +228,7 @@ const NewRoomIntro: React.FC = () => {
             avatar = (
                 <MiniAvatarUploader
                     hasAvatar={false}
-                    noAvatarLabel={_t("Add a photo, so people can easily spot your room.")}
+                    noAvatarLabel={_t("room|intro|no_avatar_label")}
                     setAvatarUrl={(url) => cli.sendStateEvent(roomId, EventType.RoomAvatar, { url }, "")}
                 >
                     {avatar}
@@ -245,7 +245,7 @@ const NewRoomIntro: React.FC = () => {
                 <p>
                     {createdText}{" "}
                     {_t(
-                        "This is the start of <roomName/>.",
+                        "room|intro|start_of_room",
                         {},
                         {
                             roomName: () => <b>{room.name}</b>,
@@ -266,9 +266,7 @@ const NewRoomIntro: React.FC = () => {
         });
     }
 
-    const subText = _t(
-        "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.",
-    );
+    const subText = _t("room|intro|private_unencrypted_warning");
 
     let subButton: JSX.Element | undefined;
     if (
@@ -277,7 +275,7 @@ const NewRoomIntro: React.FC = () => {
     ) {
         subButton = (
             <AccessibleButton kind="link_inline" onClick={openRoomSettings}>
-                {_t("Enable encryption in settings.")}
+                {_t("room|intro|enable_encryption_prompt")}
             </AccessibleButton>
         );
     }
@@ -294,7 +292,7 @@ const NewRoomIntro: React.FC = () => {
             {!hasExpectedEncryptionSettings(cli, room) && (
                 <EventTileBubble
                     className="mx_cryptoEvent mx_cryptoEvent_icon_warning"
-                    title={_t("End-to-end encryption isn't enabled")}
+                    title={_t("room|intro|unencrypted_warning")}
                     subtitle={subtitle}
                 />
             )}

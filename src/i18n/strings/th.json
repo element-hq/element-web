@@ -24,12 +24,9 @@
         "other": "และอีก %(count)s ผู้ใช้..."
     },
     "An error has occurred.": "เกิดข้อผิดพลาด",
-    "Anyone": "ทุกคน",
     "Are you sure?": "คุณแน่ใจหรือไม่?",
     "Are you sure you want to leave the room '%(roomName)s'?": "คุณแน่ใจหรือว่าต้องการจะออกจากห้อง '%(roomName)s'?",
     "Are you sure you want to reject the invitation?": "คุณแน่ใจหรือว่าต้องการจะปฏิเสธคำเชิญ?",
-    "Banned users": "ผู้ใช้ที่ถูกแบน",
-    "Commands": "คำสั่ง",
     "Confirm password": "ยืนยันรหัสผ่าน",
     "Cryptography": "วิทยาการเข้ารหัส",
     "Current password": "รหัสผ่านปัจจุบัน",
@@ -64,10 +61,8 @@
     "<not supported>": "<ไม่รองรับ>",
     "No more results": "ไม่มีผลลัพธ์อื่น",
     "Passwords can't be empty": "รหัสผ่านต้องไม่ว่าง",
-    "Permissions": "สิทธิ์",
     "Phone": "โทรศัพท์",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "กรุณาเช็คอีเมลและคลิกลิงก์ข้างใน หลังจากนั้น คลิกดำเนินการต่อ",
-    "Privileged Users": "ผู้ใช้ที่มีสิทธิพิเศษ",
     "Reject invitation": "ปฏิเสธคำเชิญ",
     "Return to login screen": "กลับไปยังหน้าลงชื่อเข้าใช้",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s ไม่มีสิทธิ์ส่งการแจ้งเตือน - กรุณาตรวจสอบการตั้งค่าเบราว์เซอร์ของคุณ",
@@ -96,10 +91,6 @@
     },
     "Upload Failed": "การอัปโหลดล้มเหลว",
     "Warning!": "คำเตือน!",
-    "Who can read history?": "ใครสามารถอ่านประวัติแชทได้?",
-    "You have <a>disabled</a> URL previews by default.": "ค่าเริ่มต้นของคุณ<a>ปิดใช้งาน</a>ตัวอย่าง URL เอาไว้",
-    "You have <a>enabled</a> URL previews by default.": "ค่าเริ่มต้นของคุณ<a>เปิดใช้งาน</a>ตัวอย่าง URL เอาไว้",
-    "You must <a>register</a> to use this functionality": "คุณต้อง<a>ลงทะเบียน</a>เพื่อใช้ฟังก์ชันนี้",
     "You need to be logged in.": "คุณต้องเข้าสู่ระบบก่อน",
     "Sun": "อา.",
     "Mon": "จ.",
@@ -144,7 +135,6 @@
     "%(roomName)s does not exist.": "ไม่มีห้อง %(roomName)s อยู่จริง",
     "Enter passphrase": "กรอกรหัสผ่าน",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (ระดับอำนาจ %(powerLevelNumber)s)",
-    "Users": "ผู้ใช้",
     "Verification Pending": "รอการตรวจสอบ",
     "You cannot place a call with yourself.": "คุณไม่สามารถโทรหาตัวเองได้",
     "Error decrypting image": "เกิดข้อผิดพลาดในการถอดรหัสรูป",
@@ -214,45 +204,8 @@
     "Too Many Calls": "โทรมากเกินไป",
     "You cannot place calls without a connection to the server.": "คุณไม่สามารถโทรออกได้หากไม่ได้เชื่อมต่อกับเซิร์ฟเวอร์.",
     "Connectivity to the server has been lost": "ขาดการเชื่อมต่อกับเซิร์ฟเวอร์",
-    "Show details": "แสดงรายละเอียด",
-    "Hide details": "ซ่อนรายละเอียด",
-    "Sign out of this session": "ออกจากระบบเซสชันนี้.",
-    "Receive push notifications on this session.": "รับการแจ้งเตือนแบบพุชในเซสชันนี้.",
-    "Push notifications": "การแจ้งเตือนแบบพุช",
-    "Toggle push notifications on this session.": "สลับการแจ้งเตือนแบบพุชในเซสชันนี้.",
-    "Session details": "รายละเอียดเซสชัน",
-    "IP address": "ที่อยู่ IP",
-    "Browser": "เบราว์เซอร์",
-    "Operating system": "ระบบปฏิบัติการ",
-    "Last activity": "กิจกรรมสุดท้าย",
     "Session ID": "รหัสเซสชัน",
-    "This provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.": "สิ่งนี้ทำให้พวกเขามั่นใจว่าพวกเขากำลังพูดกับคุณจริงๆ แต่ก็หมายความว่าพวกเขาสามารถเห็นชื่อเซสชันที่คุณป้อนที่นี่.",
-    "Other users in direct messages and rooms that you join are able to view a full list of your sessions.": "ผู้ใช้รายอื่นในข้อความส่วนตัวและห้องแชทที่คุณเข้าร่วมจะดูรายการเซสชันทั้งหมดของคุณได้.",
-    "Renaming sessions": "การเปลี่ยนชื่อเซสชัน",
-    "Please be aware that session names are also visible to people you communicate with.": "โปรดทราบว่าชื่อเซสชันจะปรากฏแก่บุคคลที่คุณสื่อสารด้วย.",
-    "Rename session": "เปลี่ยนชื่อเซสชัน",
-    "Sign out devices": {
-        "one": "ออกจากระบบอุปกรณ์",
-        "other": "ออกจากระบบอุปกรณ์"
-    },
-    "Click the button below to confirm signing out these devices.": {
-        "one": "คลิกปุ่มด้านล่างเพื่อยืนยันการออกจากระบบอุปกรณ์นี้.",
-        "other": "คลิกปุ่มด้านล่างเพื่อยืนยันการออกจากระบบอุปกรณ์เหล่านี้."
-    },
-    "Confirm signing out these devices": {
-        "one": "ยืนยันการออกจากระบบอุปกรณ์นี้",
-        "other": "ยืนยันการออกจากระบบอุปกรณ์เหล่านี้"
-    },
-    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
-        "one": "ยืนยันการออกจากระบบอุปกรณ์นี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ.",
-        "other": "ยืนยันการออกจากระบบอุปกรณ์เหล่านี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ."
-    },
-    "Current session": "เซสชันปัจจุบัน",
     "Encryption not enabled": "ไม่ได้เปิดใช้งานการเข้ารหัส",
-    "End-to-end encryption isn't enabled": "ไม่ได้เปิดใช้งานการเข้ารหัสจากต้นทางถึงปลายทาง",
-    "You won't be able to participate in rooms where encryption is enabled when using this session.": "คุณจะไม่สามารถเข้าร่วมในห้องที่เปิดใช้งานการเข้ารหัสเมื่อใช้เซสชันนี้.",
-    "Once enabled, encryption cannot be disabled.": "เมื่อเปิดใช้งานแล้ว จะไม่สามารถปิดใช้งานการเข้ารหัสได้.",
-    "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "เมื่อเปิดใช้งานแล้ว จะไม่สามารถปิดใช้งานการเข้ารหัสสำหรับห้องได้ เซิร์ฟเวอร์ไม่สามารถเห็นข้อความที่ส่งในห้องที่เข้ารหัสได้ เฉพาะผู้เข้าร่วมในห้องเท่านั้น การเปิดใช้งานการเข้ารหัสอาจทำให้บอทและบริดจ์จำนวนมากทำงานไม่ถูกต้อง. <a>เรียนรู้เพิ่มเติมเกี่ยวกับการเข้ารหัส.</a>",
     "Deactivate user": "ปิดใช้งานผู้ใช้",
     "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "การปิดใช้งานผู้ใช้รายนี้จะออกจากระบบและป้องกันไม่ให้กลับเข้าสู่ระบบ นอกจากนี้ ผู้ใช้จะออกจากห้องทั้งหมดที่พวกเขาอยู่ การดำเนินการนี้ไม่สามารถย้อนกลับได้ คุณแน่ใจหรือไม่ว่าต้องการปิดใช้งานผู้ใช้รายนี้?",
     "Deactivate user?": "ปิดการใช้งานผู้ใช้?",
@@ -417,7 +370,11 @@
         "format_italic": "ตัวเอียง",
         "format_underline": "ขีดเส้นใต้",
         "format_inline_code": "โค้ด",
-        "format_link": "ลิงค์"
+        "format_link": "ลิงค์",
+        "autocomplete": {
+            "command_description": "คำสั่ง",
+            "user_description": "ผู้ใช้"
+        }
     },
     "Link": "ลิงค์",
     "Code": "โค้ด",
@@ -453,6 +410,43 @@
         "appearance": {
             "timeline_image_size_default": "ค่าเริ่มต้น",
             "image_size_default": "ค่าเริ่มต้น"
+        },
+        "sessions": {
+            "rename_form_heading": "เปลี่ยนชื่อเซสชัน",
+            "rename_form_caption": "โปรดทราบว่าชื่อเซสชันจะปรากฏแก่บุคคลที่คุณสื่อสารด้วย.",
+            "rename_form_learn_more": "การเปลี่ยนชื่อเซสชัน",
+            "rename_form_learn_more_description_1": "ผู้ใช้รายอื่นในข้อความส่วนตัวและห้องแชทที่คุณเข้าร่วมจะดูรายการเซสชันทั้งหมดของคุณได้.",
+            "rename_form_learn_more_description_2": "สิ่งนี้ทำให้พวกเขามั่นใจว่าพวกเขากำลังพูดกับคุณจริงๆ แต่ก็หมายความว่าพวกเขาสามารถเห็นชื่อเซสชันที่คุณป้อนที่นี่.",
+            "session_id": "รหัสเซสชัน",
+            "last_activity": "กิจกรรมสุดท้าย",
+            "os": "ระบบปฏิบัติการ",
+            "browser": "เบราว์เซอร์",
+            "ip": "ที่อยู่ IP",
+            "details_heading": "รายละเอียดเซสชัน",
+            "push_toggle": "สลับการแจ้งเตือนแบบพุชในเซสชันนี้.",
+            "push_heading": "การแจ้งเตือนแบบพุช",
+            "push_subheading": "รับการแจ้งเตือนแบบพุชในเซสชันนี้.",
+            "sign_out": "ออกจากระบบเซสชันนี้.",
+            "hide_details": "ซ่อนรายละเอียด",
+            "show_details": "แสดงรายละเอียด",
+            "unverified_session_explainer_2": "คุณจะไม่สามารถเข้าร่วมในห้องที่เปิดใช้งานการเข้ารหัสเมื่อใช้เซสชันนี้.",
+            "current_session": "เซสชันปัจจุบัน",
+            "confirm_sign_out_sso": {
+                "one": "ยืนยันการออกจากระบบอุปกรณ์นี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ.",
+                "other": "ยืนยันการออกจากระบบอุปกรณ์เหล่านี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ."
+            },
+            "confirm_sign_out": {
+                "one": "ยืนยันการออกจากระบบอุปกรณ์นี้",
+                "other": "ยืนยันการออกจากระบบอุปกรณ์เหล่านี้"
+            },
+            "confirm_sign_out_body": {
+                "one": "คลิกปุ่มด้านล่างเพื่อยืนยันการออกจากระบบอุปกรณ์นี้.",
+                "other": "คลิกปุ่มด้านล่างเพื่อยืนยันการออกจากระบบอุปกรณ์เหล่านี้."
+            },
+            "confirm_sign_out_continue": {
+                "one": "ออกจากระบบอุปกรณ์",
+                "other": "ออกจากระบบอุปกรณ์"
+            }
         }
     },
     "timeline": {
@@ -523,7 +517,8 @@
         "server_picker_custom": "โฮมเซิร์ฟเวอร์อื่น ๆ",
         "server_picker_explainer": "ใช้ Matrix โฮมเซิร์ฟเวอร์ที่คุณต้องการหากคุณมี หรือโฮสต์ของคุณเอง",
         "server_picker_learn_more": "เกี่ยวกับโฮมเซิร์ฟเวอร์",
-        "incorrect_credentials": "ชื่อผู้ใช้และ/หรือรหัสผ่านไม่ถูกต้อง"
+        "incorrect_credentials": "ชื่อผู้ใช้และ/หรือรหัสผ่านไม่ถูกต้อง",
+        "phone_label": "โทรศัพท์"
     },
     "setting": {
         "help_about": {
@@ -540,5 +535,35 @@
     "update": {
         "see_changes_button": "มีอะไรใหม่?",
         "release_notes_toast_title": "มีอะไรใหม่"
+    },
+    "file_panel": {
+        "guest_note": "คุณต้อง<a>ลงทะเบียน</a>เพื่อใช้ฟังก์ชันนี้"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "สำรวจห้อง"
+        }
+    },
+    "room_settings": {
+        "permissions": {
+            "privileged_users_section": "ผู้ใช้ที่มีสิทธิพิเศษ",
+            "banned_users_section": "ผู้ใช้ที่ถูกแบน",
+            "permissions_section": "สิทธิ์"
+        },
+        "security": {
+            "enable_encryption_confirm_description": "เมื่อเปิดใช้งานแล้ว จะไม่สามารถปิดใช้งานการเข้ารหัสสำหรับห้องได้ เซิร์ฟเวอร์ไม่สามารถเห็นข้อความที่ส่งในห้องที่เข้ารหัสได้ เฉพาะผู้เข้าร่วมในห้องเท่านั้น การเปิดใช้งานการเข้ารหัสอาจทำให้บอทและบริดจ์จำนวนมากทำงานไม่ถูกต้อง. <a>เรียนรู้เพิ่มเติมเกี่ยวกับการเข้ารหัส.</a>",
+            "history_visibility_legend": "ใครสามารถอ่านประวัติแชทได้?",
+            "encryption_permanent": "เมื่อเปิดใช้งานแล้ว จะไม่สามารถปิดใช้งานการเข้ารหัสได้.",
+            "history_visibility_world_readable": "ทุกคน"
+        },
+        "general": {
+            "user_url_previews_default_on": "ค่าเริ่มต้นของคุณ<a>เปิดใช้งาน</a>ตัวอย่าง URL เอาไว้",
+            "user_url_previews_default_off": "ค่าเริ่มต้นของคุณ<a>ปิดใช้งาน</a>ตัวอย่าง URL เอาไว้"
+        }
+    },
+    "room": {
+        "intro": {
+            "unencrypted_warning": "ไม่ได้เปิดใช้งานการเข้ารหัสจากต้นทางถึงปลายทาง"
+        }
     }
 }

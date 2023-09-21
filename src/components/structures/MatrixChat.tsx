@@ -515,12 +515,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const normalFontSize = "15px";
 
         const waitText = _t("Wait!");
-        const scamText = _t(
-            "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!",
-        );
-        const devText = _t(
-            "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!",
-        );
+        const scamText = _t("console_scam_warning");
+        const devText = _t("console_dev_note");
 
         global.mx_rage_logger.bypassRageshake(
             "log",

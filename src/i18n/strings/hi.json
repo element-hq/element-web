@@ -86,7 +86,6 @@
     "Notification targets": "अधिसूचना के लक्ष्य",
     "You do not have permission to invite people to this room.": "आपको इस कमरे में लोगों को आमंत्रित करने की अनुमति नहीं है।",
     "Unknown server error": "अज्ञात सर्वर त्रुटि",
-    "Drop file here to upload": "अपलोड करने के लिए यहां फ़ाइल ड्रॉप करें",
     "This event could not be displayed": "यह घटना प्रदर्शित नहीं की जा सकी",
     "Unban": "अप्रतिबंधित करें",
     "Failed to ban user": "उपयोगकर्ता को प्रतिबंधित करने में विफल",
@@ -207,8 +206,6 @@
     "Room version:": "रूम का संस्करण:",
     "General": "सामान्य",
     "Room Addresses": "रूम का पता",
-    "Publish this room to the public in %(domain)s's room directory?": "इस कमरे को %(domain)s के कमरे की निर्देशिका में जनता के लिए प्रकाशित करें?",
-    "URL Previews": "URL पूर्वावलोकन",
     "Failed to change password. Is your password correct?": "पासवर्ड बदलने में विफल। क्या आपका पासवर्ड सही है?",
     "Profile": "प्रोफाइल",
     "Account": "अकाउंट",
@@ -226,7 +223,6 @@
     "Ignored users": "अनदेखी उपयोगकर्ताओं",
     "Bulk options": "थोक विकल्प",
     "Reject all %(invitedRooms)s invites": "सभी %(invitedRooms)s की आमंत्रण को अस्वीकार करें",
-    "Security & Privacy": "सुरक्षा और गोपनीयता",
     "No media permissions": "मीडिया की अनुमति नहीं",
     "Missing media permissions, click the button below to request.": "मीडिया अनुमतियाँ गुम, अनुरोध करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
     "Request media permissions": "मीडिया अनुमति का अनुरोध करें",
@@ -238,7 +234,6 @@
     "Voice & Video": "ध्वनि और वीडियो",
     "Failed to unban": "अप्रतिबंधित करने में विफल",
     "Banned by %(displayName)s": "%(displayName)s द्वारा प्रतिबंधित",
-    "No users have specific privileges in this room": "इस कमरे में किसी भी उपयोगकर्ता के विशेष विशेषाधिकार नहीं हैं",
     "The file '%(fileName)s' failed to upload.": "फ़ाइल '%(fileName)s' अपलोड करने में विफल रही।",
     "The user must be unbanned before they can be invited.": "उपयोगकर्ता को आमंत्रित करने से पहले उन्हें प्रतिबंधित किया जाना चाहिए।",
     "Explore rooms": "रूम का अन्वेषण करें",
@@ -669,7 +664,8 @@
     "auth": {
         "sso": "केवल हस्ताक्षर के ऊपर",
         "footer_powered_by_matrix": "मैट्रिक्स द्वारा संचालित",
-        "register_action": "खाता बनाएं"
+        "register_action": "खाता बनाएं",
+        "phone_label": "फ़ोन"
     },
     "setting": {
         "help_about": {
@@ -712,5 +708,25 @@
     },
     "devtools": {
         "widget_screenshots": "समर्थित विजेट्स पर विजेट स्क्रीनशॉट सक्षम करें"
+    },
+    "room": {
+        "drop_file_prompt": "अपलोड करने के लिए यहां फ़ाइल ड्रॉप करें"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "रूम का अन्वेषण करें"
+        }
+    },
+    "room_settings": {
+        "permissions": {
+            "no_privileged_users": "इस कमरे में किसी भी उपयोगकर्ता के विशेष विशेषाधिकार नहीं हैं"
+        },
+        "security": {
+            "title": "सुरक्षा और गोपनीयता"
+        },
+        "general": {
+            "publish_toggle": "इस कमरे को %(domain)s के कमरे की निर्देशिका में जनता के लिए प्रकाशित करें?",
+            "url_previews_section": "URL पूर्वावलोकन"
+        }
     }
 }

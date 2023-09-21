@@ -41,14 +41,14 @@ export const OtherSessionsSectionHeading: React.FC<Props> = ({
         signOutAllOtherSessions ? (
             <IconizedContextMenuOption
                 key="sign-out-all-others"
-                label={_t("Sign out of %(count)s sessions", { count: otherSessionsCount })}
+                label={_t("settings|sessions|sign_out_n_sessions", { count: otherSessionsCount })}
                 onClick={signOutAllOtherSessions}
                 isDestructive
             />
         ) : null,
     ]);
     return (
-        <SettingsSubsectionHeading heading={_t("Other sessions")}>
+        <SettingsSubsectionHeading heading={_t("settings|sessions|other_sessions_heading")}>
             {!!menuOptions.length && (
                 <KebabContextMenu
                     disabled={disabled}

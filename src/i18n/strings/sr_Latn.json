@@ -124,5 +124,10 @@
         "help_about": {
             "chat_bot": "Ćaskajte sa %(brand)s botom"
         }
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Istražite sobe"
+        }
     }
 }

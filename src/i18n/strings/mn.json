@@ -6,5 +6,10 @@
     },
     "auth": {
         "register_action": "Хэрэглэгч үүсгэх"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Өрөөнүүд үзэх"
+        }
     }
 }

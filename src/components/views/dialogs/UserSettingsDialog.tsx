@@ -144,7 +144,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         tabs.push(
             new Tab(
                 UserTab.Security,
-                _td("Security & Privacy"),
+                _td("room_settings|security|title"),
                 "mx_UserSettingsDialog_securityIcon",
                 <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
                 "UserSettingsSecurityPrivacy",

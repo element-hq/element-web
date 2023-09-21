@@ -78,5 +78,10 @@
     "auth": {
         "sso": "Single Sign On",
         "register_action": "Înregistare"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Explorează camerele"
+        }
     }
 }

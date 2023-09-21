@@ -1232,9 +1232,9 @@ class CreationGrouper extends BaseGrouper {
         const roomId = ev.getRoomId();
         const creator = ev.sender?.name ?? ev.getSender();
         if (roomId && DMRoomMap.shared().getUserIdForRoomId(roomId)) {
-            summaryText = _t("%(creator)s created this DM.", { creator });
+            summaryText = _t("timeline|creation_summary_dm", { creator });
         } else {
-            summaryText = _t("%(creator)s created and configured the room.", { creator });
+            summaryText = _t("timeline|creation_summary_room", { creator });
         }
 
         ret.push(<NewRoomIntro key="newroomintro" />);

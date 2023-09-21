@@ -23,7 +23,7 @@ import { Icon as WebIcon } from "../../../../../res/img/element-icons/settings/w
 import { Icon as MobileIcon } from "../../../../../res/img/element-icons/settings/mobile.svg";
 import { Icon as VerifiedIcon } from "../../../../../res/img/e2e/verified.svg";
 import { Icon as UnverifiedIcon } from "../../../../../res/img/e2e/warning.svg";
-import { _t } from "../../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../../languageHandler";
 import { ExtendedDevice } from "./types";
 import { DeviceType } from "../../../../utils/device/parseUserAgent";
 
@@ -39,16 +39,16 @@ const deviceTypeIcon: Record<DeviceType, React.FC<React.SVGProps<SVGSVGElement>>
     [DeviceType.Web]: WebIcon,
     [DeviceType.Unknown]: UnknownDeviceIcon,
 };
-const deviceTypeLabel: Record<DeviceType, string> = {
-    [DeviceType.Desktop]: _t("Desktop session"),
-    [DeviceType.Mobile]: _t("Mobile session"),
-    [DeviceType.Web]: _t("Web session"),
-    [DeviceType.Unknown]: _t("Unknown session type"),
+const deviceTypeLabel: Record<DeviceType, TranslationKey> = {
+    [DeviceType.Desktop]: _td("settings|sessions|desktop_session"),
+    [DeviceType.Mobile]: _td("settings|sessions|mobile_session"),
+    [DeviceType.Web]: _td("settings|sessions|web_session"),
+    [DeviceType.Unknown]: _td("settings|sessions|unknown_session"),
 };
 
 export const DeviceTypeIcon: React.FC<Props> = ({ isVerified, isSelected, deviceType }) => {
     const Icon = deviceTypeIcon[deviceType!] || deviceTypeIcon[DeviceType.Unknown];
-    const label = deviceTypeLabel[deviceType!] || deviceTypeLabel[DeviceType.Unknown];
+    const label = _t(deviceTypeLabel[deviceType!] || deviceTypeLabel[DeviceType.Unknown]);
     return (
         <div
             className={classNames("mx_DeviceTypeIcon", {

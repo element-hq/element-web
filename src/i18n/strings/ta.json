@@ -167,5 +167,10 @@
     "update": {
         "see_changes_button": "புதிதாக என்ன?",
         "release_notes_toast_title": "புதிதாக வந்தவை"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "அறைகளை ஆராயுங்கள்"
+        }
     }
 }

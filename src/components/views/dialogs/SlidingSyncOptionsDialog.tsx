@@ -80,8 +80,8 @@ export const SlidingSyncOptionsDialog: React.FC<{ onFinished(enabled: boolean): 
         nativeSupport = _t("Checking…");
     } else {
         nativeSupport = hasNativeSupport
-            ? _t("Your server has native support")
-            : _t("Your server lacks native support");
+            ? _t("labs|sliding_sync_server_support")
+            : _t("labs|sliding_sync_server_no_support");
     }
 
     const validProxy = withValidation<undefined, { error?: unknown }>({
@@ -97,7 +97,7 @@ export const SlidingSyncOptionsDialog: React.FC<{ onFinished(enabled: boolean): 
             {
                 key: "required",
                 test: async ({ value }) => !!value || !!hasNativeSupport,
-                invalid: () => _t("Your server lacks native support, you must specify a proxy"),
+                invalid: () => _t("labs|sliding_sync_server_specify_proxy"),
             },
             {
                 key: "working",
@@ -111,16 +111,20 @@ export const SlidingSyncOptionsDialog: React.FC<{ onFinished(enabled: boolean): 
 
     return (
         <TextInputDialog
-            title={_t("Sliding Sync configuration")}
+            title={_t("labs|sliding_sync_configuration")}
             description={
                 <div>
                     <div>
-                        <b>{_t("To disable you will need to log out and back in, use with caution!")}</b>
+                        <b>{_t("labs|sliding_sync_disable_warning")}</b>
                     </div>
                     {nativeSupport}
                 </div>
             }
-            placeholder={hasNativeSupport ? _t("Proxy URL (optional)") : _t("Proxy URL")}
+            placeholder={
+                hasNativeSupport
+                    ? _t("labs|sliding_sync_proxy_url_optional_label")
+                    : _t("labs|sliding_sync_proxy_url_label")
+            }
             value={currentProxy}
             button={_t("action|enable")}
             validator={validProxy}

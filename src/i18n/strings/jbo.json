@@ -151,10 +151,7 @@
     "Yesterday": "prulamdei",
     "Cancel search": "nu co'u sisku",
     "Search failed": ".i da nabmi lo nu sisku",
-    "Switch to light mode": "nu le jvinu cu binxo le ka carmi",
-    "Switch to dark mode": "nu le jvinu cu binxo le ka manku",
     "Switch theme": "nu basti fi le ka jvinu",
-    "Users": "pilno",
     "That matches!": ".i du",
     "Success!": ".i snada",
     "Verify your other session using one of the options below.": ".i ko cuxna da le di'e cei'i le ka tadji lo nu do co'a lacri",
@@ -442,7 +439,10 @@
         "placeholder_reply_encrypted": "nu pa mifra be pa jai te spuda cu zilbe'i",
         "placeholder_reply": "nu pa jai te spuda cu zilbe'i",
         "placeholder_encrypted": "nu pa mifra be pa notci cu zilbe'i",
-        "placeholder": "nu pa notci cu zilbe'i"
+        "placeholder": "nu pa notci cu zilbe'i",
+        "autocomplete": {
+            "user_description": "pilno"
+        }
     },
     "room_settings": {
         "permissions": {
@@ -488,9 +488,19 @@
     "auth": {
         "sync_footer_subtitle": ".i gi na ja do pagbu so'i se zilbe'i gi la'a ze'u gunka",
         "incorrect_password": ".i le lerpoijaspu na drani",
-        "register_action": "nu pa re'u co'a jaspu"
+        "register_action": "nu pa re'u co'a jaspu",
+        "phone_label": "fonxa"
     },
     "update": {
         "release_notes_toast_title": "notci le du'u cnino"
+    },
+    "user_menu": {
+        "switch_theme_light": "nu le jvinu cu binxo le ka carmi",
+        "switch_theme_dark": "nu le jvinu cu binxo le ka manku"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "nu facki le du'u ve zilbe'i"
+        }
     }
 }

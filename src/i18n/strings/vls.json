@@ -204,7 +204,6 @@
     "Bulk options": "Bulkopties",
     "Accept all %(invitedRooms)s invites": "Alle %(invitedRooms)s-uutnodigiengn anveirdn",
     "Reject all %(invitedRooms)s invites": "Alle %(invitedRooms)s-uutnodigiengn weigern",
-    "Security & Privacy": "Veiligheid & privacy",
     "No media permissions": "Geen mediatoestemmiengn",
     "You may need to manually permit %(brand)s to access your microphone/webcam": "Je moe %(brand)s wellicht handmoatig toestoan van je microfoon/webcam te gebruukn",
     "Missing media permissions, click the button below to request.": "Mediatoestemmiengn ountbreekn, klikt ip de knop hierounder vo deze an te vroagn.",
@@ -222,30 +221,10 @@
     "Room version": "Gespreksversie",
     "Room version:": "Gespreksversie:",
     "Room Addresses": "Gespreksadressn",
-    "Publish this room to the public in %(domain)s's room directory?": "Dit gesprek openboar moakn in de gesprekscataloog van %(domain)s?",
-    "URL Previews": "URL-voorvertoniengn",
     "Failed to unban": "Ountbann mislukt",
     "Unban": "Ountbann",
     "Banned by %(displayName)s": "Verbann deur %(displayName)s",
-    "No users have specific privileges in this room": "Geen gebruukers èn specifieke privileges in dit gesprek",
-    "Privileged Users": "Bevoorrechte gebruukers",
-    "Muted Users": "Gedempte gebruukers",
-    "Banned users": "Verbann gebruukers",
-    "Send %(eventType)s events": "%(eventType)s-gebeurtenissn verstuurn",
-    "Roles & Permissions": "Rolln & toestemmiengn",
-    "Permissions": "Toestemmiengn",
-    "Select the roles required to change various parts of the room": "Selecteert de rolln vereist vo verschillende deeln van ’t gesprek te wyzign",
-    "Enable encryption?": "Versleuterienge inschoakeln?",
-    "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Van zodra da de versleuterienge voor e gesprek es ingeschoakeld gewist, es ’t nie mi meuglik van ’t were uut te schoakeln. Berichtn da in e versleuterd gesprek wordn verstuurd wordn nie gezien deur de server, alleene moa deur de deelnemers an ’t gesprek. Deur de versleuterienge in te schoakeln kunn veel robots en overbruggiengen nie juste functioneern. <a>Leest meer over de versleuterienge.</a>",
-    "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.": "Wyzigiengn an wie da de geschiedenisse ku leezn zyn alleene moa van toepassienge ip toekomstige berichtn in dit gesprek. De zichtboarheid van de bestoande geschiedenisse bluuft ongewyzigd.",
-    "Anyone": "Iedereen",
-    "Members only (since the point in time of selecting this option)": "Alleen deelnemers (vanaf de moment da deze optie wor geselecteerd)",
-    "Members only (since they were invited)": "Alleen deelnemers (vanaf de moment dan ze uutgenodigd gewist zyn)",
-    "Members only (since they joined)": "Alleen deelnemers (vanaf de moment dan ze toegetreedn zyn)",
     "Encryption": "Versleuterienge",
-    "Once enabled, encryption cannot be disabled.": "Eenmoal ingeschoakeld ku versleuterienge nie mi wordn uutgeschoakeld.",
-    "Who can read history?": "Wien kut de geschiedenisse leezn?",
-    "Drop file here to upload": "Versleep ’t bestand noar hier vo ’t ip te loaden",
     "This event could not be displayed": "Deze gebeurtenisse kostege nie weergegeevn wordn",
     "Failed to ban user": "Verbann van gebruuker es mislukt",
     "Demote yourself?": "Jen eigen degradeern?",
@@ -323,12 +302,6 @@
     "Room avatar": "Gespreksavatar",
     "Room Name": "Gespreksnoame",
     "Room Topic": "Gespreksounderwerp",
-    "You have <a>enabled</a> URL previews by default.": "J’èt URL-voorvertoniengn standoard <a>ingeschoakeld</a>.",
-    "You have <a>disabled</a> URL previews by default.": "J’èt URL-voorvertoniengn standoard <a>uutgeschoakeld</a>.",
-    "URL previews are enabled by default for participants in this room.": "URL-voorvertoniengn zyn vo leedn van dit gesprek standoard ingeschoakeld.",
-    "URL previews are disabled by default for participants in this room.": "URL-voorvertoniengn zyn vo leedn van dit gesprek standoard uutgeschoakeld.",
-    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "In versleuterde gesprekkn lyk dat hier zyn URL-voorvertoniengn standoard uutgeschoakeld, vo te voorkommn da je thuusserver (woa da de voorvertoniengn wordn gemakt) informoasje ku verzoameln over de koppeliengn da j’hiere ziet.",
-    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "A ’t er etwien een URL in e bericht invoegt, kut er een URL-voorvertonienge getoogd wordn me meer informoasje over de koppelienge, gelyk den titel, omschryvienge en e fotootje van de website.",
     "Sunday": "Zundag",
     "Monday": "Moandag",
     "Tuesday": "Diesndag",
@@ -479,11 +452,8 @@
     "Enter username": "Gift de gebruukersnoame in",
     "Some characters not allowed": "Sommige tekens zyn nie toegeloatn",
     "Email (optional)": "E-mailadresse (optioneel)",
-    "Phone (optional)": "Telefongnumero (optioneel)",
     "Join millions for free on the largest public server": "Doe mee me miljoenen anderen ip de grotste publieke server",
     "Couldn't load page": "Kostege ’t blad nie loadn",
-    "You must <a>register</a> to use this functionality": "Je moe je <a>registreern</a> vo deze functie te gebruukn",
-    "You must join the room to see its files": "Je moe tout ’t gesprek toetreedn vo de bestandn te kunn zien",
     "Upload avatar": "Avatar iploadn",
     "Failed to reject invitation": "Weigern van d’uutnodigienge is mislukt",
     "This room is not public. You will not be able to rejoin without an invite.": "Dit gesprek is nie openboar. Zounder uutnodigienge goa je nie were kunn toetreedn.",
@@ -539,10 +509,6 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Je ku geen verbindienge moakn me de thuusserver via HTTP wanneer dat der een HTTPS-URL in je browserbalk stoat. Gebruukt HTTPS of <a>schoakelt ounveilige scripts in</a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Geen verbindienge met de thuusserver - controleer je verbindienge, zorgt dervoorn dan ’t <a>SSL-certificoat van de thuusserver</a> vertrouwd is en dat der geen browserextensies verzoekn blokkeern.",
     "Create account": "Account anmoakn",
-    "Commands": "Ipdrachtn",
-    "Notify the whole room": "Loat dit an gans ’t groepsgesprek weetn",
-    "Room Notification": "Groepsgespreksmeldienge",
-    "Users": "Gebruukers",
     "Session ID": "Sessie-ID",
     "Passphrases must match": "Paswoordn moetn overeenkommn",
     "Passphrase must not be empty": "Paswoord meug nie leeg zyn",
@@ -577,7 +543,6 @@
     "Your %(brand)s is misconfigured": "Je %(brand)s is verkeerd geconfigureerd gewist",
     "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.": "Vroagt an je %(brand)s-beheerder van <a>je configuroasje</a> noa te kykn ip verkeerde of duplicoate items.",
     "Unexpected error resolving identity server configuration": "Ounverwachte foute by ’t iplossn van d’identiteitsserverconfiguroasje",
-    "Use lowercase letters, numbers, dashes and underscores only": "Gebruukt alleene moa letters, cyfers, streeptjes en underscores",
     "Cannot reach identity server": "Kostege den identiteitsserver nie bereikn",
     "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Je ku je registreern, moa sommige functies goan pas beschikboar zyn wanneer da den identiteitsserver were online is. A je deze woarschuwienge te zien bluft krygn, controleert tan je configuroasje of nimt contact ip met e serverbeheerder.",
     "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Je ku je paswoord herinstelln, moa sommige functies goan pas beschikboar zyn wanneer da den identiteitsserver were online is. A je deze woarschuwienge te zien bluft krygn, controleert tan je configuroasje of nimt contact ip met e serverbeheerder.",
@@ -594,10 +559,6 @@
     "Failed to re-authenticate due to a homeserver problem": "’t Heranmeldn is mislukt omwille van e probleem me de thuusserver",
     "Find others by phone or email": "Viendt andere menschn via hunder telefongnumero of e-mailadresse",
     "Be found by phone or email": "Wor gevoundn via je telefongnumero of e-mailadresse",
-    "Use bots, bridges, widgets and sticker packs": "Gebruukt robottn, bruggn, widgets en stickerpakkettn",
-    "Terms of Service": "Gebruuksvoorwoardn",
-    "Service": "Dienst",
-    "Summary": "Soamnvattienge",
     "Clear personal data": "Persoonlike gegeevns wissn",
     "Checking server": "Server wor gecontroleerd",
     "Disconnect from the identity server <idserver />?": "Wil je de verbindienge me den identiteitsserver <idserver /> verbreekn?",
@@ -737,7 +698,13 @@
     "composer": {
         "format_inline_code": "Code",
         "placeholder_reply_encrypted": "Verstuurt e versleuterd antwoord…",
-        "placeholder_encrypted": "Verstuurt e versleuterd bericht…"
+        "placeholder_encrypted": "Verstuurt e versleuterd bericht…",
+        "autocomplete": {
+            "command_description": "Ipdrachtn",
+            "@room_description": "Loat dit an gans ’t groepsgesprek weetn",
+            "notification_description": "Groepsgespreksmeldienge",
+            "user_description": "Gebruukers"
+        }
     },
     "Code": "Code",
     "power_level": {
@@ -803,6 +770,9 @@
             "composer_heading": "Ipsteller",
             "autocomplete_delay": "Vertroagienge vo ’t automatisch anvulln (ms)",
             "always_show_menu_bar": "De veinstermenubalk alsan toogn"
+        },
+        "sessions": {
+            "session_id": "Sessie-ID"
         }
     },
     "devtools": {
@@ -1041,7 +1011,38 @@
             "invite": "Gebruukers uutnodign",
             "state_default": "Instelliengn wyzign",
             "ban": "Gebruukers verbann",
-            "notifications.room": "Iedereen meldn"
+            "notifications.room": "Iedereen meldn",
+            "no_privileged_users": "Geen gebruukers èn specifieke privileges in dit gesprek",
+            "privileged_users_section": "Bevoorrechte gebruukers",
+            "muted_users_section": "Gedempte gebruukers",
+            "banned_users_section": "Verbann gebruukers",
+            "send_event_type": "%(eventType)s-gebeurtenissn verstuurn",
+            "title": "Rolln & toestemmiengn",
+            "permissions_section": "Toestemmiengn",
+            "permissions_section_description_room": "Selecteert de rolln vereist vo verschillende deeln van ’t gesprek te wyzign"
+        },
+        "security": {
+            "enable_encryption_confirm_title": "Versleuterienge inschoakeln?",
+            "enable_encryption_confirm_description": "Van zodra da de versleuterienge voor e gesprek es ingeschoakeld gewist, es ’t nie mi meuglik van ’t were uut te schoakeln. Berichtn da in e versleuterd gesprek wordn verstuurd wordn nie gezien deur de server, alleene moa deur de deelnemers an ’t gesprek. Deur de versleuterienge in te schoakeln kunn veel robots en overbruggiengen nie juste functioneern. <a>Leest meer over de versleuterienge.</a>",
+            "history_visibility": {},
+            "history_visibility_warning": "Wyzigiengn an wie da de geschiedenisse ku leezn zyn alleene moa van toepassienge ip toekomstige berichtn in dit gesprek. De zichtboarheid van de bestoande geschiedenisse bluuft ongewyzigd.",
+            "history_visibility_legend": "Wien kut de geschiedenisse leezn?",
+            "title": "Veiligheid & privacy",
+            "encryption_permanent": "Eenmoal ingeschoakeld ku versleuterienge nie mi wordn uutgeschoakeld.",
+            "history_visibility_shared": "Alleen deelnemers (vanaf de moment da deze optie wor geselecteerd)",
+            "history_visibility_invited": "Alleen deelnemers (vanaf de moment dan ze uutgenodigd gewist zyn)",
+            "history_visibility_joined": "Alleen deelnemers (vanaf de moment dan ze toegetreedn zyn)",
+            "history_visibility_world_readable": "Iedereen"
+        },
+        "general": {
+            "publish_toggle": "Dit gesprek openboar moakn in de gesprekscataloog van %(domain)s?",
+            "user_url_previews_default_on": "J’èt URL-voorvertoniengn standoard <a>ingeschoakeld</a>.",
+            "user_url_previews_default_off": "J’èt URL-voorvertoniengn standoard <a>uutgeschoakeld</a>.",
+            "default_url_previews_on": "URL-voorvertoniengn zyn vo leedn van dit gesprek standoard ingeschoakeld.",
+            "default_url_previews_off": "URL-voorvertoniengn zyn vo leedn van dit gesprek standoard uutgeschoakeld.",
+            "url_preview_encryption_warning": "In versleuterde gesprekkn lyk dat hier zyn URL-voorvertoniengn standoard uutgeschoakeld, vo te voorkommn da je thuusserver (woa da de voorvertoniengn wordn gemakt) informoasje ku verzoameln over de koppeliengn da j’hiere ziet.",
+            "url_preview_explainer": "A ’t er etwien een URL in e bericht invoegt, kut er een URL-voorvertonienge getoogd wordn me meer informoasje over de koppelienge, gelyk den titel, omschryvienge en e fotootje van de website.",
+            "url_previews_section": "URL-voorvertoniengn"
         }
     },
     "encryption": {
@@ -1073,7 +1074,10 @@
         "soft_logout_intro_unsupported_auth": "Je ku je nie anmeldn me jen account. Nimt contact ip me de beheerder van je thuusserver vo meer informoasje.",
         "register_action": "Account anmoakn",
         "incorrect_credentials": "Verkeerde gebruukersnoame en/of paswoord.",
-        "account_deactivated": "Deezn account is gedeactiveerd gewist."
+        "account_deactivated": "Deezn account is gedeactiveerd gewist.",
+        "registration_username_validation": "Gebruukt alleene moa letters, cyfers, streeptjes en underscores",
+        "phone_label": "Telefongnumero",
+        "phone_optional_label": "Telefongnumero (optioneel)"
     },
     "export_chat": {
         "messages": "Berichtn"
@@ -1128,5 +1132,23 @@
     "room_list": {
         "failed_remove_tag": "Verwydern van %(tagName)s-label van gesprek is mislukt",
         "failed_add_tag": "Toevoegn van %(tagName)s-label an gesprek is mislukt"
+    },
+    "room": {
+        "drop_file_prompt": "Versleep ’t bestand noar hier vo ’t ip te loaden"
+    },
+    "file_panel": {
+        "guest_note": "Je moe je <a>registreern</a> vo deze functie te gebruukn",
+        "peek_note": "Je moe tout ’t gesprek toetreedn vo de bestandn te kunn zien"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Gesprekkn ountdekkn"
+        }
+    },
+    "terms": {
+        "integration_manager": "Gebruukt robottn, bruggn, widgets en stickerpakkettn",
+        "tos": "Gebruuksvoorwoardn",
+        "column_service": "Dienst",
+        "column_summary": "Soamnvattienge"
     }
 }

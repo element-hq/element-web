@@ -3,8 +3,6 @@
     "New passwords don't match": "As novas palavras-passe não coincidem",
     "A new password must be entered.": "Deve ser introduzida uma nova palavra-passe.",
     "Are you sure you want to reject the invitation?": "Você tem certeza que deseja rejeitar este convite?",
-    "Banned users": "Usuárias/os banidas/os",
-    "Commands": "Comandos",
     "Confirm password": "Confirmar palavra-passe",
     "Cryptography": "Criptografia",
     "Current password": "Palavra-passe atual",
@@ -27,12 +25,9 @@
     "New passwords must match each other.": "Novas palavras-passe devem coincidir.",
     "Notifications": "Notificações",
     "<not supported>": "<não suportado>",
-    "No users have specific privileges in this room": "Nenhum/a usuário/a possui privilégios específicos nesta sala",
     "Passwords can't be empty": "As palavras-passe não podem estar vazias",
-    "Permissions": "Permissões",
     "Phone": "Telefone",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Por favor verifique seu email e clique no link enviado. Quando finalizar este processo, clique para continuar.",
-    "Privileged Users": "Usuárias/os privilegiadas/os",
     "Profile": "Perfil",
     "Reject invitation": "Rejeitar convite",
     "Return to login screen": "Retornar à tela de login",
@@ -48,9 +43,7 @@
     "Unban": "Desfazer banimento",
     "unknown error code": "código de erro desconhecido",
     "Upload avatar": "Enviar icone de perfil de usuário",
-    "Users": "Usuários",
     "Verification Pending": "Verificação pendente",
-    "Who can read history?": "Quem pode ler o histórico da sala?",
     "You do not have permission to post to this room": "Você não tem permissão de postar nesta sala",
     "Sun": "Dom",
     "Mon": "Seg",
@@ -142,7 +135,6 @@
     "File to import": "Arquivo para importar",
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Este processo permite que você exporte as chaves para mensagens que você recebeu em salas criptografadas para um arquivo local. Você poderá então importar o arquivo para outro cliente Matrix no futuro, de modo que este cliente também poderá descriptografar suas mensagens.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "O ficheiro de exportação será protegido com uma frase-passe. Deve introduzir a frase-passe aqui, para desencriptar o ficheiro.",
-    "You must join the room to see its files": "Você precisa ingressar na sala para ver seus arquivos",
     "Reject all %(invitedRooms)s invites": "Rejeitar todos os %(invitedRooms)s convites",
     "Failed to invite": "Falha ao enviar o convite",
     "Confirm Removal": "Confirmar Remoção",
@@ -154,8 +146,6 @@
     "Error decrypting image": "Erro ao descriptografar a imagem",
     "Error decrypting video": "Erro ao descriptografar o vídeo",
     "Add an Integration": "Adicionar uma integração",
-    "URL Previews": "Pré-visualização de links",
-    "Drop file here to upload": "Arraste um arquivo aqui para enviar",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Este processo faz com que você possa importar as chaves de criptografia que tinha previamente exportado de outro cliente Matrix. Você poderá então descriptografar todas as mensagens que o outro cliente pôde criptografar.",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?",
     "Invited": "Convidada(o)",
@@ -165,18 +155,14 @@
     "No media permissions": "Não há permissões para o uso de vídeo/áudio no seu navegador",
     "You may need to manually permit %(brand)s to access your microphone/webcam": "Você talvez precise autorizar manualmente que o %(brand)s acesse seu microfone e webcam",
     "Default Device": "Dispositivo padrão",
-    "Anyone": "Qualquer pessoa",
     "Are you sure you want to leave the room '%(roomName)s'?": "Você tem certeza que deseja sair da sala '%(roomName)s'?",
     "Custom level": "Nível personalizado",
-    "You have <a>disabled</a> URL previews by default.": "Você <a>desabilitou</a> pré-visualizações de links por padrão.",
-    "You have <a>enabled</a> URL previews by default.": "Você <a>habilitou</a> pré-visualizações de links por padrão.",
     "Create new room": "Criar nova sala",
     "No display name": "Sem nome público de usuária(o)",
     "Uploading %(filename)s and %(count)s others": {
         "one": "Enviando o arquivo %(filename)s e %(count)s outros arquivos",
         "other": "Enviando o arquivo %(filename)s e %(count)s outros arquivos"
     },
-    "You must <a>register</a> to use this functionality": "Você deve <a>se registrar</a> para poder usar esta funcionalidade",
     "Uploading %(filename)s": "Enviando o arquivo %(filename)s",
     "Admin Tools": "Ferramentas de Administração",
     "%(roomName)s does not exist.": "%(roomName)s não existe.",
@@ -192,7 +178,6 @@
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (nível de permissão %(powerLevelNumber)s)",
     "%(roomName)s is not accessible at this time.": "%(roomName)s não está acessível neste momento.",
     "Delete widget": "Apagar widget",
-    "Publish this room to the public in %(domain)s's room directory?": "Publicar esta sala ao público no diretório de salas de %(domain)s's?",
     "AM": "AM",
     "PM": "PM",
     "Unable to create widget.": "Não foi possível criar o widget.",
@@ -408,7 +393,6 @@
     "Mali": "Mali",
     "<userName/> wants to chat": "<userName/> quer falar",
     "Start a conversation with someone using their name or username (like <userId/>).": "Comece uma conversa com alguém a partir do nome ou nome de utilizador (por exemplo: <userId/>).",
-    "Use email or phone to optionally be discoverable by existing contacts.": "Use email ou telefone para, opcionalmente, ser detectável por contactos existentes.",
     "Use an email address to recover your account": "Usar um endereço de email para recuperar a sua conta",
     "Malta": "Malta",
     "Lebanon": "Líbano",
@@ -440,14 +424,11 @@
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Enviámos-lhe um email para confirmar o seu endereço. Por favor siga as instruções no email e depois clique no botão abaixo.",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Apenas um aviso, se não adicionar um email e depois esquecer a sua palavra-passe, poderá <b>perder permanentemente o acesso à sua conta</b>.",
     "Create account": "Criar conta",
-    "Use email to optionally be discoverable by existing contacts.": "Use email para, opcionalmente, ser detectável por contactos existentes.",
     "To create your account, open the link in the email we just sent to %(emailAddress)s.": "Para criar a sua conta, abra a ligação no email que acabámos de enviar para %(emailAddress)s.",
     "Invite with email or username": "Convidar com email ou nome de utilizador",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Convide alguém a partir do nome, endereço de email, nome de utilizador (como <userId/>) ou <a>partilhe este espaço</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Convide alguém a partir do nome, email ou nome de utilizador (como <userId/>) ou <a>partilhe esta sala</a>.",
-    "Unable to check if username has been taken. Try again later.": "Não foi possível verificar se o nome de utilizador já foi usado. Tente novamente mais tarde.",
     "<userName/> invited you": "<userName/> convidou-o",
-    "Someone already has that username. Try another or if it is you, sign in below.": "Alguém já tem esse nome de utilizador. Tente outro ou, se fores tu, inicia sessão em baixo.",
     "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "Ninguém poderá reutilizar o seu nome de utilizador (MXID), incluindo o próprio: este nome de utilizador permanecerá indisponível",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "Comece uma conversa com alguém a partir do nome, endereço de email ou nome de utilizador (por exemplo: <userId/>).",
     "Zambia": "Zâmbia",
@@ -572,7 +553,6 @@
     "Are you sure you want to cancel entering passphrase?": "Tem a certeza que quer cancelar a introdução da frase-passe?",
     "Cancel entering passphrase?": "Cancelar a introdução da frase-passe?",
     "Madagascar": "Madagáscar",
-    "Add an email to be able to reset your password.": "Adicione um email para poder repôr a palavra-passe.",
     "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Convide alguém a partir do nome, nome de utilizador (como <userId/>) ou <a>partilhe este espaço</a>.",
     "Macedonia": "Macedónia",
     "Luxembourg": "Luxemburgo",
@@ -698,6 +678,9 @@
         "appearance": {
             "timeline_image_size_default": "Padrão",
             "image_size_default": "Padrão"
+        },
+        "sessions": {
+            "session_id": "Identificador de sessão"
         }
     },
     "devtools": {
@@ -815,7 +798,13 @@
         "sign_in_or_register_description": "Use a sua conta ou crie uma nova conta para continuar.",
         "sign_in_description": "Use a sua conta para continuar.",
         "register_action": "Criar conta",
-        "incorrect_credentials": "Nome de utilizador e/ou palavra-passe incorreta."
+        "incorrect_credentials": "Nome de utilizador e/ou palavra-passe incorreta.",
+        "registration_username_unable_check": "Não foi possível verificar se o nome de utilizador já foi usado. Tente novamente mais tarde.",
+        "registration_username_in_use": "Alguém já tem esse nome de utilizador. Tente outro ou, se fores tu, inicia sessão em baixo.",
+        "phone_label": "Telefone",
+        "email_help_text": "Adicione um email para poder repôr a palavra-passe.",
+        "email_phone_discovery_text": "Use email ou telefone para, opcionalmente, ser detectável por contactos existentes.",
+        "email_discovery_text": "Use email para, opcionalmente, ser detectável por contactos existentes."
     },
     "export_chat": {
         "messages": "Mensagens"
@@ -839,5 +828,41 @@
     "update": {
         "see_changes_button": "O que há de novo?",
         "release_notes_toast_title": "Novidades"
+    },
+    "composer": {
+        "autocomplete": {
+            "command_description": "Comandos",
+            "user_description": "Usuários"
+        }
+    },
+    "room": {
+        "drop_file_prompt": "Arraste um arquivo aqui para enviar"
+    },
+    "file_panel": {
+        "guest_note": "Você deve <a>se registrar</a> para poder usar esta funcionalidade",
+        "peek_note": "Você precisa ingressar na sala para ver seus arquivos"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Explorar rooms"
+        }
+    },
+    "room_settings": {
+        "permissions": {
+            "no_privileged_users": "Nenhum/a usuário/a possui privilégios específicos nesta sala",
+            "privileged_users_section": "Usuárias/os privilegiadas/os",
+            "banned_users_section": "Usuárias/os banidas/os",
+            "permissions_section": "Permissões"
+        },
+        "security": {
+            "history_visibility_legend": "Quem pode ler o histórico da sala?",
+            "history_visibility_world_readable": "Qualquer pessoa"
+        },
+        "general": {
+            "publish_toggle": "Publicar esta sala ao público no diretório de salas de %(domain)s's?",
+            "user_url_previews_default_on": "Você <a>habilitou</a> pré-visualizações de links por padrão.",
+            "user_url_previews_default_off": "Você <a>desabilitou</a> pré-visualizações de links por padrão.",
+            "url_previews_section": "Pré-visualização de links"
+        }
     }
 }

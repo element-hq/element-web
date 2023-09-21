@@ -358,7 +358,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         description: (_, results) => {
             // omit the description if the only failing result is the `available` one as it makes no sense for it.
             if (results.every(({ key, valid }) => key === "available" || valid)) return null;
-            return _t("Use lowercase letters, numbers, dashes and underscores only");
+            return _t("auth|registration_username_validation");
         },
         hideDescriptionIfValid: true,
         async deriveData(this: RegistrationForm, { value }) {
@@ -401,8 +401,8 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 },
                 invalid: (usernameAvailable) =>
                     usernameAvailable === UsernameAvailableStatus.Error
-                        ? _t("Unable to check if username has been taken. Try again later.")
-                        : _t("Someone already has that username. Try another or if it is you, sign in below."),
+                        ? _t("auth|registration_username_unable_check")
+                        : _t("auth|registration_username_in_use"),
             },
         ],
     });
@@ -496,7 +496,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         if (!this.showPhoneNumber()) {
             return null;
         }
-        const phoneLabel = this.authStepIsRequired("m.login.msisdn") ? _t("Phone") : _t("Phone (optional)");
+        const phoneLabel = this.authStepIsRequired("m.login.msisdn")
+            ? _t("auth|phone_label")
+            : _t("auth|phone_optional_label");
         const phoneCountry = (
             <CountryDropdown
                 value={this.state.phoneCountry}
@@ -549,15 +551,13 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             if (this.showPhoneNumber()) {
                 emailHelperText = (
                     <div>
-                        {_t("Add an email to be able to reset your password.")}{" "}
-                        {_t("Use email or phone to optionally be discoverable by existing contacts.")}
+                        {_t("auth|email_help_text")} {_t("auth|email_phone_discovery_text")}
                     </div>
                 );
             } else {
                 emailHelperText = (
                     <div>
-                        {_t("Add an email to be able to reset your password.")}{" "}
-                        {_t("Use email to optionally be discoverable by existing contacts.")}
+                        {_t("auth|email_help_text")} {_t("auth|email_discovery_text")}
                     </div>
                 );
             }

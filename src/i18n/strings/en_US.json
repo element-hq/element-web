@@ -15,14 +15,11 @@
     },
     "A new password must be entered.": "A new password must be entered.",
     "An error has occurred.": "An error has occurred.",
-    "Anyone": "Anyone",
     "Are you sure?": "Are you sure?",
     "Are you sure you want to leave the room '%(roomName)s'?": "Are you sure you want to leave the room '%(roomName)s'?",
     "Are you sure you want to reject the invitation?": "Are you sure you want to reject the invitation?",
-    "Banned users": "Banned users",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
     "Change Password": "Change Password",
-    "Commands": "Commands",
     "Confirm password": "Confirm password",
     "Cryptography": "Cryptography",
     "Current password": "Current password",
@@ -67,7 +64,6 @@
     "You are no longer ignoring %(userId)s": "You are no longer ignoring %(userId)s",
     "Unignored user": "Unignored user",
     "Ignored user": "Ignored user",
-    "Publish this room to the public in %(domain)s's room directory?": "Publish this room to the public in %(domain)s's room directory?",
     "Low priority": "Low priority",
     "Missing room_id in request": "Missing room_id in request",
     "Missing user_id in request": "Missing user_id in request",
@@ -78,14 +74,11 @@
     "Notifications": "Notifications",
     "<not supported>": "<not supported>",
     "No more results": "No more results",
-    "No users have specific privileges in this room": "No users have specific privileges in this room",
     "Operation failed": "Operation failed",
     "Passwords can't be empty": "Passwords can't be empty",
-    "Permissions": "Permissions",
     "Phone": "Phone",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Please check your email and click on the link it contains. Once this is done, click continue.",
     "Power level must be positive integer.": "Power level must be positive integer.",
-    "Privileged Users": "Privileged Users",
     "Profile": "Profile",
     "Reason": "Reason",
     "Reject invitation": "Reject invitation",
@@ -116,15 +109,11 @@
     "unknown error code": "unknown error code",
     "Upload avatar": "Upload avatar",
     "Upload Failed": "Upload Failed",
-    "Users": "Users",
     "Verification Pending": "Verification Pending",
     "Verified key": "Verified key",
     "Warning!": "Warning!",
-    "Who can read history?": "Who can read history?",
     "You cannot place a call with yourself.": "You cannot place a call with yourself.",
     "You do not have permission to post to this room": "You do not have permission to post to this room",
-    "You have <a>disabled</a> URL previews by default.": "You have <a>disabled</a> URL previews by default.",
-    "You have <a>enabled</a> URL previews by default.": "You have <a>enabled</a> URL previews by default.",
     "You need to be able to invite users to do that.": "You need to be able to invite users to do that.",
     "You need to be logged in.": "You need to be logged in.",
     "You seem to be in a call, are you sure you want to quit?": "You seem to be in a call, are you sure you want to quit?",
@@ -165,7 +154,6 @@
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.",
-    "You must join the room to see its files": "You must join the room to see its files",
     "Reject all %(invitedRooms)s invites": "Reject all %(invitedRooms)s invites",
     "Failed to invite": "Failed to invite",
     "Confirm Removal": "Confirm Removal",
@@ -178,8 +166,6 @@
     "Error decrypting video": "Error decrypting video",
     "Add an Integration": "Add an Integration",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?",
-    "URL Previews": "URL Previews",
-    "Drop file here to upload": "Drop file here to upload",
     "Admin Tools": "Admin Tools",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
     "Create new room": "Create new room",
@@ -194,7 +180,6 @@
         "other": "Uploading %(filename)s and %(count)s others"
     },
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",
-    "You must <a>register</a> to use this functionality": "You must <a>register</a> to use this functionality",
     "(~%(count)s results)": {
         "one": "(~%(count)s result)",
         "other": "(~%(count)s results)"
@@ -379,6 +364,9 @@
             "heading": "Customize your appearance",
             "timeline_image_size_default": "Default",
             "image_size_default": "Default"
+        },
+        "sessions": {
+            "session_id": "Session ID"
         }
     },
     "timeline": {
@@ -511,7 +499,8 @@
         "sign_in_or_register": "Sign In or Create Account",
         "sign_in_or_register_description": "Use your account or create a new one to continue.",
         "register_action": "Create Account",
-        "incorrect_credentials": "Incorrect username and/or password."
+        "incorrect_credentials": "Incorrect username and/or password.",
+        "phone_label": "Phone"
     },
     "export_chat": {
         "messages": "Messages"
@@ -532,5 +521,41 @@
     "update": {
         "see_changes_button": "What's new?",
         "release_notes_toast_title": "What's New"
+    },
+    "composer": {
+        "autocomplete": {
+            "command_description": "Commands",
+            "user_description": "Users"
+        }
+    },
+    "room": {
+        "drop_file_prompt": "Drop file here to upload"
+    },
+    "file_panel": {
+        "guest_note": "You must <a>register</a> to use this functionality",
+        "peek_note": "You must join the room to see its files"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Explore rooms"
+        }
+    },
+    "room_settings": {
+        "permissions": {
+            "no_privileged_users": "No users have specific privileges in this room",
+            "privileged_users_section": "Privileged Users",
+            "banned_users_section": "Banned users",
+            "permissions_section": "Permissions"
+        },
+        "security": {
+            "history_visibility_legend": "Who can read history?",
+            "history_visibility_world_readable": "Anyone"
+        },
+        "general": {
+            "publish_toggle": "Publish this room to the public in %(domain)s's room directory?",
+            "user_url_previews_default_on": "You have <a>enabled</a> URL previews by default.",
+            "user_url_previews_default_off": "You have <a>disabled</a> URL previews by default.",
+            "url_previews_section": "URL Previews"
+        }
     }
 }
