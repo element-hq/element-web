@@ -143,6 +143,9 @@ module.exports = (env, argv) => {
 
     return {
         ...development,
+
+        bail: true,
+
         node: {
             // Mock out the NodeFS module: The opus decoder imports this wrongly.
             fs: "empty",
