@@ -218,6 +218,7 @@ export class StopGapWidget extends EventEmitter {
             clientTheme: SettingsStore.getValue("theme"),
             clientLanguage: getUserLanguage(),
             deviceId: this.client.getDeviceId() ?? undefined,
+            baseUrl: this.client.baseUrl,
         };
         const templated = this.mockWidget.getCompleteUrl(Object.assign(defaults, fromCustomisation), opts?.asPopout);
 

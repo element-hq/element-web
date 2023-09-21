@@ -102,7 +102,7 @@
         "matrix-encrypt-attachment": "^1.0.3",
         "matrix-events-sdk": "0.0.1",
         "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
-        "matrix-widget-api": "^1.5.0",
+        "matrix-widget-api": "^1.6.0",
         "memoize-one": "^6.0.0",
         "minimist": "^1.2.5",
         "oidc-client-ts": "^2.2.4",

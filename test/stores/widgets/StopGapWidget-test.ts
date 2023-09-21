@@ -42,7 +42,7 @@ describe("StopGapWidget", () => {
                 id: "test",
                 creatorUserId: "@alice:example.org",
                 type: "example",
-                url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id",
+                url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url",
                 roomId: "!1:example.org",
             },
             room: mkRoom(client, "!1:example.org"),
@@ -62,7 +62,7 @@ describe("StopGapWidget", () => {
 
     it("should replace parameters in widget url template", () => {
         expect(widget.embedUrl).toBe(
-            "https://example.org/?user-id=%40userId%3Amatrix.org&device-id=ABCDEFGHI&widgetId=test&parentUrl=http%3A%2F%2Flocalhost%2F",
+            "https://example.org/?user-id=%40userId%3Amatrix.org&device-id=ABCDEFGHI&base-url=https%3A%2F%2Fmatrix-client.matrix.org&widgetId=test&parentUrl=http%3A%2F%2Flocalhost%2F",
         );
     });
 

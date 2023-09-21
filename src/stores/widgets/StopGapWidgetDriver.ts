@@ -32,6 +32,7 @@ import {
     WidgetEventCapability,
     WidgetKind,
     ISearchUserDirectoryResult,
+    IGetMediaConfigResult,
 } from "matrix-widget-api";
 import {
     ClientEvent,
@@ -522,5 +523,19 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 avatarUrl: r.avatar_url,
             })),
         };
+    }
+
+    public async getMediaConfig(): Promise<IGetMediaConfigResult> {
+        const client = MatrixClientPeg.safeGet();
+
+        return await client.getMediaConfig();
+    }
+
+    public async uploadFile(file: XMLHttpRequestBodyInit): Promise<{ contentUri: string }> {
+        const client = MatrixClientPeg.safeGet();
+
+        const uploadResult = await client.uploadContent(file);
+
+        return { contentUri: uploadResult.content_uri };
     }
 }
