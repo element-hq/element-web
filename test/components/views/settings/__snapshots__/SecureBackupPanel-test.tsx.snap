@@ -1,5 +1,70 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<SecureBackupPanel /> handles error fetching backup 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.
+  </div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    Unable to load key backup status
+  </div>
+  <details>
+    <summary>
+      Advanced
+    </summary>
+    <table
+      class="mx_SecureBackupPanel_statusList"
+    >
+      <tr>
+        <th
+          scope="row"
+        >
+          Backup key stored:
+        </th>
+        <td>
+          not stored
+        </td>
+      </tr>
+      <tr>
+        <th
+          scope="row"
+        >
+          Backup key cached:
+        </th>
+        <td>
+          not found locally
+          
+        </td>
+      </tr>
+      <tr>
+        <th
+          scope="row"
+        >
+          Secret storage public key:
+        </th>
+        <td>
+          not found
+        </td>
+      </tr>
+      <tr>
+        <th
+          scope="row"
+        >
+          Secret storage:
+        </th>
+        <td>
+          not ready
+        </td>
+      </tr>
+    </table>
+  </details>
+</div>
+`;
+
 exports[`<SecureBackupPanel /> suggests connecting session to key backup when backup exists 1`] = `
 <div>
   <div

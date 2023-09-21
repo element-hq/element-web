@@ -67,7 +67,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     }
 
     public componentDidMount(): void {
-        this.checkKeyBackupStatus();
+        this.loadBackupStatus();
 
         MatrixClientPeg.safeGet().on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
         MatrixClientPeg.safeGet().on(CryptoEvent.KeyBackupSessionsRemaining, this.onKeyBackupSessionsRemaining);
@@ -96,28 +96,6 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         // a re-check otherwise we risk causing infinite loops
         this.loadBackupStatus();
     };
-
-    private async checkKeyBackupStatus(): Promise<void> {
-        this.getUpdatedDiagnostics();
-        try {
-            const keyBackupResult = await MatrixClientPeg.safeGet().checkKeyBackup();
-            this.setState({
-                loading: false,
-                error: false,
-                backupInfo: keyBackupResult?.backupInfo ?? null,
-                backupSigStatus: keyBackupResult?.trustInfo ?? null,
-            });
-        } catch (e) {
-            logger.log("Unable to fetch check backup status", e);
-            if (this.unmounted) return;
-            this.setState({
-                loading: false,
-                error: true,
-                backupInfo: null,
-                backupSigStatus: null,
-            });
-        }
-    }
 
     private async loadBackupStatus(): Promise<void> {
         this.setState({ loading: true });
