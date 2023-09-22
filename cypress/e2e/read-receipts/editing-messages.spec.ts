@@ -23,7 +23,6 @@ import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import {
     assertRead,
     assertReadThread,
-    assertStillRead,
     assertUnread,
     assertUnreadThread,
     backToThreadsList,
