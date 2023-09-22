@@ -7,6 +7,7 @@ jobs:
     add_design_pr_to_project:
         name: Move PRs asking for design review to the design board
         runs-on: ubuntu-latest
+        if: github.repository == 'vector-im/element-web'
         steps:
             - uses: octokit/graphql-action@v2.x
               id: find_team_members
@@ -74,6 +75,7 @@ jobs:
     add_product_pr_to_project:
         name: Move PRs asking for design review to the design board
         runs-on: ubuntu-latest
+        if: github.repository == 'vector-im/element-web'
         steps:
             - uses: octokit/graphql-action@v2.x
               id: find_team_members

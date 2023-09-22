@@ -17,7 +17,7 @@ set -ex
 yarn install --frozen-lockfile
 
 # Pass appropriate repo to fetchdep.sh
-export PR_ORG=element-hq
+export PR_ORG=superhero-com
 export PR_REPO=element-web
 
 # Set up the js-sdk first

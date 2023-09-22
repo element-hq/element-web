@@ -9,6 +9,7 @@ concurrency:
     cancel-in-progress: true
 jobs:
     sonarqube:
+        if: github.repository == 'vector-im/element-web'
         name: 🩻 SonarQube
         uses: matrix-org/matrix-js-sdk/.github/workflows/sonarcloud.yml@develop
         secrets:
