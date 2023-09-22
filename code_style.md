@@ -113,17 +113,6 @@ Unless otherwise specified, the following applies to all code:
     }
     ```
 
-14. Explicitly cast to a boolean, rather than relying on implicit truthiness of non-boolean values:
-
-    ```typescript
-    const isRealUser = !!userId && ...;
-    // ... or ...
-    const isRealUser = Boolean(userId) && ...;
-
-    // but *not*:
-    const isRealUser = userId && ...;   // invalid implicit cast
-    ```
-
 15. Use `switch` statements when checking against more than a few enum-like values.
 16. Use `const` for constants, `let` for mutability.
 17. Describe types exhaustively (ensure noImplictAny would pass).
