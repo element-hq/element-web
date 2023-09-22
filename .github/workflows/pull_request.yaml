@@ -5,5 +5,6 @@ on:
 jobs:
     action:
         uses: matrix-org/matrix-js-sdk/.github/workflows/pull_request.yaml@develop
+        if: github.repository == 'vector-im/element-web'
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}

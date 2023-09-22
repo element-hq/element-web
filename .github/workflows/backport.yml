@@ -15,6 +15,7 @@ jobs:
         # See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_target.
         if: >
             github.event.pull_request.merged
+            && github.repository == 'vector-im/element-web'
             && (
               github.event.action == 'closed'
               || (
