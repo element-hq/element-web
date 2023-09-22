@@ -113,17 +113,17 @@ Unless otherwise specified, the following applies to all code:
     }
     ```
 
-15. Use `switch` statements when checking against more than a few enum-like values.
-16. Use `const` for constants, `let` for mutability.
-17. Describe types exhaustively (ensure noImplictAny would pass).
+14. Use `switch` statements when checking against more than a few enum-like values.
+15. Use `const` for constants, `let` for mutability.
+16. Describe types exhaustively (ensure noImplictAny would pass).
     1. Notable exceptions are arrow functions used as parameters, when a void return type is
        obvious, and when declaring and assigning a variable in the same line.
-18. Declare member visibility (public/private/protected).
-19. Private members are private and not prefixed unless required for naming conflicts.
+17. Declare member visibility (public/private/protected).
+18. Private members are private and not prefixed unless required for naming conflicts.
     1. Convention is to use an underscore or the word "internal" to denote conflicted member names.
     2. "Conflicted" typically refers to a getter which wants the same name as the underlying variable.
-20. Prefer readonly members over getters backed by a variable, unless an internal setter is required.
-21. Prefer Interfaces for object definitions, and types for parameter-value-only declarations.
+19. Prefer readonly members over getters backed by a variable, unless an internal setter is required.
+20. Prefer Interfaces for object definitions, and types for parameter-value-only declarations.
 
     1. Note that an explicit type is optional if not expected to be used outside of the function call,
        unlike in this example:
@@ -140,9 +140,9 @@ Unless otherwise specified, the following applies to all code:
         }
         ```
 
-22. Variables/properties which are `public static` should also be `readonly` when possible.
-23. Interface and type properties are terminated with semicolons, not commas.
-24. Prefer arrow formatting when declaring functions for interfaces/types:
+21. Variables/properties which are `public static` should also be `readonly` when possible.
+22. Interface and type properties are terminated with semicolons, not commas.
+23. Prefer arrow formatting when declaring functions for interfaces/types:
 
     ```typescript
     interface Test {
@@ -150,13 +150,13 @@ Unless otherwise specified, the following applies to all code:
     }
     ```
 
-25. Prefer a type definition over an inline type. For example, define an interface.
-26. Always prefer to add types or declare a type over the use of `any`. Prefer inferred types
+24. Prefer a type definition over an inline type. For example, define an interface.
+25. Always prefer to add types or declare a type over the use of `any`. Prefer inferred types
     when they are not `any`.
     1. When using `any`, a comment explaining why must be present.
-27. `import` should be used instead of `require`, as `require` does not have types.
-28. Export only what can be reused.
-29. Prefer a type like `Optional<X>` (`type Optional<T> = T | null | undefined`) instead
+26. `import` should be used instead of `require`, as `require` does not have types.
+27. Export only what can be reused.
+28. Prefer a type like `Optional<X>` (`type Optional<T> = T | null | undefined`) instead
     of truly optional parameters.
 
     1. A notable exception is when the likelihood of a bug is minimal, such as when a function
@@ -174,12 +174,12 @@ Unless otherwise specified, the following applies to all code:
         }
         ```
 
-30. There should be approximately one interface, class, or enum per file unless the file is named
+29. There should be approximately one interface, class, or enum per file unless the file is named
     "types.ts", "global.d.ts", or ends with "-types.ts".
     1. The file name should match the interface, class, or enum name.
-31. Bulk functions can be declared in a single file, though named as "foo-utils.ts" or "utils/foo.ts".
-32. Imports are grouped by external module imports first, then by internal imports.
-33. File ordering is not strict, but should generally follow this sequence:
+30. Bulk functions can be declared in a single file, though named as "foo-utils.ts" or "utils/foo.ts".
+31. Imports are grouped by external module imports first, then by internal imports.
+32. File ordering is not strict, but should generally follow this sequence:
     1. Licence header
     2. Imports
     3. Constants
@@ -194,16 +194,16 @@ Unless otherwise specified, the following applies to all code:
         5. Protected and abstract functions
         6. Public/private functions
         7. Public/protected/private static functions
-34. Variable names should be noticeably unique from their types. For example, "str: string" instead
+33. Variable names should be noticeably unique from their types. For example, "str: string" instead
     of "string: string".
-35. Use double quotes to enclose strings. You may use single quotes if the string contains double quotes.
+34. Use double quotes to enclose strings. You may use single quotes if the string contains double quotes.
 
     ```typescript
     const example1 = "simple string";
     const example2 = 'string containing "double quotes"';
     ```
 
-36. Prefer async-await to promise-chaining
+35. Prefer async-await to promise-chaining
 
     ```typescript
     async function () {
