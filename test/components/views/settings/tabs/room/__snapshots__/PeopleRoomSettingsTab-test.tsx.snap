@@ -17,7 +17,7 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests fully 1`] 
     >
       <span
         aria-label="Profile picture"
-        class="_avatar_2lhia_17 mx_BaseAvatar mx_PeopleRoomSettingsTab_avatar"
+        class="_avatar_ylj7w_17 mx_BaseAvatar mx_PeopleRoomSettingsTab_avatar"
         data-color="4"
         data-testid="avatar-img"
         data-type="round"
@@ -26,7 +26,7 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests fully 1`] 
       >
         <img
           alt=""
-          class="_image_2lhia_45"
+          class="_image_ylj7w_45"
           crossorigin="anonymous"
           data-type="round"
           height="42px"
@@ -110,7 +110,7 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests reduced 1`
       class="mx_PeopleRoomSettingsTab_knock"
     >
       <span
-        class="_avatar_2lhia_17 mx_BaseAvatar mx_PeopleRoomSettingsTab_avatar _avatar-imageless_2lhia_56"
+        class="_avatar_ylj7w_17 mx_BaseAvatar mx_PeopleRoomSettingsTab_avatar _avatar-imageless_ylj7w_56"
         data-color="4"
         data-testid="avatar-img"
         data-type="round"
