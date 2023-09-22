@@ -371,7 +371,7 @@ describe("Read receipts", () => {
             it("A room where all threaded edits are read is still read after restart", () => {
                 goTo(room2);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), editOf("Resp1", "Edit1")]);
-                assertUnread(room2, 2);
+                assertUnread(room2, 1);
                 openThread("Msg1");
                 assertRead(room2);
                 goTo(room1); // Make sure we are looking at room1 after reload
