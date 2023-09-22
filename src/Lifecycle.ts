@@ -306,7 +306,7 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
         logger.error("Failed to login via OIDC", error);
 
         // TODO(kerrya) nice error messages https://github.com/vector-im/element-web/issues/25665
-        await onFailedDelegatedAuthLogin(_t("Something went wrong."));
+        await onFailedDelegatedAuthLogin(_t("auth|oidc|error_generic"));
         return false;
     }
 }
@@ -364,11 +364,7 @@ export function attemptTokenLogin(
     const identityServer = localStorage.getItem(SSO_ID_SERVER_URL_KEY) ?? undefined;
     if (!homeserver) {
         logger.warn("Cannot log in with token: can't determine HS URL to use");
-        onFailedDelegatedAuthLogin(
-            _t(
-                "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
-            ),
-        );
+        onFailedDelegatedAuthLogin(_t("auth|sso_failed_missing_storage"));
         return Promise.resolve(false);
     }
 
@@ -423,7 +419,7 @@ type TryAgainFunction = () => void;
  */
 async function onFailedDelegatedAuthLogin(description: string | ReactNode, tryAgain?: TryAgainFunction): Promise<void> {
     Modal.createDialog(ErrorDialog, {
-        title: _t("We couldn't log you in"),
+        title: _t("auth|oidc|error_title"),
         description,
         button: _t("action|try_again"),
         // if we have a tryAgain callback, call it the primary 'try again' button was clicked in the dialog
@@ -664,15 +660,12 @@ async function checkServerVersions(): Promise<void> {
                 const toastKey = "LEGACY_SERVER";
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: toastKey,
-                    title: _t("Your server is unsupported"),
+                    title: _t("unsupported_server_title"),
                     props: {
-                        description: _t(
-                            "This server is using an older version of Matrix. Upgrade to Matrix %(version)s to use %(brand)s without errors.",
-                            {
-                                version: MINIMUM_MATRIX_VERSION,
-                                brand: SdkConfig.get().brand,
-                            },
-                        ),
+                        description: _t("unsupported_server_description", {
+                            version: MINIMUM_MATRIX_VERSION,
+                            brand: SdkConfig.get().brand,
+                        }),
                         acceptLabel: _t("action|ok"),
                         onAccept: () => {
                             ToastStore.sharedInstance().dismissToast(toastKey);

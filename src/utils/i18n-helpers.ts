@@ -40,7 +40,7 @@ export function roomContextDetails(room: Room): RoomContextDetails | null {
         const space2Name = room.client.getRoom(secondParent)?.name;
         return {
             details: _t("%(space1Name)s and %(space2Name)s", { space1Name, space2Name }),
-            ariaLabel: _t("In spaces %(space1Name)s and %(space2Name)s.", { space1Name, space2Name }),
+            ariaLabel: _t("in_space1_and_space2", { space1Name, space2Name }),
         };
     } else if (parent) {
         const spaceName = room.client.getRoom(parent)?.name ?? "";
@@ -48,12 +48,12 @@ export function roomContextDetails(room: Room): RoomContextDetails | null {
         if (count > 0) {
             return {
                 details: _t("%(spaceName)s and %(count)s others", { spaceName, count }),
-                ariaLabel: _t("In %(spaceName)s and %(count)s other spaces.", { spaceName, count }),
+                ariaLabel: _t("in_space_and_n_other_spaces", { spaceName, count }),
             };
         }
         return {
             details: spaceName,
-            ariaLabel: _t("In %(spaceName)s.", { spaceName }),
+            ariaLabel: _t("in_space", { spaceName }),
         };
     }
 

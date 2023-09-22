@@ -323,7 +323,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         } else {
             const dialogAesthetics = {
                 [SSOAuthEntry.PHASE_PREAUTH]: {
-                    title: _t("Use Single Sign On to continue"),
+                    title: _t("auth|uia|sso_title"),
                     body: _t("To continue, use Single Sign On to prove your identity."),
                     continueText: _t("auth|sso"),
                     continueKind: "primary",
@@ -337,7 +337,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             };
 
             const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-                title: _t("Setting up keys"),
+                title: _t("encryption|bootstrap_title"),
                 matrixClient: MatrixClientPeg.safeGet(),
                 makeRequest,
                 aestheticsForStagePhases: {
@@ -885,7 +885,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             case Phase.ShowKey:
                 return _t("Save your Security Key");
             case Phase.Storing:
-                return _t("Setting up keys");
+                return _t("encryption|bootstrap_title");
             case Phase.Stored:
                 return _t("Secure Backup successful");
             default:

@@ -177,10 +177,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
 
         if (err?.name === "ConnectionError") {
             this.setState({
-                errorText:
-                    _t("Cannot reach homeserver") +
-                    ": " +
-                    _t("Ensure you have a stable internet connection, or get in touch with the server admin"),
+                errorText: _t("cannot_reach_homeserver") + ": " + _t("cannot_reach_homeserver_detail"),
             });
             return;
         }

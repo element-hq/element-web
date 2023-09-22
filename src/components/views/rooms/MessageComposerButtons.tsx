@@ -270,7 +270,7 @@ const startVoiceBroadcastButton: React.FC<IProps> = (props: IProps): ReactElemen
             className="mx_MessageComposer_button"
             iconClassName="mx_MessageComposer_voiceBroadcast"
             onClick={props.onStartVoiceBroadcastClick}
-            title={_t("Voice broadcast")}
+            title={_t("voice_broadcast|action")}
         />
     ) : null;
 };

@@ -22,14 +22,8 @@ import Modal from "../../Modal";
 
 export const showCantStartACallDialog = (): void => {
     Modal.createDialog(InfoDialog, {
-        title: _t("Can’t start a call"),
-        description: (
-            <p>
-                {_t(
-                    "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.",
-                )}
-            </p>
-        ),
+        title: _t("voip|failed_call_live_broadcast_title"),
+        description: <p>{_t("voip|failed_call_live_broadcast_description")}</p>,
         hasCloseButton: true,
     });
 };

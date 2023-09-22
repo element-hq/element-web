@@ -1277,7 +1277,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 const errCode = err.errcode || _td("unknown error code");
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Failed to forget room %(errCode)s", { errCode }),
-                    description: err && err.message ? err.message : _t("Operation failed"),
+                    description: err && err.message ? err.message : _t("invite|failed_generic"),
                 });
             });
     }

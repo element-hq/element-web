@@ -8,7 +8,6 @@
     "Low Priority": "குறைந்த முன்னுரிமை",
     "Notification targets": "அறிவிப்பு இலக்குகள்",
     "Notifications": "அறிவிப்புகள்",
-    "Operation failed": "செயல்பாடு தோல்வியுற்றது",
     "Search…": "தேடு…",
     "Send": "அனுப்பு",
     "Source URL": "மூல முகவரி",
@@ -28,19 +27,8 @@
     "Yesterday": "நேற்று",
     "Thank you!": "உங்களுக்கு நன்றி",
     "Rooms": "அறைகள்",
-    "This email address is already in use": "இந்த மின்னஞ்சல் முகவரி முன்னதாகவே பயன்பாட்டில் உள்ளது",
-    "This phone number is already in use": "இந்த தொலைபேசி எண் முன்னதாகவே பயன்பாட்டில் உள்ளது",
-    "Failed to verify email address: make sure you clicked the link in the email": "மின்னஞ்சல் முகவரியை சரிபார்க்க முடியவில்லை: மின்னஞ்சலில் உள்ள இணைப்பை அழுத்தியுள்ளீர்களா என்பதை உறுதிப்படுத்தவும்",
-    "Your %(brand)s is misconfigured": "உங்கள் %(brand)s தவறாக உள்ளமைக்கப்பட்டுள்ளது",
-    "You cannot place a call with yourself.": "நீங்கள் உங்களுடனே அழைப்பை மேற்கொள்ள முடியாது.",
     "Permission Required": "அனுமதி தேவை",
-    "You do not have permission to start a conference call in this room": "இந்த அறையில் ஒரு கூட்டு அழைப்பைத் தொடங்க உங்களுக்கு அனுமதி இல்லை",
-    "The file '%(fileName)s' failed to upload.": "'%(fileName)s' கோப்பு பதிவேற்றத் தவறிவிட்டது.",
-    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "'%(fileName)s' கோப்பு இந்த வீட்டுச்சேவையகத்தின் பதிவேற்றங்களுக்கான அளவு வரம்பை மீறுகிறது",
-    "Upload Failed": "பதிவேற்றம் தோல்வியுற்றது",
     "Server may be unavailable, overloaded, or you hit a bug.": "",
-    "The server does not support the room version specified.": "குறிப்பிடப்பட்ட அறை பதிப்பை சேவையகம் ஆதரிக்கவில்லை.",
-    "Failure to create room": "அறையை உருவாக்கத் தவறியது",
     "Sun": "ஞாயிறு",
     "Mon": "திங்கள்",
     "Tue": "செவ்வாய்",
@@ -67,27 +55,6 @@
     "Sep": "செப்டம்பர்",
     "Aug": "ஆகஸ்ட்",
     "Jul": "ஜூலை",
-    "There was an error looking up the phone number": "தொலைபேசி எண்ணைத் தேடுவதில் பிழை ஏற்பட்டது",
-    "Unable to look up phone number": "தொலைபேசி எண்ணைத் தேட முடியவில்லை",
-    "You've reached the maximum number of simultaneous calls.": "ஒரே நேரத்தில் அழைக்கக்கூடிய அதிகபட்ச அழைப்புகளை நீங்கள் அடைந்துவிட்டீர்கள்.",
-    "Too Many Calls": "மிக அதிக அழைப்புகள்",
-    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "அழைப்புகள் நம்பத்தகுந்த வகையில் இயங்குவதற்காக, TURN சேவையகத்தை உள்ளமைக்க உங்கள் வீட்டுசேவையகத்தின் (<code>%(homeserverDomain)s</code>) நிர்வாகியிடம் கேளுங்கள்.",
-    "Call failed due to misconfigured server": "தவறாக உள்ளமைக்கப்பட்ட சேவையகம் காரணமாக அழைப்பு தோல்வியடைந்தது",
-    "The call was answered on another device.": "அழைப்பு மற்றொரு சாதனத்தில் பதிலளிக்கப்பட்டது.",
-    "Answered Elsewhere": "வேறு எங்கோ பதிலளிக்கப்பட்டது",
-    "The call could not be established": "அழைப்பை நிறுவ முடியவில்லை",
-    "Unable to load! Check your network connectivity and try again.": "ஏற்ற முடியவில்லை! உங்கள் பிணைய இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",
-    "Add Phone Number": "தொலைபேசி எண்ணை சேர்க்கவும்",
-    "Click the button below to confirm adding this phone number.": "இந்த தொலைபேசி எண்ணைச் சேர்ப்பதை உறுதிப்படுத்த கீழே உள்ள பொத்தானை அழுத்தவும்.",
-    "Confirm adding phone number": "தொலைபேசி எண்ணைச் சேர்ப்பதை உறுதிப்படுத்தவும்",
-    "Confirm adding this phone number by using Single Sign On to prove your identity.": "உங்கள் அடையாளத்தை நிரூபிக்க ஒற்றை உள்நுழைவைப் பயன்படுத்தி இந்த தொலைபேசி எண்ணைச் சேர்ப்பதை உறுதிப்படுத்தவும்.",
-    "Add Email Address": "மின்னஞ்சல் முகவரியை சேர்க்கவும்",
-    "Click the button below to confirm adding this email address.": "இந்த மின்னஞ்சல் முகவரியை சேர்ப்பதை உறுதிப்படுத்த கீழே உள்ள பொத்தானை அழுத்தவும்.",
-    "Confirm adding email": "மின்னஞ்சலை சேர்ப்பதை உறுதிப்படுத்தவும்",
-    "Confirm adding this email address by using Single Sign On to prove your identity.": "உங்கள் அடையாளத்தை நிரூபிக்க ஒற்றை உள்நுழைவைப் பயன்படுத்தி இந்த மின்னஞ்சல் முகவரியை சேர்ப்பதை உறுதிப்படுத்தவும்.",
-    "Use Single Sign On to continue": "தொடர ஒற்றை உள்நுழைவைப் பயன்படுத்தவும்",
-    "The user you called is busy.": "நீங்கள் அழைத்தவர் தற்போது வேளையாக இருக்கிறார்.",
-    "User Busy": "பயன்படுத்துபவர் தற்போது வேளையாக இருக்கிறார்",
     "common": {
         "analytics": "பகுப்பாய்வு",
         "error": "பிழை",
@@ -137,6 +104,18 @@
             "rule_suppress_notices": "bot மூலம் அனுப்பிய செய்திகள்",
             "show_message_desktop_notification": "திரை அறிவிப்புகளில் செய்தியை காண்பிக்கவும்",
             "noisy": "சத்தம்"
+        },
+        "general": {
+            "email_address_in_use": "இந்த மின்னஞ்சல் முகவரி முன்னதாகவே பயன்பாட்டில் உள்ளது",
+            "msisdn_in_use": "இந்த தொலைபேசி எண் முன்னதாகவே பயன்பாட்டில் உள்ளது",
+            "confirm_adding_email_title": "மின்னஞ்சலை சேர்ப்பதை உறுதிப்படுத்தவும்",
+            "confirm_adding_email_body": "இந்த மின்னஞ்சல் முகவரியை சேர்ப்பதை உறுதிப்படுத்த கீழே உள்ள பொத்தானை அழுத்தவும்.",
+            "add_email_dialog_title": "மின்னஞ்சல் முகவரியை சேர்க்கவும்",
+            "add_email_failed_verification": "மின்னஞ்சல் முகவரியை சரிபார்க்க முடியவில்லை: மின்னஞ்சலில் உள்ள இணைப்பை அழுத்தியுள்ளீர்களா என்பதை உறுதிப்படுத்தவும்",
+            "add_msisdn_confirm_sso_button": "உங்கள் அடையாளத்தை நிரூபிக்க ஒற்றை உள்நுழைவைப் பயன்படுத்தி இந்த தொலைபேசி எண்ணைச் சேர்ப்பதை உறுதிப்படுத்தவும்.",
+            "add_msisdn_confirm_button": "தொலைபேசி எண்ணைச் சேர்ப்பதை உறுதிப்படுத்தவும்",
+            "add_msisdn_confirm_body": "இந்த தொலைபேசி எண்ணைச் சேர்ப்பதை உறுதிப்படுத்த கீழே உள்ள பொத்தானை அழுத்தவும்.",
+            "add_msisdn_dialog_title": "தொலைபேசி எண்ணை சேர்க்கவும்"
         }
     },
     "voip": {
@@ -149,7 +128,21 @@
         "call_failed_media_permissions": "புகைப்படக்கருவியைப் பயன்படுத்த அனுமதி வழங்கப்பட்டுள்ளது",
         "call_failed_media_applications": "வேறு எந்த பயன்பாடும் புகைப்படக்கருவியைப் பயன்படுத்துவதில்லை",
         "already_in_call": "முன்னதாகவே அழைப்பில் உள்ளது",
-        "already_in_call_person": "நீங்கள் முன்னதாகவே இந்த நபருடன் அழைப்பில் உள்ளீர்கள்."
+        "already_in_call_person": "நீங்கள் முன்னதாகவே இந்த நபருடன் அழைப்பில் உள்ளீர்கள்.",
+        "user_busy": "பயன்படுத்துபவர் தற்போது வேளையாக இருக்கிறார்",
+        "user_busy_description": "நீங்கள் அழைத்தவர் தற்போது வேளையாக இருக்கிறார்.",
+        "call_failed_description": "அழைப்பை நிறுவ முடியவில்லை",
+        "answered_elsewhere": "வேறு எங்கோ பதிலளிக்கப்பட்டது",
+        "answered_elsewhere_description": "அழைப்பு மற்றொரு சாதனத்தில் பதிலளிக்கப்பட்டது.",
+        "misconfigured_server": "தவறாக உள்ளமைக்கப்பட்ட சேவையகம் காரணமாக அழைப்பு தோல்வியடைந்தது",
+        "misconfigured_server_description": "அழைப்புகள் நம்பத்தகுந்த வகையில் இயங்குவதற்காக, TURN சேவையகத்தை உள்ளமைக்க உங்கள் வீட்டுசேவையகத்தின் (<code>%(homeserverDomain)s</code>) நிர்வாகியிடம் கேளுங்கள்.",
+        "too_many_calls": "மிக அதிக அழைப்புகள்",
+        "too_many_calls_description": "ஒரே நேரத்தில் அழைக்கக்கூடிய அதிகபட்ச அழைப்புகளை நீங்கள் அடைந்துவிட்டீர்கள்.",
+        "cannot_call_yourself_description": "நீங்கள் உங்களுடனே அழைப்பை மேற்கொள்ள முடியாது.",
+        "msisdn_lookup_failed": "தொலைபேசி எண்ணைத் தேட முடியவில்லை",
+        "msisdn_lookup_failed_description": "தொலைபேசி எண்ணைத் தேடுவதில் பிழை ஏற்பட்டது",
+        "no_permission_conference": "அனுமதி தேவை",
+        "no_permission_conference_description": "இந்த அறையில் ஒரு கூட்டு அழைப்பைத் தொடங்க உங்களுக்கு அனுமதி இல்லை"
     },
     "labs": {
         "group_rooms": "அறைகள்"
@@ -157,7 +150,12 @@
     "auth": {
         "sso": "ஒற்றை உள்நுழைவு",
         "footer_powered_by_matrix": "Matrix-ஆல் ஆனது",
-        "register_action": "உங்கள் கணக்கை துவங்குங்கள்"
+        "register_action": "உங்கள் கணக்கை துவங்குங்கள்",
+        "uia": {
+            "sso_title": "தொடர ஒற்றை உள்நுழைவைப் பயன்படுத்தவும்",
+            "sso_body": "உங்கள் அடையாளத்தை நிரூபிக்க ஒற்றை உள்நுழைவைப் பயன்படுத்தி இந்த மின்னஞ்சல் முகவரியை சேர்ப்பதை உறுதிப்படுத்தவும்."
+        },
+        "misconfigured_title": "உங்கள் %(brand)s தவறாக உள்ளமைக்கப்பட்டுள்ளது"
     },
     "room_list": {
         "failed_remove_tag": "அறையில் இருந்து குறிச்சொல் %(tagName)s களை அகற்றுவது தோல்வியடைந்தது",
@@ -172,5 +170,16 @@
         "context_menu": {
             "explore": "அறைகளை ஆராயுங்கள்"
         }
+    },
+    "failed_load_async_component": "ஏற்ற முடியவில்லை! உங்கள் பிணைய இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",
+    "upload_failed_generic": "'%(fileName)s' கோப்பு பதிவேற்றத் தவறிவிட்டது.",
+    "upload_failed_size": "'%(fileName)s' கோப்பு இந்த வீட்டுச்சேவையகத்தின் பதிவேற்றங்களுக்கான அளவு வரம்பை மீறுகிறது",
+    "upload_failed_title": "பதிவேற்றம் தோல்வியுற்றது",
+    "create_room": {
+        "unsupported_version": "குறிப்பிடப்பட்ட அறை பதிப்பை சேவையகம் ஆதரிக்கவில்லை.",
+        "error_title": "அறையை உருவாக்கத் தவறியது"
+    },
+    "invite": {
+        "failed_generic": "செயல்பாடு தோல்வியுற்றது"
     }
 }

@@ -3,7 +3,6 @@
     "Failed to forget room %(errCode)s": "%(errCode)s റൂം ഫോര്‍ഗെറ്റ് ചെയ്യുവാന്‍ സാധിച്ചില്ല",
     "Favourite": "പ്രിയപ്പെട്ടവ",
     "Notifications": "നോട്ടിഫിക്കേഷനുകള്‍",
-    "Operation failed": "ശ്രമം പരാജയപ്പെട്ടു",
     "unknown error code": "അപരിചിത എറര്‍ കോഡ്",
     "Failed to change password. Is your password correct?": "രഹസ്യവാക്ക് മാറ്റാന്‍ സാധിച്ചില്ല. രഹസ്യവാക്ക് ശരിയാണോ ?",
     "Sunday": "ഞായര്‍",
@@ -94,5 +93,8 @@
         "context_menu": {
             "explore": "മുറികൾ കണ്ടെത്തുക"
         }
+    },
+    "invite": {
+        "failed_generic": "ശ്രമം പരാജയപ്പെട്ടു"
     }
 }

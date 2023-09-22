@@ -527,7 +527,7 @@ export default class WidgetUtils {
     }
 
     public static getWidgetName(app?: IWidget): string {
-        return app?.name?.trim() || _t("Unknown App");
+        return app?.name?.trim() || _t("widget|no_name");
     }
 
     public static getWidgetDataTitle(app?: IWidget): string {

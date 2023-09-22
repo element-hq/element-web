@@ -175,7 +175,7 @@ describe("languageHandler JSX", function () {
     const selfClosingTagSub = "Accept <policyLink /> to continue:" as TranslationKey;
     const textInTagSub = "<a>Upgrade</a> to your own domain" as TranslationKey;
     const plurals = "and %(count)s others...";
-    const variableSub = "You are now ignoring %(userId)s";
+    const variableSub = "slash_command|ignore_dialog_description";
 
     type TestCase = [
         string,

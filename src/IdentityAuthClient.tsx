@@ -136,19 +136,19 @@ export default class IdentityAuthClient {
             !(await doesIdentityServerHaveTerms(this.matrixClient, identityServerUrl))
         ) {
             const { finished } = Modal.createDialog(QuestionDialog, {
-                title: _t("Identity server has no terms of service"),
+                title: _t("terms|identity_server_no_terms_title"),
                 description: (
                     <div>
                         <p>
                             {_t(
-                                "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.",
+                                "terms|identity_server_no_terms_description_1",
                                 {},
                                 {
                                     server: () => <b>{abbreviateUrl(identityServerUrl)}</b>,
                                 },
                             )}
                         </p>
-                        <p>{_t("Only continue if you trust the owner of the server.")}</p>
+                        <p>{_t("terms|identity_server_no_terms_description_2")}</p>
                     </div>
                 ),
                 button: _t("action|trust"),

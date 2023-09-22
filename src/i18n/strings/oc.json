@@ -1,6 +1,4 @@
 {
-    "Add Email Address": "Ajustar una adreça electronica",
-    "Add Phone Number": "Ajustar un numèro de telefòn",
     "Admin Tools": "Aisinas d’administrator",
     "Invite to this room": "Convidar a aquesta sala",
     "Invited": "Convidat",
@@ -43,7 +41,6 @@
     "AM": "AM",
     "Default": "Predefinit",
     "Moderator": "Moderator",
-    "Operation failed": "L'operacion a fracassat",
     "Thank you!": "Mercés !",
     "Reason": "Rason",
     "Notifications": "Notificacions",
@@ -77,7 +74,6 @@
     "Bridges": "Bridges",
     "Sounds": "Sons",
     "Browse": "Percórrer",
-    "Unban": "Reabilitar",
     "Phone Number": "Numèro de telefòn",
     "Unencrypted": "Pas chifrat",
     "Italics": "Italicas",
@@ -118,12 +114,6 @@
     "Search failed": "La recèrca a fracassat",
     "Success!": "Capitada !",
     "Explore rooms": "Percórrer las salas",
-    "Click the button below to confirm adding this email address.": "Clicatz sus lo boton aicí dejós per confirmar l'adicion de l'adreça e-mail.",
-    "Confirm adding email": "Confirmar l'adicion de l'adressa e-mail",
-    "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirmatz l'adicion d'aquela adreça e-mail en utilizant l'autentificacion unica per provar la vòstra identitat.",
-    "Use Single Sign On to continue": "Utilizar l'autentificacion unica (SSO) per contunhar",
-    "This phone number is already in use": "Aquel numèro de telefòn es ja utilizat",
-    "This email address is already in use": "Aquela adreça e-mail es ja utilizada",
     "common": {
         "mute": "Copar lo son",
         "no_results": "Pas cap de resultat",
@@ -225,7 +215,8 @@
         "import": "Importar",
         "export": "Exportar",
         "refresh": "Actualizada",
-        "submit": "Mandar"
+        "submit": "Mandar",
+        "unban": "Reabilitar"
     },
     "keyboard": {
         "home": "Dorsièr personal",
@@ -325,7 +316,13 @@
             "encryption_section": "Chiframent"
         },
         "general": {
-            "account_section": "Compte"
+            "account_section": "Compte",
+            "email_address_in_use": "Aquela adreça e-mail es ja utilizada",
+            "msisdn_in_use": "Aquel numèro de telefòn es ja utilizat",
+            "confirm_adding_email_title": "Confirmar l'adicion de l'adressa e-mail",
+            "confirm_adding_email_body": "Clicatz sus lo boton aicí dejós per confirmar l'adicion de l'adreça e-mail.",
+            "add_email_dialog_title": "Ajustar una adreça electronica",
+            "add_msisdn_dialog_title": "Ajustar un numèro de telefòn"
         }
     },
     "auth": {
@@ -340,7 +337,11 @@
         "change_password_action": "Modificar senhal",
         "email_field_label": "Corrièl",
         "password_field_label": "Sasissètz lo senhal",
-        "msisdn_field_label": "Telefòn"
+        "msisdn_field_label": "Telefòn",
+        "uia": {
+            "sso_title": "Utilizar l'autentificacion unica (SSO) per contunhar",
+            "sso_body": "Confirmatz l'adicion d'aquela adreça e-mail en utilizant l'autentificacion unica per provar la vòstra identitat."
+        }
     },
     "export_chat": {
         "messages": "Messatges"
@@ -380,5 +381,8 @@
         "verification": {
             "cancelling": "Anullacion…"
         }
+    },
+    "invite": {
+        "failed_generic": "L'operacion a fracassat"
     }
 }

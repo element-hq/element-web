@@ -110,7 +110,7 @@ export class BannedUser extends React.Component<IBannedUserProps> {
                     kind="danger_sm"
                     onClick={this.onUnbanClick}
                 >
-                    {_t("Unban")}
+                    {_t("action|unban")}
                 </AccessibleButton>
             );
         }

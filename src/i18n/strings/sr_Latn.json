@@ -1,10 +1,4 @@
 {
-    "This email address is already in use": "Ova adresa elektronske pošte se već koristi",
-    "This phone number is already in use": "Ovaj broj telefona se već koristi",
-    "Add Email Address": "Dodajte adresu elektronske pošte",
-    "Failed to verify email address: make sure you clicked the link in the email": "Neuspela provera adrese elektronske pošte: proverite da li ste kliknuli na link u poruci elektronske pošte",
-    "Add Phone Number": "Dodajte broj telefona",
-    "Your %(brand)s is misconfigured": "Vaš %(brand)s nije dobro podešen",
     "Explore rooms": "Istražite sobe",
     "Send": "Pošalji",
     "Sun": "Ned",
@@ -28,49 +22,14 @@
     "Dec": "Dec",
     "PM": "poslepodne",
     "AM": "prepodne",
-    "Unable to load! Check your network connectivity and try again.": "Neuspelo učitavanje! Proverite vašu mrežu i pokušajte ponovo.",
-    "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s nema dozvolu da vam šalje obaveštenja. Molim proverite podešavanja vašeg internet pregledača",
-    "%(brand)s was not given permission to send notifications - please try again": "%(brand)s nije dobio dozvolu da šalje obaveštenja. Molim pokušajte ponovo",
-    "This email address was not found": "Ova adresa elektronske pošte nije pronađena",
     "Default": "Podrazumevano",
     "Restricted": "Ograničeno",
     "Moderator": "Moderator",
-    "Operation failed": "Operacija nije uspela",
-    "Failed to invite": "Slanje pozivnice nije uspelo",
-    "You need to be logged in.": "Morate biti prijavljeni",
-    "You need to be able to invite users to do that.": "Mora vam biti dozvoljeno da pozovete korisnike kako bi to uradili.",
-    "Failed to send request.": "Slanje zahteva nije uspelo.",
-    "Call failed due to misconfigured server": "Poziv nije uspio zbog pogrešno konfigurisanog servera",
-    "The call was answered on another device.": "Na poziv je odgovoreno na drugom uređaju.",
-    "Answered Elsewhere": "Odgovoreno drugdje",
-    "The call could not be established": "Poziv ne može biti uspostavljen",
-    "The user you called is busy.": "Korisnik kojeg ste zvali je zauzet.",
-    "User Busy": "Korisnik zauzet",
-    "Only continue if you trust the owner of the server.": "Produžite samo pod uslovom da vjerujete vlasniku servera.",
-    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Ova akcija zahtijeva pristup zadanom serveru za provjeru identiteta <server /> radi provjere adrese e-pošte ili telefonskog broja, no server nema nikakve uslove za pružanje usluge.",
-    "Identity server has no terms of service": "Server identiteta nema uslove pružanja usluge",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s%(day)s%(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s%(day)s%(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "Failure to create room": "Greška u kreiranju sobe za razgovore",
-    "The server does not support the room version specified.": "Privatni/javni server koji koristite ne podržava specificiranu verziju sobe.",
-    "Server may be unavailable, overloaded, or you hit a bug.": "Serveru se ne može pristupiti, preopterećen je ili ste otkrili grešku.",
-    "Upload Failed": "Prenos datoteke na server nije uspio",
-    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Datoteka '%(fileName)s' premašuje maksimalnu veličinu za prijenose privatnog/javnog servera koji koristite",
-    "The file '%(fileName)s' failed to upload.": "Prenos datoteke '%(fileName)s' nije uspio.",
-    "Click the button below to confirm adding this phone number.": "Kliknite taster ispod da biste potvrdili dodavanje telefonskog broja.",
-    "Confirm adding phone number": "Potvrdite dodavanje telefonskog broja",
-    "Confirm adding this phone number by using Single Sign On to prove your identity.": "Potvrdite dodavanje ovog telefonskog broja koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
-    "Click the button below to confirm adding this email address.": "Kliknite taster ispod da biste potvrdili dodavanje email adrese.",
-    "Confirm adding email": "Potvrdite dodavanje email adrese",
-    "Confirm adding this email address by using Single Sign On to prove your identity.": "Potvrdite dodavanje ove email adrese koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
-    "Use Single Sign On to continue": "Koristite jedinstvenu prijavu (SSO) za nastavak",
-    "There was a problem communicating with the homeserver, please try again later.": "Postoji problem u komunikaciji sa privatnim/javnim serverom. Molim Vas pokušajte kasnije.",
-    "Please note you are logging into the %(hs)s server, not matrix.org.": "Napominjem Vas da se prijavljujete na %(hs)s server, a ne na matrix.org.",
-    "Please <a>contact your service administrator</a> to continue using this service.": "Molim Vas da <a>kontaktirate administratora</a> kako bi ste nastavili sa korištenjem usluge.",
     "Start a group chat": "Pokreni grupni razgovor",
-    "User is already in the room": "Korisnik je već u sobi",
     "common": {
         "error": "Greška",
         "attachment": "Prilog",
@@ -99,6 +58,22 @@
         "appearance": {
             "timeline_image_size_default": "Podrazumevano",
             "image_size_default": "Podrazumevano"
+        },
+        "general": {
+            "email_address_in_use": "Ova adresa elektronske pošte se već koristi",
+            "msisdn_in_use": "Ovaj broj telefona se već koristi",
+            "confirm_adding_email_title": "Potvrdite dodavanje email adrese",
+            "confirm_adding_email_body": "Kliknite taster ispod da biste potvrdili dodavanje email adrese.",
+            "add_email_dialog_title": "Dodajte adresu elektronske pošte",
+            "add_email_failed_verification": "Neuspela provera adrese elektronske pošte: proverite da li ste kliknuli na link u poruci elektronske pošte",
+            "add_msisdn_confirm_sso_button": "Potvrdite dodavanje ovog telefonskog broja koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
+            "add_msisdn_confirm_button": "Potvrdite dodavanje telefonskog broja",
+            "add_msisdn_confirm_body": "Kliknite taster ispod da biste potvrdili dodavanje telefonskog broja.",
+            "add_msisdn_dialog_title": "Dodajte broj telefona"
+        },
+        "notifications": {
+            "error_permissions_denied": "%(brand)s nema dozvolu da vam šalje obaveštenja. Molim proverite podešavanja vašeg internet pregledača",
+            "error_permissions_missing": "%(brand)s nije dobio dozvolu da šalje obaveštenja. Molim pokušajte ponovo"
         }
     },
     "slash_command": {
@@ -106,7 +81,13 @@
     },
     "voip": {
         "disable_camera": "Zaustavi kameru",
-        "call_failed": "Poziv nije uspio"
+        "call_failed": "Poziv nije uspio",
+        "user_busy": "Korisnik zauzet",
+        "user_busy_description": "Korisnik kojeg ste zvali je zauzet.",
+        "call_failed_description": "Poziv ne može biti uspostavljen",
+        "answered_elsewhere": "Odgovoreno drugdje",
+        "answered_elsewhere_description": "Na poziv je odgovoreno na drugom uređaju.",
+        "misconfigured_server": "Poziv nije uspio zbog pogrešno konfigurisanog servera"
     },
     "auth": {
         "sso": "Jedinstvena prijava (SSO)",
@@ -115,7 +96,14 @@
         "unsupported_auth_email": "Ovaj server ne podržava prijavu korištenjem e-mail adrese.",
         "register_action": "Napravite nalog",
         "account_deactivated": "Ovaj nalog je dekativiran.",
-        "incorrect_credentials": "Neispravno korisničko ime i/ili lozinka."
+        "incorrect_credentials": "Neispravno korisničko ime i/ili lozinka.",
+        "uia": {
+            "sso_title": "Koristite jedinstvenu prijavu (SSO) za nastavak",
+            "sso_body": "Potvrdite dodavanje ove email adrese koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet."
+        },
+        "reset_password_email_not_found_title": "Ova adresa elektronske pošte nije pronađena",
+        "misconfigured_title": "Vaš %(brand)s nije dobro podešen",
+        "incorrect_credentials_detail": "Napominjem Vas da se prijavljujete na %(hs)s server, a ne na matrix.org."
     },
     "keyboard": {
         "keyboard_shortcuts_tab": "Otvori podešavanja"
@@ -129,5 +117,35 @@
         "context_menu": {
             "explore": "Istražite sobe"
         }
+    },
+    "failed_load_async_component": "Neuspelo učitavanje! Proverite vašu mrežu i pokušajte ponovo.",
+    "upload_failed_generic": "Prenos datoteke '%(fileName)s' nije uspio.",
+    "upload_failed_size": "Datoteka '%(fileName)s' premašuje maksimalnu veličinu za prijenose privatnog/javnog servera koji koristite",
+    "upload_failed_title": "Prenos datoteke na server nije uspio",
+    "create_room": {
+        "generic_error": "Serveru se ne može pristupiti, preopterećen je ili ste otkrili grešku.",
+        "unsupported_version": "Privatni/javni server koji koristite ne podržava specificiranu verziju sobe.",
+        "error_title": "Greška u kreiranju sobe za razgovore"
+    },
+    "terms": {
+        "identity_server_no_terms_title": "Server identiteta nema uslove pružanja usluge",
+        "identity_server_no_terms_description_1": "Ova akcija zahtijeva pristup zadanom serveru za provjeru identiteta <server /> radi provjere adrese e-pošte ili telefonskog broja, no server nema nikakve uslove za pružanje usluge.",
+        "identity_server_no_terms_description_2": "Produžite samo pod uslovom da vjerujete vlasniku servera."
+    },
+    "invite": {
+        "failed_title": "Slanje pozivnice nije uspelo",
+        "failed_generic": "Operacija nije uspela",
+        "error_already_joined_room": "Korisnik je već u sobi"
+    },
+    "widget": {
+        "error_need_to_be_logged_in": "Morate biti prijavljeni",
+        "error_need_invite_permission": "Mora vam biti dozvoljeno da pozovete korisnike kako bi to uradili."
+    },
+    "scalar": {
+        "error_send_request": "Slanje zahteva nije uspelo."
+    },
+    "error": {
+        "admin_contact": "Molim Vas da <a>kontaktirate administratora</a> kako bi ste nastavili sa korištenjem usluge.",
+        "connection": "Postoji problem u komunikaciji sa privatnim/javnim serverom. Molim Vas pokušajte kasnije."
     }
 }

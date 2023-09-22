@@ -7,14 +7,8 @@
     "Failed to change password. Is your password correct?": "S'ha produït un error en canviar la contrasenya. És correcta la teva contrasenya?",
     "Notifications": "Notificacions",
     "unknown error code": "codi d'error desconegut",
-    "Operation failed": "No s'ha pogut realitzar l'operació",
     "Rooms": "Sales",
-    "This email address is already in use": "Aquesta adreça de correu electrònic ja està en ús",
-    "This phone number is already in use": "Aquest número de telèfon ja està en ús",
-    "Failed to verify email address: make sure you clicked the link in the email": "No s'ha pogut verificar l'adreça de correu electrònic: assegura't de fer clic a l'enllaç del correu electrònic",
-    "You cannot place a call with yourself.": "No pots trucar-te a tu mateix.",
     "Warning!": "Avís!",
-    "Upload Failed": "No s'ha pogut pujar",
     "Sun": "dg.",
     "Mon": "dl.",
     "Tue": "dt.",
@@ -40,42 +34,15 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s de/d' %(monthName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s de/d' %(monthName)s de %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s de/d' %(monthName)s de %(fullYear)s %(time)s",
-    "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s no té permís per enviar-te notificacions, comprova la configuració del teu navegador",
-    "%(brand)s was not given permission to send notifications - please try again": "%(brand)s no ha rebut cap permís per enviar notificacions, torna-ho a provar",
-    "Unable to enable Notifications": "No s'han pogut activar les notificacions",
-    "This email address was not found": "Aquesta adreça de correu electrònic no s'ha trobat",
     "Default": "Predeterminat",
     "Restricted": "Restringit",
     "Moderator": "Moderador",
-    "Failed to invite": "No s'ha pogut convidar",
-    "You need to be logged in.": "Has d'haver iniciat sessió.",
-    "You need to be able to invite users to do that.": "Per fer això, necessites poder convidar a usuaris.",
-    "Unable to create widget.": "No s'ha pogut crear el giny.",
-    "Failed to send request.": "No s'ha pogut enviar la sol·licitud.",
-    "This room is not recognised.": "No es reconeix aquesta sala.",
-    "Power level must be positive integer.": "El nivell d'autoritat ha de ser un enter positiu.",
-    "You are not in this room.": "No ets en aquesta sala.",
-    "You do not have permission to do that in this room.": "No tens permís per fer això en aquesta sala.",
-    "Missing room_id in request": "Falta el room_id a la sol·licitud",
-    "Room %(roomId)s not visible": "Sala %(roomId)s no visible",
-    "Missing user_id in request": "Falta l'user_id a la sol·licitud",
-    "Ignored user": "Usuari ignorat",
-    "You are now ignoring %(userId)s": "Estàs ignorant l'usuari %(userId)s",
-    "Unignored user": "Usuari no ignorat",
-    "You are no longer ignoring %(userId)s": "Ja no estàs ignorant l'usuari %(userId)s",
-    "Verified key": "Claus verificades",
     "Reason": "Raó",
-    "Failure to create room": "No s'ha pogut crear la sala",
-    "Server may be unavailable, overloaded, or you hit a bug.": "És possible que el servidor no estigui disponible, sobrecarregat o que hagi topat amb un error.",
     "Send": "Envia",
-    "Your browser does not support the required cryptography extensions": "El vostre navegador no és compatible amb els complements criptogràfics necessaris",
-    "Not a valid %(brand)s keyfile": "El fitxer no és un fitxer de claus de %(brand)s vàlid",
-    "Authentication check failed: incorrect password?": "Ha fallat l'autenticació: heu introduït correctament la contrasenya?",
     "Incorrect verification code": "El codi de verificació és incorrecte",
     "No display name": "Sense nom visible",
     "Authentication": "Autenticació",
     "Failed to set display name": "No s'ha pogut establir el nom visible",
-    "Unban": "Retira l'expulsió",
     "This room is not public. You will not be able to rejoin without an invite.": "Aquesta sala no és pública. No podreu tronar a entrar sense invitació.",
     "Failed to ban user": "No s'ha pogut expulsar l'usuari",
     "Failed to mute user": "No s'ha pogut silenciar l'usuari",
@@ -206,18 +173,9 @@
     "Low Priority": "Baixa prioritat",
     "Thank you!": "Gràcies!",
     "Permission Required": "Es necessita permís",
-    "You do not have permission to start a conference call in this room": "No tens permís per iniciar una conferència telefònica en aquesta sala",
-    "Unable to load! Check your network connectivity and try again.": "No s'ha pogut carregar! Comprova la connectivitat de xarxa i torna-ho a intentar.",
-    "Missing roomId.": "Falta l'ID de sala.",
-    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "El fitxer %(fileName)s supera la mida màxima permesa per a pujades d'aquest servidor",
-    "You do not have permission to invite people to this room.": "No teniu permís per convidar gent a aquesta sala.",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "No s'ha trobat el perfil pels IDs de Matrix següents, els voleu convidar igualment?",
     "Invite anyway and never warn me again": "Convidar igualment i no avisar-me de nou",
     "Invite anyway": "Convidar igualment",
-    "This homeserver has hit its Monthly Active User limit.": "Aquest homeserver ha assolit el seu límit d'usuaris actius mensuals.",
-    "This homeserver has exceeded one of its resource limits.": "Aquest homeserver ha sobrepassat on dels seus límits de recursos.",
-    "Unrecognised address": "Adreça no reconeguda",
-    "Unknown server error": "Error de servidor desconegut",
     "Please contact your homeserver administrator.": "Si us plau contacteu amb l'administrador del vostre homeserver.",
     "Email addresses": "Adreces de correu electrònic",
     "Phone numbers": "Números de telèfon",
@@ -227,7 +185,6 @@
     "A connection error occurred while trying to contact the server.": "S'ha produït un error de connexió mentre s'intentava connectar al servidor.",
     "%(brand)s encountered an error during upload of:": "%(brand)s ha trobat un error durant la pujada de:",
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "S'ha produït un error en actualitzar l'adreça principal de la sala. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
-    "Error upgrading room": "Error actualitzant sala",
     "Error changing power level requirement": "Error en canviar requisit del nivell d'autoritat",
     "Error changing power level": "Error en canviar nivell d'autoritat",
     "Error updating main address": "Error actualitzant adreça principal",
@@ -236,33 +193,15 @@
     "There was an error removing that address. It may no longer exist or a temporary error occurred.": "S'ha produït un error en eliminar l'adreça. Pot ser que ja no existeixi o que s'hagi produït un error temporal.",
     "There was an error creating that address. It may not be allowed by the server or a temporary failure occurred.": "S'ha produït un error en crear l'adreça. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "S'ha produït un error en actualitzar l'adreça alternativa de la sala. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
-    "Unexpected server error trying to leave the room": "Error de servidor inesperat intentant sortir de la sala",
-    "Error leaving room": "Error sortint de la sala",
-    "Unexpected error resolving identity server configuration": "Error inesperat resolent la configuració del servidor d'identitat",
-    "Unexpected error resolving homeserver configuration": "Error inesperat resolent la configuració del servidor local",
     "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "S'ha produït un error en canviar els requisits del nivell d'autoritat de la sala. Assegura't que tens suficients permisos i torna-ho a provar.",
     "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "S'ha produït un error en canviar el nivell d'autoritat de l'usuari. Assegura't que tens suficients permisos i torna-ho a provar.",
     "Power level": "Nivell d'autoritat",
-    "Use an identity server": "Utilitza un servidor d'identitat",
-    "Double check that your server supports the room version chosen and try again.": "Comprova que el teu servidor és compatible amb la versió de sala que has triat i torna-ho a intentar.",
-    "Setting up keys": "Configurant claus",
-    "Are you sure you want to cancel entering passphrase?": "Estàs segur que vols cancel·lar la introducció de la frase secreta?",
-    "Cancel entering passphrase?": "Vols cancel·lar la introducció de la frase secreta?",
-    "%(name)s is requesting verification": "%(name)s està demanant verificació",
-    "Only continue if you trust the owner of the server.": "Continua, només, si confies amb el propietari del servidor.",
-    "Identity server has no terms of service": "El servidor d'identitat no disposa de condicions de servei",
-    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Aquesta acció necessita accedir al servidor d'identitat predeterminat <server /> per validar una adreça de correu electrònic o un número de telèfon, però el servidor no disposa de condicions de servei.",
-    "The server does not support the room version specified.": "El servidor no és compatible amb la versió de sala especificada.",
-    "The file '%(fileName)s' failed to upload.": "No s'ha pogut pujar el fitxer '%(fileName)s'.",
-    "Answered Elsewhere": "Respost en una altra banda",
     "e.g. my-room": "p.e. la-meva-sala",
     "New published address (e.g. #alias:server)": "Nova adreça publicada (p.e. #alias:server)",
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Si no has eliminat el mètode de recuperació, pot ser que un atacant estigui intentant accedir al teu compte. Canvia la teva contrasenya i configura un nou mètode de recuperació a Configuració, immediatament.",
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Si no has configurat el teu mètode de recuperació, pot ser que un atacant estigui intentant accedir al teu compte. Canvia la teva contrasenya i configura un nou mètode de recuperació a Configuració, immediatament.",
     "You can also set up Secure Backup & manage your keys in Settings.": "També pots configurar la còpia de seguretat segura i gestionar les teves claus a Configuració.",
     "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Prèviament has fet servir %(brand)s a %(host)s amb la càrrega mandrosa de membres activada. En aquesta versió la càrrega mandrosa està desactivada. Com que la memòria cau local no és compatible entre les dues versions, %(brand)s necessita tornar a sincronitzar el teu compte.",
-    "Use an identity server to invite by email. Manage in Settings.": "Utilitza un servidor d'identitat per convidar per correu electrònic. Gestiona'l a Configuració.",
-    "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. Fes clic a continua per a utilitzar el servidor d'identitat predeterminat (%(defaultIdentityServerName)s) o gestiona'l a Configuració.",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. <default>Utilitza el predeterminat (%(defaultIdentityServerName)s)</default> o gestiona'l a <settings>Configuració</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. Gestiona'l a <settings>Configuració</settings>.",
     "Integrations not allowed": "No es permeten integracions",
@@ -278,21 +217,8 @@
     "Share this email in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, comparteix aquest correu electrònic a Configuració.",
     "Go to Settings": "Ves a Configuració",
     "All settings": "Totes les configuracions",
-    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Demana a l'administrador del servidor local (<code>%(homeserverDomain)s</code>) que configuri un servidor TURN perquè les trucades funcionin de manera fiable.",
-    "Call failed due to misconfigured server": "La trucada ha fallat a causa d'una configuració errònia al servidor",
-    "The call was answered on another device.": "La trucada s'ha respost des d'un altre dispositiu.",
-    "The call could not be established": "No s'ha pogut establir la trucada",
-    "Add Phone Number": "Afegeix número de telèfon",
-    "Confirm adding email": "Confirma l'addició del correu electrònic",
     "To continue, use Single Sign On to prove your identity.": "Per continuar, utilitza la inscripció única SSO (per demostrar la teva identitat).",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Confirma la desactivació del teu compte mitjançant la inscripció única SSO (per demostrar la teva identitat).",
-    "Confirm adding this phone number by using Single Sign On to prove your identity.": "Confirma l'addició d'aquest número de telèfon mitjançant la inscripció única SSO (per demostrar la teva identitat).",
-    "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirma l'addició d'aquest correu electrònic mitjançant la inscripció única SSO (per demostrar la teva identitat).",
-    "Use Single Sign On to continue": "Utilitza la inscripció única (SSO) per a continuar",
-    "Click the button below to confirm adding this phone number.": "Fes clic al botó de sota per confirmar l'addició d'aquest número de telèfon.",
-    "Confirm adding phone number": "Confirma l'addició del número de telèfon",
-    "Add Email Address": "Afegeix una adreça de correu electrònic",
-    "Click the button below to confirm adding this email address.": "Fes clic al botó de sota per confirmar l'addició d'aquesta adreça de correu electrònic.",
     "Explore rooms": "Explora sales",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Els gestors d'integracions reben dades de configuració i poden modificar ginys, enviar invitacions a sales i establir nivells d'autoritat en nom teu.",
     "Could not connect to identity server": "No s'ha pogut connectar amb el servidor d'identitat",
@@ -364,7 +290,8 @@
         "import": "Importa",
         "export": "Exporta",
         "mention": "Menciona",
-        "submit": "Envia"
+        "submit": "Envia",
+        "unban": "Retira l'expulsió"
     },
     "labs": {
         "pinning": "Fixació de missatges",
@@ -407,7 +334,10 @@
             "rule_call": "Invitació de trucada",
             "rule_suppress_notices": "Missatges enviats pel bot",
             "show_message_desktop_notification": "Mostra els missatges amb notificacions d'escriptori",
-            "noisy": "Sorollós"
+            "noisy": "Sorollós",
+            "error_permissions_denied": "%(brand)s no té permís per enviar-te notificacions, comprova la configuració del teu navegador",
+            "error_permissions_missing": "%(brand)s no ha rebut cap permís per enviar notificacions, torna-ho a provar",
+            "error_title": "No s'han pogut activar les notificacions"
         },
         "appearance": {
             "subheading": "La configuració d'aspecte només afecta aquesta sessió %(brand)s.",
@@ -431,7 +361,17 @@
         },
         "general": {
             "account_section": "Compte",
-            "language_section": "Idioma i regió"
+            "language_section": "Idioma i regió",
+            "email_address_in_use": "Aquesta adreça de correu electrònic ja està en ús",
+            "msisdn_in_use": "Aquest número de telèfon ja està en ús",
+            "confirm_adding_email_title": "Confirma l'addició del correu electrònic",
+            "confirm_adding_email_body": "Fes clic al botó de sota per confirmar l'addició d'aquesta adreça de correu electrònic.",
+            "add_email_dialog_title": "Afegeix una adreça de correu electrònic",
+            "add_email_failed_verification": "No s'ha pogut verificar l'adreça de correu electrònic: assegura't de fer clic a l'enllaç del correu electrònic",
+            "add_msisdn_confirm_sso_button": "Confirma l'addició d'aquest número de telèfon mitjançant la inscripció única SSO (per demostrar la teva identitat).",
+            "add_msisdn_confirm_button": "Confirma l'addició del número de telèfon",
+            "add_msisdn_confirm_body": "Fes clic al botó de sota per confirmar l'addició d'aquest número de telèfon.",
+            "add_msisdn_dialog_title": "Afegeix número de telèfon"
         }
     },
     "devtools": {
@@ -620,7 +560,15 @@
         "deop": "Degrada l'usuari amb l'id donat",
         "server_error_detail": "El servidor no està disponible, està sobrecarregat o alguna altra cosa no ha funcionat correctament.",
         "server_error": "Error de servidor",
-        "command_error": "Error en l'ordre"
+        "command_error": "Error en l'ordre",
+        "invite_3pid_use_default_is_title": "Utilitza un servidor d'identitat",
+        "invite_3pid_use_default_is_title_description": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. Fes clic a continua per a utilitzar el servidor d'identitat predeterminat (%(defaultIdentityServerName)s) o gestiona'l a Configuració.",
+        "invite_3pid_needs_is_error": "Utilitza un servidor d'identitat per convidar per correu electrònic. Gestiona'l a Configuració.",
+        "ignore_dialog_title": "Usuari ignorat",
+        "ignore_dialog_description": "Estàs ignorant l'usuari %(userId)s",
+        "unignore_dialog_title": "Usuari no ignorat",
+        "unignore_dialog_description": "Ja no estàs ignorant l'usuari %(userId)s",
+        "verify_success_title": "Claus verificades"
     },
     "presence": {
         "online_for": "En línia durant %(duration)s",
@@ -639,7 +587,15 @@
         "video_call": "Trucada de vídeo",
         "call_failed": "No s'ha pogut realitzar la trucada",
         "unable_to_access_microphone": "No s'ha pogut accedir al micròfon",
-        "unable_to_access_media": "No s'ha pogut accedir a la càmera web / micròfon"
+        "unable_to_access_media": "No s'ha pogut accedir a la càmera web / micròfon",
+        "call_failed_description": "No s'ha pogut establir la trucada",
+        "answered_elsewhere": "Respost en una altra banda",
+        "answered_elsewhere_description": "La trucada s'ha respost des d'un altre dispositiu.",
+        "misconfigured_server": "La trucada ha fallat a causa d'una configuració errònia al servidor",
+        "misconfigured_server_description": "Demana a l'administrador del servidor local (<code>%(homeserverDomain)s</code>) que configuri un servidor TURN perquè les trucades funcionin de manera fiable.",
+        "cannot_call_yourself_description": "No pots trucar-te a tu mateix.",
+        "no_permission_conference": "Es necessita permís",
+        "no_permission_conference_description": "No tens permís per iniciar una conferència telefònica en aquesta sala"
     },
     "Other": "Altres",
     "Advanced": "Avançat",
@@ -699,10 +655,15 @@
             "msisdn_token_incorrect": "Token incorrecte",
             "msisdn": "S'ha enviat un missatge de text a %(msisdn)s",
             "msisdn_token_prompt": "Introdueix el codi que conté:",
-            "fallback_button": "Inicia l'autenticació"
+            "fallback_button": "Inicia l'autenticació",
+            "sso_title": "Utilitza la inscripció única (SSO) per a continuar",
+            "sso_body": "Confirma l'addició d'aquest correu electrònic mitjançant la inscripció única SSO (per demostrar la teva identitat)."
         },
         "msisdn_field_label": "Telèfon",
-        "identifier_label": "Inicieu sessió amb"
+        "identifier_label": "Inicieu sessió amb",
+        "reset_password_email_not_found_title": "Aquesta adreça de correu electrònic no s'ha trobat",
+        "autodiscovery_unexpected_error_hs": "Error inesperat resolent la configuració del servidor local",
+        "autodiscovery_unexpected_error_is": "Error inesperat resolent la configuració del servidor d'identitat"
     },
     "export_chat": {
         "messages": "Missatges"
@@ -755,7 +716,11 @@
         "failed_add_tag": "No s'ha pogut afegir l'etiqueta %(tagName)s a la sala"
     },
     "room": {
-        "drop_file_prompt": "Deixa anar el fitxer aquí per pujar-lo"
+        "drop_file_prompt": "Deixa anar el fitxer aquí per pujar-lo",
+        "leave_unexpected_error": "Error de servidor inesperat intentant sortir de la sala",
+        "leave_error_title": "Error sortint de la sala",
+        "upgrade_error_title": "Error actualitzant sala",
+        "upgrade_error_description": "Comprova que el teu servidor és compatible amb la versió de sala que has triat i torna-ho a intentar."
     },
     "file_panel": {
         "guest_note": "Per poder utilitzar aquesta funcionalitat has de <a>registrar-te</a>",
@@ -768,7 +733,13 @@
     },
     "encryption": {
         "old_version_detected_title": "S'han detectat dades de criptografia antigues",
-        "old_version_detected_description": "S'han detectat dades d'una versió antiga del %(brand)s. Això haurà provocat que el xifratge d'extrem a extrem no funcioni correctament a la versió anterior. Els missatges xifrats d'extrem a extrem que s'han intercanviat recentment mentre s'utilitzava la versió anterior no es poden desxifrar en aquesta versió. També pot provocar que els missatges intercanviats amb aquesta versió fallin. Si teniu problemes, sortiu de la sessió i torneu a entrar-hi. Per poder llegir l'historial dels missatges xifrats, exporteu i torneu a importar les vostres claus."
+        "old_version_detected_description": "S'han detectat dades d'una versió antiga del %(brand)s. Això haurà provocat que el xifratge d'extrem a extrem no funcioni correctament a la versió anterior. Els missatges xifrats d'extrem a extrem que s'han intercanviat recentment mentre s'utilitzava la versió anterior no es poden desxifrar en aquesta versió. També pot provocar que els missatges intercanviats amb aquesta versió fallin. Si teniu problemes, sortiu de la sessió i torneu a entrar-hi. Per poder llegir l'historial dels missatges xifrats, exporteu i torneu a importar les vostres claus.",
+        "cancel_entering_passphrase_title": "Vols cancel·lar la introducció de la frase secreta?",
+        "cancel_entering_passphrase_description": "Estàs segur que vols cancel·lar la introducció de la frase secreta?",
+        "bootstrap_title": "Configurant claus",
+        "export_unsupported": "El vostre navegador no és compatible amb els complements criptogràfics necessaris",
+        "import_invalid_keyfile": "El fitxer no és un fitxer de claus de %(brand)s vàlid",
+        "import_invalid_passphrase": "Ha fallat l'autenticació: heu introduït correctament la contrasenya?"
     },
     "labs_mjolnir": {
         "error_adding_ignore": "Error afegint usuari/servidor ignorat",
@@ -776,5 +747,49 @@
         "error_removing_ignore": "Error eliminant usuari/servidor ignorat",
         "error_removing_list_title": "Error en cancel·lar subscripció de la llista",
         "advanced_warning": "⚠ Aquesta configuració està pensada per usuaris avançats."
+    },
+    "failed_load_async_component": "No s'ha pogut carregar! Comprova la connectivitat de xarxa i torna-ho a intentar.",
+    "upload_failed_generic": "No s'ha pogut pujar el fitxer '%(fileName)s'.",
+    "upload_failed_size": "El fitxer %(fileName)s supera la mida màxima permesa per a pujades d'aquest servidor",
+    "upload_failed_title": "No s'ha pogut pujar",
+    "create_room": {
+        "generic_error": "És possible que el servidor no estigui disponible, sobrecarregat o que hagi topat amb un error.",
+        "unsupported_version": "El servidor no és compatible amb la versió de sala especificada.",
+        "error_title": "No s'ha pogut crear la sala"
+    },
+    "terms": {
+        "identity_server_no_terms_title": "El servidor d'identitat no disposa de condicions de servei",
+        "identity_server_no_terms_description_1": "Aquesta acció necessita accedir al servidor d'identitat predeterminat <server /> per validar una adreça de correu electrònic o un número de telèfon, però el servidor no disposa de condicions de servei.",
+        "identity_server_no_terms_description_2": "Continua, només, si confies amb el propietari del servidor."
+    },
+    "notifier": {
+        "m.key.verification.request": "%(name)s està demanant verificació"
+    },
+    "invite": {
+        "failed_title": "No s'ha pogut convidar",
+        "failed_generic": "No s'ha pogut realitzar l'operació",
+        "invalid_address": "Adreça no reconeguda",
+        "error_permissions_room": "No teniu permís per convidar gent a aquesta sala.",
+        "error_unknown": "Error de servidor desconegut"
+    },
+    "widget": {
+        "error_need_to_be_logged_in": "Has d'haver iniciat sessió.",
+        "error_need_invite_permission": "Per fer això, necessites poder convidar a usuaris."
+    },
+    "scalar": {
+        "error_create": "No s'ha pogut crear el giny.",
+        "error_missing_room_id": "Falta l'ID de sala.",
+        "error_send_request": "No s'ha pogut enviar la sol·licitud.",
+        "error_room_unknown": "No es reconeix aquesta sala.",
+        "error_power_level_invalid": "El nivell d'autoritat ha de ser un enter positiu.",
+        "error_membership": "No ets en aquesta sala.",
+        "error_permission": "No tens permís per fer això en aquesta sala.",
+        "error_missing_room_id_request": "Falta el room_id a la sol·licitud",
+        "error_room_not_visible": "Sala %(roomId)s no visible",
+        "error_missing_user_id_request": "Falta l'user_id a la sol·licitud"
+    },
+    "error": {
+        "mau": "Aquest homeserver ha assolit el seu límit d'usuaris actius mensuals.",
+        "resource_limits": "Aquest homeserver ha sobrepassat on dels seus límits de recursos."
     }
 }

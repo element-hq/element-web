@@ -73,7 +73,7 @@ export default class UserView extends React.Component<IProps, IState> {
         } catch (err) {
             Modal.createDialog(ErrorDialog, {
                 title: _t("Could not load user profile"),
-                description: err instanceof Error ? err.message : _t("Operation failed"),
+                description: err instanceof Error ? err.message : _t("invite|failed_generic"),
             });
             this.setState({ loading: false });
             return;

@@ -77,7 +77,7 @@ export const useAudioDeviceSelection = (
 
     return {
         currentDevice: state.device,
-        currentDeviceLabel: state.device?.label || _t("Default Device"),
+        currentDeviceLabel: state.device?.label || _t("voip|default_device"),
         devices: state.devices,
         setDevice,
     };

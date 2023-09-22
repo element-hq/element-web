@@ -78,8 +78,7 @@ export class UserFriendlyError extends Error {
         const errorOptions = {
             cause: substitutionVariablesAndCause?.cause,
         };
-        // Prevent "Could not find /%\(cause\)s/g in x" logs to the console by removing
-        // it from the list
+        // Prevent "Could not find /%\(cause\)s/g in x" logs to the console by removing it from the list
         const substitutionVariables = { ...substitutionVariablesAndCause };
         delete substitutionVariables["cause"];
 
@@ -247,6 +246,14 @@ export function _t(text: TranslationKey, variables?: IVariables, tags?: Tags): T
     return annotateStrings(substituted, text);
 }
 
+/**
+ * Utility function to look up a string by its translation key without resolving variables & tags
+ * @param key - the translation key to return the value for
+ */
+export function lookupString(key: TranslationKey): string {
+    return safeCounterpartTranslate(key, {}).translated;
+}
+
 /*
  * Wraps normal _t function and adds atttribution for translations that used a fallback locale
  * Wraps translations that fell back from active locale to fallback locale with a `<span lang=<fallback locale>>`
@@ -318,10 +325,10 @@ export function substitute(text: string, variables?: IVariables, tags?: Tags): s
     return result;
 }
 
-/*
+/**
  * Replace parts of a text using regular expressions
- * @param {string} text The text on which to perform substitutions
- * @param {object} mapping A mapping from regular expressions in string form to replacement string or a
+ * @param text - The text on which to perform substitutions
+ * @param mapping - A mapping from regular expressions in string form to replacement string or a
  * function which will receive as the argument the capture groups defined in the regexp. E.g.
  * { 'Hello (.?) World': (sub) => sub.toUpperCase() }
  *

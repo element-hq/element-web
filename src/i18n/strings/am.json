@@ -1,5 +1,13 @@
 {
-    "Use Single Sign On to continue": "ለመቀጠል ነጠላ ምዝገባ ይጠቀሙ",
-    "This phone number is already in use": "ይህ ስልክ ቁጥር ከዚህ በፊት ጥቅም ላይ የዋለ ነው።",
-    "This email address is already in use": "ይህ የኢሜል አድራሻ ከዚህ በፊት ጥቅም ላይ የዋለ ነው።"
+    "settings": {
+        "general": {
+            "email_address_in_use": "ይህ የኢሜል አድራሻ ከዚህ በፊት ጥቅም ላይ የዋለ ነው።",
+            "msisdn_in_use": "ይህ ስልክ ቁጥር ከዚህ በፊት ጥቅም ላይ የዋለ ነው።"
+        }
+    },
+    "auth": {
+        "uia": {
+            "sso_title": "ለመቀጠል ነጠላ ምዝገባ ይጠቀሙ"
+        }
+    }
 }

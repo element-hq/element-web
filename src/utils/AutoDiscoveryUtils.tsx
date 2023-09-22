@@ -68,13 +68,13 @@ export default class AutoDiscoveryUtils {
                 serverDeadError: null,
             };
         }
-        let title = _t("Cannot reach homeserver");
-        let body: ReactNode = _t("Ensure you have a stable internet connection, or get in touch with the server admin");
+        let title = _t("cannot_reach_homeserver");
+        let body: ReactNode = _t("cannot_reach_homeserver_detail");
         if (!AutoDiscoveryUtils.isLivelinessError(err)) {
             const brand = SdkConfig.get().brand;
-            title = _t("Your %(brand)s is misconfigured", { brand });
+            title = _t("auth|misconfigured_title", { brand });
             body = _t(
-                "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.",
+                "auth|misconfigured_body",
                 {
                     brand,
                 },
@@ -98,22 +98,16 @@ export default class AutoDiscoveryUtils {
         const errorMessage = err instanceof Error ? err.message : err;
         if (errorMessage === AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER) {
             isFatalError = false;
-            title = _t("Cannot reach identity server");
+            title = _t("auth|failed_connect_identity_server");
 
             // It's annoying having a ladder for the third word in the same sentence, but our translations
             // don't make this easy to avoid.
             if (pageName === "register") {
-                body = _t(
-                    "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.",
-                );
+                body = _t("auth|failed_connect_identity_server_register");
             } else if (pageName === "reset_password") {
-                body = _t(
-                    "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.",
-                );
+                body = _t("auth|failed_connect_identity_server_reset_password");
             } else {
-                body = _t(
-                    "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.",
-                );
+                body = _t("auth|failed_connect_identity_server_other");
             }
         }
 
@@ -143,7 +137,7 @@ export default class AutoDiscoveryUtils {
         syntaxOnly = false,
     ): Promise<ValidatedServerConfig> {
         if (!homeserverUrl) {
-            throw new UserFriendlyError("No homeserver URL provided");
+            throw new UserFriendlyError("auth|no_hs_url_provided");
         }
 
         const wellknownConfig: IClientWellKnown = {
@@ -195,7 +189,7 @@ export default class AutoDiscoveryUtils {
             // This shouldn't happen without major misconfiguration, so we'll log a bit of information
             // in the log so we can find this bit of code but otherwise tell the user "it broke".
             logger.error("Ended up in a state of not knowing which homeserver to connect to.");
-            throw new UserFriendlyError("Unexpected error resolving homeserver configuration");
+            throw new UserFriendlyError("auth|autodiscovery_unexpected_error_hs");
         }
 
         const hsResult = discoveryResult["m.homeserver"];
@@ -220,7 +214,7 @@ export default class AutoDiscoveryUtils {
                     // XXX: We mark these with _td at the top of Login.tsx - we should come up with a better solution
                     throw new UserFriendlyError(String(isResult.error) as TranslationKey);
                 }
-                throw new UserFriendlyError("Unexpected error resolving identity server configuration");
+                throw new UserFriendlyError("auth|autodiscovery_unexpected_error_is");
             } // else the error is not related to syntax - continue anyways.
 
             // rewrite homeserver error since we don't care about problems
@@ -238,11 +232,9 @@ export default class AutoDiscoveryUtils {
                     throw new UserFriendlyError(String(hsResult.error) as TranslationKey);
                 }
                 if (hsResult.error === AutoDiscovery.ERROR_HOMESERVER_TOO_OLD) {
-                    throw new UserFriendlyError(
-                        "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.",
-                    );
+                    throw new UserFriendlyError("auth|autodiscovery_hs_incompatible");
                 }
-                throw new UserFriendlyError("Unexpected error resolving homeserver configuration");
+                throw new UserFriendlyError("auth|autodiscovery_unexpected_error_hs");
             } // else the error is not related to syntax - continue anyways.
         }
 
@@ -250,7 +242,7 @@ export default class AutoDiscoveryUtils {
 
         if (!preferredHomeserverUrl) {
             logger.error("No homeserver URL configured");
-            throw new UserFriendlyError("Unexpected error resolving homeserver configuration");
+            throw new UserFriendlyError("auth|autodiscovery_unexpected_error_hs");
         }
 
         let preferredHomeserverName = serverName ?? hsResult["server_name"];
@@ -261,7 +253,7 @@ export default class AutoDiscoveryUtils {
         // It should have been set by now, so check it
         if (!preferredHomeserverName) {
             logger.error("Failed to parse homeserver name from homeserver URL");
-            throw new UserFriendlyError("Unexpected error resolving homeserver configuration");
+            throw new UserFriendlyError("auth|autodiscovery_unexpected_error_hs");
         }
 
         let delegatedAuthentication: OidcClientConfig | undefined;

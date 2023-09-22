@@ -639,14 +639,14 @@ export default class ContentMessages {
             }
 
             if (!upload.cancelled) {
-                let desc = _t("The file '%(fileName)s' failed to upload.", { fileName: upload.fileName });
+                let desc = _t("upload_failed_generic", { fileName: upload.fileName });
                 if (error instanceof HTTPError && error.httpStatus === 413) {
-                    desc = _t("The file '%(fileName)s' exceeds this homeserver's size limit for uploads", {
+                    desc = _t("upload_failed_size", {
                         fileName: upload.fileName,
                     });
                 }
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Upload Failed"),
+                    title: _t("upload_failed_title"),
                     description: desc,
                 });
                 dis.dispatch<UploadErrorPayload>({ action: Action.UploadFailed, upload, error });

@@ -1,18 +1,5 @@
 {
-    "This email address is already in use": "Ta e-poštni naslov je že v uporabi",
-    "This phone number is already in use": "Ta telefonska številka je že v uporabi",
-    "Failed to verify email address: make sure you clicked the link in the email": "E-poštnega naslova ni bilo mogoče preveriti: preverite, ali ste kliknili povezavo v e-poštnem sporočilu",
-    "Use Single Sign On to continue": "Uporabi Single Sign On za prijavo",
-    "Confirm adding this email address by using Single Sign On to prove your identity.": "Potrdite dodajanje tega e-poštnega naslova z enkratno prijavo, da dokažete svojo identiteto.",
-    "Confirm adding email": "Potrdi dodajanje e-poštnega naslova",
-    "Click the button below to confirm adding this email address.": "Kliknite gumb spodaj za potrditev dodajanja tega elektronskega naslova.",
-    "Add Email Address": "Dodaj e-poštni naslov",
-    "Confirm adding this phone number by using Single Sign On to prove your identity.": "Potrdite dodajanje te telefonske številke z enkratno prijavo, da dokažete svojo identiteto.",
-    "Confirm adding phone number": "Potrdi dodajanje telefonske številke",
-    "Click the button below to confirm adding this phone number.": "Pritisnite gumb spodaj da potrdite dodajanje te telefonske številke.",
-    "Add Phone Number": "Dodaj telefonsko številko",
     "Explore rooms": "Raziščite sobe",
-    "Identity server has no terms of service": "Identifikacijski strežnik nima pogojev storitve",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
@@ -38,9 +25,6 @@
     "Tue": "Tor",
     "Mon": "Pon",
     "Sun": "Ned",
-    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Datoteka '%(fileName)s' je večja od omejitve, nastavljene na strežniku",
-    "The file '%(fileName)s' failed to upload.": "Datoteka '%(fileName)s' se ni uspešno naložila.",
-    "Unable to load! Check your network connectivity and try again.": "Napaka pri nalaganju! Preverite vašo povezavo in poskusite ponovno.",
     "common": {
         "analytics": "Analitika",
         "error": "Napaka",
@@ -71,7 +55,11 @@
     "auth": {
         "sso": "Enkratna prijava",
         "footer_powered_by_matrix": "poganja Matrix",
-        "register_action": "Registracija"
+        "register_action": "Registracija",
+        "uia": {
+            "sso_title": "Uporabi Single Sign On za prijavo",
+            "sso_body": "Potrdite dodajanje tega e-poštnega naslova z enkratno prijavo, da dokažete svojo identiteto."
+        }
     },
     "setting": {
         "help_about": {
@@ -82,5 +70,25 @@
         "context_menu": {
             "explore": "Raziščite sobe"
         }
+    },
+    "settings": {
+        "general": {
+            "email_address_in_use": "Ta e-poštni naslov je že v uporabi",
+            "msisdn_in_use": "Ta telefonska številka je že v uporabi",
+            "confirm_adding_email_title": "Potrdi dodajanje e-poštnega naslova",
+            "confirm_adding_email_body": "Kliknite gumb spodaj za potrditev dodajanja tega elektronskega naslova.",
+            "add_email_dialog_title": "Dodaj e-poštni naslov",
+            "add_email_failed_verification": "E-poštnega naslova ni bilo mogoče preveriti: preverite, ali ste kliknili povezavo v e-poštnem sporočilu",
+            "add_msisdn_confirm_sso_button": "Potrdite dodajanje te telefonske številke z enkratno prijavo, da dokažete svojo identiteto.",
+            "add_msisdn_confirm_button": "Potrdi dodajanje telefonske številke",
+            "add_msisdn_confirm_body": "Pritisnite gumb spodaj da potrdite dodajanje te telefonske številke.",
+            "add_msisdn_dialog_title": "Dodaj telefonsko številko"
+        }
+    },
+    "failed_load_async_component": "Napaka pri nalaganju! Preverite vašo povezavo in poskusite ponovno.",
+    "upload_failed_generic": "Datoteka '%(fileName)s' se ni uspešno naložila.",
+    "upload_failed_size": "Datoteka '%(fileName)s' je večja od omejitve, nastavljene na strežniku",
+    "terms": {
+        "identity_server_no_terms_title": "Identifikacijski strežnik nima pogojev storitve"
     }
 }

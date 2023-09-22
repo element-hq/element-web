@@ -89,7 +89,7 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
                 logger.error("Unable to remove contact information: " + err);
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to remove contact information"),
-                    description: err && err.message ? err.message : _t("Operation failed"),
+                    description: err && err.message ? err.message : _t("invite|failed_generic"),
                 });
             });
     };
@@ -200,7 +200,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
                 this.setState({ verifying: false, continueDisabled: false, addTask: null });
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to add email address"),
-                    description: extractErrorMessageFromError(err, _t("Operation failed")),
+                    description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
                 });
             });
     };
@@ -247,7 +247,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
                 } else {
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Unable to verify email address."),
-                        description: extractErrorMessageFromError(err, _t("Operation failed")),
+                        description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
                     });
                 }
             });

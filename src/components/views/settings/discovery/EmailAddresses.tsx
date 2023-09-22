@@ -105,7 +105,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
             });
             Modal.createDialog(ErrorDialog, {
                 title: errorTitle,
-                description: extractErrorMessageFromError(err, _t("Operation failed")),
+                description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
             });
         }
     }
@@ -161,7 +161,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                 logger.error("Unable to verify email address: " + err);
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to verify email address."),
-                    description: extractErrorMessageFromError(err, _t("Operation failed")),
+                    description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
                 });
             }
         } finally {

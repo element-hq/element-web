@@ -223,13 +223,13 @@ export default class SetIdServer extends React.Component<IProps, IState> {
 
     private showNoTermsWarning(fullUrl: string): Promise<[ok?: boolean]> {
         const { finished } = Modal.createDialog(QuestionDialog, {
-            title: _t("Identity server has no terms of service"),
+            title: _t("terms|identity_server_no_terms_title"),
             description: (
                 <div>
                     <span className="warning">
                         {_t("The identity server you have chosen does not have any terms of service.")}
                     </span>
-                    <span>&nbsp;{_t("Only continue if you trust the owner of the server.")}</span>
+                    <span>&nbsp;{_t("terms|identity_server_no_terms_description_2")}</span>
                 </div>
             ),
             button: _t("action|continue"),

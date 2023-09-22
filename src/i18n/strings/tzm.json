@@ -16,8 +16,6 @@
     "Tue": "Asn",
     "Mon": "Ayn",
     "Sun": "Asa",
-    "Add Phone Number": "Rnu uṭṭun n utilifun",
-    "Add Email Address": "Rnu tasna imayl",
     "Santa": "Santa",
     "Pizza": "Tapizzat",
     "Corn": "Akbal",
@@ -175,7 +173,9 @@
             "cross_signing_homeserver_support_exists": "illa"
         },
         "general": {
-            "account_section": "Amiḍan"
+            "account_section": "Amiḍan",
+            "add_email_dialog_title": "Rnu tasna imayl",
+            "add_msisdn_dialog_title": "Rnu uṭṭun n utilifun"
         }
     }
 }

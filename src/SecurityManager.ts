@@ -72,8 +72,8 @@ export class AccessCancelledError extends Error {
 
 async function confirmToDismiss(): Promise<boolean> {
     const [sure] = await Modal.createDialog(QuestionDialog, {
-        title: _t("Cancel entering passphrase?"),
-        description: _t("Are you sure you want to cancel entering passphrase?"),
+        title: _t("encryption|cancel_entering_passphrase_title"),
+        description: _t("encryption|cancel_entering_passphrase_description"),
         danger: false,
         button: _t("action|go_back"),
         cancelButton: _t("action|cancel"),
@@ -356,7 +356,7 @@ export async function accessSecretStorage(func = async (): Promise<void> => {}, 
             await cli.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
                     const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-                        title: _t("Setting up keys"),
+                        title: _t("encryption|bootstrap_title"),
                         matrixClient: cli,
                         makeRequest,
                     });

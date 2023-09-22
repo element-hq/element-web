@@ -92,10 +92,10 @@ export const shouldShowSpaceInvite = (space: Room): boolean =>
 export const showSpaceInvite = (space: Room, initialText = ""): void => {
     if (space.getJoinRule() === "public") {
         const modal = Modal.createDialog(InfoDialog, {
-            title: _t("Invite to %(spaceName)s", { spaceName: space.name }),
+            title: _t("invite|to_space", { spaceName: space.name }),
             description: (
                 <React.Fragment>
-                    <span>{_t("Share your public space")}</span>
+                    <span>{_t("space|share_public")}</span>
                     <SpacePublicShare space={space} onFinished={() => modal.close()} />
                 </React.Fragment>
             ),

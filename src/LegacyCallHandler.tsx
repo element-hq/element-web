@@ -705,11 +705,11 @@ export default class LegacyCallHandler extends EventEmitter {
                     let description: string;
                     // TODO: We should either do away with these or figure out a copy for each code (expect user_hangup...)
                     if (call.hangupReason === CallErrorCode.UserBusy) {
-                        title = _t("User Busy");
-                        description = _t("The user you called is busy.");
+                        title = _t("voip|user_busy");
+                        description = _t("voip|user_busy_description");
                     } else {
                         title = _t("voip|call_failed");
-                        description = _t("The call could not be established");
+                        description = _t("voip|call_failed_description");
                     }
 
                     Modal.createDialog(ErrorDialog, {
@@ -718,8 +718,8 @@ export default class LegacyCallHandler extends EventEmitter {
                     });
                 } else if (hangupReason === CallErrorCode.AnsweredElsewhere && oldState === CallState.Connecting) {
                     Modal.createDialog(ErrorDialog, {
-                        title: _t("Answered Elsewhere"),
-                        description: _t("The call was answered on another device."),
+                        title: _t("voip|answered_elsewhere"),
+                        description: _t("voip|answered_elsewhere_description"),
                     });
                 } else if (oldState !== CallState.Fledgling && oldState !== CallState.Ringing) {
                     // don't play the end-call sound for calls that never got off the ground
@@ -818,26 +818,24 @@ export default class LegacyCallHandler extends EventEmitter {
         Modal.createDialog(
             QuestionDialog,
             {
-                title: _t("Call failed due to misconfigured server"),
+                title: _t("voip|misconfigured_server"),
                 description: (
                     <div>
                         <p>
                             {_t(
-                                "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.",
+                                "voip|misconfigured_server_description",
                                 { homeserverDomain: cli.getDomain() },
                                 { code: (sub: string) => <code>{sub}</code> },
                             )}
                         </p>
                         <p>
-                            {_t(
-                                "Alternatively, you can try to use the public server at <server/>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.",
-                                undefined,
-                                { server: () => <code>{new URL(FALLBACK_ICE_SERVER).pathname}</code> },
-                            )}
+                            {_t("voip|misconfigured_server_fallback", undefined, {
+                                server: () => <code>{new URL(FALLBACK_ICE_SERVER).pathname}</code>,
+                            })}
                         </p>
                     </div>
                 ),
-                button: _t("Try using %(server)s", {
+                button: _t("voip|misconfigured_server_fallback_accept", {
                     server: new URL(FALLBACK_ICE_SERVER).pathname,
                 }),
                 cancelButton: _t("action|ok"),
@@ -958,8 +956,8 @@ export default class LegacyCallHandler extends EventEmitter {
 
         if (cli.getSyncState() === SyncState.Error) {
             Modal.createDialog(ErrorDialog, {
-                title: _t("Connectivity to the server has been lost"),
-                description: _t("You cannot place calls without a connection to the server."),
+                title: _t("voip|connection_lost"),
+                description: _t("voip|connection_lost_description"),
             });
             return;
         }
@@ -967,8 +965,8 @@ export default class LegacyCallHandler extends EventEmitter {
         // don't allow > 2 calls to be placed.
         if (this.getAllActiveCalls().length > 1) {
             Modal.createDialog(ErrorDialog, {
-                title: _t("Too Many Calls"),
-                description: _t("You've reached the maximum number of simultaneous calls."),
+                title: _t("voip|too_many_calls"),
+                description: _t("voip|too_many_calls_description"),
             });
             return;
         }
@@ -985,7 +983,7 @@ export default class LegacyCallHandler extends EventEmitter {
         const members = getJoinedNonFunctionalMembers(room);
         if (members.length <= 1) {
             Modal.createDialog(ErrorDialog, {
-                description: _t("You cannot place a call with yourself."),
+                description: _t("voip|cannot_call_yourself_description"),
             });
         } else if (members.length === 2) {
             logger.info(`Place ${type} call in ${roomId}`);
@@ -1030,8 +1028,8 @@ export default class LegacyCallHandler extends EventEmitter {
 
         if (this.getAllActiveCalls().length > 1) {
             Modal.createDialog(ErrorDialog, {
-                title: _t("Too Many Calls"),
-                description: _t("You've reached the maximum number of simultaneous calls."),
+                title: _t("voip|too_many_calls"),
+                description: _t("voip|too_many_calls_description"),
             });
             return;
         }
@@ -1055,8 +1053,8 @@ export default class LegacyCallHandler extends EventEmitter {
         const results = await this.pstnLookup(number);
         if (!results || results.length === 0 || !results[0].userid) {
             Modal.createDialog(ErrorDialog, {
-                title: _t("Unable to look up phone number"),
-                description: _t("There was an error looking up the phone number"),
+                title: _t("voip|msisdn_lookup_failed"),
+                description: _t("voip|msisdn_lookup_failed_description"),
             });
             return;
         }
@@ -1103,8 +1101,8 @@ export default class LegacyCallHandler extends EventEmitter {
         const results = await this.pstnLookup(destination);
         if (!results || results.length === 0 || !results[0].userid) {
             Modal.createDialog(ErrorDialog, {
-                title: _t("Unable to transfer call"),
-                description: _t("There was an error looking up the phone number"),
+                title: _t("voip|msisdn_transfer_failed"),
+                description: _t("voip|msisdn_lookup_failed_description"),
             });
             return;
         }
@@ -1118,8 +1116,8 @@ export default class LegacyCallHandler extends EventEmitter {
             if (!dmRoomId) {
                 logger.log("Failed to transfer call, could not ensure dm exists");
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Transfer Failed"),
-                    description: _t("Failed to transfer call"),
+                    title: _t("voip|transfer_failed"),
+                    description: _t("voip|transfer_failed_description"),
                 });
                 return;
             }
@@ -1138,8 +1136,8 @@ export default class LegacyCallHandler extends EventEmitter {
             } catch (e) {
                 logger.log("Failed to transfer call", e);
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Transfer Failed"),
-                    description: _t("Failed to transfer call"),
+                    title: _t("voip|transfer_failed"),
+                    description: _t("voip|transfer_failed_description"),
                 });
             }
         }
@@ -1195,8 +1193,8 @@ export default class LegacyCallHandler extends EventEmitter {
         } catch (e) {
             if (e instanceof MatrixError && e.errcode === "M_FORBIDDEN") {
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Permission Required"),
-                    description: _t("You do not have permission to start a conference call in this room"),
+                    title: _t("voip|no_permission_conference"),
+                    description: _t("voip|no_permission_conference_description"),
                 });
             }
             logger.error(e);

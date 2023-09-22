@@ -221,7 +221,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
                 // in which case we show the error code)
                 reason = _t("An unknown error occurred");
             } else if (hangupReason === CallErrorCode.UserBusy) {
-                reason = _t("The user you called is busy.");
+                reason = _t("voip|user_busy_description");
             } else {
                 reason = _t("Unknown failure: %(reason)s", { reason: hangupReason });
             }

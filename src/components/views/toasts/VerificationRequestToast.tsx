@@ -172,7 +172,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
             if (description === userId) {
                 const user = client.getUser(userId);
                 if (user && user.displayName) {
-                    description = _t("%(name)s (%(userId)s)", { name: user.displayName, userId });
+                    description = _t("name_and_id", { name: user.displayName, userId });
                 }
             }
         }
