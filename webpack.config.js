@@ -728,14 +728,23 @@ module.exports = (env, argv) => {
 
         // configuration for the webpack-dev-server
         devServer: {
-            // serve unwebpacked assets from webapp.
-            contentBase: ["./webapp"],
+            static: {
+                // Where to serve static assets from
+                directory: "./webapp",
+            },
 
-            // Only output errors, warnings, or new compilations.
-            // This hides the massive list of modules.
-            stats: "minimal",
-            hotOnly: true,
-            inline: true,
+            devMiddleware: {
+                // Only output errors, warnings, or new compilations.
+                // This hides the massive list of modules.
+                stats: "minimal",
+            },
+
+            // Enable Hot Module Replacement without page refresh as a fallback in
+            // case of build failures
+            hot: "only",
+
+            // Disable host check
+            allowedHosts: 'all',
         },
     };
 };
