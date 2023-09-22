@@ -68,7 +68,7 @@ const CurrentDeviceSectionHeading: React.FC<CurrentDeviceSectionHeadingProps> = 
             ? [
                   <IconizedContextMenuOption
                       key="sign-out-all-others"
-                      label={_t("Sign out of all other sessions (%(otherSessionsCount)s)", { otherSessionsCount })}
+                      label={_t("settings|sessions|sign_out_all_other_sessions", { otherSessionsCount })}
                       onClick={signOutAllOtherSessions}
                       isDestructive
                   />,
@@ -76,7 +76,7 @@ const CurrentDeviceSectionHeading: React.FC<CurrentDeviceSectionHeadingProps> = 
             : []),
     ];
     return (
-        <SettingsSubsectionHeading heading={_t("Current session")}>
+        <SettingsSubsectionHeading heading={_t("settings|sessions|current_session")}>
             <KebabContextMenu
                 disabled={disabled}
                 title={_t("common|options")}

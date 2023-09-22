@@ -47,6 +47,7 @@ import { useRoomState } from "../../../hooks/useRoomState";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { formatCount } from "../../../utils/FormattingUtils";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
+import { Linkify, topicToHtml } from "../../../HtmlUtils";
 
 /**
  * A helper to transform a notification color to the what the Compound Icon Button
@@ -99,6 +100,11 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
     const e2eStatus = useEncryptionStatus(client, room);
 
     const notificationsEnabled = useFeatureEnabled("feature_notifications");
+
+    const roomTopicBody = useMemo(
+        () => topicToHtml(roomTopic?.text, roomTopic?.html),
+        [roomTopic?.html, roomTopic?.text],
+    );
 
     return (
         <Flex
@@ -159,7 +165,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                 </BodyText>
                 {roomTopic && (
                     <BodyText as="div" size="sm" className="mx_RoomHeader_topic">
-                        {roomTopic.text}
+                        <Linkify>{roomTopicBody}</Linkify>
                     </BodyText>
                 )}
             </Box>

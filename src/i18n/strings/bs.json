@@ -9,5 +9,10 @@
     },
     "auth": {
         "register_action": "Otvori račun"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Istražite sobe"
+        }
     }
 }

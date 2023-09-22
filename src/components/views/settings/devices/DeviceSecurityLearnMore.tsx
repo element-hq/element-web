@@ -32,73 +32,41 @@ const securityCardContent: Record<
     }
 > = {
     [DeviceSecurityVariation.Verified]: {
-        title: _t("Verified sessions"),
+        title: _t("settings|sessions|verified_sessions"),
         description: (
             <>
-                <p>
-                    {_t(
-                        "Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.",
-                    )}
-                </p>
-                <p>
-                    {_t(
-                        "This means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.",
-                    )}
-                </p>
+                <p>{_t("settings|sessions|verified_sessions_explainer_1")}</p>
+                <p>{_t("settings|sessions|verified_sessions_explainer_2")}</p>
             </>
         ),
     },
     [DeviceSecurityVariation.Unverified]: {
-        title: _t("Unverified sessions"),
+        title: _t("settings|sessions|unverified_sessions"),
         description: (
             <>
-                <p>
-                    {_t(
-                        "Unverified sessions are sessions that have logged in with your credentials but have not been cross-verified.",
-                    )}
-                </p>
-                <p>
-                    {_t(
-                        "You should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.",
-                    )}
-                </p>
+                <p>{_t("settings|sessions|unverified_sessions_explainer_1")}</p>
+                <p>{_t("settings|sessions|unverified_sessions_explainer_2")}</p>
             </>
         ),
     },
     // unverifiable uses single-session case
     // because it is only ever displayed on a single session detail
     [DeviceSecurityVariation.Unverifiable]: {
-        title: _t("Unverified session"),
+        title: _t("settings|sessions|unverified_session"),
         description: (
             <>
-                <p>{_t(`This session doesn't support encryption and thus can't be verified.`)}</p>
-                <p>
-                    {_t(
-                        `You won't be able to participate in rooms where encryption is enabled when using this session.`,
-                    )}
-                </p>
-                <p>
-                    {_t(
-                        `For best security and privacy, it is recommended to use Matrix clients that support encryption.`,
-                    )}
-                </p>
+                <p>{_t("settings|sessions|unverified_session_explainer_1")}</p>
+                <p>{_t("settings|sessions|unverified_session_explainer_2")}</p>
+                <p>{_t("settings|sessions|unverified_session_explainer_3")}</p>
             </>
         ),
     },
     [DeviceSecurityVariation.Inactive]: {
-        title: _t("Inactive sessions"),
+        title: _t("settings|sessions|inactive_sessions"),
         description: (
             <>
-                <p>
-                    {_t(
-                        "Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.",
-                    )}
-                </p>
-                <p>
-                    {_t(
-                        "Removing inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.",
-                    )}
-                </p>
+                <p>{_t("settings|sessions|inactive_sessions_explainer_1")}</p>
+                <p>{_t("settings|sessions|inactive_sessions_explainer_2")}</p>
             </>
         ),
     },

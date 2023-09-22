@@ -136,6 +136,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             clientId: ELEMENT_CLIENT_ID,
             clientTheme: SettingsStore.getValue("theme"),
             clientLanguage: getUserLanguage(),
+            baseUrl: MatrixClientPeg.safeGet().baseUrl,
         });
 
         const parsed = new URL(templated);

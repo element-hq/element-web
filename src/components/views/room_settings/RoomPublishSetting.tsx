@@ -78,7 +78,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
                 value={this.state.isRoomPublished}
                 onChange={this.onRoomPublishChange}
                 disabled={!enabled}
-                label={_t("Publish this room to the public in %(domain)s's room directory?", {
+                label={_t("room_settings|general|publish_toggle", {
                     domain: client.getDomain(),
                 })}
             />

@@ -67,7 +67,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     }
 
     public componentDidMount(): void {
-        this.checkKeyBackupStatus();
+        this.loadBackupStatus();
 
         MatrixClientPeg.safeGet().on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
         MatrixClientPeg.safeGet().on(CryptoEvent.KeyBackupSessionsRemaining, this.onKeyBackupSessionsRemaining);
@@ -96,28 +96,6 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         // a re-check otherwise we risk causing infinite loops
         this.loadBackupStatus();
     };
-
-    private async checkKeyBackupStatus(): Promise<void> {
-        this.getUpdatedDiagnostics();
-        try {
-            const keyBackupResult = await MatrixClientPeg.safeGet().checkKeyBackup();
-            this.setState({
-                loading: false,
-                error: false,
-                backupInfo: keyBackupResult?.backupInfo ?? null,
-                backupSigStatus: keyBackupResult?.trustInfo ?? null,
-            });
-        } catch (e) {
-            logger.log("Unable to fetch check backup status", e);
-            if (this.unmounted) return;
-            this.setState({
-                loading: false,
-                error: true,
-                backupInfo: null,
-                backupSigStatus: null,
-            });
-        }
-    }
 
     private async loadBackupStatus(): Promise<void> {
         this.setState({ loading: true });
@@ -388,18 +366,28 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                     <table className="mx_SecureBackupPanel_statusList">
                         <tr>
                             <th scope="row">{_t("Backup key stored:")}</th>
-                            <td>{backupKeyStored === true ? _t("in secret storage") : _t("not stored")}</td>
+                            <td>
+                                {backupKeyStored === true
+                                    ? _t("settings|security|cross_signing_in_4s")
+                                    : _t("not stored")}
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">{_t("Backup key cached:")}</th>
                             <td>
-                                {backupKeyCached ? _t("cached locally") : _t("not found locally")}
+                                {backupKeyCached
+                                    ? _t("settings|security|cross_signing_cached")
+                                    : _t("settings|security|cross_signing_not_cached")}
                                 {backupKeyWellFormedText}
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">{_t("Secret storage public key:")}</th>
-                            <td>{secretStorageKeyInAccount ? _t("in account data") : _t("not found")}</td>
+                            <td>
+                                {secretStorageKeyInAccount
+                                    ? _t("in account data")
+                                    : _t("settings|security|cross_signing_not_found")}
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">{_t("Secret storage:")}</th>

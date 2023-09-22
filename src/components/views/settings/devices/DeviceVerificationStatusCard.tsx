@@ -38,11 +38,11 @@ const getCardProps = (
 } => {
     if (device.isVerified) {
         const descriptionText = isCurrentDevice
-            ? _t("Your current session is ready for secure messaging.")
-            : _t("This session is ready for secure messaging.");
+            ? _t("settings|sessions|device_verified_description_current")
+            : _t("settings|sessions|device_verified_description");
         return {
             variation: DeviceSecurityVariation.Verified,
-            heading: _t("Verified session"),
+            heading: _t("settings|sessions|verified_session"),
             description: (
                 <>
                     {descriptionText}
@@ -54,10 +54,10 @@ const getCardProps = (
     if (device.isVerified === null) {
         return {
             variation: DeviceSecurityVariation.Unverified,
-            heading: _t("Unverified session"),
+            heading: _t("settings|sessions|unverified_session"),
             description: (
                 <>
-                    {_t(`This session doesn't support encryption and thus can't be verified.`)}
+                    {_t("settings|sessions|unverified_session_explainer_1")}
                     <DeviceSecurityLearnMore variation={DeviceSecurityVariation.Unverifiable} />
                 </>
             ),
@@ -65,11 +65,11 @@ const getCardProps = (
     }
 
     const descriptionText = isCurrentDevice
-        ? _t("Verify your current session for enhanced secure messaging.")
-        : _t("Verify or sign out from this session for best security and reliability.");
+        ? _t("settings|sessions|device_unverified_description_current")
+        : _t("settings|sessions|device_unverified_description");
     return {
         variation: DeviceSecurityVariation.Unverified,
-        heading: _t("Unverified session"),
+        heading: _t("settings|sessions|unverified_session"),
         description: (
             <>
                 {descriptionText}
@@ -95,7 +95,7 @@ export const DeviceVerificationStatusCard: React.FC<DeviceVerificationStatusCard
                     onClick={onVerifyDevice}
                     data-testid={`verification-status-button-${device.device_id}`}
                 >
-                    {_t("Verify session")}
+                    {_t("settings|sessions|verify_session")}
                 </AccessibleButton>
             )}
         </DeviceSecurityCard>

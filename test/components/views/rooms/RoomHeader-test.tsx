@@ -21,6 +21,7 @@ import {
     fireEvent,
     getAllByLabelText,
     getByLabelText,
+    getByRole,
     getByText,
     render,
     screen,
@@ -78,7 +79,7 @@ describe("RoomHeader", () => {
     });
 
     it("renders the room topic", async () => {
-        const TOPIC = "Hello World!";
+        const TOPIC = "Hello World! http://element.io";
 
         const roomTopic = new MatrixEvent({
             type: EventType.RoomTopic,
@@ -96,6 +97,7 @@ describe("RoomHeader", () => {
             withClientContextRenderOptions(MatrixClientPeg.get()!),
         );
         expect(container).toHaveTextContent(TOPIC);
+        expect(getByRole(container, "link")).toHaveTextContent("http://element.io");
     });
 
     it("opens the room summary", async () => {

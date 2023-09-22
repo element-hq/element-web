@@ -77,5 +77,10 @@
         "help_about": {
             "chat_bot": "Klepetajte z %(brand)s Botom"
         }
+    },
+    "space": {
+        "context_menu": {
+            "explore": "Raziščite sobe"
+        }
     }
 }

@@ -46,18 +46,16 @@ describe("<SecureBackupPanel />", () => {
     const getComponent = () => render(<SecureBackupPanel />);
 
     beforeEach(() => {
-        client.checkKeyBackup.mockResolvedValue({
-            backupInfo: {
-                version: "1",
-                algorithm: "test",
-                auth_data: {
-                    public_key: "1234",
-                },
+        client.getKeyBackupVersion.mockResolvedValue({
+            version: "1",
+            algorithm: "test",
+            auth_data: {
+                public_key: "1234",
             },
-            trustInfo: {
-                usable: false,
-                sigs: [],
-            },
+        });
+        client.isKeyBackupTrusted.mockResolvedValue({
+            usable: false,
+            sigs: [],
         });
 
         mocked(client.secretStorage.hasKey).mockClear().mockResolvedValue(false);
@@ -75,14 +73,21 @@ describe("<SecureBackupPanel />", () => {
         expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
     });
 
-    it("handles null backup info", async () => {
-        // checkKeyBackup can fail and return null for various reasons
-        client.checkKeyBackup.mockResolvedValue(null);
-        getComponent();
-        // flush checkKeyBackup promise
-        await flushPromises();
+    it("handles error fetching backup", async () => {
+        // getKeyBackupVersion can fail for various reasons
+        client.getKeyBackupVersion.mockImplementation(async () => {
+            throw new Error("beep beep");
+        });
+        const renderResult = getComponent();
+        await renderResult.findByText("Unable to load key backup status");
+        expect(renderResult.container).toMatchSnapshot();
+    });
 
-        // no backup info
+    it("handles absence of backup", async () => {
+        client.getKeyBackupVersion.mockResolvedValue(null);
+        getComponent();
+        // flush getKeyBackupVersion promise
+        await flushPromises();
         expect(screen.getByText("Back up your keys before signing out to avoid losing them.")).toBeInTheDocument();
     });
 
@@ -124,18 +129,12 @@ describe("<SecureBackupPanel />", () => {
     });
 
     it("deletes backup after confirmation", async () => {
-        client.checkKeyBackup
+        client.getKeyBackupVersion
             .mockResolvedValueOnce({
-                backupInfo: {
-                    version: "1",
-                    algorithm: "test",
-                    auth_data: {
-                        public_key: "1234",
-                    },
-                },
-                trustInfo: {
-                    usable: false,
-                    sigs: [],
+                version: "1",
+                algorithm: "test",
+                auth_data: {
+                    public_key: "1234",
                 },
             })
             .mockResolvedValue(null);

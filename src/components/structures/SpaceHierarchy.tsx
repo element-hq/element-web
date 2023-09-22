@@ -245,9 +245,7 @@ const Tile: React.FC<ITileProps> = ({
 
     let suggestedSection: ReactElement | undefined;
     if (suggested && (!joinedRoom || hasPermissions)) {
-        suggestedSection = (
-            <InfoTooltip tooltip={_t("This room is suggested as a good one to join")}>{_t("Suggested")}</InfoTooltip>
-        );
+        suggestedSection = <InfoTooltip tooltip={_t("space|suggested_tooltip")}>{_t("space|suggested")}</InfoTooltip>;
     }
 
     const content = (
@@ -670,14 +668,14 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
     if (!selectedRelations.length) {
         Button = AccessibleTooltipButton;
         props = {
-            tooltip: _t("Select a room below first"),
+            tooltip: _t("space|select_room_below"),
             alignment: Alignment.Top,
         };
     }
 
     let buttonText = _t("Saving…");
     if (!saving) {
-        buttonText = selectionAllSuggested ? _t("Mark as not suggested") : _t("Mark as suggested");
+        buttonText = selectionAllSuggested ? _t("space|unmark_suggested") : _t("space|mark_suggested");
     }
 
     return (
@@ -707,7 +705,7 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
                             hierarchy.removeRelation(parentId, childId);
                         }
                     } catch (e) {
-                        setError(_t("Failed to remove some rooms. Try again later"));
+                        setError(_t("space|failed_remove_rooms"));
                     }
                     setRemoving(false);
                     setSelected(new Map());
@@ -788,13 +786,13 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
     const [error, setError] = useState("");
     let errorText = error;
     if (!error && hierarchyError) {
-        errorText = _t("Failed to load list of rooms.");
+        errorText = _t("space|failed_load_rooms");
     }
 
     const loaderRef = useIntersectionObserver(loadMore);
 
     if (!loading && hierarchy!.noSupport) {
-        return <p>{_t("Your server does not support showing space hierarchies.")}</p>;
+        return <p>{_t("space|incompatible_server_hierarchy")}</p>;
     }
 
     const onKeyDown = (ev: KeyboardEvent, state: IState): void => {

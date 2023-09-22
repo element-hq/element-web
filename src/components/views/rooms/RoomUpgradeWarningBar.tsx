@@ -78,7 +78,7 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
                     </p>
                     <p>
                         {_t(
-                            "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.",
+                            "room_settings|advanced|room_upgrade_warning",
                             {},
                             {
                                 b: (sub) => <b>{sub}</b>,
@@ -89,7 +89,7 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
                 </div>
                 <p className="mx_RoomUpgradeWarningBar_upgradelink">
                     <AccessibleButton onClick={this.onUpgradeClick}>
-                        {_t("Upgrade this room to the recommended room version")}
+                        {_t("room_settings|advanced|room_upgrade_button")}
                     </AccessibleButton>
                 </p>
             </div>

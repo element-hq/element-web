@@ -132,7 +132,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
         devtoolsOption = (
             <IconizedContextMenuOption
                 iconClassName="mx_SpacePanel_iconSettings"
-                label={_t("See room timeline (devtools)")}
+                label={_t("space|context_menu|devtools_open_timeline")}
                 onClick={onViewTimelineClick}
             />
         );
@@ -243,13 +243,13 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
             <IconizedContextMenuOptionList first>
                 <IconizedContextMenuOption
                     iconClassName="mx_SpacePanel_iconHome"
-                    label={_t("Space home")}
+                    label={_t("space|context_menu|home")}
                     onClick={onHomeClick}
                 />
                 {inviteOption}
                 <IconizedContextMenuOption
                     iconClassName="mx_SpacePanel_iconExplore"
-                    label={canAddRooms ? _t("Manage & explore rooms") : _t("Explore rooms")}
+                    label={canAddRooms ? _t("space|context_menu|manage_and_explore") : _t("space|context_menu|explore")}
                     onClick={onExploreRoomsClick}
                 />
                 <IconizedContextMenuOption

@@ -146,7 +146,7 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     public getName(): string {
-        return _t("Users");
+        return _t("composer|autocomplete|user_description");
     }
 
     private makeUsers(): void {
@@ -186,7 +186,7 @@ export default class UserProvider extends AutocompleteProvider {
             <div
                 className="mx_Autocomplete_Completion_container_pill"
                 role="presentation"
-                aria-label={_t("User Autocomplete")}
+                aria-label={_t("composer|autocomplete|user_a11y")}
             >
                 {completions}
             </div>

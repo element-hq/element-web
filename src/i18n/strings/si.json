@@ -12,5 +12,10 @@
     },
     "auth": {
         "register_action": "ගිණුමක් සාදන්න"
+    },
+    "space": {
+        "context_menu": {
+            "explore": "කාමර බලන්න"
+        }
     }
 }

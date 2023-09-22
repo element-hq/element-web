@@ -396,7 +396,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
                             <PassphraseField
                                 name="reset_password"
                                 type="password"
-                                label={_td("New Password")}
+                                label={_td("auth|change_password_new_label")}
                                 value={this.state.password}
                                 minScore={PASSWORD_MIN_SCORE}
                                 fieldRef={(field) => (this.fieldPassword = field)}

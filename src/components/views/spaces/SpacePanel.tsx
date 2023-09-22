@@ -104,6 +104,7 @@ export const HomeButtonContextMenu: React.FC<ComponentProps<typeof SpaceContextM
                     label={_t("Show all rooms")}
                     active={allRoomsInHome}
                     onClick={() => {
+                        onFinished();
                         SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.ACCOUNT, !allRoomsInHome);
                     }}
                 />

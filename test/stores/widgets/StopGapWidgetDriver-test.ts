@@ -447,4 +447,44 @@ describe("StopGapWidgetDriver", () => {
             expect(client.searchUserDirectory).toHaveBeenCalledWith({ term: "foo", limit: 25 });
         });
     });
+
+    describe("getMediaConfig", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("gets the media configuration", async () => {
+            client.getMediaConfig.mockResolvedValue({
+                "m.upload.size": 1000,
+            });
+
+            await expect(driver.getMediaConfig()).resolves.toEqual({
+                "m.upload.size": 1000,
+            });
+
+            expect(client.getMediaConfig).toHaveBeenCalledWith();
+        });
+    });
+
+    describe("uploadFile", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("uploads a file", async () => {
+            client.uploadContent.mockResolvedValue({
+                content_uri: "mxc://...",
+            });
+
+            await expect(driver.uploadFile("data")).resolves.toEqual({
+                contentUri: "mxc://...",
+            });
+
+            expect(client.uploadContent).toHaveBeenCalledWith("data");
+        });
+    });
 });

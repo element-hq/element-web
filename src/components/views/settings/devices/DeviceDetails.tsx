@@ -64,9 +64,9 @@ const DeviceDetails: React.FC<Props> = ({
         {
             id: "session",
             values: [
-                { label: _t("Session ID"), value: device.device_id },
+                { label: _t("settings|sessions|session_id"), value: device.device_id },
                 {
-                    label: _t("Last activity"),
+                    label: _t("settings|sessions|last_activity"),
                     value: device.last_seen_ts && formatDate(new Date(device.last_seen_ts)),
                 },
             ],
@@ -77,7 +77,7 @@ const DeviceDetails: React.FC<Props> = ({
             values: [
                 { label: _t("common|name"), value: device.appName },
                 { label: _t("common|version"), value: device.appVersion },
-                { label: _t("URL"), value: device.url },
+                { label: _t("settings|sessions|url"), value: device.url },
             ],
         },
         {
@@ -85,9 +85,9 @@ const DeviceDetails: React.FC<Props> = ({
             heading: _t("common|device"),
             values: [
                 { label: _t("common|model"), value: device.deviceModel },
-                { label: _t("Operating system"), value: device.deviceOperatingSystem },
-                { label: _t("Browser"), value: device.client },
-                { label: _t("IP address"), value: device.last_seen_ip },
+                { label: _t("settings|sessions|os"), value: device.deviceOperatingSystem },
+                { label: _t("settings|sessions|browser"), value: device.client },
+                { label: _t("settings|sessions|ip"), value: device.last_seen_ip },
             ],
         },
     ]
@@ -122,7 +122,7 @@ const DeviceDetails: React.FC<Props> = ({
                 <DeviceVerificationStatusCard device={device} onVerifyDevice={onVerifyDevice} isCurrentDevice />
             </section>
             <section className="mx_DeviceDetails_section">
-                <p className="mx_DeviceDetails_sectionHeading">{_t("Session details")}</p>
+                <p className="mx_DeviceDetails_sectionHeading">{_t("settings|sessions|details_heading")}</p>
                 {metadata.map(({ heading, values, id }, index) => (
                     <table
                         className="mx_DeviceDetails_metadataTable"
@@ -158,13 +158,13 @@ const DeviceDetails: React.FC<Props> = ({
                         checked={isPushNotificationsEnabled(pusher, localNotificationSettings)}
                         disabled={isCheckboxDisabled(pusher, localNotificationSettings)}
                         onChange={(checked) => setPushNotifications?.(device.device_id, checked)}
-                        title={_t("Toggle push notifications on this session.")}
+                        title={_t("settings|sessions|push_toggle")}
                         data-testid="device-detail-push-notification-checkbox"
                     />
                     <p className="mx_DeviceDetails_sectionHeading">
-                        {_t("Push notifications")}
+                        {_t("settings|sessions|push_heading")}
                         <small className="mx_DeviceDetails_sectionSubheading">
-                            {_t("Receive push notifications on this session.")}
+                            {_t("settings|sessions|push_subheading")}
                         </small>
                     </p>
                 </section>
@@ -177,7 +177,7 @@ const DeviceDetails: React.FC<Props> = ({
                     data-testid="device-detail-sign-out-cta"
                 >
                     <span className="mx_DeviceDetails_signOutButtonContent">
-                        {_t("Sign out of this session")}
+                        {_t("settings|sessions|sign_out")}
                         {isSigningOut && <Spinner w={16} h={16} />}
                     </span>
                 </AccessibleButton>

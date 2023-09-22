@@ -133,18 +133,18 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
                 </div>
             );
             sasCaption = this.props.isSelf
-                ? _t("Confirm the emoji below are displayed on both devices, in the same order:")
-                : _t("Verify this user by confirming the following emoji appear on their screen.");
+                ? _t("encryption|verification|sas_emoji_caption_self")
+                : _t("encryption|verification|sas_emoji_caption_user");
         } else if (this.props.sas.decimal) {
             const numberBlocks = this.props.sas.decimal.map((num, i) => <span key={i}>{num}</span>);
             sasDisplay = <div className="mx_VerificationShowSas_decimalSas">{numberBlocks}</div>;
             sasCaption = this.props.isSelf
-                ? _t("Verify this device by confirming the following number appears on its screen.")
-                : _t("Verify this user by confirming the following number appears on their screen.");
+                ? _t("encryption|verification|sas_caption_self")
+                : _t("encryption|verification|sas_caption_user");
         } else {
             return (
                 <div>
-                    {_t("Unable to find a supported verification method.")}
+                    {_t("encryption|verification|unsupported_method")}
                     <AccessibleButton kind="primary" onClick={this.props.onCancel}>
                         {_t("action|cancel")}
                     </AccessibleButton>
@@ -159,21 +159,21 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
             // logged out during verification
             const otherDevice = this.props.otherDeviceDetails;
             if (otherDevice) {
-                text = _t("Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…", {
+                text = _t("encryption|verification|waiting_other_device_details", {
                     deviceName: otherDevice.displayName,
                     deviceId: otherDevice.deviceId,
                 });
             } else {
-                text = _t("Waiting for you to verify on your other device…");
+                text = _t("encryption|verification|waiting_other_device");
             }
             confirm = <p>{text}</p>;
         } else if (this.state.pending || this.state.cancelling) {
             let text;
             if (this.state.pending) {
                 const { displayName } = this.props;
-                text = _t("Waiting for %(displayName)s to verify…", { displayName });
+                text = _t("encryption|verification|waiting_other_user", { displayName });
             } else {
-                text = _t("Cancelling…");
+                text = _t("encryption|verification|cancelling");
             }
             confirm = <PendingActionSpinner text={text} />;
         } else {

@@ -73,36 +73,6 @@ const getFilteredSortedDevices = (devices: DevicesDictionary, filter?: FilterVar
 const ALL_FILTER_ID = "ALL";
 type DeviceFilterKey = FilterVariation | typeof ALL_FILTER_ID;
 
-const securityCardContent: Record<
-    DeviceSecurityVariation,
-    {
-        title: string;
-        description: string;
-    }
-> = {
-    [DeviceSecurityVariation.Verified]: {
-        title: _t("Verified sessions"),
-        description: _t("For best security, sign out from any session that you don't recognize or use anymore."),
-    },
-    [DeviceSecurityVariation.Unverified]: {
-        title: _t("Unverified sessions"),
-        description: _t(
-            "Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.",
-        ),
-    },
-    [DeviceSecurityVariation.Unverifiable]: {
-        title: _t("Unverified session"),
-        description: _t(`This session doesn't support encryption and thus can't be verified.`),
-    },
-    [DeviceSecurityVariation.Inactive]: {
-        title: _t("Inactive sessions"),
-        description: _t(
-            "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.",
-            { inactiveAgeDays: INACTIVE_DEVICE_AGE_DAYS },
-        ),
-    },
-};
-
 const isSecurityVariation = (filter?: DeviceFilterKey): filter is FilterVariation =>
     !!filter &&
     (
@@ -115,6 +85,33 @@ const isSecurityVariation = (filter?: DeviceFilterKey): filter is FilterVariatio
 
 const FilterSecurityCard: React.FC<{ filter?: DeviceFilterKey }> = ({ filter }) => {
     if (isSecurityVariation(filter)) {
+        const securityCardContent: Record<
+            DeviceSecurityVariation,
+            {
+                title: string;
+                description: string;
+            }
+        > = {
+            [DeviceSecurityVariation.Verified]: {
+                title: _t("settings|sessions|verified_sessions"),
+                description: _t("settings|sessions|verified_sessions_list_description"),
+            },
+            [DeviceSecurityVariation.Unverified]: {
+                title: _t("settings|sessions|unverified_sessions"),
+                description: _t("settings|sessions|unverified_sessions_list_description"),
+            },
+            [DeviceSecurityVariation.Unverifiable]: {
+                title: _t("settings|sessions|unverified_session"),
+                description: _t("settings|sessions|unverified_session_explainer_1"),
+            },
+            [DeviceSecurityVariation.Inactive]: {
+                title: _t("settings|sessions|inactive_sessions"),
+                description: _t("settings|sessions|inactive_sessions_list_description", {
+                    inactiveAgeDays: INACTIVE_DEVICE_AGE_DAYS,
+                }),
+            },
+        };
+
         const { title, description } = securityCardContent[filter];
         return (
             <div className="mx_FilteredDeviceList_securityCard">
@@ -138,13 +135,13 @@ const FilterSecurityCard: React.FC<{ filter?: DeviceFilterKey }> = ({ filter }) 
 const getNoResultsMessage = (filter?: FilterVariation): string => {
     switch (filter) {
         case DeviceSecurityVariation.Verified:
-            return _t("No verified sessions found.");
+            return _t("settings|sessions|no_verified_sessions");
         case DeviceSecurityVariation.Unverified:
-            return _t("No unverified sessions found.");
+            return _t("settings|sessions|no_unverified_sessions");
         case DeviceSecurityVariation.Inactive:
-            return _t("No inactive sessions found.");
+            return _t("settings|sessions|no_inactive_sessions");
         default:
-            return _t("No sessions found.");
+            return _t("settings|sessions|no_sessions");
     }
 };
 interface NoResultsProps {
@@ -281,21 +278,21 @@ export const FilteredDeviceList = forwardRef(
         };
 
         const options: FilterDropdownOption<DeviceFilterKey>[] = [
-            { id: ALL_FILTER_ID, label: _t("All") },
+            { id: ALL_FILTER_ID, label: _t("settings|sessions|filter_all") },
             {
                 id: DeviceSecurityVariation.Verified,
                 label: _t("common|verified"),
-                description: _t("Ready for secure messaging"),
+                description: _t("settings|sessions|filter_verified_description"),
             },
             {
                 id: DeviceSecurityVariation.Unverified,
                 label: _t("common|unverified"),
-                description: _t("Not ready for secure messaging"),
+                description: _t("settings|sessions|filter_unverified_description"),
             },
             {
                 id: DeviceSecurityVariation.Inactive,
-                label: _t("Inactive"),
-                description: _t("Inactive for %(inactiveAgeDays)s days or longer", {
+                label: _t("settings|sessions|filter_inactive"),
+                description: _t("settings|sessions|filter_inactive_description", {
                     inactiveAgeDays: INACTIVE_DEVICE_AGE_DAYS,
                 }),
             },
@@ -349,7 +346,7 @@ export const FilteredDeviceList = forwardRef(
                     ) : (
                         <FilterDropdown<DeviceFilterKey>
                             id="device-list-filter"
-                            label={_t("Filter devices")}
+                            label={_t("settings|sessions|filter_label")}
                             value={filter || ALL_FILTER_ID}
                             onOptionChange={onFilterOptionChange}
                             options={options}

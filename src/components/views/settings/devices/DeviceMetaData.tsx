@@ -50,7 +50,7 @@ const getInactiveMetadata = (device: ExtendedDevice): { id: string; value: React
         value: (
             <>
                 <InactiveIcon className="mx_DeviceTile_inactiveIcon" />
-                {_t("Inactive for %(inactiveAgeDays)s+ days", { inactiveAgeDays: INACTIVE_DEVICE_AGE_DAYS }) +
+                {_t("settings|sessions|inactive_days", { inactiveAgeDays: INACTIVE_DEVICE_AGE_DAYS }) +
                     ` (${formatLastActivity(device.last_seen_ts)})`}
             </>
         ),
@@ -62,7 +62,8 @@ const DeviceMetaDatum: React.FC<{ value: string | React.ReactNode; id: string }>
 
 export const DeviceMetaData: React.FC<Props> = ({ device }) => {
     const inactive = getInactiveMetadata(device);
-    const lastActivity = device.last_seen_ts && `${_t("Last activity")} ${formatLastActivity(device.last_seen_ts)}`;
+    const lastActivity =
+        device.last_seen_ts && `${_t("settings|sessions|last_activity")} ${formatLastActivity(device.last_seen_ts)}`;
     const verificationStatus = device.isVerified ? _t("common|verified") : _t("common|unverified");
     // if device is inactive, don't display last activity or verificationStatus
     const metadata = inactive

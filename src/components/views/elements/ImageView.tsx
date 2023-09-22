@@ -479,6 +479,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                     fallbackUserId={mxEvent.getSender()}
                     size="32px"
                     viewUserOnClick={true}
+                    className="mx_Dialog_nonDialogButton"
                 />
             );
 

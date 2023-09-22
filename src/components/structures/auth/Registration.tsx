@@ -591,7 +591,7 @@ export default class Registration extends React.Component<IProps, IState> {
         const signIn = (
             <span className="mx_AuthBody_changeFlow">
                 {_t(
-                    "auth|sign_in_instead",
+                    "auth|sign_in_instead_prompt",
                     {},
                     {
                         a: (sub) => (
@@ -682,7 +682,7 @@ export default class Registration extends React.Component<IProps, IState> {
                             title={_t("Create account")}
                             serverPicker={
                                 <ServerPicker
-                                    title={_t("auth|server_picker_title")}
+                                    title={_t("auth|server_picker_title_registration")}
                                     dialogTitle={_t("auth|server_picker_dialog_title")}
                                     serverConfig={this.props.serverConfig}
                                     onServerConfigChange={

@@ -92,6 +92,7 @@ describe("DeviceListener", () => {
             isCrossSigningReady: jest.fn().mockResolvedValue(true),
             isSecretStorageReady: jest.fn().mockResolvedValue(true),
             userHasCrossSigningKeys: jest.fn(),
+            getActiveSessionBackupVersion: jest.fn(),
         } as unknown as Mocked<CryptoApi>;
         mockClient = getMockClientWithEventEmitter({
             isGuest: jest.fn(),
@@ -101,7 +102,6 @@ describe("DeviceListener", () => {
             getRooms: jest.fn().mockReturnValue([]),
             isVersionSupported: jest.fn().mockResolvedValue(true),
             isInitialSyncComplete: jest.fn().mockReturnValue(true),
-            getKeyBackupEnabled: jest.fn(),
             waitForClientWellKnown: jest.fn(),
             isRoomEncrypted: jest.fn(),
             getClientWellKnown: jest.fn(),
@@ -337,7 +337,7 @@ describe("DeviceListener", () => {
                     mockCrypto!.userHasCrossSigningKeys.mockResolvedValue(true);
                     await createAndStart();
 
-                    expect(mockClient!.getKeyBackupEnabled).toHaveBeenCalled();
+                    expect(mockCrypto!.getActiveSessionBackupVersion).toHaveBeenCalled();
                 });
             });
 
@@ -362,8 +362,7 @@ describe("DeviceListener", () => {
             it("checks keybackup status when cross signing and secret storage are ready", async () => {
                 // default mocks set cross signing and secret storage to ready
                 await createAndStart();
-                expect(mockClient!.getKeyBackupEnabled).toHaveBeenCalled();
-                expect(mockDispatcher.dispatch).not.toHaveBeenCalled();
+                expect(mockCrypto.getActiveSessionBackupVersion).toHaveBeenCalled();
             });
 
             it("checks keybackup status when setup encryption toast has been dismissed", async () => {
@@ -373,40 +372,25 @@ describe("DeviceListener", () => {
                 instance.dismissEncryptionSetup();
                 await flushPromises();
 
-                expect(mockClient!.getKeyBackupEnabled).toHaveBeenCalled();
-            });
-
-            it("does not dispatch keybackup event when key backup check is not finished", async () => {
-                // returns null when key backup status hasn't finished being checked
-                mockClient!.getKeyBackupEnabled.mockReturnValue(null);
-                await createAndStart();
-                expect(mockDispatcher.dispatch).not.toHaveBeenCalled();
+                expect(mockCrypto.getActiveSessionBackupVersion).toHaveBeenCalled();
             });
 
             it("dispatches keybackup event when key backup is not enabled", async () => {
-                mockClient!.getKeyBackupEnabled.mockReturnValue(false);
+                mockCrypto.getActiveSessionBackupVersion.mockResolvedValue(null);
                 await createAndStart();
                 expect(mockDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ReportKeyBackupNotEnabled });
             });
 
             it("does not check key backup status again after check is complete", async () => {
-                mockClient!.getKeyBackupEnabled.mockReturnValue(null);
+                mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
                 const instance = await createAndStart();
-                expect(mockClient!.getKeyBackupEnabled).toHaveBeenCalled();
-
-                // keyback check now complete
-                mockClient!.getKeyBackupEnabled.mockReturnValue(true);
+                expect(mockCrypto.getActiveSessionBackupVersion).toHaveBeenCalled();
 
                 // trigger a recheck
                 instance.dismissEncryptionSetup();
                 await flushPromises();
-                expect(mockClient!.getKeyBackupEnabled).toHaveBeenCalledTimes(2);
-
-                // trigger another recheck
-                instance.dismissEncryptionSetup();
-                await flushPromises();
                 // not called again, check was complete last time
-                expect(mockClient!.getKeyBackupEnabled).toHaveBeenCalledTimes(2);
+                expect(mockCrypto.getActiveSessionBackupVersion).toHaveBeenCalledTimes(1);
             });
         });
 

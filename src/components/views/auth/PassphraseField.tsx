@@ -46,9 +46,9 @@ interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
 class PassphraseField extends PureComponent<IProps> {
     public static defaultProps = {
         label: _td("common|password"),
-        labelEnterPassword: _td("Enter password"),
-        labelStrongPassword: _td("Nice, strong password!"),
-        labelAllowedButUnsafe: _td("Password is allowed, but unsafe"),
+        labelEnterPassword: _td("auth|password_field_label"),
+        labelStrongPassword: _td("auth|password_field_strong_label"),
+        labelAllowedButUnsafe: _td("auth|password_field_weak_label"),
     };
 
     public readonly validate = withValidation<this, ZxcvbnResult | null>({
@@ -91,7 +91,7 @@ class PassphraseField extends PureComponent<IProps> {
                         return null;
                     }
                     const { feedback } = complexity;
-                    return feedback.warning || feedback.suggestions[0] || _t("Keep going…");
+                    return feedback.warning || feedback.suggestions[0] || _t("auth|password_field_keep_going_prompt");
                 },
             },
         ],

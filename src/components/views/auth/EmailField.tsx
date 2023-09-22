@@ -40,9 +40,9 @@ interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
 
 class EmailField extends PureComponent<IProps> {
     public static defaultProps = {
-        label: _td("Email"),
-        labelRequired: _td("Enter email address"),
-        labelInvalid: _td("Doesn't look like a valid email address"),
+        label: _td("auth|email_field_label"),
+        labelRequired: _td("auth|email_field_label_required"),
+        labelInvalid: _td("auth|email_field_label_invalid"),
     };
 
     public readonly validate = withValidation({

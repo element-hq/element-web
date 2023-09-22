@@ -263,32 +263,52 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
                     <summary>{_t("Advanced")}</summary>
                     <table className="mx_CrossSigningPanel_statusList">
                         <tr>
-                            <th scope="row">{_t("Cross-signing public keys:")}</th>
-                            <td>{crossSigningPublicKeysOnDevice ? _t("in memory") : _t("not found")}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">{_t("Cross-signing private keys:")}</th>
+                            <th scope="row">{_t("settings|security|cross_signing_public_keys")}</th>
                             <td>
-                                {crossSigningPrivateKeysInStorage
-                                    ? _t("in secret storage")
-                                    : _t("not found in storage")}
+                                {crossSigningPublicKeysOnDevice
+                                    ? _t("settings|security|cross_signing_in_memory")
+                                    : _t("settings|security|cross_signing_not_found")}
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">{_t("Master private key:")}</th>
-                            <td>{masterPrivateKeyCached ? _t("cached locally") : _t("not found locally")}</td>
+                            <th scope="row">{_t("settings|security|cross_signing_private_keys")}</th>
+                            <td>
+                                {crossSigningPrivateKeysInStorage
+                                    ? _t("settings|security|cross_signing_in_4s")
+                                    : _t("settings|security|cross_signing_not_in_4s")}
+                            </td>
                         </tr>
                         <tr>
-                            <th scope="row">{_t("Self signing private key:")}</th>
-                            <td>{selfSigningPrivateKeyCached ? _t("cached locally") : _t("not found locally")}</td>
+                            <th scope="row">{_t("settings|security|cross_signing_master_private_Key")}</th>
+                            <td>
+                                {masterPrivateKeyCached
+                                    ? _t("settings|security|cross_signing_cached")
+                                    : _t("settings|security|cross_signing_not_cached")}
+                            </td>
                         </tr>
                         <tr>
-                            <th scope="row">{_t("User signing private key:")}</th>
-                            <td>{userSigningPrivateKeyCached ? _t("cached locally") : _t("not found locally")}</td>
+                            <th scope="row">{_t("settings|security|cross_signing_self_signing_private_key")}</th>
+                            <td>
+                                {selfSigningPrivateKeyCached
+                                    ? _t("settings|security|cross_signing_cached")
+                                    : _t("settings|security|cross_signing_not_cached")}
+                            </td>
                         </tr>
                         <tr>
-                            <th scope="row">{_t("Homeserver feature support:")}</th>
-                            <td>{homeserverSupportsCrossSigning ? _t("exists") : _t("not found")}</td>
+                            <th scope="row">{_t("settings|security|cross_signing_user_signing_private_key")}</th>
+                            <td>
+                                {userSigningPrivateKeyCached
+                                    ? _t("settings|security|cross_signing_cached")
+                                    : _t("settings|security|cross_signing_not_cached")}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">{_t("settings|security|cross_signing_homeserver_support")}</th>
+                            <td>
+                                {homeserverSupportsCrossSigning
+                                    ? _t("settings|security|cross_signing_homeserver_support_exists")
+                                    : _t("settings|security|cross_signing_not_found")}
+                            </td>
                         </tr>
                     </table>
                 </details>

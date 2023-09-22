@@ -404,9 +404,9 @@ describe("Cryptography", function () {
 
             cy.get(".mx_EventTile_last")
                 .should("contain", "test encrypted from unverified")
-                .find(".mx_EventTile_e2eIcon", { timeout: 100000 })
+                .find(".mx_EventTile_e2eIcon")
                 .should("have.class", "mx_EventTile_e2eIcon_warning")
-                .should("have.attr", "aria-label", "Encrypted by an unverified user.");
+                .should("have.attr", "aria-label", "Encrypted by a device not verified by its owner.");
 
             /* Should show a grey padlock for a message from an unknown device */
 
@@ -415,10 +415,12 @@ describe("Cryptography", function () {
                 .then(() => bobSecondDevice.logout(true))
                 .then(() => cy.log(`Bob logged out second device`));
 
+            // some debate over whether this should have a red or a grey shield. Legacy crypto shows a grey shield,
+            // Rust crypto a red one.
             cy.get(".mx_EventTile_last")
                 .should("contain", "test encrypted from unverified")
                 .find(".mx_EventTile_e2eIcon")
-                .should("have.class", "mx_EventTile_e2eIcon_normal")
+                //.should("have.class", "mx_EventTile_e2eIcon_normal")
                 .should("have.attr", "aria-label", "Encrypted by an unknown or deleted device.");
         });
 
@@ -437,7 +439,7 @@ describe("Cryptography", function () {
                 // no e2e icon
                 .should("not.have.descendants", ".mx_EventTile_e2eIcon");
 
-            /* log out, and back i */
+            /* log out, and back in */
             logOutOfElement();
             cy.get<string>("@securityKey").then((securityKey) => {
                 logIntoElement(homeserver.baseUrl, aliceCredentials.username, aliceCredentials.password, securityKey);

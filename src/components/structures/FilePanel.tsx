@@ -231,7 +231,7 @@ class FilePanel extends React.Component<IProps, IState> {
                 <BaseCard className="mx_FilePanel mx_RoomView_messageListWrapper" onClose={this.props.onClose}>
                     <div className="mx_RoomView_empty">
                         {_t(
-                            "You must <a>register</a> to use this functionality",
+                            "file_panel|guest_note",
                             {},
                             {
                                 a: (sub) => (
@@ -247,7 +247,7 @@ class FilePanel extends React.Component<IProps, IState> {
         } else if (this.noRoom) {
             return (
                 <BaseCard className="mx_FilePanel mx_RoomView_messageListWrapper" onClose={this.props.onClose}>
-                    <div className="mx_RoomView_empty">{_t("You must join the room to see its files")}</div>
+                    <div className="mx_RoomView_empty">{_t("file_panel|peek_note")}</div>
                 </BaseCard>
             );
         }
@@ -256,8 +256,8 @@ class FilePanel extends React.Component<IProps, IState> {
 
         const emptyState = (
             <div className="mx_RightPanel_empty mx_FilePanel_empty">
-                <h2>{_t("No files visible in this room")}</h2>
-                <p>{_t("Attach files from chat or just drag and drop them anywhere in a room.")}</p>
+                <h2>{_t("file_panel|empty_heading")}</h2>
+                <p>{_t("file_panel|empty_description")}</p>
             </div>
         );
 

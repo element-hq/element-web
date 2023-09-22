@@ -110,21 +110,18 @@ export default class LabsUserSettingsTab extends React.Component<{}> {
 
         return (
             <SettingsTab>
-                <SettingsSection heading={_t("Upcoming features")}>
+                <SettingsSection heading={_t("labs|beta_section")}>
                     <SettingsSubsectionText>
-                        {_t(
-                            "What's next for %(brand)s? Labs are the best way to get things early, test out new features and help shape them before they actually launch.",
-                            { brand: SdkConfig.get("brand") },
-                        )}
+                        {_t("labs|beta_description", { brand: SdkConfig.get("brand") })}
                     </SettingsSubsectionText>
                     {betaSection}
                 </SettingsSection>
 
                 {labsSections && (
-                    <SettingsSection heading={_t("Early previews")}>
+                    <SettingsSection heading={_t("labs|experimental_section")}>
                         <SettingsSubsectionText>
                             {_t(
-                                "Feeling experimental? Try out our latest ideas in development. These features are not finalised; they may be unstable, may change, or may be dropped altogether. <a>Learn more</a>.",
+                                "labs|experimental_description",
                                 {},
                                 {
                                     a: (sub) => {

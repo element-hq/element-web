@@ -52,15 +52,13 @@ export default class LoginWithQRSection extends React.Component<IProps> {
         }
 
         return (
-            <SettingsSubsection heading={_t("Sign in with QR code")}>
+            <SettingsSubsection heading={_t("settings|sessions|sign_in_with_qr")}>
                 <div className="mx_LoginWithQRSection">
                     <p className="mx_SettingsTab_subsectionText">
-                        {_t(
-                            "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.",
-                        )}
+                        {_t("settings|sessions|sign_in_with_qr_description")}
                     </p>
                     <AccessibleButton onClick={this.props.onShowQr} kind="primary">
-                        {_t("Show QR code")}
+                        {_t("settings|sessions|sign_in_with_qr_button")}
                     </AccessibleButton>
                 </div>
             </SettingsSubsection>

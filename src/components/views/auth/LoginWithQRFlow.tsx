@@ -169,7 +169,7 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                 );
                 break;
             case Phase.ShowingQR:
-                title = _t("Sign in with QR code");
+                title = _t("settings|sessions|sign_in_with_qr");
                 if (this.props.code) {
                     const code = (
                         <div className="mx_LoginWithQR_qrWrapper">

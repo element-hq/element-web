@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from "react";
-import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import type CreateKeyBackupDialog from "../../../async-components/views/dialogs/security/CreateKeyBackupDialog";
@@ -35,10 +34,28 @@ interface IProps {
     onFinished: (success: boolean) => void;
 }
 
+enum BackupStatus {
+    /** we're trying to figure out if there is an active backup */
+    LOADING,
+
+    /** crypto is disabled in this client (so no need to back up) */
+    NO_CRYPTO,
+
+    /** Key backup is active and working */
+    BACKUP_ACTIVE,
+
+    /** there is a backup on the server but we are not backing up to it */
+    SERVER_BACKUP_BUT_DISABLED,
+
+    /** backup is not set up locally and there is no backup on the server */
+    NO_BACKUP,
+
+    /** there was an error fetching the state */
+    ERROR,
+}
+
 interface IState {
-    shouldLoadBackupStatus: boolean;
-    loading: boolean;
-    backupInfo: IKeyBackupInfo | null;
+    backupStatus: BackupStatus;
 }
 
 export default class LogoutDialog extends React.Component<IProps, IState> {
@@ -49,33 +66,40 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
 
-        const cli = MatrixClientPeg.safeGet();
-        const shouldLoadBackupStatus = cli.isCryptoEnabled() && !cli.getKeyBackupEnabled();
-
         this.state = {
-            shouldLoadBackupStatus: shouldLoadBackupStatus,
-            loading: shouldLoadBackupStatus,
-            backupInfo: null,
+            backupStatus: BackupStatus.LOADING,
         };
 
-        if (shouldLoadBackupStatus) {
-            this.loadBackupStatus();
-        }
+        // we can't call setState() immediately, so wait a beat
+        window.setTimeout(() => this.startLoadBackupStatus(), 0);
+    }
+
+    /** kick off the asynchronous calls to populate `state.backupStatus` in the background */
+    private startLoadBackupStatus(): void {
+        this.loadBackupStatus().catch((e) => {
+            logger.log("Unable to fetch key backup status", e);
+            this.setState({
+                backupStatus: BackupStatus.ERROR,
+            });
+        });
     }
 
     private async loadBackupStatus(): Promise<void> {
-        try {
-            const backupInfo = await MatrixClientPeg.safeGet().getKeyBackupVersion();
-            this.setState({
-                loading: false,
-                backupInfo,
-            });
-        } catch (e) {
-            logger.log("Unable to fetch key backup status", e);
-            this.setState({
-                loading: false,
-            });
+        const client = MatrixClientPeg.safeGet();
+        const crypto = client.getCrypto();
+        if (!crypto) {
+            this.setState({ backupStatus: BackupStatus.NO_CRYPTO });
+            return;
         }
+
+        if ((await crypto.getActiveSessionBackupVersion()) !== null) {
+            this.setState({ backupStatus: BackupStatus.BACKUP_ACTIVE });
+            return;
+        }
+
+        // backup is not active. see if there is a backup version on the server we ought to back up to.
+        const backupInfo = await client.getKeyBackupVersion();
+        this.setState({ backupStatus: backupInfo ? BackupStatus.SERVER_BACKUP_BUT_DISABLED : BackupStatus.NO_BACKUP });
     }
 
     private onExportE2eKeysClicked = (): void => {
@@ -98,7 +122,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
     };
 
     private onSetRecoveryMethodClick = (): void => {
-        if (this.state.backupInfo) {
+        if (this.state.backupStatus === BackupStatus.SERVER_BACKUP_BUT_DISABLED) {
             // A key backup exists for this account, but the creating device is not
             // verified, so restore the backup which will give us the keys from it and
             // allow us to trust it (ie. upload keys to it)
@@ -132,82 +156,106 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
         this.props.onFinished(true);
     };
 
-    public render(): React.ReactNode {
-        if (this.state.shouldLoadBackupStatus) {
-            const description = (
-                <div>
-                    <p>
-                        {_t(
-                            "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.",
-                        )}
-                    </p>
-                    <p>
-                        {_t(
-                            "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.",
-                        )}
-                    </p>
-                    <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
-                </div>
-            );
+    /**
+     * Show a dialog prompting the user to set up key backup.
+     *
+     * Either there is no backup at all ({@link BackupStatus.NO_BACKUP}), there is a backup on the server but
+     * we are not connected to it ({@link BackupStatus.SERVER_BACKUP_BUT_DISABLED}), or we were unable to pull the
+     * backup data ({@link BackupStatus.ERROR}). In all three cases, we should prompt the user to set up key backup.
+     */
+    private renderSetupBackupDialog(): React.ReactNode {
+        const description = (
+            <div>
+                <p>
+                    {_t(
+                        "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.",
+                    )}
+                </p>
+                <p>
+                    {_t(
+                        "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.",
+                    )}
+                </p>
+                <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
+            </div>
+        );
 
-            let dialogContent;
-            if (this.state.loading) {
-                dialogContent = <Spinner />;
-            } else {
-                let setupButtonCaption;
-                if (this.state.backupInfo) {
-                    setupButtonCaption = _t("Connect this session to Key Backup");
-                } else {
-                    // if there's an error fetching the backup info, we'll just assume there's
-                    // no backup for the purpose of the button caption
-                    setupButtonCaption = _t("Start using Key Backup");
-                }
-
-                dialogContent = (
-                    <div>
-                        <div className="mx_Dialog_content" id="mx_Dialog_content">
-                            {description}
-                        </div>
-                        <DialogButtons
-                            primaryButton={setupButtonCaption}
-                            hasCancel={false}
-                            onPrimaryButtonClick={this.onSetRecoveryMethodClick}
-                            focus={true}
-                        >
-                            <button onClick={this.onLogoutConfirm}>{_t("I don't want my encrypted messages")}</button>
-                        </DialogButtons>
-                        <details>
-                            <summary>{_t("Advanced")}</summary>
-                            <p>
-                                <button onClick={this.onExportE2eKeysClicked}>{_t("Manually export keys")}</button>
-                            </p>
-                        </details>
-                    </div>
-                );
-            }
-            // Not quite a standard question dialog as the primary button cancels
-            // the action and does something else instead, whilst non-default button
-            // confirms the action.
-            return (
-                <BaseDialog
-                    title={_t("You'll lose access to your encrypted messages")}
-                    contentId="mx_Dialog_content"
-                    hasCancel={true}
-                    onFinished={this.onFinished}
-                >
-                    {dialogContent}
-                </BaseDialog>
-            );
+        let setupButtonCaption;
+        if (this.state.backupStatus === BackupStatus.SERVER_BACKUP_BUT_DISABLED) {
+            setupButtonCaption = _t("Connect this session to Key Backup");
         } else {
-            return (
-                <QuestionDialog
-                    hasCancelButton={true}
-                    title={_t("action|sign_out")}
-                    description={_t("Are you sure you want to sign out?")}
-                    button={_t("action|sign_out")}
-                    onFinished={this.onFinished}
-                />
-            );
+            // if there's an error fetching the backup info, we'll just assume there's
+            // no backup for the purpose of the button caption
+            setupButtonCaption = _t("Start using Key Backup");
+        }
+
+        const dialogContent = (
+            <div>
+                <div className="mx_Dialog_content" id="mx_Dialog_content">
+                    {description}
+                </div>
+                <DialogButtons
+                    primaryButton={setupButtonCaption}
+                    hasCancel={false}
+                    onPrimaryButtonClick={this.onSetRecoveryMethodClick}
+                    focus={true}
+                >
+                    <button onClick={this.onLogoutConfirm}>{_t("I don't want my encrypted messages")}</button>
+                </DialogButtons>
+                <details>
+                    <summary>{_t("Advanced")}</summary>
+                    <p>
+                        <button onClick={this.onExportE2eKeysClicked}>{_t("Manually export keys")}</button>
+                    </p>
+                </details>
+            </div>
+        );
+        // Not quite a standard question dialog as the primary button cancels
+        // the action and does something else instead, whilst non-default button
+        // confirms the action.
+        return (
+            <BaseDialog
+                title={_t("You'll lose access to your encrypted messages")}
+                contentId="mx_Dialog_content"
+                hasCancel={true}
+                onFinished={this.onFinished}
+            >
+                {dialogContent}
+            </BaseDialog>
+        );
+    }
+
+    public render(): React.ReactNode {
+        switch (this.state.backupStatus) {
+            case BackupStatus.LOADING:
+                // while we're deciding if we have backups, show a spinner
+                return (
+                    <BaseDialog
+                        title={_t("action|sign_out")}
+                        contentId="mx_Dialog_content"
+                        hasCancel={true}
+                        onFinished={this.onFinished}
+                    >
+                        <Spinner />;
+                    </BaseDialog>
+                );
+
+            case BackupStatus.NO_CRYPTO:
+            case BackupStatus.BACKUP_ACTIVE:
+                return (
+                    <QuestionDialog
+                        hasCancelButton={true}
+                        title={_t("action|sign_out")}
+                        description={_t("Are you sure you want to sign out?")}
+                        button={_t("action|sign_out")}
+                        onFinished={this.onFinished}
+                    />
+                );
+
+            case BackupStatus.NO_BACKUP:
+            case BackupStatus.SERVER_BACKUP_BUT_DISABLED:
+            case BackupStatus.ERROR:
+                return this.renderSetupBackupDialog();
         }
     }
 }

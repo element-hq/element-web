@@ -88,9 +88,9 @@ export function ManualDeviceKeyVerificationDialog({
 
     return (
         <QuestionDialog
-            title={_t("Verify session")}
+            title={_t("settings|sessions|verify_session")}
             description={body}
-            button={_t("Verify session")}
+            button={_t("settings|sessions|verify_session")}
             onFinished={onLegacyFinished}
         />
     );
