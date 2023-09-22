@@ -57,8 +57,8 @@ const FacePile: FC<IProps> = ({
 
     const pileContents = (
         <>
-            {overflow ? <span className="mx_FacePile_more" /> : null}
             {faces}
+            {overflow ? <span className="mx_FacePile_more" /> : null}
         </>
     );
 
