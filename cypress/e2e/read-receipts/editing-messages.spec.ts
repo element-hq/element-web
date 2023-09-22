@@ -23,6 +23,7 @@ import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import {
     assertRead,
     assertReadThread,
+    assertStillRead,
     assertUnread,
     assertUnreadThread,
     backToThreadsList,
@@ -263,21 +264,17 @@ describe("Read receipts", () => {
                 assertRead(room2);
             });
             it("A room where all edits are read is still read after restart", () => {
-                // Given an edit made the room unread
-                goTo(room2);
-                receiveMessages(room2, ["Msg1"]);
-                assertRead(room2);
-                receiveMessages(room2, [editOf("Msg1", "Msg1 Edit1")]);
+                // Given a message was edited and read
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", editOf("Msg1", "Msg1 Edit1")]);
                 assertUnread(room2, 1);
-
-                // When I mark it as read
-                markAsRead(room2);
-
-                // Then the room becomes read
+                goTo(room2);
                 assertRead(room2);
 
-                // And remains so after a reload
+                // When I reload
                 saveAndReload();
+
+                // Then the room is still read
                 assertRead(room2);
             });
         });
