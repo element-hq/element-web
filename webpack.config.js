@@ -744,7 +744,7 @@ module.exports = (env, argv) => {
             hot: "only",
 
             // Disable host check
-            allowedHosts: 'all',
+            allowedHosts: "all",
         },
     };
 };
