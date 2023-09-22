@@ -121,7 +121,7 @@ jobs:
                 # Run 4 instances in Parallel
                 runner: [1, 2, 3, 4]
         steps:
-            - uses: browser-actions/setup-chrome@c485fa3bab6be59dce18dbc18ef6ab7cbc8ff5f1
+            - uses: browser-actions/setup-chrome@905ab04587e418717afec9c975bb144050718dc1
             - run: echo "BROWSER_PATH=$(which chrome)" >> $GITHUB_ENV
 
             # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
