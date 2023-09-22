@@ -6,6 +6,7 @@ concurrency: ${{ github.workflow }}
 jobs:
     build:
         name: Build package
+        if: github.event.release.prerelease == false && github.repository == 'vector-im/element-web'
         environment: packages.element.io
         runs-on: ubuntu-latest
         env:
