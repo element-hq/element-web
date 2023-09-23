@@ -146,14 +146,6 @@ module.exports = (env, argv) => {
 
         bail: true,
 
-        node: {
-            // Mock out the NodeFS module: The opus decoder imports this wrongly.
-            fs: "empty",
-            net: "empty",
-            tls: "empty",
-            crypto: "empty",
-        },
-
         entry: {
             bundle: "./src/vector/index.ts",
             mobileguide: "./src/vector/mobile_guide/index.ts",
@@ -193,7 +185,7 @@ module.exports = (env, argv) => {
 
             // This fixes duplicate files showing up in chrome with sourcemaps enabled.
             // See https://github.com/webpack/webpack/issues/7128 for more info.
-            namedModules: false,
+            moduleIds: "named",
 
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
@@ -241,6 +233,16 @@ module.exports = (env, argv) => {
                 // Define a variable so the i18n stuff can load
                 "$webapp": path.resolve(__dirname, "webapp"),
             },
+            fallback: {
+                // Mock out the NodeFS module: The opus decoder imports this wrongly.
+                fs: false,
+                net: false,
+                tls: false,
+                crypto: false,
+
+                // Polyfill needed by counterpart
+                util: require.resolve("util/"),
+            }
         },
 
         module: {
@@ -708,7 +710,15 @@ module.exports = (env, argv) => {
                         console.log(`::warning title=Sentry error::${err.message}`);
                     },
                 }),
+
             new webpack.EnvironmentPlugin(["VERSION"]),
+
+            // Automatically load buffer & process modules. Webpack 5 doesn't polyfill them
+            // automatically anymore.
+            new webpack.ProvidePlugin({
+                Buffer: ['buffer', 'Buffer'],
+                process: 'process/browser',
+            }),
         ].filter(Boolean),
 
         output: {
