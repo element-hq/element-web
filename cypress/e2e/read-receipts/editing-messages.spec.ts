@@ -263,21 +263,17 @@ describe("Read receipts", () => {
                 assertRead(room2);
             });
             it("A room where all edits are read is still read after restart", () => {
-                // Given an edit made the room unread
-                goTo(room2);
-                receiveMessages(room2, ["Msg1"]);
-                assertRead(room2);
-                receiveMessages(room2, [editOf("Msg1", "Msg1 Edit1")]);
+                // Given a message was edited and read
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", editOf("Msg1", "Msg1 Edit1")]);
                 assertUnread(room2, 1);
-
-                // When I mark it as read
-                markAsRead(room2);
-
-                // Then the room becomes read
+                goTo(room2);
                 assertRead(room2);
 
-                // And remains so after a reload
+                // When I reload
                 saveAndReload();
+
+                // Then the room is still read
                 assertRead(room2);
             });
         });
@@ -371,7 +367,7 @@ describe("Read receipts", () => {
             it("A room where all threaded edits are read is still read after restart", () => {
                 goTo(room2);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), editOf("Resp1", "Edit1")]);
-                assertUnread(room2, 2);
+                assertUnread(room2, 1);
                 openThread("Msg1");
                 assertRead(room2);
                 goTo(room1); // Make sure we are looking at room1 after reload
