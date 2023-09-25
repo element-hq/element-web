@@ -20,7 +20,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { mediaFromMxc } from "../../../customisations/Media";
 import { _t } from "../../../languageHandler";
-import { formatCommaSeparatedList } from "../../../utils/FormattingUtils";
+import { formatList } from "../../../utils/FormattingUtils";
 import dis from "../../../dispatcher/dispatcher";
 import ReactionsRowButtonTooltip from "./ReactionsRowButtonTooltip";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -123,7 +123,7 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
                     undefined;
             }
 
-            const reactors = formatCommaSeparatedList(senders, 6);
+            const reactors = formatList(senders, 6);
             if (content) {
                 label = _t("timeline|reactions|label", {
                     reactors,

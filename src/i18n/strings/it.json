@@ -97,9 +97,9 @@
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "L'eliminazione di un widget lo rimuove per tutti gli utenti della stanza. Sei sicuro di eliminare il widget?",
     "Delete widget": "Elimina widget",
     "Home": "Pagina iniziale",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s e altri %(count)s",
-        "one": "%(items)s e un altro"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> e altri %(count)s",
+        "one": "<Items/> e un altro"
     },
     "%(items)s and %(lastItem)s": "%(items)s e %(lastItem)s",
     "collapse": "richiudi",

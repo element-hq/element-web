@@ -109,9 +109,9 @@
     "Delete widget": "Slett widgeten",
     "Create new room": "Lag nytt rom",
     "Home": "Heim",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s og %(count)s til",
-        "one": "%(items)s og ein til"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> og %(count)s til",
+        "one": "<Items/> og ein til"
     },
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "collapse": "Slå saman",

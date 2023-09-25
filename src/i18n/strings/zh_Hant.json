@@ -150,9 +150,9 @@
     "Banned by %(displayName)s": "被 %(displayName)s 封鎖",
     "Delete Widget": "刪除小工具",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "刪除小工具會將它從此聊天室中所有使用者的收藏中移除。您確定您要刪除這個小工具嗎？",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s 與其他 %(count)s 個人",
-        "one": "%(items)s 與另一個人"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> 與其他 %(count)s 個人",
+        "one": "<Items/> 與另一個人"
     },
     "collapse": "收折",
     "expand": "展開",

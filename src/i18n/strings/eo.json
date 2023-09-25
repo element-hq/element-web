@@ -91,9 +91,9 @@
     "Delete widget": "Forigi fenestraĵon",
     "Create new room": "Krei novan ĉambron",
     "Home": "Hejmo",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s kaj %(count)s aliaj",
-        "one": "%(items)s kaj unu alia"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> kaj %(count)s aliaj",
+        "one": "<Items/> kaj unu alia"
     },
     "%(items)s and %(lastItem)s": "%(items)s kaj %(lastItem)s",
     "collapse": "maletendi",

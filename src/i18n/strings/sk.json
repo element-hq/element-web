@@ -85,9 +85,9 @@
     "Delete widget": "Vymazať widget",
     "Create new room": "Vytvoriť novú miestnosť",
     "Home": "Domov",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s a %(count)s ďalší",
-        "one": "%(items)s a jeden ďalší"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> a %(count)s ďalší",
+        "one": "<Items/> a jeden ďalší"
     },
     "%(items)s and %(lastItem)s": "%(items)s a tiež %(lastItem)s",
     "Custom level": "Vlastná úroveň",

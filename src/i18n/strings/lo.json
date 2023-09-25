@@ -1190,10 +1190,9 @@
         "other": "%(spaceName)s ແລະ %(count)s ອື່ນໆ"
     },
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s ແລະ %(space2Name)s",
-    "%(items)s and %(lastItem)s": "%(items)s ແລະ %(lastItem)s",
-    "%(items)s and %(count)s others": {
-        "one": "%(items)s ແລະ ອີກນຶ່ງລາຍການ",
-        "other": "%(items)s ແລະ %(count)s ອື່ນໆ"
+    "<Items/> and %(count)s others": {
+        "one": "<Items/> ແລະ ອີກນຶ່ງລາຍການ",
+        "other": "<Items/> ແລະ %(count)s ອື່ນໆ"
     },
     "Email (optional)": "ອີເມວ (ທາງເລືອກ)",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "ກະລຸນາຮັບຊາບວ່າ, ຖ້າທ່ານບໍ່ເພີ່ມອີເມວ ແລະ ລືມລະຫັດຜ່ານຂອງທ່ານ, ທ່ານອາດ <b>ສູນເສຍການເຂົ້າເຖິງບັນຊີຂອງທ່ານຢ່າງຖາວອນ</b>.",

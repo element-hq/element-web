@@ -686,10 +686,9 @@
     "Enable desktop notifications": "Virkja tilkynningar á skjáborði",
     "Don't miss a reply": "Ekki missa af svari",
     "Review to ensure your account is safe": "Yfirfarðu þetta til að tryggja að aðgangurinn þinn sé öruggur",
-    "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
-    "%(items)s and %(count)s others": {
-        "one": "%(items)s og einn til viðbótar",
-        "other": "%(items)s og %(count)s til viðbótar"
+    "<Items/> and %(count)s others": {
+        "one": "<Items/> og einn til viðbótar",
+        "other": "<Items/> og %(count)s til viðbótar"
     },
     "Private space": "Einkasvæði",
     "Mentions only": "Aðeins minnst á",

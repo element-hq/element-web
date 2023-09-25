@@ -135,9 +135,9 @@
     "Delete widget": "ウィジェットを削除",
     "Popout widget": "ウィジェットをポップアウト",
     "Home": "ホーム",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)sと他%(count)s人",
-        "one": "%(items)sともう1人"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/>と他%(count)s人",
+        "one": "<Items/>ともう1人"
     },
     "%(items)s and %(lastItem)s": "%(items)s, %(lastItem)s",
     "collapse": "折りたたむ",

@@ -172,9 +172,9 @@
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) починає новий сеанс без його звірення:",
     "Ask this user to verify their session, or manually verify it below.": "Попросіть цього користувача звірити сеанс, або звірте його власноруч унизу.",
     "Not Trusted": "Не довірений",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s та ще %(count)s учасників",
-        "one": "%(items)s і ще хтось"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> та ще %(count)s учасників",
+        "one": "<Items/> і ще хтось"
     },
     "Your homeserver has exceeded its user limit.": "Ваш домашній сервер перевищив свій ліміт користувачів.",
     "Your homeserver has exceeded one of its resource limits.": "Ваш домашній сервер перевищив одне із своїх обмежень ресурсів.",

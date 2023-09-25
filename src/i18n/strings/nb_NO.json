@@ -248,9 +248,9 @@
     "Upgrade your encryption": "Oppgrader krypteringen din",
     "Verify this session": "Verifiser denne økten",
     "Not Trusted": "Ikke betrodd",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s og %(count)s andre",
-        "one": "%(items)s og én annen"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> og %(count)s andre",
+        "one": "<Items/> og én annen"
     },
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "Show more": "Vis mer",

@@ -228,9 +228,9 @@
     "Your password has been reset.": "Parolanız sıfırlandı.",
     "General failure": "Genel başarısızlık",
     "Create account": "Yeni hesap",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s ve diğer %(count)s",
-        "one": "%(items)s ve bir diğeri"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> ve diğer %(count)s",
+        "one": "<Items/> ve bir diğeri"
     },
     "Clear personal data": "Kişisel veri temizle",
     "That matches!": "Eşleşti!",

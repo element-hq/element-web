@@ -177,9 +177,9 @@
     "No backup found!": "Nerasta jokios atsarginės kopijos!",
     "Failed to decrypt %(failedCount)s sessions!": "Nepavyko iššifruoti %(failedCount)s seansų!",
     "Explore rooms": "Žvalgyti kambarius",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s ir %(count)s kiti(-ų)",
-        "one": "%(items)s ir dar vienas"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> ir %(count)s kiti(-ų)",
+        "one": "<Items/> ir dar vienas"
     },
     "%(items)s and %(lastItem)s": "%(items)s ir %(lastItem)s",
     "General": "Bendrieji",

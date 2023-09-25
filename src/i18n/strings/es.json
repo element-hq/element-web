@@ -177,9 +177,9 @@
     "Delete Widget": "Eliminar accesorio",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Al borrar un accesorio, este se elimina para todos usuarios de la sala. ¿Estás seguro?",
     "Popout widget": "Abrir accesorio en una ventana emergente",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s y otros %(count)s",
-        "one": "%(items)s y otro más"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> y otros %(count)s",
+        "one": "<Items/> y otro más"
     },
     "collapse": "encoger",
     "expand": "desplegar",

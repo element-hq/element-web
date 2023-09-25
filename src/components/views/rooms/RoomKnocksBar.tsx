@@ -28,6 +28,7 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import Heading from "../typography/Heading";
+import { formatList } from "../../../utils/FormattingUtils";
 
 export const RoomKnocksBar: VFC<{ room: Room }> = ({ room }) => {
     const [disabled, setDisabled] = useState(false);
@@ -82,58 +83,46 @@ export const RoomKnocksBar: VFC<{ room: Room }> = ({ room }) => {
             {_t("action|view")}
         </AccessibleButton>
     );
-    let names: string = knockMembers
-        .slice(0, 2)
-        .map((knockMember) => knockMember.name)
-        .join(", ");
+    let names = formatList(
+        knockMembers.map((knockMember) => knockMember.name),
+        3,
+        true,
+    );
     let link: ReactNode = null;
-    switch (knockMembersCount) {
-        case 1: {
-            buttons = (
-                <>
-                    <AccessibleButton
-                        className="mx_RoomKnocksBar_action"
-                        disabled={!canKick || disabled}
-                        kind="icon_primary_outline"
-                        onClick={() => handleDeny(knockMembers[0].userId)}
-                        title={_t("action|deny")}
-                    >
-                        <XIcon width={18} height={18} />
-                    </AccessibleButton>
-                    <AccessibleButton
-                        className="mx_RoomKnocksBar_action"
-                        disabled={!canInvite || disabled}
-                        kind="icon_primary"
-                        onClick={() => handleApprove(knockMembers[0].userId)}
-                        title={_t("action|approve")}
-                    >
-                        <CheckIcon width={18} height={18} />
-                    </AccessibleButton>
-                </>
-            );
-            names = `${knockMembers[0].name} (${knockMembers[0].userId})`;
-            link = knockMembers[0].events.member?.getContent().reason && (
+    if (knockMembersCount === 1) {
+        buttons = (
+            <>
                 <AccessibleButton
-                    className="mx_RoomKnocksBar_link"
-                    element="a"
-                    kind="link_inline"
-                    onClick={handleOpenRoomSettings}
+                    className="mx_RoomKnocksBar_action"
+                    disabled={!canKick || disabled}
+                    kind="icon_primary_outline"
+                    onClick={() => handleDeny(knockMembers[0].userId)}
+                    title={_t("action|deny")}
                 >
-                    {_t("action|view_message")}
+                    <XIcon width={18} height={18} />
                 </AccessibleButton>
-            );
-            break;
-        }
-        case 2: {
-            names = _t("%(names)s and %(name)s", { names: knockMembers[0].name, name: knockMembers[1].name });
-            break;
-        }
-        case 3: {
-            names = _t("%(names)s and %(name)s", { names, name: knockMembers[2].name });
-            break;
-        }
-        default:
-            names = _t("%(names)s and %(count)s others", { names, count: knockMembersCount - 2 });
+                <AccessibleButton
+                    className="mx_RoomKnocksBar_action"
+                    disabled={!canInvite || disabled}
+                    kind="icon_primary"
+                    onClick={() => handleApprove(knockMembers[0].userId)}
+                    title={_t("action|approve")}
+                >
+                    <CheckIcon width={18} height={18} />
+                </AccessibleButton>
+            </>
+        );
+        names = `${knockMembers[0].name} (${knockMembers[0].userId})`;
+        link = knockMembers[0].events.member?.getContent().reason && (
+            <AccessibleButton
+                className="mx_RoomKnocksBar_link"
+                element="a"
+                kind="link_inline"
+                onClick={handleOpenRoomSettings}
+            >
+                {_t("action|view_message")}
+            </AccessibleButton>
+        );
     }
 
     return (

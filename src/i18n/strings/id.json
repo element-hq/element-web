@@ -526,9 +526,9 @@
     "Sending": "Mengirim",
     "Spaces": "Space",
     "Connecting": "Menghubungkan",
-    "%(items)s and %(count)s others": {
-        "one": "%(items)s dan satu lainnya",
-        "other": "%(items)s dan %(count)s lainnya"
+    "<Items/> and %(count)s others": {
+        "one": "<Items/> dan satu lainnya",
+        "other": "<Items/> dan %(count)s lainnya"
     },
     "Disconnect from the identity server <idserver />?": "Putuskan hubungan dari server identitas <idserver />?",
     "Disconnect identity server": "Putuskan hubungan server identitas",

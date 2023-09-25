@@ -151,9 +151,9 @@
     "expand": "laajenna",
     "collapse": "supista",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Sovelman poistaminen poistaa sen kaikilta huoneen käyttäjiltä. Haluatko varmasti poistaa tämän sovelman?",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s ja %(count)s muuta",
-        "one": "%(items)s ja yksi muu"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> ja %(count)s muuta",
+        "one": "<Items/> ja yksi muu"
     },
     "Sunday": "Sunnuntai",
     "Notification targets": "Ilmoituksen kohteet",

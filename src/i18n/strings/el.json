@@ -167,9 +167,9 @@
     "Your homeserver has exceeded its user limit.": "Ο διακομιστής σας ξεπέρασε το όριο χρηστών.",
     "Use app": "Χρησιμοποιήστε την εφαρμογή",
     "Use app for a better experience": "Χρησιμοποιήστε την εφαρμογή για καλύτερη εμπειρία",
-    "%(items)s and %(count)s others": {
-        "one": "%(items)s και ένα ακόμα",
-        "other": "%(items)s και %(count)s άλλα"
+    "<Items/> and %(count)s others": {
+        "one": "<Items/> και ένα ακόμα",
+        "other": "<Items/> και %(count)s άλλα"
     },
     "Ask this user to verify their session, or manually verify it below.": "Ζητήστε από αυτόν τον χρήστη να επιβεβαιώσει την συνεδρία του, ή επιβεβαιώστε την χειροκίνητα παρακάτω.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "Ο %(name)s (%(userId)s) συνδέθηκε σε μία νέα συνεδρία χωρίς να την επιβεβαιώσει:",

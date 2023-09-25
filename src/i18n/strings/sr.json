@@ -94,9 +94,9 @@
     "Delete widget": "Обриши виџет",
     "Create new room": "Направи нову собу",
     "Home": "Почетна",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s и %(count)s других",
-        "one": "%(items)s и још један"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> и %(count)s других",
+        "one": "<Items/> и још један"
     },
     "%(items)s and %(lastItem)s": "%(items)s и %(lastItem)s",
     "collapse": "скупи",

@@ -94,9 +94,9 @@
     "Something went wrong!": "Diçka shkoi ters!",
     "Create new room": "Krijoni dhomë të re",
     "Home": "Kreu",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s dhe %(count)s të tjerë",
-        "one": "%(items)s dhe një tjetër"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> dhe %(count)s të tjerë",
+        "one": "<Items/> dhe një tjetër"
     },
     "%(items)s and %(lastItem)s": "%(items)s dhe %(lastItem)s",
     "collapse": "tkurre",

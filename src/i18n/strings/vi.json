@@ -30,9 +30,9 @@
     "Restricted": "Bị hạn chế",
     "Moderator": "Điều phối viên",
     "Reason": "Lý do",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s và %(count)s mục khác",
-        "one": "%(items)s và một mục khác"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> và %(count)s mục khác",
+        "one": "<Items/> và một mục khác"
     },
     "%(items)s and %(lastItem)s": "%(items)s và %(lastItem)s",
     "Please contact your homeserver administrator.": "Vui lòng liên hệ quản trị viên homeserver của bạn.",

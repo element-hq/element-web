@@ -173,9 +173,9 @@
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Denna process låter dig exportera nycklarna för meddelanden som du har fått i krypterade rum till en lokal fil. Du kommer sedan att kunna importera filen i en annan Matrix-klient i framtiden, så att den klienten också kan avkryptera meddelandena.",
     "Confirm Removal": "Bekräfta borttagning",
     "Reject all %(invitedRooms)s invites": "Avböj alla %(invitedRooms)s inbjudningar",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s och %(count)s till",
-        "one": "%(items)s och en till"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> och %(count)s till",
+        "one": "<Items/> och en till"
     },
     "collapse": "fäll ihop",
     "expand": "fäll ut",

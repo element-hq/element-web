@@ -124,9 +124,9 @@
     "Jump to read receipt": "跳到阅读回执",
     "Unnamed room": "未命名的房间",
     "Delete Widget": "删除挂件",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s 和其他 %(count)s 人",
-        "one": "%(items)s 与另一个人"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> 和其他 %(count)s 人",
+        "one": "<Items/> 与另一个人"
     },
     "collapse": "折叠",
     "expand": "展开",
