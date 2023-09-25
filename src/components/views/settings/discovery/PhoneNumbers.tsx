@@ -106,7 +106,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
             });
             Modal.createDialog(ErrorDialog, {
                 title: errorTitle,
-                description: extractErrorMessageFromError(err, _t("Operation failed")),
+                description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
             });
         }
     }
@@ -164,7 +164,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
             if (underlyingError instanceof MatrixError && underlyingError.errcode !== "M_THREEPID_AUTH_FAILED") {
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to verify phone number."),
-                    description: extractErrorMessageFromError(err, _t("Operation failed")),
+                    description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
                 });
             } else {
                 this.setState({ verifyError: _t("Incorrect verification code") });

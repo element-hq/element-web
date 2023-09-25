@@ -245,7 +245,7 @@ export class SetupEncryptionStore extends EventEmitter {
                         }
 
                         const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-                            title: _t("Setting up keys"),
+                            title: _t("encryption|bootstrap_title"),
                             matrixClient: cli,
                             makeRequest,
                         });

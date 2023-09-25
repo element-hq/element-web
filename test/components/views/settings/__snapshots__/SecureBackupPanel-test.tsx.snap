@@ -140,20 +140,27 @@ exports[`<SecureBackupPanel /> suggests connecting session to key backup when ba
         <th
           scope="row"
         >
-          Backup version:
+          Latest backup version on server:
         </th>
         <td>
           1
+           (
+          Algorithm:
+           
+          <code>
+            test
+          </code>
+          )
         </td>
       </tr>
       <tr>
         <th
           scope="row"
         >
-          Algorithm:
+          Active backup version:
         </th>
         <td>
-          test
+          None
         </td>
       </tr>
     </table>

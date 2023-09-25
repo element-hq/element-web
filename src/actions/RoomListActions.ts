@@ -87,7 +87,7 @@ export default class RoomListActions {
                         logger.error("Failed to set DM tag " + err);
                         Modal.createDialog(ErrorDialog, {
                             title: _t("room_list|failed_set_dm_tag"),
-                            description: err && err.message ? err.message : _t("Operation failed"),
+                            description: err && err.message ? err.message : _t("invite|failed_generic"),
                         });
                     });
                 }
@@ -103,7 +103,7 @@ export default class RoomListActions {
                         logger.error("Failed to remove tag " + oldTag + " from room: " + err);
                         Modal.createDialog(ErrorDialog, {
                             title: _t("room_list|failed_remove_tag", { tagName: oldTag }),
-                            description: err && err.message ? err.message : _t("Operation failed"),
+                            description: err && err.message ? err.message : _t("invite|failed_generic"),
                         });
                     });
 
@@ -116,7 +116,7 @@ export default class RoomListActions {
                         logger.error("Failed to add tag " + newTag + " to room: " + err);
                         Modal.createDialog(ErrorDialog, {
                             title: _t("room_list|failed_add_tag", { tagName: newTag }),
-                            description: err && err.message ? err.message : _t("Operation failed"),
+                            description: err && err.message ? err.message : _t("invite|failed_generic"),
                         });
 
                         throw err;

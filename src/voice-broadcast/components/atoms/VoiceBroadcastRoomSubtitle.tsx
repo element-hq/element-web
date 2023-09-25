@@ -23,7 +23,7 @@ export const VoiceBroadcastRoomSubtitle: React.FC = () => {
     return (
         <div className="mx_RoomTile_subtitle mx_RoomTile_subtitle--voice-broadcast">
             <LiveIcon className="mx_Icon mx_Icon_16" />
-            {_t("Live")}
+            {_t("voice_broadcast|live")}
         </div>
     );
 };

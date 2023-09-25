@@ -1,13 +1,7 @@
 {
     "All messages": "सारे संदेश",
     "All Rooms": "सारे कमरे",
-    "This email address is already in use": "यह ईमेल आईडी पहले से इस्तेमाल में है",
-    "This phone number is already in use": "यह फ़ोन नंबर पहले से इस्तेमाल में है",
-    "Failed to verify email address: make sure you clicked the link in the email": "ईमेल आईडी सत्यापित नही हो पाया: कृपया सुनिश्चित कर लें कि आपने ईमेल में मौजूद लिंक पर क्लिक किया है",
-    "You cannot place a call with yourself.": "आप अपने साथ कॉल नहीं कर सकते हैं।",
     "Permission Required": "अनुमति आवश्यक है",
-    "You do not have permission to start a conference call in this room": "आपको इस रूम में कॉन्फ़्रेंस कॉल शुरू करने की अनुमति नहीं है",
-    "Upload Failed": "अपलोड विफल",
     "Sun": "रवि",
     "Mon": "सोम",
     "Tue": "मंगल",
@@ -33,39 +27,11 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
-    "Unable to enable Notifications": "अधिसूचनाएं सक्षम करने में असमर्थ",
-    "This email address was not found": "यह ईमेल पता नहीं मिला था",
     "Default": "डिफ़ॉल्ट",
     "Restricted": "वर्जित",
     "Moderator": "मध्यस्थ",
-    "Operation failed": "कार्रवाई विफल",
-    "Failed to invite": "आमंत्रित करने में विफल",
-    "You need to be logged in.": "आपको लॉग इन करने की जरूरत है।",
-    "Unable to load! Check your network connectivity and try again.": "लोड नहीं किया जा सकता! अपनी नेटवर्क कनेक्टिविटी जांचें और पुनः प्रयास करें।",
-    "You need to be able to invite users to do that.": "आपको उपयोगकर्ताओं को ऐसा करने के लिए आमंत्रित करने में सक्षम होना चाहिए।",
-    "Unable to create widget.": "विजेट बनाने में असमर्थ।",
-    "Missing roomId.": "गुमशुदा रूम ID।",
-    "Failed to send request.": "अनुरोध भेजने में विफल।",
-    "This room is not recognised.": "यह रूम पहचाना नहीं गया है।",
-    "Power level must be positive integer.": "पावर स्तर सकारात्मक पूर्णांक होना चाहिए।",
-    "You are not in this room.": "आप इस रूम में नहीं हैं।",
-    "You do not have permission to do that in this room.": "आपको इस कमरे में ऐसा करने की अनुमति नहीं है।",
-    "Missing room_id in request": "अनुरोध में रूम_आईडी गुम है",
-    "Room %(roomId)s not visible": "%(roomId)s रूम दिखाई नहीं दे रहा है",
-    "Missing user_id in request": "अनुरोध में user_id गुम है",
-    "Ignored user": "अनदेखा उपयोगकर्ता",
-    "You are now ignoring %(userId)s": "आप %(userId)s को अनदेखा कर रहे हैं",
-    "Unignored user": "अनदेखा बंद किया गया उपयोगकर्ता",
-    "You are no longer ignoring %(userId)s": "अब आप %(userId)s को अनदेखा नहीं कर रहे हैं",
-    "Verified key": "सत्यापित कुंजी",
     "Reason": "कारण",
-    "Failure to create room": "रूम बनाने में विफलता",
-    "Server may be unavailable, overloaded, or you hit a bug.": "सर्वर अनुपलब्ध, अधिभारित हो सकता है, या अपने एक सॉफ्टवेयर गर्बरी को पाया।",
     "Send": "भेजें",
-    "This homeserver has hit its Monthly Active User limit.": "इस होमसर्वर ने अपनी मासिक सक्रिय उपयोगकर्ता सीमा को प्राप्त कर लिया हैं।",
-    "This homeserver has exceeded one of its resource limits.": "यह होम सर्वर अपनी संसाधन सीमाओं में से एक से अधिक हो गया है।",
-    "Your browser does not support the required cryptography extensions": "आपका ब्राउज़र आवश्यक क्रिप्टोग्राफी एक्सटेंशन का समर्थन नहीं करता है",
-    "Authentication check failed: incorrect password?": "प्रमाणीकरण जांच विफल: गलत पासवर्ड?",
     "Please contact your homeserver administrator.": "कृपया अपने होमसर्वर व्यवस्थापक से संपर्क करें।",
     "Incorrect verification code": "गलत सत्यापन कोड",
     "No display name": "कोई प्रदर्शन नाम नहीं",
@@ -75,10 +41,7 @@
     "Delete Backup": "बैकअप हटाएं",
     "Unable to load key backup status": "कुंजी बैकअप स्थिति लोड होने में असमर्थ",
     "Notification targets": "अधिसूचना के लक्ष्य",
-    "You do not have permission to invite people to this room.": "आपको इस कमरे में लोगों को आमंत्रित करने की अनुमति नहीं है।",
-    "Unknown server error": "अज्ञात सर्वर त्रुटि",
     "This event could not be displayed": "यह घटना प्रदर्शित नहीं की जा सकी",
-    "Unban": "अप्रतिबंधित करें",
     "Failed to ban user": "उपयोगकर्ता को प्रतिबंधित करने में विफल",
     "Demote yourself?": "खुद को अवनत करें?",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "आप इस बदलाव को पूर्ववत नहीं कर पाएंगे क्योंकि आप स्वयं को अवनत कर रहे हैं, अगर आप रूम में आखिरी विशेषाधिकार प्राप्त उपयोगकर्ता हैं तो विशेषाधिकार हासिल करना असंभव होगा।",
@@ -105,8 +68,6 @@
     "%(duration)sm": "%(duration)s मिनट",
     "%(duration)sh": "%(duration)s घंटा",
     "%(duration)sd": "%(duration)s दिन",
-    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "फ़ाइल '%(fileName)s' अपलोड के लिए इस होमस्वर के आकार की सीमा से अधिक है",
-    "Unrecognised address": "अपरिचित पता",
     "Dog": "कुत्ता",
     "Cat": "बिल्ली",
     "Lion": "शेर",
@@ -201,19 +162,15 @@
     "Ignored users": "अनदेखी उपयोगकर्ताओं",
     "Bulk options": "थोक विकल्प",
     "Reject all %(invitedRooms)s invites": "सभी %(invitedRooms)s की आमंत्रण को अस्वीकार करें",
-    "No media permissions": "मीडिया की अनुमति नहीं",
     "Missing media permissions, click the button below to request.": "मीडिया अनुमतियाँ गुम, अनुरोध करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
     "Request media permissions": "मीडिया अनुमति का अनुरोध करें",
     "No Audio Outputs detected": "कोई ऑडियो आउटपुट नहीं मिला",
     "No Microphones detected": "कोई माइक्रोफोन का पता नहीं चला",
     "No Webcams detected": "कोई वेबकैम नहीं मिला",
-    "Default Device": "डिफ़ॉल्ट उपकरण",
     "Audio Output": "ध्वनि - उत्पादन",
     "Voice & Video": "ध्वनि और वीडियो",
     "Failed to unban": "अप्रतिबंधित करने में विफल",
     "Banned by %(displayName)s": "%(displayName)s द्वारा प्रतिबंधित",
-    "The file '%(fileName)s' failed to upload.": "फ़ाइल '%(fileName)s' अपलोड करने में विफल रही।",
-    "The user must be unbanned before they can be invited.": "उपयोगकर्ता को आमंत्रित करने से पहले उन्हें प्रतिबंधित किया जाना चाहिए।",
     "Explore rooms": "रूम का अन्वेषण करें",
     "Mongolia": "मंगोलिया",
     "Monaco": "मोनाको",
@@ -364,40 +321,6 @@
     "Afghanistan": "अफ़ग़ानिस्तान",
     "United States": "संयुक्त राज्य अमेरिका",
     "United Kingdom": "यूनाइटेड किंगडम",
-    "%(brand)s was not given permission to send notifications - please try again": "%(brand)s को सूचनाएं भेजने की अनुमति नहीं दी गई थी - कृपया पुनः प्रयास करें",
-    "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s को आपको सूचनाएं भेजने की अनुमति नहीं है - कृपया अपनी ब्राउज़र सेटिंग जांचें",
-    "%(name)s is requesting verification": "%(name)s सत्यापन का अनुरोध कर रहा है",
-    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "हमने ब्राउज़र से यह याद रखने के लिए कहा कि आप किस होमसर्वर का उपयोग आपको साइन इन करने के लिए करते हैं, लेकिन दुर्भाग्य से आपका ब्राउज़र इसे भूल गया है। साइन इन पेज पर जाएं और फिर से कोशिश करें.",
-    "We couldn't log you in": "हम आपको लॉग इन नहीं कर सके",
-    "Only continue if you trust the owner of the server.": "केवल तभी जारी रखें जब आप सर्वर के स्वामी पर भरोसा करते हैं।",
-    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "इस क्रिया के लिए ईमेल पते या फ़ोन नंबर को मान्य करने के लिए डिफ़ॉल्ट पहचान सर्वर <server /> तक पहुँचने की आवश्यकता है, लेकिन सर्वर के पास सेवा की कोई शर्तें नहीं हैं।",
-    "Identity server has no terms of service": "पहचान सर्वर की सेवा की कोई शर्तें नहीं हैं",
-    "The server does not support the room version specified.": "सर्वर निर्दिष्ट कक्ष संस्करण का समर्थन नहीं करता है।",
-    "Failed to transfer call": "कॉल स्थानांतरित करने में विफल",
-    "Transfer Failed": "स्थानांतरण विफल",
-    "Unable to transfer call": "कॉल ट्रांसफर करने में असमर्थ",
-    "There was an error looking up the phone number": "फ़ोन नंबर खोजने में त्रुटि हुई",
-    "Unable to look up phone number": "फ़ोन नंबर देखने में असमर्थ",
-    "You've reached the maximum number of simultaneous calls.": "आप एक साथ कॉल की अधिकतम संख्या तक पहुंच गए हैं।",
-    "Too Many Calls": "बहुत अधिक कॉल",
-    "You cannot place calls without a connection to the server.": "आप सर्वर से कनेक्शन के बिना कॉल नहीं कर सकते।",
-    "Connectivity to the server has been lost": "सर्वर से कनेक्टिविटी खो गई है",
-    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "कृपया अपने होमसर्वर (<code>%(homeserverDomain)s</code>) के व्यवस्थापक से एक TURN सर्वर कॉन्फ़िगर करने के लिए कहें ताकि कॉल विश्वसनीय रूप से काम करें।",
-    "Call failed due to misconfigured server": "गलत कॉन्फ़िगर किए गए सर्वर के कारण कॉल विफल रहा",
-    "The call was answered on another device.": "किसी अन्य डिवाइस पर कॉल का उत्तर दिया गया था।",
-    "Answered Elsewhere": "कहीं और उत्तर दिया गया",
-    "The call could not be established": "कॉल स्थापित नहीं किया जा सका",
-    "The user you called is busy.": "आपके द्वारा कॉल किया गया उपयोगकर्ता व्यस्त है।",
-    "User Busy": "उपयोगकर्ता व्यस्त है",
-    "Add Phone Number": "फोन नंबर डालें",
-    "Click the button below to confirm adding this phone number.": "इस फ़ोन नंबर को जोड़ने की पुष्टि करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
-    "Confirm adding phone number": "फ़ोन नंबर जोड़ने की पुष्टि करें",
-    "Confirm adding this phone number by using Single Sign On to prove your identity.": "अपनी पहचान साबित करने के लिए सिंगल साइन ऑन का उपयोग करके इस फ़ोन नंबर को जोड़ने की पुष्टि करें।",
-    "Add Email Address": "ईमेल पता जोड़ें",
-    "Click the button below to confirm adding this email address.": "इस ईमेल पते को जोड़ने की पुष्टि करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
-    "Confirm adding email": "ईमेल जोड़ने की पुष्टि करें",
-    "Confirm adding this email address by using Single Sign On to prove your identity.": "अपनी पहचान साबित करने के लिए सिंगल साइन ऑन का उपयोग करके इस ईमेल पते को जोड़ने की पुष्टि करें।",
-    "Use Single Sign On to continue": "जारी रखने के लिए सिंगल साइन ऑन का उपयोग करें",
     "common": {
         "analytics": "एनालिटिक्स",
         "error": "त्रुटि",
@@ -445,7 +368,8 @@
         "accept": "स्वीकार",
         "register": "पंजीकरण करें",
         "mention": "उल्लेख",
-        "submit": "जमा करें"
+        "submit": "जमा करें",
+        "unban": "अप्रतिबंधित करें"
     },
     "labs": {
         "pinning": "संदेश पिनिंग",
@@ -499,7 +423,10 @@
             "rule_suppress_notices": "रोबॉट द्वारा भेजे गए संदेश",
             "rule_encrypted_room_one_to_one": "एक एक के साथ चैट में एन्क्रिप्टेड संदेश",
             "show_message_desktop_notification": "डेस्कटॉप अधिसूचना में संदेश दिखाएं",
-            "noisy": "शोरगुल"
+            "noisy": "शोरगुल",
+            "error_permissions_denied": "%(brand)s को आपको सूचनाएं भेजने की अनुमति नहीं है - कृपया अपनी ब्राउज़र सेटिंग जांचें",
+            "error_permissions_missing": "%(brand)s को सूचनाएं भेजने की अनुमति नहीं दी गई थी - कृपया पुनः प्रयास करें",
+            "error_title": "अधिसूचनाएं सक्षम करने में असमर्थ"
         },
         "appearance": {
             "timeline_image_size_default": "डिफ़ॉल्ट",
@@ -522,7 +449,17 @@
         },
         "general": {
             "account_section": "अकाउंट",
-            "language_section": "भाषा और क्षेत्र"
+            "language_section": "भाषा और क्षेत्र",
+            "email_address_in_use": "यह ईमेल आईडी पहले से इस्तेमाल में है",
+            "msisdn_in_use": "यह फ़ोन नंबर पहले से इस्तेमाल में है",
+            "confirm_adding_email_title": "ईमेल जोड़ने की पुष्टि करें",
+            "confirm_adding_email_body": "इस ईमेल पते को जोड़ने की पुष्टि करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
+            "add_email_dialog_title": "ईमेल पता जोड़ें",
+            "add_email_failed_verification": "ईमेल आईडी सत्यापित नही हो पाया: कृपया सुनिश्चित कर लें कि आपने ईमेल में मौजूद लिंक पर क्लिक किया है",
+            "add_msisdn_confirm_sso_button": "अपनी पहचान साबित करने के लिए सिंगल साइन ऑन का उपयोग करके इस फ़ोन नंबर को जोड़ने की पुष्टि करें।",
+            "add_msisdn_confirm_button": "फ़ोन नंबर जोड़ने की पुष्टि करें",
+            "add_msisdn_confirm_body": "इस फ़ोन नंबर को जोड़ने की पुष्टि करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
+            "add_msisdn_dialog_title": "फोन नंबर डालें"
         }
     },
     "timeline": {
@@ -604,7 +541,12 @@
         "deop": "दिए गए आईडी के साथ उपयोगकर्ता को देओप्स करना",
         "server_error_detail": "सर्वर अनुपलब्ध, अधिभारित, या कुछ और गलत हो गया।",
         "server_error": "सर्वर त्रुटि",
-        "command_error": "कमांड त्रुटि"
+        "command_error": "कमांड त्रुटि",
+        "ignore_dialog_title": "अनदेखा उपयोगकर्ता",
+        "ignore_dialog_description": "आप %(userId)s को अनदेखा कर रहे हैं",
+        "unignore_dialog_title": "अनदेखा बंद किया गया उपयोगकर्ता",
+        "unignore_dialog_description": "अब आप %(userId)s को अनदेखा नहीं कर रहे हैं",
+        "verify_success_title": "सत्यापित कुंजी"
     },
     "presence": {
         "online_for": "%(duration)s के लिए ऑनलाइन",
@@ -632,7 +574,28 @@
         "already_in_call": "पहले से ही कॉल में है",
         "already_in_call_person": "आप पहले से ही इस व्यक्ति के साथ कॉल में हैं।",
         "unsupported": "कॉल असमर्थित हैं",
-        "unsupported_browser": "आप इस ब्राउज़र में कॉल नहीं कर सकते।"
+        "unsupported_browser": "आप इस ब्राउज़र में कॉल नहीं कर सकते।",
+        "user_busy": "उपयोगकर्ता व्यस्त है",
+        "user_busy_description": "आपके द्वारा कॉल किया गया उपयोगकर्ता व्यस्त है।",
+        "call_failed_description": "कॉल स्थापित नहीं किया जा सका",
+        "answered_elsewhere": "कहीं और उत्तर दिया गया",
+        "answered_elsewhere_description": "किसी अन्य डिवाइस पर कॉल का उत्तर दिया गया था।",
+        "misconfigured_server": "गलत कॉन्फ़िगर किए गए सर्वर के कारण कॉल विफल रहा",
+        "misconfigured_server_description": "कृपया अपने होमसर्वर (<code>%(homeserverDomain)s</code>) के व्यवस्थापक से एक TURN सर्वर कॉन्फ़िगर करने के लिए कहें ताकि कॉल विश्वसनीय रूप से काम करें।",
+        "connection_lost": "सर्वर से कनेक्टिविटी खो गई है",
+        "connection_lost_description": "आप सर्वर से कनेक्शन के बिना कॉल नहीं कर सकते।",
+        "too_many_calls": "बहुत अधिक कॉल",
+        "too_many_calls_description": "आप एक साथ कॉल की अधिकतम संख्या तक पहुंच गए हैं।",
+        "cannot_call_yourself_description": "आप अपने साथ कॉल नहीं कर सकते हैं।",
+        "msisdn_lookup_failed": "फ़ोन नंबर देखने में असमर्थ",
+        "msisdn_lookup_failed_description": "फ़ोन नंबर खोजने में त्रुटि हुई",
+        "msisdn_transfer_failed": "कॉल ट्रांसफर करने में असमर्थ",
+        "transfer_failed": "स्थानांतरण विफल",
+        "transfer_failed_description": "कॉल स्थानांतरित करने में विफल",
+        "no_permission_conference": "अनुमति आवश्यक है",
+        "no_permission_conference_description": "आपको इस रूम में कॉन्फ़्रेंस कॉल शुरू करने की अनुमति नहीं है",
+        "default_device": "डिफ़ॉल्ट उपकरण",
+        "no_media_perms_title": "मीडिया की अनुमति नहीं"
     },
     "Advanced": "उन्नत",
     "composer": {
@@ -649,7 +612,9 @@
             "sas_emoji_caption_user": "इस उपयोगकर्ता की पुष्टि करें कि उनकी स्क्रीन पर निम्नलिखित इमोजी दिखाई देते हैं।",
             "sas_caption_user": "निम्न स्क्रीन पर दिखाई देने वाली संख्या की पुष्टि करके इस उपयोगकर्ता को सत्यापित करें।",
             "unsupported_method": "समर्थित सत्यापन विधि खोजने में असमर्थ।"
-        }
+        },
+        "export_unsupported": "आपका ब्राउज़र आवश्यक क्रिप्टोग्राफी एक्सटेंशन का समर्थन नहीं करता है",
+        "import_invalid_passphrase": "प्रमाणीकरण जांच विफल: गलत पासवर्ड?"
     },
     "auth": {
         "sso": "केवल हस्ताक्षर के ऊपर",
@@ -663,7 +628,16 @@
         "change_password_current_label": "वर्तमान पासवर्ड",
         "change_password_new_label": "नया पासवर्ड",
         "change_password_action": "पासवर्ड बदलें",
-        "msisdn_field_label": "फ़ोन"
+        "msisdn_field_label": "फ़ोन",
+        "uia": {
+            "sso_title": "जारी रखने के लिए सिंगल साइन ऑन का उपयोग करें",
+            "sso_body": "अपनी पहचान साबित करने के लिए सिंगल साइन ऑन का उपयोग करके इस ईमेल पते को जोड़ने की पुष्टि करें।"
+        },
+        "sso_failed_missing_storage": "हमने ब्राउज़र से यह याद रखने के लिए कहा कि आप किस होमसर्वर का उपयोग आपको साइन इन करने के लिए करते हैं, लेकिन दुर्भाग्य से आपका ब्राउज़र इसे भूल गया है। साइन इन पेज पर जाएं और फिर से कोशिश करें.",
+        "oidc": {
+            "error_title": "हम आपको लॉग इन नहीं कर सके"
+        },
+        "reset_password_email_not_found_title": "यह ईमेल पता नहीं मिला था"
     },
     "setting": {
         "help_about": {
@@ -737,5 +711,50 @@
     },
     "labs_mjolnir": {
         "title": "अनदेखी उपयोगकर्ताओं"
+    },
+    "failed_load_async_component": "लोड नहीं किया जा सकता! अपनी नेटवर्क कनेक्टिविटी जांचें और पुनः प्रयास करें।",
+    "upload_failed_generic": "फ़ाइल '%(fileName)s' अपलोड करने में विफल रही।",
+    "upload_failed_size": "फ़ाइल '%(fileName)s' अपलोड के लिए इस होमस्वर के आकार की सीमा से अधिक है",
+    "upload_failed_title": "अपलोड विफल",
+    "create_room": {
+        "generic_error": "सर्वर अनुपलब्ध, अधिभारित हो सकता है, या अपने एक सॉफ्टवेयर गर्बरी को पाया।",
+        "unsupported_version": "सर्वर निर्दिष्ट कक्ष संस्करण का समर्थन नहीं करता है।",
+        "error_title": "रूम बनाने में विफलता"
+    },
+    "terms": {
+        "identity_server_no_terms_title": "पहचान सर्वर की सेवा की कोई शर्तें नहीं हैं",
+        "identity_server_no_terms_description_1": "इस क्रिया के लिए ईमेल पते या फ़ोन नंबर को मान्य करने के लिए डिफ़ॉल्ट पहचान सर्वर <server /> तक पहुँचने की आवश्यकता है, लेकिन सर्वर के पास सेवा की कोई शर्तें नहीं हैं।",
+        "identity_server_no_terms_description_2": "केवल तभी जारी रखें जब आप सर्वर के स्वामी पर भरोसा करते हैं।"
+    },
+    "notifier": {
+        "m.key.verification.request": "%(name)s सत्यापन का अनुरोध कर रहा है"
+    },
+    "invite": {
+        "failed_title": "आमंत्रित करने में विफल",
+        "failed_generic": "कार्रवाई विफल",
+        "invalid_address": "अपरिचित पता",
+        "error_permissions_room": "आपको इस कमरे में लोगों को आमंत्रित करने की अनुमति नहीं है।",
+        "error_bad_state": "उपयोगकर्ता को आमंत्रित करने से पहले उन्हें प्रतिबंधित किया जाना चाहिए।",
+        "error_unknown": "अज्ञात सर्वर त्रुटि"
+    },
+    "widget": {
+        "error_need_to_be_logged_in": "आपको लॉग इन करने की जरूरत है।",
+        "error_need_invite_permission": "आपको उपयोगकर्ताओं को ऐसा करने के लिए आमंत्रित करने में सक्षम होना चाहिए।"
+    },
+    "scalar": {
+        "error_create": "विजेट बनाने में असमर्थ।",
+        "error_missing_room_id": "गुमशुदा रूम ID।",
+        "error_send_request": "अनुरोध भेजने में विफल।",
+        "error_room_unknown": "यह रूम पहचाना नहीं गया है।",
+        "error_power_level_invalid": "पावर स्तर सकारात्मक पूर्णांक होना चाहिए।",
+        "error_membership": "आप इस रूम में नहीं हैं।",
+        "error_permission": "आपको इस कमरे में ऐसा करने की अनुमति नहीं है।",
+        "error_missing_room_id_request": "अनुरोध में रूम_आईडी गुम है",
+        "error_room_not_visible": "%(roomId)s रूम दिखाई नहीं दे रहा है",
+        "error_missing_user_id_request": "अनुरोध में user_id गुम है"
+    },
+    "error": {
+        "mau": "इस होमसर्वर ने अपनी मासिक सक्रिय उपयोगकर्ता सीमा को प्राप्त कर लिया हैं।",
+        "resource_limits": "यह होम सर्वर अपनी संसाधन सीमाओं में से एक से अधिक हो गया है।"
     }
 }

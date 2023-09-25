@@ -47,7 +47,7 @@ interface IState {
 
 export default class FontScalingPanel extends React.Component<IProps, IState> {
     private readonly MESSAGE_PREVIEW_TEXT = _t("common|preview_message");
-
+    private layoutWatcherRef?: string;
     private unmounted = false;
 
     public constructor(props: IProps) {
@@ -65,6 +65,15 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         const client = MatrixClientPeg.safeGet();
         const userId = client.getSafeUserId();
         const profileInfo = await client.getProfileInfo(userId);
+        this.layoutWatcherRef = SettingsStore.watchSetting("layout", null, () => {
+            // Update the layout for the preview window according to the user selection
+            const value = SettingsStore.getValue("layout");
+            if (this.state.layout !== value) {
+                this.setState({
+                    layout: value,
+                });
+            }
+        });
         if (this.unmounted) return;
 
         this.setState({
@@ -76,6 +85,9 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
 
     public componentWillUnmount(): void {
         this.unmounted = true;
+        if (this.layoutWatcherRef) {
+            SettingsStore.unwatchSetting(this.layoutWatcherRef);
+        }
     }
 
     private onFontSizeChanged = (size: number): void => {

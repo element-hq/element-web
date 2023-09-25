@@ -35,7 +35,7 @@ function friendlyError(message: string, friendlyText: string): { message: string
 }
 
 function cryptoFailMsg(): string {
-    return _t("Your browser does not support the required cryptography extensions");
+    return _t("encryption|export_unsupported");
 }
 
 /**
@@ -53,17 +53,17 @@ export async function decryptMegolmKeyFile(data: ArrayBuffer, password: string):
 
     // check we have a version byte
     if (body.length < 1) {
-        throw friendlyError("Invalid file: too short", _t("Not a valid %(brand)s keyfile", { brand }));
+        throw friendlyError("Invalid file: too short", _t("encryption|import_invalid_keyfile", { brand }));
     }
 
     const version = body[0];
     if (version !== 1) {
-        throw friendlyError("Unsupported version", _t("Not a valid %(brand)s keyfile", { brand }));
+        throw friendlyError("Unsupported version", _t("encryption|import_invalid_keyfile", { brand }));
     }
 
     const ciphertextLength = body.length - (1 + 16 + 16 + 4 + 32);
     if (ciphertextLength < 0) {
-        throw friendlyError("Invalid file: too short", _t("Not a valid %(brand)s keyfile", { brand }));
+        throw friendlyError("Invalid file: too short", _t("encryption|import_invalid_keyfile", { brand }));
     }
 
     const salt = body.subarray(1, 1 + 16);
@@ -82,7 +82,7 @@ export async function decryptMegolmKeyFile(data: ArrayBuffer, password: string):
         throw friendlyError("subtleCrypto.verify failed: " + e, cryptoFailMsg());
     }
     if (!isValid) {
-        throw friendlyError("hmac mismatch", _t("Authentication check failed: incorrect password?"));
+        throw friendlyError("hmac mismatch", _t("encryption|import_invalid_passphrase"));
     }
 
     let plaintext;

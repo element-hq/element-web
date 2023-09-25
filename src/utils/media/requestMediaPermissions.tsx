@@ -47,8 +47,8 @@ export const requestMediaPermissions = async (video = true): Promise<MediaStream
         logger.log("Failed to list userMedia devices", error);
         const brand = SdkConfig.get().brand;
         Modal.createDialog(ErrorDialog, {
-            title: _t("No media permissions"),
-            description: _t("You may need to manually permit %(brand)s to access your microphone/webcam", { brand }),
+            title: _t("voip|no_media_perms_title"),
+            description: _t("voip|no_media_perms_description", { brand }),
         });
     }
 

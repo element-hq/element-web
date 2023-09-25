@@ -543,7 +543,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     private renderSuggestedRooms(): ReactComponentElement<typeof ExtraTile>[] {
         return this.state.suggestedRooms.map((room) => {
-            const name = room.name || room.canonical_alias || room.aliases?.[0] || _t("Empty room");
+            const name = room.name || room.canonical_alias || room.aliases?.[0] || _t("empty_room");
             const avatar = (
                 <RoomAvatar
                     oobData={{

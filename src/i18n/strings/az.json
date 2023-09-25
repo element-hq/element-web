@@ -1,10 +1,5 @@
 {
-    "Operation failed": "Əməliyyatın nasazlığı",
-    "Failed to verify email address: make sure you clicked the link in the email": "Email-i yoxlamağı bacarmadı: əmin olun ki, siz məktubda istinaddakı ünvana keçdiniz",
-    "You cannot place a call with yourself.": "Siz özünə zəng vura bilmirsiniz.",
     "Warning!": "Diqqət!",
-    "Upload Failed": "Faylın göndərilməsinin nasazlığı",
-    "Failure to create room": "Otağı yaratmağı bacarmadı",
     "Sun": "Baz",
     "Mon": "Ber",
     "Tue": "Çax",
@@ -27,26 +22,14 @@
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
-    "Unable to enable Notifications": "Xəbərdarlıqları daxil qoşmağı bacarmadı",
     "Default": "Varsayılan olaraq",
     "Moderator": "Moderator",
-    "You need to be logged in.": "Siz sistemə girməlisiniz.",
-    "You need to be able to invite users to do that.": "Bunun üçün siz istifadəçiləri dəvət etmək imkanına malik olmalısınız.",
-    "Failed to send request.": "Sorğunu göndərməyi bacarmadı.",
-    "Power level must be positive integer.": "Hüquqların səviyyəsi müsbət tam ədəd olmalıdır.",
-    "Missing room_id in request": "Sorğuda room_id yoxdur",
-    "Missing user_id in request": "Sorğuda user_id yoxdur",
-    "Ignored user": "İstifadəçi blokun siyahısına əlavə edilmişdir",
-    "You are now ignoring %(userId)s": "Siz %(userId)s blokladınız",
-    "Unignored user": "İstifadəçi blokun siyahısından götürülmüşdür",
-    "You are no longer ignoring %(userId)s": "Siz %(userId)s blokdan çıxardınız",
     "Reason": "Səbəb",
     "Incorrect verification code": "Təsdiq etmənin səhv kodu",
     "Authentication": "Müəyyənləşdirilmə",
     "Failed to set display name": "Görünüş adını təyin etmək bacarmadı",
     "Notification targets": "Xəbərdarlıqlar üçün qurğular",
     "not specified": "qeyd edilmədi",
-    "Unban": "Blokdan çıxarmaq",
     "Failed to ban user": "İstifadəçini bloklamağı bacarmadı",
     "Failed to mute user": "İstifadəçini kəsməyi bacarmadı",
     "Failed to change power level": "Hüquqların səviyyəsini dəyişdirməyi bacarmadı",
@@ -97,43 +80,12 @@
     "New passwords must match each other.": "Yeni şifrələr uyğun olmalıdır.",
     "Return to login screen": "Girişin ekranına qayıtmaq",
     "Confirm passphrase": "Şifrəni təsdiqləyin",
-    "This email address is already in use": "Bu e-mail ünvanı istifadə olunur",
-    "This phone number is already in use": "Bu telefon nömrəsi artıq istifadə olunur",
     "Permission Required": "İzn tələb olunur",
-    "You do not have permission to start a conference call in this room": "Bu otaqda konfrans başlamaq üçün icazə yoxdur",
-    "Server may be unavailable, overloaded, or you hit a bug.": "Server, istifadə edilə bilməz, yüklənmiş ola bilər və ya bir səhv vurursunuz.",
-    "The server does not support the room version specified.": "Server göstərilən otaq versiyasını dəstəkləmir.",
     "Send": "Göndər",
     "PM": "24:00",
     "AM": "12:00",
-    "Unable to load! Check your network connectivity and try again.": "Yükləmək olmur! Şəbəkə bağlantınızı yoxlayın və yenidən cəhd edin.",
-    "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s-un sizə bildiriş göndərmək icazəsi yoxdur - brauzerinizin parametrlərini yoxlayın",
-    "%(brand)s was not given permission to send notifications - please try again": "%(brand)s bildiriş göndərmək üçün icazə verilmədi - lütfən yenidən cəhd edin",
-    "This email address was not found": "Bu e-poçt ünvanı tapılmadı",
     "Restricted": "Məhduddur",
-    "Failed to invite": "Dəvət alınmadı",
-    "Unable to create widget.": "Widjet yaratmaq olmur.",
-    "Missing roomId.": "Yarımçıq otaq ID.",
-    "This room is not recognised.": "Bu otaq tanınmır.",
-    "You are not in this room.": "Sən bu otaqda deyilsən.",
-    "You do not have permission to do that in this room.": "Bu otaqda bunu etməyə icazəniz yoxdur.",
-    "Verified key": "Təsdiqlənmiş açar",
-    "Add Email Address": "Emal ünvan əlavə etmək",
-    "Add Phone Number": "Telefon nömrəsi əlavə etmək",
-    "Call failed due to misconfigured server": "Düzgün qurulmamış server səbəbindən zəng alınmadı",
-    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Xahiş edirik, baş serverin administratoruna müraciət edin (<code>%(homeserverDomain)s</code>) ki zənglərin etibarlı işləməsi üçün dönüş serverini konfiqurasiya etsin.",
-    "The file '%(fileName)s' failed to upload.": "'%(fileName)s' faylı yüklənə bilmədi.",
-    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "'%(fileName)s' faylı yükləmə üçün bu server ölçü həddini aşmışdır",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
-    "Identity server has no terms of service": "Şəxsiyyət serverinin xidmət şərtləri yoxdur",
-    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Bu hərəkət e-poçt ünvanı və ya telefon nömrəsini təsdiqləmək üçün standart şəxsiyyət serverinə <server /> girməyi tələb edir, lakin serverdə heç bir xidmət şəraiti yoxdur.",
-    "Only continue if you trust the owner of the server.": "Yalnız server sahibinə etibar etsəniz davam edin.",
-    "Room %(roomId)s not visible": "Otaq %(roomId)s görünmür",
-    "Error upgrading room": "Otaq yeniləmə xətası",
-    "Double check that your server supports the room version chosen and try again.": "Serverinizin seçilmiş otaq versiyasını dəstəklədiyini  bir daha yoxlayın və yenidən cəhd edin.",
-    "Use an identity server": "Şəxsiyyət serverindən istifadə edin",
-    "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "E-poçtla dəvət etmək üçün şəxsiyyət serverindən istifadə edin. Defolt şəxsiyyət serverini (%(defaultIdentityServerName)s) istifadə etməyə və ya Parametrlərdə idarə etməyə davam edin.",
-    "Use an identity server to invite by email. Manage in Settings.": "E-poçtla dəvət etmək üçün şəxsiyyət serverindən istifadə edin. Parametrlərdə idarə edin.",
     "Explore rooms": "Otaqları kəşf edin",
     "common": {
         "analytics": "Analitik",
@@ -166,7 +118,8 @@
         "dismiss": "Nəzərə almayın",
         "close": "Bağlamaq",
         "accept": "Qəbul etmək",
-        "register": "Qeydiyyatdan keçmək"
+        "register": "Qeydiyyatdan keçmək",
+        "unban": "Blokdan çıxarmaq"
     },
     "keyboard": {
         "home": "Başlanğıc"
@@ -186,7 +139,10 @@
             "rule_message": "Qrup çatlarında mesajlar",
             "rule_invite_for_me": "Nə vaxt ki, məni otağa dəvət edirlər",
             "rule_call": "Dəvət zəngi",
-            "rule_suppress_notices": "Botla göndərilmiş mesajlar"
+            "rule_suppress_notices": "Botla göndərilmiş mesajlar",
+            "error_permissions_denied": "%(brand)s-un sizə bildiriş göndərmək icazəsi yoxdur - brauzerinizin parametrlərini yoxlayın",
+            "error_permissions_missing": "%(brand)s bildiriş göndərmək üçün icazə verilmədi - lütfən yenidən cəhd edin",
+            "error_title": "Xəbərdarlıqları daxil qoşmağı bacarmadı"
         },
         "appearance": {
             "timeline_image_size_default": "Varsayılan olaraq",
@@ -198,7 +154,12 @@
             "cryptography_section": "Kriptoqrafiya"
         },
         "general": {
-            "account_section": "Hesab"
+            "account_section": "Hesab",
+            "email_address_in_use": "Bu e-mail ünvanı istifadə olunur",
+            "msisdn_in_use": "Bu telefon nömrəsi artıq istifadə olunur",
+            "add_email_dialog_title": "Emal ünvan əlavə etmək",
+            "add_email_failed_verification": "Email-i yoxlamağı bacarmadı: əmin olun ki, siz məktubda istinaddakı ünvana keçdiniz",
+            "add_msisdn_dialog_title": "Telefon nömrəsi əlavə etmək"
         }
     },
     "timeline": {
@@ -263,7 +224,15 @@
         "me": "Hərəkətlərin nümayişi",
         "op": "Bir istifadəçinin güc səviyyəsini müəyyənləşdirin",
         "deop": "Verilmiş ID-lə istifadəçidən operatorun səlahiyyətlərini çıxardır",
-        "command_error": "Komandanın səhvi"
+        "command_error": "Komandanın səhvi",
+        "invite_3pid_use_default_is_title": "Şəxsiyyət serverindən istifadə edin",
+        "invite_3pid_use_default_is_title_description": "E-poçtla dəvət etmək üçün şəxsiyyət serverindən istifadə edin. Defolt şəxsiyyət serverini (%(defaultIdentityServerName)s) istifadə etməyə və ya Parametrlərdə idarə etməyə davam edin.",
+        "invite_3pid_needs_is_error": "E-poçtla dəvət etmək üçün şəxsiyyət serverindən istifadə edin. Parametrlərdə idarə edin.",
+        "ignore_dialog_title": "İstifadəçi blokun siyahısına əlavə edilmişdir",
+        "ignore_dialog_description": "Siz %(userId)s blokladınız",
+        "unignore_dialog_title": "İstifadəçi blokun siyahısından götürülmüşdür",
+        "unignore_dialog_description": "Siz %(userId)s blokdan çıxardınız",
+        "verify_success_title": "Təsdiqlənmiş açar"
     },
     "bug_reporting": {
         "collecting_information": "Proqramın versiyası haqqında məlumatın yığılması",
@@ -274,7 +243,12 @@
         "hangup": "Bitirmək",
         "voice_call": "Səs çağırış",
         "video_call": "Video çağırış",
-        "call_failed": "Uğursuz zəng"
+        "call_failed": "Uğursuz zəng",
+        "misconfigured_server": "Düzgün qurulmamış server səbəbindən zəng alınmadı",
+        "misconfigured_server_description": "Xahiş edirik, baş serverin administratoruna müraciət edin (<code>%(homeserverDomain)s</code>) ki zənglərin etibarlı işləməsi üçün dönüş serverini konfiqurasiya etsin.",
+        "cannot_call_yourself_description": "Siz özünə zəng vura bilmirsiniz.",
+        "no_permission_conference": "İzn tələb olunur",
+        "no_permission_conference_description": "Bu otaqda konfrans başlamaq üçün icazə yoxdur"
     },
     "devtools": {
         "category_other": "Digər"
@@ -301,7 +275,8 @@
         "change_password_action": "Şifrəni dəyişdirin",
         "email_field_label": "E-poçt",
         "msisdn_field_label": "Telefon",
-        "identifier_label": "Seçmək"
+        "identifier_label": "Seçmək",
+        "reset_password_email_not_found_title": "Bu e-poçt ünvanı tapılmadı"
     },
     "update": {
         "release_notes_toast_title": "Nə dəyişdi"
@@ -326,5 +301,43 @@
         "security": {
             "history_visibility_legend": "Kim tarixi oxuya bilər?"
         }
+    },
+    "failed_load_async_component": "Yükləmək olmur! Şəbəkə bağlantınızı yoxlayın və yenidən cəhd edin.",
+    "upload_failed_generic": "'%(fileName)s' faylı yüklənə bilmədi.",
+    "upload_failed_size": "'%(fileName)s' faylı yükləmə üçün bu server ölçü həddini aşmışdır",
+    "upload_failed_title": "Faylın göndərilməsinin nasazlığı",
+    "create_room": {
+        "generic_error": "Server, istifadə edilə bilməz, yüklənmiş ola bilər və ya bir səhv vurursunuz.",
+        "unsupported_version": "Server göstərilən otaq versiyasını dəstəkləmir.",
+        "error_title": "Otağı yaratmağı bacarmadı"
+    },
+    "terms": {
+        "identity_server_no_terms_title": "Şəxsiyyət serverinin xidmət şərtləri yoxdur",
+        "identity_server_no_terms_description_1": "Bu hərəkət e-poçt ünvanı və ya telefon nömrəsini təsdiqləmək üçün standart şəxsiyyət serverinə <server /> girməyi tələb edir, lakin serverdə heç bir xidmət şəraiti yoxdur.",
+        "identity_server_no_terms_description_2": "Yalnız server sahibinə etibar etsəniz davam edin."
+    },
+    "invite": {
+        "failed_title": "Dəvət alınmadı",
+        "failed_generic": "Əməliyyatın nasazlığı"
+    },
+    "widget": {
+        "error_need_to_be_logged_in": "Siz sistemə girməlisiniz.",
+        "error_need_invite_permission": "Bunun üçün siz istifadəçiləri dəvət etmək imkanına malik olmalısınız."
+    },
+    "scalar": {
+        "error_create": "Widjet yaratmaq olmur.",
+        "error_missing_room_id": "Yarımçıq otaq ID.",
+        "error_send_request": "Sorğunu göndərməyi bacarmadı.",
+        "error_room_unknown": "Bu otaq tanınmır.",
+        "error_power_level_invalid": "Hüquqların səviyyəsi müsbət tam ədəd olmalıdır.",
+        "error_membership": "Sən bu otaqda deyilsən.",
+        "error_permission": "Bu otaqda bunu etməyə icazəniz yoxdur.",
+        "error_missing_room_id_request": "Sorğuda room_id yoxdur",
+        "error_room_not_visible": "Otaq %(roomId)s görünmür",
+        "error_missing_user_id_request": "Sorğuda user_id yoxdur"
+    },
+    "room": {
+        "upgrade_error_title": "Otaq yeniləmə xətası",
+        "upgrade_error_description": "Serverinizin seçilmiş otaq versiyasını dəstəklədiyini  bir daha yoxlayın və yenidən cəhd edin."
     }
 }

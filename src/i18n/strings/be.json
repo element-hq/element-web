@@ -6,7 +6,6 @@
     "Notifications": "Апавяшчэнні",
     "Low Priority": "Нізкі прыярытэт",
     "Invite to this room": "Запрасіць у гэты пакой",
-    "Operation failed": "Не атрымалася выканаць аперацыю",
     "Source URL": "URL-адрас крыніцы",
     "common": {
         "error": "Памылка",
@@ -34,5 +33,8 @@
         "notifications": {
             "noisy": "Шумна"
         }
+    },
+    "invite": {
+        "failed_generic": "Не атрымалася выканаць аперацыю"
     }
 }

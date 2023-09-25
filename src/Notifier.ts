@@ -77,7 +77,7 @@ type of tile.
 const msgTypeHandlers: Record<string, (event: MatrixEvent) => string | null> = {
     [MsgType.KeyVerificationRequest]: (event: MatrixEvent) => {
         const name = (event.sender || {}).name;
-        return _t("%(name)s is requesting verification", { name });
+        return _t("notifier|m.key.verification.request", { name });
     },
     [M_LOCATION.name]: (event: MatrixEvent) => {
         return TextForEvent.textForLocationEvent(event)();
@@ -90,7 +90,7 @@ const msgTypeHandlers: Record<string, (event: MatrixEvent) => string | null> = {
             if (event.getContent()?.[VoiceBroadcastChunkEventType]?.sequence === 1) {
                 // Show a notification for the first broadcast chunk.
                 // At this point a user received something to listen to.
-                return _t("%(senderName)s started a voice broadcast", { senderName: getSenderName(event) });
+                return _t("notifier|io.element.voice_broadcast_chunk", { senderName: getSenderName(event) });
             }
 
             // Mute other broadcast chunks
@@ -298,15 +298,12 @@ class NotifierClass {
                     const brand = SdkConfig.get().brand;
                     const description =
                         result === "denied"
-                            ? _t(
-                                  "%(brand)s does not have permission to send you notifications - please check your browser settings",
-                                  { brand },
-                              )
-                            : _t("%(brand)s was not given permission to send notifications - please try again", {
+                            ? _t("settings|notifications|error_permissions_denied", { brand })
+                            : _t("settings|notifications|error_permissions_missing", {
                                   brand,
                               });
                     Modal.createDialog(ErrorDialog, {
-                        title: _t("Unable to enable Notifications"),
+                        title: _t("settings|notifications|error_title"),
                         description,
                     });
                     return;

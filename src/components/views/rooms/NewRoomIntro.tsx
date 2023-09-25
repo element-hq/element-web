@@ -190,7 +190,7 @@ const NewRoomIntro: React.FC = () => {
                             showSpaceInvite(parentSpace!);
                         }}
                     >
-                        {_t("Invite to %(spaceName)s", { spaceName: parentSpace.name })}
+                        {_t("invite|to_space", { spaceName: parentSpace.name })}
                     </AccessibleButton>
                     {room.canInvite(cli.getSafeUserId()) && (
                         <AccessibleButton

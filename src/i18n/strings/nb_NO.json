@@ -1,7 +1,4 @@
 {
-    "This email address is already in use": "Denne e-postadressen er allerede i bruk",
-    "This phone number is already in use": "Dette mobilnummeret er allerede i bruk",
-    "Failed to verify email address: make sure you clicked the link in the email": "Klarte ikke verifisere e-postadressen: dobbelsjekk at du trykket på lenken i e-posten",
     "Sunday": "Søndag",
     "Notification targets": "Mål for varsel",
     "Today": "I dag",
@@ -22,13 +19,7 @@
     "Yesterday": "I går",
     "Low Priority": "Lav Prioritet",
     "Saturday": "Lørdag",
-    "You cannot place a call with yourself.": "Du kan ikke ringe deg selv.",
     "Permission Required": "Tillatelse kreves",
-    "You do not have permission to start a conference call in this room": "Du har ikke tillatelse til å starte en konferansesamtale i dette rommet",
-    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Filen \"%(fileName)s\" er større enn hjemmetjenerens grense for opplastninger",
-    "Upload Failed": "Opplasting feilet",
-    "Failure to create room": "Klarte ikke å opprette rommet",
-    "Server may be unavailable, overloaded, or you hit a bug.": "Tjeneren kan være utilgjengelig, overbelastet, eller du fant en feil.",
     "Send": "Send",
     "Sun": "Søn",
     "Mon": "Man",
@@ -55,40 +46,10 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s %(day)s. %(monthName)s kl. %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s %(day)s. %(monthName)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s %(day)s. %(monthName)s %(fullYear)s kl. %(time)s",
-    "Unable to load! Check your network connectivity and try again.": "Klarte ikke laste! Sjekk nettverstilkoblingen din og prøv igjen.",
-    "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s har ikke tillatelse til å sende deg varsler - vennligst sjekk nettleserinnstillingene",
-    "%(brand)s was not given permission to send notifications - please try again": "%(brand)s fikk ikke tillatelse til å sende deg varsler - vennligst prøv igjen",
-    "Unable to enable Notifications": "Klarte ikke slå på Varslinger",
-    "This email address was not found": "Denne e-postadressen ble ikke funnet",
     "Default": "Standard",
     "Restricted": "Begrenset",
     "Moderator": "Moderator",
-    "Operation failed": "Operasjon mislyktes",
-    "Failed to invite": "Klarte ikke invitere",
-    "You need to be logged in.": "Du må være logget inn.",
-    "You need to be able to invite users to do that.": "Du må kunne invitere andre brukere for å gjøre det.",
-    "Unable to create widget.": "Klarte ikke lage widgeten.",
-    "Missing roomId.": "Manglende rom-ID.",
-    "Failed to send request.": "Klarte ikke sende forespørsel.",
-    "This room is not recognised.": "Dette rommet ble ikke gjenkjent.",
-    "Power level must be positive integer.": "Effektnivået må være et positivt heltall.",
-    "You are not in this room.": "Du er ikke i dette rommet.",
-    "You do not have permission to do that in this room.": "Du har ikke tillatelse til å gjøre det i dette rommet.",
-    "Missing room_id in request": "Manglende room_id i forespørselen",
-    "Room %(roomId)s not visible": "Rom %(roomId)s er ikke synlig",
-    "Missing user_id in request": "Manglende user_id i forespørselen",
-    "Call failed due to misconfigured server": "Oppringingen feilet på grunn av feil-konfigurert tjener",
-    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Vennligst be administratoren av din hjemmetjener (<code>%(homeserverDomain)s</code>) til å konfigurere en TURN tjener slik at samtaler vil fungere best mulig.",
-    "The file '%(fileName)s' failed to upload.": "Filen '%(fileName)s' kunne ikke lastes opp.",
-    "The server does not support the room version specified.": "Tjeneren støtter ikke rom versjonen som ble spesifisert.",
-    "Ignored user": "Ignorert(e) bruker",
-    "You are now ignoring %(userId)s": "%(userId)s er nå ignorert",
-    "Unignored user": "Uignorert bruker",
-    "You are no longer ignoring %(userId)s": "%(userId)s blir ikke lengre ignorert",
-    "Verified key": "Verifisert nøkkel",
     "Reason": "Årsak",
-    "Add Email Address": "Legg til E-postadresse",
-    "Add Phone Number": "Legg til telefonnummer",
     "Dog": "Hund",
     "Cat": "Katt",
     "Horse": "Hest",
@@ -127,7 +88,6 @@
     "General": "Generelt",
     "None": "Ingen",
     "Browse": "Bla",
-    "Unban": "Opphev utestengelse",
     "Unable to verify phone number.": "Klarte ikke å verifisere telefonnummeret.",
     "Verification code": "Verifikasjonskode",
     "Email Address": "E-postadresse",
@@ -165,7 +125,6 @@
     "Create account": "Opprett konto",
     "Success!": "Suksess!",
     "Set up": "Sett opp",
-    "Identity server has no terms of service": "Identitetstjeneren har ingen brukervilkår",
     "Lion": "Løve",
     "Pig": "Gris",
     "Rabbit": "Kanin",
@@ -205,13 +164,11 @@
     "Ignored users": "Ignorerte brukere",
     "Unignore": "Opphev ignorering",
     "Message search": "Meldingssøk",
-    "No media permissions": "Ingen mediatillatelser",
     "Missing media permissions, click the button below to request.": "Manglende mediatillatelser, klikk på knappen nedenfor for å be om dem.",
     "Request media permissions": "Be om mediatillatelser",
     "No Audio Outputs detected": "Ingen lydutdataer ble oppdaget",
     "No Microphones detected": "Ingen mikrofoner ble oppdaget",
     "No Webcams detected": "Ingen USB-kameraer ble oppdaget",
-    "Default Device": "Standardenhet",
     "Audio Output": "Lydutdata",
     "Voice & Video": "Stemme og video",
     "Room information": "Rominformasjon",
@@ -296,7 +253,6 @@
         "one": "%(items)s og én annen"
     },
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
-    "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
     "Show more": "Vis mer",
     "Warning!": "Advarsel!",
     "Authentication": "Autentisering",
@@ -370,16 +326,7 @@
     "Unable to upload": "Mislyktes i å laste opp",
     "Remove for everyone": "Fjern for alle",
     "Secret storage public key:": "Offentlig nøkkel for hemmelig lagring:",
-    "Confirm adding email": "Bekreft tillegging av E-postadresse",
-    "Confirm adding phone number": "Bekreft tillegging av telefonnummer",
-    "Setting up keys": "Setter opp nøkler",
     "New login. Was this you?": "En ny pålogging. Var det deg?",
-    "Use an identity server": "Bruk en identitetstjener",
-    "Session already verified!": "Økten er allerede verifisert!",
-    "Your %(brand)s is misconfigured": "Ditt %(brand)s-oppsett er feiloppsatt",
-    "Not a valid %(brand)s keyfile": "Ikke en gyldig %(brand)s-nøkkelfil",
-    "Unrecognised address": "Adressen ble ikke gjenkjent",
-    "Unknown server error": "Ukjent tjenerfeil",
     "Aeroplane": "Fly",
     "No display name": "Ingen visningsnavn",
     "unexpected type": "uventet type",
@@ -516,14 +463,9 @@
     "Unable to revoke sharing for email address": "Klarte ikke å trekke tilbake deling for denne e-postadressen",
     "Put a link back to the old room at the start of the new room so people can see old messages": "Legg inn en lenke tilbake til det gamle rommet i starten av det nye rommet slik at folk kan finne eldre meldinger",
     "Invite people": "Inviter personer",
-    "You do not have permission to invite people to this room.": "Du har ikke tilgang til å invitere personer til dette rommet.",
-    "Click the button below to confirm adding this email address.": "Klikk på knappen under for å bekrefte at du vil legge til denne e-postadressen.",
-    "Use Single Sign On to continue": "Bruk Single Sign On for å fortsette",
     "Belgium": "Belgia",
     "American Samoa": "Amerikansk Samoa",
     "United States": "USA",
-    "%(name)s is requesting verification": "%(name)s ber om verifisering",
-    "We couldn't log you in": "Vi kunne ikke logge deg inn",
     "Burundi": "Burundi",
     "Burkina Faso": "Burkina Faso",
     "Bulgaria": "Bulgaria",
@@ -556,14 +498,6 @@
     "Åland Islands": "Åland",
     "Afghanistan": "Afghanistan",
     "United Kingdom": "Storbritannia",
-    "Only continue if you trust the owner of the server.": "Fortsett kun om du stoler på eieren av serveren.",
-    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Denne handlingen krever tilgang til standard identitetsserver <server /> for å kunne validere en epostaddresse eller telefonnummer, men serveren har ikke bruksvilkår.",
-    "Too Many Calls": "For mange samtaler",
-    "The call was answered on another device.": "Samtalen ble besvart på en annen enhet.",
-    "The call could not be established": "Samtalen kunne ikke etableres",
-    "Click the button below to confirm adding this phone number.": "Klikk knappen nedenfor for å bekrefte dette telefonnummeret.",
-    "Confirm adding this phone number by using Single Sign On to prove your identity.": "Bekreft dette telefonnummeret ved å bruke Single Sign On for å bevise din identitet.",
-    "Confirm adding this email address by using Single Sign On to prove your identity.": "Befrekt denne e-postadressen ved å bruke Single Sign On for å bevise din identitet.",
     "Recently visited rooms": "Nylig besøkte rom",
     "Edit devices": "Rediger enheter",
     "Add existing room": "Legg til et eksisterende rom",
@@ -587,7 +521,6 @@
         "other": "%(count)s rom",
         "one": "%(count)s rom"
     },
-    "Invite to %(spaceName)s": "Inviter til %(spaceName)s",
     "unknown person": "ukjent person",
     "Click to copy": "Klikk for å kopiere",
     "Share invite link": "Del invitasjonslenke",
@@ -656,7 +589,6 @@
     "Dial pad": "Nummerpanel",
     "Enable desktop notifications": "Aktiver skrivebordsvarsler",
     "Don't miss a reply": "Ikke gå glipp av noen svar",
-    "Unknown App": "Ukjent app",
     "Zimbabwe": "Zimbabwe",
     "Yemen": "Jemen",
     "Zambia": "Zambia",
@@ -878,8 +810,6 @@
     "St. Pierre & Miquelon": "Saint-Pierre og Miquelon",
     "St. Martin": "Saint Martin",
     "St. Barthélemy": "Saint Barthélemy",
-    "You cannot place calls without a connection to the server.": "Du kan ikke ringe uten tilkobling til serveren.",
-    "Connectivity to the server has been lost": "Mistet forbindelsen til serveren",
     "common": {
         "about": "Om",
         "analytics": "Statistikk",
@@ -1039,7 +969,8 @@
         "refresh": "Oppdater",
         "mention": "Nevn",
         "submit": "Send",
-        "send_report": "Send inn rapport"
+        "send_report": "Send inn rapport",
+        "unban": "Opphev utestengelse"
     },
     "a11y": {
         "user_menu": "Brukermeny",
@@ -1170,7 +1101,10 @@
             "enable_desktop_notifications_session": "Skru på skrivebordsvarsler for denne økten",
             "show_message_desktop_notification": "Vis meldingen i skrivebordsvarselet",
             "enable_audible_notifications_session": "Skru på hørbare varsler for denne økten",
-            "noisy": "Bråkete"
+            "noisy": "Bråkete",
+            "error_permissions_denied": "%(brand)s har ikke tillatelse til å sende deg varsler - vennligst sjekk nettleserinnstillingene",
+            "error_permissions_missing": "%(brand)s fikk ikke tillatelse til å sende deg varsler - vennligst prøv igjen",
+            "error_title": "Klarte ikke slå på Varslinger"
         },
         "appearance": {
             "heading": "Tilpass utseendet du bruker",
@@ -1228,7 +1162,17 @@
         },
         "general": {
             "account_section": "Konto",
-            "language_section": "Språk og område"
+            "language_section": "Språk og område",
+            "email_address_in_use": "Denne e-postadressen er allerede i bruk",
+            "msisdn_in_use": "Dette mobilnummeret er allerede i bruk",
+            "confirm_adding_email_title": "Bekreft tillegging av E-postadresse",
+            "confirm_adding_email_body": "Klikk på knappen under for å bekrefte at du vil legge til denne e-postadressen.",
+            "add_email_dialog_title": "Legg til E-postadresse",
+            "add_email_failed_verification": "Klarte ikke verifisere e-postadressen: dobbelsjekk at du trykket på lenken i e-posten",
+            "add_msisdn_confirm_sso_button": "Bekreft dette telefonnummeret ved å bruke Single Sign On for å bevise din identitet.",
+            "add_msisdn_confirm_button": "Bekreft tillegging av telefonnummer",
+            "add_msisdn_confirm_body": "Klikk knappen nedenfor for å bekrefte dette telefonnummeret.",
+            "add_msisdn_dialog_title": "Legg til telefonnummer"
         }
     },
     "devtools": {
@@ -1258,7 +1202,10 @@
         "title_private_room": "Opprett et privat rom",
         "name_validation_required": "Vennligst skriv inn et navn for rommet",
         "encryption_label": "Aktiver start-til-mål-kryptering",
-        "topic_label": "Tema (valgfritt)"
+        "topic_label": "Tema (valgfritt)",
+        "generic_error": "Tjeneren kan være utilgjengelig, overbelastet, eller du fant en feil.",
+        "unsupported_version": "Tjeneren støtter ikke rom versjonen som ble spesifisert.",
+        "error_title": "Klarte ikke å opprette rommet"
     },
     "timeline": {
         "m.room.member": {
@@ -1454,7 +1401,14 @@
         "unknown_command_button": "Send som en melding",
         "unknown_command": "Ukjent kommando",
         "server_error": "Serverfeil",
-        "command_error": "Kommandofeil"
+        "command_error": "Kommandofeil",
+        "invite_3pid_use_default_is_title": "Bruk en identitetstjener",
+        "ignore_dialog_title": "Ignorert(e) bruker",
+        "ignore_dialog_description": "%(userId)s er nå ignorert",
+        "unignore_dialog_title": "Uignorert bruker",
+        "unignore_dialog_description": "%(userId)s blir ikke lengre ignorert",
+        "verify_nop": "Økten er allerede verifisert!",
+        "verify_success_title": "Verifisert nøkkel"
     },
     "presence": {
         "online_for": "På nett i %(duration)s",
@@ -1494,7 +1448,19 @@
         "already_in_call": "Allerede i en samtale",
         "already_in_call_person": "Du er allerede i en samtale med denne personen.",
         "unsupported": "Samtaler støttes ikke",
-        "unsupported_browser": "Du kan ikke ringe i denne nettleseren."
+        "unsupported_browser": "Du kan ikke ringe i denne nettleseren.",
+        "call_failed_description": "Samtalen kunne ikke etableres",
+        "answered_elsewhere_description": "Samtalen ble besvart på en annen enhet.",
+        "misconfigured_server": "Oppringingen feilet på grunn av feil-konfigurert tjener",
+        "misconfigured_server_description": "Vennligst be administratoren av din hjemmetjener (<code>%(homeserverDomain)s</code>) til å konfigurere en TURN tjener slik at samtaler vil fungere best mulig.",
+        "connection_lost": "Mistet forbindelsen til serveren",
+        "connection_lost_description": "Du kan ikke ringe uten tilkobling til serveren.",
+        "too_many_calls": "For mange samtaler",
+        "cannot_call_yourself_description": "Du kan ikke ringe deg selv.",
+        "no_permission_conference": "Tillatelse kreves",
+        "no_permission_conference_description": "Du har ikke tillatelse til å starte en konferansesamtale i dette rommet",
+        "default_device": "Standardenhet",
+        "no_media_perms_title": "Ingen mediatillatelser"
     },
     "Other": "Andre",
     "Advanced": "Avansert",
@@ -1562,7 +1528,9 @@
             "complete_action": "Skjønner",
             "cancelling": "Avbryter …"
         },
-        "verification_requested_toast_title": "Verifisering ble forespurt"
+        "verification_requested_toast_title": "Verifisering ble forespurt",
+        "bootstrap_title": "Setter opp nøkler",
+        "import_invalid_keyfile": "Ikke en gyldig %(brand)s-nøkkelfil"
     },
     "emoji": {
         "category_frequently_used": "Ofte brukte",
@@ -1620,7 +1588,9 @@
             "msisdn_token_incorrect": "Sjetongen er feil",
             "msisdn": "En SMS har blitt sendt til %(msisdn)s",
             "msisdn_token_prompt": "Vennligst skriv inn koden den inneholder:",
-            "fallback_button": "Begynn autentisering"
+            "fallback_button": "Begynn autentisering",
+            "sso_title": "Bruk Single Sign On for å fortsette",
+            "sso_body": "Befrekt denne e-postadressen ved å bruke Single Sign On for å bevise din identitet."
         },
         "password_field_label": "Skriv inn passord",
         "password_field_strong_label": "Strålende, passordet er sterkt!",
@@ -1630,7 +1600,12 @@
         "msisdn_field_label": "Telefon",
         "identifier_label": "Logg inn med",
         "reset_password_email_field_description": "Bruk en E-postadresse til å gjenopprette kontoen din",
-        "reset_password_email_field_required_invalid": "Skriv inn en E-postadresse (Påkrevd på denne hjemmetjeneren)"
+        "reset_password_email_field_required_invalid": "Skriv inn en E-postadresse (Påkrevd på denne hjemmetjeneren)",
+        "oidc": {
+            "error_title": "Vi kunne ikke logge deg inn"
+        },
+        "reset_password_email_not_found_title": "Denne e-postadressen ble ikke funnet",
+        "misconfigured_title": "Ditt %(brand)s-oppsett er feiloppsatt"
     },
     "room_list": {
         "show_previews": "Vis forhåndsvisninger av meldinger",
@@ -1670,7 +1645,10 @@
             "change_topic_this_room": "Endre dette rommets tema",
             "change_name_this_room": "Endre rommets navn",
             "see_images_sent_this_room": "Se bilder som er lagt ut i dette rommet"
-        }
+        },
+        "error_need_to_be_logged_in": "Du må være logget inn.",
+        "error_need_invite_permission": "Du må kunne invitere andre brukere for å gjøre det.",
+        "no_name": "Ukjent app"
     },
     "feedback": {
         "comment_label": "Kommentar"
@@ -1758,6 +1736,37 @@
         "column_summary": "Oppsummering",
         "column_document": "Dokument",
         "tac_title": "Betingelser og vilkår",
-        "tac_button": "Gå gjennom betingelser og vilkår"
-    }
+        "tac_button": "Gå gjennom betingelser og vilkår",
+        "identity_server_no_terms_title": "Identitetstjeneren har ingen brukervilkår",
+        "identity_server_no_terms_description_1": "Denne handlingen krever tilgang til standard identitetsserver <server /> for å kunne validere en epostaddresse eller telefonnummer, men serveren har ikke bruksvilkår.",
+        "identity_server_no_terms_description_2": "Fortsett kun om du stoler på eieren av serveren."
+    },
+    "failed_load_async_component": "Klarte ikke laste! Sjekk nettverstilkoblingen din og prøv igjen.",
+    "upload_failed_generic": "Filen '%(fileName)s' kunne ikke lastes opp.",
+    "upload_failed_size": "Filen \"%(fileName)s\" er større enn hjemmetjenerens grense for opplastninger",
+    "upload_failed_title": "Opplasting feilet",
+    "notifier": {
+        "m.key.verification.request": "%(name)s ber om verifisering"
+    },
+    "invite": {
+        "failed_title": "Klarte ikke invitere",
+        "failed_generic": "Operasjon mislyktes",
+        "invalid_address": "Adressen ble ikke gjenkjent",
+        "error_permissions_room": "Du har ikke tilgang til å invitere personer til dette rommet.",
+        "error_unknown": "Ukjent tjenerfeil",
+        "to_space": "Inviter til %(spaceName)s"
+    },
+    "scalar": {
+        "error_create": "Klarte ikke lage widgeten.",
+        "error_missing_room_id": "Manglende rom-ID.",
+        "error_send_request": "Klarte ikke sende forespørsel.",
+        "error_room_unknown": "Dette rommet ble ikke gjenkjent.",
+        "error_power_level_invalid": "Effektnivået må være et positivt heltall.",
+        "error_membership": "Du er ikke i dette rommet.",
+        "error_permission": "Du har ikke tillatelse til å gjøre det i dette rommet.",
+        "error_missing_room_id_request": "Manglende room_id i forespørselen",
+        "error_room_not_visible": "Rom %(roomId)s er ikke synlig",
+        "error_missing_user_id_request": "Manglende user_id i forespørselen"
+    },
+    "name_and_id": "%(name)s (%(userId)s)"
 }

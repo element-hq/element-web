@@ -63,7 +63,7 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
     const broadcast = showBroadcast && (
         <div className="mx_VoiceBroadcastHeader_line">
             <LiveIcon className="mx_Icon mx_Icon_16" />
-            {_t("Voice broadcast")}
+            {_t("voice_broadcast|action")}
         </div>
     );
 

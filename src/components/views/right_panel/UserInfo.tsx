@@ -467,18 +467,19 @@ export const UserOptionsSection: React.FC<{
                             if (errorStringFromInviterUtility) {
                                 throw new Error(errorStringFromInviterUtility);
                             } else {
-                                throw new UserFriendlyError(
-                                    `User (%(user)s) did not end up as invited to %(roomId)s but no error was given from the inviter utility`,
-                                    { user: member.userId, roomId, cause: undefined },
-                                );
+                                throw new UserFriendlyError("slash_command|invite_failed", {
+                                    user: member.userId,
+                                    roomId,
+                                    cause: undefined,
+                                });
                             }
                         }
                     });
                 } catch (err) {
-                    const description = err instanceof Error ? err.message : _t("Operation failed");
+                    const description = err instanceof Error ? err.message : _t("invite|failed_generic");
 
                     Modal.createDialog(ErrorDialog, {
-                        title: _t("Failed to invite"),
+                        title: _t("invite|failed_title"),
                         description,
                     });
                 }
@@ -1367,7 +1368,7 @@ const BasicUserInfo: React.FC<{
             logger.error("Failed to deactivate user");
             logger.error(err);
 
-            const description = err instanceof Error ? err.message : _t("Operation failed");
+            const description = err instanceof Error ? err.message : _t("invite|failed_generic");
 
             Modal.createDialog(ErrorDialog, {
                 title: _t("Failed to deactivate user"),

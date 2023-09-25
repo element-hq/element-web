@@ -27,7 +27,7 @@ export function getNameForEventRoom(matrixClient: MatrixClient, userId: string, 
 export function userLabelForEventRoom(matrixClient: MatrixClient, userId: string, roomId: string): string {
     const name = getNameForEventRoom(matrixClient, userId, roomId);
     if (name !== userId) {
-        return _t("%(name)s (%(userId)s)", { name, userId });
+        return _t("name_and_id", { name, userId });
     } else {
         return userId;
     }

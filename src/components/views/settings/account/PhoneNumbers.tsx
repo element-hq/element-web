@@ -85,7 +85,7 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
                 logger.error("Unable to remove contact information: " + err);
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to remove contact information"),
-                    description: extractErrorMessageFromError(err, _t("Operation failed")),
+                    description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
                 });
             });
     };
@@ -202,7 +202,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
                 this.setState({ verifying: false, continueDisabled: false, addTask: null });
                 Modal.createDialog(ErrorDialog, {
                     title: _t("common|error"),
-                    description: extractErrorMessageFromError(err, _t("Operation failed")),
+                    description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
                 });
             });
     };
@@ -245,7 +245,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
                 if (underlyingError.errcode !== "M_THREEPID_AUTH_FAILED") {
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Unable to verify phone number."),
-                        description: extractErrorMessageFromError(err, _t("Operation failed")),
+                        description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
                     });
                 } else {
                     this.setState({ verifyError: _t("Incorrect verification code") });

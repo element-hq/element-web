@@ -36,7 +36,7 @@ import InteractiveAuthDialog, { InteractiveAuthDialogProps } from "./components/
 function getIdServerDomain(matrixClient: MatrixClient): string {
     const idBaseUrl = matrixClient.getIdentityServerUrl(true);
     if (!idBaseUrl) {
-        throw new UserFriendlyError("Identity server not set");
+        throw new UserFriendlyError("settings|general|identity_server_not_set");
     }
     return idBaseUrl;
 }
@@ -85,7 +85,7 @@ export default class AddThreepid {
             return res;
         } catch (err) {
             if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
-                throw new UserFriendlyError("This email address is already in use", { cause: err });
+                throw new UserFriendlyError("settings|general|email_address_in_use", { cause: err });
             }
             // Otherwise, just blurt out the same error
             throw err;
@@ -115,7 +115,7 @@ export default class AddThreepid {
             return res;
         } catch (err) {
             if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
-                throw new UserFriendlyError("This email address is already in use", { cause: err });
+                throw new UserFriendlyError("settings|general|email_address_in_use", { cause: err });
             }
             // Otherwise, just blurt out the same error
             throw err;
@@ -142,7 +142,7 @@ export default class AddThreepid {
             return res;
         } catch (err) {
             if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
-                throw new UserFriendlyError("This phone number is already in use", { cause: err });
+                throw new UserFriendlyError("settings|general|msisdn_in_use", { cause: err });
             }
             // Otherwise, just blurt out the same error
             throw err;
@@ -174,7 +174,7 @@ export default class AddThreepid {
             return res;
         } catch (err) {
             if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
-                throw new UserFriendlyError("This phone number is already in use", { cause: err });
+                throw new UserFriendlyError("settings|general|msisdn_in_use", { cause: err });
             }
             // Otherwise, just blurt out the same error
             throw err;
@@ -193,7 +193,7 @@ export default class AddThreepid {
                 const authClient = new IdentityAuthClient();
                 const identityAccessToken = await authClient.getAccessToken();
                 if (!identityAccessToken) {
-                    throw new UserFriendlyError("No identity access token found");
+                    throw new UserFriendlyError("settings|general|identity_server_no_token");
                 }
                 await this.matrixClient.bindThreePid({
                     sid: this.sessionId!,
@@ -216,22 +216,20 @@ export default class AddThreepid {
 
                     const dialogAesthetics = {
                         [SSOAuthEntry.PHASE_PREAUTH]: {
-                            title: _t("Use Single Sign On to continue"),
-                            body: _t(
-                                "Confirm adding this email address by using Single Sign On to prove your identity.",
-                            ),
+                            title: _t("auth|uia|sso_title"),
+                            body: _t("auth|uia|sso_body"),
                             continueText: _t("auth|sso"),
                             continueKind: "primary",
                         },
                         [SSOAuthEntry.PHASE_POSTAUTH]: {
-                            title: _t("Confirm adding email"),
-                            body: _t("Click the button below to confirm adding this email address."),
+                            title: _t("settings|general|confirm_adding_email_title"),
+                            body: _t("settings|general|confirm_adding_email_body"),
                             continueText: _t("action|confirm"),
                             continueKind: "primary",
                         },
                     };
                     const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
-                        title: _t("Add Email Address"),
+                        title: _t("settings|general|add_email_dialog_title"),
                         matrixClient: this.matrixClient,
                         authData: err.data,
                         makeRequest: this.makeAddThreepidOnlyRequest,
@@ -245,10 +243,7 @@ export default class AddThreepid {
             }
         } catch (err) {
             if (err instanceof HTTPError && err.httpStatus === 401) {
-                throw new UserFriendlyError(
-                    "Failed to verify email address: make sure you clicked the link in the email",
-                    { cause: err },
-                );
+                throw new UserFriendlyError("settings|general|add_email_failed_verification", { cause: err });
             }
             // Otherwise, just blurt out the same error
             throw err;
@@ -296,7 +291,7 @@ export default class AddThreepid {
                 await authClient.getAccessToken(),
             );
         } else {
-            throw new UserFriendlyError("The add / bind with MSISDN flow is misconfigured");
+            throw new UserFriendlyError("settings|general|add_msisdn_misconfigured");
         }
 
         if (this.bind) {
@@ -321,20 +316,20 @@ export default class AddThreepid {
 
                 const dialogAesthetics = {
                     [SSOAuthEntry.PHASE_PREAUTH]: {
-                        title: _t("Use Single Sign On to continue"),
-                        body: _t("Confirm adding this phone number by using Single Sign On to prove your identity."),
+                        title: _t("auth|uia|sso_title"),
+                        body: _t("settings|general|add_msisdn_confirm_sso_button"),
                         continueText: _t("auth|sso"),
                         continueKind: "primary",
                     },
                     [SSOAuthEntry.PHASE_POSTAUTH]: {
-                        title: _t("Confirm adding phone number"),
-                        body: _t("Click the button below to confirm adding this phone number."),
+                        title: _t("settings|general|add_msisdn_confirm_button"),
+                        body: _t("settings|general|add_msisdn_confirm_body"),
                         continueText: _t("action|confirm"),
                         continueKind: "primary",
                     },
                 };
                 const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
-                    title: _t("Add Phone Number"),
+                    title: _t("settings|general|add_msisdn_dialog_title"),
                     matrixClient: this.matrixClient,
                     authData: err.data,
                     makeRequest: this.makeAddThreepidOnlyRequest,

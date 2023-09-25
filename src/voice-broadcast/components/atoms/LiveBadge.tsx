@@ -32,7 +32,7 @@ export const LiveBadge: React.FC<Props> = ({ grey = false }) => {
     return (
         <div className={liveBadgeClasses}>
             <LiveIcon className="mx_Icon mx_Icon_16" />
-            {_t("Live")}
+            {_t("voice_broadcast|live")}
         </div>
     );
 };

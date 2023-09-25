@@ -1,20 +1,16 @@
 {
     "No Microphones detected": "ไม่พบไมโครโฟน",
     "Default": "ค่าเริ่มต้น",
-    "Default Device": "อุปกรณ์เริ่มต้น",
     "Decrypt %(text)s": "ถอดรหัส %(text)s",
     "Download %(text)s": "ดาวน์โหลด %(text)s",
     "Low priority": "ความสำคัญต่ำ",
     "Profile": "โปรไฟล์",
     "Reason": "เหตุผล",
     "Notifications": "การแจ้งเตือน",
-    "Operation failed": "การดำเนินการล้มเหลว",
     "unknown error code": "รหัสข้อผิดพลาดที่ไม่รู้จัก",
     "Favourite": "รายการโปรด",
     "Failed to forget room %(errCode)s": "การลืมห้องล้มเหลว %(errCode)s",
     "No Webcams detected": "ไม่พบกล้องเว็บแคม",
-    "No media permissions": "ไม่มีสิทธิ์เข้าถึงสื่อ",
-    "You may need to manually permit %(brand)s to access your microphone/webcam": "คุณอาจต้องให้สิทธิ์ %(brand)s เข้าถึงไมค์โครโฟนไมค์โครโฟน/กล้องเว็บแคม ด้วยตัวเอง",
     "Authentication": "การยืนยันตัวตน",
     "%(items)s and %(lastItem)s": "%(items)s และ %(lastItem)s",
     "and %(count)s others...": {
@@ -32,11 +28,8 @@
     "Failed to change password. Is your password correct?": "การเปลี่ยนรหัสผ่านล้มเหลว รหัสผ่านของคุณถูกต้องหรือไม่?",
     "Failed to reject invite": "การปฏิเสธคำเชิญล้มเหลว",
     "Failed to reject invitation": "การปฏิเสธคำเชิญล้มเหลว",
-    "Failed to send request.": "การส่งคำขอล้มเหลว",
     "Failed to set display name": "การตั้งชื่อที่แสดงล้มเหลว",
     "Failed to unban": "การถอนแบนล้มเหลว",
-    "Failed to verify email address: make sure you clicked the link in the email": "การยืนยันอีเมลล้มเหลว: กรุณาตรวจสอบว่าคุณคลิกลิงก์ในอีเมลแล้ว",
-    "Failure to create room": "การสร้างห้องล้มเหลว",
     "Filter room members": "กรองสมาชิกห้อง",
     "Forget room": "ลืมห้อง",
     "Historical": "ประวัติแชทเก่า",
@@ -46,7 +39,6 @@
     "Invited": "เชิญแล้ว",
     "Join Room": "เข้าร่วมห้อง",
     "Jump to first unread message.": "ข้ามไปยังข้อความแรกที่ยังไม่ได้อ่าน",
-    "Missing user_id in request": "ไม่พบ user_id ในคำขอ",
     "Moderator": "ผู้ช่วยดูแล",
     "New passwords must match each other.": "รหัสผ่านใหม่ทั้งสองช่องต้องตรงกัน",
     "not specified": "ไม่ได้ระบุ",
@@ -55,30 +47,19 @@
     "Please check your email and click on the link it contains. Once this is done, click continue.": "กรุณาเช็คอีเมลและคลิกลิงก์ข้างใน หลังจากนั้น คลิกดำเนินการต่อ",
     "Reject invitation": "ปฏิเสธคำเชิญ",
     "Return to login screen": "กลับไปยังหน้าลงชื่อเข้าใช้",
-    "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s ไม่มีสิทธิ์ส่งการแจ้งเตือน - กรุณาตรวจสอบการตั้งค่าเบราว์เซอร์ของคุณ",
-    "%(brand)s was not given permission to send notifications - please try again": "%(brand)s ไม่ได้รับสิทธิ์ส่งการแจ้งเตือน - กรุณาลองใหม่อีกครั้ง",
     "Rooms": "ห้องสนทนา",
     "Search failed": "การค้นหาล้มเหลว",
     "Server may be unavailable, overloaded, or search timed out :(": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือการค้นหาหมดเวลา :(",
-    "Server may be unavailable, overloaded, or you hit a bug.": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือเจอจุดบกพร่อง",
-    "This email address is already in use": "ที่อยู่อีเมลถูกใช้แล้ว",
-    "This email address was not found": "ไม่พบที่อยู่อีเมล",
-    "This phone number is already in use": "หมายเลขโทรศัพท์นี้ถูกใช้งานแล้ว",
     "Create new room": "สร้างห้องใหม่",
-    "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "ไม่สามารถเชื่อมต่อไปยังเซิร์ฟเวอร์บ้านผ่านทาง HTTP ได้เนื่องจาก URL ที่อยู่บนเบราว์เซอร์เป็น HTTPS กรุณาใช้ HTTPS หรือ<a>เปิดใช้งานสคริปต์ที่ไม่ปลอดภัย</a>.",
     "Failed to change power level": "การเปลี่ยนระดับอำนาจล้มเหลว",
     "Unable to add email address": "ไมาสามารถเพิ่มที่อยู่อีเมล",
     "Unable to verify email address.": "ไม่สามารถยืนยันที่อยู่อีเมล",
-    "Unban": "ปลดแบน",
-    "Unable to enable Notifications": "ไม่สามารถเปิดใช้งานการแจ้งเตือน",
     "Uploading %(filename)s": "กำลังอัปโหลด %(filename)s",
     "Uploading %(filename)s and %(count)s others": {
         "one": "กำลังอัปโหลด %(filename)s และอีก %(count)s ไฟล์",
         "other": "กำลังอัปโหลด %(filename)s และอีก %(count)s ไฟล์"
     },
-    "Upload Failed": "การอัปโหลดล้มเหลว",
     "Warning!": "คำเตือน!",
-    "You need to be logged in.": "คุณต้องเข้าสู่ระบบก่อน",
     "Sun": "อา.",
     "Mon": "จ.",
     "Tue": "อ.",
@@ -105,7 +86,6 @@
     "Confirm passphrase": "ยืนยันรหัสผ่าน",
     "Import room keys": "นำเข้ากุณแจห้อง",
     "File to import": "ไฟล์ที่จะนำเข้า",
-    "Failed to invite": "การเชิญล้มเหลว",
     "Confirm Removal": "ยืนยันการลบ",
     "Unknown error": "ข้อผิดพลาดที่ไม่รู้จัก",
     "Home": "เมนูหลัก",
@@ -114,15 +94,12 @@
         "other": "(~%(count)s ผลลัพท์)"
     },
     "A new password must be entered.": "กรุณากรอกรหัสผ่านใหม่",
-    "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "ไม่สามารถเฃื่อมต่อไปหาเซิร์ฟเวอร์บ้านได้ - กรุณาตรวจสอบคุณภาพการเชื่อมต่อ, ตรวจสอบว่า<a>SSL certificate ของเซิร์ฟเวอร์บ้าน</a>ของคุณเชื่อถือได้, และวไม่มีส่วนขยายเบราว์เซอร์ใดบล๊อคการเชื่อมต่ออยู่",
     "Custom level": "กำหนดระดับเอง",
     "No display name": "ไม่มีชื่อที่แสดง",
-    "Power level must be positive integer.": "ระดับอำนาจต้องเป็นจำนวนเต็มบวก",
     "%(roomName)s does not exist.": "ไม่มีห้อง %(roomName)s อยู่จริง",
     "Enter passphrase": "กรอกรหัสผ่าน",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (ระดับอำนาจ %(powerLevelNumber)s)",
     "Verification Pending": "รอการตรวจสอบ",
-    "You cannot place a call with yourself.": "คุณไม่สามารถโทรหาตัวเองได้",
     "Error decrypting image": "เกิดข้อผิดพลาดในการถอดรหัสรูป",
     "Error decrypting video": "เกิดข้อผิดพลาดในการถอดรหัสวิดิโอ",
     "Sunday": "วันอาทิตย์",
@@ -148,46 +125,13 @@
     "Yesterday": "เมื่อวานนี้",
     "Low Priority": "ความสำคัญต่ำ",
     "Explore rooms": "สำรวจห้อง",
-    "Add Email Address": "เพิ่มที่อยู่อีเมล",
-    "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "โปรดสอบถามผู้ดูแลระบบของโฮมเซิร์ฟเวอร์ของคุณ (<code>%(homeserverDomain)s</code>) เพื่อกำหนดคอนฟิกเซิร์ฟเวอร์ TURN เพื่อให้การเรียกทำงานได้อย่างน่าเชื่อถือ.",
-    "Call failed due to misconfigured server": "การโทรล้มเหลวเนื่องจากเซิร์ฟเวอร์กำหนดค่าไม่ถูกต้อง",
-    "The call was answered on another device.": "คุณรับสายบนอุปกรณ์อื่นแล้ว.",
-    "The call could not be established": "ไม่สามารถโทรออกได้",
-    "The user you called is busy.": "ผู้ใช้ที่คุณโทรหาไม่ว่าง.",
-    "User Busy": "ผู้ใช้ไม่ว่าง",
-    "Only continue if you trust the owner of the server.": "ดำเนินการต่อหากคุณไว้วางใจเจ้าของเซิร์ฟเวอร์เท่านั้น.",
-    "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "การดำเนินการนี้จำเป็นต้องเข้าถึงเซิร์ฟเวอร์ identity เริ่มต้น <server /> เพื่อตรวจสอบที่อยู่อีเมลหรือหมายเลขโทรศัพท์ แต่เซิร์ฟเวอร์ไม่มีข้อกำหนดในการให้บริการใดๆ.",
-    "Identity server has no terms of service": "เซิร์ฟเวอร์ประจำตัวไม่มีข้อกำหนดในการให้บริการ",
-    "The server does not support the room version specified.": "เซิร์ฟเวอร์ไม่รองรับเวอร์ชันห้องที่ระบุ.",
-    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "ไฟล์ '%(fileName)s' เกินขีดจำกัดขนาดของโฮมเซิร์ฟเวอร์นี้สำหรับการอัปโหลด",
-    "The file '%(fileName)s' failed to upload.": "ไฟล์ '%(fileName)s' อัปโหลดไม่สำเร็จ.",
-    "Unable to load! Check your network connectivity and try again.": "ไม่สามารถโหลดได้! ตรวจสอบการเชื่อมต่อเครือข่ายของคุณแล้วลองอีกครั้ง.",
-    "Add Phone Number": "เพิ่มหมายเลขโทรศัพท์",
-    "Click the button below to confirm adding this phone number.": "คลิกปุ่มด้านล่างเพื่อยืนยันการเพิ่มหมายเลขโทรศัพท์นี้.",
-    "Confirm adding phone number": "ยืนยันการเพิ่มหมายเลขโทรศัพท์",
-    "Confirm adding this phone number by using Single Sign On to prove your identity.": "ยืนยันการเพิ่มหมายเลขโทรศัพท์นี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ.",
-    "Click the button below to confirm adding this email address.": "คลิกปุ่มด้านล่างเพื่อยืนยันการเพิ่มที่อยู่อีเมลนี้.",
-    "Confirm adding email": "ยืนยันการเพิ่มอีเมล",
-    "Confirm adding this email address by using Single Sign On to prove your identity.": "ยืนยันการเพิ่มที่อยู่อีเมลนี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ.",
-    "Use Single Sign On to continue": "ใช้การลงชื่อเพียงครั้งเดียวเพื่อดำเนินการต่อ",
     "You most likely do not want to reset your event index store": "คุณมักไม่ต้องการรีเซ็ตที่เก็บดัชนีเหตุการณ์ของคุณ",
     "Reset event store?": "รีเซ็ตที่เก็บกิจกรรม?",
     "The server is not configured to indicate what the problem is (CORS).": "เซิร์ฟเวอร์ไม่ได้กำหนดค่าเพื่อระบุว่าปัญหาคืออะไร (CORS).",
     "A connection error occurred while trying to contact the server.": "เกิดข้อผิดพลาดในการเชื่อมต่อขณะพยายามติดต่อกับเซิร์ฟเวอร์.",
     "Your area is experiencing difficulties connecting to the internet.": "พื้นที่ของคุณประสบปัญหาในการเชื่อมต่ออินเทอร์เน็ต.",
     "The server has denied your request.": "เซิร์ฟเวอร์ปฏิเสธคำขอของคุณ.",
-    "We couldn't log you in": "เราไม่สามารถเข้าสู่ระบบของคุณได้",
-    "You do not have permission to start a conference call in this room": "คุณไม่ได้รับอนุญาตให้เริ่มการประชุมทางโทรศัพท์ในห้องนี้",
     "Permission Required": "ต้องได้รับอนุญาต",
-    "Failed to transfer call": "โอนสายไม่สำเร็จ",
-    "Transfer Failed": "การโอนสายล้มเหลว",
-    "Unable to transfer call": "ไม่สามารถโอนสายได้",
-    "There was an error looking up the phone number": "เกิดข้อผิดพลาดในการค้นหาหมายเลขโทรศัพท์",
-    "Unable to look up phone number": "ไม่สามารถค้นหาหมายเลขโทรศัพท์",
-    "You've reached the maximum number of simultaneous calls.": "คุณมีการโทรพร้อมกันถึงจำนวนสูงสุดแล้ว.",
-    "Too Many Calls": "โทรมากเกินไป",
-    "You cannot place calls without a connection to the server.": "คุณไม่สามารถโทรออกได้หากไม่ได้เชื่อมต่อกับเซิร์ฟเวอร์.",
-    "Connectivity to the server has been lost": "ขาดการเชื่อมต่อกับเซิร์ฟเวอร์",
     "Session ID": "รหัสเซสชัน",
     "Encryption not enabled": "ไม่ได้เปิดใช้งานการเข้ารหัส",
     "Deactivate user": "ปิดใช้งานผู้ใช้",
@@ -222,20 +166,6 @@
     "Afghanistan": "อัฟกานิสถาน",
     "United States": "สหรัฐอเมริกา",
     "United Kingdom": "สหราชอาณาจักร",
-    "%(name)s is requesting verification": "%(name)s กำลังขอการตรวจสอบ",
-    "Empty room (was %(oldName)s)": "ห้องว่าง (เดิม %(oldName)s)",
-    "Inviting %(user)s and %(count)s others": {
-        "one": "เชิญ %(user)s และ 1 คนอื่นๆ",
-        "other": "เชิญ %(user)s และ %(count)s คนอื่นๆ"
-    },
-    "Inviting %(user1)s and %(user2)s": "เชิญ %(user1)s และ %(user2)s",
-    "%(user)s and %(count)s others": {
-        "one": "%(user)s และ 1 คนอื่นๆ",
-        "other": "%(user)s และ %(count)s คนอื่นๆ"
-    },
-    "%(user1)s and %(user2)s": "%(user1)s และ %(user2)s",
-    "Empty room": "ห้องว่าง",
-    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "เราส่งคำขอให้เบราว์เซอร์จดจำโฮมเซิร์ฟเวอร์ที่คุณใช้เพื่ออนุญาตให้คุณลงชื่อเข้าใช้, แต่น่าเสียดายที่เบราว์เซอร์ของคุณไม่จดจำ. ไปที่หน้าลงชื่อเข้าใช้แล้วลองอีกครั้ง.",
     "Main address": "ที่อยู่หลัก",
     "Error removing address": "เกิดข้อผิดพลาดในการนำที่อยู่ออก",
     "There was an error removing that address. It may no longer exist or a temporary error occurred.": "เกิดข้อผิดพลาดในการลบที่อยู่นั้น อาจไม่มีอยู่อีกต่อไปหรือเกิดข้อผิดพลาดชั่วคราว.",
@@ -272,7 +202,6 @@
     "General failure": "ข้อผิดพลาดทั่วไป",
     "General": "ทั่วไป",
     "collapse": "ยุบ",
-    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "ที่อยู่อีเมลของคุณไม่ได้เชื่อมโยงกับ Matrix ID บนโฮมเซิร์ฟเวอร์นี้",
     "common": {
         "encryption_enabled": "เปิดใช้งานการเข้ารหัส",
         "error": "ข้อผิดพลาด",
@@ -345,7 +274,8 @@
         "register": "ลงทะเบียน",
         "import": "นำเข้า",
         "export": "ส่งออก",
-        "submit": "ส่ง"
+        "submit": "ส่ง",
+        "unban": "ปลดแบน"
     },
     "keyboard": {
         "home": "เมนูหลัก"
@@ -389,7 +319,10 @@
             "rule_invite_for_me": "เมื่อฉันได้รับคำเชิญเข้าห้อง",
             "rule_call": "คำเชิญเข้าร่วมการโทร",
             "rule_suppress_notices": "ข้อความจากบอท",
-            "noisy": "เสียงดัง"
+            "noisy": "เสียงดัง",
+            "error_permissions_denied": "%(brand)s ไม่มีสิทธิ์ส่งการแจ้งเตือน - กรุณาตรวจสอบการตั้งค่าเบราว์เซอร์ของคุณ",
+            "error_permissions_missing": "%(brand)s ไม่ได้รับสิทธิ์ส่งการแจ้งเตือน - กรุณาลองใหม่อีกครั้ง",
+            "error_title": "ไม่สามารถเปิดใช้งานการแจ้งเตือน"
         },
         "appearance": {
             "timeline_image_size_default": "ค่าเริ่มต้น",
@@ -438,7 +371,17 @@
             "cryptography_section": "วิทยาการเข้ารหัส"
         },
         "general": {
-            "account_section": "บัญชี"
+            "account_section": "บัญชี",
+            "email_address_in_use": "ที่อยู่อีเมลถูกใช้แล้ว",
+            "msisdn_in_use": "หมายเลขโทรศัพท์นี้ถูกใช้งานแล้ว",
+            "confirm_adding_email_title": "ยืนยันการเพิ่มอีเมล",
+            "confirm_adding_email_body": "คลิกปุ่มด้านล่างเพื่อยืนยันการเพิ่มที่อยู่อีเมลนี้.",
+            "add_email_dialog_title": "เพิ่มที่อยู่อีเมล",
+            "add_email_failed_verification": "การยืนยันอีเมลล้มเหลว: กรุณาตรวจสอบว่าคุณคลิกลิงก์ในอีเมลแล้ว",
+            "add_msisdn_confirm_sso_button": "ยืนยันการเพิ่มหมายเลขโทรศัพท์นี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ.",
+            "add_msisdn_confirm_button": "ยืนยันการเพิ่มหมายเลขโทรศัพท์",
+            "add_msisdn_confirm_body": "คลิกปุ่มด้านล่างเพื่อยืนยันการเพิ่มหมายเลขโทรศัพท์นี้.",
+            "add_msisdn_dialog_title": "เพิ่มหมายเลขโทรศัพท์"
         }
     },
     "timeline": {
@@ -484,7 +427,28 @@
         "already_in_call": "อยู่ในสายแล้ว",
         "already_in_call_person": "คุณอยู่ในสายกับบุคคลนี้แล้ว.",
         "unsupported": "ไม่รองรับการโทร",
-        "unsupported_browser": "คุณไม่สามารถโทรออกในเบราว์เซอร์นี้."
+        "unsupported_browser": "คุณไม่สามารถโทรออกในเบราว์เซอร์นี้.",
+        "user_busy": "ผู้ใช้ไม่ว่าง",
+        "user_busy_description": "ผู้ใช้ที่คุณโทรหาไม่ว่าง.",
+        "call_failed_description": "ไม่สามารถโทรออกได้",
+        "answered_elsewhere_description": "คุณรับสายบนอุปกรณ์อื่นแล้ว.",
+        "misconfigured_server": "การโทรล้มเหลวเนื่องจากเซิร์ฟเวอร์กำหนดค่าไม่ถูกต้อง",
+        "misconfigured_server_description": "โปรดสอบถามผู้ดูแลระบบของโฮมเซิร์ฟเวอร์ของคุณ (<code>%(homeserverDomain)s</code>) เพื่อกำหนดคอนฟิกเซิร์ฟเวอร์ TURN เพื่อให้การเรียกทำงานได้อย่างน่าเชื่อถือ.",
+        "connection_lost": "ขาดการเชื่อมต่อกับเซิร์ฟเวอร์",
+        "connection_lost_description": "คุณไม่สามารถโทรออกได้หากไม่ได้เชื่อมต่อกับเซิร์ฟเวอร์.",
+        "too_many_calls": "โทรมากเกินไป",
+        "too_many_calls_description": "คุณมีการโทรพร้อมกันถึงจำนวนสูงสุดแล้ว.",
+        "cannot_call_yourself_description": "คุณไม่สามารถโทรหาตัวเองได้",
+        "msisdn_lookup_failed": "ไม่สามารถค้นหาหมายเลขโทรศัพท์",
+        "msisdn_lookup_failed_description": "เกิดข้อผิดพลาดในการค้นหาหมายเลขโทรศัพท์",
+        "msisdn_transfer_failed": "ไม่สามารถโอนสายได้",
+        "transfer_failed": "การโอนสายล้มเหลว",
+        "transfer_failed_description": "โอนสายไม่สำเร็จ",
+        "no_permission_conference": "ต้องได้รับอนุญาต",
+        "no_permission_conference_description": "คุณไม่ได้รับอนุญาตให้เริ่มการประชุมทางโทรศัพท์ในห้องนี้",
+        "default_device": "อุปกรณ์เริ่มต้น",
+        "no_media_perms_title": "ไม่มีสิทธิ์เข้าถึงสื่อ",
+        "no_media_perms_description": "คุณอาจต้องให้สิทธิ์ %(brand)s เข้าถึงไมค์โครโฟนไมค์โครโฟน/กล้องเว็บแคม ด้วยตัวเอง"
     },
     "devtools": {
         "category_room": "ห้อง"
@@ -520,7 +484,17 @@
         "change_password_action": "เปลี่ยนรหัสผ่าน",
         "email_field_label": "อีเมล",
         "msisdn_field_label": "โทรศัพท์",
-        "identifier_label": "เข้าสู่ระบบด้วย"
+        "identifier_label": "เข้าสู่ระบบด้วย",
+        "uia": {
+            "sso_title": "ใช้การลงชื่อเพียงครั้งเดียวเพื่อดำเนินการต่อ",
+            "sso_body": "ยืนยันการเพิ่มที่อยู่อีเมลนี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ."
+        },
+        "sso_failed_missing_storage": "เราส่งคำขอให้เบราว์เซอร์จดจำโฮมเซิร์ฟเวอร์ที่คุณใช้เพื่ออนุญาตให้คุณลงชื่อเข้าใช้, แต่น่าเสียดายที่เบราว์เซอร์ของคุณไม่จดจำ. ไปที่หน้าลงชื่อเข้าใช้แล้วลองอีกครั้ง.",
+        "oidc": {
+            "error_title": "เราไม่สามารถเข้าสู่ระบบของคุณได้"
+        },
+        "reset_password_email_not_found_title": "ไม่พบที่อยู่อีเมล",
+        "reset_password_email_not_associated": "ที่อยู่อีเมลของคุณไม่ได้เชื่อมโยงกับ Matrix ID บนโฮมเซิร์ฟเวอร์นี้"
     },
     "setting": {
         "help_about": {
@@ -528,7 +502,10 @@
         }
     },
     "create_room": {
-        "encryption_forced": "เซิร์ฟเวอร์ของคุณกำหนดให้เปิดใช้งานการเข้ารหัสในห้องส่วนตัว."
+        "encryption_forced": "เซิร์ฟเวอร์ของคุณกำหนดให้เปิดใช้งานการเข้ารหัสในห้องส่วนตัว.",
+        "generic_error": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือเจอจุดบกพร่อง",
+        "unsupported_version": "เซิร์ฟเวอร์ไม่รองรับเวอร์ชันห้องที่ระบุ.",
+        "error_title": "การสร้างห้องล้มเหลว"
     },
     "room_list": {
         "failed_remove_tag": "การลบแท็ก %(tagName)s จากห้องล้มเหลว",
@@ -569,5 +546,45 @@
         "intro": {
             "unencrypted_warning": "ไม่ได้เปิดใช้งานการเข้ารหัสจากต้นทางถึงปลายทาง"
         }
+    },
+    "failed_load_async_component": "ไม่สามารถโหลดได้! ตรวจสอบการเชื่อมต่อเครือข่ายของคุณแล้วลองอีกครั้ง.",
+    "upload_failed_generic": "ไฟล์ '%(fileName)s' อัปโหลดไม่สำเร็จ.",
+    "upload_failed_size": "ไฟล์ '%(fileName)s' เกินขีดจำกัดขนาดของโฮมเซิร์ฟเวอร์นี้สำหรับการอัปโหลด",
+    "upload_failed_title": "การอัปโหลดล้มเหลว",
+    "terms": {
+        "identity_server_no_terms_title": "เซิร์ฟเวอร์ประจำตัวไม่มีข้อกำหนดในการให้บริการ",
+        "identity_server_no_terms_description_1": "การดำเนินการนี้จำเป็นต้องเข้าถึงเซิร์ฟเวอร์ identity เริ่มต้น <server /> เพื่อตรวจสอบที่อยู่อีเมลหรือหมายเลขโทรศัพท์ แต่เซิร์ฟเวอร์ไม่มีข้อกำหนดในการให้บริการใดๆ.",
+        "identity_server_no_terms_description_2": "ดำเนินการต่อหากคุณไว้วางใจเจ้าของเซิร์ฟเวอร์เท่านั้น."
+    },
+    "empty_room": "ห้องว่าง",
+    "user1_and_user2": "%(user1)s และ %(user2)s",
+    "user_and_n_others": {
+        "one": "%(user)s และ 1 คนอื่นๆ",
+        "other": "%(user)s และ %(count)s คนอื่นๆ"
+    },
+    "inviting_user1_and_user2": "เชิญ %(user1)s และ %(user2)s",
+    "inviting_user_and_n_others": {
+        "one": "เชิญ %(user)s และ 1 คนอื่นๆ",
+        "other": "เชิญ %(user)s และ %(count)s คนอื่นๆ"
+    },
+    "empty_room_was_name": "ห้องว่าง (เดิม %(oldName)s)",
+    "notifier": {
+        "m.key.verification.request": "%(name)s กำลังขอการตรวจสอบ"
+    },
+    "invite": {
+        "failed_title": "การเชิญล้มเหลว",
+        "failed_generic": "การดำเนินการล้มเหลว"
+    },
+    "widget": {
+        "error_need_to_be_logged_in": "คุณต้องเข้าสู่ระบบก่อน"
+    },
+    "scalar": {
+        "error_send_request": "การส่งคำขอล้มเหลว",
+        "error_power_level_invalid": "ระดับอำนาจต้องเป็นจำนวนเต็มบวก",
+        "error_missing_user_id_request": "ไม่พบ user_id ในคำขอ"
+    },
+    "error": {
+        "mixed_content": "ไม่สามารถเชื่อมต่อไปยังเซิร์ฟเวอร์บ้านผ่านทาง HTTP ได้เนื่องจาก URL ที่อยู่บนเบราว์เซอร์เป็น HTTPS กรุณาใช้ HTTPS หรือ<a>เปิดใช้งานสคริปต์ที่ไม่ปลอดภัย</a>.",
+        "tls": "ไม่สามารถเฃื่อมต่อไปหาเซิร์ฟเวอร์บ้านได้ - กรุณาตรวจสอบคุณภาพการเชื่อมต่อ, ตรวจสอบว่า<a>SSL certificate ของเซิร์ฟเวอร์บ้าน</a>ของคุณเชื่อถือได้, และวไม่มีส่วนขยายเบราว์เซอร์ใดบล๊อคการเชื่อมต่ออยู่"
     }
 }

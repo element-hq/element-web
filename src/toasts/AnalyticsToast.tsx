@@ -67,7 +67,7 @@ const onLearnMorePreviouslyOptedIn = (): void => {
             }
             // otherwise, the user closed the dialog without making a choice, leave the toast open
         },
-        primaryButton: _t("That's fine"),
+        primaryButton: _t("analytics|accept_button"),
         cancelButton: _t("action|stop"),
     });
 };
@@ -87,7 +87,7 @@ export const showToast = (): void => {
         // them to opt in again.
         props = {
             description: _t("analytics|consent_migration"),
-            acceptLabel: _t("That's fine"),
+            acceptLabel: _t("analytics|accept_button"),
             onAccept,
             rejectLabel: _t("action|learn_more"),
             onReject: onLearnMorePreviouslyOptedIn,

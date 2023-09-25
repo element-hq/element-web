@@ -99,8 +99,8 @@ export async function upgradeRoom(
         logger.error(e);
 
         Modal.createDialog(ErrorDialog, {
-            title: _t("Error upgrading room"),
-            description: _t("Double check that your server supports the room version chosen and try again."),
+            title: _t("room|upgrade_error_title"),
+            description: _t("room|upgrade_error_description"),
         });
         throw e;
     }

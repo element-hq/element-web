@@ -65,7 +65,7 @@ export class MockClientWithEventEmitter extends EventEmitter {
     });
  * ```
  *
- * See also `stubClient()` which does something similar but uses a more complete mock client.
+ * See also {@link stubClient} which does something similar but uses a more complete mock client.
  */
 export const getMockClientWithEventEmitter = (
     mockProperties: Partial<Record<keyof MatrixClient, unknown>>,
@@ -152,6 +152,7 @@ export const mockClientMethodsCrypto = (): Partial<
     isKeyBackupKeyStored: jest.fn(),
     getCrossSigningCacheCallbacks: jest.fn().mockReturnValue({ getCrossSigningKeyCache: jest.fn() }),
     getStoredCrossSigningForUser: jest.fn(),
+    getKeyBackupVersion: jest.fn().mockResolvedValue(null),
     secretStorage: { hasKey: jest.fn() },
     getCrypto: jest.fn().mockReturnValue({
         getUserDeviceInfo: jest.fn(),
