@@ -133,7 +133,9 @@ export function IncomingCallToast({ callEvent }: Props): JSX.Element {
             <RoomAvatar room={room ?? undefined} size="24px" />
             <div className="mx_IncomingCallToast_content">
                 <div className="mx_IncomingCallToast_info">
-                    <span className="mx_IncomingCallToast_room">{room ? room.name : _t("Unknown room")}</span>
+                    <span className="mx_IncomingCallToast_room">
+                        {room ? room.name : _t("voip|call_toast_unknown_room")}
+                    </span>
                     <div className="mx_IncomingCallToast_message">{_t("voip|video_call_started")}</div>
                     {call ? (
                         <LiveContentSummaryWithCall call={call} />

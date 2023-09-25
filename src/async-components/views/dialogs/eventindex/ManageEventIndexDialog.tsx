@@ -191,7 +191,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
             <BaseDialog
                 className="mx_ManageEventIndexDialog"
                 onFinished={this.props.onFinished}
-                title={_t("Message search")}
+                title={_t("settings|security|message_search_section")}
             >
                 {eventIndexingSettings}
                 <DialogButtons

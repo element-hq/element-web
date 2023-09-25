@@ -42,7 +42,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
         const deviceId = client.deviceId;
         let identityKey = client.getDeviceEd25519Key();
         if (!identityKey) {
-            identityKey = _t("<not supported>");
+            identityKey = _t("encryption|not_supported");
         } else {
             identityKey = FormattingUtils.formatCryptoKey(identityKey);
         }

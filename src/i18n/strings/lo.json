@@ -348,30 +348,11 @@
     "Audio Output": "ສຽງອອກ",
     "Request media permissions": "ຮ້ອງຂໍການອະນຸຍາດສື່ມວນຊົນ",
     "Missing media permissions, click the button below to request.": "ບໍ່ອະນຸຍາດສື່, ກົດໄປທີ່ປຸ່ມຂ້າງລຸ່ມນີ້ເພື່ອຮ້ອງຂໍ.",
-    "Group all your rooms that aren't part of a space in one place.": "ຈັດກຸ່ມຫ້ອງທັງໝົດຂອງທ່ານທີ່ບໍ່ໄດ້ເປັນສ່ວນໜຶ່ງຂອງພື້ນທີ່ຢູ່ໃນບ່ອນດຽວກັນ.",
-    "Rooms outside of a space": "ຫ້ອງຢູ່ນອກພື້ນທີ່",
-    "Group all your people in one place.": "ຈັດກຸ່ມຄົນທັງໝົດຂອງເຈົ້າຢູ່ບ່ອນດຽວ.",
-    "Group all your favourite rooms and people in one place.": "ຈັດກຸ່ມຫ້ອງ ແລະ ຄົນທີ່ທ່ານມັກທັງໝົດຢູ່ບ່ອນດຽວ.",
-    "Show all your rooms in Home, even if they're in a space.": "ສະແດງຫ້ອງທັງໝົດຂອງທ່ານໃນໜ້າຫຼັກ, ເຖິງແມ່ນວ່າພວກມັນຢູ່ໃນບ່ອນໃດນຶ່ງກໍ່ຕາມ.",
-    "Home is useful for getting an overview of everything.": "ຫນ້າHome ເປັນປະໂຫຍດສໍາລັບການເບິ່ງລາຍການລວມທັງໝົດ.",
-    "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "ພຶ້ນທີ່ເປັນຊ່ອງທາງໃນການຈັດກຸ່ມຫ້ອງ ແລະ ຄົນ. ຄຽງຄູ່ກັບສະຖານທີ່ທີ່ທ່ານຢູ່ໃນ, ທ່ານສາມາດນໍາໃຊ້ບາງບ່ອນທີ່ສ້າງຂຶ້ນກ່ອນໄດ້ເຊັ່ນກັນ.",
-    "Spaces to show": "ພຶ້ນທີ່ຈະສະແດງ",
-    "Sidebar": "ແຖບດ້ານຂ້າງ",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "ແບ່ງປັນຂໍ້ມູນທີ່ບໍ່ເປີດເຜີຍຊື່ເພື່ອຊ່ວຍໃຫ້ພວກເຮົາລະບຸບັນຫາ. ບໍ່ມີຫຍັງເປັນສ່ວນຕົວ. ບໍ່ມີພາກສ່ວນທີສາມ.",
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "ຜູ້ຄຸມເຊີບເວີຂອງທ່ານໄດ້ປິດການນຳໃຊ້ການເຂົ້າລະຫັດແບບຕົ້ນທາງຮອດປາຍທາງໂດຍຄ່າເລີ່ມຕົ້ນໃນຫ້ອງສ່ວນຕົວ ແລະ ຂໍ້ຄວາມໂດຍກົງ.",
-    "Message search": "ຄົ້ນຫາຂໍ້ຄວາມ",
-    "Reject all %(invitedRooms)s invites": "ປະຕິເສດການເຊີນທັງໝົດ %(invitedRooms)s",
-    "Accept all %(invitedRooms)s invites": "ຍອມຮັບການເຊີນທັງໝົດ %(invitedRooms)s",
-    "Bulk options": "ຕົວເລືອກຈຳນວນຫຼາຍ",
     "You have no ignored users.": "ທ່ານບໍ່ມີຜູ້ໃຊ້ທີ່ຖືກລະເລີຍ.",
     "Unignore": "ບໍ່ສົນໃຈ",
     "Ignored users": "ຜູ້ໃຊ້ຖືກຍົກເວັ້ນ",
     "None": "ບໍ່ມີ",
-    "Cross-signing is not set up.": "ບໍ່ໄດ້ຕັ້ງຄ່າ Cross-signing.",
-    "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "ບັນຊີຂອງທ່ານມີຂໍ້ມູນແບບ cross-signing ໃນການເກັບຮັກສາຄວາມລັບ, ແຕ່ວ່າຍັງບໍ່ມີຄວາມເຊື່ອຖືໃນລະບົບນີ້.",
-    "Cross-signing is ready but keys are not backed up.": "ການລົງຊື່ຂ້າມແມ່ນພ້ອມແລ້ວແຕ່ກະແຈບໍ່ໄດ້ສຳຮອງໄວ້.",
-    "Cross-signing is ready for use.": "ການລົງຊື່ຂ້າມແມ່ນກຽມພ້ອມສໍາລັບການໃຊ້ງານ.",
-    "Your homeserver does not support cross-signing.": "homeserverຂອງທ່ານບໍ່ຮອງຮັບການລົງຊື່ຂ້າມ.",
     "Warning!": "ແຈ້ງເຕືອນ!",
     "No display name": "ບໍ່ມີຊື່ສະແດງຜົນ",
     "Space options": "ຕົວເລືອກພື້ນທີ່",
@@ -399,25 +380,13 @@
     "Invite with email or username": "ເຊີນດ້ວຍອີເມລ໌ ຫຼື ຊື່ຜູ້ໃຊ້",
     "Invite people": "ເຊີນຜູ້ຄົນ",
     "Share invite link": "ແບ່ງປັນລິ້ງເຊີນ",
-    "Failed to copy": "ສຳເນົາບໍ່ສຳເລັດ",
-    "Copied!": "ສຳເນົາແລ້ວ!",
-    "Click to copy": "ກົດເພື່ອສຳເນົາ",
     "Show all rooms": "ສະແດງຫ້ອງທັງໝົດ",
     "You can change these anytime.": "ທ່ານສາມາດປ່ຽນສິ່ງເຫຼົ່ານີ້ໄດ້ທຸກເວລາ.",
     "To join a space you'll need an invite.": "ເພື່ອເຂົ້າຮ່ວມພື້ນທີ່, ທ່ານຈະຕ້ອງການເຊີນ.",
     "Create a space": "ສ້າງພື້ນທີ່",
     "Address": "ທີ່ຢູ່",
     "Search %(spaceName)s": "ຊອກຫາ %(spaceName)s",
-    "Upload avatar": "ອັບໂຫຼດອາວາຕ້າ",
-    "Delete avatar": "ລືບອາວາຕ້າ",
     "Space selection": "ການເລືອກພື້ນທີ່",
-    "Match system": "ລະບົບການຈັບຄູ່",
-    "More options": "ທາງເລືອກເພີ່ມເຕີມ",
-    "Pin to sidebar": "ປັກໝຸດໃສ່ແຖບດ້ານຂ້າງ",
-    "All settings": "ການຕັ້ງຄ່າທັງໝົດ",
-    "Quick settings": "ການຕັ້ງຄ່າດ່ວນ",
-    "Accept <policyLink /> to continue:": "ຍອມຮັບ <policyLink /> ເພື່ອສືບຕໍ່:",
-    "Your server isn't responding to some <a>requests</a>.": "ເຊີບເວີຂອງທ່ານບໍ່ຕອບສະໜອງບາງ <a>ຄຳຮ້ອງຂໍ</a>.",
     "Folder": "ໂຟນເດີ",
     "Headphones": "ຫູຟັງ",
     "Anchor": "ສະມໍ",
@@ -461,25 +430,11 @@
     "No live locations": "ບໍ່ມີສະຖານທີ່ປັດຈູບັນ",
     "Live location error": "ສະຖານທີ່ປັດຈຸບັນຜິດພາດ",
     "Live location ended": "ສະຖານທີ່ປັດຈຸບັນສິ້ນສຸດລົງແລ້ວ",
-    "Move right": "ຍ້າຍໄປທາງຂວາ",
-    "Move left": "ຍ້າຍໄປທາງຊ້າຍ",
-    "Revoke permissions": "ຖອນການອະນຸຍາດ",
-    "Remove for everyone": "ລຶບອອກສຳລັບທຸກຄົນ",
-    "Delete widget": "ລຶບ widget",
-    "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "ການລຶບwidget ຈະເປັນການລຶບອອກສຳລັບຜູ້ໃຊ້ທັງໝົດໃນຫ້ອງນີ້. ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບwidget ນີ້?",
     "Delete Widget": "ລຶບ Widget",
-    "Take a picture": "ຖ່າຍຮູບ",
-    "Start audio stream": "ເລີ່ມການຖ່າຍທອດສຽງ",
     "Failed to start livestream": "ການຖ່າຍທອດສົດບໍ່ສຳເລັດ",
     "Unable to start audio streaming.": "ບໍ່ສາມາດເລີ່ມການຖ່າຍທອດສຽງໄດ້.",
     "Thread options": "ຕົວເລືອກກະທູ້",
-    "Mentions only": "ກ່າວເຖິງເທົ່ານັ້ນ",
     "Forget": "ລືມ",
-    "Report": "ລາຍງານ",
-    "Collapse reply thread": "ຫຍໍ້ກະທູ້ຕອບກັບ",
-    "Source URL": "ແຫຼ່ງ URL",
-    "Show preview": "ສະແດງຕົວຢ່າງ",
-    "View source": "ເບິ່ງແຫຼ່ງທີ່ມາ",
     "Open in OpenStreetMap": "ເປີດໃນ OpenStreetMap",
     "Hold": "ຖື",
     "Resume": "ປະຫວັດຫຍໍ້",
@@ -731,11 +686,6 @@
         "one": "ຜູ້ເຂົ້າຮ່ວມ 1ຄົນ",
         "other": "ຜູ້ເຂົ້າຮ່ວມ %(count)s ຄົນ"
     },
-    "Copy room link": "ສຳເນົາລິ້ງຫ້ອງ",
-    "Low Priority": "ຄວາມສຳຄັນຕໍ່າ",
-    "Favourite": "ສິ່ງທີ່ມັກ",
-    "Favourited": "ສີ່ງທີ່ມັກ",
-    "Forget Room": "ລືມຫ້ອງ",
     "%(errcode)s was returned while trying to access the room or space. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.": "%(errcode)s ຖືກສົ່ງຄືນໃນຂະນະທີ່ພະຍາຍາມເຂົ້າເຖິງຫ້ອງ ຫຼື ພື້ນທີ່. ຖ້າຫາກທ່ານຄິດວ່າທ່ານກໍາລັງເຫັນຂໍ້ຄວາມນີ້ຜິດພາດ, ກະລຸນາ <issueLink>ສົ່ງບົດລາຍງານ bug</issueLink>.",
     "Try again later, or ask a room or space admin to check if you have access.": "ລອງໃໝ່ໃນພາຍຫຼັງ, ຫຼື ຂໍໃຫ້ຜູ້ຄຸ້ມຄອງຫ້ອງ ຫຼື ຜູ້ຄຸ້ມຄອງພື້ນທີ່ກວດເບິ່ງວ່າທ່ານມີການເຂົ້າເຖິງ ຫຼື ບໍ່.",
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "ຖ້າທ່ານບໍ່ໄດ້ລືບຂະບວນການກູ້ຄືນ, ຜູ້ໂຈມຕີອາດຈະພະຍາຍາມເຂົ້າເຖິງບັນຊີຂອງທ່ານ. ປ່ຽນລະຫັດຜ່ານບັນຊີຂອງທ່ານ ແລະ ກຳນົດຂະບວນການກູ້ຄືນໃໝ່ທັນທີໃນການຕັ້ງຄ່າ.",
@@ -802,7 +752,6 @@
     "Verify with Security Key or Phrase": "ຢືນຢັນດ້ວຍກະແຈຄວາມປອດໄພ ຫຼືປະໂຫຍກ",
     "Proceed with reset": "ດຳເນີນການຕັ້ງຄ່າໃໝ່",
     "It looks like you don't have a Security Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.": "ເບິ່ງຄືວ່າທ່ານບໍ່ມີກະແຈຄວາມປອດໄພ ຫຼື ອຸປະກອນອື່ນໆທີ່ທ່ານສາມາດຢືນຢັນໄດ້. ອຸປະກອນນີ້ຈະບໍ່ສາມາດເຂົ້າເຖິງຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດເກົ່າໄດ້. ເພື່ອຢືນຢັນຕົວຕົນຂອງທ່ານໃນອຸປະກອນນີ້, ທ່ານຈຳເປັນຕ້ອງຕັ້ງລະຫັດຢືນຢັນຂອງທ່ານ.",
-    "Create account": "ສ້າງບັນຊີ",
     "Updating spaces... (%(progress)s out of %(count)s)": {
         "one": "ກຳລັງປັບປຸງພື້ນທີ່..",
         "other": "ກຳລັງຍົກລະດັບພື້ນທີ່... (%(progress)s ຈາກທັງໝົດ %(count)s)"
@@ -831,15 +780,6 @@
     "Upgrade required": "ຕ້ອງການບົກລະດັບ",
     "The integration manager is offline or it cannot reach your homeserver.": "ຜູ້ຈັດການການເຊື່ອມໂຍງແມ່ນອອບໄລນ໌ຫຼືບໍ່ສາມາດເຂົ້າຫາ homeserver ຂອງທ່ານໄດ້.",
     "Cannot connect to integration manager": "ບໍ່ສາມາດເຊື່ອມຕໍ່ກັບຕົວຈັດການການເຊື່ອມໂຍງໄດ້",
-    "Message search initialisation failed": "ການເລີ່ມຕົ້ນການຄົ້ນຫາຂໍ້ຄວາມບໍ່ສຳເລັດ",
-    "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s ບໍ່ສາມາດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງ ໃນຂະນະທີ່ກຳລັງດຳເນີນການໃນເວັບບຣາວເຊີ. ໃຊ້ <desktopLink>%(brand)s Desktop</desktopLink> ເພື່ອໃຫ້ຂໍ້ຄວາມເຂົ້າລະຫັດຈະປາກົດໃນຜົນການຊອກຫາ.",
-    "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s ຂາດບາງອົງປະກອບທີ່ຕ້ອງການສໍາລັບການເກັບຂໍ້ຄວາມເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງ. ຖ້າທ່ານຕ້ອງການທົດລອງໃຊ້ຄຸນສົມບັດນີ້, ສ້າງ %(brand)s Desktop ແບບກຳນົດເອງດ້ວຍການເພີ່ມ <nativeLink>ອົງປະກອບການຄົ້ນຫາ</nativeLink>.",
-    "Securely cache encrypted messages locally for them to appear in search results.": "ເກັບຮັກສາຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຄົ້ນຫາ.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
-        "one": "ຈັດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຊອກຫາ, ໂດຍໃຊ້ %(size)s ເພື່ອເກັບຂໍ້ຄວາມຈາກຫ້ອງ %(rooms)s.",
-        "other": "ຈັດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຊອກຫາ, ໂດຍໃຊ້ %(size)s ເພື່ອເກັບຂໍ້ຄວາມຈາກ %(rooms)s ຫ້ອງ."
-    },
-    "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "ຢືນຢັນແຕ່ລະລະບົບທີ່ໃຊ້ໂດຍຜູ້ໃຊ້ເພື່ອໝາຍວ່າເປັນທີ່ໜ້າເຊື່ອຖືໄດ້, ບໍ່ໄວ້ໃຈອຸປະກອນທີ່ cross-signed.",
     "Display Name": "ຊື່ສະແດງ",
     "Failed to set display name": "ກຳນົດການສະເເດງຊື່ບໍ່ສຳເລັດ",
     "Reset event store": "ກູ້ຄືນທີ່ຈັດເກັບ",
@@ -1016,33 +956,13 @@
     "View live location": "ເບິ່ງສະຖານທີ່ປັດຈຸບັນ",
     "Language Dropdown": "ເລື່ອນພາສາລົງ",
     "Information": "ຂໍ້ມູນ",
-    "Rotate Right": "ໝຸນດ້ານຂວາ",
-    "Rotate Left": "ໝຸນດ້ານຊ້າຍ",
     "expand": "ຂະຫຍາຍ",
     "collapse": "ບໍ່ສຳເລັດ",
-    "Something went wrong!": "ມີບາງຢ່າງຜິດພາດ!",
-    "Share content": "ແບ່ງປັນເນື້ອໃນ",
-    "Application window": "ປ່ອງຢ້ຽມຄໍາຮ້ອງສະຫມັກ",
-    "Share entire screen": "ແບ່ງປັນຫນ້າຈໍທັງໝົດ",
     "This version of %(brand)s does not support searching encrypted messages": "ເວີຊັ້ນຂອງ %(brand)s ບໍ່ຮອງຮັບການຊອກຫາຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດ",
     "This version of %(brand)s does not support viewing some encrypted files": "%(brand)s ລຸ້ນນີ້ບໍ່ຮອງຮັບການເບິ່ງບາງໄຟລ໌ທີ່ເຂົ້າລະຫັດໄວ້",
     "Use the <a>Desktop app</a> to search encrypted messages": "ໃຊ້ <a>ແອັບເດັສທັອບ</a> ເພື່ອຊອກຫາຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດໄວ້",
     "Use the <a>Desktop app</a> to see all encrypted files": "ໃຊ້ <a>ແອັບເດັສທັອບ</a> ເພື່ອເບິ່ງໄຟລ໌ທີ່ຖືກເຂົ້າລະຫັດທັງໝົດ",
     "Message search initialisation failed, check <a>your settings</a> for more information": "ເລີ່ມຕົ້ນການຄົ້ນຫາຂໍ້ຄວາມບ່ສຳເລັດ, ໃຫ້ກວດເບິ່ງ <a>ການຕັ້ງຄ່າຂອງທ່ານ</a> ສໍາລັບຂໍ້ມູນເພີ່ມເຕີມ",
-    "Popout widget": "ວິດເຈັດ popout",
-    "Error - Mixed content": "ຂໍ້ຜິດພາດ - ເນື້ອຫາມີການປະສົມປະສານ",
-    "Error loading Widget": "ເກີດຄວາມຜິດພາດໃນການໂຫຼດ Widget",
-    "This widget may use cookies.": "widget ນີ້ອາດຈະໃຊ້ cookies.",
-    "Widget added by": "ເພີ່ມWidgetໂດຍ",
-    "Widgets do not use message encryption.": "Widgets ບໍ່ໄດ້ໃຊ້ໃນການເຂົ້າລະຫັດຂໍ້ຄວາມ.",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "ການໃຊ້ວິດເຈັດນີ້ອາດຈະແບ່ງປັນຂໍ້ມູນ <helpIcon /> ກັບ %(widgetDomain)s.",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "ການໃຊ້ວິດເຈັດນີ້ອາດຈະແບ່ງປັນຂໍ້ມູນ <helpIcon /> ກັບ %(widgetDomain)s & ຜູ້ຈັດການການເຊື່ອມໂຍງຂອງທ່ານ.",
-    "Widget ID": "ໄອດີວິດເຈັດ",
-    "Room ID": "ID ຫ້ອງ",
-    "Your theme": "ຫົວຂໍ້ຂອງທ່ານ",
-    "Your user ID": "ID ຂອງທ່ານ",
-    "Your display name": "ສະແດງຊື່ຂອງທ່ານ",
-    "Any of the following data may be shared:": "ຂໍ້ມູນຕໍ່ໄປນີ້ອາດຈະຖືກແບ່ງປັນ:",
     "Cancel search": "ຍົກເລີກການຄົ້ນຫາ",
     "MB": "ເມກາໄບ",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການສິ້ນສຸດການສຳຫຼວດນີ້? ນີ້ຈະສະແດງຜົນສຸດທ້າຍຂອງການລົງຄະແນນສຽງ ແລະ ຢຸດບໍ່ໃຫ້ປະຊາຊົນສາມາດລົງຄະແນນສຽງໄດ້.",
@@ -1089,11 +1009,7 @@
     "Moderation": "ປານກາງ",
     "Rooms": "ຫ້ອງ",
     "Widgets": "ວິດເຈັດ",
-    "Change notification settings": "ປ່ຽນການຕັ້ງຄ່າການແຈ້ງເຕືອນ",
-    "Back to thread": "ກັບໄປທີ່ຫົວຂໍ້",
-    "Room members": "ສະມາຊິກຫ້ອງ",
     "Room information": "ຂໍ້ມູນຫ້ອງ",
-    "Back to chat": "ກັບໄປທີ່ການສົນທະນາ",
     "Replying": "ກຳລັງຕອບກັບ",
     "Recently viewed": "ເບິ່ງເມື່ອບໍ່ດົນມານີ້",
     "Seen by %(count)s people": {
@@ -1109,15 +1025,8 @@
     "%(displayName)s's live location": "ສະຖານທີ່ປັດຈຸບັນຂອງ %(displayName)s",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s ບໍ່ສາມາດສົ່ງສະຖານທີ່ຂອງທ່ານໄດ້. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
     "We couldn't send your location": "ພວກເຮົາບໍ່ສາມາດສົ່ງສະຖານທີ່ຂອງທ່ານໄດ້",
-    "Share location": "ແບ່ງປັນສະຖານທີ່",
-    "Click to drop a pin": "ກົດເພື່ອວາງປັກໝຸດ",
-    "Click to move the pin": "ກົດເພື່ອຍ້າຍ PIN",
     "Could not fetch location": "ບໍ່ສາມາດດຶງຂໍ້ມູນສະຖານທີ່ໄດ້",
     "Location": "ສະຖານທີ່",
-    "Share for %(duration)s": "ແບ່ງປັນເປັນ %(duration)s",
-    "Enable live location sharing": "ເປີດໃຊ້ການແບ່ງປັນສະຖານທີ່ປັດຈຸບັນ",
-    "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.": "ກະລຸນາບັນທຶກ: ນີ້ແມ່ນຄຸນສົມບັດຫ້ອງທົດລອງການນໍາໃຊ້ການປະຕິບັດຊົ່ວຄາວ. ນີ້ຫມາຍຄວາມວ່າທ່ານຈະບໍ່ສາມາດລຶບປະຫວັດສະຖານທີ່ຂອງທ່ານໄດ້, ແລະ ຜູ້ໃຊ້ຂັ້ນສູງຈະສາມາດເຫັນປະຫວັດສະຖານທີ່ຂອງທ່ານເຖິງແມ່ນວ່າຫຼັງຈາກທີ່ທ່ານຢຸດການແບ່ງປັນສະຖານທີ່ປັດຈຸບັນຂອງທ່ານກັບຫ້ອງນີ້.",
-    "Live location sharing": "ການແບ່ງປັນສະຖານທີ່ປັດຈຸບັນ",
     "toggle event": "ສະຫຼັບກິດຈະກຳ",
     "Can't load this message": "ບໍ່ສາມາດໂຫຼດຂໍ້ຄວາມນີ້ໄດ້",
     "Submit logs": "ສົ່ງບັນທຶກ",
@@ -1159,44 +1068,17 @@
     "You cancelled": "ທ່ານໄດ້ຍົກເລີກ",
     "You declined": "ທ່ານປະຕິເສດ",
     "Home": "ໜ້າຫຼັກ",
-    "Failed to join": "ການເຂົ້າຮ່ວມບໍ່ສຳເລັດ",
-    "The person who invited you has already left, or their server is offline.": "ບຸກຄົນທີ່ເຊີນທ່ານໄດ້ອອກໄປແລ້ວ, ຫຼືເຊີບເວີຂອງເຂົາເຈົ້າອອບລາຍຢູ່.",
-    "The person who invited you has already left.": "ຄົນທີ່ເຊີນເຈົ້າໄດ້ອອກໄປແລ້ວ.",
-    "Please contact your homeserver administrator.": "ກະລຸນາຕິດຕໍ່ຜູ້ຄຸ້ມຄອງເຊີບເວີຂອງທ່ານ.",
-    "Sorry, your homeserver is too old to participate here.": "ຂໍອະໄພ, homeserverຂອງທ່ານເກົ່າເກີນໄປທີ່ຈະເຂົ້າຮ່ວມທີ່ນີ້.",
-    "There was an error joining.": "ເກີດຄວາມຜິດພາດໃນການເຂົ້າຮ່ວມ.",
-    "%(deviceId)s from %(ip)s": "%(deviceId)s ຈາກ %(ip)s",
-    "New login. Was this you?": "ເຂົ້າສູ່ລະບົບໃໝ່. ນີ້ແມ່ນທ່ານບໍ?",
-    "Other users may not trust it": "ຜູ້ໃຊ້ອື່ນໆອາດຈະບໍ່ໄວ້ວາງໃຈ",
-    "Safeguard against losing access to encrypted messages & data": "ປ້ອງກັນການສູນເສຍການເຂົ້າເຖິງຂໍ້ຄວາມ ແລະຂໍ້ມູນທີ່ເຂົ້າລະຫັດ",
-    "Verify this session": "ຢືນຢັນລະບົບນີ້",
-    "Encryption upgrade available": "ມີການຍົກລະດັບການເຂົ້າລະຫັດ",
-    "Set up Secure Backup": "ຕັ້ງຄ່າການສໍາຮອງຂໍ້ມູນທີ່ປອດໄພ",
     "Ok": "ຕົກລົງ",
-    "Contact your <a>server admin</a>.": "ຕິດຕໍ່ <a>ຜູ້ເບິ່ງຄຸ້ມຄອງເຊີບເວີ</a> ຂອງທ່ານ.",
     "Your homeserver has exceeded one of its resource limits.": "homeserver ຂອງທ່ານເກີນຂີດຈຳກັດຊັບພະຍາກອນແລ້ວ.",
     "Your homeserver has exceeded its user limit.": "ເຊີບເວີຂອງທ່ານໃຊ້ເກີນຂີດຈຳກັດແລ້ວ.",
-    "Use app": "ໃຊ້ແອັບ",
-    "%(brand)s is experimental on a mobile web browser. For a better experience and the latest features, use our free native app.": "%(brand)s ແມ່ນທົດລອງຢູ່ໃນບຣາວຂອງມືຖື. ເພື່ອປະສົບການທີ່ດີກວ່າ ແລະ ຄຸນສົມບັດຫຼ້າສຸດ, ໃຫ້ໃຊ້ແອັບຟຣີຂອງພວກເຮົາ.",
-    "Use app for a better experience": "ໃຊ້ແອັບເພື່ອປະສົບການທີ່ດີກວ່າ",
-    "Enable desktop notifications": "ເປີດໃຊ້ການແຈ້ງເຕືອນເດັສທັອບ",
-    "Notifications": "ການແຈ້ງເຕືອນ",
-    "Don't miss a reply": "ຢ່າພາດການຕອບກັບ",
-    "Later": "ຕໍ່ມາ",
-    "Review to ensure your account is safe": "ກວດສອບໃຫ້ແນ່ໃຈວ່າບັນຊີຂອງທ່ານປອດໄພ",
     "Unnamed room": "ບໍ່ມີຊື່ຫ້ອງ",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s ແລະ %(count)s ອື່ນໆ",
         "other": "%(spaceName)s ແລະ %(count)s ອື່ນໆ"
     },
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s ແລະ %(space2Name)s",
-    "<Items/> and %(count)s others": {
-        "one": "<Items/> ແລະ ອີກນຶ່ງລາຍການ",
-        "other": "<Items/> ແລະ %(count)s ອື່ນໆ"
-    },
     "Email (optional)": "ອີເມວ (ທາງເລືອກ)",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "ກະລຸນາຮັບຊາບວ່າ, ຖ້າທ່ານບໍ່ເພີ່ມອີເມວ ແລະ ລືມລະຫັດຜ່ານຂອງທ່ານ, ທ່ານອາດ <b>ສູນເສຍການເຂົ້າເຖິງບັນຊີຂອງທ່ານຢ່າງຖາວອນ</b>.",
-    "<not supported>": "<ບໍ່ຮອງຮັບ>",
     "Suggested Rooms": "ຫ້ອງແນະນຳ",
     "Historical": "ປະຫວັດ",
     "Low priority": "ບູລິມະສິດຕໍ່າ",
@@ -1440,9 +1322,6 @@
     "Lion": "ຊ້າງ",
     "Cat": "ແມວ",
     "Dog": "ໝາ",
-    "More": "ເພີ່ມເຕີມ",
-    "Show sidebar": "ສະແດງແຖບດ້ານຂ້າງ",
-    "Hide sidebar": "ເຊື່ອງແຖບດ້ານຂ້າງ",
     "Error processing audio message": "ການປະມວນຜົນຂໍ້ຄວາມສຽງຜິດພາດ",
     "Pick a date to jump to": "ເລືອກວັນທີເພື່ອໄປຫາ",
     "Message pending moderation": "ຂໍ້ຄວາມທີ່ລໍຖ້າການກວດກາ",
@@ -1585,7 +1464,6 @@
         "one": "%(count)s ຄົນທີ່ທ່ານຮູ້ຈັກໄດ້ເຂົ້າຮ່ວມແລ້ວ",
         "other": "%(count)s ຄົນທີ່ທ່ານຮູ້ຈັກໄດ້ເຂົ້າຮ່ວມແລ້ວ"
     },
-    "%(brand)s URL": "%(brand)s URL",
     "Failed to ban user": "ຫ້າມຜູ້ໃຊ້ບໍ່ສຳເລັດ",
     "They won't be able to access whatever you're not an admin of.": "ເຂົາເຈົ້າຈະບໍ່ສາມາດເຂົ້າເຖິງໄດ້ ຫາກທ່ານບໍ່ແມ່ນຜູ້ຄຸ້ມຄອງລະບົບ.",
     "Ban them from specific things I'm able to": "ຫ້າມພວກເຂົາອອຈາກສິ່ງທີ່ສະເພາະທີ່ຂ້ອຍສາມາດເຮັດໄດ້",
@@ -1648,7 +1526,6 @@
         "one": "%(count)s ຄົນເຂົ້າຮ່ວມ\"",
         "other": "%(count)s ຄົນເຂົ້າຮ່ວມ"
     },
-    "View related event": "ເບິ່ງເຫດການທີ່ກ່ຽວຂ້ອງ",
     "Read receipts": "ຢັ້ງຢືນອ່ານແລ້ວ",
     "common": {
         "about": "ກ່ຽວກັບ",
@@ -1734,7 +1611,9 @@
         "off": "ປິດ",
         "all_rooms": "ຫ້ອງທັງໝົດ",
         "deselect_all": "ຍົກເລີກການເລືອກທັງໝົດ",
-        "select_all": "ເລືອກທັງຫມົດ"
+        "select_all": "ເລືອກທັງຫມົດ",
+        "copied": "ສຳເນົາແລ້ວ!",
+        "Advanced": "ຂັ້ນສູງ"
     },
     "action": {
         "continue": "ສືບຕໍ່",
@@ -1829,7 +1708,8 @@
         "submit": "ສົ່ງ",
         "send_report": "ສົ່ງບົດລາຍງານ",
         "clear": "ຈະແຈ້ງ",
-        "unban": "ຍົກເລີກການຫ້າມ"
+        "unban": "ຍົກເລີກການຫ້າມ",
+        "click_to_copy": "ກົດເພື່ອສຳເນົາ"
     },
     "a11y": {
         "user_menu": "ເມນູຜູ້ໃຊ້",
@@ -1971,7 +1851,6 @@
             "user_a11y": "ການຕຶ້ມຂໍ້ມູນອັດຕະໂນມັດຊື່ຜູ້ໃຊ້"
         }
     },
-    "Bold": "ຕົວໜາ",
     "Code": "ລະຫັດ",
     "power_level": {
         "default": "ຄ່າເລີ່ມຕົ້ນ",
@@ -2146,7 +2025,21 @@
             "cryptography_section": "ການເຂົ້າລະຫັດລັບ",
             "session_id": "ID ລະບົບ:",
             "session_key": "ກະແຈລະບົບ:",
-            "encryption_section": "ການເຂົ້າລະຫັດ"
+            "encryption_section": "ການເຂົ້າລະຫັດ",
+            "bulk_options_section": "ຕົວເລືອກຈຳນວນຫຼາຍ",
+            "bulk_options_accept_all_invites": "ຍອມຮັບການເຊີນທັງໝົດ %(invitedRooms)s",
+            "bulk_options_reject_all_invites": "ປະຕິເສດການເຊີນທັງໝົດ %(invitedRooms)s",
+            "message_search_section": "ຄົ້ນຫາຂໍ້ຄວາມ",
+            "analytics_subsection_description": "ແບ່ງປັນຂໍ້ມູນທີ່ບໍ່ເປີດເຜີຍຊື່ເພື່ອຊ່ວຍໃຫ້ພວກເຮົາລະບຸບັນຫາ. ບໍ່ມີຫຍັງເປັນສ່ວນຕົວ. ບໍ່ມີພາກສ່ວນທີສາມ.",
+            "encryption_individual_verification_mode": "ຢືນຢັນແຕ່ລະລະບົບທີ່ໃຊ້ໂດຍຜູ້ໃຊ້ເພື່ອໝາຍວ່າເປັນທີ່ໜ້າເຊື່ອຖືໄດ້, ບໍ່ໄວ້ໃຈອຸປະກອນທີ່ cross-signed.",
+            "message_search_enabled": {
+                "one": "ຈັດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຊອກຫາ, ໂດຍໃຊ້ %(size)s ເພື່ອເກັບຂໍ້ຄວາມຈາກຫ້ອງ %(rooms)s.",
+                "other": "ຈັດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຊອກຫາ, ໂດຍໃຊ້ %(size)s ເພື່ອເກັບຂໍ້ຄວາມຈາກ %(rooms)s ຫ້ອງ."
+            },
+            "message_search_disabled": "ເກັບຮັກສາຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຄົ້ນຫາ.",
+            "message_search_unsupported": "%(brand)s ຂາດບາງອົງປະກອບທີ່ຕ້ອງການສໍາລັບການເກັບຂໍ້ຄວາມເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງ. ຖ້າທ່ານຕ້ອງການທົດລອງໃຊ້ຄຸນສົມບັດນີ້, ສ້າງ %(brand)s Desktop ແບບກຳນົດເອງດ້ວຍການເພີ່ມ <nativeLink>ອົງປະກອບການຄົ້ນຫາ</nativeLink>.",
+            "message_search_unsupported_web": "%(brand)s ບໍ່ສາມາດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງ ໃນຂະນະທີ່ກຳລັງດຳເນີນການໃນເວັບບຣາວເຊີ. ໃຊ້ <desktopLink>%(brand)s Desktop</desktopLink> ເພື່ອໃຫ້ຂໍ້ຄວາມເຂົ້າລະຫັດຈະປາກົດໃນຜົນການຊອກຫາ.",
+            "message_search_failed": "ການເລີ່ມຕົ້ນການຄົ້ນຫາຂໍ້ຄວາມບໍ່ສຳເລັດ"
         },
         "preferences": {
             "room_list_heading": "ລາຍຊື່ຫ້ອງ",
@@ -2201,6 +2094,17 @@
             "add_msisdn_confirm_button": "ຢືນຢັນການເພີ່ມເບີໂທລະສັບ",
             "add_msisdn_confirm_body": "ກົດປຸ່ມຂ້າງລຸ່ມເພື່ອຢືນຢັນການເພີ່ມອີເມວນີ້.",
             "add_msisdn_dialog_title": "ເພີ່ມເບີໂທລະສັບ"
+        },
+        "sidebar": {
+            "title": "ແຖບດ້ານຂ້າງ",
+            "metaspaces_subsection": "ພຶ້ນທີ່ຈະສະແດງ",
+            "metaspaces_description": "ພຶ້ນທີ່ເປັນຊ່ອງທາງໃນການຈັດກຸ່ມຫ້ອງ ແລະ ຄົນ. ຄຽງຄູ່ກັບສະຖານທີ່ທີ່ທ່ານຢູ່ໃນ, ທ່ານສາມາດນໍາໃຊ້ບາງບ່ອນທີ່ສ້າງຂຶ້ນກ່ອນໄດ້ເຊັ່ນກັນ.",
+            "metaspaces_home_description": "ຫນ້າHome ເປັນປະໂຫຍດສໍາລັບການເບິ່ງລາຍການລວມທັງໝົດ.",
+            "metaspaces_home_all_rooms": "ສະແດງຫ້ອງທັງໝົດຂອງທ່ານໃນໜ້າຫຼັກ, ເຖິງແມ່ນວ່າພວກມັນຢູ່ໃນບ່ອນໃດນຶ່ງກໍ່ຕາມ.",
+            "metaspaces_favourites_description": "ຈັດກຸ່ມຫ້ອງ ແລະ ຄົນທີ່ທ່ານມັກທັງໝົດຢູ່ບ່ອນດຽວ.",
+            "metaspaces_people_description": "ຈັດກຸ່ມຄົນທັງໝົດຂອງເຈົ້າຢູ່ບ່ອນດຽວ.",
+            "metaspaces_orphans": "ຫ້ອງຢູ່ນອກພື້ນທີ່",
+            "metaspaces_orphans_description": "ຈັດກຸ່ມຫ້ອງທັງໝົດຂອງທ່ານທີ່ບໍ່ໄດ້ເປັນສ່ວນໜຶ່ງຂອງພື້ນທີ່ຢູ່ໃນບ່ອນດຽວກັນ."
         }
     },
     "devtools": {
@@ -2645,7 +2549,15 @@
             "see_older_messages": "ກົດທີ່ນີ້ເພື່ອເບິ່ງຂໍ້ຄວາມເກົ່າ."
         },
         "creation_summary_dm": "%(creator)s ສ້າງ DM ນີ້.",
-        "creation_summary_room": "%(creator)s ສ້າງ ແລະ ກຳນົດຄ່າຫ້ອງ."
+        "creation_summary_room": "%(creator)s ສ້າງ ແລະ ກຳນົດຄ່າຫ້ອງ.",
+        "context_menu": {
+            "view_source": "ເບິ່ງແຫຼ່ງທີ່ມາ",
+            "show_url_preview": "ສະແດງຕົວຢ່າງ",
+            "external_url": "ແຫຼ່ງ URL",
+            "collapse_reply_thread": "ຫຍໍ້ກະທູ້ຕອບກັບ",
+            "view_related_event": "ເບິ່ງເຫດການທີ່ກ່ຽວຂ້ອງ",
+            "report": "ລາຍງານ"
+        }
     },
     "slash_command": {
         "spoiler": "ສົ່ງຂໍ້ຄວາມທີ່ກຳນົດເປັນ spoiler",
@@ -2824,10 +2736,16 @@
         "no_permission_conference_description": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ລິເລີ່ມການໂທປະຊຸມໃນຫ້ອງນີ້",
         "default_device": "ອຸປະກອນເລີ່ມຕົ້ນ",
         "no_media_perms_title": "ບໍ່ມີການອະນຸຍາດສື່",
-        "no_media_perms_description": "ທ່ານອາດຈະຈໍາເປັນຕ້ອງໄດ້ອະນຸຍາດໃຫ້ %(brand)sເຂົ້າເຖິງໄມໂຄຣໂຟນ/ເວັບແຄມຂອງທ່ານ"
+        "no_media_perms_description": "ທ່ານອາດຈະຈໍາເປັນຕ້ອງໄດ້ອະນຸຍາດໃຫ້ %(brand)sເຂົ້າເຖິງໄມໂຄຣໂຟນ/ເວັບແຄມຂອງທ່ານ",
+        "join_button_tooltip_connecting": "ກຳລັງເຊື່ອມຕໍ່",
+        "hide_sidebar_button": "ເຊື່ອງແຖບດ້ານຂ້າງ",
+        "show_sidebar_button": "ສະແດງແຖບດ້ານຂ້າງ",
+        "more_button": "ເພີ່ມເຕີມ",
+        "screenshare_monitor": "ແບ່ງປັນຫນ້າຈໍທັງໝົດ",
+        "screenshare_window": "ປ່ອງຢ້ຽມຄໍາຮ້ອງສະຫມັກ",
+        "screenshare_title": "ແບ່ງປັນເນື້ອໃນ"
     },
     "Other": "ອື່ນໆ",
-    "Advanced": "ຂັ້ນສູງ",
     "room_settings": {
         "permissions": {
             "m.room.avatar_space": "ປ່ຽນຮູບ avatar",
@@ -2910,7 +2828,9 @@
             "room_id": "ID ຫ້ອງພາຍໃນ",
             "room_version_section": "ເວີຊັ້ນຫ້ອງ",
             "room_version": "ເວີຊັ້ນຫ້ອງ:"
-        }
+        },
+        "delete_avatar_label": "ລືບອາວາຕ້າ",
+        "upload_avatar_label": "ອັບໂຫຼດອາວາຕ້າ"
     },
     "encryption": {
         "verification": {
@@ -2935,7 +2855,11 @@
             "waiting_other_device_details": "ກຳລັງລໍຖ້າໃຫ້ທ່ານກວດສອບໃນອຸປະກອນອື່ນຂອງທ່ານ, %(deviceName)s (%(deviceId)s)…",
             "waiting_other_device": "ກຳລັງລໍຖ້າໃຫ້ທ່ານຢັ້ງຢືນໃນອຸປະກອນອື່ນຂອງທ່ານ…",
             "waiting_other_user": "ກຳລັງລໍຖ້າ %(displayName)s ເພື່ອຢັ້ງຢືນ…",
-            "cancelling": "ກຳລັງຍົກເລີກ…"
+            "cancelling": "ກຳລັງຍົກເລີກ…",
+            "unverified_sessions_toast_description": "ກວດສອບໃຫ້ແນ່ໃຈວ່າບັນຊີຂອງທ່ານປອດໄພ",
+            "unverified_sessions_toast_reject": "ຕໍ່ມາ",
+            "unverified_session_toast_title": "ເຂົ້າສູ່ລະບົບໃໝ່. ນີ້ແມ່ນທ່ານບໍ?",
+            "request_toast_detail": "%(deviceId)s ຈາກ %(ip)s"
         },
         "old_version_detected_title": "ກວດພົບຂໍ້ມູນການເຂົ້າລະຫັດລັບເກົ່າ",
         "old_version_detected_description": "ກວດພົບຂໍ້ມູນຈາກ%(brand)s ລຸ້ນເກົ່າກວ່າ. ອັນນີ້ຈະເຮັດໃຫ້ການເຂົ້າລະຫັດລັບແບບຕົ້ນທາງເຖິງປາຍທາງເຮັດວຽກຜິດປົກກະຕິໃນລຸ້ນເກົ່າ. ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດແບບຕົ້ນທາງເຖິງປາຍທາງທີ່ໄດ້ແລກປ່ຽນເມື່ອບໍ່ດົນມານີ້ ໃນຂະນະທີ່ໃຊ້ເວີຊັນເກົ່າອາດຈະບໍ່ສາມາດຖອດລະຫັດໄດ້ໃນລູ້ນນີ້. ນີ້ອາດຈະເຮັດໃຫ້ຂໍ້ຄວາມທີ່ແລກປ່ຽນກັບລູ້ນນີ້ບໍ່ສຳເລັດ. ຖ້າເຈົ້າປະສົບບັນຫາ, ໃຫ້ອອກຈາກລະບົບ ແລະ ກັບມາໃໝ່ອີກຄັ້ງ. ເພື່ອຮັກສາປະຫວັດຂໍ້ຄວາມ, ສົ່ງອອກ ແລະ ນໍາເຂົ້າລະຫັດຂອງທ່ານຄືນໃໝ່.",
@@ -2945,7 +2869,18 @@
         "bootstrap_title": "ການຕັ້ງຄ່າກະແຈ",
         "export_unsupported": "ບຣາວເຊີຂອງທ່ານບໍ່ຮອງຮັບການເພິ່ມເຂົ້າລະຫັດລັບທີ່ຕ້ອງການ",
         "import_invalid_keyfile": "ບໍ່ແມ່ນ %(brand)s ຟຮາຍຫຼັກ ທີ່ຖືກຕ້ອງ",
-        "import_invalid_passphrase": "ການກວດສອບຄວາມຖືກຕ້ອງບໍ່ສຳເລັດ: ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ?"
+        "import_invalid_passphrase": "ການກວດສອບຄວາມຖືກຕ້ອງບໍ່ສຳເລັດ: ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ?",
+        "set_up_toast_title": "ຕັ້ງຄ່າການສໍາຮອງຂໍ້ມູນທີ່ປອດໄພ",
+        "upgrade_toast_title": "ມີການຍົກລະດັບການເຂົ້າລະຫັດ",
+        "verify_toast_title": "ຢືນຢັນລະບົບນີ້",
+        "set_up_toast_description": "ປ້ອງກັນການສູນເສຍການເຂົ້າເຖິງຂໍ້ຄວາມ ແລະຂໍ້ມູນທີ່ເຂົ້າລະຫັດ",
+        "verify_toast_description": "ຜູ້ໃຊ້ອື່ນໆອາດຈະບໍ່ໄວ້ວາງໃຈ",
+        "cross_signing_unsupported": "homeserverຂອງທ່ານບໍ່ຮອງຮັບການລົງຊື່ຂ້າມ.",
+        "cross_signing_ready": "ການລົງຊື່ຂ້າມແມ່ນກຽມພ້ອມສໍາລັບການໃຊ້ງານ.",
+        "cross_signing_ready_no_backup": "ການລົງຊື່ຂ້າມແມ່ນພ້ອມແລ້ວແຕ່ກະແຈບໍ່ໄດ້ສຳຮອງໄວ້.",
+        "cross_signing_untrusted": "ບັນຊີຂອງທ່ານມີຂໍ້ມູນແບບ cross-signing ໃນການເກັບຮັກສາຄວາມລັບ, ແຕ່ວ່າຍັງບໍ່ມີຄວາມເຊື່ອຖືໃນລະບົບນີ້.",
+        "cross_signing_not_ready": "ບໍ່ໄດ້ຕັ້ງຄ່າ Cross-signing.",
+        "not_supported": "<ບໍ່ຮອງຮັບ>"
     },
     "emoji": {
         "category_frequently_used": "ໃຊ້ເປັນປະຈຳ",
@@ -2969,7 +2904,8 @@
         "bullet_1": "ພວກເຮົາ <Bold>ບໍ່</Bold> ບັນທຶກ ຫຼື ປະຫວັດຂໍ້ມູນບັນຊີໃດໆ",
         "bullet_2": "ພວກເຮົາ <Bold>ບໍ່</Bold> ແບ່ງປັນຂໍ້ມູນກັບພາກສ່ວນທີສາມ",
         "disable_prompt": "ທ່ານສາມາດປິດຕັ້ງຄ່າໄດ້ທຸກເວລາ",
-        "accept_button": "ບໍ່ເປັນຫຍັງ"
+        "accept_button": "ບໍ່ເປັນຫຍັງ",
+        "shared_data_heading": "ຂໍ້ມູນຕໍ່ໄປນີ້ອາດຈະຖືກແບ່ງປັນ:"
     },
     "chat_effects": {
         "confetti_description": "ສົ່ງຂໍ້ຄວາມພ້ອມດ້ວຍ confetti",
@@ -3101,7 +3037,8 @@
         "no_hs_url_provided": "ບໍ່ມີການສະໜອງ URL homeserver",
         "autodiscovery_unexpected_error_hs": "ເກີດຄວາມຜິດພາດທີ່ບໍ່ຄາດຄິດໃນການແກ້ໄຂການຕັ້ງຄ່າ homeserver",
         "autodiscovery_unexpected_error_is": "ເກີດຄວາມຜິດພາດທີ່ບໍ່ຄາດຄິດໃນການແກ້ໄຂການກຳນົດຄ່າເຊີບເວີ",
-        "incorrect_credentials_detail": "ກະລຸນາຮັບຊາບວ່າທ່ານກຳລັງເຂົ້າສູ່ລະບົບເຊີບເວີ %(hs)s, ບໍ່ແມ່ນ matrix.org."
+        "incorrect_credentials_detail": "ກະລຸນາຮັບຊາບວ່າທ່ານກຳລັງເຂົ້າສູ່ລະບົບເຊີບເວີ %(hs)s, ບໍ່ແມ່ນ matrix.org.",
+        "create_account_title": "ສ້າງບັນຊີ"
     },
     "room_list": {
         "sort_unread_first": "ສະແດງຫ້ອງຂໍ້ຄວາມທີ່ຍັງບໍ່ທັນໄດ້ອ່ານກ່ອນ",
@@ -3146,7 +3083,8 @@
         "intro_byline": "ເປັນເຈົ້າຂອງການສົນທະນາຂອງທ່ານ.",
         "send_dm": "ສົ່ງຂໍ້ຄວາມໂດຍກົງ",
         "explore_rooms": "ສຳຫຼວດຫ້ອງສາທາລະນະ",
-        "create_room": "ສ້າງກຸ່ມສົນທະນາ"
+        "create_room": "ສ້າງກຸ່ມສົນທະນາ",
+        "create_account": "ສ້າງບັນຊີ"
     },
     "setting": {
         "help_about": {
@@ -3229,7 +3167,31 @@
         },
         "error_need_to_be_logged_in": "ທ່ານຈໍາເປັນຕ້ອງເຂົ້າສູ່ລະບົບ.",
         "error_need_invite_permission": "ທ່ານຈະຕ້ອງເຊີນຜູ້ໃຊ້ໃຫ້ເຮັດແນວນັ້ນ.",
-        "no_name": "ແອັບທີ່ບໍ່ຮູ້ຈັກ"
+        "no_name": "ແອັບທີ່ບໍ່ຮູ້ຈັກ",
+        "context_menu": {
+            "start_audio_stream": "ເລີ່ມການຖ່າຍທອດສຽງ",
+            "screenshot": "ຖ່າຍຮູບ",
+            "delete": "ລຶບ widget",
+            "delete_warning": "ການລຶບwidget ຈະເປັນການລຶບອອກສຳລັບຜູ້ໃຊ້ທັງໝົດໃນຫ້ອງນີ້. ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບwidget ນີ້?",
+            "remove": "ລຶບອອກສຳລັບທຸກຄົນ",
+            "revoke": "ຖອນການອະນຸຍາດ",
+            "move_left": "ຍ້າຍໄປທາງຊ້າຍ",
+            "move_right": "ຍ້າຍໄປທາງຂວາ"
+        },
+        "shared_data_name": "ສະແດງຊື່ຂອງທ່ານ",
+        "shared_data_mxid": "ID ຂອງທ່ານ",
+        "shared_data_theme": "ຫົວຂໍ້ຂອງທ່ານ",
+        "shared_data_url": "%(brand)s URL",
+        "shared_data_room_id": "ID ຫ້ອງ",
+        "shared_data_widget_id": "ໄອດີວິດເຈັດ",
+        "shared_data_warning_im": "ການໃຊ້ວິດເຈັດນີ້ອາດຈະແບ່ງປັນຂໍ້ມູນ <helpIcon /> ກັບ %(widgetDomain)s & ຜູ້ຈັດການການເຊື່ອມໂຍງຂອງທ່ານ.",
+        "shared_data_warning": "ການໃຊ້ວິດເຈັດນີ້ອາດຈະແບ່ງປັນຂໍ້ມູນ <helpIcon /> ກັບ %(widgetDomain)s.",
+        "unencrypted_warning": "Widgets ບໍ່ໄດ້ໃຊ້ໃນການເຂົ້າລະຫັດຂໍ້ຄວາມ.",
+        "added_by": "ເພີ່ມWidgetໂດຍ",
+        "cookie_warning": "widget ນີ້ອາດຈະໃຊ້ cookies.",
+        "error_loading": "ເກີດຄວາມຜິດພາດໃນການໂຫຼດ Widget",
+        "error_mixed_content": "ຂໍ້ຜິດພາດ - ເນື້ອຫາມີການປະສົມປະສານ",
+        "popout": "ວິດເຈັດ popout"
     },
     "feedback": {
         "sent": "ສົ່ງຄຳຕິຊົມແລ້ວ",
@@ -3296,7 +3258,8 @@
         "empty_heading": "ຮັກສາການສົນທະນາທີ່ມີການຈັດລະບຽບ"
     },
     "theme": {
-        "light_high_contrast": "ແສງສະຫວ່າງຄວາມຄົມຊັດສູງ"
+        "light_high_contrast": "ແສງສະຫວ່າງຄວາມຄົມຊັດສູງ",
+        "match_system": "ລະບົບການຈັບຄູ່"
     },
     "space": {
         "landing_welcome": "ຍິນດີຕ້ອນຮັບສູ່ <name/>",
@@ -3324,7 +3287,14 @@
         "failed_timeout": "ໝົດເວລາດຶງຂໍ້ມູນສະຖານທີ່ຂອງທ່ານ. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
         "failed_unknown": "ການດຶງຂໍ້ມູນສະຖານທີ່ເກີດຄວາມຜິດພາດທີ່ບໍ່ຮູ້ຈັກ. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
         "expand_map": "ຂະຫຍາຍແຜນທີ່",
-        "failed_load_map": "ບໍ່ສາມາດໂຫຼດແຜນທີ່ໄດ້"
+        "failed_load_map": "ບໍ່ສາມາດໂຫຼດແຜນທີ່ໄດ້",
+        "live_enable_heading": "ການແບ່ງປັນສະຖານທີ່ປັດຈຸບັນ",
+        "live_enable_description": "ກະລຸນາບັນທຶກ: ນີ້ແມ່ນຄຸນສົມບັດຫ້ອງທົດລອງການນໍາໃຊ້ການປະຕິບັດຊົ່ວຄາວ. ນີ້ຫມາຍຄວາມວ່າທ່ານຈະບໍ່ສາມາດລຶບປະຫວັດສະຖານທີ່ຂອງທ່ານໄດ້, ແລະ ຜູ້ໃຊ້ຂັ້ນສູງຈະສາມາດເຫັນປະຫວັດສະຖານທີ່ຂອງທ່ານເຖິງແມ່ນວ່າຫຼັງຈາກທີ່ທ່ານຢຸດການແບ່ງປັນສະຖານທີ່ປັດຈຸບັນຂອງທ່ານກັບຫ້ອງນີ້.",
+        "live_toggle_label": "ເປີດໃຊ້ການແບ່ງປັນສະຖານທີ່ປັດຈຸບັນ",
+        "live_share_button": "ແບ່ງປັນເປັນ %(duration)s",
+        "click_move_pin": "ກົດເພື່ອຍ້າຍ PIN",
+        "click_drop_pin": "ກົດເພື່ອວາງປັກໝຸດ",
+        "share_button": "ແບ່ງປັນສະຖານທີ່"
     },
     "labs_mjolnir": {
         "room_name": "ບັນຊີລາຍຊື່ການຫ້າມຂອງຂ້ອຍ",
@@ -3392,7 +3362,8 @@
     },
     "user_menu": {
         "switch_theme_light": "ສະຫຼັບໄປໂໝດແສງ",
-        "switch_theme_dark": "ສະຫຼັບໄປໂໝດມືດ"
+        "switch_theme_dark": "ສະຫຼັບໄປໂໝດມືດ",
+        "settings": "ການຕັ້ງຄ່າທັງໝົດ"
     },
     "notif_panel": {
         "empty_heading": "ໝົດແລ້ວໝົດເລີຍ",
@@ -3428,7 +3399,21 @@
         "leave_error_title": "ເກີດຄວາມຜິດພາດໃນຄະນະທີ່ອອກຈາກຫ້ອງ",
         "upgrade_error_title": "ເກີດຄວາມຜິດພາດໃນການຍົກລະດັບຫ້ອງ",
         "upgrade_error_description": "ກວດເບິ່ງຄືນວ່າເຊີບເວີຂອງທ່ານຮອງຮັບເວີຊັນຫ້ອງທີ່ເລືອກແລ້ວ ແລະ ລອງໃໝ່ອີກ.",
-        "leave_server_notices_description": "ຫ້ອງນີ້ໃຊ້ສໍາລັບຂໍ້ຄວາມທີ່ສໍາຄັນຈາກ Homeserver, ດັ່ງນັ້ນທ່ານບໍ່ສາມາດອອກຈາກມັນ."
+        "leave_server_notices_description": "ຫ້ອງນີ້ໃຊ້ສໍາລັບຂໍ້ຄວາມທີ່ສໍາຄັນຈາກ Homeserver, ດັ່ງນັ້ນທ່ານບໍ່ສາມາດອອກຈາກມັນ.",
+        "error_join_connection": "ເກີດຄວາມຜິດພາດໃນການເຂົ້າຮ່ວມ.",
+        "error_join_incompatible_version_1": "ຂໍອະໄພ, homeserverຂອງທ່ານເກົ່າເກີນໄປທີ່ຈະເຂົ້າຮ່ວມທີ່ນີ້.",
+        "error_join_incompatible_version_2": "ກະລຸນາຕິດຕໍ່ຜູ້ຄຸ້ມຄອງເຊີບເວີຂອງທ່ານ.",
+        "error_join_404_invite_same_hs": "ຄົນທີ່ເຊີນເຈົ້າໄດ້ອອກໄປແລ້ວ.",
+        "error_join_404_invite": "ບຸກຄົນທີ່ເຊີນທ່ານໄດ້ອອກໄປແລ້ວ, ຫຼືເຊີບເວີຂອງເຂົາເຈົ້າອອບລາຍຢູ່.",
+        "error_join_title": "ການເຂົ້າຮ່ວມບໍ່ສຳເລັດ",
+        "context_menu": {
+            "unfavourite": "ສີ່ງທີ່ມັກ",
+            "favourite": "ສິ່ງທີ່ມັກ",
+            "mentions_only": "ກ່າວເຖິງເທົ່ານັ້ນ",
+            "copy_link": "ສຳເນົາລິ້ງຫ້ອງ",
+            "low_priority": "ຄວາມສຳຄັນຕໍ່າ",
+            "forget": "ລືມຫ້ອງ"
+        }
     },
     "file_panel": {
         "guest_note": "ທ່ານຕ້ອງ <a>ລົງທະບຽນ</a> ເພື່ອໃຊ້ຟັງຊັນນີ້",
@@ -3448,7 +3433,8 @@
         "tac_button": "ກວດເບິ່ງຂໍ້ກໍານົດ ແລະ ເງື່ອນໄຂ",
         "identity_server_no_terms_title": "ຂໍ້ມູນເຊີບເວີ ບໍ່ມີໃຫ້ບໍລິການ",
         "identity_server_no_terms_description_1": "ການດຳເນິນການນີ້ຕ້ອງໄດ້ມີການເຂົ້າເຖິງຂໍ້ມູນການຢັ້ງຢືນຕົວຕົນທີ່ <server /> ເພື່ອກວດສອບອີເມວ ຫຼື ເບີໂທລະສັບ, ແຕ່ເຊີບເວີບໍ່ມີເງື່ອນໄຂໃນບໍລິການໃດໆ.",
-        "identity_server_no_terms_description_2": "ຖ້າທ່ານໄວ້ວາງໃຈເຈົ້າຂອງເຊີບເວີດັ່ງກ່າວແລ້ວ ໃຫ້ສືບຕໍ່."
+        "identity_server_no_terms_description_2": "ຖ້າທ່ານໄວ້ວາງໃຈເຈົ້າຂອງເຊີບເວີດັ່ງກ່າວແລ້ວ ໃຫ້ສືບຕໍ່.",
+        "inline_intro_text": "ຍອມຮັບ <policyLink /> ເພື່ອສືບຕໍ່:"
     },
     "space_settings": {
         "title": "ການຕັ້ງຄ່າ - %(spaceName)s"
@@ -3521,7 +3507,43 @@
         "admin_contact": "ກະລຸນາ <a>ຕິດຕໍ່ຜູ້ຄຸ້ມຄອງການບໍລິການຂອງທ່ານ</a> ເພື່ອສືບຕໍ່ໃຊ້ບໍລິການນີ້.",
         "connection": "ມີບັນຫາໃນການສື່ສານກັບ homeserver, ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
         "mixed_content": "ບໍ່ສາມາດເຊື່ອມຕໍ່ກັບ homeserver ຜ່ານ HTTP ເມື່ອ HTTPS URL ຢູ່ໃນບຣາວເຊີຂອງທ່ານ. ໃຊ້ HTTPS ຫຼື <a>ເປີດໃຊ້ສະຄຣິບທີ່ບໍ່ປອດໄພ</a>.",
-        "tls": "ບໍ່ສາມາດເຊື່ອມຕໍ່ກັບ homeserver ໄດ້ - ກະລຸນາກວດສອບການເຊື່ອມຕໍ່ຂອງທ່ານ, ໃຫ້ແນ່ໃຈວ່າ <a>ການຢັ້ງຢືນ SSL ຂອງ homeserver</a> ຂອງທ່ານແມ່ນເຊື່ອຖືໄດ້ ແລະ ການຂະຫຍາຍບຣາວເຊີບໍ່ໄດ້ປິດບັງການຮ້ອງຂໍ."
+        "tls": "ບໍ່ສາມາດເຊື່ອມຕໍ່ກັບ homeserver ໄດ້ - ກະລຸນາກວດສອບການເຊື່ອມຕໍ່ຂອງທ່ານ, ໃຫ້ແນ່ໃຈວ່າ <a>ການຢັ້ງຢືນ SSL ຂອງ homeserver</a> ຂອງທ່ານແມ່ນເຊື່ອຖືໄດ້ ແລະ ການຂະຫຍາຍບຣາວເຊີບໍ່ໄດ້ປິດບັງການຮ້ອງຂໍ.",
+        "admin_contact_short": "ຕິດຕໍ່ <a>ຜູ້ເບິ່ງຄຸ້ມຄອງເຊີບເວີ</a> ຂອງທ່ານ.",
+        "non_urgent_echo_failure_toast": "ເຊີບເວີຂອງທ່ານບໍ່ຕອບສະໜອງບາງ <a>ຄຳຮ້ອງຂໍ</a>.",
+        "failed_copy": "ສຳເນົາບໍ່ສຳເລັດ",
+        "something_went_wrong": "ມີບາງຢ່າງຜິດພາດ!"
     },
-    "name_and_id": "%(name)s(%(userId)s)"
+    "name_and_id": "%(name)s(%(userId)s)",
+    "items_and_n_others": {
+        "one": "<Items/> ແລະ ອີກນຶ່ງລາຍການ",
+        "other": "<Items/> ແລະ %(count)s ອື່ນໆ"
+    },
+    "notifications": {
+        "enable_prompt_toast_title_from_message_send": "ຢ່າພາດການຕອບກັບ",
+        "enable_prompt_toast_title": "ການແຈ້ງເຕືອນ",
+        "enable_prompt_toast_description": "ເປີດໃຊ້ການແຈ້ງເຕືອນເດັສທັອບ",
+        "colour_none": "ບໍ່ມີ",
+        "colour_bold": "ຕົວໜາ",
+        "colour_unsent": "ຍັງບໍ່ໄດ້ສົ່ງ",
+        "error_change_title": "ປ່ຽນການຕັ້ງຄ່າການແຈ້ງເຕືອນ"
+    },
+    "mobile_guide": {
+        "toast_title": "ໃຊ້ແອັບເພື່ອປະສົບການທີ່ດີກວ່າ",
+        "toast_description": "%(brand)s ແມ່ນທົດລອງຢູ່ໃນບຣາວຂອງມືຖື. ເພື່ອປະສົບການທີ່ດີກວ່າ ແລະ ຄຸນສົມບັດຫຼ້າສຸດ, ໃຫ້ໃຊ້ແອັບຟຣີຂອງພວກເຮົາ.",
+        "toast_accept": "ໃຊ້ແອັບ"
+    },
+    "chat_card_back_action_label": "ກັບໄປທີ່ການສົນທະນາ",
+    "room_summary_card_back_action_label": "ຂໍ້ມູນຫ້ອງ",
+    "member_list_back_action_label": "ສະມາຊິກຫ້ອງ",
+    "thread_view_back_action_label": "ກັບໄປທີ່ຫົວຂໍ້",
+    "quick_settings": {
+        "title": "ການຕັ້ງຄ່າດ່ວນ",
+        "all_settings": "ການຕັ້ງຄ່າທັງໝົດ",
+        "metaspace_section": "ປັກໝຸດໃສ່ແຖບດ້ານຂ້າງ",
+        "sidebar_settings": "ທາງເລືອກເພີ່ມເຕີມ"
+    },
+    "lightbox": {
+        "rotate_left": "ໝຸນດ້ານຊ້າຍ",
+        "rotate_right": "ໝຸນດ້ານຂວາ"
+    }
 }

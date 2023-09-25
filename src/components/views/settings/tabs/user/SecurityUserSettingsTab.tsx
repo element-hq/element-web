@@ -252,21 +252,21 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         }
 
         return (
-            <SettingsSubsection heading={_t("Bulk options")}>
+            <SettingsSubsection heading={_t("settings|security|bulk_options_section")}>
                 <div className="mx_SecurityUserSettingsTab_bulkOptions">
                     <AccessibleButton
                         onClick={this.onAcceptAllInvitesClicked}
                         kind="primary"
                         disabled={this.state.managingInvites}
                     >
-                        {_t("Accept all %(invitedRooms)s invites", { invitedRooms: invitedRoomIds.size })}
+                        {_t("settings|security|bulk_options_accept_all_invites", { invitedRooms: invitedRoomIds.size })}
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this.onRejectAllInvitesClicked}
                         kind="danger"
                         disabled={this.state.managingInvites}
                     >
-                        {_t("Reject all %(invitedRooms)s invites", { invitedRooms: invitedRoomIds.size })}
+                        {_t("settings|security|bulk_options_reject_all_invites", { invitedRooms: invitedRoomIds.size })}
                     </AccessibleButton>
                     {this.state.managingInvites ? <InlineSpinner /> : <div />}
                 </div>
@@ -282,7 +282,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         );
 
         const eventIndex = (
-            <SettingsSubsection heading={_t("Message search")}>
+            <SettingsSubsection heading={_t("settings|security|message_search_section")}>
                 <EventIndexPanel />
             </SettingsSubsection>
         );
@@ -331,7 +331,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                             <SettingsFlag name="pseudonymousAnalyticsOptIn" level={SettingLevel.ACCOUNT} />
                         )}
                     </SettingsSubsection>
-                    <SettingsSubsection heading={_t("Sessions")}>
+                    <SettingsSubsection heading={_t("settings|sessions|title")}>
                         <SettingsFlag name="deviceClientInformationOptIn" level={SettingLevel.ACCOUNT} />
                     </SettingsSubsection>
                 </SettingsSection>
@@ -346,7 +346,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             // only show the section if there's something to show
             if (ignoreUsersPanel || invitesPanel || e2ePanel) {
                 advancedSection = (
-                    <SettingsSection heading={_t("Advanced")}>
+                    <SettingsSection heading={_t("common|Advanced")}>
                         {ignoreUsersPanel}
                         {invitesPanel}
                         {e2ePanel}

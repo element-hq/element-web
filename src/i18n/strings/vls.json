@@ -30,12 +30,7 @@
     "Restricted": "Beperkten toegank",
     "Moderator": "Moderator",
     "Reason": "Reedn",
-    "<Items/> and %(count)s others": {
-        "other": "<Items/> en %(count)s andere",
-        "one": "<Items/> en één ander"
-    },
     "%(items)s and %(lastItem)s": "%(items)s en %(lastItem)s",
-    "Please contact your homeserver administrator.": "Gelieve contact ip te neemn me den beheerder van je thuusserver.",
     "Dog": "Hound",
     "Cat": "Katte",
     "Lion": "Leeuw",
@@ -132,13 +127,8 @@
     "Account management": "Accountbeheer",
     "Deactivate Account": "Account deactiveern",
     "General": "Algemeen",
-    "Notifications": "Meldiengn",
     "Unignore": "Nie mi negeern",
-    "<not supported>": "<nie oundersteund>",
     "Ignored users": "Genegeerde gebruukers",
-    "Bulk options": "Bulkopties",
-    "Accept all %(invitedRooms)s invites": "Alle %(invitedRooms)s-uutnodigiengn anveirdn",
-    "Reject all %(invitedRooms)s invites": "Alle %(invitedRooms)s-uutnodigiengn weigern",
     "Missing media permissions, click the button below to request.": "Mediatoestemmiengn ountbreekn, klikt ip de knop hierounder vo deze an te vroagn.",
     "Request media permissions": "Mediatoestemmiengn verzoekn",
     "No Audio Outputs detected": "Geen geluudsuutgangn gedetecteerd",
@@ -242,19 +232,11 @@
     "Invalid file%(extra)s": "Oungeldig bestand %(extra)s",
     "Error decrypting image": "Foute by ’t ountsleutern van ’t fotootje",
     "Error decrypting video": "Foute by ’t ountsleutern van ’t filmtje",
-    "Copied!": "Gekopieerd!",
-    "Failed to copy": "Kopieern mislukt",
     "Add an Integration": "Voegt een integroasje toe",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Je goa sebiet noar en derdepartywebsite gebracht wordn zoda je den account ku legitimeern vo gebruuk me %(integrationsUrl)s. Wil je verdergoan?",
     "edited": "bewerkt",
-    "Something went wrong!": "’t Es etwa misgegoan!",
     "Delete Widget": "Widget verwydern",
-    "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "E widget verwydern doet da voor alle gebruukers in dit gesprek. Zy je zeker da je deze widget wil verwydern?",
-    "Delete widget": "Widget verwydern",
-    "Popout widget": "Widget in e nieuwe veinster openn",
     "Create new room": "E nieuw gesprek anmoakn",
-    "Rotate Left": "Links droain",
-    "Rotate Right": "Rechts droain",
     "collapse": "toeklappn",
     "expand": "uutklappn",
     "Edit message": "Bericht bewerkn",
@@ -346,19 +328,15 @@
     "Reject invitation": "Uutnodigienge weigern",
     "Are you sure you want to reject the invitation?": "Zy je zeker da je d’uutnodigienge wil weigern?",
     "You cannot delete this message. (%(code)s)": "Je kut dit bericht nie verwydern. (%(code)s)",
-    "Source URL": "Bron-URL",
     "unknown error code": "ounbekende foutcode",
     "Failed to forget room %(errCode)s": "Vergeetn van gesprek is mislukt %(errCode)s",
     "All messages": "Alle berichtn",
-    "Favourite": "Favoriet",
-    "Low Priority": "Leige prioriteit",
     "Home": "Thuus",
     "This homeserver would like to make sure you are not a robot.": "Deze thuusserver wil geirn weetn of da je gy geen robot zyt.",
     "Some characters not allowed": "Sommige tekens zyn nie toegeloatn",
     "Email (optional)": "E-mailadresse (optioneel)",
     "Join millions for free on the largest public server": "Doe mee me miljoenen anderen ip de grotste publieke server",
     "Couldn't load page": "Kostege ’t blad nie loadn",
-    "Upload avatar": "Avatar iploadn",
     "Failed to reject invitation": "Weigern van d’uutnodigienge is mislukt",
     "This room is not public. You will not be able to rejoin without an invite.": "Dit gesprek is nie openboar. Zounder uutnodigienge goa je nie were kunn toetreedn.",
     "Are you sure you want to leave the room '%(roomName)s'?": "Zy je zeker da je wilt deuregoan uut ’t gesprek ‘%(roomName)s’?",
@@ -395,7 +373,6 @@
     "Invalid base_url for m.identity_server": "Oungeldige base_url vo m.identity_server",
     "Identity server URL does not appear to be a valid identity server": "De identiteitsserver-URL lykt geen geldige identiteitsserver te zyn",
     "General failure": "Algemene foute",
-    "Create account": "Account anmoakn",
     "Session ID": "Sessie-ID",
     "Passphrases must match": "Paswoordn moetn overeenkommn",
     "Passphrase must not be empty": "Paswoord meug nie leeg zyn",
@@ -502,7 +479,9 @@
         "identity_server": "Identiteitsserver",
         "integration_manager": "Integroasjebeheerder",
         "on": "An",
-        "off": "Uut"
+        "off": "Uut",
+        "copied": "Gekopieerd!",
+        "Advanced": "Geavanceerd"
     },
     "action": {
         "continue": "Verdergoan",
@@ -645,7 +624,10 @@
             "export_megolm_keys": "E2E-gesprekssleuters exporteern",
             "import_megolm_keys": "E2E-gesprekssleuters importeern",
             "cryptography_section": "Cryptografie",
-            "encryption_section": "Versleuterienge"
+            "encryption_section": "Versleuterienge",
+            "bulk_options_section": "Bulkopties",
+            "bulk_options_accept_all_invites": "Alle %(invitedRooms)s-uutnodigiengn anveirdn",
+            "bulk_options_reject_all_invites": "Alle %(invitedRooms)s-uutnodigiengn weigern"
         },
         "preferences": {
             "room_list_heading": "Gesprekslyste",
@@ -831,6 +813,9 @@
             "lightbox_title": "%(senderDisplayName)s èt den avatar van %(roomName)s veranderd",
             "removed": "%(senderDisplayName)s èt de gespreksavatar verwyderd.",
             "changed_img": "%(senderDisplayName)s èt de gespreksavatar angepast noa <img/>"
+        },
+        "context_menu": {
+            "external_url": "Bron-URL"
         }
     },
     "slash_command": {
@@ -898,7 +883,6 @@
         "no_media_perms_description": "Je moe %(brand)s wellicht handmoatig toestoan van je microfoon/webcam te gebruukn"
     },
     "Other": "Overige",
-    "Advanced": "Geavanceerd",
     "room_settings": {
         "permissions": {
             "m.room.avatar": "Gespreksavatar wyzign",
@@ -952,7 +936,8 @@
             "room_predecessor": "Bekykt oudere berichtn in %(roomName)s.",
             "room_version_section": "Gespreksversie",
             "room_version": "Gespreksversie:"
-        }
+        },
+        "upload_avatar_label": "Avatar iploadn"
     },
     "encryption": {
         "verification": {
@@ -969,7 +954,8 @@
         "old_version_detected_description": "’t Zyn gegeevns van een oudere versie van %(brand)s gedetecteerd gewist. Dit goa probleemn veroorzakt ghed èn me de eind-tout-eind-versleuterienge in d’oude versie. Eind-tout-eind-versleuterde berichtn da recent uutgewisseld gewist zyn me d’oude versie zyn meugliks nie t’ountsleutern in deze versie. Dit zoudt der ook voorn kunnn zorgn da berichtn da uutgewisseld gewist zyn in deze versie foaln. Meldt jen heran moest je probleemn ervoarn. Exporteert de sleuters en importeer z’achteraf were vo de berichtgeschiedenisse te behoudn.",
         "export_unsupported": "Je browser oundersteunt de benodigde cryptografie-extensies nie",
         "import_invalid_keyfile": "Geen geldig %(brand)s-sleuterbestand",
-        "import_invalid_passphrase": "Anmeldiengscontrole mislukt: verkeerd paswoord?"
+        "import_invalid_passphrase": "Anmeldiengscontrole mislukt: verkeerd paswoord?",
+        "not_supported": "<nie oundersteund>"
     },
     "auth": {
         "sign_in_with_sso": "Anmeldn met enkele anmeldienge",
@@ -1037,7 +1023,8 @@
         "no_hs_url_provided": "Geen thuusserver-URL ingegeevn",
         "autodiscovery_unexpected_error_hs": "Ounverwachte foute by ’t controleern van de thuusserverconfiguroasje",
         "autodiscovery_unexpected_error_is": "Ounverwachte foute by ’t iplossn van d’identiteitsserverconfiguroasje",
-        "incorrect_credentials_detail": "Zy je dervan bewust da je jen anmeldt by de %(hs)s-server, nie by matrix.org."
+        "incorrect_credentials_detail": "Zy je dervan bewust da je jen anmeldt by de %(hs)s-server, nie by matrix.org.",
+        "create_account_title": "Account anmoakn"
     },
     "export_chat": {
         "messages": "Berichtn"
@@ -1103,7 +1090,12 @@
             "one": "J’èt %(count)s oungeleezn meldieng in e voorgoande versie van dit gesprek."
         },
         "leave_server_notices_title": "Kostege nie deuregoan uut ’t servermeldiengsgesprek",
-        "leave_server_notices_description": "Dit gesprek wor gebruukt vo belangryke berichtn van de thuusserver, dus je kut der nie uut deuregoan."
+        "leave_server_notices_description": "Dit gesprek wor gebruukt vo belangryke berichtn van de thuusserver, dus je kut der nie uut deuregoan.",
+        "error_join_incompatible_version_2": "Gelieve contact ip te neemn me den beheerder van je thuusserver.",
+        "context_menu": {
+            "favourite": "Favoriet",
+            "low_priority": "Leige prioriteit"
+        }
     },
     "file_panel": {
         "guest_note": "Je moe je <a>registreern</a> vo deze functie te gebruukn",
@@ -1148,7 +1140,12 @@
     },
     "widget": {
         "error_need_to_be_logged_in": "Hiervoorn moe je angemeld zyn.",
-        "error_need_invite_permission": "Hiervoorn moe je gebruukers kunn uutnodign."
+        "error_need_invite_permission": "Hiervoorn moe je gebruukers kunn uutnodign.",
+        "context_menu": {
+            "delete": "Widget verwydern",
+            "delete_warning": "E widget verwydern doet da voor alle gebruukers in dit gesprek. Zy je zeker da je deze widget wil verwydern?"
+        },
+        "popout": "Widget in e nieuwe veinster openn"
     },
     "scalar": {
         "error_create": "Kostege de widget nie anmoakn.",
@@ -1169,6 +1166,23 @@
         "resource_limits": "Dezen thuusserver èt één van z’n systeembronlimietn overschreedn.",
         "admin_contact": "Gelieve <a>contact ip te neemn me je dienstbeheerder</a> vo deze dienst te bluuvn gebruukn.",
         "mixed_content": "Je ku geen verbindienge moakn me de thuusserver via HTTP wanneer dat der een HTTPS-URL in je browserbalk stoat. Gebruukt HTTPS of <a>schoakelt ounveilige scripts in</a>.",
-        "tls": "Geen verbindienge met de thuusserver - controleer je verbindienge, zorgt dervoorn dan ’t <a>SSL-certificoat van de thuusserver</a> vertrouwd is en dat der geen browserextensies verzoekn blokkeern."
+        "tls": "Geen verbindienge met de thuusserver - controleer je verbindienge, zorgt dervoorn dan ’t <a>SSL-certificoat van de thuusserver</a> vertrouwd is en dat der geen browserextensies verzoekn blokkeern.",
+        "failed_copy": "Kopieern mislukt",
+        "something_went_wrong": "’t Es etwa misgegoan!"
+    },
+    "items_and_n_others": {
+        "other": "<Items/> en %(count)s andere",
+        "one": "<Items/> en één ander"
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "Meldiengn"
+    },
+    "room_summary_card_back_action_label": "Gespreksinformoasje",
+    "onboarding": {
+        "create_account": "Account anmoakn"
+    },
+    "lightbox": {
+        "rotate_left": "Links droain",
+        "rotate_right": "Rechts droain"
     }
 }

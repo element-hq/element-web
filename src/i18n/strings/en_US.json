@@ -18,7 +18,6 @@
     "Deactivate Account": "Deactivate Account",
     "Decrypt %(text)s": "Decrypt %(text)s",
     "Default": "Default",
-    "Delete widget": "Delete widget",
     "Download %(text)s": "Download %(text)s",
     "Email address": "Email address",
     "Error decrypting attachment": "Error decrypting attachment",
@@ -32,7 +31,6 @@
     "Failed to reject invitation": "Failed to reject invitation",
     "Failed to set display name": "Failed to set display name",
     "Failed to unban": "Failed to unban",
-    "Favourite": "Favorite",
     "Filter room members": "Filter room members",
     "Forget room": "Forget room",
     "Historical": "Historical",
@@ -47,8 +45,6 @@
     "Moderator": "Moderator",
     "New passwords must match each other.": "New passwords must match each other.",
     "not specified": "not specified",
-    "Notifications": "Notifications",
-    "<not supported>": "<not supported>",
     "No more results": "No more results",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Please check your email and click on the link it contains. Once this is done, click continue.",
     "Profile": "Profile",
@@ -67,7 +63,6 @@
     "Unable to remove contact information": "Unable to remove contact information",
     "Unable to verify email address.": "Unable to verify email address.",
     "unknown error code": "unknown error code",
-    "Upload avatar": "Upload avatar",
     "Verification Pending": "Verification Pending",
     "Warning!": "Warning!",
     "You do not have permission to post to this room": "You do not have permission to post to this room",
@@ -109,7 +104,6 @@
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.",
-    "Reject all %(invitedRooms)s invites": "Reject all %(invitedRooms)s invites",
     "Confirm Removal": "Confirm Removal",
     "Unknown error": "Unknown error",
     "Unable to restore session": "Unable to restore session",
@@ -134,7 +128,6 @@
         "one": "(~%(count)s result)",
         "other": "(~%(count)s results)"
     },
-    "Something went wrong!": "Something went wrong!",
     "This will allow you to reset your password and receive notifications.": "This will allow you to reset your password and receive notifications.",
     "Sunday": "Sunday",
     "Notification targets": "Notification targets",
@@ -143,7 +136,6 @@
     "Changelog": "Changelog",
     "This Room": "This Room",
     "Unavailable": "Unavailable",
-    "Source URL": "Source URL",
     "Tuesday": "Tuesday",
     "Search…": "Search…",
     "Unnamed room": "Unnamed room",
@@ -157,17 +149,14 @@
     "You cannot delete this message. (%(code)s)": "You cannot delete this message. (%(code)s)",
     "Thursday": "Thursday",
     "Yesterday": "Yesterday",
-    "Low Priority": "Low Priority",
     "Permission Required": "Permission Required",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "Restricted": "Restricted",
     "Spanner": "Wrench",
     "Aeroplane": "Airplane",
     "Cat": "Cat",
-    "Favourited": "Favorited",
     "Explore rooms": "Explore rooms",
     "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait while we resynchronize with the server!",
-    "Message search initialisation failed": "Message search initialization failed",
     "common": {
         "analytics": "Analytics",
         "error": "Error",
@@ -192,7 +181,8 @@
         "someone": "Someone",
         "unnamed_room": "Unnamed Room",
         "on": "On",
-        "off": "Off"
+        "off": "Off",
+        "Advanced": "Advanced"
     },
     "action": {
         "continue": "Continue",
@@ -281,7 +271,9 @@
         "security": {
             "export_megolm_keys": "Export E2E room keys",
             "import_megolm_keys": "Import E2E room keys",
-            "cryptography_section": "Cryptography"
+            "cryptography_section": "Cryptography",
+            "bulk_options_reject_all_invites": "Reject all %(invitedRooms)s invites",
+            "message_search_failed": "Message search initialization failed"
         },
         "general": {
             "account_section": "Account",
@@ -352,6 +344,9 @@
             "lightbox_title": "%(senderDisplayName)s changed the avatar for %(roomName)s",
             "removed": "%(senderDisplayName)s removed the room avatar.",
             "changed_img": "%(senderDisplayName)s changed the room avatar to <img/>"
+        },
+        "context_menu": {
+            "external_url": "Source URL"
         }
     },
     "slash_command": {
@@ -431,7 +426,6 @@
         "category_other": "Other"
     },
     "Other": "Other",
-    "Advanced": "Advanced",
     "labs": {
         "group_profile": "Profile",
         "group_rooms": "Rooms"
@@ -501,7 +495,12 @@
     "room": {
         "drop_file_prompt": "Drop file here to upload",
         "upgrade_error_title": "Error upgrading room",
-        "upgrade_error_description": "Double check that your server supports the room version chosen and try again."
+        "upgrade_error_description": "Double check that your server supports the room version chosen and try again.",
+        "context_menu": {
+            "unfavourite": "Favorited",
+            "favourite": "Favorite",
+            "low_priority": "Low Priority"
+        }
     },
     "file_panel": {
         "guest_note": "You must <a>register</a> to use this functionality",
@@ -531,7 +530,8 @@
         },
         "advanced": {
             "unfederated": "This room is not accessible by remote Matrix servers"
-        }
+        },
+        "upload_avatar_label": "Upload avatar"
     },
     "failed_load_async_component": "Unable to load! Check your network connectivity and try again.",
     "upload_failed_generic": "The file '%(fileName)s' failed to upload.",
@@ -557,7 +557,10 @@
     },
     "widget": {
         "error_need_to_be_logged_in": "You need to be logged in.",
-        "error_need_invite_permission": "You need to be able to invite users to do that."
+        "error_need_invite_permission": "You need to be able to invite users to do that.",
+        "context_menu": {
+            "delete": "Delete widget"
+        }
     },
     "scalar": {
         "error_create": "Unable to create widget.",
@@ -577,10 +580,15 @@
         "bootstrap_title": "Setting up keys",
         "export_unsupported": "Your browser does not support the required cryptography extensions",
         "import_invalid_keyfile": "Not a valid %(brand)s keyfile",
-        "import_invalid_passphrase": "Authentication check failed: incorrect password?"
+        "import_invalid_passphrase": "Authentication check failed: incorrect password?",
+        "not_supported": "<not supported>"
     },
     "error": {
         "mixed_content": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
-        "tls": "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests."
+        "tls": "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
+        "something_went_wrong": "Something went wrong!"
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "Notifications"
     }
 }

@@ -2,11 +2,7 @@
     "Failed to forget room %(errCode)s": "Не атрымалася забыць пакой %(errCode)s",
     "All messages": "Усе паведамленні",
     "Notification targets": "Мэты апавяшчэння",
-    "Favourite": "Улюбёнае",
-    "Notifications": "Апавяшчэнні",
-    "Low Priority": "Нізкі прыярытэт",
     "Invite to this room": "Запрасіць у гэты пакой",
-    "Source URL": "URL-адрас крыніцы",
     "common": {
         "error": "Памылка",
         "mute": "Без гуку",
@@ -36,5 +32,19 @@
     },
     "invite": {
         "failed_generic": "Не атрымалася выканаць аперацыю"
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "Апавяшчэнні"
+    },
+    "timeline": {
+        "context_menu": {
+            "external_url": "URL-адрас крыніцы"
+        }
+    },
+    "room": {
+        "context_menu": {
+            "favourite": "Улюбёнае",
+            "low_priority": "Нізкі прыярытэт"
+        }
     }
 }

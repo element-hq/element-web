@@ -43,7 +43,6 @@
     "Moderator": "Moderator",
     "Thank you!": "Mercés !",
     "Reason": "Rason",
-    "Notifications": "Notificacions",
     "Ok": "Validar",
     "Set up": "Parametrar",
     "Fish": "Pes",
@@ -79,8 +78,6 @@
     "Italics": "Italicas",
     "Historical": "Istoric",
     "Sign Up": "S’inscriure",
-    "Favourite": "Favorit",
-    "Low Priority": "Prioritat bassa",
     "Mark all as read": "Tot marcar coma legit",
     "Demote": "Retrogradar",
     "Are you sure?": "O volètz vertadièrament ?",
@@ -94,11 +91,7 @@
     "Today": "Uèi",
     "Yesterday": "Ièr",
     "Show image": "Afichar l'imatge",
-    "Failed to copy": "Impossible de copiar",
     "Cancel search": "Anullar la recèrca",
-    "More options": "Autras opcions",
-    "Rotate Left": "Pivotar cap a èrra",
-    "Rotate Right": "Pivotar cap a drecha",
     "Server name": "Títol del servidor",
     "Notes": "Nòtas",
     "Unavailable": "Pas disponible",
@@ -151,7 +144,8 @@
         "not_trusted": "Pas securizat",
         "system_alerts": "Alèrtas sistèma",
         "feedback": "Comentaris",
-        "off": "Atudat"
+        "off": "Atudat",
+        "Advanced": "Avançat"
     },
     "action": {
         "continue": "Contunhar",
@@ -244,7 +238,6 @@
             "user_description": "Utilizaires"
         }
     },
-    "Bold": "Gras",
     "power_level": {
         "default": "Predefinit",
         "moderator": "Moderator",
@@ -284,7 +277,6 @@
         "video_call": "Sonada vidèo"
     },
     "Other": "Autre",
-    "Advanced": "Avançat",
     "emoji": {
         "category_smileys_people": "Emoticònas e personatges",
         "category_animals_nature": "Animals e natura",
@@ -384,5 +376,25 @@
     },
     "invite": {
         "failed_generic": "L'operacion a fracassat"
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "Notificacions",
+        "colour_bold": "Gras"
+    },
+    "quick_settings": {
+        "sidebar_settings": "Autras opcions"
+    },
+    "error": {
+        "failed_copy": "Impossible de copiar"
+    },
+    "room": {
+        "context_menu": {
+            "favourite": "Favorit",
+            "low_priority": "Prioritat bassa"
+        }
+    },
+    "lightbox": {
+        "rotate_left": "Pivotar cap a èrra",
+        "rotate_right": "Pivotar cap a drecha"
     }
 }

@@ -403,8 +403,8 @@ export class StopGapWidget extends EventEmitter {
                 ev.preventDefault();
                 if (ev.detail.data?.errorMessage) {
                     Modal.createDialog(ErrorDialog, {
-                        title: _t("Connection lost"),
-                        description: _t("You were disconnected from the call. (Error: %(message)s)", {
+                        title: _t("widget|error_hangup_title"),
+                        description: _t("widget|error_hangup_description", {
                             message: ev.detail.data.errorMessage,
                         }),
                     });

@@ -1,8 +1,6 @@
 {
     "Create new room": "പുതിയ റൂം സൃഷ്ടിക്കുക",
     "Failed to forget room %(errCode)s": "%(errCode)s റൂം ഫോര്‍ഗെറ്റ് ചെയ്യുവാന്‍ സാധിച്ചില്ല",
-    "Favourite": "പ്രിയപ്പെട്ടവ",
-    "Notifications": "നോട്ടിഫിക്കേഷനുകള്‍",
     "unknown error code": "അപരിചിത എറര്‍ കോഡ്",
     "Failed to change password. Is your password correct?": "രഹസ്യവാക്ക് മാറ്റാന്‍ സാധിച്ചില്ല. രഹസ്യവാക്ക് ശരിയാണോ ?",
     "Sunday": "ഞായര്‍",
@@ -12,7 +10,6 @@
     "Changelog": "മാറ്റങ്ങളുടെ നാള്‍വഴി",
     "This Room": "ഈ മുറി",
     "Unavailable": "ലഭ്യമല്ല",
-    "Source URL": "സോഴ്സ് യു ആര്‍ എല്‍",
     "Tuesday": "ചൊവ്വ",
     "Unnamed room": "പേരില്ലാത്ത റൂം",
     "Saturday": "ശനി",
@@ -26,7 +23,6 @@
     "Thursday": "വ്യാഴം",
     "Search…": "തിരയുക…",
     "Yesterday": "ഇന്നലെ",
-    "Low Priority": "താഴ്ന്ന പരിഗണന",
     "Explore rooms": "മുറികൾ കണ്ടെത്തുക",
     "common": {
         "error": "എറര്‍",
@@ -96,5 +92,19 @@
     },
     "invite": {
         "failed_generic": "ശ്രമം പരാജയപ്പെട്ടു"
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "നോട്ടിഫിക്കേഷനുകള്‍"
+    },
+    "timeline": {
+        "context_menu": {
+            "external_url": "സോഴ്സ് യു ആര്‍ എല്‍"
+        }
+    },
+    "room": {
+        "context_menu": {
+            "favourite": "പ്രിയപ്പെട്ടവ",
+            "low_priority": "താഴ്ന്ന പരിഗണന"
+        }
     }
 }

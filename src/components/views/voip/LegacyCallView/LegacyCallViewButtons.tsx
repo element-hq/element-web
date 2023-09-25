@@ -304,8 +304,8 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                     <LegacyCallViewToggleButton
                         state={this.props.buttonsState.sidebarShown}
                         className="mx_LegacyCallViewButtons_button_sidebar"
-                        onLabel={_t("Hide sidebar")}
-                        offLabel={_t("Show sidebar")}
+                        onLabel={_t("voip|hide_sidebar_button")}
+                        offLabel={_t("voip|show_sidebar_button")}
                         onClick={this.props.handlers.onToggleSidebarClick}
                     />
                 )}
@@ -315,7 +315,7 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                         onClick={this.onMoreClick}
                         inputRef={this.contextMenuButton}
                         isExpanded={this.state.showMoreMenu}
-                        title={_t("More")}
+                        title={_t("voip|more_button")}
                         alignment={Alignment.Top}
                     />
                 )}

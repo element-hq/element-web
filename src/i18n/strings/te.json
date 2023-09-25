@@ -35,7 +35,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s ,%(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "Upload avatar": "అవతార్ను అప్లోడ్ చేయండి",
     "Connectivity to the server has been lost.": "సెర్వెర్ కనెక్టివిటీని కోల్పోయారు.",
     "Sent messages will be stored until your connection has returned.": "మీ కనెక్షన్ తిరిగి వచ్చే వరకు పంపిన సందేశాలు నిల్వ చేయబడతాయి.",
     "Failed to forget room %(errCode)s": "గది మర్చిపోవడం విఫలమైంది %(errCode)s",
@@ -43,14 +42,11 @@
     "unknown error code": "తెలియని కోడ్ లోపం",
     "Unable to restore session": "సెషన్ను పునరుద్ధరించడానికి సాధ్యపడలేదు",
     "Create new room": "క్రొత్త గది సృష్టించండి",
-    "Favourite": "గుర్తుంచు",
-    "Notifications": "ప్రకటనలు",
     "Sunday": "ఆదివారం",
     "Notification targets": "తాఖీదు లక్ష్యాలు",
     "Today": "ఈ రోజు",
     "Friday": "శుక్రువారం",
     "Changelog": "మార్పు వివరణ",
-    "Source URL": "మూల URL",
     "Tuesday": "మంగళవారం",
     "Monday": "సోమవారం",
     "All Rooms": "అన్ని గదులు",
@@ -61,7 +57,6 @@
     "Thursday": "గురువారం",
     "Search…": "శోధన…",
     "Yesterday": "నిన్న",
-    "Low Priority": "తక్కువ ప్రాధాన్యత",
     "Saturday": "శనివారం",
     "common": {
         "error": "లోపం",
@@ -72,7 +67,8 @@
         "camera": "కెమెరా",
         "microphone": "మైక్రోఫోన్",
         "on": "వేయుము",
-        "off": "ఆపు"
+        "off": "ఆపు",
+        "Advanced": "ఆధునిక"
     },
     "action": {
         "continue": "కొనసాగించు",
@@ -125,6 +121,9 @@
     "timeline": {
         "m.room.name": {
             "remove": "%(senderDisplayName)s గది పేరు తొలగించబడింది."
+        },
+        "context_menu": {
+            "external_url": "మూల URL"
         }
     },
     "slash_command": {
@@ -135,7 +134,6 @@
         "deop": "ఇచ్చిన ID తో వినియోగదారుని విడదీస్తుంది",
         "command_error": "కమాండ్ లోపం"
     },
-    "Advanced": "ఆధునిక",
     "voip": {
         "call_failed": "కాల్ విఫలమయింది",
         "cannot_call_yourself_description": "మీకు మీరే కాల్ చేయలేరు.",
@@ -168,7 +166,8 @@
         },
         "security": {
             "history_visibility_world_readable": "ఎవరైనా"
-        }
+        },
+        "upload_avatar_label": "అవతార్ను అప్లోడ్ చేయండి"
     },
     "update": {
         "error_encountered": "లోపం సంభవించింది (%(errorDetail)s).",
@@ -185,5 +184,14 @@
     },
     "error": {
         "tls": "గృహనిర్వాహకులకు కనెక్ట్ చేయలేరు - దయచేసి మీ కనెక్టివిటీని తనిఖీ చేయండి, మీ <a> 1 హోమరుసు యొక్క ఎస్ఎస్ఎల్ సర్టిఫికేట్ </a> 2 ని విశ్వసనీయపరుచుకొని, బ్రౌజర్ పొడిగింపు అభ్యర్థనలను నిరోధించబడదని నిర్ధారించుకోండి."
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "ప్రకటనలు"
+    },
+    "room": {
+        "context_menu": {
+            "favourite": "గుర్తుంచు",
+            "low_priority": "తక్కువ ప్రాధాన్యత"
+        }
     }
 }

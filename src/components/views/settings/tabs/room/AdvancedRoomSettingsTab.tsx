@@ -155,7 +155,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
 
         return (
             <SettingsTab>
-                <SettingsSection heading={_t("Advanced")}>
+                <SettingsSection heading={_t("common|Advanced")}>
                     <SettingsSubsection heading={room.isSpaceRoom() ? _t("Space information") : _t("Room information")}>
                         <div>
                             <span>{_t("room_settings|advanced|room_id")}</span>

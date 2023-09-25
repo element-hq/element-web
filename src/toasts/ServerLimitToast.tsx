@@ -30,12 +30,12 @@ export const showToast = (
     syncError?: boolean,
 ): void => {
     const errorText = messageForResourceLimitError(limitType, adminContact, {
-        "monthly_active_user": _td("Your homeserver has exceeded its user limit."),
+        "monthly_active_user": _td("error|mau"),
         "hs_blocked": _td("error|hs_blocked"),
-        "": _td("Your homeserver has exceeded one of its resource limits."),
+        "": _td("error|resource_limits"),
     });
     const contactText = messageForResourceLimitError(limitType, adminContact, {
-        "": _td("Contact your <a>server admin</a>."),
+        "": _td("error|admin_contact_short"),
     });
 
     ToastStore.sharedInstance().addOrReplaceToast({

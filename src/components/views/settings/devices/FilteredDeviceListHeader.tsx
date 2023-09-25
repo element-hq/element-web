@@ -55,7 +55,7 @@ const FilteredDeviceListHeader: React.FC<Props> = ({
             <span className="mx_FilteredDeviceListHeader_label">
                 {selectedDeviceCount > 0
                     ? _t("settings|sessions|n_sessions_selected", { count: selectedDeviceCount })
-                    : _t("Sessions")}
+                    : _t("settings|sessions|title")}
             </span>
             {children}
         </div>

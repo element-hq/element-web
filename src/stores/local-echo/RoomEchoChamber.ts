@@ -72,7 +72,7 @@ export class RoomEchoChamber extends GenericEchoChamber<RoomEchoContext, CachedR
     public set notificationVolume(v: RoomNotifState | undefined) {
         if (v === undefined) return;
         this.setValue(
-            _t("Change notification settings"),
+            _t("notifications|error_change_title"),
             CachedRoomKey.NotificationVolume,
             v,
             async (): Promise<void> => {

@@ -6,7 +6,6 @@
     "Failed to change password. Is your password correct?": "Falha ao alterar a palavra-passe. A sua palavra-passe está correta?",
     "Failed to reject invitation": "Falha ao tentar rejeitar convite",
     "Failed to unban": "Não foi possível desfazer o banimento",
-    "Favourite": "Favorito",
     "Filter room members": "Filtrar integrantes da sala",
     "Forget room": "Esquecer sala",
     "Historical": "Histórico",
@@ -14,8 +13,6 @@
     "Low priority": "Baixa prioridade",
     "Moderator": "Moderador/a",
     "New passwords must match each other.": "Novas palavras-passe devem coincidir.",
-    "Notifications": "Notificações",
-    "<not supported>": "<não suportado>",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Por favor verifique seu email e clique no link enviado. Quando finalizar este processo, clique para continuar.",
     "Profile": "Perfil",
     "Reject invitation": "Rejeitar convite",
@@ -27,7 +24,6 @@
     "Unable to remove contact information": "Não foi possível remover informação de contato",
     "Unable to verify email address.": "Não foi possível verificar o endereço de email.",
     "unknown error code": "código de erro desconhecido",
-    "Upload avatar": "Enviar icone de perfil de usuário",
     "Verification Pending": "Verificação pendente",
     "You do not have permission to post to this room": "Você não tem permissão de postar nesta sala",
     "Sun": "Dom",
@@ -98,7 +94,6 @@
     "File to import": "Arquivo para importar",
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Este processo permite que você exporte as chaves para mensagens que você recebeu em salas criptografadas para um arquivo local. Você poderá então importar o arquivo para outro cliente Matrix no futuro, de modo que este cliente também poderá descriptografar suas mensagens.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "O ficheiro de exportação será protegido com uma frase-passe. Deve introduzir a frase-passe aqui, para desencriptar o ficheiro.",
-    "Reject all %(invitedRooms)s invites": "Rejeitar todos os %(invitedRooms)s convites",
     "Confirm Removal": "Confirmar Remoção",
     "Unknown error": "Erro desconhecido",
     "Unable to restore session": "Não foi possível restaurar a sessão",
@@ -127,14 +122,10 @@
         "one": "(~%(count)s resultado)"
     },
     "Home": "Início",
-    "Something went wrong!": "Algo deu errado!",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (nível de permissão %(powerLevelNumber)s)",
     "%(roomName)s is not accessible at this time.": "%(roomName)s não está acessível neste momento.",
-    "Delete widget": "Apagar widget",
     "AM": "AM",
     "PM": "PM",
-    "Copied!": "Copiado!",
-    "Failed to copy": "Falha ao copiar",
     "This will allow you to reset your password and receive notifications.": "Isto irá permitir-lhe redefinir a sua palavra-passe e receber notificações.",
     "Unignore": "Deixar de ignorar",
     "Banned by %(displayName)s": "Banido por %(displayName)s",
@@ -145,7 +136,6 @@
     "Changelog": "Histórico de alterações",
     "This Room": "Esta sala",
     "Unavailable": "Indisponível",
-    "Source URL": "URL fonte",
     "Filter results": "Filtrar resultados",
     "Tuesday": "Terça-feira",
     "Search…": "Pesquisar…",
@@ -159,7 +149,6 @@
     "You cannot delete this message. (%(code)s)": "Não pode apagar esta mensagem. (%(code)s)",
     "Thursday": "Quinta-feira",
     "Yesterday": "Ontem",
-    "Low Priority": "Baixa prioridade",
     "Wednesday": "Quarta-feira",
     "Thank you!": "Obrigado!",
     "Explore rooms": "Explorar rooms",
@@ -298,7 +287,6 @@
     "Discovery options will appear once you have added an email above.": "As opções de descoberta vão aparecer assim que adicione um e-mail acima.",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Enviámos-lhe um email para confirmar o seu endereço. Por favor siga as instruções no email e depois clique no botão abaixo.",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Apenas um aviso, se não adicionar um email e depois esquecer a sua palavra-passe, poderá <b>perder permanentemente o acesso à sua conta</b>.",
-    "Create account": "Criar conta",
     "Invite with email or username": "Convidar com email ou nome de utilizador",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Convide alguém a partir do nome, endereço de email, nome de utilizador (como <userId/>) ou <a>partilhe este espaço</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Convide alguém a partir do nome, email ou nome de utilizador (como <userId/>) ou <a>partilhe esta sala</a>.",
@@ -455,7 +443,9 @@
         "someone": "Alguém",
         "unnamed_room": "Sala sem nome",
         "on": "Ativado",
-        "off": "Desativado"
+        "off": "Desativado",
+        "copied": "Copiado!",
+        "Advanced": "Avançado"
     },
     "action": {
         "continue": "Continuar",
@@ -556,7 +546,8 @@
         "security": {
             "export_megolm_keys": "Exportar chaves ponta-a-ponta da sala",
             "import_megolm_keys": "Importar chave de criptografia ponta-a-ponta (E2E) da sala",
-            "cryptography_section": "Criptografia"
+            "cryptography_section": "Criptografia",
+            "bulk_options_reject_all_invites": "Rejeitar todos os %(invitedRooms)s convites"
         },
         "general": {
             "account_section": "Conta",
@@ -614,6 +605,9 @@
             "lightbox_title": "%(senderDisplayName)s alterou a imagem da sala %(roomName)s",
             "removed": "%(senderDisplayName)s removeu a imagem da sala.",
             "changed_img": "%(senderDisplayName)s alterou a imagem da sala para <img/>"
+        },
+        "context_menu": {
+            "external_url": "URL fonte"
         }
     },
     "slash_command": {
@@ -697,7 +691,6 @@
         "no_media_perms_description": "Você talvez precise autorizar manualmente que o %(brand)s acesse seu microfone e webcam"
     },
     "Other": "Outros",
-    "Advanced": "Avançado",
     "labs": {
         "group_profile": "Perfil",
         "group_rooms": "Salas"
@@ -753,7 +746,8 @@
             "error_title": "Não foi possível fazer login"
         },
         "reset_password_email_not_found_title": "Este endereço de email não foi encontrado",
-        "reset_password_email_not_associated": "O seu endereço de email não parece estar associado a um Matrix ID neste homeserver."
+        "reset_password_email_not_associated": "O seu endereço de email não parece estar associado a um Matrix ID neste homeserver.",
+        "create_account_title": "Criar conta"
     },
     "export_chat": {
         "messages": "Mensagens"
@@ -788,7 +782,11 @@
         }
     },
     "room": {
-        "drop_file_prompt": "Arraste um arquivo aqui para enviar"
+        "drop_file_prompt": "Arraste um arquivo aqui para enviar",
+        "context_menu": {
+            "favourite": "Favorito",
+            "low_priority": "Baixa prioridade"
+        }
     },
     "file_panel": {
         "guest_note": "Você deve <a>se registrar</a> para poder usar esta funcionalidade",
@@ -818,7 +816,8 @@
         },
         "advanced": {
             "unfederated": "Esta sala não é acessível para servidores Matrix remotos"
-        }
+        },
+        "upload_avatar_label": "Enviar icone de perfil de usuário"
     },
     "failed_load_async_component": "Impossível carregar! Verifique a sua ligação de rede e tente novamente.",
     "upload_failed_generic": "O carregamento do ficheiro '%(fileName)s' falhou.",
@@ -864,7 +863,10 @@
     "widget": {
         "error_need_to_be_logged_in": "Você tem que estar logado.",
         "error_need_invite_permission": "Para fazer isso, você tem que ter permissão para convidar outras pessoas.",
-        "error_need_kick_permission": "Precisa ter permissão de expulsar utilizadores para fazer isso."
+        "error_need_kick_permission": "Precisa ter permissão de expulsar utilizadores para fazer isso.",
+        "context_menu": {
+            "delete": "Apagar widget"
+        }
     },
     "scalar": {
         "error_create": "Não foi possível criar o widget.",
@@ -886,10 +888,19 @@
         "bootstrap_title": "A configurar chaves",
         "export_unsupported": "O seu navegador não suporta as extensões de criptografia necessárias",
         "import_invalid_keyfile": "Não é um ficheiro de chaves %(brand)s válido",
-        "import_invalid_passphrase": "Erro de autenticação: palavra-passe incorreta?"
+        "import_invalid_passphrase": "Erro de autenticação: palavra-passe incorreta?",
+        "not_supported": "<não suportado>"
     },
     "error": {
         "mixed_content": "Não consigo conectar ao servidor padrão através de HTTP quando uma URL HTTPS está na barra de endereços do seu navegador. Use HTTPS ou então <a>habilite scripts não seguros no seu navegador</a>.",
-        "tls": "Não foi possível conectar ao Servidor de Base. Por favor, confira sua conectividade à internet, garanta que o <a>certificado SSL do Servidor de Base</a> é confiável, e que uma extensão do navegador não esteja bloqueando as requisições de rede."
+        "tls": "Não foi possível conectar ao Servidor de Base. Por favor, confira sua conectividade à internet, garanta que o <a>certificado SSL do Servidor de Base</a> é confiável, e que uma extensão do navegador não esteja bloqueando as requisições de rede.",
+        "failed_copy": "Falha ao copiar",
+        "something_went_wrong": "Algo deu errado!"
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "Notificações"
+    },
+    "onboarding": {
+        "create_account": "Criar conta"
     }
 }

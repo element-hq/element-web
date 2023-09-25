@@ -6,9 +6,7 @@
     "Low priority": "ความสำคัญต่ำ",
     "Profile": "โปรไฟล์",
     "Reason": "เหตุผล",
-    "Notifications": "การแจ้งเตือน",
     "unknown error code": "รหัสข้อผิดพลาดที่ไม่รู้จัก",
-    "Favourite": "รายการโปรด",
     "Failed to forget room %(errCode)s": "การลืมห้องล้มเหลว %(errCode)s",
     "No Webcams detected": "ไม่พบกล้องเว็บแคม",
     "Authentication": "การยืนยันตัวตน",
@@ -42,7 +40,6 @@
     "Moderator": "ผู้ช่วยดูแล",
     "New passwords must match each other.": "รหัสผ่านใหม่ทั้งสองช่องต้องตรงกัน",
     "not specified": "ไม่ได้ระบุ",
-    "<not supported>": "<ไม่รองรับ>",
     "No more results": "ไม่มีผลลัพธ์อื่น",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "กรุณาเช็คอีเมลและคลิกลิงก์ข้างใน หลังจากนั้น คลิกดำเนินการต่อ",
     "Reject invitation": "ปฏิเสธคำเชิญ",
@@ -110,7 +107,6 @@
     "This Room": "ห้องนี้",
     "Unavailable": "ไม่มี",
     "Send": "ส่ง",
-    "Source URL": "URL ต้นฉบับ",
     "Tuesday": "วันอังคาร",
     "Search…": "ค้นหา…",
     "Unnamed room": "ห้องที่ไม่มีชื่อ",
@@ -123,7 +119,6 @@
     "You cannot delete this message. (%(code)s)": "คุณไม่สามารถลบข้อความนี้ได้ (%(code)s)",
     "Thursday": "วันพฤหัสบดี",
     "Yesterday": "เมื่อวานนี้",
-    "Low Priority": "ความสำคัญต่ำ",
     "Explore rooms": "สำรวจห้อง",
     "You most likely do not want to reset your event index store": "คุณมักไม่ต้องการรีเซ็ตที่เก็บดัชนีเหตุการณ์ของคุณ",
     "Reset event store?": "รีเซ็ตที่เก็บกิจกรรม?",
@@ -232,7 +227,8 @@
         "unnamed_room": "ห้องที่ยังไม่ได้ตั้งชื่อ",
         "stickerpack": "ชุดสติ๊กเกอร์",
         "on": "เปิด",
-        "off": "ปิด"
+        "off": "ปิด",
+        "Advanced": "ขึ้นสูง"
     },
     "action": {
         "continue": "ดำเนินการต่อ",
@@ -396,6 +392,9 @@
         },
         "m.room.power_levels": {
             "user_from_to": "%(userId)s จาก %(fromPowerLevel)s ไปเป็น %(toPowerLevel)s"
+        },
+        "context_menu": {
+            "external_url": "URL ต้นฉบับ"
         }
     },
     "slash_command": {
@@ -453,7 +452,6 @@
     "devtools": {
         "category_room": "ห้อง"
     },
-    "Advanced": "ขึ้นสูง",
     "labs": {
         "group_profile": "โปรไฟล์",
         "group_rooms": "ห้องสนทนา"
@@ -545,6 +543,10 @@
     "room": {
         "intro": {
             "unencrypted_warning": "ไม่ได้เปิดใช้งานการเข้ารหัสจากต้นทางถึงปลายทาง"
+        },
+        "context_menu": {
+            "favourite": "รายการโปรด",
+            "low_priority": "ความสำคัญต่ำ"
         }
     },
     "failed_load_async_component": "ไม่สามารถโหลดได้! ตรวจสอบการเชื่อมต่อเครือข่ายของคุณแล้วลองอีกครั้ง.",
@@ -586,5 +588,11 @@
     "error": {
         "mixed_content": "ไม่สามารถเชื่อมต่อไปยังเซิร์ฟเวอร์บ้านผ่านทาง HTTP ได้เนื่องจาก URL ที่อยู่บนเบราว์เซอร์เป็น HTTPS กรุณาใช้ HTTPS หรือ<a>เปิดใช้งานสคริปต์ที่ไม่ปลอดภัย</a>.",
         "tls": "ไม่สามารถเฃื่อมต่อไปหาเซิร์ฟเวอร์บ้านได้ - กรุณาตรวจสอบคุณภาพการเชื่อมต่อ, ตรวจสอบว่า<a>SSL certificate ของเซิร์ฟเวอร์บ้าน</a>ของคุณเชื่อถือได้, และวไม่มีส่วนขยายเบราว์เซอร์ใดบล๊อคการเชื่อมต่ออยู่"
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "การแจ้งเตือน"
+    },
+    "encryption": {
+        "not_supported": "<ไม่รองรับ>"
     }
 }

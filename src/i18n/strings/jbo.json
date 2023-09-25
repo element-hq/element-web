@@ -32,7 +32,6 @@
     "Failed to change power level": ".i pu fliba lo nu gafygau lo ni vlipa",
     "Changes your display nickname": "",
     "Reason": "krinu",
-    "Please contact your homeserver administrator.": ".i .e'o ko tavla lo admine be le samtcise'u",
     "Incorrect verification code": ".i na'e drani ke lacri lerpoi",
     "No display name": ".i na da cmene",
     "Warning!": ".i ju'i",
@@ -115,9 +114,6 @@
     "Ask this user to verify their session, or manually verify it below.": ".i ko cpedu le ka co'a lacri le se samtcise'u kei le pilno vau ja pilno le di'e cei'i le ka co'a lacri",
     "Not Trusted": "na se lacri",
     "Ok": "je'e",
-    "Verify this session": "nu co'a lacri le se samtcise'u",
-    "Later": "nu ca na co'e",
-    "Other users may not trust it": ".i la'a na pa na du be do cu lacri",
     "Sign Up": "nu co'a na'o jaspu",
     "<userName/> wants to chat": ".i la'o zoi. <userName/> .zoi kaidji le ka tavla do",
     "<userName/> invited you": ".i la'o zoi. <userName/> .zoi friti le ka ziljmina kei do",
@@ -174,7 +170,8 @@
         "someone": "da",
         "trusted": "se lacri",
         "not_trusted": "na se lacri",
-        "unnamed_room": "na da cmene"
+        "unnamed_room": "na da cmene",
+        "Advanced": "macnu"
     },
     "action": {
         "continue": "",
@@ -402,7 +399,6 @@
         "widget_screenshots": "lo du'u xu kau kakne lo nu co'a pixra lo uidje kei lo nu kakne tu'a .ubu"
     },
     "Other": "drata",
-    "Advanced": "macnu",
     "composer": {
         "placeholder_reply_encrypted": "nu pa mifra be pa jai te spuda cu zilbe'i",
         "placeholder_reply": "nu pa jai te spuda cu zilbe'i",
@@ -434,10 +430,13 @@
             "complete_description": ".i mo'u co'a lacri le pilno",
             "complete_action": "je'e",
             "waiting_other_user": ".i ca'o denpa lo nu la'o zoi. %(displayName)s .zoi mo'u co'a lacri",
-            "cancelling": ".i ca'o co'u co'e"
+            "cancelling": ".i ca'o co'u co'e",
+            "unverified_sessions_toast_reject": "nu ca na co'e"
         },
         "export_unsupported": ".i le kibrbrauzero na ka'e pilno le mifra ciste poi jai sarcu",
-        "import_invalid_passphrase": ".i pu fliba lo nu birti lo du'u curmi lo nu do jonse .i na'e drani xu japyvla"
+        "import_invalid_passphrase": ".i pu fliba lo nu birti lo du'u curmi lo nu do jonse .i na'e drani xu japyvla",
+        "verify_toast_title": "nu co'a lacri le se samtcise'u",
+        "verify_toast_description": ".i la'a na pa na du be do cu lacri"
     },
     "export_chat": {
         "messages": "notci"
@@ -513,5 +512,8 @@
     "error": {
         "mau": ".i le samtcise'u cu bancu lo masti jimte be ri bei lo ni ca'o pilno",
         "resource_limits": ".i le samtcise'u cu bancu pa lo jimte be ri"
+    },
+    "room": {
+        "error_join_incompatible_version_2": ".i .e'o ko tavla lo admine be le samtcise'u"
     }
 }

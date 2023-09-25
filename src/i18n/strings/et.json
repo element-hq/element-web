@@ -15,7 +15,6 @@
     "PM": "PL",
     "AM": "EL",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "Verify this session": "Verifitseeri see sessioon",
     "Ask this user to verify their session, or manually verify it below.": "Palu nimetatud kasutajal verifitseerida see sessioon või tee seda alljärgnevaga käsitsi.",
     "Invite to this room": "Kutsu siia jututuppa",
     "The conversation continues here.": "Vestlus jätkub siin.",
@@ -40,8 +39,6 @@
     "Create new room": "Loo uus jututuba",
     "collapse": "ahenda",
     "expand": "laienda",
-    "Rotate Left": "Pööra vasakule",
-    "Rotate Right": "Pööra paremale",
     "Enter the name of a new server you want to explore.": "Sisesta uue serveri nimi mida tahad uurida.",
     "Explore rooms": "Tutvu jututubadega",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Sa peaksid enne ühenduse katkestamisst <b>eemaldama isiklikud andmed</b> id-serverist <idserver />. Kahjuks id-server <idserver /> ei ole hetkel võrgus või pole kättesaadav.",
@@ -66,12 +63,8 @@
         "one": "Laadi üles %(count)s muu fail"
     },
     "Resend %(unsentCount)s reaction(s)": "Saada uuesti %(unsentCount)s reaktsioon(i)",
-    "Source URL": "Lähteaadress",
     "All messages": "Kõik sõnumid",
-    "Favourite": "Lemmik",
-    "Low Priority": "Vähetähtis",
     "Home": "Avaleht",
-    "Remove for everyone": "Eemalda kõigilt",
     "You seem to be uploading files, are you sure you want to quit?": "Tundub, et sa parasjagu laadid faile üles. Kas sa kindlasti soovid väljuda?",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Kui soovid teatada Matrix'iga seotud turvaveast, siis palun tutvu enne Matrix.org <a>Turvalisuse avalikustamise juhendiga</a>.",
     "Share Link to User": "Jaga viidet kasutaja kohta",
@@ -113,13 +106,10 @@
     "%(name)s wants to verify": "%(name)s soovib verifitseerida",
     "You sent a verification request": "Sa saatsid verifitseerimispalve",
     "Error decrypting video": "Viga videovoo dekrüptimisel",
-    "Copied!": "Kopeeritud!",
-    "Failed to copy": "Kopeerimine ebaõnnestus",
     "Edited at %(date)s. Click to view edits.": "Muudetud %(date)s. Klõpsi et näha varasemaid versioone.",
     "edited": "muudetud",
     "Can't load this message": "Selle sõnumi laadimine ei õnnestu",
     "Submit logs": "Saada rakenduse logid",
-    "Something went wrong!": "Midagi läks nüüd valesti!",
     "Your server": "Sinu server",
     "Add a new server": "Lisa uus server",
     "Server name": "Serveri nimi",
@@ -156,11 +146,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s %(time)s",
-    "Encryption upgrade available": "Krüptimise uuendus on saadaval",
-    "New login. Was this you?": "Uus sisselogimine. Kas see olid sina?",
-    "Securely cache encrypted messages locally for them to appear in search results.": "Turvaliselt puhverda krüptitud sõnumid kohalikku arvutisse ja võimalda kasutada neid otsingus.",
-    "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s'is on puudu need komponendid, mis võimaldavad otsida kohalikest turvaliselt puhverdatud krüptitud sõnumitest. Kui sa tahaksid sellist funktsionaalsust katsetada, siis pead kompileerima %(brand)s'i variandi, kus <nativeLink>need komponendid on lisatud</nativeLink>.",
-    "Message search": "Otsing sõnumite seast",
     "Search…": "Otsi…",
     "Cancel search": "Tühista otsing",
     "Search failed": "Otsing ebaõnnestus",
@@ -196,7 +181,6 @@
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "Saatsime tekstisõnumi numbrile +%(msisdn)s. Palun sisesta seal kuvatud kontrollkood.",
     "Phone Number": "Telefoninumber",
     "General": "Üldist",
-    "Notifications": "Teavitused",
     "No Audio Outputs detected": "Ei leidnud ühtegi heliväljundit",
     "No Microphones detected": "Ei leidnud ühtegi mikrofoni",
     "No Webcams detected": "Ei leidnud ühtegi veebikaamerat",
@@ -209,13 +193,6 @@
     "General failure": "Üldine viga",
     "Missing media permissions, click the button below to request.": "Meediaga seotud õigused puuduvad. Nende nõutamiseks klõpsi järgnevat nuppu.",
     "Request media permissions": "Nõuta meediaõigusi",
-    "Any of the following data may be shared:": "Järgnevaid andmeid võib jagada:",
-    "Your display name": "Sinu kuvatav nimi",
-    "Your user ID": "Sinu kasutajatunnus",
-    "Your theme": "Sinu teema",
-    "%(brand)s URL": "%(brand)s'i aadress",
-    "Room ID": "Jututoa tunnus",
-    "Widget ID": "Vidina tunnus",
     "No display name": "Kuvatav nimi puudub",
     "Failed to set display name": "Kuvatava nime määramine ebaõnnestus",
     "Display Name": "Kuvatav nimi",
@@ -290,10 +267,7 @@
     "Anchor": "Ankur",
     "Headphones": "Kõrvaklapid",
     "Folder": "Kaust",
-    "Later": "Hiljem",
-    "Other users may not trust it": "Teised kasutajad ei pruugi seda usaldada",
     "Set up": "Võta kasutusele",
-    "Accept <policyLink /> to continue:": "Jätkamiseks nõustu <policyLink />'ga:",
     "Show more": "Näita rohkem",
     "Warning!": "Hoiatus!",
     "Close dialog": "Sulge dialoog",
@@ -312,11 +286,9 @@
     "Uploading %(filename)s": "Laadin üles %(filename)s",
     "A new password must be entered.": "Palun sisesta uus salasõna.",
     "New passwords must match each other.": "Uued salasõnad peavad omavahel klappima.",
-    "Create account": "Loo kasutajakonto",
     "Clear personal data": "Kustuta privaatsed andmed",
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Sa ei saa saata ühtego sõnumit enne, kui oled läbi lugenud ja nõustunud <consentLink>meie kasutustingimustega</consentLink>.",
     "Couldn't load page": "Lehe laadimine ei õnnestunud",
-    "Upload avatar": "Laadi üles profiilipilt ehk avatar",
     "Are you sure you want to leave the room '%(roomName)s'?": "Kas oled kindel, et soovid lahkuda jututoast „%(roomName)s“?",
     "Unknown error": "Teadmata viga",
     "Failed to connect to integration manager": "Ühendus integratsioonihalduriga ei õnnestunud",
@@ -415,10 +387,6 @@
     "Sent messages will be stored until your connection has returned.": "Saadetud sõnumid salvestatakse seniks, kuni võrguühendus on taastunud.",
     "Your password has been reset.": "Sinu salasõna on muudetud.",
     "Unignore": "Lõpeta eiramine",
-    "<not supported>": "<ei ole toetatud>",
-    "Bulk options": "Masstoimingute seadistused",
-    "Accept all %(invitedRooms)s invites": "Võta vastu kõik %(invitedRooms)s kutsed",
-    "Reject all %(invitedRooms)s invites": "Lükka tagasi kõik %(invitedRooms)s kutsed",
     "Uploaded sound": "Üleslaaditud heli",
     "Sounds": "Helid",
     "Notification sound": "Teavitusheli",
@@ -442,12 +410,7 @@
     "Identity server URL does not appear to be a valid identity server": "Isikutuvastusserveri aadress ei tundu viitama kehtivale isikutuvastusserverile",
     "Looks good!": "Tundub õige!",
     "Failed to re-authenticate due to a homeserver problem": "Uuesti autentimine ei õnnestunud koduserveri vea tõttu",
-    "<Items/> and %(count)s others": {
-        "other": "<Items/> ja %(count)s muud",
-        "one": "<Items/> ja üks muu"
-    },
     "%(items)s and %(lastItem)s": "%(items)s ja %(lastItem)s",
-    "Please contact your homeserver administrator.": "Palun võta ühendust koduserveri haldajaga.",
     "Checking server": "Kontrollin serverit",
     "Change identity server": "Muuda isikutuvastusserverit",
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "Kas katkestame ühenduse <current /> isikutuvastusserveriga ning selle asemel loome uue ühenduse serveriga <new />?",
@@ -513,7 +476,6 @@
     "Upload all": "Laadi kõik üles",
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "See fail on üleslaadimiseks <b>liiga suur</b>. Üleslaaditavate failide mahupiir on %(limit)s, kuid selle faili suurus on %(sizeOfThisFile)s.",
     "Switch theme": "Vaheta teemat",
-    "All settings": "Kõik seadistused",
     "Default": "Tavaline",
     "Restricted": "Piiratud õigustega kasutaja",
     "Moderator": "Moderaator",
@@ -524,22 +486,12 @@
     "Deactivate user": "Deaktiveeri kasutaja",
     "Failed to deactivate user": "Kasutaja deaktiveerimine ei õnnestunud",
     "This client does not support end-to-end encryption.": "See klient ei toeta läbivat krüptimist.",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Selle vidina kasutamisel võidakse jagada andmeid <helpIcon /> saitidega %(widgetDomain)s.",
-    "Widgets do not use message encryption.": "Erinevalt sõnumitest vidinad ei kasuta krüptimist.",
-    "Widget added by": "Vidina lisaja",
-    "This widget may use cookies.": "See vidin võib kasutada küpsiseid.",
     "Delete Widget": "Kustuta vidin",
-    "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Vidina kustutamisel eemaldatakse ta kõikide selle jututoa kasutajate jaoks. Kas sa kindlasti soovid seda vidinat eemaldada?",
-    "Delete widget": "Kustuta vidin",
-    "Popout widget": "Ava rakendus eraldi aknas",
-    "More options": "Täiendavad seadistused",
     "Language Dropdown": "Keelevalik",
     "Your homeserver has exceeded its user limit.": "Sinu koduserver on ületanud kasutajate arvu ülempiiri.",
     "Your homeserver has exceeded one of its resource limits.": "Sinu koduserver on ületanud ühe oma ressursipiirangutest.",
-    "Contact your <a>server admin</a>.": "Võta ühendust <a>oma serveri haldajaga</a>.",
     "Ok": "Sobib",
     "IRC display name width": "IRC kuvatava nime laius",
-    "Your homeserver does not support cross-signing.": "Sinu koduserver ei toeta risttunnustamist.",
     "Cannot connect to integration manager": "Ei saa ühendust lõiminguhalduriga",
     "The integration manager is offline or it cannot reach your homeserver.": "Lõiminguhaldur kas ei tööta või ei õnnestu tal teha päringuid sinu koduserveri suunas.",
     "Delete Backup": "Kustuta varukoopia",
@@ -678,14 +630,10 @@
     "Save your Security Key": "Salvesta turvavõti",
     "Unable to set up secret storage": "Turvahoidla kasutuselevõtmine ei õnnestu",
     "Your keys are being backed up (the first backup could take a few minutes).": "Sinu krüptovõtmeid varundatakse (esimese varukoopia tegemine võib võtta paar minutit).",
-    "Favourited": "Märgitud lemmikuks",
-    "Forget Room": "Unusta jututuba ära",
-    "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Sinu kontol on turvahoidlas olemas risttunnustamise identiteet, kuid seda veel ei loeta antud sessioonis usaldusväärseks.",
     "well formed": "korrektses vormingus",
     "unexpected type": "tundmatut tüüpi",
     "in account data": "kasutajakonto andmete hulgas",
     "Authentication": "Autentimine",
-    "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s ei võimalda veebibrauseris töötades krüptitud sõnumeid turvaliselt puhverdada. Selleks, et krüptitud sõnumeid saaks otsida, kasuta <desktopLink>%(brand)s Desktop</desktopLink> rakendust Matrix'i kliendina.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Krüptitud sõnumid kasutavad läbivat krüptimist. Ainult sinul ja saaja(te)l on võtmed selliste sõnumite lugemiseks.",
     "Unable to load key backup status": "Võtmete varunduse oleku laadimine ei õnnestunud",
     "Restore from Backup": "Taasta varukoopiast",
@@ -739,7 +687,6 @@
     "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Kui sa tegid seda juhuslikult, siis sa võid selles sessioonis uuesti seadistada sõnumite krüptimise, mille tulemusel krüptime uuesti kõik sõnumid ja loome uue taastamise meetodi.",
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Kui sa ei ole ise taastamise meetodeid eemaldanud, siis võib olla tegemist ründega sinu konto vastu. Palun vaheta koheselt oma kasutajakonto salasõna ning määra seadistustes uus taastemeetod.",
     "Reason": "Põhjus",
-    "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Ära usalda risttunnustamist ning verifitseeri kasutaja iga sessioon eraldi.",
     "Connect this session to Key Backup": "Seo see sessioon krüptovõtmete varundusega",
     "not stored": "ei ole salvestatud",
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Isikutuvastusserveri kasutamine ei ole kohustuslik. Kui sa seda ei tee, siis sa ei ole leitav teiste kasutajate poolt ega sulle ei saa telefoninumbri või e-posti aadressi alusel kutset saata. Küll aga saab kutset saata Matrix'i kasutajatunnuse alusel.",
@@ -754,8 +701,6 @@
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Sa oled selle sessiooni jaoks varem kasutanud %(brand)s'i uuemat versiooni. Selle versiooni kasutamiseks läbiva krüptimisega, pead sa esmalt logima välja ja siis uuesti logima tagasi sisse.",
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Kui sa ei ole ise uusi taastamise meetodeid lisanud, siis võib olla tegemist ründega sinu konto vastu. Palun vaheta koheselt oma kasutajakonto salasõna ning määra seadistustes uus taastemeetod.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Enne väljalogimist seo see sessioon krüptovõtmete varundusega. Kui sa seda ei tee, siis võid kaotada võtmed, mida kasutatakse vaid siin sessioonis.",
-    "Change notification settings": "Muuda teavituste seadistusi",
-    "Your server isn't responding to some <a>requests</a>.": "Sinu koduserver ei vasta mõnedele <a>päringutele</a>.",
     "Server isn't responding": "Server ei vasta päringutele",
     "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Sinu koduserver ei vasta mõnedele sinu päringutele. Alljärgnevalt on mõned võimalikud põhjused.",
     "The server (%(serverName)s) took too long to respond.": "Vastuseks serverist %(serverName)s kulus liiga palju aega.",
@@ -772,13 +717,9 @@
     "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Oled varem kasutanud %(brand)s serveriga %(host)s ja lubanud andmete laisa laadimise. Selles versioonis on laisk laadimine keelatud. Kuna kohalik vahemälu nende kahe seadistuse vahel ei ühildu, peab %(brand)s sinu konto uuesti sünkroonima.",
     "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Kui %(brand)s teine versioon on mõnel teisel vahekaardil endiselt avatud, palun sulge see. %(brand)s kasutamine samal serveril põhjustab vigu olukorras, kus laisk laadimine on samal ajal lubatud ja keelatud.",
     "Preparing to download logs": "Valmistun logikirjete allalaadimiseks",
-    "Set up Secure Backup": "Võta kasutusele turvaline varundus",
     "Information": "Teave",
     "Not encrypted": "Krüptimata",
     "Room settings": "Jututoa seadistused",
-    "Take a picture": "Tee foto",
-    "Cross-signing is ready for use.": "Risttunnustamine on kasutamiseks valmis.",
-    "Cross-signing is not set up.": "Risttunnustamine on seadistamata.",
     "Backup version:": "Varukoopia versioon:",
     "Algorithm:": "Algoritm:",
     "Backup key stored:": "Varukoopia võti on salvestatud:",
@@ -788,7 +729,6 @@
     "not ready": "ei ole valmis",
     "Start a conversation with someone using their name or username (like <userId/>).": "Alusta vestlust kasutades teise osapoole nime või kasutajanime (näiteks <userId/>).",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Kutsu kedagi tema nime, kasutajanime (nagu <userId/>) alusel või <a>jaga seda jututuba</a>.",
-    "Safeguard against losing access to encrypted messages & data": "Hoia ära, et kaotad ligipääsu krüptitud sõnumitele ja andmetele",
     "Widgets": "Vidinad",
     "Edit widgets, bridges & bots": "Muuda vidinaid, võrgusildu ja roboteid",
     "Add widgets, bridges & bots": "Lisa vidinaid, võrgusildu ja roboteid",
@@ -805,9 +745,6 @@
     "Ignored attempt to disable encryption": "Eirasin katset lõpetada krüptimise kasutamine",
     "Failed to save your profile": "Sinu profiili salvestamine ei õnnestunud",
     "The operation could not be completed": "Toimingut ei õnnestunud lõpetada",
-    "Move right": "Liigu paremale",
-    "Move left": "Liigu vasakule",
-    "Revoke permissions": "Tühista õigused",
     "You can only pin up to %(count)s widgets": {
         "other": "Sa saad kinnitada kuni %(count)s vidinat"
     },
@@ -815,8 +752,6 @@
     "Hide Widgets": "Peida vidinad",
     "Data on this screen is shared with %(widgetDomain)s": "Andmeid selles vaates jagatakse %(widgetDomain)s serveriga",
     "Modal Widget": "Modaalne vidin",
-    "Enable desktop notifications": "Võta kasutusele töölauakeskkonna teavitused",
-    "Don't miss a reply": "Ära jäta vastust vahele",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Kutsu teist osapoolt tema nime, e-posti aadressi, kasutajanime (nagu <userId/>) alusel või <a>jaga seda jututuba</a>.",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "Alusta vestlust kasutades teise osapoole nime, e-posti aadressi või kasutajanime (näiteks <userId/>).",
     "Invite by email": "Saada kutse e-kirjaga",
@@ -1069,10 +1004,6 @@
     "Afghanistan": "Afganistan",
     "United States": "Ameerika Ühendriigid",
     "United Kingdom": "Suurbritannia",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
-        "one": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(rooms)s jututoa andmete salvestamiseks kulub hetkel %(size)s.",
-        "other": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(rooms)s jututoa andmete salvestamiseks kulub hetkel %(size)s."
-    },
     "This widget would like to:": "See vidin sooviks:",
     "Approve widget permissions": "Anna vidinale õigused",
     "Decline All": "Keeldu kõigist",
@@ -1110,12 +1041,9 @@
     "Remember this": "Jäta see meelde",
     "The widget will verify your user ID, but won't be able to perform actions for you:": "See vidin verifitseerib sinu kasutajatunnuse, kuid ta ei saa sinu nimel toiminguid teha:",
     "Allow this widget to verify your identity": "Luba sellel vidinal sinu isikut verifitseerida",
-    "Use app for a better experience": "Rakendusega saad Matrix'is suhelda parimal viisil",
-    "Use app": "Kasuta rakendust",
     "Recently visited rooms": "Hiljuti külastatud jututoad",
     "Are you sure you want to leave the space '%(spaceName)s'?": "Kas oled kindel, et soovid lahkuda kogukonnakeskusest „%(spaceName)s“?",
     "This space is not public. You will not be able to rejoin without an invite.": "See ei ole avalik kogukonnakeskus. Ilma kutseta sa ei saa uuesti liituda.",
-    "Start audio stream": "Käivita audiovoog",
     "Failed to start livestream": "Videovoo käivitamine ei õnnestu",
     "Unable to start audio streaming.": "Audiovoo käivitamine ei õnnestu.",
     "Save Changes": "Salvesta muutused",
@@ -1136,7 +1064,6 @@
     "Leave space": "Lahku kogukonnakeskusest",
     "Invite people": "Kutsu teisi kasutajaid",
     "Share invite link": "Jaga kutse linki",
-    "Click to copy": "Kopeerimiseks klõpsa",
     "Create a space": "Loo kogukonnakeskus",
     "%(count)s members": {
         "other": "%(count)s liiget",
@@ -1158,8 +1085,6 @@
     "Public space": "Avalik kogukonnakeskus",
     "Private space": "Privaatne kogukonnakeskus",
     "unknown person": "tundmatu isik",
-    "%(deviceId)s from %(ip)s": "%(deviceId)s ip-aadressil %(ip)s",
-    "Review to ensure your account is safe": "Tagamaks, et su konto on sinu kontrolli all, vaata andmed üle",
     "Add existing rooms": "Lisa olemasolevaid jututubasid",
     "%(count)s people you know have already joined": {
         "other": "%(count)s sulle tuttavat kasutajat on juba liitunud",
@@ -1210,7 +1135,6 @@
     "You may contact me if you have any follow up questions": "Kui sul on lisaküsimusi, siis vastan neile hea meelega",
     "To leave the beta, visit your settings.": "Beetaversiooni saad välja lülitada rakenduse seadistustest.",
     "Add reaction": "Lisa reaktsioon",
-    "Message search initialisation failed": "Sõnumite otsingu alustamine ei õnnestunud",
     "Currently joining %(count)s rooms": {
         "other": "Parasjagu liitun %(count)s jututoaga",
         "one": "Parasjagu liitun %(count)s jututoaga"
@@ -1223,8 +1147,6 @@
     "Search for rooms or people": "Otsi jututubasid või inimesi",
     "Sent": "Saadetud",
     "You don't have permission to do this": "Sul puuduvad selleks toiminguks õigused",
-    "Error - Mixed content": "Viga - erinev sisu",
-    "Error loading Widget": "Viga vidina laadimisel",
     "Visibility": "Nähtavus",
     "This may be useful for public spaces.": "Seda saad kasutada näiteks avalike kogukonnakeskuste puhul.",
     "Guests can join a space without having an account.": "Külalised võivad liituda kogukonnakeskusega ilma kasutajakontota.",
@@ -1244,10 +1166,6 @@
     "Decide who can view and join %(spaceName)s.": "Otsusta kes saada näha ja liituda %(spaceName)s kogukonnaga.",
     "Set addresses for this space so users can find this space through your homeserver (%(localDomain)s)": "Selleks et teised kasutajad saaks seda kogukonda leida oma koduserveri kaudu (%(localDomain)s) seadista talle aadressid",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Sõnumite otsingu ettevalmistamine ei õnnestunud, lisateavet leiad <a>rakenduse seadistustest</a>",
-    "Report": "Teata sisust",
-    "Collapse reply thread": "Ahenda vastuste jutulõnga",
-    "Show preview": "Näita eelvaadet",
-    "View source": "Vaata lähtekoodi",
     "Please provide an address": "Palun sisesta aadress",
     "Unnamed audio": "Nimetu helifail",
     "Show %(count)s other previews": {
@@ -1256,7 +1174,6 @@
     },
     "Error processing audio message": "Viga häälsõnumi töötlemisel",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Sinu %(brand)s ei võimalda selle tegevuse jaoks kasutada lõiminguhaldurit. Palun küsi lisateavet serveri haldajalt.",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Selle vidina kasutamisel võidakse jagada andmeid <helpIcon /> %(widgetDomain)s saitidega ning sinu lõiminguhalduriga.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Lõiminguhalduritel on laiad volitused - nad võivad sinu nimel lugeda seadistusi, kohandada vidinaid, saata jututubade kutseid ning määrata õigusi.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Robotite, vidinate ja kleepsupakkide seadistamiseks kasuta lõiminguhaldurit.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Robotite, vidinate ja kleepsupakkide jaoks kasuta lõiminguhaldurit <b>(%(serverName)s)</b>.",
@@ -1288,9 +1205,6 @@
     "Anyone in a space can find and join. You can select multiple spaces.": "Kõik kogukonnakeskuse liikmed saavad leida ja liituda. Sa võid valida ka mitu kogukonnakeskust.",
     "Space members": "Kogukonnakeskuse liikmed",
     "Access": "Ligipääs",
-    "Share entire screen": "Jaga tervet ekraani",
-    "Application window": "Rakenduse aken",
-    "Share content": "Jaga sisu",
     "Leave %(spaceName)s": "Lahku %(spaceName)s kogukonnakeskusest",
     "Decrypting": "Dekrüptin sisu",
     "Show all rooms": "Näita kõiki jututubasid",
@@ -1314,13 +1228,8 @@
     "Missed call": "Vastamata kõne",
     "Send voice message": "Saada häälsõnum",
     "Stop recording": "Lõpeta salvestamine",
-    "Hide sidebar": "Peida külgpaan",
-    "Show sidebar": "Näita külgpaani",
-    "More": "Veel",
     "Add space": "Lisa kogukonnakeskus",
-    "Delete avatar": "Kustuta tunnuspilt",
     "Unknown failure: %(reason)s": "Tundmatu viga: %(reason)s",
-    "Cross-signing is ready but keys are not backed up.": "Risttunnustamine on töövalmis, aga krüptovõtmed on varundamata.",
     "Rooms and spaces": "Jututoad ja kogukonnad",
     "Results": "Tulemused",
     "Error downloading audio": "Helifaili allalaadimine ei õnnestunud",
@@ -1407,13 +1316,7 @@
     "You do not have permission to start polls in this room.": "Sul ei ole õigusi küsitluste korraldamiseks siin jututoas.",
     "Copy link to thread": "Kopeeri jutulõnga link",
     "Thread options": "Jutulõnga valikud",
-    "Show all your rooms in Home, even if they're in a space.": "Näita kõiki oma jututubasid avalehel ka siis kui nad on osa mõnest kogukonnast.",
-    "Home is useful for getting an overview of everything.": "Avalehelt saad kõigest hea ülevaate.",
-    "Spaces to show": "Näidatavad kogukonnakeskused",
-    "Sidebar": "Külgpaan",
     "Reply in thread": "Vasta jutulõngas",
-    "Rooms outside of a space": "Jututoad väljaspool seda kogukonda",
-    "Mentions only": "Ainult mainimised",
     "Forget": "Unusta",
     "Files": "Failid",
     "You won't get any notifications": "Sa ei saa üldse teavitusi",
@@ -1442,8 +1345,6 @@
     "Themes": "Teemad",
     "Messaging": "Sõnumisuhtlus",
     "Moderation": "Modereerimine",
-    "Pin to sidebar": "Kinnita külgpaanile",
-    "Quick settings": "Kiirseadistused",
     "Spaces you know that contain this space": "Sulle teadaolevad kogukonnakeskused, millesse kuulub see kogukond",
     "Home options": "Avalehe valikud",
     "%(spaceName)s menu": "%(spaceName)s menüü",
@@ -1458,8 +1359,6 @@
     },
     "No votes cast": "Hääletanuid ei ole",
     "Chat": "Vestle",
-    "Share location": "Jaga asukohta",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "Võimalike vigade leidmiseks jaga meiega anonüümseid andmeid. Isiklikku teavet meie ei kogu ega jaga mitte midagi kolmandate osapooltega.",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Kas sa oled kindel, et soovid lõpetada küsitlust? Sellega on tulemused lõplikud ja rohkem osaleda ei saa.",
     "End Poll": "Lõpeta küsitlus",
     "Sorry, the poll did not end. Please try again.": "Vabandust, aga küsitlus jäi lõpetamata. Palun proovi uuesti.",
@@ -1479,7 +1378,6 @@
     "Spaces you're in": "Kogukonnad, mille liige sa oled",
     "Link to room": "Link jututoale",
     "Including you, %(commaSeparatedMembers)s": "Seahulgas Sina, %(commaSeparatedMembers)s",
-    "Copy room link": "Kopeeri jututoa link",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Sellega rühmitad selle kogukonna liikmetega peetavaid vestlusi. Kui seadistus pole kasutusel, siis on neid vestlusi %(spaceName)s kogukonna vaates ei kuvata.",
     "Sections to show": "Näidatavad valikud",
     "Open in OpenStreetMap": "Ava OpenStreetMap'is",
@@ -1487,9 +1385,6 @@
     "This address had invalid server or is already in use": "Selle aadressiga seotud server on kas kirjas vigaselt või on juba kasutusel",
     "Missing room name or separator e.g. (my-room:domain.org)": "Jututoa nimi või eraldaja on puudu (näiteks jututuba:domeen.ee)",
     "Missing domain separator e.g. (:domain.org)": "Domeeni eraldaja on puudu (näiteks :domeen.ee)",
-    "Back to thread": "Tagasi jutulõnga manu",
-    "Room members": "Jututoa liikmed",
-    "Back to chat": "Tagasi vestluse manu",
     "Your new device is now verified. Other users will see it as trusted.": "Sinu uus seade on nüüd verifitseeritud. Teiste kasutajate jaoks on ta usaldusväärne.",
     "Your new device is now verified. It has access to your encrypted messages, and other users will see it as trusted.": "Sinu uus seade on nüüd verifitseeritud. Selles seadmes saad lugeda oma krüptitud sõnumeid ja teiste kasutajate jaoks on ta usaldusväärne.",
     "Verify with another device": "Verifitseeri teise seadmega",
@@ -1510,10 +1405,6 @@
     "You were removed from %(roomName)s by %(memberName)s": "%(memberName)s eemaldas sind %(roomName)s jututoast",
     "Message pending moderation": "Sõnum on modereerimise ootel",
     "Message pending moderation: %(reason)s": "Sõnum on modereerimise ootel: %(reason)s",
-    "Group all your rooms that aren't part of a space in one place.": "Koonda ühte kohta kõik oma jututoad, mis ei kuulu mõnda kogukonda.",
-    "Group all your people in one place.": "Koonda oma olulised sõbrad ühte kohta.",
-    "Group all your favourite rooms and people in one place.": "Koonda oma olulised sõbrad ning lemmikjututoad ühte kohta.",
-    "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Kogukonnakeskused on kasutajate ja jututubade koondamise viis. Lisaks kogukonnakeskustele, mille liiga sa oled, võid sa kasutada ka eelseadistatud kogukonnakeskusi.",
     "Pick a date to jump to": "Vali kuupäev, mida soovid vaadata",
     "Jump to date": "Vaata kuupäeva",
     "The beginning of the room": "Jututoa algus",
@@ -1539,12 +1430,9 @@
     "%(brand)s could not send your location. Please try again later.": "%(brand)s ei saanud sinu asukohta edastada. Palun proovi hiljem uuesti.",
     "We couldn't send your location": "Sinu asukoha saatmine ei õnnestunud",
     "Pinned": "Klammerdatud",
-    "Match system": "Kasuta süsteemset väärtust",
     "Expand quotes": "Näita viidatud sisu",
     "Collapse quotes": "Peida viidatud sisu",
     "Click": "Klõpsi",
-    "Click to move the pin": "Asukoha teisaldamiseks klõpsi",
-    "Click to drop a pin": "Asukoha märkimiseks klõpsi",
     "Can't create a thread from an event with an existing relation": "Jutulõnga ei saa luua sõnumist, mis juba on jutulõnga osa",
     "You are sharing your live location": "Sa jagad oma asukohta reaalajas",
     "%(displayName)s's live location": "%(displayName)s asukoht reaalajas",
@@ -1558,10 +1446,8 @@
     },
     "Preserve system messages": "Näita süsteemseid teateid",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Kui sa samuti soovid mitte kuvada selle kasutajaga seotud süsteemseid teateid (näiteks liikmelisuse muutused, profiili muutused, jne), siis eemalda see valik",
-    "Share for %(duration)s": "Jaga nii kaua - %(duration)s",
     "Unsent": "Saatmata",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Kohandatud serveriseadistusi saad kasutada selleks, et logida sisse sinu valitud koduserverisse. See võimaldab sinul kasutada %(brand)s'i mõnes teises koduserveri hallatava kasutajakontoga.",
-    "%(brand)s is experimental on a mobile web browser. For a better experience and the latest features, use our free native app.": "%(brand)s toimib nutiseadme veebibrauseris kastseliselt. Parima kasutajakogemuse ja uusima funktsionaalsuse jaoks kasuta meie rakendust.",
     "%(errcode)s was returned while trying to access the room or space. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.": "Astumisel jututuppa või liitumisel kogukonnaga tekkis viga %(errcode)s. Kui sa arvad, et sellise põhjusega viga ei tohiks tekkida, siis palun <issueLink>koosta veateade</issueLink>.",
     "Try again later, or ask a room or space admin to check if you have access.": "Proovi hiljem uuesti või küsi jututoa või kogukonna haldurilt, kas sul on ligipääs olemas.",
     "This room or space is not accessible at this time.": "See jututuba või kogukond pole hetkel ligipääsetav.",
@@ -1577,11 +1463,6 @@
     "Forget this space": "Unusta see kogukond",
     "You were removed by %(memberName)s": "%(memberName)s eemaldas sinu liikmelisuse",
     "Loading preview": "Laadin eelvaadet",
-    "Failed to join": "Liitumine ei õnnestunud",
-    "The person who invited you has already left, or their server is offline.": "See, sulle saatis kutse, kas juba on lahkunud või tema koduserver on võrgust väljas.",
-    "The person who invited you has already left.": "See, kes saatis sulle kutse, on juba lahkunud.",
-    "Sorry, your homeserver is too old to participate here.": "Vabandust, sinu koduserver on siin osalemiseks liiga vana.",
-    "There was an error joining.": "Liitumisel tekkis viga.",
     "An error occurred while stopping your live location, please try again": "Asukoha jagamise lõpetamisel tekkis viga, palun proovi mõne hetke pärast uuesti",
     "%(count)s participants": {
         "one": "1 osaleja",
@@ -1624,10 +1505,7 @@
     "Your password was successfully changed.": "Sinu salasõna muutmine õnnestus.",
     "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "Kui sa soovid ligipääsu varasematele krüptitud vestlustele, palun seadista võtmete varundus või enne jätkamist ekspordi mõnest seadmest krüptovõtmed.",
     "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "Kõikide sinu seadmete võrgust välja logimine kustutab ka nendes salvestatud krüptovõtmed ja sellega muutuvad ka krüptitud vestlused loetamatuteks.",
-    "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.": "Palun arvesta järgnevaga: see katseline funktsionaalsus kasutab ajutist lahendust. See tähendab, et sa ei saa oma asukoha jagamise ajalugu kustutada ning heade arvutioskustega kasutajad saavad näha sinu asukohta ka siis, kui sa oled oma asukoha jagamise selles jututoas lõpetanud.",
     "An error occurred while stopping your live location": "Sinu asukoha reaalajas jagamise lõpetamisel tekkis viga",
-    "Enable live location sharing": "Luba asukohta jagada reaalajas",
-    "Live location sharing": "Asukoha jagamine reaalajas",
     "%(members)s and more": "%(members)s ja veel",
     "%(members)s and %(last)s": "%(members)s ja veel %(last)s",
     "Open room": "Ava jututuba",
@@ -1649,12 +1527,8 @@
         "other": "%(count)s osalejat liitus",
         "one": "%(count)s osaleja liitus"
     },
-    "View related event": "Vaata seotud sündmust",
     "Read receipts": "Lugemisteatised",
-    "You were disconnected from the call. (Error: %(message)s)": "Kõne on katkenud. (Veateade: %(message)s)",
-    "Connection lost": "Ühendus on katkenud",
     "Deactivating your account is a permanent action — be careful!": "Kuna kasutajakonto dektiveerimist ei saa tagasi pöörata, siis palun ole ettevaatlik!",
-    "Un-maximise": "Lõpeta täisvaate kasutamine",
     "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "Kui sa logid välja, siis krüptovõtmed kustutatakse sellest seadmest. Seega, kui sul pole krüptovõtmeid varundatud teistes seadmetes või kasutusel serveripoolset varundust, siis sa krüptitud sõnumeid hiljem lugeda ei saa.",
     "Remove search filter for %(filter)s": "Eemalda otsingufilter „%(filter)s“",
     "Start a group chat": "Alusta rühmavestlust",
@@ -1690,8 +1564,6 @@
     "Choose a locale": "Vali lokaat",
     "Saved Items": "Salvestatud failid",
     "You're in": "Kõik on tehtud",
-    "Sessions": "Sessioonid",
-    "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.": "Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta.",
     "Interactively verify by emoji": "Verifitseeri interaktiivselt emoji abil",
     "Manually verify by text": "Verifitseeri käsitsi etteantud teksti abil",
     "We're creating a room with %(names)s": "Me loome jututoa järgnevaist: %(names)s",
@@ -1710,13 +1582,11 @@
     "Close call": "Lõpeta kõne",
     "Spotlight": "Rambivalgus",
     "Freedom": "Vabadus",
-    "Unknown room": "Teadmata jututuba",
     "Video call (%(brand)s)": "Videokõne (%(brand)s)",
     "Call type": "Kõne tüüp",
     "You do not have sufficient permissions to change this.": "Sul pole piisavalt õigusi selle muutmiseks.",
     "%(brand)s is end-to-end encrypted, but is currently limited to smaller numbers of users.": "%(brand)s kasutab läbivat krüptimist, kuid on hetkel piiratud väikese osalejate arvuga ühes kõnes.",
     "Enable %(brand)s as an additional calling option in this room": "Võta kasutusele %(brand)s kui lisavõimalus kõnedeks selles jututoas",
-    "Sorry — this call is currently full": "Vabandust, selles kõnes ei saa rohkem osalejaid olla",
     "Completing set up of your new device": "Lõpetame uue seadme seadistamise",
     "Waiting for device to sign in": "Ootame, et teine seade logiks võrku",
     "Review and approve the sign in": "Vaata üle ja kinnita sisselogimine Matrixi'i võrku",
@@ -1735,10 +1605,6 @@
     "The scanned code is invalid.": "Skaneeritud QR-kood on vigane.",
     "The linking wasn't completed in the required time.": "Sidumine ei lõppenud etteantud aja jooksul.",
     "Sign in new device": "Logi sisse uus seade",
-    "Are you sure you want to sign out of %(count)s sessions?": {
-        "one": "Kas sa oled kindel et soovid %(count)s sessiooni võrgust välja logida?",
-        "other": "Kas sa oled kindel et soovid %(count)s sessiooni võrgust välja logida?"
-    },
     "Show formatting": "Näita vormingut",
     "Hide formatting": "Peida vormindus",
     "Connection": "Ühendus",
@@ -1757,7 +1623,6 @@
     "We were unable to start a chat with the other user.": "Meil ei õnnestunud alustada vestlust teise kasutajaga.",
     "Error starting verification": "Viga verifitseerimise alustamisel",
     "<w>WARNING:</w> <description/>": "<w>HOIATUS:</w> <description/>",
-    "You have unverified sessions": "Sul on verifitseerimata sessioone",
     "Change layout": "Muuda paigutust",
     "Search users in this room…": "Vali kasutajad sellest jututoast…",
     "Give one or multiple users in this room more privileges": "Lisa selles jututoas ühele või mitmele kasutajale täiendavaid õigusi",
@@ -1765,7 +1630,6 @@
     "Unable to decrypt message": "Sõnumi dekrüptimine ei õnnestunud",
     "This message could not be decrypted": "Seda sõnumit ei õnnestunud dekrüptida",
     " in <strong>%(room)s</strong>": " <strong>%(room)s</strong> jututoas",
-    "Mark as read": "Märgi loetuks",
     "Text": "Tekst",
     "Create a link": "Tee link",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Kuna sa hetkel salvestad ringhäälingukõnet, siis häälsõnumi salvestamine või esitamine ei õnnestu. Selleks palun lõpeta ringhäälingukõne.",
@@ -1776,8 +1640,6 @@
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Kõik selle kasutaja sõnumid ja kutsed saava olema peidetud. Kas sa oled kindel, et soovid teda eirata?",
     "Ignore %(user)s": "Eira kasutajat %(user)s",
     "unknown": "teadmata",
-    "Red": "Punane",
-    "Grey": "Hall",
     "This session is backing up your keys.": "See sessioon varundab sinu krüptovõtmeid.",
     "Declining…": "Keeldumisel…",
     "There are no past polls in this room": "Selles jututoas pole varasemaid küsitlusi",
@@ -1812,10 +1674,7 @@
     "Due to decryption errors, some votes may not be counted": "Dekrüptimisvigade tõttu jääb osa hääli lugemata",
     "The sender has blocked you from receiving this message": "Sõnumi saatja on keelanud sul selle sõnumi saamise",
     "Ended a poll": "Lõpetas küsitluse",
-    "Yes, it was me": "Jah, see olin mina",
     "Answered elsewhere": "Vastatud mujal",
-    "If you know a room address, try joining through that instead.": "Kui sa tead jututoa aadressi, siis proovi liitumiseks seda kasutada.",
-    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Sa proovisid liituda jututoaga tema tunnuse alusel nii, et serveri nime polnud näidatud. Jututoa tunnused on sisemised identifikaatorid ja ilma lisateabeta neid liitumiseks kasutada ei saa.",
     "Load more polls": "Laadi veel küsitlusi",
     "Past polls": "Varasemad küsitlused",
     "Active polls": "Käimasolevad küsitlused",
@@ -1831,8 +1690,6 @@
     },
     "There are no past polls. Load more polls to view polls for previous months": "Pole ühtegi hiljutist küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
     "There are no active polls. Load more polls to view polls for previous months": "Pole ühtegi käimas küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
-    "Verify Session": "Verifitseeri sessioon",
-    "Ignore (%(counter)s)": "Eira (%(counter)s)",
     "Invites by email can only be sent one at a time": "Kutseid saad e-posti teel saata vaid ükshaaval",
     "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Teavituste eelistuste muutmisel tekkis viga. Palun proovi sama valikut uuesti sisse/välja lülitada.",
     "Desktop app logo": "Töölauarakenduse logo",
@@ -1848,13 +1705,10 @@
     "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Alates %(dateString)s ei leidnud me sündmusi ega teateid. Palun proovi valida varasem kuupäev.",
     "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Valitud kuupäeva vaate otsimisel ja avamisel tekkis võrguühenduse viga. Kas näiteks sinu koduserver hetkel ei tööta või on ajutisi katkestusi sinu internetiühenduses. Palun proovi mõne aja pärast uuesti. Kui viga kordub veel hiljemgi, siis palun suhtle oma koduserveri haldajaga.",
     "Poll history": "Küsitluste ajalugu",
-    "Match default setting": "Sobita vaikimisi seadistusega",
-    "Mute room": "Summuta jututuba",
     "Start DM anyway": "Ikkagi alusta vestlust",
     "Start DM anyway and never warn me again": "Alusta siiski ja ära hoiata mind enam",
     "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "Allpool loetletud Matrix'i kasutajatunnustele ei leidunud profiile. Kas sa ikkagi tahaksid nendega vestlust alustada?",
     "Formatting": "Vormindame andmeid",
-    "Image view": "Pildivaade",
     "Upload custom sound": "Laadi üles oma helifail",
     "Search all rooms": "Otsi kõikidest jututubadest",
     "Search this room": "Otsi sellest jututoast",
@@ -1865,8 +1719,6 @@
     "Once invited users have joined %(brand)s, you will be able to chat and the room will be end-to-end encrypted": "Kui kutse saanud kasutajad on liitunud %(brand)s'ga, siis saad sa nendega suhelda ja jututuba on läbivalt krüptitud",
     "Waiting for users to join %(brand)s": "Kasutajate liitumise ootel %(brand)s'ga",
     "You do not have permission to invite users": "Sul pole õigusi kutse saatmiseks teistele kasutajatele",
-    "Your language": "Sinu keel",
-    "Your device ID": "Sinu seadme tunnus",
     "Are you sure you wish to remove (delete) this event?": "Kas sa oled kindel, et soovid kustutada selle sündmuse?",
     "Note that removing room changes like this could undo the change.": "Palun arvesta jututoa muudatuste eemaldamine võib eemaldada ka selle muutuse.",
     "Ask to join": "Küsi võimalust liitumiseks",
@@ -1896,7 +1748,6 @@
     "Unable to find user by email": "E-posti aadressi alusel ei õnnestu kasutajat leida",
     "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.": "Sõnumid siin vestluses on läbivalt krüptitud. Klõpsides tunnuspilti saad verifitseerida kasutaja %(displayName)s.",
     "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "Sõnumid siin jututoas on läbivalt krüptitud. Kui uued kasutajad liituvad, siis klõpsides nende tunnuspilti saad neid verifitseerida.",
-    "Your profile picture URL": "Sinu tunnuspildi URL",
     "Upgrade room": "Uuenda jututoa versiooni",
     "Enter keywords here, or use for spelling variations or nicknames": "Sisesta märksõnad siia ning ära unusta erinevaid kirjapilte ja hüüdnimesid",
     "Quick Actions": "Kiirtoimingud",
@@ -1907,8 +1758,6 @@
     "Other spaces you know": "Muud kogukonnad, mida sa tead",
     "You need to be granted access to this room in order to view or participate in the conversation. You can send a request to join below.": "Selle jututoa vestluste lugemiseks ja nendega liitumiseks on sul vaja luba. Vastava päringu võid saata alljärgnevalt.",
     "Message (optional)": "Sõnum (kui soovid lisada)",
-    "You need an invite to access this room.": "Ligipääsuks siia jututuppa on sul vaja kutset.",
-    "Failed to cancel": "Tühistamine ei õnnestunud",
     "Ask to join %(roomName)s?": "Küsi luba liitumiseks jututoaga %(roomName)s?",
     "Ask to join?": "Küsi võimalust liitumiseks?",
     "Request access": "Küsi ligipääsu",
@@ -2013,7 +1862,9 @@
         "off": "Välja lülitatud",
         "all_rooms": "Kõik jututoad",
         "deselect_all": "Eemalda kõik valikud",
-        "select_all": "Vali kõik"
+        "select_all": "Vali kõik",
+        "copied": "Kopeeritud!",
+        "Advanced": "Teave arendajatele"
     },
     "action": {
         "continue": "Jätka",
@@ -2116,7 +1967,8 @@
         "clear": "Eemalda",
         "exit_fullscreeen": "Lülita täisekraanivaade välja",
         "enter_fullscreen": "Lülita täisekraanivaade sisse",
-        "unban": "Taasta ligipääs"
+        "unban": "Taasta ligipääs",
+        "click_to_copy": "Kopeerimiseks klõpsa"
     },
     "a11y": {
         "user_menu": "Kasutajamenüü",
@@ -2322,7 +2174,6 @@
             "user_a11y": "Kasutajanimede automaatne lõpetamine"
         }
     },
-    "Bold": "Paks kiri",
     "Link": "Link",
     "Code": "Kood",
     "power_level": {
@@ -2430,7 +2281,8 @@
         "intro_byline": "Vestlused, mida sa tegelikult ka omad.",
         "send_dm": "Saada otsesõnum",
         "explore_rooms": "Sirvi avalikke jututubasid",
-        "create_room": "Loo rühmavestlus"
+        "create_room": "Loo rühmavestlus",
+        "create_account": "Loo kasutajakonto"
     },
     "settings": {
         "show_breadcrumbs": "Näita viimati külastatud jututubade viiteid jututubade loendi kohal",
@@ -2571,7 +2423,21 @@
             "cryptography_section": "Krüptimine",
             "session_id": "Sessiooni tunnus:",
             "session_key": "Sessiooni võti:",
-            "encryption_section": "Krüptimine"
+            "encryption_section": "Krüptimine",
+            "bulk_options_section": "Masstoimingute seadistused",
+            "bulk_options_accept_all_invites": "Võta vastu kõik %(invitedRooms)s kutsed",
+            "bulk_options_reject_all_invites": "Lükka tagasi kõik %(invitedRooms)s kutsed",
+            "message_search_section": "Otsing sõnumite seast",
+            "analytics_subsection_description": "Võimalike vigade leidmiseks jaga meiega anonüümseid andmeid. Isiklikku teavet meie ei kogu ega jaga mitte midagi kolmandate osapooltega.",
+            "encryption_individual_verification_mode": "Ära usalda risttunnustamist ning verifitseeri kasutaja iga sessioon eraldi.",
+            "message_search_enabled": {
+                "one": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(rooms)s jututoa andmete salvestamiseks kulub hetkel %(size)s.",
+                "other": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(rooms)s jututoa andmete salvestamiseks kulub hetkel %(size)s."
+            },
+            "message_search_disabled": "Turvaliselt puhverda krüptitud sõnumid kohalikku arvutisse ja võimalda kasutada neid otsingus.",
+            "message_search_unsupported": "%(brand)s'is on puudu need komponendid, mis võimaldavad otsida kohalikest turvaliselt puhverdatud krüptitud sõnumitest. Kui sa tahaksid sellist funktsionaalsust katsetada, siis pead kompileerima %(brand)s'i variandi, kus <nativeLink>need komponendid on lisatud</nativeLink>.",
+            "message_search_unsupported_web": "%(brand)s ei võimalda veebibrauseris töötades krüptitud sõnumeid turvaliselt puhverdada. Selleks, et krüptitud sõnumeid saaks otsida, kasuta <desktopLink>%(brand)s Desktop</desktopLink> rakendust Matrix'i kliendina.",
+            "message_search_failed": "Sõnumite otsingu alustamine ei õnnestunud"
         },
         "preferences": {
             "room_list_heading": "Jututubade loend",
@@ -2685,7 +2551,13 @@
                 "one": "Logi seade võrgust välja"
             },
             "security_recommendations": "Turvalisusega seotud soovitused",
-            "security_recommendations_description": "Kui järgid neid soovitusi, siis sa parandad oma kasutajakonto turvalisust."
+            "security_recommendations_description": "Kui järgid neid soovitusi, siis sa parandad oma kasutajakonto turvalisust.",
+            "title": "Sessioonid",
+            "sign_out_confirm_description": {
+                "one": "Kas sa oled kindel et soovid %(count)s sessiooni võrgust välja logida?",
+                "other": "Kas sa oled kindel et soovid %(count)s sessiooni võrgust välja logida?"
+            },
+            "other_sessions_subsection_description": "Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta."
         },
         "general": {
             "oidc_manage_button": "Halda kasutajakontot",
@@ -2705,6 +2577,17 @@
             "add_msisdn_confirm_button": "Kinnita telefoninumbri lisamine",
             "add_msisdn_confirm_body": "Klõpsi järgnevat nuppu telefoninumbri lisamise kinnitamiseks.",
             "add_msisdn_dialog_title": "Lisa telefoninumber"
+        },
+        "sidebar": {
+            "title": "Külgpaan",
+            "metaspaces_subsection": "Näidatavad kogukonnakeskused",
+            "metaspaces_description": "Kogukonnakeskused on kasutajate ja jututubade koondamise viis. Lisaks kogukonnakeskustele, mille liiga sa oled, võid sa kasutada ka eelseadistatud kogukonnakeskusi.",
+            "metaspaces_home_description": "Avalehelt saad kõigest hea ülevaate.",
+            "metaspaces_home_all_rooms": "Näita kõiki oma jututubasid avalehel ka siis kui nad on osa mõnest kogukonnast.",
+            "metaspaces_favourites_description": "Koonda oma olulised sõbrad ning lemmikjututoad ühte kohta.",
+            "metaspaces_people_description": "Koonda oma olulised sõbrad ühte kohta.",
+            "metaspaces_orphans": "Jututoad väljaspool seda kogukonda",
+            "metaspaces_orphans_description": "Koonda ühte kohta kõik oma jututoad, mis ei kuulu mõnda kogukonda."
         }
     },
     "devtools": {
@@ -3208,7 +3091,15 @@
             "user": "%(senderName)s lõpetas <a>ringhäälingukõne</a>"
         },
         "creation_summary_dm": "%(creator)s alustas seda otsesuhtlust.",
-        "creation_summary_room": "%(creator)s lõi ja seadistas jututoa."
+        "creation_summary_room": "%(creator)s lõi ja seadistas jututoa.",
+        "context_menu": {
+            "view_source": "Vaata lähtekoodi",
+            "show_url_preview": "Näita eelvaadet",
+            "external_url": "Lähteaadress",
+            "collapse_reply_thread": "Ahenda vastuste jutulõnga",
+            "view_related_event": "Vaata seotud sündmust",
+            "report": "Teata sisust"
+        }
     },
     "slash_command": {
         "spoiler": "Saadab selle sõnumi rõõmurikkujana",
@@ -3411,10 +3302,18 @@
         "failed_call_live_broadcast_title": "Kõne algatamine ei õnnestu",
         "failed_call_live_broadcast_description": "Kuna sa hetkel salvestad ringhäälingukõnet, siis tavakõne algatamine ei õnnestu. Kõne alustamiseks palun lõpeta ringhäälingukõne.",
         "no_media_perms_title": "Meediaõigused puuduvad",
-        "no_media_perms_description": "Sa võib-olla pead andma %(brand)s'ile loa mikrofoni ja veebikaamera kasutamiseks"
+        "no_media_perms_description": "Sa võib-olla pead andma %(brand)s'ile loa mikrofoni ja veebikaamera kasutamiseks",
+        "call_toast_unknown_room": "Teadmata jututuba",
+        "join_button_tooltip_connecting": "Kõne on ühendamisel",
+        "join_button_tooltip_call_full": "Vabandust, selles kõnes ei saa rohkem osalejaid olla",
+        "hide_sidebar_button": "Peida külgpaan",
+        "show_sidebar_button": "Näita külgpaani",
+        "more_button": "Veel",
+        "screenshare_monitor": "Jaga tervet ekraani",
+        "screenshare_window": "Rakenduse aken",
+        "screenshare_title": "Jaga sisu"
     },
     "Other": "Muud",
-    "Advanced": "Teave arendajatele",
     "room_settings": {
         "permissions": {
             "m.room.avatar_space": "Muuda kogukonna tunnuspilti",
@@ -3503,7 +3402,9 @@
             "room_id": "Jututoa tehniline tunnus",
             "room_version_section": "Jututoa versioon",
             "room_version": "Jututoa versioon:"
-        }
+        },
+        "delete_avatar_label": "Kustuta tunnuspilt",
+        "upload_avatar_label": "Laadi üles profiilipilt ehk avatar"
     },
     "encryption": {
         "verification": {
@@ -3529,7 +3430,15 @@
             "waiting_other_device_details": "Ootan, et sa verifitseerid oma teises seadmes: %(deviceName)s (%(deviceId)s)…",
             "waiting_other_device": "Ootan, et sa verifitseeriksid oma teises seadmes…",
             "waiting_other_user": "Ootan kasutaja %(displayName)s verifitseerimist…",
-            "cancelling": "Tühistan…"
+            "cancelling": "Tühistan…",
+            "unverified_sessions_toast_title": "Sul on verifitseerimata sessioone",
+            "unverified_sessions_toast_description": "Tagamaks, et su konto on sinu kontrolli all, vaata andmed üle",
+            "unverified_sessions_toast_reject": "Hiljem",
+            "unverified_session_toast_title": "Uus sisselogimine. Kas see olid sina?",
+            "unverified_session_toast_accept": "Jah, see olin mina",
+            "request_toast_detail": "%(deviceId)s ip-aadressil %(ip)s",
+            "request_toast_decline_counter": "Eira (%(counter)s)",
+            "request_toast_accept": "Verifitseeri sessioon"
         },
         "old_version_detected_title": "Tuvastasin andmed, mille puhul on kasutatud vanemat tüüpi krüptimist",
         "old_version_detected_description": "%(brand)s vanema versiooni andmed on tuvastatud. See kindlasti põhjustab läbiva krüptimise tõrke vanemas versioonis. Läbivalt krüptitud sõnumid, mida on vanema versiooni kasutamise ajal hiljuti vahetatud, ei pruugi selles versioonis olla dekrüptitavad. See võib põhjustada vigu ka selle versiooniga saadetud sõnumite lugemisel. Kui teil tekib probleeme, logige välja ja uuesti sisse. Sõnumite ajaloo säilitamiseks eksportige ja uuesti importige oma krüptovõtmed.",
@@ -3539,7 +3448,18 @@
         "bootstrap_title": "Võtame krüptovõtmed kasutusele",
         "export_unsupported": "Sinu brauser ei toeta vajalikke krüptoteeke",
         "import_invalid_keyfile": "See ei ole sobilik võtmefail %(brand)s'i jaoks",
-        "import_invalid_passphrase": "Autentimine ebaõnnestus: kas salasõna pole õige?"
+        "import_invalid_passphrase": "Autentimine ebaõnnestus: kas salasõna pole õige?",
+        "set_up_toast_title": "Võta kasutusele turvaline varundus",
+        "upgrade_toast_title": "Krüptimise uuendus on saadaval",
+        "verify_toast_title": "Verifitseeri see sessioon",
+        "set_up_toast_description": "Hoia ära, et kaotad ligipääsu krüptitud sõnumitele ja andmetele",
+        "verify_toast_description": "Teised kasutajad ei pruugi seda usaldada",
+        "cross_signing_unsupported": "Sinu koduserver ei toeta risttunnustamist.",
+        "cross_signing_ready": "Risttunnustamine on kasutamiseks valmis.",
+        "cross_signing_ready_no_backup": "Risttunnustamine on töövalmis, aga krüptovõtmed on varundamata.",
+        "cross_signing_untrusted": "Sinu kontol on turvahoidlas olemas risttunnustamise identiteet, kuid seda veel ei loeta antud sessioonis usaldusväärseks.",
+        "cross_signing_not_ready": "Risttunnustamine on seadistamata.",
+        "not_supported": "<ei ole toetatud>"
     },
     "emoji": {
         "category_frequently_used": "Enamkasutatud",
@@ -3563,7 +3483,8 @@
         "bullet_1": "Meie <Bold>ei</Bold> salvesta ega profileeri sinu kasutajakonto andmeid",
         "bullet_2": "Meie <Bold>ei</Bold> jaga teavet kolmandate osapooltega",
         "disable_prompt": "Seadistustest saad alati määrata, et see funktsionaalsus pole kasutusel",
-        "accept_button": "Sobib"
+        "accept_button": "Sobib",
+        "shared_data_heading": "Järgnevaid andmeid võib jagada:"
     },
     "chat_effects": {
         "confetti_description": "Lisab sellele sõnumile serpentiine",
@@ -3719,7 +3640,8 @@
         "autodiscovery_unexpected_error_hs": "Koduserveri seadistustest selguse saamisel tekkis ootamatu viga",
         "autodiscovery_unexpected_error_is": "Isikutuvastusserveri seadistustest selguse saamisel tekkis ootamatu viga",
         "autodiscovery_hs_incompatible": "Sinu koduserver on liiga vana ega toeta vähimat nõutavat API versiooni. Lisateavet saad oma serveri haldajalt või kui ise oled haldaja, siis palun uuenda serverit.",
-        "incorrect_credentials_detail": "Sa kasutad sisselogimiseks serverit %(hs)s, mitte aga matrix.org'i."
+        "incorrect_credentials_detail": "Sa kasutad sisselogimiseks serverit %(hs)s, mitte aga matrix.org'i.",
+        "create_account_title": "Loo kasutajakonto"
     },
     "room_list": {
         "sort_unread_first": "Näita lugemata sõnumitega jututubasid esimesena",
@@ -3843,7 +3765,37 @@
         "error_need_to_be_logged_in": "Sa peaksid olema sisse loginud.",
         "error_need_invite_permission": "Selle tegevuse jaoks peaks sul olema õigus teistele kasutajatele kutse saatmiseks.",
         "error_need_kick_permission": "Selle tegevuse jaoks peaks sul olema õigus teistele kasutajatele müksamiseks.",
-        "no_name": "Tundmatu rakendus"
+        "no_name": "Tundmatu rakendus",
+        "error_hangup_title": "Ühendus on katkenud",
+        "error_hangup_description": "Kõne on katkenud. (Veateade: %(message)s)",
+        "context_menu": {
+            "start_audio_stream": "Käivita audiovoog",
+            "screenshot": "Tee foto",
+            "delete": "Kustuta vidin",
+            "delete_warning": "Vidina kustutamisel eemaldatakse ta kõikide selle jututoa kasutajate jaoks. Kas sa kindlasti soovid seda vidinat eemaldada?",
+            "remove": "Eemalda kõigilt",
+            "revoke": "Tühista õigused",
+            "move_left": "Liigu vasakule",
+            "move_right": "Liigu paremale"
+        },
+        "shared_data_name": "Sinu kuvatav nimi",
+        "shared_data_avatar": "Sinu tunnuspildi URL",
+        "shared_data_mxid": "Sinu kasutajatunnus",
+        "shared_data_device_id": "Sinu seadme tunnus",
+        "shared_data_theme": "Sinu teema",
+        "shared_data_lang": "Sinu keel",
+        "shared_data_url": "%(brand)s'i aadress",
+        "shared_data_room_id": "Jututoa tunnus",
+        "shared_data_widget_id": "Vidina tunnus",
+        "shared_data_warning_im": "Selle vidina kasutamisel võidakse jagada andmeid <helpIcon /> %(widgetDomain)s saitidega ning sinu lõiminguhalduriga.",
+        "shared_data_warning": "Selle vidina kasutamisel võidakse jagada andmeid <helpIcon /> saitidega %(widgetDomain)s.",
+        "unencrypted_warning": "Erinevalt sõnumitest vidinad ei kasuta krüptimist.",
+        "added_by": "Vidina lisaja",
+        "cookie_warning": "See vidin võib kasutada küpsiseid.",
+        "error_loading": "Viga vidina laadimisel",
+        "error_mixed_content": "Viga - erinev sisu",
+        "unmaximise": "Lõpeta täisvaate kasutamine",
+        "popout": "Ava rakendus eraldi aknas"
     },
     "feedback": {
         "sent": "Tagasiside on saadetud",
@@ -3940,7 +3892,8 @@
         "empty_heading": "Halda vestlusi jutulõngadena"
     },
     "theme": {
-        "light_high_contrast": "Hele ja väga kontrastne"
+        "light_high_contrast": "Hele ja väga kontrastne",
+        "match_system": "Kasuta süsteemset väärtust"
     },
     "space": {
         "landing_welcome": "Tete tulemast <name/> liikmeks",
@@ -3975,7 +3928,14 @@
         "failed_timeout": "Asukoha tuvastamine ei õnnestunud päringu aegumise tõttu. Palun proovi hiljem uuesti.",
         "failed_unknown": "Asukoha tuvastamine ei õnnestunud teadmaata põhjusel. Palun proovi hiljem uuesti.",
         "expand_map": "Kuva kaart laiemana",
-        "failed_load_map": "Kaardi laadimine ei õnnestu"
+        "failed_load_map": "Kaardi laadimine ei õnnestu",
+        "live_enable_heading": "Asukoha jagamine reaalajas",
+        "live_enable_description": "Palun arvesta järgnevaga: see katseline funktsionaalsus kasutab ajutist lahendust. See tähendab, et sa ei saa oma asukoha jagamise ajalugu kustutada ning heade arvutioskustega kasutajad saavad näha sinu asukohta ka siis, kui sa oled oma asukoha jagamise selles jututoas lõpetanud.",
+        "live_toggle_label": "Luba asukohta jagada reaalajas",
+        "live_share_button": "Jaga nii kaua - %(duration)s",
+        "click_move_pin": "Asukoha teisaldamiseks klõpsi",
+        "click_drop_pin": "Asukoha märkimiseks klõpsi",
+        "share_button": "Jaga asukohta"
     },
     "labs_mjolnir": {
         "room_name": "Minu poolt seatud ligipääsukeeldude loend",
@@ -4046,7 +4006,8 @@
     },
     "user_menu": {
         "switch_theme_light": "Kasuta heledat teemat",
-        "switch_theme_dark": "Kasuta tumedat teemat"
+        "switch_theme_dark": "Kasuta tumedat teemat",
+        "settings": "Kõik seadistused"
     },
     "notif_panel": {
         "empty_heading": "Ei tea... kõik vist on nüüd tehtud",
@@ -4084,7 +4045,28 @@
         "leave_error_title": "Viga jututoast lahkumisel",
         "upgrade_error_title": "Viga jututoa uuendamisel",
         "upgrade_error_description": "Kontrolli veel kord, kas sinu koduserver toetab seda jututoa versiooni ning proovi uuesti.",
-        "leave_server_notices_description": "Seda jututuba kasutatakse sinu koduserveri oluliste teadete jaoks ja seega sa ei saa sealt lahkuda."
+        "leave_server_notices_description": "Seda jututuba kasutatakse sinu koduserveri oluliste teadete jaoks ja seega sa ei saa sealt lahkuda.",
+        "error_join_connection": "Liitumisel tekkis viga.",
+        "error_join_incompatible_version_1": "Vabandust, sinu koduserver on siin osalemiseks liiga vana.",
+        "error_join_incompatible_version_2": "Palun võta ühendust koduserveri haldajaga.",
+        "error_join_404_invite_same_hs": "See, kes saatis sulle kutse, on juba lahkunud.",
+        "error_join_404_invite": "See, sulle saatis kutse, kas juba on lahkunud või tema koduserver on võrgust väljas.",
+        "error_join_404_1": "Sa proovisid liituda jututoaga tema tunnuse alusel nii, et serveri nime polnud näidatud. Jututoa tunnused on sisemised identifikaatorid ja ilma lisateabeta neid liitumiseks kasutada ei saa.",
+        "error_join_404_2": "Kui sa tead jututoa aadressi, siis proovi liitumiseks seda kasutada.",
+        "error_join_title": "Liitumine ei õnnestunud",
+        "error_join_403": "Ligipääsuks siia jututuppa on sul vaja kutset.",
+        "error_cancel_knock_title": "Tühistamine ei õnnestunud",
+        "context_menu": {
+            "unfavourite": "Märgitud lemmikuks",
+            "favourite": "Lemmik",
+            "mentions_only": "Ainult mainimised",
+            "copy_link": "Kopeeri jututoa link",
+            "low_priority": "Vähetähtis",
+            "forget": "Unusta jututuba ära",
+            "mark_read": "Märgi loetuks",
+            "notifications_default": "Sobita vaikimisi seadistusega",
+            "notifications_mute": "Summuta jututuba"
+        }
     },
     "file_panel": {
         "guest_note": "Selle funktsionaalsuse kasutamiseks pead sa <a>registreeruma</a>",
@@ -4104,7 +4086,8 @@
         "tac_button": "Vaata üle kasutustingimused",
         "identity_server_no_terms_title": "Isikutuvastusserveril puuduvad kasutustingimused",
         "identity_server_no_terms_description_1": "E-posti aadressi või telefoninumbri kontrolliks see tegevus eeldab päringut vaikimisi isikutuvastusserverisse <server />, aga sellel serveril puuduvad kasutustingimused.",
-        "identity_server_no_terms_description_2": "Jätka vaid siis, kui sa usaldad serveri omanikku."
+        "identity_server_no_terms_description_2": "Jätka vaid siis, kui sa usaldad serveri omanikku.",
+        "inline_intro_text": "Jätkamiseks nõustu <policyLink />'ga:"
     },
     "space_settings": {
         "title": "Seadistused - %(spaceName)s"
@@ -4200,7 +4183,11 @@
         "sync": "Ei saa ühendust koduserveriga. Proovin uuesti…",
         "connection": "Serveriühenduses tekkis viga. Palun proovi mõne aja pärast uuesti.",
         "mixed_content": "Kui aadressiribal on HTTPS-aadress, siis HTTP-protokolli kasutades ei saa ühendust koduserveriga. Palun pruugi HTTPS-protokolli või <a>luba brauseris ebaturvaliste skriptide kasutamine</a>.",
-        "tls": "Ei sa ühendust koduserveriga. Palun kontrolli, et sinu <a>koduserveri SSL sertifikaat</a> oleks usaldusväärne ning mõni brauseri lisamoodul ei blokeeri päringuid."
+        "tls": "Ei sa ühendust koduserveriga. Palun kontrolli, et sinu <a>koduserveri SSL sertifikaat</a> oleks usaldusväärne ning mõni brauseri lisamoodul ei blokeeri päringuid.",
+        "admin_contact_short": "Võta ühendust <a>oma serveri haldajaga</a>.",
+        "non_urgent_echo_failure_toast": "Sinu koduserver ei vasta mõnedele <a>päringutele</a>.",
+        "failed_copy": "Kopeerimine ebaõnnestus",
+        "something_went_wrong": "Midagi läks nüüd valesti!"
     },
     "in_space1_and_space2": "Kogukondades %(space1Name)s ja %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -4208,5 +4195,40 @@
         "other": "Kogukonnas %(spaceName)s ja %(count)s's muus kogukonnas."
     },
     "in_space": "Kogukonnas %(spaceName)s.",
-    "name_and_id": "%(name)s (%(userId)s)"
+    "name_and_id": "%(name)s (%(userId)s)",
+    "items_and_n_others": {
+        "other": "<Items/> ja %(count)s muud",
+        "one": "<Items/> ja üks muu"
+    },
+    "notifications": {
+        "enable_prompt_toast_title_from_message_send": "Ära jäta vastust vahele",
+        "enable_prompt_toast_title": "Teavitused",
+        "enable_prompt_toast_description": "Võta kasutusele töölauakeskkonna teavitused",
+        "colour_none": "Ei ühelgi juhul",
+        "colour_bold": "Paks kiri",
+        "colour_grey": "Hall",
+        "colour_red": "Punane",
+        "colour_unsent": "Saatmata",
+        "error_change_title": "Muuda teavituste seadistusi"
+    },
+    "mobile_guide": {
+        "toast_title": "Rakendusega saad Matrix'is suhelda parimal viisil",
+        "toast_description": "%(brand)s toimib nutiseadme veebibrauseris kastseliselt. Parima kasutajakogemuse ja uusima funktsionaalsuse jaoks kasuta meie rakendust.",
+        "toast_accept": "Kasuta rakendust"
+    },
+    "chat_card_back_action_label": "Tagasi vestluse manu",
+    "room_summary_card_back_action_label": "Info jututoa kohta",
+    "member_list_back_action_label": "Jututoa liikmed",
+    "thread_view_back_action_label": "Tagasi jutulõnga manu",
+    "quick_settings": {
+        "title": "Kiirseadistused",
+        "all_settings": "Kõik seadistused",
+        "metaspace_section": "Kinnita külgpaanile",
+        "sidebar_settings": "Täiendavad seadistused"
+    },
+    "lightbox": {
+        "title": "Pildivaade",
+        "rotate_left": "Pööra vasakule",
+        "rotate_right": "Pööra paremale"
+    }
 }

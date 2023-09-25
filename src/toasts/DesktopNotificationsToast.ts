@@ -39,9 +39,11 @@ const TOAST_KEY = "desktopnotifications";
 export const showToast = (fromMessageSend: boolean): void => {
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: fromMessageSend ? _t("Don't miss a reply") : _t("Notifications"),
+        title: fromMessageSend
+            ? _t("notifications|enable_prompt_toast_title_from_message_send")
+            : _t("notifications|enable_prompt_toast_title"),
         props: {
-            description: _t("Enable desktop notifications"),
+            description: _t("notifications|enable_prompt_toast_description"),
             acceptLabel: _t("action|enable"),
             onAccept,
             rejectLabel: _t("action|dismiss"),

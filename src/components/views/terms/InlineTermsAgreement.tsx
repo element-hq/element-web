@@ -87,7 +87,7 @@ export default class InlineTermsAgreement extends React.Component<IProps, IState
         for (let i = 0; i < this.state.policies.length; i++) {
             const policy = this.state.policies[i];
             const introText = _t(
-                "Accept <policyLink /> to continue:",
+                "terms|inline_intro_text",
                 {},
                 {
                     policyLink: () => {

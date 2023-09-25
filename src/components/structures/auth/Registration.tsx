@@ -679,7 +679,7 @@ export default class Registration extends React.Component<IProps, IState> {
                 <Fragment>
                     <div className="mx_Register_mainContent">
                         <AuthHeaderDisplay
-                            title={_t("Create account")}
+                            title={_t("auth|create_account_title")}
                             serverPicker={
                                 <ServerPicker
                                     title={_t("auth|server_picker_title_registration")}

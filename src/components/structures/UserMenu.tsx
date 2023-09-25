@@ -349,7 +349,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 {homeButton}
                 <IconizedContextMenuOption
                     iconClassName="mx_UserMenu_iconBell"
-                    label={_t("Notifications")}
+                    label={_t("notifications|enable_prompt_toast_title")}
                     onClick={(e) => this.onSettingsOpen(e, UserTab.Notifications)}
                 />
                 <IconizedContextMenuOption
@@ -359,7 +359,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 />
                 <IconizedContextMenuOption
                     iconClassName="mx_UserMenu_iconSettings"
-                    label={_t("All settings")}
+                    label={_t("user_menu|settings")}
                     onClick={(e) => this.onSettingsOpen(e)}
                 />
                 {feedbackButton}

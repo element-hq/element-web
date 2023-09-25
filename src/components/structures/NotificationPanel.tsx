@@ -95,7 +95,7 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
                     header={
                         <div className="mx_BaseCard_header_title">
                             <Heading size="4" className="mx_BaseCard_header_title_heading">
-                                {_t("Notifications")}
+                                {_t("notifications|enable_prompt_toast_title")}
                             </Heading>
                         </div>
                     }

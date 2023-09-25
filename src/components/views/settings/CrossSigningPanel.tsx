@@ -184,33 +184,31 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         } else if (!homeserverSupportsCrossSigning) {
             summarisedStatus = (
                 <SettingsSubsectionText data-testid="summarised-status">
-                    {_t("Your homeserver does not support cross-signing.")}
+                    {_t("encryption|cross_signing_unsupported")}
                 </SettingsSubsectionText>
             );
         } else if (crossSigningReady && crossSigningPrivateKeysInStorage) {
             summarisedStatus = (
                 <SettingsSubsectionText data-testid="summarised-status">
-                    ✅ {_t("Cross-signing is ready for use.")}
+                    ✅ {_t("encryption|cross_signing_ready")}
                 </SettingsSubsectionText>
             );
         } else if (crossSigningReady && !crossSigningPrivateKeysInStorage) {
             summarisedStatus = (
                 <SettingsSubsectionText data-testid="summarised-status">
-                    ⚠️ {_t("Cross-signing is ready but keys are not backed up.")}
+                    ⚠️ {_t("encryption|cross_signing_ready_no_backup")}
                 </SettingsSubsectionText>
             );
         } else if (crossSigningPrivateKeysInStorage) {
             summarisedStatus = (
                 <SettingsSubsectionText data-testid="summarised-status">
-                    {_t(
-                        "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.",
-                    )}
+                    {_t("encryption|cross_signing_untrusted")}
                 </SettingsSubsectionText>
             );
         } else {
             summarisedStatus = (
                 <SettingsSubsectionText data-testid="summarised-status">
-                    {_t("Cross-signing is not set up.")}
+                    {_t("encryption|cross_signing_not_ready")}
                 </SettingsSubsectionText>
             );
         }
@@ -232,9 +230,9 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
 
         // TODO: determine how better to expose this to users in addition to prompts at login/toast
         if (!keysExistEverywhere && homeserverSupportsCrossSigning) {
-            let buttonCaption = _t("Set up Secure Backup");
+            let buttonCaption = _t("encryption|set_up_toast_title");
             if (crossSigningPrivateKeysInStorage) {
-                buttonCaption = _t("Verify this session");
+                buttonCaption = _t("encryption|verify_toast_title");
             }
             actions.push(
                 <AccessibleButton key="setup" kind="primary" onClick={this.onBootstrapClick}>
@@ -260,7 +258,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
             <>
                 {summarisedStatus}
                 <details>
-                    <summary>{_t("Advanced")}</summary>
+                    <summary>{_t("common|Advanced")}</summary>
                     <table className="mx_CrossSigningPanel_statusList">
                         <tr>
                             <th scope="row">{_t("settings|security|cross_signing_public_keys")}</th>

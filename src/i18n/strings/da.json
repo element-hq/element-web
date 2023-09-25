@@ -13,8 +13,6 @@
     "Failed to change password. Is your password correct?": "Kunne ikke ændre adgangskoden. Er din adgangskode rigtig?",
     "Failed to reject invitation": "Kunne ikke afvise invitationen",
     "Failed to unban": "Var ikke i stand til at ophæve forbuddet",
-    "Favourite": "Favorit",
-    "Notifications": "Notifikationer",
     "unknown error code": "Ukendt fejlkode",
     "Failed to forget room %(errCode)s": "Kunne ikke glemme rummet %(errCode)s",
     "Unnamed room": "Unavngivet rum",
@@ -52,7 +50,6 @@
     "Changelog": "Ændringslog",
     "This Room": "Dette rum",
     "Unavailable": "Utilgængelig",
-    "Source URL": "Kilde URL",
     "Filter results": "Filtrér resultater",
     "Search…": "Søg…",
     "Tuesday": "Tirsdag",
@@ -65,7 +62,6 @@
     "You cannot delete this message. (%(code)s)": "Du kan ikke slette denne besked. (%(code)s)",
     "Thursday": "Torsdag",
     "Yesterday": "I går",
-    "Low Priority": "Lav prioritet",
     "Wednesday": "Onsdag",
     "Thank you!": "Tak!",
     "Logs sent": "Logfiler sendt",
@@ -73,21 +69,13 @@
     "Preparing to send logs": "Forbereder afsendelse af logfiler",
     "Permission Required": "Tilladelse påkrævet",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s. %(monthName)s %(fullYear)s",
-    "<Items/> and %(count)s others": {
-        "other": "<Items/> og %(count)s andre",
-        "one": "<Items/> og en anden"
-    },
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
-    "Please contact your homeserver administrator.": "Kontakt venligst din homeserver administrator.",
     "Enter passphrase": "Indtast kodeord",
-    "Verify this session": "Verificér denne session",
-    "Encryption upgrade available": "Opgradering af kryptering tilgængelig",
     "Explore rooms": "Udforsk rum",
     "Verification code": "Verifikationskode",
     "Headphones": "Hovedtelefoner",
     "Show more": "Vis mere",
     "Add a new server": "Tilføj en ny server",
-    "Change notification settings": "Skift notifikations indstillinger",
     "Profile picture": "Profil billede",
     "Checking server": "Tjekker server",
     "Profile": "Profil",
@@ -370,7 +358,8 @@
         "matrix": "Matrix",
         "unnamed_room": "Unavngivet rum",
         "on": "Tændt",
-        "off": "Slukket"
+        "off": "Slukket",
+        "Advanced": "Avanceret"
     },
     "action": {
         "continue": "Fortsæt",
@@ -565,6 +554,9 @@
         },
         "redacted": {
             "tooltip": "Besked slettet d. %(date)s"
+        },
+        "context_menu": {
+            "external_url": "Kilde URL"
         }
     },
     "slash_command": {
@@ -635,7 +627,6 @@
         "m.sticker": "%(senderName)s: %(stickerName)s"
     },
     "Other": "Andre",
-    "Advanced": "Avanceret",
     "composer": {
         "placeholder_reply": "Besvar…",
         "placeholder_encrypted": "Send en krypteret besked…",
@@ -686,7 +677,9 @@
         "bootstrap_title": "Sætter nøgler op",
         "export_unsupported": "Din browser understøtter ikke de påkrævede kryptografiske udvidelser",
         "import_invalid_keyfile": "Ikke en gyldig %(brand)s nøglefil",
-        "import_invalid_passphrase": "Godkendelse mislykkedes: forkert adgangskode?"
+        "import_invalid_passphrase": "Godkendelse mislykkedes: forkert adgangskode?",
+        "upgrade_toast_title": "Opgradering af kryptering tilgængelig",
+        "verify_toast_title": "Verificér denne session"
     },
     "emoji": {
         "categories": "Kategorier"
@@ -852,6 +845,19 @@
     },
     "room": {
         "upgrade_error_title": "Fejl under opgradering af rum",
-        "upgrade_error_description": "Dobbelt-tjek at din server understøtter den valgte rum-version og forsøg igen."
+        "upgrade_error_description": "Dobbelt-tjek at din server understøtter den valgte rum-version og forsøg igen.",
+        "error_join_incompatible_version_2": "Kontakt venligst din homeserver administrator.",
+        "context_menu": {
+            "favourite": "Favorit",
+            "low_priority": "Lav prioritet"
+        }
+    },
+    "items_and_n_others": {
+        "other": "<Items/> og %(count)s andre",
+        "one": "<Items/> og en anden"
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "Notifikationer",
+        "error_change_title": "Skift notifikations indstillinger"
     }
 }

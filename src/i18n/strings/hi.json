@@ -32,7 +32,6 @@
     "Moderator": "मध्यस्थ",
     "Reason": "कारण",
     "Send": "भेजें",
-    "Please contact your homeserver administrator.": "कृपया अपने होमसर्वर व्यवस्थापक से संपर्क करें।",
     "Incorrect verification code": "गलत सत्यापन कोड",
     "No display name": "कोई प्रदर्शन नाम नहीं",
     "Warning!": "चेतावनी!",
@@ -156,12 +155,8 @@
     "Phone numbers": "फोन नंबर",
     "Account management": "खाता प्रबंधन",
     "Deactivate Account": "खाता निष्क्रिय करें",
-    "Notifications": "सूचनाएं",
     "Scissors": "कैंची",
-    "<not supported>": "<समर्थित नहीं>",
     "Ignored users": "अनदेखी उपयोगकर्ताओं",
-    "Bulk options": "थोक विकल्प",
-    "Reject all %(invitedRooms)s invites": "सभी %(invitedRooms)s की आमंत्रण को अस्वीकार करें",
     "Missing media permissions, click the button below to request.": "मीडिया अनुमतियाँ गुम, अनुरोध करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
     "Request media permissions": "मीडिया अनुमति का अनुरोध करें",
     "No Audio Outputs detected": "कोई ऑडियो आउटपुट नहीं मिला",
@@ -343,7 +338,8 @@
         "someone": "कोई",
         "unnamed_room": "अनाम रूम",
         "on": "चालू",
-        "off": "बंद"
+        "off": "बंद",
+        "Advanced": "उन्नत"
     },
     "action": {
         "continue": "आगे बढ़ें",
@@ -441,7 +437,9 @@
             "send_analytics": "विश्लेषण डेटा भेजें",
             "export_megolm_keys": "E2E रूम कुंजी निर्यात करें",
             "import_megolm_keys": "E2E कक्ष की चाबियां आयात करें",
-            "cryptography_section": "क्रिप्टोग्राफी"
+            "cryptography_section": "क्रिप्टोग्राफी",
+            "bulk_options_section": "थोक विकल्प",
+            "bulk_options_reject_all_invites": "सभी %(invitedRooms)s की आमंत्रण को अस्वीकार करें"
         },
         "preferences": {
             "room_list_heading": "कक्ष सूचि",
@@ -597,7 +595,6 @@
         "default_device": "डिफ़ॉल्ट उपकरण",
         "no_media_perms_title": "मीडिया की अनुमति नहीं"
     },
-    "Advanced": "उन्नत",
     "composer": {
         "placeholder_reply_encrypted": "एक एन्क्रिप्टेड उत्तर भेजें …",
         "placeholder_encrypted": "एक एन्क्रिप्टेड संदेश भेजें …"
@@ -614,7 +611,8 @@
             "unsupported_method": "समर्थित सत्यापन विधि खोजने में असमर्थ।"
         },
         "export_unsupported": "आपका ब्राउज़र आवश्यक क्रिप्टोग्राफी एक्सटेंशन का समर्थन नहीं करता है",
-        "import_invalid_passphrase": "प्रमाणीकरण जांच विफल: गलत पासवर्ड?"
+        "import_invalid_passphrase": "प्रमाणीकरण जांच विफल: गलत पासवर्ड?",
+        "not_supported": "<समर्थित नहीं>"
     },
     "auth": {
         "sso": "केवल हस्ताक्षर के ऊपर",
@@ -682,7 +680,8 @@
         "widget_screenshots": "समर्थित विजेट्स पर विजेट स्क्रीनशॉट सक्षम करें"
     },
     "room": {
-        "drop_file_prompt": "अपलोड करने के लिए यहां फ़ाइल ड्रॉप करें"
+        "drop_file_prompt": "अपलोड करने के लिए यहां फ़ाइल ड्रॉप करें",
+        "error_join_incompatible_version_2": "कृपया अपने होमसर्वर व्यवस्थापक से संपर्क करें।"
     },
     "space": {
         "context_menu": {
@@ -756,5 +755,9 @@
     "error": {
         "mau": "इस होमसर्वर ने अपनी मासिक सक्रिय उपयोगकर्ता सीमा को प्राप्त कर लिया हैं।",
         "resource_limits": "यह होम सर्वर अपनी संसाधन सीमाओं में से एक से अधिक हो गया है।"
-    }
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "सूचनाएं"
+    },
+    "room_summary_card_back_action_label": "रूम जानकारी"
 }

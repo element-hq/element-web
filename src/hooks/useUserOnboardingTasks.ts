@@ -56,7 +56,7 @@ const onClickStartDm = (ev: ButtonEvent): void => {
 const tasks: UserOnboardingTask[] = [
     {
         id: "create-account",
-        title: _t("Create account"),
+        title: _t("auth|create_account_title"),
         description: _t("onboarding|you_made_it"),
         completed: () => true,
     },

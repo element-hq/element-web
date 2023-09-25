@@ -64,9 +64,9 @@ const SidebarUserSettingsTab: React.FC = () => {
 
     return (
         <SettingsTab>
-            <SettingsSection heading={_t("Sidebar")}>
+            <SettingsSection heading={_t("settings|sidebar|title")}>
                 <SettingsSubsection
-                    heading={_t("Spaces to show")}
+                    heading={_t("settings|sidebar|metaspaces_subsection")}
                     description={_t(
                         "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.",
                     )}
@@ -82,7 +82,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                             {_t("common|home")}
                         </SettingsSubsectionText>
                         <SettingsSubsectionText>
-                            {_t("Home is useful for getting an overview of everything.")}
+                            {_t("settings|sidebar|metaspaces_home_description")}
                         </SettingsSubsectionText>
                     </StyledCheckbox>
 
@@ -95,7 +95,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                     >
                         <SettingsSubsectionText>{_t("Show all rooms")}</SettingsSubsectionText>
                         <SettingsSubsectionText>
-                            {_t("Show all your rooms in Home, even if they're in a space.")}
+                            {_t("settings|sidebar|metaspaces_home_all_rooms")}
                         </SettingsSubsectionText>
                     </StyledCheckbox>
 
@@ -109,7 +109,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                             {_t("common|favourites")}
                         </SettingsSubsectionText>
                         <SettingsSubsectionText>
-                            {_t("Group all your favourite rooms and people in one place.")}
+                            {_t("settings|sidebar|metaspaces_favourites_description")}
                         </SettingsSubsectionText>
                     </StyledCheckbox>
 
@@ -122,7 +122,9 @@ const SidebarUserSettingsTab: React.FC = () => {
                             <MembersIcon />
                             {_t("common|people")}
                         </SettingsSubsectionText>
-                        <SettingsSubsectionText>{_t("Group all your people in one place.")}</SettingsSubsectionText>
+                        <SettingsSubsectionText>
+                            {_t("settings|sidebar|metaspaces_people_description")}
+                        </SettingsSubsectionText>
                     </StyledCheckbox>
 
                     <StyledCheckbox
@@ -132,10 +134,10 @@ const SidebarUserSettingsTab: React.FC = () => {
                     >
                         <SettingsSubsectionText>
                             <HashCircleIcon />
-                            {_t("Rooms outside of a space")}
+                            {_t("settings|sidebar|metaspaces_orphans")}
                         </SettingsSubsectionText>
                         <SettingsSubsectionText>
-                            {_t("Group all your rooms that aren't part of a space in one place.")}
+                            {_t("settings|sidebar|metaspaces_orphans_description")}
                         </SettingsSubsectionText>
                     </StyledCheckbox>
                 </SettingsSubsection>

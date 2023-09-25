@@ -29,7 +29,6 @@
     "Failed to reject invitation": "Misslyckades att avböja inbjudan",
     "Failed to set display name": "Misslyckades att ange visningsnamn",
     "Failed to unban": "Misslyckades att avbanna",
-    "Favourite": "Favoritmarkera",
     "Admin Tools": "Admin-verktyg",
     "Enter passphrase": "Ange lösenfras",
     "Filter room members": "Filtrera rumsmedlemmar",
@@ -46,8 +45,6 @@
     "Moderator": "Moderator",
     "New passwords must match each other.": "De nya lösenorden måste matcha.",
     "not specified": "inte specificerad",
-    "Notifications": "Aviseringar",
-    "<not supported>": "<stöds inte>",
     "No display name": "Inget visningsnamn",
     "No more results": "Inga fler resultat",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Öppna meddelandet i din e-post och klicka på länken i meddelandet. När du har gjort detta, klicka fortsätt.",
@@ -63,7 +60,6 @@
     "Session ID": "Sessions-ID",
     "Create new room": "Skapa nytt rum",
     "unknown error code": "okänd felkod",
-    "Delete widget": "Radera widget",
     "AM": "FM",
     "PM": "EM",
     "Unnamed room": "Namnlöst rum",
@@ -94,7 +90,6 @@
     "Changelog": "Ändringslogg",
     "This Room": "Det här rummet",
     "Unavailable": "Otillgänglig",
-    "Source URL": "Käll-URL",
     "Filter results": "Filtrera resultaten",
     "Tuesday": "tisdag",
     "Search…": "Sök…",
@@ -108,7 +103,6 @@
     "Invite to this room": "Bjud in till rummet",
     "Thursday": "torsdag",
     "Yesterday": "igår",
-    "Low Priority": "Låg prioritet",
     "Thank you!": "Tack!",
     "This room has no local addresses": "Det här rummet har inga lokala adresser",
     "Restricted": "Begränsad",
@@ -122,7 +116,6 @@
         "other": "(~%(count)s resultat)",
         "one": "(~%(count)s resultat)"
     },
-    "Upload avatar": "Ladda upp avatar",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (behörighet %(powerLevelNumber)s)",
     "And %(count)s more...": {
         "other": "Och %(count)s till…"
@@ -151,10 +144,7 @@
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Försökte ladda en viss punkt i det här rummets tidslinje, men du är inte behörig att visa det aktuella meddelandet.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Försökte ladda en specifik punkt i det här rummets tidslinje, men kunde inte hitta den.",
     "Unable to remove contact information": "Kunde inte ta bort kontaktuppgifter",
-    "Copied!": "Kopierat!",
-    "Failed to copy": "Misslyckades att kopiera",
     "Delete Widget": "Radera widget",
-    "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Att radera en widget tar bort den för alla användare i rummet. Är du säker på att du vill radera den?",
     "This room is not public. You will not be able to rejoin without an invite.": "Det här rummet är inte offentligt. Du kommer inte kunna gå med igen utan en inbjudan.",
     "Export room keys": "Exportera rumsnycklar",
     "Import room keys": "Importera rumsnycklar",
@@ -172,15 +162,9 @@
     "Jump to read receipt": "Hoppa till läskvitto",
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Denna process låter dig exportera nycklarna för meddelanden som du har fått i krypterade rum till en lokal fil. Du kommer sedan att kunna importera filen i en annan Matrix-klient i framtiden, så att den klienten också kan avkryptera meddelandena.",
     "Confirm Removal": "Bekräfta borttagning",
-    "Reject all %(invitedRooms)s invites": "Avböj alla %(invitedRooms)s inbjudningar",
-    "<Items/> and %(count)s others": {
-        "other": "<Items/> och %(count)s till",
-        "one": "<Items/> och en till"
-    },
     "collapse": "fäll ihop",
     "expand": "fäll ut",
     "<a>In reply to</a> <pill>": "<a>Som svar på</a> <pill>",
-    "Something went wrong!": "Något gick fel!",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Du kommer inte att kunna ångra den här ändringen eftersom du degraderar dig själv. Om du är den sista privilegierade användaren i rummet blir det omöjligt att återfå behörigheter.",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Du kommer inte att kunna ångra den här ändringen eftersom du höjer användaren till samma behörighetsnivå som dig själv.",
     "You don't currently have any stickerpacks enabled": "Du har för närvarande inga dekalpaket aktiverade",
@@ -188,7 +172,6 @@
     "Error decrypting video": "Fel vid avkryptering av video",
     "Add an Integration": "Lägg till integration",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Du kommer att skickas till en tredjepartswebbplats så att du kan autentisera ditt konto för användning med %(integrationsUrl)s. Vill du fortsätta?",
-    "Popout widget": "Poppa ut widget",
     "Passphrases must match": "Lösenfraser måste matcha",
     "Passphrase must not be empty": "Lösenfrasen får inte vara tom",
     "Confirm passphrase": "Bekräfta lösenfrasen",
@@ -208,7 +191,6 @@
     "Demote yourself?": "Degradera dig själv?",
     "Demote": "Degradera",
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Du kan inte skicka några meddelanden innan du granskar och godkänner <consentLink>våra villkor</consentLink>.",
-    "Please contact your homeserver administrator.": "Vänligen kontakta din hemserveradministratör.",
     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Ditt meddelande skickades inte eftersom hemservern har nått sin månatliga gräns för användaraktivitet. Vänligen <a>kontakta din serviceadministratör</a> för att fortsätta använda tjänsten.",
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Ditt meddelande skickades inte eftersom hemservern har överskridit en av sina resursgränser. Vänligen <a>kontakta din serviceadministratör</a> för att fortsätta använda tjänsten.",
     "This room has been replaced and is no longer active.": "Detta rum har ersatts och är inte längre aktivt.",
@@ -306,7 +288,6 @@
     "Join millions for free on the largest public server": "Gå med miljontals användare gratis på den största publika servern",
     "Your password has been reset.": "Ditt lösenord har återställts.",
     "General failure": "Allmänt fel",
-    "Create account": "Skapa konto",
     "Missing media permissions, click the button below to request.": "Saknar mediebehörigheter, klicka på knappen nedan för att begära.",
     "Request media permissions": "Begär mediebehörigheter",
     "Error updating main address": "Fel vid uppdatering av huvudadress",
@@ -320,8 +301,6 @@
     "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Är du säker? Du kommer att förlora dina krypterade meddelanden om dina nycklar inte säkerhetskopieras ordentligt.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Krypterade meddelanden är säkrade med totalsträckskryptering. Bara du och mottagaren/na har nycklarna för att läsa dessa meddelanden.",
     "Ignored users": "Ignorerade användare",
-    "Bulk options": "Massalternativ",
-    "Accept all %(invitedRooms)s invites": "Acceptera alla %(invitedRooms)s inbjudningar",
     "Failed to revoke invite": "Misslyckades att återkalla inbjudan",
     "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Kunde inte återkalla inbjudan. Servern kan ha ett tillfälligt problem eller så har du inte tillräckliga behörigheter för att återkalla inbjudan.",
     "Revoke invite": "Återkalla inbjudan",
@@ -361,7 +340,6 @@
     },
     "Cancel All": "Avbryt alla",
     "Upload Error": "Uppladdningsfel",
-    "Accept <policyLink /> to continue:": "Acceptera <policyLink /> för att fortsätta:",
     "Checking server": "Kontrollerar servern",
     "Change identity server": "Byt identitetsserver",
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "Koppla ifrån från identitetsservern <current /> och anslut till <new /> istället?",
@@ -438,20 +416,6 @@
     "%(name)s wants to verify": "%(name)s vill verifiera",
     "You sent a verification request": "Du skickade en verifieringsbegäran",
     "Cancel search": "Avbryt sökningen",
-    "Any of the following data may be shared:": "Vissa av följande data kan delas:",
-    "Your display name": "Ditt visningsnamn",
-    "Your user ID": "Ditt användar-ID",
-    "Your theme": "Ditt tema",
-    "%(brand)s URL": "%(brand)s-URL",
-    "Room ID": "Rums-ID",
-    "Widget ID": "Widget-ID",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Att använda denna widget kan dela data <helpIcon /> med %(widgetDomain)s.",
-    "Widgets do not use message encryption.": "Widgets använder inte meddelandekryptering.",
-    "Widget added by": "Widget tillagd av",
-    "This widget may use cookies.": "Denna widget kan använda kakor.",
-    "More options": "Fler alternativ",
-    "Rotate Left": "Rotera vänster",
-    "Rotate Right": "Rotera höger",
     "Language Dropdown": "Språkmeny",
     "e.g. my-room": "t.ex. mitt-rum",
     "Some characters not allowed": "Vissa tecken är inte tillåtna",
@@ -469,8 +433,6 @@
     "Message edits": "Meddelanderedigeringar",
     "Find others by phone or email": "Hitta andra via telefon eller e-post",
     "Be found by phone or email": "Bli hittad via telefon eller e-post",
-    "Verify this session": "Verifiera denna session",
-    "Encryption upgrade available": "Krypteringsuppgradering tillgänglig",
     "Unable to revoke sharing for email address": "Kunde inte återkalla delning för e-postadress",
     "Unable to share email address": "Kunde inte dela e-postadress",
     "Your email address hasn't been verified yet": "Din e-postadress har inte verifierats än",
@@ -487,34 +449,21 @@
     "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Att uppgradera ett rum är en avancerad åtgärd och rekommenderas vanligtvis när ett rum är instabilt på grund av buggar, saknade funktioner eller säkerhetsproblem.",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "Detta påverkar vanligtvis bara hur rummet bearbetas på servern. Om du har problem med %(brand)s, vänligen <a>rapportera ett fel</a>.",
     "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Du kommer att uppgradera detta rum från <oldVersion /> till <newVersion />.",
-    "Remove for everyone": "Ta bort för alla",
     "You signed in to a new session without verifying it:": "Du loggade in i en ny session utan att verifiera den:",
     "Verify your other session using one of the options below.": "Verifiera din andra session med ett av alternativen nedan.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) loggade in i en ny session utan att verifiera den:",
     "Ask this user to verify their session, or manually verify it below.": "Be den här användaren att verifiera sin session, eller verifiera den manuellt nedan.",
     "Not Trusted": "Inte betrodd",
-    "Later": "Senare",
     "Your homeserver has exceeded its user limit.": "Din hemserver har överskridit sin användargräns.",
     "Your homeserver has exceeded one of its resource limits.": "Din hemserver har överskridit en av sina resursgränser.",
-    "Contact your <a>server admin</a>.": "Kontakta din <a>serveradministratör</a>.",
     "Ok": "OK",
     "Set up": "Sätt upp",
-    "Other users may not trust it": "Andra användare kanske inta litar på den",
-    "New login. Was this you?": "Ny inloggning. Var det du?",
-    "Change notification settings": "Ändra aviseringsinställningar",
     "IRC display name width": "Bredd för IRC-visningsnamn",
     "Lock": "Lås",
-    "Your server isn't responding to some <a>requests</a>.": "Din server svarar inte på vissa <a>förfrågningar</a>.",
-    "Your homeserver does not support cross-signing.": "Din hemserver stöder inte korssignering.",
-    "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Ditt konto har en korssigneringsidentitet i hemlig lagring, men den är inte betrodd av den här sessionen än.",
     "well formed": "välformaterad",
     "unexpected type": "oväntad typ",
     "Secret storage public key:": "Publik nyckel för hemlig lagring:",
     "in account data": "i kontodata",
-    "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Verifiera individuellt varje session som används av en användare för att markera den som betrodd, och lita inte på korssignerade enheter.",
-    "Securely cache encrypted messages locally for them to appear in search results.": "Cachar krypterade meddelanden säkert lokalt för att de ska visas i sökresultat.",
-    "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s saknar vissa komponenter som krävs som krävs för att säkert cacha krypterade meddelanden lokalt. Om du vill experimentera med den här funktionen, bygg en anpassad %(brand)s Skrivbord med <nativeLink>sökkomponenter tillagda</nativeLink>.",
-    "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s kan inte säkert cacha krypterade meddelanden lokalt när den kör i en webbläsare. Använd <desktopLink>%(brand)s Skrivbord</desktopLink> för att krypterade meddelanden ska visas i sökresultaten.",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Den här servern <b>säkerhetskopierar inte dina nycklar</b>, men du har en existerande säkerhetskopia du kan återställa ifrån och lägga till till i framtiden.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Anslut den här sessionen till nyckelsäkerhetskopiering innan du loggar ut för att undvika att du blir av med nycklar som kanske bara finns på den här sessionen.",
     "Connect this session to Key Backup": "Anslut den här sessionen till nyckelsäkerhetskopiering",
@@ -533,7 +482,6 @@
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Samtyck till identitetsserverns (%(serverName)s) användarvillkor för att låta dig själv vara upptäckbar med e-postadress eller telefonnummer.",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "För att rapportera ett Matrix-relaterat säkerhetsproblem, vänligen läs Matrix.orgs <a>riktlinjer för säkerhetspublicering</a>.",
     "None": "Ingen",
-    "Message search": "Meddelandesök",
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "Din serveradministratör har inaktiverat totalsträckskryptering som förval för privata rum och direktmeddelanden.",
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "Det här rummet bryggar meddelanden till följande plattformar. <a>Lär dig mer.</a>",
     "Bridges": "Bryggor",
@@ -569,8 +517,6 @@
     "Reject & Ignore user": "Avvisa och ignorera användare",
     "Jump to first unread room.": "Hoppa till första olästa rum.",
     "Jump to first invite.": "Hoppa till första inbjudan.",
-    "Forget Room": "Glöm rum",
-    "Favourited": "Favoritmarkerad",
     "Room options": "Rumsinställningar",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Att uppgradera det här rummet kommer att stänga den nuvarande instansen av rummet och skapa ett uppgraderat rum med samma namn.",
     "This room has already been upgraded.": "Det här rummet har redan uppgraderats.",
@@ -727,7 +673,6 @@
     "Country Dropdown": "Land-dropdown",
     "Sign in with SSO": "Logga in med SSO",
     "Explore rooms": "Utforska rum",
-    "All settings": "Alla inställningar",
     "Switch theme": "Byt tema",
     "Invalid homeserver discovery response": "Ogiltigt hemserverupptäcktssvar",
     "Failed to get autodiscovery configuration from server": "Misslyckades att få konfiguration för autoupptäckt från servern",
@@ -755,7 +700,6 @@
     "Unable to query secret storage status": "Kunde inte fråga efter status på hemlig lagring",
     "If you cancel now, you may lose encrypted messages & data if you lose access to your logins.": "Om du avbryter nu så kan du förlora krypterade meddelanden och data om du förlorar åtkomst till dina inloggningar.",
     "You can also set up Secure Backup & manage your keys in Settings.": "Du kan även ställa in säker säkerhetskopiering och hantera dina nycklar i inställningarna.",
-    "Set up Secure Backup": "Ställ in säker säkerhetskopiering",
     "Upgrade your encryption": "Uppgradera din kryptering",
     "Set a Security Phrase": "Sätt en säkerhetsfras",
     "Confirm Security Phrase": "Bekräfta säkerhetsfras",
@@ -775,9 +719,6 @@
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Om du inte tog bort återställningsmetoden kan en angripare försöka komma åt ditt konto. Byt ditt kontolösenord och ställ in en ny återställningsmetod omedelbart i inställningarna.",
     "Not encrypted": "Inte krypterad",
     "Room settings": "Rumsinställningar",
-    "Take a picture": "Ta en bild",
-    "Cross-signing is ready for use.": "Korssignering är klart att användas.",
-    "Cross-signing is not set up.": "Korssignering är inte inställt.",
     "Backup version:": "Version av säkerhetskopia:",
     "Algorithm:": "Algoritm:",
     "Backup key stored:": "Lagrad säkerhetskopieringsnyckel:",
@@ -785,7 +726,6 @@
     "Secret storage:": "Hemlig lagring:",
     "ready": "klart",
     "not ready": "inte klart",
-    "Safeguard against losing access to encrypted messages & data": "Skydda mot att förlora åtkomst till krypterade meddelanden och data",
     "Widgets": "Widgets",
     "Edit widgets, bridges & bots": "Redigera widgets, bryggor och bottar",
     "Add widgets, bridges & bots": "Lägg till widgets, bryggor och bottar",
@@ -804,9 +744,6 @@
     "Use the <a>Desktop app</a> to search encrypted messages": "Använd <a>skrivbordsappen</a> söka bland krypterade meddelanden",
     "This version of %(brand)s does not support viewing some encrypted files": "Den här versionen av %(brand)s stöder inte visning av vissa krypterade filer",
     "This version of %(brand)s does not support searching encrypted messages": "Den här versionen av %(brand)s stöder inte sökning bland krypterade meddelanden",
-    "Move right": "Flytta till höger",
-    "Move left": "Flytta till vänster",
-    "Revoke permissions": "Återkalla behörigheter",
     "Data on this screen is shared with %(widgetDomain)s": "Data på den här skärmen delas med %(widgetDomain)s",
     "Modal Widget": "Dialogruta",
     "You can only pin up to %(count)s widgets": {
@@ -859,8 +796,6 @@
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Bjud in någon med deras namn, e-postadress eller användarnamn (som <userId/>) eller <a>dela det här rummet</a>.",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "Starta en konversation med någon med deras namn, e-postadress eller användarnamn (som <userId/>).",
     "Invite by email": "Bjud in via e-post",
-    "Enable desktop notifications": "Aktivera skrivbordsaviseringar",
-    "Don't miss a reply": "Missa inte ett svar",
     "Zimbabwe": "Zimbabwe",
     "Zambia": "Zambia",
     "Yemen": "Jemen",
@@ -1070,10 +1005,6 @@
     "Cape Verde": "Kap Verde",
     "Reason (optional)": "Orsak (valfritt)",
     "Server Options": "Serveralternativ",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
-        "one": "Cacha på ett säkert sätt krypterade meddelanden lokalt för att de ska visas i sökresultat, och använd %(size)s för att lagra meddelanden från %(rooms)s rum.",
-        "other": "Cacha på ett säkert sätt krypterade meddelanden lokalt för att de ska visas i sökresultat, och använd %(size)s för att lagra meddelanden från %(rooms)s rum."
-    },
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "En förvarning, om du inte lägger till en e-postadress och glömmer ditt lösenord, så kan du <b>permanent förlora åtkomst till ditt konto</b>.",
     "Continuing without email": "Fortsätter utan e-post",
     "Hold": "Parkera",
@@ -1092,8 +1023,6 @@
     "Allow this widget to verify your identity": "Tillåt att den här widgeten verifierar din identitet",
     "Set my room layout for everyone": "Sätt mitt rumsarrangemang för alla",
     "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Säkerhetskopiera dina krypteringsnycklar med din kontodata ifall du skulle förlora åtkomst till dina sessioner. Dina nycklar kommer att säkras med en unik säkerhetsnyckel.",
-    "Use app for a better experience": "Använd appen för en bättre upplevelse",
-    "Use app": "Använd app",
     "Great! This Security Phrase looks strong enough.": "Fantastiskt! Den här säkerhetsfrasen ser tillräckligt stark ut.",
     "Confirm your Security Phrase": "Bekräfta din säkerhetsfras",
     "A new Security Phrase and key for Secure Messages have been detected.": "En ny säkerhetsfras och -nyckel för säkra meddelanden har detekterats.",
@@ -1118,7 +1047,6 @@
     },
     "Are you sure you want to leave the space '%(spaceName)s'?": "Är du säker på att du vill lämna utrymmet '%(spaceName)s'?",
     "This space is not public. You will not be able to rejoin without an invite.": "Det här utrymmet är inte offentligt. Du kommer inte kunna gå med igen utan en inbjudan.",
-    "Start audio stream": "Starta ljudström",
     "Failed to start livestream": "Misslyckades att starta livestream",
     "Unable to start audio streaming.": "Kunde inte starta ljudströmning.",
     "Save Changes": "Spara ändringar",
@@ -1139,7 +1067,6 @@
     "Leave space": "Lämna utrymmet",
     "Invite people": "Bjud in folk",
     "Share invite link": "Skapa inbjudningslänk",
-    "Click to copy": "Klicka för att kopiera",
     "Create a space": "Skapa ett utrymme",
     "Private space": "Privat utrymme",
     "Public space": "Offentligt utrymme",
@@ -1160,8 +1087,6 @@
         "other": "%(count)s personer du känner har redan gått med",
         "one": "%(count)s person du känner har redan gått med"
     },
-    "Review to ensure your account is safe": "Granska för att försäkra dig om att ditt konto är säkert",
-    "%(deviceId)s from %(ip)s": "%(deviceId)s från %(ip)s",
     "unknown person": "okänd person",
     "Add existing rooms": "Lägg till existerande rum",
     "We couldn't create your DM.": "Vi kunde inte skapa ditt DM.",
@@ -1192,7 +1117,6 @@
     "Failed to send": "Misslyckades att skicka",
     "Enter your Security Phrase a second time to confirm it.": "Ange din säkerhetsfras igen för att bekräfta den.",
     "You have no ignored users.": "Du har inga ignorerade användare.",
-    "Message search initialisation failed": "Initialisering av meddelandesökning misslyckades",
     "Search names and descriptions": "Sök namn och beskrivningar",
     "You may contact me if you have any follow up questions": "Ni kan kontakta mig om ni har vidare frågor",
     "To leave the beta, visit your settings.": "För att lämna betan, besök dina inställningar.",
@@ -1220,14 +1144,10 @@
     "Message preview": "Meddelandeförhandsgranskning",
     "Sent": "Skickat",
     "You don't have permission to do this": "Du har inte behörighet att göra detta",
-    "Error - Mixed content": "Fel - blandat innehåll",
-    "Error loading Widget": "Fel vid laddning av widget",
     "Pinned messages": "Fästa meddelanden",
     "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Om du har behörighet, öppna menyn på ett meddelande och välj <b>Fäst</b> för att fösta dem här.",
     "Nothing pinned, yet": "Inget fäst än",
-    "Report": "Rapportera",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Din %(brand)s tillåter dig inte att använda en integrationshanterare för att göra detta. Vänligen kontakta en administratör.",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Att använda denna widget kan dela data <helpIcon /> med %(widgetDomain)s och din integrationshanterare.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integrationshanterare får konfigurationsdata och kan ändra widgetar, skicka rumsinbjudningar och ställa in behörighetsnivåer å dina vägnar.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Använd en integrationshanterare för att hantera bottar, widgets och dekalpaket.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Använd en integrationshanterare <b>(%(serverName)s)</b> för att hantera bottar, widgets och dekalpaket.",
@@ -1240,10 +1160,6 @@
     "Failed to update the visibility of this space": "Misslyckades att uppdatera synligheten för det här utrymmet",
     "Show all rooms": "Visa alla rum",
     "Address": "Adress",
-    "Delete avatar": "Radera avatar",
-    "More": "Mer",
-    "Show sidebar": "Visa sidopanel",
-    "Hide sidebar": "Göm sidopanel",
     "Space information": "Utrymmesinfo",
     "There was an error loading your notification settings.": "Ett fel inträffade när dina aviseringsinställningar laddades.",
     "Mentions & keywords": "Omnämnanden & nyckelord",
@@ -1297,9 +1213,6 @@
     "Published addresses can be used by anyone on any server to join your room.": "Publicerade adresser kan användas av vem som helst på vilken server som helst för att gå med i ditt rum.",
     "Published addresses can be used by anyone on any server to join your space.": "Publicerade adresser kan användas av vem som helst på vilken server som helst för att gå med i ditt utrymme.",
     "Please provide an address": "Ange en adress, tack",
-    "Share content": "Dela innehåll",
-    "Application window": "Programfönster",
-    "Share entire screen": "Dela hela skärmen",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Initialisering av meddelandesök misslyckades, kolla <a>dina inställningar</a> för mer information",
     "Adding spaces has moved.": "Tilläggning av utrymmen har flyttats.",
     "Search for rooms": "Sök efter rum",
@@ -1312,9 +1225,6 @@
     "Error downloading audio": "Fel vid nedladdning av ljud",
     "Unnamed audio": "Namnlöst ljud",
     "Add space": "Lägg till utrymme",
-    "Collapse reply thread": "Kollapsa svarstråd",
-    "Show preview": "Visa förhandsgranskning",
-    "View source": "Visa källkod",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Observera att en uppgradering kommer att skapa en ny version av rummet</b>. Alla nuvarande meddelanden kommer att stanna i det arkiverade rummet.",
     "Automatically invite members from this room to the new one": "Bjud automatiskt in medlemmar från det här rummet till det nya",
     "These are likely ones other room admins are a part of.": "Dessa är troligen såna andra rumsadmins är med i.",
@@ -1340,7 +1250,6 @@
     "Public room": "Offentligt rum",
     "Rooms and spaces": "Rum och utrymmen",
     "Results": "Resultat",
-    "Cross-signing is ready but keys are not backed up.": "Korssignering är klart, men nycklarna är inte säkerhetskopierade än.",
     "Some encryption parameters have been changed.": "Vissa krypteringsparametrar har ändrats.",
     "Role in <RoomName/>": "Roll i <RoomName/>",
     "Unknown failure": "Okänt fel",
@@ -1416,27 +1325,12 @@
     "Themes": "Teman",
     "Moderation": "Moderering",
     "Messaging": "Meddelanden",
-    "Pin to sidebar": "Fäst i sidopanelen",
-    "Quick settings": "Snabbinställningar",
-    "Spaces to show": "Utrymmen att visa",
-    "Sidebar": "Sidofält",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "Dela anonyma data med oss för att hjälpa oss att identifiera problem. Inget personligt. Inga tredje parter.",
-    "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Utrymmen är sätt att gruppera rum och personer. Utöver utrymmena du är med i så kan du använda några färdiggjorda också.",
-    "Back to thread": "Tillbaka till tråd",
-    "Room members": "Rumsmedlemmar",
-    "Back to chat": "Tillbaka till chatt",
     "From a thread": "Från en tråd",
     "You won't get any notifications": "Du får inga aviseringar",
     "Get notified only with mentions and keywords as set up in your <a>settings</a>": "Bli endast aviserad om omnämnanden och nyckelord i enlighet med dina <a>inställningar</a>",
     "@mentions & keywords": "@omnämnanden och nyckelord",
     "Get notifications as set up in your <a>settings</a>": "Få aviseringar i enlighet med dina <a>inställningar</a>",
     "Get notified for every message": "Bli aviserad för varje meddelande",
-    "Group all your rooms that aren't part of a space in one place.": "Gruppera alla dina rum som inte är en del av ett utrymme på ett ställe.",
-    "Rooms outside of a space": "Rum utanför ett utrymme",
-    "Group all your people in one place.": "Gruppera alla dina personer på ett ställe.",
-    "Group all your favourite rooms and people in one place.": "Gruppera alla dina favoritrum och -personer på ett ställe.",
-    "Show all your rooms in Home, even if they're in a space.": "Visa alla dina rum i Hem, även om de är i ett utrymme.",
-    "Home is useful for getting an overview of everything.": "Hem är användbar för att få en översikt över allt.",
     "Vote not registered": "Röst registrerades inte",
     "Reply in thread": "Svara i tråd",
     "Pick a date to jump to": "Välj ett datum att hoppa till",
@@ -1456,7 +1350,6 @@
     "Unpin this widget to view it in this panel": "Avfäst den här widgeten för att se den i den här panelen",
     "Chat": "Chatt",
     "To proceed, please accept the verification request on your other device.": "För att fortsätta, acceptera verifieringsförfrågan på din andra enhet.",
-    "Copy room link": "Kopiera rumslänk",
     "You were removed from %(roomName)s by %(memberName)s": "Du togs bort från %(roomName)s av %(memberName)s",
     "Home options": "Hemalternativ",
     "%(spaceName)s menu": "%(spaceName)s-alternativ",
@@ -1469,7 +1362,6 @@
     "Voice Message": "Röstmeddelanden",
     "Hide stickers": "Göm dekaler",
     "Including you, %(commaSeparatedMembers)s": "Inklusive dig, %(commaSeparatedMembers)s",
-    "Share location": "Dela plats",
     "Could not fetch location": "Kunde inte hämta plats",
     "Location": "Plats",
     "toggle event": "växla händelse",
@@ -1512,7 +1404,6 @@
     "Verify this device": "Verifiera den här enheten",
     "Unable to verify this device": "Kunde inte verifiera den här enheten",
     "Wait!": "Vänta!",
-    "Mentions only": "Endast omnämnanden",
     "Forget": "Glöm",
     "Open in OpenStreetMap": "Öppna i OpenStreetMap",
     "Verify other device": "Verifiera annan enhet",
@@ -1533,8 +1424,6 @@
     "Results will be visible when the poll is ended": "Resultat kommer att visas när omröstningen avslutas",
     "Pinned": "Fäst",
     "Open thread": "Öppna tråd",
-    "Match system": "Matcha systemet",
-    "%(brand)s is experimental on a mobile web browser. For a better experience and the latest features, use our free native app.": "%(brand)s är experimentell i mobila webbläsare. För en bättre upplevelse och de senaste funktionerna använd våran nativa app.",
     "This invite was sent to %(email)s": "Denna inbjudan skickades till %(email)s",
     "This invite was sent to %(email)s which is not associated with your account": "Denna inbjudan skickades till %(email)s vilken inte är associerad med ditt konto",
     "You can still join here.": "Du kan fortfarande gå med här.",
@@ -1550,11 +1439,6 @@
     },
     "New video room": "Nytt videorum",
     "New room": "Nytt rum",
-    "Failed to join": "Misslyckades att gå med",
-    "The person who invited you has already left, or their server is offline.": "Personen som bjöd in dig har redan lämnat, eller så är deras hemserver offline.",
-    "The person who invited you has already left.": "Personen som bjöd in dig har redan lämnat.",
-    "Sorry, your homeserver is too old to participate here.": "Din hemserver är tyvärr för gammal för att delta här.",
-    "There was an error joining.": "Fel vid försök att gå med.",
     "%(count)s participants": {
         "one": "1 deltagare",
         "other": "%(count)s deltagare"
@@ -1603,9 +1487,6 @@
     "%(displayName)s's live location": "Realtidsposition för %(displayName)s",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s kunde inte skicka din position. Försök igen senare.",
     "We couldn't send your location": "Vi kunde inte skicka din positoin",
-    "Click to drop a pin": "Klicka för att sätta ut en nål",
-    "Click to move the pin": "Klicka för att flytta nålen",
-    "Share for %(duration)s": "Dela under %(duration)s",
     "View live location": "Se realtidsposition",
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Du har loggats ut på alla enheter och kommer inte längre ta emot pushnotiser. För att återaktivera aviserings, logga in igen på varje enhet.",
     "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "Om du vill behålla åtkomst till din chatthistorik i krypterade rum, ställ in nyckelsäkerhetskopiering eller exportera dina rumsnycklar från en av dina andra enheter innan du fortsätter.",
@@ -1625,9 +1506,6 @@
     },
     "Your password was successfully changed.": "Ditt lösenord byttes framgångsrikt.",
     "An error occurred while stopping your live location": "Ett fel inträffade vid delning av din realtidsposition",
-    "Enable live location sharing": "Aktivera platsdelning i realtid",
-    "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.": "OBS: detta är en experimentell funktion med en temporär implementation. Detta betyder att du inte kommer kunna radera din platshistorik, och avancerade användare kommer kunna se din platshistorik även efter att du slutar dela din realtidsposition med det här rummet.",
-    "Live location sharing": "Positionsdelning i realtid",
     "%(members)s and %(last)s": "%(members)s och %(last)s",
     "%(members)s and more": "%(members)s och fler",
     "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.": "Ditt meddelande skickades inte eftersom att den här hemservern har blockerats av sin administratör. Vänligen <a>kontakta din tjänsteadministratör</a> för att fortsätta använda tjänsten.",
@@ -1649,11 +1527,7 @@
         "other": "%(count)s personer gick med",
         "one": "%(count)s person gick med"
     },
-    "View related event": "Visa relaterade händelser",
     "Read receipts": "Läskvitton",
-    "You were disconnected from the call. (Error: %(message)s)": "Du kopplades bort från samtalet. (Fel: %(message)s)",
-    "Connection lost": "Anslutning bröts",
-    "Un-maximise": "Avmaximera",
     "Deactivating your account is a permanent action — be careful!": "Avaktivering av ditt konto är en permanent handling — var försiktig!",
     "Remove search filter for %(filter)s": "Ta bort sökfilter för %(filter)s",
     "Start a group chat": "Starta en gruppchatt",
@@ -1689,23 +1563,14 @@
     "Messages in this chat will be end-to-end encrypted.": "Meddelanden i den här chatten kommer att vara totalsträckskypterade.",
     "Join the room to participate": "Gå med i rummet för att delta",
     "Saved Items": "Sparade föremål",
-    "Unknown room": "Okänt rum",
-    "Sorry — this call is currently full": "Tyvärr - det här samtalet är för närvarande fullt",
     "Connection": "Anslutning",
     "Voice processing": "Röstbearbetning",
     "Video settings": "Videoinställningar",
     "Automatically adjust the microphone volume": "Justera automatiskt mikrofonvolymen",
     "Voice settings": "Röstinställningar",
-    "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.": "För bäst säkerhet, verifiera dina sessioner och logga ut alla sessioner du inte känner igen eller använder längre.",
-    "Are you sure you want to sign out of %(count)s sessions?": {
-        "one": "Är du säker på att du vill logga ut %(count)s session?",
-        "other": "Är du säker på att du vill logga ut %(count)s sessioner?"
-    },
-    "Sessions": "Sessioner",
     "Search users in this room…": "Sök efter användare i det här rummet…",
     "Give one or multiple users in this room more privileges": "Ge en eller flera användare i det här rummet fler privilegier",
     "Add privileged users": "Lägg till privilegierade användare",
-    "You have unverified sessions": "Du har overifierade sessioner",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s eller %(recoveryFile)s",
     "Interactively verify by emoji": "Verifiera interaktivt med emoji",
     "Manually verify by text": "Verifiera manuellt med text",
@@ -1764,7 +1629,6 @@
     "Confirm new password": "Bekräfta nytt lösenord",
     "Too many attempts in a short time. Retry after %(timeout)s.": "För många försök under en kort tid. Pröva igen efter %(timeout)s.",
     "The homeserver doesn't support signing in another device.": "Hemservern stöder inte inloggning av en annan enhet.",
-    "Mark as read": "Markera som läst",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Du kan inte starta ett röstmeddelande eftersom du spelar in en direktsändning. Vänligen avsluta din direktsändning för att starta inspelning av ett röstmeddelande.",
     "Can't start voice message": "Kan inte starta röstmeddelanden",
     "Text": "Text",
@@ -1776,8 +1640,6 @@
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Alla meddelanden och inbjudningar från den här användaren kommer att döljas. Är du säker på att du vill ignorera denne?",
     "Ignore %(user)s": "Ignorera %(user)s",
     "unknown": "okänd",
-    "Red": "Röd",
-    "Grey": "Grå",
     "Declining…": "Nekar…",
     "This session is backing up your keys.": "Den här sessionen säkerhetskopierar dina nycklar.",
     "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "Varning: din personliga data (inklusive krypteringsnycklar) lagras i den här sessionen. Rensa den om du är färdig med den här sessionen, eller vill logga in i ett annat konto.",
@@ -1808,13 +1670,8 @@
     "Saving…": "Sparar …",
     "Creating…": "Skapar …",
     "Starting export process…": "Startar exportprocessen …",
-    "Yes, it was me": "Ja, det var jag",
     "Requires your server to support the stable version of MSC3827": "Kräver att din server stöder den stabila versionen av MSC3827",
-    "If you know a room address, try joining through that instead.": "Om du känner till en rumsadress, försök gå med via den istället.",
-    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Du försökte gå med med ett rums-ID utan att tillhandahålla en lista över servrar att gå med via. Rums-ID:n är interna identifierare och kan inte användas för att gå med i ett rum utan ytterligare information.",
     "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Ett fel uppstod när du uppdaterade dina aviseringsinställningar. Pröva att växla alternativet igen.",
-    "Verify Session": "Verifiera session",
-    "Ignore (%(counter)s)": "Ignorera (%(counter)s)",
     "View poll": "Visa omröstning",
     "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
         "one": "Det finns inga tidigare omröstningar för det senaste dygnet. Ladda fler omröstningar för att se omröstningar för tidigare månader",
@@ -1848,15 +1705,12 @@
     "Message from %(user)s": "Meddelande från %(user)s",
     "Answered elsewhere": "Besvarat på annat håll",
     "unknown status code": "okänd statuskod",
-    "Image view": "Bildvy",
     "Waiting for users to join %(brand)s": "Väntar på att användare går med i %(brand)s",
     "Error details": "Feldetaljer",
     "Desktop app logo": "Skrivbordsappslogga",
-    "Your device ID": "Ditt enhets-ID",
     "Message in %(room)s": "Meddelande i rum %(room)s",
     "The sender has blocked you from receiving this message": "Avsändaren har blockerat dig från att ta emot det här meddelandet",
     "Ended a poll": "Avslutade en omröstning",
-    "Your language": "Ditt språk",
     "Start DM anyway and never warn me again": "Starta DM ändå och varna mig aldrig igen",
     "Start DM anyway": "Starta DM ändå",
     "Server returned %(statusCode)s with error code %(errorCode)s": "Servern gav svar %(statusCode)s med felkoden %(errorCode)s",
@@ -1864,15 +1718,11 @@
     "Once invited users have joined %(brand)s, you will be able to chat and the room will be end-to-end encrypted": "När inbjudna användare har gått med i %(brand)s kommer du att kunna chatta och rummet kommer att vara totalsträckskrypterat",
     "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Vänligen skicka in <debugLogsLink>felsökningsloggar</debugLogsLink> för att hjälpa oss att spåra problemet.",
     "Invites by email can only be sent one at a time": "Inbjudningar via e-post kan endast skickas en i taget",
-    "Match default setting": "Matcha förvalsinställning",
-    "Mute room": "Tysta rum",
     "Unable to find event at that date": "Kunde inte hitta händelse vid det datumet",
     "Are you sure you wish to remove (delete) this event?": "Är du säker på att du vill ta bort (radera) den här händelsen?",
     "Note that removing room changes like this could undo the change.": "Observera att om du tar bort rumsändringar som den här kanske det ångrar ändringen.",
-    "You need an invite to access this room.": "Du behöver en inbjudan för att komma åt det här rummet.",
     "Ask to join": "Be om att gå med",
     "People cannot join unless access is granted.": "Personer kan inte gå med om inte åtkomst ges.",
-    "Failed to cancel": "Misslyckades att avbryta",
     "common": {
         "about": "Om",
         "analytics": "Statistik",
@@ -1970,7 +1820,9 @@
         "off": "Av",
         "all_rooms": "Alla rum",
         "deselect_all": "Välj bort alla",
-        "select_all": "Välj alla"
+        "select_all": "Välj alla",
+        "copied": "Kopierat!",
+        "Advanced": "Avancerat"
     },
     "action": {
         "continue": "Fortsätt",
@@ -2072,7 +1924,8 @@
         "clear": "Rensa",
         "exit_fullscreeen": "Gå ur fullskärm",
         "enter_fullscreen": "Gå till fullskärm",
-        "unban": "Avblockera"
+        "unban": "Avblockera",
+        "click_to_copy": "Klicka för att kopiera"
     },
     "a11y": {
         "user_menu": "Användarmeny",
@@ -2278,7 +2131,6 @@
             "user_a11y": "Autokomplettering av användare"
         }
     },
-    "Bold": "Fet",
     "Link": "Länk",
     "Code": "Kod",
     "power_level": {
@@ -2386,7 +2238,8 @@
         "intro_byline": "Äg dina konversationer.",
         "send_dm": "Skicka ett direktmeddelande",
         "explore_rooms": "Utforska offentliga rum",
-        "create_room": "Skapa en gruppchatt"
+        "create_room": "Skapa en gruppchatt",
+        "create_account": "Skapa konto"
     },
     "settings": {
         "show_breadcrumbs": "Visa genvägar till nyligen visade rum över rumslistan",
@@ -2527,7 +2380,21 @@
             "cryptography_section": "Kryptografi",
             "session_id": "Sessions-ID:",
             "session_key": "Sessionsnyckel:",
-            "encryption_section": "Kryptering"
+            "encryption_section": "Kryptering",
+            "bulk_options_section": "Massalternativ",
+            "bulk_options_accept_all_invites": "Acceptera alla %(invitedRooms)s inbjudningar",
+            "bulk_options_reject_all_invites": "Avböj alla %(invitedRooms)s inbjudningar",
+            "message_search_section": "Meddelandesök",
+            "analytics_subsection_description": "Dela anonyma data med oss för att hjälpa oss att identifiera problem. Inget personligt. Inga tredje parter.",
+            "encryption_individual_verification_mode": "Verifiera individuellt varje session som används av en användare för att markera den som betrodd, och lita inte på korssignerade enheter.",
+            "message_search_enabled": {
+                "one": "Cacha på ett säkert sätt krypterade meddelanden lokalt för att de ska visas i sökresultat, och använd %(size)s för att lagra meddelanden från %(rooms)s rum.",
+                "other": "Cacha på ett säkert sätt krypterade meddelanden lokalt för att de ska visas i sökresultat, och använd %(size)s för att lagra meddelanden från %(rooms)s rum."
+            },
+            "message_search_disabled": "Cachar krypterade meddelanden säkert lokalt för att de ska visas i sökresultat.",
+            "message_search_unsupported": "%(brand)s saknar vissa komponenter som krävs som krävs för att säkert cacha krypterade meddelanden lokalt. Om du vill experimentera med den här funktionen, bygg en anpassad %(brand)s Skrivbord med <nativeLink>sökkomponenter tillagda</nativeLink>.",
+            "message_search_unsupported_web": "%(brand)s kan inte säkert cacha krypterade meddelanden lokalt när den kör i en webbläsare. Använd <desktopLink>%(brand)s Skrivbord</desktopLink> för att krypterade meddelanden ska visas i sökresultaten.",
+            "message_search_failed": "Initialisering av meddelandesökning misslyckades"
         },
         "preferences": {
             "room_list_heading": "Rumslista",
@@ -2641,7 +2508,13 @@
                 "other": "Logga ut enheter"
             },
             "security_recommendations": "Säkerhetsrekommendationer",
-            "security_recommendations_description": "Förbättra din kontosäkerhet genom att följa dessa rekommendationer."
+            "security_recommendations_description": "Förbättra din kontosäkerhet genom att följa dessa rekommendationer.",
+            "title": "Sessioner",
+            "sign_out_confirm_description": {
+                "one": "Är du säker på att du vill logga ut %(count)s session?",
+                "other": "Är du säker på att du vill logga ut %(count)s sessioner?"
+            },
+            "other_sessions_subsection_description": "För bäst säkerhet, verifiera dina sessioner och logga ut alla sessioner du inte känner igen eller använder längre."
         },
         "general": {
             "oidc_manage_button": "Hantera konto",
@@ -2661,6 +2534,17 @@
             "add_msisdn_confirm_button": "Bekräfta tilläggning av telefonnumret",
             "add_msisdn_confirm_body": "Klicka på knappen nedan för att bekräfta tilläggning av telefonnumret.",
             "add_msisdn_dialog_title": "Lägg till telefonnummer"
+        },
+        "sidebar": {
+            "title": "Sidofält",
+            "metaspaces_subsection": "Utrymmen att visa",
+            "metaspaces_description": "Utrymmen är sätt att gruppera rum och personer. Utöver utrymmena du är med i så kan du använda några färdiggjorda också.",
+            "metaspaces_home_description": "Hem är användbar för att få en översikt över allt.",
+            "metaspaces_home_all_rooms": "Visa alla dina rum i Hem, även om de är i ett utrymme.",
+            "metaspaces_favourites_description": "Gruppera alla dina favoritrum och -personer på ett ställe.",
+            "metaspaces_people_description": "Gruppera alla dina personer på ett ställe.",
+            "metaspaces_orphans": "Rum utanför ett utrymme",
+            "metaspaces_orphans_description": "Gruppera alla dina rum som inte är en del av ett utrymme på ett ställe."
         }
     },
     "devtools": {
@@ -3150,7 +3034,15 @@
             "user": "%(senderName)s avslutade en <a>röstsändning</a>"
         },
         "creation_summary_dm": "%(creator)s skapade den här DM:en.",
-        "creation_summary_room": "%(creator)s skapade och konfigurerade rummet."
+        "creation_summary_room": "%(creator)s skapade och konfigurerade rummet.",
+        "context_menu": {
+            "view_source": "Visa källkod",
+            "show_url_preview": "Visa förhandsgranskning",
+            "external_url": "Käll-URL",
+            "collapse_reply_thread": "Kollapsa svarstråd",
+            "view_related_event": "Visa relaterade händelser",
+            "report": "Rapportera"
+        }
     },
     "slash_command": {
         "spoiler": "Skickar det angivna meddelandet som en spoiler",
@@ -3352,10 +3244,18 @@
         "failed_call_live_broadcast_title": "Kunde inte starta ett samtal",
         "failed_call_live_broadcast_description": "Du kan inte starta ett samtal eftersom att du spelar in en direktsändning. Vänligen avsluta din direktsändning för att starta ett samtal.",
         "no_media_perms_title": "Inga mediebehörigheter",
-        "no_media_perms_description": "Du behöver manuellt tillåta %(brand)s att komma åt din mikrofon/kamera"
+        "no_media_perms_description": "Du behöver manuellt tillåta %(brand)s att komma åt din mikrofon/kamera",
+        "call_toast_unknown_room": "Okänt rum",
+        "join_button_tooltip_connecting": "Ansluter",
+        "join_button_tooltip_call_full": "Tyvärr - det här samtalet är för närvarande fullt",
+        "hide_sidebar_button": "Göm sidopanel",
+        "show_sidebar_button": "Visa sidopanel",
+        "more_button": "Mer",
+        "screenshare_monitor": "Dela hela skärmen",
+        "screenshare_window": "Programfönster",
+        "screenshare_title": "Dela innehåll"
     },
     "Other": "Annat",
-    "Advanced": "Avancerat",
     "room_settings": {
         "permissions": {
             "m.room.avatar_space": "Byt utrymmesavatar",
@@ -3444,7 +3344,9 @@
             "room_id": "Internt rums-ID",
             "room_version_section": "Rumsversion",
             "room_version": "Rumsversion:"
-        }
+        },
+        "delete_avatar_label": "Radera avatar",
+        "upload_avatar_label": "Ladda upp avatar"
     },
     "encryption": {
         "verification": {
@@ -3470,7 +3372,15 @@
             "waiting_other_device_details": "Väntar på att du ska verifiera på din andra enhet, %(deviceName)s (%(deviceId)s)…",
             "waiting_other_device": "Väntar på att du ska verifiera på din andra enhet…",
             "waiting_other_user": "Väntar på att %(displayName)s ska verifiera…",
-            "cancelling": "Avbryter…"
+            "cancelling": "Avbryter…",
+            "unverified_sessions_toast_title": "Du har overifierade sessioner",
+            "unverified_sessions_toast_description": "Granska för att försäkra dig om att ditt konto är säkert",
+            "unverified_sessions_toast_reject": "Senare",
+            "unverified_session_toast_title": "Ny inloggning. Var det du?",
+            "unverified_session_toast_accept": "Ja, det var jag",
+            "request_toast_detail": "%(deviceId)s från %(ip)s",
+            "request_toast_decline_counter": "Ignorera (%(counter)s)",
+            "request_toast_accept": "Verifiera session"
         },
         "old_version_detected_title": "Gammal kryptografidata upptäckt",
         "old_version_detected_description": "Data från en äldre version av %(brand)s has upptäckts. Detta ska ha orsakat att totalsträckskryptering inte fungerat i den äldre versionen. Krypterade meddelanden som nyligen har skickats medans den äldre versionen användes kanske inte kan avkrypteras i denna version. Detta kan även orsaka att meddelanden skickade med denna version inte fungerar. Om du upplever problem, logga ut och in igen. För att behålla meddelandehistoriken, exportera dina nycklar och importera dem igen.",
@@ -3480,7 +3390,18 @@
         "bootstrap_title": "Sätter upp nycklar",
         "export_unsupported": "Din webbläsare stödjer inte nödvändiga kryptografitillägg",
         "import_invalid_keyfile": "Inte en giltig %(brand)s-nyckelfil",
-        "import_invalid_passphrase": "Autentiseringskontroll misslyckades: felaktigt lösenord?"
+        "import_invalid_passphrase": "Autentiseringskontroll misslyckades: felaktigt lösenord?",
+        "set_up_toast_title": "Ställ in säker säkerhetskopiering",
+        "upgrade_toast_title": "Krypteringsuppgradering tillgänglig",
+        "verify_toast_title": "Verifiera denna session",
+        "set_up_toast_description": "Skydda mot att förlora åtkomst till krypterade meddelanden och data",
+        "verify_toast_description": "Andra användare kanske inta litar på den",
+        "cross_signing_unsupported": "Din hemserver stöder inte korssignering.",
+        "cross_signing_ready": "Korssignering är klart att användas.",
+        "cross_signing_ready_no_backup": "Korssignering är klart, men nycklarna är inte säkerhetskopierade än.",
+        "cross_signing_untrusted": "Ditt konto har en korssigneringsidentitet i hemlig lagring, men den är inte betrodd av den här sessionen än.",
+        "cross_signing_not_ready": "Korssignering är inte inställt.",
+        "not_supported": "<stöds inte>"
     },
     "emoji": {
         "category_frequently_used": "Ofta använda",
@@ -3504,7 +3425,8 @@
         "bullet_1": "Vi spelar <Bold>inte</Bold> in eller profilerar någon kontodata",
         "bullet_2": "Vi delar <Bold>inte</Bold> information med tredje parter",
         "disable_prompt": "Du kan stänga av detta när som helst i inställningarna",
-        "accept_button": "Det är okej"
+        "accept_button": "Det är okej",
+        "shared_data_heading": "Vissa av följande data kan delas:"
     },
     "chat_effects": {
         "confetti_description": "Skickar det givna meddelandet med konfetti",
@@ -3659,7 +3581,8 @@
         "autodiscovery_unexpected_error_hs": "Oväntat fel vid inläsning av hemserverkonfiguration",
         "autodiscovery_unexpected_error_is": "Oväntat fel vid inläsning av identitetsserverkonfiguration",
         "autodiscovery_hs_incompatible": "Din hemserver är för gammal och stöder inte minimum-API:t som krävs. Vänligen kontakta din serverägare, eller uppgradera din server.",
-        "incorrect_credentials_detail": "Observera att du loggar in på servern %(hs)s, inte matrix.org."
+        "incorrect_credentials_detail": "Observera att du loggar in på servern %(hs)s, inte matrix.org.",
+        "create_account_title": "Skapa konto"
     },
     "room_list": {
         "sort_unread_first": "Visa rum med olästa meddelanden först",
@@ -3783,7 +3706,36 @@
         "error_need_to_be_logged_in": "Du måste vara inloggad.",
         "error_need_invite_permission": "Du behöver kunna bjuda in användare för att göra det där.",
         "error_need_kick_permission": "Du behöver kunna kicka användare för att göra det.",
-        "no_name": "Okänd app"
+        "no_name": "Okänd app",
+        "error_hangup_title": "Anslutning bröts",
+        "error_hangup_description": "Du kopplades bort från samtalet. (Fel: %(message)s)",
+        "context_menu": {
+            "start_audio_stream": "Starta ljudström",
+            "screenshot": "Ta en bild",
+            "delete": "Radera widget",
+            "delete_warning": "Att radera en widget tar bort den för alla användare i rummet. Är du säker på att du vill radera den?",
+            "remove": "Ta bort för alla",
+            "revoke": "Återkalla behörigheter",
+            "move_left": "Flytta till vänster",
+            "move_right": "Flytta till höger"
+        },
+        "shared_data_name": "Ditt visningsnamn",
+        "shared_data_mxid": "Ditt användar-ID",
+        "shared_data_device_id": "Ditt enhets-ID",
+        "shared_data_theme": "Ditt tema",
+        "shared_data_lang": "Ditt språk",
+        "shared_data_url": "%(brand)s-URL",
+        "shared_data_room_id": "Rums-ID",
+        "shared_data_widget_id": "Widget-ID",
+        "shared_data_warning_im": "Att använda denna widget kan dela data <helpIcon /> med %(widgetDomain)s och din integrationshanterare.",
+        "shared_data_warning": "Att använda denna widget kan dela data <helpIcon /> med %(widgetDomain)s.",
+        "unencrypted_warning": "Widgets använder inte meddelandekryptering.",
+        "added_by": "Widget tillagd av",
+        "cookie_warning": "Denna widget kan använda kakor.",
+        "error_loading": "Fel vid laddning av widget",
+        "error_mixed_content": "Fel - blandat innehåll",
+        "unmaximise": "Avmaximera",
+        "popout": "Poppa ut widget"
     },
     "feedback": {
         "sent": "Återkoppling skickad",
@@ -3880,7 +3832,8 @@
         "empty_heading": "Håll diskussioner organiserade med trådar"
     },
     "theme": {
-        "light_high_contrast": "Ljust högkontrast"
+        "light_high_contrast": "Ljust högkontrast",
+        "match_system": "Matcha systemet"
     },
     "space": {
         "landing_welcome": "Välkommen till <name/>",
@@ -3915,7 +3868,14 @@
         "failed_timeout": "Tidsgränsen överskreds vid försök att hämta din plats. Pröva igen senare.",
         "failed_unknown": "Ökänt fel när plats hämtades. Pröva igen senare.",
         "expand_map": "Expandera karta",
-        "failed_load_map": "Kunde inte ladda kartan"
+        "failed_load_map": "Kunde inte ladda kartan",
+        "live_enable_heading": "Positionsdelning i realtid",
+        "live_enable_description": "OBS: detta är en experimentell funktion med en temporär implementation. Detta betyder att du inte kommer kunna radera din platshistorik, och avancerade användare kommer kunna se din platshistorik även efter att du slutar dela din realtidsposition med det här rummet.",
+        "live_toggle_label": "Aktivera platsdelning i realtid",
+        "live_share_button": "Dela under %(duration)s",
+        "click_move_pin": "Klicka för att flytta nålen",
+        "click_drop_pin": "Klicka för att sätta ut en nål",
+        "share_button": "Dela plats"
     },
     "labs_mjolnir": {
         "room_name": "Min bannlista",
@@ -3986,7 +3946,8 @@
     },
     "user_menu": {
         "switch_theme_light": "Byt till ljust läge",
-        "switch_theme_dark": "Byt till mörkt läge"
+        "switch_theme_dark": "Byt till mörkt läge",
+        "settings": "Alla inställningar"
     },
     "notif_panel": {
         "empty_heading": "Du är ikapp",
@@ -4024,7 +3985,28 @@
         "leave_error_title": "Fel när rummet lämnades",
         "upgrade_error_title": "Fel vid uppgradering av rum",
         "upgrade_error_description": "Dubbelkolla att din server stöder den valda rumsversionen och försök igen.",
-        "leave_server_notices_description": "Detta rum används för viktiga meddelanden från hemservern, så du kan inte lämna det."
+        "leave_server_notices_description": "Detta rum används för viktiga meddelanden från hemservern, så du kan inte lämna det.",
+        "error_join_connection": "Fel vid försök att gå med.",
+        "error_join_incompatible_version_1": "Din hemserver är tyvärr för gammal för att delta här.",
+        "error_join_incompatible_version_2": "Vänligen kontakta din hemserveradministratör.",
+        "error_join_404_invite_same_hs": "Personen som bjöd in dig har redan lämnat.",
+        "error_join_404_invite": "Personen som bjöd in dig har redan lämnat, eller så är deras hemserver offline.",
+        "error_join_404_1": "Du försökte gå med med ett rums-ID utan att tillhandahålla en lista över servrar att gå med via. Rums-ID:n är interna identifierare och kan inte användas för att gå med i ett rum utan ytterligare information.",
+        "error_join_404_2": "Om du känner till en rumsadress, försök gå med via den istället.",
+        "error_join_title": "Misslyckades att gå med",
+        "error_join_403": "Du behöver en inbjudan för att komma åt det här rummet.",
+        "error_cancel_knock_title": "Misslyckades att avbryta",
+        "context_menu": {
+            "unfavourite": "Favoritmarkerad",
+            "favourite": "Favoritmarkera",
+            "mentions_only": "Endast omnämnanden",
+            "copy_link": "Kopiera rumslänk",
+            "low_priority": "Låg prioritet",
+            "forget": "Glöm rum",
+            "mark_read": "Markera som läst",
+            "notifications_default": "Matcha förvalsinställning",
+            "notifications_mute": "Tysta rum"
+        }
     },
     "file_panel": {
         "guest_note": "Du måste <a>registrera dig</a> för att använda den här funktionaliteten",
@@ -4044,7 +4026,8 @@
         "tac_button": "Granska villkoren",
         "identity_server_no_terms_title": "Identitetsservern har inga användarvillkor",
         "identity_server_no_terms_description_1": "Den här åtgärden kräver åtkomst till standardidentitetsservern <server /> för att validera en e-postadress eller ett telefonnummer, men servern har inga användarvillkor.",
-        "identity_server_no_terms_description_2": "Fortsätt endast om du litar på serverns ägare."
+        "identity_server_no_terms_description_2": "Fortsätt endast om du litar på serverns ägare.",
+        "inline_intro_text": "Acceptera <policyLink /> för att fortsätta:"
     },
     "space_settings": {
         "title": "Inställningar - %(spaceName)s"
@@ -4140,7 +4123,11 @@
         "sync": "Kunde inte kontakta hemservern. Försöker igen …",
         "connection": "Ett problem inträffade vi kommunikation med hemservern, vänligen försök igen senare.",
         "mixed_content": "Kan inte ansluta till en hemserver via HTTP då adressen i webbläsaren är HTTPS. Använd HTTPS, eller <a>aktivera osäkra skript</a>.",
-        "tls": "Kan inte ansluta till hemservern - vänligen kolla din nätverksanslutning, se till att <a>hemserverns SSL-certifikat</a> är betrott, och att inget webbläsartillägg blockerar förfrågningar."
+        "tls": "Kan inte ansluta till hemservern - vänligen kolla din nätverksanslutning, se till att <a>hemserverns SSL-certifikat</a> är betrott, och att inget webbläsartillägg blockerar förfrågningar.",
+        "admin_contact_short": "Kontakta din <a>serveradministratör</a>.",
+        "non_urgent_echo_failure_toast": "Din server svarar inte på vissa <a>förfrågningar</a>.",
+        "failed_copy": "Misslyckades att kopiera",
+        "something_went_wrong": "Något gick fel!"
     },
     "in_space1_and_space2": "I utrymmena %(space1Name)s och %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -4148,5 +4135,40 @@
         "other": "I %(spaceName)s och %(count)s andra utrymmen."
     },
     "in_space": "I utrymmet %(spaceName)s.",
-    "name_and_id": "%(name)s (%(userId)s)"
+    "name_and_id": "%(name)s (%(userId)s)",
+    "items_and_n_others": {
+        "other": "<Items/> och %(count)s till",
+        "one": "<Items/> och en till"
+    },
+    "notifications": {
+        "enable_prompt_toast_title_from_message_send": "Missa inte ett svar",
+        "enable_prompt_toast_title": "Aviseringar",
+        "enable_prompt_toast_description": "Aktivera skrivbordsaviseringar",
+        "colour_none": "Ingen",
+        "colour_bold": "Fet",
+        "colour_grey": "Grå",
+        "colour_red": "Röd",
+        "colour_unsent": "Ej skickat",
+        "error_change_title": "Ändra aviseringsinställningar"
+    },
+    "mobile_guide": {
+        "toast_title": "Använd appen för en bättre upplevelse",
+        "toast_description": "%(brand)s är experimentell i mobila webbläsare. För en bättre upplevelse och de senaste funktionerna använd våran nativa app.",
+        "toast_accept": "Använd app"
+    },
+    "chat_card_back_action_label": "Tillbaka till chatt",
+    "room_summary_card_back_action_label": "Rumsinformation",
+    "member_list_back_action_label": "Rumsmedlemmar",
+    "thread_view_back_action_label": "Tillbaka till tråd",
+    "quick_settings": {
+        "title": "Snabbinställningar",
+        "all_settings": "Alla inställningar",
+        "metaspace_section": "Fäst i sidopanelen",
+        "sidebar_settings": "Fler alternativ"
+    },
+    "lightbox": {
+        "title": "Bildvy",
+        "rotate_left": "Rotera vänster",
+        "rotate_right": "Rotera höger"
+    }
 }

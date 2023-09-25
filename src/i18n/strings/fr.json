@@ -4,8 +4,6 @@
     "Failed to change password. Is your password correct?": "Échec du changement de mot de passe. Votre mot de passe est-il correct ?",
     "Failed to change power level": "Échec du changement de rang",
     "Failed to forget room %(errCode)s": "Échec de l’oubli du salon %(errCode)s",
-    "Favourite": "Favoris",
-    "Notifications": "Notifications",
     "%(items)s and %(lastItem)s": "%(items)s et %(lastItem)s",
     "and %(count)s others...": {
         "other": "et %(count)s autres…",
@@ -35,7 +33,6 @@
     "Moderator": "Modérateur",
     "New passwords must match each other.": "Les nouveaux mots de passe doivent être identiques.",
     "not specified": "non spécifié",
-    "<not supported>": "<non pris en charge>",
     "No more results": "Fin des résultats",
     "unknown error code": "code d’erreur inconnu",
     "Default": "Par défaut",
@@ -58,7 +55,6 @@
     "Unable to add email address": "Impossible d'ajouter l’adresse e-mail",
     "Unable to remove contact information": "Impossible de supprimer les informations du contact",
     "Unable to verify email address.": "Impossible de vérifier l’adresse e-mail.",
-    "Upload avatar": "Envoyer un avatar",
     "Verification Pending": "Vérification en attente",
     "Warning!": "Attention !",
     "You do not have permission to post to this room": "Vous n’avez pas la permission de poster dans ce salon",
@@ -99,7 +95,6 @@
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Ce processus vous permet d’exporter dans un fichier local les clés pour les messages que vous avez reçus dans des salons chiffrés. Il sera ensuite possible d’importer ce fichier dans un autre client Matrix, afin de permettre à ce client de pouvoir déchiffrer ces messages.",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Ce processus vous permet d’importer les clés de chiffrement que vous avez précédemment exportées depuis un autre client Matrix. Vous serez alors capable de déchiffrer n’importe quel message que l’autre client pouvait déchiffrer.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Le fichier exporté sera protégé par un mot de passe. Vous devez saisir ce mot de passe ici, pour déchiffrer le fichier.",
-    "Reject all %(invitedRooms)s invites": "Rejeter la totalité des %(invitedRooms)s invitations",
     "Confirm Removal": "Confirmer la suppression",
     "Unknown error": "Erreur inconnue",
     "Unable to restore session": "Impossible de restaurer la session",
@@ -119,7 +114,6 @@
         "other": "Envoi de %(filename)s et %(count)s autres"
     },
     "Create new room": "Créer un nouveau salon",
-    "Something went wrong!": "Quelque chose s’est mal déroulé !",
     "No display name": "Pas de nom d’affichage",
     "%(roomName)s does not exist.": "%(roomName)s n’existe pas.",
     "%(roomName)s is not accessible at this time.": "%(roomName)s n’est pas joignable pour le moment.",
@@ -130,22 +124,14 @@
     "Home": "Accueil",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (rang %(powerLevelNumber)s)",
     "This will allow you to reset your password and receive notifications.": "Ceci vous permettra de réinitialiser votre mot de passe et de recevoir des notifications.",
-    "Delete widget": "Supprimer le widget",
     "AM": "AM",
     "PM": "PM",
-    "Copied!": "Copié !",
-    "Failed to copy": "Échec de la copie",
     "Unignore": "Ne plus ignorer",
     "Admin Tools": "Outils d’administration",
     "Unnamed room": "Salon sans nom",
     "Banned by %(displayName)s": "Banni par %(displayName)s",
     "Jump to read receipt": "Aller à l’accusé de lecture",
     "Delete Widget": "Supprimer le widget",
-    "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Supprimer un widget le supprime pour tous les utilisateurs du salon. Voulez-vous vraiment supprimer ce widget ?",
-    "<Items/> and %(count)s others": {
-        "other": "<Items/> et %(count)s autres",
-        "one": "<Items/> et un autre"
-    },
     "And %(count)s more...": {
         "other": "Et %(count)s autres…"
     },
@@ -170,7 +156,6 @@
     "Changelog": "Journal des modifications",
     "This Room": "Ce salon",
     "Unavailable": "Indisponible",
-    "Source URL": "URL de la source",
     "Filter results": "Filtrer les résultats",
     "Tuesday": "Mardi",
     "Search…": "Rechercher…",
@@ -183,12 +168,10 @@
     "All Rooms": "Tous les salons",
     "Thursday": "Jeudi",
     "Yesterday": "Hier",
-    "Low Priority": "Priorité basse",
     "Thank you!": "Merci !",
     "Logs sent": "Journaux envoyés",
     "Failed to send logs: ": "Échec lors de l’envoi des journaux : ",
     "Preparing to send logs": "Préparation de l’envoi des journaux",
-    "Popout widget": "Détacher le widget",
     "Send Logs": "Envoyer les journaux",
     "Clear Storage and Sign Out": "Effacer le stockage et se déconnecter",
     "We encountered an error trying to restore your previous session.": "Une erreur est survenue lors de la restauration de la dernière session.",
@@ -216,7 +199,6 @@
     "Put a link back to the old room at the start of the new room so people can see old messages": "Fournir un lien vers l’ancien salon au début du nouveau salon pour qu’il soit possible de consulter les anciens messages",
     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Votre message n’a pas été envoyé car le serveur d’accueil a atteint sa limite mensuelle d’utilisateurs. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Votre message n’a pas été envoyé car ce serveur d’accueil a dépassé une de ses limites de ressources. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
-    "Please contact your homeserver administrator.": "Veuillez contacter l’administrateur de votre serveur d’accueil.",
     "This room has been replaced and is no longer active.": "Ce salon a été remplacé et n’est plus actif.",
     "The conversation continues here.": "La discussion continue ici.",
     "Failed to upgrade room": "Échec de la mise à niveau du salon",
@@ -271,7 +253,6 @@
     "Phone numbers": "Numéros de téléphone",
     "Account management": "Gestion du compte",
     "Ignored users": "Utilisateurs ignorés",
-    "Bulk options": "Options de groupe",
     "Missing media permissions, click the button below to request.": "Permissions multimédia manquantes, cliquez sur le bouton ci-dessous pour la demander.",
     "Request media permissions": "Demander les permissions multimédia",
     "Voice & Video": "Audio et vidéo",
@@ -283,7 +264,6 @@
     "Incoming Verification Request": "Demande de vérification entrante",
     "Email (optional)": "E-mail (facultatif)",
     "Join millions for free on the largest public server": "Rejoignez des millions d’utilisateurs gratuitement sur le plus grand serveur public",
-    "Create account": "Créer un compte",
     "Recovery Method Removed": "Méthode de récupération supprimée",
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Si vous n’avez pas supprimé la méthode de récupération, un attaquant peut être en train d’essayer d’accéder à votre compte. Modifiez le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les réglages.",
     "Dog": "Chien",
@@ -367,7 +347,6 @@
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "Une erreur est survenue lors de la mise à jour de l’adresse principale de salon. Ce n’est peut-être pas autorisé par le serveur ou une erreur temporaire est survenue.",
     "Room Settings - %(roomName)s": "Paramètres du salon – %(roomName)s",
     "Could not load user profile": "Impossible de charger le profil de l’utilisateur",
-    "Accept all %(invitedRooms)s invites": "Accepter les %(invitedRooms)s invitations",
     "Power level": "Rang",
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Ce salon utilise la version <roomVersion />, que ce serveur d’accueil a marqué comme <i>instable</i>.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "La mise à niveau du salon désactivera cette instance du salon et créera un salon mis à niveau avec le même nom.",
@@ -410,8 +389,6 @@
     "%(roomName)s can't be previewed. Do you want to join it?": "Vous ne pouvez pas avoir d’aperçu de %(roomName)s. Voulez-vous rejoindre le salon ?",
     "This room has already been upgraded.": "Ce salon a déjà été mis à niveau.",
     "edited": "modifié",
-    "Rotate Left": "Tourner à gauche",
-    "Rotate Right": "Tourner à droite",
     "Some characters not allowed": "Certains caractères ne sont pas autorisés",
     "Failed to get autodiscovery configuration from server": "Échec de la découverte automatique de la configuration depuis le serveur",
     "Invalid base_url for m.homeserver": "base_url pour m.homeserver non valide",
@@ -459,7 +436,6 @@
     "Enter a new identity server": "Saisissez un nouveau serveur d’identité",
     "Remove %(email)s?": "Supprimer %(email)s ?",
     "Remove %(phone)s?": "Supprimer %(phone)s ?",
-    "Accept <policyLink /> to continue:": "Acceptez <policyLink /> pour continuer :",
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Acceptez les conditions de service du serveur d’identité (%(serverName)s) pour vous permettre d’être découvrable par votre adresse e-mail ou votre numéro de téléphone.",
     "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "Si vous ne voulez pas utiliser <server /> pour découvrir et être découvrable par les contacts que vous connaissez, saisissez un autre serveur d’identité ci-dessous.",
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "L’utilisation d’un serveur d’identité est optionnelle. Si vous ne choisissez pas d’utiliser un serveur d’identité, les autres utilisateurs ne pourront pas vous découvrir et vous ne pourrez pas en inviter par e-mail ou par téléphone.",
@@ -528,24 +504,11 @@
     "None": "Aucun",
     "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Vous avez ignoré cet utilisateur, donc ses messages sont cachés. <a>Les montrer quand même.</a>",
     "Messages in this room are end-to-end encrypted.": "Les messages dans ce salon sont chiffrés de bout en bout.",
-    "Any of the following data may be shared:": "Les données suivants peuvent être partagées :",
-    "Your display name": "Votre nom d’affichage",
-    "Your user ID": "Votre identifiant utilisateur",
-    "Your theme": "Votre thème",
-    "%(brand)s URL": "URL de %(brand)s",
-    "Room ID": "Identifiant du salon",
-    "Widget ID": "Identifiant du widget",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "L’utilisation de ce widget pourrait partager des données <helpIcon /> avec %(widgetDomain)s.",
-    "Widget added by": "Widget ajouté par",
-    "This widget may use cookies.": "Ce widget pourrait utiliser des cookies.",
     "Cannot connect to integration manager": "Impossible de se connecter au gestionnaire d’intégrations",
     "The integration manager is offline or it cannot reach your homeserver.": "Le gestionnaire d’intégrations est hors ligne ou il ne peut pas joindre votre serveur d’accueil.",
     "Failed to connect to integration manager": "Échec de la connexion au gestionnaire d’intégrations",
-    "Widgets do not use message encryption.": "Les widgets n’utilisent pas le chiffrement des messages.",
-    "More options": "Plus d’options",
     "Integrations are disabled": "Les intégrations sont désactivées",
     "Integrations not allowed": "Les intégrations ne sont pas autorisées",
-    "Remove for everyone": "Supprimer pour tout le monde",
     "Manage integrations": "Gérer les intégrations",
     "Verification Request": "Demande de vérification",
     "Unencrypted": "Non chiffré",
@@ -577,8 +540,6 @@
     "Something went wrong trying to invite the users.": "Une erreur est survenue en essayant d’inviter les utilisateurs.",
     "We couldn't invite those users. Please check the users you want to invite and try again.": "Impossible d’inviter ces utilisateurs. Vérifiez quels utilisateurs que vous souhaitez inviter et réessayez.",
     "Recently Direct Messaged": "Conversations privées récentes",
-    "Other users may not trust it": "D’autres utilisateurs pourraient ne pas lui faire confiance",
-    "Later": "Plus tard",
     "Verify User": "Vérifier l’utilisateur",
     "For extra security, verify this user by checking a one-time code on both of your devices.": "Pour une sécurité supplémentaire, vérifiez cet utilisateur en comparant un code à usage unique sur vos deux appareils.",
     "Start Verification": "Commencer la vérification",
@@ -588,11 +549,6 @@
     "Upgrade your encryption": "Mettre à niveau votre chiffrement",
     "This room is end-to-end encrypted": "Ce salon est chiffré de bout en bout",
     "Everyone in this room is verified": "Tout le monde dans ce salon est vérifié",
-    "Verify this session": "Vérifier cette session",
-    "Encryption upgrade available": "Mise à niveau du chiffrement disponible",
-    "Securely cache encrypted messages locally for them to appear in search results.": "Mettre en cache les messages chiffrés localement et de manière sécurisée pour qu’ils apparaissent dans les résultats de recherche.",
-    "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "Il manque quelques composants à %(brand)s pour mettre en cache les messages chiffrés localement de manière sécurisée. Si vous voulez essayer cette fonctionnalité, construisez %(brand)s Desktop vous-même en <nativeLink>ajoutant les composants de recherche</nativeLink>.",
-    "Message search": "Recherche de message",
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "Ce salon transmet les messages vers les plateformes suivantes. <a>En savoir plus.</a>",
     "Bridges": "Passerelles",
     "Waiting for %(displayName)s to accept…": "En attente d’acceptation par %(displayName)s…",
@@ -606,7 +562,6 @@
     "If you can't scan the code above, verify by comparing unique emoji.": "Si vous ne pouvez pas scanner le code ci-dessus, vérifiez en comparant des émojis uniques.",
     "You've successfully verified %(displayName)s!": "Vous avez vérifié %(displayName)s !",
     "Restore your key backup to upgrade your encryption": "Restaurez votre sauvegarde de clés pour mettre à niveau votre chiffrement",
-    "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Votre compte a une identité de signature croisée dans le coffre secret, mais cette session ne lui fait pas encore confiance.",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Cette session <b>ne sauvegarde pas vos clés</b>, mais vous n’avez pas de sauvegarde existante que vous pouvez restaurer ou compléter à l’avenir.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Connectez cette session à la sauvegarde de clés avant de vous déconnecter pour éviter de perdre des clés qui seraient uniquement dans cette session.",
     "Connect this session to Key Backup": "Connecter cette session à la sauvegarde de clés",
@@ -645,7 +600,6 @@
     "Verify by scanning": "Vérifier en scannant",
     "You declined": "Vous avez refusé",
     "%(name)s declined": "%(name)s a refusé",
-    "Your homeserver does not support cross-signing.": "Votre serveur d’accueil ne prend pas en charge la signature croisée.",
     "Accepting…": "Acceptation…",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Pour signaler un problème de sécurité lié à Matrix, consultez <a>la politique de divulgation de sécurité</a> de Matrix.org.",
     "Mark all as read": "Tout marquer comme lu",
@@ -677,7 +631,6 @@
     "Confirm by comparing the following with the User Settings in your other session:": "Confirmez en comparant ceci avec les paramètres utilisateurs de votre autre session :",
     "Confirm this user's session by comparing the following with their User Settings:": "Confirmez la session de cet utilisateur en comparant ceci avec ses paramètres utilisateur :",
     "If they don't match, the security of your communication may be compromised.": "S’ils ne correspondent pas, la sécurité de vos communications est peut-être compromise.",
-    "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Vérifiez individuellement chaque session utilisée par un utilisateur pour la marquer comme fiable, sans faire confiance aux appareils signés avec la signature croisée.",
     "In encrypted rooms, your messages are secured and only you and the recipient have the unique keys to unlock them.": "Dans les salons chiffrés, vos messages sont sécurisés et seuls vous et le destinataire avez les clés uniques pour les déchiffrer.",
     "Verify all users in a room to ensure it's secure.": "Vérifiez tous les utilisateurs d’un salon pour vous assurer qu’il est sécurisé.",
     "Sign in with SSO": "Se connecter avec l’authentification unique",
@@ -701,7 +654,6 @@
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Rappel : Votre navigateur n’est pas pris en charge donc votre expérience pourrait être aléatoire.",
     "Unable to upload": "Envoi impossible",
     "Unable to query secret storage status": "Impossible de demander le statut du coffre secret",
-    "New login. Was this you?": "Nouvelle connexion. Était-ce vous ?",
     "Restoring keys from backup": "Restauration des clés depuis la sauvegarde",
     "%(completed)s of %(total)s keys restored": "%(completed)s clés sur %(total)s restaurées",
     "Keys restored": "Clés restaurées",
@@ -727,11 +679,9 @@
     "Use a different passphrase?": "Utiliser une phrase secrète différente ?",
     "Your homeserver has exceeded its user limit.": "Votre serveur d’accueil a dépassé ses limites d’utilisateurs.",
     "Your homeserver has exceeded one of its resource limits.": "Votre serveur d’accueil a dépassé une de ses limites de ressources.",
-    "Contact your <a>server admin</a>.": "Contactez <a>l’administrateur de votre serveur</a>.",
     "Ok": "OK",
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "L’administrateur de votre serveur a désactivé le chiffrement de bout en bout par défaut dans les salons privés et les conversations privées.",
     "Switch theme": "Changer le thème",
-    "All settings": "Tous les paramètres",
     "No recently visited rooms": "Aucun salon visité récemment",
     "Message preview": "Aperçu de message",
     "Room options": "Options du salon",
@@ -750,14 +700,9 @@
     "Set a Security Phrase": "Définir une phrase de sécurité",
     "Confirm Security Phrase": "Confirmer la phrase de sécurité",
     "Save your Security Key": "Sauvegarder votre clé de sécurité",
-    "Favourited": "Favori",
-    "Forget Room": "Oublier le salon",
     "This room is public": "Ce salon est public",
     "Edited at %(date)s": "Modifié le %(date)s",
     "Click to view edits": "Cliquez pour voir les modifications",
-    "Change notification settings": "Modifier les paramètres de notification",
-    "Your server isn't responding to some <a>requests</a>.": "Votre serveur ne répond pas à certaines <a>requêtes</a>.",
-    "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s ne peut actuellement mettre en cache vos messages chiffrés localement de manière sécurisée via le navigateur Web. Utilisez <desktopLink>%(brand)s Desktop</desktopLink> pour que les messages chiffrés apparaissent dans vos résultats de recherche.",
     "ready": "prêt",
     "The operation could not be completed": "L’opération n’a pas pu être terminée",
     "Failed to save your profile": "Erreur lors de l’enregistrement du profil",
@@ -767,9 +712,6 @@
     "Backup key cached:": "Clé de sauvegarde mise en cache :",
     "Backup key stored:": "Clé de sauvegarde enregistrée :",
     "Backup version:": "Version de la sauvegarde :",
-    "Cross-signing is not set up.": "La signature croisée n’est pas configurée.",
-    "Cross-signing is ready for use.": "La signature croisée est prête à être utilisée.",
-    "Safeguard against losing access to encrypted messages & data": "Sécurité contre la perte d’accès aux messages et données chiffrées",
     "This version of %(brand)s does not support searching encrypted messages": "Cette version de %(brand)s ne prend pas en charge la recherche dans les messages chiffrés",
     "This version of %(brand)s does not support viewing some encrypted files": "Cette version de %(brand)s ne prend pas en charge l’affichage de certains fichiers chiffrés",
     "Use the <a>Desktop app</a> to search encrypted messages": "Utilisez une <a>Application de bureau</a> pour rechercher dans tous les messages chiffrés",
@@ -793,11 +735,6 @@
     "Show Widgets": "Afficher les widgets",
     "Hide Widgets": "Masquer les widgets",
     "Algorithm:": "Algorithme :",
-    "Set up Secure Backup": "Configurer la sauvegarde sécurisée",
-    "Move right": "Aller à droite",
-    "Move left": "Aller à gauche",
-    "Revoke permissions": "Révoquer les permissions",
-    "Take a picture": "Prendre une photo",
     "Unable to set up keys": "Impossible de configurer les clés",
     "Recent changes that have not yet been received": "Changements récents qui n’ont pas encore été reçus",
     "The server is not configured to indicate what the problem is (CORS).": "Le serveur n’est pas configuré pour indiquer quel est le problème (CORS).",
@@ -1073,8 +1010,6 @@
     "Invite by email": "Inviter par e-mail",
     "Reason (optional)": "Raison (optionnelle)",
     "Server Options": "Options serveur",
-    "Enable desktop notifications": "Activer les notifications sur le bureau",
-    "Don't miss a reply": "Ne ratez pas une réponse",
     "This session has detected that your Security Phrase and key for Secure Messages have been removed.": "Cette session a détecté que votre phrase secrète et clé de sécurité pour les messages sécurisés ont été supprimées.",
     "A new Security Phrase and key for Secure Messages have been detected.": "Une nouvelle phrase secrète et clé de sécurité pour les messages sécurisés ont été détectées.",
     "Confirm your Security Phrase": "Confirmez votre phrase secrète",
@@ -1106,13 +1041,7 @@
     "Open dial pad": "Ouvrir le pavé de numérotation",
     "Recently visited rooms": "Salons visités récemment",
     "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Sauvegardez vos clés de chiffrement et les données de votre compte au cas où vous perdiez l’accès à vos sessions. Vos clés seront sécurisés avec une Clé de Sécurité unique.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
-        "one": "Mettre en cache localement et de manière sécurisée les messages chiffrés pour qu’ils apparaissent dans les résultats de recherche, en utilisant %(size)s pour stocker les messages de %(rooms)s salons.",
-        "other": "Mettre en cache localement et de manière sécurisée les messages chiffrés pour qu’ils apparaissent dans les résultats de recherche. Actuellement %(size)s sont utilisé pour stocker les messages de %(rooms)s salons."
-    },
     "Dial pad": "Pavé de numérotation",
-    "Use app": "Utiliser l’application",
-    "Use app for a better experience": "Utilisez une application pour une meilleure expérience",
     "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Invitez quelqu’un grâce à son nom, nom d’utilisateur (tel que <userId/>) ou <a>partagez cet espace</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Invitez quelqu’un grâce à son nom, adresse e-mail, nom d’utilisateur (tel que <userId/>) ou <a>partagez cet espace</a>.",
     "%(count)s members": {
@@ -1121,7 +1050,6 @@
     },
     "Are you sure you want to leave the space '%(spaceName)s'?": "Êtes-vous sûr de vouloir quitter l’espace « %(spaceName)s » ?",
     "This space is not public. You will not be able to rejoin without an invite.": "Cet espace n’est pas public. Vous ne pourrez pas le rejoindre sans invitation.",
-    "Start audio stream": "Démarrer une diffusion audio",
     "Failed to start livestream": "Échec lors du démarrage de la diffusion en direct",
     "Unable to start audio streaming.": "Impossible de démarrer la diffusion audio.",
     "Save Changes": "Enregistrer les modifications",
@@ -1139,7 +1067,6 @@
     "Leave space": "Quitter l’espace",
     "Invite people": "Inviter des personnes",
     "Share invite link": "Partager le lien d’invitation",
-    "Click to copy": "Cliquez pour copier",
     "Create a space": "Créer un espace",
     "Space selection": "Sélection d’un espace",
     "Private space": "Espace privé",
@@ -1171,8 +1098,6 @@
         "other": "%(count)s personnes que vous connaissez en font déjà partie"
     },
     "unknown person": "personne inconnue",
-    "%(deviceId)s from %(ip)s": "%(deviceId)s depuis %(ip)s",
-    "Review to ensure your account is safe": "Vérifiez pour assurer la sécurité de votre compte",
     "You are the only person here. If you leave, no one will be able to join in the future, including you.": "Vous êtes la seule personne ici. Si vous partez, plus personne ne pourra rejoindre cette conversation, y compris vous.",
     "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Si vous réinitialisez tout, vous allez repartir sans session et utilisateur de confiance. Vous pourriez ne pas voir certains messages passés.",
     "Only do this if you have no other device to complete verification with.": "Poursuivez seulement si vous n’avez aucun autre appareil avec lequel procéder à la vérification.",
@@ -1206,7 +1131,6 @@
     "We were unable to access your microphone. Please check your browser settings and try again.": "Nous n’avons pas pu accéder à votre microphone. Merci de vérifier les paramètres de votre navigateur et de réessayer.",
     "Unable to access your microphone": "Impossible d’accéder à votre microphone",
     "Connecting": "Connexion",
-    "Message search initialisation failed": "Échec de l’initialisation de la recherche de message",
     "Search names and descriptions": "Rechercher par nom et description",
     "You may contact me if you have any follow up questions": "Vous pouvez me contacter si vous avez des questions par la suite",
     "To leave the beta, visit your settings.": "Pour quitter la bêta, consultez les paramètres.",
@@ -1220,15 +1144,9 @@
     "Search for rooms or people": "Rechercher des salons ou des gens",
     "Sent": "Envoyé",
     "You don't have permission to do this": "Vous n’avez pas les permissions nécessaires pour effectuer cette action",
-    "Error - Mixed content": "Erreur - Contenu mixte",
-    "Error loading Widget": "Erreur lors du chargement du widget",
     "Pinned messages": "Messages épinglés",
     "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Si vous avez les permissions, ouvrez le menu de n’importe quel message et sélectionnez <b>Épingler</b> pour les afficher ici.",
     "Nothing pinned, yet": "Rien d’épinglé, pour l’instant",
-    "Report": "Signaler",
-    "Collapse reply thread": "Masquer le fil de discussion",
-    "Show preview": "Afficher l’aperçu",
-    "View source": "Afficher la source",
     "Please provide an address": "Veuillez fournir une adresse",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Échec de l’initialisation de la recherche de messages, vérifiez <a>vos paramètres</a> pour plus d’information",
     "Set addresses for this space so users can find this space through your homeserver (%(localDomain)s)": "Définissez les adresses de cet espace pour que les utilisateurs puissent le trouver avec votre serveur d’accueil (%(localDomain)s)",
@@ -1250,7 +1168,6 @@
     "Failed to update the visibility of this space": "Échec de la mise à jour de la visibilité de cet espace",
     "Address": "Adresse",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Votre %(brand)s ne vous autorise pas à utiliser un gestionnaire d’intégrations pour faire ça. Merci de contacter un administrateur.",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "L’utilisation de ce widget pourrait partager des données <helpIcon /> avec %(widgetDomain)s et votre gestionnaire d’intégrations.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Les gestionnaires d’intégrations reçoivent les données de configuration et peuvent modifier les widgets, envoyer des invitations aux salons et définir les rangs à votre place.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Utilisez un gestionnaire d’intégrations pour gérer les robots, les widgets et les jeux d’autocollants.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Utilisez un gestionnaire d’intégrations <b>(%(serverName)s)</b> pour gérer les robots, les widgets et les jeux d’autocollants.",
@@ -1290,9 +1207,6 @@
     "Create a new space": "Créer un nouvel espace",
     "Want to add a new space instead?": "Vous voulez plutôt ajouter un nouvel espace ?",
     "Add existing space": "Ajouter un espace existant",
-    "Share content": "Partager le contenu",
-    "Application window": "Fenêtre d’application",
-    "Share entire screen": "Partager l’écran entier",
     "Decrypting": "Déchiffrement",
     "The call is in an unknown state!": "Cet appel est dans un état inconnu !",
     "An unknown error occurred": "Une erreur inconnue s’est produite",
@@ -1332,15 +1246,10 @@
     "Call declined": "Appel rejeté",
     "Stop recording": "Arrêter l’enregistrement",
     "Send voice message": "Envoyer un message vocal",
-    "More": "Plus",
-    "Show sidebar": "Afficher la barre latérale",
-    "Hide sidebar": "Masquer la barre latérale",
     "Unknown failure: %(reason)s": "Erreur inconnue : %(reason)s",
     "No answer": "Pas de réponse",
-    "Delete avatar": "Supprimer l’avatar",
     "Rooms and spaces": "Salons et espaces",
     "Results": "Résultats",
-    "Cross-signing is ready but keys are not backed up.": "La signature croisée est prête mais les clés ne sont pas sauvegardées.",
     "Some encryption parameters have been changed.": "Certains paramètres de chiffrement ont été changés.",
     "Role in <RoomName/>": "Rôle dans <RoomName/>",
     "Message didn't send. Click for info.": "Le message n’a pas été envoyé. Cliquer pour plus d’info.",
@@ -1407,7 +1316,6 @@
     "Copy link to thread": "Copier le lien du fil de discussion",
     "Thread options": "Options des fils de discussion",
     "You do not have permission to start polls in this room.": "Vous n’avez pas la permission de démarrer un sondage dans ce salon.",
-    "Mentions only": "Seulement les mentions",
     "Forget": "Oublier",
     "Files": "Fichiers",
     "Close this widget to view it in this panel": "Fermer ce widget pour l’afficher dans ce panneau",
@@ -1418,11 +1326,6 @@
     "@mentions & keywords": "@mentions et mots-clés",
     "Get notified for every message": "Recevoir une notification pour chaque message",
     "Get notifications as set up in your <a>settings</a>": "Recevoir les notifications comme défini dans vos <a>paramètres</a>",
-    "Rooms outside of a space": "Salons en dehors d’un espace",
-    "Show all your rooms in Home, even if they're in a space.": "Affiche tous vos salons dans l’accueil, même s’ils font partis d’un espace.",
-    "Home is useful for getting an overview of everything.": "L’accueil permet d’avoir un aperçu global.",
-    "Spaces to show": "Espaces à afficher",
-    "Sidebar": "Barre latérale",
     "Spaces you know that contain this space": "Les espaces connus qui contiennent cet espace",
     "Based on %(count)s votes": {
         "one": "Sur la base de %(count)s vote",
@@ -1442,8 +1345,6 @@
     "Invite to space": "Inviter dans l’espace",
     "Start new chat": "Commencer une nouvelle conversation privée",
     "Recently viewed": "Affiché récemment",
-    "Pin to sidebar": "Épingler à la barre latérale",
-    "Quick settings": "Paramètres rapides",
     "Developer": "Développeur",
     "Experimental": "Expérimental",
     "Themes": "Thèmes",
@@ -1460,7 +1361,6 @@
     "Failed to end poll": "Impossible de terminer le sondage",
     "The poll has ended. Top answer: %(topAnswer)s": "Le sondage est terminé. Meilleure réponse : %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Le sondage est terminé. Aucun vote n’a été exprimé.",
-    "Share location": "Partager la position",
     "%(count)s votes cast. Vote to see the results": {
         "one": "%(count)s vote exprimé. Votez pour voir les résultats",
         "other": "%(count)s votes exprimés. Votez pour voir les résultats"
@@ -1470,7 +1370,6 @@
         "one": "Résultat final sur la base de %(count)s vote",
         "other": "Résultat final sur la base de %(count)s votes"
     },
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "Partager des données anonymisées pour nous aider à identifier les problèmes. Rien de personnel. Aucune tierce partie.",
     "Recent searches": "Recherches récentes",
     "To search messages, look for this icon at the top of a room <icon/>": "Pour chercher des messages, repérez cette icône en haut à droite d'un salon <icon/>",
     "Other searches": "Autres recherches",
@@ -1479,7 +1378,6 @@
     "Other rooms in %(spaceName)s": "Autres salons dans %(spaceName)s",
     "Spaces you're in": "Espaces où vous êtes",
     "Including you, %(commaSeparatedMembers)s": "Dont vous, %(commaSeparatedMembers)s",
-    "Copy room link": "Copier le lien du salon",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Cela rassemble vos conversations privées avec les membres de cet espace. Le désactiver masquera ces conversations de votre vue de %(spaceName)s.",
     "Sections to show": "Sections à afficher",
     "Open in OpenStreetMap": "Ouvrir dans OpenStreetMap",
@@ -1498,9 +1396,6 @@
     "Almost there! Is your other device showing the same shield?": "On y est presque ! Votre autre appareil affiche-t-il le même bouclier ?",
     "To proceed, please accept the verification request on your other device.": "Pour continuer, veuillez accepter la demande de vérification sur votre autre appareil.",
     "From a thread": "Depuis un fil de discussion",
-    "Back to thread": "Retour au fil de discussion",
-    "Room members": "Membres du salon",
-    "Back to chat": "Retour à la conversation",
     "Could not fetch location": "Impossible de récupérer la position",
     "Message pending moderation": "Message en attente de modération",
     "Message pending moderation: %(reason)s": "Message en attente de modération : %(reason)s",
@@ -1510,10 +1405,6 @@
     "Remove them from everything I'm able to": "Les expulser de partout où j’ai le droit de le faire",
     "You were removed from %(roomName)s by %(memberName)s": "Vous avez été expulsé(e) de %(roomName)s par %(memberName)s",
     "Remove from %(roomName)s": "Expulser de %(roomName)s",
-    "Group all your people in one place.": "Regrouper toutes vos connaissances au même endroit.",
-    "Group all your favourite rooms and people in one place.": "Regroupez tous vos salons et personnes préférés au même endroit.",
-    "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Les espaces permettent de regrouper des salons et des personnes. En plus de ceux auxquels vous participez, vous pouvez également utiliser des espaces prédéfinis.",
-    "Group all your rooms that aren't part of a space in one place.": "Regroupe tous les salons n’appartenant pas à un espace au même endroit.",
     "Pick a date to jump to": "Choisissez vers quelle date aller",
     "Jump to date": "Aller à la date",
     "The beginning of the room": "Le début de ce salon",
@@ -1539,9 +1430,6 @@
     "Join %(roomAddress)s": "Rejoindre %(roomAddress)s",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s n'a pas pu envoyer votre position. Veuillez réessayer plus tard.",
     "We couldn't send your location": "Nous n'avons pas pu envoyer votre position",
-    "Match system": "S’adapter au système",
-    "Click to drop a pin": "Cliquer pour mettre un marqueur",
-    "Click to move the pin": "Cliquer pour déplacer le marqueur",
     "Click": "Clic",
     "Expand quotes": "Étendre les citations",
     "Collapse quotes": "Réduire les citations",
@@ -1556,12 +1444,10 @@
     },
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Vous pouvez utiliser l’option de serveur personnalisé pour vous connecter à d'autres serveurs Matrix en spécifiant une URL de serveur d'accueil différente. Cela vous permet d’utiliser %(brand)s avec un compte Matrix existant sur un serveur d’accueil différent.",
     "%(displayName)s's live location": "Position en direct de %(displayName)s",
-    "Share for %(duration)s": "Partagé pendant %(duration)s",
     "Currently removing messages in %(count)s rooms": {
         "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
         "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
     },
-    "%(brand)s is experimental on a mobile web browser. For a better experience and the latest features, use our free native app.": "%(brand)s est expérimental sur un navigateur mobile. Pour une meilleure expérience et bénéficier des dernières fonctionnalités, utilisez notre application native gratuite.",
     "An error occurred while stopping your live location, please try again": "Une erreur s’est produite en arrêtant le partage de votre position, veuillez réessayer",
     "%(featureName)s Beta feedback": "Commentaires sur la bêta de %(featureName)s",
     "%(count)s participants": {
@@ -1585,11 +1471,6 @@
     "Loading preview": "Chargement de l’aperçu",
     "New video room": "Nouveau salon visio",
     "New room": "Nouveau salon",
-    "Failed to join": "Impossible de rejoindre",
-    "The person who invited you has already left, or their server is offline.": "La personne qui vous a invité(e) a déjà quitté le salon, ou son serveur est hors-ligne.",
-    "The person who invited you has already left.": "La personne qui vous a invité(e) a déjà quitté le salon.",
-    "Sorry, your homeserver is too old to participate here.": "Désolé, votre serveur d'accueil est trop vieux pour participer ici.",
-    "There was an error joining.": "Il y a eu une erreur en rejoignant.",
     "View live location": "Voir la position en direct",
     "Ban from room": "Bannir du salon",
     "Unban from room": "Révoquer le bannissement du salon",
@@ -1631,9 +1512,6 @@
     "Output devices": "Périphériques de sortie",
     "Input devices": "Périphériques d’entrée",
     "Open room": "Ouvrir le salon",
-    "Enable live location sharing": "Activer le partage de position en continu",
-    "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.": "Attention : c'est une fonctionnalité expérimentale qui utilise une implémentation temporaire. Cela implique que vous ne pourrez pas supprimer votre historique de positions, et les utilisateurs avancés pourront voir votre historique de positions même après avoir arrêter le partage de votre position en continu dans ce salon.",
-    "Live location sharing": "Partage de position en continu",
     "Show Labs settings": "Afficher les réglages des expérimentations",
     "To join, please enable video rooms in Labs first": "Pour rejoindre, veuillez d’abord activer les salons vision dans la section Expérimental",
     "To view, please enable video rooms in Labs first": "Pour afficher, veuillez d’abord activer les salons vision dans la section Expérimental",
@@ -1644,7 +1522,6 @@
     "Unread email icon": "Icone d’e-mail non lu",
     "An error occurred whilst sharing your live location, please try again": "Une erreur s’est produite pendant le partage de votre position, veuillez réessayer plus tard",
     "An error occurred whilst sharing your live location": "Une erreur s’est produite pendant le partage de votre position",
-    "View related event": "Afficher les événements liés",
     "Joining…": "En train de rejoindre…",
     "Read receipts": "Accusés de réception",
     "%(count)s people joined": {
@@ -1652,9 +1529,6 @@
         "other": "%(count)s personnes se sont jointes"
     },
     "Deactivating your account is a permanent action — be careful!": "La désactivation du compte est une action permanente. Soyez prudent !",
-    "You were disconnected from the call. (Error: %(message)s)": "Vous avez déconnecté de l’appel. (Erreur : %(message)s)",
-    "Connection lost": "Connexion perdue",
-    "Un-maximise": "Dé-maximiser",
     "Remove search filter for %(filter)s": "Supprimer le filtre de recherche pour %(filter)s",
     "Start a group chat": "Démarrer une conversation de groupe",
     "Other options": "Autres options",
@@ -1691,10 +1565,8 @@
     "Saved Items": "Éléments sauvegardés",
     "Choose a locale": "Choisir une langue",
     "We're creating a room with %(names)s": "Nous créons un salon avec %(names)s",
-    "Sessions": "Sessions",
     "Interactively verify by emoji": "Vérifier de façon interactive avec des émojis",
     "Manually verify by text": "Vérifier manuellement avec un texte",
-    "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.": "Pour une meilleure sécurité, vérifiez vos sessions et déconnectez toutes les sessions que vous ne connaissez pas ou que vous n’utilisez plus.",
     "%(downloadButton)s or %(copyButton)s": "%(downloadButton)s ou %(copyButton)s",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s ou %(recoveryFile)s",
     "You do not have permission to start voice calls": "Vous n’avez pas la permission de démarrer un appel audio",
@@ -1705,7 +1577,6 @@
     "Failed to set pusher state": "Échec lors de la définition de l’état push",
     "Video call ended": "Appel vidéo terminé",
     "%(name)s started a video call": "%(name)s a démarré un appel vidéo",
-    "Unknown room": "Salon inconnu",
     "Close call": "Terminer l’appel",
     "Spotlight": "Projecteur",
     "Freedom": "Liberté",
@@ -1716,7 +1587,6 @@
     "You do not have sufficient permissions to change this.": "Vous n’avez pas assez de permissions pour changer ceci.",
     "%(brand)s is end-to-end encrypted, but is currently limited to smaller numbers of users.": "%(brand)s est chiffré de bout en bout, mais n’est actuellement utilisable qu’avec un petit nombre d’utilisateurs.",
     "Enable %(brand)s as an additional calling option in this room": "Activer %(brand)s comme une option supplémentaire d’appel dans ce salon",
-    "Sorry — this call is currently full": "Désolé — Cet appel est actuellement complet",
     "Completing set up of your new device": "Fin de la configuration de votre nouvel appareil",
     "Waiting for device to sign in": "En attente de connexion de l’appareil",
     "Review and approve the sign in": "Vérifier et autoriser la connexion",
@@ -1735,10 +1605,6 @@
     "The scanned code is invalid.": "Le code scanné est invalide.",
     "The linking wasn't completed in the required time.": "L’appairage n’a pas été effectué dans le temps imparti.",
     "Sign in new device": "Connecter le nouvel appareil",
-    "Are you sure you want to sign out of %(count)s sessions?": {
-        "one": "Voulez-vous vraiment déconnecter %(count)s session ?",
-        "other": "Voulez-vous vraiment déconnecter %(count)s de vos sessions ?"
-    },
     "Show formatting": "Afficher le formatage",
     "Hide formatting": "Masquer le formatage",
     "Error downloading image": "Erreur lors du téléchargement de l’image",
@@ -1758,14 +1624,12 @@
     "Error starting verification": "Erreur en démarrant la vérification",
     "<w>WARNING:</w> <description/>": "<w>ATTENTION :</w> <description/>",
     "Change layout": "Changer la disposition",
-    "You have unverified sessions": "Vous avez des sessions non vérifiées",
     "Search users in this room…": "Chercher des utilisateurs dans ce salon…",
     "Give one or multiple users in this room more privileges": "Donne plus de privilèges à un ou plusieurs utilisateurs de ce salon",
     "Add privileged users": "Ajouter des utilisateurs privilégiés",
     "Unable to decrypt message": "Impossible de déchiffrer le message",
     "This message could not be decrypted": "Ce message n’a pas pu être déchiffré",
     " in <strong>%(room)s</strong>": " dans <strong>%(room)s</strong>",
-    "Mark as read": "Marquer comme lu",
     "Text": "Texte",
     "Create a link": "Crée un lien",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Vous ne pouvez pas commencer un message vocal car vous êtes en train d’enregistrer une diffusion en direct. Veuillez terminer cette diffusion pour commencer un message vocal.",
@@ -1776,8 +1640,6 @@
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Tous les messages et invitations de cette utilisateur seront cachés. Êtes-vous sûr de vouloir les ignorer ?",
     "Ignore %(user)s": "Ignorer %(user)s",
     "unknown": "inconnu",
-    "Red": "Rouge",
-    "Grey": "Gris",
     "This session is backing up your keys.": "Cette session sauvegarde vos clés.",
     "Declining…": "Refus…",
     "There are no past polls in this room": "Il n’y a aucun ancien sondage dans ce salon",
@@ -1812,10 +1674,7 @@
     "Ended a poll": "Sondage terminé",
     "Due to decryption errors, some votes may not be counted": "À cause d’erreurs de déchiffrement, certains votes pourraient ne pas avoir été pris en compte",
     "The sender has blocked you from receiving this message": "L’expéditeur a bloqué la réception de votre message",
-    "Yes, it was me": "Oui, c’était moi",
     "Answered elsewhere": "Répondu autre part",
-    "If you know a room address, try joining through that instead.": "Si vous connaissez l’adresse d’un salon, essayez de l’utiliser à la place pour rejoindre ce salon.",
-    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Vous avez essayé de rejoindre à l’aide de l’ID du salon sans fournir une liste de serveurs pour l’atteindre. Les IDs de salons sont des identifiants internes et ne peuvent être utilisés pour rejoindre un salon sans informations complémentaires.",
     "View poll": "Voir le sondage",
     "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
         "one": "Il n'y a pas d’ancien sondage depuis hier. Veuillez charger plus de sondages pour consulter les sondages des mois antérieurs",
@@ -1831,8 +1690,6 @@
     "Past polls": "Anciens sondages",
     "Active polls": "Sondages en cours",
     "View poll in timeline": "Consulter la chronologie des sondages",
-    "Verify Session": "Vérifier la session",
-    "Ignore (%(counter)s)": "Ignorer (%(counter)s)",
     "Invites by email can only be sent one at a time": "Les invitations par e-mail ne peuvent être envoyées qu’une par une",
     "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Nous avons rencontré une erreur lors de la mise-à-jour de vos préférences de notification. Veuillez essayer de réactiver l’option.",
     "Desktop app logo": "Logo de l’application de bureau",
@@ -1848,13 +1705,10 @@
     "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Nous n’avons pas pu trouver d’événement à partir du %(dateString)s. Essayez avec une date antérieure.",
     "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Une erreur réseau s’est produite en tentant de chercher et d’aller à la date choisie. Votre serveur d’accueil est peut-être hors-ligne, ou bien c’est un problème temporaire avec connexion Internet. Veuillez réessayer. Si cela persiste, veuillez contacter l’administrateur de votre serveur d’accueil.",
     "Poll history": "Historique des sondages",
-    "Mute room": "Salon muet",
-    "Match default setting": "Réglage par défaut",
     "Start DM anyway": "Commencer la conversation privée quand même",
     "Start DM anyway and never warn me again": "Commencer quand même la conversation privée et ne plus me prévenir",
     "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "Impossible de trouver les profils pour les identifiants Matrix listés ci-dessous. Voulez-vous quand même commencer une conversation privée ?",
     "Formatting": "Formatage",
-    "Image view": "Vue d’image",
     "Upload custom sound": "Envoyer un son personnalisé",
     "Search all rooms": "Rechercher dans tous les salons",
     "Search this room": "Rechercher dans ce salon",
@@ -1865,8 +1719,6 @@
     "Once invited users have joined %(brand)s, you will be able to chat and the room will be end-to-end encrypted": "Une fois que les utilisateurs invités seront connectés sur %(brand)s, vous pourrez discuter et le salon sera chiffré de bout en bout",
     "Waiting for users to join %(brand)s": "En attente de connexion des utilisateurs à %(brand)s",
     "You do not have permission to invite users": "Vous n’avez pas la permission d’inviter des utilisateurs",
-    "Your language": "Votre langue",
-    "Your device ID": "Votre ID d’appareil",
     "Ask to join": "Demander à venir",
     "People cannot join unless access is granted.": "Les personnes ne peuvent pas venir tant que l’accès ne leur est pas autorisé.",
     "Receive an email summary of missed notifications": "Recevoir un résumé par courriel des notifications manquées",
@@ -1882,7 +1734,6 @@
     "The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a unique passphrase below, which will only be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.": "Le fichier exporté permettra à tous ceux qui peuvent le lire de déchiffrer tous les messages chiffrés auxquels vous avez accès, vous devez donc être vigilant et le stocker dans un endroit sûr. Afin de protéger ce fichier, saisissez ci-dessous une phrase secrète unique qui sera utilisée uniquement pour chiffrer les données exportées. Seule l’utilisation de la même phrase secrète permettra de déchiffrer et importer les données.",
     "Quick Actions": "Actions rapides",
     "Unable to find user by email": "Impossible de trouver un utilisateur avec son courriel",
-    "Your profile picture URL": "Votre URL d’image de profil",
     "Select which emails you want to send summaries to. Manage your emails in <button>General</button>.": "Sélectionner les adresses auxquelles envoyer les résumés. Gérer vos courriels dans <button>Général</button>.",
     "Notify when someone mentions using @displayname or %(mxid)s": "Notifie lorsque quelqu’un utilise la mention @displayname ou %(mxid)s",
     "Enter keywords here, or use for spelling variations or nicknames": "Entrer des mots-clés ici, ou pour des orthographes alternatives ou des surnoms",
@@ -1913,8 +1764,6 @@
     "Your request to join is pending.": "Votre demande d’accès est en cours.",
     "Cancel request": "Annuler la demande",
     "Ask to join %(roomName)s?": "Demander à venir dans %(roomName)s ?",
-    "You need an invite to access this room.": "Vous avez besoin d’une invitation pour accéder à ce salon.",
-    "Failed to cancel": "Erreur lors de l’annulation",
     "Failed to query public rooms": "Impossible d’interroger les salons publics",
     "common": {
         "about": "À propos",
@@ -2013,7 +1862,9 @@
         "off": "Désactivé",
         "all_rooms": "Tous les salons",
         "deselect_all": "Tout désélectionner",
-        "select_all": "Tout sélectionner"
+        "select_all": "Tout sélectionner",
+        "copied": "Copié !",
+        "Advanced": "Avancé"
     },
     "action": {
         "continue": "Continuer",
@@ -2116,7 +1967,8 @@
         "clear": "Effacer",
         "exit_fullscreeen": "Quitter le plein écran",
         "enter_fullscreen": "Afficher en plein écran",
-        "unban": "Révoquer le bannissement"
+        "unban": "Révoquer le bannissement",
+        "click_to_copy": "Cliquez pour copier"
     },
     "a11y": {
         "user_menu": "Menu utilisateur",
@@ -2322,7 +2174,6 @@
             "user_a11y": "Autocomplétion d’utilisateur"
         }
     },
-    "Bold": "Gras",
     "Link": "Lien",
     "Code": "Code",
     "power_level": {
@@ -2430,7 +2281,8 @@
         "intro_byline": "Contrôlez vos conversations.",
         "send_dm": "Envoyez un message privé",
         "explore_rooms": "Explorez les salons publics",
-        "create_room": "Créez une discussion de groupe"
+        "create_room": "Créez une discussion de groupe",
+        "create_account": "Créer un compte"
     },
     "settings": {
         "show_breadcrumbs": "Afficher les raccourcis vers les salons vus récemment au-dessus de la liste des salons",
@@ -2571,7 +2423,21 @@
             "cryptography_section": "Chiffrement",
             "session_id": "Identifiant de session :",
             "session_key": "Clé de session :",
-            "encryption_section": "Chiffrement"
+            "encryption_section": "Chiffrement",
+            "bulk_options_section": "Options de groupe",
+            "bulk_options_accept_all_invites": "Accepter les %(invitedRooms)s invitations",
+            "bulk_options_reject_all_invites": "Rejeter la totalité des %(invitedRooms)s invitations",
+            "message_search_section": "Recherche de message",
+            "analytics_subsection_description": "Partager des données anonymisées pour nous aider à identifier les problèmes. Rien de personnel. Aucune tierce partie.",
+            "encryption_individual_verification_mode": "Vérifiez individuellement chaque session utilisée par un utilisateur pour la marquer comme fiable, sans faire confiance aux appareils signés avec la signature croisée.",
+            "message_search_enabled": {
+                "one": "Mettre en cache localement et de manière sécurisée les messages chiffrés pour qu’ils apparaissent dans les résultats de recherche, en utilisant %(size)s pour stocker les messages de %(rooms)s salons.",
+                "other": "Mettre en cache localement et de manière sécurisée les messages chiffrés pour qu’ils apparaissent dans les résultats de recherche. Actuellement %(size)s sont utilisé pour stocker les messages de %(rooms)s salons."
+            },
+            "message_search_disabled": "Mettre en cache les messages chiffrés localement et de manière sécurisée pour qu’ils apparaissent dans les résultats de recherche.",
+            "message_search_unsupported": "Il manque quelques composants à %(brand)s pour mettre en cache les messages chiffrés localement de manière sécurisée. Si vous voulez essayer cette fonctionnalité, construisez %(brand)s Desktop vous-même en <nativeLink>ajoutant les composants de recherche</nativeLink>.",
+            "message_search_unsupported_web": "%(brand)s ne peut actuellement mettre en cache vos messages chiffrés localement de manière sécurisée via le navigateur Web. Utilisez <desktopLink>%(brand)s Desktop</desktopLink> pour que les messages chiffrés apparaissent dans vos résultats de recherche.",
+            "message_search_failed": "Échec de l’initialisation de la recherche de message"
         },
         "preferences": {
             "room_list_heading": "Liste de salons",
@@ -2685,7 +2551,13 @@
                 "other": "Déconnecter les appareils"
             },
             "security_recommendations": "Recommandations de sécurité",
-            "security_recommendations_description": "Améliorez la sécurité de votre compte à l’aide de ces recommandations."
+            "security_recommendations_description": "Améliorez la sécurité de votre compte à l’aide de ces recommandations.",
+            "title": "Sessions",
+            "sign_out_confirm_description": {
+                "one": "Voulez-vous vraiment déconnecter %(count)s session ?",
+                "other": "Voulez-vous vraiment déconnecter %(count)s de vos sessions ?"
+            },
+            "other_sessions_subsection_description": "Pour une meilleure sécurité, vérifiez vos sessions et déconnectez toutes les sessions que vous ne connaissez pas ou que vous n’utilisez plus."
         },
         "general": {
             "oidc_manage_button": "Gérer le compte",
@@ -2705,6 +2577,17 @@
             "add_msisdn_confirm_button": "Confirmer l’ajout du numéro de téléphone",
             "add_msisdn_confirm_body": "Cliquez sur le bouton ci-dessous pour confirmer l’ajout de ce numéro de téléphone.",
             "add_msisdn_dialog_title": "Ajouter un numéro de téléphone"
+        },
+        "sidebar": {
+            "title": "Barre latérale",
+            "metaspaces_subsection": "Espaces à afficher",
+            "metaspaces_description": "Les espaces permettent de regrouper des salons et des personnes. En plus de ceux auxquels vous participez, vous pouvez également utiliser des espaces prédéfinis.",
+            "metaspaces_home_description": "L’accueil permet d’avoir un aperçu global.",
+            "metaspaces_home_all_rooms": "Affiche tous vos salons dans l’accueil, même s’ils font partis d’un espace.",
+            "metaspaces_favourites_description": "Regroupez tous vos salons et personnes préférés au même endroit.",
+            "metaspaces_people_description": "Regrouper toutes vos connaissances au même endroit.",
+            "metaspaces_orphans": "Salons en dehors d’un espace",
+            "metaspaces_orphans_description": "Regroupe tous les salons n’appartenant pas à un espace au même endroit."
         }
     },
     "devtools": {
@@ -3208,7 +3091,15 @@
             "user": "%(senderName)s a terminé une <a>diffusion audio</a>"
         },
         "creation_summary_dm": "%(creator)s a créé cette conversation privée.",
-        "creation_summary_room": "%(creator)s a créé et configuré le salon."
+        "creation_summary_room": "%(creator)s a créé et configuré le salon.",
+        "context_menu": {
+            "view_source": "Afficher la source",
+            "show_url_preview": "Afficher l’aperçu",
+            "external_url": "URL de la source",
+            "collapse_reply_thread": "Masquer le fil de discussion",
+            "view_related_event": "Afficher les événements liés",
+            "report": "Signaler"
+        }
     },
     "slash_command": {
         "spoiler": "Envoie le message flouté",
@@ -3411,10 +3302,18 @@
         "failed_call_live_broadcast_title": "Impossible de démarrer un appel",
         "failed_call_live_broadcast_description": "Vous ne pouvez pas démarrer un appel car vous êtes en train d’enregistrer une diffusion en direct. Veuillez terminer cette diffusion pour démarrer un appel.",
         "no_media_perms_title": "Pas de permission pour les médias",
-        "no_media_perms_description": "Il est possible que vous deviez manuellement autoriser %(brand)s à accéder à votre micro/caméra"
+        "no_media_perms_description": "Il est possible que vous deviez manuellement autoriser %(brand)s à accéder à votre micro/caméra",
+        "call_toast_unknown_room": "Salon inconnu",
+        "join_button_tooltip_connecting": "Connexion",
+        "join_button_tooltip_call_full": "Désolé — Cet appel est actuellement complet",
+        "hide_sidebar_button": "Masquer la barre latérale",
+        "show_sidebar_button": "Afficher la barre latérale",
+        "more_button": "Plus",
+        "screenshare_monitor": "Partager l’écran entier",
+        "screenshare_window": "Fenêtre d’application",
+        "screenshare_title": "Partager le contenu"
     },
     "Other": "Autre",
-    "Advanced": "Avancé",
     "room_settings": {
         "permissions": {
             "m.room.avatar_space": "Changer l’avatar de l’espace",
@@ -3503,7 +3402,9 @@
             "room_id": "Identifiant interne du salon",
             "room_version_section": "Version du salon",
             "room_version": "Version du salon :"
-        }
+        },
+        "delete_avatar_label": "Supprimer l’avatar",
+        "upload_avatar_label": "Envoyer un avatar"
     },
     "encryption": {
         "verification": {
@@ -3529,7 +3430,15 @@
             "waiting_other_device_details": "En attente de votre vérification sur votre autre appareil, %(deviceName)s (%(deviceId)s)…",
             "waiting_other_device": "En attente de votre vérification sur votre autre appareil…",
             "waiting_other_user": "En attente de la vérification de %(displayName)s…",
-            "cancelling": "Annulation…"
+            "cancelling": "Annulation…",
+            "unverified_sessions_toast_title": "Vous avez des sessions non vérifiées",
+            "unverified_sessions_toast_description": "Vérifiez pour assurer la sécurité de votre compte",
+            "unverified_sessions_toast_reject": "Plus tard",
+            "unverified_session_toast_title": "Nouvelle connexion. Était-ce vous ?",
+            "unverified_session_toast_accept": "Oui, c’était moi",
+            "request_toast_detail": "%(deviceId)s depuis %(ip)s",
+            "request_toast_decline_counter": "Ignorer (%(counter)s)",
+            "request_toast_accept": "Vérifier la session"
         },
         "old_version_detected_title": "Anciennes données de chiffrement détectées",
         "old_version_detected_description": "Nous avons détecté des données d’une ancienne version de %(brand)s. Le chiffrement de bout en bout n’aura pas fonctionné correctement sur l’ancienne version. Les messages chiffrés échangés récemment dans l’ancienne version ne sont peut-être pas déchiffrables dans cette version. Les échanges de message avec cette version peuvent aussi échouer. Si vous rencontrez des problèmes, déconnectez-vous puis reconnectez-vous. Pour conserver l’historique des messages, exportez puis réimportez vos clés de chiffrement.",
@@ -3539,7 +3448,18 @@
         "bootstrap_title": "Configuration des clés",
         "export_unsupported": "Votre navigateur ne prend pas en charge les extensions cryptographiques nécessaires",
         "import_invalid_keyfile": "Fichier de clé %(brand)s non valide",
-        "import_invalid_passphrase": "Erreur d’authentification : mot de passe incorrect ?"
+        "import_invalid_passphrase": "Erreur d’authentification : mot de passe incorrect ?",
+        "set_up_toast_title": "Configurer la sauvegarde sécurisée",
+        "upgrade_toast_title": "Mise à niveau du chiffrement disponible",
+        "verify_toast_title": "Vérifier cette session",
+        "set_up_toast_description": "Sécurité contre la perte d’accès aux messages et données chiffrées",
+        "verify_toast_description": "D’autres utilisateurs pourraient ne pas lui faire confiance",
+        "cross_signing_unsupported": "Votre serveur d’accueil ne prend pas en charge la signature croisée.",
+        "cross_signing_ready": "La signature croisée est prête à être utilisée.",
+        "cross_signing_ready_no_backup": "La signature croisée est prête mais les clés ne sont pas sauvegardées.",
+        "cross_signing_untrusted": "Votre compte a une identité de signature croisée dans le coffre secret, mais cette session ne lui fait pas encore confiance.",
+        "cross_signing_not_ready": "La signature croisée n’est pas configurée.",
+        "not_supported": "<non pris en charge>"
     },
     "emoji": {
         "category_frequently_used": "Utilisé fréquemment",
@@ -3563,7 +3483,8 @@
         "bullet_1": "Nous n’enregistrons ou ne profilons <Bold>aucune</Bold> donnée du compte",
         "bullet_2": "Nous ne partageons <Bold>aucune</Bold> information avec des tiers",
         "disable_prompt": "Vous pouvez désactiver ceci à n’importe quel moment dans les paramètres",
-        "accept_button": "C’est bon"
+        "accept_button": "C’est bon",
+        "shared_data_heading": "Les données suivants peuvent être partagées :"
     },
     "chat_effects": {
         "confetti_description": "Envoie le message avec des confettis",
@@ -3719,7 +3640,8 @@
         "autodiscovery_unexpected_error_hs": "Une erreur inattendue est survenue pendant la résolution de la configuration du serveur d’accueil",
         "autodiscovery_unexpected_error_is": "Une erreur inattendue est survenue pendant la résolution de la configuration du serveur d’identité",
         "autodiscovery_hs_incompatible": "Votre serveur d’accueil est trop ancien et ne prend pas en charge la version minimale requise de l’API. Veuillez contacter le propriétaire du serveur, ou bien mettez à jour votre serveur.",
-        "incorrect_credentials_detail": "Veuillez noter que vous vous connectez au serveur %(hs)s, pas à matrix.org."
+        "incorrect_credentials_detail": "Veuillez noter que vous vous connectez au serveur %(hs)s, pas à matrix.org.",
+        "create_account_title": "Créer un compte"
     },
     "room_list": {
         "sort_unread_first": "Afficher les salons non lus en premier",
@@ -3843,7 +3765,37 @@
         "error_need_to_be_logged_in": "Vous devez être identifié.",
         "error_need_invite_permission": "Vous devez avoir l’autorisation d’inviter des utilisateurs pour faire ceci.",
         "error_need_kick_permission": "Vous devez avoir l’autorisation d’expulser des utilisateurs pour faire ceci.",
-        "no_name": "Application inconnue"
+        "no_name": "Application inconnue",
+        "error_hangup_title": "Connexion perdue",
+        "error_hangup_description": "Vous avez déconnecté de l’appel. (Erreur : %(message)s)",
+        "context_menu": {
+            "start_audio_stream": "Démarrer une diffusion audio",
+            "screenshot": "Prendre une photo",
+            "delete": "Supprimer le widget",
+            "delete_warning": "Supprimer un widget le supprime pour tous les utilisateurs du salon. Voulez-vous vraiment supprimer ce widget ?",
+            "remove": "Supprimer pour tout le monde",
+            "revoke": "Révoquer les permissions",
+            "move_left": "Aller à gauche",
+            "move_right": "Aller à droite"
+        },
+        "shared_data_name": "Votre nom d’affichage",
+        "shared_data_avatar": "Votre URL d’image de profil",
+        "shared_data_mxid": "Votre identifiant utilisateur",
+        "shared_data_device_id": "Votre ID d’appareil",
+        "shared_data_theme": "Votre thème",
+        "shared_data_lang": "Votre langue",
+        "shared_data_url": "URL de %(brand)s",
+        "shared_data_room_id": "Identifiant du salon",
+        "shared_data_widget_id": "Identifiant du widget",
+        "shared_data_warning_im": "L’utilisation de ce widget pourrait partager des données <helpIcon /> avec %(widgetDomain)s et votre gestionnaire d’intégrations.",
+        "shared_data_warning": "L’utilisation de ce widget pourrait partager des données <helpIcon /> avec %(widgetDomain)s.",
+        "unencrypted_warning": "Les widgets n’utilisent pas le chiffrement des messages.",
+        "added_by": "Widget ajouté par",
+        "cookie_warning": "Ce widget pourrait utiliser des cookies.",
+        "error_loading": "Erreur lors du chargement du widget",
+        "error_mixed_content": "Erreur - Contenu mixte",
+        "unmaximise": "Dé-maximiser",
+        "popout": "Détacher le widget"
     },
     "feedback": {
         "sent": "Commentaire envoyé",
@@ -3940,7 +3892,8 @@
         "empty_heading": "Garde les discussions organisées à l’aide de fils de discussion"
     },
     "theme": {
-        "light_high_contrast": "Contraste élevé clair"
+        "light_high_contrast": "Contraste élevé clair",
+        "match_system": "S’adapter au système"
     },
     "space": {
         "landing_welcome": "Bienvenue dans <name/>",
@@ -3975,7 +3928,14 @@
         "failed_timeout": "Délai d’attente expiré en essayant de récupérer votre position. Veuillez réessayer plus tard.",
         "failed_unknown": "Erreur inconnue en récupérant votre position. Veuillez réessayer plus tard.",
         "expand_map": "Étendre la carte",
-        "failed_load_map": "Impossible de charger la carte"
+        "failed_load_map": "Impossible de charger la carte",
+        "live_enable_heading": "Partage de position en continu",
+        "live_enable_description": "Attention : c'est une fonctionnalité expérimentale qui utilise une implémentation temporaire. Cela implique que vous ne pourrez pas supprimer votre historique de positions, et les utilisateurs avancés pourront voir votre historique de positions même après avoir arrêter le partage de votre position en continu dans ce salon.",
+        "live_toggle_label": "Activer le partage de position en continu",
+        "live_share_button": "Partagé pendant %(duration)s",
+        "click_move_pin": "Cliquer pour déplacer le marqueur",
+        "click_drop_pin": "Cliquer pour mettre un marqueur",
+        "share_button": "Partager la position"
     },
     "labs_mjolnir": {
         "room_name": "Ma liste de bannissement",
@@ -4046,7 +4006,8 @@
     },
     "user_menu": {
         "switch_theme_light": "Passer au mode clair",
-        "switch_theme_dark": "Passer au mode sombre"
+        "switch_theme_dark": "Passer au mode sombre",
+        "settings": "Tous les paramètres"
     },
     "notif_panel": {
         "empty_heading": "Vous êtes à jour",
@@ -4084,7 +4045,28 @@
         "leave_error_title": "Erreur en essayant de quitter le salon",
         "upgrade_error_title": "Erreur lors de la mise à niveau du salon",
         "upgrade_error_description": "Vérifiez que votre serveur prend en charge la version de salon choisie et réessayez.",
-        "leave_server_notices_description": "Ce salon est utilisé pour les messages importants du serveur d’accueil, vous ne pouvez donc pas en partir."
+        "leave_server_notices_description": "Ce salon est utilisé pour les messages importants du serveur d’accueil, vous ne pouvez donc pas en partir.",
+        "error_join_connection": "Il y a eu une erreur en rejoignant.",
+        "error_join_incompatible_version_1": "Désolé, votre serveur d'accueil est trop vieux pour participer ici.",
+        "error_join_incompatible_version_2": "Veuillez contacter l’administrateur de votre serveur d’accueil.",
+        "error_join_404_invite_same_hs": "La personne qui vous a invité(e) a déjà quitté le salon.",
+        "error_join_404_invite": "La personne qui vous a invité(e) a déjà quitté le salon, ou son serveur est hors-ligne.",
+        "error_join_404_1": "Vous avez essayé de rejoindre à l’aide de l’ID du salon sans fournir une liste de serveurs pour l’atteindre. Les IDs de salons sont des identifiants internes et ne peuvent être utilisés pour rejoindre un salon sans informations complémentaires.",
+        "error_join_404_2": "Si vous connaissez l’adresse d’un salon, essayez de l’utiliser à la place pour rejoindre ce salon.",
+        "error_join_title": "Impossible de rejoindre",
+        "error_join_403": "Vous avez besoin d’une invitation pour accéder à ce salon.",
+        "error_cancel_knock_title": "Erreur lors de l’annulation",
+        "context_menu": {
+            "unfavourite": "Favori",
+            "favourite": "Favoris",
+            "mentions_only": "Seulement les mentions",
+            "copy_link": "Copier le lien du salon",
+            "low_priority": "Priorité basse",
+            "forget": "Oublier le salon",
+            "mark_read": "Marquer comme lu",
+            "notifications_default": "Réglage par défaut",
+            "notifications_mute": "Salon muet"
+        }
     },
     "file_panel": {
         "guest_note": "Vous devez vous <a>inscrire</a> pour utiliser cette fonctionnalité",
@@ -4104,7 +4086,8 @@
         "tac_button": "Voir les conditions générales",
         "identity_server_no_terms_title": "Le serveur d’identité n’a pas de conditions de service",
         "identity_server_no_terms_description_1": "Cette action nécessite l’accès au serveur d’identité par défaut <server /> afin de valider une adresse e-mail ou un numéro de téléphone, mais le serveur n’a aucune condition de service.",
-        "identity_server_no_terms_description_2": "Continuez seulement si vous faites confiance au propriétaire du serveur."
+        "identity_server_no_terms_description_2": "Continuez seulement si vous faites confiance au propriétaire du serveur.",
+        "inline_intro_text": "Acceptez <policyLink /> pour continuer :"
     },
     "space_settings": {
         "title": "Paramètres - %(spaceName)s"
@@ -4200,7 +4183,11 @@
         "sync": "Impossible de se connecter au serveur d’accueil. Reconnexion…",
         "connection": "Il y a eu un problème lors de la communication avec le serveur d’accueil, veuillez réessayer ultérieurement.",
         "mixed_content": "Impossible de se connecter au serveur d'accueil en HTTP si l’URL dans la barre de votre explorateur est en HTTPS. Utilisez HTTPS ou <a>activez la prise en charge des scripts non-vérifiés</a>.",
-        "tls": "Impossible de se connecter au serveur d’accueil - veuillez vérifier votre connexion, assurez-vous que le <a>certificat SSL de votre serveur d’accueil</a> est un certificat de confiance, et qu’aucune extension du navigateur ne bloque les requêtes."
+        "tls": "Impossible de se connecter au serveur d’accueil - veuillez vérifier votre connexion, assurez-vous que le <a>certificat SSL de votre serveur d’accueil</a> est un certificat de confiance, et qu’aucune extension du navigateur ne bloque les requêtes.",
+        "admin_contact_short": "Contactez <a>l’administrateur de votre serveur</a>.",
+        "non_urgent_echo_failure_toast": "Votre serveur ne répond pas à certaines <a>requêtes</a>.",
+        "failed_copy": "Échec de la copie",
+        "something_went_wrong": "Quelque chose s’est mal déroulé !"
     },
     "in_space1_and_space2": "Dans les espaces %(space1Name)s et %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -4208,5 +4195,40 @@
         "other": "Dans %(spaceName)s et %(count)s autres espaces."
     },
     "in_space": "Dans l’espace %(spaceName)s.",
-    "name_and_id": "%(name)s (%(userId)s)"
+    "name_and_id": "%(name)s (%(userId)s)",
+    "items_and_n_others": {
+        "other": "<Items/> et %(count)s autres",
+        "one": "<Items/> et un autre"
+    },
+    "notifications": {
+        "enable_prompt_toast_title_from_message_send": "Ne ratez pas une réponse",
+        "enable_prompt_toast_title": "Notifications",
+        "enable_prompt_toast_description": "Activer les notifications sur le bureau",
+        "colour_none": "Aucun",
+        "colour_bold": "Gras",
+        "colour_grey": "Gris",
+        "colour_red": "Rouge",
+        "colour_unsent": "Non envoyé",
+        "error_change_title": "Modifier les paramètres de notification"
+    },
+    "mobile_guide": {
+        "toast_title": "Utilisez une application pour une meilleure expérience",
+        "toast_description": "%(brand)s est expérimental sur un navigateur mobile. Pour une meilleure expérience et bénéficier des dernières fonctionnalités, utilisez notre application native gratuite.",
+        "toast_accept": "Utiliser l’application"
+    },
+    "chat_card_back_action_label": "Retour à la conversation",
+    "room_summary_card_back_action_label": "Information du salon",
+    "member_list_back_action_label": "Membres du salon",
+    "thread_view_back_action_label": "Retour au fil de discussion",
+    "quick_settings": {
+        "title": "Paramètres rapides",
+        "all_settings": "Tous les paramètres",
+        "metaspace_section": "Épingler à la barre latérale",
+        "sidebar_settings": "Plus d’options"
+    },
+    "lightbox": {
+        "title": "Vue d’image",
+        "rotate_left": "Tourner à gauche",
+        "rotate_right": "Tourner à droite"
+    }
 }

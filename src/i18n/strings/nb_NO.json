@@ -3,9 +3,6 @@
     "Notification targets": "Mål for varsel",
     "Today": "I dag",
     "Friday": "Fredag",
-    "Notifications": "Varsler",
-    "Source URL": "Kilde URL",
-    "Favourite": "Favoritt",
     "Tuesday": "Tirsdag",
     "Unnamed room": "Rom uten navn",
     "Monday": "Mandag",
@@ -17,7 +14,6 @@
     "Thursday": "Torsdag",
     "All messages": "Alle meldinger",
     "Yesterday": "I går",
-    "Low Priority": "Lav Prioritet",
     "Saturday": "Lørdag",
     "Permission Required": "Tillatelse kreves",
     "Send": "Send",
@@ -102,9 +98,7 @@
     "All Rooms": "Alle rom",
     "Search…": "Søk …",
     "Download %(text)s": "Last ned %(text)s",
-    "Copied!": "Kopiert!",
     "Cancel search": "Avbryt søket",
-    "More options": "Flere alternativer",
     "collapse": "skjul",
     "expand": "utvid",
     "Close dialog": "Lukk dialog",
@@ -122,7 +116,6 @@
     "Home": "Hjem",
     "Explore rooms": "Se alle rom",
     "Your password has been reset.": "Passordet ditt har blitt tilbakestilt.",
-    "Create account": "Opprett konto",
     "Success!": "Suksess!",
     "Set up": "Sett opp",
     "Lion": "Løve",
@@ -147,8 +140,6 @@
     "Trophy": "Trofé",
     "Ball": "Ball",
     "Guitar": "Gitar",
-    "Later": "Senere",
-    "Accept <policyLink /> to continue:": "Aksepter <policyLink /> for å fortsette:",
     "Profile picture": "Profilbilde",
     "Checking server": "Sjekker tjeneren",
     "Change identity server": "Bytt ut identitetstjener",
@@ -163,7 +154,6 @@
     "Deactivate account": "Deaktiver kontoen",
     "Ignored users": "Ignorerte brukere",
     "Unignore": "Opphev ignorering",
-    "Message search": "Meldingssøk",
     "Missing media permissions, click the button below to request.": "Manglende mediatillatelser, klikk på knappen nedenfor for å be om dem.",
     "Request media permissions": "Be om mediatillatelser",
     "No Audio Outputs detected": "Ingen lydutdataer ble oppdaget",
@@ -210,15 +200,7 @@
     "You declined": "Du avslo",
     "You cancelled": "Du avbrøt",
     "edited": "redigert",
-    "Your user ID": "Din bruker-ID",
-    "Your theme": "Ditt tema",
-    "%(brand)s URL": "%(brand)s-URL",
-    "Room ID": "Rom-ID",
-    "Widget ID": "Modul-ID",
     "Delete Widget": "Slett modul",
-    "Delete widget": "Slett modul",
-    "Rotate Left": "Roter til venstre",
-    "Rotate Right": "Roter til høyre",
     "Power level": "Styrkenivå",
     "e.g. my-room": "f.eks. mitt-rom",
     "Enter a server name": "Skriv inn et tjenernavn",
@@ -239,24 +221,17 @@
     "No backup found!": "Ingen sikkerhetskopier ble funnet!",
     "Country Dropdown": "Nedfallsmeny over land",
     "Email (optional)": "E-post (valgfritt)",
-    "Upload avatar": "Last opp en avatar",
     "Add room": "Legg til et rom",
     "Search failed": "Søket mislyktes",
     "No more results": "Ingen flere resultater",
     "Return to login screen": "Gå tilbake til påloggingsskjermen",
     "File to import": "Filen som skal importeres",
     "Upgrade your encryption": "Oppgrader krypteringen din",
-    "Verify this session": "Verifiser denne økten",
     "Not Trusted": "Ikke betrodd",
-    "<Items/> and %(count)s others": {
-        "other": "<Items/> og %(count)s andre",
-        "one": "<Items/> og én annen"
-    },
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "Show more": "Vis mer",
     "Warning!": "Advarsel!",
     "Authentication": "Autentisering",
-    "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Verifiser hver brukerøkt individuelt for å stemple den som at du stoler på den, ikke stol på kryss-signerte enheter.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Krypterte meldinger er sikret med punkt-til-punkt-kryptering. Bare du og mottakeren(e) har nøklene til å lese disse meldingene.",
     "Your keys are <b>not being backed up from this session</b>.": "Dine nøkler <b>har ikke blitt sikkerhetskopiert fra denne økten</b>.",
     "Back up your keys before signing out to avoid losing them.": "Ta sikkerhetskopi av nøklene dine før du logger av for å unngå å miste dem.",
@@ -278,9 +253,6 @@
     "Room Name": "Rommets navn",
     "Room Topic": "Rommets tema",
     "Encryption not enabled": "Kryptering er ikke skrudd på",
-    "Something went wrong!": "Noe gikk galt!",
-    "Your display name": "Ditt visningsnavn",
-    "Widget added by": "Modulen ble lagt til av",
     "Create new room": "Opprett et nytt rom",
     "Language Dropdown": "Språk-nedfallsmeny",
     "Custom level": "Tilpasset nivå",
@@ -319,14 +291,11 @@
     "%(name)s declined": "%(name)s avslo",
     "%(name)s cancelled": "%(name)s avbrøt",
     "%(name)s wants to verify": "%(name)s ønsker å verifisere",
-    "Failed to copy": "Mislyktes i å kopiere",
     "Submit logs": "Send inn loggføringer",
     "Clear all data": "Tøm alle data",
     "Upload completed": "Opplasting fullført",
     "Unable to upload": "Mislyktes i å laste opp",
-    "Remove for everyone": "Fjern for alle",
     "Secret storage public key:": "Offentlig nøkkel for hemmelig lagring:",
-    "New login. Was this you?": "En ny pålogging. Var det deg?",
     "Aeroplane": "Fly",
     "No display name": "Ingen visningsnavn",
     "unexpected type": "uventet type",
@@ -375,7 +344,6 @@
     "That matches!": "Det samsvarer!",
     "That doesn't match.": "Det samsvarer ikke.",
     "Go back to set it again.": "Gå tilbake for å velge på nytt.",
-    "Other users may not trust it": "Andre brukere kan kanskje mistro den",
     "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s kan ikke forhåndsvises. Vil du bli med i den?",
     "Messages in this room are end-to-end encrypted.": "Meldinger i dette rommet er start-til-slutt-kryptert.",
     "Messages in this room are not end-to-end encrypted.": "Meldinger i dette rommet er ikke start-til-slutt-kryptert.",
@@ -383,7 +351,6 @@
     "Jump to read receipt": "Hopp til lesekvitteringen",
     "Verify your other session using one of the options below.": "Verifiser den andre økten din med en av metodene nedenfor.",
     "Ok": "OK",
-    "Encryption upgrade available": "Krypteringsoppdatering tilgjengelig",
     "Santa": "Julenisse",
     "wait and try again later": "vent og prøv igjen senere",
     "Remove %(phone)s?": "Vil du fjerne %(phone)s?",
@@ -401,7 +368,6 @@
     "Error decrypting video": "Feil under dekryptering av video",
     "Add an Integration": "Legg til en integrering",
     "Can't load this message": "Klarte ikke å laste inn denne meldingen",
-    "Popout widget": "Utsprettsmodul",
     "Room address": "Rommets adresse",
     "This address is available to use": "Denne adressen er allerede i bruk",
     "Failed to send logs: ": "Mislyktes i å sende loggbøker: ",
@@ -424,7 +390,6 @@
     "Jump to first invite.": "Hopp til den første invitasjonen.",
     "You seem to be uploading files, are you sure you want to quit?": "Du ser til å laste opp filer, er du sikker på at du vil avslutte?",
     "Switch theme": "Bytt tema",
-    "All settings": "Alle innstillinger",
     "Confirm encryption setup": "Bekreft krypteringsoppsett",
     "Create key backup": "Opprett nøkkelsikkerhetskopi",
     "Set up Secure Messages": "Sett opp sikre meldinger",
@@ -434,7 +399,6 @@
     "Your messages are not secure": "Dine meldinger er ikke sikre",
     "Edited at %(date)s": "Redigert den %(date)s",
     "Click to view edits": "Klikk for å vise redigeringer",
-    "This widget may use cookies.": "Denne modulen bruker kanskje infokapsler.",
     "Confirm account deactivation": "Bekreft deaktivering av kontoen",
     "The server is offline.": "Denne tjeneren er offline.",
     "Wrong file type": "Feil filtype",
@@ -456,7 +420,6 @@
     "Security Key mismatch": "Sikkerhetsnøkkel uoverensstemmelse",
     "Unable to load backup status": "Klarte ikke å laste sikkerhetskopi-status",
     "%(completed)s of %(total)s keys restored": "%(completed)s av %(total)s nøkler gjenopprettet",
-    "Revoke permissions": "Trekk tilbake rettigheter",
     "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Klarte ikke å trekke tilbake invitasjonen. Tjener kan ha et forbigående problem, eller det kan hende at du ikke har tilstrekkelige rettigheter for å trekke tilbake invitasjonen.",
     "Failed to revoke invite": "Klarte ikke å trekke tilbake invitasjon",
     "Unable to revoke sharing for phone number": "Klarte ikke trekke tilbake deling for telefonnummer",
@@ -513,7 +476,6 @@
     "No results found": "Ingen resultater ble funnet",
     "Public space": "Offentlig område",
     "Private space": "Privat område",
-    "%(deviceId)s from %(ip)s": "%(deviceId)s fra %(ip)s",
     "Leave Space": "Forlat området",
     "Save Changes": "Lagre endringer",
     "You don't have permission": "Du har ikke tillatelse",
@@ -522,7 +484,6 @@
         "one": "%(count)s rom"
     },
     "unknown person": "ukjent person",
-    "Click to copy": "Klikk for å kopiere",
     "Share invite link": "Del invitasjonslenke",
     "Leave space": "Forlat området",
     "%(count)s people you know have already joined": {
@@ -538,12 +499,9 @@
     "Malta": "Malta",
     "Uruguay": "Uruguay",
     "Remember this": "Husk dette",
-    "Move right": "Gå til høyre",
     "Security Phrase": "Sikkerhetsfrase",
     "Open dial pad": "Åpne nummerpanelet",
     "This room is public": "Dette rommet er offentlig",
-    "Move left": "Gå til venstre",
-    "Take a picture": "Ta et bilde",
     "Hold": "Hold",
     "Enter Security Phrase": "Skriv inn sikkerhetsfrase",
     "Security Key": "Sikkerhetsnøkkel",
@@ -552,8 +510,6 @@
     "New Recovery Method": "Ny gjenopprettingsmetode",
     "Generate a Security Key": "Generer en sikkerhetsnøkkel",
     "Confirm your Security Phrase": "Bekreft sikkerhetsfrasen din",
-    "Use app": "Bruk app",
-    "Use app for a better experience": "Bruk appen for en bedre opplevelse",
     "This address is already in use": "Denne adressen er allerede i bruk",
     "<a>In reply to</a> <pill>": "<a>Som svar på</a> <pill>",
     "Information": "Informasjon",
@@ -564,8 +520,6 @@
     "Room settings": "Rominnstillinger",
     "Not encrypted": "Ikke kryptert",
     "Widgets": "Komponenter",
-    "Favourited": "Favorittmerket",
-    "Forget Room": "Glem rommet",
     "Continuing without email": "Fortsetter uten E-post",
     "Are you sure you want to sign out?": "Er du sikker på at du vil logge av?",
     "Transfer": "Overfør",
@@ -574,21 +528,16 @@
     "Explore public rooms": "Utforsk offentlige rom",
     "Verify the link in your inbox": "Verifiser lenken i innboksen din",
     "Bridges": "Broer",
-    "Reject all %(invitedRooms)s invites": "Avslå alle %(invitedRooms)s-invitasjoner",
     "Upgrade Room Version": "Oppgrader romversjon",
     "You cancelled verification.": "Du avbrøt verifiseringen.",
     "Ask %(displayName)s to scan your code:": "Be %(displayName)s om å skanne koden:",
     "Failed to deactivate user": "Mislyktes i å deaktivere brukeren",
-    "Accept all %(invitedRooms)s invites": "Aksepter alle %(invitedRooms)s-invitasjoner",
-    "<not supported>": "<ikke støttet>",
     "not ready": "ikke klar",
     "ready": "klar",
     "Algorithm:": "Algoritme:",
     "Show Widgets": "Vis moduler",
     "Hide Widgets": "Skjul moduler",
     "Dial pad": "Nummerpanel",
-    "Enable desktop notifications": "Aktiver skrivebordsvarsler",
-    "Don't miss a reply": "Ikke gå glipp av noen svar",
     "Zimbabwe": "Zimbabwe",
     "Yemen": "Jemen",
     "Zambia": "Zambia",
@@ -791,7 +740,6 @@
     "Could not connect to identity server": "Kunne ikke koble til identitetsserveren",
     "Results": "Resultat",
     "Retry all": "Prøv alle igjen",
-    "Report": "Rapporter",
     "Sent": "Sendt",
     "Sending": "Sender",
     "MB": "MB",
@@ -802,10 +750,8 @@
     "Keyword": "Nøkkelord",
     "Visibility": "Synlighet",
     "Address": "Adresse",
-    "Delete avatar": "Slett profilbilde",
     "Corn": "Mais",
     "Cloud": "Sky",
-    "More": "Mer",
     "Connecting": "Kobler til",
     "St. Pierre & Miquelon": "Saint-Pierre og Miquelon",
     "St. Martin": "Saint Martin",
@@ -883,7 +829,9 @@
         "preview_message": "Hei der. Du er fantastisk!",
         "on": "På",
         "off": "Av",
-        "all_rooms": "Alle rom"
+        "all_rooms": "Alle rom",
+        "copied": "Kopiert!",
+        "Advanced": "Avansert"
     },
     "action": {
         "continue": "Fortsett",
@@ -970,7 +918,8 @@
         "mention": "Nevn",
         "submit": "Send",
         "send_report": "Send inn rapport",
-        "unban": "Opphev utestengelse"
+        "unban": "Opphev utestengelse",
+        "click_to_copy": "Klikk for å kopiere"
     },
     "a11y": {
         "user_menu": "Brukermeny",
@@ -1034,7 +983,6 @@
             "user_description": "Brukere"
         }
     },
-    "Bold": "Fet",
     "Code": "Kode",
     "power_level": {
         "default": "Standard",
@@ -1146,7 +1094,11 @@
             "cryptography_section": "Kryptografi",
             "session_id": "Økt-ID:",
             "session_key": "Øktnøkkel:",
-            "encryption_section": "Kryptering"
+            "encryption_section": "Kryptering",
+            "bulk_options_accept_all_invites": "Aksepter alle %(invitedRooms)s-invitasjoner",
+            "bulk_options_reject_all_invites": "Avslå alle %(invitedRooms)s-invitasjoner",
+            "message_search_section": "Meldingssøk",
+            "encryption_individual_verification_mode": "Verifiser hver brukerøkt individuelt for å stemple den som at du stoler på den, ikke stol på kryss-signerte enheter."
         },
         "preferences": {
             "room_list_heading": "Romliste",
@@ -1362,7 +1314,11 @@
         "m.room.create": {
             "see_older_messages": "Klikk for å se eldre meldinger."
         },
-        "creation_summary_room": "%(creator)s opprettet og satte opp rommet."
+        "creation_summary_room": "%(creator)s opprettet og satte opp rommet.",
+        "context_menu": {
+            "external_url": "Kilde URL",
+            "report": "Rapporter"
+        }
     },
     "slash_command": {
         "shrug": "Føyer til ¯\\_(ツ)_/¯ på en råtekstmelding",
@@ -1460,10 +1416,11 @@
         "no_permission_conference": "Tillatelse kreves",
         "no_permission_conference_description": "Du har ikke tillatelse til å starte en konferansesamtale i dette rommet",
         "default_device": "Standardenhet",
-        "no_media_perms_title": "Ingen mediatillatelser"
+        "no_media_perms_title": "Ingen mediatillatelser",
+        "join_button_tooltip_connecting": "Kobler til",
+        "more_button": "Mer"
     },
     "Other": "Andre",
-    "Advanced": "Avansert",
     "room_settings": {
         "permissions": {
             "m.room.avatar": "Endre rommets avatar",
@@ -1516,7 +1473,9 @@
         "advanced": {
             "room_version_section": "Romversjon",
             "room_version": "Romversjon:"
-        }
+        },
+        "delete_avatar_label": "Slett profilbilde",
+        "upload_avatar_label": "Last opp en avatar"
     },
     "encryption": {
         "verification": {
@@ -1526,11 +1485,18 @@
             "complete_description": "Du har vellykket verifisert denne brukeren.",
             "qr_prompt": "Skann denne unike koden",
             "complete_action": "Skjønner",
-            "cancelling": "Avbryter …"
+            "cancelling": "Avbryter …",
+            "unverified_sessions_toast_reject": "Senere",
+            "unverified_session_toast_title": "En ny pålogging. Var det deg?",
+            "request_toast_detail": "%(deviceId)s fra %(ip)s"
         },
         "verification_requested_toast_title": "Verifisering ble forespurt",
         "bootstrap_title": "Setter opp nøkler",
-        "import_invalid_keyfile": "Ikke en gyldig %(brand)s-nøkkelfil"
+        "import_invalid_keyfile": "Ikke en gyldig %(brand)s-nøkkelfil",
+        "upgrade_toast_title": "Krypteringsoppdatering tilgjengelig",
+        "verify_toast_title": "Verifiser denne økten",
+        "verify_toast_description": "Andre brukere kan kanskje mistro den",
+        "not_supported": "<ikke støttet>"
     },
     "emoji": {
         "category_frequently_used": "Ofte brukte",
@@ -1605,7 +1571,8 @@
             "error_title": "Vi kunne ikke logge deg inn"
         },
         "reset_password_email_not_found_title": "Denne e-postadressen ble ikke funnet",
-        "misconfigured_title": "Ditt %(brand)s-oppsett er feiloppsatt"
+        "misconfigured_title": "Ditt %(brand)s-oppsett er feiloppsatt",
+        "create_account_title": "Opprett konto"
     },
     "room_list": {
         "show_previews": "Vis forhåndsvisninger av meldinger",
@@ -1628,7 +1595,8 @@
         "intro_welcome": "Velkommen til %(appName)s",
         "send_dm": "Send en direktemelding",
         "explore_rooms": "Utforsk offentlige rom",
-        "create_room": "Opprett en gruppechat"
+        "create_room": "Opprett en gruppechat",
+        "create_account": "Opprett konto"
     },
     "setting": {
         "help_about": {
@@ -1648,7 +1616,24 @@
         },
         "error_need_to_be_logged_in": "Du må være logget inn.",
         "error_need_invite_permission": "Du må kunne invitere andre brukere for å gjøre det.",
-        "no_name": "Ukjent app"
+        "no_name": "Ukjent app",
+        "context_menu": {
+            "screenshot": "Ta et bilde",
+            "delete": "Slett modul",
+            "remove": "Fjern for alle",
+            "revoke": "Trekk tilbake rettigheter",
+            "move_left": "Gå til venstre",
+            "move_right": "Gå til høyre"
+        },
+        "shared_data_name": "Ditt visningsnavn",
+        "shared_data_mxid": "Din bruker-ID",
+        "shared_data_theme": "Ditt tema",
+        "shared_data_url": "%(brand)s-URL",
+        "shared_data_room_id": "Rom-ID",
+        "shared_data_widget_id": "Modul-ID",
+        "added_by": "Modulen ble lagt til av",
+        "cookie_warning": "Denne modulen bruker kanskje infokapsler.",
+        "popout": "Utsprettsmodul"
     },
     "feedback": {
         "comment_label": "Kommentar"
@@ -1710,7 +1695,8 @@
     },
     "user_menu": {
         "switch_theme_light": "Bytt til lys modus",
-        "switch_theme_dark": "Bytt til mørk modus"
+        "switch_theme_dark": "Bytt til mørk modus",
+        "settings": "Alle innstillinger"
     },
     "space": {
         "suggested": "Anbefalte",
@@ -1724,6 +1710,12 @@
             "no_topic": "<a>Legg til et tema</a> for hjelpe folk å forstå hva dette handler om.",
             "you_created": "Du opprettet dette rommet.",
             "no_avatar_label": "Legg til et bilde så folk lettere kan finne rommet ditt."
+        },
+        "context_menu": {
+            "unfavourite": "Favorittmerket",
+            "favourite": "Favoritt",
+            "low_priority": "Lav Prioritet",
+            "forget": "Glem rommet"
         }
     },
     "file_panel": {
@@ -1739,7 +1731,8 @@
         "tac_button": "Gå gjennom betingelser og vilkår",
         "identity_server_no_terms_title": "Identitetstjeneren har ingen brukervilkår",
         "identity_server_no_terms_description_1": "Denne handlingen krever tilgang til standard identitetsserver <server /> for å kunne validere en epostaddresse eller telefonnummer, men serveren har ikke bruksvilkår.",
-        "identity_server_no_terms_description_2": "Fortsett kun om du stoler på eieren av serveren."
+        "identity_server_no_terms_description_2": "Fortsett kun om du stoler på eieren av serveren.",
+        "inline_intro_text": "Aksepter <policyLink /> for å fortsette:"
     },
     "failed_load_async_component": "Klarte ikke laste! Sjekk nettverstilkoblingen din og prøv igjen.",
     "upload_failed_generic": "Filen '%(fileName)s' kunne ikke lastes opp.",
@@ -1768,5 +1761,33 @@
         "error_room_not_visible": "Rom %(roomId)s er ikke synlig",
         "error_missing_user_id_request": "Manglende user_id i forespørselen"
     },
-    "name_and_id": "%(name)s (%(userId)s)"
+    "name_and_id": "%(name)s (%(userId)s)",
+    "items_and_n_others": {
+        "other": "<Items/> og %(count)s andre",
+        "one": "<Items/> og én annen"
+    },
+    "notifications": {
+        "enable_prompt_toast_title_from_message_send": "Ikke gå glipp av noen svar",
+        "enable_prompt_toast_title": "Varsler",
+        "enable_prompt_toast_description": "Aktiver skrivebordsvarsler",
+        "colour_none": "Ingen",
+        "colour_bold": "Fet"
+    },
+    "mobile_guide": {
+        "toast_title": "Bruk appen for en bedre opplevelse",
+        "toast_accept": "Bruk app"
+    },
+    "room_summary_card_back_action_label": "Rominformasjon",
+    "quick_settings": {
+        "all_settings": "Alle innstillinger",
+        "sidebar_settings": "Flere alternativer"
+    },
+    "error": {
+        "failed_copy": "Mislyktes i å kopiere",
+        "something_went_wrong": "Noe gikk galt!"
+    },
+    "lightbox": {
+        "rotate_left": "Roter til venstre",
+        "rotate_right": "Roter til høyre"
+    }
 }

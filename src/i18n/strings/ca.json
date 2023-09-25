@@ -3,9 +3,7 @@
     "No Webcams detected": "No s'ha detectat cap càmera web",
     "Create new room": "Crea una sala nova",
     "Failed to forget room %(errCode)s": "No s'ha pogut oblidar la sala %(errCode)s",
-    "Favourite": "Favorit",
     "Failed to change password. Is your password correct?": "S'ha produït un error en canviar la contrasenya. És correcta la teva contrasenya?",
-    "Notifications": "Notificacions",
     "unknown error code": "codi d'error desconegut",
     "Rooms": "Sales",
     "Warning!": "Avís!",
@@ -72,7 +70,6 @@
         "one": "(~%(count)s resultat)"
     },
     "Join Room": "Entra a la sala",
-    "Upload avatar": "Puja l'avatar",
     "Forget room": "Oblida la sala",
     "Low priority": "Baixa prioritat",
     "Historical": "Històric",
@@ -89,20 +86,11 @@
     "Invalid file%(extra)s": "Fitxer invàlid%(extra)s",
     "Error decrypting image": "Error desxifrant imatge",
     "Error decrypting video": "Error desxifrant video",
-    "Copied!": "Copiat!",
-    "Failed to copy": "No s'ha pogut copiar",
     "Add an Integration": "Afegeix una integració",
     "Email address": "Correu electrònic",
     "<a>In reply to</a> <pill>": "<a>En resposta a</a> <pill>",
-    "Something went wrong!": "Alguna cosa ha anat malament!",
     "Delete Widget": "Suprimeix el giny",
-    "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "La supressió d'un giny l'elimina per a tots els usuaris d'aquesta sala. Esteu segur que voleu eliminar aquest giny?",
-    "Delete widget": "Suprimeix el giny",
     "Home": "Inici",
-    "<Items/> and %(count)s others": {
-        "other": "<Items/> i %(count)s altres",
-        "one": "<Items/> i un altre"
-    },
     "%(items)s and %(lastItem)s": "%(items)s i %(lastItem)s",
     "collapse": "col·lapsa",
     "expand": "expandeix",
@@ -155,7 +143,6 @@
     "Failed to send logs: ": "No s'han pogut enviar els logs: ",
     "This Room": "Aquesta sala",
     "Unavailable": "No disponible",
-    "Source URL": "URL origen",
     "Filter results": "Resultats del filtre",
     "Search…": "Cerca…",
     "Tuesday": "Dimarts",
@@ -170,13 +157,11 @@
     "Thursday": "Dijous",
     "Logs sent": "Logs enviats",
     "Yesterday": "Ahir",
-    "Low Priority": "Baixa prioritat",
     "Thank you!": "Gràcies!",
     "Permission Required": "Es necessita permís",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "No s'ha trobat el perfil pels IDs de Matrix següents, els voleu convidar igualment?",
     "Invite anyway and never warn me again": "Convidar igualment i no avisar-me de nou",
     "Invite anyway": "Convidar igualment",
-    "Please contact your homeserver administrator.": "Si us plau contacteu amb l'administrador del vostre homeserver.",
     "Email addresses": "Adreces de correu electrònic",
     "Phone numbers": "Números de telèfon",
     "Phone Number": "Número de telèfon",
@@ -211,12 +196,10 @@
     "Confirm this user's session by comparing the following with their User Settings:": "Confirma aquesta sessió d'usuari comparant amb la seva configuració d'usuari, el següent:",
     "Confirm by comparing the following with the User Settings in your other session:": "Confirma comparant el següent amb la configuració d'usuari de la teva altra sessió:",
     "Room settings": "Configuració de sala",
-    "Change notification settings": "Canvia la configuració de notificacions",
     "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, enllaça aquest correu electrònic amb el teu compte a Configuració.",
     "Use an identity server in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, utilitza un servidor d'identitat a Configuració.",
     "Share this email in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, comparteix aquest correu electrònic a Configuració.",
     "Go to Settings": "Ves a Configuració",
-    "All settings": "Totes les configuracions",
     "To continue, use Single Sign On to prove your identity.": "Per continuar, utilitza la inscripció única SSO (per demostrar la teva identitat).",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Confirma la desactivació del teu compte mitjançant la inscripció única SSO (per demostrar la teva identitat).",
     "Explore rooms": "Explora sales",
@@ -249,7 +232,9 @@
         "identity_server": "Servidor d'identitat",
         "integration_manager": "Gestor d'integracions",
         "on": "Engegat",
-        "off": "Apagat"
+        "off": "Apagat",
+        "copied": "Copiat!",
+        "Advanced": "Avançat"
     },
     "action": {
         "continue": "Continua",
@@ -527,6 +512,9 @@
             "lightbox_title": "%(senderDisplayName)s ha canviat l'avatar de %(roomName)s",
             "removed": "%(senderDisplayName)s ha eliminat l'avatar de la sala.",
             "changed_img": "%(senderDisplayName)s ha canviat l'avatar de la sala a <img/>"
+        },
+        "context_menu": {
+            "external_url": "URL origen"
         }
     },
     "slash_command": {
@@ -598,7 +586,6 @@
         "no_permission_conference_description": "No tens permís per iniciar una conferència telefònica en aquesta sala"
     },
     "Other": "Altres",
-    "Advanced": "Avançat",
     "composer": {
         "placeholder_reply_encrypted": "Envia una resposta xifrada…",
         "placeholder_encrypted": "Envia un missatge xifrat…"
@@ -629,7 +616,8 @@
         },
         "advanced": {
             "unfederated": "Aquesta sala no és accessible per a servidors de Matrix remots"
-        }
+        },
+        "upload_avatar_label": "Puja l'avatar"
     },
     "auth": {
         "sign_in_with_sso": "Inicia sessió mitjançant la inscripció única (SSO)",
@@ -720,7 +708,12 @@
         "leave_unexpected_error": "Error de servidor inesperat intentant sortir de la sala",
         "leave_error_title": "Error sortint de la sala",
         "upgrade_error_title": "Error actualitzant sala",
-        "upgrade_error_description": "Comprova que el teu servidor és compatible amb la versió de sala que has triat i torna-ho a intentar."
+        "upgrade_error_description": "Comprova que el teu servidor és compatible amb la versió de sala que has triat i torna-ho a intentar.",
+        "error_join_incompatible_version_2": "Si us plau contacteu amb l'administrador del vostre homeserver.",
+        "context_menu": {
+            "favourite": "Favorit",
+            "low_priority": "Baixa prioritat"
+        }
     },
     "file_panel": {
         "guest_note": "Per poder utilitzar aquesta funcionalitat has de <a>registrar-te</a>",
@@ -774,7 +767,11 @@
     },
     "widget": {
         "error_need_to_be_logged_in": "Has d'haver iniciat sessió.",
-        "error_need_invite_permission": "Per fer això, necessites poder convidar a usuaris."
+        "error_need_invite_permission": "Per fer això, necessites poder convidar a usuaris.",
+        "context_menu": {
+            "delete": "Suprimeix el giny",
+            "delete_warning": "La supressió d'un giny l'elimina per a tots els usuaris d'aquesta sala. Esteu segur que voleu eliminar aquest giny?"
+        }
     },
     "scalar": {
         "error_create": "No s'ha pogut crear el giny.",
@@ -790,6 +787,22 @@
     },
     "error": {
         "mau": "Aquest homeserver ha assolit el seu límit d'usuaris actius mensuals.",
-        "resource_limits": "Aquest homeserver ha sobrepassat on dels seus límits de recursos."
+        "resource_limits": "Aquest homeserver ha sobrepassat on dels seus límits de recursos.",
+        "failed_copy": "No s'ha pogut copiar",
+        "something_went_wrong": "Alguna cosa ha anat malament!"
+    },
+    "items_and_n_others": {
+        "other": "<Items/> i %(count)s altres",
+        "one": "<Items/> i un altre"
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "Notificacions",
+        "error_change_title": "Canvia la configuració de notificacions"
+    },
+    "user_menu": {
+        "settings": "Totes les configuracions"
+    },
+    "quick_settings": {
+        "all_settings": "Totes les configuracions"
     }
 }

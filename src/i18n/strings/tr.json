@@ -31,7 +31,6 @@
     "Failed to reject invitation": "Davetiyeyi reddetme başarısız oldu",
     "Failed to set display name": "Görünür ismi ayarlama başarısız oldu",
     "Failed to unban": "Yasağı kaldırmak başarısız oldu",
-    "Favourite": "Favori",
     "Filter room members": "Oda üyelerini Filtrele",
     "Forget room": "Odayı Unut",
     "Historical": "Tarihi",
@@ -46,8 +45,6 @@
     "Moderator": "Moderatör",
     "New passwords must match each other.": "Yeni şifreler birbirleriyle eşleşmelidir.",
     "not specified": "Belirtilmemiş",
-    "Notifications": "Bildirimler",
-    "<not supported>": "<Desteklenmiyor>",
     "No display name": "Görünür isim yok",
     "No more results": "Başka sonuç yok",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Lütfen e-postanızı kontrol edin ve içerdiği bağlantıya tıklayın . Bu işlem tamamlandıktan sonra , 'devam et' e tıklayın .",
@@ -74,7 +71,6 @@
         "one": "%(filename)s ve %(count)s kadarı yükleniyor",
         "other": "%(filename)s ve %(count)s kadarları yükleniyor"
     },
-    "Upload avatar": "Avatar yükle",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (güç %(powerLevelNumber)s)",
     "Verification Pending": "Bekleyen doğrulama",
     "Warning!": "Uyarı!",
@@ -120,7 +116,6 @@
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Bu işlem şifreli odalarda aldığınız iletilerin anahtarlarını yerel dosyaya vermenizi sağlar . Bundan sonra dosyayı ileride başka bir Matrix istemcisine de aktarabilirsiniz , böylece istemci bu mesajların şifresini çözebilir (decryption).",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Bu işlem , geçmişte başka Matrix istemcisinden dışa aktardığınız şifreleme anahtarlarınızı içe aktarmanızı sağlar . Böylece diğer istemcinin çözebileceği tüm iletilerin şifresini çözebilirsiniz.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Dışa aktarma dosyası bir şifre ile korunacaktır . Dosyanın şifresini çözmek için buraya şifre girmelisiniz.",
-    "Reject all %(invitedRooms)s invites": "Tüm %(invitedRooms)s davetlerini reddet",
     "Confirm Removal": "Kaldırma İşlemini Onayla",
     "Unknown error": "Bilinmeyen Hata",
     "Unable to restore session": "Oturum geri yüklenemiyor",
@@ -129,7 +124,6 @@
     "Error decrypting video": "Video şifre çözme hatası",
     "Add an Integration": "Entegrasyon ekleyin",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Hesabınızı %(integrationsUrl)s ile kullanmak üzere doğrulayabilmeniz için üçüncü taraf bir siteye götürülmek üzeresiniz. Devam etmek istiyor musunuz ?",
-    "Something went wrong!": "Bir şeyler yanlış gitti!",
     "This will allow you to reset your password and receive notifications.": "Bu şifrenizi sıfırlamanızı ve bildirimler almanızı sağlayacak.",
     "Sunday": "Pazar",
     "Notification targets": "Bildirim hedefleri",
@@ -138,7 +132,6 @@
     "Changelog": "Değişiklikler",
     "This Room": "Bu Oda",
     "Unavailable": "Kullanım dışı",
-    "Source URL": "Kaynak URL",
     "Tuesday": "Salı",
     "Unnamed room": "İsimsiz oda",
     "Saturday": "Cumartesi",
@@ -152,16 +145,10 @@
     "Thursday": "Perşembe",
     "Search…": "Arama…",
     "Yesterday": "Dün",
-    "Low Priority": "Düşük Öncelikli",
     "Permission Required": "İzin Gerekli",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s%(monthName)s%(day)s%(fullYear)s",
     "Restricted": "Sınırlı",
-    "%(brand)s URL": "%(brand)s Linki",
-    "Room ID": "Oda ID",
-    "More options": "Daha fazla seçenek",
     "expand": "genişlet",
-    "Rotate Left": "Sola Döndür",
-    "Rotate Right": "Sağa Döndür",
     "Power level": "Güç düzeyi",
     "e.g. my-room": "örn. odam",
     "Some characters not allowed": "Bazı karakterlere izin verilmiyor",
@@ -215,7 +202,6 @@
     "Unable to load backup status": "Yedek durumu yüklenemiyor",
     "Unable to restore backup": "Yedek geri dönüşü yapılamıyor",
     "No backup found!": "Yedek bulunamadı!",
-    "Remove for everyone": "Herkes için sil",
     "This homeserver would like to make sure you are not a robot.": "Bu ana sunucu sizin bir robot olup olmadığınızdan emin olmak istiyor.",
     "Country Dropdown": "Ülke Listesi",
     "Email (optional)": "E-posta (opsiyonel)",
@@ -227,11 +213,6 @@
     "Could not load user profile": "Kullanıcı profili yüklenemedi",
     "Your password has been reset.": "Parolanız sıfırlandı.",
     "General failure": "Genel başarısızlık",
-    "Create account": "Yeni hesap",
-    "<Items/> and %(count)s others": {
-        "other": "<Items/> ve diğer %(count)s",
-        "one": "<Items/> ve bir diğeri"
-    },
     "Clear personal data": "Kişisel veri temizle",
     "That matches!": "Eşleşti!",
     "That doesn't match.": "Eşleşmiyor.",
@@ -267,7 +248,6 @@
     "Anchor": "Çıpa",
     "Headphones": "Kulaklık",
     "Folder": "Klasör",
-    "Accept <policyLink /> to continue:": "Devam etmek için <policyLink /> i kabul ediniz:",
     "in account data": "hesap verisinde",
     "Cannot connect to integration manager": "Entegrasyon yöneticisine bağlanılamadı",
     "Delete Backup": "Yedek Sil",
@@ -280,7 +260,6 @@
     "Profile picture": "Profil resmi",
     "Checking server": "Sunucu kontrol ediliyor",
     "Change identity server": "Kimlik sunucu değiştir",
-    "Please contact your homeserver administrator.": "Lütfen anasunucu yöneticiniz ile bağlantıya geçin.",
     "Dog": "Köpek",
     "Cat": "Kedi",
     "Lion": "Aslan",
@@ -404,16 +383,12 @@
     "%(name)s cancelled": "%(name)s iptal etti",
     "%(name)s wants to verify": "%(name)s doğrulamak istiyor",
     "You sent a verification request": "Doğrulama isteği gönderdiniz",
-    "Copied!": "Kopyalandı!",
-    "Failed to copy": "Kopyalama başarısız",
     "edited": "düzenlendi",
     "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "Kimlik sunucusu üzerinde hala <b>kişisel veri paylaşımı</b> yapıyorsunuz <idserver />.",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Kimlik sunucusundan bağlantıyı kesmeden önce telefon numaranızı ve e-posta adreslerinizi silmenizi tavsiye ederiz.",
     "Deactivate account": "Hesabı pasifleştir",
     "None": "Yok",
     "Ignored users": "Yoksayılan kullanıcılar",
-    "Bulk options": "Toplu işlem seçenekleri",
-    "Accept all %(invitedRooms)s invites": "Bütün %(invitedRooms)s davetlerini kabul et",
     "Request media permissions": "Medya izinleri talebi",
     "Set a new custom sound": "Özel bir ses ayarla",
     "Error changing power level requirement": "Güç düzey gereksinimi değiştirmede hata",
@@ -439,7 +414,6 @@
     "And %(count)s more...": {
         "other": "ve %(count)s kez daha..."
     },
-    "Popout widget": "Görsel bileşeni göster",
     "Language Dropdown": "Dil Listesi",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "E-posta ile davet etmek için bir kimlik sunucusu kullan. <default> Varsayılanı kullan (%(defaultIdentityServerName)s</default> ya da <settings>Ayarlar</settings> kullanarak yönetin.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "E-posta ile davet için bir kimlik sunucu kullan. <settings>Ayarlar</settings> dan yönet.",
@@ -449,11 +423,8 @@
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Logları göndermeden önce, probleminizi betimleyen <a>bir GitHub talebi oluşturun</a>.",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Sohbet tarihçesini kaybetmemek için, çıkmadan önce odanızın anahtarlarını dışarıya aktarın. Bunu yapabilmek için %(brand)sun daha yeni sürümü gerekli. Ulaşmak için geri gitmeye ihtiyacınız var",
     "Continue With Encryption Disabled": "Şifreleme Kapalı Şekilde Devam Et",
-    "Message search": "Mesaj arama",
     "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "Kullanıcının güç düzeyini değiştirirken bir hata oluştu. Yeterli izinlere sahip olduğunuza emin olun ve yeniden deneyin.",
     "Click the link in the email you received to verify and then click continue again.": "Aldığınız e-postaki bağlantıyı tıklayarak doğrulayın ve sonra tekrar tıklayarak devam edin.",
-    "Verify this session": "Bu oturumu doğrula",
-    "Encryption upgrade available": "Şifreleme güncellemesi var",
     "Invalid homeserver discovery response": "Geçersiz anasunucu keşif yanıtı",
     "Failed to get autodiscovery configuration from server": "Sunucudan otokeşif yapılandırması alınması başarısız",
     "Homeserver URL does not appear to be a valid Matrix homeserver": "Anasunucu URL i geçerli bir Matrix anasunucusu olarak gözükmüyor",
@@ -462,8 +433,6 @@
     "Upgrade your encryption": "Şifrelemenizi güncelleyin",
     "Create key backup": "Anahtar yedeği oluştur",
     "Set up Secure Messages": "Güvenli Mesajları Ayarla",
-    "Other users may not trust it": "Diğer kullanıcılar güvenmeyebilirler",
-    "Later": "Sonra",
     "Show more": "Daha fazla göster",
     "Secret storage public key:": "Sır deposu açık anahtarı:",
     "The integration manager is offline or it cannot reach your homeserver.": "Entegrasyon yöneticisi çevrim dışı veya anasunucunuza erişemiyor.",
@@ -491,12 +460,7 @@
     },
     "%(name)s cancelled verifying": "%(name)s doğrulama iptal edildi",
     "Cancel search": "Aramayı iptal et",
-    "Your display name": "Ekran adınız",
-    "Your user ID": "Kullanıcı ID",
-    "Your theme": "Temanız",
-    "Widget ID": "Görsel Bileşen ID si",
     "Delete Widget": "Görsel Bileşen Sil",
-    "Delete widget": "Görsel bileşen sil",
     "Destroy cross-signing keys?": "Çarpraz-imzalama anahtarlarını imha et?",
     "Clear cross-signing keys": "Çapraz-imzalama anahtarlarını temizle",
     "Clear all data in this session?": "Bu oturumdaki tüm verileri temizle?",
@@ -505,7 +469,6 @@
     "Recent Conversations": "Güncel Sohbetler",
     "Recently Direct Messaged": "Güncel Doğrudan Mesajlar",
     "Lock": "Kilit",
-    "Your homeserver does not support cross-signing.": "Ana sunucunuz çapraz imzalamayı desteklemiyor.",
     "Your keys are <b>not being backed up from this session</b>.": "Anahtarlarınız <b>bu oturum tarafından yedeklenmiyor</b>.",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "Bir metin mesajı gönderildi: +%(msisdn)s. Lütfen içerdiği doğrulama kodunu girin.",
     "You have verified this user. This user has verified all of their sessions.": "Bu kullanıcıyı doğruladınız. Bu kullanıcı tüm oturumlarını doğruladı.",
@@ -559,13 +522,7 @@
     "Verify your other session using one of the options below.": "Diğer oturumunuzu aşağıdaki seçeneklerden birini kullanarak doğrulayın.",
     "Your homeserver has exceeded its user limit.": "Homeserver'ınız kullanıcı limitini aştı.",
     "Your homeserver has exceeded one of its resource limits.": "Homeserver'ınız kaynaklarından birisinin sınırını aştı.",
-    "Contact your <a>server admin</a>.": "<a>Sunucu yöneticinize</a> başvurun.",
     "Ok": "Tamam",
-    "New login. Was this you?": "Yeni giriş. Bu siz miydiniz?",
-    "Safeguard against losing access to encrypted messages & data": "Şifrelenmiş mesajlara ve verilere erişimi kaybetmemek için koruma sağlayın",
-    "Set up Secure Backup": "Güvenli Yedekleme kur",
-    "Enable desktop notifications": "Masaüstü bildirimlerini etkinleştir",
-    "Don't miss a reply": "Yanıtları kaçırma",
     "Zimbabwe": "Zimbabve",
     "Zambia": "Zambiya",
     "Yemen": "Yemen",
@@ -845,8 +802,6 @@
     "Afghanistan": "Afganistan",
     "United States": "Amerika Birleşik Devletleri",
     "United Kingdom": "Birleşik Krallık",
-    "Change notification settings": "Bildirim ayarlarını değiştir",
-    "Your server isn't responding to some <a>requests</a>.": "Sunucunuz bası <a>istekler'e</a> onay vermiyor.",
     "Thumbs up": "Başparmak havaya",
     "Santa": "Noel Baba",
     "Spanner": "Anahtar",
@@ -855,12 +810,6 @@
     "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Emin misiniz? Eğer anahtarlarınız doğru bir şekilde yedeklemediyse, şifrelenmiş iletilerinizi kaybedeceksiniz.",
     "The operation could not be completed": "Eylem tamamlanamadı",
     "Failed to save your profile": "Profiliniz kaydedilemedi",
-    "Securely cache encrypted messages locally for them to appear in search results.": "Arama sonuçlarında gozükmeleri için iletileri güvenli bir şekilde yerel olarak önbelleğe al.",
-    "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Çapraz imzalı cihazlara güvenmeden, güvenilir olarak işaretlemek için, bir kullanıcı tarafından kullanılan her bir oturumu ayrı ayrı doğrulayın.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
-        "one": "İletilerin arama sonuçlarında gözükmeleri için %(rooms)s odasından %(size)s  yardımıyla depolayarak, şifrelenmiş iletileri güvenli bir şekilde yerel olarak önbelleğe al.",
-        "other": "İletilerin arama sonuçlarında gözükmeleri için %(rooms)s odalardan %(size)s yardımıyla depolayarak, şifrelenmiş iletileri güvenli bir şekilde yerel olarak önbelleğe al."
-    },
     "Verify all users in a room to ensure it's secure.": "Güvenli olduğuna emin olmak için odadaki tüm kullanıcıları onaylayın.",
     "No recent messages by %(user)s found": "%(user)s kullanıcısın hiç yeni ileti yok",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Onaylamanız için size e-posta gönderdik. Lütfen yönergeleri takip edin ve sonra aşağıdaki butona tıklayın.",
@@ -870,7 +819,6 @@
     "Widgets": "Widgetlar",
     "Looks good!": "İyi görünüyor!",
     "Security Key": "Güvenlik anahtarı",
-    "All settings": "Tüm ayarlar",
     "Switch theme": "Temayı değiştir",
     "Keys restored": "Anahtarlar geri yüklendi",
     "Submit logs": "Günlükleri kaydet",
@@ -884,7 +832,6 @@
     "Accepting…": "Kabul ediliyor…",
     "Room avatar": "Oda avatarı",
     "Room options": "Oda ayarları",
-    "Forget Room": "Odayı unut",
     "Open dial pad": "Arama tuşlarını aç",
     "You should:": "Şunu yapmalısınız:",
     "not ready": "hazır değil",
@@ -896,8 +843,6 @@
     "Back up your keys before signing out to avoid losing them.": "Anahtarlarını kaybetmemek için, çıkış yapmadan önce önleri yedekle.",
     "Algorithm:": "Algoritma:",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Yalnızca bu oturumda olabilecek anahtarları kaybetmemek için, oturumu kapatmadan önce bu oturumu anahtar yedeklemeye bağlayın.",
-    "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s internet tarayıcısında çalışıyorken şifrelenmiş mesajları güvenli bir şekilde önbelleğe alamaz. Şifrelenmiş mesajların arama sonucunda görünmesi için <desktopLink>%(brand)s Masaüstü</desktopLink> kullanın.",
-    "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s, şifrelenmiş iletileri yerel olarak güvenli bir şekilde önbelleğe almak için gereken bazı bileşenlerden yoksun. Bu özelliği denemek istiyorsanız, <nativeLink> arama bileşenlerinin eklendiği</nativeLink> özel bir masaüstü oluşturun.",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Bu oturum <b> anahtarlarınızı yedeklemiyor</b>, ama zaten geri yükleyebileceğiniz ve ileride ekleyebileceğiniz bir yedeğiniz var.",
     "Enter a server name": "Sunucu adı girin",
     "Can't find this server or its room list": "Sunucuda veya oda listesinde bulunamıyor",
@@ -922,7 +867,6 @@
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "Odanın ana adresini güncellerken bir sorun oluştu. Bu eylem, sunucu tarafından izin verilmemiş olabilir ya da geçici bir sorun oluşmuş olabilir.",
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Bu oda, <roomVersion /> oda sürümünü kullanmaktadır ve ana sunucunuz tarafından <i>tutarsız</i> olarak işaretlenmiştir.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Bu odayı güncellerseniz bu oda kapanacak ve yerine aynı adlı, güncellenmiş bir oda geçecek.",
-    "Favourited": "Beğenilenler",
     "Share this email in Settings to receive invites directly in %(brand)s.": "Doğrdan %(brand)s uygulamasından davet isteği almak için Ayarlardan bu e-posta adresini paylaşın.",
     "Use an identity server in Settings to receive invites directly in %(brand)s.": "Doğrudan %(brand)s uygulamasından davet isteği almak için Ayarlardan bir kimlik sunucusu belirleyin.",
     "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "Bu davet, %(roomName)s odasına %(email)s e-posta adresi üzerinden yollanmıştır ve sizinle ilgili değildir",
@@ -943,11 +887,6 @@
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "<current /> kimlik sunucusundan bağlantı kesilip <new /> kimlik sunucusuna bağlanılsın mı?",
     "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Olası bir oturuma erişememe durumunu önlemek için şifreleme anahtarlarınızı hesap verilerinizle yedekleyin. Anahtarlarınız eşsiz bir güvenlik anahtarı ile güvenlenecektir.",
     "well formed": "uygun biçimlendirilmiş",
-    "Cross-signing is not set up.": "Çapraz imzalama ayarlanmamış.",
-    "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Hesabınız gizli belleğinde çapraz imzalama kimliği barındırıyor ancak bu oturumda daha kullanılmış değil.",
-    "Cross-signing is ready for use.": "Çapraz imzalama zaten kullanılıyor.",
-    "Use app": "Uygulamayı kullan",
-    "Use app for a better experience": "Daha iyi bir deneyim için uygulamayı kullanın",
     "You've successfully verified %(displayName)s!": "%(displayName)s başarıyla doğruladınız!",
     "You've successfully verified %(deviceName)s (%(deviceId)s)!": "%(deviceName)s (%(deviceId)s) başarıyla doğruladınız!",
     "You've successfully verified your device!": "Cihazınızı başarıyla doğruladınız!",
@@ -962,7 +901,6 @@
     "Invite with email or username": "E-posta veya kullanıcı adı ile davet et",
     "Invite people": "İnsanları davet et",
     "Share invite link": "Davet bağlantısını paylaş",
-    "Click to copy": "Kopyalamak için tıklayın",
     "You can change these anytime.": "Bunları istediğiniz zaman değiştirebilirsiniz.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Botları, görsel bileşenleri ve çıkartma paketlerini yönetmek için bir entegrasyon yöneticisi kullanın.",
     "Identity server (%(server)s)": "(%(server)s) Kimlik Sunucusu",
@@ -1034,7 +972,9 @@
         "preview_message": "Hey sen. Sen en iyisisin!",
         "on": "Açık",
         "off": "Kapalı",
-        "all_rooms": "Tüm odalar"
+        "all_rooms": "Tüm odalar",
+        "copied": "Kopyalandı!",
+        "Advanced": "Gelişmiş"
     },
     "action": {
         "continue": "Devam Et",
@@ -1114,7 +1054,8 @@
         "mention": "Bahsetme",
         "submit": "Gönder",
         "send_report": "Rapor gönder",
-        "unban": "Yasağı Kaldır"
+        "unban": "Yasağı Kaldır",
+        "click_to_copy": "Kopyalamak için tıklayın"
     },
     "a11y": {
         "user_menu": "Kullanıcı menüsü",
@@ -1184,7 +1125,6 @@
             "user_a11y": "Kullanıcı Otomatik Tamamlama"
         }
     },
-    "Bold": "Kalın",
     "Code": "Kod",
     "power_level": {
         "default": "Varsayılan",
@@ -1321,7 +1261,19 @@
             "cryptography_section": "Kriptografi",
             "session_id": "Oturum ID:",
             "session_key": "Oturum anahtarı:",
-            "encryption_section": "Şifreleme"
+            "encryption_section": "Şifreleme",
+            "bulk_options_section": "Toplu işlem seçenekleri",
+            "bulk_options_accept_all_invites": "Bütün %(invitedRooms)s davetlerini kabul et",
+            "bulk_options_reject_all_invites": "Tüm %(invitedRooms)s davetlerini reddet",
+            "message_search_section": "Mesaj arama",
+            "encryption_individual_verification_mode": "Çapraz imzalı cihazlara güvenmeden, güvenilir olarak işaretlemek için, bir kullanıcı tarafından kullanılan her bir oturumu ayrı ayrı doğrulayın.",
+            "message_search_enabled": {
+                "one": "İletilerin arama sonuçlarında gözükmeleri için %(rooms)s odasından %(size)s  yardımıyla depolayarak, şifrelenmiş iletileri güvenli bir şekilde yerel olarak önbelleğe al.",
+                "other": "İletilerin arama sonuçlarında gözükmeleri için %(rooms)s odalardan %(size)s yardımıyla depolayarak, şifrelenmiş iletileri güvenli bir şekilde yerel olarak önbelleğe al."
+            },
+            "message_search_disabled": "Arama sonuçlarında gozükmeleri için iletileri güvenli bir şekilde yerel olarak önbelleğe al.",
+            "message_search_unsupported": "%(brand)s, şifrelenmiş iletileri yerel olarak güvenli bir şekilde önbelleğe almak için gereken bazı bileşenlerden yoksun. Bu özelliği denemek istiyorsanız, <nativeLink> arama bileşenlerinin eklendiği</nativeLink> özel bir masaüstü oluşturun.",
+            "message_search_unsupported_web": "%(brand)s internet tarayıcısında çalışıyorken şifrelenmiş mesajları güvenli bir şekilde önbelleğe alamaz. Şifrelenmiş mesajların arama sonucunda görünmesi için <desktopLink>%(brand)s Masaüstü</desktopLink> kullanın."
         },
         "preferences": {
             "room_list_heading": "Oda listesi",
@@ -1628,7 +1580,10 @@
             "removed": "%(senderDisplayName)s odanın avatarını kaldırdı.",
             "changed_img": "%(senderDisplayName)s odanın avatarını <img/> olarak çevirdi"
         },
-        "creation_summary_room": "%(creator)s odayı oluşturdu ve yapılandırdı."
+        "creation_summary_room": "%(creator)s odayı oluşturdu ve yapılandırdı.",
+        "context_menu": {
+            "external_url": "Kaynak URL"
+        }
     },
     "slash_command": {
         "spoiler": "Mesajı sürprizbozan olarak gönder",
@@ -1775,7 +1730,6 @@
         "no_media_perms_description": "%(brand)s'un mikrofonunuza / web kameranıza el le erişmesine izin vermeniz gerekebilir"
     },
     "Other": "Diğer",
-    "Advanced": "Gelişmiş",
     "room_settings": {
         "permissions": {
             "m.room.avatar": "Oda resmini değiştir",
@@ -1830,7 +1784,8 @@
             "room_predecessor": "%(roomName)s odasında daha eski mesajları göster.",
             "room_version_section": "Oda sürümü",
             "room_version": "Oda versiyonu:"
-        }
+        },
+        "upload_avatar_label": "Avatar yükle"
     },
     "encryption": {
         "verification": {
@@ -1849,7 +1804,9 @@
             "sas_caption_user": "Aşağıdaki numaranın ekranlarında göründüğünü onaylayarak bu kullanıcıyı doğrulayın.",
             "unsupported_method": "Desteklenen doğrulama yöntemi bulunamadı.",
             "waiting_other_user": "%(displayName)s ın doğrulaması için bekleniyor…",
-            "cancelling": "İptal ediliyor…"
+            "cancelling": "İptal ediliyor…",
+            "unverified_sessions_toast_reject": "Sonra",
+            "unverified_session_toast_title": "Yeni giriş. Bu siz miydiniz?"
         },
         "old_version_detected_title": "Eski kriptolama verisi tespit edildi",
         "cancel_entering_passphrase_title": "Parola girişini iptal et?",
@@ -1857,7 +1814,17 @@
         "bootstrap_title": "Anahtarları ayarla",
         "export_unsupported": "Tarayıcınız gerekli şifreleme uzantılarını desteklemiyor",
         "import_invalid_keyfile": "Geçersiz bir %(brand)s anahtar dosyası",
-        "import_invalid_passphrase": "Kimlik doğrulama denetimi başarısız oldu : yanlış şifre ?"
+        "import_invalid_passphrase": "Kimlik doğrulama denetimi başarısız oldu : yanlış şifre ?",
+        "set_up_toast_title": "Güvenli Yedekleme kur",
+        "upgrade_toast_title": "Şifreleme güncellemesi var",
+        "verify_toast_title": "Bu oturumu doğrula",
+        "set_up_toast_description": "Şifrelenmiş mesajlara ve verilere erişimi kaybetmemek için koruma sağlayın",
+        "verify_toast_description": "Diğer kullanıcılar güvenmeyebilirler",
+        "cross_signing_unsupported": "Ana sunucunuz çapraz imzalamayı desteklemiyor.",
+        "cross_signing_ready": "Çapraz imzalama zaten kullanılıyor.",
+        "cross_signing_untrusted": "Hesabınız gizli belleğinde çapraz imzalama kimliği barındırıyor ancak bu oturumda daha kullanılmış değil.",
+        "cross_signing_not_ready": "Çapraz imzalama ayarlanmamış.",
+        "not_supported": "<Desteklenmiyor>"
     },
     "emoji": {
         "category_frequently_used": "Sıklıkla Kullanılan",
@@ -1952,7 +1919,8 @@
         "no_hs_url_provided": "Ana sunucu adresi belirtilmemiş",
         "autodiscovery_unexpected_error_hs": "Ana sunucu yapılandırması çözümlenirken beklenmeyen hata",
         "autodiscovery_unexpected_error_is": "Kimlik sunucu yapılandırması çözümlenirken beklenmeyen hata",
-        "incorrect_credentials_detail": "Lütfen %(hs)s sunucusuna oturum açtığınızın farkında olun. Bu sunucu matrix.org değil."
+        "incorrect_credentials_detail": "Lütfen %(hs)s sunucusuna oturum açtığınızın farkında olun. Bu sunucu matrix.org değil.",
+        "create_account_title": "Yeni hesap"
     },
     "room_list": {
         "sort_unread_first": "Önce okunmamış mesajları olan odaları göster",
@@ -1979,7 +1947,8 @@
         "intro_welcome": "%(appName)s' e hoş geldiniz",
         "send_dm": "Direkt mesaj gönderin",
         "explore_rooms": "Herkese açık odaları keşfet",
-        "create_room": "Grup sohbeti başlat"
+        "create_room": "Grup sohbeti başlat",
+        "create_account": "Yeni hesap"
     },
     "setting": {
         "help_about": {
@@ -2056,7 +2025,18 @@
         },
         "error_need_to_be_logged_in": "Oturum açmanız gerekiyor.",
         "error_need_invite_permission": "Bunu yapmak için kullanıcıları davet etmeye ihtiyacınız var.",
-        "no_name": "Bilinmeyen uygulama"
+        "no_name": "Bilinmeyen uygulama",
+        "context_menu": {
+            "delete": "Görsel bileşen sil",
+            "remove": "Herkes için sil"
+        },
+        "shared_data_name": "Ekran adınız",
+        "shared_data_mxid": "Kullanıcı ID",
+        "shared_data_theme": "Temanız",
+        "shared_data_url": "%(brand)s Linki",
+        "shared_data_room_id": "Oda ID",
+        "shared_data_widget_id": "Görsel Bileşen ID si",
+        "popout": "Görsel bileşeni göster"
     },
     "zxcvbn": {
         "suggestions": {
@@ -2154,7 +2134,14 @@
         "leave_error_title": "Odadan ayrılırken hata",
         "upgrade_error_title": "Oda güncellenirken hata",
         "upgrade_error_description": "Seçtiğiniz oda sürümünün sunucunuz tarafından desteklenip desteklenmediğini iki kez kontrol edin ve yeniden deneyin.",
-        "leave_server_notices_description": "Bu oda, Ana Sunucudan gelen önemli mesajlar için kullanılır, bu yüzden ayrılamazsınız."
+        "leave_server_notices_description": "Bu oda, Ana Sunucudan gelen önemli mesajlar için kullanılır, bu yüzden ayrılamazsınız.",
+        "error_join_incompatible_version_2": "Lütfen anasunucu yöneticiniz ile bağlantıya geçin.",
+        "context_menu": {
+            "unfavourite": "Beğenilenler",
+            "favourite": "Favori",
+            "low_priority": "Düşük Öncelikli",
+            "forget": "Odayı unut"
+        }
     },
     "file_panel": {
         "guest_note": "Bu işlevi kullanmak için <a> Kayıt Olun </a>",
@@ -2177,7 +2164,8 @@
         "tac_button": "Hükümler ve koşulları incele",
         "identity_server_no_terms_title": "Kimlik sunucusu hizmet kurallarına sahip değil",
         "identity_server_no_terms_description_1": "Bu eylem, bir e-posta adresini veya telefon numarasını doğrulamak için varsayılan kimlik sunucusuna <server /> erişilmesini gerektirir, ancak sunucunun herhangi bir hizmet şartı yoktur.",
-        "identity_server_no_terms_description_2": "Sadece sunucunun sahibine güveniyorsanız devam edin."
+        "identity_server_no_terms_description_2": "Sadece sunucunun sahibine güveniyorsanız devam edin.",
+        "inline_intro_text": "Devam etmek için <policyLink /> i kabul ediniz:"
     },
     "failed_load_async_component": "Yüklenemiyor! Ağ bağlantınızı kontrol edin ve yeniden deneyin.",
     "upload_failed_generic": "%(fileName)s dosyası için yükleme başarısız.",
@@ -2218,7 +2206,39 @@
         "resource_limits": "Bu anasunucu kaynak limitlerinden birini aştı.",
         "admin_contact": "Bu servisi kullanmaya devam etmek için lütfen <a>servis yöneticinizle bağlantı kurun</a>.",
         "mixed_content": "Tarayıcı çubuğunuzda bir HTTPS URL'si olduğunda Ana Sunusuna HTTP üzerinden bağlanılamıyor . Ya HTTPS kullanın veya <a> güvensiz komut dosyalarını</a> etkinleştirin.",
-        "tls": "Ana Sunucu'ya bağlanılamıyor - lütfen bağlantınızı kontrol edin ,<a> Ana Sunucu SSL sertifikanızın </a> güvenilir olduğundan ve bir tarayıcı uzantısının istekleri engellemiyor olduğundan emin olun."
+        "tls": "Ana Sunucu'ya bağlanılamıyor - lütfen bağlantınızı kontrol edin ,<a> Ana Sunucu SSL sertifikanızın </a> güvenilir olduğundan ve bir tarayıcı uzantısının istekleri engellemiyor olduğundan emin olun.",
+        "admin_contact_short": "<a>Sunucu yöneticinize</a> başvurun.",
+        "non_urgent_echo_failure_toast": "Sunucunuz bası <a>istekler'e</a> onay vermiyor.",
+        "failed_copy": "Kopyalama başarısız",
+        "something_went_wrong": "Bir şeyler yanlış gitti!"
     },
-    "name_and_id": "%(name)s (%(userId)s)"
+    "name_and_id": "%(name)s (%(userId)s)",
+    "items_and_n_others": {
+        "other": "<Items/> ve diğer %(count)s",
+        "one": "<Items/> ve bir diğeri"
+    },
+    "notifications": {
+        "enable_prompt_toast_title_from_message_send": "Yanıtları kaçırma",
+        "enable_prompt_toast_title": "Bildirimler",
+        "enable_prompt_toast_description": "Masaüstü bildirimlerini etkinleştir",
+        "colour_none": "Yok",
+        "colour_bold": "Kalın",
+        "error_change_title": "Bildirim ayarlarını değiştir"
+    },
+    "mobile_guide": {
+        "toast_title": "Daha iyi bir deneyim için uygulamayı kullanın",
+        "toast_accept": "Uygulamayı kullan"
+    },
+    "room_summary_card_back_action_label": "Oda bilgisi",
+    "user_menu": {
+        "settings": "Tüm ayarlar"
+    },
+    "quick_settings": {
+        "all_settings": "Tüm ayarlar",
+        "sidebar_settings": "Daha fazla seçenek"
+    },
+    "lightbox": {
+        "rotate_left": "Sola Döndür",
+        "rotate_right": "Sağa Döndür"
+    }
 }

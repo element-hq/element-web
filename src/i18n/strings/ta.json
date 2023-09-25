@@ -3,14 +3,10 @@
     "All Rooms": "அனைத்து அறைகள்",
     "Changelog": "மாற்றப்பதிவு",
     "Failed to forget room %(errCode)s": "அறையை மறப்பதில் தோல்வி %(errCode)s",
-    "Favourite": "விருப்பமான",
     "Invite to this room": "இந்த அறைக்கு அழை",
-    "Low Priority": "குறைந்த முன்னுரிமை",
     "Notification targets": "அறிவிப்பு இலக்குகள்",
-    "Notifications": "அறிவிப்புகள்",
     "Search…": "தேடு…",
     "Send": "அனுப்பு",
-    "Source URL": "மூல முகவரி",
     "This Room": "இந்த அறை",
     "Unavailable": "இல்லை",
     "unknown error code": "தெரியாத பிழை குறி",
@@ -181,5 +177,19 @@
     },
     "invite": {
         "failed_generic": "செயல்பாடு தோல்வியுற்றது"
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "அறிவிப்புகள்"
+    },
+    "timeline": {
+        "context_menu": {
+            "external_url": "மூல முகவரி"
+        }
+    },
+    "room": {
+        "context_menu": {
+            "favourite": "விருப்பமான",
+            "low_priority": "குறைந்த முன்னுரிமை"
+        }
     }
 }

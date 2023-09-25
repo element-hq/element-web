@@ -62,7 +62,6 @@
         "one": "(~%(count)s резултат)"
     },
     "Join Room": "Приступи соби",
-    "Upload avatar": "Отпреми аватар",
     "Forget room": "Заборави собу",
     "Rooms": "Собе",
     "Low priority": "Ниска важност",
@@ -73,7 +72,6 @@
     "Banned by %(displayName)s": "Приступ забранио %(displayName)s",
     "unknown error code": "непознати код грешке",
     "Failed to forget room %(errCode)s": "Нисам успео да заборавим собу %(errCode)s",
-    "Favourite": "Омиљено",
     "Jump to first unread message.": "Скочи на прву непрочитану поруку.",
     "not specified": "није наведено",
     "This room has no local addresses": "Ова соба нема локалних адреса",
@@ -83,21 +81,12 @@
     "Invalid file%(extra)s": "Неисправна датотека %(extra)s",
     "Error decrypting image": "Грешка при дешифровању слике",
     "Error decrypting video": "Грешка при дешифровању видеа",
-    "Copied!": "Копирано!",
-    "Failed to copy": "Нисам успео да ископирам",
     "Add an Integration": "Додај уградњу",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Бићете пребачени на сајт треће стране да бисте се идентификовали са својим налогом зарад коришћења уградње %(integrationsUrl)s. Да ли желите да наставите?",
     "Email address": "Мејл адреса",
-    "Something went wrong!": "Нешто је пошло наопако!",
     "Delete Widget": "Обриши виџет",
-    "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Брисање виџета уклања виџет за све чланове ове собе. Да ли сте сигурни да желите обрисати овај виџет?",
-    "Delete widget": "Обриши виџет",
     "Create new room": "Направи нову собу",
     "Home": "Почетна",
-    "<Items/> and %(count)s others": {
-        "other": "<Items/> и %(count)s других",
-        "one": "<Items/> и још један"
-    },
     "%(items)s and %(lastItem)s": "%(items)s и %(lastItem)s",
     "collapse": "скупи",
     "expand": "рашири",
@@ -142,11 +131,8 @@
     "Uploading %(filename)s": "Отпремам датотеку %(filename)s",
     "Failed to change password. Is your password correct?": "Нисам успео да променим лозинку. Да ли је ваша лозинка тачна?",
     "Unable to remove contact information": "Не могу да уклоним контакт податке",
-    "<not supported>": "<није подржано>",
-    "Reject all %(invitedRooms)s invites": "Одбиј све позивнице за собе %(invitedRooms)s",
     "No Microphones detected": "Нема уочених микрофона",
     "No Webcams detected": "Нема уочених веб камера",
-    "Notifications": "Обавештења",
     "Profile": "Профил",
     "A new password must be entered.": "Морате унети нову лозинку.",
     "New passwords must match each other.": "Нове лозинке се морају подударати.",
@@ -169,7 +155,6 @@
     "Changelog": "Записник о изменама",
     "This Room": "Ова соба",
     "Unavailable": "Недоступан",
-    "Source URL": "Адреса извора",
     "Filter results": "Филтрирај резултате",
     "Search…": "Претрага…",
     "Tuesday": "Уторак",
@@ -182,9 +167,7 @@
     "You cannot delete this message. (%(code)s)": "Не можете обрисати ову поруку. (%(code)s)",
     "Thursday": "Четвртак",
     "Yesterday": "Јуче",
-    "Low Priority": "Најмања важност",
     "Thank you!": "Хвала вам!",
-    "Popout widget": "Виџет за искакање",
     "You don't currently have any stickerpacks enabled": "Тренутно немате омогућено било које паковање са налепницама",
     "Preparing to send logs": "Припремам се за слање записника",
     "Logs sent": "Записници су послати",
@@ -208,10 +191,8 @@
     "Demote yourself?": "Рашчињавате себе?",
     "Demote": "Рашчини",
     "Join millions for free on the largest public server": "Придружите се милионима других бесплатно на највећем јавном серверу",
-    "Create account": "Направи налог",
     "Email (optional)": "Мејл (изборно)",
     "Are you sure you want to sign out?": "Заиста желите да се одјавите?",
-    "Encryption upgrade available": "Надоградња шифровања је доступна",
     "Show more": "Прикажи више",
     "Cannot connect to integration manager": "Не могу се повезати на управника уградњи",
     "Email addresses": "Мејл адресе",
@@ -228,7 +209,6 @@
     "Direct Messages": "Директне поруке",
     "Forget this room": "Заборави ову собу",
     "Start chatting": "Започни ћаскање",
-    "Forget Room": "Заборави собу",
     "Room options": "Опције собе",
     "Mark all as read": "Означи све као прочитано",
     "Room Name": "Назив собе",
@@ -244,10 +224,8 @@
     "Remove recent messages": "Уклони недавне поруке",
     "Encryption not enabled": "Шифровање није омогућено",
     "The encryption used by this room isn't supported.": "Начин шифровања унутар ове собе није подржан.",
-    "Widgets do not use message encryption.": "Виџети не користе шифровање порука.",
     "Room Settings - %(roomName)s": "Подешавања собе - %(roomName)s",
     "Resend %(unsentCount)s reaction(s)": "Поново пошаљи укупно %(unsentCount)s реакција",
-    "All settings": "Сва подешавања",
     "General failure": "Општа грешка",
     "Light bulb": "сијалица",
     "Voice & Video": "Глас и видео",
@@ -256,7 +234,6 @@
     "No recently visited rooms": "Нема недавно посећених соба",
     "Failed to revoke invite": "Неуспех при отказивању позивнице",
     "Revoke invite": "Откажи позивницу",
-    "Your theme": "Ваша тема",
     "Looks good": "Изгледа добро",
     "Show advanced": "Прикажи напредно",
     "Recent Conversations": "Недавни разговори",
@@ -511,8 +488,6 @@
     "United States": "Сједињене Америчке Државе",
     "United Kingdom": "Уједињено Краљевство",
     "Your homeserver": "Ваш домаћи сервер",
-    "Your homeserver does not support cross-signing.": "Ваш домаћи сервер не подржава међу-потписивање.",
-    "Please contact your homeserver administrator.": "Контактирајте администратора вашег сервера.",
     "Your homeserver has exceeded one of its resource limits.": "Ваш домаћи сервер је прекорачио ограничење неког ресурса.",
     "Your homeserver has exceeded its user limit.": "Ваш домаћи сервер је прекорачио ограничење корисника.",
     "Removing…": "Уклањам…",
@@ -597,8 +572,6 @@
     "You may want to try a different search or check for typos.": "Можда ћете желети да испробате другачију претрагу или да проверите да ли имате правописне грешке.",
     "This version of %(brand)s does not support searching encrypted messages": "Ова верзија %(brand)s с не подржава претраживање шифрованих порука",
     "Cancel search": "Откажи претрагу",
-    "Message search": "Претрага порука",
-    "Securely cache encrypted messages locally for them to appear in search results.": "Сигурно локално кеширајте шифроване поруке да би се појавиле у резултатима претраге.",
     "Failed to save space settings.": "Чување подешавања простора није успело.",
     "Confirm this user's session by comparing the following with their User Settings:": "Потврдите сесију овог корисника упоређивањем следећег са њиховим корисничким подешавањима:",
     "Confirm by comparing the following with the User Settings in your other session:": "Потврдите упоређивањем следећег са корисничким подешавањима у вашој другој сесији:",
@@ -608,7 +581,6 @@
     "Share this email in Settings to receive invites directly in %(brand)s.": "Поделите ову е-пошту у подешавањима да бисте директно добијали позиве у %(brand)s.",
     "Use an identity server in Settings to receive invites directly in %(brand)s.": "Користите сервер за идентитет у Подешавањима за директно примање позивница %(brand)s.",
     "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Повежите ову е-пошту са својим налогом у Подешавањима да бисте директно добијали позиве у %(brand)s.",
-    "Change notification settings": "Промените подешавања обавештења",
     "Verification code": "Верификациони код",
     "Please enter verification code sent via text.": "Унесите верификациони код послат путем текста.",
     "Unable to verify phone number.": "Није могуће верификовати број телефона.",
@@ -618,9 +590,6 @@
     "Enter your account password to confirm the upgrade:": "Унесите лозинку за налог да бисте потврдили надоградњу:",
     "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Заштитите од губитка приступа шифрованим порукама и подацима је подржан сигурносном копијом кључева за шифровање на серверу.",
     "Clear all data": "Очисти све податке",
-    "New login. Was this you?": "Нова пријава. Да ли сте то били Ви?",
-    "Other users may not trust it": "Други корисници можда немају поверења у то",
-    "Safeguard against losing access to encrypted messages & data": "Заштитите се од губитка приступа шифрованим порукама и подацима",
     "Profile picture": "Слика профила",
     "Display Name": "Прикажи име",
     "Couldn't load page": "Учитавање странице није успело",
@@ -638,22 +607,12 @@
     "This room is public": "Ова соба је јавна",
     "Browse": "Прегледајте",
     "Use the <a>Desktop app</a> to see all encrypted files": "Користи <a> десктоп апликација </a> да видиш све шифроване датотеке",
-    "This widget may use cookies.": "Овај виџет може користити колачиће.",
-    "Widget added by": "Додао је виџет",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Коришћење овог виџета може да дели податке <helpIcon /> са %(widgetDomain)s.",
-    "Widget ID": "ИД виџета",
-    "Room ID": "ИД собе",
-    "%(brand)s URL": "%(brand)s УРЛ",
-    "Your user ID": "Ваша корисничка ИД",
-    "Your display name": "Ваше име за приказ",
     "Not Trusted": "Није поуздано",
     "Ask this user to verify their session, or manually verify it below.": "Питајте овог корисника да потврди његову сесију или ручно да потврди у наставку.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) се улоговао у нову сесију без потврђивања:",
     "Verify your other session using one of the options below.": "Потврдите другу сесију помоћу једних од опција у испод.",
     "You signed in to a new session without verifying it:": "Пријавили сте се у нову сесију без потврђивања:",
-    "Accept all %(invitedRooms)s invites": "Прихвати све %(invitedRooms)s позивнице",
     "Réunion": "Реунион",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Коришћење овог виџета може да дели податке <helpIcon /> са %(widgetDomain)s и вашим интеграционим менаџером.",
     "common": {
         "about": "О програму",
         "analytics": "Аналитика",
@@ -701,7 +660,9 @@
         "all_rooms": "Све собе",
         "preview_message": "Хеј! Само напред!",
         "on": "Укључено",
-        "off": "Искључено"
+        "off": "Искључено",
+        "copied": "Копирано!",
+        "Advanced": "Напредно"
     },
     "action": {
         "continue": "Настави",
@@ -873,7 +834,11 @@
             "export_megolm_keys": "Извези E2E кључеве собе",
             "import_megolm_keys": "Увези E2E кључеве собе",
             "cryptography_section": "Криптографија",
-            "encryption_section": "Шифровање"
+            "encryption_section": "Шифровање",
+            "bulk_options_accept_all_invites": "Прихвати све %(invitedRooms)s позивнице",
+            "bulk_options_reject_all_invites": "Одбиј све позивнице за собе %(invitedRooms)s",
+            "message_search_section": "Претрага порука",
+            "message_search_disabled": "Сигурно локално кеширајте шифроване поруке да би се појавиле у резултатима претраге."
         },
         "voip": {
             "mirror_local_feed": "Копирај довод локалног видеа"
@@ -1094,7 +1059,10 @@
             "removed": "%(senderDisplayName)s уклони аватар собе.",
             "changed_img": "%(senderDisplayName)s промени аватар собе у <img/>"
         },
-        "creation_summary_room": "Корисник %(creator)s је направио и подесио собу."
+        "creation_summary_room": "Корисник %(creator)s је направио и подесио собу.",
+        "context_menu": {
+            "external_url": "Адреса извора"
+        }
     },
     "slash_command": {
         "shrug": "Придодаје ¯\\_(ツ)_/¯ обичној поруци",
@@ -1203,7 +1171,6 @@
         "no_media_perms_description": "Можда ћете морати да ручно доделите овлашћења %(brand)s-у за приступ микрофону/веб камери"
     },
     "Other": "Остало",
-    "Advanced": "Напредно",
     "room_settings": {
         "permissions": {
             "m.room.avatar": "Промените аватар собе",
@@ -1238,7 +1205,8 @@
         },
         "advanced": {
             "unfederated": "Ова соба није доступна са удаљених Матрикс сервера"
-        }
+        },
+        "upload_avatar_label": "Отпреми аватар"
     },
     "encryption": {
         "verification": {
@@ -1246,7 +1214,8 @@
             "sas_match": "Поклапају се",
             "in_person": "Да будете сигурни, ово обавите лично или путем поузданог начина комуникације.",
             "complete_action": "Разумем",
-            "cancelling": "Отказујем…"
+            "cancelling": "Отказујем…",
+            "unverified_session_toast_title": "Нова пријава. Да ли сте то били Ви?"
         },
         "old_version_detected_title": "Нађени су стари криптографски подаци",
         "old_version_detected_description": "Подаци из старијег издања %(brand)s-а су нађени. Ово ће узроковати лош рад шифровања с краја на крај у старијем издању. Размењене поруке које су шифроване с краја на крај у старијем издању је можда немогуће дешифровати у овом издању. Такође, ово може узроковати неуспешно размењивање порука са овим издањем. Ако доживите проблеме, одјавите се и пријавите се поново. Да бисте задржали историјат поруке, извезите па поново увезите ваше кључеве.",
@@ -1255,7 +1224,12 @@
         "bootstrap_title": "Постављам кључеве",
         "export_unsupported": "Ваш прегледач не подржава потребна криптографска проширења",
         "import_invalid_keyfile": "Није исправана %(brand)s кључ-датотека",
-        "import_invalid_passphrase": "Провера идентитета није успела: нетачна лозинка?"
+        "import_invalid_passphrase": "Провера идентитета није успела: нетачна лозинка?",
+        "upgrade_toast_title": "Надоградња шифровања је доступна",
+        "set_up_toast_description": "Заштитите се од губитка приступа шифрованим порукама и подацима",
+        "verify_toast_description": "Други корисници можда немају поверења у то",
+        "cross_signing_unsupported": "Ваш домаћи сервер не подржава међу-потписивање.",
+        "not_supported": "<није подржано>"
     },
     "emoji": {
         "category_smileys_people": "Смешци и особе",
@@ -1323,7 +1297,8 @@
         "failed_connect_identity_server": "Није могуће приступити серверу идентитета",
         "no_hs_url_provided": "Није наведен УРЛ сервера",
         "autodiscovery_unexpected_error_hs": "Неочекивана грешка при откривању подешавања сервера",
-        "incorrect_credentials_detail": "Знајте да се пријављујете на сервер %(hs)s, не на matrix.org."
+        "incorrect_credentials_detail": "Знајте да се пријављујете на сервер %(hs)s, не на matrix.org.",
+        "create_account_title": "Направи налог"
     },
     "export_chat": {
         "messages": "Поруке"
@@ -1343,7 +1318,8 @@
         "report_content_to_homeserver": "Пријави садржај администратору вашег домаћег сервера"
     },
     "onboarding": {
-        "send_dm": "Пошаљи директну поруку"
+        "send_dm": "Пошаљи директну поруку",
+        "create_account": "Направи налог"
     },
     "setting": {
         "help_about": {
@@ -1419,7 +1395,23 @@
             "see_msgtype_sent_active_room": "Видите <b>%(msgtype)s</b> поруке објављене у Вашој активној соби"
         },
         "error_need_to_be_logged_in": "Морате бити пријављени.",
-        "error_need_invite_permission": "Морате имати могућност слања позивница корисницима да бисте то урадили."
+        "error_need_invite_permission": "Морате имати могућност слања позивница корисницима да бисте то урадили.",
+        "context_menu": {
+            "delete": "Обриши виџет",
+            "delete_warning": "Брисање виџета уклања виџет за све чланове ове собе. Да ли сте сигурни да желите обрисати овај виџет?"
+        },
+        "shared_data_name": "Ваше име за приказ",
+        "shared_data_mxid": "Ваша корисничка ИД",
+        "shared_data_theme": "Ваша тема",
+        "shared_data_url": "%(brand)s УРЛ",
+        "shared_data_room_id": "ИД собе",
+        "shared_data_widget_id": "ИД виџета",
+        "shared_data_warning_im": "Коришћење овог виџета може да дели податке <helpIcon /> са %(widgetDomain)s и вашим интеграционим менаџером.",
+        "shared_data_warning": "Коришћење овог виџета може да дели податке <helpIcon /> са %(widgetDomain)s.",
+        "unencrypted_warning": "Виџети не користе шифровање порука.",
+        "added_by": "Додао је виџет",
+        "cookie_warning": "Овај виџет може користити колачиће.",
+        "popout": "Виџет за искакање"
     },
     "create_space": {
         "private_personal_heading": "Са ким радите?"
@@ -1435,14 +1427,21 @@
     },
     "user_menu": {
         "switch_theme_light": "Пребаци на светлу тему",
-        "switch_theme_dark": "Пребаци на тамну тему"
+        "switch_theme_dark": "Пребаци на тамну тему",
+        "settings": "Сва подешавања"
     },
     "room": {
         "drop_file_prompt": "Превуци датотеку овде да би је отпремио",
         "leave_server_notices_title": "Не могу да напустим собу са напоменама сервера",
         "upgrade_error_title": "Грешка при надоградњи собе",
         "upgrade_error_description": "Добро проверите да ли сервер подржава изабрану верзију собе и пробајте поново.",
-        "leave_server_notices_description": "Ова соба се користи за важне поруке са сервера. Не можете напустити ову собу."
+        "leave_server_notices_description": "Ова соба се користи за важне поруке са сервера. Не можете напустити ову собу.",
+        "error_join_incompatible_version_2": "Контактирајте администратора вашег сервера.",
+        "context_menu": {
+            "favourite": "Омиљено",
+            "low_priority": "Најмања важност",
+            "forget": "Заборави собу"
+        }
     },
     "file_panel": {
         "guest_note": "Морате се <a>регистровати</a> да бисте користили ову могућност",
@@ -1500,6 +1499,20 @@
     "error": {
         "resource_limits": "Овај сервер је достигао ограничење неког свог ресурса.",
         "mixed_content": "Не могу да се повежем на сервер преко ХТТП када је ХТТПС УРЛ у траци вашег прегледача. Или користите HTTPS или <a>омогућите небезбедне скрипте</a>.",
-        "tls": "Не могу да се повежем на домаћи сервер. Проверите вашу интернет везу, постарајте се да је <a>ССЛ сертификат сервера</a> од поверења и да проширење прегледача не блокира захтеве."
+        "tls": "Не могу да се повежем на домаћи сервер. Проверите вашу интернет везу, постарајте се да је <a>ССЛ сертификат сервера</a> од поверења и да проширење прегледача не блокира захтеве.",
+        "failed_copy": "Нисам успео да ископирам",
+        "something_went_wrong": "Нешто је пошло наопако!"
+    },
+    "items_and_n_others": {
+        "other": "<Items/> и %(count)s других",
+        "one": "<Items/> и још један"
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "Обавештења",
+        "colour_none": "Ништа",
+        "error_change_title": "Промените подешавања обавештења"
+    },
+    "quick_settings": {
+        "all_settings": "Сва подешавања"
     }
 }

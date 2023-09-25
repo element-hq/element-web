@@ -203,7 +203,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
                     <button onClick={this.onLogoutConfirm}>{_t("I don't want my encrypted messages")}</button>
                 </DialogButtons>
                 <details>
-                    <summary>{_t("Advanced")}</summary>
+                    <summary>{_t("common|Advanced")}</summary>
                     <p>
                         <button onClick={this.onExportE2eKeysClicked}>{_t("Manually export keys")}</button>
                     </p>

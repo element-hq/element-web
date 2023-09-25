@@ -74,7 +74,7 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
             SettingsStore.getValue(UIFeature.AdvancedSettings)
                 ? new Tab(
                       SpaceSettingsTab.Advanced,
-                      _td("Advanced"),
+                      _td("common|Advanced"),
                       "mx_RoomSettingsDialog_warningIcon",
                       <AdvancedRoomSettingsTab room={space} closeSettingsFn={onFinished} />,
                   )

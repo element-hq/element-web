@@ -39,7 +39,6 @@
     "Filter room members": "İştirakçılara görə axtarış",
     "You do not have permission to post to this room": "Siz bu otağa yaza bilmirsiniz",
     "Join Room": "Otağa girmək",
-    "Upload avatar": "Avatar-ı yükləmək",
     "Forget room": "Otağı unutmaq",
     "Low priority": "Əhəmiyyətsizlər",
     "Historical": "Arxiv",
@@ -47,7 +46,6 @@
     "Banned by %(displayName)s": "%(displayName)s bloklanıb",
     "unknown error code": "naməlum səhv kodu",
     "Failed to forget room %(errCode)s": "Otağı unutmağı bacarmadı: %(errCode)s",
-    "Favourite": "Seçilmiş",
     "Sunday": "Bazar",
     "Friday": "Cümə",
     "Today": "Bu gün",
@@ -67,14 +65,12 @@
     "Reject invitation": "Dəvəti rədd etmək",
     "Are you sure you want to reject the invitation?": "Siz əminsiniz ki, siz dəvəti rədd etmək istəyirsiniz?",
     "Failed to reject invitation": "Dəvəti rədd etməyi bacarmadı",
-    "Notifications": "Xəbərdarlıqlar",
     "Connectivity to the server has been lost.": "Serverlə əlaqə itirilmişdir.",
     "Sent messages will be stored until your connection has returned.": "Hələ ki serverlə əlaqə bərpa olmayacaq, göndərilmiş mesajlar saxlanacaq.",
     "No more results": "Daha çox nəticə yoxdur",
     "Failed to reject invite": "Dəvəti rədd etməyi bacarmadı",
     "Failed to load timeline position": "Xronologiyadan nişanı yükləməyi bacarmadı",
     "Unable to remove contact information": "Əlaqə məlumatlarının silməyi bacarmadı",
-    "<not supported>": "<dəstəklənmir>",
     "Profile": "Profil",
     "A new password must be entered.": "Yeni parolu daxil edin.",
     "New passwords must match each other.": "Yeni şifrələr uyğun olmalıdır.",
@@ -101,7 +97,8 @@
         "emoji": "Smaylar",
         "unnamed_room": "Adı açıqlanmayan otaq",
         "identity_server": "Eyniləşdirmənin serveri",
-        "on": "Qoşmaq"
+        "on": "Qoşmaq",
+        "Advanced": "Təfərrüatlar"
     },
     "action": {
         "continue": "Davam etmək",
@@ -254,7 +251,6 @@
         "category_other": "Digər"
     },
     "Other": "Digər",
-    "Advanced": "Təfərrüatlar",
     "labs": {
         "group_profile": "Profil"
     },
@@ -300,7 +296,8 @@
         },
         "security": {
             "history_visibility_legend": "Kim tarixi oxuya bilər?"
-        }
+        },
+        "upload_avatar_label": "Avatar-ı yükləmək"
     },
     "failed_load_async_component": "Yükləmək olmur! Şəbəkə bağlantınızı yoxlayın və yenidən cəhd edin.",
     "upload_failed_generic": "'%(fileName)s' faylı yüklənə bilmədi.",
@@ -338,6 +335,15 @@
     },
     "room": {
         "upgrade_error_title": "Otaq yeniləmə xətası",
-        "upgrade_error_description": "Serverinizin seçilmiş otaq versiyasını dəstəklədiyini  bir daha yoxlayın və yenidən cəhd edin."
+        "upgrade_error_description": "Serverinizin seçilmiş otaq versiyasını dəstəklədiyini  bir daha yoxlayın və yenidən cəhd edin.",
+        "context_menu": {
+            "favourite": "Seçilmiş"
+        }
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "Xəbərdarlıqlar"
+    },
+    "encryption": {
+        "not_supported": "<dəstəklənmir>"
     }
 }

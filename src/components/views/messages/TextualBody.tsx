@@ -196,7 +196,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
                 ...toRightOf(buttonRect, 0),
                 chevronFace: ChevronFace.None,
-                message: successful ? _t("Copied!") : _t("Failed to copy"),
+                message: successful ? _t("common|copied") : _t("error|failed_copy"),
             });
             button.onmouseleave = close;
         };

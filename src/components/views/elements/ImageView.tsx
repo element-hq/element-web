@@ -542,7 +542,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 lockProps={{
                     "onKeyDown": this.onKeyDown,
                     "role": "dialog",
-                    "aria-label": _t("Image view"),
+                    "aria-label": _t("lightbox|title"),
                 }}
                 className="mx_ImageView"
                 ref={this.focusLock}
@@ -555,12 +555,12 @@ export default class ImageView extends React.Component<IProps, IState> {
                         {zoomInButton}
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_rotateCCW"
-                            title={_t("Rotate Left")}
+                            title={_t("lightbox|rotate_left")}
                             onClick={this.onRotateCounterClockwiseClick}
                         />
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_rotateCW"
-                            title={_t("Rotate Right")}
+                            title={_t("lightbox|rotate_right")}
                             onClick={this.onRotateClockwiseClick}
                         />
                         <AccessibleTooltipButton

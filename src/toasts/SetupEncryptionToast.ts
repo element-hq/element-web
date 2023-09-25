@@ -29,11 +29,11 @@ const TOAST_KEY = "setupencryption";
 const getTitle = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
-            return _t("Set up Secure Backup");
+            return _t("encryption|set_up_toast_title");
         case Kind.UPGRADE_ENCRYPTION:
-            return _t("Encryption upgrade available");
+            return _t("encryption|upgrade_toast_title");
         case Kind.VERIFY_THIS_SESSION:
-            return _t("Verify this session");
+            return _t("encryption|verify_toast_title");
     }
 };
 
@@ -62,9 +62,9 @@ const getDescription = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
         case Kind.UPGRADE_ENCRYPTION:
-            return _t("Safeguard against losing access to encrypted messages & data");
+            return _t("encryption|set_up_toast_description");
         case Kind.VERIFY_THIS_SESSION:
-            return _t("Other users may not trust it");
+            return _t("encryption|verify_toast_description");
     }
 };
 
@@ -110,7 +110,7 @@ export const showToast = (kind: Kind): void => {
             description: getDescription(kind),
             acceptLabel: getSetupCaption(kind),
             onAccept,
-            rejectLabel: _t("Later"),
+            rejectLabel: _t("encryption|verification|unverified_sessions_toast_reject"),
             onReject,
         },
         component: GenericToast,

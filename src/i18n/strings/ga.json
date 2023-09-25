@@ -1,6 +1,5 @@
 {
     "Show more": "Taispeáin níos mó",
-    "All settings": "Gach Socrú",
     "Are you sure you want to reject the invitation?": "An bhfuil tú cinnte gur mian leat an cuireadh a dhiúltú?",
     "Are you sure you want to leave the room '%(roomName)s'?": "An bhfuil tú cinnte gur mian leat an seomra '%(roomName)s' a fhágáil?",
     "Are you sure?": "An bhfuil tú cinnte?",
@@ -204,11 +203,9 @@
     "ready": "réidh",
     "Algorithm:": "Algartam:",
     "Information": "Eolas",
-    "Favourited": "Roghnaithe",
     "Ok": "Togha",
     "Accepting…": "ag Glacadh leis…",
     "Bridges": "Droichid",
-    "Later": "Níos deireanaí",
     "Lock": "Glasáil",
     "Unencrypted": "Gan chriptiú",
     "None": "Níl aon cheann",
@@ -216,7 +213,6 @@
     "Discovery": "Aimsiú",
     "Success!": "Rath!",
     "Home": "Tús",
-    "Favourite": "Cuir mar ceanán",
     "Removing…": "ag Baint…",
     "Changelog": "Loga na n-athruithe",
     "Unavailable": "Níl sé ar fáil",
@@ -224,7 +220,6 @@
     "expand": "méadaigh",
     "collapse": "cumaisc",
     "edited": "curtha in eagar",
-    "Copied!": "Cóipeáilte!",
     "Yesterday": "Inné",
     "Today": "Inniu",
     "Saturday": "Dé Sathairn",
@@ -251,7 +246,6 @@
     "Demote": "Bain ceadanna",
     "Browse": "Brabhsáil",
     "Sounds": "Fuaimeanna",
-    "Notifications": "Fógraí",
     "General": "Ginearálta",
     "Profile": "Próifíl",
     "Authentication": "Fíordheimhniú",
@@ -346,7 +340,6 @@
     "Sign out and remove encryption keys?": "Sínigh amach agus scrios eochracha criptiúcháin?",
     "Clear Storage and Sign Out": "Scrios Stóras agus Sínigh Amach",
     "Are you sure you want to sign out?": "An bhfuil tú cinnte go dteastaíonn uait sínigh amach?",
-    "Create account": "Déan cuntas a chruthú",
     "Deactivate Account": "Cuir cuntas as feidhm",
     "Account management": "Bainistíocht cuntais",
     "Phone numbers": "Uimhreacha guthán",
@@ -357,12 +350,10 @@
     "Verification code": "Cód fíoraithe",
     "Notification targets": "Spriocanna fógraí",
     "Results": "Torthaí",
-    "More": "Níos mó",
     "Decrypting": "Ag Díchriptiú",
     "Access": "Rochtain",
     "Global": "Uilíoch",
     "Keyword": "Eochairfhocal",
-    "Report": "Tuairiscigh",
     "Visibility": "Léargas",
     "Address": "Seoladh",
     "Sent": "Seolta",
@@ -379,7 +370,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "Rooms and spaces": "Seomraí agus spásanna",
-    "Collapse reply thread": "Cuir na freagraí i bhfolach",
     "Low priority": "Tosaíocht íseal",
     "Share room": "Roinn seomra",
     "Forget room": "Déan dearmad ar an seomra",
@@ -390,7 +380,6 @@
     },
     "No answer": "Gan freagair",
     "Unknown failure: %(reason)s": "Teip anaithnid: %(reason)s",
-    "Cross-signing is ready but keys are not backed up.": "Tá tras-sínigh réidh ach ní dhéantar cóip chúltaca d'eochracha.",
     "Failed to reject invitation": "Níorbh fhéidir an cuireadh a dhiúltú",
     "Failed to reject invite": "Níorbh fhéidir an cuireadh a dhiúltú",
     "Failed to mute user": "Níor ciúnaíodh an úsáideoir",
@@ -463,7 +452,9 @@
         "cross_signing": "Cros-síniú",
         "feedback": "Aiseolas",
         "on": "Ar siúl",
-        "off": "Múchta"
+        "off": "Múchta",
+        "copied": "Cóipeáilte!",
+        "Advanced": "Forbartha"
     },
     "action": {
         "continue": "Lean ar aghaidh",
@@ -574,7 +565,6 @@
             "user_description": "Úsáideoirí"
         }
     },
-    "Bold": "Trom",
     "Code": "Cód",
     "power_level": {
         "default": "Réamhshocrú",
@@ -651,6 +641,10 @@
         },
         "m.room.power_levels": {
             "changed": "D'athraigh %(senderName)s an leibhéal cumhachta %(powerLevelDiffText)s."
+        },
+        "context_menu": {
+            "collapse_reply_thread": "Cuir na freagraí i bhfolach",
+            "report": "Tuairiscigh"
         }
     },
     "slash_command": {
@@ -721,10 +715,11 @@
         "no_permission_conference": "Is Teastáil Cead",
         "no_permission_conference_description": "Níl cead agat glao comhdhála a thosú sa seomra seo",
         "default_device": "Gléas Réamhshocraithe",
-        "no_media_perms_title": "Gan cheadanna meáin"
+        "no_media_perms_title": "Gan cheadanna meáin",
+        "join_button_tooltip_connecting": "Ag Ceangal",
+        "more_button": "Níos mó"
     },
     "Other": "Eile",
-    "Advanced": "Forbartha",
     "room_settings": {
         "permissions": {
             "m.room.power_levels": "Athraigh ceadanna",
@@ -758,8 +753,10 @@
         "verification": {
             "complete_title": "Deimhnithe!",
             "complete_action": "Tuigthe",
-            "cancelling": "ag Cealú…"
-        }
+            "cancelling": "ag Cealú…",
+            "unverified_sessions_toast_reject": "Níos deireanaí"
+        },
+        "cross_signing_ready_no_backup": "Tá tras-sínigh réidh ach ní dhéantar cóip chúltaca d'eochracha."
     },
     "emoji": {
         "category_activities": "Gníomhaíochtaí",
@@ -793,7 +790,8 @@
         "uia": {
             "sso_title": "Lean ar aghaidh le SSO",
             "sso_body": "Deimhnigh an seoladh ríomhphoist seo le SSO mar cruthúnas céannachta."
-        }
+        },
+        "create_account_title": "Déan cuntas a chruthú"
     },
     "export_chat": {
         "messages": "Teachtaireachtaí"
@@ -828,7 +826,8 @@
     },
     "user_menu": {
         "switch_theme_light": "Athraigh go mód geal",
-        "switch_theme_dark": "Athraigh go mód dorcha"
+        "switch_theme_dark": "Athraigh go mód dorcha",
+        "settings": "Gach Socrú"
     },
     "space": {
         "suggested": "Moltaí",
@@ -845,6 +844,10 @@
     "room": {
         "intro": {
             "enable_encryption_prompt": "Tosaigh criptiú sna socruithe."
+        },
+        "context_menu": {
+            "unfavourite": "Roghnaithe",
+            "favourite": "Cuir mar ceanán"
         }
     },
     "labs_mjolnir": {
@@ -871,5 +874,16 @@
     "error": {
         "mixed_content": "Ní féidir ceangal leis an bhfreastalaí baile trí HTTP nuair a bhíonn URL HTTPS i mbarra do bhrabhsálaí. Bain úsáid as HTTPS nó <a> scripteanna neamhshábháilte a chumasú </a>.",
         "tls": "Ní féidir ceangal leis an bhfreastalaí baile - seiceáil do nascacht le do thoil, déan cinnte go bhfuil muinín i dteastas <a>SSL do fhreastalaí baile</a>, agus nach bhfuil síneadh brabhsálaí ag cur bac ar iarratais."
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "Fógraí",
+        "colour_none": "Níl aon cheann",
+        "colour_bold": "Trom"
+    },
+    "onboarding": {
+        "create_account": "Déan cuntas a chruthú"
+    },
+    "quick_settings": {
+        "all_settings": "Gach Socrú"
     }
 }

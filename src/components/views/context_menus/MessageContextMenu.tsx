@@ -477,7 +477,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         const viewSourceButton = (
             <IconizedContextMenuOption
                 iconClassName="mx_MessageContextMenu_iconSource"
-                label={_t("View source")}
+                label={_t("timeline|context_menu|view_source")}
                 onClick={this.onViewSourceClick}
             />
         );
@@ -487,7 +487,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             unhidePreviewButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconUnhidePreview"
-                    label={_t("Show preview")}
+                    label={_t("timeline|context_menu|show_url_preview")}
                     onClick={this.onUnhidePreviewClick}
                 />
             );
@@ -546,7 +546,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconLink"
                     onClick={this.closeMenu}
-                    label={_t("Source URL")}
+                    label={_t("timeline|context_menu|external_url")}
                     element="a"
                     {
                         // XXX: Typescript signature for AccessibleButton doesn't work properly for non-inputs like `a`
@@ -565,7 +565,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             collapseReplyChainButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconCollapse"
-                    label={_t("Collapse reply thread")}
+                    label={_t("timeline|context_menu|collapse_reply_thread")}
                     onClick={this.onCollapseReplyChainClick}
                 />
             );
@@ -577,7 +577,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             jumpToRelatedEventButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_jumpToEvent"
-                    label={_t("View related event")}
+                    label={_t("timeline|context_menu|view_related_event")}
                     onClick={() => this.onJumpToRelatedEventClick(relatedEventId)}
                 />
             );
@@ -588,7 +588,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             reportEventButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconReport"
-                    label={_t("Report")}
+                    label={_t("timeline|context_menu|report")}
                     onClick={this.onReportEventClick}
                 />
             );

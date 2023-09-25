@@ -123,7 +123,7 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
             return (
                 <div className="mx_ErrorBoundary">
                     <div className="mx_ErrorBoundary_body">
-                        <h1>{_t("Something went wrong!")}</h1>
+                        <h1>{_t("error|something_went_wrong")}</h1>
                         {bugReportSection}
                         {clearCacheButton}
                     </div>

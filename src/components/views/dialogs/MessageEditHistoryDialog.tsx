@@ -161,7 +161,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
                 );
             } else if (error.errcode) {
                 // some kind of error from the homeserver
-                content = <p className="mx_MessageEditHistoryDialog_error">{_t("Something went wrong!")}</p>;
+                content = <p className="mx_MessageEditHistoryDialog_error">{_t("error|something_went_wrong")}</p>;
             } else {
                 content = (
                     <p className="mx_MessageEditHistoryDialog_error">

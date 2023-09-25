@@ -26,8 +26,6 @@
     "Failed to change password. Is your password correct?": "שינוי הסיסמה נכשל. האם הסיסמה שלך נכונה?",
     "unknown error code": "קוד שגיאה לא מוכר",
     "Failed to forget room %(errCode)s": "נכשל בעת בקשה לשכוח חדר %(errCode)s",
-    "Favourite": "מועדף",
-    "Notifications": "התראות",
     "Unnamed room": "חדר ללא שם",
     "Sunday": "ראשון",
     "Notification targets": "יעדי התראה",
@@ -37,7 +35,6 @@
     "Failed to send logs: ": "כשל במשלוח יומנים: ",
     "This Room": "החדר הזה",
     "Unavailable": "לא זמין",
-    "Source URL": "כתובת URL אתר המקור",
     "Filter results": "סנן התוצאות",
     "Tuesday": "שלישי",
     "Preparing to send logs": "מתכונן לשלוח יומנים",
@@ -52,7 +49,6 @@
     "Search…": "חפש…",
     "Logs sent": "יומנים נשלחו",
     "Yesterday": "אתמול",
-    "Low Priority": "עדיפות נמוכה",
     "Thank you!": "רב תודות!",
     "Moderator": "מנהל",
     "Restricted": "מחוץ לתחום",
@@ -307,10 +303,6 @@
     "Vietnam": "וייטנאם",
     "Venezuela": "ונצואלה",
     "Vatican City": "ותיקן",
-    "<Items/> and %(count)s others": {
-        "one": "<Items/> ועוד אחד אחר",
-        "other": "<Items/> ו%(count)s אחרים"
-    },
     "Not Trusted": "לא אמין",
     "Ask this user to verify their session, or manually verify it below.": "בקש ממשתמש זה לאמת את ההתחברות שלו, או לאמת אותה באופן ידני למטה.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s %(userId)s נכנס דרך התחברות חדשה מבלי לאמת אותה:",
@@ -336,25 +328,11 @@
     "Failed to save your profile": "שמירת הפרופיל שלך נכשלה",
     "The integration manager is offline or it cannot reach your homeserver.": "מנהל האינטגרציה לא מקוון או שהוא לא יכול להגיע לשרת הבית שלך.",
     "Cannot connect to integration manager": "לא ניתן להתחבר אל מנהל האינטגרציה",
-    "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s אינם יכולים לשמור במטמון מאובטח הודעות מוצפנות באופן מקומי בזמן שהם פועלים בדפדפן אינטרנט. השתמש ב- <desktopLink>%(brand)s Desktop </desktopLink> כדי שהודעות מוצפנות יופיעו בתוצאות החיפוש.",
-    "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s חסרים כמה רכיבים הנדרשים לצורך אחסון במטמון מאובטח של הודעות מוצפנות באופן מקומי. אם תרצה להתנסות בתכונה זו, בנה %(brand)s מותאם אישית לדסקטום עם <nativeLink>חפש רכיבים להוספה</nativeLink>.",
-    "Securely cache encrypted messages locally for them to appear in search results.": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
-        "one": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש באמצעות %(size)s לשמור הודעות מחדרים %(rooms)s.",
-        "other": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש באמצעות %(size)s לשמור הודעות מחדרים %(rooms)s."
-    },
-    "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "אמת בנפרד כל מושב שמשתמש בו כדי לסמן אותו כאמצעי מהימן, ולא אמון על מכשירים חתומים צולבים.",
     "Failed to set display name": "עדכון שם תצוגה נכשל",
     "Authentication": "אימות",
     "Set up": "הגדר",
-    "Cross-signing is not set up.": "חתימה צולבת אינה מוגדרת עדיין.",
-    "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "לחשבונך זהות חתימה צולבת באחסון סודי, אך הפגישה זו אינה מהימנה עדיין.",
-    "Your homeserver does not support cross-signing.": "השרת שלכם אינו תומך בחתימות-צולבות.",
-    "Cross-signing is ready for use.": "חתימה צולבת מוכנה לשימוש.",
     "No display name": "אין שם לתצוגה",
     "Show more": "הצג יותר",
-    "Accept <policyLink /> to continue:": "קבל <policyLink /> להמשך:",
-    "Your server isn't responding to some <a>requests</a>.": "השרת שלכם אינו מגיב לבקשות מסויימות <a>בקשות</a>.",
     "Folder": "תקיה",
     "Headphones": "אוזניות",
     "Anchor": "עוגן",
@@ -423,21 +401,9 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s - %(day)s - %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "IRC display name width": "רוחב תצוגת השם של IRC",
-    "Change notification settings": "שינוי הגדרת התרעות",
-    "Please contact your homeserver administrator.": "אנא צרו קשר עם מנהל השרת שלכם.",
-    "New login. Was this you?": "כניסה חדשה. האם זה אתם?",
-    "Other users may not trust it": "יתכן משתמשים אחרים לא יבטחו בזה",
-    "Safeguard against losing access to encrypted messages & data": "שמור מפני איבוד גישה אל הודעות ומידע מוצפן",
-    "Verify this session": "אשרו את ההתחברות הזאת",
-    "Encryption upgrade available": "שדרוג הצפנה קיים",
-    "Set up Secure Backup": "צור גיבוי מאובטח",
     "Ok": "בסדר",
-    "Contact your <a>server admin</a>.": "צרו קשר עם <a>מנהל השרת</a>.",
     "Your homeserver has exceeded one of its resource limits.": "השרת שלכם חרג מאחד או יותר משאבים אשר הוקצו לו.",
     "Your homeserver has exceeded its user limit.": "השרת שלכם חרג ממגבלות מספר המשתמשים שלו.",
-    "Enable desktop notifications": "אשרו התראות שולחן עבודה",
-    "Don't miss a reply": "אל תפספסו תגובה",
-    "Later": "מאוחר יותר",
     "Server did not return valid authentication information.": "השרת לא החזיר מידע אימות תקף.",
     "Server did not require any authentication": "השרת לא נדרש לאימות כלשהו",
     "There was a problem communicating with the server. Please try again.": "הייתה בעיה בתקשורת עם השרת. בבקשה נסה שוב.",
@@ -492,15 +458,12 @@
     "Power level": "דרגת מנהל",
     "Language Dropdown": "תפריט שפות",
     "Information": "מידע",
-    "Rotate Right": "סובב ימינה",
-    "Rotate Left": "סובב שמאלה",
     "collapse": "אחד",
     "expand": "הרחב",
     "This version of %(brand)s does not support searching encrypted messages": "גרסה זו של %(brand)s אינה תומכת בחיפוש הודעות מוצפנות",
     "This version of %(brand)s does not support viewing some encrypted files": "גרסה זו של %(brand)s אינה תומכת בצפייה בקבצים מוצפנים מסוימים",
     "Use the <a>Desktop app</a> to search encrypted messages": "השתמשו ב <a> אפליקציית שולחן העבודה </a> לחיפוש הודעות מוצפנות",
     "Use the <a>Desktop app</a> to see all encrypted files": "השתמשו ב <a> אפליקציית שולחן העבודה </a> כדי לראות את כל הקבצים המוצפנים",
-    "Popout widget": "יישומון קופץ",
     "Error decrypting video": "שגיאה בפענוח וידאו",
     "You sent a verification request": "שלחתם בקשה לקוד אימות",
     "%(name)s wants to verify": "%(name)s רוצה לאמת",
@@ -712,19 +675,7 @@
     "Error changing power level requirement": "שגיאה בשינוי דרישת דרגת ניהול",
     "Banned by %(displayName)s": "נחסם על ידי %(displayName)s",
     "Failed to unban": "שגיאה בהסרת חסימה",
-    "This widget may use cookies.": "יישומון זה עשוי להשתמש בעוגיות.",
-    "Widget added by": "ישומון נוסף על ידי",
-    "Widgets do not use message encryption.": "יישומונים אינם משתמשים בהצפנת הודעות.",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "שימוש ביישומון זה עשוי לשתף נתונים <helpIcon /> עם %(widgetDomain)s.",
-    "Widget ID": "קוד זהות הישומון",
-    "Room ID": "קוד זהות החדר",
-    "%(brand)s URL": "קישור %(brand)s",
-    "Your theme": "ערכת הנושא שלכם",
-    "Your user ID": "קוד זהות המשתמש שלכם",
-    "Your display name": "שם התצוגה שלך",
-    "Any of the following data may be shared:": "ניתן לשתף כל אחד מהנתונים הבאים:",
     "Cancel search": "בטל חיפוש",
-    "Something went wrong!": "משהו השתבש!",
     "Can't load this message": "לא ניתן לטעון הודעה זו",
     "Submit logs": "הגש יומנים",
     "edited": "נערך",
@@ -733,8 +684,6 @@
     "Edited at %(date)s": "נערך ב-%(date)s",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "אתה עומד להועבר לאתר של צד שלישי כדי שתוכל לאמת את חשבונך לשימוש עם %(integrationsUrl)s. האם אתה מקווה להמשיך?",
     "Add an Integration": "הוסף אינטגרציה",
-    "Failed to copy": "שגיאה בהעתקה",
-    "Copied!": "הועתק!",
     "Browse": "דפדף",
     "Set a new custom sound": "הגדר צליל מותאם אישי",
     "Notification sound": "צליל התראה",
@@ -752,11 +701,6 @@
     "Request media permissions": "בקש הרשאות למדיה",
     "Missing media permissions, click the button below to request.": "חסרות הרשאות מדיה, לחץ על הלחצן למטה כדי לבקש.",
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "מנהל השרת שלך השבית הצפנה מקצה לקצה כברירת מחדל בחדרים פרטיים ובהודעות ישירות.",
-    "Message search": "חיפוש הודעה",
-    "Reject all %(invitedRooms)s invites": "דחה את כל ההזמנות של %(invitedRooms)s",
-    "Accept all %(invitedRooms)s invites": "קבל את כל ההזמנות של %(invitedRooms)s",
-    "Bulk options": "אפשרויות בתפזורת",
-    "<not supported>": "<לא נתמך>",
     "Unignore": "הסר התעלמות",
     "Ignored users": "משתמשים שהתעלמתם מהם",
     "None": "ללא",
@@ -805,8 +749,6 @@
     "unexpected type": "סוג בלתי צפוי",
     "well formed": "מעוצב היטב",
     "Back up your keys before signing out to avoid losing them.": "גבה את המפתחות שלך לפני היציאה כדי להימנע מלאבד אותם.",
-    "Favourited": "מועדפים",
-    "Forget Room": "שכח חדר",
     "Jump to first invite.": "קפצו להזמנה ראשונה.",
     "Jump to first unread room.": "קפצו לחדר הראשון שלא נקרא.",
     "%(roomName)s is not accessible at this time.": "לא ניתן להכנס אל %(roomName)s בזמן הזה.",
@@ -836,20 +778,12 @@
     "This room is not public. You will not be able to rejoin without an invite.": "חדר זה אינו ציבורי. לא תוכל להצטרף שוב ללא הזמנה.",
     "Failed to reject invitation": "דחיית ההזמנה נכשלה",
     "Explore rooms": "גלה חדרים",
-    "Upload avatar": "העלה אוואטר",
     "Couldn't load page": "לא ניתן לטעון את הדף",
     "Sign in with SSO": "היכנס באמצעות SSO",
     "Country Dropdown": "נפתח במדינה",
     "This homeserver would like to make sure you are not a robot.": "שרת בית זה רוצה לוודא שאתה לא רובוט.",
     "This room is public": "חדר זה ציבורי",
-    "Move right": "הזז ימינה",
-    "Move left": "הזז שמאלה",
-    "Revoke permissions": "שלילת הרשאות",
-    "Remove for everyone": "הסר לכולם",
-    "Delete widget": "מחק ישומון",
-    "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "מחיקת יישומון מסירה אותו לכל המשתמשים בחדר זה. האם אתה בטוח שברצונך למחוק את היישומון הזה?",
     "Delete Widget": "מחק ישומון",
-    "Take a picture": "צלם תמונה",
     "Resend %(unsentCount)s reaction(s)": "שלח שוב תגובות %(unsentCount)s",
     "Are you sure you want to reject the invitation?": "האם אתם בטוחים שברצונכם לדחות את ההזמנה?",
     "Reject invitation": "דחה הזמנה",
@@ -1046,7 +980,6 @@
     "That matches!": "זה מתאים!",
     "Clear personal data": "נקה מידע אישי",
     "Failed to re-authenticate due to a homeserver problem": "האימות מחדש נכשל עקב בעיית שרת בית",
-    "Create account": "חשבון משתמש חדש",
     "General failure": "שגיאה כללית",
     "Identity server URL does not appear to be a valid identity server": "נראה שכתובת האתר של שרת זהות אינה שרת זהות חוקי",
     "Invalid base_url for m.identity_server": "Base_url לא חוקי עבור m.identity_server",
@@ -1061,7 +994,6 @@
     "A new password must be entered.": "יש להזין סיסמה חדשה.",
     "Could not load user profile": "לא ניתן לטעון את פרופיל המשתמש",
     "Switch theme": "שנה ערכת נושא",
-    "All settings": "כל ההגדרות",
     "Uploading %(filename)s and %(count)s others": {
         "one": "מעלה %(filename)s ו-%(count)s אחרים",
         "other": "מעלה %(filename)s ו-%(count)s אחרים"
@@ -1096,10 +1028,7 @@
     "Remember this": "זכור את זה",
     "The widget will verify your user ID, but won't be able to perform actions for you:": "היישומון יאמת את מזהה המשתמש שלך, אך לא יוכל לבצע פעולות עבורך:",
     "Allow this widget to verify your identity": "אפשר לווידג'ט זה לאמת את זהותך",
-    "Use app": "השתמש באפליקציה",
-    "Use app for a better experience": "השתמש באפליקציה לחוויה טובה יותר",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s שלכם אינו מאפשר לך להשתמש במנהל שילוב לשם כך. אנא צרו קשר עם מנהל מערכת.",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "שימוש ביישומון זה עשוי לשתף נתונים <helpIcon /> עם %(widgetDomain)s ומנהל האינטגרציה שלך.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "מנהלי שילוב מקבלים נתוני תצורה ויכולים לשנות ווידג'טים, לשלוח הזמנות לחדר ולהגדיר רמות הספק מטעמכם.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "השתמש במנהל שילוב לניהול בוטים, ווידג'טים וחבילות מדבקות.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "השתמש במנהל שילוב <b> (%(serverName)s) </b> כדי לנהל בוטים, ווידג'טים וחבילות מדבקות.",
@@ -1117,15 +1046,11 @@
     "Connection failed": "החיבור נכשל",
     "Failed to remove user": "הסרת המשתמש נכשלה",
     "Failed to send": "השליחה נכשלה",
-    "Message search initialisation failed": "אתחול חיפוש הודעות נכשל",
     "Developer": "מפתח",
     "Experimental": "נִסיוֹנִי",
     "Spaces": "מרחבי עבודה",
     "Messaging": "הודעות",
     "Moderation": "מְתִינוּת",
-    "Back to thread": "חזרה לשרשור",
-    "Room members": "חברי החדר",
-    "Back to chat": "חזרה לצ'אט",
     "Voice Message": "הודעה קולית",
     "Send voice message": "שלח הודעה קולית",
     "Your message was sent": "ההודעה שלך נשלחה",
@@ -1144,23 +1069,15 @@
     "Leave Space": "עזוב את מרחב העבודה",
     "Access": "גישה",
     "Save Changes": "שמור שינוייים",
-    "Click to copy": "לחץ להעתקה",
     "Show all rooms": "הצג את כל החדרים",
     "Create a space": "צור מרחב עבודה",
     "Address": "כתובת",
-    "Pin to sidebar": "הצמד לסרגל הצד",
-    "More options": "אפשרויות נוספות",
-    "Quick settings": "הגדרות מהירות",
-    "More": "יותר",
-    "Show sidebar": "הצג סרגל צד",
-    "Hide sidebar": "הסתר סרגל צד",
     "Connecting": "מקשר",
     "unknown person": "אדם לא ידוע",
     "Great! This Security Phrase looks strong enough.": "מצוין! ביטוי אבטחה זה נראה מספיק חזק.",
     "Not a valid Security Key": "מפתח האבטחה לא חוקי",
     "Failed to end poll": "תקלה בסגירת הסקר",
     "Confirm your Security Phrase": "אשר את ביטוי האבטחה שלך",
-    "Application window": "חלון אפליקציה",
     "Results will be visible when the poll is ended": "תוצאות יהיו זמינות כאשר הסקר יסתיים",
     "Sorry, you can't edit a poll after votes have been cast.": "סליחה, אתם לא יכולים לערוך את שאלות הסקר לאחר שבוצעו הצבעות.",
     "Can't edit poll": "לא ניתן לערוךסקר",
@@ -1199,7 +1116,6 @@
     "You may want to try a different search or check for typos.": "אולי תרצו לנסות חיפוש אחר או לבדוק אם יש שגיאות הקלדה.",
     "We're creating a room with %(names)s": "יצרנו חדר עם %(names)s",
     "Thread options": "אפשרויות שרשור",
-    "Collapse reply thread": "אחד שרשור של התשובות",
     "Can't create a thread from an event with an existing relation": "לא ניתן ליצור שרשור מאירוע עם קשר קיים",
     "Open thread": "פתיחת שרשור",
     "From a thread": "משרשור",
@@ -1211,7 +1127,6 @@
     "Decrypting": "מפענח",
     "Downloading": "מוריד",
     "Jump to date": "קיפצו לתאריך",
-    "Review to ensure your account is safe": "בידקו כדי לוודא שהחשבון שלך בטוח",
     "You may contact me if you have any follow up questions": "אתם יכולים לתקשר איתי אם יש לכם שאלות המשך",
     "Feedback sent! Thanks, we appreciate it!": "משוב נשלח! תודה, אנחנו מודים לכם",
     "Search for rooms or people": "חפשו אנשים או חדרים",
@@ -1220,18 +1135,9 @@
     "Published addresses can be used by anyone on any server to join your space.": "כל אחד בכל שרת יכול להשתמש בכתובות שפורסמו כדי להצטרף למרחב העבודה שלכם.",
     "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "אם ברצונכם לשמור על גישה להיסטוריית הצ'אט שלכם בחדרים מוצפנים, הגדירו גיבוי מפתחות או ייצאו את מפתחות ההודעות שלכם מאחד מהמכשירים האחרים שלכם לפני שתמשיך.",
     "Export chat": "ייצוא צ'אט",
-    "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.": "שימו לב: זוהי תכונת פיתוח המשתמשת ביישום זמני. משמעות הדבר היא שלא תוכלו למחוק את היסטוריית המיקומים שלכם, ומשתמשים מתקדמים יוכלו לראות את היסטוריית המיקומים שלך גם לאחר שתפסיקו לשתף את המיקום החי שלכם עם החדר הזה.",
     "Show Labs settings": "הצג את אופציית מעבדת הפיתוח",
     "To join, please enable video rooms in Labs first": "כדי להצטרף, נא אפשר תחילה וידאו במעבדת הפיתוח",
     "To view, please enable video rooms in Labs first": "כדי לצפות, אנא הפעל תחילה חדרי וידאו במעבדת הפיתוח",
-    "Group all your rooms that aren't part of a space in one place.": "קבצו את כל החדרים שלכם שאינם משויכים למרחב עבודה במקום אחד.",
-    "Rooms outside of a space": "חדרים שמחוץ למרחב העבודה",
-    "Group all your people in one place.": "קבצו את כל אנשי הקשר שלכם במקום אחד.",
-    "Group all your favourite rooms and people in one place.": "קבצו את כל החדרים ואנשי הקשר האהובים עליכם במקום אחד.",
-    "Show all your rooms in Home, even if they're in a space.": "הצג את כל החדרים שלכם במסך הבית, אפילו אם הם משויכים למרחב עבודה.",
-    "Home is useful for getting an overview of everything.": "מסך הבית עוזר לסקירה כללית.",
-    "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "מרחבי עבודה הם דרך לקבץ חדרים ואנשים. במקביל למרחבי העבודה בהם אתם נמצאים ניתן להשתמש גם בכאלה שנבנו מראש.",
-    "Spaces to show": "מרחבי עבודה להצגה",
     "Access your secure message history and set up secure messaging by entering your Security Phrase.": "גש להיסטוריית ההודעות המאובטחת שלך והגדר הודעות מאובטחות על ידי הזנת ביטוי האבטחה שלך.",
     "@mentions & keywords": "אזכורים ומילות מפתח",
     "Mentions & keywords": "אזכורים ומילות מפתח",
@@ -1298,7 +1204,6 @@
     "New keyword": "מילת מפתח חדשה",
     "Keyword": "מילת מפתח",
     "Location": "מיקום",
-    "Share location": "שתף מיקום",
     "Edit devices": "הגדרת מכשירים",
     "Role in <RoomName/>": "תפקיד בחדר <RoomName/>",
     "You won't get any notifications": "לא תקבל שום התראה",
@@ -1306,14 +1211,11 @@
     "Get notifications as set up in your <a>settings</a>": "קבלת התראות על פי ההעדפות שלך במסך<a>הגדרות</a>",
     "Enable guest access": "אפשר גישה לאורחים",
     "Unable to copy room link": "לא ניתן להעתיק קישור לחדר",
-    "Copy room link": "העתק קישור לחדר",
-    "Match system": "בהתאם למערכת",
     "Voice processing": "עיבוד קול",
     "Video settings": "הגדרות וידאו",
     "Automatically adjust the microphone volume": "התאמה אוטומטית של עוצמת המיקרופון",
     "Voice settings": "הגדרות קול",
     "Close sidebar": "סגור סרגל צד",
-    "Sidebar": "סרגל צד",
     "Deactivating your account is a permanent action — be careful!": "סגירת החשבון הינה פעולה שלא ניתנת לביטול - שים לב!",
     "Room info": "מידע על החדר",
     "Search users in this room…": "חיפוש משתמשים בחדר זה…",
@@ -1408,7 +1310,9 @@
         "off": "ללא",
         "all_rooms": "כל החדרים",
         "deselect_all": "הסר סימון מהכל",
-        "select_all": "בחר הכל"
+        "select_all": "בחר הכל",
+        "copied": "הועתק!",
+        "Advanced": "מתקדם"
     },
     "action": {
         "continue": "המשך",
@@ -1499,7 +1403,8 @@
         "send_report": "שלח דיווח",
         "exit_fullscreeen": "יציאה ממסך מלא",
         "enter_fullscreen": "עברו למסך מלא",
-        "unban": "הסר חסימה"
+        "unban": "הסר חסימה",
+        "click_to_copy": "לחץ להעתקה"
     },
     "a11y": {
         "user_menu": "תפריט משתמש",
@@ -1623,7 +1528,6 @@
             "user_a11y": "השלמה אוטומטית למשתמשים"
         }
     },
-    "Bold": "מודגש",
     "Code": "קוד",
     "power_level": {
         "default": "ברירת מחדל",
@@ -1800,7 +1704,20 @@
             "cryptography_section": "קריפטוגרפיה",
             "session_id": "מזהה מושב:",
             "session_key": "מפתח מושב:",
-            "encryption_section": "הצפנה"
+            "encryption_section": "הצפנה",
+            "bulk_options_section": "אפשרויות בתפזורת",
+            "bulk_options_accept_all_invites": "קבל את כל ההזמנות של %(invitedRooms)s",
+            "bulk_options_reject_all_invites": "דחה את כל ההזמנות של %(invitedRooms)s",
+            "message_search_section": "חיפוש הודעה",
+            "encryption_individual_verification_mode": "אמת בנפרד כל מושב שמשתמש בו כדי לסמן אותו כאמצעי מהימן, ולא אמון על מכשירים חתומים צולבים.",
+            "message_search_enabled": {
+                "one": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש באמצעות %(size)s לשמור הודעות מחדרים %(rooms)s.",
+                "other": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש באמצעות %(size)s לשמור הודעות מחדרים %(rooms)s."
+            },
+            "message_search_disabled": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש.",
+            "message_search_unsupported": "%(brand)s חסרים כמה רכיבים הנדרשים לצורך אחסון במטמון מאובטח של הודעות מוצפנות באופן מקומי. אם תרצה להתנסות בתכונה זו, בנה %(brand)s מותאם אישית לדסקטום עם <nativeLink>חפש רכיבים להוספה</nativeLink>.",
+            "message_search_unsupported_web": "%(brand)s אינם יכולים לשמור במטמון מאובטח הודעות מוצפנות באופן מקומי בזמן שהם פועלים בדפדפן אינטרנט. השתמש ב- <desktopLink>%(brand)s Desktop </desktopLink> כדי שהודעות מוצפנות יופיעו בתוצאות החיפוש.",
+            "message_search_failed": "אתחול חיפוש הודעות נכשל"
         },
         "preferences": {
             "room_list_heading": "רשימת חדרים",
@@ -1845,6 +1762,17 @@
             "add_msisdn_confirm_button": "אישור הוספת מספר טלפון",
             "add_msisdn_confirm_body": "לחצו על הכפתור לאישור הוספת מספר הטלפון הזה.",
             "add_msisdn_dialog_title": "הוסף מספר טלפון"
+        },
+        "sidebar": {
+            "title": "סרגל צד",
+            "metaspaces_subsection": "מרחבי עבודה להצגה",
+            "metaspaces_description": "מרחבי עבודה הם דרך לקבץ חדרים ואנשים. במקביל למרחבי העבודה בהם אתם נמצאים ניתן להשתמש גם בכאלה שנבנו מראש.",
+            "metaspaces_home_description": "מסך הבית עוזר לסקירה כללית.",
+            "metaspaces_home_all_rooms": "הצג את כל החדרים שלכם במסך הבית, אפילו אם הם משויכים למרחב עבודה.",
+            "metaspaces_favourites_description": "קבצו את כל החדרים ואנשי הקשר האהובים עליכם במקום אחד.",
+            "metaspaces_people_description": "קבצו את כל אנשי הקשר שלכם במקום אחד.",
+            "metaspaces_orphans": "חדרים שמחוץ למרחב העבודה",
+            "metaspaces_orphans_description": "קבצו את כל החדרים שלכם שאינם משויכים למרחב עבודה במקום אחד."
         }
     },
     "devtools": {
@@ -2194,7 +2122,11 @@
             "see_older_messages": "לחץ כאן לראות הודעות ישנות."
         },
         "creation_summary_dm": "%(creator)s יצר את DM הזה.",
-        "creation_summary_room": "%(creator)s יצר/ה והגדיר/ה את החדר."
+        "creation_summary_room": "%(creator)s יצר/ה והגדיר/ה את החדר.",
+        "context_menu": {
+            "external_url": "כתובת URL אתר המקור",
+            "collapse_reply_thread": "אחד שרשור של התשובות"
+        }
     },
     "slash_command": {
         "spoiler": "שולח הודעה ומסמן אותה כספוילר",
@@ -2366,10 +2298,14 @@
         "no_permission_conference_description": "אין לכם הרשאות להתחיל ועידה בחדר זה",
         "default_device": "התקן ברירת מחדל",
         "no_media_perms_title": "אין הרשאות מדיה",
-        "no_media_perms_description": "ייתכן שיהיה עליך לאפשר ידנית ל-%(brand)s גישה למיקרופון / מצלמת האינטרנט שלך"
+        "no_media_perms_description": "ייתכן שיהיה עליך לאפשר ידנית ל-%(brand)s גישה למיקרופון / מצלמת האינטרנט שלך",
+        "join_button_tooltip_connecting": "מקשר",
+        "hide_sidebar_button": "הסתר סרגל צד",
+        "show_sidebar_button": "הצג סרגל צד",
+        "more_button": "יותר",
+        "screenshare_window": "חלון אפליקציה"
     },
     "Other": "אחר",
-    "Advanced": "מתקדם",
     "room_settings": {
         "permissions": {
             "m.room.avatar_space": "שנה את דמות מרחב העבודה",
@@ -2444,7 +2380,8 @@
             "room_predecessor": "צפה בהודעות ישנות ב-%(roomName)s.",
             "room_version_section": "גרסאת חדר",
             "room_version": "גרסאת חדש:"
-        }
+        },
+        "upload_avatar_label": "העלה אוואטר"
     },
     "encryption": {
         "verification": {
@@ -2466,7 +2403,10 @@
             "unsupported_method": "לא מצליח למצוא שיטות אימות נתמכות.",
             "waiting_other_device": "ממתין לאישור שלך במכשיר השני…",
             "waiting_other_user": "ממתין ל- %(displayName)s בכדי לאמת…",
-            "cancelling": "מבטל…"
+            "cancelling": "מבטל…",
+            "unverified_sessions_toast_description": "בידקו כדי לוודא שהחשבון שלך בטוח",
+            "unverified_sessions_toast_reject": "מאוחר יותר",
+            "unverified_session_toast_title": "כניסה חדשה. האם זה אתם?"
         },
         "old_version_detected_title": "נתגלו נתוני הצפנה ישנים",
         "old_version_detected_description": "נתגלו גרסאות ישנות יותר של %(brand)s. זה יגרום לתקלה בקריפטוגרפיה מקצה לקצה בגרסה הישנה יותר. הודעות מוצפנות מקצה לקצה שהוחלפו לאחרונה בעת השימוש בגרסה הישנה עשויות שלא להיות ניתנות לפענוח בגירסה זו. זה עלול גם לגרום להודעות שהוחלפו עם גרסה זו להיכשל. אם אתה נתקל בבעיות, צא וחזור שוב. כדי לשמור על היסטוריית ההודעות, ייצא וייבא מחדש את המפתחות שלך.",
@@ -2476,7 +2416,17 @@
         "bootstrap_title": "מגדיר מפתחות",
         "export_unsupported": "הדפדפן שלכם אינו תומך בהצפנה הדרושה",
         "import_invalid_keyfile": "קובץ מפתח של %(brand)s אינו תקין",
-        "import_invalid_passphrase": "האימות שלכם נכשל: סיסמא שגויה?"
+        "import_invalid_passphrase": "האימות שלכם נכשל: סיסמא שגויה?",
+        "set_up_toast_title": "צור גיבוי מאובטח",
+        "upgrade_toast_title": "שדרוג הצפנה קיים",
+        "verify_toast_title": "אשרו את ההתחברות הזאת",
+        "set_up_toast_description": "שמור מפני איבוד גישה אל הודעות ומידע מוצפן",
+        "verify_toast_description": "יתכן משתמשים אחרים לא יבטחו בזה",
+        "cross_signing_unsupported": "השרת שלכם אינו תומך בחתימות-צולבות.",
+        "cross_signing_ready": "חתימה צולבת מוכנה לשימוש.",
+        "cross_signing_untrusted": "לחשבונך זהות חתימה צולבת באחסון סודי, אך הפגישה זו אינה מהימנה עדיין.",
+        "cross_signing_not_ready": "חתימה צולבת אינה מוגדרת עדיין.",
+        "not_supported": "<לא נתמך>"
     },
     "emoji": {
         "category_frequently_used": "לעיתים קרובות בשימוש",
@@ -2495,7 +2445,8 @@
         "enable_prompt": "עזרו בשיפור %(analyticsOwner)s",
         "consent_migration": "הסכמתם בעבר לשתף איתנו מידע אנונימי לגבי השימוש שלכם. אנחנו מעדכנים איך זה מתבצע.",
         "learn_more": "שתף נתונים אנונימיים כדי לעזור לנו לזהות בעיות. ללא אישי. אין צדדים שלישיים. <LearnMoreLink>למידע נוסף</LearnMoreLink>",
-        "accept_button": "זה בסדר"
+        "accept_button": "זה בסדר",
+        "shared_data_heading": "ניתן לשתף כל אחד מהנתונים הבאים:"
     },
     "chat_effects": {
         "confetti_description": "שולח הודעה זו ביחד עם קונפטי",
@@ -2618,7 +2569,8 @@
         "no_hs_url_provided": "לא סופקה כתובת של שרת הראשי",
         "autodiscovery_unexpected_error_hs": "שגיאה לא צפוייה של התחברות לשרת הראשי",
         "autodiscovery_unexpected_error_is": "שגיאה לא צפויה בהתחברות אל שרת הזיהוי",
-        "incorrect_credentials_detail": "שים לב שאתה מתחבר לשרת %(hs)s, לא ל- matrix.org."
+        "incorrect_credentials_detail": "שים לב שאתה מתחבר לשרת %(hs)s, לא ל- matrix.org.",
+        "create_account_title": "חשבון משתמש חדש"
     },
     "room_list": {
         "sort_unread_first": "הצג תחילה חדרים עם הודעות שלא נקראו",
@@ -2649,7 +2601,8 @@
         "intro_welcome": "ברוכים הבאים אל %(appName)s",
         "send_dm": "שלח הודעה ישירה",
         "explore_rooms": "חקור חדרים ציבוריים",
-        "create_room": "צור צ'אט קבוצתי"
+        "create_room": "צור צ'אט קבוצתי",
+        "create_account": "חשבון משתמש חדש"
     },
     "setting": {
         "help_about": {
@@ -2724,7 +2677,28 @@
         },
         "error_need_to_be_logged_in": "עליכם להיות מחוברים.",
         "error_need_invite_permission": "עליכם להיות מאושרים להזמין משתמשים על מנת לבצע פעולה זו.",
-        "no_name": "אפליקציה לא ידועה"
+        "no_name": "אפליקציה לא ידועה",
+        "context_menu": {
+            "screenshot": "צלם תמונה",
+            "delete": "מחק ישומון",
+            "delete_warning": "מחיקת יישומון מסירה אותו לכל המשתמשים בחדר זה. האם אתה בטוח שברצונך למחוק את היישומון הזה?",
+            "remove": "הסר לכולם",
+            "revoke": "שלילת הרשאות",
+            "move_left": "הזז שמאלה",
+            "move_right": "הזז ימינה"
+        },
+        "shared_data_name": "שם התצוגה שלך",
+        "shared_data_mxid": "קוד זהות המשתמש שלכם",
+        "shared_data_theme": "ערכת הנושא שלכם",
+        "shared_data_url": "קישור %(brand)s",
+        "shared_data_room_id": "קוד זהות החדר",
+        "shared_data_widget_id": "קוד זהות הישומון",
+        "shared_data_warning_im": "שימוש ביישומון זה עשוי לשתף נתונים <helpIcon /> עם %(widgetDomain)s ומנהל האינטגרציה שלך.",
+        "shared_data_warning": "שימוש ביישומון זה עשוי לשתף נתונים <helpIcon /> עם %(widgetDomain)s.",
+        "unencrypted_warning": "יישומונים אינם משתמשים בהצפנת הודעות.",
+        "added_by": "ישומון נוסף על ידי",
+        "cookie_warning": "יישומון זה עשוי להשתמש בעוגיות.",
+        "popout": "יישומון קופץ"
     },
     "feedback": {
         "sent": "משוב נשלח",
@@ -2805,7 +2779,9 @@
         "location_not_available": "מיקום אינו זמין",
         "mapbox_logo": "לוגו",
         "reset_bearing": "נעלו את המפה לכיוון צפון",
-        "failed_generic": "איתור המיקום שלך נכשל. אנא נסה שוב מאוחר יותר."
+        "failed_generic": "איתור המיקום שלך נכשל. אנא נסה שוב מאוחר יותר.",
+        "live_enable_description": "שימו לב: זוהי תכונת פיתוח המשתמשת ביישום זמני. משמעות הדבר היא שלא תוכלו למחוק את היסטוריית המיקומים שלכם, ומשתמשים מתקדמים יוכלו לראות את היסטוריית המיקומים שלך גם לאחר שתפסיקו לשתף את המיקום החי שלכם עם החדר הזה.",
+        "share_button": "שתף מיקום"
     },
     "labs_mjolnir": {
         "room_name": "רשימת החסומים שלי",
@@ -2871,7 +2847,8 @@
     },
     "user_menu": {
         "switch_theme_light": "שנה למצב בהיר",
-        "switch_theme_dark": "שנה למצב כהה"
+        "switch_theme_dark": "שנה למצב כהה",
+        "settings": "כל ההגדרות"
     },
     "notif_panel": {
         "empty_heading": "אתם כבר מעודכנים בהכל",
@@ -2900,7 +2877,15 @@
         "leave_error_title": "שגיאת נסיון לצאת מהחדר",
         "upgrade_error_title": "שגיאה בשדרוג חדר",
         "upgrade_error_description": "בדקו שהשרת תומך בגרסאת החדר ונסו שוב.",
-        "leave_server_notices_description": "החדר הזה משמש להודעות חשובות מהשרת ולכן אינכם יכולים לעזוב אותו."
+        "leave_server_notices_description": "החדר הזה משמש להודעות חשובות מהשרת ולכן אינכם יכולים לעזוב אותו.",
+        "error_join_incompatible_version_2": "אנא צרו קשר עם מנהל השרת שלכם.",
+        "context_menu": {
+            "unfavourite": "מועדפים",
+            "favourite": "מועדף",
+            "copy_link": "העתק קישור לחדר",
+            "low_priority": "עדיפות נמוכה",
+            "forget": "שכח חדר"
+        }
     },
     "file_panel": {
         "guest_note": "עליך <a> להירשם </a> כדי להשתמש בפונקציונליות זו",
@@ -2920,7 +2905,8 @@
         "tac_button": "עיין בתנאים ובהגבלות",
         "identity_server_no_terms_title": "לשרת הזיהוי אין כללי שרות",
         "identity_server_no_terms_description_1": "פעולה זו דורשת להכנס אל שרת הזיהוי <server /> לאשר מייל או טלפון, אבל לשרת אין כללי שרות.",
-        "identity_server_no_terms_description_2": "המשיכו רק אם הנכם בוטחים בבעלים של השרת."
+        "identity_server_no_terms_description_2": "המשיכו רק אם הנכם בוטחים בבעלים של השרת.",
+        "inline_intro_text": "קבל <policyLink /> להמשך:"
     },
     "poll": {
         "create_poll_title": "צרו סקר",
@@ -2980,7 +2966,11 @@
         "admin_contact": "אנא <a> פנה למנהל השירות שלך </a> כדי להמשיך להשתמש בשירות זה.",
         "connection": "הייתה תקשורת עם שרת הבית. נסה שוב מאוחר יותר.",
         "mixed_content": "לא ניתן להתחבר לשרת ביתי באמצעות HTTP כאשר כתובת HTTPS נמצאת בסרגל הדפדפן שלך. השתמש ב- HTTPS או <a> הפעל סקריפטים לא בטוחים </a>.",
-        "tls": "לא ניתן להתחבר לשרת בית - אנא בדוק את הקישוריות שלך, וודא ש- <a> תעודת ה- SSL של שרת הביתה </a> שלך מהימנה ושהסיומת לדפדפן אינה חוסמת בקשות."
+        "tls": "לא ניתן להתחבר לשרת בית - אנא בדוק את הקישוריות שלך, וודא ש- <a> תעודת ה- SSL של שרת הביתה </a> שלך מהימנה ושהסיומת לדפדפן אינה חוסמת בקשות.",
+        "admin_contact_short": "צרו קשר עם <a>מנהל השרת</a>.",
+        "non_urgent_echo_failure_toast": "השרת שלכם אינו מגיב לבקשות מסויימות <a>בקשות</a>.",
+        "failed_copy": "שגיאה בהעתקה",
+        "something_went_wrong": "משהו השתבש!"
     },
     "in_space1_and_space2": "במרחבי עבודה %(space1Name)sו%(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -2988,5 +2978,38 @@
         "other": "%(spaceName)sו%(count)s מרחבי עבודה אחרים."
     },
     "in_space": "במרחבי עבודה%(spaceName)s.",
-    "name_and_id": "%(userId)s %(name)s"
+    "name_and_id": "%(userId)s %(name)s",
+    "items_and_n_others": {
+        "one": "<Items/> ועוד אחד אחר",
+        "other": "<Items/> ו%(count)s אחרים"
+    },
+    "notifications": {
+        "enable_prompt_toast_title_from_message_send": "אל תפספסו תגובה",
+        "enable_prompt_toast_title": "התראות",
+        "enable_prompt_toast_description": "אשרו התראות שולחן עבודה",
+        "colour_none": "ללא",
+        "colour_bold": "מודגש",
+        "error_change_title": "שינוי הגדרת התרעות"
+    },
+    "mobile_guide": {
+        "toast_title": "השתמש באפליקציה לחוויה טובה יותר",
+        "toast_accept": "השתמש באפליקציה"
+    },
+    "chat_card_back_action_label": "חזרה לצ'אט",
+    "room_summary_card_back_action_label": "מידע החדר",
+    "member_list_back_action_label": "חברי החדר",
+    "thread_view_back_action_label": "חזרה לשרשור",
+    "quick_settings": {
+        "title": "הגדרות מהירות",
+        "all_settings": "כל ההגדרות",
+        "metaspace_section": "הצמד לסרגל הצד",
+        "sidebar_settings": "אפשרויות נוספות"
+    },
+    "theme": {
+        "match_system": "בהתאם למערכת"
+    },
+    "lightbox": {
+        "rotate_left": "סובב שמאלה",
+        "rotate_right": "סובב ימינה"
+    }
 }
