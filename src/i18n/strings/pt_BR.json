@@ -151,9 +151,9 @@
     "Delete Widget": "Apagar widget",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Remover um widget o remove para todas as pessoas desta sala. Tem certeza que quer remover este widget?",
     "Delete widget": "Remover widget",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s e %(count)s outras",
-        "one": "%(items)s e uma outra"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> e %(count)s outras",
+        "one": "<Items/> e uma outra"
     },
     "collapse": "recolher",
     "expand": "expandir",

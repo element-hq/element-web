@@ -442,9 +442,9 @@
     "Identity server URL does not appear to be a valid identity server": "Isikutuvastusserveri aadress ei tundu viitama kehtivale isikutuvastusserverile",
     "Looks good!": "Tundub õige!",
     "Failed to re-authenticate due to a homeserver problem": "Uuesti autentimine ei õnnestunud koduserveri vea tõttu",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s ja %(count)s muud",
-        "one": "%(items)s ja üks muu"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> ja %(count)s muud",
+        "one": "<Items/> ja üks muu"
     },
     "%(items)s and %(lastItem)s": "%(items)s ja %(lastItem)s",
     "Please contact your homeserver administrator.": "Palun võta ühendust koduserveri haldajaga.",

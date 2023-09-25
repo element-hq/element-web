@@ -20,7 +20,7 @@ import React, { ComponentProps, ReactNode } from "react";
 import { MatrixEvent, RoomMember, EventType } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
-import { formatCommaSeparatedList } from "../../../utils/FormattingUtils";
+import { formatList } from "../../../utils/FormattingUtils";
 import { isValid3pidInvite } from "../../../RoomInvite";
 import GenericEventListSummary from "./GenericEventListSummary";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
@@ -131,7 +131,7 @@ export default class EventListSummary extends React.Component<
                 return EventListSummary.getDescriptionForTransition(t.transitionType, userNames.length, t.repeats);
             });
 
-            const desc = formatCommaSeparatedList(descs);
+            const desc = formatList(descs);
 
             return _t("timeline|summary|format", { nameList, transitionList: desc });
         });
@@ -150,7 +150,7 @@ export default class EventListSummary extends React.Component<
      * included before "and [n] others".
      */
     private renderNameList(users: string[]): string {
-        return formatCommaSeparatedList(users, this.props.summaryLength);
+        return formatList(users, this.props.summaryLength);
     }
 
     /**

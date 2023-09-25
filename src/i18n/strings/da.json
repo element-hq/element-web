@@ -73,9 +73,9 @@
     "Preparing to send logs": "Forbereder afsendelse af logfiler",
     "Permission Required": "Tilladelse påkrævet",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s. %(monthName)s %(fullYear)s",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s og %(count)s andre",
-        "one": "%(items)s og en anden"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> og %(count)s andre",
+        "one": "<Items/> og en anden"
     },
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "Please contact your homeserver administrator.": "Kontakt venligst din homeserver administrator.",

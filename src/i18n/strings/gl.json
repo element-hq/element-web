@@ -94,9 +94,9 @@
     "Delete widget": "Eliminar widget",
     "Create new room": "Crear unha nova sala",
     "Home": "Inicio",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s e %(count)s outras",
-        "one": "%(items)s e outra máis"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> e %(count)s outras",
+        "one": "<Items/> e outra máis"
     },
     "%(items)s and %(lastItem)s": "%(items)s e %(lastItem)s",
     "collapse": "comprimir",

@@ -33,7 +33,7 @@ import { PollResponseEvent } from "matrix-js-sdk/src/extensible_events_v1/PollRe
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import { IBodyProps } from "./IBodyProps";
-import { formatCommaSeparatedList } from "../../../utils/FormattingUtils";
+import { formatList } from "../../../utils/FormattingUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { GetRelationsForEvent } from "../rooms/EventTile";
@@ -100,7 +100,7 @@ export function findTopAnswer(pollEvent: MatrixEvent, voteRelations: Relations):
 
     const bestAnswerTexts = bestAnswerIds.map(findAnswerText);
 
-    return formatCommaSeparatedList(bestAnswerTexts, 3);
+    return formatList(bestAnswerTexts, 3);
 }
 
 export function isPollEnded(pollEvent: MatrixEvent, matrixClient: MatrixClient): boolean {

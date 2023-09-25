@@ -56,7 +56,7 @@ describe("roomContextDetails", () => {
             new Set([parent1.roomId, parent2.roomId, parent3.roomId]),
         );
         const res = roomContextDetails(room);
-        expect(res!.details).toMatchInlineSnapshot(`"Alpha and 1 other"`);
-        expect(res!.ariaLabel).toMatchInlineSnapshot(`"In Alpha and 1 other space."`);
+        expect(res!.details).toMatchInlineSnapshot(`"Alpha and one other"`);
+        expect(res!.ariaLabel).toMatchInlineSnapshot(`"In Alpha and one other space."`);
     });
 });

@@ -145,9 +145,9 @@
     },
     "Delete Widget": "Удалить виджет",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Удаление виджета действует для всех участников этой комнаты. Вы действительно хотите удалить этот виджет?",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s и ещё %(count)s участника(-ов)",
-        "one": "%(items)s и ещё кто-то"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> и ещё %(count)s участника(-ов)",
+        "one": "<Items/> и ещё кто-то"
     },
     "Restricted": "Ограниченный пользователь",
     "%(duration)ss": "%(duration)s сек",

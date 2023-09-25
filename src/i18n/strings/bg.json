@@ -95,9 +95,9 @@
     "Delete widget": "Изтрий приспособлението",
     "Create new room": "Създай нова стая",
     "Home": "Начална страница",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s и %(count)s други",
-        "one": "%(items)s и още един"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> и %(count)s други",
+        "one": "<Items/> и още един"
     },
     "%(items)s and %(lastItem)s": "%(items)s и %(lastItem)s",
     "collapse": "свий",

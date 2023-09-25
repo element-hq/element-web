@@ -115,9 +115,9 @@
     "Set up Secure Messages": "Sbadu iznan iɣelsanen",
     "Logs sent": "Iɣmisen ttewaznen",
     "Not Trusted": "Ur yettwattkal ara",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s d %(count)s wiyaḍ",
-        "one": "%(items)s d wayeḍ-nniḍen"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> d %(count)s wiyaḍ",
+        "one": "<Items/> d wayeḍ-nniḍen"
     },
     "%(items)s and %(lastItem)s": "%(items)s d %(lastItem)s",
     "Encryption upgrade available": "Yella uleqqem n uwgelhen",

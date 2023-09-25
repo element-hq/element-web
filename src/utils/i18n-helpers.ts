@@ -19,6 +19,7 @@ import { Room } from "matrix-js-sdk/src/matrix";
 import SpaceStore from "../stores/spaces/SpaceStore";
 import { _t } from "../languageHandler";
 import DMRoomMap from "./DMRoomMap";
+import { formatList } from "./FormattingUtils";
 
 export interface RoomContextDetails {
     details: string | null;
@@ -39,7 +40,7 @@ export function roomContextDetails(room: Room): RoomContextDetails | null {
         const space1Name = room.client.getRoom(parent)?.name;
         const space2Name = room.client.getRoom(secondParent)?.name;
         return {
-            details: _t("%(space1Name)s and %(space2Name)s", { space1Name, space2Name }),
+            details: formatList([space1Name ?? "", space2Name ?? ""]),
             ariaLabel: _t("in_space1_and_space2", { space1Name, space2Name }),
         };
     } else if (parent) {
@@ -47,7 +48,7 @@ export function roomContextDetails(room: Room): RoomContextDetails | null {
         const count = otherParents.length;
         if (count > 0) {
             return {
-                details: _t("%(spaceName)s and %(count)s others", { spaceName, count }),
+                details: formatList([spaceName, ...otherParents], 1),
                 ariaLabel: _t("in_space_and_n_other_spaces", { spaceName, count }),
             };
         }

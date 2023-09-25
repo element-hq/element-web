@@ -173,9 +173,9 @@
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "자기 자신을 강등하는 것은 되돌릴 수 없고, 자신이 마지막으로 이 방에서 특권을 가진 사용자라면 다시 특권을 얻는 건 불가능합니다.",
     "Jump to read receipt": "읽은 기록으로 건너뛰기",
     "Share room": "방 공유하기",
-    "%(items)s and %(count)s others": {
-        "one": "%(items)s님 외 한 명",
-        "other": "%(items)s님 외 %(count)s명"
+    "<Items/> and %(count)s others": {
+        "one": "<Items/>님 외 한 명",
+        "other": "<Items/>님 외 %(count)s명"
     },
     "Permission Required": "권한 필요",
     "Copied!": "복사했습니다!",

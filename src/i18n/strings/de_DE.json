@@ -145,9 +145,9 @@
     },
     "Delete Widget": "Widget löschen",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Das Löschen des Widgets entfernt es für alle in diesem Raum. Wirklich löschen?",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s und %(count)s andere",
-        "one": "%(items)s und ein weiteres Raummitglied"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> und %(count)s andere",
+        "one": "<Items/> und ein weiteres Raummitglied"
     },
     "Restricted": "Eingeschränkt",
     "%(duration)ss": "%(duration)ss",

@@ -153,9 +153,9 @@
     },
     "Delete Widget": "Ezabatu trepeta",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Trepeta ezabatzean gelako kide guztientzat kentzen da. Ziur trepeta ezabatu nahi duzula?",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s eta beste %(count)s",
-        "one": "%(items)s eta beste bat"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> eta beste %(count)s",
+        "one": "<Items/> eta beste bat"
     },
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Ezin izango duzu hau aldatu zure burua mailaz jaisten ari zarelako, zu bazara gelan baimenak dituen azken erabiltzailea ezin izango dira baimenak berreskuratu.",
     "Replying": "Erantzuten",

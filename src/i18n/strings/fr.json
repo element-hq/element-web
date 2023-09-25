@@ -142,9 +142,9 @@
     "Jump to read receipt": "Aller à l’accusé de lecture",
     "Delete Widget": "Supprimer le widget",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Supprimer un widget le supprime pour tous les utilisateurs du salon. Voulez-vous vraiment supprimer ce widget ?",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s et %(count)s autres",
-        "one": "%(items)s et un autre"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> et %(count)s autres",
+        "one": "<Items/> et un autre"
     },
     "And %(count)s more...": {
         "other": "Et %(count)s autres…"

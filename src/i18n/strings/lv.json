@@ -158,9 +158,9 @@
         "other": "Un par %(count)s vairāk..."
     },
     "This room is not public. You will not be able to rejoin without an invite.": "Šī istaba nav publiska un jūs nevarēsiet atkārtoti pievienoties bez uzaicinājuma.",
-    "%(items)s and %(count)s others": {
-        "one": "%(items)s un viens cits",
-        "other": "%(items)s un %(count)s citus"
+    "<Items/> and %(count)s others": {
+        "one": "<Items/> un viens cits",
+        "other": "<Items/> un %(count)s citus"
     },
     "Sunday": "Svētdiena",
     "Notification targets": "Paziņojumu adresāti",

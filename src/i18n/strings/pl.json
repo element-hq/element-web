@@ -210,9 +210,9 @@
         "other": "I %(count)s więcej…"
     },
     "Delete Backup": "Usuń kopię zapasową",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s i %(count)s innych",
-        "one": "%(items)s i jedna inna osoba"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> i %(count)s innych",
+        "one": "<Items/> i jedna inna osoba"
     },
     "Add some now": "Dodaj teraz kilka",
     "Continue With Encryption Disabled": "Kontynuuj Z Wyłączonym Szyfrowaniem",

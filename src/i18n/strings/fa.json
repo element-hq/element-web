@@ -1011,10 +1011,9 @@
     "IRC display name width": "عرض نمایش نام‌های IRC",
     "This event could not be displayed": "امکان نمایش این رخداد وجود ندارد",
     "Edit message": "ویرایش پیام",
-    "%(items)s and %(lastItem)s": "%(items)s و %(lastItem)s",
-    "%(items)s and %(count)s others": {
-        "one": "%(items)s و یکی دیگر",
-        "other": "%(items)s و %(count)s دیگر"
+    "<Items/> and %(count)s others": {
+        "one": "<Items/> و یکی دیگر",
+        "other": "<Items/> و %(count)s دیگر"
     },
     "Clear personal data": "پاک‌کردن داده‌های شخصی",
     "Verify your identity to access encrypted messages and prove your identity to others.": "با تائید هویت خود به پیام‌های رمزشده دسترسی یافته و هویت خود را به دیگران ثابت می‌کنید.",

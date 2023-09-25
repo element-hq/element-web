@@ -132,9 +132,9 @@
     "Invalid file%(extra)s": "Neplatný soubor%(extra)s",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Budete přesměrováni na stránku třetí strany k ověření svého účtu pro používání s %(integrationsUrl)s. Chcete pokračovat?",
     "Something went wrong!": "Něco se nepodařilo!",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s a %(count)s další",
-        "one": "%(items)s a jeden další"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> a %(count)s další",
+        "one": "<Items/> a jeden další"
     },
     "%(items)s and %(lastItem)s": "%(items)s a také %(lastItem)s",
     "And %(count)s more...": {

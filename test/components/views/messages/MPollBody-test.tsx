@@ -40,6 +40,7 @@ import {
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { MediaEventHelper } from "../../../../src/utils/MediaEventHelper";
+import * as languageHandler from "../../../../src/languageHandler";
 
 const CHECKED = "mx_PollOption_checked";
 const userId = "@me:example.com";
@@ -58,6 +59,7 @@ describe("MPollBody", () => {
 
         mockClient.getRoom.mockReturnValue(null);
         mockClient.relations.mockResolvedValue({ events: [] });
+        jest.spyOn(languageHandler, "getUserLanguage").mockReturnValue("en-GB");
     });
 
     it("finds no votes if there are none", () => {

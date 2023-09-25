@@ -307,10 +307,9 @@
     "Vietnam": "וייטנאם",
     "Venezuela": "ונצואלה",
     "Vatican City": "ותיקן",
-    "%(items)s and %(lastItem)s": "%(items)s ו%(lastItem)s אחרון",
-    "%(items)s and %(count)s others": {
-        "one": "%(items)s ועוד אחד אחר",
-        "other": "%(items)s ו%(count)s אחרים"
+    "<Items/> and %(count)s others": {
+        "one": "<Items/> ועוד אחד אחר",
+        "other": "<Items/> ו%(count)s אחרים"
     },
     "Not Trusted": "לא אמין",
     "Ask this user to verify their session, or manually verify it below.": "בקש ממשתמש זה לאמת את ההתחברות שלו, או לאמת אותה באופן ידני למטה.",

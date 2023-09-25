@@ -39,6 +39,7 @@ import {
     getMockClientWithEventEmitter,
     mockClientMethodsUser,
 } from "../../../test-utils";
+import * as languageHandler from "../../../../src/languageHandler";
 
 describe("RoomKnocksBar", () => {
     const userId = "@alice:example.org";
@@ -127,6 +128,7 @@ describe("RoomKnocksBar", () => {
             jest.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(true);
             jest.spyOn(Modal, "createDialog");
             jest.spyOn(dis, "dispatch");
+            jest.spyOn(languageHandler, "getUserLanguage").mockReturnValue("en-GB");
         });
 
         it("does not render if user can neither approve nor deny", () => {

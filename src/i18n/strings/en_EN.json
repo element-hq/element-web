@@ -764,15 +764,10 @@
     "error_database_closed_title": "Database unexpectedly closed",
     "error_database_closed_description": "This may be caused by having the app open in multiple tabs or due to clearing browser data.",
     "empty_room": "Empty room",
-    "user1_and_user2": "%(user1)s and %(user2)s",
-    "user_and_n_others": {
-        "other": "%(user)s and %(count)s others",
-        "one": "%(user)s and 1 other"
-    },
     "inviting_user1_and_user2": "Inviting %(user1)s and %(user2)s",
     "inviting_user_and_n_others": {
         "other": "Inviting %(user)s and %(count)s others",
-        "one": "Inviting %(user)s and 1 other"
+        "one": "Inviting %(user)s and one other"
     },
     "empty_room_was_name": "Empty room (was %(oldName)s)",
     "notifier": {
@@ -1403,20 +1398,14 @@
         "mixed_content": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
         "tls": "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests."
     },
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s and %(count)s others",
-        "one": "%(items)s and one other"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> and %(count)s others",
+        "one": "<Items/> and one other"
     },
-    "%(items)s and %(lastItem)s": "%(items)s and %(lastItem)s",
-    "%(space1Name)s and %(space2Name)s": "%(space1Name)s and %(space2Name)s",
     "in_space1_and_space2": "In spaces %(space1Name)s and %(space2Name)s.",
-    "%(spaceName)s and %(count)s others": {
-        "other": "%(spaceName)s and %(count)s others",
-        "one": "%(spaceName)s and %(count)s other"
-    },
     "in_space_and_n_other_spaces": {
         "other": "In %(spaceName)s and %(count)s other spaces.",
-        "one": "In %(spaceName)s and %(count)s other space."
+        "one": "In %(spaceName)s and one other space."
     },
     "in_space": "In %(spaceName)s.",
     "name_and_id": "%(name)s (%(userId)s)",
@@ -2571,11 +2560,6 @@
     "Public space": "Public space",
     "Private space": "Private space",
     "Private room": "Private room",
-    "%(names)s and %(name)s": "%(names)s and %(name)s",
-    "%(names)s and %(count)s others": {
-        "other": "%(names)s and %(count)s others",
-        "one": "%(names)s and %(count)s other"
-    },
     "%(count)s people asking to join": {
         "other": "%(count)s people asking to join",
         "one": "Asking to join"

@@ -30,9 +30,9 @@
     "Restricted": "Beperkten toegank",
     "Moderator": "Moderator",
     "Reason": "Reedn",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s en %(count)s andere",
-        "one": "%(items)s en één ander"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> en %(count)s andere",
+        "one": "<Items/> en één ander"
     },
     "%(items)s and %(lastItem)s": "%(items)s en %(lastItem)s",
     "Please contact your homeserver administrator.": "Gelieve contact ip te neemn me den beheerder van je thuusserver.",

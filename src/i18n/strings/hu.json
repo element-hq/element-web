@@ -145,9 +145,9 @@
     },
     "Delete Widget": "Kisalkalmazás törlése",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "A kisalkalmazás törlése minden felhasználót érint a szobában. Biztos, hogy törli a kisalkalmazást?",
-    "%(items)s and %(count)s others": {
-        "other": "%(items)s és még %(count)s másik",
-        "one": "%(items)s és még egy másik"
+    "<Items/> and %(count)s others": {
+        "other": "<Items/> és még %(count)s másik",
+        "one": "<Items/> és még egy másik"
     },
     "Restricted": "Korlátozott",
     "%(duration)ss": "%(duration)s mp",
