@@ -262,6 +262,14 @@ export function sendMessageAsClient(cli: MatrixClient, room: string, messages: M
                 await message.performAction(cli, room);
             }
         });
+        // TODO: without this wait, some tests that send lots of messages flake
+        // from time to time. I (andyb) have done some investigation, but it
+        // needs more work to figure out. The messages do arrive over sync, but
+        // they never appear in the timeline, and they never fire a
+        // Room.timeline event. I think this only happens with events that refer
+        // to other events (e.g. replies), so it might be caused by the
+        // referring event arriving before the referred-to event.
+        cy.wait(200);
     }
 }
 
