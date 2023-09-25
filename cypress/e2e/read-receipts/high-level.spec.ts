@@ -22,6 +22,7 @@ import type { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import {
     assertRead,
+    assertStillRead,
     assertUnread,
     customEvent,
     goTo,
@@ -157,18 +158,25 @@ describe("Read receipts", () => {
             assertRead(room2);
         });
         it("Sending an important event after unimportant ones makes the room unread", () => {
+            // Given We have read the important messages
             goTo(room1);
             assertRead(room2);
             receiveMessages(room2, ["Msg1", "Msg2"]);
             assertUnread(room2, 2);
-
-            markAsRead(room2);
+            goTo(room2);
             assertRead(room2);
+            goTo(room1);
 
+            // When we receive important messages
             receiveMessages(room2, [customEvent("org.custom.event", { body: "foobar" })]);
-            assertRead(room2);
 
+            // Then the room is still read
+            assertStillRead(room2);
+
+            // And when we receive more important ones
             receiveMessages(room2, ["Hello"]);
+
+            // The room is unread again
             assertUnread(room2, 1);
         });
         it.skip("A receipt for the last unimportant event makes the room read, even if all are unimportant", () => {});
