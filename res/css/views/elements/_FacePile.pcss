@@ -15,11 +15,13 @@ limitations under the License.
 */
 
 .mx_FacePile_more {
+    /* Needed to calculate the offset on the face pile */
+    --cpd-avatar-size: 28px;
     position: relative;
     border-radius: 100%;
-    width: 30px;
-    height: 30px;
-    background-color: $spacePanel-bg-color;
+    width: 28px;
+    height: 28px;
+    background-color: $panels;
     display: inline-block;
 
     &::before {
