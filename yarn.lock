@@ -7656,10 +7656,9 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-js-sdk@28.2.0:
+"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "28.2.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-28.2.0.tgz#2ec2d15c8f1e0dff85e7ec9e9ad061b039320def"
-  integrity sha512-YENmPaiGgWwCqoYWoL/8oD7QPWd6M/A0xdNhC4yMSiFny419AjUdPQk/EbM8RTSzQV27F79llhWisnz+/AXdaA==
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d59bb240fa50b736ac6c3cbfff935ee08b697663"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^1.2.3-alpha.0"
@@ -7693,7 +7692,7 @@ matrix-web-i18n@^2.1.0:
     lodash "^4.17.21"
     walk "^2.3.15"
 
-matrix-widget-api@^1.6.0:
+matrix-widget-api@^1.5.0, matrix-widget-api@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.6.0.tgz#f0075411edffc6de339580ade7e6e6e6edb01af4"
   integrity sha512-VXIJyAZ/WnBmT4C7ePqevgMYGneKMCP/0JuCOqntSsaNlCRHJvwvTxmqUU+ufOpzIF5gYNyIrAjbgrEbK3iqJQ==
