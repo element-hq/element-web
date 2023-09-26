@@ -32,22 +32,16 @@
     "Moderator": "मध्यस्थ",
     "Reason": "कारण",
     "Send": "भेजें",
-    "Please contact your homeserver administrator.": "कृपया अपने होमसर्वर व्यवस्थापक से संपर्क करें।",
     "Incorrect verification code": "गलत सत्यापन कोड",
-    "No display name": "कोई प्रदर्शन नाम नहीं",
     "Warning!": "चेतावनी!",
     "Authentication": "प्रमाणीकरण",
     "Failed to set display name": "प्रदर्शन नाम सेट करने में विफल",
-    "Delete Backup": "बैकअप हटाएं",
-    "Unable to load key backup status": "कुंजी बैकअप स्थिति लोड होने में असमर्थ",
-    "Notification targets": "अधिसूचना के लक्ष्य",
     "This event could not be displayed": "यह घटना प्रदर्शित नहीं की जा सकी",
     "Failed to ban user": "उपयोगकर्ता को प्रतिबंधित करने में विफल",
     "Demote yourself?": "खुद को अवनत करें?",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "आप इस बदलाव को पूर्ववत नहीं कर पाएंगे क्योंकि आप स्वयं को अवनत कर रहे हैं, अगर आप रूम में आखिरी विशेषाधिकार प्राप्त उपयोगकर्ता हैं तो विशेषाधिकार हासिल करना असंभव होगा।",
     "Demote": "अवनत",
     "Failed to mute user": "उपयोगकर्ता को म्यूट करने में विफल",
-    "Failed to change power level": "पावर स्तर बदलने में विफल",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "आप इस परिवर्तन को पूर्ववत नहीं कर पाएंगे क्योंकि आप उपयोगकर्ता को अपने आप से समान शक्ति स्तर रखने के लिए प्रोत्साहित कर रहे हैं।",
     "Are you sure?": "क्या आपको यकीन है?",
     "Unignore": "अनदेखा न करें",
@@ -136,32 +130,21 @@
     "Unable to verify email address.": "ईमेल पते को सत्यापित करने में असमर्थ।",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "हमने आपको अपना पता सत्यापित करने के लिए एक ईमेल भेजा है। कृपया वहां दिए गए निर्देशों का पालन करें और फिर नीचे दिए गए बटन पर क्लिक करें।",
     "Email Address": "ईमेल पता",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "क्या आपको यकीन है? यदि आपकी कुंजियाँ ठीक से बैकअप नहीं हैं तो आप अपने एन्क्रिप्टेड संदेशों को खो देंगे।",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "एन्क्रिप्ट किए गए संदेश एंड-टू-एंड एन्क्रिप्शन के साथ सुरक्षित हैं। केवल आपके और प्राप्तकर्ता के पास ही इन संदेशों को पढ़ने की कुंजी है।",
-    "Restore from Backup": "बैकअप से बहाल करना",
     "Back up your keys before signing out to avoid losing them.": "उन्हें खोने से बचने के लिए साइन आउट करने से पहले अपनी कुंजियों का बैकअप लें।",
-    "All keys backed up": "सभी कुंजियाँ वापस आ गईं",
     "Start using Key Backup": "कुंजी बैकअप का उपयोग करना शुरू करें",
     "Unable to verify phone number.": "फ़ोन नंबर सत्यापित करने में असमर्थ।",
     "Verification code": "पुष्टि संख्या",
     "Phone Number": "फ़ोन नंबर",
-    "Profile picture": "प्रोफ़ाइल फोटो",
-    "Display Name": "प्रदर्शित होने वाला नाम",
     "Room information": "रूम जानकारी",
-    "General": "सामान्य",
     "Room Addresses": "रूम का पता",
     "Failed to change password. Is your password correct?": "पासवर्ड बदलने में विफल। क्या आपका पासवर्ड सही है?",
-    "Profile": "प्रोफाइल",
     "Email addresses": "ईमेल पता",
     "Phone numbers": "फोन नंबर",
     "Account management": "खाता प्रबंधन",
     "Deactivate Account": "खाता निष्क्रिय करें",
-    "Notifications": "सूचनाएं",
     "Scissors": "कैंची",
-    "<not supported>": "<समर्थित नहीं>",
     "Ignored users": "अनदेखी उपयोगकर्ताओं",
-    "Bulk options": "थोक विकल्प",
-    "Reject all %(invitedRooms)s invites": "सभी %(invitedRooms)s की आमंत्रण को अस्वीकार करें",
     "Missing media permissions, click the button below to request.": "मीडिया अनुमतियाँ गुम, अनुरोध करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
     "Request media permissions": "मीडिया अनुमति का अनुरोध करें",
     "No Audio Outputs detected": "कोई ऑडियो आउटपुट नहीं मिला",
@@ -343,7 +326,12 @@
         "someone": "कोई",
         "unnamed_room": "अनाम रूम",
         "on": "चालू",
-        "off": "बंद"
+        "off": "बंद",
+        "advanced": "उन्नत",
+        "general": "सामान्य",
+        "profile": "प्रोफाइल",
+        "display_name": "प्रदर्शित होने वाला नाम",
+        "user_avatar": "प्रोफ़ाइल फोटो"
     },
     "action": {
         "continue": "आगे बढ़ें",
@@ -426,7 +414,8 @@
             "noisy": "शोरगुल",
             "error_permissions_denied": "%(brand)s को आपको सूचनाएं भेजने की अनुमति नहीं है - कृपया अपनी ब्राउज़र सेटिंग जांचें",
             "error_permissions_missing": "%(brand)s को सूचनाएं भेजने की अनुमति नहीं दी गई थी - कृपया पुनः प्रयास करें",
-            "error_title": "अधिसूचनाएं सक्षम करने में असमर्थ"
+            "error_title": "अधिसूचनाएं सक्षम करने में असमर्थ",
+            "push_targets": "अधिसूचना के लक्ष्य"
         },
         "appearance": {
             "timeline_image_size_default": "डिफ़ॉल्ट",
@@ -441,7 +430,14 @@
             "send_analytics": "विश्लेषण डेटा भेजें",
             "export_megolm_keys": "E2E रूम कुंजी निर्यात करें",
             "import_megolm_keys": "E2E कक्ष की चाबियां आयात करें",
-            "cryptography_section": "क्रिप्टोग्राफी"
+            "cryptography_section": "क्रिप्टोग्राफी",
+            "bulk_options_section": "थोक विकल्प",
+            "bulk_options_reject_all_invites": "सभी %(invitedRooms)s की आमंत्रण को अस्वीकार करें",
+            "delete_backup": "बैकअप हटाएं",
+            "delete_backup_confirm_description": "क्या आपको यकीन है? यदि आपकी कुंजियाँ ठीक से बैकअप नहीं हैं तो आप अपने एन्क्रिप्टेड संदेशों को खो देंगे।",
+            "error_loading_key_backup_status": "कुंजी बैकअप स्थिति लोड होने में असमर्थ",
+            "restore_key_backup": "बैकअप से बहाल करना",
+            "key_backup_complete": "सभी कुंजियाँ वापस आ गईं"
         },
         "preferences": {
             "room_list_heading": "कक्ष सूचि",
@@ -459,7 +455,8 @@
             "add_msisdn_confirm_sso_button": "अपनी पहचान साबित करने के लिए सिंगल साइन ऑन का उपयोग करके इस फ़ोन नंबर को जोड़ने की पुष्टि करें।",
             "add_msisdn_confirm_button": "फ़ोन नंबर जोड़ने की पुष्टि करें",
             "add_msisdn_confirm_body": "इस फ़ोन नंबर को जोड़ने की पुष्टि करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
-            "add_msisdn_dialog_title": "फोन नंबर डालें"
+            "add_msisdn_dialog_title": "फोन नंबर डालें",
+            "name_placeholder": "कोई प्रदर्शन नाम नहीं"
         }
     },
     "timeline": {
@@ -597,7 +594,6 @@
         "default_device": "डिफ़ॉल्ट उपकरण",
         "no_media_perms_title": "मीडिया की अनुमति नहीं"
     },
-    "Advanced": "उन्नत",
     "composer": {
         "placeholder_reply_encrypted": "एक एन्क्रिप्टेड उत्तर भेजें …",
         "placeholder_encrypted": "एक एन्क्रिप्टेड संदेश भेजें …"
@@ -614,7 +610,8 @@
             "unsupported_method": "समर्थित सत्यापन विधि खोजने में असमर्थ।"
         },
         "export_unsupported": "आपका ब्राउज़र आवश्यक क्रिप्टोग्राफी एक्सटेंशन का समर्थन नहीं करता है",
-        "import_invalid_passphrase": "प्रमाणीकरण जांच विफल: गलत पासवर्ड?"
+        "import_invalid_passphrase": "प्रमाणीकरण जांच विफल: गलत पासवर्ड?",
+        "not_supported": "<समर्थित नहीं>"
     },
     "auth": {
         "sso": "केवल हस्ताक्षर के ऊपर",
@@ -682,7 +679,8 @@
         "widget_screenshots": "समर्थित विजेट्स पर विजेट स्क्रीनशॉट सक्षम करें"
     },
     "room": {
-        "drop_file_prompt": "अपलोड करने के लिए यहां फ़ाइल ड्रॉप करें"
+        "drop_file_prompt": "अपलोड करने के लिए यहां फ़ाइल ड्रॉप करें",
+        "error_join_incompatible_version_2": "कृपया अपने होमसर्वर व्यवस्थापक से संपर्क करें।"
     },
     "space": {
         "context_menu": {
@@ -755,6 +753,11 @@
     },
     "error": {
         "mau": "इस होमसर्वर ने अपनी मासिक सक्रिय उपयोगकर्ता सीमा को प्राप्त कर लिया हैं।",
-        "resource_limits": "यह होम सर्वर अपनी संसाधन सीमाओं में से एक से अधिक हो गया है।"
-    }
+        "resource_limits": "यह होम सर्वर अपनी संसाधन सीमाओं में से एक से अधिक हो गया है।",
+        "update_power_level": "पावर स्तर बदलने में विफल"
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "सूचनाएं"
+    },
+    "room_summary_card_back_action_label": "रूम जानकारी"
 }

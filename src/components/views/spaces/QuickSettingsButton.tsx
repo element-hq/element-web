@@ -58,7 +58,7 @@ const QuickSettingsButton: React.FC<{
                 managed={false}
                 focusLock={true}
             >
-                <h2>{_t("Quick settings")}</h2>
+                <h2>{_t("quick_settings|title")}</h2>
 
                 <AccessibleButton
                     onClick={() => {
@@ -67,7 +67,7 @@ const QuickSettingsButton: React.FC<{
                     }}
                     kind="primary_outline"
                 >
-                    {_t("All settings")}
+                    {_t("quick_settings|all_settings")}
                 </AccessibleButton>
 
                 {currentRoomId && developerModeEnabled && (
@@ -90,7 +90,7 @@ const QuickSettingsButton: React.FC<{
 
                 <h4 className="mx_QuickSettingsButton_pinToSidebarHeading">
                     <PinUprightIcon className="mx_QuickSettingsButton_icon" />
-                    {_t("Pin to sidebar")}
+                    {_t("quick_settings|metaspace_section")}
                 </h4>
 
                 <StyledCheckbox
@@ -120,7 +120,7 @@ const QuickSettingsButton: React.FC<{
                     }}
                 >
                     <EllipsisIcon className="mx_QuickSettingsButton_icon" />
-                    {_t("More options")}
+                    {_t("quick_settings|sidebar_settings")}
                 </AccessibleButton>
 
                 <QuickThemeSwitcher requestClose={closeMenu} />
@@ -133,7 +133,7 @@ const QuickSettingsButton: React.FC<{
             <AccessibleTooltipButton
                 className={classNames("mx_QuickSettingsButton", { expanded: !isPanelCollapsed })}
                 onClick={openMenu}
-                title={_t("Quick settings")}
+                title={_t("quick_settings|title")}
                 inputRef={handle}
                 forceHide={!isPanelCollapsed}
                 aria-expanded={!isPanelCollapsed}

@@ -30,16 +30,16 @@ export enum NotificationColor {
 export function humanReadableNotificationColor(color: NotificationColor): string {
     switch (color) {
         case NotificationColor.None:
-            return _t("None");
+            return _t("notifications|colour_none");
         case NotificationColor.Bold:
-            return _t("Bold");
+            return _t("notifications|colour_bold");
         case NotificationColor.Grey:
-            return _t("Grey");
+            return _t("notifications|colour_grey");
         case NotificationColor.Red:
-            return _t("Red");
+            return _t("notifications|colour_red");
         case NotificationColor.Unsent:
-            return _t("Unsent");
-        default:
-            return _t("unknown");
+            return _t("notifications|colour_unsent");
+        case NotificationColor.Muted:
+            return _t("notifications|colour_muted");
     }
 }

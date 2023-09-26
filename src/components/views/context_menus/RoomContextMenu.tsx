@@ -83,7 +83,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
         leaveOption = (
             <IconizedContextMenuOption
                 iconClassName="mx_RoomTile_iconSignOut"
-                label={_t("Forget")}
+                label={_t("room|context_menu|forget")}
                 className="mx_IconizedContextMenu_option_red"
                 onClick={onForgetRoomClick}
             />
@@ -154,7 +154,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
                     PosthogTrackers.trackInteraction("WebRoomHeaderContextMenuFavouriteToggle", e);
                 }}
                 active={isFavorite}
-                label={isFavorite ? _t("Favourited") : _t("Favourite")}
+                label={isFavorite ? _t("room|context_menu|unfavourite") : _t("room|context_menu|favourite")}
                 iconClassName="mx_RoomTile_iconStar"
             />
         );
@@ -182,7 +182,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
                 iconClassName = "mx_RoomTile_iconNotificationsAllMessages";
                 break;
             case RoomNotifState.MentionsOnly:
-                notificationLabel = _t("Mentions only");
+                notificationLabel = _t("room|context_menu|mentions_only");
                 iconClassName = "mx_RoomTile_iconNotificationsMentionsKeywords";
                 break;
             case RoomNotifState.Mute:
@@ -206,7 +206,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
 
                     PosthogTrackers.trackInteraction("WebRoomHeaderContextMenuNotificationsItem", ev);
                 }}
-                label={_t("Notifications")}
+                label={_t("notifications|enable_prompt_toast_title")}
                 iconClassName={iconClassName}
             >
                 <span className="mx_IconizedContextMenu_sublabel">{notificationLabel}</span>
@@ -247,7 +247,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
                     });
                     onFinished();
                 }}
-                label={_t("Copy room link")}
+                label={_t("room|context_menu|copy_link")}
                 iconClassName="mx_RoomTile_iconCopyLink"
             />
         );

@@ -95,9 +95,9 @@ export const SpaceButton: React.FC<IButtonProps> = ({
 
     let notifBadge;
     if (spaceKey && notificationState) {
-        let ariaLabel = _t("Jump to first unread room.");
+        let ariaLabel = _t("a11y_jump_first_unread_room");
         if (space?.getMyMembership() === "invite") {
-            ariaLabel = _t("Jump to first invite.");
+            ariaLabel = _t("a11y|jump_first_invite");
         }
 
         const jumpToNotification = (ev: MouseEvent): void => {
@@ -371,7 +371,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                     className={isInvite ? "mx_SpaceButton_invite" : undefined}
                     selected={selected}
                     label={this.state.name}
-                    contextMenuTooltip={_t("Space options")}
+                    contextMenuTooltip={_t("space|context_menu|options")}
                     notificationState={notificationState}
                     isNarrow={isPanelCollapsed}
                     size={isNested ? "24px" : "32px"}

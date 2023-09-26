@@ -119,7 +119,7 @@ export default function NotificationSettings2(): JSX.Element {
                     )}
                 </SettingsBanner>
             )}
-            <SettingsSection heading={_t("Notifications")}>
+            <SettingsSection heading={_t("notifications|enable_prompt_toast_title")}>
                 <div className="mx_SettingsSubsection_content mx_NotificationSettings2_flags">
                     <LabelledToggleSwitch
                         label={_t("settings|notifications|enable_notifications_account")}
@@ -343,8 +343,8 @@ export default function NotificationSettings2(): JSX.Element {
                                 keywords: model!.keywords.filter((it) => it !== keyword),
                             });
                         }}
-                        label={_t("Keyword")}
-                        placeholder={_t("New keyword")}
+                        label={_t("notifications|keyword")}
+                        placeholder={_t("notifications|keyword_new")}
                     />
                 </SettingsSubsection>
                 <NotificationPusherSettings />

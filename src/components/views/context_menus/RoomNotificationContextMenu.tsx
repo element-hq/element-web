@@ -52,7 +52,7 @@ export const RoomNotificationContextMenu: React.FC<IProps> = ({ room, onFinished
 
     const defaultOption: JSX.Element = (
         <IconizedContextMenuRadio
-            label={_t("Match default setting")}
+            label={_t("room|context_menu|notifications_default")}
             active={notificationState === RoomNotifState.AllMessages}
             iconClassName="mx_RoomNotificationContextMenu_iconBell"
             onClick={wrapHandler(() => setNotificationState(RoomNotifState.AllMessages))}
@@ -70,7 +70,7 @@ export const RoomNotificationContextMenu: React.FC<IProps> = ({ room, onFinished
 
     const mentionsOption: JSX.Element = (
         <IconizedContextMenuRadio
-            label={_t("Mentions & keywords")}
+            label={_t("notifications|mentions_keywords")}
             active={notificationState === RoomNotifState.MentionsOnly}
             iconClassName="mx_RoomNotificationContextMenu_iconBellMentions"
             onClick={wrapHandler(() => setNotificationState(RoomNotifState.MentionsOnly))}
@@ -79,7 +79,7 @@ export const RoomNotificationContextMenu: React.FC<IProps> = ({ room, onFinished
 
     const muteOption: JSX.Element = (
         <IconizedContextMenuRadio
-            label={_t("Mute room")}
+            label={_t("room|context_menu|notifications_mute")}
             active={notificationState === RoomNotifState.Mute}
             iconClassName="mx_RoomNotificationContextMenu_iconBellCrossed"
             onClick={wrapHandler(() => setNotificationState(RoomNotifState.Mute))}

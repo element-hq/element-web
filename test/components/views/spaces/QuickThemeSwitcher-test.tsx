@@ -68,7 +68,7 @@ describe("<QuickThemeSwitcher />", () => {
     });
 
     const selectFromDropdown = async (getByTextArg: RegExp | string) => {
-        const dropdown = screen.getByRole("button", { name: "Space selection" });
+        const dropdown = screen.getByRole("button", { name: "Theme" });
         await userEvent.click(dropdown);
         await waitFor(() => {
             expect(dropdown).toHaveAttribute("aria-expanded", "true");

@@ -118,7 +118,7 @@ export function NotificationPusherSettings(): JSX.Element {
                 </SettingsIndent>
             </SettingsSubsection>
             {notificationTargets.length > 0 && (
-                <SettingsSubsection heading={_t("Notification targets")}>
+                <SettingsSubsection heading={_t("settings|notifications|push_targets")}>
                     <ul>
                         {pushers
                             .filter((it) => it.kind !== "email")

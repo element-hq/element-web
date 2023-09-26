@@ -934,7 +934,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                             copyPlaintext(ownInviteLink);
                         }}
                         onHideTooltip={() => setInviteLinkCopied(false)}
-                        title={inviteLinkCopied ? _t("Copied!") : _t("action|copy")}
+                        title={inviteLinkCopied ? _t("common|copied") : _t("action|copy")}
                     >
                         <span className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline">
                             {_t("Copy invite link")}

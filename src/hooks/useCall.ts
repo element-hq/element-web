@@ -84,8 +84,8 @@ export const useJoinCallButtonDisabledTooltip = (call: Call): string | null => {
     const isFull = useFull(call);
     const state = useConnectionState(call);
 
-    if (state === ConnectionState.Connecting) return _t("Connecting");
-    if (isFull) return _t("Sorry — this call is currently full");
+    if (state === ConnectionState.Connecting) return _t("voip|join_button_tooltip_connecting");
+    if (isFull) return _t("voip|join_button_tooltip_call_full");
     return null;
 };
 

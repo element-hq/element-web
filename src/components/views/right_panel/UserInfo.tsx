@@ -1163,7 +1163,7 @@ export const PowerLevelEditor: React.FC<{
                         logger.error("Failed to change power level " + err);
                         Modal.createDialog(ErrorDialog, {
                             title: _t("common|error"),
-                            description: _t("Failed to change power level"),
+                            description: _t("error|update_power_level"),
                         });
                     },
                 );

@@ -224,7 +224,11 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
 
                 {this.props.shareType === LocationShareType.Pin && (
                     <div className="mx_LocationPicker_pinText">
-                        <span>{this.state.position ? _t("Click to move the pin") : _t("Click to drop a pin")}</span>
+                        <span>
+                            {this.state.position
+                                ? _t("location_sharing|click_move_pin")
+                                : _t("location_sharing|click_drop_pin")}
+                        </span>
                     </div>
                 )}
                 <div className="mx_LocationPicker_footer">
@@ -241,7 +245,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
                             disabled={!this.state.position}
                             onClick={this.onOk}
                         >
-                            {_t("Share location")}
+                            {_t("location_sharing|share_button")}
                         </AccessibleButton>
                     </form>
                 </div>

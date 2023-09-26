@@ -126,7 +126,7 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
                 if (this.unmounted) {
                     return;
                 }
-                const msg = e.friendlyText || _t("Unknown error");
+                const msg = e.friendlyText || _t("error|unknown");
                 this.setState({
                     errStr: msg,
                     phase: Phase.Edit,

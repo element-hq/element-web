@@ -601,13 +601,13 @@ export class RoomViewStore extends EventEmitter {
         logger.log("Failed to join room:", description);
 
         if (err.name === "ConnectionError") {
-            description = _t("There was an error joining.");
+            description = _t("room|error_join_connection");
         } else if (err.errcode === "M_INCOMPATIBLE_ROOM_VERSION") {
             description = (
                 <div>
-                    {_t("Sorry, your homeserver is too old to participate here.")}
+                    {_t("room|error_join_incompatible_version_1")}
                     <br />
-                    {_t("Please contact your homeserver administrator.")}
+                    {_t("room|error_join_incompatible_version_2")}
                 </div>
             );
         } else if (err.httpStatus === 404) {
@@ -616,9 +616,9 @@ export class RoomViewStore extends EventEmitter {
             if (invitingUserId) {
                 // if the inviting user is on the same HS, there can only be one cause: they left.
                 if (invitingUserId.endsWith(`:${MatrixClientPeg.safeGet().getDomain()}`)) {
-                    description = _t("The person who invited you has already left.");
+                    description = _t("room|error_join_404_invite_same_hs");
                 } else {
-                    description = _t("The person who invited you has already left, or their server is offline.");
+                    description = _t("room|error_join_404_invite");
                 }
             }
 
@@ -627,19 +627,17 @@ export class RoomViewStore extends EventEmitter {
             if (roomId === this.state.roomId && this.state.viaServers.length === 0) {
                 description = (
                     <div>
-                        {_t(
-                            "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.",
-                        )}
+                        {_t("room|error_join_404_1")}
                         <br />
                         <br />
-                        {_t("If you know a room address, try joining through that instead.")}
+                        {_t("room|error_join_404_2")}
                     </div>
                 );
             }
         }
 
         Modal.createDialog(ErrorDialog, {
-            title: _t("Failed to join"),
+            title: _t("room|error_join_title"),
             description,
         });
     }
@@ -784,8 +782,8 @@ export class RoomViewStore extends EventEmitter {
             .knockRoom(payload.roomId, { viaServers: this.state.viaServers, ...payload.opts })
             .catch((err: MatrixError) =>
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Failed to join"),
-                    description: err.httpStatus === 403 ? _t("You need an invite to access this room.") : err.message,
+                    title: _t("room|error_join_title"),
+                    description: err.httpStatus === 403 ? _t("room|error_join_403") : err.message,
                 }),
             )
             .finally(() => this.setState({ promptAskToJoin: false }));
@@ -801,7 +799,10 @@ export class RoomViewStore extends EventEmitter {
         MatrixClientPeg.safeGet()
             .leave(payload.roomId)
             .catch((err: MatrixError) =>
-                Modal.createDialog(ErrorDialog, { title: _t("Failed to cancel"), description: err.message }),
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("room|error_cancel_knock_title"),
+                    description: err.message,
+                }),
             );
     }
 }

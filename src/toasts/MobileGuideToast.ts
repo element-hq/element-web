@@ -42,13 +42,10 @@ export const showToast = (): void => {
     }
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: _t("Use app for a better experience"),
+        title: _t("mobile_guide|toast_title"),
         props: {
-            description: _t(
-                "%(brand)s is experimental on a mobile web browser. For a better experience and the latest features, use our free native app.",
-                { brand },
-            ),
-            acceptLabel: _t("Use app"),
+            description: _t("mobile_guide|toast_description", { brand }),
+            acceptLabel: _t("mobile_guide|toast_accept"),
             onAccept,
             rejectLabel: _t("action|dismiss"),
             onReject,

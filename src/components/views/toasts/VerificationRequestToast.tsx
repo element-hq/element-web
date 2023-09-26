@@ -158,7 +158,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         if (request.isSelfVerification) {
             if (this.state.device) {
                 description = this.state.device.displayName;
-                detail = _t("%(deviceId)s from %(ip)s", {
+                detail = _t("encryption|verification|request_toast_detail", {
                     deviceId: this.state.device.deviceId,
                     ip: this.state.ip,
                 });
@@ -179,13 +179,13 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         const declineLabel =
             this.state.counter === 0
                 ? _t("action|ignore")
-                : _t("Ignore (%(counter)s)", { counter: this.state.counter });
+                : _t("encryption|verification|request_toast_decline_counter", { counter: this.state.counter });
 
         return (
             <GenericToast
                 description={description}
                 detail={detail}
-                acceptLabel={_t("Verify Session")}
+                acceptLabel={_t("encryption|verification|request_toast_accept")}
                 onAccept={this.accept}
                 rejectLabel={declineLabel}
                 onReject={this.cancel}

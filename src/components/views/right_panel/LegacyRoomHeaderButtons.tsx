@@ -288,7 +288,7 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
                 <HeaderButton
                     key="notifsButton"
                     name="notifsButton"
-                    title={_t("Notifications")}
+                    title={_t("notifications|enable_prompt_toast_title")}
                     isHighlighted={this.isPhase(RightPanelPhases.NotificationPanel)}
                     onClick={this.onNotificationsClicked}
                     isUnread={this.globalNotificationState.color === NotificationColor.Red}

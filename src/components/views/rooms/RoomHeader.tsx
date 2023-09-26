@@ -203,14 +203,14 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     </IconButton>
                 </Tooltip>
                 {notificationsEnabled && (
-                    <Tooltip label={_t("Notifications")}>
+                    <Tooltip label={_t("notifications|enable_prompt_toast_title")}>
                         <IconButton
                             indicator={notificationColorToIndicator(globalNotificationState.color)}
                             onClick={(evt) => {
                                 evt.stopPropagation();
                                 RightPanelStore.instance.showOrHidePanel(RightPanelPhases.NotificationPanel);
                             }}
-                            aria-label={_t("Notifications")}
+                            aria-label={_t("notifications|enable_prompt_toast_title")}
                         >
                             <NotificationsIcon />
                         </IconButton>

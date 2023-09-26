@@ -33,7 +33,7 @@ interface IProps {
 }
 
 const SpacePublicShare: React.FC<IProps> = ({ space, onFinished }) => {
-    const [copiedText, setCopiedText] = useState(_t("Click to copy"));
+    const [copiedText, setCopiedText] = useState(_t("action|click_to_copy"));
 
     return (
         <div className="mx_SpacePublicShare">
@@ -43,16 +43,16 @@ const SpacePublicShare: React.FC<IProps> = ({ space, onFinished }) => {
                     const permalinkCreator = new RoomPermalinkCreator(space);
                     permalinkCreator.load();
                     const success = await copyPlaintext(permalinkCreator.forShareableRoom());
-                    const text = success ? _t("Copied!") : _t("Failed to copy");
+                    const text = success ? _t("common|copied") : _t("error|failed_copy");
                     setCopiedText(text);
                     await sleep(5000);
                     if (copiedText === text) {
                         // if the text hasn't changed by another click then clear it after some time
-                        setCopiedText(_t("Click to copy"));
+                        setCopiedText(_t("action|click_to_copy"));
                     }
                 }}
             >
-                {_t("Share invite link")}
+                {_t("space|invite_link")}
                 <div>{copiedText}</div>
             </AccessibleButton>
             {space.canInvite(MatrixClientPeg.safeGet().getSafeUserId()) &&
@@ -64,8 +64,8 @@ const SpacePublicShare: React.FC<IProps> = ({ space, onFinished }) => {
                         showRoomInviteDialog(space.roomId);
                     }}
                 >
-                    {_t("Invite people")}
-                    <div>{_t("Invite with email or username")}</div>
+                    {_t("space|invite")}
+                    <div>{_t("space|invite_description")}</div>
                 </AccessibleButton>
             ) : null}
         </div>

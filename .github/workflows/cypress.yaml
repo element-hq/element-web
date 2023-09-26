@@ -174,11 +174,15 @@ jobs:
                   record: true
                   parallel: true
                   command-prefix: "yarn percy exec --parallel --"
+                  command: "npx cypress-cloud run"
                   config: '{"reporter":"cypress-multi-reporters", "reporterOptions": { "configFile": "cypress-ci-reporter-config.json" } }'
                   ci-build-id: ${{ needs.prepare.outputs.uuid }}
               env:
                   # pass the Dashboard record key as an environment variable
                   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+                  CURRENTS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+                  CURRENTS_PROJECT_ID: ${{ github.repository }}
+                  CURRENTS_API_URL: ${{ vars.CURRENTS_API_URL }}
 
                   # Use existing chromium rather than downloading another
                   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true

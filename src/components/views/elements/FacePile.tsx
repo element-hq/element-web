@@ -57,9 +57,8 @@ const FacePile: FC<IProps> = ({
 
     const pileContents = (
         <>
-            {/* XXX: The margin-left is a workaround for Compound's styling excluding this element and being overly specific */}
-            {overflow ? <span className="mx_FacePile_more" style={{ marginLeft: `calc(${size} * -0.2)` }} /> : null}
             {faces}
+            {overflow ? <span className="mx_FacePile_more" /> : null}
         </>
     );
 

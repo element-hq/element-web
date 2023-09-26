@@ -154,15 +154,15 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
 
     public render(): React.ReactNode {
         const tabs: NonEmptyArray<Tab<TabId>> = [
-            this.getTab("screen", _td("Share entire screen")),
-            this.getTab("window", _td("Application window")),
+            this.getTab("screen", _td("voip|screenshare_monitor")),
+            this.getTab("window", _td("voip|screenshare_window")),
         ];
 
         return (
             <BaseDialog
                 className="mx_desktopCapturerSourcePicker"
                 onFinished={this.onCloseClick}
-                title={_t("Share content")}
+                title={_t("voip|screenshare_title")}
             >
                 <TabbedView tabs={tabs} tabLocation={TabLocation.TOP} onChange={this.onTabChange} />
                 <DialogButtons

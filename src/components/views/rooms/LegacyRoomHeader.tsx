@@ -290,26 +290,24 @@ const CallButtons: FC<CallButtonsProps> = ({ room }) => {
     } else if (groupCallsEnabled) {
         if (useElementCallExclusively) {
             if (hasGroupCall) {
-                return makeVideoCallButton(new DisabledWithReason(_t("Ongoing call")));
+                return makeVideoCallButton(new DisabledWithReason(_t("voip|disabled_ongoing_call")));
             } else if (mayCreateElementCalls) {
                 return makeVideoCallButton("element");
             } else {
-                return makeVideoCallButton(
-                    new DisabledWithReason(_t("You do not have permission to start video calls")),
-                );
+                return makeVideoCallButton(new DisabledWithReason(_t("voip|disabled_no_perms_start_video_call")));
             }
         } else if (hasLegacyCall || hasJitsiWidget || hasGroupCall) {
             return (
                 <>
-                    {makeVoiceCallButton(new DisabledWithReason(_t("Ongoing call")))}
-                    {makeVideoCallButton(new DisabledWithReason(_t("Ongoing call")))}
+                    {makeVoiceCallButton(new DisabledWithReason(_t("voip|disabled_ongoing_call")))}
+                    {makeVideoCallButton(new DisabledWithReason(_t("voip|disabled_ongoing_call")))}
                 </>
             );
         } else if (functionalMembers.length <= 1) {
             return (
                 <>
-                    {makeVoiceCallButton(new DisabledWithReason(_t("There's no one here to call")))}
-                    {makeVideoCallButton(new DisabledWithReason(_t("There's no one here to call")))}
+                    {makeVoiceCallButton(new DisabledWithReason(_t("voip|disabled_no_one_here")))}
+                    {makeVideoCallButton(new DisabledWithReason(_t("voip|disabled_no_one_here")))}
                 </>
             );
         } else if (functionalMembers.length === 2) {
@@ -329,10 +327,10 @@ const CallButtons: FC<CallButtonsProps> = ({ room }) => {
         } else {
             const videoCallBehavior = mayCreateElementCalls
                 ? "element"
-                : new DisabledWithReason(_t("You do not have permission to start video calls"));
+                : new DisabledWithReason(_t("voip|disabled_no_perms_start_video_call"));
             return (
                 <>
-                    {makeVoiceCallButton(new DisabledWithReason(_t("You do not have permission to start voice calls")))}
+                    {makeVoiceCallButton(new DisabledWithReason(_t("voip|disabled_no_perms_start_voice_call")))}
                     {makeVideoCallButton(videoCallBehavior)}
                 </>
             );
@@ -340,15 +338,15 @@ const CallButtons: FC<CallButtonsProps> = ({ room }) => {
     } else if (hasLegacyCall || hasJitsiWidget) {
         return (
             <>
-                {makeVoiceCallButton(new DisabledWithReason(_t("Ongoing call")))}
-                {makeVideoCallButton(new DisabledWithReason(_t("Ongoing call")))}
+                {makeVoiceCallButton(new DisabledWithReason(_t("voip|disabled_ongoing_call")))}
+                {makeVideoCallButton(new DisabledWithReason(_t("voip|disabled_ongoing_call")))}
             </>
         );
     } else if (functionalMembers.length <= 1) {
         return (
             <>
-                {makeVoiceCallButton(new DisabledWithReason(_t("There's no one here to call")))}
-                {makeVideoCallButton(new DisabledWithReason(_t("There's no one here to call")))}
+                {makeVoiceCallButton(new DisabledWithReason(_t("voip|disabled_no_one_here")))}
+                {makeVideoCallButton(new DisabledWithReason(_t("voip|disabled_no_one_here")))}
             </>
         );
     } else if (functionalMembers.length === 2 || mayEditWidgets) {
@@ -361,8 +359,8 @@ const CallButtons: FC<CallButtonsProps> = ({ room }) => {
     } else {
         return (
             <>
-                {makeVoiceCallButton(new DisabledWithReason(_t("You do not have permission to start voice calls")))}
-                {makeVideoCallButton(new DisabledWithReason(_t("You do not have permission to start video calls")))}
+                {makeVoiceCallButton(new DisabledWithReason(_t("voip|disabled_no_perms_start_voice_call")))}
+                {makeVideoCallButton(new DisabledWithReason(_t("voip|disabled_no_perms_start_video_call")))}
             </>
         );
     }
@@ -764,7 +762,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
 
         const buttons = this.props.showButtons ? this.renderButtons(isVideoRoom) : null;
 
-        let oobName = _t("Join Room");
+        let oobName = _t("Unnamed room");
         if (this.props.oobData && this.props.oobData.name) {
             oobName = this.props.oobData.name;
         }

@@ -46,13 +46,13 @@ export function backLabelForPhase(phase: RightPanelPhases | null): string | null
         case RightPanelPhases.ThreadPanel:
             return _t("common|threads");
         case RightPanelPhases.Timeline:
-            return _t("Back to chat");
+            return _t("chat_card_back_action_label");
         case RightPanelPhases.RoomSummary:
-            return _t("Room information");
+            return _t("room_summary_card_back_action_label");
         case RightPanelPhases.RoomMemberList:
-            return _t("Room members");
+            return _t("member_list_back_action_label");
         case RightPanelPhases.ThreadView:
-            return _t("Back to thread");
+            return _t("thread_view_back_action_label");
     }
     return null;
 }

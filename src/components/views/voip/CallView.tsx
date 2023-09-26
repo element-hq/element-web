@@ -285,7 +285,7 @@ export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabledTooltip, con
                 disabled={connecting || joinCallButtonDisabledTooltip !== undefined}
                 onClick={onConnectClick}
                 label={_t("action|join")}
-                tooltip={connecting ? _t("Connecting") : joinCallButtonDisabledTooltip}
+                tooltip={connecting ? _t("voip|connecting") : joinCallButtonDisabledTooltip}
                 alignment={Alignment.Bottom}
             />
         </div>
@@ -397,7 +397,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call }) => {
 
             facePile = (
                 <div className="mx_CallView_participants">
-                    {_t("%(count)s people joined", { count: members.length })}
+                    {_t("voip|n_people_joined", { count: members.length })}
                     <FacePile members={shownMembers} size="24px" overflow={overflow} />
                 </div>
             );

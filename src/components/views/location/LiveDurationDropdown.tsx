@@ -35,7 +35,7 @@ interface Props {
 }
 
 const getLabel = (durationMs: number): string => {
-    return _t("Share for %(duration)s", { duration: formatDuration(durationMs) });
+    return _t("location_sharing|live_share_button", { duration: formatDuration(durationMs) });
 };
 
 const LiveDurationDropdown: React.FC<Props> = ({ timeout, onChange }) => {

@@ -440,10 +440,10 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
                 const cli = MatrixClientPeg.safeGet();
                 const callRoomId = LegacyCallHandler.instance.roomIdForCall(call);
                 const transferTargetRoom = callRoomId ? cli.getRoom(callRoomId) : null;
-                const transferTargetName = transferTargetRoom ? transferTargetRoom.name : _t("unknown person");
+                const transferTargetName = transferTargetRoom ? transferTargetRoom.name : _t("voip|unknown_person");
                 const transfereeCallRoomId = LegacyCallHandler.instance.roomIdForCall(transfereeCall);
                 const transfereeRoom = transfereeCallRoomId ? cli.getRoom(transfereeCallRoomId) : null;
-                const transfereeName = transfereeRoom ? transfereeRoom.name : _t("unknown person");
+                const transfereeName = transfereeRoom ? transfereeRoom.name : _t("voip|unknown_person");
 
                 holdTransferContent = (
                     <div className="mx_LegacyCallView_status">
@@ -508,7 +508,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
                             <RoomAvatar room={callRoom} size={avatarSize} />
                         </div>
                     </div>
-                    <div className="mx_LegacyCallView_status">{_t("Connecting")}</div>
+                    <div className="mx_LegacyCallView_status">{_t("voip|connecting")}</div>
                     {secondaryFeedElement}
                 </div>
             );

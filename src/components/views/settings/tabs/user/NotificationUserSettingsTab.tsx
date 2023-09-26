@@ -33,7 +33,7 @@ export default class NotificationUserSettingsTab extends React.Component {
                 {newNotificationSettingsEnabled ? (
                     <NotificationSettings2 />
                 ) : (
-                    <SettingsSection heading={_t("Notifications")}>
+                    <SettingsSection heading={_t("notifications|enable_prompt_toast_title")}>
                         <Notifications />
                     </SettingsSection>
                 )}

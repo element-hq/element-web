@@ -54,12 +54,12 @@ export const showToast = async (deviceId: string): Promise<void> => {
 
     ToastStore.sharedInstance().addOrReplaceToast({
         key: toastKey(deviceId),
-        title: _t("New login. Was this you?"),
+        title: _t("encryption|verification|unverified_session_toast_title"),
         icon: "verification_warning",
         props: {
             description: device.display_name,
             detail: <DeviceMetaData device={extendedDevice} />,
-            acceptLabel: _t("Yes, it was me"),
+            acceptLabel: _t("encryption|verification|unverified_session_toast_accept"),
             onAccept,
             rejectLabel: _t("action|no"),
             onReject,

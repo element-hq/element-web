@@ -42,14 +42,11 @@
     "Afghanistan": "Afɣanistan",
     "Send": "Azen",
     "edited": "infel",
-    "Copied!": "inɣel!",
     "Home": "Asnubeg",
     "Search…": "Arezzu…",
     "Re-join": "als-lkem",
     "%(duration)sd": "%(duration)sas",
     "None": "Walu",
-    "Algorithm:": "Talguritmit:",
-    "Profile": "Ifres",
     "Folder": "Asdaw",
     "Guitar": "Agiṭaṛ",
     "Ball": "Tacama",
@@ -77,7 +74,6 @@
     "Cat": "Amuc",
     "Dog": "Aydi",
     "Ok": "Wax",
-    "Notifications": "Tineɣmisin",
     "Feb": "Bṛa",
     "Jan": "Yen",
     "common": {
@@ -93,7 +89,9 @@
         "camera": "Takamiṛa",
         "microphone": "Amikṛu",
         "emoji": "Imuji",
-        "space": "Space"
+        "space": "Space",
+        "copied": "inɣel!",
+        "profile": "Ifres"
     },
     "action": {
         "continue": "Kemmel",
@@ -170,12 +168,18 @@
     },
     "settings": {
         "security": {
-            "cross_signing_homeserver_support_exists": "illa"
+            "cross_signing_homeserver_support_exists": "illa",
+            "key_backup_algorithm": "Talguritmit:"
         },
         "general": {
             "account_section": "Amiḍan",
             "add_email_dialog_title": "Rnu tasna imayl",
             "add_msisdn_dialog_title": "Rnu uṭṭun n utilifun"
         }
+    },
+    "notifications": {
+        "enable_prompt_toast_title": "Tineɣmisin",
+        "colour_none": "Walu",
+        "class_other": "Yaḍn"
     }
 }

@@ -116,7 +116,7 @@ export function formatList(items: ReactNode[], itemLimit = items.length, include
             joinedItems = jsxJoin(items, ", ");
         }
 
-        return _t("<Items/> and %(count)s others", { count: remaining }, { Items: () => joinedItems });
+        return _t("items_and_n_others", { count: remaining }, { Items: () => joinedItems });
     }
 
     if (items.every((e) => typeof e === "string")) {

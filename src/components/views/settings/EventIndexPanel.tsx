@@ -148,16 +148,13 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
             eventIndexingSettings = (
                 <>
                     <SettingsSubsectionText>
-                        {_t(
-                            "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
-                            {
-                                size: formatBytes(this.state.eventIndexSize, 0),
-                                // This drives the singular / plural string
-                                // selection for "room" / "rooms" only.
-                                count: this.state.roomCount,
-                                rooms: formatCountLong(this.state.roomCount),
-                            },
-                        )}
+                        {_t("settings|security|message_search_enabled", {
+                            size: formatBytes(this.state.eventIndexSize, 0),
+                            // This drives the singular / plural string
+                            // selection for "room" / "rooms" only.
+                            count: this.state.roomCount,
+                            rooms: formatCountLong(this.state.roomCount),
+                        })}
                     </SettingsSubsectionText>
                     <AccessibleButton kind="primary" onClick={this.onManage}>
                         {_t("action|manage")}
@@ -167,9 +164,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         } else if (!this.state.eventIndexingEnabled && EventIndexPeg.supportIsInstalled()) {
             eventIndexingSettings = (
                 <>
-                    <SettingsSubsectionText>
-                        {_t("Securely cache encrypted messages locally for them to appear in search results.")}
-                    </SettingsSubsectionText>
+                    <SettingsSubsectionText>{_t("settings|security|message_search_disabled")}</SettingsSubsectionText>
                     <div>
                         <AccessibleButton kind="primary" disabled={this.state.enabling} onClick={this.onEnable}>
                             {_t("action|enable")}
@@ -187,7 +182,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
             eventIndexingSettings = (
                 <SettingsSubsectionText>
                     {_t(
-                        "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.",
+                        "settings|security|message_search_unsupported",
                         {
                             brand,
                         },
@@ -205,7 +200,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
             eventIndexingSettings = (
                 <SettingsSubsectionText>
                     {_t(
-                        "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.",
+                        "settings|security|message_search_unsupported_web",
                         {
                             brand,
                         },
@@ -227,16 +222,16 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
             eventIndexingSettings = (
                 <>
                     <SettingsSubsectionText>
-                        {this.state.enabling ? <InlineSpinner /> : _t("Message search initialisation failed")}
+                        {this.state.enabling ? <InlineSpinner /> : _t("settings|security|message_search_failed")}
                     </SettingsSubsectionText>
                     {EventIndexPeg.error && (
                         <SettingsSubsectionText>
                             <details>
-                                <summary>{_t("Advanced")}</summary>
+                                <summary>{_t("common|advanced")}</summary>
                                 <code>
                                     {EventIndexPeg.error instanceof Error
                                         ? EventIndexPeg.error.message
-                                        : _t("Unknown error")}
+                                        : _t("error|unknown")}
                                 </code>
                                 <p>
                                     <AccessibleButton key="delete" kind="danger" onClick={this.confirmEventStoreReset}>

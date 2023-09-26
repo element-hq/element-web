@@ -45,7 +45,7 @@ const updatePowerLevelHelper = (
     const room = client.getRoom(roomId);
     if (!room) {
         return reject(
-            new UserFriendlyError("Command failed: Unable to find room (%(roomId)s", {
+            new UserFriendlyError("slash_command|error_invalid_room", {
                 roomId,
                 cause: undefined,
             }),
@@ -53,7 +53,7 @@ const updatePowerLevelHelper = (
     }
     const member = room.getMember(userId);
     if (!member?.membership || getEffectiveMembership(member.membership) === EffectiveMembership.Leave) {
-        return reject(new UserFriendlyError("Could not find user in room"));
+        return reject(new UserFriendlyError("slash_command|error_invalid_user_in_room"));
     }
 
     return success(updatePowerLevel(room, member, powerLevel));

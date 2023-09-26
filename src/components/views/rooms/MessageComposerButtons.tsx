@@ -131,7 +131,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
                 <AccessibleTooltipButton
                     className={moreOptionsClasses}
                     onClick={props.toggleButtonMenu}
-                    title={_t("More options")}
+                    title={_t("quick_settings|sidebar_settings")}
                 />
             )}
             {props.isMenuOpen && (

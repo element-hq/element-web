@@ -71,7 +71,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="_avatar_2lhia_17 mx_BaseAvatar _avatar-imageless_2lhia_56"
+              class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
               data-color="7"
               data-testid="avatar-img"
               data-type="round"
@@ -141,7 +141,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="_avatar_2lhia_17 mx_BaseAvatar _avatar-imageless_2lhia_56"
+              class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
               data-color="8"
               data-testid="avatar-img"
               data-type="round"
@@ -212,7 +212,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="_avatar_2lhia_17 mx_BaseAvatar _avatar-imageless_2lhia_56"
+              class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
               data-color="8"
               data-testid="avatar-img"
               data-type="round"
@@ -289,7 +289,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="_avatar_2lhia_17 mx_BaseAvatar _avatar-imageless_2lhia_56"
+              class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
               data-color="2"
               data-testid="avatar-img"
               data-type="round"

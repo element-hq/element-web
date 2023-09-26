@@ -101,17 +101,17 @@ export default class AppPermission extends React.Component<IProps, IState> {
 
         const warningTooltipText = (
             <div>
-                {_t("Any of the following data may be shared:")}
+                {_t("analytics|shared_data_heading")}
                 <ul>
-                    <li>{_t("Your display name")}</li>
-                    <li>{_t("Your profile picture URL")}</li>
-                    <li>{_t("Your user ID")}</li>
-                    <li>{_t("Your device ID")}</li>
-                    <li>{_t("Your theme")}</li>
-                    <li>{_t("Your language")}</li>
-                    <li>{_t("%(brand)s URL", { brand })}</li>
-                    <li>{_t("Room ID")}</li>
-                    <li>{_t("Widget ID")}</li>
+                    <li>{_t("widget|shared_data_name")}</li>
+                    <li>{_t("widget|shared_data_avatar")}</li>
+                    <li>{_t("widget|shared_data_mxid")}</li>
+                    <li>{_t("widget|shared_data_device_id")}</li>
+                    <li>{_t("widget|shared_data_theme")}</li>
+                    <li>{_t("widget|shared_data_lang")}</li>
+                    <li>{_t("widget|shared_data_url", { brand })}</li>
+                    <li>{_t("widget|shared_data_room_id")}</li>
+                    <li>{_t("widget|shared_data_widget_id")}</li>
                 </ul>
             </div>
         );
@@ -128,22 +128,22 @@ export default class AppPermission extends React.Component<IProps, IState> {
         // Due to i18n limitations, we can't dedupe the code for variables in these two messages.
         const warning = this.state.isWrapped
             ? _t(
-                  "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.",
+                  "widget|shared_data_warning_im",
                   { widgetDomain: this.state.widgetDomain },
                   { helpIcon: () => warningTooltip },
               )
             : _t(
-                  "Using this widget may share data <helpIcon /> with %(widgetDomain)s.",
+                  "widget|shared_data_warning",
                   { widgetDomain: this.state.widgetDomain },
                   { helpIcon: () => warningTooltip },
               );
 
-        const encryptionWarning = this.props.isRoomEncrypted ? _t("Widgets do not use message encryption.") : null;
+        const encryptionWarning = this.props.isRoomEncrypted ? _t("widget|unencrypted_warning") : null;
 
         return (
             <div className="mx_AppPermission">
                 <div className="mx_AppPermission_content">
-                    <div className="mx_AppPermission_content_bolder">{_t("Widget added by")}</div>
+                    <div className="mx_AppPermission_content_bolder">{_t("widget|added_by")}</div>
                     <div>
                         {avatar}
                         <Heading size="4">{displayName}</Heading>
@@ -151,7 +151,7 @@ export default class AppPermission extends React.Component<IProps, IState> {
                     </div>
                     <div>{warning}</div>
                     <div>
-                        {_t("This widget may use cookies.")}&nbsp;{encryptionWarning}
+                        {_t("widget|cookie_warning")}&nbsp;{encryptionWarning}
                     </div>
                     <div>
                         <AccessibleButton kind="primary_sm" onClick={this.props.onPermissionGranted}>

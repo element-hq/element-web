@@ -803,7 +803,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                                 onClick={this.onCopyClick}
                                 disabled={this.state.phase === Phase.Storing}
                             >
-                                {this.state.copied ? _t("Copied!") : _t("action|copy")}
+                                {this.state.copied ? _t("common|copied") : _t("action|copy")}
                             </AccessibleButton>
                         </div>
                     </div>
@@ -873,7 +873,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     private titleForPhase(phase: Phase): string {
         switch (phase) {
             case Phase.ChooseKeyPassphrase:
-                return _t("Set up Secure Backup");
+                return _t("encryption|set_up_toast_title");
             case Phase.Migrate:
                 return _t("Upgrade your encryption");
             case Phase.Passphrase:
