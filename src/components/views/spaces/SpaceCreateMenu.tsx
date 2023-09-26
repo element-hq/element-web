@@ -193,8 +193,8 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
                     onChange={setAlias}
                     domain={domain}
                     value={alias}
-                    placeholder={name ? nameToLocalpart(name) : _t("create_space|name_placeholder")}
-                    label={_t("Address")}
+                    placeholder={name ? nameToLocalpart(name) : _t("create_space|address_placeholder")}
+                    label={_t("create_space|address_label")}
                     disabled={busy}
                     onKeyDown={onKeyDown}
                 />
@@ -284,7 +284,7 @@ const SpaceCreateMenu: React.FC<{
     if (visibility === null) {
         body = (
             <React.Fragment>
-                <h2>{_t("Create a space")}</h2>
+                <h2>{_t("create_space|label")}</h2>
                 <p>{_t("create_space|explainer")}</p>
 
                 <SpaceCreateMenuType
@@ -322,7 +322,7 @@ const SpaceCreateMenu: React.FC<{
                         : _t("create_space|private_heading")}
                 </h2>
                 <p>
-                    {_t("create_space|add_details_prompt")} {_t("You can change these anytime.")}
+                    {_t("create_space|add_details_prompt")} {_t("create_space|add_details_prompt_2")}
                 </p>
 
                 <SpaceCreateForm
@@ -341,7 +341,7 @@ const SpaceCreateMenu: React.FC<{
                 />
 
                 <AccessibleButton kind="primary" onClick={onSpaceCreateClick} disabled={busy}>
-                    {busy ? _t("Creating…") : _t("action|create")}
+                    {busy ? _t("create_space|creating") : _t("action|create")}
                 </AccessibleButton>
             </React.Fragment>
         );

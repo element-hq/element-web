@@ -26,7 +26,6 @@
     "Enter passphrase": "암호 입력",
     "Error decrypting attachment": "첨부 파일 복호화 중 오류",
     "Failed to ban user": "사용자 출입 금지에 실패함",
-    "Failed to change power level": "권한 등급 변경에 실패함",
     "Failed to load timeline position": "타임라인 위치 불러오기에 실패함",
     "Failed to mute user": "사용자 음소거에 실패함",
     "Failed to reject invite": "초대 거부에 실패함",
@@ -48,12 +47,10 @@
     "Moderator": "조정자",
     "New passwords must match each other.": "새 비밀번호는 서로 같아야 합니다.",
     "not specified": "지정되지 않음",
-    "No display name": "표시 이름 없음",
     "No more results": "더 이상 결과 없음",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "이메일을 확인하고 안의 링크를 클릭합니다. 모두 마치고 나서, 계속하기를 누르세요.",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s님 (권한 %(powerLevelNumber)s)",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "사용자를 자신과 같은 권한 등급으로 올리는 것은 취소할 수 없습니다.",
-    "Profile": "프로필",
     "Reason": "이유",
     "Reject invitation": "초대 거절",
     "Return to login screen": "로그인 화면으로 돌아가기",
@@ -114,7 +111,6 @@
     "Confirm passphrase": "암호 확인",
     "File to import": "가져올 파일",
     "Confirm Removal": "삭제 확인",
-    "Unknown error": "알 수 없는 오류",
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "이 과정으로 암호화한 방에서 받은 메시지의 키를 로컬 파일로 내보낼 수 있습니다. 그런 다음 나중에 다른 Matrix 클라이언트에서 파일을 가져와서, 해당 클라이언트에서도 이 메시지를 복호화할 수 있도록 할 수 있습니다.",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "이 과정으로 다른 Matrix 클라이언트에서 내보낸 암호화 키를 가져올 수 있습니다. 그런 다음 이전 클라이언트에서 복호화할 수 있는 모든 메시지를 복호화할 수 있습니다.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "내보낸 파일이 암호로 보호되어 있습니다. 파일을 복호화하려면, 여기에 암호를 입력해야 합니다.",
@@ -126,7 +122,6 @@
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "%(integrationsUrl)s에서 쓸 수 있도록 계정을 인증하려고 다른 사이트로 이동하고 있습니다. 계속하겠습니까?",
     "This will allow you to reset your password and receive notifications.": "이렇게 하면 비밀번호를 다시 설정하고 알림을 받을 수 있습니다.",
     "Sunday": "일요일",
-    "Notification targets": "알림 대상",
     "Today": "오늘",
     "Friday": "금요일",
     "Changelog": "바뀐 점",
@@ -264,16 +259,9 @@
     "Headphones": "헤드폰",
     "Folder": "폴더",
     "Power level": "권한 등급",
-    "Delete Backup": "백업 삭제",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "확실합니까? 키를 정상적으로 백업하지 않았다면 암호화된 메시지를 잃게 됩니다.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "암호화된 메시지는 종단간 암호화로 보호됩니다. 오직 당신과 상대방만 이 메시지를 읽을 수 있는 키를 갖습니다.",
-    "Unable to load key backup status": "키 백업 상태를 불러올 수 없음",
-    "Restore from Backup": "백업에서 복구",
-    "All keys backed up": "모든 키 백업됨",
     "Back up your keys before signing out to avoid losing them.": "잃어버리지 않도록 로그아웃하기 전에 키를 백업하세요.",
     "Start using Key Backup": "키 백업 시작",
-    "Profile picture": "프로필 사진",
-    "Display Name": "표시 이름",
     "Checking server": "서버 확인 중",
     "Terms of service not accepted or the identity server is invalid.": "서비스 약관에 동의하지 않거나 ID 서버가 올바르지 않습니다.",
     "The identity server you have chosen does not have any terms of service.": "고른 ID 서버가 서비스 약관을 갖고 있지 않습니다.",
@@ -289,7 +277,6 @@
     "Phone numbers": "전화번호",
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "이메일 주소나 전화번호로 자신을 발견할 수 있도록 ID 서버 (%(serverName)s) 서비스 약관에 동의하세요.",
     "Account management": "계정 관리",
-    "General": "기본",
     "Discovery": "탐색",
     "Deactivate account": "계정 비활성화",
     "Ignored users": "무시한 사용자",
@@ -472,8 +459,6 @@
     "Explore rooms": "방 검색",
     "Verify the link in your inbox": "메일함에 있는 링크로 확인",
     "e.g. my-room": "예: my-room",
-    "Hide advanced": "고급 숨기기",
-    "Show advanced": "고급 보이기",
     "Close dialog": "대화 상자 닫기",
     "Show image": "이미지 보이기",
     "Your email address hasn't been verified yet": "이메일 주소가 아직 확인되지 않았습니다",
@@ -487,8 +472,6 @@
     "Failed to deactivate user": "사용자 비활성화에 실패함",
     "This client does not support end-to-end encryption.": "이 클라이언트는 종단간 암호화를 지원하지 않습니다.",
     "Messages in this room are not end-to-end encrypted.": "이 방의 메시지는 종단간 암호화가 되지 않았습니다.",
-    "Jump to first unread room.": "읽지 않은 첫 방으로 건너뜁니다.",
-    "Jump to first invite.": "첫 초대로 건너뜁니다.",
     "Room %(name)s": "%(name)s 방",
     "Message Actions": "메시지 동작",
     "You verified %(name)s": "%(name)s님을 확인했습니다",
@@ -503,8 +486,6 @@
     "None": "없음",
     "Messages in this room are end-to-end encrypted.": "이 방의 메시지는 종단간 암호화되었습니다.",
     "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "이 사용자를 무시했습니다. 사용자의 메시지는 숨겨집니다. <a>무시하고 보이기.</a>",
-    "Cannot connect to integration manager": "통합 관리자에 연결할 수 없음",
-    "The integration manager is offline or it cannot reach your homeserver.": "통합 관리자가 오프라인이거나 당신의 홈서버에서 접근할 수 없습니다.",
     "Show more": "더 보기",
     "Identity server (%(server)s)": "ID 서버 (%(server)s)",
     "Could not connect to identity server": "ID 서버에 연결할 수 없음",
@@ -514,19 +495,10 @@
     "New room": "새로운 방 만들기",
     "Start new chat": "새로운 대화 시작하기",
     "Room options": "방 옵션",
-    "Mentions & keywords": "멘션 및 키워드",
     "Get notified only with mentions and keywords as set up in your <a>settings</a>": "<a>설정</a>에서 지정한 멘션과 키워드인 경우에만 알림을 받습니다",
     "Get notifications as set up in your <a>settings</a>": "<a>설정</a>에서 지정한 알림만 받습니다",
     "Get notified for every message": "모든 메세지 알림을 받습니다",
     "You won't get any notifications": "어떤 알람도 받지 않습니다",
-    "Space members": "스페이스 멤버 목록",
-    "Decide who can view and join %(spaceName)s.": "누가 %(spaceName)s를 보거나 참여할 수 있는지 설정합니다.",
-    "Access": "접근",
-    "Recommended for public spaces.": "공개 스페이스에 권장 합니다.",
-    "Allow people to preview your space before they join.": "스페이스에 참여하기 전에 미리볼 수 있도록 허용합니다.",
-    "Preview Space": "스페이스 미리보기",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "<spaceName/>에 소속된 누구나 찾고 참여할 수 있습니다. 다른 스페이스도 선택 가능합니다.",
-    "Visibility": "가시성",
     "Search for": "검색 기준",
     "Search for rooms or people": "방 또는 사람 검색",
     "Search for rooms": "방 검색",
@@ -544,7 +516,6 @@
     "Private space": "비공개 스페이스",
     "Rooms and spaces": "방 및 스페이스 목록",
     "Leave all rooms": "모든 방에서 떠나기",
-    "Show all rooms": "모든 방 목록 보기",
     "Create a new space": "새로운 스페이스 만들기",
     "Create a space": "스페이스 만들기",
     "Export chat": "대화 내보내기",
@@ -568,8 +539,6 @@
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "이름, 이메일, 사용자명(<userId/>) 으로 대화를 시작하세요.",
     "Search names and descriptions": "이름 및 설명 검색",
     "@mentions & keywords": "@멘션(언급) & 키워드",
-    "Anyone in a space can find and join. You can select multiple spaces.": "스페이스의 누구나 찾고 참여할 수 있습니다. 여러 스페이스를 선택할 수 있습니다.",
-    "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "누구나 스페이스를 찾고 참여할 수 있습니다. <a>이곳에서 접근 가능한 스페이스를 편집하세요.</a>",
     "Add space": "스페이스 추가하기",
     "Add existing rooms": "기존 방 추가",
     "Add existing room": "기존 방 목록에서 추가하기",
@@ -595,7 +564,6 @@
     "Australia": "호주",
     "Afghanistan": "아프가니스탄",
     "United States": "미국",
-    "Mark all as read": "모두 읽음으로 표시",
     "Deactivating your account is a permanent action — be careful!": "계정을 비활성화 하는 것은 취소할 수 없습니다. 조심하세요!",
     "Room info": "방 정보",
     "common": {
@@ -657,7 +625,11 @@
         "off": "끄기",
         "all_rooms": "모든 방 목록",
         "copied": "복사했습니다!",
-        "Advanced": "고급"
+        "advanced": "고급",
+        "general": "기본",
+        "profile": "프로필",
+        "display_name": "표시 이름",
+        "user_avatar": "프로필 사진"
     },
     "action": {
         "continue": "계속하기",
@@ -725,7 +697,9 @@
         "submit": "제출",
         "send_report": "신고 보내기",
         "clear": "지우기",
-        "unban": "출입 금지 풀기"
+        "unban": "출입 금지 풀기",
+        "hide_advanced": "고급 숨기기",
+        "show_advanced": "고급 보이기"
     },
     "labs": {
         "pinning": "메시지 고정",
@@ -817,7 +791,8 @@
             "noisy": "소리",
             "error_permissions_denied": "%(brand)s은 알림을 보낼 권한을 가지고 있지 않습니다. 브라우저 설정을 확인해주세요",
             "error_permissions_missing": "%(brand)s이 알림을 보낼 권한을 받지 못했습니다. 다시 해주세요",
-            "error_title": "알림을 사용할 수 없음"
+            "error_title": "알림을 사용할 수 없음",
+            "push_targets": "알림 대상"
         },
         "appearance": {
             "heading": "모습 개인화하기",
@@ -839,7 +814,12 @@
             "encryption_section": "암호화",
             "bulk_options_section": "대량 설정",
             "bulk_options_accept_all_invites": "모든 %(invitedRooms)s개의 초대를 수락",
-            "bulk_options_reject_all_invites": "모든 %(invitedRooms)s개의 초대를 거절"
+            "bulk_options_reject_all_invites": "모든 %(invitedRooms)s개의 초대를 거절",
+            "delete_backup": "백업 삭제",
+            "delete_backup_confirm_description": "확실합니까? 키를 정상적으로 백업하지 않았다면 암호화된 메시지를 잃게 됩니다.",
+            "error_loading_key_backup_status": "키 백업 상태를 불러올 수 없음",
+            "restore_key_backup": "백업에서 복구",
+            "key_backup_complete": "모든 키 백업됨"
         },
         "preferences": {
             "room_list_heading": "방 목록",
@@ -871,10 +851,12 @@
             "msisdn_in_use": "이 전화번호는 이미 사용 중입니다",
             "add_email_dialog_title": "이메일 주소 추가",
             "add_email_failed_verification": "이메일 주소를 인증하지 못했습니다. 메일에 나온 주소를 눌렀는지 확인해 보세요",
-            "add_msisdn_dialog_title": "전화번호 추가"
+            "add_msisdn_dialog_title": "전화번호 추가",
+            "name_placeholder": "표시 이름 없음"
         },
         "sidebar": {
-            "title": "사이드바"
+            "title": "사이드바",
+            "metaspaces_home_all_rooms": "모든 방 목록 보기"
         }
     },
     "devtools": {
@@ -1208,7 +1190,11 @@
             "history_visibility_shared": "구성원만(이 설정을 선택한 시점부터)",
             "history_visibility_invited": "구성원만(구성원이 초대받은 시점부터)",
             "history_visibility_joined": "구성원만(구성원들이 참여한 시점부터)",
-            "history_visibility_world_readable": "누구나"
+            "history_visibility_world_readable": "누구나",
+            "join_rule_restricted_description": "누구나 스페이스를 찾고 참여할 수 있습니다. <a>이곳에서 접근 가능한 스페이스를 편집하세요.</a>",
+            "join_rule_restricted_description_active_space": "<spaceName/>에 소속된 누구나 찾고 참여할 수 있습니다. 다른 스페이스도 선택 가능합니다.",
+            "join_rule_restricted_description_prompt": "스페이스의 누구나 찾고 참여할 수 있습니다. 여러 스페이스를 선택할 수 있습니다.",
+            "join_rule_restricted": "스페이스 멤버 목록"
         },
         "general": {
             "publish_toggle": "%(domain)s님의 방 목록에서 이 방을 공개로 게시하겠습니까?",
@@ -1228,7 +1214,17 @@
             "room_version": "방 버전:"
         },
         "delete_avatar_label": "아바타 삭제",
-        "upload_avatar_label": "아바타 업로드"
+        "upload_avatar_label": "아바타 업로드",
+        "visibility": {
+            "title": "가시성",
+            "history_visibility_anyone_space": "스페이스 미리보기",
+            "history_visibility_anyone_space_description": "스페이스에 참여하기 전에 미리볼 수 있도록 허용합니다.",
+            "history_visibility_anyone_space_recommendation": "공개 스페이스에 권장 합니다."
+        },
+        "access": {
+            "title": "접근",
+            "description_space": "누가 %(spaceName)s를 보거나 참여할 수 있는지 설정합니다."
+        }
     },
     "encryption": {
         "verification": {
@@ -1363,7 +1359,8 @@
             "other": "%(count)s개의 읽지 않은 메시지.",
             "one": "1개의 읽지 않은 메시지."
         },
-        "unread_messages": "읽지 않은 메시지."
+        "unread_messages": "읽지 않은 메시지.",
+        "jump_first_invite": "첫 초대로 건너뜁니다."
     },
     "onboarding": {
         "welcome_user": "환영합니다 %(name)s님",
@@ -1459,7 +1456,8 @@
     },
     "create_space": {
         "public_heading": "당신의 공개 스페이스",
-        "private_heading": "당신의 비공개 스페이스"
+        "private_heading": "당신의 비공개 스페이스",
+        "label": "스페이스 만들기"
     },
     "room": {
         "drop_file_prompt": "업로드할 파일을 여기에 놓으세요",
@@ -1559,7 +1557,9 @@
         "mixed_content": "주소 창에 HTTPS URL이 있을 때는 HTTP로 홈서버를 연결할 수 없습니다. HTTPS를 쓰거나 <a>안전하지 않은 스크립트를 허용</a>해주세요.",
         "tls": "홈서버에 연결할 수 없음 - 연결 상태를 확인하거나, <a>홈서버의 SSL 인증서</a>가 믿을 수 있는지 확인하고, 브라우저 확장 기능이 요청을 막고 있는지 확인해주세요.",
         "failed_copy": "복사 실패함",
-        "something_went_wrong": "문제가 생겼습니다!"
+        "something_went_wrong": "문제가 생겼습니다!",
+        "update_power_level": "권한 등급 변경에 실패함",
+        "unknown": "알 수 없는 오류"
     },
     "name_and_id": "%(name)s (%(userId)s)",
     "items_and_n_others": {
@@ -1569,7 +1569,10 @@
     "notifications": {
         "enable_prompt_toast_title": "알림",
         "colour_none": "없음",
-        "colour_bold": "굵게"
+        "colour_bold": "굵게",
+        "mark_all_read": "모두 읽음으로 표시",
+        "class_other": "기타",
+        "mentions_keywords": "멘션 및 키워드"
     },
     "room_summary_card_back_action_label": "방 정보",
     "quick_settings": {
@@ -1590,5 +1593,10 @@
     "lightbox": {
         "rotate_left": "왼쪽으로 회전",
         "rotate_right": "오른쪽으로 회전"
+    },
+    "a11y_jump_first_unread_room": "읽지 않은 첫 방으로 건너뜁니다.",
+    "integration_manager": {
+        "error_connecting_heading": "통합 관리자에 연결할 수 없음",
+        "error_connecting": "통합 관리자가 오프라인이거나 당신의 홈서버에서 접근할 수 없습니다."
     }
 }

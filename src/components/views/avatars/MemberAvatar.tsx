@@ -99,7 +99,7 @@ export default function MemberAvatar({
                       }
                     : props.onClick
             }
-            altText={_t("Profile picture")}
+            altText={_t("common|user_avatar")}
         />
     );
 }

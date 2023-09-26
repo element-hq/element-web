@@ -334,7 +334,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             visibilitySection = (
                 <LabelledCheckbox
                     className="mx_CreateRoomDialog_labelledCheckbox"
-                    label={_t("Make this room visible in the public room directory.")}
+                    label={_t("room_settings|security|publish_room")}
                     onChange={this.onIsPublicKnockRoomChange}
                     value={this.state.isPublicKnockRoom}
                 />
@@ -417,7 +417,9 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                         <JoinRuleDropdown
                             label={_t("create_room|room_visibility_label")}
                             labelInvite={_t("create_room|join_rule_invite")}
-                            labelKnock={this.askToJoinEnabled ? _t("Ask to join") : undefined}
+                            labelKnock={
+                                this.askToJoinEnabled ? _t("room_settings|security|join_rule_knock") : undefined
+                            }
                             labelPublic={_t("Public room")}
                             labelRestricted={
                                 this.supportsRestricted ? _t("create_room|join_rule_restricted") : undefined
@@ -432,7 +434,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                         {aliasField}
                         <details onToggle={this.onDetailsToggled} className="mx_CreateRoomDialog_details">
                             <summary className="mx_CreateRoomDialog_details_summary">
-                                {this.state.detailsOpen ? _t("Hide advanced") : _t("Show advanced")}
+                                {this.state.detailsOpen ? _t("action|hide_advanced") : _t("action|show_advanced")}
                             </summary>
                             <LabelledToggleSwitch
                                 label={_t("create_room|unfederated", {

@@ -93,9 +93,11 @@ const SidebarUserSettingsTab: React.FC = () => {
                         className="mx_SidebarUserSettingsTab_checkbox mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
                         data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
                     >
-                        <SettingsSubsectionText>{_t("Show all rooms")}</SettingsSubsectionText>
                         <SettingsSubsectionText>
                             {_t("settings|sidebar|metaspaces_home_all_rooms")}
+                        </SettingsSubsectionText>
+                        <SettingsSubsectionText>
+                            {_t("settings|sidebar|metaspaces_home_all_rooms_description")}
                         </SettingsSubsectionText>
                     </StyledCheckbox>
 

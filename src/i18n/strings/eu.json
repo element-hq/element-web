@@ -41,7 +41,6 @@
     "Download %(text)s": "Deskargatu %(text)s",
     "Error decrypting attachment": "Errorea eranskina deszifratzean",
     "Failed to ban user": "Huts egin du erabiltzailea debekatzean",
-    "Failed to change power level": "Huts egin du botere maila aldatzean",
     "Failed to load timeline position": "Huts egin du denbora-lerroko puntua kargatzean",
     "Failed to mute user": "Huts egin du erabiltzailea mututzean",
     "Failed to reject invite": "Huts egin du gonbidapena baztertzean",
@@ -55,9 +54,7 @@
     "Invited": "Gonbidatuta",
     "New passwords must match each other.": "Pasahitz berriak berdinak izan behar dira.",
     "not specified": "zehaztu gabe",
-    "No display name": "Pantaila izenik ez",
     "No more results": "Emaitza gehiagorik ez",
-    "Profile": "Profila",
     "Reason": "Arrazoia",
     "Reject invitation": "Baztertu gonbidapena",
     "%(roomName)s does not exist.": "Ez dago %(roomName)s izeneko gela.",
@@ -113,7 +110,6 @@
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Prozesu honek aurretik beste Matrix bezero batetik esportatu dituzun zifratze gakoak inportatzea ahalbidetzen dizu. Gero beste bezeroak deszifratu zitzakeen mezuak deszifratu ahal izango dituzu.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Esportatutako fitxategia pasaesaldi batez babestuko da. Pasaesaldia bertan idatzi behar duzu, fitxategia deszifratzeko.",
     "Confirm Removal": "Berretsi kentzea",
-    "Unknown error": "Errore ezezaguna",
     "Unable to restore session": "Ezin izan da saioa berreskuratu",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Aurretik %(brand)s bertsio berriago bat erabili baduzu, zure saioa bertsio honekin bateraezina izan daiteke. Itxi leiho hau eta itzuli bertsio berriagora.",
     "Error decrypting image": "Errorea audioa deszifratzean",
@@ -150,7 +146,6 @@
     "<a>In reply to</a> <pill>": "<a>honi erantzunez:</a> <pill>",
     "You don't currently have any stickerpacks enabled": "Ez duzu eranskailu multzorik aktibatuta",
     "Sunday": "Igandea",
-    "Notification targets": "Jakinarazpenen helburuak",
     "Today": "Gaur",
     "Friday": "Ostirala",
     "Changelog": "Aldaketa-egunkaria",
@@ -211,8 +206,6 @@
     "Incompatible local cache": "Katxe lokal bateraezina",
     "Clear cache and resync": "Garbitu katxea eta sinkronizatu berriro",
     "Add some now": "Gehitu batzuk orain",
-    "Delete Backup": "Ezabatu babes-kopia",
-    "Unable to load key backup status": "Ezin izan da gakoen babes-kopiaren egoera kargatu",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Zure txaten historiala ez galtzeko, zure gelako gakoak esportatu behar dituzu saioa amaitu aurretik. %(brand)s-en bertsio berriagora bueltatu behar zara hau egiteko",
     "Incompatible Database": "Datu-base bateraezina",
     "Continue With Encryption Disabled": "Jarraitu zifratzerik gabe",
@@ -289,7 +282,6 @@
     "Email (optional)": "E-mail (aukerakoa)",
     "Join millions for free on the largest public server": "Elkartu milioika pertsonekin dohain hasiera zerbitzari publiko handienean",
     "Couldn't load page": "Ezin izan da orria kargatu",
-    "General": "Orokorra",
     "Room Addresses": "Gelaren helbideak",
     "Email addresses": "E-mail helbideak",
     "Phone numbers": "Telefono zenbakiak",
@@ -302,9 +294,7 @@
     "Missing media permissions, click the button below to request.": "Multimedia baimenak falda dira, sakatu beheko botoia baimenak eskatzeko.",
     "Request media permissions": "Eskatu multimedia baimenak",
     "Start using Key Backup": "Hasi gakoen babes-kopia egiten",
-    "Restore from Backup": "Berrezarri babes-kopia",
     "Back up your keys before signing out to avoid losing them.": "Egin gakoen babes-kopia bat saioa amaitu aurretik, galdu nahi ez badituzu.",
-    "All keys backed up": "Gako guztien babes.kopia egin da",
     "Headphones": "Aurikularrak",
     "Folder": "Karpeta",
     "Flag": "Bandera",
@@ -323,13 +313,10 @@
     "Paperclip": "Klipa",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "E-mail bat bidali dizugu zure helbidea egiaztatzeko. Jarraitu hango argibideak eta gero sakatu beheko botoia.",
     "Email Address": "E-mail helbidea",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Ziur al zaude? Zure zifratutako mezuak galduko dituzu zure gakoen babes-kopia egoki bat egiten ez bada.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Zifratutako mezuak muturretik muturrerako zifratzearen bidez babestuak daude. Zuk eta hartzaileak edo hartzaileek irakurri ditzakezue mezu horiek, beste inork ez.",
     "Unable to verify phone number.": "Ezin izan da telefono zenbakia egiaztatu.",
     "Verification code": "Egiaztaketa kodea",
     "Phone Number": "Telefono zenbakia",
-    "Profile picture": "Profileko irudia",
-    "Display Name": "Pantaila-izena",
     "Room information": "Gelako informazioa",
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Egiaztatu erabiltzaile hau fidagarritzat markatzeko. Honek bakea ematen dizu muturretik muturrerako zifratutako mezuak erabiltzean.",
     "Incoming Verification Request": "Jasotako egiaztaketa eskaria",
@@ -475,8 +462,6 @@
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Erabili identitate-zerbitzari bat e-mail bidez gonbidatzeko. <default>Erabili lehenetsitakoa (%(defaultIdentityServerName)s)</default> edo gehitu bat <settings>Ezarpenak</settings> atalean.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Erabili identitate-zerbitzari bat e-mail bidez gonbidatzeko. Kudeatu <settings>Ezarpenak</settings> atalean.",
     "Close dialog": "Itxi elkarrizketa-koadroa",
-    "Hide advanced": "Ezkutatu aurreratua",
-    "Show advanced": "Erakutsi aurreratua",
     "Explore rooms": "Arakatu gelak",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Zure <b>datu pribatuak kendu</b> beharko zenituzke <idserver /> identitate-zerbitzaritik deskonektatu aurretik. Zoritxarrez <idserver /> identitate-zerbitzaria lineaz kanpo dago eta ezin da atzitu.",
     "You should:": "Hau egin beharko zenuke:",
@@ -488,8 +473,6 @@
     "This client does not support end-to-end encryption.": "Bezero honek ez du muturretik muturrerako zifratzea onartzen.",
     "Messages in this room are not end-to-end encrypted.": "Gela honetako mezuak ez daude muturretik muturrera zifratuta.",
     "Cancel search": "Ezeztatu bilaketa",
-    "Jump to first unread room.": "Jauzi irakurri gabeko lehen gelara.",
-    "Jump to first invite.": "Jauzi lehen gonbidapenera.",
     "Message Actions": "Mezu-ekintzak",
     "You verified %(name)s": "%(name)s egiaztatu duzu",
     "You cancelled verifying %(name)s": "%(name)s egiaztatzeari utzi diozu",
@@ -500,8 +483,6 @@
     "%(name)s cancelled": "%(name)s utzita",
     "%(name)s wants to verify": "%(name)s(e)k egiaztatu nahi du",
     "You sent a verification request": "Egiaztaketa eskari bat bidali duzu",
-    "Cannot connect to integration manager": "Ezin da integrazio kudeatzailearekin konektatu",
-    "The integration manager is offline or it cannot reach your homeserver.": "Integrazio kudeatzailea lineaz kanpo dago edo ezin du zure hasiera-zerbitzaria atzitu.",
     "Manage integrations": "Kudeatu integrazioak",
     "None": "Bat ere ez",
     "Failed to connect to integration manager": "Huts egin du integrazio kudeatzailera konektatzean",
@@ -510,9 +491,6 @@
     "Integrations are disabled": "Integrazioak desgaituta daude",
     "Integrations not allowed": "Integrazioak ez daude baimenduta",
     "Verification Request": "Egiaztaketa eskaria",
-    "Secret storage public key:": "Biltegi sekretuko gako publikoa:",
-    "in account data": "kontuaren datuetan",
-    "not stored": "gorde gabe",
     "Unencrypted": "Zifratu gabe",
     "Close preview": "Itxi aurrebista",
     "<userName/> wants to chat": "<userName/> erabiltzaileak txateatu nahi du",
@@ -547,11 +525,7 @@
     "Enter your account password to confirm the upgrade:": "Sartu zure kontuaren pasa-hitza eguneraketa baieztatzeko:",
     "You'll need to authenticate with the server to confirm the upgrade.": "Zerbitzariarekin autentifikatu beharko duzu eguneraketa baieztatzeko.",
     "Upgrade your encryption": "Eguneratu zure zifratzea",
-    "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Saio honek <b>ez du zure gakoen babes-kopia egiten</b>, baina badago berreskuratu eta gehitu deakezun aurreko babes-kopia bat.",
-    "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Konektatu saio hau gakoen babes-kopiara saioa amaitu aurretik saio honetan bakarrik dauden gakoak ez galtzeko.",
-    "Connect this session to Key Backup": "Konektatu saio hau gakoen babes-kopiara",
     "This backup is trusted because it has been restored on this session": "Babes-kopia hau fidagarritzat jotzen da saio honetan berrekuratu delako",
-    "Your keys are <b>not being backed up from this session</b>.": "<b>Ez da zure gakoen babes-kopia egiten saio honetatik</b>.",
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "Gela honek honako plataformetara kopiatzen ditu mezuak. <a>Argibide gehiago.</a>",
     "Bridges": "Zubiak",
     "This user has not verified all of their sessions.": "Erabiltzaile honek ez ditu bere saio guztiak egiaztatu.",
@@ -600,7 +574,6 @@
     "This session is encrypting history using the new recovery method.": "Saio honek historiala zifratzen du berreskuratze metodo berria erabiliz.",
     "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Nahi gabe egin baduzu hau, Mezu seguruak ezarri ditzakezu saio honetan eta saioaren mezuen historiala berriro zifratuko da berreskuratze metodo berriarekin.",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Matrix-ekin lotutako segurtasun arazo baten berri emateko, irakurri <a>Segurtasun ezagutarazte gidalerroak</a>.",
-    "Mark all as read": "Markatu denak irakurrita gisa",
     "Scroll to most recent messages": "Korritu azken mezuetara",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Errore bat gertatu da gelaren ordezko helbideak eguneratzean. Agian zerbitzariak ez du onartzen edo une bateko akatsa izan da.",
     "Local address": "Helbide lokala",
@@ -632,8 +605,6 @@
     "In encrypted rooms, your messages are secured and only you and the recipient have the unique keys to unlock them.": "Gela zifratuetan, zuon mezuak babestuta daude, zuk zeuk eta hartzaileak bakarrik duzue hauek deszifratzeko gako bakanak.",
     "Verify all users in a room to ensure it's secure.": "Egiaztatu gela bateko erabiltzaile guztiak segurua dela baieztatzeko.",
     "Sign in with SSO": "Hasi saioa SSO-rekin",
-    "well formed": "ongi osatua",
-    "unexpected type": "ustekabeko mota",
     "Almost there! Is %(displayName)s showing the same shield?": "Ia amaitu duzu! %(displayName)s gailuak ezkutu bera erakusten du?",
     "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Ongi egiaztatu duzu %(deviceName)s (%(deviceId)s)!",
     "Start verification again from the notification.": "Hasi egiaztaketa berriro jakinarazpenetik.",
@@ -756,7 +727,11 @@
         "off": "Ez",
         "all_rooms": "Gela guztiak",
         "copied": "Kopiatuta!",
-        "Advanced": "Aurreratua"
+        "advanced": "Aurreratua",
+        "general": "Orokorra",
+        "profile": "Profila",
+        "display_name": "Pantaila-izena",
+        "user_avatar": "Profileko irudia"
     },
     "action": {
         "continue": "Jarraitu",
@@ -831,7 +806,9 @@
         "mention": "Aipatu",
         "submit": "Bidali",
         "send_report": "Bidali salaketa",
-        "unban": "Debekua kendu"
+        "unban": "Debekua kendu",
+        "hide_advanced": "Ezkutatu aurreratua",
+        "show_advanced": "Erakutsi aurreratua"
     },
     "a11y": {
         "user_menu": "Erabiltzailea-menua",
@@ -843,7 +820,8 @@
             "other": "irakurri gabeko %(count)s mezu.",
             "one": "Irakurri gabeko mezu 1."
         },
-        "unread_messages": "Irakurri gabeko mezuak."
+        "unread_messages": "Irakurri gabeko mezuak.",
+        "jump_first_invite": "Jauzi lehen gonbidapenera."
     },
     "labs": {
         "pinning": "Mezuak finkatzea",
@@ -985,7 +963,8 @@
             "noisy": "Zaratatsua",
             "error_permissions_denied": "%(brand)sek ez du zuri jakinarazpenak bidaltzeko baimenik,  egiaztatu nabigatzailearen ezarpenak",
             "error_permissions_missing": "Ez zaio jakinarazpenak bidaltzeko baimena eman %(brand)si, saiatu berriro",
-            "error_title": "Ezin izan dira jakinarazpenak gaitu"
+            "error_title": "Ezin izan dira jakinarazpenak gaitu",
+            "push_targets": "Jakinarazpenen helburuak"
         },
         "appearance": {
             "match_system_theme": "Bat egin sistemako azalarekin",
@@ -1046,7 +1025,21 @@
             "message_search_section": "Mezuen bilaketa",
             "encryption_individual_verification_mode": "Egiaztatu erabiltzaile baten saio bakoitza hau fidagarri gisa markatzeko, ez dira zeharka sinatutako gailuak fidagarritzat jotzen.",
             "message_search_disabled": "Gorde zifratutako mezuak cachean modu seguruan bilaketen emaitzetan agertu daitezen.",
-            "message_search_unsupported": "%(brand)s-ek zifratutako mezuak cache lokalean modu seguruan gordetzeko elementu batzuk faltan ditu. Ezaugarri honekin esperimentatu nahi baduzu, konpilatu pertsonalizatutako %(brand)s Desktop <nativeLink> bilaketa osagaiekin</nativeLink>."
+            "message_search_unsupported": "%(brand)s-ek zifratutako mezuak cache lokalean modu seguruan gordetzeko elementu batzuk faltan ditu. Ezaugarri honekin esperimentatu nahi baduzu, konpilatu pertsonalizatutako %(brand)s Desktop <nativeLink> bilaketa osagaiekin</nativeLink>.",
+            "backup_key_well_formed": "ongi osatua",
+            "backup_key_unexpected_type": "ustekabeko mota",
+            "cross_signing_not_stored": "gorde gabe",
+            "4s_public_key_status": "Biltegi sekretuko gako publikoa:",
+            "4s_public_key_in_account_data": "kontuaren datuetan",
+            "delete_backup": "Ezabatu babes-kopia",
+            "delete_backup_confirm_description": "Ziur al zaude? Zure zifratutako mezuak galduko dituzu zure gakoen babes-kopia egoki bat egiten ez bada.",
+            "error_loading_key_backup_status": "Ezin izan da gakoen babes-kopiaren egoera kargatu",
+            "restore_key_backup": "Berrezarri babes-kopia",
+            "key_backup_inactive": "Saio honek <b>ez du zure gakoen babes-kopia egiten</b>, baina badago berreskuratu eta gehitu deakezun aurreko babes-kopia bat.",
+            "key_backup_connect_prompt": "Konektatu saio hau gakoen babes-kopiara saioa amaitu aurretik saio honetan bakarrik dauden gakoak ez galtzeko.",
+            "key_backup_connect": "Konektatu saio hau gakoen babes-kopiara",
+            "key_backup_complete": "Gako guztien babes.kopia egin da",
+            "key_backup_inactive_warning": "<b>Ez da zure gakoen babes-kopia egiten saio honetatik</b>."
         },
         "preferences": {
             "room_list_heading": "Gelen zerrenda",
@@ -1072,7 +1065,8 @@
             "add_msisdn_confirm_sso_button": "Baieztatu telefono zenbaki hau gehitzea Single sign-on bidez zure identitatea frogatuz.",
             "add_msisdn_confirm_button": "Berretsi telefono zenbakia gehitzea",
             "add_msisdn_confirm_body": "Sakatu beheko botoia telefono zenbaki hau gehitzea berresteko.",
-            "add_msisdn_dialog_title": "Gehitu telefono zenbakia"
+            "add_msisdn_dialog_title": "Gehitu telefono zenbakia",
+            "name_placeholder": "Pantaila izenik ez"
         }
     },
     "devtools": {
@@ -1802,7 +1796,9 @@
         "tls": "Ezin da hasiera zerbitzarira konektatu, egiaztatu zure konexioa, ziurtatu zure <a>hasiera zerbitzariaren SSL ziurtagiria</a> fidagarritzat jotzen duela zure gailuak, eta nabigatzailearen pluginen batek ez dituela eskaerak blokeatzen.",
         "admin_contact_short": "Jarri kontaktuan <a>zerbitzariaren administratzailearekin</a>.",
         "failed_copy": "Kopiak huts egin du",
-        "something_went_wrong": "Zerk edo zerk huts egin du!"
+        "something_went_wrong": "Zerk edo zerk huts egin du!",
+        "update_power_level": "Huts egin du botere maila aldatzean",
+        "unknown": "Errore ezezaguna"
     },
     "name_and_id": "%(name)s (%(userId)s)",
     "items_and_n_others": {
@@ -1813,7 +1809,9 @@
         "enable_prompt_toast_title": "Jakinarazpenak",
         "colour_none": "Bat ere ez",
         "colour_bold": "Lodia",
-        "error_change_title": "Aldatu jakinarazpenen ezarpenak"
+        "error_change_title": "Aldatu jakinarazpenen ezarpenak",
+        "mark_all_read": "Markatu denak irakurrita gisa",
+        "class_other": "Beste bat"
     },
     "room_summary_card_back_action_label": "Gelako informazioa",
     "quick_settings": {
@@ -1826,5 +1824,10 @@
     "lightbox": {
         "rotate_left": "Biratu ezkerrera",
         "rotate_right": "Biratu eskumara"
+    },
+    "a11y_jump_first_unread_room": "Jauzi irakurri gabeko lehen gelara.",
+    "integration_manager": {
+        "error_connecting_heading": "Ezin da integrazio kudeatzailearekin konektatu",
+        "error_connecting": "Integrazio kudeatzailea lineaz kanpo dago edo ezin du zure hasiera-zerbitzaria atzitu."
     }
 }

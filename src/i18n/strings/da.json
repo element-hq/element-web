@@ -44,7 +44,6 @@
     "Moderator": "Moderator",
     "Reason": "Årsag",
     "Sunday": "Søndag",
-    "Notification targets": "Meddelelsesmål",
     "Today": "I dag",
     "Friday": "Fredag",
     "Changelog": "Ændringslog",
@@ -76,9 +75,7 @@
     "Headphones": "Hovedtelefoner",
     "Show more": "Vis mere",
     "Add a new server": "Tilføj en ny server",
-    "Profile picture": "Profil billede",
     "Checking server": "Tjekker server",
-    "Profile": "Profil",
     "Local address": "Lokal adresse",
     "This room has no local addresses": "Dette rum har ingen lokal adresse",
     "The conversation continues here.": "Samtalen fortsætter her.",
@@ -359,7 +356,9 @@
         "unnamed_room": "Unavngivet rum",
         "on": "Tændt",
         "off": "Slukket",
-        "Advanced": "Avanceret"
+        "advanced": "Avanceret",
+        "profile": "Profil",
+        "user_avatar": "Profil billede"
     },
     "action": {
         "continue": "Fortsæt",
@@ -431,7 +430,8 @@
             "noisy": "Støjende",
             "error_permissions_denied": "%(brand)s har ikke tilladelse til at sende dig notifikationer - tjek venligst dine browserindstillinger",
             "error_permissions_missing": "%(brand)s fik ikke tilladelse til at sende notifikationer - Vær sød at prøve igen",
-            "error_title": "Kunne ikke slå Notifikationer til"
+            "error_title": "Kunne ikke slå Notifikationer til",
+            "push_targets": "Meddelelsesmål"
         },
         "appearance": {
             "custom_theme_success": "Tema tilføjet!",
@@ -858,6 +858,7 @@
     },
     "notifications": {
         "enable_prompt_toast_title": "Notifikationer",
-        "error_change_title": "Skift notifikations indstillinger"
+        "error_change_title": "Skift notifikations indstillinger",
+        "class_other": "Andre"
     }
 }

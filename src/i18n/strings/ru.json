@@ -52,7 +52,6 @@
     "Decrypt %(text)s": "Расшифровать %(text)s",
     "Download %(text)s": "Скачать %(text)s",
     "Failed to ban user": "Не удалось заблокировать пользователя",
-    "Failed to change power level": "Не удалось изменить уровень прав",
     "Failed to forget room %(errCode)s": "Не удалось забыть комнату: %(errCode)s",
     "Authentication": "Аутентификация",
     "%(items)s and %(lastItem)s": "%(items)s и %(lastItem)s",
@@ -66,7 +65,6 @@
     "not specified": "не задан",
     "No more results": "Больше никаких результатов",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Проверьте свою электронную почту и нажмите на ссылку в письме. После этого нажмите кнопку Продолжить.",
-    "Profile": "Профиль",
     "Reason": "Причина",
     "Reject invitation": "Отклонить приглашение",
     "Rooms": "Комнаты",
@@ -101,7 +99,6 @@
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Этот процесс позволит вам импортировать ключи шифрования, которые вы экспортировали ранее из клиента Matrix. Это позволит вам расшифровать историю чата.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Файл экспорта будет защищен кодовой фразой. Для расшифровки файла необходимо будет её ввести.",
     "Confirm Removal": "Подтвердите удаление",
-    "Unknown error": "Неизвестная ошибка",
     "Unable to restore session": "Восстановление сеанса не удалось",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Если вы использовали более новую версию %(brand)s, то ваш сеанс может быть несовместим с ней. Закройте это окно и вернитесь к более новой версии.",
     "Error decrypting image": "Ошибка расшифровки изображения",
@@ -116,7 +113,6 @@
     },
     "Home": "Главная",
     "Admin Tools": "Инструменты администратора",
-    "No display name": "Нет отображаемого имени",
     "(~%(count)s results)": {
         "other": "(~%(count)s результатов)",
         "one": "(~%(count)s результат)"
@@ -149,7 +145,6 @@
     "This room is not public. You will not be able to rejoin without an invite.": "Эта комната не является публичной. Вы не сможете войти без приглашения.",
     "<a>In reply to</a> <pill>": "<a>В ответ на</a> <pill>",
     "Sunday": "Воскресенье",
-    "Notification targets": "Устройства для уведомлений",
     "Today": "Сегодня",
     "Friday": "Пятница",
     "Changelog": "История изменений",
@@ -198,11 +193,9 @@
     "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Остановим общение пользователей в старой версии комнаты и опубликуем сообщение, в котором пользователям рекомендуется перейти в новую комнату",
     "Put a link back to the old room at the start of the new room so people can see old messages": "Разместим ссылку на старую комнату, чтобы люди могли видеть старые сообщения",
     "Email Address": "Адрес электронной почты",
-    "Delete Backup": "Удалить резервную копию",
     "Unable to verify phone number.": "Невозможно проверить номер телефона.",
     "Verification code": "Код подтверждения",
     "Phone Number": "Номер телефона",
-    "Display Name": "Отображаемое имя",
     "Room information": "Информация о комнате",
     "Room Addresses": "Адреса комнаты",
     "Email addresses": "Адреса электронной почты",
@@ -217,8 +210,6 @@
     "Room Topic": "Тема комнаты",
     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Ваше сообщение не было отправлено, потому что этот домашний сервер превысил месячный лимит активных пользователей. <a>обратитесь к администратору службы</a>, чтобы продолжить использование службы.",
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Ваше сообщение не было отправлено, потому что этот домашний сервер превысил лимит ресурсов. <a>обратитесь к администратору службы</a>, чтобы продолжить использование службы.",
-    "All keys backed up": "Все ключи сохранены",
-    "General": "Общие",
     "Room avatar": "Аватар комнаты",
     "The following users may not exist": "Следующих пользователей может не существовать",
     "Invite anyway and never warn me again": "Пригласить и больше не предупреждать",
@@ -303,13 +294,9 @@
     "Your keys are being backed up (the first backup could take a few minutes).": "Выполняется резервная копия ключей (первый раз это может занять несколько минут).",
     "Scissors": "Ножницы",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Мы отправили вам сообщение для подтверждения адреса электронной почты. Пожалуйста, следуйте указаниям в сообщении, после чего нажмите кнопку ниже.",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Вы уверены? Зашифрованные сообщения будут безвозвратно утеряны при отсутствии соответствующего резервного копирования ваших ключей.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Эти сообщения защищены сквозным шифрованием. Только вы и ваш собеседник имеете ключи для их расшифровки и чтения.",
-    "Unable to load key backup status": "Не удалось получить статус резервного копирования для ключей шифрования",
-    "Restore from Backup": "Восстановить из резервной копии",
     "Back up your keys before signing out to avoid losing them.": "Перед выходом сохраните резервную копию ключей шифрования, чтобы не потерять их.",
     "Start using Key Backup": "Использовать резервную копию ключей шифрования",
-    "Profile picture": "Аватар",
     "Missing media permissions, click the button below to request.": "Отсутствуют разрешения для доступа к камере/микрофону. Нажмите кнопку ниже, чтобы запросить их.",
     "Request media permissions": "Запросить доступ к медиа устройству",
     "Error updating main address": "Ошибка обновления основного адреса",
@@ -472,8 +459,6 @@
     "Show image": "Показать изображение",
     "e.g. my-room": "например, моя-комната",
     "Close dialog": "Закрыть диалог",
-    "Hide advanced": "Скрыть дополнительные настройки",
-    "Show advanced": "Показать дополнительные настройки",
     "Command Help": "Помощь команды",
     "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "Деактивация этого пользователя приведет к его выходу из системы и запрету повторного входа. Кроме того, они оставит все комнаты, в которых он участник. Это действие безповоротно. Вы уверены, что хотите деактивировать этого пользователя?",
     "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "Приглашение в %(roomName)s было отправлено на %(email)s, но этот адрес не связан с вашей учётной записью",
@@ -489,8 +474,6 @@
     "Explore rooms": "Обзор комнат",
     "Cancel search": "Отменить поиск",
     "Room %(name)s": "Комната %(name)s",
-    "Jump to first unread room.": "Перейти в первую непрочитанную комнату.",
-    "Jump to first invite.": "Перейти к первому приглашению.",
     "Message Actions": "Сообщение действий",
     "Manage integrations": "Управление интеграциями",
     "Direct Messages": "Личные сообщения",
@@ -499,19 +482,11 @@
         "one": "%(count)s сеанс"
     },
     "Hide sessions": "Свернуть сеансы",
-    "Your keys are <b>not being backed up from this session</b>.": "Ваши ключи <b>не резервируются с этом сеансе</b>.",
     "Lock": "Заблокировать",
     "Show more": "Показать больше",
     "Not Trusted": "Недоверенное",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) произвел(а) вход через новый сеанс без подтверждения:",
     "Ask this user to verify their session, or manually verify it below.": "Попросите этого пользователя подтвердить сеанс или подтвердите его вручную ниже.",
-    "Secret storage public key:": "Публичный ключ секретного хранилища:",
-    "in account data": "в данных учётной записи",
-    "Cannot connect to integration manager": "Не удалось подключиться к менеджеру интеграций",
-    "The integration manager is offline or it cannot reach your homeserver.": "Менеджер интеграций не работает или не может подключиться к вашему домашнему серверу.",
-    "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Это сеанс <b>не сохраняет ваши ключи</b>, но у вас есть резервная копия, из которой вы можете их восстановить.",
-    "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Подключите этот сеанс к резервированию ключей до выхода, чтобы избежать утраты доступных только в этом сеансе ключей.",
-    "Connect this session to Key Backup": "Подключить этот сеанс к резервированию ключей",
     "This backup is trusted because it has been restored on this session": "Эта резервная копия является доверенной, потому что она была восстановлена в этом сеансе",
     "None": "Нет",
     "Verify by scanning": "Подтверждение сканированием",
@@ -521,8 +496,6 @@
     "Verify by comparing unique emoji.": "Подтверждение сравнением уникальных смайлов.",
     "Verify all users in a room to ensure it's secure.": "Подтвердите всех пользователей в комнате, чтобы обеспечить безопасность.",
     "You've successfully verified %(displayName)s!": "Вы успешно подтвердили %(displayName)s!",
-    "well formed": "корректный",
-    "unexpected type": "непредвиденный тип",
     "Bridges": "Мосты",
     "This user has not verified all of their sessions.": "Этот пользователь не подтвердил все свои сеансы.",
     "You have not verified this user.": "Вы не подтвердили этого пользователя.",
@@ -539,7 +512,6 @@
     "Start chatting": "Начать беседу",
     "Reject & Ignore user": "Отклонить и заигнорировать пользователя",
     "Failed to connect to integration manager": "Не удалось подключиться к менеджеру интеграций",
-    "Mark all as read": "Отметить всё как прочитанное",
     "Local address": "Локальный адрес",
     "Published Addresses": "Публичные адреса",
     "Other published addresses:": "Прочие публичные адреса:",
@@ -593,7 +565,6 @@
     "Session key": "Ключ сеанса",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Чтобы сообщить о проблеме безопасности Matrix, пожалуйста, прочитайте <a>Политику раскрытия информации</a> Matrix.org.",
     "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "Установить адрес этой комнаты, чтобы пользователи могли найти ее на вашем сервере (%(localDomain)s)",
-    "not stored": "не сохранено",
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "Эта комната пересылает сообщения с помощью моста на следующие платформы. <a>Подробнее</a>",
     "For extra security, verify this user by checking a one-time code on both of your devices.": "Для дополнительной безопасности подтвердите этого пользователя, сравнив одноразовый код на ваших устройствах.",
     "Start verification again from their profile.": "Начните подтверждение заново в профиле пользователя.",
@@ -720,12 +691,6 @@
     "Not encrypted": "Не зашифровано",
     "Room settings": "Настройки комнаты",
     "Backup version:": "Версия резервной копии:",
-    "Algorithm:": "Алгоритм:",
-    "Backup key stored:": "Резервный ключ сохранён:",
-    "Backup key cached:": "Резервный ключ кэширован:",
-    "Secret storage:": "Секретное хранилище:",
-    "ready": "готов",
-    "not ready": "не готов",
     "Widgets": "Виджеты",
     "Edit widgets, bridges & bots": "Редактировать виджеты, мосты и ботов",
     "Add widgets, bridges & bots": "Добавить виджеты, мосты и ботов",
@@ -741,8 +706,6 @@
     "Video conference ended by %(senderName)s": "%(senderName)s завершил(а) видеоконференцию",
     "Video conference updated by %(senderName)s": "%(senderName)s обновил(а) видеоконференцию",
     "Video conference started by %(senderName)s": "%(senderName)s начал(а) видеоконференцию",
-    "Failed to save your profile": "Не удалось сохранить ваш профиль",
-    "The operation could not be completed": "Операция не может быть выполнена",
     "Data on this screen is shared with %(widgetDomain)s": "Данные на этом экране используются %(widgetDomain)s",
     "Modal Widget": "Модальный виджет",
     "Ignored attempt to disable encryption": "Игнорируемая попытка отключить шифрование",
@@ -1040,7 +1003,6 @@
     "The widget will verify your user ID, but won't be able to perform actions for you:": "Виджет проверит ваш идентификатор пользователя, но не сможет выполнять за вас действия:",
     "Set my room layout for everyone": "Установить мой макет комнаты для всех",
     "Recently visited rooms": "Недавно посещённые комнаты",
-    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Сделайте резервную копию ключей шифрования с данными вашей учетной записи на случай, если вы потеряете доступ к своим сеансам. Ваши ключи будут защищены уникальным ключом безопасности.",
     "%(count)s rooms": {
         "one": "%(count)s комната",
         "other": "%(count)s комнат"
@@ -1054,16 +1016,11 @@
     "This space is not public. You will not be able to rejoin without an invite.": "Это пространство не публично. Вы не сможете вновь войти без приглашения.",
     "Unable to start audio streaming.": "Невозможно запустить аудио трансляцию.",
     "Failed to start livestream": "Не удалось запустить прямую трансляцию",
-    "Save Changes": "Сохранить изменения",
-    "Leave Space": "Покинуть пространство",
-    "Edit settings relating to your space.": "Редактировать настройки, относящиеся к вашему пространству.",
-    "Failed to save space settings.": "Не удалось сохранить настройки пространства.",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Обычно это только влияет на то, как комната обрабатывается на сервере. Если у вас проблемы с вашим %(brand)s, сообщите об ошибке.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Пригласите кого-нибудь, используя их имя, адрес электронной почты, имя пользователя (например, <userId/>) или <a>поделитесь этим пространством</a>.",
     "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Пригласите кого-нибудь, используя их имя, учётную запись (как <userId/>) или <a>поделитесь этим пространством</a>.",
     "Invite to %(roomName)s": "Пригласить в %(roomName)s",
     "Create a new room": "Создать новую комнату",
-    "Spaces": "Пространства",
     "Space selection": "Выбор пространства",
     "Edit devices": "Редактировать сеансы",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.": "Вы не сможете отменить это изменение, поскольку вы понижаете свои права, если вы являетесь последним привилегированным пользователем в пространстве, будет невозможно восстановить привилегии вбудущем.",
@@ -1071,19 +1028,13 @@
     "Add existing room": "Добавить существующую комнату",
     "Invite to this space": "Пригласить в это пространство",
     "Your message was sent": "Ваше сообщение было отправлено",
-    "Space options": "Настройки пространства",
     "Leave space": "Покинуть пространство",
-    "Invite with email or username": "Пригласить по электронной почте или имени пользователя",
-    "Invite people": "Пригласить людей",
-    "Share invite link": "Поделиться ссылкой на приглашение",
-    "You can change these anytime.": "Вы можете изменить их в любое время.",
     "Create a space": "Создать пространство",
     "Private space": "Приватное пространство",
     "Public space": "Публичное пространство",
     "<inviter/> invites you": "<inviter/> пригласил(а) тебя",
     "You may want to try a different search or check for typos.": "Вы можете попробовать другой поиск или проверить опечатки.",
     "No results found": "Результаты не найдены",
-    "Connecting": "Подключение",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Ваш %(brand)s не позволяет вам использовать для этого Менеджер Интеграции. Пожалуйста, свяжитесь с администратором.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Менеджеры по интеграции получают данные конфигурации и могут изменять виджеты, отправлять приглашения в комнаты и устанавливать уровни доступа от вашего имени.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Используйте менеджер интеграций для управления ботами, виджетами и наклейками.",
@@ -1131,7 +1082,6 @@
     "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Вы являетесь единственным администратором некоторых комнат или пространств, которые вы хотите покинуть. Покинув их, вы оставите их без администраторов.",
     "You're the only admin of this space. Leaving it will mean no one has control over it.": "Вы единственный администратор этого пространства. Если вы его оставите, это будет означать, что никто не имеет над ним контроля.",
     "You won't be able to rejoin unless you are re-invited.": "Вы сможете присоединиться только после повторного приглашения.",
-    "Search %(spaceName)s": "Поиск %(spaceName)s",
     "User Directory": "Каталог пользователей",
     "Consult first": "Сначала проконсультируйтесь",
     "Invited people will be able to read old messages.": "Приглашенные люди смогут читать старые сообщения.",
@@ -1152,7 +1102,6 @@
     "Anyone will be able to find and join this space, not just members of <SpaceName/>.": "Любой сможет найти и присоединиться к этому пространству, а не только члены <SpaceName/>.",
     "Anyone in <SpaceName/> will be able to find and join.": "Любой человек в <SpaceName/> сможет найти и присоединиться.",
     "Public room": "Публичная комната",
-    "This upgrade will allow members of selected spaces access to this room without an invite.": "Это обновление позволит участникам выбранных пространств получить доступ в эту комнату без приглашения.",
     "To leave the beta, visit your settings.": "Чтобы выйти из бета-версии, зайдите в настройки.",
     "Adding spaces has moved.": "Добавление пространств перемещено.",
     "Search for rooms": "Поиск комнат",
@@ -1211,41 +1160,9 @@
         "other": "Показать %(count)s других предварительных просмотров"
     },
     "Failed to send": "Не удалось отправить",
-    "Access": "Доступ",
-    "Space members": "Участники пространства",
-    "Anyone in a space can find and join. You can select multiple spaces.": "Любой человек в пространстве может найти и присоединиться. Вы можете выбрать несколько пространств.",
-    "Spaces with access": "Пространства с доступом",
-    "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Любой человек в пространстве может найти и присоединиться. <a>Укажите здесь, какие пространства могут получить доступ.</a>",
-    "Currently, %(count)s spaces have access": {
-        "other": "В настоящее время %(count)s пространств имеют доступ",
-        "one": "В настоящее время пространство имеет доступ"
-    },
-    "& %(count)s more": {
-        "other": "и %(count)s ещё",
-        "one": "и %(count)s еще"
-    },
-    "Upgrade required": "Требуется обновление",
     "Space information": "Информация о пространстве",
     "You have no ignored users.": "У вас нет игнорируемых пользователей.",
-    "There was an error loading your notification settings.": "Произошла ошибка при загрузке настроек уведомлений.",
-    "Mentions & keywords": "Упоминания и ключевые слова",
-    "Global": "Глобально",
-    "New keyword": "Новое ключевое слово",
-    "Keyword": "Ключевое слово",
-    "Recommended for public spaces.": "Рекомендуется для публичных пространств.",
-    "Allow people to preview your space before they join.": "Дайте людям возможность предварительно ознакомиться с вашим пространством, прежде чем они присоединятся к нему.",
-    "Preview Space": "Предварительный просмотр пространства",
-    "Decide who can view and join %(spaceName)s.": "Определите, кто может просматривать и присоединяться к %(spaceName)s.",
-    "Visibility": "Видимость",
-    "This may be useful for public spaces.": "Это может быть полезно для публичных пространств.",
-    "Guests can join a space without having an account.": "Гости могут присоединиться к пространству, не имея учётной записи.",
-    "Enable guest access": "Включить гостевой доступ",
-    "Failed to update the history visibility of this space": "Не удалось обновить видимость истории этого пространства",
-    "Failed to update the guest access of this space": "Не удалось обновить гостевой доступ к этому пространству",
-    "Failed to update the visibility of this space": "Не удалось обновить видимость этого пространства",
-    "Show all rooms": "Показать все комнаты",
     "Address": "Адрес",
-    "unknown person": "Неизвестное лицо",
     "Rooms and spaces": "Комнаты и пространства",
     "Results": "Результаты",
     "Some encryption parameters have been changed.": "Некоторые параметры шифрования были изменены.",
@@ -1254,7 +1171,6 @@
     "Role in <RoomName/>": "Роль в <RoomName/>",
     "Unknown failure": "Неизвестная ошибка",
     "Failed to update the join rules": "Не удалось обновить правила присоединения",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Любой человек в <spaceName/> может найти и присоединиться. Вы можете выбрать и другие пространства.",
     "Leave some rooms": "Покинуть несколько комнат",
     "Leave all rooms": "Покинуть все комнаты",
     "Don't leave any rooms": "Не покидать ни одну комнату",
@@ -1273,16 +1189,6 @@
     "Proceed with reset": "Выполнить сброс",
     "It looks like you don't have a Security Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.": "Похоже, у вас нет бумажного ключа, или других сеансов, с которыми вы могли бы свериться.  В этом сеансе вы не сможете получить доступ к старым зашифрованным сообщениям. Чтобы подтвердить свою личность в этом сеансе, вам нужно будет сбросить свои ключи шифрования.",
     "Really reset verification keys?": "Действительно сбросить ключи подтверждения?",
-    "Updating spaces... (%(progress)s out of %(count)s)": {
-        "one": "Обновление пространства…",
-        "other": "Обновление пространств... (%(progress)s из %(count)s)"
-    },
-    "Sending invites... (%(progress)s out of %(count)s)": {
-        "one": "Отправка приглашения…",
-        "other": "Отправка приглашений... (%(progress)s из %(count)s)"
-    },
-    "Loading new room": "Загрузка новой комнаты",
-    "Upgrading room": "Обновление комнаты",
     "Ban from %(roomName)s": "Заблокировать в %(roomName)s",
     "Unban from %(roomName)s": "Разблокировать в %(roomName)s",
     "They won't be able to access whatever you're not an admin of.": "Они не смогут получить доступ к тем местам, где вы не являетесь администратором.",
@@ -1404,7 +1310,6 @@
     "Get notified for every message": "Получать уведомление о каждом сообщении",
     "Get notifications as set up in your <a>settings</a>": "Получать уведомления в соответствии с <a>настройками</a>",
     "This room isn't bridging messages to any platforms. <a>Learn more.</a>": "Эта комната не передаёт сообщения на какие-либо платформы <a>Узнать больше.</a>",
-    "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Эта комната находится в некоторых пространствах, администратором которых вы не являетесь. В этих пространствах старая комната будет по-прежнему отображаться, но людям будет предложено присоединиться к новой.",
     "Developer": "Разработка",
     "Experimental": "Экспериментально",
     "Themes": "Темы",
@@ -1453,10 +1358,6 @@
     "%(members)s and more": "%(members)s и многие другие",
     "Deactivating your account is a permanent action — be careful!": "Деактивация вашей учётной записи является необратимым действием — будьте осторожны!",
     "Your password was successfully changed.": "Ваш пароль успешно изменён.",
-    "%(count)s people joined": {
-        "one": "%(count)s человек присоединился",
-        "other": "%(count)s человек(а) присоединились"
-    },
     "Remove from space": "Исключить из пространства",
     "This room or space is not accessible at this time.": "Эта комната или пространство в данный момент недоступны.",
     "This room or space does not exist.": "Такой комнаты или пространства не существует.",
@@ -1574,7 +1475,6 @@
     "Video call (Jitsi)": "Видеозвонок (Jitsi)",
     "View chat timeline": "Посмотреть ленту сообщений",
     "Video call (%(brand)s)": "Видеозвонок (%(brand)s)",
-    "Search users in this room…": "Поиск пользователей в этой комнате…",
     "Send email": "Отправить электронное письмо",
     "The homeserver doesn't support signing in another device.": "Домашний сервер не поддерживает вход с другого устройства.",
     "Connection": "Соединение",
@@ -1597,10 +1497,6 @@
     "Change layout": "Изменить расположение",
     "Spotlight": "Освещение",
     "Freedom": "Свободное",
-    "You do not have permission to start voice calls": "У вас нет разрешения для запуска звонка",
-    "There's no one here to call": "Здесь некому звонить",
-    "You do not have permission to start video calls": "У вас нет разрешения для запуска видеозвонка",
-    "Ongoing call": "Текущий звонок",
     "Show formatting": "Показать форматирование",
     "Hide formatting": "Скрыть форматирование",
     "This message could not be decrypted": "Это сообщение не удалось расшифровать",
@@ -1714,7 +1610,12 @@
         "deselect_all": "Отменить выбор",
         "select_all": "Выбрать все",
         "copied": "Скопировано!",
-        "Advanced": "Подробности"
+        "advanced": "Подробности",
+        "spaces": "Пространства",
+        "general": "Общие",
+        "profile": "Профиль",
+        "display_name": "Отображаемое имя",
+        "user_avatar": "Аватар"
     },
     "action": {
         "continue": "Продолжить",
@@ -1816,7 +1717,9 @@
         "exit_fullscreeen": "Выйти из полноэкранного режима",
         "enter_fullscreen": "Перейти в полноэкранный режим",
         "unban": "Разблокировать",
-        "click_to_copy": "Нажмите, чтобы скопировать"
+        "click_to_copy": "Нажмите, чтобы скопировать",
+        "hide_advanced": "Скрыть дополнительные настройки",
+        "show_advanced": "Показать дополнительные настройки"
     },
     "a11y": {
         "user_menu": "Меню пользователя",
@@ -1828,7 +1731,8 @@
             "other": "%(count)s непрочитанных сообщения(-й).",
             "one": "1 непрочитанное сообщение."
         },
-        "unread_messages": "Непрочитанные сообщения."
+        "unread_messages": "Непрочитанные сообщения.",
+        "jump_first_invite": "Перейти к первому приглашению."
     },
     "labs": {
         "video_rooms": "Видеокомнаты",
@@ -2162,7 +2066,9 @@
             "noisy": "Вкл. (со звуком)",
             "error_permissions_denied": "У %(brand)s нет разрешения на отправку уведомлений — проверьте настройки браузера",
             "error_permissions_missing": "%(brand)s не получил разрешение на отправку уведомлений: пожалуйста, попробуйте снова",
-            "error_title": "Не удалось включить уведомления"
+            "error_title": "Не удалось включить уведомления",
+            "push_targets": "Устройства для уведомлений",
+            "error_loading": "Произошла ошибка при загрузке настроек уведомлений."
         },
         "appearance": {
             "layout_irc": "IRC (Экспериментально)",
@@ -2248,7 +2154,28 @@
             "message_search_disabled": "Безопасно кэшировать шифрованные сообщения локально, чтобы они появлялись в результатах поиска.",
             "message_search_unsupported": "Отсутствуют некоторые необходимые компоненты для %(brand)s, чтобы безопасно кэшировать шифрованные сообщения локально. Если вы хотите попробовать эту возможность, соберите самостоятельно %(brand)s Desktop с <nativeLink>добавлением поисковых компонентов</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s не может безопасно кэшировать зашифрованные сообщения локально во время работы в веб-браузере. Используйте <desktopLink>%(brand)s Desktop</desktopLink>, чтобы зашифрованные сообщения появились в результатах поиска.",
-            "message_search_failed": "Инициализация поиска сообщений не удалась"
+            "message_search_failed": "Инициализация поиска сообщений не удалась",
+            "backup_key_well_formed": "корректный",
+            "backup_key_unexpected_type": "непредвиденный тип",
+            "backup_keys_description": "Сделайте резервную копию ключей шифрования с данными вашей учетной записи на случай, если вы потеряете доступ к своим сеансам. Ваши ключи будут защищены уникальным ключом безопасности.",
+            "backup_key_stored_status": "Резервный ключ сохранён:",
+            "cross_signing_not_stored": "не сохранено",
+            "backup_key_cached_status": "Резервный ключ кэширован:",
+            "4s_public_key_status": "Публичный ключ секретного хранилища:",
+            "4s_public_key_in_account_data": "в данных учётной записи",
+            "secret_storage_status": "Секретное хранилище:",
+            "secret_storage_ready": "готов",
+            "secret_storage_not_ready": "не готов",
+            "delete_backup": "Удалить резервную копию",
+            "delete_backup_confirm_description": "Вы уверены? Зашифрованные сообщения будут безвозвратно утеряны при отсутствии соответствующего резервного копирования ваших ключей.",
+            "error_loading_key_backup_status": "Не удалось получить статус резервного копирования для ключей шифрования",
+            "restore_key_backup": "Восстановить из резервной копии",
+            "key_backup_inactive": "Это сеанс <b>не сохраняет ваши ключи</b>, но у вас есть резервная копия, из которой вы можете их восстановить.",
+            "key_backup_connect_prompt": "Подключите этот сеанс к резервированию ключей до выхода, чтобы избежать утраты доступных только в этом сеансе ключей.",
+            "key_backup_connect": "Подключить этот сеанс к резервированию ключей",
+            "key_backup_complete": "Все ключи сохранены",
+            "key_backup_algorithm": "Алгоритм:",
+            "key_backup_inactive_warning": "Ваши ключи <b>не резервируются с этом сеансе</b>."
         },
         "preferences": {
             "room_list_heading": "Список комнат",
@@ -2380,18 +2307,22 @@
             "add_msisdn_confirm_sso_button": "Подтвердите добавление этого номера телефона с помощью единой точки входа.",
             "add_msisdn_confirm_button": "Подтвердите добавление номера телефона",
             "add_msisdn_confirm_body": "Нажмите кнопку ниже для добавления этого номера телефона.",
-            "add_msisdn_dialog_title": "Добавить номер телефона"
+            "add_msisdn_dialog_title": "Добавить номер телефона",
+            "name_placeholder": "Нет отображаемого имени",
+            "error_saving_profile_title": "Не удалось сохранить ваш профиль",
+            "error_saving_profile": "Операция не может быть выполнена"
         },
         "sidebar": {
             "title": "Боковая панель",
             "metaspaces_subsection": "Пространства для показа",
             "metaspaces_description": "Пространства — это способ группировки комнат и людей. Наряду с пространствами, в которых вы находитесь, вы также можете использовать некоторые предварительно созданные пространства.",
             "metaspaces_home_description": "Раздел \"Главная\" полезен для получения общего вида.",
-            "metaspaces_home_all_rooms": "Показать все комнаты на Главной, даже если они находятся в пространстве.",
             "metaspaces_favourites_description": "Сгруппируйте все свои любимые комнаты и людей в одном месте.",
             "metaspaces_people_description": "Сгруппируйте всех своих людей в одном месте.",
             "metaspaces_orphans": "Комнаты без пространства",
-            "metaspaces_orphans_description": "Сгруппируйте все комнаты, которые не являются частью пространства, в одном месте."
+            "metaspaces_orphans_description": "Сгруппируйте все комнаты, которые не являются частью пространства, в одном месте.",
+            "metaspaces_home_all_rooms_description": "Показать все комнаты на Главной, даже если они находятся в пространстве.",
+            "metaspaces_home_all_rooms": "Показать все комнаты"
         }
     },
     "devtools": {
@@ -3060,7 +2991,17 @@
         "more_button": "Больше",
         "screenshare_monitor": "Поделиться всем экраном",
         "screenshare_window": "Окно приложения",
-        "screenshare_title": "Поделиться содержимым"
+        "screenshare_title": "Поделиться содержимым",
+        "disabled_no_perms_start_voice_call": "У вас нет разрешения для запуска звонка",
+        "disabled_no_perms_start_video_call": "У вас нет разрешения для запуска видеозвонка",
+        "disabled_ongoing_call": "Текущий звонок",
+        "disabled_no_one_here": "Здесь некому звонить",
+        "n_people_joined": {
+            "one": "%(count)s человек присоединился",
+            "other": "%(count)s человек(а) присоединились"
+        },
+        "unknown_person": "Неизвестное лицо",
+        "connecting": "Подключение"
     },
     "Other": "Другие",
     "room_settings": {
@@ -3100,7 +3041,8 @@
             "title": "Роли и права",
             "permissions_section": "Права доступа",
             "permissions_section_description_space": "Выберите роли, необходимые для изменения различных частей пространства",
-            "permissions_section_description_room": "Выберите роль, которая может изменять различные части комнаты"
+            "permissions_section_description_room": "Выберите роль, которая может изменять различные части комнаты",
+            "add_privileged_user_filter_placeholder": "Поиск пользователей в этой комнате…"
         },
         "security": {
             "strict_encryption": "Никогда не отправлять зашифрованные сообщения непроверенным сеансам в этой комнате и через этот сеанс",
@@ -3126,7 +3068,33 @@
             "history_visibility_shared": "Только участники (с момента выбора этого параметра)",
             "history_visibility_invited": "Только участники (с момента их приглашения)",
             "history_visibility_joined": "Только участники (с момента их входа)",
-            "history_visibility_world_readable": "Все"
+            "history_visibility_world_readable": "Все",
+            "join_rule_upgrade_required": "Требуется обновление",
+            "join_rule_restricted_n_more": {
+                "other": "и %(count)s ещё",
+                "one": "и %(count)s еще"
+            },
+            "join_rule_restricted_summary": {
+                "other": "В настоящее время %(count)s пространств имеют доступ",
+                "one": "В настоящее время пространство имеет доступ"
+            },
+            "join_rule_restricted_description": "Любой человек в пространстве может найти и присоединиться. <a>Укажите здесь, какие пространства могут получить доступ.</a>",
+            "join_rule_restricted_description_spaces": "Пространства с доступом",
+            "join_rule_restricted_description_active_space": "Любой человек в <spaceName/> может найти и присоединиться. Вы можете выбрать и другие пространства.",
+            "join_rule_restricted_description_prompt": "Любой человек в пространстве может найти и присоединиться. Вы можете выбрать несколько пространств.",
+            "join_rule_restricted": "Участники пространства",
+            "join_rule_restricted_upgrade_warning": "Эта комната находится в некоторых пространствах, администратором которых вы не являетесь. В этих пространствах старая комната будет по-прежнему отображаться, но людям будет предложено присоединиться к новой.",
+            "join_rule_restricted_upgrade_description": "Это обновление позволит участникам выбранных пространств получить доступ в эту комнату без приглашения.",
+            "join_rule_upgrade_upgrading_room": "Обновление комнаты",
+            "join_rule_upgrade_awaiting_room": "Загрузка новой комнаты",
+            "join_rule_upgrade_sending_invites": {
+                "one": "Отправка приглашения…",
+                "other": "Отправка приглашений... (%(progress)s из %(count)s)"
+            },
+            "join_rule_upgrade_updating_spaces": {
+                "one": "Обновление пространства…",
+                "other": "Обновление пространств... (%(progress)s из %(count)s)"
+            }
         },
         "general": {
             "publish_toggle": "Опубликовать эту комнату в каталоге комнат %(domain)s?",
@@ -3136,7 +3104,11 @@
             "default_url_previews_off": "Предпросмотр ссылок по умолчанию выключен для участников этой комнаты.",
             "url_preview_encryption_warning": "В зашифрованных комнатах, подобных этой, предварительный просмотр URL-адресов отключен по умолчанию, чтобы гарантировать, что ваш сервер (где создаются предварительные просмотры) не может собирать информацию о ссылках, которые вы видите в этой комнате.",
             "url_preview_explainer": "Когда кто-то вставляет URL-адрес в свое сообщение, то можно просмотреть его, чтобы получить дополнительную информацию об этой ссылке, такую как название, описание и изображение с веб-сайта.",
-            "url_previews_section": "Предпросмотр содержимого ссылок"
+            "url_previews_section": "Предпросмотр содержимого ссылок",
+            "error_save_space_settings": "Не удалось сохранить настройки пространства.",
+            "description_space": "Редактировать настройки, относящиеся к вашему пространству.",
+            "save": "Сохранить изменения",
+            "leave_space": "Покинуть пространство"
         },
         "advanced": {
             "unfederated": "Это комната недоступна из других серверов Matrix",
@@ -3149,7 +3121,23 @@
             "room_version": "Версия комнаты:"
         },
         "delete_avatar_label": "Удалить аватар",
-        "upload_avatar_label": "Загрузить аватар"
+        "upload_avatar_label": "Загрузить аватар",
+        "visibility": {
+            "error_update_guest_access": "Не удалось обновить гостевой доступ к этому пространству",
+            "error_update_history_visibility": "Не удалось обновить видимость истории этого пространства",
+            "guest_access_explainer": "Гости могут присоединиться к пространству, не имея учётной записи.",
+            "guest_access_explainer_public_space": "Это может быть полезно для публичных пространств.",
+            "title": "Видимость",
+            "error_failed_save": "Не удалось обновить видимость этого пространства",
+            "history_visibility_anyone_space": "Предварительный просмотр пространства",
+            "history_visibility_anyone_space_description": "Дайте людям возможность предварительно ознакомиться с вашим пространством, прежде чем они присоединятся к нему.",
+            "history_visibility_anyone_space_recommendation": "Рекомендуется для публичных пространств.",
+            "guest_access_label": "Включить гостевой доступ"
+        },
+        "access": {
+            "title": "Доступ",
+            "description_space": "Определите, кто может просматривать и присоединяться к %(spaceName)s."
+        }
     },
     "encryption": {
         "verification": {
@@ -3616,9 +3604,14 @@
             "devtools_open_timeline": "Просмотреть шкалу времени комнаты (инструменты разработчика)",
             "home": "Пространство — Главная",
             "explore": "Обзор комнат",
-            "manage_and_explore": "Управление и список комнат"
+            "manage_and_explore": "Управление и список комнат",
+            "options": "Настройки пространства"
         },
-        "share_public": "Поделитесь своим публичным пространством"
+        "share_public": "Поделитесь своим публичным пространством",
+        "search_children": "Поиск %(spaceName)s",
+        "invite_link": "Поделиться ссылкой на приглашение",
+        "invite": "Пригласить людей",
+        "invite_description": "Пригласить по электронной почте или имени пользователя"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Этот домашний сервер не настроен на отображение карт.",
@@ -3676,7 +3669,6 @@
     },
     "create_space": {
         "name_required": "Пожалуйста, введите название пространства",
-        "name_placeholder": "например, my-space",
         "explainer": "Пространства — это новый способ организации комнат и людей. Какой вид пространства вы хотите создать? Вы можете изменить это позже.",
         "public_description": "Открытое пространство для всех, лучший вариант для сообществ",
         "private_description": "Только по приглашениям, лучший вариант для себя или команды",
@@ -3706,7 +3698,11 @@
         "setup_rooms_community_description": "Давайте создадим для каждого из них отдельную комнату.",
         "setup_rooms_description": "Позже можно добавить и другие, в том числе уже существующие.",
         "setup_rooms_private_heading": "Над какими проектами ваша команда работает?",
-        "setup_rooms_private_description": "Мы создадим комнаты для каждого из них."
+        "setup_rooms_private_description": "Мы создадим комнаты для каждого из них.",
+        "address_placeholder": "например, my-space",
+        "address_label": "Адрес",
+        "label": "Создать пространство",
+        "add_details_prompt_2": "Вы можете изменить их в любое время."
     },
     "user_menu": {
         "switch_theme_light": "Переключить в светлый режим",
@@ -3875,7 +3871,9 @@
         "admin_contact_short": "Обратитесь к <a>администратору сервера</a>.",
         "non_urgent_echo_failure_toast": "Ваш сервер не отвечает на некоторые <a>запросы</a>.",
         "failed_copy": "Не удалось скопировать",
-        "something_went_wrong": "Что-то пошло не так!"
+        "something_went_wrong": "Что-то пошло не так!",
+        "update_power_level": "Не удалось изменить уровень прав",
+        "unknown": "Неизвестная ошибка"
     },
     "in_space1_and_space2": "В пространствах %(space1Name)s и %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -3897,7 +3895,13 @@
         "colour_grey": "Серый",
         "colour_red": "Красный",
         "colour_unsent": "Не отправлено",
-        "error_change_title": "Изменить настройки уведомлений"
+        "error_change_title": "Изменить настройки уведомлений",
+        "mark_all_read": "Отметить всё как прочитанное",
+        "keyword": "Ключевое слово",
+        "keyword_new": "Новое ключевое слово",
+        "class_global": "Глобально",
+        "class_other": "Другие",
+        "mentions_keywords": "Упоминания и ключевые слова"
     },
     "mobile_guide": {
         "toast_title": "Используйте приложение для лучшего опыта",
@@ -3917,5 +3921,10 @@
     "lightbox": {
         "rotate_left": "Повернуть влево",
         "rotate_right": "Повернуть вправо"
+    },
+    "a11y_jump_first_unread_room": "Перейти в первую непрочитанную комнату.",
+    "integration_manager": {
+        "error_connecting_heading": "Не удалось подключиться к менеджеру интеграций",
+        "error_connecting": "Менеджер интеграций не работает или не может подключиться к вашему домашнему серверу."
     }
 }

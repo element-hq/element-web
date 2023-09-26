@@ -20,7 +20,6 @@
     "Email address": "Адреса е-пошти",
     "Rooms": "Кімнати",
     "Sunday": "Неділя",
-    "Notification targets": "Цілі сповіщень",
     "Today": "Сьогодні",
     "Friday": "П'ятниця",
     "Changelog": "Журнал змін",
@@ -44,7 +43,6 @@
     "Logs sent": "Журнали надіслані",
     "Yesterday": "Вчора",
     "Thank you!": "Дякуємо!",
-    "Profile": "Профіль",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Введіть пароль для захисту експортованого файлу. Щоб розшифрувати файл потрібно буде ввести цей пароль.",
     "Warning!": "Увага!",
     "Sun": "нд",
@@ -78,7 +76,6 @@
     "Reason": "Причина",
     "Default": "Типовий",
     "Incorrect verification code": "Неправильний код перевірки",
-    "No display name": "Немає псевдоніма",
     "Failed to set display name": "Не вдалося налаштувати псевдонім",
     "This event could not be displayed": "Неможливо показати цю подію",
     "Failed to ban user": "Не вдалося заблокувати користувача",
@@ -86,7 +83,6 @@
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Ви не зможете скасувати цю дію, оскільки ви зменшуєте свої повноваження. Якщо ви останній привілейований користувач у цій кімнаті, ви не зможете повернути повноваження.",
     "Demote": "Зменшити повноваження",
     "Failed to mute user": "Не вдалося заглушити користувача",
-    "Failed to change power level": "Не вдалося змінити рівень повноважень",
     "Join the discussion": "Приєднатися до обговорення",
     "The conversation continues here.": "Розмова триває тут.",
     "This room has been replaced and is no longer active.": "Ця кімната була замінена і не є активною.",
@@ -94,7 +90,6 @@
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Щоб уникнути втрати історії ваших листувань, ви маєте експортувати ключі кімнати перед виходом. Вам треба буде повернутися до новішої версії %(brand)s аби зробити це",
     "Incompatible Database": "Несумісна база даних",
     "Continue With Encryption Disabled": "Продовжити із вимкненим шифруванням",
-    "Unknown error": "Невідома помилка",
     "Are you sure you want to sign out?": "Ви впевнені, що хочете вийти?",
     "Your homeserver doesn't seem to support this feature.": "Схоже, що ваш домашній сервер не підтримує цю властивість.",
     "Sign out and remove encryption keys?": "Вийти та видалити ключі шифрування?",
@@ -121,7 +116,6 @@
     "Join the conversation with an account": "Приєднатись до бесіди з обліковим записом",
     "Unable to restore session": "Не вдалося відновити сеанс",
     "We encountered an error trying to restore your previous session.": "Ми натрапили на помилку, намагаючись відновити ваш попередній сеанс.",
-    "in account data": "у даних облікового запису",
     "Email addresses": "Адреси е-пошти",
     "Phone numbers": "Номери телефонів",
     "Forget this room": "Забути цю кімнату",
@@ -137,8 +131,6 @@
     "Session key": "Ключ сеансу",
     "Connectivity to the server has been lost.": "З'єднання з сервером було втрачено.",
     "Sent messages will be stored until your connection has returned.": "Надіслані повідомлення будуть збережені поки не з'явиться зв'язок.",
-    "Jump to first unread room.": "Перейти до першої непрочитаної кімнати.",
-    "Jump to first invite.": "Перейти до першого запрошення.",
     "Add room": "Додати кімнату",
     "You seem to be uploading files, are you sure you want to quit?": "Схоже, що ви зараз відвантажуєте файли. Ви впевнені, що хочете вийти?",
     "You seem to be in a call, are you sure you want to quit?": "Схоже, ви намагаєтесь вийти посеред розмови. Ви впевнені, що хочете вийти?",
@@ -166,7 +158,6 @@
     "Your homeserver has exceeded one of its resource limits.": "Ваш домашній сервер перевищив одне із своїх обмежень ресурсів.",
     "Ok": "Гаразд",
     "Set up": "Налаштувати",
-    "General": "Загальні",
     "Discovery": "Виявлення",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Щоб повідомити про проблеми безпеки Matrix, будь ласка, прочитайте <a>Політику розкриття інформації</a> Matrix.org.",
     "Error changing power level requirement": "Помилка під час зміни вимог до рівня повноважень",
@@ -246,13 +237,6 @@
     "Santa": "Св. Миколай",
     "Gift": "Подарунок",
     "Lock": "Замок",
-    "well formed": "добре сформований",
-    "unexpected type": "несподіваний тип",
-    "Cannot connect to integration manager": "Не вдалося з'єднатися з менеджером інтеграцій",
-    "Delete Backup": "Видалити резервну копію",
-    "Restore from Backup": "Відновити з резервної копії",
-    "not stored": "не збережено",
-    "All keys backed up": "Усі ключі збережено",
     "Checking server": "Перевірка сервера",
     "You should:": "Вам варто:",
     "Disconnect anyway": "Відключити в будь-якому випадку",
@@ -278,7 +262,6 @@
     "Share Room Message": "Поділитися повідомленням кімнати",
     "General failure": "Загальний збій",
     "Enter your account password to confirm the upgrade:": "Введіть пароль вашого облікового запису щоб підтвердити поліпшення:",
-    "Secret storage public key:": "Таємне сховище відкритого ключа:",
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "Адміністратором вашого сервера було вимкнено автоматичне наскрізне шифрування у приватних кімнатах і особистих повідомленнях.",
     "expand": "розгорнути",
     "New Recovery Method": "Новий метод відновлення",
@@ -291,9 +274,7 @@
     "Upgrade this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.": "Поліпшіть цей сеанс, щоб уможливити звірення інших сеансів, надаючи їм доступ до зашифрованих повідомлень та позначаючи їх довіреними для інших користувачів.",
     "Upgrade your encryption": "Поліпшити ваше шифрування",
     "IRC display name width": "Ширина псевдоніма IRC",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Ви впевнені? Ви втратите ваші зашифровані повідомлення якщо копія ключів не була створена коректно.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Зашифровані повідомлення захищені наскрізним шифруванням. Лише ви та отримувачі повідомлень мають ключі для їх читання.",
-    "Display Name": "Псевдонім",
     "wait and try again later": "зачекати та повторити спробу пізніше",
     "This room is end-to-end encrypted": "Ця кімната є наскрізно зашифрованою",
     "Encrypted by an unverified session": "Зашифроване незвіреним сеансом",
@@ -311,13 +292,10 @@
     "If you can't scan the code above, verify by comparing unique emoji.": "Якщо ви не можете сканувати зазначений код, звірте порівнянням унікальних емодзі.",
     "Verify by comparing unique emoji.": "Звірити порівнянням унікальних емодзі.",
     "Verify by emoji": "Звірити за допомогою емодзі",
-    "The integration manager is offline or it cannot reach your homeserver.": "Менеджер інтеграцій не під'єднаний або не може зв'язатися з вашим домашнім сервером.",
-    "Profile picture": "Зображення профілю",
     "Failed to connect to integration manager": "Не вдалось з'єднатись з менеджером інтеграцій",
     "Show image": "Показати зображення",
     "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Ви ігноруєте цього користувача, тож його повідомлення приховано. <a>Все одно показати.</a>",
     "Add an Integration": "Додати інтеграцію",
-    "Show advanced": "Показати розширені",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Підтвердьте деактивацію свого облікового запису через єдиний вхід, щоб підтвердити вашу особу.",
     "Comoros": "Коморські Острови",
     "Colombia": "Колумбія",
@@ -582,7 +560,6 @@
     "Share Link to User": "Поділитися посиланням на користувача",
     "<a>In reply to</a> <pill>": "<a>У відповідь на</a> <pill>",
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Ви не можете надсилати жодних повідомлень, поки не переглянете та не погодитесь з <consentLink>нашими умовами та положеннями</consentLink>.",
-    "unknown person": "невідома особа",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Ваш %(brand)s не дозволяє вам користуватись для цього менеджером інтеграцій. Зверніться до адміністратора.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Менеджери інтеграцій отримують дані конфігурації та можуть змінювати віджети, надсилати запрошення у кімнати й установлювати рівні повноважень від вашого імені.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Використовувати менеджер інтеграцій для керування ботами, віджетами й пакунками наліпок.",
@@ -594,7 +571,6 @@
     "Link to most recent message": "Посилання на останнє повідомлення",
     "Share Room": "Поділитись кімнатою",
     "Share room": "Поділитись кімнатою",
-    "Invite people": "Запросити людей",
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Погодьтесь з Умовами надання послуг сервера ідентифікації (%(serverName)s), щоб дозволити знаходити вас за адресою електронної пошти або за номером телефону.",
     "The identity server you have chosen does not have any terms of service.": "Вибраний вами сервер ідентифікації не містить жодних умов користування.",
     "Terms of service not accepted or the identity server is invalid.": "Умови користування не прийнято або сервер ідентифікації недійсний.",
@@ -628,7 +604,6 @@
     "Share User": "Поділитися користувачем",
     "Unable to share phone number": "Не вдалося надіслати телефонний номер",
     "Unable to share email address": "Не вдалося надіслати адресу е-пошти",
-    "Share invite link": "Надіслати запрошувальне посилання",
     "Some suggestions may be hidden for privacy.": "Деякі пропозиції можуть бути сховані для приватності.",
     "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Захистіться від втрати доступу до зашифрованих повідомлень і даних створенням резервної копії ключів шифрування на своєму сервері.",
     "You may contact me if you have any follow up questions": "Можете зв’язатися зі мною, якщо у вас виникнуть додаткові запитання",
@@ -646,7 +621,6 @@
     "Allow this widget to verify your identity": "Дозволити цьому віджету перевіряти вашу особу",
     "<userName/> invited you": "<userName/> запрошує вас",
     "Sign in with SSO": "Увійти за допомогою SSO",
-    "Connecting": "З'єднання",
     "Click the button below to confirm your identity.": "Клацніть на кнопку внизу, щоб підтвердити свою особу.",
     "Confirm to continue": "Підтвердьте, щоб продовжити",
     "Start Verification": "Почати перевірку",
@@ -705,7 +679,6 @@
     "e.g. my-room": "наприклад, моя-кімната",
     "Room address": "Адреса кімнати",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Не вдалося завантажити подію, на яку було надано відповідь, її або не існує, або у вас немає дозволу на її перегляд.",
-    "Spaces": "Простори",
     "Custom level": "Власний рівень",
     "To leave the beta, visit your settings.": "Щоб вийти з бета-тестування, перейдіть до налаштувань.",
     "File to import": "Файл для імпорту",
@@ -723,30 +696,7 @@
     "Retry all": "Повторити надсилання всіх",
     "Delete all": "Видалити всі",
     "Some of your messages have not been sent": "Деякі з ваших повідомлень не надіслано",
-    "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Цей сеанс <b>не створює резервну копію ваших ключів</b>, але у вас є резервна копія, з якої ви можете їх відновити.",
-    "Your keys are <b>not being backed up from this session</b>.": "<b>Резервна копія ваших ключів не створюється з цього сеансу</b>.",
     "Back up your keys before signing out to avoid losing them.": "Створіть резервну копію ключів перед виходом, щоб не втратити їх.",
-    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Резервне копіювання ключів шифрування з даними вашого облікового запису на випадок втрати доступу до сеансів. Ваші ключі будуть захищені унікальним ключем безпеки.",
-    "Backup key stored:": "Резервну копію ключа розміщено:",
-    "Backup key cached:": "Резервну копію ключа кешовано:",
-    "Unable to load key backup status": "Не вдалося завантажити стан резервного копіювання ключа",
-    "The operation could not be completed": "Неможливо завершити операцію",
-    "Failed to save your profile": "Не вдалося зберегти ваш профіль",
-    "There was an error loading your notification settings.": "Сталася помилка під час завантаження налаштувань сповіщень.",
-    "Mentions & keywords": "Згадки та ключові слова",
-    "Global": "Глобально",
-    "New keyword": "Нове ключове слово",
-    "Keyword": "Ключове слово",
-    "This upgrade will allow members of selected spaces access to this room without an invite.": "Це поліпшення дозволить учасникам обраних просторів доступитися до цієї кімнати без запрошення.",
-    "Space members": "Учасники простору",
-    "Anyone in a space can find and join. You can select multiple spaces.": "Будь-хто у просторі може знайти та приєднатися. Можна вибрати кілька просторів.",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Будь-хто у <spaceName/> може знайти та приєднатися. Ви можете вибрати інші простори.",
-    "Spaces with access": "Простори з доступом",
-    "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Будь-хто у просторі може знайти та приєднатися. <a>Укажіть, які простори можуть отримати доступ сюди.</a>",
-    "Currently, %(count)s spaces have access": {
-        "one": "На разі простір має доступ",
-        "other": "На разі доступ мають %(count)s просторів"
-    },
     "contact the administrators of identity server <idserver />": "зв'язатися з адміністратором сервера ідентифікації <idserver />",
     "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "перевірити плагіни браузера на наявність будь-чого, що може заблокувати сервер ідентифікації (наприклад, Privacy Badger)",
     "Disconnect from the identity server <idserver />?": "Від'єднатися від сервера ідентифікації <idserver />?",
@@ -755,36 +705,7 @@
     "Change identity server": "Змінити сервер ідентифікації",
     "Not a valid identity server (status code %(code)s)": "Хибний сервер ідентифікації (код статусу %(code)s)",
     "Identity server URL must be HTTPS": "URL-адреса сервера ідентифікації повинна починатися з HTTPS",
-    "not ready": "не готове",
-    "ready": "готове",
-    "Secret storage:": "Таємне сховище:",
-    "Algorithm:": "Алгоритм:",
     "Backup version:": "Версія резервної копії:",
-    "& %(count)s more": {
-        "one": "і ще %(count)s",
-        "other": "і ще %(count)s"
-    },
-    "Upgrade required": "Потрібне поліпшення",
-    "Space options": "Параметри простору",
-    "Recommended for public spaces.": "Рекомендовано для загальнодоступних просторів.",
-    "Allow people to preview your space before they join.": "Дозвольте людям переглядати ваш простір, перш ніж вони приєднаються.",
-    "Preview Space": "Попередній перегляд простору",
-    "Failed to update the visibility of this space": "Не вдалось оновити видимість цього простору",
-    "Decide who can view and join %(spaceName)s.": "Визначте хто може переглядати та приєднатися до %(spaceName)s.",
-    "Visibility": "Видимість",
-    "This may be useful for public spaces.": "Це може бути корисним для загальнодоступних просторів.",
-    "Guests can join a space without having an account.": "Гості можуть приєднатися до простору без облікового запису.",
-    "Enable guest access": "Увімкнути гостьовий доступ",
-    "Hide advanced": "Сховати розширені",
-    "Failed to update the history visibility of this space": "Не вдалося оновити видимість історії цього простору",
-    "Failed to update the guest access of this space": "Не вдалося оновити гостьовий доступ до цього простору",
-    "Leave Space": "Вийти з простору",
-    "Save Changes": "Зберегти зміни",
-    "Edit settings relating to your space.": "Змінити налаштування, що стосуються вашого простору.",
-    "Failed to save space settings.": "Не вдалося зберегти налаштування простору.",
-    "Invite with email or username": "Запросити за допомогою е-пошти або імені користувача",
-    "Show all rooms": "Показати всі кімнати",
-    "You can change these anytime.": "Ви можете змінити це будь-коли.",
     "Create a space": "Створити простір",
     "Address": "Адреса",
     "Cancel All": "Скасувати все",
@@ -813,7 +734,6 @@
     "Unable to upload": "Не вдалося вивантажити",
     "Cancelled signature upload": "Вивантаження підпису скасовано",
     "Upload completed": "Вивантаження виконано",
-    "Search %(spaceName)s": "Пошук %(spaceName)s",
     "Leave some rooms": "Вийте з кількох кімнат",
     "Leave all rooms": "Вийти з кімнати",
     "Success!": "Успішно!",
@@ -856,7 +776,6 @@
     "Stop recording": "Зупинити запис",
     "No microphone found": "Мікрофона не знайдено",
     "Unable to access your microphone": "Не вдалося доступитися до мікрофона",
-    "Mark all as read": "Позначити все прочитаним",
     "Try to join anyway": "Все одно спробувати приєднатися",
     "Reason: %(reason)s": "Причина: %(reason)s",
     "Sign Up": "Зареєструватися",
@@ -894,7 +813,6 @@
     "Verification code": "Код перевірки",
     "Verify the link in your inbox": "Перевірте посилання у теці «Вхідні»",
     "Unable to verify email address.": "Не вдалося перевірити адресу е-пошти.",
-    "Access": "Доступ",
     "Unknown failure": "Невідомий збій",
     "Failed to update the join rules": "Не вдалося оновити правила приєднання",
     "Browse": "Огляд",
@@ -926,7 +844,6 @@
     "Modal Widget": "Модальний віджет",
     "Message edits": "Редагування повідомлення",
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Ви раніше використовували новішу версію %(brand)s для цього сеансу. Щоб знову використовувати цю версію із наскрізним шифруванням, вам потрібно буде вийти та знову ввійти.",
-    "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Налаштуйте цьому сеансу резервне копіювання, інакше при виході втратите ключі, доступні лише в цьому сеансі.",
     "To continue, use Single Sign On to prove your identity.": "Щоб продовжити, скористайтеся єдиним входом для підтвердження особи.",
     "For extra security, verify this user by checking a one-time code on both of your devices.": "Для додаткової безпеки перевірте цього користувача, звіривши одноразовий код на обох своїх пристроях.",
     "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Якщо звірити цей пристрій, його буде позначено надійним, а користувачі, які перевірили у вас, будуть довіряти цьому пристрою.",
@@ -1001,16 +918,6 @@
     "To join a space you'll need an invite.": "Щоб приєднатись до простору, вам потрібне запрошення.",
     "You are about to leave <spaceName/>.": "Ви збираєтеся вийти з <spaceName/>.",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Введіть свою фразу безпеки чи <button>скористайтесь ключем безпеки</button> для продовження.",
-    "Updating spaces... (%(progress)s out of %(count)s)": {
-        "one": "Оновлення простору...",
-        "other": "Оновлення просторів... (%(progress)s із %(count)s)"
-    },
-    "Sending invites... (%(progress)s out of %(count)s)": {
-        "one": "Надсилання запрошення...",
-        "other": "Надсилання запрошень... (%(progress)s із %(count)s)"
-    },
-    "Loading new room": "Звантаження нової кімнати",
-    "Upgrading room": "Поліпшення кімнати",
     "Link to selected message": "Посилання на вибране повідомлення",
     "To help us prevent this in future, please <a>send us logs</a>.": "Щоб уникнути цього в майбутньому просимо <a>надіслати нам журнал</a>.",
     "Missing session data": "Відсутні дані сеансу",
@@ -1223,8 +1130,6 @@
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Радимо вилучити адреси е-пошти й номери телефонів із сервера ідентифікації, перш ніж від'єднатися.",
     "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "Сервер ідентифікації <idserver /> досі <b>поширює ваші особисті дані</b>.",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Слід <b>вилучити ваші особисті дані</b> з сервера ідентифікації <idserver />, перш ніж від'єднатися. На жаль, сервер ідентифікації <idserver /> зараз офлайн чи недоступний.",
-    "Connect this session to Key Backup": "Налаштувати цьому сеансу резервне копіювання ключів",
-    "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Ця кімната належить до просторів, які ви не адмініструєте. Ці простори показуватимуть стару кімнату, але пропонуватимуть людям приєднатись до нової.",
     "Failed to re-authenticate due to a homeserver problem": "Не вдалося перезайти через проблему з домашнім сервером",
     "Resetting your verification keys cannot be undone. After resetting, you won't have access to old encrypted messages, and any friends who have previously verified you will see security warnings until you re-verify with them.": "Скидання ключів звірки неможливо скасувати. Після скидання, ви втратите доступ до старих зашифрованих повідомлень, а всі друзі, які раніше вас звіряли, бачитимуть застереження безпеки, поки ви не проведете звірку з ними знову.",
     "I'll verify later": "Звірю пізніше",
@@ -1523,10 +1428,6 @@
     "An error occurred whilst sharing your live location": "Сталася помилка під час надання доступу до вашого поточного місцеперебування",
     "Unread email icon": "Піктограма непрочитаного електронного листа",
     "Joining…": "Приєднання…",
-    "%(count)s people joined": {
-        "one": "%(count)s осіб приєдналися",
-        "other": "%(count)s людей приєдналися"
-    },
     "Read receipts": "Звіти про прочитання",
     "Deactivating your account is a permanent action — be careful!": "Деактивація вашого облікового запису — це незворотна дія, будьте обережні!",
     "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "Коли ви вийдете, ці ключі буде видалено з цього пристрою, і ви не зможете читати зашифровані повідомлення, якщо у вас немає ключів для них на інших пристроях або не створено їх резервну копію на сервері.",
@@ -1569,10 +1470,6 @@
     "Manually verify by text": "Звірити вручну за допомогою тексту",
     "%(downloadButton)s or %(copyButton)s": "%(downloadButton)s або %(copyButton)s",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s або %(recoveryFile)s",
-    "You do not have permission to start voice calls": "У вас немає дозволу розпочинати голосові виклики",
-    "There's no one here to call": "Тут немає кого викликати",
-    "You do not have permission to start video calls": "У вас немає дозволу розпочинати відеовиклики",
-    "Ongoing call": "Поточний виклик",
     "Video call (Jitsi)": "Відеовиклик (Jitsi)",
     "Failed to set pusher state": "Не вдалося встановити стан push-служби",
     "Video call ended": "Відеовиклик завершено",
@@ -1624,9 +1521,6 @@
     "Error starting verification": "Помилка запуску перевірки",
     "<w>WARNING:</w> <description/>": "<w>ПОПЕРЕДЖЕННЯ:</w> <description/>",
     "Change layout": "Змінити макет",
-    "Search users in this room…": "Пошук користувачів у цій кімнаті…",
-    "Give one or multiple users in this room more privileges": "Надайте одному або кільком користувачам у цій кімнаті більше повноважень",
-    "Add privileged users": "Додати привілейованих користувачів",
     "Unable to decrypt message": "Не вдалося розшифрувати повідомлення",
     "This message could not be decrypted": "Не вдалося розшифрувати це повідомлення",
     " in <strong>%(room)s</strong>": " в <strong>%(room)s</strong>",
@@ -1641,7 +1535,6 @@
     "Ignore %(user)s": "Нехтувати %(user)s",
     "unknown": "невідомо",
     "Declining…": "Відхилення…",
-    "This session is backing up your keys.": "Під час цього сеансу створюється резервна копія ваших ключів.",
     "There are no past polls in this room": "У цій кімнаті ще не проводилися опитувань",
     "There are no active polls in this room": "У цій кімнаті немає активних опитувань",
     "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "Попередження: ваші особисті дані ( включно з ключами шифрування) досі зберігаються в цьому сеансі. Очистьте їх, якщо ви завершили роботу в цьому сеансі або хочете увійти в інший обліковий запис.",
@@ -1663,10 +1556,6 @@
     "Encrypting your message…": "Шифрування повідомлення…",
     "Sending your message…": "Надсилання повідомлення…",
     "Set a new account password…": "Встановити новий пароль облікового запису…",
-    "Backing up %(sessionsRemaining)s keys…": "Резервне копіювання %(sessionsRemaining)s ключів…",
-    "Connecting to integration manager…": "Під'єднання до менеджера інтеграцій…",
-    "Saving…": "Збереження…",
-    "Creating…": "Створення…",
     "Starting export process…": "Початок процесу експорту…",
     "Secure Backup successful": "Безпечне резервне копіювання виконано успішно",
     "Your keys are now being backed up from this device.": "На цьому пристрої створюється резервна копія ваших ключів.",
@@ -1691,7 +1580,6 @@
     "There are no active polls. Load more polls to view polls for previous months": "Немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
     "Load more polls": "Завантажити більше опитувань",
     "Invites by email can only be sent one at a time": "Запрошення електронною поштою можна надсилати лише одне за раз",
-    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Сталася помилка під час оновлення налаштувань сповіщень. Спробуйте змінити налаштування ще раз.",
     "Desktop app logo": "Логотип комп'ютерного застосунку",
     "Requires your server to support the stable version of MSC3827": "Потрібно, щоб ваш сервер підтримував стабільну версію MSC3827",
     "Message from %(user)s": "Повідомлення від %(user)s",
@@ -1715,11 +1603,9 @@
     "Error changing password": "Помилка зміни пароля",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s (HTTP-статус %(httpStatus)s)",
     "Unknown password change error (%(stringifiedError)s)": "Невідома помилка зміни пароля (%(stringifiedError)s)",
-    "Failed to download source media, no source url was found": "Не вдалося завантажити початковий медіафайл, не знайдено url джерела",
     "Once invited users have joined %(brand)s, you will be able to chat and the room will be end-to-end encrypted": "Після того, як запрошені користувачі приєднаються до %(brand)s, ви зможете спілкуватися в бесіді, а кімната буде наскрізно зашифрована",
     "Waiting for users to join %(brand)s": "Очікування приєднання користувача до %(brand)s",
     "You do not have permission to invite users": "У вас немає дозволу запрошувати користувачів",
-    "Ask to join": "Запит на приєднання",
     "Mentions and Keywords only": "Лише згадки та ключові слова",
     "This setting will be applied by default to all your rooms.": "Цей параметр буде застосовано усталеним до всіх ваших кімнат.",
     "Play a sound for": "Відтворювати звук про",
@@ -1746,7 +1632,6 @@
     "Messages sent by bots": "Повідомлення від ботів",
     "New room activity, upgrades and status messages occur": "Нова діяльність у кімнаті, поліпшення та повідомлення про стан",
     "Unable to find user by email": "Не вдалося знайти користувача за адресою електронної пошти",
-    "People cannot join unless access is granted.": "Люди не можуть приєднатися, якщо їм не надано доступ.",
     "<strong>Update:</strong>We’ve simplified Notifications Settings to make options easier to find. Some custom settings you’ve chosen in the past are not shown here, but they’re still active. If you proceed, some of your settings may change. <a>Learn more</a>": "<strong>Оновлення:</strong>Ми спростили налаштування сповіщень, щоб полегшити пошук потрібних опцій. Деякі налаштування, які ви вибрали раніше, тут не показано, але вони залишаються активними. Якщо ви продовжите, деякі з ваших налаштувань можуть змінитися. <a>Докладніше</a>",
     "Show a badge <badge/> when keywords are used in a room.": "Показувати значок <badge/>, коли в кімнаті вжито ключові слова.",
     "Email Notifications": "Сповіщення е-поштою",
@@ -1864,7 +1749,13 @@
         "deselect_all": "Скасувати вибір",
         "select_all": "Вибрати всі",
         "copied": "Скопійовано!",
-        "Advanced": "Подробиці"
+        "advanced": "Подробиці",
+        "spaces": "Простори",
+        "general": "Загальні",
+        "saving": "Збереження…",
+        "profile": "Профіль",
+        "display_name": "Псевдонім",
+        "user_avatar": "Зображення профілю"
     },
     "action": {
         "continue": "Продовжити",
@@ -1968,7 +1859,9 @@
         "exit_fullscreeen": "Вийти з повноекранного режиму",
         "enter_fullscreen": "Перейти у повноекранний режим",
         "unban": "Розблокувати",
-        "click_to_copy": "Клацніть, щоб скопіювати"
+        "click_to_copy": "Клацніть, щоб скопіювати",
+        "hide_advanced": "Сховати розширені",
+        "show_advanced": "Показати розширені"
     },
     "a11y": {
         "user_menu": "Користувацьке меню",
@@ -1980,7 +1873,8 @@
             "other": "%(count)s непрочитаних повідомлень.",
             "one": "1 непрочитане повідомлення."
         },
-        "unread_messages": "Непрочитані повідомлення."
+        "unread_messages": "Непрочитані повідомлення.",
+        "jump_first_invite": "Перейти до першого запрошення."
     },
     "labs": {
         "video_rooms": "Відеокімнати",
@@ -2349,7 +2243,10 @@
             "noisy": "Шумно",
             "error_permissions_denied": "%(brand)s не має дозволу надсилати вам сповіщення — перевірте налаштування браузера",
             "error_permissions_missing": "%(brand)s не має дозволу надсилати сповіщення — будь ласка, спробуйте ще раз",
-            "error_title": "Не вдалося увімкнути сповіщення"
+            "error_title": "Не вдалося увімкнути сповіщення",
+            "error_updating": "Сталася помилка під час оновлення налаштувань сповіщень. Спробуйте змінити налаштування ще раз.",
+            "push_targets": "Цілі сповіщень",
+            "error_loading": "Сталася помилка під час завантаження налаштувань сповіщень."
         },
         "appearance": {
             "layout_irc": "IRC (Експериментально)",
@@ -2437,7 +2334,30 @@
             "message_search_disabled": "Безпечно локально кешувати зашифровані повідомлення щоб вони з'являлись у результатах пошуку.",
             "message_search_unsupported": "%(brand)s'ові бракує деяких складників, необхідних для безпечного локального кешування зашифрованих повідомлень. Якщо ви хочете поекспериментувати з цією властивістю, зберіть спеціальну збірку %(brand)s Desktop із <nativeLink>доданням пошукових складників</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s не може безпечно локально кешувати зашифровані повідомлення під час роботи у браузері. Користуйтесь <desktopLink>%(brand)s для комп'ютерів</desktopLink>, в якому зашифровані повідомлення з'являються у результатах пошуку.",
-            "message_search_failed": "Не вдалося ініціалізувати пошук повідомлень"
+            "message_search_failed": "Не вдалося ініціалізувати пошук повідомлень",
+            "backup_key_well_formed": "добре сформований",
+            "backup_key_unexpected_type": "несподіваний тип",
+            "backup_keys_description": "Резервне копіювання ключів шифрування з даними вашого облікового запису на випадок втрати доступу до сеансів. Ваші ключі будуть захищені унікальним ключем безпеки.",
+            "backup_key_stored_status": "Резервну копію ключа розміщено:",
+            "cross_signing_not_stored": "не збережено",
+            "backup_key_cached_status": "Резервну копію ключа кешовано:",
+            "4s_public_key_status": "Таємне сховище відкритого ключа:",
+            "4s_public_key_in_account_data": "у даних облікового запису",
+            "secret_storage_status": "Таємне сховище:",
+            "secret_storage_ready": "готове",
+            "secret_storage_not_ready": "не готове",
+            "delete_backup": "Видалити резервну копію",
+            "delete_backup_confirm_description": "Ви впевнені? Ви втратите ваші зашифровані повідомлення якщо копія ключів не була створена коректно.",
+            "error_loading_key_backup_status": "Не вдалося завантажити стан резервного копіювання ключа",
+            "restore_key_backup": "Відновити з резервної копії",
+            "key_backup_active": "Під час цього сеансу створюється резервна копія ваших ключів.",
+            "key_backup_inactive": "Цей сеанс <b>не створює резервну копію ваших ключів</b>, але у вас є резервна копія, з якої ви можете їх відновити.",
+            "key_backup_connect_prompt": "Налаштуйте цьому сеансу резервне копіювання, інакше при виході втратите ключі, доступні лише в цьому сеансі.",
+            "key_backup_connect": "Налаштувати цьому сеансу резервне копіювання ключів",
+            "key_backup_in_progress": "Резервне копіювання %(sessionsRemaining)s ключів…",
+            "key_backup_complete": "Усі ключі збережено",
+            "key_backup_algorithm": "Алгоритм:",
+            "key_backup_inactive_warning": "<b>Резервна копія ваших ключів не створюється з цього сеансу</b>."
         },
         "preferences": {
             "room_list_heading": "Перелік кімнат",
@@ -2576,18 +2496,22 @@
             "add_msisdn_confirm_sso_button": "Підтвердьте додавання цього телефонного номера за допомогоє єдиного входу, щоб довести вашу справжність.",
             "add_msisdn_confirm_button": "Підтвердьте додавання номера телефону",
             "add_msisdn_confirm_body": "Клацніть на кнопку внизу, щоб підтвердити додавання цього номера телефону.",
-            "add_msisdn_dialog_title": "Додати номер телефону"
+            "add_msisdn_dialog_title": "Додати номер телефону",
+            "name_placeholder": "Немає псевдоніма",
+            "error_saving_profile_title": "Не вдалося зберегти ваш профіль",
+            "error_saving_profile": "Неможливо завершити операцію"
         },
         "sidebar": {
             "title": "Бічна панель",
             "metaspaces_subsection": "Показувати такі простори",
             "metaspaces_description": "Простори — це спосіб групування кімнат і людей. Окрім просторів, до яких ви приєдналися, ви також можете використовувати деякі вбудовані.",
             "metaspaces_home_description": "Домівка надає загальний огляд усього.",
-            "metaspaces_home_all_rooms": "Показати всі кімнати в домівці, навіть ті, що належать до просторів.",
             "metaspaces_favourites_description": "Групуйте всі свої улюблені кімнати та людей в одному місці.",
             "metaspaces_people_description": "Групуйте всіх своїх людей в одному місці.",
             "metaspaces_orphans": "Кімнати без просторів",
-            "metaspaces_orphans_description": "Групуйте всі свої кімнати, не приєднані до простору, в одному місці."
+            "metaspaces_orphans_description": "Групуйте всі свої кімнати, не приєднані до простору, в одному місці.",
+            "metaspaces_home_all_rooms_description": "Показати всі кімнати в домівці, навіть ті, що належать до просторів.",
+            "metaspaces_home_all_rooms": "Показати всі кімнати"
         }
     },
     "devtools": {
@@ -3311,7 +3235,17 @@
         "more_button": "Більше",
         "screenshare_monitor": "Поділитися всім екраном",
         "screenshare_window": "Вікно застосунку",
-        "screenshare_title": "Поділитися вмістом"
+        "screenshare_title": "Поділитися вмістом",
+        "disabled_no_perms_start_voice_call": "У вас немає дозволу розпочинати голосові виклики",
+        "disabled_no_perms_start_video_call": "У вас немає дозволу розпочинати відеовиклики",
+        "disabled_ongoing_call": "Поточний виклик",
+        "disabled_no_one_here": "Тут немає кого викликати",
+        "n_people_joined": {
+            "one": "%(count)s осіб приєдналися",
+            "other": "%(count)s людей приєдналися"
+        },
+        "unknown_person": "невідома особа",
+        "connecting": "З'єднання"
     },
     "Other": "Інше",
     "room_settings": {
@@ -3353,7 +3287,10 @@
             "title": "Ролі й дозволи",
             "permissions_section": "Дозволи",
             "permissions_section_description_space": "Оберіть ролі, потрібні для зміни різних частин простору",
-            "permissions_section_description_room": "Виберіть ролі, необхідні для зміни різних частин кімнати"
+            "permissions_section_description_room": "Виберіть ролі, необхідні для зміни різних частин кімнати",
+            "add_privileged_user_heading": "Додати привілейованих користувачів",
+            "add_privileged_user_description": "Надайте одному або кільком користувачам у цій кімнаті більше повноважень",
+            "add_privileged_user_filter_placeholder": "Пошук користувачів у цій кімнаті…"
         },
         "security": {
             "strict_encryption": "Ніколи не надсилати зашифровані повідомлення до незвірених сеансів у цій кімнаті з цього сеансу",
@@ -3380,7 +3317,35 @@
             "history_visibility_shared": "Лише учасники (від часу вибору цієї опції)",
             "history_visibility_invited": "Лише учасники (від часу їхнього запрошення)",
             "history_visibility_joined": "Лише учасники (від часу приєднання)",
-            "history_visibility_world_readable": "Кожний"
+            "history_visibility_world_readable": "Кожний",
+            "join_rule_upgrade_required": "Потрібне поліпшення",
+            "join_rule_restricted_n_more": {
+                "one": "і ще %(count)s",
+                "other": "і ще %(count)s"
+            },
+            "join_rule_restricted_summary": {
+                "one": "На разі простір має доступ",
+                "other": "На разі доступ мають %(count)s просторів"
+            },
+            "join_rule_restricted_description": "Будь-хто у просторі може знайти та приєднатися. <a>Укажіть, які простори можуть отримати доступ сюди.</a>",
+            "join_rule_restricted_description_spaces": "Простори з доступом",
+            "join_rule_restricted_description_active_space": "Будь-хто у <spaceName/> може знайти та приєднатися. Ви можете вибрати інші простори.",
+            "join_rule_restricted_description_prompt": "Будь-хто у просторі може знайти та приєднатися. Можна вибрати кілька просторів.",
+            "join_rule_restricted": "Учасники простору",
+            "join_rule_knock": "Запит на приєднання",
+            "join_rule_knock_description": "Люди не можуть приєднатися, якщо їм не надано доступ.",
+            "join_rule_restricted_upgrade_warning": "Ця кімната належить до просторів, які ви не адмініструєте. Ці простори показуватимуть стару кімнату, але пропонуватимуть людям приєднатись до нової.",
+            "join_rule_restricted_upgrade_description": "Це поліпшення дозволить учасникам обраних просторів доступитися до цієї кімнати без запрошення.",
+            "join_rule_upgrade_upgrading_room": "Поліпшення кімнати",
+            "join_rule_upgrade_awaiting_room": "Звантаження нової кімнати",
+            "join_rule_upgrade_sending_invites": {
+                "one": "Надсилання запрошення...",
+                "other": "Надсилання запрошень... (%(progress)s із %(count)s)"
+            },
+            "join_rule_upgrade_updating_spaces": {
+                "one": "Оновлення простору...",
+                "other": "Оновлення просторів... (%(progress)s із %(count)s)"
+            }
         },
         "general": {
             "publish_toggle": "Опублікувати цю кімнату для всіх у каталозі кімнат %(domain)s?",
@@ -3390,7 +3355,11 @@
             "default_url_previews_off": "Попередній перегляд URL-адрес типово вимкнений для учасників цієї кімнати.",
             "url_preview_encryption_warning": "У кімнатах з шифруванням, як у цій, попередній перегляд посилань усталено вимкнено. Це робиться, щоб гарантувати, що ваш домашній сервер (на якому генеруються перегляди) не матиме змоги збирати дані щодо посилань, які ви бачите у цій кімнаті.",
             "url_preview_explainer": "Коли хтось додає URL-адресу у повідомлення, можливо автоматично показувати для цієї URL-адресу попередній перегляд його заголовку, опису й зображення.",
-            "url_previews_section": "Попередній перегляд URL-адрес"
+            "url_previews_section": "Попередній перегляд URL-адрес",
+            "error_save_space_settings": "Не вдалося зберегти налаштування простору.",
+            "description_space": "Змінити налаштування, що стосуються вашого простору.",
+            "save": "Зберегти зміни",
+            "leave_space": "Вийти з простору"
         },
         "advanced": {
             "unfederated": "Ця кімната недоступна для віддалених серверів Matrix",
@@ -3404,7 +3373,23 @@
             "room_version": "Версія кімнати:"
         },
         "delete_avatar_label": "Видалити аватар",
-        "upload_avatar_label": "Вивантажити аватар"
+        "upload_avatar_label": "Вивантажити аватар",
+        "visibility": {
+            "error_update_guest_access": "Не вдалося оновити гостьовий доступ до цього простору",
+            "error_update_history_visibility": "Не вдалося оновити видимість історії цього простору",
+            "guest_access_explainer": "Гості можуть приєднатися до простору без облікового запису.",
+            "guest_access_explainer_public_space": "Це може бути корисним для загальнодоступних просторів.",
+            "title": "Видимість",
+            "error_failed_save": "Не вдалось оновити видимість цього простору",
+            "history_visibility_anyone_space": "Попередній перегляд простору",
+            "history_visibility_anyone_space_description": "Дозвольте людям переглядати ваш простір, перш ніж вони приєднаються.",
+            "history_visibility_anyone_space_recommendation": "Рекомендовано для загальнодоступних просторів.",
+            "guest_access_label": "Увімкнути гостьовий доступ"
+        },
+        "access": {
+            "title": "Доступ",
+            "description_space": "Визначте хто може переглядати та приєднатися до %(spaceName)s."
+        }
     },
     "encryption": {
         "verification": {
@@ -3909,9 +3894,14 @@
             "devtools_open_timeline": "Переглянути стрічку кімнати (розробка)",
             "home": "Домівка простору",
             "explore": "Каталог кімнат",
-            "manage_and_explore": "Керування і перегляд кімнат"
+            "manage_and_explore": "Керування і перегляд кімнат",
+            "options": "Параметри простору"
         },
-        "share_public": "Поділитися своїм загальнодоступним простором"
+        "share_public": "Поділитися своїм загальнодоступним простором",
+        "search_children": "Пошук %(spaceName)s",
+        "invite_link": "Надіслати запрошувальне посилання",
+        "invite": "Запросити людей",
+        "invite_description": "Запросити за допомогою е-пошти або імені користувача"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Цей домашній сервер не налаштовано на показ карт.",
@@ -3971,7 +3961,6 @@
     },
     "create_space": {
         "name_required": "Будь ласка, введіть назву простору",
-        "name_placeholder": "наприклад, мій-простір",
         "explainer": "Простори — це новий спосіб групових кімнат та людей. Який вид простору ви хочете створити? Ви можете змінити це пізніше.",
         "public_description": "Відкритий простір для будь-кого, найкраще для спільнот",
         "private_description": "Лише за запрошенням, найкраще для себе чи для команди",
@@ -4002,7 +3991,12 @@
         "setup_rooms_community_description": "Створімо по кімнаті для кожної.",
         "setup_rooms_description": "Згодом ви зможете додати більше, зокрема вже наявні.",
         "setup_rooms_private_heading": "Над якими проєктами працює ваша команда?",
-        "setup_rooms_private_description": "Ми створимо кімнати для кожного з них."
+        "setup_rooms_private_description": "Ми створимо кімнати для кожного з них.",
+        "address_placeholder": "наприклад, мій-простір",
+        "address_label": "Адреса",
+        "label": "Створити простір",
+        "add_details_prompt_2": "Ви можете змінити це будь-коли.",
+        "creating": "Створення…"
     },
     "user_menu": {
         "switch_theme_light": "Світла тема",
@@ -4187,7 +4181,10 @@
         "admin_contact_short": "Зверніться до <a>адміністратора сервера</a>.",
         "non_urgent_echo_failure_toast": "Ваш сервер не відповідає на деякі <a>запити</a>.",
         "failed_copy": "Не вдалося скопіювати",
-        "something_went_wrong": "Щось пішло не так!"
+        "something_went_wrong": "Щось пішло не так!",
+        "download_media": "Не вдалося завантажити початковий медіафайл, не знайдено url джерела",
+        "update_power_level": "Не вдалося змінити рівень повноважень",
+        "unknown": "Невідома помилка"
     },
     "in_space1_and_space2": "У просторах %(space1Name)s і %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -4209,7 +4206,13 @@
         "colour_grey": "Сірий",
         "colour_red": "Червоний",
         "colour_unsent": "Не надіслано",
-        "error_change_title": "Змінити налаштування сповіщень"
+        "error_change_title": "Змінити налаштування сповіщень",
+        "mark_all_read": "Позначити все прочитаним",
+        "keyword": "Ключове слово",
+        "keyword_new": "Нове ключове слово",
+        "class_global": "Глобально",
+        "class_other": "Інше",
+        "mentions_keywords": "Згадки та ключові слова"
     },
     "mobile_guide": {
         "toast_title": "Використовуйте застосунок для зручності",
@@ -4230,5 +4233,11 @@
         "title": "Перегляд зображення",
         "rotate_left": "Обернути ліворуч",
         "rotate_right": "Обернути праворуч"
+    },
+    "a11y_jump_first_unread_room": "Перейти до першої непрочитаної кімнати.",
+    "integration_manager": {
+        "connecting": "Під'єднання до менеджера інтеграцій…",
+        "error_connecting_heading": "Не вдалося з'єднатися з менеджером інтеграцій",
+        "error_connecting": "Менеджер інтеграцій не під'єднаний або не може зв'язатися з вашим домашнім сервером."
     }
 }

@@ -31,12 +31,10 @@
     "Reason": "Разлог",
     "Send": "Пошаљи",
     "Incorrect verification code": "Нетачни потврдни код",
-    "No display name": "Нема приказног имена",
     "Authentication": "Идентификација",
     "Failed to set display name": "Нисам успео да поставим приказно име",
     "Failed to ban user": "Неуспех при забрањивању приступа кориснику",
     "Failed to mute user": "Неуспех при пригушивању корисника",
-    "Failed to change power level": "Не могу да изменим ниво снаге",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Нећете моћи да опозовете ове промене јер себи смањујете овлашћења. Ако сте последњи овлашћени корисник у соби, немогуће је да поново добијете овлашћења.",
     "Are you sure?": "Да ли сте сигурни?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Нећете моћи да опозовете ову измену јер унапређујете корисника тако да има исти ниво снаге као и ви.",
@@ -95,7 +93,6 @@
         "other": "И %(count)s других..."
     },
     "Confirm Removal": "Потврди уклањање",
-    "Unknown error": "Непозната грешка",
     "Deactivate Account": "Деактивирај налог",
     "An error has occurred.": "Догодила се грешка.",
     "Unable to restore session": "Не могу да повратим сесију",
@@ -133,7 +130,6 @@
     "Unable to remove contact information": "Не могу да уклоним контакт податке",
     "No Microphones detected": "Нема уочених микрофона",
     "No Webcams detected": "Нема уочених веб камера",
-    "Profile": "Профил",
     "A new password must be entered.": "Морате унети нову лозинку.",
     "New passwords must match each other.": "Нове лозинке се морају подударати.",
     "Return to login screen": "Врати ме на екран за пријаву",
@@ -149,7 +145,6 @@
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Извезена датотека ће бити заштићена са фразом. Требало би да унесете фразу овде, да бисте дешифровали датотеку.",
     "File to import": "Датотека за увоз",
     "Sunday": "Недеља",
-    "Notification targets": "Циљеви обавештења",
     "Today": "Данас",
     "Friday": "Петак",
     "Changelog": "Записник о изменама",
@@ -194,10 +189,8 @@
     "Email (optional)": "Мејл (изборно)",
     "Are you sure you want to sign out?": "Заиста желите да се одјавите?",
     "Show more": "Прикажи више",
-    "Cannot connect to integration manager": "Не могу се повезати на управника уградњи",
     "Email addresses": "Мејл адресе",
     "Phone numbers": "Бројеви телефона",
-    "General": "Опште",
     "Discovery": "Откриће",
     "None": "Ништа",
     "Discovery options will appear once you have added an email above.": "Опције откривања појавиће се након што додате мејл адресу изнад.",
@@ -210,7 +203,6 @@
     "Forget this room": "Заборави ову собу",
     "Start chatting": "Започни ћаскање",
     "Room options": "Опције собе",
-    "Mark all as read": "Означи све као прочитано",
     "Room Name": "Назив собе",
     "Room Topic": "Тема собе",
     "Messages in this room are end-to-end encrypted.": "Поруке у овој соби су шифроване с краја на крај.",
@@ -235,7 +227,6 @@
     "Failed to revoke invite": "Неуспех при отказивању позивнице",
     "Revoke invite": "Откажи позивницу",
     "Looks good": "Изгледа добро",
-    "Show advanced": "Прикажи напредно",
     "Recent Conversations": "Недавни разговори",
     "Recently Direct Messaged": "Недавне директне поруке",
     "Looks good!": "Изгледа добро!",
@@ -572,11 +563,9 @@
     "You may want to try a different search or check for typos.": "Можда ћете желети да испробате другачију претрагу или да проверите да ли имате правописне грешке.",
     "This version of %(brand)s does not support searching encrypted messages": "Ова верзија %(brand)s с не подржава претраживање шифрованих порука",
     "Cancel search": "Откажи претрагу",
-    "Failed to save space settings.": "Чување подешавања простора није успело.",
     "Confirm this user's session by comparing the following with their User Settings:": "Потврдите сесију овог корисника упоређивањем следећег са њиховим корисничким подешавањима:",
     "Confirm by comparing the following with the User Settings in your other session:": "Потврдите упоређивањем следећег са корисничким подешавањима у вашој другој сесији:",
     "You can also set up Secure Backup & manage your keys in Settings.": "Такође можете да подесите Сигурносну копију и управљате својим тастерима у подешавањима.",
-    "Edit settings relating to your space.": "Уредите поставке које се односе на ваш простор.",
     "Go to Settings": "Идите на подешавања",
     "Share this email in Settings to receive invites directly in %(brand)s.": "Поделите ову е-пошту у подешавањима да бисте директно добијали позиве у %(brand)s.",
     "Use an identity server in Settings to receive invites directly in %(brand)s.": "Користите сервер за идентитет у Подешавањима за директно примање позивница %(brand)s.",
@@ -590,8 +579,6 @@
     "Enter your account password to confirm the upgrade:": "Унесите лозинку за налог да бисте потврдили надоградњу:",
     "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Заштитите од губитка приступа шифрованим порукама и подацима је подржан сигурносном копијом кључева за шифровање на серверу.",
     "Clear all data": "Очисти све податке",
-    "Profile picture": "Слика профила",
-    "Display Name": "Прикажи име",
     "Couldn't load page": "Учитавање странице није успело",
     "Sign in with SSO": "Пријавите се помоћу SSO",
     "Kosovo": "/",
@@ -662,7 +649,11 @@
         "on": "Укључено",
         "off": "Искључено",
         "copied": "Копирано!",
-        "Advanced": "Напредно"
+        "advanced": "Напредно",
+        "general": "Опште",
+        "profile": "Профил",
+        "display_name": "Прикажи име",
+        "user_avatar": "Слика профила"
     },
     "action": {
         "continue": "Настави",
@@ -722,7 +713,8 @@
         "refresh": "Освежи",
         "mention": "Спомени",
         "submit": "Пошаљи",
-        "unban": "Скини забрану"
+        "unban": "Скини забрану",
+        "show_advanced": "Прикажи напредно"
     },
     "labs": {
         "pinning": "Закачене поруке",
@@ -806,7 +798,8 @@
             "noisy": "Бучно",
             "error_permissions_denied": "%(brand)s нема овлашћења за слање обавештења, проверите подешавања вашег прегледача",
             "error_permissions_missing": "%(brand)s-у није дато овлашћење за слање обавештења, пробајте поново касније",
-            "error_title": "Нисам успео да омогућим обавештења"
+            "error_title": "Нисам успео да омогућим обавештења",
+            "push_targets": "Циљеви обавештења"
         },
         "appearance": {
             "heading": "Прилагодите изглед",
@@ -858,7 +851,8 @@
             "add_msisdn_confirm_sso_button": "Потврдите додавање броја телефона помоћу јединствене пријаве да докажете свој идентитет.",
             "add_msisdn_confirm_button": "Потврда додавања броја телефона",
             "add_msisdn_confirm_body": "Кликните на дугме испод за потврду додавања броја телефона.",
-            "add_msisdn_dialog_title": "Додај број телефона"
+            "add_msisdn_dialog_title": "Додај број телефона",
+            "name_placeholder": "Нема приказног имена"
         }
     },
     "devtools": {
@@ -1201,7 +1195,9 @@
             "user_url_previews_default_off": "<a>Искључили</a> сте да се УРЛ прегледи подразумевају.",
             "default_url_previews_on": "УРЛ прегледи су подразумевано укључени за чланове ове собе.",
             "default_url_previews_off": "УРЛ прегледи су подразумевано искључени за чланове ове собе.",
-            "url_previews_section": "УРЛ прегледи"
+            "url_previews_section": "УРЛ прегледи",
+            "error_save_space_settings": "Чување подешавања простора није успело.",
+            "description_space": "Уредите поставке које се односе на ваш простор."
         },
         "advanced": {
             "unfederated": "Ова соба није доступна са удаљених Матрикс сервера"
@@ -1501,7 +1497,9 @@
         "mixed_content": "Не могу да се повежем на сервер преко ХТТП када је ХТТПС УРЛ у траци вашег прегледача. Или користите HTTPS или <a>омогућите небезбедне скрипте</a>.",
         "tls": "Не могу да се повежем на домаћи сервер. Проверите вашу интернет везу, постарајте се да је <a>ССЛ сертификат сервера</a> од поверења и да проширење прегледача не блокира захтеве.",
         "failed_copy": "Нисам успео да ископирам",
-        "something_went_wrong": "Нешто је пошло наопако!"
+        "something_went_wrong": "Нешто је пошло наопако!",
+        "update_power_level": "Не могу да изменим ниво снаге",
+        "unknown": "Непозната грешка"
     },
     "items_and_n_others": {
         "other": "<Items/> и %(count)s других",
@@ -1510,9 +1508,14 @@
     "notifications": {
         "enable_prompt_toast_title": "Обавештења",
         "colour_none": "Ништа",
-        "error_change_title": "Промените подешавања обавештења"
+        "error_change_title": "Промените подешавања обавештења",
+        "mark_all_read": "Означи све као прочитано",
+        "class_other": "Остало"
     },
     "quick_settings": {
         "all_settings": "Сва подешавања"
+    },
+    "integration_manager": {
+        "error_connecting_heading": "Не могу се повезати на управника уградњи"
     }
 }

@@ -1,7 +1,6 @@
 {
     "Failed to forget room %(errCode)s": "Не атрымалася забыць пакой %(errCode)s",
     "All messages": "Усе паведамленні",
-    "Notification targets": "Мэты апавяшчэння",
     "Invite to this room": "Запрасіць у гэты пакой",
     "common": {
         "error": "Памылка",
@@ -27,7 +26,8 @@
     },
     "settings": {
         "notifications": {
-            "noisy": "Шумна"
+            "noisy": "Шумна",
+            "push_targets": "Мэты апавяшчэння"
         }
     },
     "invite": {

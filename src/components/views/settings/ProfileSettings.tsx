@@ -123,8 +123,8 @@ export default class ProfileSettings extends React.Component<{}, IState> {
         } catch (err) {
             logger.log("Failed to save profile", err);
             Modal.createDialog(ErrorDialog, {
-                title: _t("Failed to save your profile"),
-                description: err instanceof Error ? err.message : _t("The operation could not be completed"),
+                title: _t("settings|general|error_saving_profile_title"),
+                description: err instanceof Error ? err.message : _t("settings|general|error_saving_profile"),
             });
         }
 
@@ -184,9 +184,9 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                 />
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_profile_controls">
-                        <SettingsSubsectionHeading heading={_t("Profile")} />
+                        <SettingsSubsectionHeading heading={_t("common|profile")} />
                         <Field
-                            label={_t("Display Name")}
+                            label={_t("common|display_name")}
                             type="text"
                             value={this.state.displayName}
                             autoComplete="off"
@@ -201,7 +201,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                     <AvatarSetting
                         avatarUrl={avatarUrl}
                         avatarName={this.state.displayName || this.userId}
-                        avatarAltText={_t("Profile picture")}
+                        avatarAltText={_t("common|user_avatar")}
                         uploadAvatar={this.uploadAvatar}
                         removeAvatar={this.removeAvatar}
                     />

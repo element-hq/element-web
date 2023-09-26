@@ -35,7 +35,7 @@ export default class TopUnreadMessagesBar extends React.PureComponent<IProps> {
                 />
                 <AccessibleButton
                     className="mx_TopUnreadMessagesBar_markAsRead"
-                    title={_t("Mark all as read")}
+                    title={_t("notifications|mark_all_read")}
                     onClick={this.props.onCloseClick}
                 />
             </div>

@@ -346,7 +346,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             // only show the section if there's something to show
             if (ignoreUsersPanel || invitesPanel || e2ePanel) {
                 advancedSection = (
-                    <SettingsSection heading={_t("common|Advanced")}>
+                    <SettingsSection heading={_t("common|advanced")}>
                         {ignoreUsersPanel}
                         {invitesPanel}
                         {e2ePanel}

@@ -90,15 +90,15 @@ const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space })
         const failures = results.filter((r) => r.status === "rejected");
         if (failures.length > 0) {
             logger.error("Failed to save space settings: ", failures);
-            setError(_t("Failed to save space settings."));
+            setError(_t("room_settings|general|error_save_space_settings"));
         }
     };
 
     return (
         <SettingsTab>
-            <SettingsSection heading={_t("General")}>
+            <SettingsSection heading={_t("common|general")}>
                 <div>
-                    <div>{_t("Edit settings relating to your space.")}</div>
+                    <div>{_t("room_settings|general|description_space")}</div>
 
                     {error && <div className="mx_SpaceRoomView_errorText">{error}</div>}
 
@@ -122,18 +122,18 @@ const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space })
                         {_t("action|cancel")}
                     </AccessibleButton>
                     <AccessibleButton onClick={onSave} disabled={busy} kind="primary">
-                        {busy ? _t("Saving…") : _t("Save Changes")}
+                        {busy ? _t("common|saving") : _t("room_settings|general|save")}
                     </AccessibleButton>
                 </div>
 
-                <SettingsSubsection heading={_t("Leave Space")}>
+                <SettingsSubsection heading={_t("room_settings|general|leave_space")}>
                     <AccessibleButton
                         kind="danger"
                         onClick={() => {
                             leaveSpace(space);
                         }}
                     >
-                        {_t("Leave Space")}
+                        {_t("room_settings|general|leave_space")}
                     </AccessibleButton>
                 </SettingsSubsection>
             </SettingsSection>

@@ -30,13 +30,11 @@
     "Reason": "Razón",
     "Send": "Enviar",
     "Incorrect verification code": "Código de verificación incorrecto",
-    "No display name": "Sen nome público",
     "Authentication": "Autenticación",
     "Failed to set display name": "Fallo ao establecer o nome público",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
     "Failed to ban user": "Fallo ao bloquear usuaria",
     "Failed to mute user": "Fallo ó silenciar usuaria",
-    "Failed to change power level": "Fallo ao cambiar o nivel de permisos",
     "Are you sure?": "Está segura?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Non poderá desfacer este cambio xa que lle estará promocionando e outorgándolle a outra persoa os mesmos permisos que os seus.",
     "Unignore": "Non ignorar",
@@ -95,7 +93,6 @@
         "other": "E %(count)s máis..."
     },
     "Confirm Removal": "Confirma a retirada",
-    "Unknown error": "Fallo descoñecido",
     "Deactivate Account": "Desactivar conta",
     "An error has occurred.": "Algo fallou.",
     "Unable to restore session": "Non se puido restaurar a sesión",
@@ -131,7 +128,6 @@
     "Unable to remove contact information": "Non se puido eliminar a información do contacto",
     "No Microphones detected": "Non se detectaron micrófonos",
     "No Webcams detected": "Non se detectaron cámaras",
-    "Profile": "Perfil",
     "A new password must be entered.": "Debe introducir un novo contrasinal.",
     "New passwords must match each other.": "Os novos contrasinais deben ser coincidentes.",
     "Return to login screen": "Volver a pantalla de acceso",
@@ -150,7 +146,6 @@
     "This room is not public. You will not be able to rejoin without an invite.": "Esta sala non é pública. Non poderá volver a ela sen un convite.",
     "You don't currently have any stickerpacks enabled": "Non ten paquetes de iconas activados",
     "Sunday": "Domingo",
-    "Notification targets": "Obxectivos das notificacións",
     "Today": "Hoxe",
     "Friday": "Venres",
     "Changelog": "Rexistro de cambios",
@@ -201,7 +196,6 @@
     "Sign out and remove encryption keys?": "Saír e eliminar as chaves de cifrado?",
     "Sign in with SSO": "Conecta utilizando SSO",
     "Your password has been reset.": "Restableceuse o contrasinal.",
-    "General": "Xeral",
     "Discovery": "Descubrir",
     "Deactivate account": "Desactivar conta",
     "Room %(name)s": "Sala %(name)s",
@@ -300,28 +294,10 @@
     "Headphones": "Auriculares",
     "Folder": "Cartafol",
     "Show more": "Mostrar máis",
-    "well formed": "ben formado",
-    "unexpected type": "tipo non agardado",
-    "Secret storage public key:": "Chave pública da almacenaxe segreda:",
-    "in account data": "nos datos da conta",
-    "Cannot connect to integration manager": "Non se puido conectar co xestor de intregración",
-    "The integration manager is offline or it cannot reach your homeserver.": "O xestor de integración non está en liña ou non é accesible desde o teu servidor.",
-    "Delete Backup": "Borrar copia de apoio",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Estás seguro? Perderás as mensaxes cifradas se non tes unha copia de apoio das chaves de cifrado.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "As mensaxes cifradas están seguras con cifrado de extremo-a-extremo. Só ti e o correpondente(s) tedes as chaves para ler as mensaxes.",
-    "Unable to load key backup status": "Non se puido cargar o estado das chaves de apoio",
-    "Restore from Backup": "Restaurar desde copia de apoio",
-    "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Esta sesión <b>non está facendo copia das chaves</b>, pero tes unha copia de apoio existente que podes restablecer e engadir para seguir adiante.",
-    "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Conecta esta sesión ao gardado das chaves antes de desconectarte para evitar perder calquera chave que só puidese estar nesta sesión.",
-    "Connect this session to Key Backup": "Conecta esta sesión a Copia de Apoio de chaves",
-    "not stored": "non gardado",
-    "All keys backed up": "Copiaronse todas as chaves",
     "This backup is trusted because it has been restored on this session": "Esta copia é de confianza porque foi restaurada nesta sesión",
-    "Your keys are <b>not being backed up from this session</b>.": "As túas chaves <b>non están a ser copiadas desde esta sesión</b>.",
     "Back up your keys before signing out to avoid losing them.": "Fai unha copia de apoio das chaves antes de saír para evitar perdelas.",
     "Start using Key Backup": "Fai unha Copia de apoio das chaves",
-    "Display Name": "Nome mostrado",
-    "Profile picture": "Imaxe de perfil",
     "Checking server": "Comprobando servidor",
     "Change identity server": "Cambiar de servidor de identidade",
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "Desconectar do servidor de identidade <current /> e conectar con <new />?",
@@ -429,7 +405,6 @@
     "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Non se revogou o convite. O servidor podería estar experimentando un problema temporal ou non tes permisos suficientes para revogar o convite.",
     "Revoke invite": "Revogar convite",
     "Invited by %(sender)s": "Convidada por %(sender)s",
-    "Mark all as read": "Marcar todo como lido",
     "Error updating main address": "Fallo ao actualizar o enderezo principal",
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "Algo fallou ao actualizar o enderezo principal da sala. Podería non estar autorizado polo servidor ou ser un fallo temporal.",
     "Error creating address": "Fallo ao crear o enderezo",
@@ -547,8 +522,6 @@
     "Clear all data in this session?": "¿Baleirar todos os datos desta sesión?",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "O baleirado dos datos da sesión é permanente. As mensaxes cifradas perderánse a menos que as súas chaves estiveren nunha copia de apoio.",
     "Clear all data": "Eliminar todos os datos",
-    "Hide advanced": "Ocultar Avanzado",
-    "Show advanced": "Mostrar Avanzado",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Para evitar perder o historial da conversa, debes exportar as chaves da sala antes de saír. Necesitarás volver á nova versión de %(brand)s para facer esto",
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Xa utilizaches unha versión máis nova de %(brand)s nesta sesión. Para usar esta versión novamente con cifrado extremo-a-extremo tes que saír e volver a acceder.",
     "Incompatible Database": "Base de datos non compatible",
@@ -647,8 +620,6 @@
     "Country Dropdown": "Despregable de países",
     "Email (optional)": "Email (optativo)",
     "Couldn't load page": "Non se puido cargar a páxina",
-    "Jump to first unread room.": "Vaite a primeira sala non lida.",
-    "Jump to first invite.": "Vai ó primeiro convite.",
     "Switch theme": "Cambiar decorado",
     "Could not load user profile": "Non se cargou o perfil da usuaria",
     "Invalid homeserver discovery response": "Resposta de descubrimento do servidor non válida",
@@ -721,12 +692,6 @@
     "Not encrypted": "Sen cifrar",
     "Room settings": "Axustes da sala",
     "Backup version:": "Versión da copia:",
-    "Algorithm:": "Algoritmo:",
-    "Backup key stored:": "Chave da copia gardada:",
-    "Backup key cached:": "Chave da copia na caché:",
-    "Secret storage:": "Almacenaxe segreda:",
-    "ready": "lista",
-    "not ready": "non lista",
     "Start a conversation with someone using their name or username (like <userId/>).": "Inicia unha conversa con alguén usando o seu nome ou nome de usuaria (como <userId/>).",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Convida a alguén usando o seu nome, nome de usuaria (como <userId/>) ou <a>comparte esta sala</a>.",
     "Unable to set up keys": "Non se puideron configurar as chaves",
@@ -743,8 +708,6 @@
     "Video conference updated by %(senderName)s": "Video conferencia actualizada por %(senderName)s",
     "Video conference started by %(senderName)s": "Video conferencia iniciada por %(senderName)s",
     "Ignored attempt to disable encryption": "Intento ignorado de desactivar o cifrado",
-    "Failed to save your profile": "Non se gardaron os cambios",
-    "The operation could not be completed": "Non se puido realizar a acción",
     "You can only pin up to %(count)s widgets": {
         "other": "Só podes fixar ata %(count)s widgets"
     },
@@ -1037,7 +1000,6 @@
     "Invalid Security Key": "Chave de Seguridade non válida",
     "Wrong Security Key": "Chave de Seguridade incorrecta",
     "Set my room layout for everyone": "Establecer a miña disposición da sala para todas",
-    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Fai unha copia de apoio das chaves de cifrado da túa conta en caso de perder o acceso ás túas sesións. As chaves estarán seguras cunha única Chave de Seguridade.",
     "Allow this widget to verify your identity": "Permitir a este widget verificar a túa identidade",
     "The widget will verify your user ID, but won't be able to perform actions for you:": "Este widget vai verificar o ID do teu usuario, pero non poderá realizar accións no teu nome:",
     "Remember this": "Lembrar isto",
@@ -1050,24 +1012,16 @@
     "This space is not public. You will not be able to rejoin without an invite.": "Este espazo non é público. Non poderás volver a unirte sen un convite.",
     "Failed to start livestream": "Fallou o inicio da emisión en directo",
     "Unable to start audio streaming.": "Non se puido iniciar a retransmisión de audio.",
-    "Save Changes": "Gardar cambios",
-    "Leave Space": "Deixar o Espazo",
-    "Edit settings relating to your space.": "Editar os axustes relativos ao teu espazo.",
-    "Failed to save space settings.": "Fallo ao gardar os axustes do espazo.",
     "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Convida a alguén usando o seu nome, nome de usuaria (como <userId/>) ou <a>comparte este espazo</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Convida a persoas usando o seu nome, enderezo de email, nome de usuaria (como <userId/>) ou <a>comparte este espazo</a>.",
     "Create a new room": "Crear unha nova sala",
-    "Spaces": "Espazos",
     "Space selection": "Selección de Espazos",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.": "Non poderás desfacer este cambio xa que te estás degradando a ti mesma, se es a última usuaria con privilexios no espazo será imposible volver a obter os privilexios.",
     "Suggested Rooms": "Salas suxeridas",
     "Add existing room": "Engadir sala existente",
     "Invite to this space": "Convidar a este espazo",
     "Your message was sent": "Enviouse a túa mensaxe",
-    "Space options": "Opcións do Espazo",
     "Leave space": "Saír do espazo",
-    "Invite people": "Convidar persoas",
-    "Share invite link": "Compartir ligazón do convite",
     "Create a space": "Crear un espazo",
     "Private space": "Espazo privado",
     "Public space": "Espazo público",
@@ -1082,15 +1036,12 @@
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Normalmente esto só afecta a como se xestiona a sala no servidor. Se tes problemas co teu %(brand)s, informa do fallo.",
     "Invite to %(roomName)s": "Convidar a %(roomName)s",
     "Edit devices": "Editar dispositivos",
-    "Invite with email or username": "Convida con email ou nome de usuaria",
-    "You can change these anytime.": "Poderás cambialo en calquera momento.",
     "We couldn't create your DM.": "Non puidemos crear o teu MD.",
     "Invited people will be able to read old messages.": "As persoas convidadas poderán ler as mensaxes antigas.",
     "Reset event store?": "Restablecer almacenaxe do evento?",
     "You most likely do not want to reset your event index store": "Probablemente non queiras restablecer o índice de almacenaxe do evento",
     "Avatar": "Avatar",
     "Verify your identity to access encrypted messages and prove your identity to others.": "Verifica a túa identidade para acceder a mensaxes cifradas e acreditar a túa identidade ante outras.",
-    "unknown person": "persoa descoñecida",
     "%(count)s people you know have already joined": {
         "other": "%(count)s persoas que coñeces xa se uniron",
         "one": "%(count)s persoa que coñeces xa se uniu"
@@ -1130,7 +1081,6 @@
     "No microphone found": "Non atopamos ningún micrófono",
     "We were unable to access your microphone. Please check your browser settings and try again.": "Non puidemos acceder ao teu micrófono. Comproba os axustes do navegador e proba outra vez.",
     "Unable to access your microphone": "Non se puido acceder ao micrófono",
-    "Connecting": "Conectando",
     "Search names and descriptions": "Buscar nome e descricións",
     "You may contact me if you have any follow up questions": "Podes contactar conmigo se tes algunha outra suxestión",
     "To leave the beta, visit your settings.": "Para saír da beta, vai aos axustes.",
@@ -1169,22 +1119,6 @@
         "other": "Mostrar outras %(count)s vistas previas"
     },
     "Space information": "Información do Espazo",
-    "There was an error loading your notification settings.": "Houbo un erro ao cargar os axustes de notificación.",
-    "Mentions & keywords": "Mencións e palabras chave",
-    "Global": "Global",
-    "New keyword": "Nova palabra chave",
-    "Keyword": "Palabra chave",
-    "Recommended for public spaces.": "Recomendado para espazos públicos.",
-    "Allow people to preview your space before they join.": "Permitir que sexa visible o espazo antes de unirte a el.",
-    "Preview Space": "Vista previa do Espazo",
-    "Decide who can view and join %(spaceName)s.": "Decidir quen pode ver e unirse a %(spaceName)s.",
-    "Visibility": "Visibilidade",
-    "This may be useful for public spaces.": "Esto podería ser útil para espazos públicos.",
-    "Guests can join a space without having an account.": "As convidadas poden unirse ao espazo sen ter unha conta.",
-    "Enable guest access": "Activar acceso de convidadas",
-    "Failed to update the history visibility of this space": "Fallou a actualización da visibilidade do historial do espazo",
-    "Failed to update the guest access of this space": "Fallou a actualización do acceso de convidadas ao espazo",
-    "Failed to update the visibility of this space": "Fallou a actualización da visibilidade do espazo",
     "Address": "Enderezo",
     "Unable to copy a link to the room to the clipboard.": "Non se copiou a ligazón da sala ao portapapeis.",
     "Unable to copy room link": "Non se puido copiar ligazón da sala",
@@ -1207,21 +1141,6 @@
     "Select spaces": "Elixe espazos",
     "You're removing all spaces. Access will default to invite only": "Vas eliminar tódolos espazos. Por defecto o acceso cambiará a só por convite",
     "Public room": "Sala pública",
-    "Access": "Acceder",
-    "Space members": "Membros do espazo",
-    "Anyone in a space can find and join. You can select multiple spaces.": "Calquera nun espazo pode atopar e unirse. Podes elexir múltiples espazos.",
-    "Spaces with access": "Espazos con acceso",
-    "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Calquera nun espazo pode atopala e unirse. <a>Editar que espazos poden acceder aquí.</a>",
-    "Currently, %(count)s spaces have access": {
-        "other": "Actualmente, %(count)s espazos teñen acceso",
-        "one": "Actualmente, un espazo ten acceso"
-    },
-    "& %(count)s more": {
-        "other": "e %(count)s máis",
-        "one": "e %(count)s máis"
-    },
-    "Upgrade required": "Actualización requerida",
-    "This upgrade will allow members of selected spaces access to this room without an invite.": "Esta actualización permitirá que os membros dos espazos seleccionados teñan acceso á sala sen precisar convite.",
     "Want to add an existing space instead?": "Queres engadir un espazo xa existente?",
     "Private space (invite only)": "Espazo privado (só convidadas)",
     "Space visibility": "Visibilidade do espazo",
@@ -1240,9 +1159,7 @@
     "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Es a única administradora dalgunhas salas ou espazos dos que queres saír. Ao saír deles deixaralos sen administración.",
     "You're the only admin of this space. Leaving it will mean no one has control over it.": "Ti es a única administradora deste espazo. Ao saír farás que a ninguén teña control sobre el.",
     "You won't be able to rejoin unless you are re-invited.": "Non poderás volver a unirte se non te volven a convidar.",
-    "Search %(spaceName)s": "Buscar %(spaceName)s",
     "Decrypting": "Descifrando",
-    "Show all rooms": "Mostar tódalas salas",
     "Missed call": "Chamada perdida",
     "Call declined": "Chamada rexeitada",
     "Stop recording": "Deter a gravación",
@@ -1254,7 +1171,6 @@
     "Role in <RoomName/>": "Rol en <RoomName/>",
     "Unknown failure": "Fallo descoñecido",
     "Failed to update the join rules": "Fallou a actualización das normas para unirse",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Calquera en <spaceName/> pode atopar e unirse. Tamén podes elexir outros espazos.",
     "Message didn't send. Click for info.": "Non se enviou a mensaxe. Click para info.",
     "To join a space you'll need an invite.": "Para unirte a un espazo precisas un convite.",
     "Would you like to leave the rooms in this space?": "Queres saír destas salas neste espazo?",
@@ -1287,16 +1203,6 @@
         "one": "%(count)s resposta",
         "other": "%(count)s respostas"
     },
-    "Updating spaces... (%(progress)s out of %(count)s)": {
-        "one": "Actualizando espazo...",
-        "other": "Actualizando espazos... (%(progress)s de %(count)s)"
-    },
-    "Sending invites... (%(progress)s out of %(count)s)": {
-        "one": "Enviando convite...",
-        "other": "Enviando convites... (%(progress)s de %(count)s)"
-    },
-    "Loading new room": "Cargando nova sala",
-    "Upgrading room": "Actualizando sala",
     "View in room": "Ver na sala",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Escribe a túa Frase de Seguridade ou <button>usa a túa Chave de Seguridade</button> para continuar.",
     "Insert link": "Escribir ligazón",
@@ -1317,7 +1223,6 @@
     "@mentions & keywords": "@mencións & palabras chave",
     "Get notified for every message": "Ter notificación de tódalas mensaxes",
     "This room isn't bridging messages to any platforms. <a>Learn more.</a>": "Esta sala non está a reenviar mensaxes a ningún outro sistema. <a>Saber máis.</a>",
-    "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Esta sala está nalgúns espazos nos que non es admin. Nesos espazos, seguirase mostrando a sala antiga, pero as usuarias serán convidadas a unirse á nova.",
     "Store your Security Key somewhere safe, like a password manager or a safe, as it's used to safeguard your encrypted data.": "Garda a túa Chave de Seguridade nun lugar seguro, como un xestor de contrasinais ou caixa forte, xa que vai protexer os teus datos cifrados.",
     "We'll generate a Security Key for you to store somewhere safe, like a password manager or a safe.": "Imos crear unha Chave de Seguridade para que a gardes nun lugar seguro, como nun xestor de contrasinais ou caixa forte.",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Recupera o acceso á túa conta e ás chaves de cifrado gardadas nesta sesión. Sen elas, non poderás ler tódalas túas mensaxes seguras en calquera sesión.",
@@ -1523,10 +1428,6 @@
     "An error occurred whilst sharing your live location, please try again": "Algo fallou ao compartir a túa localización en directo, inténtao outra vez",
     "An error occurred whilst sharing your live location": "Algo fallou ao intentar compartir a túa localización en directo",
     "Joining…": "Entrando…",
-    "%(count)s people joined": {
-        "one": "uníuse %(count)s persoa",
-        "other": "%(count)s persoas uníronse"
-    },
     "Read receipts": "Resgados de lectura",
     "Deactivating your account is a permanent action — be careful!": "A desactivación da conta é unha acción permanente — coidado!",
     "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "Ao saír, estas chaves serán eliminadas deste dispositivo, o que significa que non poderás ler as mensaxes cifradas a menos que teñas as chaves noutro dos teus dispositivos, ou unha copia de apoio no servidor.",
@@ -1663,7 +1564,12 @@
         "deselect_all": "Retirar selección a todos",
         "select_all": "Seleccionar todos",
         "copied": "Copiado!",
-        "Advanced": "Avanzado"
+        "advanced": "Avanzado",
+        "spaces": "Espazos",
+        "general": "Xeral",
+        "profile": "Perfil",
+        "display_name": "Nome mostrado",
+        "user_avatar": "Imaxe de perfil"
     },
     "action": {
         "continue": "Continuar",
@@ -1764,7 +1670,9 @@
         "exit_fullscreeen": "Saír de pantalla completa",
         "enter_fullscreen": "Ir a pantalla completa",
         "unban": "Non bloquear",
-        "click_to_copy": "Click para copiar"
+        "click_to_copy": "Click para copiar",
+        "hide_advanced": "Ocultar Avanzado",
+        "show_advanced": "Mostrar Avanzado"
     },
     "a11y": {
         "user_menu": "Menú de usuaria",
@@ -1776,7 +1684,8 @@
             "other": "%(count)s mensaxe non lidas.",
             "one": "1 mensaxe non lida."
         },
-        "unread_messages": "Mensaxes non lidas."
+        "unread_messages": "Mensaxes non lidas.",
+        "jump_first_invite": "Vai ó primeiro convite."
     },
     "labs": {
         "video_rooms": "Salas de vídeo",
@@ -2093,7 +2002,9 @@
             "noisy": "Ruidoso",
             "error_permissions_denied": "%(brand)s non ten permiso para enviarlle notificacións: comprobe os axustes do navegador",
             "error_permissions_missing": "%(brand)s non ten permiso para enviar notificacións: inténteo de novo",
-            "error_title": "Non se puideron activar as notificacións"
+            "error_title": "Non se puideron activar as notificacións",
+            "push_targets": "Obxectivos das notificacións",
+            "error_loading": "Houbo un erro ao cargar os axustes de notificación."
         },
         "appearance": {
             "layout_irc": "IRC (Experimental)",
@@ -2173,7 +2084,28 @@
             "message_search_disabled": "Gardar de xeito seguro mensaxes cifradas na caché local para que aparezan nos resultados de buscas.",
             "message_search_unsupported": "Falta un compoñente de %(brand)s requerido para almacenar localmente mensaxes cifradas na caché. Se queres experimentar con esta función, compila unha versión personalizada de %(brand)s Desktop <nativeLink>cos compoñentes de busca engadidos</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s non pode por na caché local de xeito as mensaxes cifradas cando usa un navegador web. Usa <desktopLink>%(brand)s Desktop</desktopLink> para que as mensaxes cifradas aparezan nos resultados.",
-            "message_search_failed": "Fallou a inicialización da busca de mensaxes"
+            "message_search_failed": "Fallou a inicialización da busca de mensaxes",
+            "backup_key_well_formed": "ben formado",
+            "backup_key_unexpected_type": "tipo non agardado",
+            "backup_keys_description": "Fai unha copia de apoio das chaves de cifrado da túa conta en caso de perder o acceso ás túas sesións. As chaves estarán seguras cunha única Chave de Seguridade.",
+            "backup_key_stored_status": "Chave da copia gardada:",
+            "cross_signing_not_stored": "non gardado",
+            "backup_key_cached_status": "Chave da copia na caché:",
+            "4s_public_key_status": "Chave pública da almacenaxe segreda:",
+            "4s_public_key_in_account_data": "nos datos da conta",
+            "secret_storage_status": "Almacenaxe segreda:",
+            "secret_storage_ready": "lista",
+            "secret_storage_not_ready": "non lista",
+            "delete_backup": "Borrar copia de apoio",
+            "delete_backup_confirm_description": "Estás seguro? Perderás as mensaxes cifradas se non tes unha copia de apoio das chaves de cifrado.",
+            "error_loading_key_backup_status": "Non se puido cargar o estado das chaves de apoio",
+            "restore_key_backup": "Restaurar desde copia de apoio",
+            "key_backup_inactive": "Esta sesión <b>non está facendo copia das chaves</b>, pero tes unha copia de apoio existente que podes restablecer e engadir para seguir adiante.",
+            "key_backup_connect_prompt": "Conecta esta sesión ao gardado das chaves antes de desconectarte para evitar perder calquera chave que só puidese estar nesta sesión.",
+            "key_backup_connect": "Conecta esta sesión a Copia de Apoio de chaves",
+            "key_backup_complete": "Copiaronse todas as chaves",
+            "key_backup_algorithm": "Algoritmo:",
+            "key_backup_inactive_warning": "As túas chaves <b>non están a ser copiadas desde esta sesión</b>."
         },
         "preferences": {
             "room_list_heading": "Listaxe de Salas",
@@ -2261,18 +2193,22 @@
             "add_msisdn_confirm_sso_button": "Confirma que queres engadir este teléfono usando Single Sign On como proba de identidade.",
             "add_msisdn_confirm_button": "Confirma a adición do teléfono",
             "add_msisdn_confirm_body": "Preme no botón inferior para confirmar que engades este número.",
-            "add_msisdn_dialog_title": "Engadir novo Número"
+            "add_msisdn_dialog_title": "Engadir novo Número",
+            "name_placeholder": "Sen nome público",
+            "error_saving_profile_title": "Non se gardaron os cambios",
+            "error_saving_profile": "Non se puido realizar a acción"
         },
         "sidebar": {
             "title": "Barra lateral",
             "metaspaces_subsection": "Espazos a mostrar",
             "metaspaces_description": "Os Espazos son xeitos de agrupar salas e persoas. Xunto cos espazos nos que estás, tamén podes usar algún dos prestablecidos.",
             "metaspaces_home_description": "O Inicio é útil para ter unha visión xeral do que acontece.",
-            "metaspaces_home_all_rooms": "Mostra tódalas túas salas en Inicio, incluso se están nun espazo.",
             "metaspaces_favourites_description": "Agrupa tódalas túas salas favoritas e persoas nun só lugar.",
             "metaspaces_people_description": "Agrupa tódalas persoas nun só lugar.",
             "metaspaces_orphans": "Salas fóra dun espazo",
-            "metaspaces_orphans_description": "Agrupa nun só lugar tódalas túas salas que non forman parte dun espazo."
+            "metaspaces_orphans_description": "Agrupa nun só lugar tódalas túas salas que non forman parte dun espazo.",
+            "metaspaces_home_all_rooms_description": "Mostra tódalas túas salas en Inicio, incluso se están nun espazo.",
+            "metaspaces_home_all_rooms": "Mostar tódalas salas"
         }
     },
     "devtools": {
@@ -2917,7 +2853,13 @@
         "more_button": "Máis",
         "screenshare_monitor": "Compartir pantalla completa",
         "screenshare_window": "Ventá da aplicación",
-        "screenshare_title": "Compartir contido"
+        "screenshare_title": "Compartir contido",
+        "n_people_joined": {
+            "one": "uníuse %(count)s persoa",
+            "other": "%(count)s persoas uníronse"
+        },
+        "unknown_person": "persoa descoñecida",
+        "connecting": "Conectando"
     },
     "Other": "Outro",
     "room_settings": {
@@ -2983,7 +2925,33 @@
             "history_visibility_shared": "Só participantes (desde o momento en que se selecciona esta opción)",
             "history_visibility_invited": "Só participantes (desde que foron convidadas)",
             "history_visibility_joined": "Só participantes (desde que se uniron)",
-            "history_visibility_world_readable": "Calquera"
+            "history_visibility_world_readable": "Calquera",
+            "join_rule_upgrade_required": "Actualización requerida",
+            "join_rule_restricted_n_more": {
+                "other": "e %(count)s máis",
+                "one": "e %(count)s máis"
+            },
+            "join_rule_restricted_summary": {
+                "other": "Actualmente, %(count)s espazos teñen acceso",
+                "one": "Actualmente, un espazo ten acceso"
+            },
+            "join_rule_restricted_description": "Calquera nun espazo pode atopala e unirse. <a>Editar que espazos poden acceder aquí.</a>",
+            "join_rule_restricted_description_spaces": "Espazos con acceso",
+            "join_rule_restricted_description_active_space": "Calquera en <spaceName/> pode atopar e unirse. Tamén podes elexir outros espazos.",
+            "join_rule_restricted_description_prompt": "Calquera nun espazo pode atopar e unirse. Podes elexir múltiples espazos.",
+            "join_rule_restricted": "Membros do espazo",
+            "join_rule_restricted_upgrade_warning": "Esta sala está nalgúns espazos nos que non es admin. Nesos espazos, seguirase mostrando a sala antiga, pero as usuarias serán convidadas a unirse á nova.",
+            "join_rule_restricted_upgrade_description": "Esta actualización permitirá que os membros dos espazos seleccionados teñan acceso á sala sen precisar convite.",
+            "join_rule_upgrade_upgrading_room": "Actualizando sala",
+            "join_rule_upgrade_awaiting_room": "Cargando nova sala",
+            "join_rule_upgrade_sending_invites": {
+                "one": "Enviando convite...",
+                "other": "Enviando convites... (%(progress)s de %(count)s)"
+            },
+            "join_rule_upgrade_updating_spaces": {
+                "one": "Actualizando espazo...",
+                "other": "Actualizando espazos... (%(progress)s de %(count)s)"
+            }
         },
         "general": {
             "publish_toggle": "Publicar esta sala no directorio público de salas de %(domain)s?",
@@ -2993,7 +2961,11 @@
             "default_url_previews_off": "As vistas previas de URL están desactivadas por defecto para as participantes desta sala.",
             "url_preview_encryption_warning": "Nas salas cifradas, como é esta, está desactivado por defecto a previsualización das URL co fin de asegurarse de que o servidor local (que é onde se gardan as previsualizacións) non poida recoller información sobre das ligazóns que se ven nesta sala.",
             "url_preview_explainer": "Cando alguén pon unha URL na mensaxe, esta previsualízarase para que así se coñezan xa cousas delas como o título, a descrición ou as imaxes que inclúe ese sitio web.",
-            "url_previews_section": "Vista previa de URL"
+            "url_previews_section": "Vista previa de URL",
+            "error_save_space_settings": "Fallo ao gardar os axustes do espazo.",
+            "description_space": "Editar os axustes relativos ao teu espazo.",
+            "save": "Gardar cambios",
+            "leave_space": "Deixar o Espazo"
         },
         "advanced": {
             "unfederated": "Esta sala non é accesible por servidores Matrix remotos",
@@ -3006,7 +2978,23 @@
             "room_version": "Versión da sala:"
         },
         "delete_avatar_label": "Eliminar avatar",
-        "upload_avatar_label": "Subir avatar"
+        "upload_avatar_label": "Subir avatar",
+        "visibility": {
+            "error_update_guest_access": "Fallou a actualización do acceso de convidadas ao espazo",
+            "error_update_history_visibility": "Fallou a actualización da visibilidade do historial do espazo",
+            "guest_access_explainer": "As convidadas poden unirse ao espazo sen ter unha conta.",
+            "guest_access_explainer_public_space": "Esto podería ser útil para espazos públicos.",
+            "title": "Visibilidade",
+            "error_failed_save": "Fallou a actualización da visibilidade do espazo",
+            "history_visibility_anyone_space": "Vista previa do Espazo",
+            "history_visibility_anyone_space_description": "Permitir que sexa visible o espazo antes de unirte a el.",
+            "history_visibility_anyone_space_recommendation": "Recomendado para espazos públicos.",
+            "guest_access_label": "Activar acceso de convidadas"
+        },
+        "access": {
+            "title": "Acceder",
+            "description_space": "Decidir quen pode ver e unirse a %(spaceName)s."
+        }
     },
     "encryption": {
         "verification": {
@@ -3445,9 +3433,14 @@
             "devtools_open_timeline": "Ver cronoloxía da sala (devtools)",
             "home": "Inicio do espazo",
             "explore": "Explorar salas",
-            "manage_and_explore": "Xestionar e explorar salas"
+            "manage_and_explore": "Xestionar e explorar salas",
+            "options": "Opcións do Espazo"
         },
-        "share_public": "Comparte o teu espazo público"
+        "share_public": "Comparte o teu espazo público",
+        "search_children": "Buscar %(spaceName)s",
+        "invite_link": "Compartir ligazón do convite",
+        "invite": "Convidar persoas",
+        "invite_description": "Convida con email ou nome de usuaria"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Este servidor non está configurado para mostrar mapas.",
@@ -3505,7 +3498,6 @@
     },
     "create_space": {
         "name_required": "Escribe un nome para o espazo",
-        "name_placeholder": "ex. o-meu-espazo",
         "explainer": "Espazos é o novo xeito de agrupar salas e persoas. Que tipo de Espazo queres crear? Pódelo cambiar máis tarde.",
         "public_description": "Espazo aberto para calquera, mellor para comunidades",
         "private_description": "Só con convite, mellor para ti ou para equipos",
@@ -3534,7 +3526,11 @@
         "setup_rooms_community_description": "Crea unha sala para cada un deles.",
         "setup_rooms_description": "Podes engadir máis posteriormente, incluíndo os xa existentes.",
         "setup_rooms_private_heading": "En que proxectos está a traballar o teu equipo?",
-        "setup_rooms_private_description": "Imos crear salas para cada un deles."
+        "setup_rooms_private_description": "Imos crear salas para cada un deles.",
+        "address_placeholder": "ex. o-meu-espazo",
+        "address_label": "Enderezo",
+        "label": "Crear un espazo",
+        "add_details_prompt_2": "Poderás cambialo en calquera momento."
     },
     "user_menu": {
         "switch_theme_light": "Cambiar a decorado claro",
@@ -3704,7 +3700,9 @@
         "admin_contact_short": "Contacta coa <a>administración</a>.",
         "non_urgent_echo_failure_toast": "O teu servidor non responde a algunhas <a>solicitudes</a>.",
         "failed_copy": "Fallo ao copiar",
-        "something_went_wrong": "Algo fallou!"
+        "something_went_wrong": "Algo fallou!",
+        "update_power_level": "Fallo ao cambiar o nivel de permisos",
+        "unknown": "Fallo descoñecido"
     },
     "in_space1_and_space2": "Nos espazos %(space1Name)s e %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -3724,7 +3722,13 @@
         "colour_none": "Nada",
         "colour_bold": "Resaltado",
         "colour_unsent": "Sen enviar",
-        "error_change_title": "Cambiar os axustes das notificacións"
+        "error_change_title": "Cambiar os axustes das notificacións",
+        "mark_all_read": "Marcar todo como lido",
+        "keyword": "Palabra chave",
+        "keyword_new": "Nova palabra chave",
+        "class_global": "Global",
+        "class_other": "Outro",
+        "mentions_keywords": "Mencións e palabras chave"
     },
     "mobile_guide": {
         "toast_title": "Para ter unha mellor experiencia usa a app",
@@ -3744,5 +3748,10 @@
     "lightbox": {
         "rotate_left": "Rotar á esquerda",
         "rotate_right": "Rotar á dereita"
+    },
+    "a11y_jump_first_unread_room": "Vaite a primeira sala non lida.",
+    "integration_manager": {
+        "error_connecting_heading": "Non se puido conectar co xestor de intregración",
+        "error_connecting": "O xestor de integración non está en liña ou non é accesible desde o teu servidor."
     }
 }

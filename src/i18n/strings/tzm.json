@@ -47,8 +47,6 @@
     "Re-join": "als-lkem",
     "%(duration)sd": "%(duration)sas",
     "None": "Walu",
-    "Algorithm:": "Talguritmit:",
-    "Profile": "Ifres",
     "Folder": "Asdaw",
     "Guitar": "Agiṭaṛ",
     "Ball": "Tacama",
@@ -92,7 +90,8 @@
         "microphone": "Amikṛu",
         "emoji": "Imuji",
         "space": "Space",
-        "copied": "inɣel!"
+        "copied": "inɣel!",
+        "profile": "Ifres"
     },
     "action": {
         "continue": "Kemmel",
@@ -169,7 +168,8 @@
     },
     "settings": {
         "security": {
-            "cross_signing_homeserver_support_exists": "illa"
+            "cross_signing_homeserver_support_exists": "illa",
+            "key_backup_algorithm": "Talguritmit:"
         },
         "general": {
             "account_section": "Amiḍan",
@@ -179,6 +179,7 @@
     },
     "notifications": {
         "enable_prompt_toast_title": "Tineɣmisin",
-        "colour_none": "Walu"
+        "colour_none": "Walu",
+        "class_other": "Yaḍn"
     }
 }

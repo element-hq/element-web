@@ -322,7 +322,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                     </SettingsSubsection>
                     {this.renderLegal()}
                     {this.renderCredits()}
-                    <SettingsSubsection heading={_t("common|Advanced")}>
+                    <SettingsSubsection heading={_t("common|advanced")}>
                         <SettingsSubsectionText>
                             {_t(
                                 "setting|help_about|homeserver",

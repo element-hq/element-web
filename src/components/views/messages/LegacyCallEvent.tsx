@@ -250,7 +250,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
         if (this.state.callState === CallState.Connecting) {
             return (
                 <div className="mx_LegacyCallEvent_content">
-                    {_t("Connecting")}
+                    {_t("voip|connecting")}
                     {this.props.timestamp}
                 </div>
             );

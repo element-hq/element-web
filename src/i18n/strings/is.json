@@ -31,7 +31,6 @@
     "Reason": "Ástæða",
     "Send": "Senda",
     "Authentication": "Auðkenning",
-    "Notification targets": "Markmið tilkynninga",
     "Are you sure?": "Ertu viss?",
     "Unignore": "Hætta að hunsa",
     "Admin Tools": "Kerfisstjóratól",
@@ -73,7 +72,6 @@
     "Unavailable": "Ekki tiltækt",
     "Changelog": "Breytingaskrá",
     "Confirm Removal": "Staðfesta fjarlægingu",
-    "Unknown error": "Óþekkt villa",
     "Deactivate Account": "Gera notandaaðgang óvirkann",
     "Filter results": "Sía niðurstöður",
     "An error has occurred.": "Villa kom upp.",
@@ -87,7 +85,6 @@
     "Invite to this room": "Bjóða inn á þessa spjallrás",
     "Connectivity to the server has been lost.": "Tenging við vefþjón hefur rofnað.",
     "Search failed": "Leit mistókst",
-    "Profile": "Notandasnið",
     "A new password must be entered.": "Það verður að setja inn nýtt lykilorð.",
     "New passwords must match each other.": "Nýju lykilorðin verða að vera þau sömu.",
     "Return to login screen": "Fara aftur í innskráningargluggann",
@@ -127,7 +124,6 @@
     "Add room": "Bæta við spjallrás",
     "Room information": "Upplýsingar um spjallrás",
     "Room options": "Valkostir spjallrásar",
-    "Invite people": "Bjóða fólki",
     "Finland": "Finnland",
     "Norway": "Noreg",
     "Denmark": "Danmörk",
@@ -196,7 +192,6 @@
     "Lion": "Ljón",
     "Cat": "Köttur",
     "Dog": "Hundur",
-    "General": "Almennt",
     "Demote": "Leggja til baka",
     "Replying": "Svara",
     "%(duration)sd": "%(duration)sd",
@@ -212,7 +207,6 @@
         "other": "Bæti við spjallrásum... (%(progress)s af %(count)s)"
     },
     "Role in <RoomName/>": "Hlutverk í <RoomName/>",
-    "Spaces": "Svæði",
     "Zimbabwe": "Simbabve",
     "Zambia": "Sambía",
     "Yemen": "Jemen",
@@ -458,7 +452,6 @@
     "Afghanistan": "Afganistan",
     "United States": "Bandaríkin",
     "United Kingdom": "Stóra Bretland",
-    "Connecting": "Tengist",
     "Developer": "Forritari",
     "Experimental": "Á tilraunastigi",
     "Themes": "Þemu",
@@ -476,7 +469,6 @@
     "Room Name": "Heiti spjallrásar",
     "<userName/> invited you": "<userName/> bauð þér",
     "<userName/> wants to chat": "<userName/> langar til að spjalla",
-    "Invite with email or username": "Bjóða með tölvupóstfangi eða notandanafni",
     "Go to Settings": "Fara í stillingar",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Útflutta skráin verður varin með lykilfrasa. Settu inn lykilfrasann hér til að afkóða skrána.",
     "Success!": "Tókst!",
@@ -551,7 +543,6 @@
     "Local address": "Staðvært vistfang",
     "Stop recording": "Stöðva upptöku",
     "No microphone found": "Enginn hljóðnemi fannst",
-    "Mark all as read": "Merkja allt sem lesið",
     "%(roomName)s does not exist.": "%(roomName)s er ekki til.",
     "Do you want to join %(roomName)s?": "Viltu taka þátt í %(roomName)s?",
     "Start chatting": "Hefja spjall",
@@ -578,26 +569,6 @@
     "Deactivate account": "Gera notandaaðgang óvirkann",
     "Phone numbers": "Símanúmer",
     "Email addresses": "Tölvupóstföng",
-    "not ready": "ekki tilbúið",
-    "ready": "tilbúið",
-    "Algorithm:": "Reiknirit:",
-    "Restore from Backup": "Endurheimta úr öryggisafriti",
-    "Profile picture": "Notandamynd",
-    "Mentions & keywords": "Tilvísanir og stikkorð",
-    "Global": "Víðvært",
-    "Keyword": "Stikkorð",
-    "Updating spaces... (%(progress)s out of %(count)s)": {
-        "one": "Uppfæri svæði...",
-        "other": "Uppfæri svæði... (%(progress)s af %(count)s)"
-    },
-    "Space members": "Meðlimir svæðis",
-    "Upgrade required": "Uppfærsla er nauðsynleg",
-    "Display Name": "Birtingarnafn",
-    "Space options": "Valkostir svæðis",
-    "Preview Space": "Forskoða svæði",
-    "Visibility": "Sýnileiki",
-    "Leave Space": "Yfirgefa svæði",
-    "Save Changes": "Vista breytingar",
     "Address": "Vistfang",
     "Space selection": "Val svæðis",
     "Folder": "Mappa",
@@ -640,9 +611,6 @@
     "Ignored attempt to disable encryption": "Hunsaði tilraun til að gera dulritun óvirka",
     "This client does not support end-to-end encryption.": "Þetta forrit styður ekki enda-í-enda dulritun.",
     "Room Addresses": "Vistföng spjallrása",
-    "Loading new room": "Hleð inn nýrri spjallrás",
-    "Upgrading room": "Uppfæri spjallrás",
-    "Show all rooms": "Sýna allar spjallrásir",
     "Your homeserver has exceeded one of its resource limits.": "Heimaþjóninn þinn er kominn fram yfir takmörk á tilföngum.",
     "Your homeserver has exceeded its user limit.": "Heimaþjóninn þinn er kominn fram yfir takmörk á fjölda notenda.",
     "Private space": "Einkasvæði",
@@ -688,15 +656,8 @@
     "View in room": "Skoða á spjallrás",
     "Set up": "Setja upp",
     "Failed to set display name": "Mistókst að stilla birtingarnafn",
-    "Show advanced": "Birta ítarlegt",
-    "Hide advanced": "Fela ítarlegt",
-    "Edit settings relating to your space.": "Breyta stillingum viðkomandi svæðinu þínu.",
-    "Failed to save space settings.": "Mistókst að vista stillingar svæðis.",
-    "Share invite link": "Deila boðstengli",
     "Copy link to thread": "Afrita tengil á spjallþráð",
-    "You can change these anytime.": "Þú getur breytt þessu hvenær sem er.",
     "Create a space": "Búa til svæði",
-    "Search %(spaceName)s": "Leita í %(spaceName)s",
     "Guitar": "Gítar",
     "Ball": "Bolti",
     "Trophy": "Verðlaun",
@@ -716,25 +677,12 @@
     "Heart": "Hjarta",
     "Corn": "Maís",
     "Strawberry": "Jarðarber",
-    "unknown person": "óþekktur einstaklingur",
     "This room is not public. You will not be able to rejoin without an invite.": "Þessi spjallrás er ekki opinber. Þú munt ekki geta tekið aftur þátt nema að vera boðið.",
     "If they don't match, the security of your communication may be compromised.": "Ef þetta samsvarar ekki, getur verið að samskiptin þín séu berskjölduð.",
     "Confirm by comparing the following with the User Settings in your other session:": "Staðfestu með því að bera eftirfarandi saman við 'Stillingar notanda' í hinni setunni þinni:",
     "Start using Key Backup": "Byrja að nota öryggisafrit dulritunarlykla",
     "No votes cast": "Engin atkvæði greidd",
     "This room has been replaced and is no longer active.": "Þessari spjallrás hefur verið skipt út og er hún ekki lengur virk.",
-    "Delete Backup": "Eyða öryggisafriti",
-    "Sending invites... (%(progress)s out of %(count)s)": {
-        "one": "Sendi boð...",
-        "other": "Sendi boð... (%(progress)s af %(count)s)"
-    },
-    "Spaces with access": "Svæði með aðgang",
-    "& %(count)s more": {
-        "one": "og %(count)s til viðbótar",
-        "other": "og %(count)s til viðbótar"
-    },
-    "No display name": "Ekkert birtingarnafn",
-    "Access": "Aðgangur",
     "Spanner": "Skrúflykill",
     "Invalid base_url for m.homeserver": "Ógilt base_url fyrir m.homeserver",
     "This homeserver would like to make sure you are not a robot.": "Þessi heimaþjónn vill ganga úr skugga um að þú sért ekki vélmenni.",
@@ -767,8 +715,6 @@
     "Jump to date": "Hoppa á dagsetningu",
     "Jump to read receipt": "Fara í fyrstu leskvittun",
     "Incorrect verification code": "Rangur sannvottunarkóði",
-    "Jump to first invite.": "Fara í fyrsta boð.",
-    "Jump to first unread room.": "Fara í fyrstu ólesnu spjallrásIna.",
     "Generate a Security Key": "Útbúa öryggislykil",
     "Not a valid Security Key": "Ekki gildur öryggislykill",
     "This looks like a valid Security Key!": "Þetta lítur út eins og gildur öryggislykill!",
@@ -783,22 +729,8 @@
     "You signed in to a new session without verifying it:": "Þú skráðir inn í nýja setu án þess að sannvotta hana:",
     "Your messages are not secure": "Skilaboðin þín eru ekki örugg",
     "Could not connect to identity server": "Gat ekki tengst við auðkennisþjón",
-    "Secret storage:": "Leynigeymsla:",
-    "in account data": "í gögnum notandaaðgangs",
-    "Secret storage public key:": "Dreifilykill leynigeymslu:",
-    "Backup key cached:": "Öryggisafritunarlykill í skyndiminni:",
-    "not stored": "ekki geymt",
-    "Backup key stored:": "Geymdur öryggisafritunarlykill:",
-    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Taktu öryggisafrit af dulritunarlyklunum þínum ásamt gögnum notandaaðgangsins fari svo að þú missir aðgang að setunum þínum. Dulritunarlyklarnir verða varðir með einstökum öryggislykli.",
-    "unexpected type": "óvænt tegund",
-    "well formed": "rétt sniðið",
     "Back up your keys before signing out to avoid losing them.": "Taktu öryggisafrit af dulritunarlyklunum áður en þú skráir þig út svo þeir tapist ekki.",
-    "Your keys are <b>not being backed up from this session</b>.": "Dulritunarlyklarnir þínir eru <b>ekki öryggisafritaðir úr þessari setu</b>.",
     "Backup version:": "Útgáfa öryggisafrits:",
-    "All keys backed up": "Allir lyklar öryggisafritaðir",
-    "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Þessi seta er <b>ekki að öryggisafrita dulritunarlyklana þína</b>, en þú ert með fyrirliggjandi öryggisafrit sem þú getur endurheimt úr og notað til að halda áfram.",
-    "Unable to load key backup status": "Tókst ekki að hlaða inn stöðu öryggisafritunar dulritunarlykla",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Ertu viss? Þú munt tapa dulrituðu skilaboðunum þínum ef dulritunarlyklarnir þínir eru ekki rétt öryggisafritaðir.",
     "Switch theme": "Skipta um þema",
     "Unable to create key backup": "Tókst ekki að gera öryggisafrit af dulritunarlykli",
     "Create key backup": "Gera öryggisafrit af dulritunarlykli",
@@ -827,10 +759,6 @@
         "other": "Sýna %(count)s forskoðanir til viðbótar"
     },
     "You have no ignored users.": "Þú ert ekki með neina hunsaða notendur.",
-    "Anyone in a space can find and join. You can select multiple spaces.": "Hver sem er í svæði getur fundið og tekið þátt. Þú getur valið mörg svæði.",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Hver sem er í <spaceName/> getur fundið og tekið þátt. Þú getur einnig valið önnur svæði.",
-    "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Hver sem er í svæði getur fundið og tekið þátt. <a>Breyttu hér því hvaða svæði hafa aðgang.</a>",
-    "Enable guest access": "Leyfa aðgang gesta",
     "Integrations are disabled": "Samþættingar eru óvirkar",
     "Your homeserver doesn't seem to support this feature.": "Heimaþjóninn þinn virðist ekki styðja þennan eiginleika.",
     "Including %(commaSeparatedMembers)s": "Þar með taldir %(commaSeparatedMembers)s",
@@ -849,12 +777,6 @@
     "Manage integrations": "Sýsla með samþættingar",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Notaðu samþættingarstýringu til að stýra vélmennum, viðmótshlutum og límmerkjapökkum.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Notaðu samþættingarstýringu <b>(%(serverName)s)</b> til að stýra vélmennum, viðmótshlutum og límmerkjapökkum.",
-    "Currently, %(count)s spaces have access": {
-        "one": "Núna er svæði með aðgang",
-        "other": "Núna eru %(count)s svæði með aðgang"
-    },
-    "The integration manager is offline or it cannot reach your homeserver.": "Samþættingarstýringin er ekki nettengd og nær ekki að tengjast heimaþjóninum þínum.",
-    "Cannot connect to integration manager": "Get ekki tengst samþættingarstýringu",
     "IRC display name width": "Breidd IRC-birtingarnafns",
     "Cancel search": "Hætta við leitina",
     "Drop a Pin": "Sleppa pinna",
@@ -964,10 +886,6 @@
         "other": "Sjá alla %(count)s meðlimina"
     },
     "Identity server URL must be HTTPS": "Slóð á auðkennisþjón verður að vera HTTPS",
-    "The operation could not be completed": "Ekki tókst að ljúka aðgerðinni",
-    "Failed to save your profile": "Mistókst að vista sniðið þitt",
-    "There was an error loading your notification settings.": "Það kom upp villa við að hlaða inn stillingum fyrir tilkynningar.",
-    "New keyword": "Nýtt stikkorð",
     "This event could not be displayed": "Ekki tókst að birta þennan atburð",
     "Edit message": "Breyta skilaboðum",
     "Everyone in this room is verified": "Allir á þessari spjallrás eru staðfestir",
@@ -1047,7 +965,6 @@
     "Add existing room": "Bæta við fyrirliggjandi spjallrás",
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "Aftengjast frá auðkennisþjóninum <current /> og tengjast í staðinn við <new />?",
     "Checking server": "Athuga með þjón",
-    "Decide who can view and join %(spaceName)s.": "Veldu hverjir geta skoðað og tekið þátt í %(spaceName)s.",
     "Verification Request": "Beiðni um sannvottun",
     "Save your Security Key": "Vista öryggislykilinn þinn",
     "Set a Security Phrase": "Setja öryggisfrasa",
@@ -1152,13 +1069,6 @@
     "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "Þetta boð í %(roomName)s var sent til %(email)s sem er ekki tengt notandaaðgangnum þínum",
     "Unnamed audio": "Nafnlaust hljóð",
     "To continue, use Single Sign On to prove your identity.": "Til að halda áfram skaltu nota einfalda innskráningu (single-sign-on) til að sanna auðkennið þitt.",
-    "Recommended for public spaces.": "Mælt með fyrir opinber almenningssvæði.",
-    "Allow people to preview your space before they join.": "Bjóddu fólki að forskoða svæðið þitt áður en þau geta tekið þátt.",
-    "Failed to update the visibility of this space": "Mistókst að uppfæra sýnileika þessa svæðis",
-    "This may be useful for public spaces.": "Þetta getur hentað fyrir opinber almenningssvæði.",
-    "Guests can join a space without having an account.": "Gestir geta tekið þátt í svæði án þess að vera með notandaaðgang.",
-    "Failed to update the history visibility of this space": "Mistókst að uppfæra sýnileika atvikaferils þessa svæðis",
-    "Failed to update the guest access of this space": "Mistókst að uppfæra gestaaðgang þessa svæðis",
     "To join a space you'll need an invite.": "Til að ganga til liðs við svæði þarftu boð.",
     "Unable to set up secret storage": "Tókst ekki að setja upp leynigeymslu",
     "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Tryggðu þig gegn því að missa aðgang að dulrituðum skilaboðum og gögnum með því að taka öryggisafrit af dulritunarlyklunum á netþjóninum þinum.",
@@ -1233,7 +1143,6 @@
     "Almost there! Is %(displayName)s showing the same shield?": "Næstum því búið! Sýnir %(displayName)s sama skjöldinn?",
     "Almost there! Is your other device showing the same shield?": "Næstum því búið! Sýnir hitt tækið þitt sama skjöldinn?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Þú getur ekki afturkallað þessa aðgerð, þar sem þú ert að gefa notandanum jafn mikil völd og þú hefur sjálf/ur.",
-    "Failed to change power level": "Mistókst að breyta valdastigi",
     "You can only pin up to %(count)s widgets": {
         "other": "Þú getur bara fest allt að %(count)s viðmótshluta"
     },
@@ -1288,12 +1197,7 @@
     "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "að yfirfara vafraviðbæturnar þínar ef vera kynni að einhverjar þeirra loki á auðkenningarþjóninn (eins og t.d. Privacy Badger)",
     "The identity server you have chosen does not have any terms of service.": "Auðkennisþjónninn sem þú valdir er ekki með neina þjónustuskilmála.",
     "Terms of service not accepted or the identity server is invalid.": "Þjónustuskilmálar eru ekki samþykktir eða að auðkennisþjónn er ógildur.",
-    "Connect this session to Key Backup": "Tengja þessa setu við öryggisafrit af lykli",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Við mælum með því að þú fjarlægir tölvupóstföngin þín og símanúmer af auðkennisþjóninum áður en þú aftengist.",
-    "%(count)s people joined": {
-        "one": "%(count)s aðili hefur tekið þátt",
-        "other": "%(count)s aðilar hafa tekið þátt"
-    },
     "Live location enabled": "Staðsetning í rauntíma virkjuð",
     "Close sidebar": "Loka hliðarstiku",
     "View List": "Skoða lista",
@@ -1363,7 +1267,6 @@
     "View live location": "Skoða staðsetningu í rauntíma",
     "%(name)s started a video call": "%(name)s hóf myndsímtal",
     "To view %(roomName)s, you need an invite": "Til að skoða %(roomName)s þarftu boð",
-    "Ongoing call": "Símtal í gangi",
     "Video call (Jitsi)": "Myndsímtal (Jitsi)",
     "Seen by %(count)s people": {
         "one": "Séð af %(count)s aðila",
@@ -1412,7 +1315,6 @@
     "Connection": "Tenging",
     "Video settings": "Myndstillingar",
     "Voice settings": "Raddstillingar",
-    "Search users in this room…": "Leita að notendum á þessari spjallrás…",
     "Unable to show image due to error": "Get ekki birt mynd vegna villu",
     "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.": "Þú getur ekki afturkallað þessa aðgerð, þar sem þú ert að lækka sjálfa/n þig í tign, og ef þú ert síðasti notandinn með nógu mikil völd á þessu svæði, verður ómögulegt að ná aftur stjórn á því.",
@@ -1424,9 +1326,6 @@
     "This invite was sent to %(email)s which is not associated with your account": "Þetta boð var sent til %(email)s sem er ekki tengt notandaaðgangnum þínum",
     "You can still join here.": "Þú getur samt tekið þátt hér.",
     "Join the room to participate": "Taka þátt í spjallrás",
-    "You do not have permission to start voice calls": "Þú hefur ekki heimildir til að hefja raddsímtöl",
-    "There's no one here to call": "Hér er enginn sem hægt er að hringja í",
-    "You do not have permission to start video calls": "Þú hefur ekki heimildir til að hefja myndsímtöl",
     "Video call (%(brand)s)": "Myndsímtal (%(brand)s)",
     "Show formatting": "Sýna sniðmótun",
     "Hide formatting": "Fela sniðmótun",
@@ -1436,8 +1335,6 @@
     "Failed to update the join rules": "Mistókst að uppfæra reglur fyrir þátttöku",
     "Voice processing": "Meðhöndlun tals",
     "Automatically adjust the microphone volume": "Aðlaga hljóðstyrk hljóðnema sjálfvirkt",
-    "Give one or multiple users in this room more privileges": "Gefðu einum eða fleiri notendum á þessari spjallrás auknar heimildir",
-    "Add privileged users": "Bæta við notendum með auknar heimildir",
     "common": {
         "about": "Um hugbúnaðinn",
         "analytics": "Greiningar",
@@ -1535,7 +1432,12 @@
         "deselect_all": "Afvelja allt",
         "select_all": "Velja allt",
         "copied": "Afritað!",
-        "Advanced": "Nánar"
+        "advanced": "Nánar",
+        "spaces": "Svæði",
+        "general": "Almennt",
+        "profile": "Notandasnið",
+        "display_name": "Birtingarnafn",
+        "user_avatar": "Notandamynd"
     },
     "action": {
         "continue": "Halda áfram",
@@ -1637,7 +1539,9 @@
         "exit_fullscreeen": "Fara úr fullskjásstillingu",
         "enter_fullscreen": "Fara í fullskjásstillingu",
         "unban": "Afbanna",
-        "click_to_copy": "Smelltu til að afrita"
+        "click_to_copy": "Smelltu til að afrita",
+        "hide_advanced": "Fela ítarlegt",
+        "show_advanced": "Birta ítarlegt"
     },
     "a11y": {
         "user_menu": "Valmynd notandans",
@@ -1649,7 +1553,8 @@
             "one": "1 ólesin skilaboð.",
             "other": "%(count)s ólesin skilaboð."
         },
-        "unread_messages": "Ólesin skilaboð."
+        "unread_messages": "Ólesin skilaboð.",
+        "jump_first_invite": "Fara í fyrsta boð."
     },
     "labs": {
         "video_rooms": "Myndspjallrásir",
@@ -1972,7 +1877,9 @@
             "noisy": "Hávært",
             "error_permissions_denied": "%(brand)s hefur ekki heimildir til að senda þér tilkynningar - yfirfarðu stillingar vafrans þíns",
             "error_permissions_missing": "%(brand)s voru ekki gefnar heimildir til að senda þér tilkynningar - reyndu aftur",
-            "error_title": "Tekst ekki að virkja tilkynningar"
+            "error_title": "Tekst ekki að virkja tilkynningar",
+            "push_targets": "Markmið tilkynninga",
+            "error_loading": "Það kom upp villa við að hlaða inn stillingum fyrir tilkynningar."
         },
         "appearance": {
             "layout_irc": "IRC (á tilraunastigi)",
@@ -2056,7 +1963,27 @@
             },
             "message_search_disabled": "Setja dulrituð skilaboð leynilega í skyndiminni á tækinu svo þau birtist í leitarniðurstöðum.",
             "message_search_unsupported_web": "%(brand)s nær ekki að setja dulrituð skilaboð leynilega í skyndiminni á tækinu á meðan keyrt er í vafra. Notaðu <desktopLink>%(brand)s Desktop vinnutölvuútgáfuna</desktopLink> svo skilaboðin birtist í leitarniðurstöðum.",
-            "message_search_failed": "Frumstilling leitar í skilaboðum mistókst"
+            "message_search_failed": "Frumstilling leitar í skilaboðum mistókst",
+            "backup_key_well_formed": "rétt sniðið",
+            "backup_key_unexpected_type": "óvænt tegund",
+            "backup_keys_description": "Taktu öryggisafrit af dulritunarlyklunum þínum ásamt gögnum notandaaðgangsins fari svo að þú missir aðgang að setunum þínum. Dulritunarlyklarnir verða varðir með einstökum öryggislykli.",
+            "backup_key_stored_status": "Geymdur öryggisafritunarlykill:",
+            "cross_signing_not_stored": "ekki geymt",
+            "backup_key_cached_status": "Öryggisafritunarlykill í skyndiminni:",
+            "4s_public_key_status": "Dreifilykill leynigeymslu:",
+            "4s_public_key_in_account_data": "í gögnum notandaaðgangs",
+            "secret_storage_status": "Leynigeymsla:",
+            "secret_storage_ready": "tilbúið",
+            "secret_storage_not_ready": "ekki tilbúið",
+            "delete_backup": "Eyða öryggisafriti",
+            "delete_backup_confirm_description": "Ertu viss? Þú munt tapa dulrituðu skilaboðunum þínum ef dulritunarlyklarnir þínir eru ekki rétt öryggisafritaðir.",
+            "error_loading_key_backup_status": "Tókst ekki að hlaða inn stöðu öryggisafritunar dulritunarlykla",
+            "restore_key_backup": "Endurheimta úr öryggisafriti",
+            "key_backup_inactive": "Þessi seta er <b>ekki að öryggisafrita dulritunarlyklana þína</b>, en þú ert með fyrirliggjandi öryggisafrit sem þú getur endurheimt úr og notað til að halda áfram.",
+            "key_backup_connect": "Tengja þessa setu við öryggisafrit af lykli",
+            "key_backup_complete": "Allir lyklar öryggisafritaðir",
+            "key_backup_algorithm": "Reiknirit:",
+            "key_backup_inactive_warning": "Dulritunarlyklarnir þínir eru <b>ekki öryggisafritaðir úr þessari setu</b>."
         },
         "preferences": {
             "room_list_heading": "Spjallrásalisti",
@@ -2167,18 +2094,22 @@
             "add_msisdn_confirm_sso_button": "Staðfestu viðbætingu þessa símanúmers með því að nota einfalda innskráningu (single-sign-on) til að sanna auðkennið þitt.",
             "add_msisdn_confirm_button": "Staðfestu að bæta við símanúmeri",
             "add_msisdn_confirm_body": "Smelltu á hnappinn hér að neðan til að staðfesta að bæta við þessu símanúmeri.",
-            "add_msisdn_dialog_title": "Bæta við símanúmeri"
+            "add_msisdn_dialog_title": "Bæta við símanúmeri",
+            "name_placeholder": "Ekkert birtingarnafn",
+            "error_saving_profile_title": "Mistókst að vista sniðið þitt",
+            "error_saving_profile": "Ekki tókst að ljúka aðgerðinni"
         },
         "sidebar": {
             "title": "Hliðarspjald",
             "metaspaces_subsection": "Svæði sem á að birta",
             "metaspaces_description": "Svæði eru leið til að hópa fólk og spjallrásir. Auk svæðanna sem þú ert á, geturðu líka notað nokkur forútbúin svæði.",
             "metaspaces_home_description": "Forsíðan nýtist til að hafa yfirsýn yfir allt.",
-            "metaspaces_home_all_rooms": "Birtu allar spjallrásirnar þínar á forsíðunni, jafnvel þótt þær tilheyri svæði.",
             "metaspaces_favourites_description": "Hópaðu allar eftirlætisspjallrásir og fólk á einum stað.",
             "metaspaces_people_description": "Hópaðu allt fólk á einum stað.",
             "metaspaces_orphans": "Spjallrásir utan svæðis",
-            "metaspaces_orphans_description": "Hópaðu allar spjallrásir sem ekki eru hluti af svæðum á einum stað."
+            "metaspaces_orphans_description": "Hópaðu allar spjallrásir sem ekki eru hluti af svæðum á einum stað.",
+            "metaspaces_home_all_rooms_description": "Birtu allar spjallrásirnar þínar á forsíðunni, jafnvel þótt þær tilheyri svæði.",
+            "metaspaces_home_all_rooms": "Sýna allar spjallrásir"
         }
     },
     "devtools": {
@@ -2803,7 +2734,17 @@
         "more_button": "Meira",
         "screenshare_monitor": "Deila öllum skjánum",
         "screenshare_window": "Forritsgluggi",
-        "screenshare_title": "Deila efni"
+        "screenshare_title": "Deila efni",
+        "disabled_no_perms_start_voice_call": "Þú hefur ekki heimildir til að hefja raddsímtöl",
+        "disabled_no_perms_start_video_call": "Þú hefur ekki heimildir til að hefja myndsímtöl",
+        "disabled_ongoing_call": "Símtal í gangi",
+        "disabled_no_one_here": "Hér er enginn sem hægt er að hringja í",
+        "n_people_joined": {
+            "one": "%(count)s aðili hefur tekið þátt",
+            "other": "%(count)s aðilar hafa tekið þátt"
+        },
+        "unknown_person": "óþekktur einstaklingur",
+        "connecting": "Tengist"
     },
     "Other": "Annað",
     "room_settings": {
@@ -2845,7 +2786,10 @@
             "title": "Hlutverk og heimildir",
             "permissions_section": "Heimildir",
             "permissions_section_description_space": "Veldu þau hlutverk sem krafist er til að breyta ýmsum þáttum svæðisins",
-            "permissions_section_description_room": "Veldu þau hlutverk sem krafist er til að breyta ýmsum þáttum spjallrásarinnar"
+            "permissions_section_description_room": "Veldu þau hlutverk sem krafist er til að breyta ýmsum þáttum spjallrásarinnar",
+            "add_privileged_user_heading": "Bæta við notendum með auknar heimildir",
+            "add_privileged_user_description": "Gefðu einum eða fleiri notendum á þessari spjallrás auknar heimildir",
+            "add_privileged_user_filter_placeholder": "Leita að notendum á þessari spjallrás…"
         },
         "security": {
             "strict_encryption": "Aldrei senda dulrituð skilaboð af þessu tæki til ósannvottaðra tækja á þessari spjallrás úr þessari setu",
@@ -2863,7 +2807,31 @@
             "history_visibility_shared": "Einungis meðlimir (síðan þessi kostur var valinn)",
             "history_visibility_invited": "Einungis meðlimir (síðan þeim var boðið)",
             "history_visibility_joined": "Einungis meðlimir (síðan þeir skráðu sig)",
-            "history_visibility_world_readable": "Hver sem er"
+            "history_visibility_world_readable": "Hver sem er",
+            "join_rule_upgrade_required": "Uppfærsla er nauðsynleg",
+            "join_rule_restricted_n_more": {
+                "one": "og %(count)s til viðbótar",
+                "other": "og %(count)s til viðbótar"
+            },
+            "join_rule_restricted_summary": {
+                "one": "Núna er svæði með aðgang",
+                "other": "Núna eru %(count)s svæði með aðgang"
+            },
+            "join_rule_restricted_description": "Hver sem er í svæði getur fundið og tekið þátt. <a>Breyttu hér því hvaða svæði hafa aðgang.</a>",
+            "join_rule_restricted_description_spaces": "Svæði með aðgang",
+            "join_rule_restricted_description_active_space": "Hver sem er í <spaceName/> getur fundið og tekið þátt. Þú getur einnig valið önnur svæði.",
+            "join_rule_restricted_description_prompt": "Hver sem er í svæði getur fundið og tekið þátt. Þú getur valið mörg svæði.",
+            "join_rule_restricted": "Meðlimir svæðis",
+            "join_rule_upgrade_upgrading_room": "Uppfæri spjallrás",
+            "join_rule_upgrade_awaiting_room": "Hleð inn nýrri spjallrás",
+            "join_rule_upgrade_sending_invites": {
+                "one": "Sendi boð...",
+                "other": "Sendi boð... (%(progress)s af %(count)s)"
+            },
+            "join_rule_upgrade_updating_spaces": {
+                "one": "Uppfæri svæði...",
+                "other": "Uppfæri svæði... (%(progress)s af %(count)s)"
+            }
         },
         "general": {
             "publish_toggle": "Birta þessa spjallrás opinberlega á skrá %(domain)s yfir spjallrásir?",
@@ -2872,7 +2840,11 @@
             "default_url_previews_on": "Forskoðun vefslóða er sjálfgefið virk fyrir þátttakendur í þessari spjallrás.",
             "default_url_previews_off": "Forskoðun vefslóða er sjálfgefið óvirk fyrir þátttakendur í þessari spjallrás.",
             "url_preview_encryption_warning": "Í dulrituðum spjallrásum, eins og þessari, er sjálfgefið slökkt á forskoðun vefslóða til að tryggja að heimaþjónn þinn (þar sem forskoðunin myndast) geti ekki safnað upplýsingum um tengla sem þú sérð í þessari spjallrás.",
-            "url_previews_section": "Forskoðun vefslóða"
+            "url_previews_section": "Forskoðun vefslóða",
+            "error_save_space_settings": "Mistókst að vista stillingar svæðis.",
+            "description_space": "Breyta stillingum viðkomandi svæðinu þínu.",
+            "save": "Vista breytingar",
+            "leave_space": "Yfirgefa svæði"
         },
         "advanced": {
             "unfederated": "Þessi spjallrás er ekki aðgengileg fjartengdum Matrix-netþjónum",
@@ -2885,7 +2857,23 @@
             "room_version": "Útgáfa spjallrásar:"
         },
         "delete_avatar_label": "Eyða auðkennismynd",
-        "upload_avatar_label": "Senda inn auðkennismynd"
+        "upload_avatar_label": "Senda inn auðkennismynd",
+        "visibility": {
+            "error_update_guest_access": "Mistókst að uppfæra gestaaðgang þessa svæðis",
+            "error_update_history_visibility": "Mistókst að uppfæra sýnileika atvikaferils þessa svæðis",
+            "guest_access_explainer": "Gestir geta tekið þátt í svæði án þess að vera með notandaaðgang.",
+            "guest_access_explainer_public_space": "Þetta getur hentað fyrir opinber almenningssvæði.",
+            "title": "Sýnileiki",
+            "error_failed_save": "Mistókst að uppfæra sýnileika þessa svæðis",
+            "history_visibility_anyone_space": "Forskoða svæði",
+            "history_visibility_anyone_space_description": "Bjóddu fólki að forskoða svæðið þitt áður en þau geta tekið þátt.",
+            "history_visibility_anyone_space_recommendation": "Mælt með fyrir opinber almenningssvæði.",
+            "guest_access_label": "Leyfa aðgang gesta"
+        },
+        "access": {
+            "title": "Aðgangur",
+            "description_space": "Veldu hverjir geta skoðað og tekið þátt í %(spaceName)s."
+        }
     },
     "encryption": {
         "verification": {
@@ -3336,9 +3324,14 @@
             "devtools_open_timeline": "Skoða tímalínu spjallrásar (forritaratól)",
             "home": "Forsíða svæðis",
             "explore": "Kanna spjallrásir",
-            "manage_and_explore": "Sýsla með og kanna spjallrásir"
+            "manage_and_explore": "Sýsla með og kanna spjallrásir",
+            "options": "Valkostir svæðis"
         },
-        "share_public": "Deildu opinbera svæðinu þínu"
+        "share_public": "Deildu opinbera svæðinu þínu",
+        "search_children": "Leita í %(spaceName)s",
+        "invite_link": "Deila boðstengli",
+        "invite": "Bjóða fólki",
+        "invite_description": "Bjóða með tölvupóstfangi eða notandanafni"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Heimaþjónninn er ekki stilltur til að birta landakort.",
@@ -3390,7 +3383,6 @@
     },
     "create_space": {
         "name_required": "Settu inn eitthvað nafn fyrir svæðið",
-        "name_placeholder": "t.d. mitt-svæði",
         "explainer": "Svæði eru ný leið til að hópa fólk og spjallrásir. Hverskyns svæði langar þig til að útbúa? Þessu má breyta síðar.",
         "public_description": "Opið öllum, best fyrir dreifða hópa",
         "private_description": "Einungis gegn boði, best fyrir þig og lítinn hóp",
@@ -3413,7 +3405,11 @@
         "invite_teammates_heading": "Bjóddu félögum þínum",
         "invite_teammates_description": "Gakktu úr skugga um að rétta fólkið hafi aðgang. Þú getur boðið fleira fólki síðar.",
         "invite_teammates_by_username": "Bjóða með notandanafni",
-        "setup_rooms_community_description": "Búum til spjallrás fyrir hvern og einn þeirra."
+        "setup_rooms_community_description": "Búum til spjallrás fyrir hvern og einn þeirra.",
+        "address_placeholder": "t.d. mitt-svæði",
+        "address_label": "Vistfang",
+        "label": "Búa til svæði",
+        "add_details_prompt_2": "Þú getur breytt þessu hvenær sem er."
     },
     "user_menu": {
         "switch_theme_light": "Skiptu yfir í ljósan ham",
@@ -3576,7 +3572,9 @@
         "admin_contact_short": "Hafðu samband við <a>kerfisstjórann þinn</a>.",
         "non_urgent_echo_failure_toast": "Netþjónninn þinn er ekki að svara sumum <a>beiðnum</a>.",
         "failed_copy": "Mistókst að afrita",
-        "something_went_wrong": "Eitthvað fór úrskeiðis!"
+        "something_went_wrong": "Eitthvað fór úrskeiðis!",
+        "update_power_level": "Mistókst að breyta valdastigi",
+        "unknown": "Óþekkt villa"
     },
     "in_space1_and_space2": "Á svæðunum %(space1Name)s og %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -3596,7 +3594,13 @@
         "colour_none": "Ekkert",
         "colour_bold": "Feitletrað",
         "colour_unsent": "Ósent",
-        "error_change_title": "Breytta tilkynningastillingum"
+        "error_change_title": "Breytta tilkynningastillingum",
+        "mark_all_read": "Merkja allt sem lesið",
+        "keyword": "Stikkorð",
+        "keyword_new": "Nýtt stikkorð",
+        "class_global": "Víðvært",
+        "class_other": "Annað",
+        "mentions_keywords": "Tilvísanir og stikkorð"
     },
     "mobile_guide": {
         "toast_title": "Notaðu smáforritið til að njóta betur reynslunnar",
@@ -3616,5 +3620,10 @@
     "lightbox": {
         "rotate_left": "Snúa til vinstri",
         "rotate_right": "Snúa til hægri"
+    },
+    "a11y_jump_first_unread_room": "Fara í fyrstu ólesnu spjallrásIna.",
+    "integration_manager": {
+        "error_connecting_heading": "Get ekki tengst samþættingarstýringu",
+        "error_connecting": "Samþættingarstýringin er ekki nettengd og nær ekki að tengjast heimaþjóninum þínum."
     }
 }

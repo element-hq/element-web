@@ -31,18 +31,15 @@
     "Reason": "Grunnlag",
     "Send": "Send",
     "Incorrect verification code": "Urett stadfestingskode",
-    "No display name": "Ingen visningsnamn",
     "Warning!": "Åtvaring!",
     "Authentication": "Authentisering",
     "Failed to set display name": "Fekk ikkje til å setja visningsnamn",
-    "Notification targets": "Varselmål",
     "This event could not be displayed": "Denne hendingen kunne ikkje visast",
     "Failed to ban user": "Fekk ikkje til å stenge ute brukaren",
     "Demote yourself?": "Senke ditt eige tilgangsnivå?",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Du kan ikkje gjera om på denne endringa sidan du senkar tilgangsnivået ditt. Viss du er den siste privilegerte brukaren i rommet vil det bli umogleg å få tilbake tilgangsrettane.",
     "Demote": "Degrader",
     "Failed to mute user": "Fekk ikkje til å dempe brukaren",
-    "Failed to change power level": "Fekk ikkje til å endra tilgangsnivået",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Du kan ikkje angre denne endringa, fordi brukaren du forfremmar vil få same tilgangsnivå som du har no.",
     "Are you sure?": "Er du sikker?",
     "Unignore": "Slutt å ignorer",
@@ -117,7 +114,6 @@
     "Changelog": "Endringslogg",
     "not specified": "Ikkje spesifisert",
     "Confirm Removal": "Godkjenn Fjerning",
-    "Unknown error": "Noko ukjend gjekk galt",
     "Deactivate Account": "Avliv Brukaren",
     "An error has occurred.": "Noko gjekk gale.",
     "Clear Storage and Sign Out": "Tøm Lager og Logg Ut",
@@ -184,7 +180,6 @@
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Klarte ikkje å lasta handlinga som vert svara til. Anten finst ho ikkje elles har du ikkje tilgang til å sjå ho.",
     "Filter results": "Filtrer resultat",
     "Server may be unavailable, overloaded, or search timed out :(": "Tenaren er kanskje utilgjengeleg, overlasta, elles så vart søket tidsavbrote :(",
-    "Profile": "Brukar",
     "Export room keys": "Eksporter romnøklar",
     "Import room keys": "Importer romnøklar",
     "File to import": "Fil til import",
@@ -274,7 +269,6 @@
     "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Fekk ikkje til å ta attende invitasjonen. Det kan ha oppstått ein mellombels feil på tenaren, eller så har ikkje du tilstrekkelege rettar for å ta attende invitasjonen.",
     "Revoke invite": "Trekk invitasjon",
     "Invited by %(sender)s": "Invitert av %(sender)s",
-    "Mark all as read": "Merk alle som lesne",
     "Error updating main address": "Feil under oppdatering av hovedadresse",
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "Det skjedde ein feil under oppdatering av hovudadressa for rommet. Det kan hende at dette er ein mellombels feil, eller at det ikkje er tillate på tenaren.",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Feil under oppdatering av alternativ adresse. Det kan hende at dette er mellombels, eller at det ikkje er tillate på tenaren.",
@@ -292,9 +286,7 @@
     "Power level": "Tilgangsnivå",
     "Voice & Video": "Tale og video",
     "Show more": "Vis meir",
-    "Display Name": "Visningsnamn",
     "Invalid theme schema.": "",
-    "General": "Generelt",
     "Room information": "Rominformasjon",
     "Room Addresses": "Romadresser",
     "Sounds": "Lydar",
@@ -304,15 +296,11 @@
     "Cancelled signature upload": "Kansellerte opplasting av signatur",
     "Room Settings - %(roomName)s": "Rominnstillingar - %(roomName)s",
     "Failed to upgrade room": "Fekk ikkje til å oppgradere rom",
-    "Secret storage public key:": "Public-nøkkel for hemmeleg lager:",
     "Ignored users": "Ignorerte brukarar",
     "Enter the name of a new server you want to explore.": "Skriv inn namn på ny tenar du ynskjer å utforske.",
     "Command Help": "Kommandohjelp",
     "To help us prevent this in future, please <a>send us logs</a>.": "For å bistå med å forhindre dette i framtida, gjerne <a>send oss loggar</a>.",
-    "Jump to first unread room.": "Hopp til fyrste uleste rom.",
-    "Jump to first invite.": "Hopp til fyrste invitasjon.",
     "Unable to set up secret storage": "Oppsett av hemmeleg lager feila",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Er du sikker? Alle dine krypterte meldingar vil gå tapt viss nøklane dine ikkje er sikkerheitskopierte.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Krypterte meldingar er sikra med ende-til-ende kryptering. Berre du og mottakar(ane) har nøklane for å lese desse meldingane.",
     "wait and try again later": "vent og prøv om att seinare",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "For å rapportere eit Matrix-relatert sikkerheitsproblem, les Matrix.org sin <a>Security Disclosure Policy</a>.",
@@ -327,13 +315,9 @@
     "This client does not support end-to-end encryption.": "Denne klienten støttar ikkje ende-til-ende kryptering.",
     "Add a new server": "Legg til ein ny tenar",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Tømming av data frå denne sesjonen er permanent. Krypterte meldingar vil gå tapt med mindre krypteringsnøklane har blitt sikkerheitskopierte.",
-    "Hide advanced": "Gøym avanserte alternativ",
-    "Show advanced": "Vis avanserte alternativ",
     "I don't want my encrypted messages": "Eg treng ikkje mine krypterte meldingar",
     "You'll lose access to your encrypted messages": "Du vil miste tilgangen til dine krypterte meldingar",
     "Join millions for free on the largest public server": "Kom ihop med millionar av andre på den største offentlege tenaren",
-    "Delete Backup": "Slett sikkerheitskopi",
-    "Restore from Backup": "Gjenopprett frå sikkerheitskopi",
     "Video conference started by %(senderName)s": "Videokonferanse starta av %(senderName)s",
     "Video conference updated by %(senderName)s": "Videokonferanse oppdatert av %(senderName)s",
     "Video conference ended by %(senderName)s": "Videokonferanse avslutta av %(senderName)s",
@@ -371,9 +355,6 @@
     "Poll": "Røysting",
     "You do not have permission to start polls in this room.": "Du har ikkje lov til å starte nye røystingar i dette rommet.",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Er du sikker på at du vil avslutta denne røystinga ? Dette vil gjelde for alle, og dei endelege resultata vil bli presentert.",
-    "New keyword": "Nytt nøkkelord",
-    "Keyword": "Nøkkelord",
-    "Mentions & keywords": "Nemningar & nøkkelord",
     "Identity server (%(server)s)": "Identietstenar (%(server)s)",
     "Change identity server": "Endre identitetstenar",
     "Not a valid identity server (status code %(code)s)": "Ikkje ein gyldig identietstenar (statuskode %(code)s)",
@@ -436,7 +417,10 @@
         "on": "På",
         "off": "Av",
         "copied": "Kopiert!",
-        "Advanced": "Avansert"
+        "advanced": "Avansert",
+        "general": "Generelt",
+        "profile": "Brukar",
+        "display_name": "Visningsnamn"
     },
     "action": {
         "continue": "Fortset",
@@ -491,7 +475,9 @@
         "refresh": "Hent fram på nytt",
         "mention": "Nemn",
         "submit": "Send inn",
-        "unban": "Slepp inn att"
+        "unban": "Slepp inn att",
+        "hide_advanced": "Gøym avanserte alternativ",
+        "show_advanced": "Vis avanserte alternativ"
     },
     "labs": {
         "pinning": "Meldingsfesting",
@@ -599,7 +585,8 @@
             "noisy": "Bråkete",
             "error_permissions_denied": "%(brand)s har ikkje lov til å senda deg varsel - sjekk nettlesarinnstillingane dine",
             "error_permissions_missing": "%(brand)s fekk ikkje tillating til å senda varsel - ver venleg og prøv igjen",
-            "error_title": "Klarte ikkje å skru på Varsel"
+            "error_title": "Klarte ikkje å skru på Varsel",
+            "push_targets": "Varselmål"
         },
         "appearance": {
             "layout_irc": "IRC (eksperimentell)",
@@ -640,7 +627,11 @@
             "cryptography_section": "Kryptografi",
             "encryption_section": "Kryptografi",
             "bulk_options_accept_all_invites": "Aksepter alle invitasjonar frå %(invitedRooms)s",
-            "bulk_options_reject_all_invites": "Kanseller alle invitasjonar frå %(invitedRooms)s"
+            "bulk_options_reject_all_invites": "Kanseller alle invitasjonar frå %(invitedRooms)s",
+            "4s_public_key_status": "Public-nøkkel for hemmeleg lager:",
+            "delete_backup": "Slett sikkerheitskopi",
+            "delete_backup_confirm_description": "Er du sikker? Alle dine krypterte meldingar vil gå tapt viss nøklane dine ikkje er sikkerheitskopierte.",
+            "restore_key_backup": "Gjenopprett frå sikkerheitskopi"
         },
         "preferences": {
             "room_list_heading": "Romkatalog",
@@ -677,7 +668,8 @@
             "add_msisdn_confirm_sso_button": "Stadfest dette telefonnummeret for å bruka Single-sign-on for å bevisa identiteten din.",
             "add_msisdn_confirm_button": "Stadfest tilleggjing av telefonnummeret",
             "add_msisdn_confirm_body": "Trykk på knappen nedanfor for å legge til dette telefonnummeret.",
-            "add_msisdn_dialog_title": "Legg til telefonnummer"
+            "add_msisdn_dialog_title": "Legg til telefonnummer",
+            "name_placeholder": "Ingen visningsnamn"
         },
         "sidebar": {
             "title": "Sidestolpe"
@@ -1111,7 +1103,8 @@
             "other": "%(count)s uleste meldingar.",
             "one": "1 ulesen melding."
         },
-        "unread_messages": "Uleste meldingar."
+        "unread_messages": "Uleste meldingar.",
+        "jump_first_invite": "Hopp til fyrste invitasjon."
     },
     "onboarding": {
         "explore_rooms": "Utforsk offentlege rom",
@@ -1253,7 +1246,9 @@
         "mixed_content": "Kan ikkje kobla til heimetenaren via HTTP fordi URL-adressa i nettlesaren er HTTPS. Bruk HTTPS, eller <a>aktiver usikre skript</a>.",
         "tls": "Kan ikkje kopla til heimtenaren - ver venleg og sjekk tilkoplinga di, og sjå til at <a>heimtenaren din sitt CCL-sertifikat</a> er stolt på og at ein nettlesartillegg ikkje hindrar førespurnader.",
         "failed_copy": "Noko gjekk gale med kopieringa",
-        "something_went_wrong": "Noko gjekk gale!"
+        "something_went_wrong": "Noko gjekk gale!",
+        "update_power_level": "Fekk ikkje til å endra tilgangsnivået",
+        "unknown": "Noko ukjend gjekk galt"
     },
     "items_and_n_others": {
         "other": "<Items/> og %(count)s til",
@@ -1263,7 +1258,12 @@
         "enable_prompt_toast_title": "Varsel",
         "enable_prompt_toast_description": "Aktiver skrivebordsvarsel",
         "colour_bold": "Feit",
-        "error_change_title": "Endra varslingsinnstillingar"
+        "error_change_title": "Endra varslingsinnstillingar",
+        "mark_all_read": "Merk alle som lesne",
+        "keyword": "Nøkkelord",
+        "keyword_new": "Nytt nøkkelord",
+        "class_other": "Anna",
+        "mentions_keywords": "Nemningar & nøkkelord"
     },
     "room_summary_card_back_action_label": "Rominformasjon",
     "quick_settings": {
@@ -1277,5 +1277,6 @@
     },
     "theme": {
         "match_system": "Følg systemet"
-    }
+    },
+    "a11y_jump_first_unread_room": "Hopp til fyrste uleste rom."
 }

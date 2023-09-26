@@ -4,7 +4,6 @@
     "unknown error code": "അപരിചിത എറര്‍ കോഡ്",
     "Failed to change password. Is your password correct?": "രഹസ്യവാക്ക് മാറ്റാന്‍ സാധിച്ചില്ല. രഹസ്യവാക്ക് ശരിയാണോ ?",
     "Sunday": "ഞായര്‍",
-    "Notification targets": "നോട്ടിഫിക്കേഷന്‍ ടാര്‍ഗെറ്റുകള്‍",
     "Today": "ഇന്ന്",
     "Friday": "വെള്ളി",
     "Changelog": "മാറ്റങ്ങളുടെ നാള്‍വഴി",
@@ -68,7 +67,8 @@
             "rule_invite_for_me": "ഞാന്‍ ഒരു റൂമിലേക്ക് ക്ഷണിക്കപ്പെടുമ്പോള്‍",
             "rule_call": "വിളിയ്ക്കുന്നു",
             "rule_suppress_notices": "ബോട്ട് അയയ്ക്കുന്ന സന്ദേശങ്ങള്‍ക്ക്",
-            "noisy": "ഉച്ചത്തില്‍"
+            "noisy": "ഉച്ചത്തില്‍",
+            "push_targets": "നോട്ടിഫിക്കേഷന്‍ ടാര്‍ഗെറ്റുകള്‍"
         }
     },
     "auth": {

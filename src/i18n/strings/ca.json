@@ -38,13 +38,11 @@
     "Reason": "Raó",
     "Send": "Envia",
     "Incorrect verification code": "El codi de verificació és incorrecte",
-    "No display name": "Sense nom visible",
     "Authentication": "Autenticació",
     "Failed to set display name": "No s'ha pogut establir el nom visible",
     "This room is not public. You will not be able to rejoin without an invite.": "Aquesta sala no és pública. No podreu tronar a entrar sense invitació.",
     "Failed to ban user": "No s'ha pogut expulsar l'usuari",
     "Failed to mute user": "No s'ha pogut silenciar l'usuari",
-    "Failed to change power level": "No s'ha pogut canviar el nivell d'autoritat",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "No podràs desfer aquest canvi ja que t'estàs baixant de rang, si ets l'últim usuari de la sala amb privilegis, et serà impossible recuperar-los.",
     "Are you sure?": "Estàs segur?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "No podràs desfer aquest canvi ja que estàs donant a l'usuari el mateix nivell d'autoritat que el teu.",
@@ -99,7 +97,6 @@
         "other": "I %(count)s més..."
     },
     "Confirm Removal": "Confirmeu l'eliminació",
-    "Unknown error": "Error desconegut",
     "Deactivate Account": "Desactivar el compte",
     "An error has occurred.": "S'ha produït un error.",
     "Unable to restore session": "No s'ha pogut restaurar la sessió",
@@ -136,7 +133,6 @@
     "Confirm passphrase": "Introduïu una contrasenya",
     "Import room keys": "Importa les claus de la sala",
     "Sunday": "Diumenge",
-    "Notification targets": "Objectius de les notificacions",
     "Today": "Avui",
     "Friday": "Divendres",
     "Changelog": "Registre de canvis",
@@ -234,7 +230,7 @@
         "on": "Engegat",
         "off": "Apagat",
         "copied": "Copiat!",
-        "Advanced": "Avançat"
+        "advanced": "Avançat"
     },
     "action": {
         "continue": "Continua",
@@ -322,7 +318,8 @@
             "noisy": "Sorollós",
             "error_permissions_denied": "%(brand)s no té permís per enviar-te notificacions, comprova la configuració del teu navegador",
             "error_permissions_missing": "%(brand)s no ha rebut cap permís per enviar notificacions, torna-ho a provar",
-            "error_title": "No s'han pogut activar les notificacions"
+            "error_title": "No s'han pogut activar les notificacions",
+            "push_targets": "Objectius de les notificacions"
         },
         "appearance": {
             "subheading": "La configuració d'aspecte només afecta aquesta sessió %(brand)s.",
@@ -356,7 +353,8 @@
             "add_msisdn_confirm_sso_button": "Confirma l'addició d'aquest número de telèfon mitjançant la inscripció única SSO (per demostrar la teva identitat).",
             "add_msisdn_confirm_button": "Confirma l'addició del número de telèfon",
             "add_msisdn_confirm_body": "Fes clic al botó de sota per confirmar l'addició d'aquest número de telèfon.",
-            "add_msisdn_dialog_title": "Afegeix número de telèfon"
+            "add_msisdn_dialog_title": "Afegeix número de telèfon",
+            "name_placeholder": "Sense nom visible"
         }
     },
     "devtools": {
@@ -789,7 +787,9 @@
         "mau": "Aquest homeserver ha assolit el seu límit d'usuaris actius mensuals.",
         "resource_limits": "Aquest homeserver ha sobrepassat on dels seus límits de recursos.",
         "failed_copy": "No s'ha pogut copiar",
-        "something_went_wrong": "Alguna cosa ha anat malament!"
+        "something_went_wrong": "Alguna cosa ha anat malament!",
+        "update_power_level": "No s'ha pogut canviar el nivell d'autoritat",
+        "unknown": "Error desconegut"
     },
     "items_and_n_others": {
         "other": "<Items/> i %(count)s altres",
@@ -797,7 +797,8 @@
     },
     "notifications": {
         "enable_prompt_toast_title": "Notificacions",
-        "error_change_title": "Canvia la configuració de notificacions"
+        "error_change_title": "Canvia la configuració de notificacions",
+        "class_other": "Altres"
     },
     "user_menu": {
         "settings": "Totes les configuracions"

@@ -1,6 +1,5 @@
 {
     "This will allow you to reset your password and receive notifications.": "To pozwoli Ci zresetować Twoje hasło i otrzymać powiadomienia.",
-    "Unknown error": "Nieznany błąd",
     "Create new room": "Utwórz nowy pokój",
     "Jan": "Sty",
     "Feb": "Lut",
@@ -48,7 +47,6 @@
     "Enter passphrase": "Wpisz frazę",
     "Error decrypting attachment": "Błąd odszyfrowywania załącznika",
     "Failed to ban user": "Nie udało się zbanować użytkownika",
-    "Failed to change power level": "Nie udało się zmienić poziomu mocy",
     "Failed to load timeline position": "Nie udało się wczytać pozycji osi czasu",
     "Failed to mute user": "Nie udało się wyciszyć użytkownika",
     "Failed to reject invite": "Nie udało się odrzucić zaproszenia",
@@ -70,10 +68,8 @@
     "not specified": "nieokreślony",
     "AM": "AM",
     "PM": "PM",
-    "No display name": "Brak nazwy ekranowej",
     "No more results": "Nie ma więcej wyników",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Sprawdź swój e-mail i kliknij link w nim zawarty. Kiedy już to zrobisz, kliknij \"kontynuuj\".",
-    "Profile": "Profil",
     "Reason": "Powód",
     "Reject invitation": "Odrzuć zaproszenie",
     "Return to login screen": "Wróć do ekranu logowania",
@@ -133,7 +129,6 @@
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Nie będziesz mógł cofnąć tej zmiany, ponieważ degradujesz swoje uprawnienia. Jeśli jesteś ostatnim użytkownikiem uprzywilejowanym w tym pokoju, nie będziesz mógł ich odzyskać.",
     "Unnamed room": "Pokój bez nazwy",
     "Sunday": "Niedziela",
-    "Notification targets": "Cele powiadomień",
     "Today": "Dzisiaj",
     "Friday": "Piątek",
     "Changelog": "Dziennik zmian",
@@ -196,7 +191,6 @@
     "And %(count)s more...": {
         "other": "I %(count)s więcej…"
     },
-    "Delete Backup": "Usuń kopię zapasową",
     "Add some now": "Dodaj teraz kilka",
     "Continue With Encryption Disabled": "Kontynuuj Z Wyłączonym Szyfrowaniem",
     "Unable to create key backup": "Nie można utworzyć kopii zapasowej klucza",
@@ -261,7 +255,6 @@
     "Headphones": "Słuchawki",
     "Folder": "Folder",
     "Phone Number": "Numer telefonu",
-    "Display Name": "Wyświetlana nazwa",
     "Email addresses": "Adresy e-mail",
     "Phone numbers": "Numery telefonów",
     "Account management": "Zarządzanie kontem",
@@ -282,25 +275,19 @@
     "Santa": "Mikołaj",
     "Gift": "Prezent",
     "Hammer": "Młotek",
-    "Restore from Backup": "Przywróć z kopii zapasowej",
     "Unable to restore backup": "Przywrócenie kopii zapasowej jest niemożliwe",
     "Email Address": "Adres e-mail",
     "edited": "edytowane",
     "Edit message": "Edytuj wiadomość",
-    "General": "Ogólne",
     "Sounds": "Dźwięki",
     "Notification sound": "Dźwięk powiadomień",
     "Set a new custom sound": "Ustaw nowy niestandardowy dźwięk",
     "Browse": "Przeglądaj",
     "Thumbs up": "Kciuk w górę",
     "Ball": "Piłka",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Czy jesteś pewien? Stracisz dostęp do wszystkich swoich zaszyfrowanych wiadomości, jeżeli nie utworzyłeś poprawnej kopii zapasowej kluczy.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Zaszyfrowane wiadomości są zabezpieczone przy użyciu szyfrowania end-to-end. Tylko Ty oraz ich adresaci posiadają klucze do ich rozszyfrowania.",
-    "Unable to load key backup status": "Nie można załadować stanu kopii zapasowej klucza",
-    "All keys backed up": "Utworzono kopię zapasową wszystkich kluczy",
     "Back up your keys before signing out to avoid losing them.": "Utwórz kopię zapasową kluczy przed wylogowaniem, aby ich nie utracić.",
     "Start using Key Backup": "Rozpocznij z użyciem klucza kopii zapasowej",
-    "Profile picture": "Obraz profilowy",
     "Checking server": "Sprawdzanie serwera",
     "Terms of service not accepted or the identity server is invalid.": "Warunki użytkowania nieakceptowane lub serwer tożsamości jest nieprawidłowy.",
     "The identity server you have chosen does not have any terms of service.": "Serwer tożsamości który został wybrany nie posiada warunków użytkowania.",
@@ -362,8 +349,6 @@
     "Add a new server": "Dodaj nowy serwer",
     "Enter the name of a new server you want to explore.": "Wpisz nazwę nowego serwera, którego chcesz przeglądać.",
     "Server name": "Nazwa serwera",
-    "Hide advanced": "Ukryj zaawansowane",
-    "Show advanced": "Pokaż zaawansowane",
     "Recent Conversations": "Najnowsze rozmowy",
     "Upload files (%(current)s of %(total)s)": "Prześlij pliki (%(current)s z %(total)s)",
     "Upload files": "Prześlij pliki",
@@ -579,7 +564,6 @@
     "Revoke invite": "Odwołaj zaproszenie",
     "General failure": "Ogólny błąd",
     "Removing…": "Usuwanie…",
-    "Algorithm:": "Algorytm:",
     "Incompatible Database": "Niekompatybilna baza danych",
     "Information": "Informacje",
     "Accepting…": "Akceptowanie…",
@@ -717,8 +701,6 @@
     "Bridges": "Mostki",
     "Verify User": "Weryfikuj użytkownika",
     "Verification Request": "Żądanie weryfikacji",
-    "Jump to first unread room.": "Przejdź do pierwszego nieprzeczytanego pokoju.",
-    "Jump to first invite.": "Przejdź do pierwszego zaproszenia.",
     "You verified %(name)s": "Zweryfikowałeś %(name)s",
     "Message Actions": "Działania na wiadomościach",
     "This client does not support end-to-end encryption.": "Ten klient nie obsługuje szyfrowania end-to-end.",
@@ -757,8 +739,6 @@
     "The room upgrade could not be completed": "Uaktualnienie pokoju nie mogło zostać ukończone",
     "Failed to upgrade room": "Nie udało się uaktualnić pokoju",
     "Backup version:": "Wersja kopii zapasowej:",
-    "The operation could not be completed": "To działanie nie mogło być ukończone",
-    "Failed to save your profile": "Nie udało się zapisać profilu",
     "Set up": "Konfiguruj",
     "IRC display name width": "Szerokość nazwy wyświetlanej IRC",
     "Your homeserver has exceeded one of its resource limits.": "Twój homeserver przekroczył jeden z limitów zasobów.",
@@ -766,8 +746,6 @@
     "Everyone in this room is verified": "Wszyscy w tym pokoju są zweryfikowani",
     "This room is end-to-end encrypted": "Ten pokój jest szyfrowany end-to-end",
     "Scroll to most recent messages": "Przewiń do najnowszych wiadomości",
-    "The integration manager is offline or it cannot reach your homeserver.": "Menedżer integracji jest offline, lub nie może połączyć się z Twoim homeserverem.",
-    "Cannot connect to integration manager": "Nie udało się połączyć z menedżerem integracji",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Aby zgłosić błąd związany z bezpieczeństwem Matriksa, przeczytaj <a>Politykę odpowiedzialnego ujawniania informacji</a> Matrix.org.",
     "Server Options": "Opcje serwera",
     "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Ostrzeżenie</b>: kopia zapasowa klucza powinna być konfigurowana tylko z zaufanego komputera.",
@@ -786,7 +764,6 @@
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Zweryfikuj tego użytkownika, aby oznaczyć go jako zaufanego. Użytkownicy zaufani dodają większej pewności, gdy korzystasz z wiadomości szyfrowanych end-to-end.",
     "Encryption not enabled": "Nie włączono szyfrowania",
     "Use the <a>Desktop app</a> to see all encrypted files": "Użyj <a>aplikacji desktopowej</a>, aby zobaczyć wszystkie szyfrowane pliki",
-    "Connecting": "Łączenie",
     "Create key backup": "Utwórz kopię zapasową klucza",
     "Generate a Security Key": "Wygeneruj klucz bezpieczeństwa",
     "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Zabezpiecz się przed utratą dostępu do szyfrowanych wiadomości i danych, tworząc kopię zapasową kluczy szyfrowania na naszym serwerze.",
@@ -806,7 +783,6 @@
         "other": "%(count)s członkowie"
     },
     "You don't have permission": "Nie masz uprawnień",
-    "Spaces": "Przestrzenie",
     "Nothing pinned, yet": "Nie przypięto tu jeszcze niczego",
     "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Jeżeli masz uprawnienia, przejdź do menu dowolnej wiadomości i wybierz <b>Przypnij</b>, aby przyczepić ją tutaj.",
     "Pinned messages": "Przypięte wiadomości",
@@ -834,7 +810,6 @@
     "Messaging": "Wiadomości",
     "Lock": "Zamek",
     "Hold": "Wstrzymaj",
-    "ready": "gotowy",
     "Create a new room": "Utwórz nowy pokój",
     "Adding rooms... (%(progress)s out of %(count)s)": {
         "other": "Dodawanie pokojów... (%(progress)s z %(count)s)",
@@ -844,75 +819,13 @@
     "Stop recording": "Skończ nagrywanie",
     "We didn't find a microphone on your device. Please check your settings and try again.": "Nie udało się znaleźć żadnego mikrofonu w twoim urządzeniu. Sprawdź ustawienia i spróbuj ponownie.",
     "No microphone found": "Nie znaleziono mikrofonu",
-    "Connect this session to Key Backup": "Połącz tę sesję z kopią zapasową kluczy",
-    "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Połącz tę sesję z kopią zapasową kluczy przed wylogowaniem, aby uniknąć utraty kluczy które mogą istnieć tylko w tej sesji.",
-    "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Ta sesja <b>nie wykonuje kopii zapasowej twoich kluczy</b>, ale masz istniejącą kopię którą możesz przywrócić i uzupełniać w przyszłości.",
-    "There was an error loading your notification settings.": "Wystąpił błąd podczas wczytywania twoich ustawień powiadomień.",
-    "Mentions & keywords": "Wzmianki i słowa kluczowe",
-    "Global": "Globalne",
-    "New keyword": "Nowe słowo kluczowe",
-    "Keyword": "Słowo kluczowe",
-    "Updating spaces... (%(progress)s out of %(count)s)": {
-        "one": "Aktualizowanie przestrzeni...",
-        "other": "Aktualizowanie przestrzeni... (%(progress)s z %(count)s)"
-    },
-    "Sending invites... (%(progress)s out of %(count)s)": {
-        "one": "Wysyłanie zaproszenia...",
-        "other": "Wysyłanie zaproszeń... (%(progress)s z %(count)s)"
-    },
-    "Loading new room": "Wczytywanie nowego pokoju",
-    "Upgrading room": "Aktualizowanie pokoju",
-    "This upgrade will allow members of selected spaces access to this room without an invite.": "To ulepszenie pozwoli członkom wybranych przestrzeni uzyskać dostęp do tego pokoju bez zaproszenia.",
-    "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Ten pokój znajduje się w przestrzeniach, w których nie masz uprawnień administratora. W tych przestrzeniach stary pokój wciąż będzie wyświetlany, lecz ludzie otrzymają propozycję dołączenia do nowego.",
-    "Space members": "Członkowie przestrzeni",
-    "Anyone in a space can find and join. You can select multiple spaces.": "Każdy w przestrzeni może znaleźć i dołączyć. Możesz wybrać wiele przestrzeni.",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Każdy w <spaceName/> może znaleźć i dołączyć. Możesz też wybrać inne przestrzenie.",
-    "Spaces with access": "Przestrzenie z dostępem",
-    "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Każdy w przestrzeni może znaleźć i dołączyć. <a>Kliknij tu, aby ustawić które przestrzenie mają dostęp.</a>",
-    "Currently, %(count)s spaces have access": {
-        "one": "Obecnie jedna przestrzeń ma dostęp",
-        "other": "Obecnie %(count)s przestrzeni ma dostęp"
-    },
-    "& %(count)s more": {
-        "one": "i %(count)s więcej",
-        "other": "i %(count)s więcej"
-    },
-    "Upgrade required": "Aktualizacja wymagana",
     "We're creating a room with %(names)s": "Tworzymy pokój z %(names)s",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s lub %(recoveryFile)s",
     "%(downloadButton)s or %(copyButton)s": "%(downloadButton)s lub %(copyButton)s",
-    "Space options": "Opcje przestrzeni",
-    "Recommended for public spaces.": "Zalecane dla publicznych przestrzeni.",
-    "Allow people to preview your space before they join.": "Pozwól ludziom na podgląd twojej przestrzeni zanim dołączą.",
-    "Preview Space": "Podgląd przestrzeni",
-    "Failed to update the visibility of this space": "Nie udało się zaktualizować widoczności tej przestrzeni",
-    "Decide who can view and join %(spaceName)s.": "Zdecyduj kto może wyświetlić i dołączyć do %(spaceName)s.",
-    "Access": "Dostęp",
-    "Visibility": "Widoczność",
-    "This may be useful for public spaces.": "Może to być przydatne dla publicznych przestrzeni.",
-    "Guests can join a space without having an account.": "Goście mogą dołączyć do przestrzeni bez posiadania konta.",
-    "Failed to update the guest access of this space": "Nie udało się zaktualizować dostępu dla gości do tej przestrzeni",
-    "Enable guest access": "Włącz dostęp dla gości",
-    "Failed to update the history visibility of this space": "Nie udało się zaktualizować widoczności historii dla tej przestrzeni",
-    "Leave Space": "Opuść przestrzeń",
-    "Save Changes": "Zapisz zmiany",
-    "Edit settings relating to your space.": "Edytuj ustawienia powiązane z twoją przestrzenią.",
-    "Failed to save space settings.": "Nie udało się zapisać ustawień przestrzeni.",
-    "Invite with email or username": "Zaproś przy użyciu adresu email lub nazwy użytkownika",
-    "Invite people": "Zaproś ludzi",
-    "Share invite link": "Udostępnij link zaproszenia",
-    "Show all rooms": "Pokaż wszystkie pokoje",
-    "You can change these anytime.": "Możesz to zmienić w każdej chwili.",
     "To join a space you'll need an invite.": "Wymagane jest zaproszenie, aby dołączyć do przestrzeni.",
     "Create a space": "Utwórz przestrzeń",
     "Address": "Adres",
-    "Search %(spaceName)s": "Przeszukaj %(spaceName)s",
     "Space selection": "Wybór przestrzeni",
-    "unknown person": "nieznana osoba",
-    "%(count)s people joined": {
-        "one": "%(count)s osoba dołączyła",
-        "other": "%(count)s osób dołączyło"
-    },
     "Reply in thread": "Odpowiedz w wątku",
     "Explore public spaces in the new search dialog": "Odkrywaj publiczne przestrzenie w nowym oknie wyszukiwania",
     "Start new chat": "Nowy czat",
@@ -959,7 +872,6 @@
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Wprowadź swoją frazę zabezpieczającą lub <button>użyj klucza zabezpieczającego</button>, aby kontynuować.",
     "Invalid Security Key": "Nieprawidłowy klucz bezpieczeństwa",
     "Wrong Security Key": "Niewłaściwy klucz bezpieczeństwa",
-    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Utwórz kopię zapasową kluczy szyfrujących wraz z danymi konta na wypadek utraty dostępu do sesji. Twoje klucze będą zabezpieczone unikalnym kluczem bezpieczeństwa.",
     "Secure Backup successful": "Wykonanie bezpiecznej kopii zapasowej powiodło się",
     "You can also set up Secure Backup & manage your keys in Settings.": "W ustawieniach możesz również skonfigurować bezpieczną kopię zapasową i zarządzać swoimi kluczami.",
     "Restore your key backup to upgrade your encryption": "Przywróć kopię zapasową klucza, aby ulepszyć szyfrowanie",
@@ -969,8 +881,6 @@
     "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.": "Kopia zapasowa nie mogła zostać rozszyfrowana za pomocą tego Klucza: upewnij się, że wprowadzono prawidłowy Klucz bezpieczeństwa.",
     "Restoring keys from backup": "Przywracanie kluczy z kopii zapasowej",
     "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Brakuje niektórych danych sesji, w tym zaszyfrowanych kluczy wiadomości. Wyloguj się i zaloguj, aby to naprawić, przywracając klucze z kopii zapasowej.",
-    "Backup key stored:": "Klucz zapasowy zapisany:",
-    "Backup key cached:": "Klucz zapasowy zapisany w pamięci podręcznej:",
     "Requires your server to support the stable version of MSC3827": "Wymaga od Twojego serwera wsparcia wersji stabilnej MSC3827",
     "unknown": "nieznane",
     "Unsent": "Niewysłane",
@@ -979,31 +889,13 @@
     "Video settings": "Ustawienia wideo",
     "Set a new account password…": "Ustaw nowe hasło użytkownika…",
     "Error changing password": "Wystąpił błąd podczas zmiany hasła",
-    "Search users in this room…": "Szukaj użytkowników w tym pokoju…",
-    "Saving…": "Zapisywanie…",
-    "Creating…": "Tworzenie…",
     "Failed to re-authenticate due to a homeserver problem": "Nie udało się uwierzytelnić ponownie z powodu błędu serwera domowego",
     "Your account details are managed separately at <code>%(hostname)s</code>.": "Twoje dane konta są zarządzane oddzielnie na <code>%(hostname)s</code>.",
     "Your password was successfully changed.": "Twoje hasło zostało pomyślnie zmienione.",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s (Status HTTP %(httpStatus)s)",
     "Unknown password change error (%(stringifiedError)s)": "Wystąpił nieznany błąd podczas zmiany hasła (%(stringifiedError)s)",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Powinieneś <b>usunąć swoje prywatne dane</b> z serwera tożsamości <idserver /> przed rozłączeniem. Niestety, serwer tożsamości <idserver /> jest aktualnie offline lub nie można się z nim połączyć.",
-    "not ready": "nie gotowe",
-    "Secret storage:": "Sekretny magazyn:",
-    "in account data": "w danych konta",
-    "Secret storage public key:": "Publiczny klucz sekretnego magazynu:",
-    "not stored": "nieprzechowywany",
-    "unexpected type": "niespodziewany typ",
-    "well formed": "dobrze ukształtowany",
-    "Your keys are <b>not being backed up from this session</b>.": "Twoje klucze <b>nie są zapisywanie na tej sesji</b>.",
     "This backup is trusted because it has been restored on this session": "Ta kopia jest zaufana, ponieważ została przywrócona w tej sesji",
-    "Backing up %(sessionsRemaining)s keys…": "Tworzenie kopii zapasowej %(sessionsRemaining)s kluczy…",
-    "This session is backing up your keys.": "Ta sesja tworzy kopię zapasową kluczy.",
-    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Wystąpił błąd podczas aktualizowania Twoich preferencji powiadomień. Przełącz opcję ponownie.",
-    "Mark all as read": "Oznacz wszystko jako przeczytane",
-    "Connecting to integration manager…": "Łączenie z menedżerem integracji…",
-    "Give one or multiple users in this room more privileges": "Dodaj jednemu lub więcej użytkownikom więcej uprawnień",
-    "Add privileged users": "Dodaj użytkowników uprzywilejowanych",
     "Home options": "Opcje głównej",
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "Twój administrator serwera wyłączył szyfrowanie end-to-end domyślnie w pokojach prywatnych i wiadomościach bezpośrednich.",
     "You have no ignored users.": "Nie posiadasz ignorowanych użytkowników.",
@@ -1066,7 +958,6 @@
     "You have verified this user. This user has verified all of their sessions.": "Zweryfikowałeś tego użytkownika. Użytkownik zweryfikował wszystkie swoje sesje.",
     "You have not verified this user.": "Nie zweryfikowałeś tego użytkownika.",
     "This user has not verified all of their sessions.": "Ten użytkownik nie zweryfikował wszystkich swoich sesji.",
-    "Failed to download source media, no source url was found": "Nie udało się pobrać media źródłowego, nie znaleziono źródłowego adresu URL",
     "This room has already been upgraded.": "Ten pokój został już ulepszony.",
     "Joined": "Dołączono",
     "Show Labs settings": "Pokaż ustawienia laboratoriów",
@@ -1106,7 +997,6 @@
         "one": "Aktualnie dołączanie do %(count)s pokoju",
         "other": "Aktualnie dołączanie do %(count)s pokoi"
     },
-    "Ongoing call": "Rozmowa w toku",
     "Add space": "Dodaj przestrzeń",
     "Suggested Rooms": "Sugerowane pokoje",
     "Saved Items": "Przedmioty zapisane",
@@ -1123,9 +1013,6 @@
     "Close call": "Zamknij połączenie",
     "Change layout": "Zmień układ",
     "Freedom": "Wolność",
-    "You do not have permission to start voice calls": "Nie posiadasz uprawnień do rozpoczęcia rozmowy głosowej",
-    "There's no one here to call": "Nie ma tu nikogo, do kogo można zadzwonić",
-    "You do not have permission to start video calls": "Nie posiadasz wymaganych uprawnień do rozpoczęcia rozmowy wideo",
     "Video call (%(brand)s)": "Rozmowa wideo (%(brand)s)",
     "Video call (Jitsi)": "Rozmowa wideo (Jitsi)",
     "Recently visited rooms": "Ostatnio odwiedzane pokoje",
@@ -1721,8 +1608,6 @@
     "%(completed)s of %(total)s keys restored": "%(completed)s z %(total)s kluczy przywrócono",
     "Are you sure you wish to remove (delete) this event?": "Czy na pewno chcesz usunąć to wydarzenie?",
     "Note that removing room changes like this could undo the change.": "Usuwanie zmian pokoju w taki sposób może cofnąć zmianę.",
-    "Ask to join": "Poproś o dołączenie",
-    "People cannot join unless access is granted.": "Osoby nie mogą dołączyć, dopóki nie otrzymają zezwolenia.",
     "<strong>Update:</strong>We’ve simplified Notifications Settings to make options easier to find. Some custom settings you’ve chosen in the past are not shown here, but they’re still active. If you proceed, some of your settings may change. <a>Learn more</a>": "<strong>Aktualizacja:</strong>Uprościliśmy Ustawienia powiadomień, aby łatwiej je nawigować. Niektóre ustawienia niestandardowe nie są już tu widoczne, lecz wciąż aktywne. Jeśli kontynuujesz, niektóre Twoje ustawienia mogą się zmienić. <a>Dowiedz się więcej</a>",
     "Mentions and Keywords only": "Wyłącznie wzmianki i słowa kluczowe",
     "Play a sound for": "Odtwórz dźwięk dla",
@@ -1853,7 +1738,13 @@
         "deselect_all": "Odznacz wszystkie",
         "select_all": "Zaznacz wszystkie",
         "copied": "Skopiowano!",
-        "Advanced": "Zaawansowane"
+        "advanced": "Zaawansowane",
+        "spaces": "Przestrzenie",
+        "general": "Ogólne",
+        "saving": "Zapisywanie…",
+        "profile": "Profil",
+        "display_name": "Wyświetlana nazwa",
+        "user_avatar": "Obraz profilowy"
     },
     "action": {
         "continue": "Kontynuuj",
@@ -1957,7 +1848,9 @@
         "exit_fullscreeen": "Wyjdź z trybu pełnoekranowego",
         "enter_fullscreen": "Otwórz w trybie pełnoekranowym",
         "unban": "Odbanuj",
-        "click_to_copy": "Kliknij aby skopiować"
+        "click_to_copy": "Kliknij aby skopiować",
+        "hide_advanced": "Ukryj zaawansowane",
+        "show_advanced": "Pokaż zaawansowane"
     },
     "a11y": {
         "user_menu": "Menu użytkownika",
@@ -1969,7 +1862,8 @@
             "other": "%(count)s nieprzeczytanych wiadomości.",
             "one": "1 nieprzeczytana wiadomość."
         },
-        "unread_messages": "Nieprzeczytane wiadomości."
+        "unread_messages": "Nieprzeczytane wiadomości.",
+        "jump_first_invite": "Przejdź do pierwszego zaproszenia."
     },
     "labs": {
         "video_rooms": "Pokoje wideo",
@@ -2338,7 +2232,10 @@
             "noisy": "Głośny",
             "error_permissions_denied": "%(brand)s nie ma uprawnień, by wysyłać Ci powiadomienia - sprawdź ustawienia swojej przeglądarki",
             "error_permissions_missing": "%(brand)s nie otrzymał uprawnień do wysyłania powiadomień - spróbuj ponownie",
-            "error_title": "Nie można włączyć powiadomień"
+            "error_title": "Nie można włączyć powiadomień",
+            "error_updating": "Wystąpił błąd podczas aktualizowania Twoich preferencji powiadomień. Przełącz opcję ponownie.",
+            "push_targets": "Cele powiadomień",
+            "error_loading": "Wystąpił błąd podczas wczytywania twoich ustawień powiadomień."
         },
         "appearance": {
             "layout_irc": "IRC (eksperymentalny)",
@@ -2426,7 +2323,30 @@
             "message_search_disabled": "Bezpiecznie przechowuj lokalnie wiadomości szyfrowane, aby mogły się wyświetlać w wynikach wyszukiwania.",
             "message_search_unsupported": "%(brand)s brakuje niektórych komponentów wymaganych do bezpiecznego przechowywania wiadomości szyfrowanych lokalnie. Jeśli chcesz eksperymentować z tą funkcją, zbuduj własny %(brand)s Desktop z <nativeLink> dodanymi komponentami wyszukiwania</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s nie jest w stanie bezpiecznie przechowywać wiadomości szyfrowanych lokalnie, gdy działa w przeglądarce. Użyj <desktopLink> Desktop</desktopLink>, aby wiadomości pojawiły się w wynikach wyszukiwania.",
-            "message_search_failed": "Inicjalizacja wyszukiwania wiadomości nie powiodła się"
+            "message_search_failed": "Inicjalizacja wyszukiwania wiadomości nie powiodła się",
+            "backup_key_well_formed": "dobrze ukształtowany",
+            "backup_key_unexpected_type": "niespodziewany typ",
+            "backup_keys_description": "Utwórz kopię zapasową kluczy szyfrujących wraz z danymi konta na wypadek utraty dostępu do sesji. Twoje klucze będą zabezpieczone unikalnym kluczem bezpieczeństwa.",
+            "backup_key_stored_status": "Klucz zapasowy zapisany:",
+            "cross_signing_not_stored": "nieprzechowywany",
+            "backup_key_cached_status": "Klucz zapasowy zapisany w pamięci podręcznej:",
+            "4s_public_key_status": "Publiczny klucz sekretnego magazynu:",
+            "4s_public_key_in_account_data": "w danych konta",
+            "secret_storage_status": "Sekretny magazyn:",
+            "secret_storage_ready": "gotowy",
+            "secret_storage_not_ready": "nie gotowe",
+            "delete_backup": "Usuń kopię zapasową",
+            "delete_backup_confirm_description": "Czy jesteś pewien? Stracisz dostęp do wszystkich swoich zaszyfrowanych wiadomości, jeżeli nie utworzyłeś poprawnej kopii zapasowej kluczy.",
+            "error_loading_key_backup_status": "Nie można załadować stanu kopii zapasowej klucza",
+            "restore_key_backup": "Przywróć z kopii zapasowej",
+            "key_backup_active": "Ta sesja tworzy kopię zapasową kluczy.",
+            "key_backup_inactive": "Ta sesja <b>nie wykonuje kopii zapasowej twoich kluczy</b>, ale masz istniejącą kopię którą możesz przywrócić i uzupełniać w przyszłości.",
+            "key_backup_connect_prompt": "Połącz tę sesję z kopią zapasową kluczy przed wylogowaniem, aby uniknąć utraty kluczy które mogą istnieć tylko w tej sesji.",
+            "key_backup_connect": "Połącz tę sesję z kopią zapasową kluczy",
+            "key_backup_in_progress": "Tworzenie kopii zapasowej %(sessionsRemaining)s kluczy…",
+            "key_backup_complete": "Utworzono kopię zapasową wszystkich kluczy",
+            "key_backup_algorithm": "Algorytm:",
+            "key_backup_inactive_warning": "Twoje klucze <b>nie są zapisywanie na tej sesji</b>."
         },
         "preferences": {
             "room_list_heading": "Lista pokojów",
@@ -2565,18 +2485,22 @@
             "add_msisdn_confirm_sso_button": "Potwierdź dodanie tego numeru telefonu przy użyciu pojedynczego logowania, aby potwierdzić swoją tożsamość.",
             "add_msisdn_confirm_button": "Potwierdź dodanie numeru telefonu",
             "add_msisdn_confirm_body": "Naciśnij przycisk poniżej aby potwierdzić dodanie tego numeru telefonu.",
-            "add_msisdn_dialog_title": "Dodaj numer telefonu"
+            "add_msisdn_dialog_title": "Dodaj numer telefonu",
+            "name_placeholder": "Brak nazwy ekranowej",
+            "error_saving_profile_title": "Nie udało się zapisać profilu",
+            "error_saving_profile": "To działanie nie mogło być ukończone"
         },
         "sidebar": {
             "title": "Pasek boczny",
             "metaspaces_subsection": "Wyświetlanie przestrzeni",
             "metaspaces_description": "Przestrzenie to sposób grupowania pokoi i osób. Oprócz przestrzeni, w których się znajdujesz, możesz też skorzystać z gotowych grupowań.",
             "metaspaces_home_description": "Strona główna to przydatne miejsce dla podsumowania wszystkiego.",
-            "metaspaces_home_all_rooms": "Pokaż wszystkie swoje pokoje na głównej, nawet jeśli znajdują się w przestrzeni.",
             "metaspaces_favourites_description": "Pogrupuj wszystkie swoje ulubione pokoje i osoby w jednym miejscu.",
             "metaspaces_people_description": "Pogrupuj wszystkie osoby w jednym miejscu.",
             "metaspaces_orphans": "Pokoje poza przestrzenią",
-            "metaspaces_orphans_description": "Pogrupuj wszystkie pokoje, które nie są częścią przestrzeni, w jednym miejscu."
+            "metaspaces_orphans_description": "Pogrupuj wszystkie pokoje, które nie są częścią przestrzeni, w jednym miejscu.",
+            "metaspaces_home_all_rooms_description": "Pokaż wszystkie swoje pokoje na głównej, nawet jeśli znajdują się w przestrzeni.",
+            "metaspaces_home_all_rooms": "Pokaż wszystkie pokoje"
         }
     },
     "devtools": {
@@ -3298,7 +3222,17 @@
         "more_button": "Więcej",
         "screenshare_monitor": "Udostępnij cały ekran",
         "screenshare_window": "Okno aplikacji",
-        "screenshare_title": "Udostępnij zawartość"
+        "screenshare_title": "Udostępnij zawartość",
+        "disabled_no_perms_start_voice_call": "Nie posiadasz uprawnień do rozpoczęcia rozmowy głosowej",
+        "disabled_no_perms_start_video_call": "Nie posiadasz wymaganych uprawnień do rozpoczęcia rozmowy wideo",
+        "disabled_ongoing_call": "Rozmowa w toku",
+        "disabled_no_one_here": "Nie ma tu nikogo, do kogo można zadzwonić",
+        "n_people_joined": {
+            "one": "%(count)s osoba dołączyła",
+            "other": "%(count)s osób dołączyło"
+        },
+        "unknown_person": "nieznana osoba",
+        "connecting": "Łączenie"
     },
     "Other": "Inne",
     "room_settings": {
@@ -3340,7 +3274,10 @@
             "title": "Role i uprawnienia",
             "permissions_section": "Uprawnienia",
             "permissions_section_description_space": "Wybierz wymagane role wymagane do zmiany różnych części przestrzeni",
-            "permissions_section_description_room": "Wybierz role wymagane do zmieniania różnych części pokoju"
+            "permissions_section_description_room": "Wybierz role wymagane do zmieniania różnych części pokoju",
+            "add_privileged_user_heading": "Dodaj użytkowników uprzywilejowanych",
+            "add_privileged_user_description": "Dodaj jednemu lub więcej użytkownikom więcej uprawnień",
+            "add_privileged_user_filter_placeholder": "Szukaj użytkowników w tym pokoju…"
         },
         "security": {
             "strict_encryption": "Nigdy nie wysyłaj zaszyfrowanych wiadomości do niezweryfikowanych sesji z tej sesji w tym pokoju",
@@ -3367,7 +3304,35 @@
             "history_visibility_shared": "Tylko członkowie (od momentu włączenia tej opcji)",
             "history_visibility_invited": "Tylko członkowie (od kiedy zostali zaproszeni)",
             "history_visibility_joined": "Tylko członkowie (od kiedy dołączyli)",
-            "history_visibility_world_readable": "Każdy"
+            "history_visibility_world_readable": "Każdy",
+            "join_rule_upgrade_required": "Aktualizacja wymagana",
+            "join_rule_restricted_n_more": {
+                "one": "i %(count)s więcej",
+                "other": "i %(count)s więcej"
+            },
+            "join_rule_restricted_summary": {
+                "one": "Obecnie jedna przestrzeń ma dostęp",
+                "other": "Obecnie %(count)s przestrzeni ma dostęp"
+            },
+            "join_rule_restricted_description": "Każdy w przestrzeni może znaleźć i dołączyć. <a>Kliknij tu, aby ustawić które przestrzenie mają dostęp.</a>",
+            "join_rule_restricted_description_spaces": "Przestrzenie z dostępem",
+            "join_rule_restricted_description_active_space": "Każdy w <spaceName/> może znaleźć i dołączyć. Możesz też wybrać inne przestrzenie.",
+            "join_rule_restricted_description_prompt": "Każdy w przestrzeni może znaleźć i dołączyć. Możesz wybrać wiele przestrzeni.",
+            "join_rule_restricted": "Członkowie przestrzeni",
+            "join_rule_knock": "Poproś o dołączenie",
+            "join_rule_knock_description": "Osoby nie mogą dołączyć, dopóki nie otrzymają zezwolenia.",
+            "join_rule_restricted_upgrade_warning": "Ten pokój znajduje się w przestrzeniach, w których nie masz uprawnień administratora. W tych przestrzeniach stary pokój wciąż będzie wyświetlany, lecz ludzie otrzymają propozycję dołączenia do nowego.",
+            "join_rule_restricted_upgrade_description": "To ulepszenie pozwoli członkom wybranych przestrzeni uzyskać dostęp do tego pokoju bez zaproszenia.",
+            "join_rule_upgrade_upgrading_room": "Aktualizowanie pokoju",
+            "join_rule_upgrade_awaiting_room": "Wczytywanie nowego pokoju",
+            "join_rule_upgrade_sending_invites": {
+                "one": "Wysyłanie zaproszenia...",
+                "other": "Wysyłanie zaproszeń... (%(progress)s z %(count)s)"
+            },
+            "join_rule_upgrade_updating_spaces": {
+                "one": "Aktualizowanie przestrzeni...",
+                "other": "Aktualizowanie przestrzeni... (%(progress)s z %(count)s)"
+            }
         },
         "general": {
             "publish_toggle": "Czy opublikować ten pokój dla ogółu w spisie pokojów domeny %(domain)s?",
@@ -3377,7 +3342,11 @@
             "default_url_previews_off": "Podglądy linków są domyślnie wyłączone dla uczestników tego pokoju.",
             "url_preview_encryption_warning": "W zaszyfrowanych pokojach, takich jak ten, podgląd adresów URL jest domyślnie wyłączony, aby upewnić się, że serwer (w którym generowane są podglądy) nie może zbierać informacji o linkach widocznych w tym pokoju.",
             "url_preview_explainer": "Gdy ktoś umieści URL w wiadomości, można wyświetlić podgląd adresu URL, aby podać więcej informacji o tym łączu, takich jak tytuł, opis i obraz ze strony internetowej.",
-            "url_previews_section": "Podglądy linków"
+            "url_previews_section": "Podglądy linków",
+            "error_save_space_settings": "Nie udało się zapisać ustawień przestrzeni.",
+            "description_space": "Edytuj ustawienia powiązane z twoją przestrzenią.",
+            "save": "Zapisz zmiany",
+            "leave_space": "Opuść przestrzeń"
         },
         "advanced": {
             "unfederated": "Ten pokój nie jest dostępny na zdalnych serwerach Matrix",
@@ -3391,7 +3360,23 @@
             "room_version": "Wersja pokoju:"
         },
         "delete_avatar_label": "Usuń awatar",
-        "upload_avatar_label": "Prześlij awatar"
+        "upload_avatar_label": "Prześlij awatar",
+        "visibility": {
+            "error_update_guest_access": "Nie udało się zaktualizować dostępu dla gości do tej przestrzeni",
+            "error_update_history_visibility": "Nie udało się zaktualizować widoczności historii dla tej przestrzeni",
+            "guest_access_explainer": "Goście mogą dołączyć do przestrzeni bez posiadania konta.",
+            "guest_access_explainer_public_space": "Może to być przydatne dla publicznych przestrzeni.",
+            "title": "Widoczność",
+            "error_failed_save": "Nie udało się zaktualizować widoczności tej przestrzeni",
+            "history_visibility_anyone_space": "Podgląd przestrzeni",
+            "history_visibility_anyone_space_description": "Pozwól ludziom na podgląd twojej przestrzeni zanim dołączą.",
+            "history_visibility_anyone_space_recommendation": "Zalecane dla publicznych przestrzeni.",
+            "guest_access_label": "Włącz dostęp dla gości"
+        },
+        "access": {
+            "title": "Dostęp",
+            "description_space": "Zdecyduj kto może wyświetlić i dołączyć do %(spaceName)s."
+        }
     },
     "encryption": {
         "verification": {
@@ -3895,9 +3880,14 @@
             "devtools_open_timeline": "Pokaż oś czasu pokoju (devtools)",
             "home": "Przestrzeń główna",
             "explore": "Przeglądaj pokoje",
-            "manage_and_explore": "Zarządzaj i odkrywaj pokoje"
+            "manage_and_explore": "Zarządzaj i odkrywaj pokoje",
+            "options": "Opcje przestrzeni"
         },
-        "share_public": "Zaproś do swojej publicznej przestrzeni"
+        "share_public": "Zaproś do swojej publicznej przestrzeni",
+        "search_children": "Przeszukaj %(spaceName)s",
+        "invite_link": "Udostępnij link zaproszenia",
+        "invite": "Zaproś ludzi",
+        "invite_description": "Zaproś przy użyciu adresu email lub nazwy użytkownika"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Ten serwer domowy nie jest skonfigurowany by wyświetlać mapy.",
@@ -3957,7 +3947,6 @@
     },
     "create_space": {
         "name_required": "Podaj nazwę dla przestrzeni",
-        "name_placeholder": "np. moja-przestrzen",
         "explainer": "Przestrzenie to nowy sposób na grupowanie pokojów i osób. Jaki rodzaj przestrzeni chcesz utworzyć? Możesz zmienić to później.",
         "public_description": "Przestrzeń otwarta dla każdego, najlepsza dla społeczności",
         "private_description": "Tylko na zaproszenie, najlepsza dla siebie lub zespołów",
@@ -3988,7 +3977,12 @@
         "setup_rooms_community_description": "Utwórzmy pokój dla każdego z nich.",
         "setup_rooms_description": "W przyszłości będziesz mógł dodać więcej, włączając już istniejące.",
         "setup_rooms_private_heading": "Nad jakimi projektami pracuje Twój zespół?",
-        "setup_rooms_private_description": "Utworzymy pokój dla każdego z nich."
+        "setup_rooms_private_description": "Utworzymy pokój dla każdego z nich.",
+        "address_placeholder": "np. moja-przestrzen",
+        "address_label": "Adres",
+        "label": "Utwórz przestrzeń",
+        "add_details_prompt_2": "Możesz to zmienić w każdej chwili.",
+        "creating": "Tworzenie…"
     },
     "user_menu": {
         "switch_theme_light": "Przełącz na tryb jasny",
@@ -4169,7 +4163,10 @@
         "admin_contact_short": "Skontaktuj się ze swoim <a>administratorem serwera</a>.",
         "non_urgent_echo_failure_toast": "Twój serwer nie odpowiada na niektóre <a>zapytania</a>.",
         "failed_copy": "Kopiowanie nieudane",
-        "something_went_wrong": "Coś poszło nie tak!"
+        "something_went_wrong": "Coś poszło nie tak!",
+        "download_media": "Nie udało się pobrać media źródłowego, nie znaleziono źródłowego adresu URL",
+        "update_power_level": "Nie udało się zmienić poziomu mocy",
+        "unknown": "Nieznany błąd"
     },
     "in_space1_and_space2": "W przestrzeniach %(space1Name)s i %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -4191,7 +4188,13 @@
         "colour_grey": "Szary",
         "colour_red": "Czerwony",
         "colour_unsent": "Niewysłane",
-        "error_change_title": "Zmień ustawienia powiadomień"
+        "error_change_title": "Zmień ustawienia powiadomień",
+        "mark_all_read": "Oznacz wszystko jako przeczytane",
+        "keyword": "Słowo kluczowe",
+        "keyword_new": "Nowe słowo kluczowe",
+        "class_global": "Globalne",
+        "class_other": "Inne",
+        "mentions_keywords": "Wzmianki i słowa kluczowe"
     },
     "mobile_guide": {
         "toast_title": "Użyj aplikacji by mieć lepsze doświadczenie",
@@ -4212,5 +4215,11 @@
         "title": "Widok obrazu",
         "rotate_left": "Obróć w lewo",
         "rotate_right": "Obróć w prawo"
+    },
+    "a11y_jump_first_unread_room": "Przejdź do pierwszego nieprzeczytanego pokoju.",
+    "integration_manager": {
+        "connecting": "Łączenie z menedżerem integracji…",
+        "error_connecting_heading": "Nie udało się połączyć z menedżerem integracji",
+        "error_connecting": "Menedżer integracji jest offline, lub nie może połączyć się z Twoim homeserverem."
     }
 }

@@ -26,7 +26,6 @@
     "Enter passphrase": "Jelmondat megadása",
     "Error decrypting attachment": "Csatolmány visszafejtése sikertelen",
     "Failed to ban user": "A felhasználót nem sikerült kizárni",
-    "Failed to change power level": "A hozzáférési szint megváltoztatása sikertelen",
     "Failed to load timeline position": "Az idővonal pozíciót nem sikerült betölteni",
     "Failed to mute user": "A felhasználót némítása sikertelen",
     "Failed to reject invite": "A meghívót nem sikerült elutasítani",
@@ -47,10 +46,8 @@
     "Moderator": "Moderátor",
     "New passwords must match each other.": "Az új jelszavaknak meg kell egyezniük egymással.",
     "not specified": "nincs meghatározva",
-    "No display name": "Nincs megjelenítendő név",
     "No more results": "Nincs több találat",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Nézze meg a levelét és kattintson a benne lévő hivatkozásra. Ha ez megvan, kattintson a folytatásra.",
-    "Profile": "Profil",
     "Reason": "Ok",
     "Reject invitation": "Meghívó elutasítása",
     "Return to login screen": "Vissza a bejelentkezési képernyőre",
@@ -115,7 +112,6 @@
     "File to import": "Fájl betöltése",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "A kimentett fájl jelmondattal van védve. A kibontáshoz add meg a jelmondatot.",
     "Confirm Removal": "Törlés megerősítése",
-    "Unknown error": "Ismeretlen hiba",
     "Unable to restore session": "A munkamenetet nem lehet helyreállítani",
     "Error decrypting image": "Hiba a kép visszafejtésénél",
     "Error decrypting video": "Hiba a videó visszafejtésénél",
@@ -150,7 +146,6 @@
     "<a>In reply to</a> <pill>": "<a>Válasz neki</a> <pill>",
     "You don't currently have any stickerpacks enabled": "Nincs engedélyezett matrica csomagod",
     "Sunday": "Vasárnap",
-    "Notification targets": "Értesítések célpontja",
     "Today": "Ma",
     "Friday": "Péntek",
     "Changelog": "Változások",
@@ -215,8 +210,6 @@
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Hogy a régi üzenetekhez továbbra is hozzáférhess kijelentkezés előtt ki kell mentened a szobák titkosító kulcsait. Ehhez a %(brand)s egy frissebb verzióját kell használnod",
     "Incompatible Database": "Nem kompatibilis adatbázis",
     "Continue With Encryption Disabled": "Folytatás a titkosítás kikapcsolásával",
-    "Delete Backup": "Mentés törlése",
-    "Unable to load key backup status": "A mentett kulcsok állapotát nem lehet betölteni",
     "That matches!": "Egyeznek!",
     "That doesn't match.": "Nem egyeznek.",
     "Go back to set it again.": "Lépj vissza és állítsd be újra.",
@@ -240,14 +233,10 @@
     "Invite anyway": "Meghívás mindenképp",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "E-mail üzenetet küldtünk Önnek, hogy ellenőrizzük a címét. Kövesse az ott leírt utasításokat, és kattintson az alábbi gombra.",
     "Email Address": "E-mail cím",
-    "All keys backed up": "Az összes kulcs elmentve",
     "Unable to verify phone number.": "A telefonszámot nem sikerült ellenőrizni.",
     "Verification code": "Ellenőrző kód",
     "Phone Number": "Telefonszám",
-    "Profile picture": "Profilkép",
-    "Display Name": "Megjelenítési név",
     "Room information": "Szobainformációk",
-    "General": "Általános",
     "Room Addresses": "Szobacímek",
     "Email addresses": "E-mail-cím",
     "Phone numbers": "Telefonszámok",
@@ -330,9 +319,7 @@
     "This homeserver would like to make sure you are not a robot.": "A Matrix-kiszolgáló ellenőrizné, hogy Ön nem egy robot.",
     "Couldn't load page": "Az oldal nem tölthető be",
     "Your password has been reset.": "A jelszavad újra beállításra került.",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Biztos benne? Ha a kulcsai nincsenek megfelelően mentve, akkor elveszíti a titkosított üzeneteit.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "A titkosított üzenetek végponttól végpontig titkosítással védettek. Csak neked és a címzetteknek lehet meg a kulcs az üzenet visszafejtéséhez.",
-    "Restore from Backup": "Helyreállítás mentésből",
     "Back up your keys before signing out to avoid losing them.": "Mentse a kulcsait a kiszolgálóra kijelentkezés előtt, hogy ne veszítse el azokat.",
     "Start using Key Backup": "Kulcs mentés használatának megkezdése",
     "I don't want my encrypted messages": "Nincs szükségem a titkosított üzeneteimre",
@@ -473,8 +460,6 @@
     "Explore rooms": "Szobák felderítése",
     "Verify the link in your inbox": "Ellenőrizd a hivatkozást a bejövő leveleid között",
     "e.g. my-room": "pl.: szobam",
-    "Hide advanced": "Speciális beállítások elrejtése",
-    "Show advanced": "Speciális beállítások megjelenítése",
     "Close dialog": "Ablak bezárása",
     "Show image": "Kép megjelenítése",
     "Your email address hasn't been verified yet": "Az e-mail-címe még nincs ellenőrizve",
@@ -488,8 +473,6 @@
     "This client does not support end-to-end encryption.": "A kliens nem támogatja a végponttól végpontig való titkosítást.",
     "Messages in this room are not end-to-end encrypted.": "Az üzenetek a szobában nincsenek végponttól végpontig titkosítva.",
     "Cancel search": "Keresés megszakítása",
-    "Jump to first unread room.": "Ugrás az első olvasatlan szobához.",
-    "Jump to first invite.": "Újrás az első meghívóhoz.",
     "Room %(name)s": "Szoba: %(name)s",
     "Message Actions": "Üzenet Műveletek",
     "You verified %(name)s": "Ellenőrizte: %(name)s",
@@ -504,8 +487,6 @@
     "None": "Semmi",
     "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Ezt a felhasználót figyelmen kívül hagyod, így az üzenetei el lesznek rejtve. <a>Megjelenítés mindenképpen.</a>",
     "Messages in this room are end-to-end encrypted.": "Az üzenetek a szobában végponttól végpontig titkosítottak.",
-    "Cannot connect to integration manager": "Nem lehet kapcsolódni az integrációkezelőhöz",
-    "The integration manager is offline or it cannot reach your homeserver.": "Az integrációkezelő nem működik, vagy nem éri el a Matrix-kiszolgálóját.",
     "Failed to connect to integration manager": "Az integrációs menedzserhez nem sikerült csatlakozni",
     "Integrations are disabled": "Az integrációk le vannak tiltva",
     "Integrations not allowed": "Az integrációk nem engedélyezettek",
@@ -519,10 +500,7 @@
     "You'll upgrade this room from <oldVersion /> to <newVersion />.": "<oldVersion /> verzióról <newVersion /> verzióra fogja fejleszteni a szobát.",
     "<userName/> wants to chat": "<userName/> csevegni szeretne",
     "Start chatting": "Beszélgetés elkezdése",
-    "Secret storage public key:": "Titkos tároló nyilvános kulcsa:",
-    "in account data": "fiókadatokban",
     "Unable to set up secret storage": "A biztonsági tárolót nem sikerült beállítani",
-    "not stored": "nincs tárolva",
     "Hide verified sessions": "Ellenőrzött munkamenetek eltakarása",
     "%(count)s verified sessions": {
         "other": "%(count)s ellenőrzött munkamenet",
@@ -552,11 +530,7 @@
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "Ez a szoba áthidalja az üzeneteket a felsorolt platformok felé. <a>Tudjon meg többet.</a>",
     "Bridges": "Hidak",
     "Restore your key backup to upgrade your encryption": "A titkosítás fejlesztéséhez allítsd vissza a kulcs mentést",
-    "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Ez az munkamenet <b>nem menti el a kulcsait</b>, de van létező mentése, amelyből helyre tudja állítani, és amelyhez hozzá tudja adni a továbbiakban.",
-    "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Csatlakoztassa ezt a munkamenetet a kulcsmentéshez kijelentkezés előtt, hogy ne veszítsen el olyan kulcsot, amely lehet, hogy csak ezen az eszközön van meg.",
-    "Connect this session to Key Backup": "Munkamenet csatlakoztatása a kulcsmentéshez",
     "This backup is trusted because it has been restored on this session": "Ez a mentés megbízható, mert ebben a munkamenetben lett helyreállítva",
-    "Your keys are <b>not being backed up from this session</b>.": "A kulcsai <b>nem kerülnek mentésre ebből a munkamenetből</b>.",
     "This user has not verified all of their sessions.": "Ez a felhasználó még nem ellenőrizte az összes munkamenetét.",
     "You have not verified this user.": "Még nem ellenőrizted ezt a felhasználót.",
     "You have verified this user. This user has verified all of their sessions.": "Ezt a felhasználót ellenőrizted. Ez a felhasználó hitelesítette az összes munkamenetét.",
@@ -602,7 +576,6 @@
     "%(name)s declined": "%(name)s elutasította",
     "Accepting…": "Elfogadás…",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "A Matrixszal kapcsolatos biztonsági hibák jelentésével kapcsolatban olvassa el a Matrix.org <a>biztonsági hibák közzétételi házirendjét</a>.",
-    "Mark all as read": "Összes megjelölése olvasottként",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "A szoba címének megváltoztatásakor hiba történt. Lehet, hogy a szerver nem engedélyezi vagy átmeneti hiba történt.",
     "Scroll to most recent messages": "A legfrissebb üzenethez görget",
     "Local address": "Helyi cím",
@@ -633,8 +606,6 @@
     "Confirm by comparing the following with the User Settings in your other session:": "Erősítsd meg a felhasználói beállítások összehasonlításával a többi munkamenetedben:",
     "Confirm this user's session by comparing the following with their User Settings:": "Ezt a munkamenetet hitelesítsd az ő felhasználói beállításának az összehasonlításával:",
     "If they don't match, the security of your communication may be compromised.": "Ha nem egyeznek akkor a kommunikációtok biztonsága veszélyben lehet.",
-    "well formed": "helyesen formázott",
-    "unexpected type": "váratlan típus",
     "Almost there! Is %(displayName)s showing the same shield?": "Majdnem kész! %(displayName)s is ugyanazt a pajzsot mutatja?",
     "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Sikeresen ellenőrizted: %(deviceName)s (%(deviceId)s)!",
     "Start verification again from the notification.": "Ellenőrzés újrakezdése az értesítésből.",
@@ -721,12 +692,6 @@
     "Not encrypted": "Nem titkosított",
     "Room settings": "Szoba beállítások",
     "Backup version:": "Mentés verziója:",
-    "Algorithm:": "Algoritmus:",
-    "Backup key stored:": "Tárolt mentési kulcs:",
-    "Backup key cached:": "Gyorsítótárazott mentési kulcs:",
-    "Secret storage:": "Titkos tároló:",
-    "ready": "kész",
-    "not ready": "nincs kész",
     "Start a conversation with someone using their name or username (like <userId/>).": "Indíts beszélgetést valakivel és használd hozzá a nevét vagy a felhasználói nevét (mint <userId/>).",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Hívj meg valakit a nevét, vagy felhasználónevét (például <userId/>) megadva, vagy <a>oszd meg ezt a szobát</a>.",
     "Add widgets, bridges & bots": "Kisalkalmazások, hidak, és botok hozzáadása",
@@ -743,8 +708,6 @@
     "Video conference ended by %(senderName)s": "A videókonferenciát befejezte: %(senderName)s",
     "Video conference updated by %(senderName)s": "A videókonferenciát frissítette: %(senderName)s",
     "Video conference started by %(senderName)s": "A videókonferenciát elindította: %(senderName)s",
-    "Failed to save your profile": "A saját profil mentése sikertelen",
-    "The operation could not be completed": "A műveletet nem lehetett befejezni",
     "Data on this screen is shared with %(widgetDomain)s": "Az ezen a képernyőn látható adatok megosztásra kerülnek ezzel: %(widgetDomain)s",
     "Modal Widget": "Előugró kisalkalmazás",
     "You can only pin up to %(count)s widgets": {
@@ -1036,7 +999,6 @@
     "Unable to access secret storage. Please verify that you entered the correct Security Phrase.": "A biztonsági tárolóhoz nem lehet hozzáférni. Kérjük ellenőrizze, hogy jó Biztonsági jelmondatot adott-e meg.",
     "Invalid Security Key": "Érvénytelen biztonsági kulcs",
     "Wrong Security Key": "Hibás biztonsági kulcs",
-    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Mentse el a titkosítási kulcsokat a fiókadatokkal arra az esetre, ha elvesztené a hozzáférést a munkameneteihez. A kulcsok egy egyedi biztonsági kulccsal lesznek védve.",
     "Set my room layout for everyone": "A szoba megjelenésének beállítása mindenki számára",
     "Remember this": "Emlékezzen erre",
     "The widget will verify your user ID, but won't be able to perform actions for you:": "A kisalkalmazás ellenőrizni fogja a felhasználói azonosítóját, de az alábbi tevékenységeket nem tudja végrehajtani:",
@@ -1050,24 +1012,16 @@
     "This space is not public. You will not be able to rejoin without an invite.": "Ez a tér nem nyilvános. Kilépés után csak újabb meghívóval lehet újra belépni.",
     "Failed to start livestream": "Az élő adás indítása sikertelen",
     "Unable to start audio streaming.": "A hang folyam indítása sikertelen.",
-    "Save Changes": "Változtatások mentése",
-    "Leave Space": "Tér elhagyása",
-    "Edit settings relating to your space.": "A tér beállításainak szerkesztése.",
-    "Failed to save space settings.": "A tér beállításának mentése sikertelen.",
     "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Hívjon meg valakit a nevével, felhasználói nevével (pl. <userId/>) vagy <a>oszd meg ezt a teret</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Hívjon meg valakit a nevét, e-mail címét, vagy felhasználónevét (például <userId/>) megadva, vagy <a>oszd meg ezt a teret</a>.",
     "Create a new room": "Új szoba készítése",
-    "Spaces": "Terek",
     "Space selection": "Tér kiválasztása",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.": "Nem fogja tudni visszavonni ezt a változtatást, mert lefokozza magát, ha Ön az utolsó privilegizált felhasználó a térben, akkor lehetetlen lesz a jogosultságok visszanyerése.",
     "Suggested Rooms": "Javasolt szobák",
     "Add existing room": "Létező szoba hozzáadása",
     "Invite to this space": "Meghívás a térbe",
     "Your message was sent": "Üzenet elküldve",
-    "Space options": "Tér beállításai",
     "Leave space": "Tér elhagyása",
-    "Invite people": "Emberek meghívása",
-    "Share invite link": "Meghívási hivatkozás megosztása",
     "Create a space": "Tér létrehozása",
     "Private space": "Privát tér",
     "Public space": "Nyilvános tér",
@@ -1082,8 +1036,6 @@
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Ez általában a szoba kiszolgálóoldali kezelésében jelent változást. Ha a(z) %(brand)s kliensben tapasztal problémát, akkor küldjön egy hibajelentést.",
     "Invite to %(roomName)s": "Meghívás ide: %(roomName)s",
     "Edit devices": "Eszközök szerkesztése",
-    "Invite with email or username": "Meghívás e-mail-címmel vagy felhasználónévvel",
-    "You can change these anytime.": "Ezeket bármikor megváltoztathatja.",
     "Verify your identity to access encrypted messages and prove your identity to others.": "Ellenőrizze a személyazonosságát, hogy hozzáférjen a titkosított üzeneteihez és másoknak is bizonyítani tudja személyazonosságát.",
     "Avatar": "Profilkép",
     "Reset event store": "Az eseménytároló alaphelyzetbe állítása",
@@ -1097,7 +1049,6 @@
         "one": "%(count)s ismerős már csatlakozott",
         "other": "%(count)s ismerős már csatlakozott"
     },
-    "unknown person": "ismeretlen személy",
     "You are the only person here. If you leave, no one will be able to join in the future, including you.": "Csak ön van itt. Ha kilép, akkor a jövőben senki nem tud majd ide belépni, beleértve önt is.",
     "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Ha mindent alaphelyzetbe állít, akkor nem lesz megbízható munkamenete, nem lesznek megbízható felhasználók és a régi üzenetekhez sem biztos, hogy hozzáfér majd.",
     "Only do this if you have no other device to complete verification with.": "Csak akkor tegye meg, ha egyetlen másik eszköze sincs az ellenőrzés elvégzéséhez.",
@@ -1130,7 +1081,6 @@
     "No microphone found": "Nem található mikrofon",
     "We were unable to access your microphone. Please check your browser settings and try again.": "Nem lehet a mikrofont használni. Ellenőrizze a böngésző beállításait és próbálja újra.",
     "Unable to access your microphone": "A mikrofont nem lehet használni",
-    "Connecting": "Kapcsolódás",
     "To leave the beta, visit your settings.": "A beállításokban tudja elhagyni a bétát.",
     "Add reaction": "Reakció hozzáadása",
     "Search names and descriptions": "Nevek és leírások keresése",
@@ -1152,20 +1102,9 @@
     "To publish an address, it needs to be set as a local address first.": "A cím publikálásához először helyi címet kell beállítani.",
     "Published addresses can be used by anyone on any server to join your space.": "A nyilvánosságra hozott címet bárki bármelyik szerverről használhatja a térbe való belépéshez.",
     "Published addresses can be used by anyone on any server to join your room.": "A nyilvánosságra hozott címet bárki bármelyik szerverről használhatja a szobához való belépéshez.",
-    "Failed to update the history visibility of this space": "A tér régi üzeneteinek láthatóságának frissítése sikertelen",
-    "Failed to update the guest access of this space": "A tér vendéghozzáférésének frissítése sikertelen",
     "Please provide an address": "Kérem adja meg a címet",
     "This space has no local addresses": "Ennek a térnek nincs helyi címe",
     "Space information": "Tér információi",
-    "Recommended for public spaces.": "A nyilvános terekhez ajánlott.",
-    "Allow people to preview your space before they join.": "A tér előnézetének engedélyezése a belépés előtt.",
-    "Preview Space": "Tér előnézete",
-    "Decide who can view and join %(spaceName)s.": "Döntse el, hogy ki láthatja, és léphet be ide: %(spaceName)s.",
-    "Visibility": "Láthatóság",
-    "This may be useful for public spaces.": "A nyilvános tereknél ez hasznos lehet.",
-    "Guests can join a space without having an account.": "A vendégek fiók nélkül is beléphetnek a térbe.",
-    "Enable guest access": "Vendéghozzáférés engedélyezése",
-    "Failed to update the visibility of this space": "A tér láthatóságának frissítése sikertelen",
     "Address": "Cím",
     "Unnamed audio": "Névtelen hang",
     "Error processing audio message": "Hiba a hangüzenet feldolgozásánál",
@@ -1200,26 +1139,6 @@
     "Connection failed": "Kapcsolódás sikertelen",
     "Could not connect media": "Média kapcsolat nem hozható létre",
     "Call back": "Visszahívás",
-    "Access": "Hozzáférés",
-    "Space members": "Tértagság",
-    "Anyone in a space can find and join. You can select multiple spaces.": "A téren bárki megtalálhatja és beléphet. Több teret is kiválaszthat.",
-    "Spaces with access": "Terek hozzáféréssel",
-    "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "A téren bárki megtalálhatja és beléphet. <a>Szerkessze, hogy melyik tér férhet hozzá.</a>",
-    "Currently, %(count)s spaces have access": {
-        "other": "Jelenleg %(count)s tér rendelkezik hozzáféréssel",
-        "one": "Jelenleg egy tér rendelkezik hozzáféréssel"
-    },
-    "& %(count)s more": {
-        "other": "és még %(count)s",
-        "one": "és még %(count)s"
-    },
-    "Upgrade required": "Fejlesztés szükséges",
-    "This upgrade will allow members of selected spaces access to this room without an invite.": "Ez a fejlesztés lehetővé teszi, hogy a kiválasztott terek tagjai meghívó nélkül is elérjék ezt a szobát.",
-    "There was an error loading your notification settings.": "Hiba történt az értesítés beállítások betöltése során.",
-    "Mentions & keywords": "Megemlítések és kulcsszavak",
-    "Global": "Globális",
-    "New keyword": "Új kulcsszó",
-    "Keyword": "Kulcsszó",
     "Want to add an existing space instead?": "Inkább meglévő teret adna hozzá?",
     "Private space (invite only)": "Privát tér (csak meghívóval)",
     "Space visibility": "Tér láthatósága",
@@ -1235,12 +1154,10 @@
     "Add existing space": "Meglévő tér hozzáadása",
     "Add space": "Tér hozzáadása",
     "These are likely ones other room admins are a part of.": "Ezek valószínűleg olyanok, amelyeknek más szoba adminok is tagjai.",
-    "Show all rooms": "Minden szoba megjelenítése",
     "Leave %(spaceName)s": "Kilép innen: %(spaceName)s",
     "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Ön az adminisztrátora néhány szobának vagy térnek amiből ki szeretne lépni. Ha kilép belőlük akkor azok adminisztrátor nélkül maradnak.",
     "You're the only admin of this space. Leaving it will mean no one has control over it.": "Ön az egyetlen adminisztrátora a térnek. Ha kilép, senki nem tudja irányítani.",
     "You won't be able to rejoin unless you are re-invited.": "Nem fog tudni újra belépni amíg nem hívják meg újra.",
-    "Search %(spaceName)s": "Keresés: %(spaceName)s",
     "Decrypting": "Visszafejtés",
     "Missed call": "Nem fogadott hívás",
     "Call declined": "Hívás elutasítva",
@@ -1254,7 +1171,6 @@
     "Role in <RoomName/>": "Szerep itt: <RoomName/>",
     "Unknown failure": "Ismeretlen hiba",
     "Failed to update the join rules": "A csatlakozási szabályokat nem sikerült frissíteni",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "A(z) <spaceName/> téren bárki megtalálhatja és beléphet. Kiválaszthat más tereket is.",
     "Message didn't send. Click for info.": "Az üzenet nincs elküldve. Kattintson az információkért.",
     "To join a space you'll need an invite.": "A térre való belépéshez meghívóra van szükség.",
     "Would you like to leave the rooms in this space?": "Ki szeretne lépni ennek a térnek minden szobájából?",
@@ -1273,16 +1189,6 @@
     "Verify with Security Key": "Ellenőrzés Biztonsági Kulccsal",
     "Verify with Security Key or Phrase": "Ellenőrzés Biztonsági Kulccsal vagy Jelmondattal",
     "It looks like you don't have a Security Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.": "Úgy tűnik, hogy nem rendelkezik biztonsági kulccsal, vagy másik eszközzel, amelyikkel ellenőrizhetné. Ezzel az eszközzel nem fér majd hozzá a régi titkosított üzenetekhez. Ahhoz, hogy a személyazonosságát ezen az eszközön ellenőrizni lehessen, az ellenőrzédi kulcsokat alaphelyzetbe kell állítani.",
-    "Updating spaces... (%(progress)s out of %(count)s)": {
-        "one": "Terek frissítése…",
-        "other": "Terek frissítése… (%(progress)s / %(count)s)"
-    },
-    "Sending invites... (%(progress)s out of %(count)s)": {
-        "one": "Meghívók küldése…",
-        "other": "Meghívók küldése… (%(progress)s / %(count)s)"
-    },
-    "Loading new room": "Új szoba betöltése",
-    "Upgrading room": "Szoba fejlesztése",
     "Downloading": "Letöltés",
     "They won't be able to access whatever you're not an admin of.": "Később nem férhetnek hozzá olyan helyekhez ahol ön nem adminisztrátor.",
     "Ban them from specific things I'm able to": "Kitiltani őket bizonyos helyekről ahonnan joga van hozzá",
@@ -1304,7 +1210,6 @@
     "Joining": "Belépés",
     "You do not have permission to start polls in this room.": "Nincs joga szavazást kezdeményezni ebben a szobában.",
     "This room isn't bridging messages to any platforms. <a>Learn more.</a>": "Ez a szoba egy platformra sem hidalja át az üzeneteket. <a>Tudjon meg többet.</a>",
-    "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Ez a szoba olyan terekben is benne van, amelynek nem Ön az adminisztrátora. Ezekben a terekben továbbra is a régi szoba jelenik meg, de az emberek jelzést kapnak, hogy lépjenek be az újba.",
     "Store your Security Key somewhere safe, like a password manager or a safe, as it's used to safeguard your encrypted data.": "A biztonsági kulcsot tárolja biztonságos helyen, például egy jelszókezelőben vagy egy széfben, mivel ez tartja biztonságban a titkosított adatait.",
     "We'll generate a Security Key for you to store somewhere safe, like a password manager or a safe.": "A biztonsági kulcsodat elkészül, ezt tárolja valamilyen biztonságos helyen, például egy jelszókezelőben vagy egy széfben.",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Szerezze vissza a hozzáférést a fiókjához és állítsa vissza az elmentett titkosítási kulcsokat ebben a munkamenetben. Ezek nélkül egyetlen munkamenetben sem tudja elolvasni a titkosított üzeneteit.",
@@ -1523,10 +1428,6 @@
     "Show Labs settings": "Labor beállítások megjelenítése",
     "To join, please enable video rooms in Labs first": "A belépéshez a Laborban be kell kapcsolni a videó szobákat",
     "To view, please enable video rooms in Labs first": "A megjelenítéshez a Laborban be kell kapcsolni a videó szobákat",
-    "%(count)s people joined": {
-        "one": "%(count)s személy belépett",
-        "other": "%(count)s személy belépett"
-    },
     "Read receipts": "Olvasási visszajelzés",
     "Deactivating your account is a permanent action — be careful!": "A fiók felfüggesztése végleges — legyen óvatos!",
     "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "A kijelentkezéssel a kulcsok az eszközről törlődnek, ami azt jelenti, hogy ha nincsenek meg máshol a kulcsok, vagy nincsenek mentve a kiszolgálón, akkor a titkosított üzenetek olvashatatlanná válnak.",
@@ -1571,10 +1472,6 @@
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s vagy %(recoveryFile)s",
     "Video call ended": "Videó hívás befejeződött",
     "%(name)s started a video call": "%(name)s videóhívást indított",
-    "You do not have permission to start voice calls": "Nincs jogosultságod hang hívást indítani",
-    "There's no one here to call": "Itt nincs senki akit fel lehetne hívni",
-    "You do not have permission to start video calls": "Nincs jogosultságod videó hívást indítani",
-    "Ongoing call": "Hívás folyamatban",
     "Video call (Jitsi)": "Videóhívás (Jitsi)",
     "Failed to set pusher state": "A leküldő állapotának beállítása sikertelen",
     "Room info": "Szoba információ",
@@ -1624,9 +1521,6 @@
     "We were unable to start a chat with the other user.": "A beszélgetést a másik felhasználóval nem lehetett elindítani.",
     "Error starting verification": "Ellenőrzés indításakor hiba lépett fel",
     "Change layout": "Képernyőbeosztás megváltoztatása",
-    "Search users in this room…": "Felhasználók keresése a szobában…",
-    "Give one or multiple users in this room more privileges": "Több jog adása egy vagy több felhasználónak a szobában",
-    "Add privileged users": "Privilegizált felhasználók hozzáadása",
     "Unable to decrypt message": "Üzenet visszafejtése sikertelen",
     "This message could not be decrypted": "Ezt az üzenetet nem lehet visszafejteni",
     " in <strong>%(room)s</strong>": " itt: <strong>%(room)s</strong>",
@@ -1651,7 +1545,6 @@
     "Select '%(scanQRCode)s'": "Kiválasztás „%(scanQRCode)s”",
     "Loading live location…": "Élő földrajzi helyzet meghatározás betöltése…",
     "There are no past polls in this room": "Nincsenek régebbi szavazások ebben a szobában",
-    "Saving…": "Mentés…",
     "There are no active polls in this room": "Nincsenek aktív szavazások ebben a szobában",
     "Fetching keys from server…": "Kulcsok lekérése a kiszolgálóról…",
     "Checking…": "Ellenőrzés…",
@@ -1665,10 +1558,6 @@
     "Encrypting your message…": "Üzenet titkosítása…",
     "Sending your message…": "Üzenet küldése…",
     "Set a new account password…": "Új fiókjelszó beállítása…",
-    "Backing up %(sessionsRemaining)s keys…": "%(sessionsRemaining)s kulcs biztonsági mentése…",
-    "This session is backing up your keys.": "Ez a munkamenet elmenti a kulcsait.",
-    "Connecting to integration manager…": "Kapcsolódás az integrációkezelőhöz…",
-    "Creating…": "Létrehozás…",
     "Starting export process…": "Exportálási folyamat indítása…",
     "Loading polls": "Szavazások betöltése",
     "Ended a poll": "Lezárta a szavazást",
@@ -1691,7 +1580,6 @@
         "other": "%(count)s napja nincs aktív szavazás. További szavazások betöltése az előző havi szavazások megjelenítéséhez"
     },
     "Invites by email can only be sent one at a time": "E-mail meghívóból egyszerre csak egy küldhető el",
-    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Hiba történt az értesítési beállítások frissítése során. Próbálja meg be- és kikapcsolni a beállítást.",
     "Desktop app logo": "Asztali alkalmazás profilkép",
     "Requires your server to support the stable version of MSC3827": "A Matrix-kiszolgálónak támogatnia kell az MSC3827 stabil verzióját",
     "Message from %(user)s": "Üzenet tőle: %(user)s",
@@ -1715,7 +1603,6 @@
     "Error changing password": "Hiba a jelszó módosítása során",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s (HTTP állapot: %(httpStatus)s)",
     "Unknown password change error (%(stringifiedError)s)": "Ismeretlen jelszómódosítási hiba (%(stringifiedError)s)",
-    "Failed to download source media, no source url was found": "A forrásmédia letöltése sikertelen, nem található forráswebcím",
     "common": {
         "about": "Névjegy",
         "analytics": "Analitika",
@@ -1815,7 +1702,13 @@
         "deselect_all": "Semmit nem jelöl ki",
         "select_all": "Mindet kijelöli",
         "copied": "Másolva!",
-        "Advanced": "Speciális"
+        "advanced": "Speciális",
+        "spaces": "Terek",
+        "general": "Általános",
+        "saving": "Mentés…",
+        "profile": "Profil",
+        "display_name": "Megjelenítési név",
+        "user_avatar": "Profilkép"
     },
     "action": {
         "continue": "Folytatás",
@@ -1918,7 +1811,9 @@
         "exit_fullscreeen": "Kilépés a teljes képernyőből",
         "enter_fullscreen": "Teljes képernyőre váltás",
         "unban": "Kitiltás visszavonása",
-        "click_to_copy": "Másolás kattintással"
+        "click_to_copy": "Másolás kattintással",
+        "hide_advanced": "Speciális beállítások elrejtése",
+        "show_advanced": "Speciális beállítások megjelenítése"
     },
     "a11y": {
         "user_menu": "Felhasználói menü",
@@ -1930,7 +1825,8 @@
             "other": "%(count)s olvasatlan üzenet.",
             "one": "1 olvasatlan üzenet."
         },
-        "unread_messages": "Olvasatlan üzenetek."
+        "unread_messages": "Olvasatlan üzenetek.",
+        "jump_first_invite": "Újrás az első meghívóhoz."
     },
     "labs": {
         "video_rooms": "Videószobák",
@@ -2290,7 +2186,10 @@
             "noisy": "Hangos",
             "error_permissions_denied": "A(z) %(brand)s alkalmazásnak nincs jogosultsága értesítést küldeni – ellenőrizze a böngésző beállításait",
             "error_permissions_missing": "A(z) %(brand)s alkalmazásnak nincs jogosultsága értesítést küldeni – próbálja újra",
-            "error_title": "Az értesítések engedélyezése sikertelen"
+            "error_title": "Az értesítések engedélyezése sikertelen",
+            "error_updating": "Hiba történt az értesítési beállítások frissítése során. Próbálja meg be- és kikapcsolni a beállítást.",
+            "push_targets": "Értesítések célpontja",
+            "error_loading": "Hiba történt az értesítés beállítások betöltése során."
         },
         "appearance": {
             "layout_irc": "IRC (kísérleti)",
@@ -2377,7 +2276,30 @@
             "message_search_disabled": "A titkosított üzenetek biztonságos helyi gyorsítótárazása, hogy megjelenhessenek a keresési találatok között.",
             "message_search_unsupported": "A titkosított üzenetek biztonságos helyi tárolásához hiányzik néhány összetevő a(z) %(brand)s alkalmazásból. Ha kísérletezni szeretne ezzel a funkcióval, akkor állítson össze egy egyéni asztali %(brand)s alkalmazást, amely <nativeLink>tartalmazza a keresési összetevőket</nativeLink>.",
             "message_search_unsupported_web": "A(z) %(brand)s nem képes helyileg biztonságosan elmenteni a titkosított üzeneteket, ha webböngészőben fut. Használja az <desktopLink>asztali %(brand)s</desktopLink> alkalmazást, hogy az üzenetekben való kereséskor a titkosított üzenetek is megjelenjenek.",
-            "message_search_failed": "Az üzenetkeresés előkészítése sikertelen"
+            "message_search_failed": "Az üzenetkeresés előkészítése sikertelen",
+            "backup_key_well_formed": "helyesen formázott",
+            "backup_key_unexpected_type": "váratlan típus",
+            "backup_keys_description": "Mentse el a titkosítási kulcsokat a fiókadatokkal arra az esetre, ha elvesztené a hozzáférést a munkameneteihez. A kulcsok egy egyedi biztonsági kulccsal lesznek védve.",
+            "backup_key_stored_status": "Tárolt mentési kulcs:",
+            "cross_signing_not_stored": "nincs tárolva",
+            "backup_key_cached_status": "Gyorsítótárazott mentési kulcs:",
+            "4s_public_key_status": "Titkos tároló nyilvános kulcsa:",
+            "4s_public_key_in_account_data": "fiókadatokban",
+            "secret_storage_status": "Titkos tároló:",
+            "secret_storage_ready": "kész",
+            "secret_storage_not_ready": "nincs kész",
+            "delete_backup": "Mentés törlése",
+            "delete_backup_confirm_description": "Biztos benne? Ha a kulcsai nincsenek megfelelően mentve, akkor elveszíti a titkosított üzeneteit.",
+            "error_loading_key_backup_status": "A mentett kulcsok állapotát nem lehet betölteni",
+            "restore_key_backup": "Helyreállítás mentésből",
+            "key_backup_active": "Ez a munkamenet elmenti a kulcsait.",
+            "key_backup_inactive": "Ez az munkamenet <b>nem menti el a kulcsait</b>, de van létező mentése, amelyből helyre tudja állítani, és amelyhez hozzá tudja adni a továbbiakban.",
+            "key_backup_connect_prompt": "Csatlakoztassa ezt a munkamenetet a kulcsmentéshez kijelentkezés előtt, hogy ne veszítsen el olyan kulcsot, amely lehet, hogy csak ezen az eszközön van meg.",
+            "key_backup_connect": "Munkamenet csatlakoztatása a kulcsmentéshez",
+            "key_backup_in_progress": "%(sessionsRemaining)s kulcs biztonsági mentése…",
+            "key_backup_complete": "Az összes kulcs elmentve",
+            "key_backup_algorithm": "Algoritmus:",
+            "key_backup_inactive_warning": "A kulcsai <b>nem kerülnek mentésre ebből a munkamenetből</b>."
         },
         "preferences": {
             "room_list_heading": "Szobalista",
@@ -2516,18 +2438,22 @@
             "add_msisdn_confirm_sso_button": "Erősítse meg a telefonszám hozzáadását azáltal, hogy az egyszeri bejelentkezéssel bizonyítja a személyazonosságát.",
             "add_msisdn_confirm_button": "Telefonszám hozzáadásának megerősítése",
             "add_msisdn_confirm_body": "A telefonszám hozzáadásának megerősítéséhez kattintson a lenti gombra.",
-            "add_msisdn_dialog_title": "Telefonszám hozzáadása"
+            "add_msisdn_dialog_title": "Telefonszám hozzáadása",
+            "name_placeholder": "Nincs megjelenítendő név",
+            "error_saving_profile_title": "A saját profil mentése sikertelen",
+            "error_saving_profile": "A műveletet nem lehetett befejezni"
         },
         "sidebar": {
             "title": "Oldalsáv",
             "metaspaces_subsection": "Megjelenítendő terek",
             "metaspaces_description": "A terek a szobák és emberek csoportosítási módjainak egyike. Azokon kívül, amelyekben benne van, használhat néhány előre meghatározottat is.",
             "metaspaces_home_description": "A Kezdőlap áttekintést adhat mindenről.",
-            "metaspaces_home_all_rooms": "Minden szoba megjelenítése a Kezdőlapon, akkor is ha egy tér része.",
             "metaspaces_favourites_description": "Csoportosítsa az összes kedvenc szobáját és ismerősét egy helyre.",
             "metaspaces_people_description": "Csoportosítsa az összes ismerősét egy helyre.",
             "metaspaces_orphans": "Téren kívüli szobák",
-            "metaspaces_orphans_description": "Csoportosítsa egy helyre az összes olyan szobát, amely nem egy tér része."
+            "metaspaces_orphans_description": "Csoportosítsa egy helyre az összes olyan szobát, amely nem egy tér része.",
+            "metaspaces_home_all_rooms_description": "Minden szoba megjelenítése a Kezdőlapon, akkor is ha egy tér része.",
+            "metaspaces_home_all_rooms": "Minden szoba megjelenítése"
         }
     },
     "devtools": {
@@ -3228,7 +3154,17 @@
         "more_button": "Több",
         "screenshare_monitor": "A teljes képernyő megosztása",
         "screenshare_window": "Alkalmazásablak",
-        "screenshare_title": "Tartalom megosztása"
+        "screenshare_title": "Tartalom megosztása",
+        "disabled_no_perms_start_voice_call": "Nincs jogosultságod hang hívást indítani",
+        "disabled_no_perms_start_video_call": "Nincs jogosultságod videó hívást indítani",
+        "disabled_ongoing_call": "Hívás folyamatban",
+        "disabled_no_one_here": "Itt nincs senki akit fel lehetne hívni",
+        "n_people_joined": {
+            "one": "%(count)s személy belépett",
+            "other": "%(count)s személy belépett"
+        },
+        "unknown_person": "ismeretlen személy",
+        "connecting": "Kapcsolódás"
     },
     "Other": "Egyéb",
     "room_settings": {
@@ -3270,7 +3206,10 @@
             "title": "Szerepek és jogosultságok",
             "permissions_section": "Jogosultságok",
             "permissions_section_description_space": "A tér bizonyos beállításainak megváltoztatásához szükséges szerep kiválasztása",
-            "permissions_section_description_room": "A szoba bizonyos beállításainak megváltoztatásához szükséges szerep kiválasztása"
+            "permissions_section_description_room": "A szoba bizonyos beállításainak megváltoztatásához szükséges szerep kiválasztása",
+            "add_privileged_user_heading": "Privilegizált felhasználók hozzáadása",
+            "add_privileged_user_description": "Több jog adása egy vagy több felhasználónak a szobában",
+            "add_privileged_user_filter_placeholder": "Felhasználók keresése a szobában…"
         },
         "security": {
             "strict_encryption": "Ebben a szobában sose küldjön titkosított üzenetet ellenőrizetlen munkamenetekbe ebből a munkamenetből",
@@ -3296,7 +3235,33 @@
             "history_visibility_shared": "Csak tagok számára (a beállítás kiválasztásától)",
             "history_visibility_invited": "Csak tagoknak (a meghívásuk idejétől)",
             "history_visibility_joined": "Csak tagoknak (amióta csatlakoztak)",
-            "history_visibility_world_readable": "Bárki"
+            "history_visibility_world_readable": "Bárki",
+            "join_rule_upgrade_required": "Fejlesztés szükséges",
+            "join_rule_restricted_n_more": {
+                "other": "és még %(count)s",
+                "one": "és még %(count)s"
+            },
+            "join_rule_restricted_summary": {
+                "other": "Jelenleg %(count)s tér rendelkezik hozzáféréssel",
+                "one": "Jelenleg egy tér rendelkezik hozzáféréssel"
+            },
+            "join_rule_restricted_description": "A téren bárki megtalálhatja és beléphet. <a>Szerkessze, hogy melyik tér férhet hozzá.</a>",
+            "join_rule_restricted_description_spaces": "Terek hozzáféréssel",
+            "join_rule_restricted_description_active_space": "A(z) <spaceName/> téren bárki megtalálhatja és beléphet. Kiválaszthat más tereket is.",
+            "join_rule_restricted_description_prompt": "A téren bárki megtalálhatja és beléphet. Több teret is kiválaszthat.",
+            "join_rule_restricted": "Tértagság",
+            "join_rule_restricted_upgrade_warning": "Ez a szoba olyan terekben is benne van, amelynek nem Ön az adminisztrátora. Ezekben a terekben továbbra is a régi szoba jelenik meg, de az emberek jelzést kapnak, hogy lépjenek be az újba.",
+            "join_rule_restricted_upgrade_description": "Ez a fejlesztés lehetővé teszi, hogy a kiválasztott terek tagjai meghívó nélkül is elérjék ezt a szobát.",
+            "join_rule_upgrade_upgrading_room": "Szoba fejlesztése",
+            "join_rule_upgrade_awaiting_room": "Új szoba betöltése",
+            "join_rule_upgrade_sending_invites": {
+                "one": "Meghívók küldése…",
+                "other": "Meghívók küldése… (%(progress)s / %(count)s)"
+            },
+            "join_rule_upgrade_updating_spaces": {
+                "one": "Terek frissítése…",
+                "other": "Terek frissítése… (%(progress)s / %(count)s)"
+            }
         },
         "general": {
             "publish_toggle": "Publikálod a szobát a(z) %(domain)s szoba listájába?",
@@ -3306,7 +3271,11 @@
             "default_url_previews_off": "Az URL előnézet alapértelmezetten tiltva van a szobában jelenlévőknek.",
             "url_preview_encryption_warning": "A titkosított szobákban, mint például ez is, az URL előnézet alapértelmezetten ki van kapcsolva, hogy biztosított legyen, hogy a Matrix szerver (ahol az előnézet készül) ne tudjon információt gyűjteni arról, hogy milyen linkeket látsz ebben a szobában.",
             "url_preview_explainer": "Ha valaki URL linket helyez az üzenetébe, lehetőség van egy előnézet megjelenítésére amivel további információt kaphatunk a linkről, mint cím, leírás és a weboldal képe.",
-            "url_previews_section": "URL előnézet"
+            "url_previews_section": "URL előnézet",
+            "error_save_space_settings": "A tér beállításának mentése sikertelen.",
+            "description_space": "A tér beállításainak szerkesztése.",
+            "save": "Változtatások mentése",
+            "leave_space": "Tér elhagyása"
         },
         "advanced": {
             "unfederated": "Ez a szoba távoli Matrix-kiszolgálóról nem érhető el",
@@ -3320,7 +3289,23 @@
             "room_version": "Szoba verziója:"
         },
         "delete_avatar_label": "Profilkép törlése",
-        "upload_avatar_label": "Profilkép feltöltése"
+        "upload_avatar_label": "Profilkép feltöltése",
+        "visibility": {
+            "error_update_guest_access": "A tér vendéghozzáférésének frissítése sikertelen",
+            "error_update_history_visibility": "A tér régi üzeneteinek láthatóságának frissítése sikertelen",
+            "guest_access_explainer": "A vendégek fiók nélkül is beléphetnek a térbe.",
+            "guest_access_explainer_public_space": "A nyilvános tereknél ez hasznos lehet.",
+            "title": "Láthatóság",
+            "error_failed_save": "A tér láthatóságának frissítése sikertelen",
+            "history_visibility_anyone_space": "Tér előnézete",
+            "history_visibility_anyone_space_description": "A tér előnézetének engedélyezése a belépés előtt.",
+            "history_visibility_anyone_space_recommendation": "A nyilvános terekhez ajánlott.",
+            "guest_access_label": "Vendéghozzáférés engedélyezése"
+        },
+        "access": {
+            "title": "Hozzáférés",
+            "description_space": "Döntse el, hogy ki láthatja, és léphet be ide: %(spaceName)s."
+        }
     },
     "encryption": {
         "verification": {
@@ -3819,9 +3804,14 @@
             "devtools_open_timeline": "Szoba idővonal megjelenítése (fejlesztői eszközök)",
             "home": "Kezdő tér",
             "explore": "Szobák felderítése",
-            "manage_and_explore": "Szobák kezelése és felderítése"
+            "manage_and_explore": "Szobák kezelése és felderítése",
+            "options": "Tér beállításai"
         },
-        "share_public": "Nyilvános tér megosztása"
+        "share_public": "Nyilvános tér megosztása",
+        "search_children": "Keresés: %(spaceName)s",
+        "invite_link": "Meghívási hivatkozás megosztása",
+        "invite": "Emberek meghívása",
+        "invite_description": "Meghívás e-mail-címmel vagy felhasználónévvel"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Ezen a Matrix-kiszolgálón nincs beállítva a térképek megjelenítése.",
@@ -3881,7 +3871,6 @@
     },
     "create_space": {
         "name_required": "Adjon meg egy nevet a térhez",
-        "name_placeholder": "például sajat-ter",
         "explainer": "A terek a szobák és emberek csoportosításának új módja. Milyen teret szeretne létrehozni? Később megváltoztathatja.",
         "public_description": "Mindenki számára nyílt tér, a közösségek számára ideális",
         "private_description": "Csak meghívóval, saját célra és csoportok számára ideális",
@@ -3912,7 +3901,12 @@
         "setup_rooms_community_description": "Készítsünk szobát mindhez.",
         "setup_rooms_description": "Később is hozzáadhat többet, beleértve meglévőket is.",
         "setup_rooms_private_heading": "Milyen projekteken dolgozik a csoportja?",
-        "setup_rooms_private_description": "Mindenhez készítünk egy szobát."
+        "setup_rooms_private_description": "Mindenhez készítünk egy szobát.",
+        "address_placeholder": "például sajat-ter",
+        "address_label": "Cím",
+        "label": "Tér létrehozása",
+        "add_details_prompt_2": "Ezeket bármikor megváltoztathatja.",
+        "creating": "Létrehozás…"
     },
     "user_menu": {
         "switch_theme_light": "Világos módra váltás",
@@ -4091,7 +4085,10 @@
         "admin_contact_short": "Vegye fel a kapcsolatot a <a>kiszolgáló rendszergazdájával</a>.",
         "non_urgent_echo_failure_toast": "A kiszolgálója nem válaszol néhány <a>kérésre</a>.",
         "failed_copy": "Sikertelen másolás",
-        "something_went_wrong": "Valami rosszul sikerült."
+        "something_went_wrong": "Valami rosszul sikerült.",
+        "download_media": "A forrásmédia letöltése sikertelen, nem található forráswebcím",
+        "update_power_level": "A hozzáférési szint megváltoztatása sikertelen",
+        "unknown": "Ismeretlen hiba"
     },
     "in_space1_and_space2": "Ezekben a terekben: %(space1Name)s és %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -4113,7 +4110,13 @@
         "colour_grey": "Szürke",
         "colour_red": "Piros",
         "colour_unsent": "Elküldetlen",
-        "error_change_title": "Értesítési beállítások megváltoztatása"
+        "error_change_title": "Értesítési beállítások megváltoztatása",
+        "mark_all_read": "Összes megjelölése olvasottként",
+        "keyword": "Kulcsszó",
+        "keyword_new": "Új kulcsszó",
+        "class_global": "Globális",
+        "class_other": "Egyéb",
+        "mentions_keywords": "Megemlítések és kulcsszavak"
     },
     "mobile_guide": {
         "toast_title": "A jobb élmény érdekében használjon alkalmazást",
@@ -4134,5 +4137,11 @@
         "title": "Képnézet",
         "rotate_left": "Forgatás balra",
         "rotate_right": "Forgatás jobbra"
+    },
+    "a11y_jump_first_unread_room": "Ugrás az első olvasatlan szobához.",
+    "integration_manager": {
+        "connecting": "Kapcsolódás az integrációkezelőhöz…",
+        "error_connecting_heading": "Nem lehet kapcsolódni az integrációkezelőhöz",
+        "error_connecting": "Az integrációkezelő nem működik, vagy nem éri el a Matrix-kiszolgálóját."
     }
 }

@@ -134,7 +134,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
         tabs.push(
             new Tab(
                 RoomSettingsTab.General,
-                _td("General"),
+                _td("common|general"),
                 "mx_RoomSettingsDialog_settingsIcon",
                 <GeneralRoomSettingsTab room={this.state.room} />,
                 "RoomSettingsGeneral",
@@ -218,7 +218,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
             tabs.push(
                 new Tab(
                     RoomSettingsTab.Advanced,
-                    _td("common|Advanced"),
+                    _td("common|advanced"),
                     "mx_RoomSettingsDialog_warningIcon",
                     (
                         <AdvancedRoomSettingsTab
