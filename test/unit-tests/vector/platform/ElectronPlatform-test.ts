@@ -26,6 +26,7 @@ import DesktopCapturerSourcePicker from "matrix-react-sdk/src/components/views/e
 import { mocked } from "jest-mock";
 
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
+import { setupLanguageMock } from "../../../setup/setupLanguage";
 
 jest.mock("matrix-react-sdk/src/rageshake/rageshake", () => ({
     flush: jest.fn(),
@@ -51,6 +52,7 @@ describe("ElectronPlatform", () => {
         window.electron = mockElectron;
         jest.clearAllMocks();
         Object.defineProperty(window, "navigator", { value: { userAgent: defaultUserAgent }, writable: true });
+        setupLanguageMock();
     });
 
     const getElectronEventHandlerCall = (eventType: string): [type: string, handler: Function] | undefined =>
