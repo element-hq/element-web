@@ -24,19 +24,13 @@
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s %(time)s",
-    "Default": "Ordinara",
     "Restricted": "Limigita",
     "Moderator": "Ĉambrestro",
-    "Reason": "Kialo",
     "Send": "Sendi",
-    "Incorrect verification code": "Malĝusta kontrola kodo",
-    "Authentication": "Aŭtentikigo",
-    "Failed to set display name": "Malsukcesis agordi vidigan nomon",
     "Failed to ban user": "Malsukcesis forbari uzanton",
     "Failed to mute user": "Malsukcesis silentigi uzanton",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Tiun ĉi ŝanĝon vi ne povos malfari, ĉar vi donas al la uzanto la saman povnivelon, kiun havas vi mem.",
     "Are you sure?": "Ĉu vi certas?",
-    "Unignore": "Reatenti",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Vi estas direktota al ekstera retejo por aŭtentikigi vian konton por uzo kun %(integrationsUrl)s. Ĉu vi volas daŭrigi tion?",
     "Jump to read receipt": "Salti al legokonfirmo",
     "Admin Tools": "Estriloj",
@@ -64,8 +58,6 @@
     "Historical": "Estintaj",
     "%(roomName)s does not exist.": "%(roomName)s ne ekzistas.",
     "%(roomName)s is not accessible at this time.": "%(roomName)s ne estas atingebla nun.",
-    "Failed to unban": "Malsukcesis malforbari",
-    "Banned by %(displayName)s": "Forbarita de %(displayName)s",
     "unknown error code": "nekonata kodo de eraro",
     "Failed to forget room %(errCode)s": "Malsukcesis forgesi ĉambron %(errCode)s",
     "Jump to first unread message.": "Salti al unua nelegita mesaĝo.",
@@ -78,7 +70,6 @@
     "Error decrypting image": "Malĉifro de bildo eraris",
     "Error decrypting video": "Malĉifro de filmo eraris",
     "Add an Integration": "Aldoni kunigon",
-    "Failed to change password. Is your password correct?": "Malsukcesis ŝanĝi la pasvorton. Ĉu via pasvorto estas ĝusta?",
     "Email address": "Retpoŝtadreso",
     "Delete Widget": "Forigi fenestraĵon",
     "Create new room": "Krei novan ĉambron",
@@ -91,16 +82,11 @@
         "other": "Kaj %(count)s pliaj…"
     },
     "Confirm Removal": "Konfirmi forigon",
-    "Deactivate Account": "Malaktivigi konton",
     "An error has occurred.": "Okazis eraro.",
     "Unable to restore session": "Salutaĵo ne rehaveblas",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Se vi antaŭe uzis pli novan version de %(brand)s, via salutaĵo eble ne akordos kun ĉi tiu versio. Fermu ĉi tiun fenestron kaj revenu al la pli nova versio.",
-    "Invalid Email Address": "Malvalida retpoŝtadreso",
-    "This doesn't appear to be a valid email address": "Tio ĉi ne ŝajnas esti valida retpoŝtadreso",
     "Verification Pending": "Atendante kontrolon",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Bonvolu kontroli vian retpoŝton, kaj klaki la ligilon enhavatan en la sendita mesaĝo. Farinte tion, klaku je «daŭrigi».",
-    "Unable to add email address": "Ne povas aldoni retpoŝtadreson",
-    "Unable to verify email address.": "Retpoŝtadreso ne kontroleblas.",
     "This will allow you to reset your password and receive notifications.": "Tio ĉi permesos al vi restarigi vian pasvorton kaj ricevi sciigojn.",
     "Reject invitation": "Rifuzi inviton",
     "Are you sure you want to reject the invitation?": "Ĉu vi certe volas rifuzi la inviton?",
@@ -122,9 +108,6 @@
         "one": "Alŝutante dosieron %(filename)s kaj %(count)s alian"
     },
     "Uploading %(filename)s": "Alŝutante dosieron %(filename)s",
-    "Unable to remove contact information": "Ne povas forigi kontaktajn informojn",
-    "No Microphones detected": "Neniu mikrofono troviĝis",
-    "No Webcams detected": "Neniu kamerao troviĝis",
     "A new password must be entered.": "Vi devas enigi novan pasvorton.",
     "New passwords must match each other.": "Novaj pasvortoj devas akordi.",
     "Return to login screen": "Reiri al saluta paĝo",
@@ -152,10 +135,8 @@
     "Search…": "Serĉi…",
     "Saturday": "Sabato",
     "Monday": "Lundo",
-    "Invite to this room": "Inviti al ĉi tiu ĉambro",
     "Wednesday": "Merkredo",
     "You cannot delete this message. (%(code)s)": "Vi ne povas forigi tiun ĉi mesaĝon. (%(code)s)",
-    "All messages": "Ĉiuj mesaĝoj",
     "All Rooms": "Ĉiuj ĉambroj",
     "Thursday": "Ĵaŭdo",
     "Yesterday": "Hieraŭ",
@@ -224,14 +205,6 @@
     "Anchor": "Ankro",
     "Headphones": "Kapaŭdilo",
     "Folder": "Dosierujo",
-    "Email Address": "Retpoŝtadreso",
-    "Phone Number": "Telefonnumero",
-    "Email addresses": "Retpoŝtadresoj",
-    "Phone numbers": "Telefonnumeroj",
-    "Ignored users": "Malatentaj uzantoj",
-    "Voice & Video": "Voĉo kaj vido",
-    "Room information": "Informoj pri ĉambro",
-    "Room Addresses": "Adresoj de ĉambro",
     "Share Link to User": "Kunhavigi ligilon al uzanto",
     "Share room": "Kunhavigi ĉambron",
     "Main address": "Ĉefa adreso",
@@ -257,15 +230,8 @@
     "Santa": "Kristnaska viro",
     "Thumbs up": "Dikfingro supren",
     "Paperclip": "Paperkuntenilo",
-    "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Ni sendis al vi retleteron por konfirmi vian adreson. Bonvolu sekvi la tieajn intrukciojn kaj poste klaki al la butono sube.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Ĉifritaj mesaĝoj estas sekurigitaj per tutvoja ĉifrado. Nur vi kaj la ricevonto(j) havas la ŝlosilojn necesajn por legado.",
     "Back up your keys before signing out to avoid losing them.": "Savkopiu viajn ŝlosilojn antaŭ adiaŭo, por ilin ne perdi.",
-    "Unable to verify phone number.": "Ne povas kontroli telefonnumeron.",
-    "Verification code": "Kontrola kodo",
-    "Missing media permissions, click the button below to request.": "Mankas aŭdovidaj permesoj; klaku al la suba butono por peti.",
-    "Request media permissions": "Peti aŭdovidajn permesojn",
-    "Audio Output": "Sona eligo",
-    "Account management": "Administrado de kontoj",
     "This event could not be displayed": "Ĉi tiu okazo ne povis montriĝi",
     "This room is not public. You will not be able to rejoin without an invite.": "Ĉi tiu ĉambro ne estas publika. Vi ne povos re-aliĝi sen invito.",
     "Revoke invite": "Nuligi inviton",
@@ -330,11 +296,6 @@
     "Join millions for free on the largest public server": "Senpage aliĝu al milionoj sur la plej granda publika servilo",
     "Add room": "Aldoni ĉambron",
     "Start using Key Backup": "Ekuzi Savkopiadon de ŝlosiloj",
-    "Uploaded sound": "Alŝutita sono",
-    "Sounds": "Sonoj",
-    "Notification sound": "Sono de sciigo",
-    "Set a new custom sound": "Agordi novan propran sonon",
-    "Browse": "Foliumi",
     "Edited at %(date)s. Click to view edits.": "Redaktita je %(date)s. Klaku por vidi redaktojn.",
     "The following users may not exist": "La jenaj uzantoj eble ne ekzistas",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Ne povas trovi profilojn de la ĉi-subaj Matrix-identigilojn – ĉu vi tamen volas inviti ilin?",
@@ -347,7 +308,6 @@
     "I don't want my encrypted messages": "Mi ne volas miajn ĉifritajn mesaĝojn",
     "No backup found!": "Neniu savkopio troviĝis!",
     "Go to Settings": "Iri al agordoj",
-    "No Audio Outputs detected": "Neniu soneligo troviĝis",
     "The conversation continues here.": "La interparolo daŭras ĉi tie.",
     "This room has been replaced and is no longer active.": "Ĉi tiu ĉambro estas anstataŭita, kaj ne plu aktivas.",
     "Only room administrators will see this warning": "Nur administrantoj de ĉambro vidos ĉi tiun averton",
@@ -402,32 +362,7 @@
     "Invalid base_url for m.identity_server": "Nevalida base_url por m.identity_server",
     "Find others by phone or email": "Trovu aliajn per telefonnumero aŭ retpoŝtadreso",
     "Be found by phone or email": "Troviĝu per telefonnumero aŭ retpoŝtadreso",
-    "Do not use an identity server": "Ne uzi identigan servilon",
-    "Enter a new identity server": "Enigi novan identigan servilon",
-    "Checking server": "Kontrolante servilon",
-    "Change identity server": "Ŝanĝi identigan servilon",
-    "Disconnect from the identity server <current /> and connect to <new /> instead?": "Ĉu malkonekti de la nuna identiga servilo <current /> kaj konekti anstataŭe al <new />?",
-    "Terms of service not accepted or the identity server is invalid.": "Aŭ uzkondiĉoj ne akceptiĝis, aŭ la identiga servilo estas nevalida.",
-    "The identity server you have chosen does not have any terms of service.": "La identiga servilo, kiun vi elektis, havas neniujn uzkondiĉojn.",
-    "Disconnect identity server": "Malkonekti la identigan servilon",
-    "Disconnect from the identity server <idserver />?": "Ĉu malkonektiĝi de la identiga servilo <idserver />?",
-    "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "Vi ankoraŭ <b>havigas siajn personajn datumojn</b> je la identiga servilo <idserver />.",
-    "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Ni rekomendas, ke vi forigu viajn retpoŝtadresojn kaj telefonnumerojn de la identiga servilo, antaŭ ol vi malkonektiĝos.",
-    "Disconnect anyway": "Tamen malkonekti",
-    "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "Vi nun uzas servilon <server></server> por trovi kontaktojn, kaj troviĝi de ili. Vi povas ŝanĝi vian identigan servilon sube.",
-    "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "Se vi ne volas uzi servilon <server /> por trovi kontaktojn kaj troviĝi mem, enigu alian identigan servilon sube.",
-    "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "Vi nun ne uzas identigan servilon. Por trovi kontaktojn kaj troviĝi de ili mem, aldonu iun sube.",
-    "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Malkonektiĝo de via identiga servilo signifas, ke vi ne povos troviĝi de aliaj uzantoj, kaj vi ne povos memage inviti aliajn per retpoŝto aŭ telefono.",
-    "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Vi ne devas uzi identigan servilon. Se vi tion elektos, vi ne povos troviĝi de aliaj uzantoj, kaj vi ne povos memage inviti ilin per retpoŝto aŭ telefono.",
-    "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Konsentu al uzkondiĉoj de la identiga servilo (%(serverName)s) por esti trovita per retpoŝtadreso aŭ telefonnumero.",
-    "Discovery": "Trovado",
     "Deactivate account": "Malaktivigi konton",
-    "Error changing power level requirement": "Eraris ŝanĝo de postulo de povnivelo",
-    "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "Eraris ŝanĝo de la postuloj de la ĉambro pri povnivelo. Certigu, ke vi havas sufiĉajn permesojn, kaj reprovu.",
-    "Error changing power level": "Eraris ŝanĝo de povnivelo",
-    "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "Eraris ŝanĝo de povnivelo de la uzanto. Certigu, ke vi havas sufiĉajn permesojn, kaj reprovu.",
-    "Remove %(email)s?": "Ĉu forigi %(email)s?",
-    "Remove %(phone)s?": "Ĉu forigi %(phone)s?",
     "No recent messages by %(user)s found": "Neniuj freŝaj mesaĝoj de %(user)s troviĝis",
     "Remove recent messages by %(user)s": "Forigi freŝajn mesaĝojn de %(user)s",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Je granda nombro da mesaĝoj, tio povas daŭri iomon da tempo. Bonvolu ne aktualigi vian klienton dume.",
@@ -440,25 +375,7 @@
     "Deactivate user": "Malaktivigi uzanton",
     "Remove recent messages": "Forigi freŝajn mesaĝojn",
     "Italics": "Kursive",
-    "Explore rooms": "Esplori ĉambrojn",
-    "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Vi <b>forigu viajn personajn datumojn</b> de identiga servilo <idserver /> antaŭ ol vi malkonektiĝos. Bedaŭrinde, identiga servilo <idserver /> estas nuntempe eksterreta kaj ne eblas ĝin atingi.",
-    "You should:": "Vi devus:",
-    "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "kontrolu kromprogramojn de via foliumilo je ĉio, kio povus malhelpi konekton al la identiga servilo (ekzemple « Privacy Badger »)",
-    "contact the administrators of identity server <idserver />": "kontaktu la administrantojn de la identiga servilo <idserver />",
-    "wait and try again later": "atendu, kaj reprovu poste",
-    "Unable to revoke sharing for email address": "Ne povas senvalidigi havigadon je retpoŝtadreso",
-    "Unable to share email address": "Ne povas havigi vian retpoŝtadreson",
-    "Your email address hasn't been verified yet": "Via retpoŝtadreso ankoraŭ ne kontroliĝis",
-    "Click the link in the email you received to verify and then click continue again.": "Klaku la ligilon en la ricevita retletero por kontroli, kaj poste reklaku al « daŭrigi ».",
-    "Verify the link in your inbox": "Kontrolu la ligilon en via ricevujo",
-    "Discovery options will appear once you have added an email above.": "Eltrovaj agordoj aperos kiam vi aldonos supre retpoŝtadreson.",
-    "Unable to revoke sharing for phone number": "Ne povas senvalidigi havigadon je telefonnumero",
-    "Unable to share phone number": "Ne povas havigi telefonnumeron",
-    "Please enter verification code sent via text.": "Bonvolu enigi kontrolan kodon senditan per tekstmesaĝo.",
-    "Discovery options will appear once you have added a phone number above.": "Eltrovaj agordoj aperos kiam vi aldonos telefonnumeron supre.",
-    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "Tekstmesaĝo sendiĝis al +%(msisdn)s. Bonvolu enigi la kontrolan kodon enhavitan.",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Provu rulumi supren tra la historio por kontroli, ĉu ne estas iuj pli fruaj.",
-    "Room %(name)s": "Ĉambro %(name)s",
     "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "Ĉi tiu invito al %(roomName)s sendiĝis al %(email)s, kiu ne estas ligita al via konto",
     "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Ligu ĉi tiun retpoŝtadreson al via konto en Agordoj por ricevadi invitojn rekte per %(brand)s.",
     "This invite to %(roomName)s was sent to %(email)s": "La invito al %(roomName)s sendiĝis al %(email)s",
@@ -506,18 +423,13 @@
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) salutis novan salutaĵon ne kontrolante ĝin:",
     "Ask this user to verify their session, or manually verify it below.": "Petu, ke ĉi tiu la uzanto kontrolu sian salutaĵon, aŭ kontrolu ĝin permane sube.",
     "This backup is trusted because it has been restored on this session": "Ĉi tiu savkopio estas fidata, ĉar ĝi estis rehavita en ĉi tiu salutaĵo",
-    "Manage integrations": "Administri kunigojn",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Por raparto de sekureca problemo rilata al Matrix, bonvolu legi la <a>Eldiran Politikon pri Sekureco</a> de Matrix.org.",
-    "None": "Neniu",
-    "This room is bridging messages to the following platforms. <a>Learn more.</a>": "Ĉi tiu ĉambro transpontigas mesaĝojn al la jenaj platformoj. <a>Eksciu plion.</a>",
-    "Bridges": "Pontoj",
     "This user has not verified all of their sessions.": "Ĉi tiu uzanto ne kontrolis ĉiomon da siaj salutaĵoj.",
     "You have not verified this user.": "Vi ne kontrolis tiun ĉi uzanton.",
     "You have verified this user. This user has verified all of their sessions.": "Vi kontrolis tiun ĉi uzanton. Ĝi kontrolis ĉiomon da siaj salutaĵoj.",
     "Someone is using an unknown session": "Iu uzas nekonatan salutaĵon",
     "Encrypted by an unverified session": "Ĉifrita de nekontrolita salutaĵo",
     "Encrypted by a deleted session": "Ĉifrita de forigita salutaĵo",
-    "Close preview": "Fermi antaŭrigardon",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Eraris ĝisdatigo de la alternativaj adresoj de la ĉambro. Eble la servilo ne permesas tion, aŭ io dumtempe ne funkcias.",
     "Waiting for %(displayName)s to accept…": "Atendante akcepton de %(displayName)s…",
     "Accepting…": "Akceptante…",
@@ -651,9 +563,7 @@
     "Your homeserver has exceeded its user limit.": "Via hejmservilo atingis sian limon de uzantoj.",
     "Your homeserver has exceeded one of its resource limits.": "Via hejmservilo atingis iun limon de rimedoj.",
     "Ok": "Bone",
-    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "La administranto de via servilo malŝaltis implicitan tutvojan ĉifradon en privataj kaj individuaj ĉambroj.",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "La aŭtentikeco de ĉi tiu ĉifrita mesaĝo ne povas esti garantiita sur ĉi tiu aparato.",
-    "No recently visited rooms": "Neniuj freŝdate vizititaj ĉambroj",
     "Message preview": "Antaŭrigardo al mesaĝo",
     "Room options": "Elektebloj pri ĉambro",
     "Wrong file type": "Neĝusta dosiertipo",
@@ -709,7 +619,6 @@
     "You can only pin up to %(count)s widgets": {
         "other": "Vi povas fiksi maksimume %(count)s fenestraĵojn"
     },
-    "Explore public rooms": "Esplori publikajn ĉambrojn",
     "Show Widgets": "Montri fenestraĵojn",
     "Hide Widgets": "Kaŝi fenestraĵojn",
     "Backup version:": "Repaŝa versio:",
@@ -993,7 +902,6 @@
     "Decline All": "Rifuzi ĉion",
     "This widget would like to:": "Ĉi tiu fenestraĵo volas:",
     "Approve widget permissions": "Aprobi rajtojn de fenestraĵo",
-    "Recently visited rooms": "Freŝe vizititiaj ĉambroj",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Averte, se vi ne aldonos retpoŝtadreson kaj poste forgesos vian pasvorton, vi eble <b>por ĉiam perdos aliron al via konto</b>.",
     "Continuing without email": "Daŭrigante sen retpoŝtadreso",
     "Transfer": "Transdoni",
@@ -1005,8 +913,6 @@
     "Dial pad": "Ciferplato",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Ĉi tiu kutime influas nur traktadon de la ĉambro servil-flanke. Se vi spertas problemojn pri via %(brand)s, bonvolu raporti eraron.",
     "Suggested Rooms": "Rekomendataj ĉambroj",
-    "Private space": "Privata aro",
-    "Public space": "Publika aro",
     "<inviter/> invites you": "<inviter/> invitas vin",
     "No results found": "Neniuj rezultoj troviĝis",
     "%(count)s rooms": {
@@ -1028,8 +934,6 @@
     "Space selection": "Elekto de aro",
     "Edit devices": "Redakti aparatojn",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.": "Vi ne povos malfari ĉi tiun ŝanĝon, ĉar vi malrangaltigas vin mem; se vi estas la lasta altranga uzanto de la aro, vi ne plu povos rehavi viajn rajtojn.",
-    "Add existing room": "Aldoni jaman ĉambron",
-    "Invite to this space": "Inviti al ĉi tiu aro",
     "Your message was sent": "Via mesaĝo sendiĝis",
     "Leave space": "Forlasi aron",
     "Create a space": "Krei aron",
@@ -1064,7 +968,6 @@
     "No microphone found": "Neniu mikrofono troviĝis",
     "We were unable to access your microphone. Please check your browser settings and try again.": "Ni ne povis aliri vian mikrofonon. Bonvolu kontroli la agordojn de via foliumilo kaj reprovi.",
     "Unable to access your microphone": "Ne povas aliri vian mikrofonon",
-    "You have no ignored users.": "Vi malatentas neniujn uzantojn.",
     "Modal Widget": "Reĝima fenestraĵo",
     "Consult first": "Unue konsulti",
     "Enter your Security Phrase a second time to confirm it.": "Enigu vian Sekurecan frazon duafoje por ĝin konfirmi.",
@@ -1090,22 +993,9 @@
         "other": "Nun aliĝante al %(count)s ĉambroj"
     },
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Via %(brand)so ne permesas al vi uzi kunigilon por tio. Bonvolu kontakti administranton.",
-    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Kunigiloj ricevas agordajn datumojn, kaj povas modifi fenestraĵojn, sendi invitojn al ĉambroj, kaj vianome agordi povnivelojn.",
-    "Use an integration manager to manage bots, widgets, and sticker packs.": "Uzu kunigilon por administrado de robotoj, fenestraĵoj, kaj glumarkaroj.",
-    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Uzu kunigilon <b>(%(serverName)s)</b> por administrado de robotoj, fenestraĵoj, kaj glumarkaroj.",
-    "Identity server (%(server)s)": "Identiga servilo (%(server)s)",
-    "Could not connect to identity server": "Ne povis konektiĝi al identiga servilo",
-    "Not a valid identity server (status code %(code)s)": "Nevalida identiga servilo (statkodo %(code)s)",
-    "Address": "Adreso",
     "This space has no local addresses": "Ĉi tiu aro ne havas lokajn adresojn",
     "Stop recording": "Malŝalti registradon",
     "Send voice message": "Sendi voĉmesaĝon",
-    "Show %(count)s other previews": {
-        "one": "Montri %(count)s alian antaŭrigardon",
-        "other": "Montri %(count)s aliajn antaŭrigardojn"
-    },
-    "Space information": "Informoj pri aro",
-    "Identity server URL must be HTTPS": "URL de identiga servilo devas esti je HTTPS",
     "To publish an address, it needs to be set as a local address first.": "Por ke adreso publikiĝu, ĝi unue devas esti loka adreso.",
     "Published addresses can be used by anyone on any server to join your room.": "Publikigitajn adresojn povas uzi ajna persono sur ajna servilo por aliĝi al via ĉambro.",
     "Published addresses can be used by anyone on any server to join your space.": "Publikigitajn adresojn povas uzi ajna persono sur ajna servilo por aliĝi al via aro.",
@@ -1139,7 +1029,6 @@
     "Anyone in <SpaceName/> will be able to find and join.": "Ĉiu en <SpaceName/> povos ĝin trovi kaj aliĝi.",
     "Private space (invite only)": "Privata aro (nur por invititoj)",
     "Space visibility": "Videbleco de aro",
-    "Public room": "Publika ĉambro",
     "Adding spaces has moved.": "Aldonejo de aroj moviĝis.",
     "Search for rooms": "Serĉi ĉambrojn",
     "Search for spaces": "Serĉi arojn",
@@ -1175,8 +1064,6 @@
     "Some encryption parameters have been changed.": "Ŝanĝiĝis iuj parametroj de ĉifrado.",
     "Role in <RoomName/>": "Rolo en <RoomName/>",
     "Message didn't send. Click for info.": "Mesaĝo ne sendiĝis. Klaku por akiri informojn.",
-    "Unknown failure": "Nekonata malsukceso",
-    "Failed to update the join rules": "Malsukcesis ĝisdatigi regulojn pri aliĝo",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Ĉu vi certas, ke vi volas fini ĉi tiun balotenketon? Ĉi tio montros la finajn rezultojn de la balotenketo kaj malhelpos personojn povi voĉdoni.",
     "End Poll": "Finu Balotenketon",
     "Sorry, the poll did not end. Please try again.": "Pardonu, la balotenketo ne finiĝis. Bonvolu reprovi.",
@@ -1307,7 +1194,11 @@
         "general": "Ĝeneralaj",
         "profile": "Profilo",
         "display_name": "Vidiga nomo",
-        "user_avatar": "Profilbildo"
+        "user_avatar": "Profilbildo",
+        "authentication": "Aŭtentikigo",
+        "public_room": "Publika ĉambro",
+        "public_space": "Publika aro",
+        "private_space": "Privata aro"
     },
     "action": {
         "continue": "Daŭrigi",
@@ -1402,7 +1293,11 @@
         "unban": "Malforbari",
         "click_to_copy": "Klaku por kopii",
         "hide_advanced": "Kaŝi specialajn",
-        "show_advanced": "Montri specialajn"
+        "show_advanced": "Montri specialajn",
+        "unignore": "Reatenti",
+        "explore_rooms": "Esplori ĉambrojn",
+        "add_existing_room": "Aldoni jaman ĉambron",
+        "explore_public_rooms": "Esplori publikajn ĉambrojn"
     },
     "a11y": {
         "user_menu": "Menuo de uzanto",
@@ -1415,7 +1310,8 @@
             "one": "1 nelegita mesaĝo."
         },
         "unread_messages": "Nelegitaj mesaĝoj.",
-        "jump_first_invite": "Salti al unua invito."
+        "jump_first_invite": "Salti al unua invito.",
+        "room_name": "Ĉambro %(name)s"
     },
     "labs": {
         "video_rooms": "Videoĉambroj",
@@ -1667,7 +1563,14 @@
         "inline_url_previews_room_account": "Ŝalti URL-antaŭrigardon en ĉi tiu ĉambro (nur por vi)",
         "inline_url_previews_room": "Ŝalti URL-antaŭrigardon por anoj de ĉi tiu ĉambro",
         "voip": {
-            "mirror_local_feed": "Speguli lokan filmon"
+            "mirror_local_feed": "Speguli lokan filmon",
+            "missing_permissions_prompt": "Mankas aŭdovidaj permesoj; klaku al la suba butono por peti.",
+            "request_permissions": "Peti aŭdovidajn permesojn",
+            "audio_output": "Sona eligo",
+            "audio_output_empty": "Neniu soneligo troviĝis",
+            "audio_input_empty": "Neniu mikrofono troviĝis",
+            "video_input_empty": "Neniu kamerao troviĝis",
+            "title": "Voĉo kaj vido"
         },
         "security": {
             "message_search_disable_warning": "Post malŝalto, mesaĝoj el ĉifritaj ĉambroj ne aperos en serĉorezultoj.",
@@ -1735,7 +1638,11 @@
             "key_backup_connect": "Konekti ĉi tiun salutaĵon al Savkopiado de ŝlosiloj",
             "key_backup_complete": "Ĉiuj ŝlosiloj estas savkopiitaj",
             "key_backup_algorithm": "Algoritmo:",
-            "key_backup_inactive_warning": "Viaj ŝlosiloj <b>ne estas savkopiataj el ĉi tiu salutaĵo</b>."
+            "key_backup_inactive_warning": "Viaj ŝlosiloj <b>ne estas savkopiataj el ĉi tiu salutaĵo</b>.",
+            "key_backup_active_version_none": "Neniu",
+            "ignore_users_empty": "Vi malatentas neniujn uzantojn.",
+            "ignore_users_section": "Malatentaj uzantoj",
+            "e2ee_default_disabled_warning": "La administranto de via servilo malŝaltis implicitan tutvojan ĉifradon en privataj kaj individuaj ĉambroj."
         },
         "preferences": {
             "room_list_heading": "Ĉambrolisto",
@@ -1801,7 +1708,39 @@
             "add_msisdn_dialog_title": "Aldoni telefonnumeron",
             "name_placeholder": "Sen vidiga nomo",
             "error_saving_profile_title": "Malsukcesis konservi vian profilon",
-            "error_saving_profile": "La ago ne povis finiĝi"
+            "error_saving_profile": "La ago ne povis finiĝi",
+            "error_password_change_403": "Malsukcesis ŝanĝi la pasvorton. Ĉu via pasvorto estas ĝusta?",
+            "emails_heading": "Retpoŝtadresoj",
+            "msisdns_heading": "Telefonnumeroj",
+            "discovery_needs_terms": "Konsentu al uzkondiĉoj de la identiga servilo (%(serverName)s) por esti trovita per retpoŝtadreso aŭ telefonnumero.",
+            "deactivate_section": "Malaktivigi konton",
+            "account_management_section": "Administrado de kontoj",
+            "discovery_section": "Trovado",
+            "error_revoke_email_discovery": "Ne povas senvalidigi havigadon je retpoŝtadreso",
+            "error_share_email_discovery": "Ne povas havigi vian retpoŝtadreson",
+            "email_not_verified": "Via retpoŝtadreso ankoraŭ ne kontroliĝis",
+            "email_verification_instructions": "Klaku la ligilon en la ricevita retletero por kontroli, kaj poste reklaku al « daŭrigi ».",
+            "error_email_verification": "Retpoŝtadreso ne kontroleblas.",
+            "discovery_email_verification_instructions": "Kontrolu la ligilon en via ricevujo",
+            "discovery_email_empty": "Eltrovaj agordoj aperos kiam vi aldonos supre retpoŝtadreson.",
+            "error_revoke_msisdn_discovery": "Ne povas senvalidigi havigadon je telefonnumero",
+            "error_share_msisdn_discovery": "Ne povas havigi telefonnumeron",
+            "error_msisdn_verification": "Ne povas kontroli telefonnumeron.",
+            "incorrect_msisdn_verification": "Malĝusta kontrola kodo",
+            "msisdn_verification_instructions": "Bonvolu enigi kontrolan kodon senditan per tekstmesaĝo.",
+            "msisdn_verification_field_label": "Kontrola kodo",
+            "discovery_msisdn_empty": "Eltrovaj agordoj aperos kiam vi aldonos telefonnumeron supre.",
+            "error_set_name": "Malsukcesis agordi vidigan nomon",
+            "error_remove_3pid": "Ne povas forigi kontaktajn informojn",
+            "remove_email_prompt": "Ĉu forigi %(email)s?",
+            "error_invalid_email": "Malvalida retpoŝtadreso",
+            "error_invalid_email_detail": "Tio ĉi ne ŝajnas esti valida retpoŝtadreso",
+            "error_add_email": "Ne povas aldoni retpoŝtadreson",
+            "add_email_instructions": "Ni sendis al vi retleteron por konfirmi vian adreson. Bonvolu sekvi la tieajn intrukciojn kaj poste klaki al la butono sube.",
+            "email_address_label": "Retpoŝtadreso",
+            "remove_msisdn_prompt": "Ĉu forigi %(phone)s?",
+            "add_msisdn_instructions": "Tekstmesaĝo sendiĝis al +%(msisdn)s. Bonvolu enigi la kontrolan kodon enhavitan.",
+            "msisdn_label": "Telefonnumero"
         },
         "sidebar": {
             "title": "Flanka kolumno",
@@ -2168,6 +2107,13 @@
             "external_url": "Fonta URL",
             "collapse_reply_thread": "Maletendi respondan fadenon",
             "report": "Raporti"
+        },
+        "url_preview": {
+            "show_n_more": {
+                "one": "Montri %(count)s alian antaŭrigardon",
+                "other": "Montri %(count)s aliajn antaŭrigardojn"
+            },
+            "close": "Fermi antaŭrigardon"
         }
     },
     "slash_command": {
@@ -2399,7 +2345,14 @@
             "permissions_section": "Permesoj",
             "permissions_section_description_space": "Elekti rolojn bezonatajn por ŝanĝado de diversaj partoj de la aro",
             "permissions_section_description_room": "Elektu la rolojn postulatajn por ŝanĝado de diversaj partoj de la ĉambro",
-            "add_privileged_user_heading": "Aldoni rajtigitan uzanton"
+            "add_privileged_user_heading": "Aldoni rajtigitan uzanton",
+            "error_unbanning": "Malsukcesis malforbari",
+            "banned_by": "Forbarita de %(displayName)s",
+            "ban_reason": "Kialo",
+            "error_changing_pl_reqs_title": "Eraris ŝanĝo de postulo de povnivelo",
+            "error_changing_pl_reqs_description": "Eraris ŝanĝo de la postuloj de la ĉambro pri povnivelo. Certigu, ke vi havas sufiĉajn permesojn, kaj reprovu.",
+            "error_changing_pl_title": "Eraris ŝanĝo de povnivelo",
+            "error_changing_pl_description": "Eraris ŝanĝo de povnivelo de la uzanto. Certigu, ke vi havas sufiĉajn permesojn, kaj reprovu."
         },
         "security": {
             "strict_encryption": "Neniam sendi ĉifritajn mesaĝojn al nekontrolitaj salutaĵoj en ĉi tiu ĉambro de ĉi tiu salutaĵo",
@@ -2449,7 +2402,9 @@
             "join_rule_upgrade_updating_spaces": {
                 "one": "Ĝisdatigante aro...",
                 "other": "Ĝisdatigante arojn... (%(progress)s el %(count)s)"
-            }
+            },
+            "error_join_rule_change_title": "Malsukcesis ĝisdatigi regulojn pri aliĝo",
+            "error_join_rule_change_unknown": "Nekonata malsukceso"
         },
         "general": {
             "publish_toggle": "Ĉu publikigi ĉi tiun ĉambron per la katalogo de ĉambroj de %(domain)s?",
@@ -2463,14 +2418,18 @@
             "error_save_space_settings": "Malsukcesis konservi agordojn de aro.",
             "description_space": "Redaktu agordojn pri via aro.",
             "save": "Konservi ŝanĝojn",
-            "leave_space": "Forlasi aron"
+            "leave_space": "Forlasi aron",
+            "aliases_section": "Adresoj de ĉambro",
+            "other_section": "Alia"
         },
         "advanced": {
             "unfederated": "Ĉi tiu ĉambro ne atingeblas por foraj serviloj de Matrix",
             "room_upgrade_button": "Gradaltigi ĉi tiun ĉambron al rekomendata ĉambra versio",
             "room_predecessor": "Montri pli malnovajn mesaĝojn en %(roomName)s.",
             "room_version_section": "Ĉambra versio",
-            "room_version": "Ĉambra versio:"
+            "room_version": "Ĉambra versio:",
+            "information_section_space": "Informoj pri aro",
+            "information_section_room": "Informoj pri ĉambro"
         },
         "delete_avatar_label": "Forigi profilbildon",
         "upload_avatar_label": "Alŝuti profilbildon",
@@ -2484,11 +2443,23 @@
             "history_visibility_anyone_space": "Antaŭrigardi aron",
             "history_visibility_anyone_space_description": "Povigi personojn antaŭrigardi vian aron antaŭ aliĝo.",
             "history_visibility_anyone_space_recommendation": "Rekomendita por publikaj aroj.",
-            "guest_access_label": "Ŝalti aliron de gastoj"
+            "guest_access_label": "Ŝalti aliron de gastoj",
+            "alias_section": "Adreso"
         },
         "access": {
             "title": "Aliro",
             "description_space": "Decidu, kiu povas rigardi kaj aliĝi aron %(spaceName)s."
+        },
+        "bridges": {
+            "description": "Ĉi tiu ĉambro transpontigas mesaĝojn al la jenaj platformoj. <a>Eksciu plion.</a>",
+            "title": "Pontoj"
+        },
+        "notifications": {
+            "uploaded_sound": "Alŝutita sono",
+            "sounds_section": "Sonoj",
+            "notification_sound": "Sono de sciigo",
+            "custom_sound_prompt": "Agordi novan propran sonon",
+            "browse_button": "Foliumi"
         }
     },
     "encryption": {
@@ -2701,7 +2672,9 @@
         "show_less": "Montri malpli",
         "notification_options": "Elektebloj pri sciigoj",
         "failed_remove_tag": "Malsukcesis forigi etikedon %(tagName)s el la ĉambro",
-        "failed_add_tag": "Malsukcesis aldoni etikedon %(tagName)s al ĉambro"
+        "failed_add_tag": "Malsukcesis aldoni etikedon %(tagName)s al ĉambro",
+        "breadcrumbs_label": "Freŝe vizititiaj ĉambroj",
+        "breadcrumbs_empty": "Neniuj freŝdate vizititaj ĉambroj"
     },
     "report_content": {
         "missing_reason": "Bonvolu skribi, kial vi raportas.",
@@ -2936,7 +2909,8 @@
         "search_children": "Serĉi je %(spaceName)s",
         "invite_link": "Diskonigi invitan ligilon",
         "invite": "Inviti personojn",
-        "invite_description": "Inviti per retpoŝtadreso aŭ uzantonomo"
+        "invite_description": "Inviti per retpoŝtadreso aŭ uzantonomo",
+        "invite_this_space": "Inviti al ĉi tiu aro"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Ĉi tiu hejmservilo ne estas agordita por montri mapojn.",
@@ -2979,7 +2953,8 @@
         "lists_heading": "Abonataj listoj",
         "lists_description_1": "Abono de listo de forbaroj aligos vin al ĝi!",
         "lists_description_2": "Se vi ne volas tion, bonvolu uzi alian ilon por malatenti uzantojn.",
-        "lists_new_label": "Ĉambra identigilo aŭ adreso de listo de forbaroj"
+        "lists_new_label": "Ĉambra identigilo aŭ adreso de listo de forbaroj",
+        "rules_empty": "Neniu"
     },
     "create_space": {
         "name_required": "Bonvolu enigi nomon por la aro",
@@ -3058,7 +3033,8 @@
             "favourite": "Elstarigi",
             "low_priority": "Malalta prioritato",
             "forget": "Forgesi ĉambron"
-        }
+        },
+        "invite_this_room": "Inviti al ĉi tiu ĉambro"
     },
     "file_panel": {
         "guest_note": "Vi devas <a>registriĝî</a> por uzi tiun ĉi funkcion",
@@ -3190,7 +3166,9 @@
         "keyword_new": "Nova ĉefvorto",
         "class_global": "Ĉie",
         "class_other": "Alia",
-        "mentions_keywords": "Mencioj kaj ĉefvortoj"
+        "mentions_keywords": "Mencioj kaj ĉefvortoj",
+        "default": "Ordinara",
+        "all_messages": "Ĉiuj mesaĝoj"
     },
     "mobile_guide": {
         "toast_title": "Uzu aplikaĵon por pli bona sperto",
@@ -3211,6 +3189,38 @@
     "a11y_jump_first_unread_room": "Salti al unua nelegita ĉambro.",
     "integration_manager": {
         "error_connecting_heading": "Ne povas konektiĝi al kunigilo",
-        "error_connecting": "La kunigilo estas eksterreta aŭ ne povas atingi vian hejmservilon."
+        "error_connecting": "La kunigilo estas eksterreta aŭ ne povas atingi vian hejmservilon.",
+        "use_im_default": "Uzu kunigilon <b>(%(serverName)s)</b> por administrado de robotoj, fenestraĵoj, kaj glumarkaroj.",
+        "use_im": "Uzu kunigilon por administrado de robotoj, fenestraĵoj, kaj glumarkaroj.",
+        "manage_title": "Administri kunigojn",
+        "explainer": "Kunigiloj ricevas agordajn datumojn, kaj povas modifi fenestraĵojn, sendi invitojn al ĉambroj, kaj vianome agordi povnivelojn."
+    },
+    "identity_server": {
+        "url_not_https": "URL de identiga servilo devas esti je HTTPS",
+        "error_invalid": "Nevalida identiga servilo (statkodo %(code)s)",
+        "error_connection": "Ne povis konektiĝi al identiga servilo",
+        "checking": "Kontrolante servilon",
+        "change": "Ŝanĝi identigan servilon",
+        "change_prompt": "Ĉu malkonekti de la nuna identiga servilo <current /> kaj konekti anstataŭe al <new />?",
+        "error_invalid_or_terms": "Aŭ uzkondiĉoj ne akceptiĝis, aŭ la identiga servilo estas nevalida.",
+        "no_terms": "La identiga servilo, kiun vi elektis, havas neniujn uzkondiĉojn.",
+        "disconnect": "Malkonekti la identigan servilon",
+        "disconnect_server": "Ĉu malkonektiĝi de la identiga servilo <idserver />?",
+        "disconnect_offline_warning": "Vi <b>forigu viajn personajn datumojn</b> de identiga servilo <idserver /> antaŭ ol vi malkonektiĝos. Bedaŭrinde, identiga servilo <idserver /> estas nuntempe eksterreta kaj ne eblas ĝin atingi.",
+        "suggestions": "Vi devus:",
+        "suggestions_1": "kontrolu kromprogramojn de via foliumilo je ĉio, kio povus malhelpi konekton al la identiga servilo (ekzemple « Privacy Badger »)",
+        "suggestions_2": "kontaktu la administrantojn de la identiga servilo <idserver />",
+        "suggestions_3": "atendu, kaj reprovu poste",
+        "disconnect_anyway": "Tamen malkonekti",
+        "disconnect_personal_data_warning_1": "Vi ankoraŭ <b>havigas siajn personajn datumojn</b> je la identiga servilo <idserver />.",
+        "disconnect_personal_data_warning_2": "Ni rekomendas, ke vi forigu viajn retpoŝtadresojn kaj telefonnumerojn de la identiga servilo, antaŭ ol vi malkonektiĝos.",
+        "url": "Identiga servilo (%(server)s)",
+        "description_connected": "Vi nun uzas servilon <server></server> por trovi kontaktojn, kaj troviĝi de ili. Vi povas ŝanĝi vian identigan servilon sube.",
+        "change_server_prompt": "Se vi ne volas uzi servilon <server /> por trovi kontaktojn kaj troviĝi mem, enigu alian identigan servilon sube.",
+        "description_disconnected": "Vi nun ne uzas identigan servilon. Por trovi kontaktojn kaj troviĝi de ili mem, aldonu iun sube.",
+        "disconnect_warning": "Malkonektiĝo de via identiga servilo signifas, ke vi ne povos troviĝi de aliaj uzantoj, kaj vi ne povos memage inviti aliajn per retpoŝto aŭ telefono.",
+        "description_optional": "Vi ne devas uzi identigan servilon. Se vi tion elektos, vi ne povos troviĝi de aliaj uzantoj, kaj vi ne povos memage inviti ilin per retpoŝto aŭ telefono.",
+        "do_not_use": "Ne uzi identigan servilon",
+        "url_field_label": "Enigi novan identigan servilon"
     }
 }

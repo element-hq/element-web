@@ -215,7 +215,7 @@ const NewRoomIntro: React.FC = () => {
                             defaultDispatcher.dispatch({ action: "view_invite", roomId });
                         }}
                     >
-                        {_t("Invite to this room")}
+                        {_t("room|invite_this_room")}
                     </AccessibleButton>
                 </div>
             );

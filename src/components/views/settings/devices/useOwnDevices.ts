@@ -194,8 +194,8 @@ export const useOwnDevices = (): DevicesState => {
                 await matrixClient.setDeviceDetails(deviceId, { display_name: deviceName });
                 await refreshDevices();
             } catch (error) {
-                logger.error("Error setting session display name", error);
-                throw new Error(_t("Failed to set display name"));
+                logger.error("Error setting device name", error);
+                throw new Error(_t("settings|sessions|error_set_name"));
             }
         },
         [matrixClient, devices, refreshDevices],
@@ -217,7 +217,7 @@ export const useOwnDevices = (): DevicesState => {
                 }
             } catch (error) {
                 logger.error("Error setting pusher state", error);
-                throw new Error(_t("Failed to set pusher state"));
+                throw new Error(_t("settings|sessions|error_pusher_state"));
             } finally {
                 await refreshDevices();
             }

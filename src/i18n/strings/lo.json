@@ -199,7 +199,6 @@
     "Permission Required": "ຕ້ອງການອະນຸຍາດ",
     "Moderator": "ຜູ້ດຳເນິນລາຍການ",
     "Restricted": "ຖືກຈຳກັດ",
-    "Default": "ຄ່າເລີ່ມຕົ້ນ",
     "Zimbabwe": "ຊິມບັບເວ",
     "Zambia": "ແຊມເບຍ",
     "Yemen": "ເຢເມນ",
@@ -292,71 +291,9 @@
     "You have verified this user. This user has verified all of their sessions.": "ທ່ານໄດ້ຢັ້ງຢືນຜູ້ໃຊ້ນີ້ແລ້ວ. ຜູ້ໃຊ້ນີ້ໄດ້ຢັ້ງຢືນທຸກເງິຶອນໄຂຂອງເຂົາເຈົ້າແລ້ວ.",
     "You have not verified this user.": "ທ່ານຍັງບໍ່ໄດ້ຢືນຢັນຜູ້ໃຊ້ນີ້.",
     "This user has not verified all of their sessions.": "ຜູ້ໃຊ້ນີ້ຍັງບໍ່ໄດ້ຢຶນຢັນການເຂົ້າຮ່ວມຂອງເຂົາເຈົ້າທັງຫມົດຂອງ.",
-    "Phone Number": "ເບີໂທລະສັບ",
-    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "ຂໍ້ຄວາມໄດ້ຖືກສົ່ງໄປຫາ +%(msisdn)s. ກະລຸນາໃສ່ລະຫັດຢືນຢັນ.",
-    "Remove %(phone)s?": "ລຶບ %(phone)sອອກບໍ?",
-    "Email Address": "ທີ່ຢູ່ອີເມວ",
-    "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "ພວກເຮົາໄດ້ສົ່ງອີເມວຫາທ່ານເພື່ອຢືນຢັນທີ່ຢູ່ຂອງທ່ານ. ກະລຸນາປະຕິບັດຕາມຄໍາແນະນໍາຢູ່ທີ່ນັ້ນ ແລະ ຫຼັງຈາກນັ້ນໃຫ້ຄລິກໃສ່ປຸ່ມຂ້າງລຸ່ມນີ້.",
-    "Unable to add email address": "ບໍ່ສາມາດເພີ່ມທີ່ຢູ່ອີເມວໄດ້",
-    "This doesn't appear to be a valid email address": "ສິ່ງນີ້ເບິ່ງຄືວ່າບໍ່ແມ່ນທີ່ຢູ່ອີເມວທີ່ຖືກຕ້ອງ",
-    "Invalid Email Address": "ທີ່ຢູ່ອີເມວບໍ່ຖືກຕ້ອງ",
-    "Remove %(email)s?": "ລຶບ %(email)s ອອກບໍ?",
-    "Unable to remove contact information": "ບໍ່ສາມາດລຶບຂໍ້ມູນການຕິດຕໍ່ໄດ້",
-    "Discovery options will appear once you have added a phone number above.": "ຕົວເລືອກການຄົ້ນພົບຈະປາກົດເມື່ອທ່ານໄດ້ເພີ່ມເບີໂທລະສັບຂ້າງເທິງ.",
-    "Verification code": "ລະຫັດຢືນຢັນ",
-    "Please enter verification code sent via text.": "ກະລຸນາໃສ່ລະຫັດຢືນຢັນທີ່ສົ່ງຜ່ານຂໍ້ຄວາມ.",
-    "Incorrect verification code": "ລະຫັດຢືນຢັນບໍ່ຖືກຕ້ອງ",
-    "Unable to verify phone number.": "ບໍ່ສາມາດຢັ້ງຢືນເບີໂທລະສັບໄດ້.",
-    "Unable to share phone number": "ບໍ່ສາມາດແບ່ງປັນເບີໂທລະສັບໄດ້",
-    "Unable to revoke sharing for phone number": "ບໍ່ສາມາດຖອນການແບ່ງປັນສຳລັບເບີໂທລະສັບໄດ້",
-    "Discovery options will appear once you have added an email above.": "ຕົວເລືອກການຄົ້ນພົບຈະປາກົດຂຶ້ນເມື່ອທ່ານໄດ້ເພີ່ມອີເມວຂ້າງເທິງ.",
-    "Verify the link in your inbox": "ຢືນຢັນການເຊື່ອມຕໍ່ໃນ inbox ຂອງທ່ານ",
-    "Unable to verify email address.": "ບໍ່ສາມາດຢັ້ງຢືນທີ່ຢູ່ອີເມວໄດ້.",
-    "Click the link in the email you received to verify and then click continue again.": "ກົດທີ່ລິ້ງໃນອີເມວທີ່ທ່ານໄດ້ຮັບເພື່ອກວດສອບ ແລະ ຈາກນັ້ນກົດສືບຕໍ່ອີກຄັ້ງ.",
-    "Your email address hasn't been verified yet": "ທີ່ຢູ່ອີເມວຂອງທ່ານຍັງບໍ່ໄດ້ຖືກຢືນຢັນເທື່ອ",
-    "Unable to share email address": "ບໍ່ສາມາດແບ່ງປັນທີ່ຢູ່ອີເມວໄດ້",
-    "Unable to revoke sharing for email address": "ບໍ່ສາມາດຖອນການແບ່ງປັນສໍາລັບທີ່ຢູ່ອີເມວໄດ້",
-    "Unknown failure": "ຄວາມລົ້ມເຫຼວທີ່ບໍ່ຮູ້ສາເຫດ",
-    "Failed to update the join rules": "ອັບເດດກົດລະບຽບການເຂົ້າຮ່ວມບໍ່ສຳເລັດ",
-    "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "ເກີດຄວາມຜິດພາດໃນການປ່ຽນແປງລະດັບສິດຂອງຜູ້ໃຊ້. ກວດໃຫ້ແນ່ໃຈວ່າເຈົ້າມີສິດອະນຸຍາດພຽງພໍແລ້ວລອງໃໝ່ອີກຄັ້ງ.",
-    "Error changing power level": "ເກີດຄວາມຜິດພາດໃນການປ່ຽນແປງລະດັບສິດ",
-    "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "ເກີດຄວາມຜິດພາດໃນການປ່ຽນແປງຂໍ້ກຳນົດລະດັບສິດຂອງຫ້ອງ. ກວດໃຫ້ແນ່ໃຈວ່າເຈົ້າມີສິດອະນຸຍາດພຽງພໍແລ້ວລອງໃໝ່ອີກຄັ້ງ.",
-    "Error changing power level requirement": "ເກີດຄວາມຜິດພາດໃນການປ່ຽນແປງຄວາມຕ້ອງການລະດັບພະລັງງານ",
-    "Reason": "ເຫດຜົນ",
-    "Banned by %(displayName)s": "ຫ້າມໂດຍ %(displayName)s",
-    "Failed to unban": "ຍົກເລີກບໍ່ສໍາເລັດ",
-    "Browse": "ຄົ້ນຫາ",
-    "Set a new custom sound": "ຕັ້ງສຽງແບບກຳນົດເອງ",
-    "Notification sound": "ສຽງແຈ້ງເຕຶອນ",
-    "Sounds": "ສຽງ",
-    "You won't get any notifications": "ທ່ານຈະບໍ່ໄດ້ຮັບການແຈ້ງເຕືອນໃດໆ",
-    "Get notified only with mentions and keywords as set up in your <a>settings</a>": "ຮັບການແຈ້ງເຕືອນພຽງແຕ່ມີການກ່າວເຖິງ ແລະ ຄໍາທີ່ກຳນົດໄວ້ໃນ<a>settings</a>ຂອງທ່ານ",
-    "@mentions & keywords": "@ກ່າວເຖິງ & ຄໍາສໍາຄັນ",
-    "Get notified for every message": "ໄດ້ຮັບການແຈ້ງເຕືອນສໍາລັບທຸກໆຂໍ້ຄວາມ",
-    "All messages": "ຂໍ້ຄວາມທັງໝົດ",
-    "Get notifications as set up in your <a>settings</a>": "ຮັບການແຈ້ງເຕືອນຕາມທີ່ກຳນົດໄວ້ໃນ <a>ການຕັ້ງຄ່າ</a> ຂອງທ່ານ",
-    "Uploaded sound": "ອັບໂຫຼດສຽງ",
-    "Room Addresses": "ທີ່ຢູ່ຂອງຫ້ອງ",
-    "Bridges": "ເປັນຂົວຕໍ່",
-    "This room isn't bridging messages to any platforms. <a>Learn more.</a>": "ຫ້ອງນີ້ບໍ່ໄດ້ເຊື່ອມຕໍ່ຂໍ້ຄວາມໄປຫາພັລດຟອມໃດໆ. <a>ສຶກສາເພີ່ມເຕີມ.</a>",
-    "This room is bridging messages to the following platforms. <a>Learn more.</a>": "ຫ້ອງນີ້ກໍາລັງເຊື່ອມຕໍ່ຂໍ້ຄວາມໄປຫາພັລດຟອມຕໍ່ໄປນີ້. <a>ສຶກສາເພີ່ມເຕີມ.</a>",
-    "Space information": "ຂໍ້ມູນພື້ນທີ່",
-    "Voice & Video": "ສຽງ & ວິດີໂອ",
-    "No Webcams detected": "ບໍ່ພົບ Webcam",
-    "No Microphones detected": "ບໍ່ພົບໄມໂຄຣໂຟນ",
-    "No Audio Outputs detected": "ບໍ່ພົບສຽງອອກ",
-    "Audio Output": "ສຽງອອກ",
-    "Request media permissions": "ຮ້ອງຂໍການອະນຸຍາດສື່ມວນຊົນ",
-    "Missing media permissions, click the button below to request.": "ບໍ່ອະນຸຍາດສື່, ກົດໄປທີ່ປຸ່ມຂ້າງລຸ່ມນີ້ເພື່ອຮ້ອງຂໍ.",
-    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "ຜູ້ຄຸມເຊີບເວີຂອງທ່ານໄດ້ປິດການນຳໃຊ້ການເຂົ້າລະຫັດແບບຕົ້ນທາງຮອດປາຍທາງໂດຍຄ່າເລີ່ມຕົ້ນໃນຫ້ອງສ່ວນຕົວ ແລະ ຂໍ້ຄວາມໂດຍກົງ.",
-    "You have no ignored users.": "ທ່ານບໍ່ມີຜູ້ໃຊ້ທີ່ຖືກລະເລີຍ.",
-    "Unignore": "ບໍ່ສົນໃຈ",
-    "Ignored users": "ຜູ້ໃຊ້ຖືກຍົກເວັ້ນ",
-    "None": "ບໍ່ມີ",
     "Warning!": "ແຈ້ງເຕືອນ!",
     "To join a space you'll need an invite.": "ເພື່ອເຂົ້າຮ່ວມພື້ນທີ່, ທ່ານຈະຕ້ອງການເຊີນ.",
     "Create a space": "ສ້າງພື້ນທີ່",
-    "Address": "ທີ່ຢູ່",
     "Space selection": "ການເລືອກພື້ນທີ່",
     "Folder": "ໂຟນເດີ",
     "Headphones": "ຫູຟັງ",
@@ -520,7 +457,6 @@
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "ພະຍາຍາມໂຫຼດຈຸດສະເພາະໃນທາມລາຍຂອງຫ້ອງນີ້, ແຕ່ບໍ່ສາມາດຊອກຫາມັນໄດ້.",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "ພະຍາຍາມໂຫຼດຈຸດສະເພາະຢູ່ໃນທາມລາຍຂອງຫ້ອງນີ້, ແຕ່ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເບິ່ງຂໍ້ຄວາມທີ່ເປັນຄໍາຖາມ.",
     "<inviter/> invites you": "<inviter/> ເຊີນທ່ານ",
-    "Private space": "ພື້ນທີ່ສ່ວນຕົວ",
     "Search names and descriptions": "ຄົ້ນຫາຊື່ ແລະ ຄໍາອະທິບາຍ",
     "Rooms and spaces": "ຫ້ອງ ແລະ ພຶ້ນທີ່",
     "Results": "ຜົນຮັບ",
@@ -719,7 +655,6 @@
     "Verify with Security Key or Phrase": "ຢືນຢັນດ້ວຍກະແຈຄວາມປອດໄພ ຫຼືປະໂຫຍກ",
     "Proceed with reset": "ດຳເນີນການຕັ້ງຄ່າໃໝ່",
     "It looks like you don't have a Security Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.": "ເບິ່ງຄືວ່າທ່ານບໍ່ມີກະແຈຄວາມປອດໄພ ຫຼື ອຸປະກອນອື່ນໆທີ່ທ່ານສາມາດຢືນຢັນໄດ້. ອຸປະກອນນີ້ຈະບໍ່ສາມາດເຂົ້າເຖິງຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດເກົ່າໄດ້. ເພື່ອຢືນຢັນຕົວຕົນຂອງທ່ານໃນອຸປະກອນນີ້, ທ່ານຈຳເປັນຕ້ອງຕັ້ງລະຫັດຢືນຢັນຂອງທ່ານ.",
-    "Failed to set display name": "ກຳນົດການສະເເດງຊື່ບໍ່ສຳເລັດ",
     "Reset event store": "ກູ້ຄືນທີ່ຈັດເກັບ",
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "ຖ້າທ່ານດຳເນິນການ, ກະລຸນາຮັບຊາບວ່າຂໍ້ຄວາມຂອງທ່ານຈະບໍ່ຖືກລຶບ, ແຕ່ການຊອກຫາອາດຈະຖືກຫຼຸດໜ້ອຍລົງເປັນເວລາສອງສາມນາທີໃນຂະນະທີ່ດັດສະນີຈະຖືກສ້າງໃໝ່",
     "You most likely do not want to reset your event index store": "ສ່ວນຫຼາຍແລ້ວທ່ານບໍ່ຢາກຈະກູ້ຄືນດັດສະນີຂອງທ່ານ",
@@ -925,14 +860,12 @@
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "ກ່ອນໜ້ານີ້ທ່ານເຄີຍໃຊ້%(brand)sເວີຊັ້ນໃໝ່ກວ່າໃນລະບົບນີ້. ເພື່ອໃຊ້ເວີຊັ້ນນີ້ອີກເທື່ອໜຶ່ງດ້ວຍການເຂົ້າລະຫັດແບບຕົ້ນທາງເຖິງປາຍທາງ, ທ່ານຈະຕ້ອງອອກຈາກລະບົບ ແລະ ກັບຄືນເຂົ້າລະຫັດໃໝ່ອີກຄັ້ງ.",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "ເພື່ອຫຼີກເວັ້ນການສູນເສຍປະຫວັດການສົນທະນາຂອງທ່ານ, ທ່ານຕ້ອງອອກກະແຈຫ້ອງຂອງທ່ານກ່ອນທີ່ຈະອອກຈາກລະບົບ. ທ່ານຈະຕ້ອງໄດ້ກັບຄືນໄປຫາເວີຊັ້ນໃຫມ່ຂອງ %(brand)s ເພື່ອເຮັດສິ່ງນີ້",
     "Want to add an existing space instead?": "ຕ້ອງການເພີ່ມພື້ນທີ່ທີ່ມີຢູ່ແທນບໍ?",
-    "Public space": "ພື້ນທີ່ສາທາລະນະ",
     "Private space (invite only)": "ພື້ນທີ່ສ່ວນຕົວ (ເຊີນເທົ່ານັ້ນ)",
     "Space visibility": "ການເບິ່ງເຫັນພຶ້ນທີ່",
     "Add a space to a space you manage.": "ເພີ່ມພື້ນທີ່ໃສ່ພື້ນທີ່ທີ່ທ່ານຈັດການ.",
     "Only people invited will be able to find and join this space.": "ມີແຕ່ຄົນທີ່ຖືກເຊີນເທົ່ານັ້ນທີ່ສາມາດຊອກຫາ ແລະເຂົ້າຮ່ວມພື້ນທີ່ນີ້ໄດ້.",
     "Anyone will be able to find and join this space, not just members of <SpaceName/>.": "ທຸກຄົນຈະສາມາດຊອກຫາ ແລະເຂົ້າຮ່ວມພື້ນທີ່ນີ້, ບໍ່ພຽງແຕ່ສະມາຊິກຂອງ <SpaceName/> ເທົ່ານັ້ນ.",
     "Anyone in <SpaceName/> will be able to find and join.": "ທຸກຄົນໃນ <SpaceName/> ຈະສາມາດຊອກຫາ ແລະ ເຂົ້າຮ່ວມໄດ້.",
-    "Public room": "ຫ້ອງສາທາລະນະ",
     "Clear all data": "ລຶບລ້າງຂໍ້ມູນທັງໝົດ",
     "An error has occurred.": "ໄດ້ເກີດຂໍ້ຜິດພາດ.",
     "Sorry, the poll did not end. Please try again.": "ຂໍອະໄພ,ບໍ່ສາມາດສິ້ນສຸດການສຳຫຼວດ. ກະລຸນາລອງອີກຄັ້ງ.",
@@ -947,7 +880,6 @@
     "Moderation": "ປານກາງ",
     "Rooms": "ຫ້ອງ",
     "Widgets": "ວິດເຈັດ",
-    "Room information": "ຂໍ້ມູນຫ້ອງ",
     "Replying": "ກຳລັງຕອບກັບ",
     "Recently viewed": "ເບິ່ງເມື່ອບໍ່ດົນມານີ້",
     "Seen by %(count)s people": {
@@ -1021,11 +953,6 @@
     "Historical": "ປະຫວັດ",
     "Low priority": "ບູລິມະສິດຕໍ່າ",
     "Add room": "ເພີ່ມຫ້ອງ",
-    "Explore public rooms": "ສຳຫຼວດຫ້ອງສາທາລະນະ",
-    "Add existing room": "ເພີ່ມຫ້ອງທີ່ມີຢູ່",
-    "New video room": "ຫ້ອງວິດີໂອໃຫມ່",
-    "New room": "ຫ້ອງໃຫມ່",
-    "Explore rooms": "ການສຳຫຼວດຫ້ອງ",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s%(day)s%(fullYear)s%(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "Tuesday": "ວັນອັງຄານ",
@@ -1073,7 +1000,6 @@
     "Remove them from everything I'm able to": "ລຶບອອກຈາກທຸກສິ່ງທີ່ຂ້ອຍສາມາດເຮັດໄດ້",
     "Remove from %(roomName)s": "ລຶບອອກຈາກ %(roomName)s",
     "Disinvite from %(roomName)s": "ຍົກເລີກເຊີນຈາກ %(roomName)s",
-    "Authentication": "ການຢືນຢັນ",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "ການລຶບລ້າງຂໍ້ມູນທັງໝົດຈາກລະບົບນີ້ຖາວອນ. ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດຈະສູນເສຍເວັ້ນເສຍແຕ່ກະແຈຂອງເຂົາເຈົ້າໄດ້ຮັບການສໍາຮອງຂໍ້ມູນ.",
     "%(duration)sd": "%(duration)sd",
     "This room or space is not accessible at this time.": "ຫ້ອງ ຫຼື ພື້ນທີ່ນີ້ບໍ່ສາມາດເຂົ້າເຖິງໄດ້ໃນເວລານີ້.",
@@ -1177,40 +1103,6 @@
     "Leave space": "ອອກຈາກພື້ນທີ່",
     "Leave some rooms": "ອອກຈາກບາງຫ້ອງ",
     "Leave all rooms": "ອອກຈາກຫ້ອງທັງຫມົດ",
-    "Phone numbers": "ເບີໂທລະສັບ",
-    "Email addresses": "ທີ່ຢູ່ອີເມວ",
-    "Your password was successfully changed.": "ລະຫັດຜ່ານຂອງທ່ານຖືກປ່ຽນສຳເລັດແລ້ວ.",
-    "Failed to change password. Is your password correct?": "ປ່ຽນລະຫັດຜ່ານບໍ່ສຳເລັດ. ລະຫັດຜ່ານຂອງທ່ານຖືກຕ້ອງບໍ?",
-    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "ຜູ້ຈັດການລວມລະບົບໄດ້ຮັບຂໍ້ມູນການຕັ້ງຄ່າ ແລະ ສາມາດແກ້ໄຂ widget, ສົ່ງການເຊີນຫ້ອງ ແລະ ກໍານົດລະດັບພະລັງງານໃນນາມຂອງທ່ານ.",
-    "Manage integrations": "ຈັດການການເຊື່ອມໂຍງ",
-    "Use an integration manager to manage bots, widgets, and sticker packs.": "ໃຊ້ຕົວຈັດການການເຊື່ອມໂຍງເພື່ອຈັດການ bots, widget, ແລະຊຸດສະຕິກເກີ.",
-    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "ໃຊ້ຕົວຈັດການການເຊື່ອມໂຍງ <b>(%(serverName)s)</b> ເພື່ອຈັດການບັອດ, widgets, ແລະ ຊຸດສະຕິກເກີ.",
-    "Enter a new identity server": "ໃສ່ເຊີບເວີໃໝ່",
-    "Do not use an identity server": "ກະລຸນນາຢ່າໃຊ້ເຊີບເວີລະບຸຕົວຕົນ",
-    "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "ການນໍາໃຊ້ຕົວເຊີບເວີເປັນທາງເລືອກ. ຖ້າທ່ານເລືອກທີ່ຈະບໍ່ໃຊ້ຕົວເຊີບເວີ, ທ່ານຈະບໍ່ຖືກຄົ້ນພົບໂດຍຜູ້ໃຊ້ອື່ນ ແລະ ທ່ານຈະບໍ່ສາມາດເຊີນຜູ້ອື່ນໂດຍອີເມລ໌ຫຼືໂທລະສັບ.",
-    "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "ການຕັດການເຊື່ອມຕໍ່ຈາກຕົວເຊີບເວີຂອງທ່ານຈະຫມາຍຄວາມວ່າທ່ານຈະບໍ່ຖືກຄົ້ນຫາໂດຍຜູ້ໃຊ້ອື່ນ ແລະ ທ່ານຈະບໍ່ສາມາດເຊີນຜູ້ອື່ນໂດຍອີເມລ໌ ຫຼື ໂທລະສັບ.",
-    "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "ໃນປັດຈຸບັນທ່ານບໍ່ໄດ້ໃຊ້ເຊີບເວີ. ເພື່ອຄົ້ນຫາ ແລະ ສາມາດຄົ້ນຫາໄດ້ໂດຍຜູ້ຕິດຕໍ່ທີ່ມີຢູ່ແລ້ວ, ໃຫ້ເພີ່ມທີ່ຢຸ່ຂ້າງລຸ່ມນີ້.",
-    "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "ຖ້າຫາກວ່າທ່ານບໍ່ຕ້ອງການທີ່ຈະນໍາໃຊ້ <server /> ເພື່ອຄົ້ນຫາ ແລະ ສາມາດຄົ້ນຫາໂດຍການຕິດຕໍ່ທີ່ມີຢູ່ແລ້ວ, ເຂົ້າໄປໃນຕົວ server ອື່ນຂ້າງລຸ່ມນີ້.",
-    "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "ຕອນນີ້ທ່ານກຳລັງໃຊ້ <server></server> ເພື່ອຄົ້ນຫາ ແລະ ສາມາດຄົ້ນຫາໄດ້ໂດຍຜູ້ຕິດຕໍ່ທີ່ມີຢູ່ແລ້ວ. ທ່ານສາມາດປ່ຽນເຊີບເວນຂອງທ່ານໄດ້ຂ້າງລຸ່ມນີ້.",
-    "Identity server (%(server)s)": "ເຊີບເວີ %(server)s)",
-    "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "ພວກເຮົາແນະນໍາໃຫ້ທ່ານເອົາທີ່ຢູ່ອີເມວ ແລະ ເບີໂທລະສັບຂອງທ່ານອອກຈາກເຊີບເວີກ່ອນທີ່ຈະຕັດການເຊື່ອມຕໍ່.",
-    "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "ທ່ານຍັງ <b>ແບ່ງປັນຂໍ້ມູນສ່ວນຕົວຂອງທ່ານ</b> ຢູ່ໃນເຊີບເວີ <idserver />.",
-    "Disconnect anyway": "ຍົກເລີກການເຊື່ອມຕໍ່",
-    "wait and try again later": "ລໍຖ້າແລ້ວລອງໃໝ່ໃນພາຍຫຼັງ",
-    "contact the administrators of identity server <idserver />": "ຕິດຕໍ່ຜູ້ຄຸ້ມຄອງເຊີບເວີ <idserver />",
-    "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "ກວດເບິ່ງ plugins ຂອງບ່ໜາວເຊີຂອງທ່ານສໍາລັບສິ່ງໃດແດ່ທີ່ອາດຈະກີດກັ້ນເຊີບເວີ (ເຊັ່ນ: ຄວາມເປັນສ່ວນຕົວ Badger)",
-    "You should:": "ທ່ານຄວນ:",
-    "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "ທ່ານຄວນ <b>ລຶບຂໍ້ມູນສ່ວນຕົວຂອງທ່ານ</b> ອອກຈາກເຊີບເວີ <idserver /> ກ່ອນທີ່ຈະຕັດການເຊື່ອມຕໍ່. ຂໍອະໄພ, ເຊີບເວີ <idserver /> ຢູ່ໃນຂະນະອອບລາຍຢູ່ ຫຼືບໍ່ສາມາດຕິດຕໍ່ໄດ້.",
-    "Disconnect from the identity server <idserver />?": "ຕັດການເຊື່ອມຕໍ່ຈາກເຊີບເວີ <idserver />?",
-    "Disconnect identity server": "ຕັດການເຊື່ອມຕໍ່ເຊີບເວີ",
-    "The identity server you have chosen does not have any terms of service.": "ເຊີບທີ່ທ່ານເລືອກບໍ່ມີເງື່ອນໄຂການບໍລິການໃດໆ.",
-    "Terms of service not accepted or the identity server is invalid.": "ບໍ່ຖືກຍອມຮັບເງື່ອນໄຂການໃຫ້ບໍລິການ ຫຼື ເຊີບເວີບໍ່ຖືກຕ້ອງ.",
-    "Disconnect from the identity server <current /> and connect to <new /> instead?": "ຕັດການເຊື່ອມຕໍ່ຈາກເຊີບເວີ<current />ແລະ ເຊື່ອມຕໍ່ຫາ <new /> ແທນບໍ?",
-    "Change identity server": "ປ່ຽນຕົວເຊີບເວີ",
-    "Checking server": "ກຳລັງກວດສອບເຊີບເວີ",
-    "Could not connect to identity server": "ບໍ່ສາມາດເຊື່ອມຕໍ່ກັບເຊີບເວີໄດ້",
-    "Not a valid identity server (status code %(code)s)": "ບໍ່ແມ່ນເຊີບເວີທີ່ຖືກຕ້ອງ (ລະຫັດສະຖານະ %(code)s)",
-    "Identity server URL must be HTTPS": "URL ເຊີບເວີຕ້ອງເປັນ HTTPS",
     "Set up": "ຕັ້ງຄ່າ",
     "Back up your keys before signing out to avoid losing them.": "ສຳຮອງຂໍ້ມູນກະແຈຂອງທ່ານກ່ອນທີ່ຈະອອກຈາກລະບົບເພື່ອຫຼີກເວັ້ນການສູນເສຍຂໍ້ມູນ.",
     "Backup version:": "ເວີຊັ້ນສໍາຮອງຂໍ້ມູນ:",
@@ -1267,11 +1159,7 @@
     "Flower": "ດອກໄມ້",
     "Butterfly": "ແມງກະເບື້ອ",
     "Octopus": "ປາຫມຶກ",
-    "Discovery": "ການຄົ້ນພົບ",
     "Deactivate account": "ປິດການນຳໃຊ້ບັນຊີ",
-    "Deactivate Account": "ປິດການນຳໃຊ້ບັນຊີ",
-    "Account management": "ການຈັດການບັນຊີ",
-    "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "ຕົກລົງເຫັນດີກັບ ເຊີບເວີ(%(serverName)s) ເງື່ອນໄຂການໃຫ້ບໍລິການເພື່ອອະນຸຍາດໃຫ້ຕົວທ່ານເອງສາມາດຄົ້ນພົບໄດ້ໂດຍທີ່ຢູ່ອີເມວ ຫຼືເບີໂທລະສັບ.",
     "Recent changes that have not yet been received": "ການປ່ຽນແປງຫຼ້າສຸດທີ່ຍັງບໍ່ທັນໄດ້ຮັບ",
     "The server is not configured to indicate what the problem is (CORS).": "ເຊີບເວີບໍ່ໄດ້ຖືກຕັ້ງຄ່າເພື່ອຊີ້ບອກວ່າບັນຫາແມ່ນຫຍັງ (CORS).",
     "A connection error occurred while trying to contact the server.": "ເກີດຄວາມຜິດພາດໃນການເຊື່ອມຕໍ່ໃນຂະນະທີ່ພະຍາຍາມຕິດຕໍ່ກັບເຊີບເວີ.",
@@ -1330,19 +1218,11 @@
     "Preparing to download logs": "ກຳລັງກະກຽມດາວໂຫຼດບັນທຶກ",
     "Failed to send logs: ": "ສົ່ງບັນທຶກບໍ່ສຳເລັດ: ",
     "Room Settings - %(roomName)s": "ການຕັ້ງຄ່າຫ້ອງ - %(roomName)s",
-    "Close preview": "ປິດຕົວຢ່າງ",
-    "Show %(count)s other previews": {
-        "one": "ສະແດງຕົວຢ່າງ %(count)s ອື່ນໆ",
-        "other": "ສະແດງຕົວຢ່າງອື່ນໆ %(count)s"
-    },
     "Scroll to most recent messages": "ເລື່ອນໄປຫາຂໍ້ຄວາມຫຼ້າສຸດ",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "ອຸປະກອນນີ້ບໍ່ສາມາດຮັບປະກັນຄວາມຖືກຕ້ອງຂອງຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດນີ້ໄດ້.",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",
     "Filter room members": "ການກັ່ນຕອງສະມາຊິກຫ້ອງ",
     "Invited": "ເຊີນ",
-    "Start new chat": "ເລີ່ມການສົນທະນາໃໝ່",
-    "Add people": "ເພີ່ມຄົນ",
-    "Invite to space": "ເຊີນໄປຍັງພື້ນທີ່",
     "a key signature": "ລາຍເຊັນຫຼັກ",
     "a device cross-signing signature": "ການ cross-signing ອຸປະກອນ",
     "a new cross-signing key signature": "ການລົງລາຍເຊັນ cross-signing ແບບໃໝ່",
@@ -1389,9 +1269,6 @@
         "one": "(~%(count)sຜົນຮັບ)",
         "other": "(~%(count)sຜົນຮັບ)"
     },
-    "No recently visited rooms": "ບໍ່ມີຫ້ອງທີ່ເຂົ້າເບິ່ງເມື່ອບໍ່ດົນມານີ້",
-    "Recently visited rooms": "ຫ້ອງທີ່ເຂົ້າເບິ່ງເມື່ອບໍ່ດົນມານີ້",
-    "Room %(name)s": "ຫ້ອງ %(name)s",
     "%(duration)sh": "%(duration)sh",
     "%(duration)sm": "%(duration)sm",
     "%(duration)ss": "%(duration)s",
@@ -1404,8 +1281,6 @@
     "You do not have permission to post to this room": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ໂພສໃສ່ຫ້ອງນີ້",
     "This room has been replaced and is no longer active.": "ຫ້ອງນີ້ໄດ້ໍປ່ຽນແທນ ແລະບໍ່ມີການເຄື່ອນໄຫວອີກຕໍ່ໄປ.",
     "The conversation continues here.": "ການສົນທະນາສືບຕໍ່ຢູ່ທີ່ນີ້.",
-    "Invite to this space": "ເຊີນໄປບ່ອນນີ້",
-    "Invite to this room": "ເຊີນເຂົ້າຫ້ອງນີ້",
     "and %(count)s others...": {
         "one": "ແລະ ອີກອັນນຶ່ງ...",
         "other": "ແລະ %(count)s ຜູ້ອຶ່ນ..."
@@ -1421,8 +1296,6 @@
     "To join, please enable video rooms in Labs first": "ເພື່ອເຂົ້າຮ່ວມ, ທ່ານຕ້ອງເປີດຫ້ອງວີດີໂອໃນສູນທົດລອງກ່ອນ",
     "To view, please enable video rooms in Labs first": "ເພື່ອເບິ່ງ, ທ່ານຕ້ອງເປີດຫ້ອງວີດີໂອໃນສູນທົດລອງກ່ອນ",
     "To view %(roomName)s, you need an invite": "ເພື່ອເບິ່ງ %(roomName)s, ທ່ານຕ້ອງມີບັດເຊີນ",
-    "Private room": "ຫ້ອງສ່ວນຕົວ",
-    "Video room": "ຫ້ອງວີດີໂອ",
     "Unread email icon": "ໄອຄັອນເມວທີ່ຍັງບໍ່ໄດ້ຖືກອ່ານ",
     "An error occurred whilst sharing your live location, please try again": "ພົບບັນຫາຕອນກຳລັງແບ່ງປັນຈຸດພິກັດຂອງທ່ານ, ກະລຸນາລອງໃໝ່",
     "An error occurred whilst sharing your live location": "ພົບບັນຫາຕອນກຳລັງແບ່ງປັນຈຸດພິກັດຂອງທ່ານ",
@@ -1519,7 +1392,13 @@
         "general": "ທົ່ວໄປ",
         "profile": "ໂປຣໄຟລ໌",
         "display_name": "ຊື່ສະແດງ",
-        "user_avatar": "ຮູບໂປຣໄຟລ໌"
+        "user_avatar": "ຮູບໂປຣໄຟລ໌",
+        "authentication": "ການຢືນຢັນ",
+        "public_room": "ຫ້ອງສາທາລະນະ",
+        "video_room": "ຫ້ອງວີດີໂອ",
+        "public_space": "ພື້ນທີ່ສາທາລະນະ",
+        "private_space": "ພື້ນທີ່ສ່ວນຕົວ",
+        "private_room": "ຫ້ອງສ່ວນຕົວ"
     },
     "action": {
         "continue": "ສືບຕໍ່",
@@ -1617,7 +1496,16 @@
         "unban": "ຍົກເລີກການຫ້າມ",
         "click_to_copy": "ກົດເພື່ອສຳເນົາ",
         "hide_advanced": "ເຊື່ອງຂັ້ນສູງ",
-        "show_advanced": "ສະແດງຂັ້ນສູງ"
+        "show_advanced": "ສະແດງຂັ້ນສູງ",
+        "unignore": "ບໍ່ສົນໃຈ",
+        "start_new_chat": "ເລີ່ມການສົນທະນາໃໝ່",
+        "invite_to_space": "ເຊີນໄປຍັງພື້ນທີ່",
+        "add_people": "ເພີ່ມຄົນ",
+        "explore_rooms": "ການສຳຫຼວດຫ້ອງ",
+        "new_room": "ຫ້ອງໃຫມ່",
+        "new_video_room": "ຫ້ອງວິດີໂອໃຫມ່",
+        "add_existing_room": "ເພີ່ມຫ້ອງທີ່ມີຢູ່",
+        "explore_public_rooms": "ສຳຫຼວດຫ້ອງສາທາລະນະ"
     },
     "a11y": {
         "user_menu": "ເມນູຜູ້ໃຊ້",
@@ -1630,7 +1518,8 @@
             "other": "%(count)s ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ."
         },
         "unread_messages": "ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
-        "jump_first_invite": "ໄປຫາຄຳເຊີນທຳອິດ."
+        "jump_first_invite": "ໄປຫາຄຳເຊີນທຳອິດ.",
+        "room_name": "ຫ້ອງ %(name)s"
     },
     "labs": {
         "msc3531_hide_messages_pending_moderation": "ໃຫ້ຜູ້ຄວບຄຸມການເຊື່ອງຂໍ້ຄວາມທີ່ລໍຖ້າການກັ່ນຕອງ.",
@@ -1902,7 +1791,14 @@
         "inline_url_previews_room_account": "ເປີດໃຊ້ຕົວຢ່າງ URL ສໍາລັບຫ້ອງນີ້ (ມີຜົນຕໍ່ທ່ານເທົ່ານັ້ນ)",
         "inline_url_previews_room": "ເປີດໃຊ້ການສະແດງຕົວຢ່າງ URL ໂດຍຄ່າເລີ່ມຕົ້ນສໍາລັບຜູ້ເຂົ້າຮ່ວມໃນຫ້ອງນີ້",
         "voip": {
-            "mirror_local_feed": "ເບິ່ງຟີດວິດີໂອທ້ອງຖິ່ນ"
+            "mirror_local_feed": "ເບິ່ງຟີດວິດີໂອທ້ອງຖິ່ນ",
+            "missing_permissions_prompt": "ບໍ່ອະນຸຍາດສື່, ກົດໄປທີ່ປຸ່ມຂ້າງລຸ່ມນີ້ເພື່ອຮ້ອງຂໍ.",
+            "request_permissions": "ຮ້ອງຂໍການອະນຸຍາດສື່ມວນຊົນ",
+            "audio_output": "ສຽງອອກ",
+            "audio_output_empty": "ບໍ່ພົບສຽງອອກ",
+            "audio_input_empty": "ບໍ່ພົບໄມໂຄຣໂຟນ",
+            "video_input_empty": "ບໍ່ພົບ Webcam",
+            "title": "ສຽງ & ວິດີໂອ"
         },
         "security": {
             "message_search_disable_warning": "ຖ້າປິດໃຊ້ງານ, ຂໍ້ຄວາມຈາກຫ້ອງທີ່ເຂົ້າລະຫັດຈະບໍ່ປາກົດຢູ່ໃນຜົນການຄົ້ນຫາ.",
@@ -1971,7 +1867,11 @@
             "key_backup_connect": "ເຊື່ອມຕໍ່ລະບົບນີ້ກັບ ກະເເຈສຳຮອງ",
             "key_backup_complete": "ກະແຈທັງໝົດຖືກສຳຮອງໄວ້",
             "key_backup_algorithm": "ສູດການຄິດໄລ່:",
-            "key_backup_inactive_warning": "ກະແຈຂອງທ່ານ <b>ບໍ່ຖືກສຳຮອງຂໍ້ມູນຈາກລະບົບນີ້</b>."
+            "key_backup_inactive_warning": "ກະແຈຂອງທ່ານ <b>ບໍ່ຖືກສຳຮອງຂໍ້ມູນຈາກລະບົບນີ້</b>.",
+            "key_backup_active_version_none": "ບໍ່ມີ",
+            "ignore_users_empty": "ທ່ານບໍ່ມີຜູ້ໃຊ້ທີ່ຖືກລະເລີຍ.",
+            "ignore_users_section": "ຜູ້ໃຊ້ຖືກຍົກເວັ້ນ",
+            "e2ee_default_disabled_warning": "ຜູ້ຄຸມເຊີບເວີຂອງທ່ານໄດ້ປິດການນຳໃຊ້ການເຂົ້າລະຫັດແບບຕົ້ນທາງຮອດປາຍທາງໂດຍຄ່າເລີ່ມຕົ້ນໃນຫ້ອງສ່ວນຕົວ ແລະ ຂໍ້ຄວາມໂດຍກົງ."
         },
         "preferences": {
             "room_list_heading": "ລາຍຊື່ຫ້ອງ",
@@ -2028,7 +1928,40 @@
             "add_msisdn_dialog_title": "ເພີ່ມເບີໂທລະສັບ",
             "name_placeholder": "ບໍ່ມີຊື່ສະແດງຜົນ",
             "error_saving_profile_title": "ບັນທຶກໂປຣໄຟລ໌ຂອງທ່ານບໍ່ສຳເລັດ",
-            "error_saving_profile": "ການດໍາເນີນງານບໍ່ສໍາເລັດ"
+            "error_saving_profile": "ການດໍາເນີນງານບໍ່ສໍາເລັດ",
+            "error_password_change_403": "ປ່ຽນລະຫັດຜ່ານບໍ່ສຳເລັດ. ລະຫັດຜ່ານຂອງທ່ານຖືກຕ້ອງບໍ?",
+            "password_change_success": "ລະຫັດຜ່ານຂອງທ່ານຖືກປ່ຽນສຳເລັດແລ້ວ.",
+            "emails_heading": "ທີ່ຢູ່ອີເມວ",
+            "msisdns_heading": "ເບີໂທລະສັບ",
+            "discovery_needs_terms": "ຕົກລົງເຫັນດີກັບ ເຊີບເວີ(%(serverName)s) ເງື່ອນໄຂການໃຫ້ບໍລິການເພື່ອອະນຸຍາດໃຫ້ຕົວທ່ານເອງສາມາດຄົ້ນພົບໄດ້ໂດຍທີ່ຢູ່ອີເມວ ຫຼືເບີໂທລະສັບ.",
+            "deactivate_section": "ປິດການນຳໃຊ້ບັນຊີ",
+            "account_management_section": "ການຈັດການບັນຊີ",
+            "discovery_section": "ການຄົ້ນພົບ",
+            "error_revoke_email_discovery": "ບໍ່ສາມາດຖອນການແບ່ງປັນສໍາລັບທີ່ຢູ່ອີເມວໄດ້",
+            "error_share_email_discovery": "ບໍ່ສາມາດແບ່ງປັນທີ່ຢູ່ອີເມວໄດ້",
+            "email_not_verified": "ທີ່ຢູ່ອີເມວຂອງທ່ານຍັງບໍ່ໄດ້ຖືກຢືນຢັນເທື່ອ",
+            "email_verification_instructions": "ກົດທີ່ລິ້ງໃນອີເມວທີ່ທ່ານໄດ້ຮັບເພື່ອກວດສອບ ແລະ ຈາກນັ້ນກົດສືບຕໍ່ອີກຄັ້ງ.",
+            "error_email_verification": "ບໍ່ສາມາດຢັ້ງຢືນທີ່ຢູ່ອີເມວໄດ້.",
+            "discovery_email_verification_instructions": "ຢືນຢັນການເຊື່ອມຕໍ່ໃນ inbox ຂອງທ່ານ",
+            "discovery_email_empty": "ຕົວເລືອກການຄົ້ນພົບຈະປາກົດຂຶ້ນເມື່ອທ່ານໄດ້ເພີ່ມອີເມວຂ້າງເທິງ.",
+            "error_revoke_msisdn_discovery": "ບໍ່ສາມາດຖອນການແບ່ງປັນສຳລັບເບີໂທລະສັບໄດ້",
+            "error_share_msisdn_discovery": "ບໍ່ສາມາດແບ່ງປັນເບີໂທລະສັບໄດ້",
+            "error_msisdn_verification": "ບໍ່ສາມາດຢັ້ງຢືນເບີໂທລະສັບໄດ້.",
+            "incorrect_msisdn_verification": "ລະຫັດຢືນຢັນບໍ່ຖືກຕ້ອງ",
+            "msisdn_verification_instructions": "ກະລຸນາໃສ່ລະຫັດຢືນຢັນທີ່ສົ່ງຜ່ານຂໍ້ຄວາມ.",
+            "msisdn_verification_field_label": "ລະຫັດຢືນຢັນ",
+            "discovery_msisdn_empty": "ຕົວເລືອກການຄົ້ນພົບຈະປາກົດເມື່ອທ່ານໄດ້ເພີ່ມເບີໂທລະສັບຂ້າງເທິງ.",
+            "error_set_name": "ກຳນົດການສະເເດງຊື່ບໍ່ສຳເລັດ",
+            "error_remove_3pid": "ບໍ່ສາມາດລຶບຂໍ້ມູນການຕິດຕໍ່ໄດ້",
+            "remove_email_prompt": "ລຶບ %(email)s ອອກບໍ?",
+            "error_invalid_email": "ທີ່ຢູ່ອີເມວບໍ່ຖືກຕ້ອງ",
+            "error_invalid_email_detail": "ສິ່ງນີ້ເບິ່ງຄືວ່າບໍ່ແມ່ນທີ່ຢູ່ອີເມວທີ່ຖືກຕ້ອງ",
+            "error_add_email": "ບໍ່ສາມາດເພີ່ມທີ່ຢູ່ອີເມວໄດ້",
+            "add_email_instructions": "ພວກເຮົາໄດ້ສົ່ງອີເມວຫາທ່ານເພື່ອຢືນຢັນທີ່ຢູ່ຂອງທ່ານ. ກະລຸນາປະຕິບັດຕາມຄໍາແນະນໍາຢູ່ທີ່ນັ້ນ ແລະ ຫຼັງຈາກນັ້ນໃຫ້ຄລິກໃສ່ປຸ່ມຂ້າງລຸ່ມນີ້.",
+            "email_address_label": "ທີ່ຢູ່ອີເມວ",
+            "remove_msisdn_prompt": "ລຶບ %(phone)sອອກບໍ?",
+            "add_msisdn_instructions": "ຂໍ້ຄວາມໄດ້ຖືກສົ່ງໄປຫາ +%(msisdn)s. ກະລຸນາໃສ່ລະຫັດຢືນຢັນ.",
+            "msisdn_label": "ເບີໂທລະສັບ"
         },
         "sidebar": {
             "title": "ແຖບດ້ານຂ້າງ",
@@ -2493,6 +2426,13 @@
             "collapse_reply_thread": "ຫຍໍ້ກະທູ້ຕອບກັບ",
             "view_related_event": "ເບິ່ງເຫດການທີ່ກ່ຽວຂ້ອງ",
             "report": "ລາຍງານ"
+        },
+        "url_preview": {
+            "show_n_more": {
+                "one": "ສະແດງຕົວຢ່າງ %(count)s ອື່ນໆ",
+                "other": "ສະແດງຕົວຢ່າງອື່ນໆ %(count)s"
+            },
+            "close": "ປິດຕົວຢ່າງ"
         }
     },
     "slash_command": {
@@ -2724,7 +2664,14 @@
             "title": "ພາລະບົດບາດ & ການອະນຸຍາດ",
             "permissions_section": "ການອະນຸຍາດ",
             "permissions_section_description_space": "ເລືອກພາລະບົດບາດທີ່ຕ້ອງການໃນການປ່ຽນແປງພາກສ່ວນຕ່າງໆຂອງພຶ້ນທີ່",
-            "permissions_section_description_room": "ເລືອກພາລະບົດບາດທີ່ຕ້ອງການໃນການປ່ຽນແປງພາກສ່ວນຕ່າງໆຂອງຫ້ອງ"
+            "permissions_section_description_room": "ເລືອກພາລະບົດບາດທີ່ຕ້ອງການໃນການປ່ຽນແປງພາກສ່ວນຕ່າງໆຂອງຫ້ອງ",
+            "error_unbanning": "ຍົກເລີກບໍ່ສໍາເລັດ",
+            "banned_by": "ຫ້າມໂດຍ %(displayName)s",
+            "ban_reason": "ເຫດຜົນ",
+            "error_changing_pl_reqs_title": "ເກີດຄວາມຜິດພາດໃນການປ່ຽນແປງຄວາມຕ້ອງການລະດັບພະລັງງານ",
+            "error_changing_pl_reqs_description": "ເກີດຄວາມຜິດພາດໃນການປ່ຽນແປງຂໍ້ກຳນົດລະດັບສິດຂອງຫ້ອງ. ກວດໃຫ້ແນ່ໃຈວ່າເຈົ້າມີສິດອະນຸຍາດພຽງພໍແລ້ວລອງໃໝ່ອີກຄັ້ງ.",
+            "error_changing_pl_title": "ເກີດຄວາມຜິດພາດໃນການປ່ຽນແປງລະດັບສິດ",
+            "error_changing_pl_description": "ເກີດຄວາມຜິດພາດໃນການປ່ຽນແປງລະດັບສິດຂອງຜູ້ໃຊ້. ກວດໃຫ້ແນ່ໃຈວ່າເຈົ້າມີສິດອະນຸຍາດພຽງພໍແລ້ວລອງໃໝ່ອີກຄັ້ງ."
         },
         "security": {
             "strict_encryption": "ບໍ່ສົ່ງຂໍ້ຄວາມເຂົ້າລະຫັດໄປຫາລະບົບທີ່ບໍ່ໄດ້ຢືນຢັນໃນຫ້ອງນີ້ຈາກລະບົບນີ້",
@@ -2775,7 +2722,9 @@
             "join_rule_upgrade_updating_spaces": {
                 "one": "ກຳລັງປັບປຸງພື້ນທີ່..",
                 "other": "ກຳລັງຍົກລະດັບພື້ນທີ່... (%(progress)s ຈາກທັງໝົດ %(count)s)"
-            }
+            },
+            "error_join_rule_change_title": "ອັບເດດກົດລະບຽບການເຂົ້າຮ່ວມບໍ່ສຳເລັດ",
+            "error_join_rule_change_unknown": "ຄວາມລົ້ມເຫຼວທີ່ບໍ່ຮູ້ສາເຫດ"
         },
         "general": {
             "publish_toggle": "ເຜີຍແຜ່ຫ້ອງນີ້ຕໍ່ສາທາລະນະຢູ່ໃນຄຳນຳຫ້ອງຂອງ %(domain)s ບໍ?",
@@ -2789,7 +2738,9 @@
             "error_save_space_settings": "ບັນທຶກການຕັ້ງຄ່າພື້ນທີ່ບໍ່ສຳເລັດ.",
             "description_space": "ແກ້ໄຂການຕັ້ງຄ່າທີ່ກ່ຽວຂ້ອງກັບພື້ນທີ່ຂອງທ່ານ.",
             "save": "ບັນທຶກການປ່ຽນແປງ",
-            "leave_space": "ອອກຈາກພື້ນທີ່"
+            "leave_space": "ອອກຈາກພື້ນທີ່",
+            "aliases_section": "ທີ່ຢູ່ຂອງຫ້ອງ",
+            "other_section": "ອື່ນໆ"
         },
         "advanced": {
             "unfederated": "ຫ້ອງນີ້ບໍ່ສາມາດເຂົ້າເຖິງໄດ້ໂດຍເຊີບເວີ Matrix ໄລຍະໄກ",
@@ -2799,7 +2750,9 @@
             "room_predecessor": "ບິ່ງຂໍ້ຄວາມເກົ່າໃນ %(roomName)s.",
             "room_id": "ID ຫ້ອງພາຍໃນ",
             "room_version_section": "ເວີຊັ້ນຫ້ອງ",
-            "room_version": "ເວີຊັ້ນຫ້ອງ:"
+            "room_version": "ເວີຊັ້ນຫ້ອງ:",
+            "information_section_space": "ຂໍ້ມູນພື້ນທີ່",
+            "information_section_room": "ຂໍ້ມູນຫ້ອງ"
         },
         "delete_avatar_label": "ລືບອາວາຕ້າ",
         "upload_avatar_label": "ອັບໂຫຼດອາວາຕ້າ",
@@ -2813,11 +2766,25 @@
             "history_visibility_anyone_space": "ເບິ່ງຕົວຢ່າງພື້ນທີ່",
             "history_visibility_anyone_space_description": "ອະນຸຍາດໃຫ້ຄົນເບິ່ງຕົວຢ່າງພື້ນທີ່ຂອງທ່ານກ່ອນທີ່ເຂົາເຈົ້າເຂົ້າຮ່ວມ.",
             "history_visibility_anyone_space_recommendation": "ແນະນຳສຳລັບສະຖານທີ່ສາທາລະນະ.",
-            "guest_access_label": "ເປີດໃຊ້ການເຂົ້າເຖິງແຂກ/ຜູ້ຖືກເຊີນ"
+            "guest_access_label": "ເປີດໃຊ້ການເຂົ້າເຖິງແຂກ/ຜູ້ຖືກເຊີນ",
+            "alias_section": "ທີ່ຢູ່"
         },
         "access": {
             "title": "ການເຂົ້າເຖິງ",
             "description_space": "ຕັດສິນໃຈວ່າໃຜສາມາດເບິ່ງ ແລະ ເຂົ້າຮ່ວມ %(spaceName)s."
+        },
+        "bridges": {
+            "description": "ຫ້ອງນີ້ກໍາລັງເຊື່ອມຕໍ່ຂໍ້ຄວາມໄປຫາພັລດຟອມຕໍ່ໄປນີ້. <a>ສຶກສາເພີ່ມເຕີມ.</a>",
+            "empty": "ຫ້ອງນີ້ບໍ່ໄດ້ເຊື່ອມຕໍ່ຂໍ້ຄວາມໄປຫາພັລດຟອມໃດໆ. <a>ສຶກສາເພີ່ມເຕີມ.</a>",
+            "title": "ເປັນຂົວຕໍ່"
+        },
+        "notifications": {
+            "uploaded_sound": "ອັບໂຫຼດສຽງ",
+            "settings_link": "ຮັບການແຈ້ງເຕືອນຕາມທີ່ກຳນົດໄວ້ໃນ <a>ການຕັ້ງຄ່າ</a> ຂອງທ່ານ",
+            "sounds_section": "ສຽງ",
+            "notification_sound": "ສຽງແຈ້ງເຕຶອນ",
+            "custom_sound_prompt": "ຕັ້ງສຽງແບບກຳນົດເອງ",
+            "browse_button": "ຄົ້ນຫາ"
         }
     },
     "encryption": {
@@ -3042,7 +3009,9 @@
         "show_less": "ສະແດງໜ້ອຍລົງ",
         "notification_options": "ຕົວເລືອກການແຈ້ງເຕືອນ",
         "failed_remove_tag": "ລຶບແທັກ %(tagName)s ອອກຈາກຫ້ອງບໍ່ສຳເລັດ",
-        "failed_add_tag": "ເພີ່ມແທັກ %(tagName)s ໃສ່ຫ້ອງບໍ່ສຳເລັດ"
+        "failed_add_tag": "ເພີ່ມແທັກ %(tagName)s ໃສ່ຫ້ອງບໍ່ສຳເລັດ",
+        "breadcrumbs_label": "ຫ້ອງທີ່ເຂົ້າເບິ່ງເມື່ອບໍ່ດົນມານີ້",
+        "breadcrumbs_empty": "ບໍ່ມີຫ້ອງທີ່ເຂົ້າເບິ່ງເມື່ອບໍ່ດົນມານີ້"
     },
     "report_content": {
         "missing_reason": "ກະລຸນາຕື່ມຂໍ້ມູນວ່າເປັນຫຍັງທ່ານກໍາລັງລາຍງານ.",
@@ -3270,7 +3239,8 @@
         "search_children": "ຊອກຫາ %(spaceName)s",
         "invite_link": "ແບ່ງປັນລິ້ງເຊີນ",
         "invite": "ເຊີນຜູ້ຄົນ",
-        "invite_description": "ເຊີນດ້ວຍອີເມລ໌ ຫຼື ຊື່ຜູ້ໃຊ້"
+        "invite_description": "ເຊີນດ້ວຍອີເມລ໌ ຫຼື ຊື່ຜູ້ໃຊ້",
+        "invite_this_space": "ເຊີນໄປບ່ອນນີ້"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "homeserver ນີ້ບໍ່ໄດ້ຕັ້ງຄ່າເພື່ອສະແດງແຜນທີ່.",
@@ -3318,7 +3288,8 @@
         "lists_heading": "ລາຍຊື່ທີ່ສະໝັກແລ້ວ",
         "lists_description_1": "ການສະໝັກບັນຊີລາຍການຫ້າມຈະເຮັດໃຫ້ທ່ານເຂົ້າຮ່ວມ!",
         "lists_description_2": "ຖ້າສິ່ງນີ້ບໍ່ແມ່ນສິ່ງທີ່ທ່ານຕ້ອງການ, ກະລຸນາໃຊ້ເຄື່ອງມືອື່ນເພື່ອລະເວັ້ນຜູ້ໃຊ້.",
-        "lists_new_label": "IDຫ້ອງ ຫຼື ທີ່ຢູ່ຂອງລາຍການຫ້າມ"
+        "lists_new_label": "IDຫ້ອງ ຫຼື ທີ່ຢູ່ຂອງລາຍການຫ້າມ",
+        "rules_empty": "ບໍ່ມີ"
     },
     "create_space": {
         "name_required": "ກະລຸນາໃສ່ຊື່ສໍາລັບຊ່ອງຫວ່າງ",
@@ -3409,7 +3380,8 @@
             "copy_link": "ສຳເນົາລິ້ງຫ້ອງ",
             "low_priority": "ຄວາມສຳຄັນຕໍ່າ",
             "forget": "ລືມຫ້ອງ"
-        }
+        },
+        "invite_this_room": "ເຊີນເຂົ້າຫ້ອງນີ້"
     },
     "file_panel": {
         "guest_note": "ທ່ານຕ້ອງ <a>ລົງທະບຽນ</a> ເພື່ອໃຊ້ຟັງຊັນນີ້",
@@ -3529,7 +3501,13 @@
         "keyword_new": "ຄໍາສໍາຄັນໃຫມ່",
         "class_global": "ທົ່ວໂລກ",
         "class_other": "ອື່ນໆ",
-        "mentions_keywords": "ກ່າວເຖິງ & ຄໍາສໍາຄັນ"
+        "mentions_keywords": "ກ່າວເຖິງ & ຄໍາສໍາຄັນ",
+        "default": "ຄ່າເລີ່ມຕົ້ນ",
+        "all_messages": "ຂໍ້ຄວາມທັງໝົດ",
+        "all_messages_description": "ໄດ້ຮັບການແຈ້ງເຕືອນສໍາລັບທຸກໆຂໍ້ຄວາມ",
+        "mentions_and_keywords": "@ກ່າວເຖິງ & ຄໍາສໍາຄັນ",
+        "mentions_and_keywords_description": "ຮັບການແຈ້ງເຕືອນພຽງແຕ່ມີການກ່າວເຖິງ ແລະ ຄໍາທີ່ກຳນົດໄວ້ໃນ<a>settings</a>ຂອງທ່ານ",
+        "mute_description": "ທ່ານຈະບໍ່ໄດ້ຮັບການແຈ້ງເຕືອນໃດໆ"
     },
     "mobile_guide": {
         "toast_title": "ໃຊ້ແອັບເພື່ອປະສົບການທີ່ດີກວ່າ",
@@ -3553,6 +3531,38 @@
     "a11y_jump_first_unread_room": "ໄປຫາຫ້ອງທໍາອິດທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
     "integration_manager": {
         "error_connecting_heading": "ບໍ່ສາມາດເຊື່ອມຕໍ່ກັບຕົວຈັດການການເຊື່ອມໂຍງໄດ້",
-        "error_connecting": "ຜູ້ຈັດການການເຊື່ອມໂຍງແມ່ນອອບໄລນ໌ຫຼືບໍ່ສາມາດເຂົ້າຫາ homeserver ຂອງທ່ານໄດ້."
+        "error_connecting": "ຜູ້ຈັດການການເຊື່ອມໂຍງແມ່ນອອບໄລນ໌ຫຼືບໍ່ສາມາດເຂົ້າຫາ homeserver ຂອງທ່ານໄດ້.",
+        "use_im_default": "ໃຊ້ຕົວຈັດການການເຊື່ອມໂຍງ <b>(%(serverName)s)</b> ເພື່ອຈັດການບັອດ, widgets, ແລະ ຊຸດສະຕິກເກີ.",
+        "use_im": "ໃຊ້ຕົວຈັດການການເຊື່ອມໂຍງເພື່ອຈັດການ bots, widget, ແລະຊຸດສະຕິກເກີ.",
+        "manage_title": "ຈັດການການເຊື່ອມໂຍງ",
+        "explainer": "ຜູ້ຈັດການລວມລະບົບໄດ້ຮັບຂໍ້ມູນການຕັ້ງຄ່າ ແລະ ສາມາດແກ້ໄຂ widget, ສົ່ງການເຊີນຫ້ອງ ແລະ ກໍານົດລະດັບພະລັງງານໃນນາມຂອງທ່ານ."
+    },
+    "identity_server": {
+        "url_not_https": "URL ເຊີບເວີຕ້ອງເປັນ HTTPS",
+        "error_invalid": "ບໍ່ແມ່ນເຊີບເວີທີ່ຖືກຕ້ອງ (ລະຫັດສະຖານະ %(code)s)",
+        "error_connection": "ບໍ່ສາມາດເຊື່ອມຕໍ່ກັບເຊີບເວີໄດ້",
+        "checking": "ກຳລັງກວດສອບເຊີບເວີ",
+        "change": "ປ່ຽນຕົວເຊີບເວີ",
+        "change_prompt": "ຕັດການເຊື່ອມຕໍ່ຈາກເຊີບເວີ<current />ແລະ ເຊື່ອມຕໍ່ຫາ <new /> ແທນບໍ?",
+        "error_invalid_or_terms": "ບໍ່ຖືກຍອມຮັບເງື່ອນໄຂການໃຫ້ບໍລິການ ຫຼື ເຊີບເວີບໍ່ຖືກຕ້ອງ.",
+        "no_terms": "ເຊີບທີ່ທ່ານເລືອກບໍ່ມີເງື່ອນໄຂການບໍລິການໃດໆ.",
+        "disconnect": "ຕັດການເຊື່ອມຕໍ່ເຊີບເວີ",
+        "disconnect_server": "ຕັດການເຊື່ອມຕໍ່ຈາກເຊີບເວີ <idserver />?",
+        "disconnect_offline_warning": "ທ່ານຄວນ <b>ລຶບຂໍ້ມູນສ່ວນຕົວຂອງທ່ານ</b> ອອກຈາກເຊີບເວີ <idserver /> ກ່ອນທີ່ຈະຕັດການເຊື່ອມຕໍ່. ຂໍອະໄພ, ເຊີບເວີ <idserver /> ຢູ່ໃນຂະນະອອບລາຍຢູ່ ຫຼືບໍ່ສາມາດຕິດຕໍ່ໄດ້.",
+        "suggestions": "ທ່ານຄວນ:",
+        "suggestions_1": "ກວດເບິ່ງ plugins ຂອງບ່ໜາວເຊີຂອງທ່ານສໍາລັບສິ່ງໃດແດ່ທີ່ອາດຈະກີດກັ້ນເຊີບເວີ (ເຊັ່ນ: ຄວາມເປັນສ່ວນຕົວ Badger)",
+        "suggestions_2": "ຕິດຕໍ່ຜູ້ຄຸ້ມຄອງເຊີບເວີ <idserver />",
+        "suggestions_3": "ລໍຖ້າແລ້ວລອງໃໝ່ໃນພາຍຫຼັງ",
+        "disconnect_anyway": "ຍົກເລີກການເຊື່ອມຕໍ່",
+        "disconnect_personal_data_warning_1": "ທ່ານຍັງ <b>ແບ່ງປັນຂໍ້ມູນສ່ວນຕົວຂອງທ່ານ</b> ຢູ່ໃນເຊີບເວີ <idserver />.",
+        "disconnect_personal_data_warning_2": "ພວກເຮົາແນະນໍາໃຫ້ທ່ານເອົາທີ່ຢູ່ອີເມວ ແລະ ເບີໂທລະສັບຂອງທ່ານອອກຈາກເຊີບເວີກ່ອນທີ່ຈະຕັດການເຊື່ອມຕໍ່.",
+        "url": "ເຊີບເວີ %(server)s)",
+        "description_connected": "ຕອນນີ້ທ່ານກຳລັງໃຊ້ <server></server> ເພື່ອຄົ້ນຫາ ແລະ ສາມາດຄົ້ນຫາໄດ້ໂດຍຜູ້ຕິດຕໍ່ທີ່ມີຢູ່ແລ້ວ. ທ່ານສາມາດປ່ຽນເຊີບເວນຂອງທ່ານໄດ້ຂ້າງລຸ່ມນີ້.",
+        "change_server_prompt": "ຖ້າຫາກວ່າທ່ານບໍ່ຕ້ອງການທີ່ຈະນໍາໃຊ້ <server /> ເພື່ອຄົ້ນຫາ ແລະ ສາມາດຄົ້ນຫາໂດຍການຕິດຕໍ່ທີ່ມີຢູ່ແລ້ວ, ເຂົ້າໄປໃນຕົວ server ອື່ນຂ້າງລຸ່ມນີ້.",
+        "description_disconnected": "ໃນປັດຈຸບັນທ່ານບໍ່ໄດ້ໃຊ້ເຊີບເວີ. ເພື່ອຄົ້ນຫາ ແລະ ສາມາດຄົ້ນຫາໄດ້ໂດຍຜູ້ຕິດຕໍ່ທີ່ມີຢູ່ແລ້ວ, ໃຫ້ເພີ່ມທີ່ຢຸ່ຂ້າງລຸ່ມນີ້.",
+        "disconnect_warning": "ການຕັດການເຊື່ອມຕໍ່ຈາກຕົວເຊີບເວີຂອງທ່ານຈະຫມາຍຄວາມວ່າທ່ານຈະບໍ່ຖືກຄົ້ນຫາໂດຍຜູ້ໃຊ້ອື່ນ ແລະ ທ່ານຈະບໍ່ສາມາດເຊີນຜູ້ອື່ນໂດຍອີເມລ໌ ຫຼື ໂທລະສັບ.",
+        "description_optional": "ການນໍາໃຊ້ຕົວເຊີບເວີເປັນທາງເລືອກ. ຖ້າທ່ານເລືອກທີ່ຈະບໍ່ໃຊ້ຕົວເຊີບເວີ, ທ່ານຈະບໍ່ຖືກຄົ້ນພົບໂດຍຜູ້ໃຊ້ອື່ນ ແລະ ທ່ານຈະບໍ່ສາມາດເຊີນຜູ້ອື່ນໂດຍອີເມລ໌ຫຼືໂທລະສັບ.",
+        "do_not_use": "ກະລຸນນາຢ່າໃຊ້ເຊີບເວີລະບຸຕົວຕົນ",
+        "url_field_label": "ໃສ່ເຊີບເວີໃໝ່"
     }
 }

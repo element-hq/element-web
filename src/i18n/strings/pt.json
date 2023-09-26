@@ -1,15 +1,10 @@
 {
     "A new password must be entered.": "Deve ser introduzida uma nova palavra-passe.",
     "Are you sure you want to reject the invitation?": "Você tem certeza que deseja rejeitar este convite?",
-    "Deactivate Account": "Desativar conta",
-    "Default": "Padrão",
-    "Failed to change password. Is your password correct?": "Falha ao alterar a palavra-passe. A sua palavra-passe está correta?",
     "Failed to reject invitation": "Falha ao tentar rejeitar convite",
-    "Failed to unban": "Não foi possível desfazer o banimento",
     "Filter room members": "Filtrar integrantes da sala",
     "Forget room": "Esquecer sala",
     "Historical": "Histórico",
-    "Invalid Email Address": "Endereço de email inválido",
     "Low priority": "Baixa prioridade",
     "Moderator": "Moderador/a",
     "New passwords must match each other.": "Novas palavras-passe devem coincidir.",
@@ -18,10 +13,6 @@
     "Return to login screen": "Retornar à tela de login",
     "Rooms": "Salas",
     "Session ID": "Identificador de sessão",
-    "This doesn't appear to be a valid email address": "Este não aparenta ser um endereço de email válido",
-    "Unable to add email address": "Não foi possível adicionar endereço de email",
-    "Unable to remove contact information": "Não foi possível remover informação de contato",
-    "Unable to verify email address.": "Não foi possível verificar o endereço de email.",
     "unknown error code": "código de erro desconhecido",
     "Verification Pending": "Verificação pendente",
     "You do not have permission to post to this room": "Você não tem permissão de postar nesta sala",
@@ -46,7 +37,6 @@
     "Dec": "Dez",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s às %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s às %(time)s",
-    "Reason": "Razão",
     "Connectivity to the server has been lost.": "A conexão com o servidor foi perdida. Verifique sua conexão de internet.",
     "Sent messages will be stored until your connection has returned.": "Imagens enviadas ficarão armazenadas até que sua conexão seja reestabelecida.",
     "Failed to forget room %(errCode)s": "Falha ao esquecer a sala %(errCode)s",
@@ -63,8 +53,6 @@
     "Failed to load timeline position": "Não foi possível carregar a posição na linha do tempo",
     "Failed to mute user": "Não foi possível remover notificações da/do usuária/o",
     "Failed to reject invite": "Não foi possível rejeitar o convite",
-    "Failed to set display name": "Houve falha ao definir o nome público",
-    "Incorrect verification code": "Código de verificação incorreto",
     "Join Room": "Ingressar na sala",
     "Jump to first unread message.": "Ir diretamente para a primeira das mensagens não lidas.",
     "not specified": "não especificado",
@@ -77,7 +65,6 @@
     "You seem to be in a call, are you sure you want to quit?": "Parece que você está em uma chamada. Tem certeza que quer sair?",
     "You seem to be uploading files, are you sure you want to quit?": "Parece que você está enviando arquivos. Tem certeza que quer sair?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Você não poderá desfazer esta mudança, pois estará dando a este(a) usuário(a) o mesmo nível de permissões que você.",
-    "Authentication": "Autenticação",
     "An error has occurred.": "Ocorreu um erro.",
     "Email address": "Endereço de email",
     "Error decrypting attachment": "Erro ao descriptografar o anexo",
@@ -101,8 +88,6 @@
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Este processo faz com que você possa importar as chaves de criptografia que tinha previamente exportado de outro cliente Matrix. Você poderá então descriptografar todas as mensagens que o outro cliente pôde criptografar.",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?",
     "Invited": "Convidada(o)",
-    "No Microphones detected": "Não foi detetado nenhum microfone",
-    "No Webcams detected": "Não foi detetada nenhuma Webcam",
     "Are you sure you want to leave the room '%(roomName)s'?": "Você tem certeza que deseja sair da sala '%(roomName)s'?",
     "Custom level": "Nível personalizado",
     "Create new room": "Criar nova sala",
@@ -123,8 +108,6 @@
     "AM": "AM",
     "PM": "PM",
     "This will allow you to reset your password and receive notifications.": "Isto irá permitir-lhe redefinir a sua palavra-passe e receber notificações.",
-    "Unignore": "Deixar de ignorar",
-    "Banned by %(displayName)s": "Banido por %(displayName)s",
     "Sunday": "Domingo",
     "Today": "Hoje",
     "Friday": "Sexta-feira",
@@ -137,18 +120,13 @@
     "Unnamed room": "Sala sem nome",
     "Saturday": "Sábado",
     "Monday": "Segunda-feira",
-    "Invite to this room": "Convidar para esta sala",
     "Send": "Enviar",
-    "All messages": "Todas as mensagens",
     "All Rooms": "Todas as salas",
     "You cannot delete this message. (%(code)s)": "Não pode apagar esta mensagem. (%(code)s)",
     "Thursday": "Quinta-feira",
     "Yesterday": "Ontem",
     "Wednesday": "Quarta-feira",
     "Thank you!": "Obrigado!",
-    "Explore rooms": "Explorar rooms",
-    "Not a valid identity server (status code %(code)s)": "Servidor de Identidade inválido (código de status %(code)s)",
-    "Identity server URL must be HTTPS": "O link do servidor de identidade deve começar com HTTPS",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s-%(monthName)s-%(fullYear)s",
     "Anguilla": "Anguilla",
     "United States": "Estados Unidos",
@@ -247,7 +225,6 @@
     "Gambia": "Gâmbia",
     "Georgia": "Geórgia",
     "Mayotte": "Mayotte",
-    "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Recomendamos que remova seus endereços de email e números de telefone do servidor de identidade antes de se desconectar.",
     "Macau": "Macau",
     "Malaysia": "Malásia",
     "Lesotho": "Lesoto",
@@ -279,8 +256,6 @@
     "Liberia": "Libéria",
     "Mexico": "México",
     "Moldova": "Moldávia",
-    "Discovery options will appear once you have added an email above.": "As opções de descoberta vão aparecer assim que adicione um e-mail acima.",
-    "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Enviámos-lhe um email para confirmar o seu endereço. Por favor siga as instruções no email e depois clique no botão abaixo.",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Apenas um aviso, se não adicionar um email e depois esquecer a sua palavra-passe, poderá <b>perder permanentemente o acesso à sua conta</b>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Convide alguém a partir do nome, endereço de email, nome de utilizador (como <userId/>) ou <a>partilhe este espaço</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Convide alguém a partir do nome, email ou nome de utilizador (como <userId/>) ou <a>partilhe esta sala</a>.",
@@ -440,7 +415,8 @@
         "off": "Desativado",
         "copied": "Copiado!",
         "advanced": "Avançado",
-        "profile": "Perfil"
+        "profile": "Perfil",
+        "authentication": "Autenticação"
     },
     "action": {
         "continue": "Continuar",
@@ -480,7 +456,9 @@
         "import": "Importar",
         "export": "Exportar",
         "submit": "Enviar",
-        "unban": "Desfazer banimento"
+        "unban": "Desfazer banimento",
+        "unignore": "Deixar de ignorar",
+        "explore_rooms": "Explorar rooms"
     },
     "keyboard": {
         "home": "Início"
@@ -560,7 +538,22 @@
             "add_msisdn_confirm_button": "Confirme que quer adicionar o número de telefone",
             "add_msisdn_confirm_body": "Pressione o botão abaixo para confirmar a adição este número de telefone.",
             "add_msisdn_dialog_title": "Adicione número de telefone",
-            "name_placeholder": "Sem nome público de usuária(o)"
+            "name_placeholder": "Sem nome público de usuária(o)",
+            "error_password_change_403": "Falha ao alterar a palavra-passe. A sua palavra-passe está correta?",
+            "deactivate_section": "Desativar conta",
+            "error_email_verification": "Não foi possível verificar o endereço de email.",
+            "discovery_email_empty": "As opções de descoberta vão aparecer assim que adicione um e-mail acima.",
+            "incorrect_msisdn_verification": "Código de verificação incorreto",
+            "error_set_name": "Houve falha ao definir o nome público",
+            "error_remove_3pid": "Não foi possível remover informação de contato",
+            "error_invalid_email": "Endereço de email inválido",
+            "error_invalid_email_detail": "Este não aparenta ser um endereço de email válido",
+            "error_add_email": "Não foi possível adicionar endereço de email",
+            "add_email_instructions": "Enviámos-lhe um email para confirmar o seu endereço. Por favor siga as instruções no email e depois clique no botão abaixo."
+        },
+        "voip": {
+            "audio_input_empty": "Não foi detetado nenhum microfone",
+            "video_input_empty": "Não foi detetada nenhuma Webcam"
         }
     },
     "devtools": {
@@ -783,7 +776,8 @@
         "context_menu": {
             "favourite": "Favorito",
             "low_priority": "Baixa prioridade"
-        }
+        },
+        "invite_this_room": "Convidar para esta sala"
     },
     "file_panel": {
         "guest_note": "Você deve <a>se registrar</a> para poder usar esta funcionalidade",
@@ -800,7 +794,10 @@
             "no_privileged_users": "Nenhum/a usuário/a possui privilégios específicos nesta sala",
             "privileged_users_section": "Usuárias/os privilegiadas/os",
             "banned_users_section": "Usuárias/os banidas/os",
-            "permissions_section": "Permissões"
+            "permissions_section": "Permissões",
+            "error_unbanning": "Não foi possível desfazer o banimento",
+            "banned_by": "Banido por %(displayName)s",
+            "ban_reason": "Razão"
         },
         "security": {
             "history_visibility_legend": "Quem pode ler o histórico da sala?",
@@ -810,7 +807,8 @@
             "publish_toggle": "Publicar esta sala ao público no diretório de salas de %(domain)s's?",
             "user_url_previews_default_on": "Você <a>habilitou</a> pré-visualizações de links por padrão.",
             "user_url_previews_default_off": "Você <a>desabilitou</a> pré-visualizações de links por padrão.",
-            "url_previews_section": "Pré-visualização de links"
+            "url_previews_section": "Pré-visualização de links",
+            "other_section": "Outros"
         },
         "advanced": {
             "unfederated": "Esta sala não é acessível para servidores Matrix remotos"
@@ -899,9 +897,16 @@
     },
     "notifications": {
         "enable_prompt_toast_title": "Notificações",
-        "class_other": "Outros"
+        "class_other": "Outros",
+        "default": "Padrão",
+        "all_messages": "Todas as mensagens"
     },
     "onboarding": {
         "create_account": "Criar conta"
+    },
+    "identity_server": {
+        "url_not_https": "O link do servidor de identidade deve começar com HTTPS",
+        "error_invalid": "Servidor de Identidade inválido (código de status %(code)s)",
+        "disconnect_personal_data_warning_2": "Recomendamos que remova seus endereços de email e números de telefone do servidor de identidade antes de se desconectar."
     }
 }

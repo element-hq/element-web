@@ -154,7 +154,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
             tabs.push(
                 new Tab(
                     RoomSettingsTab.Voip,
-                    _td("Voice & Video"),
+                    _td("settings|voip|title"),
                     "mx_RoomSettingsDialog_voiceIcon",
                     <VoipRoomSettingsTab room={this.state.room} />,
                 ),
@@ -197,7 +197,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
             tabs.push(
                 new Tab(
                     RoomSettingsTab.Bridges,
-                    _td("Bridges"),
+                    _td("room_settings|bridges|title"),
                     "mx_RoomSettingsDialog_bridgesIcon",
                     <BridgeSettingsTab room={this.state.room} />,
                     "RoomSettingsBridges",

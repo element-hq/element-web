@@ -1,9 +1,9 @@
 {
-    "Explore rooms": "කාමර බලන්න",
     "action": {
         "confirm": "තහවුරු කරන්න",
         "dismiss": "ඉවතලන්න",
-        "sign_in": "පිවිසෙන්න"
+        "sign_in": "පිවිසෙන්න",
+        "explore_rooms": "කාමර බලන්න"
     },
     "auth": {
         "register_action": "ගිණුමක් සාදන්න",

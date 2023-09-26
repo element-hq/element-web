@@ -1,5 +1,4 @@
 {
-    "Explore rooms": "ოთახების დათავლიერება",
     "Sun": "მზე",
     "Dec": "დეკ",
     "PM": "PM",
@@ -27,7 +26,8 @@
     "action": {
         "confirm": "დადასტურება",
         "dismiss": "დახურვა",
-        "sign_in": "შესვლა"
+        "sign_in": "შესვლა",
+        "explore_rooms": "ოთახების დათავლიერება"
     },
     "time": {
         "hours_minutes_seconds_left": "%(hours)sს %(minutes)sწთ %(seconds)sწმ დარჩა",

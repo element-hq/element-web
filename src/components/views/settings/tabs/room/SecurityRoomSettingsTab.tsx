@@ -301,8 +301,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
     private onJoinRuleChangeError = (error: Error): void => {
         Modal.createDialog(ErrorDialog, {
-            title: _t("Failed to update the join rules"),
-            description: error.message ?? _t("Unknown failure"),
+            title: _t("room_settings|security|error_join_rule_change_title"),
+            description: error.message ?? _t("room_settings|security|error_join_rule_change_unknown"),
         });
     };
 

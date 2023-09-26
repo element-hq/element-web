@@ -417,7 +417,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                         <Field
                             className="mx_ReportEventDialog_reason"
                             element="textarea"
-                            label={_t("Reason")}
+                            label={_t("room_settings|permissions|ban_reason")}
                             rows={5}
                             onChange={this.onReasonChange}
                             value={this.state.reason}
@@ -456,7 +456,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                     <Field
                         className="mx_ReportEventDialog_reason"
                         element="textarea"
-                        label={_t("Reason")}
+                        label={_t("room_settings|permissions|ban_reason")}
                         rows={5}
                         onChange={this.onReasonChange}
                         value={this.state.reason}

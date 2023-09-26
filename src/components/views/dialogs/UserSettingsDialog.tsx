@@ -133,7 +133,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             tabs.push(
                 new Tab(
                     UserTab.Voice,
-                    _td("Voice & Video"),
+                    _td("settings|voip|title"),
                     "mx_UserSettingsDialog_voiceIcon",
                     <VoiceUserSettingsTab />,
                     "UserSettingsVoiceVideo",

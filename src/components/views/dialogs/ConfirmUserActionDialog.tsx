@@ -95,7 +95,7 @@ export default class ConfirmUserActionDialog extends React.Component<IProps, ISt
                         onChange={this.onReasonChange}
                         value={this.state.reason}
                         className="mx_ConfirmUserActionDialog_reasonField"
-                        label={_t("Reason")}
+                        label={_t("room_settings|permissions|ban_reason")}
                         autoFocus={true}
                     />
                 </form>

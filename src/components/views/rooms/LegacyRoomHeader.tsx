@@ -762,7 +762,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
 
         const buttons = this.props.showButtons ? this.renderButtons(isVideoRoom) : null;
 
-        let oobName = _t("Unnamed room");
+        let oobName = _t("common|unnamed_room");
         if (this.props.oobData && this.props.oobData.name) {
             oobName = this.props.oobData.name;
         }

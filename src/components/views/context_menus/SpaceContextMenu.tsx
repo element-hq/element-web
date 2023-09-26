@@ -187,7 +187,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                     <IconizedContextMenuOption
                         data-testid="new-video-room-option"
                         iconClassName="mx_SpacePanel_iconPlus"
-                        label={_t("Video room")}
+                        label={_t("common|video_room")}
                         onClick={onNewVideoRoomClick}
                     >
                         <BetaPill />

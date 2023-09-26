@@ -26,7 +26,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s%(monthName)s%(day)s%(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s%(monthName)s%(day)s%(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s%(monthName)s%(day)s%(fullYear)s%(time)s",
-    "Explore rooms": "Explorează camerele",
     "common": {
         "analytics": "Analizarea",
         "error": "Eroare"
@@ -35,7 +34,8 @@
         "ok": "OK",
         "sign_in": "Autentificare",
         "dismiss": "Închide",
-        "confirm": "Confirmă"
+        "confirm": "Confirmă",
+        "explore_rooms": "Explorează camerele"
     },
     "voip": {
         "call_failed": "Apel eșuat",

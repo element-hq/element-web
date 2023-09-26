@@ -1,5 +1,4 @@
 {
-    "Explore rooms": "Istražite sobe",
     "Send": "Pošalji",
     "Sun": "Ned",
     "Mon": "Pon",
@@ -22,7 +21,6 @@
     "Dec": "Dec",
     "PM": "poslepodne",
     "AM": "prepodne",
-    "Default": "Podrazumevano",
     "Restricted": "Ograničeno",
     "Moderator": "Moderator",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "",
@@ -40,7 +38,8 @@
         "dismiss": "Odbaci",
         "trust": "Vjeruj",
         "sign_in": "Prijavite se",
-        "register": "Registruj se"
+        "register": "Registruj se",
+        "explore_rooms": "Istražite sobe"
     },
     "power_level": {
         "default": "Podrazumevano",
@@ -147,5 +146,8 @@
     "error": {
         "admin_contact": "Molim Vas da <a>kontaktirate administratora</a> kako bi ste nastavili sa korištenjem usluge.",
         "connection": "Postoji problem u komunikaciji sa privatnim/javnim serverom. Molim Vas pokušajte kasnije."
+    },
+    "notifications": {
+        "default": "Podrazumevano"
     }
 }

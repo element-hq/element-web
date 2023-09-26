@@ -143,7 +143,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         const name = room ? room.name : list.roomId;
 
         const renderRules = (rules: ListRule[]): JSX.Element => {
-            if (rules.length === 0) return <i>{_t("None")}</i>;
+            if (rules.length === 0) return <i>{_t("labs_mjolnir|rules_empty")}</i>;
 
             const tiles: JSX.Element[] = [];
             for (const rule of rules) {

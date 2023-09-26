@@ -47,7 +47,7 @@ export default class IntegrationsDisabledDialog extends React.Component<IProps> 
                 <div className="mx_IntegrationsDisabledDialog_content">
                     <p>
                         {_t("Enable '%(manageIntegrations)s' in Settings to do this.", {
-                            manageIntegrations: _t("Manage integrations"),
+                            manageIntegrations: _t("integration_manager|manage_title"),
                         })}
                     </p>
                 </div>

@@ -1,5 +1,4 @@
 {
-    "Authentication": "Login bevestigen",
     "%(items)s and %(lastItem)s": "%(items)s en %(lastItem)s",
     "and %(count)s others...": {
         "other": "en %(count)s anderen…",
@@ -10,17 +9,13 @@
     "Are you sure?": "Weet je het zeker?",
     "Are you sure you want to reject the invitation?": "Weet je zeker dat je de uitnodiging wilt weigeren?",
     "Admin Tools": "Beheerdersgereedschap",
-    "No Microphones detected": "Geen microfoons gevonden",
-    "No Webcams detected": "Geen webcams gevonden",
     "Are you sure you want to leave the room '%(roomName)s'?": "Weet je zeker dat je de kamer ‘%(roomName)s’ wil verlaten?",
     "Create new room": "Nieuwe kamer aanmaken",
     "Failed to forget room %(errCode)s": "Vergeten van kamer is mislukt %(errCode)s",
     "unknown error code": "onbekende foutcode",
-    "Failed to change password. Is your password correct?": "Wijzigen van wachtwoord is mislukt. Is je wachtwoord juist?",
     "Moderator": "Moderator",
     "not specified": "niet opgegeven",
     "No more results": "Geen resultaten meer",
-    "Reason": "Reden",
     "Reject invitation": "Uitnodiging weigeren",
     "Sun": "Zo",
     "Mon": "Ma",
@@ -44,12 +39,10 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s, %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s, %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s, %(time)s",
-    "Deactivate Account": "Account Sluiten",
     "Decrypt %(text)s": "%(text)s ontsleutelen",
     "Download %(text)s": "%(text)s downloaden",
     "Email address": "E-mailadres",
     "Custom level": "Aangepast niveau",
-    "Default": "Standaard",
     "Enter passphrase": "Wachtwoord invoeren",
     "Error decrypting attachment": "Fout bij het ontsleutelen van de bijlage",
     "Failed to ban user": "Verbannen van persoon is mislukt",
@@ -57,14 +50,10 @@
     "Failed to mute user": "Dempen van persoon is mislukt",
     "Failed to reject invite": "Weigeren van uitnodiging is mislukt",
     "Failed to reject invitation": "Weigeren van uitnodiging is mislukt",
-    "Failed to set display name": "Instellen van weergavenaam is mislukt",
-    "Failed to unban": "Ontbannen mislukt",
     "Filter room members": "Kamerleden filteren",
     "Forget room": "Kamer vergeten",
     "Historical": "Historisch",
     "Home": "Home",
-    "Incorrect verification code": "Onjuiste verificatiecode",
-    "Invalid Email Address": "Ongeldig e-mailadres",
     "Invalid file%(extra)s": "Ongeldig bestand %(extra)s",
     "Invited": "Uitgenodigd",
     "Join Room": "Kamer toetreden",
@@ -80,12 +69,8 @@
     "Server may be unavailable, overloaded, or search timed out :(": "De server is misschien onbereikbaar of overbelast, of het zoeken duurde te lang :(",
     "Session ID": "Sessie-ID",
     "This room has no local addresses": "Deze kamer heeft geen lokale adressen",
-    "This doesn't appear to be a valid email address": "Het ziet er niet naar uit dat dit een geldig e-mailadres is",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Je probeert een punt in de tijdlijn van deze kamer te laden, maar je hebt niet voldoende rechten om het bericht te lezen.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Geprobeerd een gegeven punt in de tijdslijn van deze kamer te laden, maar kon dit niet vinden.",
-    "Unable to add email address": "Kan e-mailadres niet toevoegen",
-    "Unable to remove contact information": "Kan contactinformatie niet verwijderen",
-    "Unable to verify email address.": "Kan e-mailadres niet verifiëren.",
     "Uploading %(filename)s": "%(filename)s wordt geüpload",
     "Uploading %(filename)s and %(count)s others": {
         "one": "%(filename)s en %(count)s ander worden geüpload",
@@ -128,7 +113,6 @@
     "Send": "Versturen",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Zelfdegradatie is onomkeerbaar. Als je de laatst gemachtigde persoon in de kamer bent zullen deze rechten voorgoed verloren gaan.",
-    "Unignore": "Niet meer negeren",
     "Jump to read receipt": "Naar het laatst gelezen bericht gaan",
     "%(duration)ss": "%(duration)ss",
     "%(duration)sm": "%(duration)sm",
@@ -136,7 +120,6 @@
     "%(duration)sd": "%(duration)sd",
     "Replying": "Aan het beantwoorden",
     "Unnamed room": "Naamloze kamer",
-    "Banned by %(displayName)s": "Verbannen door %(displayName)s",
     "collapse": "dichtvouwen",
     "expand": "uitvouwen",
     "And %(count)s more...": {
@@ -156,8 +139,6 @@
     "Search…": "Zoeken…",
     "Saturday": "Zaterdag",
     "Monday": "Maandag",
-    "Invite to this room": "Uitnodigen voor deze kamer",
-    "All messages": "Alle berichten",
     "All Rooms": "Alle kamers",
     "You cannot delete this message. (%(code)s)": "Je kan dit bericht niet verwijderen. (%(code)s)",
     "Thursday": "Donderdag",
@@ -184,9 +165,6 @@
     "Share Room Message": "Bericht uit kamer delen",
     "Link to selected message": "Koppeling naar geselecteerd bericht",
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Je kan geen berichten sturen totdat je <consentLink>onze algemene voorwaarden</consentLink> hebt gelezen en aanvaard.",
-    "No Audio Outputs detected": "Geen geluidsuitgangen gedetecteerd",
-    "Audio Output": "Geluidsuitgang",
-    "Ignored users": "Genegeerde personen",
     "Dog": "Hond",
     "Cat": "Kat",
     "Lion": "Leeuw",
@@ -249,22 +227,9 @@
     "Anchor": "Anker",
     "Headphones": "Koptelefoon",
     "Folder": "Map",
-    "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "We hebben je een e-mail gestuurd om je adres te verifiëren. Gelieve de daarin gegeven aanwijzingen op te volgen en dan op de knop hieronder te klikken.",
-    "Email Address": "E-mailadres",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Versleutelde berichten zijn beveiligd met eind-tot-eind-versleuteling. Enkel de ontvanger(s) en jij hebben de sleutels om deze berichten te lezen.",
     "Back up your keys before signing out to avoid losing them.": "Maak een back-up van je sleutels voordat je jezelf afmeldt om ze niet te verliezen.",
     "Start using Key Backup": "Begin sleutelback-up te gebruiken",
-    "Unable to verify phone number.": "Kan telefoonnummer niet verifiëren.",
-    "Verification code": "Verificatiecode",
-    "Phone Number": "Telefoonnummer",
-    "Email addresses": "E-mailadressen",
-    "Phone numbers": "Telefoonnummers",
-    "Account management": "Accountbeheer",
-    "Missing media permissions, click the button below to request.": "Mediatoestemmingen ontbreken, klik op de knop hieronder om deze aan te vragen.",
-    "Request media permissions": "Mediatoestemmingen verzoeken",
-    "Voice & Video": "Spraak & video",
-    "Room information": "Kamerinformatie",
-    "Room Addresses": "Kameradressen",
     "This room has been replaced and is no longer active.": "Deze kamer is vervangen en niet langer actief.",
     "The conversation continues here.": "Het gesprek gaat hier verder.",
     "Only room administrators will see this warning": "Enkel kamerbeheerders zullen deze waarschuwing zien",
@@ -384,11 +349,6 @@
     "Homeserver URL does not appear to be a valid Matrix homeserver": "De homeserver-URL lijkt geen geldige Matrix-homeserver",
     "Invalid base_url for m.identity_server": "Ongeldige base_url voor m.identity_server",
     "Identity server URL does not appear to be a valid identity server": "De identiteitsserver-URL lijkt geen geldige identiteitsserver",
-    "Uploaded sound": "Geüpload-geluid",
-    "Sounds": "Geluiden",
-    "Notification sound": "Meldingsgeluid",
-    "Set a new custom sound": "Stel een nieuw aangepast geluid in",
-    "Browse": "Bladeren",
     "Upload all": "Alles versturen",
     "Edited at %(date)s. Click to view edits.": "Bewerkt op %(date)s. Klik om de bewerkingen te bekijken.",
     "Message edits": "Berichtbewerkingen",
@@ -402,42 +362,8 @@
     "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Laat ons weten wat er verkeerd is gegaan, of nog beter, maak een foutrapport aan op GitHub, waarin je het probleem beschrijft.",
     "Find others by phone or email": "Vind anderen via telefoonnummer of e-mailadres",
     "Be found by phone or email": "Wees vindbaar via telefoonnummer of e-mailadres",
-    "Checking server": "Server wordt gecontroleerd",
-    "Disconnect from the identity server <idserver />?": "Wil je de verbinding met de identiteitsserver <idserver /> verbreken?",
-    "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "Om bekenden te kunnen vinden en voor hen vindbaar te zijn gebruik je momenteel <server></server>. Je kan die identiteitsserver hieronder wijzigen.",
-    "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "Je gebruikt momenteel geen identiteitsserver. Voeg er hieronder één toe om bekenden te kunnen vinden en voor hen vindbaar te zijn.",
-    "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Als je de verbinding met je identiteitsserver verbreekt zal je niet door andere personen gevonden kunnen worden, en dat je anderen niet via e-mail of telefoon zal kunnen uitnodigen.",
-    "Discovery": "Vindbaarheid",
     "Deactivate account": "Account sluiten",
-    "Unable to revoke sharing for email address": "Kan delen voor dit e-mailadres niet intrekken",
-    "Unable to share email address": "Kan e-mailadres niet delen",
-    "Discovery options will appear once you have added an email above.": "Vindbaarheidopties zullen verschijnen wanneer je een e-mailadres hebt toegevoegd.",
-    "Unable to revoke sharing for phone number": "Kan delen voor dit telefoonnummer niet intrekken",
-    "Unable to share phone number": "Kan telefoonnummer niet delen",
-    "Please enter verification code sent via text.": "Voer de verificatiecode in die werd verstuurd via sms.",
-    "Discovery options will appear once you have added a phone number above.": "Vindbaarheidopties zullen verschijnen wanneer je een telefoonnummer hebt toegevoegd.",
-    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "Er is een sms verstuurd naar +%(msisdn)s. Voor de verificatiecode in die in het bericht staat.",
     "Command Help": "Hulp bij opdrachten",
-    "The identity server you have chosen does not have any terms of service.": "De identiteitsserver die je hebt gekozen heeft geen dienstvoorwaarden.",
-    "Terms of service not accepted or the identity server is invalid.": "Dienstvoorwaarden niet aanvaard, of de identiteitsserver is ongeldig.",
-    "Enter a new identity server": "Voer een nieuwe identiteitsserver in",
-    "Remove %(email)s?": "%(email)s verwijderen?",
-    "Remove %(phone)s?": "%(phone)s verwijderen?",
-    "Change identity server": "Identiteitsserver wisselen",
-    "Disconnect from the identity server <current /> and connect to <new /> instead?": "Verbinding met identiteitsserver <current /> verbreken en in plaats daarvan verbinden met <new />?",
-    "Disconnect identity server": "Verbinding met identiteitsserver verbreken",
-    "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "Je deelt nog steeds <b>je persoonlijke gegevens</b> op de identiteitsserver <idserver />.",
-    "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "We raden je aan je e-mailadressen en telefoonnummers van de identiteitsserver te verwijderen voordat je de verbinding verbreekt.",
-    "Disconnect anyway": "Verbinding toch verbreken",
-    "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "Mocht je, om bekenden te zoeken en zelf vindbaar te zijn, <server /> niet willen gebruiken, voer dan hieronder een andere identiteitsserver in.",
-    "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Een identiteitsserver is niet verplicht, maar zonder identiteitsserver zal je geen bekenden op e-mailadres of telefoonnummer kunnen zoeken, noch door hen vindbaar zijn.",
-    "Do not use an identity server": "Geen identiteitsserver gebruiken",
-    "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Aanvaard de gebruiksvoorwaarden van de identiteitsserver (%(serverName)s) om vindbaar te zijn op e-mailadres of telefoonnummer.",
-    "Error changing power level requirement": "Fout bij wijzigen van machtsniveauvereiste",
-    "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "Er is een fout opgetreden bij het wijzigen van de machtsniveauvereisten van de kamer. Zorg ervoor dat je over voldoende machtigingen beschikt en probeer het opnieuw.",
-    "Error changing power level": "Fout bij wijzigen van machtsniveau",
-    "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "Er is een fout opgetreden bij het wijzigen van het machtsniveau van de persoon. Zorg ervoor dat je over voldoende machtigingen beschikt en probeer het opnieuw.",
-    "Verify the link in your inbox": "Verifieer de koppeling in je postvak",
     "No recent messages by %(user)s found": "Geen recente berichten door %(user)s gevonden",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Probeer omhoog te scrollen in de tijdslijn om te kijken of er eerdere zijn.",
     "Remove recent messages by %(user)s": "Recente berichten door %(user)s verwijderen",
@@ -458,22 +384,11 @@
     "Share this email in Settings to receive invites directly in %(brand)s.": "Deel in de instellingen dit e-mailadres om uitnodigingen direct in %(brand)s te ontvangen.",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Gebruik een identiteitsserver om uit te nodigen op e-mailadres. <default>Gebruik de standaardserver (%(defaultIdentityServerName)s)</default> of beheer de server in de <settings>Instellingen</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Gebruik een identiteitsserver om anderen uit te nodigen via e-mail. Beheer de server in de <settings>Instellingen</settings>.",
-    "Explore rooms": "Kamers ontdekken",
     "Show image": "Afbeelding tonen",
     "e.g. my-room": "bv. mijn-kamer",
     "Close dialog": "Dialoog sluiten",
-    "Your email address hasn't been verified yet": "Jouw e-mailadres is nog niet geverifieerd",
-    "Click the link in the email you received to verify and then click continue again.": "Open de koppeling in de ontvangen verificatie-e-mail, en klik dan op ‘Doorgaan’.",
     "Lock": "Hangslot",
     "Show more": "Meer tonen",
-    "None": "Geen",
-    "You should:": "Je zou best:",
-    "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "je browserextensies bekijken voor extensies die mogelijk de identiteitsserver blokkeren (zoals Privacy Badger)",
-    "contact the administrators of identity server <idserver />": "contact opnemen met de beheerders van de identiteitsserver <idserver />",
-    "wait and try again later": "wachten en het later weer proberen",
-    "Manage integrations": "Integratiebeheerder",
-    "This room is bridging messages to the following platforms. <a>Learn more.</a>": "Deze kamer wordt overbrugd naar de volgende platformen. <a>Lees meer</a>",
-    "Bridges": "Bruggen",
     "This user has not verified all of their sessions.": "Deze persoon heeft niet al zijn sessies geverifieerd.",
     "You have not verified this user.": "Je hebt deze persoon niet geverifieerd.",
     "You have verified this user. This user has verified all of their sessions.": "Je hebt deze persoon geverifieerd. Deze persoon heeft al zijn sessies geverifieerd.",
@@ -482,13 +397,10 @@
     "Everyone in this room is verified": "Iedereen in deze kamer is geverifieerd",
     "Direct Messages": "Direct gesprek",
     "This backup is trusted because it has been restored on this session": "Deze back-up is vertrouwd omdat hij hersteld is naar deze sessie",
-    "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Je moet je <b>persoonlijke informatie</b> van de identiteitsserver <idserver /> <b>verwijderen</b> voordat je ontkoppelt. Helaas kan de identiteitsserver <idserver /> op dit moment niet worden bereikt. Mogelijk is hij offline.",
     "Encrypted by an unverified session": "Versleuteld door een niet-geverifieerde sessie",
     "Unencrypted": "Onversleuteld",
     "Encrypted by a deleted session": "Versleuteld door een verwijderde sessie",
-    "Close preview": "Voorbeeld sluiten",
     "Failed to deactivate user": "Deactiveren van persoon is mislukt",
-    "Room %(name)s": "Kamer %(name)s",
     "<userName/> wants to chat": "<userName/> wil een chat met je beginnen",
     "Start chatting": "Gesprek beginnen",
     "Reject & Ignore user": "Weigeren en persoon negeren",
@@ -832,7 +744,6 @@
     "Vatican City": "Vaticaanstad",
     "Taiwan": "Taiwan",
     "This room is public": "Deze kamer is publiek",
-    "Explore public rooms": "Publieke kamers ontdekken",
     "Room options": "Kameropties",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "Start een kamer met iemand door hun naam, e-mailadres of inlognaam (zoals <userId/>) te typen.",
     "Error removing address": "Fout bij verwijderen van adres",
@@ -843,7 +754,6 @@
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Er is een fout opgetreden bij het bijwerken van de bijnaam van de kamer. Dit wordt mogelijk niet toegestaan door de server of er is een tijdelijk probleem opgetreden.",
     "Show Widgets": "Widgets tonen",
     "Hide Widgets": "Widgets verbergen",
-    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "De beheerder van je server heeft eind-tot-eind-versleuteling standaard uitgeschakeld in alle privékamers en directe gesprekken.",
     "Scroll to most recent messages": "Spring naar meest recente bericht",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "De echtheid van dit versleutelde bericht kan op dit apparaat niet worden gegarandeerd.",
     "Backup version:": "Versie reservekopie:",
@@ -910,7 +820,6 @@
     "St. Lucia": "Sint Lucia",
     "South Sudan": "Zuid-Soedan",
     "Oman": "Oman",
-    "No recently visited rooms": "Geen onlangs bezochte kamers",
     "Use the <a>Desktop app</a> to see all encrypted files": "Gebruik de <a>Desktop-app</a> om alle versleutelde bestanden te zien",
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Herinnering: Jouw browser wordt niet ondersteund. Dit kan een negatieve impact hebben op je ervaring.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Nodig iemand uit door gebruik te maken van hun naam, e-mailadres, inlognaam (zoals <userId/>) of <a>deel deze kamer</a>.",
@@ -998,7 +907,6 @@
     "Other published addresses:": "Andere gepubliceerde adressen:",
     "Published Addresses": "Gepubliceerde adressen",
     "Open dial pad": "Kiestoetsen openen",
-    "Recently visited rooms": "Onlangs geopende kamers",
     "Dial pad": "Kiestoetsen",
     "IRC display name width": "Breedte IRC-weergavenaam",
     "If you cancel now, you may lose encrypted messages & data if you lose access to your logins.": "Als je nu annuleert, kan je versleutelde berichten en gegevens verliezen als je geen toegang meer hebt tot je login.",
@@ -1017,13 +925,9 @@
     "Space selection": "Space-selectie",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.": "Je kan deze wijziging niet ongedaan maken, omdat je jezelf rechten ontneemt. Als je de laatst bevoegde persoon in de Space bent zal het onmogelijk zijn om weer rechten te krijgen.",
     "Suggested Rooms": "Kamersuggesties",
-    "Add existing room": "Bestaande kamers toevoegen",
-    "Invite to this space": "Voor deze Space uitnodigen",
     "Your message was sent": "Je bericht is verstuurd",
     "Leave space": "Space verlaten",
     "Create a space": "Space maken",
-    "Private space": "Privé Space",
-    "Public space": "Publieke Space",
     "<inviter/> invites you": "<inviter/> nodigt je uit",
     "You may want to try a different search or check for typos.": "Je kan een andere zoekterm proberen of controleren op een typefout.",
     "No results found": "Geen resultaten gevonden",
@@ -1067,7 +971,6 @@
     },
     "Failed to send": "Versturen is mislukt",
     "Enter your Security Phrase a second time to confirm it.": "Voer je veiligheidswachtwoord een tweede keer in om het te bevestigen.",
-    "You have no ignored users.": "Je hebt geen persoon genegeerd.",
     "Want to add a new room instead?": "Wil je anders een nieuwe kamer toevoegen?",
     "Adding rooms... (%(progress)s out of %(count)s)": {
         "one": "Kamer toevoegen...",
@@ -1104,22 +1007,9 @@
     "Published addresses can be used by anyone on any server to join your room.": "Gepubliceerde adressen kunnen door iedereen op elke server gebruikt worden om bij jouw kamer te komen.",
     "Published addresses can be used by anyone on any server to join your space.": "Gepubliceerde adressen kunnen door iedereen op elke server gebruikt worden om jouw Space te betreden.",
     "This space has no local addresses": "Deze Space heeft geen lokaaladres",
-    "Space information": "Space-informatie",
-    "Address": "Adres",
     "Unnamed audio": "Naamloze audio",
     "Error processing audio message": "Fout bij verwerking audiobericht",
-    "Show %(count)s other previews": {
-        "one": "%(count)s andere preview weergeven",
-        "other": "%(count)s andere previews weergeven"
-    },
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Jouw %(brand)s laat je geen integratiebeheerder gebruiken om dit te doen. Neem contact op met een beheerder.",
-    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integratiebeheerders ontvangen configuratie-informatie en kunnen widgets aanpassen, kameruitnodigingen versturen en machtsniveau’s namens jou aanpassen.",
-    "Use an integration manager to manage bots, widgets, and sticker packs.": "Gebruik een integratiebeheerder om bots, widgets en stickerpakketten te beheren.",
-    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Gebruik een integratiebeheerder <b>(%(serverName)s)</b> om bots, widgets en stickerpakketten te beheren.",
-    "Identity server (%(server)s)": "Identiteitsserver (%(server)s)",
-    "Could not connect to identity server": "Kon geen verbinding maken met de identiteitsserver",
-    "Not a valid identity server (status code %(code)s)": "Geen geldige identiteitsserver (statuscode %(code)s)",
-    "Identity server URL must be HTTPS": "Identiteitsserver-URL moet HTTPS zijn",
     "User Directory": "Personengids",
     "Unable to copy a link to the room to the clipboard.": "Kopiëren van kamerlink naar het klembord is mislukt.",
     "Unable to copy room link": "Kopiëren van kamerlink is mislukt",
@@ -1130,7 +1020,6 @@
     "Their device couldn't start the camera or microphone": "Het andere apparaat kon de camera of microfoon niet starten",
     "Connection failed": "Verbinding mislukt",
     "Could not connect media": "Mediaverbinding mislukt",
-    "Public room": "Publieke kamer",
     "Error downloading audio": "Fout bij downloaden van audio",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Let op bijwerken maakt een nieuwe versie van deze kamer</b>. Alle huidige berichten blijven in deze gearchiveerde kamer.",
     "Automatically invite members from this room to the new one": "Automatisch leden uitnodigen van deze kamer in de nieuwe",
@@ -1169,8 +1058,6 @@
     "Results": "Resultaten",
     "Some encryption parameters have been changed.": "Enkele versleutingsparameters zijn gewijzigd.",
     "Role in <RoomName/>": "Rol in <RoomName/>",
-    "Unknown failure": "Onbekende fout",
-    "Failed to update the join rules": "Het updaten van de deelname regels is mislukt",
     "Message didn't send. Click for info.": "Bericht is niet verstuur. Klik voor meer info.",
     "To join a space you'll need an invite.": "Om te kunnen deelnemen aan een space heb je een uitnodiging nodig.",
     "Would you like to leave the rooms in this space?": "Wil je de kamers verlaten in deze Space?",
@@ -1229,12 +1116,6 @@
     "The homeserver the user you're verifying is connected to": "De homeserver waarmee de persoon die jij verifieert verbonden is",
     "You do not have permission to start polls in this room.": "Je hebt geen toestemming om polls te starten in deze kamer.",
     "Reply in thread": "Reageer in draad",
-    "You won't get any notifications": "Je krijgt geen meldingen",
-    "Get notified only with mentions and keywords as set up in your <a>settings</a>": "Krijg alleen meldingen met vermeldingen en trefwoorden zoals ingesteld in je <a>instellingen</a>",
-    "@mentions & keywords": "@vermeldingen & trefwoorden",
-    "Get notified for every message": "Ontvang een melding bij elk bericht",
-    "Get notifications as set up in your <a>settings</a>": "Ontvang de meldingen zoals ingesteld in uw <a>instellingen</a>",
-    "This room isn't bridging messages to any platforms. <a>Learn more.</a>": "Deze kamer overbrugt geen berichten naar platformen. <a>Lees meer.</a>",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s en %(count)s andere",
         "other": "%(spaceName)s en %(count)s andere"
@@ -1255,9 +1136,6 @@
     "Home options": "Home-opties",
     "%(spaceName)s menu": "%(spaceName)s-menu",
     "Join public room": "Publieke kamer toetreden",
-    "Add people": "Personen toevoegen",
-    "Invite to space": "Voor Space uitnodigen",
-    "Start new chat": "Nieuwe chat beginnen",
     "Recently viewed": "Recent bekeken",
     "%(count)s votes cast. Vote to see the results": {
         "one": "%(count)s stem uitgebracht. Stem om de resultaten te zien",
@@ -1372,8 +1250,6 @@
         "one": "Momenteel berichten in %(count)s kamer aan het verwijderen",
         "other": "Momenteel berichten in %(count)s kamers aan het verwijderen"
     },
-    "New video room": "Nieuwe video kamer",
-    "New room": "Nieuwe kamer",
     "An error occurred while stopping your live location, please try again": "Er is een fout opgetreden bij het stoppen van je live locatie, probeer het opnieuw",
     "You are sharing your live location": "Je deelt je live locatie",
     "Live location enabled": "Live locatie ingeschakeld",
@@ -1409,19 +1285,16 @@
         "one": "Gezien door %(count)s persoon",
         "other": "Gezien door %(count)s mensen"
     },
-    "Your password was successfully changed.": "Wachtwoord veranderen geslaagd.",
     "An error occurred while stopping your live location": "Er is een fout opgetreden bij het stoppen van je live locatie",
     "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.": "Je bericht is niet verzonden omdat deze server is geblokkeerd door de beheerder. Neem <a>contact op met je servicebeheerder</a> om de service te blijven gebruiken.",
     "Cameras": "Camera's",
     "Output devices": "Uitvoerapparaten",
     "Input devices": "Invoer apparaten",
-    "Private room": "Privé kamer",
     "To view, please enable video rooms in Labs first": "Schakel eerst videokamers in Labs in om te bekijken",
     "To join, please enable video rooms in Labs first": "Schakel eerst videokamers in Labs in om deel te nemen",
     "Open room": "Open kamer",
     "Show Labs settings": "Lab instellingen weergeven",
     "To view %(roomName)s, you need an invite": "Om %(roomName)s te bekijken, heb je een uitnodiging nodig",
-    "Video room": "Video kamer",
     "%(members)s and %(last)s": "%(members)s en %(last)s",
     "%(members)s and more": "%(members)s en meer",
     "Unread email icon": "Ongelezen e-mailpictogram",
@@ -1429,7 +1302,6 @@
     "An error occurred whilst sharing your live location": "Er is een fout opgetreden bij het delen van je live locatie",
     "Joining…": "Deelnemen…",
     "Read receipts": "Leesbevestigingen",
-    "Deactivating your account is a permanent action — be careful!": "Het deactiveren van je account is een permanente actie - wees voorzichtig!",
     "Remove search filter for %(filter)s": "Verwijder zoekfilter voor %(filter)s",
     "Start a group chat": "Start een groepsgesprek",
     "Other options": "Andere opties",
@@ -1498,11 +1370,6 @@
     "Video call (%(brand)s)": "Videogesprek (%(brand)s)",
     "Video call (Jitsi)": "Videogesprek (Jitsi)",
     "Show formatting": "Opmaak tonen",
-    "Failed to set pusher state": "Kan de pusher status niet instellen",
-    "Call type": "Oproeptype",
-    "You do not have sufficient permissions to change this.": "U heeft niet voldoende rechten om dit te wijzigen.",
-    "%(brand)s is end-to-end encrypted, but is currently limited to smaller numbers of users.": "%(brand)s is eind-tot-eind versleuteld, maar is momenteel beperkt tot kleinere aantallen gebruikers.",
-    "Enable %(brand)s as an additional calling option in this room": "Schakel %(brand)s in als extra bel optie in deze kamer",
     "common": {
         "about": "Over",
         "analytics": "Gebruiksgegevens",
@@ -1605,7 +1472,13 @@
         "general": "Algemeen",
         "profile": "Profiel",
         "display_name": "Weergavenaam",
-        "user_avatar": "Profielfoto"
+        "user_avatar": "Profielfoto",
+        "authentication": "Login bevestigen",
+        "public_room": "Publieke kamer",
+        "video_room": "Video kamer",
+        "public_space": "Publieke Space",
+        "private_space": "Privé Space",
+        "private_room": "Privé kamer"
     },
     "action": {
         "continue": "Doorgaan",
@@ -1708,7 +1581,16 @@
         "unban": "Ontbannen",
         "click_to_copy": "Klik om te kopiëren",
         "hide_advanced": "Geavanceerde info verbergen",
-        "show_advanced": "Geavanceerde info tonen"
+        "show_advanced": "Geavanceerde info tonen",
+        "unignore": "Niet meer negeren",
+        "start_new_chat": "Nieuwe chat beginnen",
+        "invite_to_space": "Voor Space uitnodigen",
+        "add_people": "Personen toevoegen",
+        "explore_rooms": "Kamers ontdekken",
+        "new_room": "Nieuwe kamer",
+        "new_video_room": "Nieuwe video kamer",
+        "add_existing_room": "Bestaande kamers toevoegen",
+        "explore_public_rooms": "Publieke kamers ontdekken"
     },
     "a11y": {
         "user_menu": "Persoonsmenu",
@@ -1721,7 +1603,8 @@
             "one": "1 ongelezen bericht."
         },
         "unread_messages": "Ongelezen berichten.",
-        "jump_first_invite": "Ga naar de eerste uitnodiging."
+        "jump_first_invite": "Ga naar de eerste uitnodiging.",
+        "room_name": "Kamer %(name)s"
     },
     "labs": {
         "video_rooms": "Video kamers",
@@ -2072,7 +1955,14 @@
         "inline_url_previews_room_account": "URL-voorvertoning in dit kamer inschakelen (geldt alleen voor jou)",
         "inline_url_previews_room": "URL-voorvertoning voor alle deelnemers aan deze kamer standaard inschakelen",
         "voip": {
-            "mirror_local_feed": "Lokale videoaanvoer ook elders opslaan (spiegelen)"
+            "mirror_local_feed": "Lokale videoaanvoer ook elders opslaan (spiegelen)",
+            "missing_permissions_prompt": "Mediatoestemmingen ontbreken, klik op de knop hieronder om deze aan te vragen.",
+            "request_permissions": "Mediatoestemmingen verzoeken",
+            "audio_output": "Geluidsuitgang",
+            "audio_output_empty": "Geen geluidsuitgangen gedetecteerd",
+            "audio_input_empty": "Geen microfoons gevonden",
+            "video_input_empty": "Geen webcams gevonden",
+            "title": "Spraak & video"
         },
         "send_read_receipts_unsupported": "Jouw server biedt geen ondersteuning voor het uitschakelen van het verzenden van leesbevestigingen.",
         "security": {
@@ -2143,7 +2033,11 @@
             "key_backup_connect": "Verbind deze sessie met de sleutelback-up",
             "key_backup_complete": "Alle sleutels zijn geback-upt",
             "key_backup_algorithm": "Algoritme:",
-            "key_backup_inactive_warning": "Jouw sleutels worden <b>niet geback-upt van deze sessie</b>."
+            "key_backup_inactive_warning": "Jouw sleutels worden <b>niet geback-upt van deze sessie</b>.",
+            "key_backup_active_version_none": "Geen",
+            "ignore_users_empty": "Je hebt geen persoon genegeerd.",
+            "ignore_users_section": "Genegeerde personen",
+            "e2ee_default_disabled_warning": "De beheerder van je server heeft eind-tot-eind-versleuteling standaard uitgeschakeld in alle privékamers en directe gesprekken."
         },
         "preferences": {
             "room_list_heading": "Kamerslijst",
@@ -2242,7 +2136,8 @@
                 "one": "Weet u zeker dat u zich wilt afmelden bij %(count)s sessies?",
                 "other": "Weet u zeker dat u zich wilt afmelden bij %(count)s sessies?"
             },
-            "other_sessions_subsection_description": "Voor de beste beveiliging verifieer je jouw sessies en meldt je jezelf af bij elke sessie die je niet meer herkent of gebruikt."
+            "other_sessions_subsection_description": "Voor de beste beveiliging verifieer je jouw sessies en meldt je jezelf af bij elke sessie die je niet meer herkent of gebruikt.",
+            "error_pusher_state": "Kan de pusher status niet instellen"
         },
         "general": {
             "account_section": "Account",
@@ -2260,7 +2155,41 @@
             "add_msisdn_dialog_title": "Telefoonnummer toevoegen",
             "name_placeholder": "Geen weergavenaam",
             "error_saving_profile_title": "Profiel opslaan mislukt",
-            "error_saving_profile": "De handeling kon niet worden voltooid"
+            "error_saving_profile": "De handeling kon niet worden voltooid",
+            "error_password_change_403": "Wijzigen van wachtwoord is mislukt. Is je wachtwoord juist?",
+            "password_change_success": "Wachtwoord veranderen geslaagd.",
+            "emails_heading": "E-mailadressen",
+            "msisdns_heading": "Telefoonnummers",
+            "discovery_needs_terms": "Aanvaard de gebruiksvoorwaarden van de identiteitsserver (%(serverName)s) om vindbaar te zijn op e-mailadres of telefoonnummer.",
+            "deactivate_section": "Account Sluiten",
+            "account_management_section": "Accountbeheer",
+            "deactivate_warning": "Het deactiveren van je account is een permanente actie - wees voorzichtig!",
+            "discovery_section": "Vindbaarheid",
+            "error_revoke_email_discovery": "Kan delen voor dit e-mailadres niet intrekken",
+            "error_share_email_discovery": "Kan e-mailadres niet delen",
+            "email_not_verified": "Jouw e-mailadres is nog niet geverifieerd",
+            "email_verification_instructions": "Open de koppeling in de ontvangen verificatie-e-mail, en klik dan op ‘Doorgaan’.",
+            "error_email_verification": "Kan e-mailadres niet verifiëren.",
+            "discovery_email_verification_instructions": "Verifieer de koppeling in je postvak",
+            "discovery_email_empty": "Vindbaarheidopties zullen verschijnen wanneer je een e-mailadres hebt toegevoegd.",
+            "error_revoke_msisdn_discovery": "Kan delen voor dit telefoonnummer niet intrekken",
+            "error_share_msisdn_discovery": "Kan telefoonnummer niet delen",
+            "error_msisdn_verification": "Kan telefoonnummer niet verifiëren.",
+            "incorrect_msisdn_verification": "Onjuiste verificatiecode",
+            "msisdn_verification_instructions": "Voer de verificatiecode in die werd verstuurd via sms.",
+            "msisdn_verification_field_label": "Verificatiecode",
+            "discovery_msisdn_empty": "Vindbaarheidopties zullen verschijnen wanneer je een telefoonnummer hebt toegevoegd.",
+            "error_set_name": "Instellen van weergavenaam is mislukt",
+            "error_remove_3pid": "Kan contactinformatie niet verwijderen",
+            "remove_email_prompt": "%(email)s verwijderen?",
+            "error_invalid_email": "Ongeldig e-mailadres",
+            "error_invalid_email_detail": "Het ziet er niet naar uit dat dit een geldig e-mailadres is",
+            "error_add_email": "Kan e-mailadres niet toevoegen",
+            "add_email_instructions": "We hebben je een e-mail gestuurd om je adres te verifiëren. Gelieve de daarin gegeven aanwijzingen op te volgen en dan op de knop hieronder te klikken.",
+            "email_address_label": "E-mailadres",
+            "remove_msisdn_prompt": "%(phone)s verwijderen?",
+            "add_msisdn_instructions": "Er is een sms verstuurd naar +%(msisdn)s. Voor de verificatiecode in die in het bericht staat.",
+            "msisdn_label": "Telefoonnummer"
         },
         "sidebar": {
             "title": "Zijbalk",
@@ -2730,6 +2659,13 @@
             "collapse_reply_thread": "Antwoorddraad invouwen",
             "view_related_event": "Bekijk gerelateerde gebeurtenis",
             "report": "Melden"
+        },
+        "url_preview": {
+            "show_n_more": {
+                "one": "%(count)s andere preview weergeven",
+                "other": "%(count)s andere previews weergeven"
+            },
+            "close": "Voorbeeld sluiten"
         }
     },
     "slash_command": {
@@ -2974,7 +2910,14 @@
             "title": "Rollen & rechten",
             "permissions_section": "Rechten",
             "permissions_section_description_space": "Selecteer de rollen die vereist zijn om onderdelen van de space te wijzigen",
-            "permissions_section_description_room": "Selecteer de vereiste rollen om verschillende delen van de kamer te wijzigen"
+            "permissions_section_description_room": "Selecteer de vereiste rollen om verschillende delen van de kamer te wijzigen",
+            "error_unbanning": "Ontbannen mislukt",
+            "banned_by": "Verbannen door %(displayName)s",
+            "ban_reason": "Reden",
+            "error_changing_pl_reqs_title": "Fout bij wijzigen van machtsniveauvereiste",
+            "error_changing_pl_reqs_description": "Er is een fout opgetreden bij het wijzigen van de machtsniveauvereisten van de kamer. Zorg ervoor dat je over voldoende machtigingen beschikt en probeer het opnieuw.",
+            "error_changing_pl_title": "Fout bij wijzigen van machtsniveau",
+            "error_changing_pl_description": "Er is een fout opgetreden bij het wijzigen van het machtsniveau van de persoon. Zorg ervoor dat je over voldoende machtigingen beschikt en probeer het opnieuw."
         },
         "security": {
             "strict_encryption": "Vanaf deze sessie nooit versleutelde berichten naar ongeverifieerde sessies in deze kamer versturen",
@@ -3026,7 +2969,9 @@
             "join_rule_upgrade_updating_spaces": {
                 "one": "Spaces bijwerken...",
                 "other": "Spaces bijwerken... (%(progress)s van %(count)s)"
-            }
+            },
+            "error_join_rule_change_title": "Het updaten van de deelname regels is mislukt",
+            "error_join_rule_change_unknown": "Onbekende fout"
         },
         "general": {
             "publish_toggle": "Deze kamer vermelden in de publieke kamersgids van %(domain)s?",
@@ -3040,7 +2985,9 @@
             "error_save_space_settings": "Het opslaan van de space-instellingen is mislukt.",
             "description_space": "Bewerk instellingen gerelateerd aan jouw space.",
             "save": "Wijzigingen opslaan",
-            "leave_space": "Space verlaten"
+            "leave_space": "Space verlaten",
+            "aliases_section": "Kameradressen",
+            "other_section": "Overige"
         },
         "advanced": {
             "unfederated": "Deze kamer is niet toegankelijk vanaf externe Matrix-servers",
@@ -3050,7 +2997,9 @@
             "room_predecessor": "Bekijk oudere berichten in %(roomName)s.",
             "room_id": "Interne ruimte ID",
             "room_version_section": "Kamerversie",
-            "room_version": "Kamerversie:"
+            "room_version": "Kamerversie:",
+            "information_section_space": "Space-informatie",
+            "information_section_room": "Kamerinformatie"
         },
         "delete_avatar_label": "Afbeelding verwijderen",
         "upload_avatar_label": "Afbeelding uploaden",
@@ -3064,11 +3013,31 @@
             "history_visibility_anyone_space": "Space voorvertoning",
             "history_visibility_anyone_space_description": "Personen toestaan een voorvertoning van jouw space te zien voor deelname.",
             "history_visibility_anyone_space_recommendation": "Aanbevolen voor publieke spaces.",
-            "guest_access_label": "Gastentoegang inschakelen"
+            "guest_access_label": "Gastentoegang inschakelen",
+            "alias_section": "Adres"
         },
         "access": {
             "title": "Toegang",
             "description_space": "Bepaal wie kan lezen en deelnemen aan %(spaceName)s."
+        },
+        "bridges": {
+            "description": "Deze kamer wordt overbrugd naar de volgende platformen. <a>Lees meer</a>",
+            "empty": "Deze kamer overbrugt geen berichten naar platformen. <a>Lees meer.</a>",
+            "title": "Bruggen"
+        },
+        "notifications": {
+            "uploaded_sound": "Geüpload-geluid",
+            "settings_link": "Ontvang de meldingen zoals ingesteld in uw <a>instellingen</a>",
+            "sounds_section": "Geluiden",
+            "notification_sound": "Meldingsgeluid",
+            "custom_sound_prompt": "Stel een nieuw aangepast geluid in",
+            "browse_button": "Bladeren"
+        },
+        "voip": {
+            "enable_element_call_label": "Schakel %(brand)s in als extra bel optie in deze kamer",
+            "enable_element_call_caption": "%(brand)s is eind-tot-eind versleuteld, maar is momenteel beperkt tot kleinere aantallen gebruikers.",
+            "enable_element_call_no_permissions_tooltip": "U heeft niet voldoende rechten om dit te wijzigen.",
+            "call_type_section": "Oproeptype"
         }
     },
     "encryption": {
@@ -3295,7 +3264,9 @@
         "notification_options": "Meldingsinstellingen",
         "failed_set_dm_tag": "Kan tag voor direct bericht niet instellen",
         "failed_remove_tag": "Verwijderen van %(tagName)s-label van kamer is mislukt",
-        "failed_add_tag": "Toevoegen van %(tagName)s-label aan kamer is mislukt"
+        "failed_add_tag": "Toevoegen van %(tagName)s-label aan kamer is mislukt",
+        "breadcrumbs_label": "Onlangs geopende kamers",
+        "breadcrumbs_empty": "Geen onlangs bezochte kamers"
     },
     "report_content": {
         "missing_reason": "Geef aan waarom je deze melding indient.",
@@ -3530,7 +3501,8 @@
         "search_children": "Zoek %(spaceName)s",
         "invite_link": "Deel uitnodigingskoppeling",
         "invite": "Personen uitnodigen",
-        "invite_description": "Uitnodigen per e-mail of inlognaam"
+        "invite_description": "Uitnodigen per e-mail of inlognaam",
+        "invite_this_space": "Voor deze Space uitnodigen"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Deze server is niet geconfigureerd om kaarten weer te geven.",
@@ -3584,7 +3556,8 @@
         "lists_heading": "Abonnementen op lijsten",
         "lists_description_1": "Wanneer je jezelf abonneert op een banlijst zal je eraan worden toegevoegd!",
         "lists_description_2": "Als je dit niet wilt kan je een andere methode gebruiken om personen te negeren.",
-        "lists_new_label": "Kamer-ID of het adres van de banlijst"
+        "lists_new_label": "Kamer-ID of het adres van de banlijst",
+        "rules_empty": "Geen"
     },
     "create_space": {
         "name_required": "Vul een naam in voor deze space",
@@ -3676,7 +3649,8 @@
             "copy_link": "Kamerlink kopiëren",
             "low_priority": "Lage prioriteit",
             "forget": "Kamer vergeten"
-        }
+        },
+        "invite_this_room": "Uitnodigen voor deze kamer"
     },
     "file_panel": {
         "guest_note": "Je dient je te <a>registreren</a> om deze functie te gebruiken",
@@ -3813,7 +3787,13 @@
         "keyword_new": "Nieuw trefwoord",
         "class_global": "Overal",
         "class_other": "Overige",
-        "mentions_keywords": "Vermeldingen & trefwoorden"
+        "mentions_keywords": "Vermeldingen & trefwoorden",
+        "default": "Standaard",
+        "all_messages": "Alle berichten",
+        "all_messages_description": "Ontvang een melding bij elk bericht",
+        "mentions_and_keywords": "@vermeldingen & trefwoorden",
+        "mentions_and_keywords_description": "Krijg alleen meldingen met vermeldingen en trefwoorden zoals ingesteld in je <a>instellingen</a>",
+        "mute_description": "Je krijgt geen meldingen"
     },
     "mobile_guide": {
         "toast_title": "Gebruik de app voor een betere ervaring",
@@ -3837,6 +3817,38 @@
     "a11y_jump_first_unread_room": "Ga naar het eerste ongelezen kamer.",
     "integration_manager": {
         "error_connecting_heading": "Kan geen verbinding maken met de integratiebeheerder",
-        "error_connecting": "De integratiebeheerder is offline of kan je homeserver niet bereiken."
+        "error_connecting": "De integratiebeheerder is offline of kan je homeserver niet bereiken.",
+        "use_im_default": "Gebruik een integratiebeheerder <b>(%(serverName)s)</b> om bots, widgets en stickerpakketten te beheren.",
+        "use_im": "Gebruik een integratiebeheerder om bots, widgets en stickerpakketten te beheren.",
+        "manage_title": "Integratiebeheerder",
+        "explainer": "Integratiebeheerders ontvangen configuratie-informatie en kunnen widgets aanpassen, kameruitnodigingen versturen en machtsniveau’s namens jou aanpassen."
+    },
+    "identity_server": {
+        "url_not_https": "Identiteitsserver-URL moet HTTPS zijn",
+        "error_invalid": "Geen geldige identiteitsserver (statuscode %(code)s)",
+        "error_connection": "Kon geen verbinding maken met de identiteitsserver",
+        "checking": "Server wordt gecontroleerd",
+        "change": "Identiteitsserver wisselen",
+        "change_prompt": "Verbinding met identiteitsserver <current /> verbreken en in plaats daarvan verbinden met <new />?",
+        "error_invalid_or_terms": "Dienstvoorwaarden niet aanvaard, of de identiteitsserver is ongeldig.",
+        "no_terms": "De identiteitsserver die je hebt gekozen heeft geen dienstvoorwaarden.",
+        "disconnect": "Verbinding met identiteitsserver verbreken",
+        "disconnect_server": "Wil je de verbinding met de identiteitsserver <idserver /> verbreken?",
+        "disconnect_offline_warning": "Je moet je <b>persoonlijke informatie</b> van de identiteitsserver <idserver /> <b>verwijderen</b> voordat je ontkoppelt. Helaas kan de identiteitsserver <idserver /> op dit moment niet worden bereikt. Mogelijk is hij offline.",
+        "suggestions": "Je zou best:",
+        "suggestions_1": "je browserextensies bekijken voor extensies die mogelijk de identiteitsserver blokkeren (zoals Privacy Badger)",
+        "suggestions_2": "contact opnemen met de beheerders van de identiteitsserver <idserver />",
+        "suggestions_3": "wachten en het later weer proberen",
+        "disconnect_anyway": "Verbinding toch verbreken",
+        "disconnect_personal_data_warning_1": "Je deelt nog steeds <b>je persoonlijke gegevens</b> op de identiteitsserver <idserver />.",
+        "disconnect_personal_data_warning_2": "We raden je aan je e-mailadressen en telefoonnummers van de identiteitsserver te verwijderen voordat je de verbinding verbreekt.",
+        "url": "Identiteitsserver (%(server)s)",
+        "description_connected": "Om bekenden te kunnen vinden en voor hen vindbaar te zijn gebruik je momenteel <server></server>. Je kan die identiteitsserver hieronder wijzigen.",
+        "change_server_prompt": "Mocht je, om bekenden te zoeken en zelf vindbaar te zijn, <server /> niet willen gebruiken, voer dan hieronder een andere identiteitsserver in.",
+        "description_disconnected": "Je gebruikt momenteel geen identiteitsserver. Voeg er hieronder één toe om bekenden te kunnen vinden en voor hen vindbaar te zijn.",
+        "disconnect_warning": "Als je de verbinding met je identiteitsserver verbreekt zal je niet door andere personen gevonden kunnen worden, en dat je anderen niet via e-mail of telefoon zal kunnen uitnodigen.",
+        "description_optional": "Een identiteitsserver is niet verplicht, maar zonder identiteitsserver zal je geen bekenden op e-mailadres of telefoonnummer kunnen zoeken, noch door hen vindbaar zijn.",
+        "do_not_use": "Geen identiteitsserver gebruiken",
+        "url_field_label": "Voer een nieuwe identiteitsserver in"
     }
 }

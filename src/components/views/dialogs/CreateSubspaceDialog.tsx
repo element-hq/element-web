@@ -163,7 +163,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
                         <JoinRuleDropdown
                             label={_t("Space visibility")}
                             labelInvite={_t("Private space (invite only)")}
-                            labelPublic={_t("Public space")}
+                            labelPublic={_t("common|public_space")}
                             labelRestricted={_t("create_room|join_rule_restricted")}
                             width={478}
                             value={joinRule}

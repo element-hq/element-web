@@ -163,7 +163,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
             currentUploadedFile = (
                 <div>
                     <span>
-                        {_t("Uploaded sound")}: <code>{this.state.uploadedFile.name}</code>
+                        {_t("room_settings|notifications|uploaded_sound")}: <code>{this.state.uploadedFile.name}</code>
                     </span>
                 </div>
             );
@@ -181,10 +181,10 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                     className: "mx_NotificationSettingsTab_defaultEntry",
                                     label: (
                                         <>
-                                            {_t("Default")}
+                                            {_t("notifications|default")}
                                             <div className="mx_NotificationSettingsTab_microCopy">
                                                 {_t(
-                                                    "Get notifications as set up in your <a>settings</a>",
+                                                    "room_settings|notifications|settings_link",
                                                     {},
                                                     {
                                                         a: (sub) => (
@@ -206,9 +206,9 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                     className: "mx_NotificationSettingsTab_allMessagesEntry",
                                     label: (
                                         <>
-                                            {_t("All messages")}
+                                            {_t("notifications|all_messages")}
                                             <div className="mx_NotificationSettingsTab_microCopy">
-                                                {_t("Get notified for every message")}
+                                                {_t("notifications|all_messages_description")}
                                             </div>
                                         </>
                                     ),
@@ -218,10 +218,10 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                     className: "mx_NotificationSettingsTab_mentionsKeywordsEntry",
                                     label: (
                                         <>
-                                            {_t("@mentions & keywords")}
+                                            {_t("notifications|mentions_and_keywords")}
                                             <div className="mx_NotificationSettingsTab_microCopy">
                                                 {_t(
-                                                    "Get notified only with mentions and keywords as set up in your <a>settings</a>",
+                                                    "notifications|mentions_and_keywords_description",
                                                     {},
                                                     {
                                                         a: (sub) => (
@@ -245,7 +245,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                         <>
                                             {_t("common|off")}
                                             <div className="mx_NotificationSettingsTab_microCopy">
-                                                {_t("You won't get any notifications")}
+                                                {_t("notifications|mute_description")}
                                             </div>
                                         </>
                                     ),
@@ -256,11 +256,12 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                         />
                     </div>
 
-                    <SettingsSubsection heading={_t("Sounds")}>
+                    <SettingsSubsection heading={_t("room_settings|notifications|sounds_section")}>
                         <div>
                             <div className="mx_SettingsTab_subsectionText">
                                 <span>
-                                    {_t("Notification sound")}: <code>{this.state.currentSound}</code>
+                                    {_t("room_settings|notifications|notification_sound")}:{" "}
+                                    <code>{this.state.currentSound}</code>
                                 </span>
                             </div>
                             <AccessibleButton
@@ -273,7 +274,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                             </AccessibleButton>
                         </div>
                         <div>
-                            <h4 className="mx_Heading_h4">{_t("Set a new custom sound")}</h4>
+                            <h4 className="mx_Heading_h4">{_t("room_settings|notifications|custom_sound_prompt")}</h4>
                             <div className="mx_SettingsFlag">
                                 <form autoComplete="off" noValidate={true}>
                                     <input
@@ -283,7 +284,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                         onClick={chromeFileInputFix}
                                         onChange={this.onSoundUploadChanged}
                                         accept="audio/*"
-                                        aria-label={_t("Upload custom sound")}
+                                        aria-label={_t("room_settings|notifications|upload_sound_label")}
                                     />
                                 </form>
 
@@ -295,7 +296,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                 onClick={this.triggerUploader}
                                 kind="primary"
                             >
-                                {_t("Browse")}
+                                {_t("room_settings|notifications|browse_button")}
                             </AccessibleButton>
 
                             <AccessibleButton

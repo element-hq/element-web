@@ -13,36 +13,25 @@
     "Failed to forget room %(errCode)s": "فراموش کردن اتاق با خطا مواجه شد %(errCode)s",
     "Wednesday": "چهارشنبه",
     "Send": "ارسال",
-    "All messages": "همه‌ی پیام‌ها",
     "unknown error code": "کد خطای ناشناخته",
-    "Invite to this room": "دعوت به این گپ",
     "You cannot delete this message. (%(code)s)": "شما نمی‌توانید این پیام را پاک کنید. (%(code)s)",
     "Thursday": "پنج‌شنبه",
     "Search…": "جستجو…",
     "Yesterday": "دیروز",
-    "Failed to change password. Is your password correct?": "خطا در تغییر گذرواژه. آیا از درستی گذرواژه‌تان اطمینان دارید؟",
     "Ok": "تأیید",
     "Set up": "برپایی",
     "Forget room": "فراموش کردن اتاق",
     "Filter room members": "فیلتر کردن اعضای اتاق",
-    "Failed to unban": "رفع مسدودیت با خطا مواجه شد",
-    "Failed to set display name": "تنظیم نام نمایشی با خطا مواجه شد",
     "Failed to ban user": "کاربر مسدود نشد",
     "Error decrypting attachment": "خطا در رمزگشایی پیوست",
     "Email address": "آدرس ایمیل",
     "Download %(text)s": "دانلود 2%(text)s",
-    "Default": "پیشفرض",
     "Decrypt %(text)s": "رمزگشایی %(text)s",
-    "Deactivate Account": "غیرفعال کردن حساب",
     "Are you sure you want to reject the invitation?": "آیا مطمئن هستید که می خواهید دعوت را رد کنید؟",
     "Are you sure you want to leave the room '%(roomName)s'?": "آیا مطمئن هستید که می خواهید از اتاق '2%(roomName)s' خارج شوید؟",
     "Are you sure?": "مطمئنی؟",
     "An error has occurred.": "خطایی رخ داده است.",
     "A new password must be entered.": "گذواژه جدید باید وارد شود.",
-    "Authentication": "احراز هویت",
-    "No Webcams detected": "هیچ وبکمی شناسایی نشد",
-    "No Microphones detected": "هیچ میکروفونی شناسایی نشد",
-    "Incorrect verification code": "کد فعال‌سازی اشتباه است",
     "Home": "خانه",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s.%(day)s.%(fullYear)s.%(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s.%(day)s.%(fullYear)s",
@@ -70,7 +59,6 @@
     "Mon": "دوشنبه",
     "Sun": "یکشنبه",
     "Permission Required": "اجازه نیاز است",
-    "Explore rooms": "جستجو در اتاق ها",
     "Moderator": "معاون",
     "Restricted": "ممنوع",
     "Zimbabwe": "زیمبابوه",
@@ -322,7 +310,6 @@
     "Afghanistan": "افغانستان",
     "United States": "ایالات متحده",
     "United Kingdom": "انگلستان",
-    "Reason": "دلیل",
     "The server has denied your request.": "سرور درخواست شما را رد کرده است.",
     "Use your Security Key to continue.": "برای ادامه از کلید امنیتی خود استفاده کنید.",
     "Be found by phone or email": "از طریق تلفن یا ایمیل پیدا شوید",
@@ -669,7 +656,6 @@
     "Suggested Rooms": "اتاق‌های پیشنهادی",
     "Historical": "تاریخی",
     "Low priority": "اولویت کم",
-    "Explore public rooms": "کاوش در اتاق‌های عمومی",
     "Add room": "افزودن اتاق",
     "Rooms": "اتاق‌ها",
     "Open dial pad": "باز کردن صفحه شماره‌گیری",
@@ -680,9 +666,6 @@
         "one": "(~%(count)s نتیجه)",
         "other": "(~%(count)s نتیجه)"
     },
-    "No recently visited rooms": "اخیراً از اتاقی بازدید نشده است",
-    "Recently visited rooms": "اتاق‌هایی که به تازگی بازدید کرده‌اید",
-    "Room %(name)s": "اتاق %(name)s",
     "Replying": "پاسخ دادن",
     "%(duration)sd": "%(duration)s روز",
     "%(duration)sh": "%(duration)s ساعت",
@@ -694,12 +677,10 @@
     "The conversation continues here.": "گفتگو در اینجا ادامه دارد.",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (سطح قدرت %(powerLevelNumber)s)",
     "Invited": "دعوت شد",
-    "Invite to this space": "به این فضای کاری دعوت کنید",
     "and %(count)s others...": {
         "one": "و یکی دیگر ...",
         "other": "و %(count)s مورد دیگر ..."
     },
-    "Close preview": "بستن پیش نمایش",
     "Scroll to most recent messages": "به جدیدترین پیام‌ها بروید",
     "Failed to send": "ارسال با خطا مواجه شد",
     "Your message was sent": "پیام شما ارسال شد",
@@ -744,7 +725,6 @@
     "This session has detected that your Security Phrase and key for Secure Messages have been removed.": "نشست فعلی تشخیص داده که عبارت امنیتی و کلید لازم شما برای پیام‌رسانی امن حذف شده‌است.",
     "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "اگر این کار را به صورت تصادفی انجام دادید، می‌توانید سازوکار پیام امن را برای این نشست تنظیم کرده که باعث می‌شود تمام تاریخچه‌ی این نشست با استفاده از یک روش جدیدِ بازیابی، مجددا رمزشود.",
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "اگر متد بازیابی را حذف نکرده‌اید، ممکن است حمله‌کننده‌ای سعی در دسترسی به حساب‌کاربری شما داشته باشد. گذرواژه حساب کاربری خود را تغییر داده و فورا یک روش بازیابی را از بخش تنظیمات خود تنظیم کنید.",
-    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "مدیر سرور شما قابلیت رمزنگاری سرتاسر برای اتاق‌ها و گفتگوهای خصوصی را به صورت پیش‌فرض غیرفعال کرده‌است.",
     "Can't load this message": "بارگیری این پیام امکان پذیر نیست",
     "Submit logs": "ارسال لاگ‌ها",
     "edited": "ویرایش شده",
@@ -770,49 +750,7 @@
     "You have verified this user. This user has verified all of their sessions.": "شما این کاربر را تائید کرده‌اید. این کاربر تمام نشست‌های خود را تائيد کرده‌است.",
     "You have not verified this user.": "شما این کاربر را تائید نکرده‌اید.",
     "This user has not verified all of their sessions.": "این کاربر هیچ‌کدام از نشست‌های خود را تائید نکرده است.",
-    "Phone Number": "شماره تلفن",
-    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "یک پیام متنی به +%(msisdn)s ارسال شد. لطفا کد تائید موجود در آن را وارد کنید.",
-    "Remove %(phone)s?": "%(phone)s را پاک می‌کنید؟",
-    "Email Address": "آدرس ایمیل",
-    "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "جهت تائيد آدرس ایمیل، ما یک ایمیل برای شما ارسال کردیم. لطفا فرآیند موجود در ایمیل را پی گرفته و سپس بر روی دکمه‌ی زیر کلیک نمائید.",
-    "Unable to add email address": "امکان اضافه‌کردن آدرس ایمیل وجود ندارد",
-    "This doesn't appear to be a valid email address": "به نظر می‌رسد این یک آدرس ایمیل معتبر نیست",
-    "Invalid Email Address": "آدرس ایمیل نامعتبر",
-    "Remove %(email)s?": "%(email)s را پاک می‌کنید؟",
-    "Unable to remove contact information": "حذف اطلاعات تماس امکان‌پذیر نیست",
-    "Discovery options will appear once you have added a phone number above.": "امکانات کاوش و جستجو بلافاصله بعد از اضافه‌کردن شماره تلفن در بالا ظاهر خواهند شد.",
-    "Verification code": "کد تائید",
-    "Please enter verification code sent via text.": "لطفا کد تائیدی را که از طریق متن ارسال شده‌است، وارد کنید.",
-    "Unable to verify phone number.": "امکان تائید شماره تلفن وجود ندارد.",
-    "Unable to share phone number": "امکان به اشتراک‌گذاری شماره تلفن وجود ندارد",
-    "Unable to revoke sharing for phone number": "لغو اشتراک‌گذاری شماره تلفن امکان‌پذیر نیست",
-    "Discovery options will appear once you have added an email above.": "امکانات کاوش و جستجو بلافاصله بعد از اضافه‌کردن یک ایمیل در بالا ظاهر خواهند شد.",
-    "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "در تغییر الزامات سطح دسترسی اتاق خطایی رخ داد. از داشتن دسترسی‌های کافی اطمینان حاصل کرده و مجددا امتحان کنید.",
-    "Error changing power level requirement": "خطا در تغییر الزامات سطح دسترسی",
-    "Banned by %(displayName)s": "توسط %(displayName)s تحریم شد",
-    "This room is bridging messages to the following platforms. <a>Learn more.</a>": "این اتاق، ارتباط بین پیام‌ها و پلتفورم‌های زیر را ایجاد می‌کند. <a>بیشتر بدانید.</a>",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "برای گزارش مشکلات امنیتی مربوط به ماتریکس، لطفا سایت Matrix.org بخش <a>Security Disclosure Policy</a> را مطالعه فرمائید.",
-    "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "با شرایط و ضوایط سرویس سرور هویت‌سنجی (%(serverName)s) موافقت کرده تا بتوانید از طریق آدرس ایمیل و شماره تلفن قابل یافته‌شدن باشید.",
-    "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "استفاده از سرور هویت‌سنجی اختیاری است. اگر تصمیم بگیرید از سرور هویت‌سنجی استفاده نکنید، شما با استفاده از آدرس ایمیل و شماره تلفن قابل یافته‌شدن و دعوت‌شدن توسط سایر کاربران نخواهید بود.",
-    "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "قطع ارتباط با سرور هویت‌سنجی به این معناست که شما از طریق ادرس ایمیل و شماره تلفن، بیش از این قابل یافته‌شدن و دعوت‌شدن توسط کاربران دیگر نیستید.",
-    "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "در حال حاضر از سرور هویت‌سنجی استفاده نمی‌کنید. برای یافتن و یافته‌شدن توسط مخاطبان موجود که شما آن‌ها را می‌شناسید، یک مورد در پایین اضافه کنید.",
-    "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "اگر تمایل به استفاده از <server /> برای یافتن و یافته‌شدن توسط مخاطبان خود را ندارید، سرور هویت‌سنجی دیگری را در پایین وارد کنید.",
-    "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "در حال حاضر شما از <server></server> برای یافتن و یافته‌شدن توسط مخاطبانی که می‌شناسید، استفاده می‌کنید. می‌توانید سرور هویت‌سنجی خود را در زیر تغییر دهید.",
-    "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "توصیه می‌کنیم آدرس‌های ایمیل و شماره تلفن‌های خود را پیش از قطع ارتباط با سرور هویت‌سنجی از روی آن پاک کنید.",
-    "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "شما هم‌چنان <b>داده‌های شخصی خودتان</b> را بر روی سرور هویت‌سنجی <idserver /> به اشتراک می‌گذارید.",
-    "Disconnect anyway": "در هر صورت قطع کن",
-    "wait and try again later": "صبر کرده و بعدا دوباره امتحان کنید",
-    "contact the administrators of identity server <idserver />": "با مدیران سرور هویت‌سنجی <idserver /> تماس بگیرید",
-    "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "پلاگین‌های مرورگر خود را بررسی کنید تا مبادا سرور هویت‌سنجی را بلاک کرده باشند (پلاگینی مانند Privacy Badger)",
-    "You should:": "شما باید:",
-    "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "شما باید قبل از قطع اتصال، <b>داده‌های شخصی خود را</b> از سرور هویت‌سنجی <idserver /> پاک کنید. متاسفانه سرور هویت‌سنجی <idserver /> هم‌اکنون آفلاین بوده و یا دسترسی به آن امکان‌پذیر نیست.",
-    "Disconnect from the identity server <idserver />?": "از سرور هویت‌سنجی <idserver /> قطع می‌شوید؟",
-    "Disconnect identity server": "اتصال با سرور هویت‌سنجی را قطع کن",
-    "The identity server you have chosen does not have any terms of service.": "سرور هویت‌سنجی که انتخاب کرده‌اید شرایط و ضوابط سرویس ندارد.",
-    "Terms of service not accepted or the identity server is invalid.": "شرایط و ضوابط سرویس پذیرفته نشده و یا سرور هویت‌سنجی معتبر نیست.",
-    "Disconnect from the identity server <current /> and connect to <new /> instead?": "ارتباط با سرور هویت‌سنجی <current /> قطع شده و در عوض به <new /> متصل شوید؟",
-    "Change identity server": "تغییر سرور هویت‌سنجی",
-    "Checking server": "در حال بررسی سرور",
     "Back up your keys before signing out to avoid losing them.": "پیش از خروج از حساب کاربری، از کلید‌های خود پشتیبان بگیرید تا آن‌ها را از دست ندهید.",
     "Backup version:": "نسخه‌ی پشتیبان:",
     "This backup is trusted because it has been restored on this session": "این نسخه‌ی پشتیبان قابل اعتماد است چرا که بر روی این نشست بازیابی شد",
@@ -941,8 +879,6 @@
     "Could not load user profile": "امکان نمایش پروفایل کاربر میسر نیست",
     "Switch theme": "تعویض پوسته",
     "<inviter/> invites you": "<inviter/> شما را دعوت کرد",
-    "Private space": "محیط خصوصی",
-    "Public space": "محیط عمومی",
     "No results found": "نتیجه‌ای یافت نشد",
     "You don't have permission": "شما دسترسی ندارید",
     "Failed to reject invite": "رد دعوتنامه با شکست همراه شد",
@@ -960,7 +896,6 @@
     "You are the only person here. If you leave, no one will be able to join in the future, including you.": "شما در این‌جا تنها هستید. اگر اینجا را ترک کنید، دیگر هیچ‌کس حتی خودتان امکان پیوستن مجدد را نخواهید داشت.",
     "Failed to reject invitation": "رد دعوتنامه موفقیت‌آمیز نبود",
     "Warning!": "هشدار!",
-    "Add existing room": "اضافه‌کردن اتاق موجود",
     "Create new room": "ایجاد اتاق جدید",
     "Leave space": "ترک محیط",
     "Couldn't load page": "نمایش صفحه امکان‌پذیر نبود",
@@ -973,41 +908,9 @@
     "Reject invitation": "ردکردن دعوت",
     "Hold": "نگه‌داشتن",
     "Resume": "ادامه",
-    "Verify the link in your inbox": "لینک موجود در صندوق دریافت خود را تائید کنید",
-    "Unable to verify email address.": "تائید آدرس ایمیل ممکن نیست.",
-    "Click the link in the email you received to verify and then click continue again.": "برای تائید ادرس ایمیل، بر روی لینکی که برای شما ایمیل شده‌است کلیک کرده و مجددا بر روی ادامه کلیک کنید.",
-    "Your email address hasn't been verified yet": "آدرس ایمیل شما هنوز تائید نشده‌است",
-    "Unable to share email address": "به اشتراک‌گذاری آدرس ایمیل ممکن نیست",
-    "Unable to revoke sharing for email address": "لغو اشتراک گذاری برای آدرس ایمیل ممکن نیست",
-    "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "هنگام تغییر طرح دسترسی کاربر خطایی رخ داد. از داشتن سطح دسترسی کافی برای این کار اطمینان حاصل کرده و مجددا اقدام نمائید.",
-    "Error changing power level": "تغییر سطح دسترسی با خطا همراه بود",
-    "Browse": "جستجو",
-    "Set a new custom sound": "تنظیم صدای دلخواه جدید",
-    "Notification sound": "صدای اعلان",
-    "Sounds": "صداها",
-    "Uploaded sound": "صدای بارگذاری‌شده",
-    "Room Addresses": "آدرس‌های اتاق",
-    "Bridges": "پل‌ها",
-    "Room information": "اطلاعات اتاق",
-    "Voice & Video": "صدا و تصویر",
-    "Audio Output": "خروجی صدا",
-    "No Audio Outputs detected": "هیچ خروجی صدایی یافت نشد",
-    "Request media permissions": "درخواست دسترسی به رسانه",
-    "Missing media permissions, click the button below to request.": "دسترسی به رسانه از دست رفت، برای درخواست مجدد بر روی دکمه‌ی زیر کلیک نمائید.",
-    "You have no ignored users.": "شما هیچ کاربری را نادیده نگرفته‌اید.",
-    "Unignore": "لغو نادیده‌گرفتن",
-    "Ignored users": "کاربران نادیده‌گرفته‌شده",
-    "None": "هیچ‌کدام",
-    "Discovery": "کاوش",
     "Deactivate account": "غیرفعال‌کردن حساب کاربری",
-    "Account management": "مدیریت حساب کاربری",
     "Your homeserver has exceeded one of its resource limits.": "سرور شما از یکی از محدودیت‌های منابع خود فراتر رفته است.",
     "Your homeserver has exceeded its user limit.": "سرور شما از حد مجاز کاربر خود فراتر رفته است.",
-    "Phone numbers": "شماره تلفن",
-    "Email addresses": "آدرس ایمیل",
-    "Manage integrations": "مدیریت پکپارچه‌سازی‌ها",
-    "Enter a new identity server": "یک سرور هویت‌سنجی جدید وارد کنید",
-    "Do not use an identity server": "از سرور هویت‌سنجی استفاده نکن",
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "اگر این کار را انجام می‌دهید، لطفاً توجه داشته باشید که هیچ یک از پیام‌های شما حذف نمی‌شوند ، با این حال چون پیام‌ها مجددا ایندکس می‌شوند، ممکن است برای چند لحظه قابلیت جستجو با مشکل مواجه شود",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "حذف کلیدهای امضای متقابل دائمی است. هرکسی که او را تائید کرده‌باشید، هشدارهای امنیتی را مشاهده خواهد کرد. به احتمال زیاد نمی‌خواهید این کار را انجام دهید ، مگر هیچ دستگاهی برای امضاء متقابل از طریق آن نداشته باشید.",
     "Click the button below to confirm setting up encryption.": "برای تأیید و فعال‌سازی رمزگذاری ، روی دکمه زیر کلیک کنید.",
@@ -1084,12 +987,6 @@
     "Start a conversation with someone using their name or username (like <userId/>).": "با استفاده از نام یا نام کاربری (مانند <userId/>)، گفتگوی جدیدی را با دیگران شروع کنید.",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "با استفاده از نام، آدرس ایمیل و یا نام کاربری (مانند <userId/>)، یک گفتگوی جدید را شروع کنید.",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s شما اجازهٔ استفاده از یک مدیر یکپارچگی را برای این کار نمی دهد. لطفاً با مدیری تماس بگیرید.",
-    "Use an integration manager to manage bots, widgets, and sticker packs.": "برای مدیریت بات‌ها، ابزارک‌ها و بسته‌های برچسب، از یک مدیر پکپارچه‌سازی استفاده کنید.",
-    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "برای مدیریت بات‌ها، ابزارک‌ها و بسته‌های برچسب، از یک مدیر پکپارچه‌سازی <b>(%(serverName)s)</b> استفاده کنید.",
-    "Identity server (%(server)s)": "کارساز هویت (%(server)s)",
-    "Could not connect to identity server": "نتوانست به کارساز هویت وصل شود",
-    "Not a valid identity server (status code %(code)s)": "کارساز هویت معتبر نیست (کد وضعیت %(code)s)",
-    "Identity server URL must be HTTPS": "نشانی کارساز هویت باید HTTPS باشد",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s و %(count)s دیگر",
         "other": "%(spaceName)s و %(count)s دیگران"
@@ -1097,9 +994,6 @@
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s و %(space2Name)s",
     "Close sidebar": "بستن نوارکناری",
     "Hide stickers": "پنهان سازی استیکرها",
-    "Get notified only with mentions and keywords as set up in your <a>settings</a>": "بنابر <a>تنظیمات</a> خودتان فقط با منشن ها و کلمات کلیدی مطلع شوید",
-    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "مدیران ادغام داده‌های پیکربندی را دریافت می‌کنند و می‌توانند ویجت‌ها را تغییر دهند، دعوت‌نامه‌های اتاق ارسال کنند و سطوح قدرت را از طرف شما تنظیم کنند.",
-    "Deactivating your account is a permanent action — be careful!": "غیرفعال سازی اکانت شما یک اقدام دائمی است - مراقب باشید!",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "عبارت امنیتی خود را وارد کنید و یا <button>کلید امنیتی خود را استفاده کنید</button>.",
     "Developer": "توسعه دهنده",
     "Experimental": "تجربی",
@@ -1188,7 +1082,10 @@
         "general": "عمومی",
         "profile": "پروفایل",
         "display_name": "نام نمایشی",
-        "user_avatar": "تصویر پروفایل"
+        "user_avatar": "تصویر پروفایل",
+        "authentication": "احراز هویت",
+        "public_space": "محیط عمومی",
+        "private_space": "محیط خصوصی"
     },
     "action": {
         "continue": "ادامه",
@@ -1280,7 +1177,11 @@
         "unban": "رفع تحریم",
         "click_to_copy": "برای گرفتن رونوشت کلیک کنید",
         "hide_advanced": "پنهان‌کردن بخش پیشرفته",
-        "show_advanced": "نمایش بخش پیشرفته"
+        "show_advanced": "نمایش بخش پیشرفته",
+        "unignore": "لغو نادیده‌گرفتن",
+        "explore_rooms": "جستجو در اتاق ها",
+        "add_existing_room": "اضافه‌کردن اتاق موجود",
+        "explore_public_rooms": "کاوش در اتاق‌های عمومی"
     },
     "a11y": {
         "user_menu": "منوی کاربر",
@@ -1293,7 +1194,8 @@
             "other": "%(count)s پیام خوانده نشده."
         },
         "unread_messages": "پیام های خوانده نشده.",
-        "jump_first_invite": "به اولین دعوت بروید."
+        "jump_first_invite": "به اولین دعوت بروید.",
+        "room_name": "اتاق %(name)s"
     },
     "labs": {
         "video_rooms": "اتاق های تصویری",
@@ -1532,7 +1434,14 @@
         "inline_url_previews_room_account": "فعال‌سازی پیش‌نمایش URL برای این اتاق (تنها شما را تحت تاثیر قرار می‌دهد)",
         "inline_url_previews_room": "امکان پیش‌نمایش URL را به صورت پیش‌فرض برای اعضای این اتاق فعال کن",
         "voip": {
-            "mirror_local_feed": "تصویر خودتان را هنگام تماس تصویری برعکس (مثل آینه) نمایش بده"
+            "mirror_local_feed": "تصویر خودتان را هنگام تماس تصویری برعکس (مثل آینه) نمایش بده",
+            "missing_permissions_prompt": "دسترسی به رسانه از دست رفت، برای درخواست مجدد بر روی دکمه‌ی زیر کلیک نمائید.",
+            "request_permissions": "درخواست دسترسی به رسانه",
+            "audio_output": "خروجی صدا",
+            "audio_output_empty": "هیچ خروجی صدایی یافت نشد",
+            "audio_input_empty": "هیچ میکروفونی شناسایی نشد",
+            "video_input_empty": "هیچ وبکمی شناسایی نشد",
+            "title": "صدا و تصویر"
         },
         "security": {
             "message_search_disable_warning": "اگر غیر فعال شود، پیام‌های اتاق‌های رمزشده در نتایج جستجوها نمایش داده نمی‌شوند.",
@@ -1600,7 +1509,11 @@
             "key_backup_connect": "این نشست را به کلید پشتیبان‌گیر متصل کن",
             "key_backup_complete": "از همه کلیدها نسخه‌ی پشتیبان گرفته شد",
             "key_backup_algorithm": "الگوریتم:",
-            "key_backup_inactive_warning": "کلید‌های شما <b>از این نشست پشتیبان‌گیری نمی‌شود</b>."
+            "key_backup_inactive_warning": "کلید‌های شما <b>از این نشست پشتیبان‌گیری نمی‌شود</b>.",
+            "key_backup_active_version_none": "هیچ‌کدام",
+            "ignore_users_empty": "شما هیچ کاربری را نادیده نگرفته‌اید.",
+            "ignore_users_section": "کاربران نادیده‌گرفته‌شده",
+            "e2ee_default_disabled_warning": "مدیر سرور شما قابلیت رمزنگاری سرتاسر برای اتاق‌ها و گفتگوهای خصوصی را به صورت پیش‌فرض غیرفعال کرده‌است."
         },
         "preferences": {
             "room_list_heading": "لیست اتاق‌ها",
@@ -1634,7 +1547,40 @@
             "add_msisdn_dialog_title": "افزودن شماره تلفن",
             "name_placeholder": "هیچ نامی برای نمایش وجود ندارد",
             "error_saving_profile_title": "ذخیره‌ی تنظیمات شما موفقیت‌آمیز نبود",
-            "error_saving_profile": "امکان تکمیل عملیات وجود ندارد"
+            "error_saving_profile": "امکان تکمیل عملیات وجود ندارد",
+            "error_password_change_403": "خطا در تغییر گذرواژه. آیا از درستی گذرواژه‌تان اطمینان دارید؟",
+            "emails_heading": "آدرس ایمیل",
+            "msisdns_heading": "شماره تلفن",
+            "discovery_needs_terms": "با شرایط و ضوایط سرویس سرور هویت‌سنجی (%(serverName)s) موافقت کرده تا بتوانید از طریق آدرس ایمیل و شماره تلفن قابل یافته‌شدن باشید.",
+            "deactivate_section": "غیرفعال کردن حساب",
+            "account_management_section": "مدیریت حساب کاربری",
+            "deactivate_warning": "غیرفعال سازی اکانت شما یک اقدام دائمی است - مراقب باشید!",
+            "discovery_section": "کاوش",
+            "error_revoke_email_discovery": "لغو اشتراک گذاری برای آدرس ایمیل ممکن نیست",
+            "error_share_email_discovery": "به اشتراک‌گذاری آدرس ایمیل ممکن نیست",
+            "email_not_verified": "آدرس ایمیل شما هنوز تائید نشده‌است",
+            "email_verification_instructions": "برای تائید ادرس ایمیل، بر روی لینکی که برای شما ایمیل شده‌است کلیک کرده و مجددا بر روی ادامه کلیک کنید.",
+            "error_email_verification": "تائید آدرس ایمیل ممکن نیست.",
+            "discovery_email_verification_instructions": "لینک موجود در صندوق دریافت خود را تائید کنید",
+            "discovery_email_empty": "امکانات کاوش و جستجو بلافاصله بعد از اضافه‌کردن یک ایمیل در بالا ظاهر خواهند شد.",
+            "error_revoke_msisdn_discovery": "لغو اشتراک‌گذاری شماره تلفن امکان‌پذیر نیست",
+            "error_share_msisdn_discovery": "امکان به اشتراک‌گذاری شماره تلفن وجود ندارد",
+            "error_msisdn_verification": "امکان تائید شماره تلفن وجود ندارد.",
+            "incorrect_msisdn_verification": "کد فعال‌سازی اشتباه است",
+            "msisdn_verification_instructions": "لطفا کد تائیدی را که از طریق متن ارسال شده‌است، وارد کنید.",
+            "msisdn_verification_field_label": "کد تائید",
+            "discovery_msisdn_empty": "امکانات کاوش و جستجو بلافاصله بعد از اضافه‌کردن شماره تلفن در بالا ظاهر خواهند شد.",
+            "error_set_name": "تنظیم نام نمایشی با خطا مواجه شد",
+            "error_remove_3pid": "حذف اطلاعات تماس امکان‌پذیر نیست",
+            "remove_email_prompt": "%(email)s را پاک می‌کنید؟",
+            "error_invalid_email": "آدرس ایمیل نامعتبر",
+            "error_invalid_email_detail": "به نظر می‌رسد این یک آدرس ایمیل معتبر نیست",
+            "error_add_email": "امکان اضافه‌کردن آدرس ایمیل وجود ندارد",
+            "add_email_instructions": "جهت تائيد آدرس ایمیل، ما یک ایمیل برای شما ارسال کردیم. لطفا فرآیند موجود در ایمیل را پی گرفته و سپس بر روی دکمه‌ی زیر کلیک نمائید.",
+            "email_address_label": "آدرس ایمیل",
+            "remove_msisdn_prompt": "%(phone)s را پاک می‌کنید؟",
+            "add_msisdn_instructions": "یک پیام متنی به +%(msisdn)s ارسال شد. لطفا کد تائید موجود در آن را وارد کنید.",
+            "msisdn_label": "شماره تلفن"
         },
         "sidebar": {
             "title": "نوارکناری",
@@ -1957,6 +1903,9 @@
         "creation_summary_room": "%(creator)s اتاق را ایجاد و پیکربندی کرد.",
         "context_menu": {
             "external_url": "آدرس مبدا"
+        },
+        "url_preview": {
+            "close": "بستن پیش نمایش"
         }
     },
     "slash_command": {
@@ -2161,7 +2110,14 @@
             "send_event_type": "ارسال رخدادهای %(eventType)s",
             "title": "نقش‌ها و دسترسی‌ها",
             "permissions_section": "دسترسی‌ها",
-            "permissions_section_description_room": "برای تغییر هر یک از بخش‌های اتاق، خداقل نقش مورد نیاز را انتخاب کنید"
+            "permissions_section_description_room": "برای تغییر هر یک از بخش‌های اتاق، خداقل نقش مورد نیاز را انتخاب کنید",
+            "error_unbanning": "رفع مسدودیت با خطا مواجه شد",
+            "banned_by": "توسط %(displayName)s تحریم شد",
+            "ban_reason": "دلیل",
+            "error_changing_pl_reqs_title": "خطا در تغییر الزامات سطح دسترسی",
+            "error_changing_pl_reqs_description": "در تغییر الزامات سطح دسترسی اتاق خطایی رخ داد. از داشتن دسترسی‌های کافی اطمینان حاصل کرده و مجددا امتحان کنید.",
+            "error_changing_pl_title": "تغییر سطح دسترسی با خطا همراه بود",
+            "error_changing_pl_description": "هنگام تغییر طرح دسترسی کاربر خطایی رخ داد. از داشتن سطح دسترسی کافی برای این کار اطمینان حاصل کرده و مجددا اقدام نمائید."
         },
         "security": {
             "strict_encryption": "هرگز از این نشست، پیام‌های رمزشده برای به نشست‌های تائید نشده در این اتاق ارسال مکن",
@@ -2190,16 +2146,30 @@
             "error_save_space_settings": "تنظیمات فضای کاری ذخیره نشد.",
             "description_space": "تنظیمات مربوط به فضای کاری خود را ویرایش کنید.",
             "save": "ذخیره تغییرات",
-            "leave_space": "ترک فضای کاری"
+            "leave_space": "ترک فضای کاری",
+            "aliases_section": "آدرس‌های اتاق",
+            "other_section": "دیگر"
         },
         "advanced": {
             "unfederated": "این اتاق توسط سرورهای ماتریکس در دسترس نیست",
             "room_upgrade_button": "نسخه‌ی این اتاق را به نسخه‌ی توصیه‌شده ارتقاء دهید",
             "room_predecessor": "پیام‌های قدیمی اتاق %(roomName)s را مشاهده کنید.",
             "room_version_section": "نسخه‌ی اتاق",
-            "room_version": "نسخه‌ی اتاق:"
+            "room_version": "نسخه‌ی اتاق:",
+            "information_section_room": "اطلاعات اتاق"
         },
-        "upload_avatar_label": "بارگذاری نمایه"
+        "upload_avatar_label": "بارگذاری نمایه",
+        "bridges": {
+            "description": "این اتاق، ارتباط بین پیام‌ها و پلتفورم‌های زیر را ایجاد می‌کند. <a>بیشتر بدانید.</a>",
+            "title": "پل‌ها"
+        },
+        "notifications": {
+            "uploaded_sound": "صدای بارگذاری‌شده",
+            "sounds_section": "صداها",
+            "notification_sound": "صدای اعلان",
+            "custom_sound_prompt": "تنظیم صدای دلخواه جدید",
+            "browse_button": "جستجو"
+        }
     },
     "encryption": {
         "verification": {
@@ -2397,7 +2367,9 @@
         "show_less": "نمایش کمتر",
         "notification_options": "تنظیمات اعلان",
         "failed_remove_tag": "خطا در حذف کلیدواژه‌ی %(tagName)s از گپ",
-        "failed_add_tag": "در افزودن تگ %(tagName)s موفقیت‌آمیز نبود"
+        "failed_add_tag": "در افزودن تگ %(tagName)s موفقیت‌آمیز نبود",
+        "breadcrumbs_label": "اتاق‌هایی که به تازگی بازدید کرده‌اید",
+        "breadcrumbs_empty": "اخیراً از اتاقی بازدید نشده است"
     },
     "report_content": {
         "missing_reason": "لطفا توضیح دهید که چرا گزارش می‌دهید.",
@@ -2609,7 +2581,8 @@
         "share_public": "محیط عمومی خود را به اشتراک بگذارید",
         "invite_link": "به اشتراک‌گذاری لینک دعوت",
         "invite": "دعوت کاربران",
-        "invite_description": "دعوت با ایمیل یا نام‌کاربری"
+        "invite_description": "دعوت با ایمیل یا نام‌کاربری",
+        "invite_this_space": "به این فضای کاری دعوت کنید"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "این سرور خانگی برای نمایش نقشه تنظیم نشده است.",
@@ -2650,7 +2623,8 @@
         "lists_heading": "لیست‌هایی که در آن‌ها ثبت‌نام کرده‌اید",
         "lists_description_1": "ثبت‌نام کردن در یک لیست تحریم باعث می‌شود شما هم عضو آن شوید!",
         "lists_description_2": "اگر این چیزی نیست که شما می‌خواهید، از یک ابزار دیگر برای نادیده‌گرفتن کاربران استفاده نمائيد.",
-        "lists_new_label": "شناسه‌ی اتاق یا آدرس لیست تحریم"
+        "lists_new_label": "شناسه‌ی اتاق یا آدرس لیست تحریم",
+        "rules_empty": "هیچ‌کدام"
     },
     "create_space": {
         "name_required": "لطفا یک نام برای محیط وارد کنید",
@@ -2726,7 +2700,8 @@
             "favourite": "علاقه‌مندی‌ها",
             "low_priority": "کم اهمیت",
             "forget": "اتاق را فراموش کن"
-        }
+        },
+        "invite_this_room": "دعوت به این گپ"
     },
     "file_panel": {
         "guest_note": "برای استفاده از این قابلیت باید <a>ثبت نام</a> کنید",
@@ -2851,7 +2826,10 @@
         "keyword": "کلمه کلیدی",
         "keyword_new": "کلمه کلیدی جدید",
         "class_other": "دیگر",
-        "mentions_keywords": "منشن ها و کلمات کلیدی"
+        "mentions_keywords": "منشن ها و کلمات کلیدی",
+        "default": "پیشفرض",
+        "all_messages": "همه‌ی پیام‌ها",
+        "mentions_and_keywords_description": "بنابر <a>تنظیمات</a> خودتان فقط با منشن ها و کلمات کلیدی مطلع شوید"
     },
     "mobile_guide": {
         "toast_title": "برای تجربه بهتر از برنامه استفاده کنید",
@@ -2872,6 +2850,38 @@
     "a11y_jump_first_unread_room": "به اولین اتاق خوانده نشده بروید.",
     "integration_manager": {
         "error_connecting_heading": "امکان اتصال به مدیر یکپارچه‌سازی‌ها وجود ندارد",
-        "error_connecting": "مدیر یکپارچه‌سازی‌ یا آفلاین است و یا نمی‌تواند به سرور شما متصل شود."
+        "error_connecting": "مدیر یکپارچه‌سازی‌ یا آفلاین است و یا نمی‌تواند به سرور شما متصل شود.",
+        "use_im_default": "برای مدیریت بات‌ها، ابزارک‌ها و بسته‌های برچسب، از یک مدیر پکپارچه‌سازی <b>(%(serverName)s)</b> استفاده کنید.",
+        "use_im": "برای مدیریت بات‌ها، ابزارک‌ها و بسته‌های برچسب، از یک مدیر پکپارچه‌سازی استفاده کنید.",
+        "manage_title": "مدیریت پکپارچه‌سازی‌ها",
+        "explainer": "مدیران ادغام داده‌های پیکربندی را دریافت می‌کنند و می‌توانند ویجت‌ها را تغییر دهند، دعوت‌نامه‌های اتاق ارسال کنند و سطوح قدرت را از طرف شما تنظیم کنند."
+    },
+    "identity_server": {
+        "url_not_https": "نشانی کارساز هویت باید HTTPS باشد",
+        "error_invalid": "کارساز هویت معتبر نیست (کد وضعیت %(code)s)",
+        "error_connection": "نتوانست به کارساز هویت وصل شود",
+        "checking": "در حال بررسی سرور",
+        "change": "تغییر سرور هویت‌سنجی",
+        "change_prompt": "ارتباط با سرور هویت‌سنجی <current /> قطع شده و در عوض به <new /> متصل شوید؟",
+        "error_invalid_or_terms": "شرایط و ضوابط سرویس پذیرفته نشده و یا سرور هویت‌سنجی معتبر نیست.",
+        "no_terms": "سرور هویت‌سنجی که انتخاب کرده‌اید شرایط و ضوابط سرویس ندارد.",
+        "disconnect": "اتصال با سرور هویت‌سنجی را قطع کن",
+        "disconnect_server": "از سرور هویت‌سنجی <idserver /> قطع می‌شوید؟",
+        "disconnect_offline_warning": "شما باید قبل از قطع اتصال، <b>داده‌های شخصی خود را</b> از سرور هویت‌سنجی <idserver /> پاک کنید. متاسفانه سرور هویت‌سنجی <idserver /> هم‌اکنون آفلاین بوده و یا دسترسی به آن امکان‌پذیر نیست.",
+        "suggestions": "شما باید:",
+        "suggestions_1": "پلاگین‌های مرورگر خود را بررسی کنید تا مبادا سرور هویت‌سنجی را بلاک کرده باشند (پلاگینی مانند Privacy Badger)",
+        "suggestions_2": "با مدیران سرور هویت‌سنجی <idserver /> تماس بگیرید",
+        "suggestions_3": "صبر کرده و بعدا دوباره امتحان کنید",
+        "disconnect_anyway": "در هر صورت قطع کن",
+        "disconnect_personal_data_warning_1": "شما هم‌چنان <b>داده‌های شخصی خودتان</b> را بر روی سرور هویت‌سنجی <idserver /> به اشتراک می‌گذارید.",
+        "disconnect_personal_data_warning_2": "توصیه می‌کنیم آدرس‌های ایمیل و شماره تلفن‌های خود را پیش از قطع ارتباط با سرور هویت‌سنجی از روی آن پاک کنید.",
+        "url": "کارساز هویت (%(server)s)",
+        "description_connected": "در حال حاضر شما از <server></server> برای یافتن و یافته‌شدن توسط مخاطبانی که می‌شناسید، استفاده می‌کنید. می‌توانید سرور هویت‌سنجی خود را در زیر تغییر دهید.",
+        "change_server_prompt": "اگر تمایل به استفاده از <server /> برای یافتن و یافته‌شدن توسط مخاطبان خود را ندارید، سرور هویت‌سنجی دیگری را در پایین وارد کنید.",
+        "description_disconnected": "در حال حاضر از سرور هویت‌سنجی استفاده نمی‌کنید. برای یافتن و یافته‌شدن توسط مخاطبان موجود که شما آن‌ها را می‌شناسید، یک مورد در پایین اضافه کنید.",
+        "disconnect_warning": "قطع ارتباط با سرور هویت‌سنجی به این معناست که شما از طریق ادرس ایمیل و شماره تلفن، بیش از این قابل یافته‌شدن و دعوت‌شدن توسط کاربران دیگر نیستید.",
+        "description_optional": "استفاده از سرور هویت‌سنجی اختیاری است. اگر تصمیم بگیرید از سرور هویت‌سنجی استفاده نکنید، شما با استفاده از آدرس ایمیل و شماره تلفن قابل یافته‌شدن و دعوت‌شدن توسط سایر کاربران نخواهید بود.",
+        "do_not_use": "از سرور هویت‌سنجی استفاده نکن",
+        "url_field_label": "یک سرور هویت‌سنجی جدید وارد کنید"
     }
 }

@@ -409,7 +409,7 @@ export const UserOptionsSection: React.FC<{
                 kind="link"
                 className={classNames("mx_UserInfo_field", { mx_UserInfo_destructive: !isIgnored })}
             >
-                {isIgnored ? _t("Unignore") : _t("action|ignore")}
+                {isIgnored ? _t("action|unignore") : _t("action|ignore")}
             </AccessibleButton>
         );
 

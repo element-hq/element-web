@@ -214,7 +214,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
                 className="mx_DeactivateAccountDialog"
                 onFinished={this.props.onFinished}
                 titleClass="danger"
-                title={_t("Deactivate Account")}
+                title={_t("settings|general|deactivate_section")}
                 screenName="DeactivateAccount"
             >
                 <div className="mx_Dialog_content">

@@ -131,12 +131,12 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     {roomName}
 
                     {!isDirectMessage && roomState.getJoinRule() === JoinRule.Public && (
-                        <Tooltip label={_t("Public room")}>
+                        <Tooltip label={_t("common|public_room")}>
                             <PublicIcon
                                 width="16px"
                                 height="16px"
                                 className="text-secondary"
-                                aria-label={_t("Public room")}
+                                aria-label={_t("common|public_room")}
                             />
                         </Tooltip>
                     )}
@@ -153,12 +153,12 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     )}
 
                     {isDirectMessage && e2eStatus === E2EStatus.Warning && (
-                        <Tooltip label={_t("Untrusted")}>
+                        <Tooltip label={_t("room|header_untrusted_label")}>
                             <ErrorIcon
                                 width="16px"
                                 height="16px"
                                 className="mx_Untrusted"
-                                aria-label={_t("Untrusted")}
+                                aria-label={_t("room|header_untrusted_label")}
                             />
                         </Tooltip>
                     )}

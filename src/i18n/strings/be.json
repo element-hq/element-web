@@ -1,7 +1,5 @@
 {
     "Failed to forget room %(errCode)s": "Не атрымалася забыць пакой %(errCode)s",
-    "All messages": "Усе паведамленні",
-    "Invite to this room": "Запрасіць у гэты пакой",
     "common": {
         "error": "Памылка",
         "mute": "Без гуку",
@@ -34,7 +32,8 @@
         "failed_generic": "Не атрымалася выканаць аперацыю"
     },
     "notifications": {
-        "enable_prompt_toast_title": "Апавяшчэнні"
+        "enable_prompt_toast_title": "Апавяшчэнні",
+        "all_messages": "Усе паведамленні"
     },
     "timeline": {
         "context_menu": {
@@ -45,6 +44,7 @@
         "context_menu": {
             "favourite": "Улюбёнае",
             "low_priority": "Нізкі прыярытэт"
-        }
+        },
+        "invite_this_room": "Запрасіць у гэты пакой"
     }
 }
