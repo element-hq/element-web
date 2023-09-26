@@ -14,7 +14,6 @@
     "Moderator": "Moderador/a",
     "New passwords must match each other.": "As novas senhas informadas precisam ser idênticas.",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Por favor, confirme o seu e-mail e clique no link enviado. Feito isso, clique em continuar.",
-    "Profile": "Perfil",
     "Reject invitation": "Recusar o convite",
     "Return to login screen": "Retornar à tela de login",
     "Rooms": "Salas",
@@ -61,7 +60,6 @@
     "Decrypt %(text)s": "Descriptografar %(text)s",
     "Download %(text)s": "Baixar %(text)s",
     "Failed to ban user": "Não foi possível banir o usuário",
-    "Failed to change power level": "Não foi possível alterar o nível de permissão",
     "Failed to load timeline position": "Não foi possível carregar um trecho da conversa",
     "Failed to mute user": "Não foi possível remover notificações da/do usuária/o",
     "Failed to reject invite": "Não foi possível recusar o convite",
@@ -95,7 +93,6 @@
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Este processo permite que você exporte as chaves para mensagens que você recebeu em salas criptografadas para um arquivo local. Você poderá então importar o arquivo para outro cliente Matrix no futuro, de modo que este cliente também poderá descriptografar suas mensagens.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "O arquivo exportado será protegido com uma senha. Você deverá inserir a senha aqui para poder descriptografar o arquivo futuramente.",
     "Confirm Removal": "Confirmar a remoção",
-    "Unknown error": "Erro desconhecido",
     "Unable to restore session": "Não foi possível restaurar a sessão",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Se você já usou antes uma versão mais recente do %(brand)s, a sua sessão pode ser incompatível com esta versão. Feche esta janela e tente abrir com a versão mais recente.",
     "Error decrypting image": "Erro ao descriptografar a imagem",
@@ -116,7 +113,6 @@
     },
     "Create new room": "Criar nova sala",
     "Admin Tools": "Ferramentas de administração",
-    "No display name": "Nenhum nome e sobrenome",
     "%(roomName)s does not exist.": "%(roomName)s não existe.",
     "%(roomName)s is not accessible at this time.": "%(roomName)s não está acessível neste momento.",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (nível de permissão %(powerLevelNumber)s)",
@@ -149,7 +145,6 @@
     },
     "This room is not public. You will not be able to rejoin without an invite.": "Esta sala não é pública. Você não poderá voltar sem ser convidada/o.",
     "Sunday": "Domingo",
-    "Notification targets": "Aparelhos notificados",
     "Today": "Hoje",
     "Friday": "Sexta-feira",
     "Changelog": "Registro de alterações",
@@ -169,8 +164,6 @@
     "Wednesday": "Quarta-feira",
     "Thank you!": "Obrigado!",
     "Permission Required": "Permissão necessária",
-    "Delete Backup": "Remover backup",
-    "Unable to load key backup status": "Não foi possível carregar o status do backup da chave",
     "This event could not be displayed": "Este evento não pôde ser exibido",
     "Share Link to User": "Compartilhar este usuário",
     "This room has been replaced and is no longer active.": "Esta sala foi substituída e não está mais ativa.",
@@ -302,20 +295,15 @@
     "Folder": "Pasta",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Enviamos um e-mail para você confirmar seu endereço. Por favor, siga as instruções e clique no botão abaixo.",
     "Email Address": "Endereço de e-mail",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Tem certeza? Você perderá suas mensagens criptografadas se não tiver feito o backup de suas chaves.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "As mensagens estão protegidas com a criptografia de ponta a ponta. Somente você e o(s) destinatário(s) têm as chaves para ler essas mensagens.",
-    "Restore from Backup": "Restaurar do backup",
     "Back up your keys before signing out to avoid losing them.": "Faça o backup das suas chaves antes de sair, para evitar perdê-las.",
-    "All keys backed up": "O backup de todas as chaves foi realizado",
     "Start using Key Backup": "Comece a usar backup de chave",
     "Unable to verify phone number.": "Não foi possível confirmar o número de telefone.",
     "Verification code": "Código de confirmação",
     "Phone Number": "Número de telefone",
-    "Profile picture": "Foto de perfil",
     "Email addresses": "Endereços de e-mail",
     "Phone numbers": "Números de Telefone",
     "Account management": "Gerenciamento da Conta",
-    "General": "Geral",
     "Ignored users": "Usuários bloqueados",
     "Missing media permissions, click the button below to request.": "Permissões de mídia ausentes, clique no botão abaixo para solicitar.",
     "Request media permissions": "Solicitar permissões de mídia",
@@ -333,18 +321,7 @@
     "IRC display name width": "Largura do nome e sobrenome nas mensagens",
     "Lock": "Cadeado",
     "Show more": "Mostrar mais",
-    "well formed": "bem formado",
-    "unexpected type": "tipo inesperado",
-    "Secret storage public key:": "Chave pública do armazenamento secreto:",
-    "in account data": "nos dados de conta",
-    "Cannot connect to integration manager": "Não foi possível conectar ao gerenciador de integrações",
-    "The integration manager is offline or it cannot reach your homeserver.": "Ou o gerenciador de integrações está indisponível, ou ele não conseguiu acessar o seu servidor.",
-    "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Esta sessão <b>não está fazendo backup de suas chaves</b>, mas você tem um backup existente que pode restaurar para continuar.",
-    "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Autorize esta sessão a fazer o backup de chaves antes de se desconectar, para evitar perder chaves que possam estar apenas nesta sessão.",
-    "Connect this session to Key Backup": "Autorize esta sessão a fazer o backup de chaves",
-    "not stored": "não armazenado",
     "This backup is trusted because it has been restored on this session": "Este backup é confiável, pois foi restaurado nesta sessão",
-    "Your keys are <b>not being backed up from this session</b>.": "Suas chaves <b>não estão sendo copiadas desta sessão</b>.",
     "wait and try again later": "aguarde e tente novamente mais tarde",
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "O administrador do servidor desativou a criptografia de ponta a ponta por padrão em salas privadas e em conversas.",
     "Click the link in the email you received to verify and then click continue again.": "Clique no link no e-mail que você recebeu para confirmar e então clique novamente em continuar.",
@@ -435,15 +412,11 @@
     "Removing…": "Removendo…",
     "Clear all data in this session?": "Limpar todos os dados nesta sessão?",
     "Clear all data": "Limpar todos os dados",
-    "Hide advanced": "Esconder configurações avançadas",
-    "Show advanced": "Mostrar configurações avançadas",
     "Are you sure you want to deactivate your account? This is irreversible.": "Tem certeza de que deseja desativar sua conta? Isso é irreversível.",
     "Confirm account deactivation": "Confirmar desativação da conta",
     "Server did not return valid authentication information.": "O servidor não retornou informações de autenticação válidas.",
     "Integrations are disabled": "As integrações estão desativadas",
     "Integrations not allowed": "As integrações não estão permitidas",
-    "Jump to first unread room.": "Ir para a primeira sala não lida.",
-    "Jump to first invite.": "Ir para o primeiro convite.",
     "Add room": "Adicionar sala",
     "Room options": "Opções da Sala",
     "This room is public": "Esta sala é pública",
@@ -463,7 +436,6 @@
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Se você confirmar esse usuário, a sessão será marcada como confiável para você e para ele.",
     "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Confirmar este aparelho o marcará como confiável para você e para os usuários que se confirmaram com você.",
     "Email (optional)": "E-mail (opcional)",
-    "Display Name": "Nome e sobrenome",
     "Checking server": "Verificando servidor",
     "Change identity server": "Alterar o servidor de identidade",
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "Desconectar-se do servidor de identidade <current /> e conectar-se em <new /> em vez disso?",
@@ -542,7 +514,6 @@
     "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Não foi possível revogar o convite. O servidor pode estar com um problema temporário ou você não tem permissões suficientes para revogar o convite.",
     "Revoke invite": "Revogar o convite",
     "Invited by %(sender)s": "Convidado por %(sender)s",
-    "Mark all as read": "Marcar tudo como lido",
     "Error updating main address": "Erro ao atualizar o endereço principal",
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "Ocorreu um erro ao atualizar o endereço principal da sala. Isso pode não ser permitido pelo servidor ou houve um problema temporário.",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Ocorreu um erro ao atualizar o endereço alternativo da sala. Isso pode não ser permitido pelo servidor ou houve um problema temporário.",
@@ -703,16 +674,8 @@
     "This version of %(brand)s does not support searching encrypted messages": "Esta versão do %(brand)s não permite buscar mensagens criptografadas",
     "Information": "Informação",
     "Backup version:": "Versão do backup:",
-    "Backup key stored:": "Backup da chave armazenada:",
-    "Backup key cached:": "Backup da chave em cache:",
     "Your keys are being backed up (the first backup could take a few minutes).": "O backup de suas chaves está sendo feito (o primeiro backup pode demorar alguns minutos).",
     "You can also set up Secure Backup & manage your keys in Settings.": "Você também pode configurar o Backup online & configurar as suas senhas nas Configurações.",
-    "Failed to save your profile": "Houve uma falha ao salvar o seu perfil",
-    "The operation could not be completed": "A operação não foi concluída",
-    "Algorithm:": "Algoritmo:",
-    "Secret storage:": "Armazenamento secreto:",
-    "ready": "pronto",
-    "not ready": "não está pronto",
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "Esta sala está integrando mensagens com as seguintes plataformas. <a>Saiba mais.</a>",
     "Bridges": "Integrações",
     "Error changing power level requirement": "Houve um erro ao alterar o nível de permissão do contato",
@@ -1035,7 +998,6 @@
     "A call can only be transferred to a single user.": "Uma chamada só pode ser transferida para um único usuário.",
     "Set my room layout for everyone": "Definir a minha aparência da sala para todos",
     "Open dial pad": "Abrir o teclado de discagem",
-    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Faça backup de suas chaves de criptografia com os dados da sua conta, para se prevenir a perder o acesso às suas sessões. Suas chaves serão protegidas por uma Chave de Segurança exclusiva.",
     "Dial pad": "Teclado de discagem",
     "Remember this": "Lembre-se disso",
     "The widget will verify your user ID, but won't be able to perform actions for you:": "O widget verificará o seu ID de usuário, mas não poderá realizar ações para você:",
@@ -1049,20 +1011,12 @@
     },
     "Are you sure you want to leave the space '%(spaceName)s'?": "Tem certeza de que deseja sair desse espaço '%(spaceName)s'?",
     "This space is not public. You will not be able to rejoin without an invite.": "Este espaço não é público. Você não poderá entrar novamente sem um convite.",
-    "Save Changes": "Salvar alterações",
     "Leave space": "Sair do espaço",
-    "Leave Space": "Sair desse espaço",
-    "Edit settings relating to your space.": "Editar configurações relacionadas ao seu espaço.",
-    "Failed to save space settings.": "Falha ao salvar as configurações desse espaço.",
     "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Convide alguém a partir do nome, nome de usuário (como <userId/>) ou <a>compartilhe este espaço</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Convide alguém a partir do nome, endereço de e-mail, nome de usuário (como <userId/>) ou <a>compartilhe este espaço</a>.",
     "Create a new room": "Criar uma nova sala",
-    "Spaces": "Espaços",
     "Invite to this space": "Convidar para este espaço",
     "Your message was sent": "A sua mensagem foi enviada",
-    "Space options": "Opções do espaço",
-    "Invite people": "Convidar pessoas",
-    "Share invite link": "Compartilhar link de convite",
     "Create a space": "Criar um espaço",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Seu %(brand)s não permite que você use o gerenciador de integrações para fazer isso. Entre em contato com o administrador.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "O gerenciador de integrações recebe dados de configuração e pode modificar widgets, enviar convites para salas e definir níveis de permissão em seu nome.",
@@ -1077,39 +1031,9 @@
     "Unable to access your microphone": "Não foi possível acessar seu microfone",
     "View message": "Ver mensagem",
     "Failed to send": "Falhou a enviar",
-    "Access": "Acesso",
-    "Space members": "Membros do espaço",
-    "Spaces with access": "Espaço com acesso",
-    "& %(count)s more": {
-        "other": "e %(count)s mais",
-        "one": "& %(count)s mais"
-    },
-    "Upgrade required": "Atualização necessária",
     "You have no ignored users.": "Você não tem usuários ignorados.",
     "Space information": "Informações do espaço",
-    "Mentions & keywords": "Menções e palavras-chave",
-    "Global": "Global",
-    "New keyword": "Nova palavra-chave",
-    "Keyword": "Palavra-chave",
-    "Recommended for public spaces.": "Recomendado para espaços públicos.",
-    "Preview Space": "Previsualizar o Espaço",
-    "Visibility": "Visibilidade",
-    "This may be useful for public spaces.": "Isso pode ser útil para espaços públicos.",
-    "Enable guest access": "Habilitar acesso a convidados",
-    "Invite with email or username": "Convidar com email ou nome de usuário",
-    "Show all rooms": "Mostrar todas as salas",
-    "You can change these anytime.": "Você pode mudá-los a qualquer instante.",
     "Address": "Endereço",
-    "Connecting": "Conectando",
-    "unknown person": "pessoa desconhecida",
-    "There was an error loading your notification settings.": "Um erro ocorreu ao carregar suas configurações de notificação.",
-    "Anyone in a space can find and join. You can select multiple spaces.": "Qualquer um em um espaço pode encontrar e se juntar. Você pode selecionar múltiplos espaços.",
-    "Allow people to preview your space before they join.": "Permite que pessoas vejam seu espaço antes de entrarem.",
-    "Failed to update the visibility of this space": "Falha ao atualizar a visibilidade deste espaço",
-    "Decide who can view and join %(spaceName)s.": "Decide quem pode ver e se juntar a %(spaceName)s.",
-    "Guests can join a space without having an account.": "Convidados podem se juntar a um espaço sem ter uma conta.",
-    "Failed to update the history visibility of this space": "Falha ao atualizar a visibilidade do histórico deste espaço",
-    "Failed to update the guest access of this space": "Falha ao atualizar o acesso de convidados a este espaço",
     "To join a space you'll need an invite.": "Para se juntar a um espaço você precisará de um convite.",
     "You may contact me if you have any follow up questions": "Vocês podem me contactar se tiverem quaisquer perguntas subsequentes",
     "Search for rooms or people": "Procurar por salas ou pessoas",
@@ -1189,19 +1113,11 @@
     "Moderation": "Moderação",
     "Developer": "Desenvolvedor",
     "Messaging": "Mensagens",
-    "Search %(spaceName)s": "Pesquisar %(spaceName)s",
     "Show %(count)s other previews": {
         "one": "Exibir a %(count)s outra prévia",
         "other": "Exibir as %(count)s outras prévias"
     },
     "Failed to update the join rules": "Falha ao atualizar as regras de entrada",
-    "This upgrade will allow members of selected spaces access to this room without an invite.": "Esta melhoria permite que membros de espaços selecionados acessem esta sala sem um convite.",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Qualquer um em <spaceName/> pode encontrar e se juntar. Você pode selecionar outros espaços também.",
-    "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Qualquer um em um espaço pode encontrar e se juntar. <a>Edite quais espaços podem ser acessados aqui.</a>",
-    "Currently, %(count)s spaces have access": {
-        "one": "Atualmente, um espaço tem acesso",
-        "other": "Atualmente, %(count)s espaços tem acesso"
-    },
     "Including you, %(commaSeparatedMembers)s": "Incluindo você, %(commaSeparatedMembers)s",
     "%(count)s votes": {
         "one": "%(count)s voto",
@@ -1264,17 +1180,6 @@
     "Get notified for every message": "Seja notificado para cada mensagem",
     "Get notifications as set up in your <a>settings</a>": "Receba notificações conforme configurado em suas <a>configurações</a>",
     "This room isn't bridging messages to any platforms. <a>Learn more.</a>": "Esta sala não está conectando mensagens a nenhuma plataforma. <a> Saiba mais. </a>",
-    "Updating spaces... (%(progress)s out of %(count)s)": {
-        "one": "Atualizando espaço...",
-        "other": "Atualizando espaços... (%(progress)s de %(count)s)"
-    },
-    "Sending invites... (%(progress)s out of %(count)s)": {
-        "one": "Enviando convite...",
-        "other": "Enviando convites... (%(progress)s de %(count)s)"
-    },
-    "Loading new room": "Carregando nova sala",
-    "Upgrading room": "Atualizando sala",
-    "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Esta sala está em alguns espaços dos quais você não é administrador. Nesses espaços, a sala antiga ainda será exibida, mas as pessoas serão solicitadas a ingressar na nova.",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s e %(space2Name)s",
     "Leave some rooms": "Sair de algumas salas",
     "Leave all rooms": "Sair de todas as salas",
@@ -1300,10 +1205,6 @@
         "other": "Visto por %(count)s pessoas"
     },
     "Remove messages sent by me": "",
-    "%(count)s people joined": {
-        "one": "%(count)s pessoa entrou",
-        "other": "%(count)s pessoas entraram"
-    },
     "Text": "Texto",
     "Edit link": "Editar ligação",
     "Copy link to thread": "Copiar ligação para o tópico",
@@ -1399,7 +1300,12 @@
         "deselect_all": "Desmarcar todos",
         "select_all": "Selecionar tudo",
         "copied": "Copiado!",
-        "Advanced": "Avançado"
+        "advanced": "Avançado",
+        "spaces": "Espaços",
+        "general": "Geral",
+        "profile": "Perfil",
+        "display_name": "Nome e sobrenome",
+        "user_avatar": "Foto de perfil"
     },
     "action": {
         "continue": "Continuar",
@@ -1490,7 +1396,9 @@
         "exit_fullscreeen": "Sair da tela cheia",
         "enter_fullscreen": "Entrar em tela cheia",
         "unban": "Remover banimento",
-        "click_to_copy": "Clique para copiar"
+        "click_to_copy": "Clique para copiar",
+        "hide_advanced": "Esconder configurações avançadas",
+        "show_advanced": "Mostrar configurações avançadas"
     },
     "a11y": {
         "user_menu": "Menu do usuário",
@@ -1502,7 +1410,8 @@
             "other": "%(count)s mensagens não lidas.",
             "one": "1 mensagem não lida."
         },
-        "unread_messages": "Mensagens não lidas."
+        "unread_messages": "Mensagens não lidas.",
+        "jump_first_invite": "Ir para o primeiro convite."
     },
     "labs": {
         "video_rooms": "Salas de vídeo",
@@ -1729,7 +1638,9 @@
             "noisy": "Ativado com som",
             "error_permissions_denied": "%(brand)s não tem permissão para lhe enviar notificações - confirme as configurações do seu navegador",
             "error_permissions_missing": "%(brand)s não tem permissão para lhe enviar notificações - tente novamente",
-            "error_title": "Não foi possível ativar as notificações"
+            "error_title": "Não foi possível ativar as notificações",
+            "push_targets": "Aparelhos notificados",
+            "error_loading": "Um erro ocorreu ao carregar suas configurações de notificação."
         },
         "appearance": {
             "layout_irc": "IRC (experimental)",
@@ -1808,7 +1719,28 @@
             "message_search_disabled": "Armazene mensagens criptografadas de forma segura localmente para que possam aparecer nos resultados das buscas.",
             "message_search_unsupported": "%(brand)s precisa de componentes adicionais para pesquisar as mensagens criptografadas armazenadas localmente. Se quiser testar esse recurso, construa uma versão do %(brand)s para Computador com <nativeLink>componentes de busca ativados</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s não consegue pesquisar as mensagens criptografadas armazenadas localmente em um navegador de internet. Use o <desktopLink>%(brand)s para Computador</desktopLink> para que as mensagens criptografadas sejam exibidas nos resultados de buscas.",
-            "message_search_failed": "Falha na inicialização da pesquisa de mensagens"
+            "message_search_failed": "Falha na inicialização da pesquisa de mensagens",
+            "backup_key_well_formed": "bem formado",
+            "backup_key_unexpected_type": "tipo inesperado",
+            "backup_keys_description": "Faça backup de suas chaves de criptografia com os dados da sua conta, para se prevenir a perder o acesso às suas sessões. Suas chaves serão protegidas por uma Chave de Segurança exclusiva.",
+            "backup_key_stored_status": "Backup da chave armazenada:",
+            "cross_signing_not_stored": "não armazenado",
+            "backup_key_cached_status": "Backup da chave em cache:",
+            "4s_public_key_status": "Chave pública do armazenamento secreto:",
+            "4s_public_key_in_account_data": "nos dados de conta",
+            "secret_storage_status": "Armazenamento secreto:",
+            "secret_storage_ready": "pronto",
+            "secret_storage_not_ready": "não está pronto",
+            "delete_backup": "Remover backup",
+            "delete_backup_confirm_description": "Tem certeza? Você perderá suas mensagens criptografadas se não tiver feito o backup de suas chaves.",
+            "error_loading_key_backup_status": "Não foi possível carregar o status do backup da chave",
+            "restore_key_backup": "Restaurar do backup",
+            "key_backup_inactive": "Esta sessão <b>não está fazendo backup de suas chaves</b>, mas você tem um backup existente que pode restaurar para continuar.",
+            "key_backup_connect_prompt": "Autorize esta sessão a fazer o backup de chaves antes de se desconectar, para evitar perder chaves que possam estar apenas nesta sessão.",
+            "key_backup_connect": "Autorize esta sessão a fazer o backup de chaves",
+            "key_backup_complete": "O backup de todas as chaves foi realizado",
+            "key_backup_algorithm": "Algoritmo:",
+            "key_backup_inactive_warning": "Suas chaves <b>não estão sendo copiadas desta sessão</b>."
         },
         "preferences": {
             "room_list_heading": "Lista de salas",
@@ -1883,14 +1815,18 @@
             "add_msisdn_confirm_sso_button": "Confirme a adição deste número de telefone usando o Login Único para provar sua identidade.",
             "add_msisdn_confirm_button": "Confirmar adição de número de telefone",
             "add_msisdn_confirm_body": "Clique no botão abaixo para confirmar a adição deste número de telefone.",
-            "add_msisdn_dialog_title": "Adicionar número de telefone"
+            "add_msisdn_dialog_title": "Adicionar número de telefone",
+            "name_placeholder": "Nenhum nome e sobrenome",
+            "error_saving_profile_title": "Houve uma falha ao salvar o seu perfil",
+            "error_saving_profile": "A operação não foi concluída"
         },
         "sidebar": {
             "title": "Barra lateral",
             "metaspaces_subsection": "Espaços para mostrar",
             "metaspaces_home_description": "A página inicial é útil para obter uma visão geral de tudo.",
-            "metaspaces_home_all_rooms": "Mostre todas as suas salas no Início, mesmo que elas estejam em um espaço.",
-            "metaspaces_orphans": "Salas fora de um espaço"
+            "metaspaces_orphans": "Salas fora de um espaço",
+            "metaspaces_home_all_rooms_description": "Mostre todas as suas salas no Início, mesmo que elas estejam em um espaço.",
+            "metaspaces_home_all_rooms": "Mostrar todas as salas"
         }
     },
     "devtools": {
@@ -2444,7 +2380,13 @@
         "more_button": "Mais",
         "screenshare_monitor": "Compartilhe a tela inteira",
         "screenshare_window": "Janela da aplicação",
-        "screenshare_title": "Compatilhe conteúdo"
+        "screenshare_title": "Compatilhe conteúdo",
+        "n_people_joined": {
+            "one": "%(count)s pessoa entrou",
+            "other": "%(count)s pessoas entraram"
+        },
+        "unknown_person": "pessoa desconhecida",
+        "connecting": "Conectando"
     },
     "Other": "Outros",
     "room_settings": {
@@ -2506,7 +2448,33 @@
             "history_visibility_shared": "Apenas participantes (a partir do momento em que esta opção for selecionada)",
             "history_visibility_invited": "Apenas participantes (desde que foram convidadas/os)",
             "history_visibility_joined": "Apenas participantes (desde que entraram na sala)",
-            "history_visibility_world_readable": "Qualquer pessoa"
+            "history_visibility_world_readable": "Qualquer pessoa",
+            "join_rule_upgrade_required": "Atualização necessária",
+            "join_rule_restricted_n_more": {
+                "other": "e %(count)s mais",
+                "one": "& %(count)s mais"
+            },
+            "join_rule_restricted_summary": {
+                "one": "Atualmente, um espaço tem acesso",
+                "other": "Atualmente, %(count)s espaços tem acesso"
+            },
+            "join_rule_restricted_description": "Qualquer um em um espaço pode encontrar e se juntar. <a>Edite quais espaços podem ser acessados aqui.</a>",
+            "join_rule_restricted_description_spaces": "Espaço com acesso",
+            "join_rule_restricted_description_active_space": "Qualquer um em <spaceName/> pode encontrar e se juntar. Você pode selecionar outros espaços também.",
+            "join_rule_restricted_description_prompt": "Qualquer um em um espaço pode encontrar e se juntar. Você pode selecionar múltiplos espaços.",
+            "join_rule_restricted": "Membros do espaço",
+            "join_rule_restricted_upgrade_warning": "Esta sala está em alguns espaços dos quais você não é administrador. Nesses espaços, a sala antiga ainda será exibida, mas as pessoas serão solicitadas a ingressar na nova.",
+            "join_rule_restricted_upgrade_description": "Esta melhoria permite que membros de espaços selecionados acessem esta sala sem um convite.",
+            "join_rule_upgrade_upgrading_room": "Atualizando sala",
+            "join_rule_upgrade_awaiting_room": "Carregando nova sala",
+            "join_rule_upgrade_sending_invites": {
+                "one": "Enviando convite...",
+                "other": "Enviando convites... (%(progress)s de %(count)s)"
+            },
+            "join_rule_upgrade_updating_spaces": {
+                "one": "Atualizando espaço...",
+                "other": "Atualizando espaços... (%(progress)s de %(count)s)"
+            }
         },
         "general": {
             "publish_toggle": "Quer publicar esta sala na lista pública de salas da %(domain)s?",
@@ -2516,7 +2484,11 @@
             "default_url_previews_off": "Pré-visualizações de links estão desativadas por padrão para participantes desta sala.",
             "url_preview_encryption_warning": "Em salas criptografadas, como esta, as pré-visualizações de links estão desativadas por padrão para garantir que o seu servidor local (onde as visualizações são geradas) não possa coletar informações sobre os links que você vê nesta sala.",
             "url_preview_explainer": "Quando alguém inclui um link em uma mensagem, a pré-visualização do link pode ser exibida para fornecer mais informações sobre esse link, como o título, a descrição e uma imagem do site.",
-            "url_previews_section": "Pré-visualização de links"
+            "url_previews_section": "Pré-visualização de links",
+            "error_save_space_settings": "Falha ao salvar as configurações desse espaço.",
+            "description_space": "Editar configurações relacionadas ao seu espaço.",
+            "save": "Salvar alterações",
+            "leave_space": "Sair desse espaço"
         },
         "advanced": {
             "unfederated": "Esta sala não é acessível para servidores Matrix remotos",
@@ -2526,7 +2498,23 @@
             "room_version": "Versão da sala:"
         },
         "delete_avatar_label": "Remover foto de perfil",
-        "upload_avatar_label": "Enviar uma foto de perfil"
+        "upload_avatar_label": "Enviar uma foto de perfil",
+        "visibility": {
+            "error_update_guest_access": "Falha ao atualizar o acesso de convidados a este espaço",
+            "error_update_history_visibility": "Falha ao atualizar a visibilidade do histórico deste espaço",
+            "guest_access_explainer": "Convidados podem se juntar a um espaço sem ter uma conta.",
+            "guest_access_explainer_public_space": "Isso pode ser útil para espaços públicos.",
+            "title": "Visibilidade",
+            "error_failed_save": "Falha ao atualizar a visibilidade deste espaço",
+            "history_visibility_anyone_space": "Previsualizar o Espaço",
+            "history_visibility_anyone_space_description": "Permite que pessoas vejam seu espaço antes de entrarem.",
+            "history_visibility_anyone_space_recommendation": "Recomendado para espaços públicos.",
+            "guest_access_label": "Habilitar acesso a convidados"
+        },
+        "access": {
+            "title": "Acesso",
+            "description_space": "Decide quem pode ver e se juntar a %(spaceName)s."
+        }
     },
     "encryption": {
         "verification": {
@@ -2916,9 +2904,14 @@
     "space": {
         "landing_welcome": "Boas-vindas ao <name/>",
         "context_menu": {
-            "explore": "Explorar salas"
+            "explore": "Explorar salas",
+            "options": "Opções do espaço"
         },
-        "share_public": "Compartilhar o seu espaço público"
+        "share_public": "Compartilhar o seu espaço público",
+        "search_children": "Pesquisar %(spaceName)s",
+        "invite_link": "Compartilhar link de convite",
+        "invite": "Convidar pessoas",
+        "invite_description": "Convidar com email ou nome de usuário"
     },
     "location_sharing": {
         "find_my_location": "Encontrar minha localização",
@@ -2958,7 +2951,6 @@
     },
     "create_space": {
         "name_required": "Por favor entre o nome do espaço",
-        "name_placeholder": "e.g. meu-espaco",
         "public_description": "Abra espaços para todos, especialmente para comunidades",
         "private_description": "Somente convite, melhor para si mesmo(a) ou para equipes",
         "public_heading": "O seu espaço público",
@@ -2966,7 +2958,11 @@
         "add_details_prompt": "Adicione alguns detalhes para ajudar as pessoas a reconhecê-lo.",
         "failed_create_initial_rooms": "Falha ao criar salas de espaço iniciais",
         "skip_action": "Ignorar por enquanto",
-        "invite_teammates_by_username": "Convidar por nome de usuário"
+        "invite_teammates_by_username": "Convidar por nome de usuário",
+        "address_placeholder": "e.g. meu-espaco",
+        "address_label": "Endereço",
+        "label": "Criar um espaço",
+        "add_details_prompt_2": "Você pode mudá-los a qualquer instante."
     },
     "user_menu": {
         "switch_theme_light": "Alternar para o modo claro",
@@ -3107,7 +3103,9 @@
         "admin_contact_short": "Entre em contato com sua(seu) <a>administrador(a) do servidor</a>.",
         "non_urgent_echo_failure_toast": "Seu servidor não está respondendo a algumas <a>solicitações</a>.",
         "failed_copy": "Não foi possível copiar",
-        "something_went_wrong": "Não foi possível carregar!"
+        "something_went_wrong": "Não foi possível carregar!",
+        "update_power_level": "Não foi possível alterar o nível de permissão",
+        "unknown": "Erro desconhecido"
     },
     "in_space1_and_space2": "Nos espaços %(space1Name)s e %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -3126,7 +3124,13 @@
         "enable_prompt_toast_description": "Ativar notificações na área de trabalho",
         "colour_none": "Nenhuma",
         "colour_bold": "Negrito",
-        "error_change_title": "Alterar configuração de notificações"
+        "error_change_title": "Alterar configuração de notificações",
+        "mark_all_read": "Marcar tudo como lido",
+        "keyword": "Palavra-chave",
+        "keyword_new": "Nova palavra-chave",
+        "class_global": "Global",
+        "class_other": "Outros",
+        "mentions_keywords": "Menções e palavras-chave"
     },
     "mobile_guide": {
         "toast_title": "Use o aplicativo para ter uma experiência melhor",
@@ -3144,5 +3148,10 @@
     "lightbox": {
         "rotate_left": "Girar para a esquerda",
         "rotate_right": "Girar para a direita"
+    },
+    "a11y_jump_first_unread_room": "Ir para a primeira sala não lida.",
+    "integration_manager": {
+        "error_connecting_heading": "Não foi possível conectar ao gerenciador de integrações",
+        "error_connecting": "Ou o gerenciador de integrações está indisponível, ou ele não conseguiu acessar o seu servidor."
     }
 }

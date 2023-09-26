@@ -737,7 +737,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             switch (this.state.shieldReason) {
                 case null:
                 case EventShieldReason.UNKNOWN:
-                    shieldReasonMessage = _t("Unknown error");
+                    shieldReasonMessage = _t("error|unknown");
                     break;
 
                 case EventShieldReason.UNVERIFIED_IDENTITY:

@@ -28,11 +28,9 @@
     "Incorrect verification code": "Təsdiq etmənin səhv kodu",
     "Authentication": "Müəyyənləşdirilmə",
     "Failed to set display name": "Görünüş adını təyin etmək bacarmadı",
-    "Notification targets": "Xəbərdarlıqlar üçün qurğular",
     "not specified": "qeyd edilmədi",
     "Failed to ban user": "İstifadəçini bloklamağı bacarmadı",
     "Failed to mute user": "İstifadəçini kəsməyi bacarmadı",
-    "Failed to change power level": "Hüquqların səviyyəsini dəyişdirməyi bacarmadı",
     "Are you sure?": "Siz əminsiniz?",
     "Unignore": "Blokdan çıxarmaq",
     "Invited": "Dəvət edilmişdir",
@@ -71,7 +69,6 @@
     "Failed to reject invite": "Dəvəti rədd etməyi bacarmadı",
     "Failed to load timeline position": "Xronologiyadan nişanı yükləməyi bacarmadı",
     "Unable to remove contact information": "Əlaqə məlumatlarının silməyi bacarmadı",
-    "Profile": "Profil",
     "A new password must be entered.": "Yeni parolu daxil edin.",
     "New passwords must match each other.": "Yeni şifrələr uyğun olmalıdır.",
     "Return to login screen": "Girişin ekranına qayıtmaq",
@@ -98,7 +95,8 @@
         "unnamed_room": "Adı açıqlanmayan otaq",
         "identity_server": "Eyniləşdirmənin serveri",
         "on": "Qoşmaq",
-        "Advanced": "Təfərrüatlar"
+        "advanced": "Təfərrüatlar",
+        "profile": "Profil"
     },
     "action": {
         "continue": "Davam etmək",
@@ -139,7 +137,8 @@
             "rule_suppress_notices": "Botla göndərilmiş mesajlar",
             "error_permissions_denied": "%(brand)s-un sizə bildiriş göndərmək icazəsi yoxdur - brauzerinizin parametrlərini yoxlayın",
             "error_permissions_missing": "%(brand)s bildiriş göndərmək üçün icazə verilmədi - lütfən yenidən cəhd edin",
-            "error_title": "Xəbərdarlıqları daxil qoşmağı bacarmadı"
+            "error_title": "Xəbərdarlıqları daxil qoşmağı bacarmadı",
+            "push_targets": "Xəbərdarlıqlar üçün qurğular"
         },
         "appearance": {
             "timeline_image_size_default": "Varsayılan olaraq",
@@ -341,9 +340,13 @@
         }
     },
     "notifications": {
-        "enable_prompt_toast_title": "Xəbərdarlıqlar"
+        "enable_prompt_toast_title": "Xəbərdarlıqlar",
+        "class_other": "Digər"
     },
     "encryption": {
         "not_supported": "<dəstəklənmir>"
+    },
+    "error": {
+        "update_power_level": "Hüquqların səviyyəsini dəyişdirməyi bacarmadı"
     }
 }

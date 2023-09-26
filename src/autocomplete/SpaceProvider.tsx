@@ -30,7 +30,7 @@ export default class SpaceProvider extends RoomProvider {
     }
 
     public getName(): string {
-        return _t("Spaces");
+        return _t("common|spaces");
     }
 
     public renderCompletions(completions: React.ReactNode[]): React.ReactNode {

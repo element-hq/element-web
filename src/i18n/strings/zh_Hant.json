@@ -50,17 +50,14 @@
     "Are you sure you want to leave the room '%(roomName)s'?": "您確定要離開聊天室「%(roomName)s」嗎？",
     "Custom level": "自訂等級",
     "Enter passphrase": "輸入安全密語",
-    "Failed to change power level": "無法變更權限等級",
     "Home": "首頁",
     "Invited": "已邀請",
     "Low priority": "低優先度",
     "Moderator": "版主",
     "New passwords must match each other.": "新密碼必須互相相符。",
     "not specified": "未指定",
-    "No display name": "沒有顯示名稱",
     "No more results": "沒有更多結果",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "請收信並點擊信中的連結。完成後，再點擊「繼續」。",
-    "Profile": "基本資料",
     "Reject invitation": "拒絕邀請",
     "%(roomName)s does not exist.": "%(roomName)s 不存在。",
     "%(roomName)s is not accessible at this time.": "%(roomName)s 此時無法存取。",
@@ -117,7 +114,6 @@
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "這個過程讓您可以匯入您先前從其他 Matrix 客戶端匯出的加密金鑰。您將可以解密在其他客戶端可以解密的訊息。",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "匯出檔案被安全密語所保護。您應該在這裡輸入安全密語來解密檔案。",
     "Confirm Removal": "確認刪除",
-    "Unknown error": "未知的錯誤",
     "Unable to restore session": "無法復原工作階段",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "若您先前使用過較新版本的 %(brand)s，您的工作階段可能與此版本不相容。關閉此視窗並回到較新的版本。",
     "This will allow you to reset your password and receive notifications.": "這讓您可以重設您的密碼與接收通知。",
@@ -150,7 +146,6 @@
     "<a>In reply to</a> <pill>": "<a>回覆給</a> <pill>",
     "You don't currently have any stickerpacks enabled": "您目前沒有啟用任何貼圖包",
     "Sunday": "星期日",
-    "Notification targets": "通知目標",
     "Today": "今天",
     "Friday": "星期五",
     "Changelog": "變更記錄檔",
@@ -211,8 +206,6 @@
     "Incompatible local cache": "不相容的本機快取",
     "Clear cache and resync": "清除快取並重新同步",
     "Add some now": "現在新增一些嗎",
-    "Delete Backup": "刪除備份",
-    "Unable to load key backup status": "無法載入金鑰備份狀態",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "為了避免遺失您的聊天歷史，您必須在登出前匯出您的聊天室金鑰。您必須回到較新版的 %(brand)s 才能執行此動作",
     "Incompatible Database": "不相容的資料庫",
     "Continue With Encryption Disabled": "在停用加密的情況下繼續",
@@ -239,14 +232,10 @@
     "Invite anyway": "無論如何都要邀請",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "我們已經傳送給您一封電子郵件以驗證您的地址。請遵照那裡的指示，然後點選下面的按鈕。",
     "Email Address": "電子郵件地址",
-    "All keys backed up": "所有金鑰都已備份",
     "Unable to verify phone number.": "無法驗證電話號碼。",
     "Verification code": "驗證碼",
     "Phone Number": "電話號碼",
-    "Profile picture": "大頭照",
-    "Display Name": "顯示名稱",
     "Room information": "聊天室資訊",
-    "General": "一般",
     "Room Addresses": "聊天室位址",
     "Email addresses": "電子郵件地址",
     "Phone numbers": "電話號碼",
@@ -329,9 +318,7 @@
     "This homeserver would like to make sure you are not a robot.": "這個家伺服器想要確認您不是機器人。",
     "Couldn't load page": "無法載入頁面",
     "Your password has been reset.": "您的密碼已重設。",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "您確定嗎？如果沒有正確備份金鑰的話，將會遺失所有加密訊息。",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "加密訊息是使用端對端加密。只有您和接收者才有金鑰可以閱讀這些訊息。",
-    "Restore from Backup": "從備份還原",
     "Back up your keys before signing out to avoid losing them.": "請在登出前備份您的金鑰，以免遺失。",
     "Start using Key Backup": "開始使用金鑰備份",
     "I don't want my encrypted messages": "我不要我的加密訊息了",
@@ -472,8 +459,6 @@
     "Share this email in Settings to receive invites directly in %(brand)s.": "在設定中分享此電子郵件以直接在 %(brand)s 中接收邀請。",
     "Explore rooms": "探索聊天室",
     "e.g. my-room": "例如：my-room",
-    "Hide advanced": "隱藏進階設定",
-    "Show advanced": "顯示進階設定",
     "Close dialog": "關閉對話框",
     "Show image": "顯示圖片",
     "Your email address hasn't been verified yet": "您的電子郵件地址尚未被驗證",
@@ -487,8 +472,6 @@
     "This client does not support end-to-end encryption.": "此客戶端不支援端對端加密。",
     "Messages in this room are not end-to-end encrypted.": "此聊天室內的訊息未經端到端加密。",
     "Cancel search": "取消搜尋",
-    "Jump to first unread room.": "跳到第一個未讀的聊天室。",
-    "Jump to first invite.": "跳到第一個邀請。",
     "Room %(name)s": "聊天室 %(name)s",
     "Message Actions": "訊息動作",
     "You verified %(name)s": "您驗證了 %(name)s",
@@ -503,8 +486,6 @@
     "None": "無",
     "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "您已忽略這個使用者，所以他們的訊息會隱藏。<a>無論如何都顯示。</a>",
     "Messages in this room are end-to-end encrypted.": "此聊天室內的訊息有端對端加密。",
-    "Cannot connect to integration manager": "無法連線到整合管理員",
-    "The integration manager is offline or it cannot reach your homeserver.": "整合管理員已離線或無法存取您的家伺服器。",
     "Failed to connect to integration manager": "無法連線到整合服務伺服器",
     "Integrations are disabled": "整合已停用",
     "Integrations not allowed": "不允許整合",
@@ -518,9 +499,6 @@
     "You'll upgrade this room from <oldVersion /> to <newVersion />.": "您將要把此聊天室從 <oldVersion /> 升級到 <newVersion />。",
     "<userName/> wants to chat": "<userName/> 想要聊天",
     "Start chatting": "開始聊天",
-    "Secret storage public key:": "秘密儲存空間公鑰：",
-    "in account data": "在帳號資料中",
-    "not stored": "未儲存",
     "Hide verified sessions": "隱藏已驗證的工作階段",
     "%(count)s verified sessions": {
         "other": "%(count)s 個已驗證的工作階段",
@@ -548,11 +526,7 @@
     "Enter your account password to confirm the upgrade:": "輸入您的帳號密碼以確認升級：",
     "You'll need to authenticate with the server to confirm the upgrade.": "您必須透過伺服器驗證以確認升級。",
     "Upgrade your encryption": "升級您的加密",
-    "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "此工作階段<b>並未備份您的金鑰</b>，您可還原先前的備份後再繼續新增金鑰到備份內容中。",
-    "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "在登出前，請先將此工作階段連線到金鑰備份以避免遺失任何可能僅存在此工作階段中的金鑰。",
-    "Connect this session to Key Backup": "將此工作階段連結至金鑰備份",
     "This backup is trusted because it has been restored on this session": "此備份已受信任，因為它已在此工作階段上復原",
-    "Your keys are <b>not being backed up from this session</b>.": "您<b>並未備份此裝置的金鑰</b>。",
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "此聊天室已橋接訊息到以下平臺。<a>取得更多詳細資訊。</a>",
     "Bridges": "橋接",
     "This user has not verified all of their sessions.": "此使用者尚未驗證他們的所有工作階段。",
@@ -601,7 +575,6 @@
     "%(name)s declined": "%(name)s 拒絕了",
     "Accepting…": "正在接受…",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "要回報與 Matrix 有關的安全性問題，請閱讀 Matrix.org 的<a>安全性揭露政策</a>。",
-    "Mark all as read": "全部標示為已讀",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "更新聊天室的替代位址時發生錯誤。伺服器可能不允許這麼做，或是遇到暫時性的錯誤。",
     "Scroll to most recent messages": "捲動到最新訊息",
     "Local address": "本機位址",
@@ -640,8 +613,6 @@
     "Verification timed out.": "驗證逾時。",
     "%(displayName)s cancelled verification.": "%(displayName)s 取消驗證。",
     "You cancelled verification.": "您取消了驗證。",
-    "well formed": "組成良好",
-    "unexpected type": "預料之外的類型",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "透過使用單一登入系統來證您的身分以確認停用您的帳號。",
     "Are you sure you want to deactivate your account? This is irreversible.": "確定您想要停用您的帳號嗎？此為不可逆的操作。",
     "Confirm account deactivation": "確認停用帳號",
@@ -721,12 +692,6 @@
     "Not encrypted": "未加密",
     "Room settings": "聊天室設定",
     "Backup version:": "備份版本：",
-    "Algorithm:": "演算法：",
-    "Backup key stored:": "是否已儲存備份金鑰：",
-    "Backup key cached:": "是否快取備份金鑰：",
-    "Secret storage:": "秘密儲存空間：",
-    "ready": "已準備好",
-    "not ready": "尚未準備好",
     "Start a conversation with someone using their name or username (like <userId/>).": "使用某人的名字或使用者名稱（如 <userId/>）以與他們開始對話。",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "使用某人的名字、使用者名稱（如 <userId/>）或<a>分享此聊天室</a>來邀請人。",
     "Widgets": "小工具",
@@ -743,8 +708,6 @@
     "Video conference updated by %(senderName)s": "視訊會議由 %(senderName)s 更新",
     "Video conference started by %(senderName)s": "視訊會議由 %(senderName)s 開始",
     "Ignored attempt to disable encryption": "已忽略嘗試停用加密",
-    "Failed to save your profile": "無法儲存您的設定檔",
-    "The operation could not be completed": "無法完成操作",
     "You can only pin up to %(count)s widgets": {
         "other": "您最多只能釘選 %(count)s 個小工具"
     },
@@ -1037,7 +1000,6 @@
     "Invalid Security Key": "無效的安全金鑰",
     "Wrong Security Key": "錯誤的安全金鑰",
     "Set my room layout for everyone": "為所有人設定我的聊天室佈局",
-    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "請備份您帳號的加密金鑰，以防無法使用您的工作階段。您的金鑰會被特殊的安全金鑰保護。",
     "Remember this": "記住這個",
     "The widget will verify your user ID, but won't be able to perform actions for you:": "小工具將會驗證您的使用者 ID，但將無法為您執行動作：",
     "Allow this widget to verify your identity": "允許此小工具驗證您的身分",
@@ -1050,24 +1012,16 @@
     "This space is not public. You will not be able to rejoin without an invite.": "此聊天空間並非公開。在無邀請的情況下，您將無法重新加入。",
     "Failed to start livestream": "無法開始直播",
     "Unable to start audio streaming.": "無法開始音訊串流。",
-    "Save Changes": "儲存變更",
-    "Leave Space": "離開聊天空間",
-    "Edit settings relating to your space.": "編輯您的聊天空間的設定。",
-    "Failed to save space settings.": "無法儲存聊天空間設定。",
     "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "使用某人的名字、使用者名稱（如 <userId/>）或<a>分享此聊天室</a>來邀請人。",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "使用某人的名字、電子郵件地址、使用者名稱（如 <userId/>）或<a>分享此聊天空間</a>來邀請人。",
     "Create a new room": "建立新聊天室",
-    "Spaces": "聊天空間",
     "Space selection": "選取聊天空間",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.": "如果您將自己降級，將無法撤銷此變更，而且如果您是空間中的最後一個特殊權限使用者，將無法再取得這類特殊權限。",
     "Suggested Rooms": "建議的聊天室",
     "Add existing room": "新增既有的聊天室",
     "Invite to this space": "邀請加入此聊天空間",
     "Your message was sent": "您的訊息已傳送",
-    "Space options": "聊天空間選項",
     "Leave space": "離開聊天空間",
-    "Invite people": "邀請夥伴",
-    "Share invite link": "分享邀請連結",
     "Create a space": "建立聊天空間",
     "Private space": "私密聊天空間",
     "Public space": "公開聊天空間",
@@ -1082,9 +1036,6 @@
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "這通常只影響伺服器如何處理聊天室。如果您的 %(brand)s 遇到問題，請回報錯誤。",
     "Invite to %(roomName)s": "邀請加入 %(roomName)s",
     "Edit devices": "編輯裝置",
-    "Invite with email or username": "使用電子郵件或使用者名稱邀請",
-    "You can change these anytime.": "您隨時可以變更這些。",
-    "unknown person": "不明身份的人",
     "Verify your identity to access encrypted messages and prove your identity to others.": "驗證您的身分來存取已加密的訊息並對其他人證明您的身分。",
     "%(count)s people you know have already joined": {
         "other": "%(count)s 個您認識的人已加入",
@@ -1130,7 +1081,6 @@
     "No microphone found": "找不到麥克風",
     "We were unable to access your microphone. Please check your browser settings and try again.": "我們無法存取您的麥克風。請檢查您的瀏覽器設定並再試一次。",
     "Unable to access your microphone": "無法存取您的麥克風",
-    "Connecting": "連線中",
     "Search names and descriptions": "搜尋名稱與描述",
     "You may contact me if you have any follow up questions": "如果後續有任何問題，可以聯絡我",
     "To leave the beta, visit your settings.": "請到設定頁面離開 Beta 測試版。",
@@ -1155,17 +1105,6 @@
     "Published addresses can be used by anyone on any server to join your space.": "任何伺服器上的人都可以使用已發佈的位址加入您的聊天空間。",
     "This space has no local addresses": "此聊天空間沒有本機位址",
     "Space information": "聊天空間資訊",
-    "Recommended for public spaces.": "給公開聊天空間的推薦。",
-    "Allow people to preview your space before they join.": "允許人們在加入前預覽您的聊天空間。",
-    "Preview Space": "預覽聊天空間",
-    "Decide who can view and join %(spaceName)s.": "決定誰可以檢視並加入 %(spaceName)s。",
-    "Visibility": "能見度",
-    "This may be useful for public spaces.": "這可能對公開聊天空間很有用。",
-    "Guests can join a space without having an account.": "訪客無需帳號即可加入聊天空間。",
-    "Enable guest access": "允許訪客存取",
-    "Failed to update the history visibility of this space": "無法更新此聊天空間紀錄的能見度",
-    "Failed to update the guest access of this space": "無法更新此聊天空間的訪客存取權限",
-    "Failed to update the visibility of this space": "無法更新此聊天空間的能見度",
     "Address": "位址",
     "Unnamed audio": "未命名的音訊",
     "Error processing audio message": "處理音訊訊息時出現問題",
@@ -1184,11 +1123,6 @@
     "Unable to copy a link to the room to the clipboard.": "無法複製聊天室連結至剪貼簿。",
     "Unable to copy room link": "無法複製聊天室連結",
     "User Directory": "使用者目錄",
-    "There was an error loading your notification settings.": "載入您的通知設定時發生錯誤。",
-    "Mentions & keywords": "提及與關鍵字",
-    "Global": "全域",
-    "New keyword": "新關鍵字",
-    "Keyword": "關鍵字",
     "The call is in an unknown state!": "通話處於未知狀態！",
     "Call back": "回撥",
     "No answer": "無回應",
@@ -1197,7 +1131,6 @@
     "Connection failed": "連線失敗",
     "Could not connect media": "無法連結媒體",
     "Error downloading audio": "下載音訊時發生錯誤",
-    "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "任何在聊天空間中的人都可以找到並加入。<a>編輯哪些聊天空間可以存取這裡。</a>",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>請注意，升級會讓聊天室變成全新的版本</b>。目前所有的訊息都只會留在被封存的聊天室。",
     "Automatically invite members from this room to the new one": "自動將該聊天室的成員邀請至新的聊天室",
     "These are likely ones other room admins are a part of.": "這些可能是其他聊天室管理員的一部分。",
@@ -1208,20 +1141,6 @@
     "Select spaces": "選取聊天空間",
     "You're removing all spaces. Access will default to invite only": "您將取消所有聊天空間。存取權限將會預設為邀請制",
     "Public room": "公開聊天室",
-    "Access": "存取",
-    "Space members": "聊天空間成員",
-    "Anyone in a space can find and join. You can select multiple spaces.": "空間中的任何人都可以找到並加入。您可以選取多個空間。",
-    "Spaces with access": "可存取的聊天空間",
-    "Currently, %(count)s spaces have access": {
-        "other": "目前，%(count)s 個空間可存取",
-        "one": "目前，1 個空間可存取"
-    },
-    "& %(count)s more": {
-        "other": "以及 %(count)s 個",
-        "one": "與其他 %(count)s 個"
-    },
-    "Upgrade required": "必須升級",
-    "This upgrade will allow members of selected spaces access to this room without an invite.": "此升級讓特定聊天空間的成員不需要邀請就可以存取此聊天室。",
     "Want to add an existing space instead?": "想要新增既有的聊天空間嗎？",
     "Private space (invite only)": "私密聊天空間（邀請制）",
     "Space visibility": "空間能見度",
@@ -1240,9 +1159,7 @@
     "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "您是將要離開的聊天室與聊天空間唯一的管理員。您離開之後會讓它們沒有任何管理員。",
     "You're the only admin of this space. Leaving it will mean no one has control over it.": "您是此聊天空間唯一的管理員。離開將代表沒有人可以控制它。",
     "You won't be able to rejoin unless you are re-invited.": "您將無法重新加入，除非您再次被邀請。",
-    "Search %(spaceName)s": "搜尋 %(spaceName)s",
     "Decrypting": "正在解密",
-    "Show all rooms": "顯示所有聊天室",
     "Missed call": "未接來電",
     "Call declined": "已拒絕通話",
     "Stop recording": "停止錄製",
@@ -1254,7 +1171,6 @@
     "Role in <RoomName/>": "<RoomName/> 中的角色",
     "Unknown failure": "未知錯誤",
     "Failed to update the join rules": "加入規則更新失敗",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "在 <spaceName/> 中的任何人都可以找到並加入。您也可以選取其他聊天空間。",
     "Message didn't send. Click for info.": "訊息未傳送。點擊以取得更多資訊。",
     "To join a space you'll need an invite.": "若要加入聊天空間，您必須被邀請。",
     "Would you like to leave the rooms in this space?": "您想要離開此聊天空間中的聊天室嗎？",
@@ -1282,16 +1198,6 @@
     "Unban from %(roomName)s": "從 %(roomName)s 取消封鎖",
     "They'll still be able to access whatever you're not an admin of.": "他們仍然可以存取您不是管理員的任何地方。",
     "Disinvite from %(roomName)s": "拒絕來自 %(roomName)s 的邀請",
-    "Updating spaces... (%(progress)s out of %(count)s)": {
-        "one": "正在更新空間…",
-        "other": "正在更新空間…（%(count)s 中的第 %(progress)s 個）"
-    },
-    "Sending invites... (%(progress)s out of %(count)s)": {
-        "one": "正在傳送邀請…",
-        "other": "正在傳送邀請…（%(count)s 中的第 %(progress)s 個）"
-    },
-    "Loading new room": "正在載入新的聊天室",
-    "Upgrading room": "正在升級聊天室",
     "Downloading": "正在下載",
     "%(count)s reply": {
         "one": "%(count)s 回覆",
@@ -1312,7 +1218,6 @@
     "Yours, or the other users' internet connection": "您或其他使用者的網際網路連線",
     "The homeserver the user you're verifying is connected to": "您正在驗證的使用者所連線的家伺服器",
     "This room isn't bridging messages to any platforms. <a>Learn more.</a>": "此聊天室不會將訊息橋接至任何平台。<a>取得更多資訊。</a>",
-    "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "這個聊天室位於您不是管理員的某些聊天空間中。在那些聊天空間中，舊的聊天室仍將會顯示，但系統會提示使用者加入新的聊天室。",
     "Copy link to thread": "複製討論串連結",
     "Thread options": "討論串選項",
     "You do not have permission to start polls in this room.": "您沒有權限在此聊天室發起投票。",
@@ -1523,10 +1428,6 @@
     "An error occurred whilst sharing your live location": "分享您的即時位置時發生錯誤",
     "Unread email icon": "未讀電子郵件圖示",
     "Joining…": "正在加入…",
-    "%(count)s people joined": {
-        "one": "%(count)s 個人已加入",
-        "other": "%(count)s 個人已加入"
-    },
     "Read receipts": "讀取回條",
     "Deactivating your account is a permanent action — be careful!": "停用帳號無法還原 — 請小心！",
     "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "當您登出時，這些金鑰將會從此裝置被刪除，這代表您將無法再閱讀加密的訊息，除非您在其他裝置上有那些訊息的金鑰，或是將它們備份到伺服器上。",
@@ -1569,10 +1470,6 @@
     "Manually verify by text": "透過文字手動驗證",
     "%(downloadButton)s or %(copyButton)s": "%(downloadButton)s 或 %(copyButton)s",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s 或 %(recoveryFile)s",
-    "You do not have permission to start voice calls": "您無權限開始語音通話",
-    "There's no one here to call": "這裡沒有人可以通話",
-    "You do not have permission to start video calls": "您沒有權限開始視訊通話",
-    "Ongoing call": "正在進行通話",
     "Video call (Jitsi)": "視訊通話 (Jitsi)",
     "Failed to set pusher state": "無法設定推送程式狀態",
     "Video call ended": "視訊通話已結束",
@@ -1624,9 +1521,6 @@
     "We were unable to start a chat with the other user.": "我們無法與其他使用者開始聊天。",
     "Error starting verification": "開始驗證時發生錯誤",
     "Change layout": "變更排列",
-    "Search users in this room…": "搜尋此聊天室中的使用者…",
-    "Give one or multiple users in this room more privileges": "給這個聊天室中的一個使用者或多個使用者更多的特殊權限",
-    "Add privileged users": "新增特權使用者",
     "Unable to decrypt message": "無法解密訊息",
     "This message could not be decrypted": "此訊息無法解密",
     " in <strong>%(room)s</strong>": " 在 <strong>%(room)s</strong>",
@@ -1643,7 +1537,6 @@
     "There are no past polls in this room": "此聊天室沒有過去的投票",
     "There are no active polls in this room": "此聊天室沒有正在進行的投票",
     "Declining…": "正在拒絕…",
-    "This session is backing up your keys.": "此工作階段正在備份您的金鑰。",
     "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "警告：您的個人資料（包含加密金鑰）仍儲存於此工作階段。若您使用完此工作階段或想要登入其他帳號，請清除它。",
     "Scan QR code": "掃描 QR Code",
     "Select '%(scanQRCode)s'": "選取「%(scanQRCode)s」",
@@ -1663,10 +1556,6 @@
     "Encrypting your message…": "正在加密您的訊息…",
     "Sending your message…": "正在傳送您的訊息…",
     "Set a new account password…": "設定新帳號密碼…",
-    "Backing up %(sessionsRemaining)s keys…": "正在備份 %(sessionsRemaining)s 把金鑰…",
-    "Connecting to integration manager…": "正在連線至整合管理員…",
-    "Saving…": "正在儲存…",
-    "Creating…": "正在建立…",
     "Starting export process…": "正在開始匯出流程…",
     "Secure Backup successful": "安全備份成功",
     "Your keys are now being backed up from this device.": "您已備份此裝置的金鑰。",
@@ -1691,7 +1580,6 @@
     "View poll in timeline": "在時間軸中檢視投票",
     "Answered elsewhere": "在別處回答",
     "Invites by email can only be sent one at a time": "透過電子郵件傳送的邀請一次只能傳送一個",
-    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "更新您的通知偏好設定時發生錯誤。請再試一次。",
     "Desktop app logo": "桌面應用程式標誌",
     "Requires your server to support the stable version of MSC3827": "您的伺服器必須支援穩定版本的 MSC3827",
     "Message from %(user)s": "來自 %(user)s 的訊息",
@@ -1715,12 +1603,9 @@
     "Error changing password": "變更密碼錯誤",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s（HTTP 狀態 %(httpStatus)s）",
     "Unknown password change error (%(stringifiedError)s)": "未知密碼變更錯誤（%(stringifiedError)s）",
-    "Failed to download source media, no source url was found": "下載來源媒體失敗，找不到來源 URL",
     "Once invited users have joined %(brand)s, you will be able to chat and the room will be end-to-end encrypted": "被邀請的使用者加入 %(brand)s 後，您就可以聊天，聊天室將會進行端到端加密",
     "Waiting for users to join %(brand)s": "等待使用者加入 %(brand)s",
     "You do not have permission to invite users": "您沒有權限邀請使用者",
-    "Ask to join": "要求加入",
-    "People cannot join unless access is granted.": "除非授予存取權限，否則人們無法加入。",
     "Email summary": "電子郵件摘要",
     "Select which emails you want to send summaries to. Manage your emails in <button>General</button>.": "選取您要將摘要傳送到的電子郵件地址。請在<button>一般</button>中管理您的電子郵件地址。",
     "Mentions and Keywords only": "僅提及與關鍵字",
@@ -1864,7 +1749,13 @@
         "deselect_all": "取消選取",
         "select_all": "全部選取",
         "copied": "已複製！",
-        "Advanced": "進階"
+        "advanced": "進階",
+        "spaces": "聊天空間",
+        "general": "一般",
+        "saving": "正在儲存…",
+        "profile": "基本資料",
+        "display_name": "顯示名稱",
+        "user_avatar": "大頭照"
     },
     "action": {
         "continue": "繼續",
@@ -1968,7 +1859,9 @@
         "exit_fullscreeen": "離開全螢幕",
         "enter_fullscreen": "進入全螢幕",
         "unban": "解除封鎖",
-        "click_to_copy": "點擊複製"
+        "click_to_copy": "點擊複製",
+        "hide_advanced": "隱藏進階設定",
+        "show_advanced": "顯示進階設定"
     },
     "a11y": {
         "user_menu": "使用者選單",
@@ -1980,7 +1873,8 @@
             "other": "%(count)s 則未讀訊息。",
             "one": "1 則未讀的訊息。"
         },
-        "unread_messages": "未讀的訊息。"
+        "unread_messages": "未讀的訊息。",
+        "jump_first_invite": "跳到第一個邀請。"
     },
     "labs": {
         "video_rooms": "視訊聊天室",
@@ -2349,7 +2243,10 @@
             "noisy": "吵鬧",
             "error_permissions_denied": "%(brand)s 沒有權限向您傳送通知──請檢查您的瀏覽器設定",
             "error_permissions_missing": "%(brand)s 沒有權限向您傳送通知──請重試",
-            "error_title": "無法啟用通知功能"
+            "error_title": "無法啟用通知功能",
+            "error_updating": "更新您的通知偏好設定時發生錯誤。請再試一次。",
+            "push_targets": "通知目標",
+            "error_loading": "載入您的通知設定時發生錯誤。"
         },
         "appearance": {
             "layout_irc": "IRC（實驗性）",
@@ -2437,7 +2334,30 @@
             "message_search_disabled": "將加密的訊息安全地在本機快取以出現在顯示結果中。",
             "message_search_unsupported": "%(brand)s 缺少某些在本機快取已加密訊息所需的元件。如果您想要實驗此功能，請加入<nativeLink>搜尋元件</nativeLink>來自行建構 %(brand)s 桌面版。",
             "message_search_unsupported_web": "%(brand)s 無法在網頁瀏覽器中執行時，安全地在本機快取加密訊息。若需搜尋加密訊息，請使用 <desktopLink>%(brand)s 桌面版</desktopLink>。",
-            "message_search_failed": "訊息搜尋初始化失敗"
+            "message_search_failed": "訊息搜尋初始化失敗",
+            "backup_key_well_formed": "組成良好",
+            "backup_key_unexpected_type": "預料之外的類型",
+            "backup_keys_description": "請備份您帳號的加密金鑰，以防無法使用您的工作階段。您的金鑰會被特殊的安全金鑰保護。",
+            "backup_key_stored_status": "是否已儲存備份金鑰：",
+            "cross_signing_not_stored": "未儲存",
+            "backup_key_cached_status": "是否快取備份金鑰：",
+            "4s_public_key_status": "秘密儲存空間公鑰：",
+            "4s_public_key_in_account_data": "在帳號資料中",
+            "secret_storage_status": "秘密儲存空間：",
+            "secret_storage_ready": "已準備好",
+            "secret_storage_not_ready": "尚未準備好",
+            "delete_backup": "刪除備份",
+            "delete_backup_confirm_description": "您確定嗎？如果沒有正確備份金鑰的話，將會遺失所有加密訊息。",
+            "error_loading_key_backup_status": "無法載入金鑰備份狀態",
+            "restore_key_backup": "從備份還原",
+            "key_backup_active": "此工作階段正在備份您的金鑰。",
+            "key_backup_inactive": "此工作階段<b>並未備份您的金鑰</b>，您可還原先前的備份後再繼續新增金鑰到備份內容中。",
+            "key_backup_connect_prompt": "在登出前，請先將此工作階段連線到金鑰備份以避免遺失任何可能僅存在此工作階段中的金鑰。",
+            "key_backup_connect": "將此工作階段連結至金鑰備份",
+            "key_backup_in_progress": "正在備份 %(sessionsRemaining)s 把金鑰…",
+            "key_backup_complete": "所有金鑰都已備份",
+            "key_backup_algorithm": "演算法：",
+            "key_backup_inactive_warning": "您<b>並未備份此裝置的金鑰</b>。"
         },
         "preferences": {
             "room_list_heading": "聊天室清單",
@@ -2576,18 +2496,22 @@
             "add_msisdn_confirm_sso_button": "透過使用單一登入來證明您的身分，以確認新增此電話號碼。",
             "add_msisdn_confirm_button": "確認新增電話號碼",
             "add_msisdn_confirm_body": "點擊下方按鈕以確認新增此電話號碼。",
-            "add_msisdn_dialog_title": "新增電話號碼"
+            "add_msisdn_dialog_title": "新增電話號碼",
+            "name_placeholder": "沒有顯示名稱",
+            "error_saving_profile_title": "無法儲存您的設定檔",
+            "error_saving_profile": "無法完成操作"
         },
         "sidebar": {
             "title": "側邊欄",
             "metaspaces_subsection": "要顯示的聊天空間",
             "metaspaces_description": "聊天空間是將聊天室與夥伴們分組的方式。除了您所在的聊天空間之外，還可以使用一些預設分類。",
             "metaspaces_home_description": "首頁對於取得所有內容的概覽很有用。",
-            "metaspaces_home_all_rooms": "將您所有的聊天室顯示在首頁，即便它們位於同一個聊天空間。",
             "metaspaces_favourites_description": "將所有您最喜愛的聊天室與夥伴集中在同一個地方。",
             "metaspaces_people_description": "將您所有的夥伴集中在同一個地方。",
             "metaspaces_orphans": "聊天空間外的聊天室",
-            "metaspaces_orphans_description": "將所有不屬於某個聊天空間的聊天室集中在同一個地方。"
+            "metaspaces_orphans_description": "將所有不屬於某個聊天空間的聊天室集中在同一個地方。",
+            "metaspaces_home_all_rooms_description": "將您所有的聊天室顯示在首頁，即便它們位於同一個聊天空間。",
+            "metaspaces_home_all_rooms": "顯示所有聊天室"
         }
     },
     "devtools": {
@@ -3311,7 +3235,17 @@
         "more_button": "更多",
         "screenshare_monitor": "分享整個螢幕",
         "screenshare_window": "應用程式視窗",
-        "screenshare_title": "分享內容"
+        "screenshare_title": "分享內容",
+        "disabled_no_perms_start_voice_call": "您無權限開始語音通話",
+        "disabled_no_perms_start_video_call": "您沒有權限開始視訊通話",
+        "disabled_ongoing_call": "正在進行通話",
+        "disabled_no_one_here": "這裡沒有人可以通話",
+        "n_people_joined": {
+            "one": "%(count)s 個人已加入",
+            "other": "%(count)s 個人已加入"
+        },
+        "unknown_person": "不明身份的人",
+        "connecting": "連線中"
     },
     "Other": "其他",
     "room_settings": {
@@ -3353,7 +3287,10 @@
             "title": "角色與權限",
             "permissions_section": "權限",
             "permissions_section_description_space": "選取變更聊天空間各個部份所需的角色",
-            "permissions_section_description_room": "選取更改聊天室各部份的所需的角色"
+            "permissions_section_description_room": "選取更改聊天室各部份的所需的角色",
+            "add_privileged_user_heading": "新增特權使用者",
+            "add_privileged_user_description": "給這個聊天室中的一個使用者或多個使用者更多的特殊權限",
+            "add_privileged_user_filter_placeholder": "搜尋此聊天室中的使用者…"
         },
         "security": {
             "strict_encryption": "不要從此工作階段傳送已加密的訊息給此聊天室中未驗證的工作階段",
@@ -3380,7 +3317,35 @@
             "history_visibility_shared": "僅限成員（自選取此選項開始）",
             "history_visibility_invited": "僅限成員（自他們被邀請開始）",
             "history_visibility_joined": "僅限成員（自他們加入開始）",
-            "history_visibility_world_readable": "任何人"
+            "history_visibility_world_readable": "任何人",
+            "join_rule_upgrade_required": "必須升級",
+            "join_rule_restricted_n_more": {
+                "other": "以及 %(count)s 個",
+                "one": "與其他 %(count)s 個"
+            },
+            "join_rule_restricted_summary": {
+                "other": "目前，%(count)s 個空間可存取",
+                "one": "目前，1 個空間可存取"
+            },
+            "join_rule_restricted_description": "任何在聊天空間中的人都可以找到並加入。<a>編輯哪些聊天空間可以存取這裡。</a>",
+            "join_rule_restricted_description_spaces": "可存取的聊天空間",
+            "join_rule_restricted_description_active_space": "在 <spaceName/> 中的任何人都可以找到並加入。您也可以選取其他聊天空間。",
+            "join_rule_restricted_description_prompt": "空間中的任何人都可以找到並加入。您可以選取多個空間。",
+            "join_rule_restricted": "聊天空間成員",
+            "join_rule_knock": "要求加入",
+            "join_rule_knock_description": "除非授予存取權限，否則人們無法加入。",
+            "join_rule_restricted_upgrade_warning": "這個聊天室位於您不是管理員的某些聊天空間中。在那些聊天空間中，舊的聊天室仍將會顯示，但系統會提示使用者加入新的聊天室。",
+            "join_rule_restricted_upgrade_description": "此升級讓特定聊天空間的成員不需要邀請就可以存取此聊天室。",
+            "join_rule_upgrade_upgrading_room": "正在升級聊天室",
+            "join_rule_upgrade_awaiting_room": "正在載入新的聊天室",
+            "join_rule_upgrade_sending_invites": {
+                "one": "正在傳送邀請…",
+                "other": "正在傳送邀請…（%(count)s 中的第 %(progress)s 個）"
+            },
+            "join_rule_upgrade_updating_spaces": {
+                "one": "正在更新空間…",
+                "other": "正在更新空間…（%(count)s 中的第 %(progress)s 個）"
+            }
         },
         "general": {
             "publish_toggle": "將這個聊天室公開到 %(domain)s 的聊天室目錄中？",
@@ -3390,7 +3355,11 @@
             "default_url_previews_off": "此聊天室已預設對參與者停用網址預覽。",
             "url_preview_encryption_warning": "在加密的聊天室中（這個就是），會預設停用網址預覽以確保您的家伺服器（產生預覽資訊的地方）無法透過這個聊天室收集您看到的連結的相關資訊。",
             "url_preview_explainer": "當某人在他們的訊息中放置網址時，可以顯示如標題、描述與網頁上的圖片等等來給您更多關於該連結的資訊。",
-            "url_previews_section": "網址預覽"
+            "url_previews_section": "網址預覽",
+            "error_save_space_settings": "無法儲存聊天空間設定。",
+            "description_space": "編輯您的聊天空間的設定。",
+            "save": "儲存變更",
+            "leave_space": "離開聊天空間"
         },
         "advanced": {
             "unfederated": "此聊天室無法被遠端的 Matrix 伺服器存取",
@@ -3404,7 +3373,23 @@
             "room_version": "聊天室版本："
         },
         "delete_avatar_label": "刪除大頭照",
-        "upload_avatar_label": "上傳大頭照"
+        "upload_avatar_label": "上傳大頭照",
+        "visibility": {
+            "error_update_guest_access": "無法更新此聊天空間的訪客存取權限",
+            "error_update_history_visibility": "無法更新此聊天空間紀錄的能見度",
+            "guest_access_explainer": "訪客無需帳號即可加入聊天空間。",
+            "guest_access_explainer_public_space": "這可能對公開聊天空間很有用。",
+            "title": "能見度",
+            "error_failed_save": "無法更新此聊天空間的能見度",
+            "history_visibility_anyone_space": "預覽聊天空間",
+            "history_visibility_anyone_space_description": "允許人們在加入前預覽您的聊天空間。",
+            "history_visibility_anyone_space_recommendation": "給公開聊天空間的推薦。",
+            "guest_access_label": "允許訪客存取"
+        },
+        "access": {
+            "title": "存取",
+            "description_space": "決定誰可以檢視並加入 %(spaceName)s。"
+        }
     },
     "encryption": {
         "verification": {
@@ -3909,9 +3894,14 @@
             "devtools_open_timeline": "檢視聊天室時間軸（開發者工具）",
             "home": "聊天空間首頁",
             "explore": "探索聊天室",
-            "manage_and_explore": "管理與探索聊天室"
+            "manage_and_explore": "管理與探索聊天室",
+            "options": "聊天空間選項"
         },
-        "share_public": "分享您的公開聊天空間"
+        "share_public": "分享您的公開聊天空間",
+        "search_children": "搜尋 %(spaceName)s",
+        "invite_link": "分享邀請連結",
+        "invite": "邀請夥伴",
+        "invite_description": "使用電子郵件或使用者名稱邀請"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "此家伺服器未設定來顯示地圖。",
@@ -3971,7 +3961,6 @@
     },
     "create_space": {
         "name_required": "請輸入聊天空間名稱",
-        "name_placeholder": "例如：my-space",
         "explainer": "聊天空間是一種將聊天室與夥伴分組的新方式。您想要建立何種類型的聊天空間？您稍後仍可變更。",
         "public_description": "對所有人開放的聊天空間，最適合社群",
         "private_description": "邀請制，適用於您自己或團隊使用",
@@ -4002,7 +3991,12 @@
         "setup_rooms_community_description": "讓我們為每個主題建立一個聊天室吧。",
         "setup_rooms_description": "您稍後可以新增更多內容，包含既有的。",
         "setup_rooms_private_heading": "您的團隊正在從事哪些專案？",
-        "setup_rooms_private_description": "我們將為每個主題建立聊天室。"
+        "setup_rooms_private_description": "我們將為每個主題建立聊天室。",
+        "address_placeholder": "例如：my-space",
+        "address_label": "位址",
+        "label": "建立聊天空間",
+        "add_details_prompt_2": "您隨時可以變更這些。",
+        "creating": "正在建立…"
     },
     "user_menu": {
         "switch_theme_light": "切換至淺色模式",
@@ -4187,7 +4181,10 @@
         "admin_contact_short": "聯絡您的<a>伺服器管理員</a>。",
         "non_urgent_echo_failure_toast": "您的伺服器未回應某些<a>請求</a>。",
         "failed_copy": "無法複製",
-        "something_went_wrong": "出了點問題！"
+        "something_went_wrong": "出了點問題！",
+        "download_media": "下載來源媒體失敗，找不到來源 URL",
+        "update_power_level": "無法變更權限等級",
+        "unknown": "未知的錯誤"
     },
     "in_space1_and_space2": "在聊天空間 %(space1Name)s 與 %(space2Name)s。",
     "in_space_and_n_other_spaces": {
@@ -4209,7 +4206,13 @@
         "colour_grey": "灰",
         "colour_red": "紅",
         "colour_unsent": "未傳送",
-        "error_change_title": "變更通知設定"
+        "error_change_title": "變更通知設定",
+        "mark_all_read": "全部標示為已讀",
+        "keyword": "關鍵字",
+        "keyword_new": "新關鍵字",
+        "class_global": "全域",
+        "class_other": "其他",
+        "mentions_keywords": "提及與關鍵字"
     },
     "mobile_guide": {
         "toast_title": "使用應用程式以取得更好的體驗",
@@ -4230,5 +4233,11 @@
         "title": "影像檢視",
         "rotate_left": "向左旋轉",
         "rotate_right": "向右旋轉"
+    },
+    "a11y_jump_first_unread_room": "跳到第一個未讀的聊天室。",
+    "integration_manager": {
+        "connecting": "正在連線至整合管理員…",
+        "error_connecting_heading": "無法連線到整合管理員",
+        "error_connecting": "整合管理員已離線或無法存取您的家伺服器。"
     }
 }

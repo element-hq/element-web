@@ -200,7 +200,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                     </SettingsSubsection>
                 </SettingsSection>
 
-                <SettingsSection heading={_t("common|Advanced")}>
+                <SettingsSection heading={_t("common|advanced")}>
                     <SettingsSubsection heading={_t("Voice processing")}>
                         <LabelledToggleSwitch
                             value={this.state.audioNoiseSuppression}

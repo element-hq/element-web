@@ -152,7 +152,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         </SettingsSubsection>
                     )}
 
-                    <SettingsSubsection heading={_t("Spaces")}>
+                    <SettingsSubsection heading={_t("common|spaces")}>
                         {this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT)}
                     </SettingsSubsection>
 
@@ -204,7 +204,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         {this.renderGroup(PreferencesUserSettingsTab.ROOM_DIRECTORY_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("General")} stretchContent>
+                    <SettingsSubsection heading={_t("common|general")} stretchContent>
                         {this.renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS)}
 
                         <SettingsFlag name="Electron.showTrayIcon" level={SettingLevel.PLATFORM} hideIfCannotSet />

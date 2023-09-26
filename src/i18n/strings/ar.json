@@ -122,7 +122,6 @@
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "حدث خطأ أثناء تحديث العناوين البديلة للغرفة. قد لا يسمح به الخادم أو حدث فشل مؤقت.",
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "حدث خطأ أثناء تحديث العنوان الرئيسي للغرفة. قد لا يسمح به الخادم أو حدث فشل مؤقت.",
     "Error updating main address": "تعذر تحديث العنوان الرئيسي",
-    "Mark all as read": "أشر عليها بأنها قرأت",
     "Jump to first unread message.": "الانتقال إلى أول رسالة غير مقروءة.",
     "Invited by %(sender)s": "دُعيت من %(sender)s",
     "Revoke invite": "إبطال الدعوة",
@@ -139,8 +138,6 @@
     "This room has already been upgraded.": "سبق وأن تمت ترقية هذه الغرفة.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "ستؤدي ترقية هذه الغرفة إلى إغلاق النسخة الحالية للغرفة وإنشاء غرفة تمت ترقيتها بنفس الاسم.",
     "Room options": "خيارات الغرفة",
-    "Jump to first invite.": "الانتقال لأول دعوة.",
-    "Jump to first unread room.": "الانتقال لأول غرفة لم تقرأ.",
     "%(roomName)s is not accessible at this time.": "لا يمكن الوصول إلى %(roomName)s في الوقت الحالي.",
     "%(roomName)s does not exist.": "الغرفة %(roomName)s ليست موجودة.",
     "%(roomName)s can't be previewed. Do you want to join it?": "لا يمكن معاينة %(roomName)s. هل تريد الانضمام إليها؟",
@@ -209,7 +206,6 @@
     "Ignored users": "المستخدمون المتجاهَلون",
     "None": "لا شيء",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "للإبلاغ عن مشكلة أمنية متعلقة بMatrix ، يرجى قراءة <a>سياسة الإفصاح الأمني</a> في Matrix.org.",
-    "General": "عام",
     "Discovery": "الاكتشاف",
     "Deactivate account": "تعطيل الحساب",
     "Deactivate Account": "تعطيل الحساب",
@@ -240,35 +236,9 @@
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "انفصل عن خادم الهوية <current /> واتصل بآخر <new /> بدلاً منه؟",
     "Change identity server": "تغيير خادم الهوية",
     "Checking server": "فحص خادم",
-    "not ready": "غير جاهز",
-    "ready": "جاهز",
-    "Secret storage:": "التخزين السري:",
-    "in account data": "بيانات في حساب",
-    "Secret storage public key:": "المفتاح العام للتخزين السري:",
-    "Backup key cached:": "المفتاح الاحتياطي المحفوظ (في cache):",
-    "Backup key stored:": "المفتاح الاختياطي المحفوظ:",
-    "not stored": "لم يُحفظ",
-    "unexpected type": "نوع غير متوقع",
-    "well formed": "مشكل جيّداً",
     "Back up your keys before signing out to avoid losing them.": "أضف مفاتيحك للاحتياطي قبل تسجيل الخروج لتتجنب ضياعها.",
-    "Your keys are <b>not being backed up from this session</b>.": "مفاتيحك <b>لا احتياطيَّ لها من هذا الاتصال</b>.",
-    "Algorithm:": "الخوارزمية:",
     "Backup version:": "نسخة الاحتياطي:",
     "This backup is trusted because it has been restored on this session": "هذا الاحتياطي موثوق به لأنه تمت استعادته في هذا الاتصال",
-    "All keys backed up": "جميع المفاتيح منسوخة في الاحتياطي",
-    "Connect this session to Key Backup": "اربط هذا الاتصال باحتياطي مفتاح",
-    "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "اربط هذا الاتصال باحتياطي قبل تسجيل الخروج لتجنب فقدان أي مفاتيح قد تكون موجودة فقط في هذا الاتصال.",
-    "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "هذا الاتصال <b>لم يعتمد الاحتياطي لمفاتيحك</b> لكن لديك احتياطي يمكنك الاتسرجاع منه والإضافة إليه فيما بعد.",
-    "Restore from Backup": "استعادة من الاحتياطي",
-    "Unable to load key backup status": "تعذر حمل حالة النسخ الاحتياطي للمفتاح",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "هل أنت واثق؟ ستفقد رسائلك المشفرة إذا لم يتم نسخ المفاتيح احتياطيًا بشكل صحيح.",
-    "Delete Backup": "حذف الحتياطي",
-    "Profile picture": "الصورة الشخصية",
-    "Display Name": "الاسم الظاهر",
-    "Profile": "الملف الشخصي",
-    "The operation could not be completed": "تعذر إتمام العملية",
-    "Failed to save your profile": "تعذر حفظ ملفك الشخصي",
-    "Notification targets": "أهداف الإشعار",
     "You've successfully verified your device!": "لقد نجحت في التحقق من جهازك!",
     "Verify all users in a room to ensure it's secure.": "تحقق من جميع المستخدمين في الغرفة للتأكد من أنها آمنة.",
     "Almost there! Is %(displayName)s showing the same shield?": "أوشكت على الوصول! هل يظهر %(displayName)s نفس الدرع؟",
@@ -284,7 +254,6 @@
     "Deactivate user?": "إلغاء نشاط المستخدم؟",
     "Are you sure?": "هل متأكد أنت؟",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "لن تكون قادرًا على التراجع عن هذا التغيير لأنك ترقي المستخدم ليكون له نفس مستوى الطاقة لديك.",
-    "Failed to change power level": "تعذر تغيير مستوى القوة",
     "Failed to mute user": "تعذر كتم المستخدم",
     "Failed to ban user": "تعذر حذف المستخدم",
     "Remove recent messages": "احذف الرسائل الحديثة",
@@ -335,13 +304,10 @@
     "Room avatar": "صورة الغرفة",
     "Room Topic": "موضوع الغرفة",
     "Room Name": "اسم الغرفة",
-    "The integration manager is offline or it cannot reach your homeserver.": "مدري التكامل غير متصل بالإنرتنت أو لا يمكنه الوصول إلى خادمك الوسيط.",
-    "Cannot connect to integration manager": "لا يمكن الاتصال بمدير التكامل",
     "Failed to set display name": "تعذر تعيين الاسم الظاهر",
     "Authentication": "المصادقة",
     "Set up": "تأسيس",
     "Warning!": "إنذار!",
-    "No display name": "لا اسم ظاهر",
     "Show more": "أظهر أكثر",
     "Dog": "كلب",
     "IRC display name width": "عرض الاسم الظاهر لIRC",
@@ -615,7 +581,11 @@
         "on": "مشتغل",
         "off": "مطفأ",
         "copied": "نُسخ!",
-        "Advanced": "متقدم"
+        "advanced": "متقدم",
+        "general": "عام",
+        "profile": "الملف الشخصي",
+        "display_name": "الاسم الظاهر",
+        "user_avatar": "الصورة الشخصية"
     },
     "action": {
         "continue": "واصِل",
@@ -759,7 +729,8 @@
             "noisy": "مزعج",
             "error_permissions_denied": "لا يملك %(brand)s التصريح لإرسال التنبيهات. من فضلك تحقّق من إعدادات المتصفح",
             "error_permissions_missing": "لم تقدّم التصريح اللازم كي يُرسل %(brand)s التنبيهات. من فضلك أعِد المحاولة",
-            "error_title": "تعذر تفعيل التنبيهات"
+            "error_title": "تعذر تفعيل التنبيهات",
+            "push_targets": "أهداف الإشعار"
         },
         "appearance": {
             "heading": "تخصيص مظهرك",
@@ -817,7 +788,27 @@
             "encryption_individual_verification_mode": "تحقق بشكل فردي من كل اتصال يستخدمه المستخدم لتمييزه أنه موثوق ، دون الوثوق بالأجهزة الموقعة بالتبادل.",
             "message_search_disabled": "تخزين الرسائل المشفرة بشكل آمن (في cache) محليًا حتى تظهر في نتائج البحث.",
             "message_search_unsupported": "%(brand)s يفقد بعض المكونات المطلوبة لحفظ آمن محليًّا للرسائل المشفرة. إذا أدرت تجربة هذه الخاصية، فأنشئ %(brand)s على سطح المكتب مع <nativeLink>إضافة مكونات البحث</nativeLink>.",
-            "message_search_unsupported_web": "%(brand)s لا يستطيع تخزين الرسائل المشفرة محليًّا (في cache) بشكل آمن طالما أنه يعمل على متصفح ويب. استخدم <desktopLink>%(brand)s على سطح المكتب</desktopLink> لتظهر لك الرسائل المشفرة في نتائج البحث."
+            "message_search_unsupported_web": "%(brand)s لا يستطيع تخزين الرسائل المشفرة محليًّا (في cache) بشكل آمن طالما أنه يعمل على متصفح ويب. استخدم <desktopLink>%(brand)s على سطح المكتب</desktopLink> لتظهر لك الرسائل المشفرة في نتائج البحث.",
+            "backup_key_well_formed": "مشكل جيّداً",
+            "backup_key_unexpected_type": "نوع غير متوقع",
+            "backup_key_stored_status": "المفتاح الاختياطي المحفوظ:",
+            "cross_signing_not_stored": "لم يُحفظ",
+            "backup_key_cached_status": "المفتاح الاحتياطي المحفوظ (في cache):",
+            "4s_public_key_status": "المفتاح العام للتخزين السري:",
+            "4s_public_key_in_account_data": "بيانات في حساب",
+            "secret_storage_status": "التخزين السري:",
+            "secret_storage_ready": "جاهز",
+            "secret_storage_not_ready": "غير جاهز",
+            "delete_backup": "حذف الحتياطي",
+            "delete_backup_confirm_description": "هل أنت واثق؟ ستفقد رسائلك المشفرة إذا لم يتم نسخ المفاتيح احتياطيًا بشكل صحيح.",
+            "error_loading_key_backup_status": "تعذر حمل حالة النسخ الاحتياطي للمفتاح",
+            "restore_key_backup": "استعادة من الاحتياطي",
+            "key_backup_inactive": "هذا الاتصال <b>لم يعتمد الاحتياطي لمفاتيحك</b> لكن لديك احتياطي يمكنك الاتسرجاع منه والإضافة إليه فيما بعد.",
+            "key_backup_connect_prompt": "اربط هذا الاتصال باحتياطي قبل تسجيل الخروج لتجنب فقدان أي مفاتيح قد تكون موجودة فقط في هذا الاتصال.",
+            "key_backup_connect": "اربط هذا الاتصال باحتياطي مفتاح",
+            "key_backup_complete": "جميع المفاتيح منسوخة في الاحتياطي",
+            "key_backup_algorithm": "الخوارزمية:",
+            "key_backup_inactive_warning": "مفاتيحك <b>لا احتياطيَّ لها من هذا الاتصال</b>."
         },
         "preferences": {
             "room_list_heading": "قائمة الغرفة",
@@ -837,7 +828,10 @@
             "add_msisdn_confirm_sso_button": "أكّد إضافتك لرقم الهاتف هذا باستعمال الولوج الموحّد لإثبات هويّتك.",
             "add_msisdn_confirm_button": "أكّد إضافة رقم الهاتف",
             "add_msisdn_confirm_body": "انقر الزر بالأسفل لتأكيد إضافة رقم الهاتف هذا.",
-            "add_msisdn_dialog_title": "أضِف رقم الهاتف"
+            "add_msisdn_dialog_title": "أضِف رقم الهاتف",
+            "name_placeholder": "لا اسم ظاهر",
+            "error_saving_profile_title": "تعذر حفظ ملفك الشخصي",
+            "error_saving_profile": "تعذر إتمام العملية"
         }
     },
     "devtools": {
@@ -1275,7 +1269,8 @@
             "one": "رسالة واحدة غير مقروءة.",
             "other": "%(count)s من الرسائل غير مقروءة."
         },
-        "unread_messages": "رسائل غير المقروءة."
+        "unread_messages": "رسائل غير المقروءة.",
+        "jump_first_invite": "الانتقال لأول دعوة."
     },
     "setting": {
         "help_about": {
@@ -1505,13 +1500,16 @@
         "enable_prompt_toast_description": "تمكين إشعارات سطح المكتب",
         "colour_none": "لا شيء",
         "colour_bold": "ثخين",
-        "error_change_title": "تغيير إعدادات الإشعار"
+        "error_change_title": "تغيير إعدادات الإشعار",
+        "mark_all_read": "أشر عليها بأنها قرأت",
+        "class_other": "أخرى"
     },
     "error": {
         "admin_contact_short": "تواصل مع <a>مدير الخادم</a> الخاص بك.",
         "non_urgent_echo_failure_toast": "خادمك لا يتجاوب مع بعض <a>الطلبات</a>.",
         "failed_copy": "تعذر النسخ",
-        "something_went_wrong": "هناك خطأ ما!"
+        "something_went_wrong": "هناك خطأ ما!",
+        "update_power_level": "تعذر تغيير مستوى القوة"
     },
     "room_summary_card_back_action_label": "معلومات الغرفة",
     "analytics": {
@@ -1520,5 +1518,10 @@
     "lightbox": {
         "rotate_left": "أدر لليسار",
         "rotate_right": "أدر لليمين"
+    },
+    "a11y_jump_first_unread_room": "الانتقال لأول غرفة لم تقرأ.",
+    "integration_manager": {
+        "error_connecting_heading": "لا يمكن الاتصال بمدير التكامل",
+        "error_connecting": "مدري التكامل غير متصل بالإنرتنت أو لا يمكنه الوصول إلى خادمك الوسيط."
     }
 }

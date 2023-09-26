@@ -749,7 +749,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                     className="mx_UserNotifSettings_clearNotifsButton"
                     data-testid="clear-notifications"
                 >
-                    {_t("Mark all as read")}
+                    {_t("notifications|mark_all_read")}
                 </AccessibleButton>
             );
         }
@@ -759,7 +759,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             if (clearNotifsButton) {
                 return (
                     <div className="mx_UserNotifSettings_floatingSection">
-                        <div>{_t("Other")}</div>
+                        <div>{_t("notifications|class_other")}</div>
                         {clearNotifsButton}
                     </div>
                 );
@@ -776,8 +776,8 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                     onAdd={this.onKeywordAdd}
                     onRemove={this.onKeywordRemove}
                     disabled={this.state.phase === Phase.Persisting}
-                    label={_t("Keyword")}
-                    placeholder={_t("New keyword")}
+                    label={_t("notifications|keyword")}
+                    placeholder={_t("notifications|keyword_new")}
                 />
             );
         }
@@ -811,11 +811,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                 {makeRadio(r, VectorState.Loud)}
                 {this.state.ruleIdsWithError[r.ruleId] && (
                     <div className="mx_UserNotifSettings_gridRowError">
-                        <Caption isError>
-                            {_t(
-                                "An error occurred when updating your notification preferences. Please try to toggle your option again.",
-                            )}
-                        </Caption>
+                        <Caption isError>{_t("settings|notifications|error_updating")}</Caption>
                     </div>
                 )}
             </fieldset>
@@ -824,13 +820,13 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         let sectionName: string;
         switch (category) {
             case RuleClass.VectorGlobal:
-                sectionName = _t("Global");
+                sectionName = _t("notifications|class_global");
                 break;
             case RuleClass.VectorMentions:
-                sectionName = _t("Mentions & keywords");
+                sectionName = _t("notifications|mentions_keywords");
                 break;
             case RuleClass.VectorOther:
-                sectionName = _t("Other");
+                sectionName = _t("notifications|class_other");
                 break;
             default:
                 throw new Error("Developer error: Unnamed notifications section: " + category);
@@ -865,7 +861,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
 
         return (
             <div className="mx_UserNotifSettings_floatingSection">
-                <div>{_t("Notification targets")}</div>
+                <div>{_t("settings|notifications|push_targets")}</div>
                 <table>
                     <tbody>{rows}</tbody>
                 </table>
@@ -878,7 +874,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             // Ends up default centered
             return <Spinner />;
         } else if (this.state.phase === Phase.Error) {
-            return <p data-testid="error-message">{_t("There was an error loading your notification settings.")}</p>;
+            return <p data-testid="error-message">{_t("settings|notifications|error_loading")}</p>;
         }
 
         return (

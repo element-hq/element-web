@@ -43,7 +43,6 @@
     "Unable to restore session": "సెషన్ను పునరుద్ధరించడానికి సాధ్యపడలేదు",
     "Create new room": "క్రొత్త గది సృష్టించండి",
     "Sunday": "ఆదివారం",
-    "Notification targets": "తాఖీదు లక్ష్యాలు",
     "Today": "ఈ రోజు",
     "Friday": "శుక్రువారం",
     "Changelog": "మార్పు వివరణ",
@@ -68,7 +67,7 @@
         "microphone": "మైక్రోఫోన్",
         "on": "వేయుము",
         "off": "ఆపు",
-        "Advanced": "ఆధునిక"
+        "advanced": "ఆధునిక"
     },
     "action": {
         "continue": "కొనసాగించు",
@@ -101,7 +100,8 @@
             "rule_message": "సమూహ మాటామంతిలో సందేశాలు",
             "rule_call": "మాట్లాడడానికి ఆహ్వానం",
             "rule_suppress_notices": "బాట్ పంపిన సందేశాలు",
-            "noisy": "శబ్దం"
+            "noisy": "శబ్దం",
+            "push_targets": "తాఖీదు లక్ష్యాలు"
         },
         "appearance": {
             "timeline_image_size_default": "డిఫాల్ట్",

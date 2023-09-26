@@ -64,10 +64,6 @@
     "Folder": "Dorsièr",
     "Show more": "Ne veire mai",
     "Authentication": "Autentificacion",
-    "Restore from Backup": "Restablir a partir de l'archiu",
-    "Display Name": "Nom d'afichatge",
-    "Profile": "Perfil",
-    "General": "General",
     "Unignore": "Ignorar pas",
     "Audio Output": "Sortida àudio",
     "Bridges": "Bridges",
@@ -78,7 +74,6 @@
     "Italics": "Italicas",
     "Historical": "Istoric",
     "Sign Up": "S’inscriure",
-    "Mark all as read": "Tot marcar coma legit",
     "Demote": "Retrogradar",
     "Are you sure?": "O volètz vertadièrament ?",
     "Sunday": "Dimenge",
@@ -103,7 +98,6 @@
     "Email address": "Adreça de corrièl",
     "Upload files": "Mandar de fichièrs",
     "Home": "Dorsièr personal",
-    "Unknown error": "Error desconeguda",
     "Search failed": "La recèrca a fracassat",
     "Success!": "Capitada !",
     "Explore rooms": "Percórrer las salas",
@@ -145,7 +139,10 @@
         "system_alerts": "Alèrtas sistèma",
         "feedback": "Comentaris",
         "off": "Atudat",
-        "Advanced": "Avançat"
+        "advanced": "Avançat",
+        "general": "General",
+        "profile": "Perfil",
+        "display_name": "Nom d'afichatge"
     },
     "action": {
         "continue": "Contunhar",
@@ -305,7 +302,8 @@
         "security": {
             "cross_signing_not_found": "pas trobat",
             "cross_signing_homeserver_support_exists": "existís",
-            "encryption_section": "Chiframent"
+            "encryption_section": "Chiframent",
+            "restore_key_backup": "Restablir a partir de l'archiu"
         },
         "general": {
             "account_section": "Compte",
@@ -379,13 +377,16 @@
     },
     "notifications": {
         "enable_prompt_toast_title": "Notificacions",
-        "colour_bold": "Gras"
+        "colour_bold": "Gras",
+        "mark_all_read": "Tot marcar coma legit",
+        "class_other": "Autre"
     },
     "quick_settings": {
         "sidebar_settings": "Autras opcions"
     },
     "error": {
-        "failed_copy": "Impossible de copiar"
+        "failed_copy": "Impossible de copiar",
+        "unknown": "Error desconeguda"
     },
     "room": {
         "context_menu": {

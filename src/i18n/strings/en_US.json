@@ -23,7 +23,6 @@
     "Error decrypting attachment": "Error decrypting attachment",
     "Failed to ban user": "Failed to ban user",
     "Failed to change password. Is your password correct?": "Failed to change password. Is your password correct?",
-    "Failed to change power level": "Failed to change power level",
     "Failed to forget room %(errCode)s": "Failed to forget room %(errCode)s",
     "Failed to load timeline position": "Failed to load timeline position",
     "Failed to mute user": "Failed to mute user",
@@ -47,7 +46,6 @@
     "not specified": "not specified",
     "No more results": "No more results",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Please check your email and click on the link it contains. Once this is done, click continue.",
-    "Profile": "Profile",
     "Reason": "Reason",
     "Reject invitation": "Reject invitation",
     "Return to login screen": "Return to login screen",
@@ -105,7 +103,6 @@
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.",
     "Confirm Removal": "Confirm Removal",
-    "Unknown error": "Unknown error",
     "Unable to restore session": "Unable to restore session",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.",
     "Error decrypting image": "Error decrypting image",
@@ -115,7 +112,6 @@
     "Admin Tools": "Admin Tools",
     "Create new room": "Create new room",
     "Home": "Home",
-    "No display name": "No display name",
     "%(roomName)s does not exist.": "%(roomName)s does not exist.",
     "%(roomName)s is not accessible at this time.": "%(roomName)s is not accessible at this time.",
     "Uploading %(filename)s": "Uploading %(filename)s",
@@ -130,7 +126,6 @@
     },
     "This will allow you to reset your password and receive notifications.": "This will allow you to reset your password and receive notifications.",
     "Sunday": "Sunday",
-    "Notification targets": "Notification targets",
     "Today": "Today",
     "Friday": "Friday",
     "Changelog": "Changelog",
@@ -182,7 +177,8 @@
         "unnamed_room": "Unnamed Room",
         "on": "On",
         "off": "Off",
-        "Advanced": "Advanced"
+        "advanced": "Advanced",
+        "profile": "Profile"
     },
     "action": {
         "continue": "Continue",
@@ -258,7 +254,8 @@
             "noisy": "Noisy",
             "error_permissions_denied": "%(brand)s does not have permission to send you notifications - please check your browser settings",
             "error_permissions_missing": "%(brand)s was not given permission to send notifications - please try again",
-            "error_title": "Unable to enable Notifications"
+            "error_title": "Unable to enable Notifications",
+            "push_targets": "Notification targets"
         },
         "appearance": {
             "heading": "Customize your appearance",
@@ -286,7 +283,8 @@
             "add_msisdn_confirm_sso_button": "Confirm adding this phone number by using Single Sign On to prove your identity.",
             "add_msisdn_confirm_button": "Confirm adding phone number",
             "add_msisdn_confirm_body": "Click the button below to confirm adding this phone number.",
-            "add_msisdn_dialog_title": "Add Phone Number"
+            "add_msisdn_dialog_title": "Add Phone Number",
+            "name_placeholder": "No display name"
         }
     },
     "timeline": {
@@ -586,9 +584,12 @@
     "error": {
         "mixed_content": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
         "tls": "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
-        "something_went_wrong": "Something went wrong!"
+        "something_went_wrong": "Something went wrong!",
+        "update_power_level": "Failed to change power level",
+        "unknown": "Unknown error"
     },
     "notifications": {
-        "enable_prompt_toast_title": "Notifications"
+        "enable_prompt_toast_title": "Notifications",
+        "class_other": "Other"
     }
 }

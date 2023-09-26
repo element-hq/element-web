@@ -145,7 +145,7 @@ const SpaceChildrenPicker: React.FC<IProps> = ({
 
             {state === Target.Specific && (
                 <SpecificChildrenPicker
-                    filterPlaceholder={_t("Search %(spaceName)s", { spaceName: space.name })}
+                    filterPlaceholder={_t("space|search_children", { spaceName: space.name })}
                     rooms={spaceChildren}
                     selected={selected}
                     onChange={(isSelected: boolean, room: Room) => {

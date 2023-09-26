@@ -61,7 +61,7 @@ export default class ChangelogDialog extends React.Component<IProps, State> {
             const body = await res.json();
             this.setState({ [repo]: body.commits });
         } catch (err) {
-            this.setState({ [repo]: err instanceof Error ? err.message : _t("Unknown error") });
+            this.setState({ [repo]: err instanceof Error ? err.message : _t("error|unknown") });
         }
     }
 

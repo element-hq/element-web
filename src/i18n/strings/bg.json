@@ -36,12 +36,10 @@
     "Moderator": "Модератор",
     "Reason": "Причина",
     "Incorrect verification code": "Неправилен код за потвърждение",
-    "No display name": "Няма име",
     "Authentication": "Автентикация",
     "Failed to set display name": "Неуспешно задаване на име",
     "Failed to ban user": "Неуспешно блокиране на потребителя",
     "Failed to mute user": "Неуспешно заглушаване на потребителя",
-    "Failed to change power level": "Неуспешна промяна на нивото на достъп",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "След като си намалите нивото на достъп, няма да можете да възвърнете тази промяна. Ако сте последния потребител с привилегии в тази стая, ще бъде невъзможно да възвърнете привилегии си.",
     "Are you sure?": "Сигурни ли сте?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Няма да можете да възвърнете тази промяна, тъй като повишавате този потребител до същото ниво на достъп като Вашето.",
@@ -96,7 +94,6 @@
         "other": "И %(count)s други..."
     },
     "Confirm Removal": "Потвърдете премахването",
-    "Unknown error": "Неизвестна грешка",
     "Deactivate Account": "Затвори акаунта",
     "Verification Pending": "Очакване на потвърждение",
     "An error has occurred.": "Възникна грешка.",
@@ -131,7 +128,6 @@
     "Uploading %(filename)s": "Качване на %(filename)s",
     "No Microphones detected": "Няма открити микрофони",
     "No Webcams detected": "Няма открити уеб камери",
-    "Profile": "Профил",
     "A new password must be entered.": "Трябва да бъде въведена нова парола.",
     "New passwords must match each other.": "Новите пароли трябва да съвпадат една с друга.",
     "Return to login screen": "Връщане към страницата за влизане в профила",
@@ -150,7 +146,6 @@
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Експортираният файл може да бъде предпазен с парола. Трябва да въведете парола тук, за да разшифровате файла.",
     "You don't currently have any stickerpacks enabled": "В момента нямате включени пакети със стикери",
     "Sunday": "Неделя",
-    "Notification targets": "Устройства, получаващи известия",
     "Today": "Днес",
     "Friday": "Петък",
     "Changelog": "Списък на промените",
@@ -212,8 +207,6 @@
     "Incompatible local cache": "Несъвместим локален кеш",
     "Clear cache and resync": "Изчисти кеша и ресинхронизирай",
     "Add some now": "Добави сега",
-    "Delete Backup": "Изтрий резервното копие",
-    "Unable to load key backup status": "Неуспешно зареждане на състоянието на резервното копие на ключа",
     "Set up": "Настрой",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "За да избегнете загубата на чат история, трябва да експортирате ключовете на стаята преди да излезете от профила си. Ще трябва да се върнете към по-новата версия на %(brand)s за да направите това",
     "Incompatible Database": "Несъвместима база данни",
@@ -240,14 +233,10 @@
     "Invite anyway": "Покани въпреки това",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Изпратихме Ви имейл за да потвърдим адреса Ви. Последвайте инструкциите в имейла и след това кликнете на бутона по-долу.",
     "Email Address": "Имейл адрес",
-    "All keys backed up": "Всички ключове са в резервното копие",
     "Unable to verify phone number.": "Неуспешно потвърждение на телефонния номер.",
     "Verification code": "Код за потвърждение",
     "Phone Number": "Телефонен номер",
-    "Profile picture": "Профилна снимка",
-    "Display Name": "Име",
     "Room information": "Информация за стаята",
-    "General": "Общи",
     "Room Addresses": "Адреси на стаята",
     "Email addresses": "Имейл адреси",
     "Phone numbers": "Телефонни номера",
@@ -330,9 +319,7 @@
     "This homeserver would like to make sure you are not a robot.": "Сървърът иска да потвърди, че не сте робот.",
     "Couldn't load page": "Страницата не можа да бъде заредена",
     "Your password has been reset.": "Паролата беше анулирана.",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Сигурни ли сте? Ако нямате работещо резервно копие на ключовете, ще загубите достъп до шифрованите съобщения.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Шифрованите съобщения са защитени с шифроване от край до край. Само Вие и получателят (получателите) имате ключове за четенето им.",
-    "Restore from Backup": "Възстанови от резервно копие",
     "Back up your keys before signing out to avoid losing them.": "Направете резервно копие на ключовете преди изход от профила, за да не ги загубите.",
     "Start using Key Backup": "Включи резервни копия за ключовете",
     "I don't want my encrypted messages": "Не искам шифрованите съобщения",
@@ -473,8 +460,6 @@
     "Explore rooms": "Открий стаи",
     "Verify the link in your inbox": "Потвърдете линка във вашата пощенска кутия",
     "e.g. my-room": "например my-room",
-    "Hide advanced": "Скрий разширени настройки",
-    "Show advanced": "Покажи разширени настройки",
     "Close dialog": "Затвори прозореца",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Би било добре да <b>премахнете личните си данни</b> от сървъра за самоличност <idserver /> преди прекъсване на връзката. За съжаление, сървърът за самоличност <idserver /> в момента не е достъпен.",
     "You should:": "Ще е добре да:",
@@ -490,8 +475,6 @@
     "Message Actions": "Действия със съобщението",
     "Show image": "Покажи снимката",
     "Cancel search": "Отмени търсенето",
-    "Jump to first unread room.": "Отиди до първата непрочетена стая.",
-    "Jump to first invite.": "Отиди до първата покана.",
     "You verified %(name)s": "Потвърдихте %(name)s",
     "You cancelled verifying %(name)s": "Отказахте потвърждаването за %(name)s",
     "%(name)s cancelled verifying": "%(name)s отказа потвърждаването",
@@ -501,11 +484,6 @@
     "%(name)s cancelled": "%(name)s отказа",
     "%(name)s wants to verify": "%(name)s иска да извърши потвърждение",
     "You sent a verification request": "Изпратихте заявка за потвърждение",
-    "Cannot connect to integration manager": "Неуспешна връзка с мениджъра на интеграции",
-    "The integration manager is offline or it cannot reach your homeserver.": "Мениджъра на интеграции е офлайн или не може да се свърже със сървъра ви.",
-    "Secret storage public key:": "Публичен ключ за секретно складиране:",
-    "in account data": "в данни за акаунта",
-    "not stored": "не е складиран",
     "Manage integrations": "Управление на интеграциите",
     "None": "Няма нищо",
     "Unencrypted": "Нешифровано",
@@ -540,13 +518,7 @@
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) влезе в нова сесия без да я потвърди:",
     "Ask this user to verify their session, or manually verify it below.": "Поискайте от този потребител да потвърди сесията си, или я потвърдете ръчно по-долу.",
     "Lock": "Заключи",
-    "well formed": "коректен",
-    "unexpected type": "непознат тип",
-    "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Тази сесия <b>не прави резервни копия на ключовете</b>, но имате съществуващо резервно копие, което да възстановите и към което да добавяте от тук нататък.",
-    "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Свържете тази сесия с резервно копие на ключове преди да се отпишете от нея, за да не загубите ключове, които може би съществуват единствено в тази сесия.",
-    "Connect this session to Key Backup": "Свържи тази сесия с резервно копие на ключовете",
     "This backup is trusted because it has been restored on this session": "Това резервно копие е доверено, защото е било възстановено в текущата сесия",
-    "Your keys are <b>not being backed up from this session</b>.": "На ключовете ви <b>не се прави резервно копие от тази сесия</b>.",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "За да съобщените за проблем със сигурността свързан с Matrix, прочетете <a>Политиката за споделяне на проблеми със сигурността</a> на Matrix.org.",
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "Тази стая препредава съобщения със следните платформи. <a>Научи повече.</a>",
     "Bridges": "Мостове",
@@ -560,7 +532,6 @@
     "Encrypted by a deleted session": "Шифровано от изтрита сесия",
     "Scroll to most recent messages": "Отиди до най-скорошните съобщения",
     "Reject & Ignore user": "Откажи и игнорирай потребителя",
-    "Mark all as read": "Маркирай всичко като прочетено",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Възникна грешка при обновяване на алтернативните адреси на стаята. Или не е позволено от сървъра или се е случила временна грешка.",
     "Local address": "Локален адрес",
     "Published Addresses": "Публикувани адреси",
@@ -737,15 +708,7 @@
     "Explore public rooms": "Прегледай публични стаи",
     "Show Widgets": "Покажи приспособленията",
     "Hide Widgets": "Скрий приспособленията",
-    "not ready": "не е готово",
-    "ready": "готово",
-    "Secret storage:": "Секретно складиране:",
-    "Backup key cached:": "Резервният ключ е кеширан:",
-    "Backup key stored:": "Резервният ключ е съхранен:",
-    "Algorithm:": "Алгоритъм:",
     "Backup version:": "Версия на резервното копие:",
-    "The operation could not be completed": "Операцията не можа да бъде завършена",
-    "Failed to save your profile": "Неуспешно запазване на профила ви",
     "Save your Security Key": "Запази ключа за сигурност",
     "Confirm Security Phrase": "Потвърди фразата за сигурност",
     "Set a Security Phrase": "Настрой фраза за сигурност",
@@ -1008,16 +971,10 @@
     "Afghanistan": "Афганистан",
     "United States": "Съединените щати",
     "United Kingdom": "Обединеното кралство",
-    "Space options": "Опции на пространството",
     "Add existing room": "Добави съществуваща стая",
     "Leave space": "Напусни пространство",
-    "Invite with email or username": "Покани чрез имейл или потребителско име",
-    "Invite people": "Покани хора",
-    "Share invite link": "Сподели връзка с покана",
     "Create a space": "Създаване на пространство",
-    "You can change these anytime.": "Можете да ги промените по всяко време.",
     "unknown person": "",
-    "Spaces": "Пространства",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Вашият %(brand)s не позволява да използвате мениджъра на интеграции за да направите това. Свържете се с администратор.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Мениджърът на интеграции получава конфигурационни данни, може да модифицира приспособления, да изпраща покани за стаи и да настройва нива на достъп от ваше име.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Използвай мениджър на интеграции за управление на ботове, приспособления и стикери.",
@@ -1092,7 +1049,12 @@
         "off": "Изкл.",
         "all_rooms": "Всички стаи",
         "copied": "Копирано!",
-        "Advanced": "Разширени"
+        "advanced": "Разширени",
+        "spaces": "Пространства",
+        "general": "Общи",
+        "profile": "Профил",
+        "display_name": "Име",
+        "user_avatar": "Профилна снимка"
     },
     "action": {
         "continue": "Продължи",
@@ -1172,7 +1134,9 @@
         "submit": "Изпрати",
         "send_report": "Изпрати доклад",
         "unban": "Отблокирай",
-        "click_to_copy": "Натиснете за копиране"
+        "click_to_copy": "Натиснете за копиране",
+        "hide_advanced": "Скрий разширени настройки",
+        "show_advanced": "Покажи разширени настройки"
     },
     "a11y": {
         "user_menu": "Потребителско меню",
@@ -1184,7 +1148,8 @@
             "other": "%(count)s непрочетени съобщения.",
             "one": "1 непрочетено съобщение."
         },
-        "unread_messages": "Непрочетени съобщения."
+        "unread_messages": "Непрочетени съобщения.",
+        "jump_first_invite": "Отиди до първата покана."
     },
     "labs": {
         "pinning": "Функция за закачане на съобщения",
@@ -1344,7 +1309,8 @@
             "noisy": "Шумно",
             "error_permissions_denied": "%(brand)s няма разрешение да Ви изпраща известия - моля проверете вашите настройки на браузъра",
             "error_permissions_missing": "%(brand)s не е получил разрешение да изпраща известия - моля опитайте отново",
-            "error_title": "Неупешно включване на известия"
+            "error_title": "Неупешно включване на известия",
+            "push_targets": "Устройства, получаващи известия"
         },
         "appearance": {
             "heading": "Настройте изгледа",
@@ -1411,7 +1377,27 @@
             "encryption_individual_verification_mode": "Потвърждавай индивидуално всяка сесия на потребителите, маркирайки я като доверена и недоверявайки се на кръстосано-подписваните устройства.",
             "message_search_disabled": "Кеширай шифровани съобщения локално по сигурен начин за да се появяват в резултати от търсения.",
             "message_search_unsupported": "Липсват задължителни компоненти в %(brand)s, за да могат да бъдат складирани локално и по сигурен начин шифровани съобщения. Ако искате да експериментирате с тази функция, \"компилирайте\" версия на %(brand)s Desktop с <nativeLink>добавени компоненти за търсене</nativeLink>.",
-            "message_search_unsupported_web": "%(brand)s не може да кешира шифровани съобщения локално по сигурен начин когато работи в уеб браузър. Използвайте <desktopLink>%(brand)s Desktop </desktopLink> за да можете да търсите шифровани съобщения."
+            "message_search_unsupported_web": "%(brand)s не може да кешира шифровани съобщения локално по сигурен начин когато работи в уеб браузър. Използвайте <desktopLink>%(brand)s Desktop </desktopLink> за да можете да търсите шифровани съобщения.",
+            "backup_key_well_formed": "коректен",
+            "backup_key_unexpected_type": "непознат тип",
+            "backup_key_stored_status": "Резервният ключ е съхранен:",
+            "cross_signing_not_stored": "не е складиран",
+            "backup_key_cached_status": "Резервният ключ е кеширан:",
+            "4s_public_key_status": "Публичен ключ за секретно складиране:",
+            "4s_public_key_in_account_data": "в данни за акаунта",
+            "secret_storage_status": "Секретно складиране:",
+            "secret_storage_ready": "готово",
+            "secret_storage_not_ready": "не е готово",
+            "delete_backup": "Изтрий резервното копие",
+            "delete_backup_confirm_description": "Сигурни ли сте? Ако нямате работещо резервно копие на ключовете, ще загубите достъп до шифрованите съобщения.",
+            "error_loading_key_backup_status": "Неуспешно зареждане на състоянието на резервното копие на ключа",
+            "restore_key_backup": "Възстанови от резервно копие",
+            "key_backup_inactive": "Тази сесия <b>не прави резервни копия на ключовете</b>, но имате съществуващо резервно копие, което да възстановите и към което да добавяте от тук нататък.",
+            "key_backup_connect_prompt": "Свържете тази сесия с резервно копие на ключове преди да се отпишете от нея, за да не загубите ключове, които може би съществуват единствено в тази сесия.",
+            "key_backup_connect": "Свържи тази сесия с резервно копие на ключовете",
+            "key_backup_complete": "Всички ключове са в резервното копие",
+            "key_backup_algorithm": "Алгоритъм:",
+            "key_backup_inactive_warning": "На ключовете ви <b>не се прави резервно копие от тази сесия</b>."
         },
         "preferences": {
             "room_list_heading": "Списък със стаи",
@@ -1437,7 +1423,10 @@
             "add_msisdn_confirm_sso_button": "Потвърдете добавянето на този телефонен номер като докажете идентичността си чрез използване на Single Sign On.",
             "add_msisdn_confirm_button": "Потвърдете добавянето на телефонен номер",
             "add_msisdn_confirm_body": "Кликнете бутона по-долу за да потвърдите добавянето на телефонния номер.",
-            "add_msisdn_dialog_title": "Добави телефонен номер"
+            "add_msisdn_dialog_title": "Добави телефонен номер",
+            "name_placeholder": "Няма име",
+            "error_saving_profile_title": "Неуспешно запазване на профила ви",
+            "error_saving_profile": "Операцията не можа да бъде завършена"
         }
     },
     "devtools": {
@@ -2165,7 +2154,9 @@
         "private_description": "Само с покана, най-добро за вас самият или отбори",
         "public_heading": "Вашето публично пространство",
         "private_heading": "Вашето лично пространство",
-        "add_details_prompt": "Добавете някои подробности, за да помогнете на хората да го разпознаят."
+        "add_details_prompt": "Добавете някои подробности, за да помогнете на хората да го разпознаят.",
+        "label": "Създаване на пространство",
+        "add_details_prompt_2": "Можете да ги промените по всяко време."
     },
     "user_menu": {
         "switch_theme_light": "Смени на светъл режим",
@@ -2204,9 +2195,13 @@
     "space": {
         "context_menu": {
             "explore": "Открий стаи",
-            "manage_and_explore": "Управление и откриване на стаи"
+            "manage_and_explore": "Управление и откриване на стаи",
+            "options": "Опции на пространството"
         },
-        "share_public": "Споделете публичното си място"
+        "share_public": "Споделете публичното си място",
+        "invite_link": "Сподели връзка с покана",
+        "invite": "Покани хора",
+        "invite_description": "Покани чрез имейл или потребителско име"
     },
     "terms": {
         "integration_manager": "Използвайте ботове, връзки с други мрежи, приспособления и стикери",
@@ -2305,7 +2300,9 @@
         "admin_contact_short": "Свържете се със <a>сървърния администратор</a>.",
         "non_urgent_echo_failure_toast": "Сървърът ви не отговаря на някои <a>заявки</a>.",
         "failed_copy": "Неуспешно копиране",
-        "something_went_wrong": "Нещо се обърка!"
+        "something_went_wrong": "Нещо се обърка!",
+        "update_power_level": "Неуспешна промяна на нивото на достъп",
+        "unknown": "Неизвестна грешка"
     },
     "name_and_id": "%(name)s (%(userId)s)",
     "items_and_n_others": {
@@ -2318,7 +2315,9 @@
         "enable_prompt_toast_description": "Включете уведомления на работния плот",
         "colour_none": "Няма нищо",
         "colour_bold": "Удебелено",
-        "error_change_title": "Промяна на настройките за уведомление"
+        "error_change_title": "Промяна на настройките за уведомление",
+        "mark_all_read": "Маркирай всичко като прочетено",
+        "class_other": "Други"
     },
     "mobile_guide": {
         "toast_title": "Използвайте приложението за по-добра работа",
@@ -2335,5 +2334,10 @@
     "lightbox": {
         "rotate_left": "Завърти наляво",
         "rotate_right": "Завърти надясно"
+    },
+    "a11y_jump_first_unread_room": "Отиди до първата непрочетена стая.",
+    "integration_manager": {
+        "error_connecting_heading": "Неуспешна връзка с мениджъра на интеграции",
+        "error_connecting": "Мениджъра на интеграции е офлайн или не може да се свърже със сървъра ви."
     }
 }

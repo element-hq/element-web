@@ -23,7 +23,6 @@
     "Error decrypting attachment": "Ek şifresini çözme hatası",
     "Failed to ban user": "Kullanıcı yasaklama(Ban) başarısız",
     "Failed to change password. Is your password correct?": "Parola değiştirilemedi . Şifreniz doğru mu ?",
-    "Failed to change power level": "Güç seviyesini değiştirme başarısız oldu",
     "Failed to forget room %(errCode)s": "Oda unutulması başarısız oldu %(errCode)s",
     "Failed to load timeline position": "Zaman çizelgesi konumu yüklenemedi",
     "Failed to mute user": "Kullanıcıyı sessize almak başarısız oldu",
@@ -45,10 +44,8 @@
     "Moderator": "Moderatör",
     "New passwords must match each other.": "Yeni şifreler birbirleriyle eşleşmelidir.",
     "not specified": "Belirtilmemiş",
-    "No display name": "Görünür isim yok",
     "No more results": "Başka sonuç yok",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Lütfen e-postanızı kontrol edin ve içerdiği bağlantıya tıklayın . Bu işlem tamamlandıktan sonra , 'devam et' e tıklayın .",
-    "Profile": "Profil",
     "Reason": "Sebep",
     "Reject invitation": "Daveti Reddet",
     "Return to login screen": "Giriş ekranına dön",
@@ -117,7 +114,6 @@
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Bu işlem , geçmişte başka Matrix istemcisinden dışa aktardığınız şifreleme anahtarlarınızı içe aktarmanızı sağlar . Böylece diğer istemcinin çözebileceği tüm iletilerin şifresini çözebilirsiniz.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Dışa aktarma dosyası bir şifre ile korunacaktır . Dosyanın şifresini çözmek için buraya şifre girmelisiniz.",
     "Confirm Removal": "Kaldırma İşlemini Onayla",
-    "Unknown error": "Bilinmeyen Hata",
     "Unable to restore session": "Oturum geri yüklenemiyor",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Eğer daha önce %(brand)s'un daha yeni bir versiyonunu kullandıysanız , oturumunuz bu sürümle uyumsuz olabilir . Bu pencereyi kapatın ve daha yeni sürüme geri dönün.",
     "Error decrypting image": "Resim şifre çözme hatası",
@@ -126,7 +122,6 @@
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Hesabınızı %(integrationsUrl)s ile kullanmak üzere doğrulayabilmeniz için üçüncü taraf bir siteye götürülmek üzeresiniz. Devam etmek istiyor musunuz ?",
     "This will allow you to reset your password and receive notifications.": "Bu şifrenizi sıfırlamanızı ve bildirimler almanızı sağlayacak.",
     "Sunday": "Pazar",
-    "Notification targets": "Bildirim hedefleri",
     "Today": "Bugün",
     "Friday": "Cuma",
     "Changelog": "Değişiklikler",
@@ -162,8 +157,6 @@
     "Notes": "Notlar",
     "Removing…": "Siliniyor…",
     "Clear all data": "Bütün verileri sil",
-    "Hide advanced": "Gelişmiş gizle",
-    "Show advanced": "Gelişmiş göster",
     "Incompatible Database": "Uyumsuz Veritabanı",
     "Filter results": "Sonuçları filtrele",
     "Integrations are disabled": "Bütünleştirmeler kapatılmış",
@@ -207,8 +200,6 @@
     "Email (optional)": "E-posta (opsiyonel)",
     "Couldn't load page": "Sayfa yüklenemiyor",
     "Verification Request": "Doğrulama Talebi",
-    "Jump to first unread room.": "Okunmamış ilk odaya zıpla.",
-    "Jump to first invite.": "İlk davete zıpla.",
     "Add room": "Oda ekle",
     "Could not load user profile": "Kullanıcı profili yüklenemedi",
     "Your password has been reset.": "Parolanız sıfırlandı.",
@@ -248,16 +239,7 @@
     "Anchor": "Çıpa",
     "Headphones": "Kulaklık",
     "Folder": "Klasör",
-    "in account data": "hesap verisinde",
-    "Cannot connect to integration manager": "Entegrasyon yöneticisine bağlanılamadı",
-    "Delete Backup": "Yedek Sil",
-    "Unable to load key backup status": "Anahtar yedek durumu yüklenemiyor",
-    "Restore from Backup": "Yedekten Geri Dön",
-    "not stored": "depolanmadı",
-    "All keys backed up": "Bütün yedekler yedeklendi",
     "Start using Key Backup": "Anahtar Yedekleme kullanmaya başla",
-    "Display Name": "Ekran Adı",
-    "Profile picture": "Profil resmi",
     "Checking server": "Sunucu kontrol ediliyor",
     "Change identity server": "Kimlik sunucu değiştir",
     "Dog": "Köpek",
@@ -298,7 +280,6 @@
     "Email addresses": "E-posta adresleri",
     "Phone numbers": "Telefon numaraları",
     "Account management": "Hesap yönetimi",
-    "General": "Genel",
     "Discovery": "Keşfet",
     "No Audio Outputs detected": "Ses çıkışları tespit edilemedi",
     "Audio Output": "Ses Çıkışı",
@@ -434,9 +415,6 @@
     "Create key backup": "Anahtar yedeği oluştur",
     "Set up Secure Messages": "Güvenli Mesajları Ayarla",
     "Show more": "Daha fazla göster",
-    "Secret storage public key:": "Sır deposu açık anahtarı:",
-    "The integration manager is offline or it cannot reach your homeserver.": "Entegrasyon yöneticisi çevrim dışı veya anasunucunuza erişemiyor.",
-    "Connect this session to Key Backup": "Anahtar Yedekleme için bu oturuma bağlanın",
     "This backup is trusted because it has been restored on this session": "Bu yedek güvenilir çünkü bu oturumda geri döndürüldü",
     "This user has not verified all of their sessions.": "Bu kullanıcı bütün oturumlarında doğrulanmamış.",
     "You have not verified this user.": "Bu kullanıcıyı doğrulamadınız.",
@@ -469,7 +447,6 @@
     "Recent Conversations": "Güncel Sohbetler",
     "Recently Direct Messaged": "Güncel Doğrudan Mesajlar",
     "Lock": "Kilit",
-    "Your keys are <b>not being backed up from this session</b>.": "Anahtarlarınız <b>bu oturum tarafından yedeklenmiyor</b>.",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "Bir metin mesajı gönderildi: +%(msisdn)s. Lütfen içerdiği doğrulama kodunu girin.",
     "You have verified this user. This user has verified all of their sessions.": "Bu kullanıcıyı doğruladınız. Bu kullanıcı tüm oturumlarını doğruladı.",
     "This room is end-to-end encrypted": "Bu oda uçtan uça şifreli",
@@ -477,7 +454,6 @@
     "Encrypted by a deleted session": "Silinen bir oturumla şifrelenmiş",
     "Reject & Ignore user": "Kullanıcı Reddet & Yoksay",
     "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Davet geri çekilemiyor. Sunucu geçici bir problem yaşıyor olabilir yada daveti geri çekmek için gerekli izinlere sahip değilsin.",
-    "Mark all as read": "Tümünü okunmuş olarak işaretle",
     "Incoming Verification Request": "Gelen Doğrulama İsteği",
     "Explore rooms": "Odaları keşfet",
     "Invalid base_url for m.homeserver": "m.anasunucu için geçersiz base_url",
@@ -807,9 +783,6 @@
     "Spanner": "Anahtar",
     "Smiley": "Gülen yüz",
     "Dial pad": "Arama tuşları",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Emin misiniz? Eğer anahtarlarınız doğru bir şekilde yedeklemediyse, şifrelenmiş iletilerinizi kaybedeceksiniz.",
-    "The operation could not be completed": "Eylem tamamlanamadı",
-    "Failed to save your profile": "Profiliniz kaydedilemedi",
     "Verify all users in a room to ensure it's secure.": "Güvenli olduğuna emin olmak için odadaki tüm kullanıcıları onaylayın.",
     "No recent messages by %(user)s found": "%(user)s kullanıcısın hiç yeni ileti yok",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Onaylamanız için size e-posta gönderdik. Lütfen yönergeleri takip edin ve sonra aşağıdaki butona tıklayın.",
@@ -834,16 +807,7 @@
     "Room options": "Oda ayarları",
     "Open dial pad": "Arama tuşlarını aç",
     "You should:": "Şunu yapmalısınız:",
-    "not ready": "hazır değil",
-    "ready": "hazır",
-    "Secret storage:": "Gizli depolama:",
-    "Backup key cached:": "Yedekleme anahtarı önbelleğe alındı:",
-    "Backup key stored:": "Yedekleme anahtarı depolandı:",
-    "unexpected type": "Bilinmeyen tür",
     "Back up your keys before signing out to avoid losing them.": "Anahtarlarını kaybetmemek için, çıkış yapmadan önce önleri yedekle.",
-    "Algorithm:": "Algoritma:",
-    "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Yalnızca bu oturumda olabilecek anahtarları kaybetmemek için, oturumu kapatmadan önce bu oturumu anahtar yedeklemeye bağlayın.",
-    "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Bu oturum <b> anahtarlarınızı yedeklemiyor</b>, ama zaten geri yükleyebileceğiniz ve ileride ekleyebileceğiniz bir yedeğiniz var.",
     "Enter a server name": "Sunucu adı girin",
     "Can't find this server or its room list": "Sunucuda veya oda listesinde bulunamıyor",
     "Add a new server": "Yeni sunucu ekle",
@@ -885,8 +849,6 @@
     "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "kimlik sunucunuza erişimi engelleyen herhangi bir eklenti (Privacy Badger gibi) için tarayıcınızı kontrol ediniz",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Bağlantınızı kesmeden önce <b>kişisel verilerinizi <idserver /> kimlik sunucusundan silmelisiniz</b>. Ne yazık ki <idserver /> kimlik sunucusu şu anda çevrim dışı ya da bir nedenden ötürü erişilemiyor.",
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "<current /> kimlik sunucusundan bağlantı kesilip <new /> kimlik sunucusuna bağlanılsın mı?",
-    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Olası bir oturuma erişememe durumunu önlemek için şifreleme anahtarlarınızı hesap verilerinizle yedekleyin. Anahtarlarınız eşsiz bir güvenlik anahtarı ile güvenlenecektir.",
-    "well formed": "uygun biçimlendirilmiş",
     "You've successfully verified %(displayName)s!": "%(displayName)s başarıyla doğruladınız!",
     "You've successfully verified %(deviceName)s (%(deviceId)s)!": "%(deviceName)s (%(deviceId)s) başarıyla doğruladınız!",
     "You've successfully verified your device!": "Cihazınızı başarıyla doğruladınız!",
@@ -896,12 +858,6 @@
     "Suggested Rooms": "Önerilen Odalar",
     "View message": "Mesajı görüntüle",
     "Your message was sent": "Mesajınız gönderildi",
-    "Visibility": "Görünürlük",
-    "Save Changes": "Değişiklikleri Kaydet",
-    "Invite with email or username": "E-posta veya kullanıcı adı ile davet et",
-    "Invite people": "İnsanları davet et",
-    "Share invite link": "Davet bağlantısını paylaş",
-    "You can change these anytime.": "Bunları istediğiniz zaman değiştirebilirsiniz.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Botları, görsel bileşenleri ve çıkartma paketlerini yönetmek için bir entegrasyon yöneticisi kullanın.",
     "Identity server (%(server)s)": "(%(server)s) Kimlik Sunucusu",
     "Could not connect to identity server": "Kimlik Sunucusuna bağlanılamadı",
@@ -974,7 +930,11 @@
         "off": "Kapalı",
         "all_rooms": "Tüm odalar",
         "copied": "Kopyalandı!",
-        "Advanced": "Gelişmiş"
+        "advanced": "Gelişmiş",
+        "general": "Genel",
+        "profile": "Profil",
+        "display_name": "Ekran Adı",
+        "user_avatar": "Profil resmi"
     },
     "action": {
         "continue": "Devam Et",
@@ -1055,7 +1015,9 @@
         "submit": "Gönder",
         "send_report": "Rapor gönder",
         "unban": "Yasağı Kaldır",
-        "click_to_copy": "Kopyalamak için tıklayın"
+        "click_to_copy": "Kopyalamak için tıklayın",
+        "hide_advanced": "Gelişmiş gizle",
+        "show_advanced": "Gelişmiş göster"
     },
     "a11y": {
         "user_menu": "Kullanıcı menüsü",
@@ -1067,7 +1029,8 @@
             "other": "%(count)s okunmamış mesaj.",
             "one": "1 okunmamış mesaj."
         },
-        "unread_messages": "Okunmamış mesajlar."
+        "unread_messages": "Okunmamış mesajlar.",
+        "jump_first_invite": "İlk davete zıpla."
     },
     "labs": {
         "latex_maths": "Mesajlarda LaTex maths işleyin",
@@ -1206,7 +1169,8 @@
             "noisy": "Gürültülü",
             "error_permissions_denied": "%(brand)s size bildirim gönderme iznine sahip değil - lütfen tarayıcı ayarlarınızı kontrol edin",
             "error_permissions_missing": "%(brand)s'a bildirim gönderme izni verilmedi - lütfen tekrar deneyin",
-            "error_title": "Bildirimler aktif edilemedi"
+            "error_title": "Bildirimler aktif edilemedi",
+            "push_targets": "Bildirim hedefleri"
         },
         "appearance": {
             "heading": "Görünüşü özelleştir",
@@ -1273,7 +1237,28 @@
             },
             "message_search_disabled": "Arama sonuçlarında gozükmeleri için iletileri güvenli bir şekilde yerel olarak önbelleğe al.",
             "message_search_unsupported": "%(brand)s, şifrelenmiş iletileri yerel olarak güvenli bir şekilde önbelleğe almak için gereken bazı bileşenlerden yoksun. Bu özelliği denemek istiyorsanız, <nativeLink> arama bileşenlerinin eklendiği</nativeLink> özel bir masaüstü oluşturun.",
-            "message_search_unsupported_web": "%(brand)s internet tarayıcısında çalışıyorken şifrelenmiş mesajları güvenli bir şekilde önbelleğe alamaz. Şifrelenmiş mesajların arama sonucunda görünmesi için <desktopLink>%(brand)s Masaüstü</desktopLink> kullanın."
+            "message_search_unsupported_web": "%(brand)s internet tarayıcısında çalışıyorken şifrelenmiş mesajları güvenli bir şekilde önbelleğe alamaz. Şifrelenmiş mesajların arama sonucunda görünmesi için <desktopLink>%(brand)s Masaüstü</desktopLink> kullanın.",
+            "backup_key_well_formed": "uygun biçimlendirilmiş",
+            "backup_key_unexpected_type": "Bilinmeyen tür",
+            "backup_keys_description": "Olası bir oturuma erişememe durumunu önlemek için şifreleme anahtarlarınızı hesap verilerinizle yedekleyin. Anahtarlarınız eşsiz bir güvenlik anahtarı ile güvenlenecektir.",
+            "backup_key_stored_status": "Yedekleme anahtarı depolandı:",
+            "cross_signing_not_stored": "depolanmadı",
+            "backup_key_cached_status": "Yedekleme anahtarı önbelleğe alındı:",
+            "4s_public_key_status": "Sır deposu açık anahtarı:",
+            "4s_public_key_in_account_data": "hesap verisinde",
+            "secret_storage_status": "Gizli depolama:",
+            "secret_storage_ready": "hazır",
+            "secret_storage_not_ready": "hazır değil",
+            "delete_backup": "Yedek Sil",
+            "delete_backup_confirm_description": "Emin misiniz? Eğer anahtarlarınız doğru bir şekilde yedeklemediyse, şifrelenmiş iletilerinizi kaybedeceksiniz.",
+            "error_loading_key_backup_status": "Anahtar yedek durumu yüklenemiyor",
+            "restore_key_backup": "Yedekten Geri Dön",
+            "key_backup_inactive": "Bu oturum <b> anahtarlarınızı yedeklemiyor</b>, ama zaten geri yükleyebileceğiniz ve ileride ekleyebileceğiniz bir yedeğiniz var.",
+            "key_backup_connect_prompt": "Yalnızca bu oturumda olabilecek anahtarları kaybetmemek için, oturumu kapatmadan önce bu oturumu anahtar yedeklemeye bağlayın.",
+            "key_backup_connect": "Anahtar Yedekleme için bu oturuma bağlanın",
+            "key_backup_complete": "Bütün yedekler yedeklendi",
+            "key_backup_algorithm": "Algoritma:",
+            "key_backup_inactive_warning": "Anahtarlarınız <b>bu oturum tarafından yedeklenmiyor</b>."
         },
         "preferences": {
             "room_list_heading": "Oda listesi",
@@ -1329,7 +1314,10 @@
             "add_msisdn_confirm_sso_button": "Kimliğinizi doğrulamak için Tek Seferlik Oturum Açma özelliğini kullanarak bu telefon numarasını eklemeyi onaylayın.",
             "add_msisdn_confirm_button": "Telefon numarası eklemeyi onayla",
             "add_msisdn_confirm_body": "Telefon numarasını eklemeyi kabul etmek için aşağıdaki tuşa tıklayın.",
-            "add_msisdn_dialog_title": "Telefon Numarası Ekle"
+            "add_msisdn_dialog_title": "Telefon Numarası Ekle",
+            "name_placeholder": "Görünür isim yok",
+            "error_saving_profile_title": "Profiliniz kaydedilemedi",
+            "error_saving_profile": "Eylem tamamlanamadı"
         }
     },
     "devtools": {
@@ -1776,7 +1764,8 @@
             "user_url_previews_default_on": "URL önizlemelerini varsayılan olarak <a>etkinleştirdiniz</a>.",
             "user_url_previews_default_off": "URL önizlemelerini varsayılan olarak <a> devre dışı </a> bıraktınız.",
             "default_url_previews_off": "URL ön izlemeleri, bu odadaki kullanıcılar için varsayılan olarak devre dışı bıraktırılmıştır.",
-            "url_previews_section": "URL önizlemeleri"
+            "url_previews_section": "URL önizlemeleri",
+            "save": "Değişiklikleri Kaydet"
         },
         "advanced": {
             "unfederated": "Bu oda uzak Matrix Sunucuları tarafından erişilebilir değil",
@@ -1785,7 +1774,10 @@
             "room_version_section": "Oda sürümü",
             "room_version": "Oda versiyonu:"
         },
-        "upload_avatar_label": "Avatar yükle"
+        "upload_avatar_label": "Avatar yükle",
+        "visibility": {
+            "title": "Görünürlük"
+        }
     },
     "encryption": {
         "verification": {
@@ -2150,7 +2142,10 @@
     "space": {
         "context_menu": {
             "explore": "Odaları keşfet"
-        }
+        },
+        "invite_link": "Davet bağlantısını paylaş",
+        "invite": "İnsanları davet et",
+        "invite_description": "E-posta veya kullanıcı adı ile davet et"
     },
     "terms": {
         "integration_manager": "Botları, köprüleri, görsel bileşenleri ve çıkartma paketlerini kullan",
@@ -2210,7 +2205,9 @@
         "admin_contact_short": "<a>Sunucu yöneticinize</a> başvurun.",
         "non_urgent_echo_failure_toast": "Sunucunuz bası <a>istekler'e</a> onay vermiyor.",
         "failed_copy": "Kopyalama başarısız",
-        "something_went_wrong": "Bir şeyler yanlış gitti!"
+        "something_went_wrong": "Bir şeyler yanlış gitti!",
+        "update_power_level": "Güç seviyesini değiştirme başarısız oldu",
+        "unknown": "Bilinmeyen Hata"
     },
     "name_and_id": "%(name)s (%(userId)s)",
     "items_and_n_others": {
@@ -2223,7 +2220,9 @@
         "enable_prompt_toast_description": "Masaüstü bildirimlerini etkinleştir",
         "colour_none": "Yok",
         "colour_bold": "Kalın",
-        "error_change_title": "Bildirim ayarlarını değiştir"
+        "error_change_title": "Bildirim ayarlarını değiştir",
+        "mark_all_read": "Tümünü okunmuş olarak işaretle",
+        "class_other": "Diğer"
     },
     "mobile_guide": {
         "toast_title": "Daha iyi bir deneyim için uygulamayı kullanın",
@@ -2240,5 +2239,13 @@
     "lightbox": {
         "rotate_left": "Sola Döndür",
         "rotate_right": "Sağa Döndür"
+    },
+    "create_space": {
+        "add_details_prompt_2": "Bunları istediğiniz zaman değiştirebilirsiniz."
+    },
+    "a11y_jump_first_unread_room": "Okunmamış ilk odaya zıpla.",
+    "integration_manager": {
+        "error_connecting_heading": "Entegrasyon yöneticisine bağlanılamadı",
+        "error_connecting": "Entegrasyon yöneticisi çevrim dışı veya anasunucunuza erişemiyor."
     }
 }

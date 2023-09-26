@@ -92,7 +92,7 @@ export function RoomResultContextMenus({ room }: Props): JSX.Element {
                         const target = ev.target as HTMLElement;
                         setGeneralMenuPosition(target.getBoundingClientRect());
                     }}
-                    title={room.isSpaceRoom() ? _t("Space options") : _t("Room options")}
+                    title={room.isSpaceRoom() ? _t("space|context_menu|options") : _t("Room options")}
                     isExpanded={generalMenuPosition !== null}
                 />
             )}

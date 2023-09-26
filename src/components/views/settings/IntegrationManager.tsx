@@ -89,7 +89,7 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
         if (this.props.loading) {
             return (
                 <div className="mx_IntegrationManager_loading">
-                    <Heading size="3">{_t("Connecting to integration manager…")}</Heading>
+                    <Heading size="3">{_t("integration_manager|connecting")}</Heading>
                     <Spinner />
                 </div>
             );
@@ -98,8 +98,8 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
         if (!this.props.connected || this.state.errored) {
             return (
                 <div className="mx_IntegrationManager_error">
-                    <Heading size="3">{_t("Cannot connect to integration manager")}</Heading>
-                    <p>{_t("The integration manager is offline or it cannot reach your homeserver.")}</p>
+                    <Heading size="3">{_t("integration_manager|error_connecting_heading")}</Heading>
+                    <p>{_t("integration_manager|error_connecting")}</p>
                 </div>
             );
         }

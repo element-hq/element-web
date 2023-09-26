@@ -343,8 +343,8 @@ export default function NotificationSettings2(): JSX.Element {
                                 keywords: model!.keywords.filter((it) => it !== keyword),
                             });
                         }}
-                        label={_t("Keyword")}
-                        placeholder={_t("New keyword")}
+                        label={_t("notifications|keyword")}
+                        placeholder={_t("notifications|keyword_new")}
                     />
                 </SettingsSubsection>
                 <NotificationPusherSettings />

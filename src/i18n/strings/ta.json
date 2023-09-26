@@ -4,7 +4,6 @@
     "Changelog": "மாற்றப்பதிவு",
     "Failed to forget room %(errCode)s": "அறையை மறப்பதில் தோல்வி %(errCode)s",
     "Invite to this room": "இந்த அறைக்கு அழை",
-    "Notification targets": "அறிவிப்பு இலக்குகள்",
     "Search…": "தேடு…",
     "Send": "அனுப்பு",
     "This Room": "இந்த அறை",
@@ -99,7 +98,8 @@
             "rule_call": "அழைப்பிற்கான விண்ணப்பம்",
             "rule_suppress_notices": "bot மூலம் அனுப்பிய செய்திகள்",
             "show_message_desktop_notification": "திரை அறிவிப்புகளில் செய்தியை காண்பிக்கவும்",
-            "noisy": "சத்தம்"
+            "noisy": "சத்தம்",
+            "push_targets": "அறிவிப்பு இலக்குகள்"
         },
         "general": {
             "email_address_in_use": "இந்த மின்னஞ்சல் முகவரி முன்னதாகவே பயன்பாட்டில் உள்ளது",

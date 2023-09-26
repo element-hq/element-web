@@ -1,6 +1,5 @@
 {
     "Sunday": "Sekmadienis",
-    "Notification targets": "Pranešimo objektai",
     "Today": "Šiandien",
     "Friday": "Penktadienis",
     "Changelog": "Keitinių žurnalas",
@@ -53,7 +52,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(fullYear)s %(monthName)s %(day)s %(time)s",
     "Reason": "Priežastis",
     "Incorrect verification code": "Neteisingas patvirtinimo kodas",
-    "No display name": "Nėra rodomo vardo",
     "Warning!": "Įspėjimas!",
     "Failed to set display name": "Nepavyko nustatyti rodomo vardo",
     "Failed to mute user": "Nepavyko nutildyti vartotojo",
@@ -91,7 +89,6 @@
     "No Microphones detected": "Neaptikta jokių mikrofonų",
     "No Webcams detected": "Neaptikta jokių kamerų",
     "Audio Output": "Garso išvestis",
-    "Profile": "Profilis",
     "A new password must be entered.": "Privalo būti įvestas naujas slaptažodis.",
     "New passwords must match each other.": "Nauji slaptažodžiai privalo sutapti.",
     "Return to login screen": "Grįžti į prisijungimą",
@@ -126,7 +123,6 @@
     "expand": "išskleisti",
     "Logs sent": "Žurnalai išsiųsti",
     "Failed to send logs: ": "Nepavyko išsiųsti žurnalų: ",
-    "Unknown error": "Nežinoma klaida",
     "An error has occurred.": "Įvyko klaida.",
     "Failed to upgrade room": "Nepavyko atnaujinti kambario",
     "The room upgrade could not be completed": "Nepavyko užbaigti kambario atnaujinimo",
@@ -150,7 +146,6 @@
     "Restricted": "Apribotas",
     "Moderator": "Moderatorius",
     "Historical": "Istoriniai",
-    "Delete Backup": "Ištrinti Atsarginę Kopiją",
     "Set up": "Nustatyti",
     "Preparing to send logs": "Ruošiamasi išsiųsti žurnalus",
     "Incompatible Database": "Nesuderinama duomenų bazė",
@@ -166,7 +161,6 @@
     "Failed to decrypt %(failedCount)s sessions!": "Nepavyko iššifruoti %(failedCount)s seansų!",
     "Explore rooms": "Žvalgyti kambarius",
     "%(items)s and %(lastItem)s": "%(items)s ir %(lastItem)s",
-    "General": "Bendrieji",
     "Remove recent messages by %(user)s": "Pašalinti paskutines %(user)s žinutes",
     "Jump to read receipt": "Nušokti iki perskaitytų žinučių",
     "Remove recent messages": "Pašalinti paskutines žinutes",
@@ -197,7 +191,6 @@
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (galia %(powerLevelNumber)s)",
     "Change identity server": "Pakeisti tapatybės serverį",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Jūs neturėsite galimybės atšaukti šio keitimo, kadangi jūs žeminate savo privilegijas kambaryje. Jei jūs esate paskutinis privilegijuotas vartotojas kambaryje, atgauti privilegijas bus neįmanoma.",
-    "Failed to change power level": "Nepavyko pakeisti galios lygio",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Jūs neturėsite galimybės atšaukti šio keitimo, kadangi jūs paaukštinate vartotoją, suteikdami tokį patį galios lygį, kokį turite jūs.",
     "Email (optional)": "El. paštas (neprivaloma)",
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Jei jūs nenustatėte naujo paskyros atgavimo metodo, gali būti, kad užpuolikas bando patekti į jūsų paskyrą. Nedelsiant nustatymuose pakeiskite savo paskyros slaptažodį ir nustatykite naują atgavimo metodą.",
@@ -214,7 +207,6 @@
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Užšifruotos žinutės yra apsaugotos visapusiu šifravimu. Tik jūs ir gavėjas(-ai) turi raktus šioms žinutėms perskaityti.",
     "Back up your keys before signing out to avoid losing them.": "Prieš atsijungdami sukurkite atsarginę savo raktų kopiją, kad išvengtumėte jų praradimo.",
     "Start using Key Backup": "Pradėti naudoti atsarginę raktų kopiją",
-    "Display Name": "Rodomas Vardas",
     "Room %(name)s": "Kambarys %(name)s",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Atnaujinimas išjungs dabartinę kambario instanciją ir sukurs atnaujintą kambarį tuo pačiu pavadinimu.",
     "Other published addresses:": "Kiti paskelbti adresai:",
@@ -231,8 +223,6 @@
     "Enter a server name": "Įveskite serverio pavadinimą",
     "Enter the name of a new server you want to explore.": "Įveskite naujo, norimo žvalgyti serverio pavadinimą.",
     "Server name": "Serverio pavadinimas",
-    "Hide advanced": "Paslėpti išplėstinius",
-    "Show advanced": "Rodyti išplėstinius",
     "Session name": "Seanso pavadinimas",
     "Session key": "Seanso raktas",
     "I don't want my encrypted messages": "Man nereikalingos užšifruotos žinutės",
@@ -257,7 +247,6 @@
     "Your password has been reset.": "Jūsų slaptažodis buvo iš naujo nustatytas.",
     "Show more": "Rodyti daugiau",
     "Verify your other session using one of the options below.": "Patvirtinkite savo kitą seansą naudodami vieną iš žemiau esančių parinkčių.",
-    "Restore from Backup": "Atkurti iš Atsarginės Kopijos",
     "Voice & Video": "Garsas ir Vaizdas",
     "Deactivate user?": "Deaktyvuoti vartotoją?",
     "Deactivate user": "Deaktyvuoti vartotoją",
@@ -430,9 +419,6 @@
     "Click the button below to confirm setting up encryption.": "Paspauskite mygtuką žemiau, kad patvirtintumėte šifravimo nustatymą.",
     "Restore your key backup to upgrade your encryption": "Atkurkite savo atsarginę raktų kopiją, kad atnaujintumėte šifravimą",
     "Upgrade your encryption": "Atnaujinkite savo šifravimą",
-    "Unable to load key backup status": "Nepavyko įkelti atsarginės raktų kopijos būklės",
-    "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Prieš atsijungdami prijunkite šį seansą prie atsarginės raktų kopijos, kad neprarastumėte raktų, kurie gali būti tik šiame seanse.",
-    "Connect this session to Key Backup": "Prijungti šį seansą prie Atsarginės Raktų Kopijos",
     "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "Tam, kad galėtumėte rasti ir tam, kad būtumėte randamas esamų, jums žinomų kontaktų, jūs šiuo metu naudojate <server></server> tapatybės serverį. Jį pakeisti galite žemiau.",
     "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "Šiuo metu jūs nenaudojate tapatybės serverio. Tam, kad galėtumėte rasti ir tam, kad būtumėte randamas esamų, jums žinomų kontaktų, pridėkite jį žemiau.",
     "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Atsijungimas nuo tapatybės serverio reikš, kad jūs nebebūsite randamas kitų vartotojų ir jūs nebegalėsite pakviesti kitų, naudodami jų el. paštą arba telefoną.",
@@ -441,12 +427,6 @@
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Bandyta įkelti konkrečią vietą šio kambario laiko juostoje, bet jūs neturite leidimo peržiūrėti tos žinutės.",
     "Failed to load timeline position": "Nepavyko įkelti laiko juostos pozicijos",
     "Identity server URL does not appear to be a valid identity server": "Tapatybės serverio URL neatrodo kaip tinkamas tapatybės serveris",
-    "well formed": "gerai suformuotas",
-    "unexpected type": "netikėto tipo",
-    "Secret storage public key:": "Slaptos saugyklos viešas raktas:",
-    "in account data": "paskyros duomenyse",
-    "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Šis seansas <b>nekuria atsarginių raktų kopijų</b>, bet jūs jau turite atsarginę kopiją iš kurios galite atkurti ir pridėti.",
-    "All keys backed up": "Atsarginės kopijos sukurtos visiems raktams",
     "This backup is trusted because it has been restored on this session": "Ši atsarginė kopija yra patikima, nes buvo atkurta šiame seanse",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Šio seanso duomenų išvalymas yra negrįžtamas. Šifruotos žinutės bus prarastos, nebent buvo sukurta jų raktų atsarginė kopija.",
     "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Trūksta kai kurių seanso duomenų, įskaitant šifruotų žinučių raktus. Atsijunkite ir prisijunkite, kad tai išspręstumėte, atkurdami raktus iš atsarginės kopijos.",
@@ -458,8 +438,6 @@
     "Unable to create key backup": "Nepavyko sukurti atsarginės raktų kopijos",
     "Your homeserver has exceeded its user limit.": "Jūsų serveris pasiekė savo vartotojų limitą.",
     "Your homeserver has exceeded one of its resource limits.": "Jūsų serveris pasiekė vieną iš savo resursų limitų.",
-    "Cannot connect to integration manager": "Neįmanoma prisijungti prie integracijų tvarkytuvo",
-    "The integration manager is offline or it cannot reach your homeserver.": "Integracijų tvarkytuvas yra išjungtas arba negali pasiekti jūsų serverio.",
     "Disconnect anyway": "Vis tiek atsijungti",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Norėdami pranešti apie su Matrix susijusią saugos problemą, perskaitykite Matrix.org <a>Saugumo Atskleidimo Poliiką</a>.",
     "Failed to connect to integration manager": "Nepavyko prisijungti prie integracijų tvarkytuvo",
@@ -538,24 +516,12 @@
     "None": "Nė vienas",
     "You should:": "Jūs turėtumėte:",
     "Checking server": "Tikrinamas serveris",
-    "not ready": "neparuošta",
-    "ready": "paruošta",
-    "Secret storage:": "Slapta saugykla:",
-    "Backup key cached:": "Atsarginis raktas išsaugotas talpykloje:",
-    "not stored": "nesaugomas",
-    "Backup key stored:": "Atsarginis raktas saugomas:",
-    "Algorithm:": "Algoritmas:",
     "Backup version:": "Atsarginės kopijos versija:",
-    "Profile picture": "Profilio paveikslėlis",
-    "The operation could not be completed": "Nepavyko užbaigti operacijos",
-    "Failed to save your profile": "Nepavyko išsaugoti jūsų profilio",
     "Forget this room": "Pamiršti šį kambarį",
     "This homeserver would like to make sure you are not a robot.": "Šis serveris norėtų įsitikinti, kad jūs nesate robotas.",
     "Your area is experiencing difficulties connecting to the internet.": "Jūsų vietovėje kyla sunkumų prisijungiant prie interneto.",
     "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Jūsų serveris neatsako į kai kurias jūsų užklausas. Žemiau pateikiamos kelios labiausiai tikėtinos priežastys.",
     "Your messages are not secure": "Jūsų žinutės nėra saugios",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Ar tikrai? Jūs prarasite savo šifruotas žinutes, jei jūsų raktams nebus tinkamai sukurtos atsarginės kopijos.",
-    "Your keys are <b>not being backed up from this session</b>.": "Jūsų raktams <b>nėra daromos atsarginės kopijos iš šio seanso</b>.",
     "Room options": "Kambario parinktys",
     "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Jei kita %(brand)s versija vis dar yra atidaryta kitame skirtuke, uždarykite jį, nes %(brand)s naudojimas tame pačiame serveryje, tuo pačiu metu įjungus ir išjungus tingų įkėlimą, sukelks problemų.",
     "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Jūs anksčiau naudojote %(brand)s ant %(host)s įjungę tingų narių įkėlimą. Šioje versijoje tingus įkėlimas yra išjungtas. Kadangi vietinė talpykla nesuderinama tarp šių dviejų nustatymų, %(brand)s reikia iš naujo sinchronizuoti jūsų paskyrą.",
@@ -708,7 +674,6 @@
     "Verification Request": "Patikrinimo Užklausa",
     "Be found by phone or email": "Tapkite randami telefonu arba el. paštu",
     "Find others by phone or email": "Ieškokite kitų telefonu arba el. paštu",
-    "Save Changes": "Išsaugoti Pakeitimus",
     "Link to selected message": "Nuoroda į pasirinktą pranešimą",
     "Share User": "Dalintis Vartotoju",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Patikrinkite savo el. laišką ir spustelėkite jame esančią nuorodą. Kai tai padarysite, spauskite tęsti.",
@@ -817,29 +782,7 @@
     "Bahamas": "Bahamų salos",
     "Unable to share email address": "Nepavyko pasidalinti el. pašto adresu",
     "Verification code": "Patvirtinimo kodas",
-    "Mentions & keywords": "Paminėjimai & Raktažodžiai",
-    "New keyword": "Naujas raktažodis",
-    "Keyword": "Raktažodis",
-    "Sending invites... (%(progress)s out of %(count)s)": {
-        "one": "Siunčiame pakvietimą...",
-        "other": "Siunčiame pakvietimus... (%(progress)s iš %(count)s)"
-    },
-    "Loading new room": "Įkeliamas naujas kambarys",
-    "Upgrading room": "Atnaujinamas kambarys",
-    "& %(count)s more": {
-        "one": "& %(count)s daugiau",
-        "other": "& %(count)s daugiau"
-    },
-    "Upgrade required": "Reikalingas atnaujinimas",
-    "Decide who can view and join %(spaceName)s.": "Nuspręskite kas gali peržiūrėti ir prisijungti prie %(spaceName)s.",
-    "Visibility": "Matomumas",
-    "Jump to first unread room.": "Peršokti į pirmą neperskaitytą kambarį.",
-    "Jump to first invite.": "Peršokti iki pirmo pakvietimo.",
-    "Enable guest access": "Įjungti svečių prieigą",
-    "Invite people": "Pakviesti žmonių",
     "Address": "Adresas",
-    "Search %(spaceName)s": "Ieškoti %(spaceName)s",
-    "Connecting": "Jungiamasi",
     "Their device couldn't start the camera or microphone": "Jų įrenginys negalėjo įjungti kameros arba mikrofono",
     "Connection failed": "Nepavyko prisijungti",
     "Could not connect media": "Nepavyko prijungti medijos",
@@ -911,7 +854,6 @@
     "No microphone found": "Mikrofonas nerastas",
     "We were unable to access your microphone. Please check your browser settings and try again.": "Mums nepavyko pasiekti jūsų mikrofono. Patikrinkite naršyklės nustatymus ir bandykite dar kartą.",
     "Unable to access your microphone": "Nepavyksta pasiekti mikrofono",
-    "Mark all as read": "Pažymėti viską kaip perskaitytą",
     "Jump to first unread message.": "Pereiti prie pirmos neperskaitytos žinutės.",
     "Open thread": "Atidaryti temą",
     "%(count)s reply": {
@@ -973,57 +915,16 @@
     "You have no ignored users.": "Nėra ignoruojamų naudotojų.",
     "Deactivating your account is a permanent action — be careful!": "Paskyros deaktyvavimas yra negrįžtamas veiksmas — būkite atsargūs!",
     "Your password was successfully changed.": "Jūsų slaptažodis sėkmingai pakeistas.",
-    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Pasidarykite šifravimo raktų ir paskyros duomenų atsarginę kopiją, jei prarastumėte prieigą prie sesijų. Jūsų raktai bus apsaugoti unikaliu saugumo raktu.",
-    "There was an error loading your notification settings.": "Įkeliant pranešimų nustatymus įvyko klaida.",
-    "Global": "Globalus",
-    "Updating spaces... (%(progress)s out of %(count)s)": {
-        "one": "Atnaujinama erdvė...",
-        "other": "Atnaujinamos erdvės... (%(progress)s iš %(count)s)"
-    },
-    "This upgrade will allow members of selected spaces access to this room without an invite.": "Šis atnaujinimas suteiks galimybę pasirinktų erdvių nariams patekti į šį kambarį be kvietimo.",
-    "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Šis kambarys yra kai kuriose erdvėse, kuriose nesate administratorius. Šiose erdvėse senasis kambarys vis dar bus rodomas, bet žmonės bus raginami prisijungti prie naujojo.",
-    "Space members": "Erdvės nariai",
-    "Anyone in a space can find and join. You can select multiple spaces.": "Kiekvienas esantis erdvėje gali rasti ir prisijungti. Galite pasirinkti kelias erdves.",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Kiekvienas iš <spaceName/> gali rasti ir prisijungti. Galite pasirinkti ir kitas erdves.",
-    "Spaces with access": "Erdvės su prieiga",
-    "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Bet kas erdvėje gali rasti ir prisijungti. <a>Redaguoti kurios erdvės gali pasiekti čia.</a>",
-    "Currently, %(count)s spaces have access": {
-        "one": "Šiuo metu erdvė turi prieigą",
-        "other": "Šiuo metu %(count)s erdvės turi prieigą"
-    },
-    "Space options": "Erdvės parinktys",
-    "Recommended for public spaces.": "Rekomenduojama viešosiose erdvėse.",
-    "Allow people to preview your space before they join.": "Leisti žmonėms peržiūrėti jūsų erdvę prieš prisijungiant.",
     "Explore public spaces in the new search dialog": "Tyrinėkite viešas erdves naujajame paieškos lange",
     "Reply in thread": "Atsakyti temoje",
     "Developer": "Kūrėjas",
     "Experimental": "Eksperimentinis",
     "Themes": "Temos",
     "Moderation": "Moderavimas",
-    "Spaces": "Erdvės",
     "Messaging": "Žinučių siuntimas",
-    "Preview Space": "Peržiūrėti erdvę",
-    "Failed to update the visibility of this space": "Nepavyko atnaujinti šios erdvės matomumo",
-    "Access": "Prieiga",
-    "This may be useful for public spaces.": "Tai gali būti naudinga viešosiose erdvėse.",
-    "Guests can join a space without having an account.": "Svečiai gali prisijungti prie erdvės neturėdami paskyros.",
-    "Failed to update the history visibility of this space": "Nepavyko atnaujinti šios erdvės istorijos matomumo",
-    "Failed to update the guest access of this space": "Nepavyko atnaujinti šios erdvės svečių prieigos",
-    "Leave Space": "Palikti erdvę",
-    "Edit settings relating to your space.": "Redaguoti su savo erdve susijusius nustatymus.",
-    "Failed to save space settings.": "Nepavyko išsaugoti erdvės nustatymų.",
-    "Invite with email or username": "Pakviesti su el. paštu arba naudotojo vardu",
-    "Share invite link": "Bendrinti pakvietimo nuorodą",
-    "Show all rooms": "Rodyti visus kambarius",
-    "You can change these anytime.": "Jūs tai galite pakeisti bet kada.",
     "To join a space you'll need an invite.": "Norėdami prisijungti prie erdvės, turėsite gauti kvietimą.",
     "Create a space": "Sukurti erdvę",
     "Space selection": "Erdvės pasirinkimas",
-    "unknown person": "nežinomas asmuo",
-    "%(count)s people joined": {
-        "one": "%(count)s žmogus prisijungė",
-        "other": "%(count)s žmonės prisijungė"
-    },
     "Vietnam": "Vietnamas",
     "United Arab Emirates": "Jungtiniai Arabų Emiratai",
     "Ukraine": "Ukraina",
@@ -1185,7 +1086,12 @@
         "deselect_all": "Nuimti pasirinkimą nuo visko",
         "select_all": "Pasirinkti viską",
         "copied": "Nukopijuota!",
-        "Advanced": "Išplėstiniai"
+        "advanced": "Išplėstiniai",
+        "spaces": "Erdvės",
+        "general": "Bendrieji",
+        "profile": "Profilis",
+        "display_name": "Rodomas Vardas",
+        "user_avatar": "Profilio paveikslėlis"
     },
     "action": {
         "continue": "Tęsti",
@@ -1276,7 +1182,9 @@
         "submit": "Pateikti",
         "send_report": "Siųsti pranešimą",
         "unban": "Atblokuoti",
-        "click_to_copy": "Spustelėkite kad nukopijuoti"
+        "click_to_copy": "Spustelėkite kad nukopijuoti",
+        "hide_advanced": "Paslėpti išplėstinius",
+        "show_advanced": "Rodyti išplėstinius"
     },
     "labs": {
         "video_rooms": "Vaizdo kambariai",
@@ -1519,7 +1427,9 @@
             "noisy": "Triukšmingas",
             "error_permissions_denied": "%(brand)s neturi leidimo siųsti jums pranešimus - patikrinkite savo naršyklės nustatymus",
             "error_permissions_missing": "%(brand)s nebuvo suteiktas leidimas siųsti pranešimus - bandykite dar kartą",
-            "error_title": "Nepavyko įjungti Pranešimų"
+            "error_title": "Nepavyko įjungti Pranešimų",
+            "push_targets": "Pranešimo objektai",
+            "error_loading": "Įkeliant pranešimų nustatymus įvyko klaida."
         },
         "appearance": {
             "layout_irc": "IRC (eksperimentinis)",
@@ -1591,7 +1501,28 @@
             "message_search_disabled": "Šifruotas žinutes saugiai talpinkite lokaliai, kad jos būtų rodomos paieškos rezultatuose.",
             "message_search_unsupported": "%(brand)s trūksta kai kurių komponentų, reikalingų saugiai talpinti šifruotas žinutes lokaliai. Jei norite eksperimentuoti su šia funkcija, sukurkite pasirinktinį %(brand)s Desktop (darbastalio versiją), su <nativeLink>pridėtais paieškos komponentais</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s negali saugiai talpinti šifruotų žinučių lokaliai, kai veikia interneto naršyklėje. Naudokite <desktopLink>%(brand)s Desktop (darbastalio versija)</desktopLink>, kad šifruotos žinutės būtų rodomos paieškos rezultatuose.",
-            "message_search_failed": "Nepavyko inicializuoti žinučių paieškos"
+            "message_search_failed": "Nepavyko inicializuoti žinučių paieškos",
+            "backup_key_well_formed": "gerai suformuotas",
+            "backup_key_unexpected_type": "netikėto tipo",
+            "backup_keys_description": "Pasidarykite šifravimo raktų ir paskyros duomenų atsarginę kopiją, jei prarastumėte prieigą prie sesijų. Jūsų raktai bus apsaugoti unikaliu saugumo raktu.",
+            "backup_key_stored_status": "Atsarginis raktas saugomas:",
+            "cross_signing_not_stored": "nesaugomas",
+            "backup_key_cached_status": "Atsarginis raktas išsaugotas talpykloje:",
+            "4s_public_key_status": "Slaptos saugyklos viešas raktas:",
+            "4s_public_key_in_account_data": "paskyros duomenyse",
+            "secret_storage_status": "Slapta saugykla:",
+            "secret_storage_ready": "paruošta",
+            "secret_storage_not_ready": "neparuošta",
+            "delete_backup": "Ištrinti Atsarginę Kopiją",
+            "delete_backup_confirm_description": "Ar tikrai? Jūs prarasite savo šifruotas žinutes, jei jūsų raktams nebus tinkamai sukurtos atsarginės kopijos.",
+            "error_loading_key_backup_status": "Nepavyko įkelti atsarginės raktų kopijos būklės",
+            "restore_key_backup": "Atkurti iš Atsarginės Kopijos",
+            "key_backup_inactive": "Šis seansas <b>nekuria atsarginių raktų kopijų</b>, bet jūs jau turite atsarginę kopiją iš kurios galite atkurti ir pridėti.",
+            "key_backup_connect_prompt": "Prieš atsijungdami prijunkite šį seansą prie atsarginės raktų kopijos, kad neprarastumėte raktų, kurie gali būti tik šiame seanse.",
+            "key_backup_connect": "Prijungti šį seansą prie Atsarginės Raktų Kopijos",
+            "key_backup_complete": "Atsarginės kopijos sukurtos visiems raktams",
+            "key_backup_algorithm": "Algoritmas:",
+            "key_backup_inactive_warning": "Jūsų raktams <b>nėra daromos atsarginės kopijos iš šio seanso</b>."
         },
         "preferences": {
             "room_list_heading": "Kambarių sąrašas",
@@ -1678,18 +1609,22 @@
             "add_msisdn_confirm_sso_button": "Patvirtinkite šio tel. nr. pridėjimą naudodami Vieną Prisijungimą, kad įrodytumėte savo tapatybę.",
             "add_msisdn_confirm_button": "Patvirtinkite telefono numerio pridėjimą",
             "add_msisdn_confirm_body": "Paspauskite žemiau esantį mygtuką, kad patvirtintumėte šio numerio pridėjimą.",
-            "add_msisdn_dialog_title": "Pridėti Telefono Numerį"
+            "add_msisdn_dialog_title": "Pridėti Telefono Numerį",
+            "name_placeholder": "Nėra rodomo vardo",
+            "error_saving_profile_title": "Nepavyko išsaugoti jūsų profilio",
+            "error_saving_profile": "Nepavyko užbaigti operacijos"
         },
         "sidebar": {
             "title": "Šoninė juosta",
             "metaspaces_subsection": "Kurias erdves rodyti",
             "metaspaces_description": "Erdvės - tai kambarių ir žmonių grupavimo būdai. Kartu su erdvėmis kuriose esate, galite naudoti ir kai kurias iš anksto sukurtas erdves.",
             "metaspaces_home_description": "Pradžia yra naudinga norint apžvelgti viską.",
-            "metaspaces_home_all_rooms": "Rodyti visus savo kambarius pradžioje, net jei jie yra erdvėje.",
             "metaspaces_favourites_description": "Sugrupuokite visus mėgstamus kambarius ir žmones vienoje vietoje.",
             "metaspaces_people_description": "Sugrupuokite visus savo žmones vienoje vietoje.",
             "metaspaces_orphans": "Kambariai nepriklausantys erdvei",
-            "metaspaces_orphans_description": "Sugrupuokite visus kambarius, kurie nėra erdvės dalis, į vieną vietą."
+            "metaspaces_orphans_description": "Sugrupuokite visus kambarius, kurie nėra erdvės dalis, į vieną vietą.",
+            "metaspaces_home_all_rooms_description": "Rodyti visus savo kambarius pradžioje, net jei jie yra erdvėje.",
+            "metaspaces_home_all_rooms": "Rodyti visus kambarius"
         }
     },
     "devtools": {
@@ -2152,7 +2087,13 @@
         "join_button_tooltip_connecting": "Jungiamasi",
         "hide_sidebar_button": "Slėpti šoninę juostą",
         "show_sidebar_button": "Rodyti šoninę juostą",
-        "more_button": "Daugiau"
+        "more_button": "Daugiau",
+        "n_people_joined": {
+            "one": "%(count)s žmogus prisijungė",
+            "other": "%(count)s žmonės prisijungė"
+        },
+        "unknown_person": "nežinomas asmuo",
+        "connecting": "Jungiamasi"
     },
     "Other": "Kitas",
     "room_settings": {
@@ -2217,7 +2158,33 @@
             "history_visibility_shared": "Tik nariai (nuo šios parinkties pasirinkimo momento)",
             "history_visibility_invited": "Tik nariai (nuo jų pakvietimo)",
             "history_visibility_joined": "Tik nariai (nuo jų prisijungimo)",
-            "history_visibility_world_readable": "Bet kas"
+            "history_visibility_world_readable": "Bet kas",
+            "join_rule_upgrade_required": "Reikalingas atnaujinimas",
+            "join_rule_restricted_n_more": {
+                "one": "& %(count)s daugiau",
+                "other": "& %(count)s daugiau"
+            },
+            "join_rule_restricted_summary": {
+                "one": "Šiuo metu erdvė turi prieigą",
+                "other": "Šiuo metu %(count)s erdvės turi prieigą"
+            },
+            "join_rule_restricted_description": "Bet kas erdvėje gali rasti ir prisijungti. <a>Redaguoti kurios erdvės gali pasiekti čia.</a>",
+            "join_rule_restricted_description_spaces": "Erdvės su prieiga",
+            "join_rule_restricted_description_active_space": "Kiekvienas iš <spaceName/> gali rasti ir prisijungti. Galite pasirinkti ir kitas erdves.",
+            "join_rule_restricted_description_prompt": "Kiekvienas esantis erdvėje gali rasti ir prisijungti. Galite pasirinkti kelias erdves.",
+            "join_rule_restricted": "Erdvės nariai",
+            "join_rule_restricted_upgrade_warning": "Šis kambarys yra kai kuriose erdvėse, kuriose nesate administratorius. Šiose erdvėse senasis kambarys vis dar bus rodomas, bet žmonės bus raginami prisijungti prie naujojo.",
+            "join_rule_restricted_upgrade_description": "Šis atnaujinimas suteiks galimybę pasirinktų erdvių nariams patekti į šį kambarį be kvietimo.",
+            "join_rule_upgrade_upgrading_room": "Atnaujinamas kambarys",
+            "join_rule_upgrade_awaiting_room": "Įkeliamas naujas kambarys",
+            "join_rule_upgrade_sending_invites": {
+                "one": "Siunčiame pakvietimą...",
+                "other": "Siunčiame pakvietimus... (%(progress)s iš %(count)s)"
+            },
+            "join_rule_upgrade_updating_spaces": {
+                "one": "Atnaujinama erdvė...",
+                "other": "Atnaujinamos erdvės... (%(progress)s iš %(count)s)"
+            }
         },
         "general": {
             "publish_toggle": "Paskelbti šį kambarį viešai %(domain)s kambarių kataloge?",
@@ -2227,7 +2194,11 @@
             "default_url_previews_off": "URL nuorodų peržiūros šio kambario dalyviams yra išjungtos kaip numatytosios.",
             "url_preview_encryption_warning": "Šifruotuose kambariuose, tokiuose kaip šis, URL nuorodų peržiūros pagal numatymą yra išjungtos, kad būtų užtikrinta, jog jūsų serveris (kur yra generuojamos peržiūros) negali rinkti informacijos apie jūsų šiame kambaryje peržiūrėtas nuorodas.",
             "url_preview_explainer": "Kai kas nors į savo žinutę įtraukia URL, gali būti rodoma URL peržiūra, suteikianti daugiau informacijos apie tą nuorodą, tokios kaip pavadinimas, aprašymas ir vaizdas iš svetainės.",
-            "url_previews_section": "URL nuorodų peržiūros"
+            "url_previews_section": "URL nuorodų peržiūros",
+            "error_save_space_settings": "Nepavyko išsaugoti erdvės nustatymų.",
+            "description_space": "Redaguoti su savo erdve susijusius nustatymus.",
+            "save": "Išsaugoti Pakeitimus",
+            "leave_space": "Palikti erdvę"
         },
         "advanced": {
             "unfederated": "Šis kambarys nėra pasiekiamas nuotoliniams Matrix serveriams",
@@ -2240,7 +2211,23 @@
             "room_version": "Kambario versija:"
         },
         "delete_avatar_label": "Ištrinti avatarą",
-        "upload_avatar_label": "Įkelti pseudoportretą"
+        "upload_avatar_label": "Įkelti pseudoportretą",
+        "visibility": {
+            "error_update_guest_access": "Nepavyko atnaujinti šios erdvės svečių prieigos",
+            "error_update_history_visibility": "Nepavyko atnaujinti šios erdvės istorijos matomumo",
+            "guest_access_explainer": "Svečiai gali prisijungti prie erdvės neturėdami paskyros.",
+            "guest_access_explainer_public_space": "Tai gali būti naudinga viešosiose erdvėse.",
+            "title": "Matomumas",
+            "error_failed_save": "Nepavyko atnaujinti šios erdvės matomumo",
+            "history_visibility_anyone_space": "Peržiūrėti erdvę",
+            "history_visibility_anyone_space_description": "Leisti žmonėms peržiūrėti jūsų erdvę prieš prisijungiant.",
+            "history_visibility_anyone_space_recommendation": "Rekomenduojama viešosiose erdvėse.",
+            "guest_access_label": "Įjungti svečių prieigą"
+        },
+        "access": {
+            "title": "Prieiga",
+            "description_space": "Nuspręskite kas gali peržiūrėti ir prisijungti prie %(spaceName)s."
+        }
     },
     "encryption": {
         "verification": {
@@ -2435,7 +2422,8 @@
             "one": "1 neperskaityta žinutė.",
             "other": "%(count)s neperskaitytos žinutės."
         },
-        "unread_messages": "Neperskaitytos žinutės."
+        "unread_messages": "Neperskaitytos žinutės.",
+        "jump_first_invite": "Peršokti iki pirmo pakvietimo."
     },
     "setting": {
         "help_about": {
@@ -2596,13 +2584,16 @@
     },
     "create_space": {
         "name_required": "Prašome įvesti pavadinimą šiai erdvei",
-        "name_placeholder": "pvz., mano-erdvė",
         "explainer": "Erdvės - tai naujas kambarių ir žmonių grupavimo būdas. Kokią erdvę norite sukurti? Vėliau tai galėsite pakeisti.",
         "public_description": "Atvira erdvė visiems, geriausia bendruomenėms",
         "private_description": "Tik pakviestiems, geriausia sau arba komandoms",
         "public_heading": "Jūsų vieša erdvė",
         "private_heading": "Jūsų privati erdvė",
-        "add_details_prompt": "Pridėkite šiek tiek detalių, kad žmonės galėtų ją atpažinti."
+        "add_details_prompt": "Pridėkite šiek tiek detalių, kad žmonės galėtų ją atpažinti.",
+        "address_placeholder": "pvz., mano-erdvė",
+        "address_label": "Adresas",
+        "label": "Sukurti erdvę",
+        "add_details_prompt_2": "Jūs tai galite pakeisti bet kada."
     },
     "room": {
         "drop_file_prompt": "Norėdami įkelti, vilkite failą čia",
@@ -2652,8 +2643,13 @@
     "space": {
         "context_menu": {
             "explore": "Žvalgyti kambarius",
-            "manage_and_explore": "Valdyti & tyrinėti kambarius"
-        }
+            "manage_and_explore": "Valdyti & tyrinėti kambarius",
+            "options": "Erdvės parinktys"
+        },
+        "search_children": "Ieškoti %(spaceName)s",
+        "invite_link": "Bendrinti pakvietimo nuorodą",
+        "invite": "Pakviesti žmonių",
+        "invite_description": "Pakviesti su el. paštu arba naudotojo vardu"
     },
     "terms": {
         "integration_manager": "Naudoti botus, tiltus, valdiklius ir lipdukų pakuotes",
@@ -2720,7 +2716,9 @@
         "admin_contact_short": "Susisiekite su savo <a>serverio administratoriumi</a>.",
         "non_urgent_echo_failure_toast": "Jūsų serveris neatsako į kai kurias <a>užklausas</a>.",
         "failed_copy": "Nepavyko nukopijuoti",
-        "something_went_wrong": "Kažkas nutiko!"
+        "something_went_wrong": "Kažkas nutiko!",
+        "update_power_level": "Nepavyko pakeisti galios lygio",
+        "unknown": "Nežinoma klaida"
     },
     "name_and_id": "%(name)s (%(userId)s)",
     "items_and_n_others": {
@@ -2733,7 +2731,13 @@
         "enable_prompt_toast_description": "Įjungti darbalaukio pranešimus",
         "colour_none": "Nė vienas",
         "colour_bold": "Pusjuodis",
-        "error_change_title": "Keisti pranešimų nustatymus"
+        "error_change_title": "Keisti pranešimų nustatymus",
+        "mark_all_read": "Pažymėti viską kaip perskaitytą",
+        "keyword": "Raktažodis",
+        "keyword_new": "Naujas raktažodis",
+        "class_global": "Globalus",
+        "class_other": "Kitas",
+        "mentions_keywords": "Paminėjimai & Raktažodžiai"
     },
     "mobile_guide": {
         "toast_title": "Naudokite programėlę geresnei patirčiai",
@@ -2755,5 +2759,10 @@
     },
     "lightbox": {
         "rotate_left": "Pasukti Kairėn"
+    },
+    "a11y_jump_first_unread_room": "Peršokti į pirmą neperskaitytą kambarį.",
+    "integration_manager": {
+        "error_connecting_heading": "Neįmanoma prisijungti prie integracijų tvarkytuvo",
+        "error_connecting": "Integracijų tvarkytuvas yra išjungtas arba negali pasiekti jūsų serverio."
     }
 }
