@@ -2975,6 +2975,23 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
+"@zxcvbn-ts/core@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@zxcvbn-ts/core/-/core-3.0.4.tgz#c5bde72235eb6c273cec78b672bb47c0d7045cad"
+  integrity sha512-aQeiT0F09FuJaAqNrxynlAwZ2mW/1MdXakKWNmGM1Qp/VaY6CnB/GfnMS2T8gB2231Esp1/maCWd8vTG4OuShw==
+  dependencies:
+    fastest-levenshtein "1.0.16"
+
+"@zxcvbn-ts/language-common@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@zxcvbn-ts/language-common/-/language-common-3.0.4.tgz#fa1d2a42f8c8a589555859795da90d6b8027b7c4"
+  integrity sha512-viSNNnRYtc7ULXzxrQIVUNwHAPSXRtoIwy/Tq4XQQdIknBzw4vz36lQLF6mvhMlTIlpjoN/Z1GFu/fwiAlUSsw==
+
+"@zxcvbn-ts/language-en@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@zxcvbn-ts/language-en/-/language-en-3.0.2.tgz#162ada6b2b556444efd5a7700e70845cfde6d6ec"
+  integrity sha512-Zp+zL+I6Un2Bj0tRXNs6VUBq3Djt+hwTwUz4dkt2qgsQz47U0/XthZ4ULrT/RxjwJRl5LwiaKOOZeOtmixHnjg==
+
 abab@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.6.tgz#41b80f2c871d19686216b82309231cfd3cb3d291"
@@ -6142,7 +6159,7 @@ fast-levenshtein@^2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==
 
-fastest-levenshtein@^1.0.16:
+fastest-levenshtein@1.0.16, fastest-levenshtein@^1.0.16:
   version "1.0.16"
   resolved "https://registry.yarnpkg.com/fastest-levenshtein/-/fastest-levenshtein-1.0.16.tgz#210e61b6ff181de91ea9b3d1b84fdedd47e034e5"
   integrity sha512-eRnCtTTtGZFpQCwhJiUOuxPQWRXVKYDn0b2PeHfXL6/Zi53SLAzAHfVhVWK2AryC/WH05kGfxhFIPvTF0SXQzg==
@@ -8902,26 +8919,6 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-js-sdk@28.2.0:
-  version "28.2.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-28.2.0.tgz#2ec2d15c8f1e0dff85e7ec9e9ad061b039320def"
-  integrity sha512-YENmPaiGgWwCqoYWoL/8oD7QPWd6M/A0xdNhC4yMSiFny419AjUdPQk/EbM8RTSzQV27F79llhWisnz+/AXdaA==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^1.2.3-alpha.0"
-    another-json "^0.2.0"
-    bs58 "^5.0.0"
-    content-type "^1.0.4"
-    jwt-decode "^3.1.2"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.6.0"
-    oidc-client-ts "^2.2.4"
-    p-retry "4"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-    uuid "9"
-
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "28.2.0"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d59bb240fa50b736ac6c3cbfff935ee08b697663"
@@ -8948,10 +8945,9 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.81.0:
+"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.81.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.81.0.tgz#3c07b431151243cfe6edb93b802666b94c7a3e6d"
-  integrity sha512-TKlKBdvSEtPcWgNsDPy5bye23OYUSrSi7Q4d3VFPqitoOvR3WIE3pNKLpRDwoakDVanUCLc4wHUCN9L9VyMvNA==
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/13aed62a91e7151246fc38f6c15a79df116792ba"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.7.0"
@@ -8964,6 +8960,9 @@ matrix-react-sdk@3.81.0:
     "@testing-library/react-hooks" "^8.0.1"
     "@vector-im/compound-design-tokens" "^0.0.5"
     "@vector-im/compound-web" "^0.4.0"
+    "@zxcvbn-ts/core" "^3.0.4"
+    "@zxcvbn-ts/language-common" "^3.0.4"
+    "@zxcvbn-ts/language-en" "^3.0.2"
     await-lock "^2.1.0"
     blurhash "^1.1.3"
     classnames "^2.2.6"
@@ -8992,7 +8991,7 @@ matrix-react-sdk@3.81.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "28.2.0"
+    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     matrix-widget-api "^1.5.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
@@ -9017,7 +9016,6 @@ matrix-react-sdk@3.81.0:
     ua-parser-js "^1.0.2"
     uuid "^9.0.0"
     what-input "^5.2.10"
-    zxcvbn "^4.4.2"
 
 matrix-web-i18n@^3.1.1:
   version "3.1.1"
@@ -14078,8 +14076,3 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
-
-zxcvbn@^4.4.2:
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/zxcvbn/-/zxcvbn-4.4.2.tgz#28ec17cf09743edcab056ddd8b1b06262cc73c30"
-  integrity sha512-Bq0B+ixT/DMyG8kgX2xWcI5jUvCwqrMxSFam7m0lAf78nf04hv6lNCsyLYdyYTrCVMqNDY/206K7eExYCeSyUQ==
