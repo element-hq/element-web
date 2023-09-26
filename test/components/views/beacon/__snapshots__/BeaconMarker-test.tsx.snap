@@ -11,7 +11,7 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
         class="mx_Marker_border"
       >
         <span
-          class="_avatar_2lhia_17 mx_BaseAvatar _avatar-imageless_2lhia_56"
+          class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
           data-color="8"
           data-testid="avatar-img"
           data-type="round"
