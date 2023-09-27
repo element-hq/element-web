@@ -63,7 +63,7 @@ export default class BridgeSettingsTab extends React.Component<IProps> {
                 <div>
                     <p>
                         {_t(
-                            "This room is bridging messages to the following platforms. <a>Learn more.</a>",
+                            "room_settings|bridges|description",
                             {},
                             {
                                 // TODO: We don't have this link yet: this will prevent the translators
@@ -85,7 +85,7 @@ export default class BridgeSettingsTab extends React.Component<IProps> {
             content = (
                 <p>
                     {_t(
-                        "This room isn't bridging messages to any platforms. <a>Learn more.</a>",
+                        "room_settings|bridges|empty",
                         {},
                         {
                             // TODO: We don't have this link yet: this will prevent the translators
@@ -103,7 +103,7 @@ export default class BridgeSettingsTab extends React.Component<IProps> {
 
         return (
             <SettingsTab>
-                <SettingsSection heading={_t("Bridges")}>{content}</SettingsSection>
+                <SettingsSection heading={_t("room_settings|bridges|title")}>{content}</SettingsSection>
             </SettingsTab>
         );
     }

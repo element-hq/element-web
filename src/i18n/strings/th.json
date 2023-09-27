@@ -1,15 +1,9 @@
 {
-    "No Microphones detected": "ไม่พบไมโครโฟน",
-    "Default": "ค่าเริ่มต้น",
     "Decrypt %(text)s": "ถอดรหัส %(text)s",
     "Download %(text)s": "ดาวน์โหลด %(text)s",
     "Low priority": "ความสำคัญต่ำ",
-    "Profile": "โปรไฟล์",
-    "Reason": "เหตุผล",
     "unknown error code": "รหัสข้อผิดพลาดที่ไม่รู้จัก",
     "Failed to forget room %(errCode)s": "การลืมห้องล้มเหลว %(errCode)s",
-    "No Webcams detected": "ไม่พบกล้องเว็บแคม",
-    "Authentication": "การยืนยันตัวตน",
     "%(items)s and %(lastItem)s": "%(items)s และ %(lastItem)s",
     "and %(count)s others...": {
         "one": "และอีกหนึ่งผู้ใช้...",
@@ -19,20 +13,14 @@
     "Are you sure?": "คุณแน่ใจหรือไม่?",
     "Are you sure you want to leave the room '%(roomName)s'?": "คุณแน่ใจหรือว่าต้องการจะออกจากห้อง '%(roomName)s'?",
     "Are you sure you want to reject the invitation?": "คุณแน่ใจหรือว่าต้องการจะปฏิเสธคำเชิญ?",
-    "Deactivate Account": "ปิดการใช้งานบัญชี",
     "Email address": "ที่อยู่อีเมล",
     "Error decrypting attachment": "การถอดรหัสไฟล์แนบผิดพลาด",
     "Failed to ban user": "การแบนผู้ใช้ล้มเหลว",
-    "Failed to change password. Is your password correct?": "การเปลี่ยนรหัสผ่านล้มเหลว รหัสผ่านของคุณถูกต้องหรือไม่?",
     "Failed to reject invite": "การปฏิเสธคำเชิญล้มเหลว",
     "Failed to reject invitation": "การปฏิเสธคำเชิญล้มเหลว",
-    "Failed to set display name": "การตั้งชื่อที่แสดงล้มเหลว",
-    "Failed to unban": "การถอนแบนล้มเหลว",
     "Filter room members": "กรองสมาชิกห้อง",
     "Forget room": "ลืมห้อง",
     "Historical": "ประวัติแชทเก่า",
-    "Incorrect verification code": "รหัสยืนยันไม่ถูกต้อง",
-    "Invalid Email Address": "ที่อยู่อีเมลไม่ถูกต้อง",
     "Invalid file%(extra)s": "ไฟล์ %(extra)s ไม่ถูกต้อง",
     "Invited": "เชิญแล้ว",
     "Join Room": "เข้าร่วมห้อง",
@@ -48,9 +36,6 @@
     "Search failed": "การค้นหาล้มเหลว",
     "Server may be unavailable, overloaded, or search timed out :(": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือการค้นหาหมดเวลา :(",
     "Create new room": "สร้างห้องใหม่",
-    "Failed to change power level": "การเปลี่ยนระดับอำนาจล้มเหลว",
-    "Unable to add email address": "ไมาสามารถเพิ่มที่อยู่อีเมล",
-    "Unable to verify email address.": "ไม่สามารถยืนยันที่อยู่อีเมล",
     "Uploading %(filename)s": "กำลังอัปโหลด %(filename)s",
     "Uploading %(filename)s and %(count)s others": {
         "one": "กำลังอัปโหลด %(filename)s และอีก %(count)s ไฟล์",
@@ -84,7 +69,6 @@
     "Import room keys": "นำเข้ากุณแจห้อง",
     "File to import": "ไฟล์ที่จะนำเข้า",
     "Confirm Removal": "ยืนยันการลบ",
-    "Unknown error": "ข้อผิดพลาดที่ไม่รู้จัก",
     "Home": "เมนูหลัก",
     "(~%(count)s results)": {
         "one": "(~%(count)s ผลลัพท์)",
@@ -92,7 +76,6 @@
     },
     "A new password must be entered.": "กรุณากรอกรหัสผ่านใหม่",
     "Custom level": "กำหนดระดับเอง",
-    "No display name": "ไม่มีชื่อที่แสดง",
     "%(roomName)s does not exist.": "ไม่มีห้อง %(roomName)s อยู่จริง",
     "Enter passphrase": "กรอกรหัสผ่าน",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (ระดับอำนาจ %(powerLevelNumber)s)",
@@ -100,7 +83,6 @@
     "Error decrypting image": "เกิดข้อผิดพลาดในการถอดรหัสรูป",
     "Error decrypting video": "เกิดข้อผิดพลาดในการถอดรหัสวิดิโอ",
     "Sunday": "วันอาทิตย์",
-    "Notification targets": "เป้าหมายการแจ้งเตือน",
     "Today": "วันนี้",
     "Friday": "วันศุกร์",
     "Changelog": "บันทึกการเปลี่ยนแปลง",
@@ -114,12 +96,9 @@
     "Monday": "วันจันทร์",
     "All Rooms": "ทุกห้อง",
     "Wednesday": "วันพุธ",
-    "All messages": "ทุกข้อความ",
-    "Invite to this room": "เชิญเข้าห้องนี้",
     "You cannot delete this message. (%(code)s)": "คุณไม่สามารถลบข้อความนี้ได้ (%(code)s)",
     "Thursday": "วันพฤหัสบดี",
     "Yesterday": "เมื่อวานนี้",
-    "Explore rooms": "สำรวจห้อง",
     "You most likely do not want to reset your event index store": "คุณมักไม่ต้องการรีเซ็ตที่เก็บดัชนีเหตุการณ์ของคุณ",
     "Reset event store?": "รีเซ็ตที่เก็บกิจกรรม?",
     "The server is not configured to indicate what the problem is (CORS).": "เซิร์ฟเวอร์ไม่ได้กำหนดค่าเพื่อระบุว่าปัญหาคืออะไร (CORS).",
@@ -180,7 +159,6 @@
     "No microphone found": "ไม่พบไมโครโฟน",
     "We were unable to access your microphone. Please check your browser settings and try again.": "เราไม่สามารถเข้าถึงไมโครโฟนของคุณได้ โปรดตรวจสอบการตั้งค่าเบราว์เซอร์ของคุณแล้วลองอีกครั้ง.",
     "Unable to access your microphone": "ไม่สามารถเข้าถึงไมโครโฟนของคุณ",
-    "Mark all as read": "ทำเครื่องหมายทั้งหมดว่าอ่านแล้ว",
     "Open thread": "เปิดกระทู้",
     "%(count)s reply": {
         "one": "%(count)s ตอบ",
@@ -195,7 +173,6 @@
     "You don't currently have any stickerpacks enabled": "ขณะนี้คุณไม่ได้เปิดใช้งานชุดสติกเกอร์ใดๆ",
     "Failed to connect to integration manager": "ไม่สามารถเชื่อมต่อกับตัวจัดการการรวม",
     "General failure": "ข้อผิดพลาดทั่วไป",
-    "General": "ทั่วไป",
     "collapse": "ยุบ",
     "common": {
         "encryption_enabled": "เปิดใช้งานการเข้ารหัส",
@@ -228,7 +205,10 @@
         "stickerpack": "ชุดสติ๊กเกอร์",
         "on": "เปิด",
         "off": "ปิด",
-        "Advanced": "ขึ้นสูง"
+        "advanced": "ขึ้นสูง",
+        "general": "ทั่วไป",
+        "profile": "โปรไฟล์",
+        "authentication": "การยืนยันตัวตน"
     },
     "action": {
         "continue": "ดำเนินการต่อ",
@@ -271,7 +251,8 @@
         "import": "นำเข้า",
         "export": "ส่งออก",
         "submit": "ส่ง",
-        "unban": "ปลดแบน"
+        "unban": "ปลดแบน",
+        "explore_rooms": "สำรวจห้อง"
     },
     "keyboard": {
         "home": "เมนูหลัก"
@@ -318,7 +299,8 @@
             "noisy": "เสียงดัง",
             "error_permissions_denied": "%(brand)s ไม่มีสิทธิ์ส่งการแจ้งเตือน - กรุณาตรวจสอบการตั้งค่าเบราว์เซอร์ของคุณ",
             "error_permissions_missing": "%(brand)s ไม่ได้รับสิทธิ์ส่งการแจ้งเตือน - กรุณาลองใหม่อีกครั้ง",
-            "error_title": "ไม่สามารถเปิดใช้งานการแจ้งเตือน"
+            "error_title": "ไม่สามารถเปิดใช้งานการแจ้งเตือน",
+            "push_targets": "เป้าหมายการแจ้งเตือน"
         },
         "appearance": {
             "timeline_image_size_default": "ค่าเริ่มต้น",
@@ -377,7 +359,19 @@
             "add_msisdn_confirm_sso_button": "ยืนยันการเพิ่มหมายเลขโทรศัพท์นี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ.",
             "add_msisdn_confirm_button": "ยืนยันการเพิ่มหมายเลขโทรศัพท์",
             "add_msisdn_confirm_body": "คลิกปุ่มด้านล่างเพื่อยืนยันการเพิ่มหมายเลขโทรศัพท์นี้.",
-            "add_msisdn_dialog_title": "เพิ่มหมายเลขโทรศัพท์"
+            "add_msisdn_dialog_title": "เพิ่มหมายเลขโทรศัพท์",
+            "name_placeholder": "ไม่มีชื่อที่แสดง",
+            "error_password_change_403": "การเปลี่ยนรหัสผ่านล้มเหลว รหัสผ่านของคุณถูกต้องหรือไม่?",
+            "deactivate_section": "ปิดการใช้งานบัญชี",
+            "error_email_verification": "ไม่สามารถยืนยันที่อยู่อีเมล",
+            "incorrect_msisdn_verification": "รหัสยืนยันไม่ถูกต้อง",
+            "error_set_name": "การตั้งชื่อที่แสดงล้มเหลว",
+            "error_invalid_email": "ที่อยู่อีเมลไม่ถูกต้อง",
+            "error_add_email": "ไมาสามารถเพิ่มที่อยู่อีเมล"
+        },
+        "voip": {
+            "audio_input_empty": "ไม่พบไมโครโฟน",
+            "video_input_empty": "ไม่พบกล้องเว็บแคม"
         }
     },
     "timeline": {
@@ -527,7 +521,9 @@
         "permissions": {
             "privileged_users_section": "ผู้ใช้ที่มีสิทธิพิเศษ",
             "banned_users_section": "ผู้ใช้ที่ถูกแบน",
-            "permissions_section": "สิทธิ์"
+            "permissions_section": "สิทธิ์",
+            "error_unbanning": "การถอนแบนล้มเหลว",
+            "ban_reason": "เหตุผล"
         },
         "security": {
             "enable_encryption_confirm_description": "เมื่อเปิดใช้งานแล้ว จะไม่สามารถปิดใช้งานการเข้ารหัสสำหรับห้องได้ เซิร์ฟเวอร์ไม่สามารถเห็นข้อความที่ส่งในห้องที่เข้ารหัสได้ เฉพาะผู้เข้าร่วมในห้องเท่านั้น การเปิดใช้งานการเข้ารหัสอาจทำให้บอทและบริดจ์จำนวนมากทำงานไม่ถูกต้อง. <a>เรียนรู้เพิ่มเติมเกี่ยวกับการเข้ารหัส.</a>",
@@ -547,7 +543,8 @@
         "context_menu": {
             "favourite": "รายการโปรด",
             "low_priority": "ความสำคัญต่ำ"
-        }
+        },
+        "invite_this_room": "เชิญเข้าห้องนี้"
     },
     "failed_load_async_component": "ไม่สามารถโหลดได้! ตรวจสอบการเชื่อมต่อเครือข่ายของคุณแล้วลองอีกครั้ง.",
     "upload_failed_generic": "ไฟล์ '%(fileName)s' อัปโหลดไม่สำเร็จ.",
@@ -587,10 +584,15 @@
     },
     "error": {
         "mixed_content": "ไม่สามารถเชื่อมต่อไปยังเซิร์ฟเวอร์บ้านผ่านทาง HTTP ได้เนื่องจาก URL ที่อยู่บนเบราว์เซอร์เป็น HTTPS กรุณาใช้ HTTPS หรือ<a>เปิดใช้งานสคริปต์ที่ไม่ปลอดภัย</a>.",
-        "tls": "ไม่สามารถเฃื่อมต่อไปหาเซิร์ฟเวอร์บ้านได้ - กรุณาตรวจสอบคุณภาพการเชื่อมต่อ, ตรวจสอบว่า<a>SSL certificate ของเซิร์ฟเวอร์บ้าน</a>ของคุณเชื่อถือได้, และวไม่มีส่วนขยายเบราว์เซอร์ใดบล๊อคการเชื่อมต่ออยู่"
+        "tls": "ไม่สามารถเฃื่อมต่อไปหาเซิร์ฟเวอร์บ้านได้ - กรุณาตรวจสอบคุณภาพการเชื่อมต่อ, ตรวจสอบว่า<a>SSL certificate ของเซิร์ฟเวอร์บ้าน</a>ของคุณเชื่อถือได้, และวไม่มีส่วนขยายเบราว์เซอร์ใดบล๊อคการเชื่อมต่ออยู่",
+        "update_power_level": "การเปลี่ยนระดับอำนาจล้มเหลว",
+        "unknown": "ข้อผิดพลาดที่ไม่รู้จัก"
     },
     "notifications": {
-        "enable_prompt_toast_title": "การแจ้งเตือน"
+        "enable_prompt_toast_title": "การแจ้งเตือน",
+        "mark_all_read": "ทำเครื่องหมายทั้งหมดว่าอ่านแล้ว",
+        "default": "ค่าเริ่มต้น",
+        "all_messages": "ทุกข้อความ"
     },
     "encryption": {
         "not_supported": "<ไม่รองรับ>"

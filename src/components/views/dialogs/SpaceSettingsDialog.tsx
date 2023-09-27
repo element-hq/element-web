@@ -55,13 +55,13 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
         return [
             new Tab(
                 SpaceSettingsTab.General,
-                _td("General"),
+                _td("common|general"),
                 "mx_SpaceSettingsDialog_generalIcon",
                 <SpaceSettingsGeneralTab matrixClient={cli} space={space} />,
             ),
             new Tab(
                 SpaceSettingsTab.Visibility,
-                _td("Visibility"),
+                _td("room_settings|visibility|title"),
                 "mx_SpaceSettingsDialog_visibilityIcon",
                 <SpaceSettingsVisibilityTab matrixClient={cli} space={space} closeSettingsFn={onFinished} />,
             ),
@@ -74,7 +74,7 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
             SettingsStore.getValue(UIFeature.AdvancedSettings)
                 ? new Tab(
                       SpaceSettingsTab.Advanced,
-                      _td("common|Advanced"),
+                      _td("common|advanced"),
                       "mx_RoomSettingsDialog_warningIcon",
                       <AdvancedRoomSettingsTab room={space} closeSettingsFn={onFinished} />,
                   )

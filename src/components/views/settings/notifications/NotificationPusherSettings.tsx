@@ -51,7 +51,7 @@ export function NotificationPusherSettings(): JSX.Element {
         () => ({
             kind: "email",
             app_id: "m.email",
-            app_display_name: _t("Email Notifications"),
+            app_display_name: _t("notifications|email_pusher_app_display_name"),
             lang: navigator.language,
             data: {
                 brand: SdkConfig.get().brand,
@@ -91,17 +91,16 @@ export function NotificationPusherSettings(): JSX.Element {
 
     return (
         <>
-            <SettingsSubsection className="mx_NotificationPusherSettings" heading={_t("Email summary")}>
+            <SettingsSubsection
+                className="mx_NotificationPusherSettings"
+                heading={_t("settings|notifications|email_section")}
+            >
                 <SettingsSubsectionText className="mx_NotificationPusherSettings_description">
-                    {_t("Receive an email summary of missed notifications")}
+                    {_t("settings|notifications|email_description")}
                 </SettingsSubsectionText>
                 <div className="mx_SettingsSubsection_description mx_NotificationPusherSettings_detail">
                     <SettingsSubsectionText>
-                        {_t(
-                            "Select which emails you want to send summaries to. Manage your emails in <button>General</button>.",
-                            {},
-                            { button: generalTabButton },
-                        )}
+                        {_t("settings|notifications|email_select", {}, { button: generalTabButton })}
                     </SettingsSubsectionText>
                 </div>
                 <SettingsIndent>
@@ -118,7 +117,7 @@ export function NotificationPusherSettings(): JSX.Element {
                 </SettingsIndent>
             </SettingsSubsection>
             {notificationTargets.length > 0 && (
-                <SettingsSubsection heading={_t("Notification targets")}>
+                <SettingsSubsection heading={_t("settings|notifications|push_targets")}>
                     <ul>
                         {pushers
                             .filter((it) => it.kind !== "email")

@@ -59,7 +59,7 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
             <AccessibleButton onClick={toggleExpanded}>
                 {expanded
                     ? _t("action|collapse")
-                    : _t("Show %(count)s other previews", { count: previews.length - showPreviews.length })}
+                    : _t("timeline|url_preview|show_n_more", { count: previews.length - showPreviews.length })}
             </AccessibleButton>
         );
     }
@@ -72,7 +72,7 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
                         <AccessibleButton
                             className="mx_LinkPreviewGroup_hide"
                             onClick={onCancelClick}
-                            aria-label={_t("Close preview")}
+                            aria-label={_t("timeline|url_preview|close")}
                         >
                             <img
                                 className="mx_filterFlipColor"

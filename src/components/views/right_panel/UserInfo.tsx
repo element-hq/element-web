@@ -409,7 +409,7 @@ export const UserOptionsSection: React.FC<{
                 kind="link"
                 className={classNames("mx_UserInfo_field", { mx_UserInfo_destructive: !isIgnored })}
             >
-                {isIgnored ? _t("Unignore") : _t("action|ignore")}
+                {isIgnored ? _t("action|unignore") : _t("action|ignore")}
             </AccessibleButton>
         );
 
@@ -1163,7 +1163,7 @@ export const PowerLevelEditor: React.FC<{
                         logger.error("Failed to change power level " + err);
                         Modal.createDialog(ErrorDialog, {
                             title: _t("common|error"),
-                            description: _t("Failed to change power level"),
+                            description: _t("error|update_power_level"),
                         });
                     },
                 );

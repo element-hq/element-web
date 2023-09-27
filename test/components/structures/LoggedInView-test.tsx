@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { render, RenderResult } from "@testing-library/react";
-import { ConditionKind, EventType, IPushRule, MatrixEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
+import { ConditionKind, EventType, IPushRule, MatrixEvent, ClientEvent, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -80,6 +80,11 @@ describe("<LoggedInView />", () => {
             default: true,
             enabled: true,
         } as IPushRule;
+
+        const oneToOneRuleDisabled = {
+            ...oneToOneRule,
+            enabled: false,
+        };
 
         const groupRule = {
             conditions: [{ kind: ConditionKind.EventMatch, key: "type", pattern: "m.room.message" }],
@@ -221,6 +226,36 @@ describe("<LoggedInView />", () => {
                 );
             });
 
+            it("updates all mismatched rules from synced rules when primary rule is disabled", async () => {
+                setPushRules([
+                    // poll 1-1 rules are synced with oneToOneRule
+                    oneToOneRuleDisabled, // off
+                    pollStartOneToOne, // on
+                    pollEndOneToOne, // loud
+                    // poll group rules are synced with groupRule
+                    groupRule, // on
+                    pollStartGroup, // loud
+                ]);
+
+                getComponent();
+
+                await flushPromises();
+
+                // set to match primary rule
+                expect(mockClient.setPushRuleEnabled).toHaveBeenCalledWith(
+                    "global",
+                    PushRuleKind.Underride,
+                    pollStartOneToOne.rule_id,
+                    false,
+                );
+                expect(mockClient.setPushRuleEnabled).toHaveBeenCalledWith(
+                    "global",
+                    PushRuleKind.Underride,
+                    pollEndOneToOne.rule_id,
+                    false,
+                );
+            });
+
             it("catches and logs errors while updating a rule", async () => {
                 mockClient.setPushRuleActions.mockRejectedValueOnce("oups").mockResolvedValueOnce({});
 
@@ -299,6 +334,31 @@ describe("<LoggedInView />", () => {
                     "underride",
                     pollEndOneToOne.rule_id,
                     StandardActions.ACTION_NOTIFY,
+                );
+            });
+
+            it("updates all mismatched rules from synced rules on a change to push rules account data when primary rule is disabled", async () => {
+                // setup a push rule state with mismatched rules
+                setPushRules([
+                    // poll 1-1 rules are synced with oneToOneRule
+                    oneToOneRuleDisabled, // off
+                    pollEndOneToOne, // loud
+                ]);
+
+                getComponent();
+
+                await flushPromises();
+
+                mockClient.setPushRuleEnabled.mockClear();
+
+                mockClient.emit(ClientEvent.AccountData, pushRulesEvent);
+
+                // set to match primary rule
+                expect(mockClient.setPushRuleEnabled).toHaveBeenCalledWith(
+                    "global",
+                    "underride",
+                    pollEndOneToOne.rule_id,
+                    false,
                 );
             });
 

@@ -1,6 +1,6 @@
 {
     "name": "matrix-react-sdk",
-    "version": "3.80.1",
+    "version": "3.81.0",
     "description": "SDK for matrix.org using React",
     "author": "matrix.org",
     "repository": {
@@ -23,7 +23,7 @@
         "package.json",
         ".stylelintrc.js"
     ],
-    "main": "./src/index.ts",
+    "main": "./lib/index.ts",
     "matrix_src_main": "./src/index.ts",
     "matrix_lib_main": "./lib/index.ts",
     "matrix_lib_typings": "./lib/index.d.ts",
@@ -102,7 +102,7 @@
         "matrix-encrypt-attachment": "^1.0.3",
         "matrix-events-sdk": "0.0.1",
         "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
-        "matrix-widget-api": "^1.6.0",
+        "matrix-widget-api": "^1.5.0",
         "memoize-one": "^6.0.0",
         "minimist": "^1.2.5",
         "oidc-client-ts": "^2.2.4",
@@ -188,7 +188,9 @@
         "chokidar": "^3.5.1",
         "cypress": "^13.0.0",
         "cypress-axe": "^1.0.0",
+        "cypress-cloud": "^2.0.0-beta.0",
         "cypress-multi-reporters": "^1.6.1",
+        "cypress-plugin-init": "^0.0.8",
         "cypress-real-events": "^1.7.1",
         "cypress-terminal-report": "^5.3.2",
         "eslint": "8.48.0",
@@ -231,5 +233,6 @@
         "outputDirectory": "coverage",
         "outputName": "jest-sonar-report.xml",
         "relativePaths": true
-    }
+    },
+    "typings": "./lib/index.d.ts"
 }

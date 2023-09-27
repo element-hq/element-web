@@ -99,7 +99,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 onClick={() => this.setState({ showAdvanced: !this.state.showAdvanced })}
                 aria-expanded={this.state.showAdvanced}
             >
-                {this.state.showAdvanced ? _t("Hide advanced") : _t("Show advanced")}
+                {this.state.showAdvanced ? _t("action|hide_advanced") : _t("action|show_advanced")}
             </AccessibleButton>
         );
 

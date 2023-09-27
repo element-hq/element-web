@@ -132,7 +132,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                     <IconizedContextMenuOptionList first>
                         {showCreateRooms && (
                             <IconizedContextMenuOption
-                                label={_t("Start new chat")}
+                                label={_t("action|start_new_chat")}
                                 iconClassName="mx_RoomList_iconStartChat"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -148,7 +148,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                         )}
                         {showInviteUsers && (
                             <IconizedContextMenuOption
-                                label={_t("Invite to space")}
+                                label={_t("action|invite_to_space")}
                                 iconClassName="mx_RoomList_iconInvite"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -172,8 +172,8 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                     onClick={openMenu}
                     className="mx_RoomSublist_auxButton"
                     tooltipClassName="mx_RoomSublist_addRoomTooltip"
-                    aria-label={_t("Add people")}
-                    title={_t("Add people")}
+                    aria-label={_t("action|add_people")}
+                    title={_t("action|add_people")}
                     isExpanded={menuDisplayed}
                     inputRef={handle}
                 />
@@ -222,7 +222,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
         contextMenuContent = (
             <IconizedContextMenuOptionList first>
                 <IconizedContextMenuOption
-                    label={_t("Explore rooms")}
+                    label={_t("action|explore_rooms")}
                     iconClassName="mx_RoomList_iconExplore"
                     onClick={(e) => {
                         e.preventDefault();
@@ -239,7 +239,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                 {showCreateRoom ? (
                     <>
                         <IconizedContextMenuOption
-                            label={_t("New room")}
+                            label={_t("action|new_room")}
                             iconClassName="mx_RoomList_iconNewRoom"
                             onClick={(e) => {
                                 e.preventDefault();
@@ -253,7 +253,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                         />
                         {videoRoomsEnabled && (
                             <IconizedContextMenuOption
-                                label={_t("New video room")}
+                                label={_t("action|new_video_room")}
                                 iconClassName="mx_RoomList_iconNewVideoRoom"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -271,7 +271,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                             </IconizedContextMenuOption>
                         )}
                         <IconizedContextMenuOption
-                            label={_t("Add existing room")}
+                            label={_t("action|add_existing_room")}
                             iconClassName="mx_RoomList_iconAddExistingRoom"
                             onClick={(e) => {
                                 e.preventDefault();
@@ -292,7 +292,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                 {showCreateRoom && (
                     <>
                         <IconizedContextMenuOption
-                            label={_t("New room")}
+                            label={_t("action|new_room")}
                             iconClassName="mx_RoomList_iconNewRoom"
                             onClick={(e) => {
                                 e.preventDefault();
@@ -304,7 +304,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                         />
                         {videoRoomsEnabled && (
                             <IconizedContextMenuOption
-                                label={_t("New video room")}
+                                label={_t("action|new_video_room")}
                                 iconClassName="mx_RoomList_iconNewVideoRoom"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -325,7 +325,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                 )}
                 {showExploreRooms ? (
                     <IconizedContextMenuOption
-                        label={_t("Explore public rooms")}
+                        label={_t("action|explore_public_rooms")}
                         iconClassName="mx_RoomList_iconExplore"
                         onClick={(e) => {
                             e.preventDefault();

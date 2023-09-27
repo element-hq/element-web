@@ -1,5 +1,4 @@
 {
-    "All messages": "सारे संदेश",
     "All Rooms": "सारे कमरे",
     "Permission Required": "अनुमति आवश्यक है",
     "Sun": "रवि",
@@ -27,29 +26,18 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
-    "Default": "डिफ़ॉल्ट",
     "Restricted": "वर्जित",
     "Moderator": "मध्यस्थ",
-    "Reason": "कारण",
     "Send": "भेजें",
-    "Incorrect verification code": "गलत सत्यापन कोड",
-    "No display name": "कोई प्रदर्शन नाम नहीं",
     "Warning!": "चेतावनी!",
-    "Authentication": "प्रमाणीकरण",
-    "Failed to set display name": "प्रदर्शन नाम सेट करने में विफल",
-    "Delete Backup": "बैकअप हटाएं",
-    "Unable to load key backup status": "कुंजी बैकअप स्थिति लोड होने में असमर्थ",
-    "Notification targets": "अधिसूचना के लक्ष्य",
     "This event could not be displayed": "यह घटना प्रदर्शित नहीं की जा सकी",
     "Failed to ban user": "उपयोगकर्ता को प्रतिबंधित करने में विफल",
     "Demote yourself?": "खुद को अवनत करें?",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "आप इस बदलाव को पूर्ववत नहीं कर पाएंगे क्योंकि आप स्वयं को अवनत कर रहे हैं, अगर आप रूम में आखिरी विशेषाधिकार प्राप्त उपयोगकर्ता हैं तो विशेषाधिकार हासिल करना असंभव होगा।",
     "Demote": "अवनत",
     "Failed to mute user": "उपयोगकर्ता को म्यूट करने में विफल",
-    "Failed to change power level": "पावर स्तर बदलने में विफल",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "आप इस परिवर्तन को पूर्ववत नहीं कर पाएंगे क्योंकि आप उपयोगकर्ता को अपने आप से समान शक्ति स्तर रखने के लिए प्रोत्साहित कर रहे हैं।",
     "Are you sure?": "क्या आपको यकीन है?",
-    "Unignore": "अनदेखा न करें",
     "Jump to read receipt": "पढ़ी हुई रसीद में कूदें",
     "Share Link to User": "उपयोगकर्ता को लिंक साझा करें",
     "Admin Tools": "व्यवस्थापक उपकरण",
@@ -128,45 +116,10 @@
     "Anchor": "लंगर",
     "Headphones": "हेडफोन",
     "Folder": "फ़ोल्डर",
-    "Unable to remove contact information": "संपर्क जानकारी निकालने में असमर्थ",
-    "Invalid Email Address": "अमान्य ईमेल पता",
-    "This doesn't appear to be a valid email address": "यह एक मान्य ईमेल पता प्रतीत नहीं होता है",
-    "Unable to add email address": "ईमेल पता जोड़ने में असमर्थ",
-    "Unable to verify email address.": "ईमेल पते को सत्यापित करने में असमर्थ।",
-    "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "हमने आपको अपना पता सत्यापित करने के लिए एक ईमेल भेजा है। कृपया वहां दिए गए निर्देशों का पालन करें और फिर नीचे दिए गए बटन पर क्लिक करें।",
-    "Email Address": "ईमेल पता",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "क्या आपको यकीन है? यदि आपकी कुंजियाँ ठीक से बैकअप नहीं हैं तो आप अपने एन्क्रिप्टेड संदेशों को खो देंगे।",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "एन्क्रिप्ट किए गए संदेश एंड-टू-एंड एन्क्रिप्शन के साथ सुरक्षित हैं। केवल आपके और प्राप्तकर्ता के पास ही इन संदेशों को पढ़ने की कुंजी है।",
-    "Restore from Backup": "बैकअप से बहाल करना",
     "Back up your keys before signing out to avoid losing them.": "उन्हें खोने से बचने के लिए साइन आउट करने से पहले अपनी कुंजियों का बैकअप लें।",
-    "All keys backed up": "सभी कुंजियाँ वापस आ गईं",
     "Start using Key Backup": "कुंजी बैकअप का उपयोग करना शुरू करें",
-    "Unable to verify phone number.": "फ़ोन नंबर सत्यापित करने में असमर्थ।",
-    "Verification code": "पुष्टि संख्या",
-    "Phone Number": "फ़ोन नंबर",
-    "Profile picture": "प्रोफ़ाइल फोटो",
-    "Display Name": "प्रदर्शित होने वाला नाम",
-    "Room information": "रूम जानकारी",
-    "General": "सामान्य",
-    "Room Addresses": "रूम का पता",
-    "Failed to change password. Is your password correct?": "पासवर्ड बदलने में विफल। क्या आपका पासवर्ड सही है?",
-    "Profile": "प्रोफाइल",
-    "Email addresses": "ईमेल पता",
-    "Phone numbers": "फोन नंबर",
-    "Account management": "खाता प्रबंधन",
-    "Deactivate Account": "खाता निष्क्रिय करें",
     "Scissors": "कैंची",
-    "Ignored users": "अनदेखी उपयोगकर्ताओं",
-    "Missing media permissions, click the button below to request.": "मीडिया अनुमतियाँ गुम, अनुरोध करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
-    "Request media permissions": "मीडिया अनुमति का अनुरोध करें",
-    "No Audio Outputs detected": "कोई ऑडियो आउटपुट नहीं मिला",
-    "No Microphones detected": "कोई माइक्रोफोन का पता नहीं चला",
-    "No Webcams detected": "कोई वेबकैम नहीं मिला",
-    "Audio Output": "ध्वनि - उत्पादन",
-    "Voice & Video": "ध्वनि और वीडियो",
-    "Failed to unban": "अप्रतिबंधित करने में विफल",
-    "Banned by %(displayName)s": "%(displayName)s द्वारा प्रतिबंधित",
-    "Explore rooms": "रूम का अन्वेषण करें",
     "Mongolia": "मंगोलिया",
     "Monaco": "मोनाको",
     "Moldova": "मोलदोवा",
@@ -339,7 +292,12 @@
         "unnamed_room": "अनाम रूम",
         "on": "चालू",
         "off": "बंद",
-        "Advanced": "उन्नत"
+        "advanced": "उन्नत",
+        "general": "सामान्य",
+        "profile": "प्रोफाइल",
+        "display_name": "प्रदर्शित होने वाला नाम",
+        "user_avatar": "प्रोफ़ाइल फोटो",
+        "authentication": "प्रमाणीकरण"
     },
     "action": {
         "continue": "आगे बढ़ें",
@@ -365,7 +323,9 @@
         "register": "पंजीकरण करें",
         "mention": "उल्लेख",
         "submit": "जमा करें",
-        "unban": "अप्रतिबंधित करें"
+        "unban": "अप्रतिबंधित करें",
+        "unignore": "अनदेखा न करें",
+        "explore_rooms": "रूम का अन्वेषण करें"
     },
     "labs": {
         "pinning": "संदेश पिनिंग",
@@ -422,7 +382,8 @@
             "noisy": "शोरगुल",
             "error_permissions_denied": "%(brand)s को आपको सूचनाएं भेजने की अनुमति नहीं है - कृपया अपनी ब्राउज़र सेटिंग जांचें",
             "error_permissions_missing": "%(brand)s को सूचनाएं भेजने की अनुमति नहीं दी गई थी - कृपया पुनः प्रयास करें",
-            "error_title": "अधिसूचनाएं सक्षम करने में असमर्थ"
+            "error_title": "अधिसूचनाएं सक्षम करने में असमर्थ",
+            "push_targets": "अधिसूचना के लक्ष्य"
         },
         "appearance": {
             "timeline_image_size_default": "डिफ़ॉल्ट",
@@ -431,7 +392,14 @@
         "inline_url_previews_room_account": "इस रूम के लिए यूआरएल पूर्वावलोकन सक्षम करें (केवल आपको प्रभावित करता है)",
         "inline_url_previews_room": "इस रूम में प्रतिभागियों के लिए डिफ़ॉल्ट रूप से यूआरएल पूर्वावलोकन सक्षम करें",
         "voip": {
-            "mirror_local_feed": "स्थानीय वीडियो फ़ीड को आईना करें"
+            "mirror_local_feed": "स्थानीय वीडियो फ़ीड को आईना करें",
+            "missing_permissions_prompt": "मीडिया अनुमतियाँ गुम, अनुरोध करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
+            "request_permissions": "मीडिया अनुमति का अनुरोध करें",
+            "audio_output": "ध्वनि - उत्पादन",
+            "audio_output_empty": "कोई ऑडियो आउटपुट नहीं मिला",
+            "audio_input_empty": "कोई माइक्रोफोन का पता नहीं चला",
+            "video_input_empty": "कोई वेबकैम नहीं मिला",
+            "title": "ध्वनि और वीडियो"
         },
         "security": {
             "send_analytics": "विश्लेषण डेटा भेजें",
@@ -439,7 +407,13 @@
             "import_megolm_keys": "E2E कक्ष की चाबियां आयात करें",
             "cryptography_section": "क्रिप्टोग्राफी",
             "bulk_options_section": "थोक विकल्प",
-            "bulk_options_reject_all_invites": "सभी %(invitedRooms)s की आमंत्रण को अस्वीकार करें"
+            "bulk_options_reject_all_invites": "सभी %(invitedRooms)s की आमंत्रण को अस्वीकार करें",
+            "delete_backup": "बैकअप हटाएं",
+            "delete_backup_confirm_description": "क्या आपको यकीन है? यदि आपकी कुंजियाँ ठीक से बैकअप नहीं हैं तो आप अपने एन्क्रिप्टेड संदेशों को खो देंगे।",
+            "error_loading_key_backup_status": "कुंजी बैकअप स्थिति लोड होने में असमर्थ",
+            "restore_key_backup": "बैकअप से बहाल करना",
+            "key_backup_complete": "सभी कुंजियाँ वापस आ गईं",
+            "ignore_users_section": "अनदेखी उपयोगकर्ताओं"
         },
         "preferences": {
             "room_list_heading": "कक्ष सूचि",
@@ -457,7 +431,25 @@
             "add_msisdn_confirm_sso_button": "अपनी पहचान साबित करने के लिए सिंगल साइन ऑन का उपयोग करके इस फ़ोन नंबर को जोड़ने की पुष्टि करें।",
             "add_msisdn_confirm_button": "फ़ोन नंबर जोड़ने की पुष्टि करें",
             "add_msisdn_confirm_body": "इस फ़ोन नंबर को जोड़ने की पुष्टि करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
-            "add_msisdn_dialog_title": "फोन नंबर डालें"
+            "add_msisdn_dialog_title": "फोन नंबर डालें",
+            "name_placeholder": "कोई प्रदर्शन नाम नहीं",
+            "error_password_change_403": "पासवर्ड बदलने में विफल। क्या आपका पासवर्ड सही है?",
+            "emails_heading": "ईमेल पता",
+            "msisdns_heading": "फोन नंबर",
+            "deactivate_section": "खाता निष्क्रिय करें",
+            "account_management_section": "खाता प्रबंधन",
+            "error_email_verification": "ईमेल पते को सत्यापित करने में असमर्थ।",
+            "error_msisdn_verification": "फ़ोन नंबर सत्यापित करने में असमर्थ।",
+            "incorrect_msisdn_verification": "गलत सत्यापन कोड",
+            "msisdn_verification_field_label": "पुष्टि संख्या",
+            "error_set_name": "प्रदर्शन नाम सेट करने में विफल",
+            "error_remove_3pid": "संपर्क जानकारी निकालने में असमर्थ",
+            "error_invalid_email": "अमान्य ईमेल पता",
+            "error_invalid_email_detail": "यह एक मान्य ईमेल पता प्रतीत नहीं होता है",
+            "error_add_email": "ईमेल पता जोड़ने में असमर्थ",
+            "add_email_instructions": "हमने आपको अपना पता सत्यापित करने के लिए एक ईमेल भेजा है। कृपया वहां दिए गए निर्देशों का पालन करें और फिर नीचे दिए गए बटन पर क्लिक करें।",
+            "email_address_label": "ईमेल पता",
+            "msisdn_label": "फ़ोन नंबर"
         }
     },
     "timeline": {
@@ -690,19 +682,24 @@
     },
     "room_settings": {
         "permissions": {
-            "no_privileged_users": "इस कमरे में किसी भी उपयोगकर्ता के विशेष विशेषाधिकार नहीं हैं"
+            "no_privileged_users": "इस कमरे में किसी भी उपयोगकर्ता के विशेष विशेषाधिकार नहीं हैं",
+            "error_unbanning": "अप्रतिबंधित करने में विफल",
+            "banned_by": "%(displayName)s द्वारा प्रतिबंधित",
+            "ban_reason": "कारण"
         },
         "security": {
             "title": "सुरक्षा और गोपनीयता"
         },
         "general": {
             "publish_toggle": "इस कमरे को %(domain)s के कमरे की निर्देशिका में जनता के लिए प्रकाशित करें?",
-            "url_previews_section": "URL पूर्वावलोकन"
+            "url_previews_section": "URL पूर्वावलोकन",
+            "aliases_section": "रूम का पता"
         },
         "advanced": {
             "unfederated": "यह रूम रिमोट मैट्रिक्स सर्वर द्वारा सुलभ नहीं है",
             "room_version_section": "रूम का संस्करण",
-            "room_version": "रूम का संस्करण:"
+            "room_version": "रूम का संस्करण:",
+            "information_section_room": "रूम जानकारी"
         }
     },
     "update": {
@@ -754,10 +751,13 @@
     },
     "error": {
         "mau": "इस होमसर्वर ने अपनी मासिक सक्रिय उपयोगकर्ता सीमा को प्राप्त कर लिया हैं।",
-        "resource_limits": "यह होम सर्वर अपनी संसाधन सीमाओं में से एक से अधिक हो गया है।"
+        "resource_limits": "यह होम सर्वर अपनी संसाधन सीमाओं में से एक से अधिक हो गया है।",
+        "update_power_level": "पावर स्तर बदलने में विफल"
     },
     "notifications": {
-        "enable_prompt_toast_title": "सूचनाएं"
+        "enable_prompt_toast_title": "सूचनाएं",
+        "default": "डिफ़ॉल्ट",
+        "all_messages": "सारे संदेश"
     },
     "room_summary_card_back_action_label": "रूम जानकारी"
 }

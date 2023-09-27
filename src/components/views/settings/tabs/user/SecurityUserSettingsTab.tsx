@@ -63,7 +63,7 @@ export class IgnoredUser extends React.Component<IIgnoredUserProps> {
                     aria-describedby={id}
                     disabled={this.props.inProgress}
                 >
-                    {_t("Unignore")}
+                    {_t("action|unignore")}
                 </AccessibleButton>
                 <span id={id}>{this.props.userId}</span>
             </div>
@@ -225,7 +225,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         const { waitingUnignored, ignoredUserIds } = this.state;
 
         const userIds = !ignoredUserIds?.length
-            ? _t("You have no ignored users.")
+            ? _t("settings|security|ignore_users_empty")
             : ignoredUserIds.map((u) => {
                   return (
                       <IgnoredUser
@@ -238,7 +238,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
               });
 
         return (
-            <SettingsSubsection heading={_t("Ignored users")}>
+            <SettingsSubsection heading={_t("settings|security|ignore_users_section")}>
                 <SettingsSubsectionText>{userIds}</SettingsSubsectionText>
             </SettingsSubsection>
         );
@@ -301,9 +301,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         if (!privateShouldBeEncrypted(MatrixClientPeg.safeGet())) {
             warning = (
                 <div className="mx_SecurityUserSettingsTab_warning">
-                    {_t(
-                        "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.",
-                    )}
+                    {_t("settings|security|e2ee_default_disabled_warning")}
                 </div>
             );
         }
@@ -320,9 +318,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                 <SettingsSection heading={_t("common|privacy")}>
                     <SettingsSubsection
                         heading={_t("common|analytics")}
-                        description={_t(
-                            "Share anonymous data to help us identify issues. Nothing personal. No third parties.",
-                        )}
+                        description={_t("settings|security|analytics_description")}
                     >
                         <AccessibleButton kind="link" onClick={onClickAnalyticsLearnMore}>
                             {_t("action|learn_more")}
@@ -346,7 +342,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             // only show the section if there's something to show
             if (ignoreUsersPanel || invitesPanel || e2ePanel) {
                 advancedSection = (
-                    <SettingsSection heading={_t("common|Advanced")}>
+                    <SettingsSection heading={_t("common|advanced")}>
                         {ignoreUsersPanel}
                         {invitesPanel}
                         {e2ePanel}

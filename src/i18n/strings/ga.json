@@ -6,14 +6,9 @@
     "An error has occurred.": "D’imigh earráid éigin.",
     "A new password must be entered.": "Caithfear focal faire nua a iontráil.",
     "%(items)s and %(lastItem)s": "%(items)s agus %(lastItem)s",
-    "No Webcams detected": "Níor braitheadh aon ceamara gréasáin",
-    "No Microphones detected": "Níor braitheadh aon micreafón",
     "Reject & Ignore user": "Diúltaigh ⁊ Neamaird do úsáideoir",
-    "Ignored users": "Úsáideoirí neamhairde",
-    "Unignore": "Stop ag tabhairt neamhaird air",
     "%(weekDayName)s %(time)s": "%(weekDayName)s ar a %(time)s",
     "Permission Required": "Is Teastáil Cead",
-    "Spaces": "Spásanna",
     "Transfer": "Aistrigh",
     "Hold": "Fan",
     "Resume": "Tosaigh arís",
@@ -200,17 +195,12 @@
     "Albania": "an Albáin",
     "Afghanistan": "an Afganastáin",
     "Widgets": "Giuirléidí",
-    "ready": "réidh",
-    "Algorithm:": "Algartam:",
     "Information": "Eolas",
     "Ok": "Togha",
     "Accepting…": "ag Glacadh leis…",
-    "Bridges": "Droichid",
     "Lock": "Glasáil",
     "Unencrypted": "Gan chriptiú",
-    "None": "Níl aon cheann",
     "Italics": "Iodálach",
-    "Discovery": "Aimsiú",
     "Success!": "Rath!",
     "Home": "Tús",
     "Removing…": "ag Baint…",
@@ -238,17 +228,10 @@
     "%(duration)sh": "%(duration)su",
     "%(duration)sm": "%(duration)sn",
     "%(duration)ss": "%(duration)ss",
-    "Delete Backup": "Scrios cúltaca",
-    "Email Address": "Seoladh Ríomhphoist",
     "Light bulb": "Bolgán solais",
     "Thumbs up": "Ordógí suas",
     "Invited": "Le cuireadh",
     "Demote": "Bain ceadanna",
-    "Browse": "Brabhsáil",
-    "Sounds": "Fuaimeanna",
-    "General": "Ginearálta",
-    "Profile": "Próifíl",
-    "Authentication": "Fíordheimhniú",
     "Warning!": "Aire!",
     "Folder": "Fillteán",
     "Headphones": "Cluasáin",
@@ -310,10 +293,8 @@
     "Lion": "Leon",
     "Cat": "Cat",
     "Dog": "Madra",
-    "Reason": "Cúis",
     "Moderator": "Modhnóir",
     "Restricted": "Teoranta",
-    "Default": "Réamhshocrú",
     "AM": "RN",
     "PM": "IN",
     "Dec": "Nol",
@@ -336,36 +317,17 @@
     "Mon": "Lua",
     "Sun": "Doṁ",
     "Send": "Seol",
-    "Explore rooms": "Breathnaigh thart ar na seomraí",
     "Sign out and remove encryption keys?": "Sínigh amach agus scrios eochracha criptiúcháin?",
     "Clear Storage and Sign Out": "Scrios Stóras agus Sínigh Amach",
     "Are you sure you want to sign out?": "An bhfuil tú cinnte go dteastaíonn uait sínigh amach?",
-    "Deactivate Account": "Cuir cuntas as feidhm",
-    "Account management": "Bainistíocht cuntais",
-    "Phone numbers": "Uimhreacha guthán",
-    "Email addresses": "Seoltaí r-phost",
-    "Display Name": "Ainm Taispeána",
-    "Profile picture": "Pictiúr próifíle",
-    "Phone Number": "Uimhir Fóin",
-    "Verification code": "Cód fíoraithe",
-    "Notification targets": "Spriocanna fógraí",
     "Results": "Torthaí",
     "Decrypting": "Ag Díchriptiú",
-    "Access": "Rochtain",
-    "Global": "Uilíoch",
-    "Keyword": "Eochairfhocal",
-    "Visibility": "Léargas",
-    "Address": "Seoladh",
     "Sent": "Seolta",
-    "Connecting": "Ag Ceangal",
     "Sending": "Ag Seoladh",
     "Avatar": "Abhatár",
     "Unnamed room": "Seomra gan ainm",
     "Admin Tools": "Uirlisí Riaracháin",
     "Demote yourself?": "Tabhair ísliú céime duit féin?",
-    "Notification sound": "Fuaim fógra",
-    "Uploaded sound": "Fuaim uaslódáilte",
-    "Room Addresses": "Seoltaí Seomra",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
@@ -385,8 +347,6 @@
     "Failed to mute user": "Níor ciúnaíodh an úsáideoir",
     "Failed to load timeline position": "Níor lódáladh áit amlíne",
     "Failed to forget room %(errCode)s": "Níor dhearnadh dearmad ar an seomra %(errCode)s",
-    "Failed to change power level": "Níor éiríodh leis an leibhéal cumhachta a hathrú",
-    "Failed to change password. Is your password correct?": "Níor éiríodh leis do phasfhocal a hathrú. An bhfuil do phasfhocal ceart?",
     "Failed to ban user": "Níor éiríodh leis an úsáideoir a thoirmeasc",
     "Error decrypting attachment": "Earráid le ceangaltán a dhíchriptiú",
     "Enter passphrase": "Iontráil pasfrása",
@@ -454,7 +414,13 @@
         "on": "Ar siúl",
         "off": "Múchta",
         "copied": "Cóipeáilte!",
-        "Advanced": "Forbartha"
+        "advanced": "Forbartha",
+        "spaces": "Spásanna",
+        "general": "Ginearálta",
+        "profile": "Próifíl",
+        "display_name": "Ainm Taispeána",
+        "user_avatar": "Pictiúr próifíle",
+        "authentication": "Fíordheimhniú"
     },
     "action": {
         "continue": "Lean ar aghaidh",
@@ -532,7 +498,9 @@
         "refresh": "Athnuaigh",
         "mention": "Luaigh",
         "submit": "Cuir isteach",
-        "unban": "Bain an cosc"
+        "unban": "Bain an cosc",
+        "unignore": "Stop ag tabhairt neamhaird air",
+        "explore_rooms": "Breathnaigh thart ar na seomraí"
     },
     "labs": {
         "pinning": "Ceangal teachtaireachta",
@@ -577,7 +545,8 @@
         "always_show_message_timestamps": "Taispeáin stampaí ama teachtaireachta i gcónaí",
         "notifications": {
             "rule_call": "Nuair a fhaighim cuireadh glaoigh",
-            "noisy": "Callánach"
+            "noisy": "Callánach",
+            "push_targets": "Spriocanna fógraí"
         },
         "appearance": {
             "timeline_image_size_default": "Réamhshocrú",
@@ -590,7 +559,12 @@
             "cross_signing_homeserver_support_exists": "a bheith ann",
             "export_megolm_keys": "Easpórtáil eochracha an tseomra le criptiú ó dheireadh go deireadh",
             "cryptography_section": "Cripteagrafaíocht",
-            "encryption_section": "Criptiúchán"
+            "encryption_section": "Criptiúchán",
+            "secret_storage_ready": "réidh",
+            "delete_backup": "Scrios cúltaca",
+            "key_backup_algorithm": "Algartam:",
+            "key_backup_active_version_none": "Níl aon cheann",
+            "ignore_users_section": "Úsáideoirí neamhairde"
         },
         "general": {
             "account_section": "Cuntas",
@@ -603,7 +577,20 @@
             "add_msisdn_confirm_sso_button": "Deimhnigh an uimhir ghutháin seo le SSO mar cruthúnas céannachta.",
             "add_msisdn_confirm_button": "Deimhnigh an uimhir ghutháin nua",
             "add_msisdn_confirm_body": "Cliceáil an cnaipe thíos chun an uimhir ghutháin nua a dheimhniú.",
-            "add_msisdn_dialog_title": "Cuir uimhir ghutháin"
+            "add_msisdn_dialog_title": "Cuir uimhir ghutháin",
+            "error_password_change_403": "Níor éiríodh leis do phasfhocal a hathrú. An bhfuil do phasfhocal ceart?",
+            "emails_heading": "Seoltaí r-phost",
+            "msisdns_heading": "Uimhreacha guthán",
+            "deactivate_section": "Cuir cuntas as feidhm",
+            "account_management_section": "Bainistíocht cuntais",
+            "discovery_section": "Aimsiú",
+            "msisdn_verification_field_label": "Cód fíoraithe",
+            "email_address_label": "Seoladh Ríomhphoist",
+            "msisdn_label": "Uimhir Fóin"
+        },
+        "voip": {
+            "audio_input_empty": "Níor braitheadh aon micreafón",
+            "video_input_empty": "Níor braitheadh aon ceamara gréasáin"
         }
     },
     "devtools": {
@@ -717,7 +704,8 @@
         "default_device": "Gléas Réamhshocraithe",
         "no_media_perms_title": "Gan cheadanna meáin",
         "join_button_tooltip_connecting": "Ag Ceangal",
-        "more_button": "Níos mó"
+        "more_button": "Níos mó",
+        "connecting": "Ag Ceangal"
     },
     "Other": "Eile",
     "room_settings": {
@@ -734,7 +722,8 @@
             "privileged_users_section": "Úsáideoirí Pribhléideacha",
             "muted_users_section": "Úsáideoirí Fuaim",
             "banned_users_section": "Úsáideoirí toirmiscthe",
-            "permissions_section": "Ceadanna"
+            "permissions_section": "Ceadanna",
+            "ban_reason": "Cúis"
         },
         "security": {
             "enable_encryption_confirm_title": "Cumasaigh criptiú?",
@@ -742,11 +731,29 @@
             "history_visibility_world_readable": "Aon duine"
         },
         "general": {
-            "url_previews_section": "Réamhamhairc URL"
+            "url_previews_section": "Réamhamhairc URL",
+            "aliases_section": "Seoltaí Seomra",
+            "other_section": "Eile"
         },
         "advanced": {
             "room_version_section": "Leagan seomra",
             "room_version": "Leagan seomra:"
+        },
+        "visibility": {
+            "title": "Léargas",
+            "alias_section": "Seoladh"
+        },
+        "access": {
+            "title": "Rochtain"
+        },
+        "bridges": {
+            "title": "Droichid"
+        },
+        "notifications": {
+            "uploaded_sound": "Fuaim uaslódáilte",
+            "sounds_section": "Fuaimeanna",
+            "notification_sound": "Fuaim fógra",
+            "browse_button": "Brabhsáil"
         }
     },
     "encryption": {
@@ -852,7 +859,8 @@
     },
     "labs_mjolnir": {
         "ban_reason": "Neamhairde/Tachta",
-        "title": "Úsáideoirí neamhairde"
+        "title": "Úsáideoirí neamhairde",
+        "rules_empty": "Níl aon cheann"
     },
     "failed_load_async_component": "Ní féidir a lódáil! Seiceáil do nascacht líonra agus bain triail eile as.",
     "upload_failed_generic": "Níor éirigh leis an gcomhad '%(fileName)s' a uaslódáil.",
@@ -873,17 +881,25 @@
     },
     "error": {
         "mixed_content": "Ní féidir ceangal leis an bhfreastalaí baile trí HTTP nuair a bhíonn URL HTTPS i mbarra do bhrabhsálaí. Bain úsáid as HTTPS nó <a> scripteanna neamhshábháilte a chumasú </a>.",
-        "tls": "Ní féidir ceangal leis an bhfreastalaí baile - seiceáil do nascacht le do thoil, déan cinnte go bhfuil muinín i dteastas <a>SSL do fhreastalaí baile</a>, agus nach bhfuil síneadh brabhsálaí ag cur bac ar iarratais."
+        "tls": "Ní féidir ceangal leis an bhfreastalaí baile - seiceáil do nascacht le do thoil, déan cinnte go bhfuil muinín i dteastas <a>SSL do fhreastalaí baile</a>, agus nach bhfuil síneadh brabhsálaí ag cur bac ar iarratais.",
+        "update_power_level": "Níor éiríodh leis an leibhéal cumhachta a hathrú"
     },
     "notifications": {
         "enable_prompt_toast_title": "Fógraí",
         "colour_none": "Níl aon cheann",
-        "colour_bold": "Trom"
+        "colour_bold": "Trom",
+        "keyword": "Eochairfhocal",
+        "class_global": "Uilíoch",
+        "class_other": "Eile",
+        "default": "Réamhshocrú"
     },
     "onboarding": {
         "create_account": "Déan cuntas a chruthú"
     },
     "quick_settings": {
         "all_settings": "Gach Socrú"
+    },
+    "create_space": {
+        "address_label": "Seoladh"
     }
 }

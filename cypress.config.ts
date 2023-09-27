@@ -17,6 +17,8 @@ limitations under the License.
 import { defineConfig } from "cypress";
 import * as fs from "node:fs";
 
+import registerPlugins from "./cypress/plugins";
+
 export default defineConfig({
     video: true,
     projectId: "ppvnzg",
@@ -38,7 +40,7 @@ export default defineConfig({
                 }
             });
 
-            return require("./cypress/plugins/index.ts").default(on, config);
+            return registerPlugins(on, config);
         },
         baseUrl: "http://localhost:8080",
         specPattern: "cypress/e2e/**/*.spec.{js,jsx,ts,tsx}",

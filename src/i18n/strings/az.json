@@ -22,19 +22,11 @@
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
-    "Default": "Varsayılan olaraq",
     "Moderator": "Moderator",
-    "Reason": "Səbəb",
-    "Incorrect verification code": "Təsdiq etmənin səhv kodu",
-    "Authentication": "Müəyyənləşdirilmə",
-    "Failed to set display name": "Görünüş adını təyin etmək bacarmadı",
-    "Notification targets": "Xəbərdarlıqlar üçün qurğular",
     "not specified": "qeyd edilmədi",
     "Failed to ban user": "İstifadəçini bloklamağı bacarmadı",
     "Failed to mute user": "İstifadəçini kəsməyi bacarmadı",
-    "Failed to change power level": "Hüquqların səviyyəsini dəyişdirməyi bacarmadı",
     "Are you sure?": "Siz əminsiniz?",
-    "Unignore": "Blokdan çıxarmaq",
     "Invited": "Dəvət edilmişdir",
     "Filter room members": "İştirakçılara görə axtarış",
     "You do not have permission to post to this room": "Siz bu otağa yaza bilmirsiniz",
@@ -42,8 +34,6 @@
     "Forget room": "Otağı unutmaq",
     "Low priority": "Əhəmiyyətsizlər",
     "Historical": "Arxiv",
-    "Failed to unban": "Blokdan çıxarmağı bacarmadı",
-    "Banned by %(displayName)s": "%(displayName)s bloklanıb",
     "unknown error code": "naməlum səhv kodu",
     "Failed to forget room %(errCode)s": "Otağı unutmağı bacarmadı: %(errCode)s",
     "Sunday": "Bazar",
@@ -54,14 +44,9 @@
     "Create new room": "Otağı yaratmaq",
     "Home": "Başlanğıc",
     "%(items)s and %(lastItem)s": "%(items)s və %(lastItem)s",
-    "Deactivate Account": "Hesabı bağlamaq",
     "An error has occurred.": "Səhv oldu.",
-    "Invalid Email Address": "Yanlış email",
     "Verification Pending": "Gözləmə təsdiq etmələr",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Öz elektron poçtunu yoxlayın və olan istinadı basın. Bundan sonra düyməni Davam etməyə basın.",
-    "Unable to add email address": "Email-i əlavə etməyə müvəffəq olmur",
-    "Unable to verify email address.": "Email-i yoxlamağı bacarmadı.",
-    "Failed to change password. Is your password correct?": "Şifrəni əvəz etməyi bacarmadı. Siz cari şifrə düzgün daxil etdiniz?",
     "Reject invitation": "Dəvəti rədd etmək",
     "Are you sure you want to reject the invitation?": "Siz əminsiniz ki, siz dəvəti rədd etmək istəyirsiniz?",
     "Failed to reject invitation": "Dəvəti rədd etməyi bacarmadı",
@@ -70,8 +55,6 @@
     "No more results": "Daha çox nəticə yoxdur",
     "Failed to reject invite": "Dəvəti rədd etməyi bacarmadı",
     "Failed to load timeline position": "Xronologiyadan nişanı yükləməyi bacarmadı",
-    "Unable to remove contact information": "Əlaqə məlumatlarının silməyi bacarmadı",
-    "Profile": "Profil",
     "A new password must be entered.": "Yeni parolu daxil edin.",
     "New passwords must match each other.": "Yeni şifrələr uyğun olmalıdır.",
     "Return to login screen": "Girişin ekranına qayıtmaq",
@@ -82,7 +65,6 @@
     "AM": "12:00",
     "Restricted": "Məhduddur",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
-    "Explore rooms": "Otaqları kəşf edin",
     "common": {
         "analytics": "Analitik",
         "error": "Səhv",
@@ -98,7 +80,9 @@
         "unnamed_room": "Adı açıqlanmayan otaq",
         "identity_server": "Eyniləşdirmənin serveri",
         "on": "Qoşmaq",
-        "Advanced": "Təfərrüatlar"
+        "advanced": "Təfərrüatlar",
+        "profile": "Profil",
+        "authentication": "Müəyyənləşdirilmə"
     },
     "action": {
         "continue": "Davam etmək",
@@ -116,7 +100,9 @@
         "close": "Bağlamaq",
         "accept": "Qəbul etmək",
         "register": "Qeydiyyatdan keçmək",
-        "unban": "Blokdan çıxarmaq"
+        "unban": "Blokdan çıxarmaq",
+        "unignore": "Blokdan çıxarmaq",
+        "explore_rooms": "Otaqları kəşf edin"
     },
     "keyboard": {
         "home": "Başlanğıc"
@@ -139,7 +125,8 @@
             "rule_suppress_notices": "Botla göndərilmiş mesajlar",
             "error_permissions_denied": "%(brand)s-un sizə bildiriş göndərmək icazəsi yoxdur - brauzerinizin parametrlərini yoxlayın",
             "error_permissions_missing": "%(brand)s bildiriş göndərmək üçün icazə verilmədi - lütfən yenidən cəhd edin",
-            "error_title": "Xəbərdarlıqları daxil qoşmağı bacarmadı"
+            "error_title": "Xəbərdarlıqları daxil qoşmağı bacarmadı",
+            "push_targets": "Xəbərdarlıqlar üçün qurğular"
         },
         "appearance": {
             "timeline_image_size_default": "Varsayılan olaraq",
@@ -156,7 +143,15 @@
             "msisdn_in_use": "Bu telefon nömrəsi artıq istifadə olunur",
             "add_email_dialog_title": "Emal ünvan əlavə etmək",
             "add_email_failed_verification": "Email-i yoxlamağı bacarmadı: əmin olun ki, siz məktubda istinaddakı ünvana keçdiniz",
-            "add_msisdn_dialog_title": "Telefon nömrəsi əlavə etmək"
+            "add_msisdn_dialog_title": "Telefon nömrəsi əlavə etmək",
+            "error_password_change_403": "Şifrəni əvəz etməyi bacarmadı. Siz cari şifrə düzgün daxil etdiniz?",
+            "deactivate_section": "Hesabı bağlamaq",
+            "error_email_verification": "Email-i yoxlamağı bacarmadı.",
+            "incorrect_msisdn_verification": "Təsdiq etmənin səhv kodu",
+            "error_set_name": "Görünüş adını təyin etmək bacarmadı",
+            "error_remove_3pid": "Əlaqə məlumatlarının silməyi bacarmadı",
+            "error_invalid_email": "Yanlış email",
+            "error_add_email": "Email-i əlavə etməyə müvəffəq olmur"
         }
     },
     "timeline": {
@@ -292,12 +287,18 @@
         "permissions": {
             "no_privileged_users": "Heç bir istifadəçi bu otaqda xüsusi hüquqlara malik deyil",
             "banned_users_section": "Bloklanmış istifadəçilər",
-            "permissions_section": "Girişin hüquqları"
+            "permissions_section": "Girişin hüquqları",
+            "error_unbanning": "Blokdan çıxarmağı bacarmadı",
+            "banned_by": "%(displayName)s bloklanıb",
+            "ban_reason": "Səbəb"
         },
         "security": {
             "history_visibility_legend": "Kim tarixi oxuya bilər?"
         },
-        "upload_avatar_label": "Avatar-ı yükləmək"
+        "upload_avatar_label": "Avatar-ı yükləmək",
+        "general": {
+            "other_section": "Digər"
+        }
     },
     "failed_load_async_component": "Yükləmək olmur! Şəbəkə bağlantınızı yoxlayın və yenidən cəhd edin.",
     "upload_failed_generic": "'%(fileName)s' faylı yüklənə bilmədi.",
@@ -341,9 +342,14 @@
         }
     },
     "notifications": {
-        "enable_prompt_toast_title": "Xəbərdarlıqlar"
+        "enable_prompt_toast_title": "Xəbərdarlıqlar",
+        "class_other": "Digər",
+        "default": "Varsayılan olaraq"
     },
     "encryption": {
         "not_supported": "<dəstəklənmir>"
+    },
+    "error": {
+        "update_power_level": "Hüquqların səviyyəsini dəyişdirməyi bacarmadı"
     }
 }

@@ -2,9 +2,7 @@
     "Create new room": "പുതിയ റൂം സൃഷ്ടിക്കുക",
     "Failed to forget room %(errCode)s": "%(errCode)s റൂം ഫോര്‍ഗെറ്റ് ചെയ്യുവാന്‍ സാധിച്ചില്ല",
     "unknown error code": "അപരിചിത എറര്‍ കോഡ്",
-    "Failed to change password. Is your password correct?": "രഹസ്യവാക്ക് മാറ്റാന്‍ സാധിച്ചില്ല. രഹസ്യവാക്ക് ശരിയാണോ ?",
     "Sunday": "ഞായര്‍",
-    "Notification targets": "നോട്ടിഫിക്കേഷന്‍ ടാര്‍ഗെറ്റുകള്‍",
     "Today": "ഇന്ന്",
     "Friday": "വെള്ളി",
     "Changelog": "മാറ്റങ്ങളുടെ നാള്‍വഴി",
@@ -18,12 +16,9 @@
     "Wednesday": "ബുധന്‍",
     "You cannot delete this message. (%(code)s)": "നിങ്ങള്‍ക്ക് ഈ സന്ദേശം നീക്കം ചെയ്യാനാകില്ല. (%(code)s)",
     "Send": "അയയ്ക്കുക",
-    "All messages": "എല്ലാ സന്ദേശങ്ങളും",
-    "Invite to this room": "ഈ റൂമിലേക്ക് ക്ഷണിക്കുക",
     "Thursday": "വ്യാഴം",
     "Search…": "തിരയുക…",
     "Yesterday": "ഇന്നലെ",
-    "Explore rooms": "മുറികൾ കണ്ടെത്തുക",
     "common": {
         "error": "എറര്‍",
         "mute": "നിശ്ശബ്ദം",
@@ -52,7 +47,8 @@
         "dismiss": "ഒഴിവാക്കുക",
         "close": "അടയ്ക്കുക",
         "cancel": "റദ്ദാക്കുക",
-        "back": "തിരികെ"
+        "back": "തിരികെ",
+        "explore_rooms": "മുറികൾ കണ്ടെത്തുക"
     },
     "bug_reporting": {
         "send_logs": "നാള്‍വഴി അയയ്ക്കുക",
@@ -68,7 +64,11 @@
             "rule_invite_for_me": "ഞാന്‍ ഒരു റൂമിലേക്ക് ക്ഷണിക്കപ്പെടുമ്പോള്‍",
             "rule_call": "വിളിയ്ക്കുന്നു",
             "rule_suppress_notices": "ബോട്ട് അയയ്ക്കുന്ന സന്ദേശങ്ങള്‍ക്ക്",
-            "noisy": "ഉച്ചത്തില്‍"
+            "noisy": "ഉച്ചത്തില്‍",
+            "push_targets": "നോട്ടിഫിക്കേഷന്‍ ടാര്‍ഗെറ്റുകള്‍"
+        },
+        "general": {
+            "error_password_change_403": "രഹസ്യവാക്ക് മാറ്റാന്‍ സാധിച്ചില്ല. രഹസ്യവാക്ക് ശരിയാണോ ?"
         }
     },
     "auth": {
@@ -94,7 +94,8 @@
         "failed_generic": "ശ്രമം പരാജയപ്പെട്ടു"
     },
     "notifications": {
-        "enable_prompt_toast_title": "നോട്ടിഫിക്കേഷനുകള്‍"
+        "enable_prompt_toast_title": "നോട്ടിഫിക്കേഷനുകള്‍",
+        "all_messages": "എല്ലാ സന്ദേശങ്ങളും"
     },
     "timeline": {
         "context_menu": {
@@ -105,6 +106,7 @@
         "context_menu": {
             "favourite": "പ്രിയപ്പെട്ടവ",
             "low_priority": "താഴ്ന്ന പരിഗണന"
-        }
+        },
+        "invite_this_room": "ഈ റൂമിലേക്ക് ക്ഷണിക്കുക"
     }
 }

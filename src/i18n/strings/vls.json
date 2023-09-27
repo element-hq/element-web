@@ -26,10 +26,8 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s, %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s, %(time)s",
-    "Default": "Standoard",
     "Restricted": "Beperkten toegank",
     "Moderator": "Moderator",
-    "Reason": "Reedn",
     "%(items)s and %(lastItem)s": "%(items)s en %(lastItem)s",
     "Dog": "Hound",
     "Cat": "Katte",
@@ -93,60 +91,17 @@
     "Anchor": "Anker",
     "Headphones": "Koptelefong",
     "Folder": "Mappe",
-    "No display name": "Geen weergavenoame",
     "Warning!": "Let ip!",
-    "Authentication": "Authenticoasje",
-    "Failed to set display name": "Instelln van weergavenoame es mislukt",
-    "Unable to remove contact information": "Kan contactinformoasje nie verwydern",
     "Are you sure?": "Zy je zeker?",
-    "Invalid Email Address": "Oungeldig e-mailadresse",
-    "This doesn't appear to be a valid email address": "’t En ziet er nie noar uut da dit e geldig e-mailadresse es",
-    "Unable to add email address": "Kostege ’t e-mailadresse nie toevoegn",
-    "Unable to verify email address.": "Kostege ’t e-mailadresse nie verifieern.",
-    "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "M'èn joun een e-mail gestuurd vo jen adresse te verifieern. Gelieve de doarin gegeven anwyziengn ip te volgn en ton ip de knop hierounder te klikkn.",
-    "Email Address": "E-mailadresse",
-    "Delete Backup": "Back-up verwydern",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Zy je zeker? Je goa je versleuterde berichtn kwytspeeln a je sleuters nie correct geback-upt zyn.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Versleuterde berichtn zyn beveiligd me eind-tout-eind-versleuterienge. Alleene d’ountvanger(s) en gy èn de sleuters vo deze berichtn te leezn.",
-    "Unable to load key backup status": "Kostege de sleuterback-upstatus nie loadn",
-    "Restore from Backup": "Herstelln uut back-up",
-    "All keys backed up": "Alle sleuters zyn geback-upt",
     "Back up your keys before signing out to avoid losing them.": "Makt een back-up van je sleuters vooraleer da je jen afmeldt vo ze nie kwyt te speeln.",
     "Start using Key Backup": "Begint me de sleuterback-up te gebruukn",
-    "Notification targets": "Meldiengsbestemmiengn",
-    "Unable to verify phone number.": "Kostege de telefongnumero nie verifieern.",
-    "Incorrect verification code": "Onjuste verificoasjecode",
-    "Verification code": "Verificoasjecode",
-    "Phone Number": "Telefongnumero",
-    "Profile picture": "Profielfoto",
-    "Display Name": "Weergavenoame",
-    "Failed to change password. Is your password correct?": "Wyzign van ’t paswoord es mislukt. Es je paswoord wel juste?",
-    "Profile": "Profiel",
-    "Email addresses": "E-mailadressn",
-    "Phone numbers": "Telefongnumero’s",
-    "Account management": "Accountbeheer",
-    "Deactivate Account": "Account deactiveern",
-    "General": "Algemeen",
-    "Unignore": "Nie mi negeern",
-    "Ignored users": "Genegeerde gebruukers",
-    "Missing media permissions, click the button below to request.": "Mediatoestemmiengn ountbreekn, klikt ip de knop hierounder vo deze an te vroagn.",
-    "Request media permissions": "Mediatoestemmiengn verzoekn",
-    "No Audio Outputs detected": "Geen geluudsuutgangn gedetecteerd",
-    "No Microphones detected": "Geen microfoons gevoundn",
-    "No Webcams detected": "Geen webcams gevoundn",
-    "Audio Output": "Geluudsuutgang",
-    "Voice & Video": "Sproak & video",
-    "Room information": "Gespreksinformoasje",
-    "Room Addresses": "Gespreksadressn",
-    "Failed to unban": "Ountbann mislukt",
-    "Banned by %(displayName)s": "Verbann deur %(displayName)s",
     "This event could not be displayed": "Deze gebeurtenisse kostege nie weergegeevn wordn",
     "Failed to ban user": "Verbann van gebruuker es mislukt",
     "Demote yourself?": "Jen eigen degradeern?",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Je kut deze actie nie oungedoan moakn omda je jen eigen degradeert. A je de latste bevoorrechte gebruuker in ’t gesprek zyt, is ’t ounmeuglik van deze rechtn were te krygn.",
     "Demote": "Degradeern",
     "Failed to mute user": "Dempn van gebruuker es mislukt",
-    "Failed to change power level": "Wyzign van ’t machtsniveau es mislukt",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Je kut deze veranderiengn nie oungedoan moakn angezien da je de gebruuker tout ’tzelfste niveau als jen eigen promoveert.",
     "Jump to read receipt": "Noar ’t latst geleezn bericht goan",
     "Share Link to User": "Koppelienge me de gebruuker deeln",
@@ -155,7 +110,6 @@
         "other": "en %(count)s anderen…",
         "one": "en één andere…"
     },
-    "Invite to this room": "Uutnodign in dit gesprek",
     "Invited": "Uutgenodigd",
     "Filter room members": "Gespreksleedn filtern",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (macht %(powerLevelNumber)s)",
@@ -264,7 +218,6 @@
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Vo je gespreksgeschiedenisse nie kwyt te speeln, moe je je gesprekssleuters exporteern vooraleer da je jen afmeldt. Je goa moetn werekeern noa de nieuwere versie van %(brand)s vo dit te doen",
     "Incompatible Database": "Incompatibele database",
     "Continue With Encryption Disabled": "Verdergoan me versleuterienge uutgeschoakeld",
-    "Unknown error": "Ounbekende foute",
     "Filter results": "Resultoatn filtern",
     "An error has occurred.": "’t Is e foute ipgetreedn.",
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Verifieert deze gebruuker vo n’hem/heur als vertrouwd te markeern. Gebruukers vertrouwn gift je extra gemoedsrust by ’t gebruuk van eind-tout-eind-versleuterde berichtn.",
@@ -330,7 +283,6 @@
     "You cannot delete this message. (%(code)s)": "Je kut dit bericht nie verwydern. (%(code)s)",
     "unknown error code": "ounbekende foutcode",
     "Failed to forget room %(errCode)s": "Vergeetn van gesprek is mislukt %(errCode)s",
-    "All messages": "Alle berichtn",
     "Home": "Thuus",
     "This homeserver would like to make sure you are not a robot.": "Deze thuusserver wil geirn weetn of da je gy geen robot zyt.",
     "Some characters not allowed": "Sommige tekens zyn nie toegeloatn",
@@ -397,11 +349,6 @@
     "Set up Secure Messages": "Beveiligde berichtn instelln",
     "Recovery Method Removed": "Herstelmethode verwyderd",
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "A je de herstelmethode nie è verwyderd, is ’t meuglik dat der een anvaller toegank tout jen account probeert te verkrygn. Wyzigt ounmiddellik jen accountpaswoord en stelt e nieuwe herstelmethode in in d’instelliengn.",
-    "Uploaded sound": "Ipgeloadn-geluud",
-    "Sounds": "Geluudn",
-    "Notification sound": "Meldiengsgeluud",
-    "Set a new custom sound": "Stelt e nieuw angepast geluud in",
-    "Browse": "Bloadern",
     "Edited at %(date)s. Click to view edits.": "Bewerkt ip %(date)s. Klikt vo de bewerkiengn te bekykn.",
     "Message edits": "Berichtbewerkiengn",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Dit gesprek bywerkn vereist da je d’huudige instantie dervan ofsluut en in de plekke dervan e nieuw gesprek anmakt. Vo de gespreksleedn de best meuglike ervoarienge te biedn, goan me:",
@@ -415,32 +362,8 @@
     "Find others by phone or email": "Viendt andere menschn via hunder telefongnumero of e-mailadresse",
     "Be found by phone or email": "Wor gevoundn via je telefongnumero of e-mailadresse",
     "Clear personal data": "Persoonlike gegeevns wissn",
-    "Checking server": "Server wor gecontroleerd",
-    "Disconnect from the identity server <idserver />?": "Wil je de verbindienge me den identiteitsserver <idserver /> verbreekn?",
-    "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "Je makt vo de moment gebruuk van <server></server> vo deur je contactn gevoundn te kunn wordn, en von hunder te kunn viendn. Je kut hierounder jen identiteitsserver wyzign.",
-    "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "Je makt vo de moment geen gebruuk van een identiteitsserver. Voegt der hierounder één toe vo deur je contactn gevoundn te kunn wordn en von hunder te kunn viendn.",
-    "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "De verbindienge me jen identiteitsserver verbreekn goat dervoorn zorgn da je nie mi deur andere gebruukers gevoundn goa kunn wordn, en dat andere menschn je nie via e-mail of telefong goan kunn uutnodign.",
-    "Discovery": "Ountdekkienge",
     "Deactivate account": "Account deactiveern",
-    "Unable to revoke sharing for email address": "Kostege ’t deeln vo dat e-mailadresse hier nie intrekkn",
-    "Unable to share email address": "Kostege ’t e-mailadresse nie deeln",
-    "Discovery options will appear once you have added an email above.": "Ountdekkiengsopties goan verschynn a j’een e-mailadresse toegevoegd ghed èt.",
-    "Unable to revoke sharing for phone number": "Kostege ’t deeln vo dien telefongnumero hier nie intrekkn",
-    "Unable to share phone number": "Kostege den telefongnumero nie deeln",
-    "Please enter verification code sent via text.": "Gift de verificoasjecode in da je in een smse gekreegn ghed èt.",
-    "Discovery options will appear once you have added a phone number above.": "Ountdekkiengsopties goan verschynn a j’e telefongnumero toegevoegd ghed èt.",
-    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "’t Is een smse versteur noa +%(msisdn)s. Gift de verificoasjecode in da derin stoat.",
     "Command Help": "Hulp by ipdrachtn",
-    "The identity server you have chosen does not have any terms of service.": "Den identiteitsserver da je gekozen ghed èt, èt geen dienstvoorwoardn.",
-    "Terms of service not accepted or the identity server is invalid.": "Dienstvoorwoardn nie anveird, of den identiteitsserver is oungeldig.",
-    "Enter a new identity server": "Gift e nieuwen identiteitsserver in",
-    "Remove %(email)s?": "%(email)s verwydern?",
-    "Remove %(phone)s?": "%(phone)s verwydern?",
-    "Explore rooms": "Gesprekkn ountdekkn",
-    "Identity server (%(server)s)": "Identiteitsserver (%(server)s)",
-    "Could not connect to identity server": "Kostege geen verbindienge moakn me den identiteitsserver",
-    "Not a valid identity server (status code %(code)s)": "Geen geldigen identiteitsserver (statuscode %(code)s)",
-    "Identity server URL must be HTTPS": "Den identiteitsserver-URL moet HTTPS zyn",
     "common": {
         "analytics": "Statistische gegeevns",
         "error": "Foute",
@@ -481,7 +404,12 @@
         "on": "An",
         "off": "Uut",
         "copied": "Gekopieerd!",
-        "Advanced": "Geavanceerd"
+        "advanced": "Geavanceerd",
+        "general": "Algemeen",
+        "profile": "Profiel",
+        "display_name": "Weergavenoame",
+        "user_avatar": "Profielfoto",
+        "authentication": "Authenticoasje"
     },
     "action": {
         "continue": "Verdergoan",
@@ -536,7 +464,9 @@
         "refresh": "Herloadn",
         "mention": "Vermeldn",
         "submit": "Bevestign",
-        "unban": "Ountbann"
+        "unban": "Ountbann",
+        "unignore": "Nie mi negeern",
+        "explore_rooms": "Gesprekkn ountdekkn"
     },
     "labs": {
         "pinning": "Bericht vastprikkn",
@@ -608,7 +538,8 @@
             "noisy": "Lawoaierig",
             "error_permissions_denied": "%(brand)s èt geen toestemmienge vo je meldiengn te verstuurn - controleert je browserinstelliengn",
             "error_permissions_missing": "%(brand)s èt geen toestemmienge gekreegn ghed vo joun meldiengn te verstuurn - herprobeer ’t e ki",
-            "error_title": "Kostege meldiengn nie inschoakeln"
+            "error_title": "Kostege meldiengn nie inschoakeln",
+            "push_targets": "Meldiengsbestemmiengn"
         },
         "appearance": {
             "timeline_image_size_default": "Standoard",
@@ -617,7 +548,14 @@
         "inline_url_previews_room_account": "URL-voorvertoniengn in dit gesprek inschoakeln (geldt alleene vo joun)",
         "inline_url_previews_room": "URL-voorvertoniengn standoard vo de gebruukers in dit gesprek inschoakeln",
         "voip": {
-            "mirror_local_feed": "Lokoale videoanvoer ook elders ipsloan (spiegeln)"
+            "mirror_local_feed": "Lokoale videoanvoer ook elders ipsloan (spiegeln)",
+            "missing_permissions_prompt": "Mediatoestemmiengn ountbreekn, klikt ip de knop hierounder vo deze an te vroagn.",
+            "request_permissions": "Mediatoestemmiengn verzoekn",
+            "audio_output": "Geluudsuutgang",
+            "audio_output_empty": "Geen geluudsuutgangn gedetecteerd",
+            "audio_input_empty": "Geen microfoons gevoundn",
+            "video_input_empty": "Geen webcams gevoundn",
+            "title": "Sproak & video"
         },
         "security": {
             "send_analytics": "Statistische gegeevns (analytics) verstuurn",
@@ -627,7 +565,13 @@
             "encryption_section": "Versleuterienge",
             "bulk_options_section": "Bulkopties",
             "bulk_options_accept_all_invites": "Alle %(invitedRooms)s-uutnodigiengn anveirdn",
-            "bulk_options_reject_all_invites": "Alle %(invitedRooms)s-uutnodigiengn weigern"
+            "bulk_options_reject_all_invites": "Alle %(invitedRooms)s-uutnodigiengn weigern",
+            "delete_backup": "Back-up verwydern",
+            "delete_backup_confirm_description": "Zy je zeker? Je goa je versleuterde berichtn kwytspeeln a je sleuters nie correct geback-upt zyn.",
+            "error_loading_key_backup_status": "Kostege de sleuterback-upstatus nie loadn",
+            "restore_key_backup": "Herstelln uut back-up",
+            "key_backup_complete": "Alle sleuters zyn geback-upt",
+            "ignore_users_section": "Genegeerde gebruukers"
         },
         "preferences": {
             "room_list_heading": "Gesprekslyste",
@@ -643,7 +587,36 @@
             "language_section": "Toale en regio",
             "email_address_in_use": "Dat e-mailadresse hier es al in gebruuk",
             "msisdn_in_use": "Dezen telefongnumero es al in gebruuk",
-            "add_email_failed_verification": "Kostege ’t e-mailadresse nie verifieern: zorgt dervoor da je de koppelienge in den e-mail èt angeklikt"
+            "add_email_failed_verification": "Kostege ’t e-mailadresse nie verifieern: zorgt dervoor da je de koppelienge in den e-mail èt angeklikt",
+            "name_placeholder": "Geen weergavenoame",
+            "error_password_change_403": "Wyzign van ’t paswoord es mislukt. Es je paswoord wel juste?",
+            "emails_heading": "E-mailadressn",
+            "msisdns_heading": "Telefongnumero’s",
+            "deactivate_section": "Account deactiveern",
+            "account_management_section": "Accountbeheer",
+            "discovery_section": "Ountdekkienge",
+            "error_revoke_email_discovery": "Kostege ’t deeln vo dat e-mailadresse hier nie intrekkn",
+            "error_share_email_discovery": "Kostege ’t e-mailadresse nie deeln",
+            "error_email_verification": "Kostege ’t e-mailadresse nie verifieern.",
+            "discovery_email_empty": "Ountdekkiengsopties goan verschynn a j’een e-mailadresse toegevoegd ghed èt.",
+            "error_revoke_msisdn_discovery": "Kostege ’t deeln vo dien telefongnumero hier nie intrekkn",
+            "error_share_msisdn_discovery": "Kostege den telefongnumero nie deeln",
+            "error_msisdn_verification": "Kostege de telefongnumero nie verifieern.",
+            "incorrect_msisdn_verification": "Onjuste verificoasjecode",
+            "msisdn_verification_instructions": "Gift de verificoasjecode in da je in een smse gekreegn ghed èt.",
+            "msisdn_verification_field_label": "Verificoasjecode",
+            "discovery_msisdn_empty": "Ountdekkiengsopties goan verschynn a j’e telefongnumero toegevoegd ghed èt.",
+            "error_set_name": "Instelln van weergavenoame es mislukt",
+            "error_remove_3pid": "Kan contactinformoasje nie verwydern",
+            "remove_email_prompt": "%(email)s verwydern?",
+            "error_invalid_email": "Oungeldig e-mailadresse",
+            "error_invalid_email_detail": "’t En ziet er nie noar uut da dit e geldig e-mailadresse es",
+            "error_add_email": "Kostege ’t e-mailadresse nie toevoegn",
+            "add_email_instructions": "M'èn joun een e-mail gestuurd vo jen adresse te verifieern. Gelieve de doarin gegeven anwyziengn ip te volgn en ton ip de knop hierounder te klikkn.",
+            "email_address_label": "E-mailadresse",
+            "remove_msisdn_prompt": "%(phone)s verwydern?",
+            "add_msisdn_instructions": "’t Is een smse versteur noa +%(msisdn)s. Gift de verificoasjecode in da derin stoat.",
+            "msisdn_label": "Telefongnumero"
         }
     },
     "devtools": {
@@ -905,7 +878,10 @@
             "send_event_type": "%(eventType)s-gebeurtenissn verstuurn",
             "title": "Rolln & toestemmiengn",
             "permissions_section": "Toestemmiengn",
-            "permissions_section_description_room": "Selecteert de rolln vereist vo verschillende deeln van ’t gesprek te wyzign"
+            "permissions_section_description_room": "Selecteert de rolln vereist vo verschillende deeln van ’t gesprek te wyzign",
+            "error_unbanning": "Ountbann mislukt",
+            "banned_by": "Verbann deur %(displayName)s",
+            "ban_reason": "Reedn"
         },
         "security": {
             "enable_encryption_confirm_title": "Versleuterienge inschoakeln?",
@@ -928,16 +904,26 @@
             "default_url_previews_off": "URL-voorvertoniengn zyn vo leedn van dit gesprek standoard uutgeschoakeld.",
             "url_preview_encryption_warning": "In versleuterde gesprekkn lyk dat hier zyn URL-voorvertoniengn standoard uutgeschoakeld, vo te voorkommn da je thuusserver (woa da de voorvertoniengn wordn gemakt) informoasje ku verzoameln over de koppeliengn da j’hiere ziet.",
             "url_preview_explainer": "A ’t er etwien een URL in e bericht invoegt, kut er een URL-voorvertonienge getoogd wordn me meer informoasje over de koppelienge, gelyk den titel, omschryvienge en e fotootje van de website.",
-            "url_previews_section": "URL-voorvertoniengn"
+            "url_previews_section": "URL-voorvertoniengn",
+            "aliases_section": "Gespreksadressn",
+            "other_section": "Overige"
         },
         "advanced": {
             "unfederated": "Dit gesprek es nie toegankelik voor externe Matrix-servers",
             "room_upgrade_button": "Actualiseert dit gesprek noar d’anbevooln gespreksversie",
             "room_predecessor": "Bekykt oudere berichtn in %(roomName)s.",
             "room_version_section": "Gespreksversie",
-            "room_version": "Gespreksversie:"
+            "room_version": "Gespreksversie:",
+            "information_section_room": "Gespreksinformoasje"
         },
-        "upload_avatar_label": "Avatar iploadn"
+        "upload_avatar_label": "Avatar iploadn",
+        "notifications": {
+            "uploaded_sound": "Ipgeloadn-geluud",
+            "sounds_section": "Geluudn",
+            "notification_sound": "Meldiengsgeluud",
+            "custom_sound_prompt": "Stelt e nieuw angepast geluud in",
+            "browse_button": "Bloadern"
+        }
     },
     "encryption": {
         "verification": {
@@ -1095,7 +1081,8 @@
         "context_menu": {
             "favourite": "Favoriet",
             "low_priority": "Leige prioriteit"
-        }
+        },
+        "invite_this_room": "Uutnodign in dit gesprek"
     },
     "file_panel": {
         "guest_note": "Je moe je <a>registreern</a> vo deze functie te gebruukn",
@@ -1168,14 +1155,19 @@
         "mixed_content": "Je ku geen verbindienge moakn me de thuusserver via HTTP wanneer dat der een HTTPS-URL in je browserbalk stoat. Gebruukt HTTPS of <a>schoakelt ounveilige scripts in</a>.",
         "tls": "Geen verbindienge met de thuusserver - controleer je verbindienge, zorgt dervoorn dan ’t <a>SSL-certificoat van de thuusserver</a> vertrouwd is en dat der geen browserextensies verzoekn blokkeern.",
         "failed_copy": "Kopieern mislukt",
-        "something_went_wrong": "’t Es etwa misgegoan!"
+        "something_went_wrong": "’t Es etwa misgegoan!",
+        "update_power_level": "Wyzign van ’t machtsniveau es mislukt",
+        "unknown": "Ounbekende foute"
     },
     "items_and_n_others": {
         "other": "<Items/> en %(count)s andere",
         "one": "<Items/> en één ander"
     },
     "notifications": {
-        "enable_prompt_toast_title": "Meldiengn"
+        "enable_prompt_toast_title": "Meldiengn",
+        "class_other": "Overige",
+        "default": "Standoard",
+        "all_messages": "Alle berichtn"
     },
     "room_summary_card_back_action_label": "Gespreksinformoasje",
     "onboarding": {
@@ -1184,5 +1176,19 @@
     "lightbox": {
         "rotate_left": "Links droain",
         "rotate_right": "Rechts droain"
+    },
+    "identity_server": {
+        "url_not_https": "Den identiteitsserver-URL moet HTTPS zyn",
+        "error_invalid": "Geen geldigen identiteitsserver (statuscode %(code)s)",
+        "error_connection": "Kostege geen verbindienge moakn me den identiteitsserver",
+        "checking": "Server wor gecontroleerd",
+        "error_invalid_or_terms": "Dienstvoorwoardn nie anveird, of den identiteitsserver is oungeldig.",
+        "no_terms": "Den identiteitsserver da je gekozen ghed èt, èt geen dienstvoorwoardn.",
+        "disconnect_server": "Wil je de verbindienge me den identiteitsserver <idserver /> verbreekn?",
+        "url": "Identiteitsserver (%(server)s)",
+        "description_connected": "Je makt vo de moment gebruuk van <server></server> vo deur je contactn gevoundn te kunn wordn, en von hunder te kunn viendn. Je kut hierounder jen identiteitsserver wyzign.",
+        "description_disconnected": "Je makt vo de moment geen gebruuk van een identiteitsserver. Voegt der hierounder één toe vo deur je contactn gevoundn te kunn wordn en von hunder te kunn viendn.",
+        "disconnect_warning": "De verbindienge me jen identiteitsserver verbreekn goat dervoorn zorgn da je nie mi deur andere gebruukers gevoundn goa kunn wordn, en dat andere menschn je nie via e-mail of telefong goan kunn uutnodign.",
+        "url_field_label": "Gift e nieuwen identiteitsserver in"
     }
 }

@@ -61,7 +61,7 @@ export const RoomNotificationContextMenu: React.FC<IProps> = ({ room, onFinished
 
     const allMessagesOption: JSX.Element = (
         <IconizedContextMenuRadio
-            label={_t("All messages")}
+            label={_t("notifications|all_messages")}
             active={notificationState === RoomNotifState.AllMessagesLoud}
             iconClassName="mx_RoomNotificationContextMenu_iconBellDot"
             onClick={wrapHandler(() => setNotificationState(RoomNotifState.AllMessagesLoud))}
@@ -70,7 +70,7 @@ export const RoomNotificationContextMenu: React.FC<IProps> = ({ room, onFinished
 
     const mentionsOption: JSX.Element = (
         <IconizedContextMenuRadio
-            label={_t("Mentions & keywords")}
+            label={_t("notifications|mentions_keywords")}
             active={notificationState === RoomNotifState.MentionsOnly}
             iconClassName="mx_RoomNotificationContextMenu_iconBellMentions"
             onClick={wrapHandler(() => setNotificationState(RoomNotifState.MentionsOnly))}

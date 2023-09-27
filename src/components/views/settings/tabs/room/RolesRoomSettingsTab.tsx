@@ -95,7 +95,7 @@ export class BannedUser extends React.Component<IBannedUserProps> {
             logger.error("Failed to unban: " + err);
             Modal.createDialog(ErrorDialog, {
                 title: _t("common|error"),
-                description: _t("Failed to unban"),
+                description: _t("room_settings|permissions|error_unbanning"),
             });
         });
     };
@@ -119,9 +119,11 @@ export class BannedUser extends React.Component<IBannedUserProps> {
         return (
             <li>
                 {unbanButton}
-                <span title={_t("Banned by %(displayName)s", { displayName: this.props.by })}>
+                <span title={_t("room_settings|permissions|banned_by", { displayName: this.props.by })}>
                     <strong>{this.props.member.name}</strong> {userId}
-                    {this.props.reason ? " " + _t("Reason") + ": " + this.props.reason : ""}
+                    {this.props.reason
+                        ? " " + _t("room_settings|permissions|ban_reason") + ": " + this.props.reason
+                        : ""}
                 </span>
             </li>
         );
@@ -205,10 +207,8 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             logger.error(e);
 
             Modal.createDialog(ErrorDialog, {
-                title: _t("Error changing power level requirement"),
-                description: _t(
-                    "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.",
-                ),
+                title: _t("room_settings|permissions|error_changing_pl_reqs_title"),
+                description: _t("room_settings|permissions|error_changing_pl_reqs_description"),
             });
         });
     };
@@ -230,10 +230,8 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             logger.error(e);
 
             Modal.createDialog(ErrorDialog, {
-                title: _t("Error changing power level"),
-                description: _t(
-                    "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.",
-                ),
+                title: _t("room_settings|permissions|error_changing_pl_title"),
+                description: _t("room_settings|permissions|error_changing_pl_description"),
             });
         });
     };

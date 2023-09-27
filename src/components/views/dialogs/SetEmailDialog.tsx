@@ -67,8 +67,8 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
         const emailAddress = this.state.emailAddress;
         if (!Email.looksValid(emailAddress)) {
             Modal.createDialog(ErrorDialog, {
-                title: _t("Invalid Email Address"),
-                description: _t("This doesn't appear to be a valid email address"),
+                title: _t("settings|general|error_invalid_email"),
+                description: _t("settings|general|error_invalid_email_detail"),
             });
             return;
         }
@@ -88,7 +88,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                 this.setState({ emailBusy: false });
                 logger.error("Unable to add email address " + emailAddress + " " + err);
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Unable to add email address"),
+                    title: _t("settings|general|error_add_email"),
                     description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
                 });
             },
@@ -123,7 +123,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
 
                 if (underlyingError instanceof MatrixError && underlyingError.errcode === "M_THREEPID_AUTH_FAILED") {
                     const message =
-                        _t("Unable to verify email address.") +
+                        _t("settings|general|error_email_verification") +
                         " " +
                         _t(
                             "Please check your email and click on the link it contains. Once this is done, click continue.",
@@ -137,7 +137,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                 } else {
                     logger.error("Unable to verify email address: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: _t("Unable to verify email address."),
+                        title: _t("settings|general|error_email_verification"),
                         description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
                     });
                 }

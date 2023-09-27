@@ -650,9 +650,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 {({ onFocus, isActive, ref }) => {
                     const tabIndex = isActive ? 0 : -1;
 
-                    let ariaLabel = _t("Jump to first unread room.");
+                    let ariaLabel = _t("a11y_jump_first_unread_room");
                     if (this.props.tagId === DefaultTagID.Invite) {
-                        ariaLabel = _t("Jump to first invite.");
+                        ariaLabel = _t("a11y|jump_first_invite");
                     }
 
                     const badge = (

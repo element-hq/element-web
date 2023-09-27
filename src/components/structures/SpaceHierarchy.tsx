@@ -384,7 +384,7 @@ export const showRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
         oob_data: {
             avatarUrl: room?.avatar_url,
             // XXX: This logic is duplicated from the JS SDK which would normally decide what the name is.
-            name: room?.name || roomAlias || _t("Unnamed room"),
+            name: room?.name || roomAlias || _t("common|unnamed_room"),
             roomType,
         } as IOOBData,
         metricsTrigger: "RoomDirectory",
@@ -410,7 +410,7 @@ export const joinRoom = async (cli: MatrixClient, hierarchy: RoomHierarchy, room
             logger.warn("Got a non-MatrixError while joining room", err);
             SdkContextClass.instance.roomViewStore.showJoinRoomError(
                 new MatrixError({
-                    error: _t("Unknown error"),
+                    error: _t("error|unknown"),
                 }),
                 roomId,
             );
@@ -673,7 +673,7 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
         };
     }
 
-    let buttonText = _t("Saving…");
+    let buttonText = _t("common|saving");
     if (!saving) {
         buttonText = selectionAllSuggested ? _t("space|unmark_suggested") : _t("space|mark_suggested");
     }

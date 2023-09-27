@@ -1,8 +1,5 @@
 {
     "Admin Tools": "Administratora rīki",
-    "No Microphones detected": "Nav mikrofonu",
-    "No Webcams detected": "Nav webkameru",
-    "Authentication": "Autentifikācija",
     "%(items)s and %(lastItem)s": "%(items)s un %(lastItem)s",
     "A new password must be entered.": "Nepieciešams ievadīt jauno paroli.",
     "An error has occurred.": "Notikusi kļūda.",
@@ -10,30 +7,22 @@
     "Are you sure you want to leave the room '%(roomName)s'?": "Vai tiešām vēlaties pamest istabu: '%(roomName)s'?",
     "Are you sure you want to reject the invitation?": "Vai tiešām vēlaties noraidīt šo uzaicinājumu?",
     "Custom level": "Pielāgots līmenis",
-    "Deactivate Account": "Deaktivizēt kontu",
     "Decrypt %(text)s": "Atšifrēt %(text)s",
-    "Default": "Noklusējuma",
     "Download %(text)s": "Lejupielādēt: %(text)s",
     "Email address": "Epasta adrese",
     "Enter passphrase": "Ievadiet frāzveida paroli",
     "Error decrypting attachment": "Kļūda atšifrējot pielikumu",
     "Failed to ban user": "Neizdevās nobanot/bloķēt (liegt pieeju) lietotāju",
-    "Failed to change password. Is your password correct?": "Neizdevās nomainīt paroli. Vai tā ir pareiza?",
-    "Failed to change power level": "Neizdevās nomainīt statusa līmeni",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Tu nevarēsi atcelt šo darbību, jo šim lietotājam piešķir tādu pašu statusa līmeni, kāds ir Tev.",
     "Failed to forget room %(errCode)s": "Neizdevās \"aizmirst\" istabu %(errCode)s",
     "Failed to load timeline position": "Neizdevās ielādēt laikpaziņojumu pozīciju",
     "Failed to mute user": "Neizdevās apklusināt lietotāju",
     "Failed to reject invite": "Neizdevās noraidīt uzaicinājumu",
     "Failed to reject invitation": "Neizdevās noraidīt uzaicinājumu",
-    "Failed to set display name": "Neizdevās iestatīt parādāmo vārdu",
-    "Failed to unban": "Neizdevās atbanot/atbloķēt (atcelt pieejas liegumu)",
     "Filter room members": "Atfiltrēt istabas dalībniekus",
     "Forget room": "Aizmirst istabu",
     "Historical": "Bijušie",
     "Home": "Mājup",
-    "Incorrect verification code": "Nepareizs verifikācijas kods",
-    "Invalid Email Address": "Nepareiza epasta adrese",
     "Invalid file%(extra)s": "Nederīgs fails %(extra)s",
     "Invited": "Uzaicināts/a",
     "Join Room": "Pievienoties istabai",
@@ -42,11 +31,8 @@
     "Moderator": "Moderators",
     "New passwords must match each other.": "Jaunajām parolēm ir jāsakrīt vienai ar otru.",
     "not specified": "nav noteikts",
-    "No display name": "Nav parādāmā vārda",
     "No more results": "Vairāk nekādu rezultātu nav",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Lūdzu, pārbaudi savu epastu un noklikšķini tajā esošo saiti. Tiklīdz tas ir izdarīts, klikšķini \"turpināt\".",
-    "Profile": "Profils",
-    "Reason": "Iemesls",
     "Reject invitation": "Noraidīt uzaicinājumu",
     "Return to login screen": "Atgriezties uz pierakstīšanās lapu",
     "This will allow you to reset your password and receive notifications.": "Tas atļaus Tev atiestatīt paroli un saņemt paziņojumus.",
@@ -71,12 +57,8 @@
     "Server may be unavailable, overloaded, or search timed out :(": "Serveris izskatās nesasniedzams, ir pārslogots, vai arī meklēšana beigusies ar savienojuma noildzi :(",
     "Session ID": "Sesijas ID",
     "This room has no local addresses": "Šai istabai nav lokālo adrešu",
-    "This doesn't appear to be a valid email address": "Šī neizskatās pēc derīgas epasta adreses",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Notika mēģinājums specifisku posmu šīs istabas laika skalā, bet jums nav atļaujas skatīt konkrēto ziņu.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Mēģinājums ielādēt šīs istabas čata vēstures izvēlēto posmu neizdevās, jo tas netika atrasts.",
-    "Unable to add email address": "Neizdevās pievienot epasta adresi",
-    "Unable to remove contact information": "Neizdevās dzēst kontaktinformāciju",
-    "Unable to verify email address.": "Neizdevās apstiprināt epasta adresi.",
     "unknown error code": "nezināms kļūdas kods",
     "Create new room": "Izveidot jaunu istabu",
     "Verification Pending": "Gaida verifikāciju",
@@ -115,7 +97,6 @@
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Šis process ļaus Tev importēt šifrēšanas atslēgas, kuras Tu iepriekš eksportēji no cita Matrix klienta. Tas ļaus Tev atšifrēt čata vēsturi.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Eksporta fails būs aizsargāts ar frāzveida paroli. Tā ir jāievada šeit, lai atšifrētu failu.",
     "Confirm Removal": "Apstipriniet dzēšanu",
-    "Unknown error": "Nezināma kļūda",
     "Unable to restore session": "Neizdevās atjaunot sesiju",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Ja iepriekš izmantojāt jaunāku %(brand)s versiju, jūsu sesija var nebūt saderīga ar šo versiju. Aizveriet šo logu un atgriezieties jaunākajā versijā.",
     "Error decrypting image": "Kļūda atšifrējot attēlu",
@@ -132,14 +113,12 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "Restricted": "Ierobežots",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Jūs nevarēsiet atcelt šīs izmaiņas pēc sava statusa pazemināšanas. Gadījumā, ja esat pēdējais priviliģētais lietotājs istabā, būs neiespējami atgūt šīs privilēģijas.",
-    "Unignore": "Atcelt ignorēšanu",
     "Jump to read receipt": "Pāriet uz pēdējo skatīto ziņu",
     "%(duration)ss": "%(duration)s sek",
     "%(duration)sm": "%(duration)smin",
     "%(duration)sh": "%(duration)s stundas",
     "%(duration)sd": "%(duration)s dienas",
     "Replying": "Atbildot uz",
-    "Banned by %(displayName)s": "%(displayName)s liedzis pieeju",
     "Delete Widget": "Dzēst vidžetu",
     "collapse": "sakļaut",
     "expand": "izvērst",
@@ -149,7 +128,6 @@
     },
     "This room is not public. You will not be able to rejoin without an invite.": "Šī istaba nav publiska un jūs nevarēsiet atkārtoti pievienoties bez uzaicinājuma.",
     "Sunday": "Svētdiena",
-    "Notification targets": "Paziņojumu adresāti",
     "Today": "Šodien",
     "Friday": "Piektdiena",
     "Changelog": "Izmaiņu vēsture",
@@ -165,8 +143,6 @@
     "All Rooms": "Visās istabās",
     "Wednesday": "Trešdiena",
     "You cannot delete this message. (%(code)s)": "Tu nevari dzēst šo ziņu. (%(code)s)",
-    "All messages": "Visas ziņas",
-    "Invite to this room": "Uzaicināt uz šo istabu",
     "Thursday": "Ceturtdiena",
     "Logs sent": "Logfaili nosūtīti",
     "Yesterday": "Vakardien",
@@ -196,12 +172,10 @@
     },
     "Encryption not enabled": "Šifrēšana nav iespējota",
     "Use the <a>Desktop app</a> to search encrypted messages": "Izmantojiet <a>lietotni</a>, lai veiktu šifrētu ziņu meklēšanu",
-    "None": "Neviena",
     "Room options": "Istabas opcijas",
     "Encrypted by a deleted session": "Šifrēts ar dzēstu sesiju",
     "Messages in this room are not end-to-end encrypted.": "Ziņām šajā istabā netiek piemērota pilnīga šifrēšana.",
     "This room is end-to-end encrypted": "Šajā istabā tiek veikta pilnīga šifrēšana",
-    "Room information": "Informācija par istabu",
     "The server is offline.": "Serveris bezsaistē.",
     "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>": "Ja ir aizmirsta slepenā frāze, jūs varat <button1>izmantot drošības atslēgu</button1> vai<button2>iestatīt jaunus atkopšanas veidus</button2>",
     "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "Ja ir aizmirsta drošības atslēga, jūs varat <button>iestatīt jaunus atkopšanas veidus</button>",
@@ -242,20 +216,8 @@
     "You accepted": "Jūs akceptējāt",
     "IRC display name width": "IRC parādāmā vārda platums",
     "%(displayName)s cancelled verification.": "%(displayName)s atcēla verificēšanu.",
-    "Manage integrations": "Pārvaldīt integrācijas",
-    "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "Pašlaik jūs izmantojat <server></server>, lai atklātu esošos kontaktus un jūs būtu atklājams citiem. Jūs varat mainīt identitātes serveri zemāk.",
-    "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "Pašlaik jūs neizmantojat nevienu identitātes serveri. Lai atklātu esošos kontaktus un jūs būtu atklājams citiem, pievienojiet kādu identitātes serveri zemāk.",
     "Are you sure you want to deactivate your account? This is irreversible.": "Vai tiešām vēlaties deaktivizēt savu kontu? Tas ir neatgriezeniski.",
     "Deactivate account": "Deaktivizēt kontu",
-    "Phone Number": "Tālruņa numurs",
-    "Phone numbers": "Tālruņa numuri",
-    "Email Address": "Epasta adrese",
-    "Email addresses": "Epasta adreses",
-    "Browse": "Pārlūkot",
-    "Notification sound": "Paziņojumu skaņas signāli",
-    "Uploaded sound": "Augšupielādētie skaņas signāli",
-    "Sounds": "Skaņas signāli",
-    "Set a new custom sound": "Iestatīt jaunu pielāgotu skaņas signālu",
     "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "Iestatiet istabai adresi, lai lietotāji var atrast šo istabu jūsu bāzes serverī (%(localDomain)s)",
     "Local Addresses": "Lokālās adreses",
     "New published address (e.g. #alias:server)": "Jauna publiska adrese (piemēram, #alias:server)",
@@ -267,17 +229,12 @@
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "Notikusi kļūda, mēģinot atjaunināt istabas galveno adresi. Iespējams, tas ir liegts servera iestatījumos vai arī notikusi kāda pagaidu kļūme.",
     "Error updating main address": "Kļūda galvenās adreses atjaunināšanā",
     "This address is available to use": "Šī adrese ir pieejama",
-    "Room Addresses": "Istabas adreses",
     "Room Topic": "Istabas temats",
-    "Room %(name)s": "Istaba %(name)s",
     "Room Name": "Istabas nosaukums",
     "General failure": "Vispārīga kļūda",
-    "General": "Vispārīgi",
     "Recently Direct Messaged": "Nesenās tiešās sarakstes",
     "e.g. my-room": "piem., mana-istaba",
     "Room address": "Istabas adrese",
-    "Show advanced": "Rādīt papildu iestatījumus",
-    "Hide advanced": "Slēpt papildu iestatījumus",
     "Add a new server": "Pievienot jaunu serveri",
     "Your homeserver": "Jūsu bāzes serveris",
     "Your server": "Jūsu serveris",
@@ -302,7 +259,6 @@
     "Start chatting": "Uzsākt saraksti",
     "Reject & Ignore user": "Noraidīt un ignorēt lietotāju",
     "Do you want to chat with %(user)s?": "Vai vēlaties sarakstīties ar %(user)s?",
-    "Explore rooms": "Pārlūkot istabas",
     "Confirm Security Phrase": "Apstipriniet slepeno frāzi",
     "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Nodrošinieties pret piekļuves zaudēšanu šifrētām ziņām un datiem, dublējot šifrēšanas atslēgas savā serverī.",
     "Use a secret phrase only you know, and optionally save a Security Key to use for backup.": "Izmantojiet tikai jums zināmu slepeno frāzi un pēc izvēles saglabājiet drošības atslēgu, lai to izmantotu dublēšanai.",
@@ -316,8 +272,6 @@
     "Couldn't load page": "Neizdevās ielādēt lapu",
     "Sign in with SSO": "Pierakstieties, izmantojot SSO",
     "Session key": "Sesijas atslēga",
-    "Account management": "Konta pārvaldība",
-    "Failed to save your profile": "Neizdevās salabāt jūsu profilu",
     "Ok": "Labi",
     "Your homeserver has exceeded one of its resource limits.": "Jūsu bāzes serverī ir pārsniegts limits kādam no resursiem.",
     "Your homeserver has exceeded its user limit.": "Jūsu bāzes serverī ir pārsniegts lietotāju limits.",
@@ -363,13 +317,7 @@
     "Demote yourself?": "Pazemināt sevi?",
     "Accepting…": "Akceptē…",
     "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s priekšskatījums nav pieejams. Vai vēlaties tai pievienoties?",
-    "Add existing room": "Pievienot eksistējošu istabu",
     "Add room": "Pievienot istabu",
-    "Invite to this space": "Uzaicināt uz šo vietu",
-    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "Teksta ziņa tika nosūtīta uz +%(msisdn)s. Lūdzu, ievadiet tajā esošo verifikācijas kodu.",
-    "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Piekrītiet identitāšu servera (%(serverName)s) pakalpojumu sniegšanas noteikumiem, lai padarītu sevi atrodamu citiem, izmantojot epasta adresi vai tālruņa numuru.",
-    "Algorithm:": "Algoritms:",
-    "Display Name": "Parādāmais vārds",
     "Create a space": "Izveidot vietu",
     "Anchor": "Enkurs",
     "Aeroplane": "Aeroplāns",
@@ -401,8 +349,6 @@
     "This invite to %(roomName)s was sent to %(email)s": "Šis uzaicinājums uz %(roomName)s tika nosūtīts %(email)s",
     "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "Šis uzaicinājums uz %(roomName)s tika nosūtīts %(email)s, kas nav saistīts ar jūsu kontu",
     "Your message was sent": "Jūsu ziņa ir nosūtīta",
-    "Remove %(phone)s?": "Dzēst %(phone)s?",
-    "Remove %(email)s?": "Dēst %(email)s?",
     "You signed in to a new session without verifying it:": "Jūs pierakstījāties jaunā sesijā, neveicot tās verifikāciju:",
     "%(count)s people you know have already joined": {
         "other": "%(count)s pazīstami cilvēki ir jau pievienojusies",
@@ -412,11 +358,9 @@
         "one": "%(count)s dalībnieks",
         "other": "%(count)s dalībnieki"
     },
-    "Save Changes": "Saglabāt izmaiņas",
     "Upload files": "Failu augšupielāde",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Šie faili <b>pārsniedz</b> augšupielādes izmēra ierobežojumu %(limit)s.",
     "Upload files (%(current)s of %(total)s)": "Failu augšupielāde (%(current)s no %(total)s)",
-    "Could not connect to identity server": "Neizdevās pieslēgties identitāšu serverim",
     "Zimbabwe": "Zimbabve",
     "Zambia": "Zambija",
     "Yemen": "Jemena",
@@ -653,7 +597,6 @@
     "Sending": "Sūta",
     "Can't load this message": "Nevar ielādēt šo ziņu",
     "Send voice message": "Sūtīt balss ziņu",
-    "Address": "Adrese",
     "Forgotten or lost all recovery methods? <a>Reset all</a>": "Aizmirsāt vai pazaudējāt visas atkopšanās iespējas? <a>Atiestatiet visu</a>",
     "Link to most recent message": "Saite uz jaunāko ziņu",
     "Share Room": "Dalīties ar istabu",
@@ -663,7 +606,6 @@
     "Some suggestions may be hidden for privacy.": "Daži ieteikumi var būt slēpti dēļ privātuma.",
     "Search for rooms or people": "Meklēt istabas vai cilvēkus",
     "Message preview": "Ziņas priekšskatījums",
-    "Public room": "Publiska istaba",
     "Search for rooms": "Meklēt istabas",
     "Server name": "Servera nosaukums",
     "Enter the name of a new server you want to explore.": "Ievadiet nosaukumu jaunam serverim, kuru vēlaties pārlūkot.",
@@ -672,20 +614,6 @@
     "Call declined": "Zvans noraidīts",
     "Join the discussion": "Pievienoties diskusijai",
     "Forget this room": "Aizmirst šo istabu",
-    "Explore public rooms": "Pārlūkot publiskas istabas",
-    "Show %(count)s other previews": {
-        "one": "Rādīt %(count)s citu priekšskatījumu",
-        "other": "Rādīt %(count)s citus priekšskatījumus"
-    },
-    "Access": "Piekļuve",
-    "Enter a new identity server": "Ievadiet jaunu identitāšu serveri",
-    "Mentions & keywords": "Pieminēšana un atslēgvārdi",
-    "New keyword": "Jauns atslēgvārds",
-    "Keyword": "Atslēgvārds",
-    "Decide who can view and join %(spaceName)s.": "Nosakiet, kas var skatīt un pievienoties %(spaceName)s.",
-    "Enable guest access": "Iespējot piekļuvi viesiem",
-    "Invite people": "Uzaicināt cilvēkus",
-    "Show all rooms": "Rādīt visas istabas",
     "Corn": "Kukurūza",
     "Final result based on %(count)s votes": {
         "one": "Gala rezultāts pamatojoties uz %(count)s balss",
@@ -696,7 +624,6 @@
         "other": "Pamatojoties uz %(count)s balsīm"
     },
     "No votes cast": "Nav balsojumu",
-    "Space options": "Vietas parametri",
     "Reason (optional)": "Iemesls (izvēles)",
     "You may contact me if you have any follow up questions": "Ja jums ir kādi papildjautājumi, varat sazināties ar mani",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Vai esat pārliecināts, ka vēlaties pārtraukt šo aptauju? Tas parādīs aptaujas galīgos rezultātus un liegs cilvēkiem iespēju balsot.",
@@ -739,7 +666,6 @@
     "Pinned messages": "Piespraustās ziņas",
     "Pinned": "Piesprausts",
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Šis fails ir <b>pārlieku liels</b>, lai to augšupielādētu. Faila izmēra ierobežojums ir %(limit)s, bet šis fails ir %(sizeOfThisFile)s.",
-    "Space information": "Informācija par vietu",
     "Information": "Informācija",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Nevar atrast zemāk norādīto Matrix ID profilus - vai tomēr vēlaties tos uzaicināt?",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Daži faili ir <b>pārlieku lieli</b>, lai tos augšupielādētu. Faila izmēra ierobežojums ir %(limit)s.",
@@ -750,18 +676,13 @@
     },
     "Files": "Faili",
     "To join a space you'll need an invite.": "Lai pievienotos vietai, ir nepieciešams uzaicinājums.",
-    "You can change these anytime.": "Jebkurā laikā varat to mainīt.",
     "Join public room": "Pievienoties publiskai istabai",
     "Update any local room aliases to point to the new room": "Atjaunināt jebkurus vietējās istabas aizstājvārdus, lai tie norādītu uz jauno istabu",
-    "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Šī istabā atrodas dažās vietās, kurās jūs neesat administrators. Šajās vietās vecā istaba joprojām būs redzama, bet cilvēki tiks aicināti pievienoties jaunajai istabai.",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Lai nezaudētu čata vēsturi, pirms izrakstīšanās no konta jums ir jāeksportē istabas atslēgas. Lai to izdarītu, jums būs jāatgriežas jaunākajā %(brand)s versijā",
     "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Pārtraukt lietotāju runāšanu vecajā istabas versijā un publicēt ziņojumu, kurā lietotājiem tiek ieteikts pāriet uz jauno istabu",
     "Put a link back to the old room at the start of the new room so people can see old messages": "Jaunās istabas sākumā ievietojiet saiti uz veco istabu, lai cilvēki varētu apskatīt vecās ziņas",
     "Automatically invite members from this room to the new one": "Automātiski uzaicināt dalībniekus no šīs istabas uz jauno",
     "Want to add a new room instead?": "Vai tā vietā vēlaties pievienot jaunu istabu?",
-    "New video room": "Jauna video istaba",
-    "Loading new room": "Ielādē jaunu istabu",
-    "New room": "Jauna istaba",
     "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Pārlūkprogrammas krātuves dzēšana var atrisināt problēmu, taču tas nozīmē, ka jūs izrakstīsieties un šifrēto čata vēsturi vairs nebūs iespējams nolasīt.",
     "Clear Storage and Sign Out": "Iztīrīt krātuvi un izrakstīties",
     "Clear cache and resync": "Iztīrīt kešatmiņu un atkārtoti sinhronizēt",
@@ -777,7 +698,6 @@
     "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Savienojiet iestatījumos šo e-pasta adresi ar savu kontu, lai uzaicinājumus saņemtu tieši %(brand)s.",
     "If you can't see who you're looking for, send them your invite link.": "Ja neredzat meklēto personu, nosūtiet tai uzaicinājuma saiti.",
     "Copy invite link": "Kopēt uzaicinājuma saiti",
-    "Share invite link": "Dalīties ar uzaicinājuma saiti",
     "Some results may be hidden for privacy": "Daži rezultāti var būt slēpti dēļ privātuma",
     "Some results may be hidden": "Atsevišķi rezultāti var būt slēpti",
     "Add new server…": "Pievienot jaunu serveri…",
@@ -793,7 +713,6 @@
     "Search for spaces": "Meklēt vietas",
     "Recently viewed": "Nesen skatītie",
     "Who will you chat to the most?": "Ar ko jūs sarakstīsieties visvairāk?",
-    "Start new chat": "Uzsākt jaunu čatu",
     "Start a group chat": "Uzsākt grupas čatu",
     "Messages in this chat will be end-to-end encrypted.": "Ziņām šajā istabā tiek piemērota pilnīga šifrēšana.",
     "Export chat": "Eksportēt čatu",
@@ -852,7 +771,12 @@
         "off": "Izslēgt",
         "all_rooms": "Visas istabas",
         "copied": "Nokopēts!",
-        "Advanced": "Papildu"
+        "advanced": "Papildu",
+        "general": "Vispārīgi",
+        "profile": "Profils",
+        "display_name": "Parādāmais vārds",
+        "authentication": "Autentifikācija",
+        "public_room": "Publiska istaba"
     },
     "action": {
         "continue": "Turpināt",
@@ -921,7 +845,16 @@
         "submit": "Iesniegt",
         "send_report": "Nosūtīt ziņojumu",
         "clear": "Notīrīt",
-        "unban": "Atcelt pieejas liegumu"
+        "unban": "Atcelt pieejas liegumu",
+        "hide_advanced": "Slēpt papildu iestatījumus",
+        "show_advanced": "Rādīt papildu iestatījumus",
+        "unignore": "Atcelt ignorēšanu",
+        "start_new_chat": "Uzsākt jaunu čatu",
+        "explore_rooms": "Pārlūkot istabas",
+        "new_room": "Jauna istaba",
+        "new_video_room": "Jauna video istaba",
+        "add_existing_room": "Pievienot eksistējošu istabu",
+        "explore_public_rooms": "Pārlūkot publiskas istabas"
     },
     "a11y": {
         "user_menu": "Lietotāja izvēlne",
@@ -932,7 +865,8 @@
         "n_unread_messages": {
             "one": "1 nelasīta ziņa.",
             "other": "%(count)s nelasītas ziņas."
-        }
+        },
+        "room_name": "Istaba %(name)s"
     },
     "labs": {
         "pinning": "Ziņu piespraušana",
@@ -1054,7 +988,8 @@
             "noisy": "Ar skaņu",
             "error_permissions_denied": "%(brand)s nav atļauts nosūtīt jums paziņojumus. Lūdzu pārbaudi sava pārlūka iestatījumus",
             "error_permissions_missing": "%(brand)s nav piešķirta atļauja nosūtīt paziņojumus. Lūdzu mēģini vēlreiz",
-            "error_title": "Neizdevās iespējot paziņojumus"
+            "error_title": "Neizdevās iespējot paziņojumus",
+            "push_targets": "Paziņojumu adresāti"
         },
         "appearance": {
             "heading": "Pielāgot izskatu",
@@ -1072,7 +1007,9 @@
         "inline_url_previews_room_account": "Iespējot URL priekšskatījumus šajā istabā (ietekmē tikai jūs pašu)",
         "inline_url_previews_room": "Iespējot URL priekšskatījumus pēc noklusējuma visiem šīs istabas dalībniekiem",
         "voip": {
-            "mirror_local_feed": "Rādīt spoguļskatā kameras video"
+            "mirror_local_feed": "Rādīt spoguļskatā kameras video",
+            "audio_input_empty": "Nav mikrofonu",
+            "video_input_empty": "Nav webkameru"
         },
         "security": {
             "message_search_indexing": "Pašlaik indeksē: %(currentRoom)s",
@@ -1091,7 +1028,9 @@
             "bulk_options_accept_all_invites": "Pieņemt visus %(invitedRooms)s uzaicinājumus",
             "bulk_options_reject_all_invites": "Noraidīt visus %(invitedRooms)s uzaicinājumus",
             "message_search_section": "Ziņu meklēšana",
-            "encryption_individual_verification_mode": "Uzskatīt par uzticamām tikai individuāli verificētas lietotāja sesijas, nepaļaujoties uz ierīču cross-signing funkcionalitāti."
+            "encryption_individual_verification_mode": "Uzskatīt par uzticamām tikai individuāli verificētas lietotāja sesijas, nepaļaujoties uz ierīču cross-signing funkcionalitāti.",
+            "key_backup_algorithm": "Algoritms:",
+            "key_backup_active_version_none": "Neviena"
         },
         "preferences": {
             "room_list_heading": "Istabu saraksts",
@@ -1118,7 +1057,30 @@
             "add_msisdn_confirm_sso_button": "Apstiprināt šī tālruņa numura pievienošanu, izmantojot vienoto pieteikšanos savas identitātes apliecināšanai.",
             "add_msisdn_confirm_button": "Apstiprināt tālruņa numura pievienošanu",
             "add_msisdn_confirm_body": "Jānospiež zemāk esošā poga, lai apstiprinātu šī tālruņa numura pievienošanu.",
-            "add_msisdn_dialog_title": "Pievienot tālruņa numuru"
+            "add_msisdn_dialog_title": "Pievienot tālruņa numuru",
+            "name_placeholder": "Nav parādāmā vārda",
+            "error_saving_profile_title": "Neizdevās salabāt jūsu profilu",
+            "error_password_change_403": "Neizdevās nomainīt paroli. Vai tā ir pareiza?",
+            "emails_heading": "Epasta adreses",
+            "msisdns_heading": "Tālruņa numuri",
+            "discovery_needs_terms": "Piekrītiet identitāšu servera (%(serverName)s) pakalpojumu sniegšanas noteikumiem, lai padarītu sevi atrodamu citiem, izmantojot epasta adresi vai tālruņa numuru.",
+            "deactivate_section": "Deaktivizēt kontu",
+            "account_management_section": "Konta pārvaldība",
+            "error_email_verification": "Neizdevās apstiprināt epasta adresi.",
+            "incorrect_msisdn_verification": "Nepareizs verifikācijas kods",
+            "error_set_name": "Neizdevās iestatīt parādāmo vārdu",
+            "error_remove_3pid": "Neizdevās dzēst kontaktinformāciju",
+            "remove_email_prompt": "Dēst %(email)s?",
+            "error_invalid_email": "Nepareiza epasta adrese",
+            "error_invalid_email_detail": "Šī neizskatās pēc derīgas epasta adreses",
+            "error_add_email": "Neizdevās pievienot epasta adresi",
+            "email_address_label": "Epasta adrese",
+            "remove_msisdn_prompt": "Dzēst %(phone)s?",
+            "add_msisdn_instructions": "Teksta ziņa tika nosūtīta uz +%(msisdn)s. Lūdzu, ievadiet tajā esošo verifikācijas kodu.",
+            "msisdn_label": "Tālruņa numurs"
+        },
+        "sidebar": {
+            "metaspaces_home_all_rooms": "Rādīt visas istabas"
         }
     },
     "devtools": {
@@ -1411,6 +1373,12 @@
             "view_source": "Skatīt pirmkodu",
             "show_url_preview": "Rādīt priekšskatījumu",
             "external_url": "Avota URL adrese"
+        },
+        "url_preview": {
+            "show_n_more": {
+                "one": "Rādīt %(count)s citu priekšskatījumu",
+                "other": "Rādīt %(count)s citus priekšskatījumus"
+            }
         }
     },
     "slash_command": {
@@ -1571,7 +1539,10 @@
             "banned_users_section": "Lietotāji, kuriem liegta pieeja",
             "title": "Lomas un atļaujas",
             "permissions_section": "Atļaujas",
-            "permissions_section_description_room": "Izvēlieties lomas, kas nepieciešamas, lai mainītu dažādus istabas parametrus"
+            "permissions_section_description_room": "Izvēlieties lomas, kas nepieciešamas, lai mainītu dažādus istabas parametrus",
+            "error_unbanning": "Neizdevās atbanot/atbloķēt (atcelt pieejas liegumu)",
+            "banned_by": "%(displayName)s liedzis pieeju",
+            "ban_reason": "Iemesls"
         },
         "security": {
             "strict_encryption": "Nesūtīt šifrētas ziņas no šīs sesijas neverificētām sesijām šajā istabā",
@@ -1593,7 +1564,9 @@
             "history_visibility_shared": "Tikai dalībnieki (no šī parametra iestatīšanas brīža)",
             "history_visibility_invited": "Tikai dalībnieki (no to uzaicināšanas brīža)",
             "history_visibility_joined": "Tikai dalībnieki (kopš pievienošanās)",
-            "history_visibility_world_readable": "Ikviens"
+            "history_visibility_world_readable": "Ikviens",
+            "join_rule_restricted_upgrade_warning": "Šī istabā atrodas dažās vietās, kurās jūs neesat administrators. Šajās vietās vecā istaba joprojām būs redzama, bet cilvēki tiks aicināti pievienoties jaunajai istabai.",
+            "join_rule_upgrade_awaiting_room": "Ielādē jaunu istabu"
         },
         "general": {
             "publish_toggle": "Publicēt šo istabu publiskajā %(domain)s katalogā?",
@@ -1603,14 +1576,34 @@
             "default_url_previews_off": "ULR priekšskatījumi šīs istabas dalībniekiem pēc noklusējuma ir atspējoti.",
             "url_preview_encryption_warning": "Šifrētās istabās, ieskaitot arī šo, URL priekšskatījumi pēc noklusējuma ir atspējoti, lai nodrošinātu, ka jūsu bāzes serveris, kurā notiek priekšskatījumu ģenerēšana, nevar apkopot informāciju par saitēm, kuras redzat šajā istabā.",
             "url_preview_explainer": "Kad kāds savā ziņā ievieto URL, priekšskatījums ar virsrakstu, aprakstu un vietnes attēlu var tikt parādīts, tādējādi sniedzot vairāk informācijas par šo vietni.",
-            "url_previews_section": "URL priekšskatījumi"
+            "url_previews_section": "URL priekšskatījumi",
+            "save": "Saglabāt izmaiņas",
+            "aliases_section": "Istabas adreses",
+            "other_section": "Citi"
         },
         "advanced": {
             "unfederated": "Šī istaba nav pieejama no citiem Matrix serveriem",
             "room_version_section": "Istabas versija",
-            "room_version": "Istabas versija:"
+            "room_version": "Istabas versija:",
+            "information_section_space": "Informācija par vietu",
+            "information_section_room": "Informācija par istabu"
         },
-        "upload_avatar_label": "Augšupielādēt avataru"
+        "upload_avatar_label": "Augšupielādēt avataru",
+        "access": {
+            "title": "Piekļuve",
+            "description_space": "Nosakiet, kas var skatīt un pievienoties %(spaceName)s."
+        },
+        "visibility": {
+            "guest_access_label": "Iespējot piekļuvi viesiem",
+            "alias_section": "Adrese"
+        },
+        "notifications": {
+            "uploaded_sound": "Augšupielādētie skaņas signāli",
+            "sounds_section": "Skaņas signāli",
+            "notification_sound": "Paziņojumu skaņas signāli",
+            "custom_sound_prompt": "Iestatīt jaunu pielāgotu skaņas signālu",
+            "browse_button": "Pārlūkot"
+        }
     },
     "encryption": {
         "verification": {
@@ -1880,9 +1873,13 @@
     "space": {
         "landing_welcome": "Laipni lūdzam uz <name/>",
         "context_menu": {
-            "explore": "Pārlūkot istabas"
+            "explore": "Pārlūkot istabas",
+            "options": "Vietas parametri"
         },
-        "share_public": "Dalīties ar jūsu publisko vietu"
+        "share_public": "Dalīties ar jūsu publisko vietu",
+        "invite_link": "Dalīties ar uzaicinājuma saiti",
+        "invite": "Uzaicināt cilvēkus",
+        "invite_this_space": "Uzaicināt uz šo vietu"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Šis bāzes serveris nav konfigurēts karšu attēlošanai.",
@@ -1912,7 +1909,10 @@
         "personal_space_description": "Privāta vieta, kur organizēt jūsu istabas",
         "private_space_description": "Privāta vieta jums un jūsu komandas dalībniekiem",
         "setup_rooms_community_description": "Izveidojam katram no tiem savu istabu!",
-        "setup_rooms_private_description": "Mēs izveidosim istabas katram no tiem."
+        "setup_rooms_private_description": "Mēs izveidosim istabas katram no tiem.",
+        "address_label": "Adrese",
+        "label": "Izveidot vietu",
+        "add_details_prompt_2": "Jebkurā laikā varat to mainīt."
     },
     "user_menu": {
         "switch_theme_light": "Pārslēgt gaišo režīmu",
@@ -1946,7 +1946,8 @@
             "favourite": "Izlase",
             "low_priority": "Zema prioritāte",
             "forget": "Aizmirst istabu"
-        }
+        },
+        "invite_this_room": "Uzaicināt uz šo istabu"
     },
     "file_panel": {
         "guest_note": "Lai izmantotu šo funkcionalitāti, Tev ir <a>jāreģistrējas</a>",
@@ -2016,7 +2017,9 @@
         "tls": "Neizdodas savienoties ar bāzes serveri. Pārbaudi tīkla savienojumu un pārliecinies, ka <a> bāzes servera SSL sertifikāts</a> ir uzticams, kā arī pārlūkā instalētie paplašinājumi nebloķē pieprasījumus.",
         "admin_contact_short": "Sazinieties ar <a>servera administratoru</a>.",
         "failed_copy": "Nokopēt neizdevās",
-        "something_went_wrong": "Kaut kas nogāja greizi!"
+        "something_went_wrong": "Kaut kas nogāja greizi!",
+        "update_power_level": "Neizdevās nomainīt statusa līmeni",
+        "unknown": "Nezināma kļūda"
     },
     "name_and_id": "%(name)s (%(userId)s)",
     "items_and_n_others": {
@@ -2028,7 +2031,13 @@
         "enable_prompt_toast_title": "Paziņojumi",
         "enable_prompt_toast_description": "Iespējot darbvirsmas paziņojumus",
         "colour_none": "Neviena",
-        "error_change_title": "Mainīt paziņojumu iestatījumus"
+        "error_change_title": "Mainīt paziņojumu iestatījumus",
+        "keyword": "Atslēgvārds",
+        "keyword_new": "Jauns atslēgvārds",
+        "class_other": "Citi",
+        "mentions_keywords": "Pieminēšana un atslēgvārdi",
+        "default": "Noklusējuma",
+        "all_messages": "Visas ziņas"
     },
     "chat_card_back_action_label": "Atgriezties uz čatu",
     "room_summary_card_back_action_label": "Informācija par istabu",
@@ -2039,5 +2048,17 @@
     "lightbox": {
         "rotate_left": "Rotēt pa kreisi",
         "rotate_right": "Rotēt pa labi"
+    },
+    "labs_mjolnir": {
+        "rules_empty": "Neviena"
+    },
+    "identity_server": {
+        "error_connection": "Neizdevās pieslēgties identitāšu serverim",
+        "description_connected": "Pašlaik jūs izmantojat <server></server>, lai atklātu esošos kontaktus un jūs būtu atklājams citiem. Jūs varat mainīt identitātes serveri zemāk.",
+        "description_disconnected": "Pašlaik jūs neizmantojat nevienu identitātes serveri. Lai atklātu esošos kontaktus un jūs būtu atklājams citiem, pievienojiet kādu identitātes serveri zemāk.",
+        "url_field_label": "Ievadiet jaunu identitāšu serveri"
+    },
+    "integration_manager": {
+        "manage_title": "Pārvaldīt integrācijas"
     }
 }

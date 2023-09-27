@@ -1,5 +1,4 @@
 {
-    "Explore rooms": "Raziščite sobe",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
@@ -37,7 +36,8 @@
         "confirm": "Potrdi",
         "dismiss": "Opusti",
         "sign_in": "Prijava",
-        "change": "Sprememba"
+        "change": "Sprememba",
+        "explore_rooms": "Raziščite sobe"
     },
     "time": {
         "hours_minutes_seconds_left": "Preostalo je %(hours)s ur, %(minutes)s minut %(seconds)s sekund",

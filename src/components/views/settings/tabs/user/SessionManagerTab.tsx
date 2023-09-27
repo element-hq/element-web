@@ -302,9 +302,7 @@ const SessionManagerTab: React.FC = () => {
                                 disabled={!!signingOutDeviceIds.length}
                             />
                         }
-                        description={_t(
-                            "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.",
-                        )}
+                        description={_t("settings|sessions|best_security_note")}
                         data-testid="other-sessions-section"
                         stretchContent
                     >

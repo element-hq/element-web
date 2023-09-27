@@ -58,21 +58,6 @@ function toDefaultLevels(levels: NotificationSettings["defaultLevels"]): Notific
     }
 }
 
-const NotificationOptions = [
-    {
-        value: NotificationDefaultLevels.AllMessages,
-        label: _t("All messages"),
-    },
-    {
-        value: NotificationDefaultLevels.PeopleMentionsKeywords,
-        label: _t("People, Mentions and Keywords"),
-    },
-    {
-        value: NotificationDefaultLevels.MentionsKeywords,
-        label: _t("Mentions and Keywords only"),
-    },
-];
-
 function boldText(text: string): JSX.Element {
     return <strong>{text}</strong>;
 }
@@ -101,6 +86,21 @@ export default function NotificationSettings2(): JSX.Element {
     const [updatingUnread, setUpdatingUnread] = useState<boolean>(false);
     const hasUnreadNotifications = useHasUnreadNotifications();
 
+    const NotificationOptions = [
+        {
+            value: NotificationDefaultLevels.AllMessages,
+            label: _t("notifications|all_messages"),
+        },
+        {
+            value: NotificationDefaultLevels.PeopleMentionsKeywords,
+            label: _t("settings|notifications|people_mentions_keywords"),
+        },
+        {
+            value: NotificationDefaultLevels.MentionsKeywords,
+            label: _t("settings|notifications|mentions_keywords_only"),
+        },
+    ];
+
     return (
         <div className="mx_NotificationSettings2">
             {hasPendingChanges && model !== null && (
@@ -110,7 +110,7 @@ export default function NotificationSettings2(): JSX.Element {
                     onAction={() => reconcile(model!)}
                 >
                     {_t(
-                        "<strong>Update:</strong>We’ve simplified Notifications Settings to make options easier to find. Some custom settings you’ve chosen in the past are not shown here, but they’re still active. If you proceed, some of your settings may change. <a>Learn more</a>",
+                        "settings|notifications|labs_notice_prompt",
                         {},
                         {
                             strong: boldText,
@@ -140,7 +140,7 @@ export default function NotificationSettings2(): JSX.Element {
                         }
                     />
                     <LabelledToggleSwitch
-                        label={_t("Show message preview in desktop notification")}
+                        label={_t("settings|notifications|desktop_notification_message_preview")}
                         value={desktopShowBody}
                         onChange={(value) =>
                             SettingsStore.setValue("notificationBodyEnabled", null, SettingLevel.DEVICE, value)
@@ -155,8 +155,8 @@ export default function NotificationSettings2(): JSX.Element {
                     />
                 </div>
                 <SettingsSubsection
-                    heading={_t("I want to be notified for (Default Setting)")}
-                    description={_t("This setting will be applied by default to all your rooms.")}
+                    heading={_t("settings|notifications|default_setting_section")}
+                    description={_t("settings|notifications|default_setting_description")}
                 >
                     <StyledRadioGroup
                         name="defaultNotificationLevel"
@@ -182,8 +182,8 @@ export default function NotificationSettings2(): JSX.Element {
                     />
                 </SettingsSubsection>
                 <SettingsSubsection
-                    heading={_t("Play a sound for")}
-                    description={_t("Applied by default to all rooms on all devices.")}
+                    heading={_t("settings|notifications|play_sound_for_section")}
+                    description={_t("settings|notifications|play_sound_for_description")}
                 >
                     <LabelledCheckbox
                         label="People"
@@ -200,7 +200,7 @@ export default function NotificationSettings2(): JSX.Element {
                         }}
                     />
                     <LabelledCheckbox
-                        label={_t("Mentions and Keywords")}
+                        label={_t("settings|notifications|mentions_keywords")}
                         value={settings.sound.mentions !== undefined}
                         disabled={disabled}
                         onChange={(value) => {
@@ -214,7 +214,7 @@ export default function NotificationSettings2(): JSX.Element {
                         }}
                     />
                     <LabelledCheckbox
-                        label={_t("Audio and Video calls")}
+                        label={_t("settings|notifications|voip")}
                         value={settings.sound.calls !== undefined}
                         disabled={disabled}
                         onChange={(value) => {
@@ -228,9 +228,9 @@ export default function NotificationSettings2(): JSX.Element {
                         }}
                     />
                 </SettingsSubsection>
-                <SettingsSubsection heading={_t("Other things we think you might be interested in:")}>
+                <SettingsSubsection heading={_t("settings|notifications|other_section")}>
                     <LabelledCheckbox
-                        label={_t("Invited to a room")}
+                        label={_t("settings|notifications|invites")}
                         value={settings.activity.invite}
                         disabled={disabled}
                         onChange={(value) => {
@@ -244,7 +244,7 @@ export default function NotificationSettings2(): JSX.Element {
                         }}
                     />
                     <LabelledCheckbox
-                        label={_t("New room activity, upgrades and status messages occur")}
+                        label={_t("settings|notifications|room_activity")}
                         value={settings.activity.status_event}
                         disabled={disabled}
                         onChange={(value) => {
@@ -258,7 +258,7 @@ export default function NotificationSettings2(): JSX.Element {
                         }}
                     />
                     <LabelledCheckbox
-                        label={_t("Messages sent by bots")}
+                        label={_t("settings|notifications|notices")}
                         value={settings.activity.bot_notices}
                         disabled={disabled}
                         onChange={(value) => {
@@ -273,9 +273,9 @@ export default function NotificationSettings2(): JSX.Element {
                     />
                 </SettingsSubsection>
                 <SettingsSubsection
-                    heading={_t("Mentions and Keywords")}
+                    heading={_t("settings|notifications|mentions_keywords")}
                     description={_t(
-                        "Show a badge <badge/> when keywords are used in a room.",
+                        "settings|notifications|keywords",
                         {},
                         {
                             badge: <StatelessNotificationBadge symbol="1" count={1} color={NotificationColor.Grey} />,
@@ -283,7 +283,7 @@ export default function NotificationSettings2(): JSX.Element {
                     )}
                 >
                     <LabelledCheckbox
-                        label={_t("Notify when someone mentions using @room")}
+                        label={_t("settings|notifications|notify_at_room")}
                         value={settings.mentions.room}
                         disabled={disabled}
                         onChange={(value) => {
@@ -297,7 +297,7 @@ export default function NotificationSettings2(): JSX.Element {
                         }}
                     />
                     <LabelledCheckbox
-                        label={_t("Notify when someone mentions using @displayname or %(mxid)s", {
+                        label={_t("settings|notifications|notify_mention", {
                             mxid: cli.getUserId()!,
                         })}
                         value={settings.mentions.user}
@@ -313,8 +313,8 @@ export default function NotificationSettings2(): JSX.Element {
                         }}
                     />
                     <LabelledCheckbox
-                        label={_t("Notify when someone uses a keyword")}
-                        byline={_t("Enter keywords here, or use for spelling variations or nicknames")}
+                        label={_t("settings|notifications|notify_keyword")}
+                        byline={_t("settings|notifications|keywords_prompt")}
                         value={settings.mentions.keywords}
                         disabled={disabled}
                         onChange={(value) => {
@@ -343,12 +343,12 @@ export default function NotificationSettings2(): JSX.Element {
                                 keywords: model!.keywords.filter((it) => it !== keyword),
                             });
                         }}
-                        label={_t("Keyword")}
-                        placeholder={_t("New keyword")}
+                        label={_t("notifications|keyword")}
+                        placeholder={_t("notifications|keyword_new")}
                     />
                 </SettingsSubsection>
                 <NotificationPusherSettings />
-                <SettingsSubsection heading={_t("Quick Actions")}>
+                <SettingsSubsection heading={_t("settings|notifications|quick_actions_section")}>
                     {hasUnreadNotifications && (
                         <AccessibleButton
                             kind="primary_outline"
@@ -359,7 +359,7 @@ export default function NotificationSettings2(): JSX.Element {
                                 setUpdatingUnread(false);
                             }}
                         >
-                            {_t("Mark all messages as read")}
+                            {_t("settings|notifications|quick_actions_mark_all_read")}
                         </AccessibleButton>
                     )}
                     <AccessibleButton
@@ -369,7 +369,7 @@ export default function NotificationSettings2(): JSX.Element {
                             reconcile(DefaultNotificationSettings);
                         }}
                     >
-                        {_t("Reset to default settings")}
+                        {_t("settings|notifications|quick_actions_reset")}
                     </AccessibleButton>
                 </SettingsSubsection>
             </SettingsSection>

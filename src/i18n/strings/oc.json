@@ -1,6 +1,5 @@
 {
     "Admin Tools": "Aisinas d’administrator",
-    "Invite to this room": "Convidar a aquesta sala",
     "Invited": "Convidat",
     "Unnamed room": "Sala sens nom",
     "Share room": "Partejar la sala",
@@ -39,10 +38,8 @@
     "Dec": "Dec",
     "PM": "PM",
     "AM": "AM",
-    "Default": "Predefinit",
     "Moderator": "Moderator",
     "Thank you!": "Mercés !",
-    "Reason": "Rason",
     "Ok": "Validar",
     "Set up": "Parametrar",
     "Fish": "Pes",
@@ -63,22 +60,10 @@
     "Headphones": "Escotadors",
     "Folder": "Dorsièr",
     "Show more": "Ne veire mai",
-    "Authentication": "Autentificacion",
-    "Restore from Backup": "Restablir a partir de l'archiu",
-    "Display Name": "Nom d'afichatge",
-    "Profile": "Perfil",
-    "General": "General",
-    "Unignore": "Ignorar pas",
-    "Audio Output": "Sortida àudio",
-    "Bridges": "Bridges",
-    "Sounds": "Sons",
-    "Browse": "Percórrer",
-    "Phone Number": "Numèro de telefòn",
     "Unencrypted": "Pas chifrat",
     "Italics": "Italicas",
     "Historical": "Istoric",
     "Sign Up": "S’inscriure",
-    "Mark all as read": "Tot marcar coma legit",
     "Demote": "Retrogradar",
     "Are you sure?": "O volètz vertadièrament ?",
     "Sunday": "Dimenge",
@@ -103,10 +88,8 @@
     "Email address": "Adreça de corrièl",
     "Upload files": "Mandar de fichièrs",
     "Home": "Dorsièr personal",
-    "Unknown error": "Error desconeguda",
     "Search failed": "La recèrca a fracassat",
     "Success!": "Capitada !",
-    "Explore rooms": "Percórrer las salas",
     "common": {
         "mute": "Copar lo son",
         "no_results": "Pas cap de resultat",
@@ -145,7 +128,11 @@
         "system_alerts": "Alèrtas sistèma",
         "feedback": "Comentaris",
         "off": "Atudat",
-        "Advanced": "Avançat"
+        "advanced": "Avançat",
+        "general": "General",
+        "profile": "Perfil",
+        "display_name": "Nom d'afichatge",
+        "authentication": "Autentificacion"
     },
     "action": {
         "continue": "Contunhar",
@@ -210,7 +197,9 @@
         "export": "Exportar",
         "refresh": "Actualizada",
         "submit": "Mandar",
-        "unban": "Reabilitar"
+        "unban": "Reabilitar",
+        "unignore": "Ignorar pas",
+        "explore_rooms": "Percórrer las salas"
     },
     "keyboard": {
         "home": "Dorsièr personal",
@@ -305,7 +294,8 @@
         "security": {
             "cross_signing_not_found": "pas trobat",
             "cross_signing_homeserver_support_exists": "existís",
-            "encryption_section": "Chiframent"
+            "encryption_section": "Chiframent",
+            "restore_key_backup": "Restablir a partir de l'archiu"
         },
         "general": {
             "account_section": "Compte",
@@ -314,7 +304,11 @@
             "confirm_adding_email_title": "Confirmar l'adicion de l'adressa e-mail",
             "confirm_adding_email_body": "Clicatz sus lo boton aicí dejós per confirmar l'adicion de l'adreça e-mail.",
             "add_email_dialog_title": "Ajustar una adreça electronica",
-            "add_msisdn_dialog_title": "Ajustar un numèro de telefòn"
+            "add_msisdn_dialog_title": "Ajustar un numèro de telefòn",
+            "msisdn_label": "Numèro de telefòn"
+        },
+        "voip": {
+            "audio_output": "Sortida àudio"
         }
     },
     "auth": {
@@ -363,10 +357,21 @@
     },
     "room_settings": {
         "permissions": {
-            "permissions_section": "Permissions"
+            "permissions_section": "Permissions",
+            "ban_reason": "Rason"
         },
         "security": {
             "title": "Seguretat e vida privada"
+        },
+        "bridges": {
+            "title": "Bridges"
+        },
+        "general": {
+            "other_section": "Autre"
+        },
+        "notifications": {
+            "sounds_section": "Sons",
+            "browse_button": "Percórrer"
         }
     },
     "encryption": {
@@ -379,19 +384,24 @@
     },
     "notifications": {
         "enable_prompt_toast_title": "Notificacions",
-        "colour_bold": "Gras"
+        "colour_bold": "Gras",
+        "mark_all_read": "Tot marcar coma legit",
+        "class_other": "Autre",
+        "default": "Predefinit"
     },
     "quick_settings": {
         "sidebar_settings": "Autras opcions"
     },
     "error": {
-        "failed_copy": "Impossible de copiar"
+        "failed_copy": "Impossible de copiar",
+        "unknown": "Error desconeguda"
     },
     "room": {
         "context_menu": {
             "favourite": "Favorit",
             "low_priority": "Prioritat bassa"
-        }
+        },
+        "invite_this_room": "Convidar a aquesta sala"
     },
     "lightbox": {
         "rotate_left": "Pivotar cap a èrra",

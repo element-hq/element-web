@@ -8,11 +8,7 @@
     "Session ID": "Sessions ID",
     "Warning!": "Advarsel!",
     "Are you sure you want to reject the invitation?": "Er du sikker på du vil afvise invitationen?",
-    "Deactivate Account": "Deaktiver brugerkonto",
-    "Default": "Standard",
-    "Failed to change password. Is your password correct?": "Kunne ikke ændre adgangskoden. Er din adgangskode rigtig?",
     "Failed to reject invitation": "Kunne ikke afvise invitationen",
-    "Failed to unban": "Var ikke i stand til at ophæve forbuddet",
     "unknown error code": "Ukendt fejlkode",
     "Failed to forget room %(errCode)s": "Kunne ikke glemme rummet %(errCode)s",
     "Unnamed room": "Unavngivet rum",
@@ -42,9 +38,7 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "Restricted": "Begrænset",
     "Moderator": "Moderator",
-    "Reason": "Årsag",
     "Sunday": "Søndag",
-    "Notification targets": "Meddelelsesmål",
     "Today": "I dag",
     "Friday": "Fredag",
     "Changelog": "Ændringslog",
@@ -55,9 +49,7 @@
     "Tuesday": "Tirsdag",
     "Saturday": "Lørdag",
     "Monday": "Mandag",
-    "Invite to this room": "Inviter til dette rum",
     "Send": "Send",
-    "All messages": "Alle beskeder",
     "All Rooms": "Alle rum",
     "You cannot delete this message. (%(code)s)": "Du kan ikke slette denne besked. (%(code)s)",
     "Thursday": "Torsdag",
@@ -71,14 +63,9 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s. %(monthName)s %(fullYear)s",
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "Enter passphrase": "Indtast kodeord",
-    "Explore rooms": "Udforsk rum",
-    "Verification code": "Verifikationskode",
     "Headphones": "Hovedtelefoner",
     "Show more": "Vis mere",
     "Add a new server": "Tilføj en ny server",
-    "Profile picture": "Profil billede",
-    "Checking server": "Tjekker server",
-    "Profile": "Profil",
     "Local address": "Lokal adresse",
     "This room has no local addresses": "Dette rum har ingen lokal adresse",
     "The conversation continues here.": "Samtalen fortsætter her.",
@@ -337,8 +324,6 @@
     "Algeria": "Algeriet",
     "Åland Islands": "Ålandsøerne",
     "Your password has been reset.": "Din adgangskode er blevet nulstillet.",
-    "Your password was successfully changed.": "Din adgangskode blev ændret.",
-    "Set a new custom sound": "Sæt en ny brugerdefineret lyd",
     "common": {
         "analytics": "Analyse data",
         "error": "Fejl",
@@ -359,7 +344,9 @@
         "unnamed_room": "Unavngivet rum",
         "on": "Tændt",
         "off": "Slukket",
-        "Advanced": "Avanceret"
+        "advanced": "Avanceret",
+        "profile": "Profil",
+        "user_avatar": "Profil billede"
     },
     "action": {
         "continue": "Fortsæt",
@@ -392,7 +379,8 @@
         "cancel": "Afbryd",
         "back": "Tilbage",
         "accept": "Accepter",
-        "register": "Registrér"
+        "register": "Registrér",
+        "explore_rooms": "Udforsk rum"
     },
     "labs": {
         "pinning": "Fastgørelse af beskeder",
@@ -431,7 +419,8 @@
             "noisy": "Støjende",
             "error_permissions_denied": "%(brand)s har ikke tilladelse til at sende dig notifikationer - tjek venligst dine browserindstillinger",
             "error_permissions_missing": "%(brand)s fik ikke tilladelse til at sende notifikationer - Vær sød at prøve igen",
-            "error_title": "Kunne ikke slå Notifikationer til"
+            "error_title": "Kunne ikke slå Notifikationer til",
+            "push_targets": "Meddelelsesmål"
         },
         "appearance": {
             "custom_theme_success": "Tema tilføjet!",
@@ -456,7 +445,11 @@
             "add_msisdn_confirm_sso_button": "Bekræft tilføjelsen af dette telefonnummer ved at bruge Single Sign On til at bevise din identitet.",
             "add_msisdn_confirm_button": "Bekræft tilføjelse af telefonnummer",
             "add_msisdn_confirm_body": "Klik på knappen herunder for at bekræfte tilføjelsen af dette telefonnummer.",
-            "add_msisdn_dialog_title": "Tilføj telefonnummer"
+            "add_msisdn_dialog_title": "Tilføj telefonnummer",
+            "error_password_change_403": "Kunne ikke ændre adgangskoden. Er din adgangskode rigtig?",
+            "password_change_success": "Din adgangskode blev ændret.",
+            "deactivate_section": "Deaktiver brugerkonto",
+            "msisdn_verification_field_label": "Verifikationskode"
         }
     },
     "devtools": {
@@ -788,13 +781,21 @@
     "room_settings": {
         "permissions": {
             "banned_users_section": "Bortviste brugere",
-            "permissions_section": "Tilladelser"
+            "permissions_section": "Tilladelser",
+            "error_unbanning": "Var ikke i stand til at ophæve forbuddet",
+            "ban_reason": "Årsag"
         },
         "security": {
             "enable_encryption_confirm_title": "Aktiver kryptering?",
             "history_visibility_legend": "Hvem kan læse historikken?",
             "title": "Sikkerhed & Privatliv",
             "encryption_permanent": "Efter aktivering er det ikke muligt at slå kryptering fra."
+        },
+        "general": {
+            "other_section": "Andre"
+        },
+        "notifications": {
+            "custom_sound_prompt": "Sæt en ny brugerdefineret lyd"
         }
     },
     "failed_load_async_component": "Kunne ikke hente! Tjek din netværksforbindelse og prøv igen.",
@@ -850,7 +851,8 @@
         "context_menu": {
             "favourite": "Favorit",
             "low_priority": "Lav prioritet"
-        }
+        },
+        "invite_this_room": "Inviter til dette rum"
     },
     "items_and_n_others": {
         "other": "<Items/> og %(count)s andre",
@@ -858,6 +860,12 @@
     },
     "notifications": {
         "enable_prompt_toast_title": "Notifikationer",
-        "error_change_title": "Skift notifikations indstillinger"
+        "error_change_title": "Skift notifikations indstillinger",
+        "class_other": "Andre",
+        "default": "Standard",
+        "all_messages": "Alle beskeder"
+    },
+    "identity_server": {
+        "checking": "Tjekker server"
     }
 }

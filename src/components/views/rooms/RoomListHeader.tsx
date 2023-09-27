@@ -203,7 +203,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                 <>
                     <IconizedContextMenuOption
                         iconClassName="mx_RoomListHeader_iconNewRoom"
-                        label={_t("New room")}
+                        label={_t("action|new_room")}
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -215,7 +215,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     {videoRoomsEnabled && (
                         <IconizedContextMenuOption
                             iconClassName="mx_RoomListHeader_iconNewVideoRoom"
-                            label={_t("New video room")}
+                            label={_t("action|new_video_room")}
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -243,7 +243,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     {inviteOption}
                     {newRoomOptions}
                     <IconizedContextMenuOption
-                        label={_t("Explore rooms")}
+                        label={_t("action|explore_rooms")}
                         iconClassName="mx_RoomListHeader_iconExplore"
                         onClick={(e) => {
                             e.preventDefault();
@@ -258,7 +258,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                         }}
                     />
                     <IconizedContextMenuOption
-                        label={_t("Add existing room")}
+                        label={_t("action|add_existing_room")}
                         iconClassName="mx_RoomListHeader_iconPlus"
                         onClick={(e) => {
                             e.preventDefault();
@@ -296,7 +296,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             newRoomOpts = (
                 <>
                     <IconizedContextMenuOption
-                        label={_t("Start new chat")}
+                        label={_t("action|start_new_chat")}
                         iconClassName="mx_RoomListHeader_iconStartChat"
                         onClick={(e) => {
                             e.preventDefault();
@@ -307,7 +307,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                         }}
                     />
                     <IconizedContextMenuOption
-                        label={_t("New room")}
+                        label={_t("action|new_room")}
                         iconClassName="mx_RoomListHeader_iconNewRoom"
                         onClick={(e) => {
                             e.preventDefault();
@@ -319,7 +319,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     />
                     {videoRoomsEnabled && (
                         <IconizedContextMenuOption
-                            label={_t("New video room")}
+                            label={_t("action|new_video_room")}
                             iconClassName="mx_RoomListHeader_iconNewVideoRoom"
                             onClick={(e) => {
                                 e.preventDefault();

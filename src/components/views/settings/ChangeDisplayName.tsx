@@ -42,7 +42,7 @@ export default class ChangeDisplayName extends React.Component {
         return (
             <EditableTextContainer
                 getInitialValue={this.getDisplayName}
-                placeholder={_t("No display name")}
+                placeholder={_t("settings|general|name_placeholder")}
                 blurToSubmit={true}
                 onSubmit={this.changeDisplayName}
             />

@@ -31,7 +31,7 @@ const getRoomName = (room?: Room, oobName = ""): string => room?.name || oobName
  * @returns {string} the room name
  */
 export function useRoomName(room?: Room, oobData?: IOOBData): string {
-    let oobName = _t("Join Room");
+    let oobName = _t("common|unnamed_room");
     if (oobData && oobData.name) {
         oobName = oobData.name;
     }

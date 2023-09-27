@@ -277,7 +277,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         className="mx_SettingsTab_showAdvanced"
                         aria-expanded={this.state.showAdvancedSection}
                     >
-                        {this.state.showAdvancedSection ? _t("Hide advanced") : _t("Show advanced")}
+                        {this.state.showAdvancedSection ? _t("action|hide_advanced") : _t("action|show_advanced")}
                     </AccessibleButton>
                     {this.state.showAdvancedSection && this.renderAdvanced()}
                 </div>
@@ -285,7 +285,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         }
 
         return (
-            <SettingsFieldset legend={_t("Access")} description={description}>
+            <SettingsFieldset legend={_t("room_settings|access|title")} description={description}>
                 <JoinRuleSettings
                     room={room}
                     beforeChange={this.onBeforeJoinRuleChange}
@@ -301,8 +301,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
     private onJoinRuleChangeError = (error: Error): void => {
         Modal.createDialog(ErrorDialog, {
-            title: _t("Failed to update the join rules"),
-            description: error.message ?? _t("Unknown failure"),
+            title: _t("room_settings|security|error_join_rule_change_title"),
+            description: error.message ?? _t("room_settings|security|error_join_rule_change_unknown"),
         });
     };
 
@@ -411,7 +411,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     value={guestAccess === GuestAccess.CanJoin}
                     onChange={this.onGuestAccessChange}
                     disabled={!canSetGuestAccess}
-                    label={_t("Enable guest access")}
+                    label={_t("room_settings|visibility|guest_access_label")}
                 />
                 <p>{_t("room_settings|security|guest_access_warning")}</p>
             </div>

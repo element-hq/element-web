@@ -159,7 +159,7 @@ describe("<GeneralUserSettingsTab />", () => {
             );
             render(getComponent());
 
-            expect(screen.queryByText("Deactivate account")).not.toBeInTheDocument();
+            expect(screen.queryByText("Deactivate Account")).not.toBeInTheDocument();
             expect(SettingsStore.getValue).toHaveBeenCalledWith(UIFeature.Deactivate);
         });
         it("should not render section when account is managed externally", async () => {
@@ -177,7 +177,7 @@ describe("<GeneralUserSettingsTab />", () => {
 
             await flushPromises();
 
-            expect(screen.queryByText("Deactivate account")).not.toBeInTheDocument();
+            expect(screen.queryByText("Deactivate Account")).not.toBeInTheDocument();
         });
         it("should render section when account deactivation feature is enabled", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation(
@@ -185,7 +185,7 @@ describe("<GeneralUserSettingsTab />", () => {
             );
             render(getComponent());
 
-            expect(screen.getByText("Deactivate account").parentElement!).toMatchSnapshot();
+            expect(screen.getByText("Deactivate Account", { selector: "h2" }).parentElement!).toMatchSnapshot();
         });
     });
 

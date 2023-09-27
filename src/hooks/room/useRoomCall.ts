@@ -190,16 +190,16 @@ export const useRoomCall = (
     let videoCallDisabledReason: string | null;
     switch (state) {
         case State.NoPermission:
-            voiceCallDisabledReason = _t("You do not have permission to start voice calls");
-            videoCallDisabledReason = _t("You do not have permission to start video calls");
+            voiceCallDisabledReason = _t("voip|disabled_no_perms_start_voice_call");
+            videoCallDisabledReason = _t("voip|disabled_no_perms_start_video_call");
             break;
         case State.Ongoing:
-            voiceCallDisabledReason = _t("Ongoing call");
-            videoCallDisabledReason = _t("Ongoing call");
+            voiceCallDisabledReason = _t("voip|disabled_ongoing_call");
+            videoCallDisabledReason = _t("voip|disabled_ongoing_call");
             break;
         case State.NoOneHere:
-            voiceCallDisabledReason = _t("There's no one here to call");
-            videoCallDisabledReason = _t("There's no one here to call");
+            voiceCallDisabledReason = _t("voip|disabled_no_one_here");
+            videoCallDisabledReason = _t("voip|disabled_no_one_here");
             break;
         case State.Unpinned:
         case State.NoCall:

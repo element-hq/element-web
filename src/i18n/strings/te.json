@@ -1,8 +1,5 @@
 {
     "Admin Tools": "నిర్వాహకుని ఉపకరణాలు",
-    "No Microphones detected": "మైక్రోఫోన్లు కనుగొనబడలేదు",
-    "No Webcams detected": "వెబ్కామ్లు కనుగొనబడలేదు",
-    "Authentication": "ప్రామాణీకరణ",
     "You do not have permission to post to this room": "మీకు ఈ గదికి పోస్ట్ చేయడానికి అనుమతి లేదు",
     "A new password must be entered.": "కొత్త పాస్ వర్డ్ ను తప్పక నమోదు చేయాలి.",
     "An error has occurred.": "ఒక లోపము సంభవించినది.",
@@ -10,8 +7,6 @@
     "Are you sure you want to leave the room '%(roomName)s'?": "మీరు ఖచ్చితంగా గది '%(roomName)s' వదిలివేయాలనుకుంటున్నారా?",
     "Are you sure you want to reject the invitation?": "మీరు ఖచ్చితంగా ఆహ్వానాన్ని తిరస్కరించాలనుకుంటున్నారా?",
     "Custom level": "అనుకూల స్థాయి",
-    "Deactivate Account": "ఖాతాను డీయాక్టివేట్ చేయండి",
-    "Default": "డిఫాల్ట్",
     "Sun": "ఆదివారం",
     "Mon": "సోమవారం",
     "Tue": "మంగళవారం",
@@ -38,12 +33,10 @@
     "Connectivity to the server has been lost.": "సెర్వెర్ కనెక్టివిటీని కోల్పోయారు.",
     "Sent messages will be stored until your connection has returned.": "మీ కనెక్షన్ తిరిగి వచ్చే వరకు పంపిన సందేశాలు నిల్వ చేయబడతాయి.",
     "Failed to forget room %(errCode)s": "గది మర్చిపోవడం విఫలమైంది %(errCode)s",
-    "Incorrect verification code": "ధృవీకరణ కోడ్ సరిగా లెదు",
     "unknown error code": "తెలియని కోడ్ లోపం",
     "Unable to restore session": "సెషన్ను పునరుద్ధరించడానికి సాధ్యపడలేదు",
     "Create new room": "క్రొత్త గది సృష్టించండి",
     "Sunday": "ఆదివారం",
-    "Notification targets": "తాఖీదు లక్ష్యాలు",
     "Today": "ఈ రోజు",
     "Friday": "శుక్రువారం",
     "Changelog": "మార్పు వివరణ",
@@ -52,8 +45,6 @@
     "All Rooms": "అన్ని గదులు",
     "Wednesday": "బుధవారం",
     "Send": "పంపండి",
-    "All messages": "అన్ని సందేశాలు",
-    "Invite to this room": "ఈ గదికి ఆహ్వానించండి",
     "Thursday": "గురువారం",
     "Search…": "శోధన…",
     "Yesterday": "నిన్న",
@@ -68,7 +59,8 @@
         "microphone": "మైక్రోఫోన్",
         "on": "వేయుము",
         "off": "ఆపు",
-        "Advanced": "ఆధునిక"
+        "advanced": "ఆధునిక",
+        "authentication": "ప్రామాణీకరణ"
     },
     "action": {
         "continue": "కొనసాగించు",
@@ -101,7 +93,8 @@
             "rule_message": "సమూహ మాటామంతిలో సందేశాలు",
             "rule_call": "మాట్లాడడానికి ఆహ్వానం",
             "rule_suppress_notices": "బాట్ పంపిన సందేశాలు",
-            "noisy": "శబ్దం"
+            "noisy": "శబ్దం",
+            "push_targets": "తాఖీదు లక్ష్యాలు"
         },
         "appearance": {
             "timeline_image_size_default": "డిఫాల్ట్",
@@ -115,7 +108,13 @@
             "email_address_in_use": "ఈ ఇమెయిల్ అడ్రస్ ఇప్పటికే వాడుకం లో ఉంది",
             "msisdn_in_use": "ఈ ఫోన్ నంబర్ ఇప్పటికే వాడుకం లో ఉంది",
             "confirm_adding_email_title": "ఈమెయిల్ చేర్చుటకు ధ్రువీకరించు",
-            "add_email_failed_verification": "ఇమెయిల్ అడ్రస్ ని నిరూపించలేక పోయాము. ఈమెయిల్ లో వచ్చిన లింక్ ని నొక్కారా"
+            "add_email_failed_verification": "ఇమెయిల్ అడ్రస్ ని నిరూపించలేక పోయాము. ఈమెయిల్ లో వచ్చిన లింక్ ని నొక్కారా",
+            "deactivate_section": "ఖాతాను డీయాక్టివేట్ చేయండి",
+            "incorrect_msisdn_verification": "ధృవీకరణ కోడ్ సరిగా లెదు"
+        },
+        "voip": {
+            "audio_input_empty": "మైక్రోఫోన్లు కనుగొనబడలేదు",
+            "video_input_empty": "వెబ్కామ్లు కనుగొనబడలేదు"
         }
     },
     "timeline": {
@@ -186,12 +185,15 @@
         "tls": "గృహనిర్వాహకులకు కనెక్ట్ చేయలేరు - దయచేసి మీ కనెక్టివిటీని తనిఖీ చేయండి, మీ <a> 1 హోమరుసు యొక్క ఎస్ఎస్ఎల్ సర్టిఫికేట్ </a> 2 ని విశ్వసనీయపరుచుకొని, బ్రౌజర్ పొడిగింపు అభ్యర్థనలను నిరోధించబడదని నిర్ధారించుకోండి."
     },
     "notifications": {
-        "enable_prompt_toast_title": "ప్రకటనలు"
+        "enable_prompt_toast_title": "ప్రకటనలు",
+        "default": "డిఫాల్ట్",
+        "all_messages": "అన్ని సందేశాలు"
     },
     "room": {
         "context_menu": {
             "favourite": "గుర్తుంచు",
             "low_priority": "తక్కువ ప్రాధాన్యత"
-        }
+        },
+        "invite_this_room": "ఈ గదికి ఆహ్వానించండి"
     }
 }

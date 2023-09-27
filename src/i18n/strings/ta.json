@@ -1,10 +1,7 @@
 {
-    "All messages": "அனைத்து செய்திகள்",
     "All Rooms": "அனைத்து அறைகள்",
     "Changelog": "மாற்றப்பதிவு",
     "Failed to forget room %(errCode)s": "அறையை மறப்பதில் தோல்வி %(errCode)s",
-    "Invite to this room": "இந்த அறைக்கு அழை",
-    "Notification targets": "அறிவிப்பு இலக்குகள்",
     "Search…": "தேடு…",
     "Send": "அனுப்பு",
     "This Room": "இந்த அறை",
@@ -38,7 +35,6 @@
     "Apr": "ஏப்ரல்",
     "May": "மே",
     "Jun": "ஜூன்",
-    "Explore rooms": "அறைகளை ஆராயுங்கள்",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
@@ -77,7 +73,8 @@
         "close": "மூடு",
         "cancel": "ரத்து",
         "back": "பின்",
-        "register": "பதிவு செய்"
+        "register": "பதிவு செய்",
+        "explore_rooms": "அறைகளை ஆராயுங்கள்"
     },
     "bug_reporting": {
         "send_logs": "பதிவுகளை அனுப்பு",
@@ -99,7 +96,8 @@
             "rule_call": "அழைப்பிற்கான விண்ணப்பம்",
             "rule_suppress_notices": "bot மூலம் அனுப்பிய செய்திகள்",
             "show_message_desktop_notification": "திரை அறிவிப்புகளில் செய்தியை காண்பிக்கவும்",
-            "noisy": "சத்தம்"
+            "noisy": "சத்தம்",
+            "push_targets": "அறிவிப்பு இலக்குகள்"
         },
         "general": {
             "email_address_in_use": "இந்த மின்னஞ்சல் முகவரி முன்னதாகவே பயன்பாட்டில் உள்ளது",
@@ -179,7 +177,8 @@
         "failed_generic": "செயல்பாடு தோல்வியுற்றது"
     },
     "notifications": {
-        "enable_prompt_toast_title": "அறிவிப்புகள்"
+        "enable_prompt_toast_title": "அறிவிப்புகள்",
+        "all_messages": "அனைத்து செய்திகள்"
     },
     "timeline": {
         "context_menu": {
@@ -190,6 +189,7 @@
         "context_menu": {
             "favourite": "விருப்பமான",
             "low_priority": "குறைந்த முன்னுரிமை"
-        }
+        },
+        "invite_this_room": "இந்த அறைக்கு அழை"
     }
 }

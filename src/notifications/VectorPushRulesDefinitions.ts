@@ -111,6 +111,7 @@ export const VectorPushRulesDefinitions: Record<string, VectorPushRuleDefinition
             [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
             [VectorState.Off]: StandardActions.ACTION_DISABLED,
         },
+        syncedRuleIds: [RuleId.IsUserMention],
     }),
 
     // Messages containing @room
@@ -122,6 +123,7 @@ export const VectorPushRulesDefinitions: Record<string, VectorPushRuleDefinition
             [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT,
             [VectorState.Off]: StandardActions.ACTION_DISABLED,
         },
+        syncedRuleIds: [RuleId.IsRoomMention],
     }),
 
     // Messages just sent to the user in a 1:1 room

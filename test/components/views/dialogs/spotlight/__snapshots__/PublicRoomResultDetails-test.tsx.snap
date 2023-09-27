@@ -158,7 +158,7 @@ exports[`PublicRoomResultDetails Public room results 5`] = `
         class="mx_SpotlightDialog_result_publicRoomName"
         id="label-id"
       >
-        Unnamed room
+        Unnamed Room
       </span>
       <span
         class="mx_SpotlightDialog_result_publicRoomAlias"
