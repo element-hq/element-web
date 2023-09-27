@@ -196,7 +196,6 @@
     "Tue": "ວັນອັງຄານ",
     "Mon": "ວັນຈັນ",
     "Sun": "ວັນອາທິດ",
-    "Permission Required": "ຕ້ອງການອະນຸຍາດ",
     "Moderator": "ຜູ້ດຳເນິນລາຍການ",
     "Restricted": "ຖືກຈຳກັດ",
     "Zimbabwe": "ຊິມບັບເວ",
@@ -323,13 +322,6 @@
     "Umbrella": "ຄັນຮົ່ມ",
     "Thumbs up": "ຍົກໂປ້",
     "Santa": "ຊານຕາ",
-    "Italics": "ໂຕໜັງສືອຽງ",
-    "Home options": "ຕົວເລືອກໜ້າຫຼັກ",
-    "%(spaceName)s menu": "ເມນູ %(spaceName)s",
-    "Currently removing messages in %(count)s rooms": {
-        "one": "ຕອນນີ້ກຳລັງລຶບຂໍ້ຄວາມຢູ່ໃນຫ້ອງ %(count)s",
-        "other": "ກຳລັງລຶບຂໍ້ຄວາມຢູ່ໃນ %(count)s ຫ້ອງ"
-    },
     "Live location enabled": "ເປີດໃຊ້ສະຖານທີປັດຈຸບັນແລ້ວ",
     "You are sharing your live location": "ທ່ານກໍາລັງແບ່ງປັນສະຖານທີ່ປັດຈຸບັນຂອງທ່ານ",
     "Close sidebar": "ປິດແຖບດ້ານຂ້າງ",
@@ -590,8 +582,6 @@
         "one": "ຜູ້ເຂົ້າຮ່ວມ 1ຄົນ",
         "other": "ຜູ້ເຂົ້າຮ່ວມ %(count)s ຄົນ"
     },
-    "%(errcode)s was returned while trying to access the room or space. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.": "%(errcode)s ຖືກສົ່ງຄືນໃນຂະນະທີ່ພະຍາຍາມເຂົ້າເຖິງຫ້ອງ ຫຼື ພື້ນທີ່. ຖ້າຫາກທ່ານຄິດວ່າທ່ານກໍາລັງເຫັນຂໍ້ຄວາມນີ້ຜິດພາດ, ກະລຸນາ <issueLink>ສົ່ງບົດລາຍງານ bug</issueLink>.",
-    "Try again later, or ask a room or space admin to check if you have access.": "ລອງໃໝ່ໃນພາຍຫຼັງ, ຫຼື ຂໍໃຫ້ຜູ້ຄຸ້ມຄອງຫ້ອງ ຫຼື ຜູ້ຄຸ້ມຄອງພື້ນທີ່ກວດເບິ່ງວ່າທ່ານມີການເຂົ້າເຖິງ ຫຼື ບໍ່.",
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "ຖ້າທ່ານບໍ່ໄດ້ລືບຂະບວນການກູ້ຄືນ, ຜູ້ໂຈມຕີອາດຈະພະຍາຍາມເຂົ້າເຖິງບັນຊີຂອງທ່ານ. ປ່ຽນລະຫັດຜ່ານບັນຊີຂອງທ່ານ ແລະ ກຳນົດຂະບວນການກູ້ຄືນໃໝ່ທັນທີໃນການຕັ້ງຄ່າ.",
     "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "ຖ້າທ່ານດຳເນີນການສິ່ງນີ້ໂດຍບໍ່ໄດ້ຕັ້ງໃຈ, ທ່ານສາມາດຕັ້ງຄ່າຄວາມປອດໄພຂອງຂໍ້ຄວາມ ໃນລະບົບນີ້ ເຊິ່ງຈະມີການເຂົ້າລະຫັດປະຫວັດຂໍ້ຄວາມຂອງລະບົບນີ້ຄືນໃໝ່ດ້ວຍຂະບວນການກູ້ຂໍ້ມູນໃໝ່.",
     "This session has detected that your Security Phrase and key for Secure Messages have been removed.": "ລະບົບນີ້ໄດ້ກວດພົບປະໂຫຍກຄວາມປອດໄພ ແລະ ກະແຈຂໍ້ຄວາມທີ່ປອດໄພຂອງທ່ານໄດ້ຖືກເອົາອອກແລ້ວ.",
@@ -878,16 +868,9 @@
     "Experimental": "ທົດລອງ",
     "Themes": "ຫົວຂໍ້",
     "Moderation": "ປານກາງ",
-    "Rooms": "ຫ້ອງ",
     "Widgets": "ວິດເຈັດ",
-    "Replying": "ກຳລັງຕອບກັບ",
     "Recently viewed": "ເບິ່ງເມື່ອບໍ່ດົນມານີ້",
-    "Seen by %(count)s people": {
-        "one": "ເຫັນໂດຍ %(count)s ຄົນ",
-        "other": "ເຫັນໂດຍ %(count)s ຄົນ"
-    },
     "View message": "ເບິ່ງຂໍ້ຄວາມ",
-    "Message didn't send. Click for info.": "ບໍ່ໄດ້ສົ່ງຂໍ້ຄວາມ. ກົດສຳລັບຂໍ້ມູນ.",
     "What location type do you want to share?": "ທ່ານຕ້ອງການແບ່ງປັນສະຖານທີ່ປະເພດໃດ?",
     "Drop a Pin": "ປັກໝຸດ",
     "My live location": "ສະຖານທີ່ຂອງຂ້ອຍ",
@@ -949,10 +932,6 @@
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s ແລະ %(space2Name)s",
     "Email (optional)": "ອີເມວ (ທາງເລືອກ)",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "ກະລຸນາຮັບຊາບວ່າ, ຖ້າທ່ານບໍ່ເພີ່ມອີເມວ ແລະ ລືມລະຫັດຜ່ານຂອງທ່ານ, ທ່ານອາດ <b>ສູນເສຍການເຂົ້າເຖິງບັນຊີຂອງທ່ານຢ່າງຖາວອນ</b>.",
-    "Suggested Rooms": "ຫ້ອງແນະນຳ",
-    "Historical": "ປະຫວັດ",
-    "Low priority": "ບູລິມະສິດຕໍ່າ",
-    "Add room": "ເພີ່ມຫ້ອງ",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s%(day)s%(fullYear)s%(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "Tuesday": "ວັນອັງຄານ",
@@ -1002,52 +981,7 @@
     "Disinvite from %(roomName)s": "ຍົກເລີກເຊີນຈາກ %(roomName)s",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "ການລຶບລ້າງຂໍ້ມູນທັງໝົດຈາກລະບົບນີ້ຖາວອນ. ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດຈະສູນເສຍເວັ້ນເສຍແຕ່ກະແຈຂອງເຂົາເຈົ້າໄດ້ຮັບການສໍາຮອງຂໍ້ມູນ.",
     "%(duration)sd": "%(duration)sd",
-    "This room or space is not accessible at this time.": "ຫ້ອງ ຫຼື ພື້ນທີ່ນີ້ບໍ່ສາມາດເຂົ້າເຖິງໄດ້ໃນເວລານີ້.",
-    "%(roomName)s is not accessible at this time.": "%(roomName)s ບໍ່ສາມາດເຂົ້າເຖິງໄດ້ໃນເວລານີ້.",
-    "Are you sure you're at the right place?": "ທ່ານແນ່ໃຈບໍ່ວ່າທ່ານຢູ່ບ່ອນທີ່ຖືກຕ້ອງ?",
-    "This room or space does not exist.": "ບໍ່ມີຫ້ອງ ຫຼື ພື້ນທີ່ນີ້.",
-    "%(roomName)s does not exist.": "%(roomName)s ບໍ່ມີ.",
-    "There's no preview, would you like to join?": "ບໍ່ມີຕົວຢ່າງ, ທ່ານຕ້ອງການເຂົ້າຮ່ວມບໍ?",
-    "%(roomName)s can't be previewed. Do you want to join it?": "ບໍ່ສາມາດເບິ່ງຕົວຢ່າງ %(roomName)s ໄດ້. ທ່ານຕ້ອງການເຂົ້າຮ່ວມມັນບໍ?",
-    "You're previewing %(roomName)s. Want to join it?": "ທ່ານກຳລັງເບິ່ງຕົວຢ່າງ %(roomName)s. ຕ້ອງການເຂົ້າຮ່ວມບໍ?",
-    "Reject & Ignore user": "ປະຕິເສດ ແລະ ບໍ່ສົນໃຈຜູ້ໃຊ້",
-    "<userName/> invited you": "<userName/> ເຊີນທ່ານ",
-    "Do you want to join %(roomName)s?": "ທ່ານຕ້ອງການເຂົ້າຮ່ວມ %(roomName)s ບໍ?",
-    "Start chatting": "ເລີ່ມການສົນທະນາ",
-    "<userName/> wants to chat": "<userName/> ຕ້ອງການສົນທະນາ",
-    "Do you want to chat with %(user)s?": "ທ່ານຕ້ອງການສົນທະນາກັບ %(user)s ບໍ?",
-    "Share this email in Settings to receive invites directly in %(brand)s.": "ແບ່ງປັນອີເມວນີ້ໃນການຕັ້ງຄ່າເພື່ອຮັບການເຊີນໂດຍກົງໃນ %(brand)s.",
-    "Use an identity server in Settings to receive invites directly in %(brand)s.": "ໃຊ້ເຊີບເວີໃນການຕັ້ງຄ່າເພື່ອຮັບການເຊີນໂດຍກົງໃນ %(brand)s.",
-    "This invite was sent to %(email)s": "ການເຊີນນີ້ຖືກສົ່ງໄປຫາ %(email)s",
-    "This invite to %(roomName)s was sent to %(email)s": "ການເຊີນນີ້ໄປຫາ %(roomName)s ໄດ້ຖືກສົ່ງໄປຫາ %(email)s",
-    "Link this email with your account in Settings to receive invites directly in %(brand)s.": "ເຊື່ອມຕໍ່ອີເມວນີ້ກັບບັນຊີຂອງທ່ານໃນການຕັ້ງຄ່າເພື່ອຮັບການເຊີນໂດຍກົງໃນ %(brand)s.",
-    "This invite was sent to %(email)s which is not associated with your account": "ການເຊີນນີ້ຖືກສົ່ງໄປຫາ %(email)s ທີ່ບໍ່ກ່ຽວຂ້ອງກັບບັນຊີຂອງທ່ານ",
-    "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "ການເຊີນນີ້ໄປຫາ %(roomName)s ໄດ້ຖືກສົ່ງໄປຫາ %(email)s ຊຶ່ງບໍ່ກ່ຽວຂ້ອງກັບບັນຊີຂອງທ່ານ",
-    "Join the discussion": "ເຂົ້າຮ່ວມການສົນທະນາ",
-    "You can still join here.": "ທ່ານຍັງສາມາດເຂົ້າຮ່ວມໄດ້ຢູ່ບ່ອນນີ້.",
-    "Try to join anyway": "ພະຍາຍາມເຂົ້າຮ່ວມຕໍ່ໄປ",
-    "You can only join it with a working invite.": "ທ່ານສາມາດເຂົ້າຮ່ວມໄດ້ດ້ວຍການເຊີນເຮັດວຽກເທົ່ານັ້ນ.",
     "unknown error code": "ລະຫັດຜິດພາດທີ່ບໍ່ຮູ້ຈັກ",
-    "An error (%(errcode)s) was returned while trying to validate your invite. You could try to pass this information on to the person who invited you.": "ຄວາມຜິດພາດ (%(errcode)s) ໃນຂະນະທີ່ພະຍາຍາມທີ່ຈະກວດສອບການເຊີນຂອງທ່ານ. ທ່ານສາມາດທົດລອງສົ່ງຂໍ້ມູນນີ້ໄປຫາບບຸກຄົນທີ່ເຊີນທ່ານ.",
-    "Something went wrong with your invite.": "ມີບາງຢ່າງຜິດພາດກ່ຍວກັບການເຊີນຂອງທ່ານ.",
-    "Something went wrong with your invite to %(roomName)s": "ມີບາງຢ່າງຜິດພາດກ່ຽວກັບການເຊີນຂອງທ່ານໄປຫາ %(roomName)s",
-    "You were banned by %(memberName)s": "ທ່ານຖືກຫ້າມໂດຍ %(memberName)s",
-    "You were banned from %(roomName)s by %(memberName)s": "ທ່ານຖືກຫ້າມຈາກ %(roomName)s ໂດຍ %(memberName)s",
-    "Re-join": "ເຂົ້າຮ່ວມອີກຄັ້ງ",
-    "Forget this room": "ລືມຫ້ອງນີ້",
-    "Forget this space": "ລືມພຶ້ນທີ່ນີ້",
-    "Reason: %(reason)s": "ເຫດຜົນ: %(reason)s",
-    "You were removed by %(memberName)s": "ທ່ານຖືກລຶບຍອອກໂດຍ %(memberName)s",
-    "You were removed from %(roomName)s by %(memberName)s": "ທ່ານຖືກລຶບອອກຈາກ %(roomName)s ໂດຍ %(memberName)s",
-    "Loading preview": "ກຳລັງໂຫຼດຕົວຢ່າງ",
-    "Sign Up": "ລົງທະບຽນ",
-    "Join the conversation with an account": "ເຂົ້າຮ່ວມການສົນທະນາດ້ວຍບັນຊີ",
-    "Currently joining %(count)s rooms": {
-        "one": "ກຳລັງເຂົ້າຮ່ວມຫ້ອງ %(count)s",
-        "other": "ປະຈຸບັນກຳລັງເຂົ້າຮ່ວມ %(count)s ຫ້ອງ"
-    },
-    "Join public room": "ເຂົ້າຮ່ວມຫ້ອງສາທາລະນະ",
-    "Add space": "ເພີ່ມພື້ນທີ່",
     "Don't leave any rooms": "ຢ່າອອກຈາກຫ້ອງ",
     "Would you like to leave the rooms in this space?": "ທ່ານຕ້ອງການອອກຈາກຫ້ອງໃນພື້ນທີ່ນີ້ບໍ?",
     "You are about to leave <spaceName/>.": "ທ່ານກຳລັງຈະອອກຈາກ <spaceName/>.",
@@ -1220,9 +1154,6 @@
     "Room Settings - %(roomName)s": "ການຕັ້ງຄ່າຫ້ອງ - %(roomName)s",
     "Scroll to most recent messages": "ເລື່ອນໄປຫາຂໍ້ຄວາມຫຼ້າສຸດ",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "ອຸປະກອນນີ້ບໍ່ສາມາດຮັບປະກັນຄວາມຖືກຕ້ອງຂອງຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດນີ້ໄດ້.",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",
-    "Filter room members": "ການກັ່ນຕອງສະມາຊິກຫ້ອງ",
-    "Invited": "ເຊີນ",
     "a key signature": "ລາຍເຊັນຫຼັກ",
     "a device cross-signing signature": "ການ cross-signing ອຸປະກອນ",
     "a new cross-signing key signature": "ການລົງລາຍເຊັນ cross-signing ແບບໃໝ່",
@@ -1260,10 +1191,6 @@
     "Ban from room": "ຫ້າມອອກຈາກຫ້ອງ",
     "Unban from room": "ຫ້າມຈາກຫ້ອງ",
     "Ban from space": "ພື້ນທີ່ຫ້າມຈາກ",
-    "Show Widgets": "ສະແດງ Widgets",
-    "Hide Widgets": "ເຊື່ອງ Widgets",
-    "Forget room": "ລືມຫ້ອງ",
-    "Room options": "ຕົວເລືອກຫ້ອງ",
     "Join Room": "ເຂົ້າຮ່ວມຫ້ອງ",
     "(~%(count)s results)": {
         "one": "(~%(count)sຜົນຮັບ)",
@@ -1272,15 +1199,7 @@
     "%(duration)sh": "%(duration)sh",
     "%(duration)sm": "%(duration)sm",
     "%(duration)ss": "%(duration)s",
-    "Insert link": "ໃສ່ລິ້ງ",
-    "Poll": "ການສໍາຫລວດ",
-    "You do not have permission to start polls in this room.": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເລີ່ມແບບສຳຫຼວດຢູ່ໃນຫ້ອງນີ້.",
-    "Voice Message": "ຂໍ້ຄວາມສຽງ",
-    "Hide stickers": "ເຊື່ອງສະຕິກເກີ",
     "Send voice message": "ສົ່ງຂໍ້ຄວາມສຽງ",
-    "You do not have permission to post to this room": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ໂພສໃສ່ຫ້ອງນີ້",
-    "This room has been replaced and is no longer active.": "ຫ້ອງນີ້ໄດ້ໍປ່ຽນແທນ ແລະບໍ່ມີການເຄື່ອນໄຫວອີກຕໍ່ໄປ.",
-    "The conversation continues here.": "ການສົນທະນາສືບຕໍ່ຢູ່ທີ່ນີ້.",
     "and %(count)s others...": {
         "one": "ແລະ ອີກອັນນຶ່ງ...",
         "other": "ແລະ %(count)s ຜູ້ອຶ່ນ..."
@@ -1293,14 +1212,9 @@
     "Output devices": "ອຸປະກອນຂາອອກ",
     "Input devices": "ອຸປະກອນຂາເຂົ້າ",
     "Show Labs settings": "ໂຊການຕັ້ງຄ່າສູນທົດລອງ",
-    "To join, please enable video rooms in Labs first": "ເພື່ອເຂົ້າຮ່ວມ, ທ່ານຕ້ອງເປີດຫ້ອງວີດີໂອໃນສູນທົດລອງກ່ອນ",
-    "To view, please enable video rooms in Labs first": "ເພື່ອເບິ່ງ, ທ່ານຕ້ອງເປີດຫ້ອງວີດີໂອໃນສູນທົດລອງກ່ອນ",
-    "To view %(roomName)s, you need an invite": "ເພື່ອເບິ່ງ %(roomName)s, ທ່ານຕ້ອງມີບັດເຊີນ",
     "Unread email icon": "ໄອຄັອນເມວທີ່ຍັງບໍ່ໄດ້ຖືກອ່ານ",
     "An error occurred whilst sharing your live location, please try again": "ພົບບັນຫາຕອນກຳລັງແບ່ງປັນຈຸດພິກັດຂອງທ່ານ, ກະລຸນາລອງໃໝ່",
     "An error occurred whilst sharing your live location": "ພົບບັນຫາຕອນກຳລັງແບ່ງປັນຈຸດພິກັດຂອງທ່ານ",
-    "Joining…": "ກຳລັງເຂົ້າ…",
-    "Read receipts": "ຢັ້ງຢືນອ່ານແລ້ວ",
     "common": {
         "about": "ກ່ຽວກັບ",
         "analytics": "ວິເຄາະ",
@@ -1398,7 +1312,10 @@
         "video_room": "ຫ້ອງວີດີໂອ",
         "public_space": "ພື້ນທີ່ສາທາລະນະ",
         "private_space": "ພື້ນທີ່ສ່ວນຕົວ",
-        "private_room": "ຫ້ອງສ່ວນຕົວ"
+        "private_room": "ຫ້ອງສ່ວນຕົວ",
+        "rooms": "ຫ້ອງ",
+        "low_priority": "ບູລິມະສິດຕໍ່າ",
+        "historical": "ປະຫວັດ"
     },
     "action": {
         "continue": "ສືບຕໍ່",
@@ -1647,7 +1564,19 @@
             "space_a11y": "ການເພິ່ມຂໍ້ຄວາມອັດຕະໂນມັດໃນພື້ນທີ່",
             "user_description": "ຜູ້ໃຊ້",
             "user_a11y": "ການຕຶ້ມຂໍ້ມູນອັດຕະໂນມັດຊື່ຜູ້ໃຊ້"
-        }
+        },
+        "room_upgraded_link": "ການສົນທະນາສືບຕໍ່ຢູ່ທີ່ນີ້.",
+        "room_upgraded_notice": "ຫ້ອງນີ້ໄດ້ໍປ່ຽນແທນ ແລະບໍ່ມີການເຄື່ອນໄຫວອີກຕໍ່ໄປ.",
+        "no_perms_notice": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ໂພສໃສ່ຫ້ອງນີ້",
+        "send_button_voice_message": "ສົ່ງຂໍ້ຄວາມສຽງ",
+        "close_sticker_picker": "ເຊື່ອງສະຕິກເກີ",
+        "voice_message_button": "ຂໍ້ຄວາມສຽງ",
+        "poll_button_no_perms_title": "ຕ້ອງການອະນຸຍາດ",
+        "poll_button_no_perms_description": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເລີ່ມແບບສຳຫຼວດຢູ່ໃນຫ້ອງນີ້.",
+        "poll_button": "ການສໍາຫລວດ",
+        "format_italics": "ໂຕໜັງສືອຽງ",
+        "format_insert_link": "ໃສ່ລິ້ງ",
+        "replying_title": "ກຳລັງຕອບກັບ"
     },
     "Code": "ລະຫັດ",
     "power_level": {
@@ -2433,7 +2362,12 @@
                 "other": "ສະແດງຕົວຢ່າງອື່ນໆ %(count)s"
             },
             "close": "ປິດຕົວຢ່າງ"
-        }
+        },
+        "read_receipt_title": {
+            "one": "ເຫັນໂດຍ %(count)s ຄົນ",
+            "other": "ເຫັນໂດຍ %(count)s ຄົນ"
+        },
+        "read_receipts_label": "ຢັ້ງຢືນອ່ານແລ້ວ"
     },
     "slash_command": {
         "spoiler": "ສົ່ງຂໍ້ຄວາມທີ່ກຳນົດເປັນ spoiler",
@@ -3011,7 +2945,21 @@
         "failed_remove_tag": "ລຶບແທັກ %(tagName)s ອອກຈາກຫ້ອງບໍ່ສຳເລັດ",
         "failed_add_tag": "ເພີ່ມແທັກ %(tagName)s ໃສ່ຫ້ອງບໍ່ສຳເລັດ",
         "breadcrumbs_label": "ຫ້ອງທີ່ເຂົ້າເບິ່ງເມື່ອບໍ່ດົນມານີ້",
-        "breadcrumbs_empty": "ບໍ່ມີຫ້ອງທີ່ເຂົ້າເບິ່ງເມື່ອບໍ່ດົນມານີ້"
+        "breadcrumbs_empty": "ບໍ່ມີຫ້ອງທີ່ເຂົ້າເບິ່ງເມື່ອບໍ່ດົນມານີ້",
+        "add_room_label": "ເພີ່ມຫ້ອງ",
+        "suggested_rooms_heading": "ຫ້ອງແນະນຳ",
+        "add_space_label": "ເພີ່ມພື້ນທີ່",
+        "join_public_room_label": "ເຂົ້າຮ່ວມຫ້ອງສາທາລະນະ",
+        "joining_rooms_status": {
+            "one": "ກຳລັງເຂົ້າຮ່ວມຫ້ອງ %(count)s",
+            "other": "ປະຈຸບັນກຳລັງເຂົ້າຮ່ວມ %(count)s ຫ້ອງ"
+        },
+        "redacting_messages_status": {
+            "one": "ຕອນນີ້ກຳລັງລຶບຂໍ້ຄວາມຢູ່ໃນຫ້ອງ %(count)s",
+            "other": "ກຳລັງລຶບຂໍ້ຄວາມຢູ່ໃນ %(count)s ຫ້ອງ"
+        },
+        "space_menu_label": "ເມນູ %(spaceName)s",
+        "home_menu_label": "ຕົວເລືອກໜ້າຫຼັກ"
     },
     "report_content": {
         "missing_reason": "ກະລຸນາຕື່ມຂໍ້ມູນວ່າເປັນຫຍັງທ່ານກໍາລັງລາຍງານ.",
@@ -3379,9 +3327,60 @@
             "mentions_only": "ກ່າວເຖິງເທົ່ານັ້ນ",
             "copy_link": "ສຳເນົາລິ້ງຫ້ອງ",
             "low_priority": "ຄວາມສຳຄັນຕໍ່າ",
-            "forget": "ລືມຫ້ອງ"
+            "forget": "ລືມຫ້ອງ",
+            "title": "ຕົວເລືອກຫ້ອງ"
         },
-        "invite_this_room": "ເຊີນເຂົ້າຫ້ອງນີ້"
+        "invite_this_room": "ເຊີນເຂົ້າຫ້ອງນີ້",
+        "header": {
+            "forget_room_button": "ລືມຫ້ອງ",
+            "hide_widgets_button": "ເຊື່ອງ Widgets",
+            "show_widgets_button": "ສະແດງ Widgets"
+        },
+        "joining": "ກຳລັງເຂົ້າ…",
+        "join_title_account": "ເຂົ້າຮ່ວມການສົນທະນາດ້ວຍບັນຊີ",
+        "join_button_account": "ລົງທະບຽນ",
+        "loading_preview": "ກຳລັງໂຫຼດຕົວຢ່າງ",
+        "kicked_from_room_by": "ທ່ານຖືກລຶບອອກຈາກ %(roomName)s ໂດຍ %(memberName)s",
+        "kicked_by": "ທ່ານຖືກລຶບຍອອກໂດຍ %(memberName)s",
+        "kick_reason": "ເຫດຜົນ: %(reason)s",
+        "forget_space": "ລືມພຶ້ນທີ່ນີ້",
+        "forget_room": "ລືມຫ້ອງນີ້",
+        "rejoin_button": "ເຂົ້າຮ່ວມອີກຄັ້ງ",
+        "banned_from_room_by": "ທ່ານຖືກຫ້າມຈາກ %(roomName)s ໂດຍ %(memberName)s",
+        "banned_by": "ທ່ານຖືກຫ້າມໂດຍ %(memberName)s",
+        "3pid_invite_error_title_room": "ມີບາງຢ່າງຜິດພາດກ່ຽວກັບການເຊີນຂອງທ່ານໄປຫາ %(roomName)s",
+        "3pid_invite_error_title": "ມີບາງຢ່າງຜິດພາດກ່ຍວກັບການເຊີນຂອງທ່ານ.",
+        "3pid_invite_error_description": "ຄວາມຜິດພາດ (%(errcode)s) ໃນຂະນະທີ່ພະຍາຍາມທີ່ຈະກວດສອບການເຊີນຂອງທ່ານ. ທ່ານສາມາດທົດລອງສົ່ງຂໍ້ມູນນີ້ໄປຫາບບຸກຄົນທີ່ເຊີນທ່ານ.",
+        "3pid_invite_error_invite_subtitle": "ທ່ານສາມາດເຂົ້າຮ່ວມໄດ້ດ້ວຍການເຊີນເຮັດວຽກເທົ່ານັ້ນ.",
+        "3pid_invite_error_invite_action": "ພະຍາຍາມເຂົ້າຮ່ວມຕໍ່ໄປ",
+        "3pid_invite_error_public_subtitle": "ທ່ານຍັງສາມາດເຂົ້າຮ່ວມໄດ້ຢູ່ບ່ອນນີ້.",
+        "join_the_discussion": "ເຂົ້າຮ່ວມການສົນທະນາ",
+        "3pid_invite_email_not_found_account_room": "ການເຊີນນີ້ໄປຫາ %(roomName)s ໄດ້ຖືກສົ່ງໄປຫາ %(email)s ຊຶ່ງບໍ່ກ່ຽວຂ້ອງກັບບັນຊີຂອງທ່ານ",
+        "3pid_invite_email_not_found_account": "ການເຊີນນີ້ຖືກສົ່ງໄປຫາ %(email)s ທີ່ບໍ່ກ່ຽວຂ້ອງກັບບັນຊີຂອງທ່ານ",
+        "link_email_to_receive_3pid_invite": "ເຊື່ອມຕໍ່ອີເມວນີ້ກັບບັນຊີຂອງທ່ານໃນການຕັ້ງຄ່າເພື່ອຮັບການເຊີນໂດຍກົງໃນ %(brand)s.",
+        "invite_sent_to_email_room": "ການເຊີນນີ້ໄປຫາ %(roomName)s ໄດ້ຖືກສົ່ງໄປຫາ %(email)s",
+        "invite_sent_to_email": "ການເຊີນນີ້ຖືກສົ່ງໄປຫາ %(email)s",
+        "3pid_invite_no_is_subtitle": "ໃຊ້ເຊີບເວີໃນການຕັ້ງຄ່າເພື່ອຮັບການເຊີນໂດຍກົງໃນ %(brand)s.",
+        "invite_email_mismatch_suggestion": "ແບ່ງປັນອີເມວນີ້ໃນການຕັ້ງຄ່າເພື່ອຮັບການເຊີນໂດຍກົງໃນ %(brand)s.",
+        "dm_invite_title": "ທ່ານຕ້ອງການສົນທະນາກັບ %(user)s ບໍ?",
+        "dm_invite_subtitle": "<userName/> ຕ້ອງການສົນທະນາ",
+        "dm_invite_action": "ເລີ່ມການສົນທະນາ",
+        "invite_title": "ທ່ານຕ້ອງການເຂົ້າຮ່ວມ %(roomName)s ບໍ?",
+        "invite_subtitle": "<userName/> ເຊີນທ່ານ",
+        "invite_reject_ignore": "ປະຕິເສດ ແລະ ບໍ່ສົນໃຈຜູ້ໃຊ້",
+        "peek_join_prompt": "ທ່ານກຳລັງເບິ່ງຕົວຢ່າງ %(roomName)s. ຕ້ອງການເຂົ້າຮ່ວມບໍ?",
+        "no_peek_join_prompt": "ບໍ່ສາມາດເບິ່ງຕົວຢ່າງ %(roomName)s ໄດ້. ທ່ານຕ້ອງການເຂົ້າຮ່ວມມັນບໍ?",
+        "no_peek_no_name_join_prompt": "ບໍ່ມີຕົວຢ່າງ, ທ່ານຕ້ອງການເຂົ້າຮ່ວມບໍ?",
+        "not_found_title_name": "%(roomName)s ບໍ່ມີ.",
+        "not_found_title": "ບໍ່ມີຫ້ອງ ຫຼື ພື້ນທີ່ນີ້.",
+        "not_found_subtitle": "ທ່ານແນ່ໃຈບໍ່ວ່າທ່ານຢູ່ບ່ອນທີ່ຖືກຕ້ອງ?",
+        "inaccessible_name": "%(roomName)s ບໍ່ສາມາດເຂົ້າເຖິງໄດ້ໃນເວລານີ້.",
+        "inaccessible": "ຫ້ອງ ຫຼື ພື້ນທີ່ນີ້ບໍ່ສາມາດເຂົ້າເຖິງໄດ້ໃນເວລານີ້.",
+        "inaccessible_subtitle_1": "ລອງໃໝ່ໃນພາຍຫຼັງ, ຫຼື ຂໍໃຫ້ຜູ້ຄຸ້ມຄອງຫ້ອງ ຫຼື ຜູ້ຄຸ້ມຄອງພື້ນທີ່ກວດເບິ່ງວ່າທ່ານມີການເຂົ້າເຖິງ ຫຼື ບໍ່.",
+        "inaccessible_subtitle_2": "%(errcode)s ຖືກສົ່ງຄືນໃນຂະນະທີ່ພະຍາຍາມເຂົ້າເຖິງຫ້ອງ ຫຼື ພື້ນທີ່. ຖ້າຫາກທ່ານຄິດວ່າທ່ານກໍາລັງເຫັນຂໍ້ຄວາມນີ້ຜິດພາດ, ກະລຸນາ <issueLink>ສົ່ງບົດລາຍງານ bug</issueLink>.",
+        "join_failed_needs_invite": "ເພື່ອເບິ່ງ %(roomName)s, ທ່ານຕ້ອງມີບັດເຊີນ",
+        "view_failed_enable_video_rooms": "ເພື່ອເບິ່ງ, ທ່ານຕ້ອງເປີດຫ້ອງວີດີໂອໃນສູນທົດລອງກ່ອນ",
+        "join_failed_enable_video_rooms": "ເພື່ອເຂົ້າຮ່ວມ, ທ່ານຕ້ອງເປີດຫ້ອງວີດີໂອໃນສູນທົດລອງກ່ອນ"
     },
     "file_panel": {
         "guest_note": "ທ່ານຕ້ອງ <a>ລົງທະບຽນ</a> ເພື່ອໃຊ້ຟັງຊັນນີ້",
@@ -3507,7 +3506,8 @@
         "all_messages_description": "ໄດ້ຮັບການແຈ້ງເຕືອນສໍາລັບທຸກໆຂໍ້ຄວາມ",
         "mentions_and_keywords": "@ກ່າວເຖິງ & ຄໍາສໍາຄັນ",
         "mentions_and_keywords_description": "ຮັບການແຈ້ງເຕືອນພຽງແຕ່ມີການກ່າວເຖິງ ແລະ ຄໍາທີ່ກຳນົດໄວ້ໃນ<a>settings</a>ຂອງທ່ານ",
-        "mute_description": "ທ່ານຈະບໍ່ໄດ້ຮັບການແຈ້ງເຕືອນໃດໆ"
+        "mute_description": "ທ່ານຈະບໍ່ໄດ້ຮັບການແຈ້ງເຕືອນໃດໆ",
+        "message_didnt_send": "ບໍ່ໄດ້ສົ່ງຂໍ້ຄວາມ. ກົດສຳລັບຂໍ້ມູນ."
     },
     "mobile_guide": {
         "toast_title": "ໃຊ້ແອັບເພື່ອປະສົບການທີ່ດີກວ່າ",
@@ -3564,5 +3564,10 @@
         "description_optional": "ການນໍາໃຊ້ຕົວເຊີບເວີເປັນທາງເລືອກ. ຖ້າທ່ານເລືອກທີ່ຈະບໍ່ໃຊ້ຕົວເຊີບເວີ, ທ່ານຈະບໍ່ຖືກຄົ້ນພົບໂດຍຜູ້ໃຊ້ອື່ນ ແລະ ທ່ານຈະບໍ່ສາມາດເຊີນຜູ້ອື່ນໂດຍອີເມລ໌ຫຼືໂທລະສັບ.",
         "do_not_use": "ກະລຸນນາຢ່າໃຊ້ເຊີບເວີລະບຸຕົວຕົນ",
         "url_field_label": "ໃສ່ເຊີບເວີໃໝ່"
+    },
+    "member_list": {
+        "invited_list_heading": "ເຊີນ",
+        "filter_placeholder": "ການກັ່ນຕອງສະມາຊິກຫ້ອງ",
+        "power_label": "%(userName)s (power %(powerLevelNumber)s)"
     }
 }

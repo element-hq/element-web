@@ -39,27 +39,16 @@
         "other": "и %(count)s других...",
         "one": "и још један други..."
     },
-    "Invited": "Позван",
-    "Filter room members": "Филтрирај чланове собе",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (снага %(powerLevelNumber)s)",
-    "You do not have permission to post to this room": "Немате овлашћење за писање у овој соби",
     "%(duration)ss": "%(duration)sс",
     "%(duration)sm": "%(duration)sм",
     "%(duration)sh": "%(duration)sч",
     "%(duration)sd": "%(duration)sд",
-    "Replying": "Одговара",
     "Unnamed room": "Неименована соба",
     "(~%(count)s results)": {
         "other": "(~%(count)s резултата)",
         "one": "(~%(count)s резултат)"
     },
     "Join Room": "Приступи соби",
-    "Forget room": "Заборави собу",
-    "Rooms": "Собе",
-    "Low priority": "Ниска важност",
-    "Historical": "Историја",
-    "%(roomName)s does not exist.": "Соба %(roomName)s не постоји.",
-    "%(roomName)s is not accessible at this time.": "Соба %(roomName)s није доступна у овом тренутку.",
     "unknown error code": "непознати код грешке",
     "Failed to forget room %(errCode)s": "Нисам успео да заборавим собу %(errCode)s",
     "Jump to first unread message.": "Скочи на прву непрочитану поруку.",
@@ -160,7 +149,6 @@
     "Share User": "Подели корисника",
     "Share Room Message": "Подели поруку у соби",
     "Link to selected message": "Веза ка изабраној поруци",
-    "Permission Required": "Неопходна је дозвола",
     "This event could not be displayed": "Овај догађај не може бити приказан",
     "Demote yourself?": "Рашчињавате себе?",
     "Demote": "Рашчини",
@@ -171,9 +159,6 @@
     "Encrypted by an unverified session": "Шифровано од стране непотврђене сесије",
     "Scroll to most recent messages": "Пребаци на најновије поруке",
     "Direct Messages": "Директне поруке",
-    "Forget this room": "Заборави ову собу",
-    "Start chatting": "Започни ћаскање",
-    "Room options": "Опције собе",
     "Room Name": "Назив собе",
     "Room Topic": "Тема собе",
     "Messages in this room are end-to-end encrypted.": "Поруке у овој соби су шифроване с краја на крај.",
@@ -531,9 +516,6 @@
     "Confirm by comparing the following with the User Settings in your other session:": "Потврдите упоређивањем следећег са корисничким подешавањима у вашој другој сесији:",
     "You can also set up Secure Backup & manage your keys in Settings.": "Такође можете да подесите Сигурносну копију и управљате својим тастерима у подешавањима.",
     "Go to Settings": "Идите на подешавања",
-    "Share this email in Settings to receive invites directly in %(brand)s.": "Поделите ову е-пошту у подешавањима да бисте директно добијали позиве у %(brand)s.",
-    "Use an identity server in Settings to receive invites directly in %(brand)s.": "Користите сервер за идентитет у Подешавањима за директно примање позивница %(brand)s.",
-    "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Повежите ову е-пошту са својим налогом у Подешавањима да бисте директно добијали позиве у %(brand)s.",
     "You'll need to authenticate with the server to confirm the upgrade.": "Да бисте потврдили надоградњу, мораћете да се пријавите на серверу.",
     "Restore your key backup to upgrade your encryption": "Вратите сигурносну копију кључа да бисте надоградили шифровање",
     "Enter your account password to confirm the upgrade:": "Унесите лозинку за налог да бисте потврдили надоградњу:",
@@ -612,7 +594,10 @@
         "profile": "Профил",
         "display_name": "Прикажи име",
         "user_avatar": "Слика профила",
-        "authentication": "Идентификација"
+        "authentication": "Идентификација",
+        "rooms": "Собе",
+        "low_priority": "Ниска важност",
+        "historical": "Историја"
     },
     "action": {
         "continue": "Настави",
@@ -711,7 +696,10 @@
             "@room_description": "Обавести све у соби",
             "notification_description": "Собно обавештење",
             "user_description": "Корисници"
-        }
+        },
+        "no_perms_notice": "Немате овлашћење за писање у овој соби",
+        "poll_button_no_perms_title": "Неопходна је дозвола",
+        "replying_title": "Одговара"
     },
     "Code": "Код",
     "power_level": {
@@ -1436,9 +1424,20 @@
         "context_menu": {
             "favourite": "Омиљено",
             "low_priority": "Најмања важност",
-            "forget": "Заборави собу"
+            "forget": "Заборави собу",
+            "title": "Опције собе"
         },
-        "invite_this_room": "Позови у ову собу"
+        "invite_this_room": "Позови у ову собу",
+        "header": {
+            "forget_room_button": "Заборави собу"
+        },
+        "forget_room": "Заборави ову собу",
+        "link_email_to_receive_3pid_invite": "Повежите ову е-пошту са својим налогом у Подешавањима да бисте директно добијали позиве у %(brand)s.",
+        "3pid_invite_no_is_subtitle": "Користите сервер за идентитет у Подешавањима за директно примање позивница %(brand)s.",
+        "invite_email_mismatch_suggestion": "Поделите ову е-пошту у подешавањима да бисте директно добијали позиве у %(brand)s.",
+        "dm_invite_action": "Започни ћаскање",
+        "not_found_title_name": "Соба %(roomName)s не постоји.",
+        "inaccessible_name": "Соба %(roomName)s није доступна у овом тренутку."
     },
     "file_panel": {
         "guest_note": "Морате се <a>регистровати</a> да бисте користили ову могућност",
@@ -1521,5 +1520,10 @@
     },
     "integration_manager": {
         "error_connecting_heading": "Не могу се повезати на управника уградњи"
+    },
+    "member_list": {
+        "invited_list_heading": "Позван",
+        "filter_placeholder": "Филтрирај чланове собе",
+        "power_label": "%(userName)s (снага %(powerLevelNumber)s)"
     }
 }

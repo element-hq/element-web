@@ -2,7 +2,6 @@
     "Create new room": "Crea una sala nova",
     "Failed to forget room %(errCode)s": "No s'ha pogut oblidar la sala %(errCode)s",
     "unknown error code": "codi d'error desconegut",
-    "Rooms": "Sales",
     "Warning!": "Avís!",
     "Sun": "dg.",
     "Mon": "dl.",
@@ -44,26 +43,16 @@
         "other": "i %(count)s altres...",
         "one": "i un altre..."
     },
-    "Invited": "Convidat",
-    "Filter room members": "Filtra els membres de la sala",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (autoritat %(powerLevelNumber)s)",
-    "You do not have permission to post to this room": "No tens permís per enviar res en aquesta sala",
     "%(duration)ss": "%(duration)ss",
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)sh",
     "%(duration)sd": "%(duration)sd",
-    "Replying": "S'està contestant",
     "Unnamed room": "Sala sense nom",
     "(~%(count)s results)": {
         "other": "(~%(count)s resultats)",
         "one": "(~%(count)s resultat)"
     },
     "Join Room": "Entra a la sala",
-    "Forget room": "Oblida la sala",
-    "Low priority": "Baixa prioritat",
-    "Historical": "Històric",
-    "%(roomName)s does not exist.": "La sala %(roomName)s no existeix.",
-    "%(roomName)s is not accessible at this time.": "La sala %(roomName)s no és accessible en aquest moment.",
     "Jump to first unread message.": "Salta al primer missatge no llegit.",
     "not specified": "sense especificar",
     "This room has no local addresses": "Aquesta sala no té adreces locals",
@@ -136,7 +125,6 @@
     "Logs sent": "Logs enviats",
     "Yesterday": "Ahir",
     "Thank you!": "Gràcies!",
-    "Permission Required": "Es necessita permís",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "No s'ha trobat el perfil pels IDs de Matrix següents, els voleu convidar igualment?",
     "Invite anyway and never warn me again": "Convidar igualment i no avisar-me de nou",
     "Invite anyway": "Convidar igualment",
@@ -166,9 +154,6 @@
     "Confirm this user's session by comparing the following with their User Settings:": "Confirma aquesta sessió d'usuari comparant amb la seva configuració d'usuari, el següent:",
     "Confirm by comparing the following with the User Settings in your other session:": "Confirma comparant el següent amb la configuració d'usuari de la teva altra sessió:",
     "Room settings": "Configuració de sala",
-    "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, enllaça aquest correu electrònic amb el teu compte a Configuració.",
-    "Use an identity server in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, utilitza un servidor d'identitat a Configuració.",
-    "Share this email in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, comparteix aquest correu electrònic a Configuració.",
     "Go to Settings": "Ves a Configuració",
     "To continue, use Single Sign On to prove your identity.": "Per continuar, utilitza la inscripció única SSO (per demostrar la teva identitat).",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Confirma la desactivació del teu compte mitjançant la inscripció única SSO (per demostrar la teva identitat).",
@@ -202,7 +187,10 @@
         "off": "Apagat",
         "copied": "Copiat!",
         "advanced": "Avançat",
-        "authentication": "Autenticació"
+        "authentication": "Autenticació",
+        "rooms": "Sales",
+        "low_priority": "Baixa prioritat",
+        "historical": "Històric"
     },
     "action": {
         "continue": "Continua",
@@ -573,7 +561,10 @@
     "Other": "Altres",
     "composer": {
         "placeholder_reply_encrypted": "Envia una resposta xifrada…",
-        "placeholder_encrypted": "Envia un missatge xifrat…"
+        "placeholder_encrypted": "Envia un missatge xifrat…",
+        "no_perms_notice": "No tens permís per enviar res en aquesta sala",
+        "poll_button_no_perms_title": "Es necessita permís",
+        "replying_title": "S'està contestant"
     },
     "room_settings": {
         "permissions": {
@@ -707,7 +698,15 @@
             "favourite": "Favorit",
             "low_priority": "Baixa prioritat"
         },
-        "invite_this_room": "Convida a aquesta sala"
+        "invite_this_room": "Convida a aquesta sala",
+        "header": {
+            "forget_room_button": "Oblida la sala"
+        },
+        "link_email_to_receive_3pid_invite": "Per rebre invitacions directament a %(brand)s, enllaça aquest correu electrònic amb el teu compte a Configuració.",
+        "3pid_invite_no_is_subtitle": "Per rebre invitacions directament a %(brand)s, utilitza un servidor d'identitat a Configuració.",
+        "invite_email_mismatch_suggestion": "Per rebre invitacions directament a %(brand)s, comparteix aquest correu electrònic a Configuració.",
+        "not_found_title_name": "La sala %(roomName)s no existeix.",
+        "inaccessible_name": "La sala %(roomName)s no és accessible en aquest moment."
     },
     "file_panel": {
         "guest_note": "Per poder utilitzar aquesta funcionalitat has de <a>registrar-te</a>",
@@ -810,5 +809,10 @@
     "integration_manager": {
         "manage_title": "Gestió d'integracions",
         "explainer": "Els gestors d'integracions reben dades de configuració i poden modificar ginys, enviar invitacions a sales i establir nivells d'autoritat en nom teu."
+    },
+    "member_list": {
+        "invited_list_heading": "Convidat",
+        "filter_placeholder": "Filtra els membres de la sala",
+        "power_label": "%(userName)s (autoritat %(powerLevelNumber)s)"
     }
 }

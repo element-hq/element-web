@@ -2,20 +2,14 @@
     "A new password must be entered.": "Uma nova senha precisa ser inserida.",
     "Are you sure you want to reject the invitation?": "Tem certeza de que deseja recusar o convite?",
     "Failed to reject invitation": "Falha ao tentar recusar o convite",
-    "Filter room members": "Pesquisar participantes da sala",
-    "Forget room": "Esquecer sala",
-    "Historical": "Histórico",
-    "Low priority": "Baixa prioridade",
     "Moderator": "Moderador/a",
     "New passwords must match each other.": "As novas senhas informadas precisam ser idênticas.",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Por favor, confirme o seu e-mail e clique no link enviado. Feito isso, clique em continuar.",
     "Reject invitation": "Recusar o convite",
     "Return to login screen": "Retornar à tela de login",
-    "Rooms": "Salas",
     "Session ID": "Identificador de sessão",
     "unknown error code": "código de erro desconhecido",
     "Verification Pending": "Confirmação pendente",
-    "You do not have permission to post to this room": "Você não tem permissão para digitar nesta sala",
     "Sun": "Dom",
     "Mon": "Seg",
     "Tue": "Ter",
@@ -87,7 +81,6 @@
     "Add an Integration": "Adicionar uma integração",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Este processo faz com que você possa importar as chaves de criptografia que tinha previamente exportado de outro cliente Matrix. Você poderá então descriptografar todas as mensagens que o outro cliente pôde criptografar.",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será redirecionado para um site de terceiros para poder autenticar a sua conta, tendo em vista usar o serviço %(integrationsUrl)s. Deseja prosseguir?",
-    "Invited": "Convidada(o)",
     "Are you sure you want to leave the room '%(roomName)s'?": "Tem certeza de que deseja sair da sala '%(roomName)s'?",
     "Custom level": "Nível personalizado",
     "Home": "Home",
@@ -98,9 +91,6 @@
     },
     "Create new room": "Criar nova sala",
     "Admin Tools": "Ferramentas de administração",
-    "%(roomName)s does not exist.": "%(roomName)s não existe.",
-    "%(roomName)s is not accessible at this time.": "%(roomName)s não está acessível neste momento.",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (nível de permissão %(powerLevelNumber)s)",
     "(~%(count)s results)": {
         "one": "(~%(count)s resultado)",
         "other": "(~%(count)s resultados)"
@@ -117,7 +107,6 @@
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)sh",
     "%(duration)sd": "%(duration)sd",
-    "Replying": "Em resposta a",
     "Unnamed room": "Sala sem nome",
     "Delete Widget": "Apagar widget",
     "collapse": "recolher",
@@ -144,11 +133,8 @@
     "Yesterday": "Ontem",
     "Wednesday": "Quarta-feira",
     "Thank you!": "Obrigado!",
-    "Permission Required": "Permissão necessária",
     "This event could not be displayed": "Este evento não pôde ser exibido",
     "Share Link to User": "Compartilhar este usuário",
-    "This room has been replaced and is no longer active.": "Esta sala foi substituída e não está mais ativa.",
-    "The conversation continues here.": "A conversa continua aqui.",
     "Share room": "Compartilhar sala",
     "Set up": "Configurar",
     "Only room administrators will see this warning": "Somente administradores de sala verão esse alerta",
@@ -292,7 +278,6 @@
     "Unencrypted": "Descriptografada",
     "Encrypted by a deleted session": "Criptografada por uma sessão já apagada",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "A autenticidade desta mensagem criptografada não pode ser garantida neste aparelho.",
-    "Start chatting": "Começar a conversa",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Atualizar esta sala irá fechar a instância atual da sala e criar uma sala atualizada com o mesmo nome.",
     "Start Verification": "Iniciar confirmação",
     "Messages in this room are end-to-end encrypted.": "As mensagens nesta sala estão criptografadas de ponta a ponta.",
@@ -377,8 +362,6 @@
     "Server did not return valid authentication information.": "O servidor não retornou informações de autenticação válidas.",
     "Integrations are disabled": "As integrações estão desativadas",
     "Integrations not allowed": "As integrações não estão permitidas",
-    "Add room": "Adicionar sala",
-    "Room options": "Opções da Sala",
     "This room is public": "Esta sala é pública",
     "This room has already been upgraded.": "Esta sala já foi atualizada.",
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Esta sala está executando a versão <roomVersion />, que este servidor marcou como <i>instável</i>.",
@@ -398,28 +381,6 @@
     "Email (optional)": "E-mail (opcional)",
     "Deactivate account": "Desativar minha conta",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Para relatar um problema de segurança relacionado à tecnologia Matrix, leia a <a>Política de Divulgação de Segurança</a> da Matrix.org.",
-    "Join the conversation with an account": "Participar da conversa com uma conta",
-    "Sign Up": "Inscrever-se",
-    "Reason: %(reason)s": "Razão: %(reason)s",
-    "Forget this room": "Esquecer esta sala",
-    "Re-join": "Entrar novamente",
-    "You were banned from %(roomName)s by %(memberName)s": "Você foi banido de %(roomName)s por %(memberName)s",
-    "Something went wrong with your invite to %(roomName)s": "Ocorreu um erro no seu convite para %(roomName)s",
-    "You can only join it with a working invite.": "Você só pode participar com um convite válido.",
-    "Try to join anyway": "Tentar entrar mesmo assim",
-    "Join the discussion": "Participar da discussão",
-    "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "Este convite para %(roomName)s foi enviado para %(email)s, que não está associado à sua conta",
-    "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Vincule esse e-mail à sua conta em Configurações, para receber convites diretamente no %(brand)s.",
-    "This invite to %(roomName)s was sent to %(email)s": "Este convite para %(roomName)s foi enviado para %(email)s",
-    "Use an identity server in Settings to receive invites directly in %(brand)s.": "Use um servidor de identidade em Configurações para receber convites diretamente no %(brand)s.",
-    "Share this email in Settings to receive invites directly in %(brand)s.": "Compartilhe este e-mail em Configurações para receber convites diretamente no %(brand)s.",
-    "Do you want to chat with %(user)s?": "Deseja conversar com %(user)s?",
-    "<userName/> wants to chat": "<userName/> quer conversar",
-    "Do you want to join %(roomName)s?": "Deseja se juntar a %(roomName)s?",
-    "<userName/> invited you": "<userName/> convidou você",
-    "Reject & Ignore user": "Recusar e bloquear usuário",
-    "You're previewing %(roomName)s. Want to join it?": "Você está visualizando %(roomName)s. Deseja participar?",
-    "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s não pode ser visualizado. Deseja participar?",
     "Room Topic": "Descrição da sala",
     "Resend %(unsentCount)s reaction(s)": "Reenviar %(unsentCount)s reações",
     "Clear personal data": "Limpar dados pessoais",
@@ -431,7 +392,6 @@
     "Everyone in this room is verified": "Todos nesta sala estão confirmados",
     "Edit message": "Editar mensagem",
     "Scroll to most recent messages": "Ir para as mensagens recentes",
-    "Italics": "Itálico",
     "Failed to connect to integration manager": "Falha ao conectar-se ao gerenciador de integrações",
     "Failed to revoke invite": "Falha ao revogar o convite",
     "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Não foi possível revogar o convite. O servidor pode estar com um problema temporário ou você não tem permissões suficientes para revogar o convite.",
@@ -619,8 +579,6 @@
     "You can only pin up to %(count)s widgets": {
         "other": "Você pode fixar até %(count)s widgets"
     },
-    "Show Widgets": "Mostrar widgets",
-    "Hide Widgets": "Esconder widgets",
     "Modal Widget": "Popup do widget",
     "Data on this screen is shared with %(widgetDomain)s": "Dados nessa tela são compartilhados com %(widgetDomain)s",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Convide alguém a partir do nome, e-mail ou nome de usuário (por exemplo: <userId/>) ou <a>compartilhe esta sala</a>.",
@@ -911,7 +869,6 @@
     "Remember this": "Lembre-se disso",
     "The widget will verify your user ID, but won't be able to perform actions for you:": "O widget verificará o seu ID de usuário, mas não poderá realizar ações para você:",
     "Allow this widget to verify your identity": "Permitir que este widget verifique a sua identidade",
-    "Suggested Rooms": "Salas sugeridas",
     "%(count)s members": {
         "one": "%(count)s integrante",
         "other": "%(count)s integrantes"
@@ -991,7 +948,6 @@
     "Stop recording": "Parar a gravação",
     "We didn't find a microphone on your device. Please check your settings and try again.": "Não foi possível encontrar um microfone em seu dispositivo. Confira suas configurações e tente novamente.",
     "We were unable to access your microphone. Please check your browser settings and try again.": "Não foi possível acessar seu microfone. Por favor, confira as configurações do seu navegador e tente novamente.",
-    "Message didn't send. Click for info.": "A mensagem não foi enviada. Clique para mais informações.",
     "Send voice message": "Enviar uma mensagem de voz",
     "MB": "MB",
     "In reply to <a>this message</a>": "Em resposta a <a>esta mensagem</a>",
@@ -1044,16 +1000,7 @@
     "Yours, or the other users' session": "A sua ou a sessão de outros usuários",
     "Yours, or the other users' internet connection": "A sua ou a conexão de Internet de outros usuários",
     "The homeserver the user you're verifying is connected to": "O servidor doméstico do usuário que você está verificando está conectado",
-    "Home options": "Opções do Início",
-    "%(spaceName)s menu": "%(spaceName)s menu",
-    "Currently joining %(count)s rooms": {
-        "one": "Entrando na %(count)s sala",
-        "other": "Entrando atualmente em %(count)s salas"
-    },
-    "Join public room": "Entrar na sala pública",
     "Recently viewed": "Visualizado recentemente",
-    "Insert link": "Inserir link",
-    "You do not have permission to start polls in this room.": "Você não tem permissão para iniciar enquetes nesta sala.",
     "Reply in thread": "Responder no tópico",
     "%(count)s reply": {
         "one": "%(count)s resposta",
@@ -1073,11 +1020,6 @@
         "one": "1 participante"
     },
     "Saved Items": "Itens salvos",
-    "Add space": "Adicionar espaço",
-    "Seen by %(count)s people": {
-        "one": "Visto por %(count)s pessoa",
-        "other": "Visto por %(count)s pessoas"
-    },
     "Remove messages sent by me": "",
     "Text": "Texto",
     "Edit link": "Editar ligação",
@@ -1185,7 +1127,10 @@
         "video_room": "Sala de vídeo",
         "public_space": "Espaço público",
         "private_space": "Espaço privado",
-        "private_room": "Sala privada"
+        "private_room": "Sala privada",
+        "rooms": "Salas",
+        "low_priority": "Baixa prioridade",
+        "historical": "Histórico"
     },
     "action": {
         "continue": "Continuar",
@@ -1400,7 +1345,16 @@
             "room_a11y": "Preenchimento automático de sala",
             "user_description": "Usuários",
             "user_a11y": "Preenchimento automático de usuário"
-        }
+        },
+        "room_upgraded_link": "A conversa continua aqui.",
+        "room_upgraded_notice": "Esta sala foi substituída e não está mais ativa.",
+        "no_perms_notice": "Você não tem permissão para digitar nesta sala",
+        "send_button_voice_message": "Enviar uma mensagem de voz",
+        "poll_button_no_perms_title": "Permissão necessária",
+        "poll_button_no_perms_description": "Você não tem permissão para iniciar enquetes nesta sala.",
+        "format_italics": "Itálico",
+        "format_insert_link": "Inserir link",
+        "replying_title": "Em resposta a"
     },
     "Link": "Ligação",
     "Code": "Código",
@@ -2127,6 +2081,10 @@
                 "other": "Exibir as %(count)s outras prévias"
             },
             "close": "Fechar a visualização"
+        },
+        "read_receipt_title": {
+            "one": "Visto por %(count)s pessoa",
+            "other": "Visto por %(count)s pessoas"
         }
     },
     "slash_command": {
@@ -2683,7 +2641,17 @@
         "failed_remove_tag": "Falha ao remover a tag %(tagName)s da sala",
         "failed_add_tag": "Falha ao adicionar a tag %(tagName)s para a sala",
         "breadcrumbs_label": "Salas visitadas recentemente",
-        "breadcrumbs_empty": "Nenhuma sala foi visitada recentemente"
+        "breadcrumbs_empty": "Nenhuma sala foi visitada recentemente",
+        "add_room_label": "Adicionar sala",
+        "suggested_rooms_heading": "Salas sugeridas",
+        "add_space_label": "Adicionar espaço",
+        "join_public_room_label": "Entrar na sala pública",
+        "joining_rooms_status": {
+            "one": "Entrando na %(count)s sala",
+            "other": "Entrando atualmente em %(count)s salas"
+        },
+        "space_menu_label": "%(spaceName)s menu",
+        "home_menu_label": "Opções do Início"
     },
     "report_content": {
         "missing_reason": "Por favor, descreva porque você está reportando.",
@@ -2980,9 +2948,40 @@
             "favourite": "Favoritar",
             "copy_link": "Copiar link da sala",
             "low_priority": "Baixa prioridade",
-            "forget": "Esquecer Sala"
+            "forget": "Esquecer Sala",
+            "title": "Opções da Sala"
         },
-        "invite_this_room": "Convidar para esta sala"
+        "invite_this_room": "Convidar para esta sala",
+        "header": {
+            "forget_room_button": "Esquecer sala",
+            "hide_widgets_button": "Esconder widgets",
+            "show_widgets_button": "Mostrar widgets"
+        },
+        "join_title_account": "Participar da conversa com uma conta",
+        "join_button_account": "Inscrever-se",
+        "kick_reason": "Razão: %(reason)s",
+        "forget_room": "Esquecer esta sala",
+        "rejoin_button": "Entrar novamente",
+        "banned_from_room_by": "Você foi banido de %(roomName)s por %(memberName)s",
+        "3pid_invite_error_title_room": "Ocorreu um erro no seu convite para %(roomName)s",
+        "3pid_invite_error_invite_subtitle": "Você só pode participar com um convite válido.",
+        "3pid_invite_error_invite_action": "Tentar entrar mesmo assim",
+        "join_the_discussion": "Participar da discussão",
+        "3pid_invite_email_not_found_account_room": "Este convite para %(roomName)s foi enviado para %(email)s, que não está associado à sua conta",
+        "link_email_to_receive_3pid_invite": "Vincule esse e-mail à sua conta em Configurações, para receber convites diretamente no %(brand)s.",
+        "invite_sent_to_email_room": "Este convite para %(roomName)s foi enviado para %(email)s",
+        "3pid_invite_no_is_subtitle": "Use um servidor de identidade em Configurações para receber convites diretamente no %(brand)s.",
+        "invite_email_mismatch_suggestion": "Compartilhe este e-mail em Configurações para receber convites diretamente no %(brand)s.",
+        "dm_invite_title": "Deseja conversar com %(user)s?",
+        "dm_invite_subtitle": "<userName/> quer conversar",
+        "dm_invite_action": "Começar a conversa",
+        "invite_title": "Deseja se juntar a %(roomName)s?",
+        "invite_subtitle": "<userName/> convidou você",
+        "invite_reject_ignore": "Recusar e bloquear usuário",
+        "peek_join_prompt": "Você está visualizando %(roomName)s. Deseja participar?",
+        "no_peek_join_prompt": "%(roomName)s não pode ser visualizado. Deseja participar?",
+        "not_found_title_name": "%(roomName)s não existe.",
+        "inaccessible_name": "%(roomName)s não está acessível neste momento."
     },
     "file_panel": {
         "guest_note": "Você deve <a>se registrar</a> para usar este recurso",
@@ -3108,7 +3107,8 @@
         "all_messages_description": "Seja notificado para cada mensagem",
         "mentions_and_keywords": "@menções e palavras-chave",
         "mentions_and_keywords_description": "Receba notificações apenas com menções e palavras-chave conforme definido em suas <a>configurações</a>",
-        "mute_description": "Você não receberá nenhuma notificação"
+        "mute_description": "Você não receberá nenhuma notificação",
+        "message_didnt_send": "A mensagem não foi enviada. Clique para mais informações."
     },
     "mobile_guide": {
         "toast_title": "Use o aplicativo para ter uma experiência melhor",
@@ -3163,5 +3163,10 @@
         "description_optional": "Usar um servidor de identidade é opcional. Se você optar por não usar um servidor de identidade, não poderá ser descoberto por outros usuários e não poderá convidar outras pessoas por e-mail ou por número de celular.",
         "do_not_use": "Não usar um servidor de identidade",
         "url_field_label": "Digite um novo servidor de identidade"
+    },
+    "member_list": {
+        "invited_list_heading": "Convidada(o)",
+        "filter_placeholder": "Pesquisar participantes da sala",
+        "power_label": "%(userName)s (nível de permissão %(powerLevelNumber)s)"
     }
 }

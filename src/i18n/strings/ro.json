@@ -1,5 +1,4 @@
 {
-    "Permission Required": "Permisul Obligatoriu",
     "Send": "Trimite",
     "Sun": "Dum",
     "Mon": "Lun",
@@ -92,5 +91,8 @@
     "create_room": {
         "generic_error": "Serverul poate fi indisponibil, supraîncărcat sau ați lovit un bug.",
         "error_title": "Eșecul de a crea spațiu"
+    },
+    "composer": {
+        "poll_button_no_perms_title": "Permisul Obligatoriu"
     }
 }

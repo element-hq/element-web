@@ -371,7 +371,7 @@ export default class MemberList extends React.Component<IProps, IState> {
                         className="mx_MemberList_invite"
                         onClick={null}
                         disabled
-                        tooltip={_t("You do not have permission to invite users")}
+                        tooltip={_t("member_list|invite_button_no_perms_tooltip")}
                     >
                         <span>{inviteButtonText}</span>
                     </AccessibleTooltipButton>
@@ -382,7 +382,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         let invitedHeader;
         let invitedSection;
         if (this.getChildCountInvited() > 0) {
-            invitedHeader = <h2>{_t("Invited")}</h2>;
+            invitedHeader = <h2>{_t("member_list|invited_list_heading")}</h2>;
             invitedSection = (
                 <TruncatedList
                     className="mx_MemberList_section mx_MemberList_invited"
@@ -397,7 +397,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         const footer = (
             <SearchBox
                 className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
-                placeholder={_t("Filter room members")}
+                placeholder={_t("member_list|filter_placeholder")}
                 onSearch={this.onSearchQueryChanged}
                 initialValue={this.props.searchQuery}
             />

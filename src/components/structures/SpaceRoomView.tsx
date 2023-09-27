@@ -175,7 +175,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                     />
                     {canCreateSpace && (
                         <IconizedContextMenuOption
-                            label={_t("Add space")}
+                            label={_t("room_list|add_space_label")}
                             iconClassName="mx_RoomList_iconPlus"
                             onClick={(e) => {
                                 e.preventDefault();

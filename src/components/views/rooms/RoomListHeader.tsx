@@ -271,7 +271,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     />
                     {canCreateSpaces && (
                         <IconizedContextMenuOption
-                            label={_t("Add space")}
+                            label={_t("room_list|add_space_label")}
                             iconClassName="mx_RoomListHeader_iconPlus"
                             onClick={(e) => {
                                 e.preventDefault();
@@ -340,7 +340,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
         if (canExploreRooms) {
             joinRoomOpt = (
                 <IconizedContextMenuOption
-                    label={_t("Join public room")}
+                    label={_t("room_list|join_public_room_label")}
                     iconClassName="mx_RoomListHeader_iconExplore"
                     onClick={(e) => {
                         e.preventDefault();
@@ -379,9 +379,9 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
         .map(([type, keys]) => {
             switch (type) {
                 case PendingActionType.JoinRoom:
-                    return _t("Currently joining %(count)s rooms", { count: keys.size });
+                    return _t("room_list|joining_rooms_status", { count: keys.size });
                 case PendingActionType.BulkRedact:
-                    return _t("Currently removing messages in %(count)s rooms", { count: keys.size });
+                    return _t("room_list|redacting_messages_status", { count: keys.size });
             }
         })
         .join("\n");
@@ -400,11 +400,11 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             contextMenuButton = (
                 <ContextMenuButton
                     {...commonProps}
-                    label={_t("%(spaceName)s menu", { spaceName: spaceName ?? activeSpace.name })}
+                    label={_t("room_list|space_menu_label", { spaceName: spaceName ?? activeSpace.name })}
                 />
             );
         } else {
-            contextMenuButton = <ContextMenuTooltipButton {...commonProps} title={_t("Home options")} />;
+            contextMenuButton = <ContextMenuTooltipButton {...commonProps} title={_t("room_list|home_menu_label")} />;
         }
     }
 

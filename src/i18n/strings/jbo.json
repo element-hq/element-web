@@ -1,5 +1,4 @@
 {
-    "Permission Required": ".i lo nu curmi cu sarcu",
     "Send": "nu zilbe'i",
     "Sun": "jy. dy. ze",
     "Mon": "jy. dy. pa",
@@ -87,7 +86,6 @@
     "Trumpet": "tabra",
     "Bell": "janbe",
     "Headphones": "selsnapra",
-    "Rooms": "ve zilbe'i",
     "Search…": "nu sisku",
     "Sunday": "li jy. dy. ze detri",
     "Monday": "li jy. dy. pa detri",
@@ -107,9 +105,6 @@
     "Ask this user to verify their session, or manually verify it below.": ".i ko cpedu le ka co'a lacri le se samtcise'u kei le pilno vau ja pilno le di'e cei'i le ka co'a lacri",
     "Not Trusted": "na se lacri",
     "Ok": "je'e",
-    "Sign Up": "nu co'a na'o jaspu",
-    "<userName/> wants to chat": ".i la'o zoi. <userName/> .zoi kaidji le ka tavla do",
-    "<userName/> invited you": ".i la'o zoi. <userName/> .zoi friti le ka ziljmina kei do",
     "Messages in this room are end-to-end encrypted.": ".i ro zilbe'i be fo le cei'i cu mifra",
     "Messages in this room are not end-to-end encrypted.": ".i na pa zilbe'i be fo le cei'i cu mifra",
     "%(count)s verified sessions": {
@@ -161,7 +156,8 @@
         "not_trusted": "na se lacri",
         "unnamed_room": "na da cmene",
         "advanced": "macnu",
-        "authentication": "lo nu facki lo du'u do du ma kau"
+        "authentication": "lo nu facki lo du'u do du ma kau",
+        "rooms": "ve zilbe'i"
     },
     "action": {
         "continue": "",
@@ -402,7 +398,8 @@
         "placeholder": "nu pa notci cu zilbe'i",
         "autocomplete": {
             "user_description": "pilno"
-        }
+        },
+        "poll_button_no_perms_title": ".i lo nu curmi cu sarcu"
     },
     "room_settings": {
         "permissions": {
@@ -516,7 +513,10 @@
     },
     "room": {
         "error_join_incompatible_version_2": ".i .e'o ko tavla lo admine be le samtcise'u",
-        "invite_this_room": "nu friti le ka ziljmina le se zilbe'i"
+        "invite_this_room": "nu friti le ka ziljmina le se zilbe'i",
+        "join_button_account": "nu co'a na'o jaspu",
+        "dm_invite_subtitle": ".i la'o zoi. <userName/> .zoi kaidji le ka tavla do",
+        "invite_subtitle": ".i la'o zoi. <userName/> .zoi friti le ka ziljmina kei do"
     },
     "notifications": {
         "class_other": "drata",

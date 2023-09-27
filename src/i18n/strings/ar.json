@@ -5,7 +5,6 @@
     "All Rooms": "كل الغُرف",
     "Changelog": "سِجل التغييرات",
     "Thank you!": "شكرًا !",
-    "Permission Required": "التصريح مطلوب",
     "Sun": "الأحد",
     "Mon": "الإثنين",
     "Tue": "الثلاثاء",
@@ -133,58 +132,17 @@
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "هذه الغرفة تشغل إصدار الغرفة <roomVersion /> ، والذي عده الخادم الوسيط هذا بأنه<i> غير مستقر </i>.",
     "This room has already been upgraded.": "سبق وأن تمت ترقية هذه الغرفة.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "ستؤدي ترقية هذه الغرفة إلى إغلاق النسخة الحالية للغرفة وإنشاء غرفة تمت ترقيتها بنفس الاسم.",
-    "Room options": "خيارات الغرفة",
-    "%(roomName)s is not accessible at this time.": "لا يمكن الوصول إلى %(roomName)s في الوقت الحالي.",
-    "%(roomName)s does not exist.": "الغرفة %(roomName)s ليست موجودة.",
-    "%(roomName)s can't be previewed. Do you want to join it?": "لا يمكن معاينة %(roomName)s. هل تريد الانضمام إليها؟",
-    "You're previewing %(roomName)s. Want to join it?": "أنت تعاين %(roomName)s. تريد الانضمام إليها؟",
-    "Reject & Ignore user": "رفض الدعوة وتجاهل الداعي",
-    "<userName/> invited you": "<userName/> دعاك",
-    "Do you want to join %(roomName)s?": "هل تريد أن تنضم إلى %(roomName)s؟",
-    "Start chatting": "ابدأ المحادثة",
-    "<userName/> wants to chat": "<userName/> يريد محادثتك",
-    "Do you want to chat with %(user)s?": "هل تريد محادثة %(user)s؟",
-    "Share this email in Settings to receive invites directly in %(brand)s.": "شارك هذا البريد الإلكتروني في الإعدادات لتلقي الدعوات مباشرةً في %(brand)s.",
-    "Use an identity server in Settings to receive invites directly in %(brand)s.": "استخدم خادم هوية في الإعدادات لتلقي الدعوات مباشرة في %(brand)s.",
-    "This invite to %(roomName)s was sent to %(email)s": "الدعوة إلى %(roomName)s أرسلت إلى %(email)s",
-    "Link this email with your account in Settings to receive invites directly in %(brand)s.": "اربط هذا البريد الإلكتروني بحسابك في الإعدادات لتلقي الدعوات مباشرةً في%(brand)s.",
-    "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "تم إرسال الدعوة إلى %(roomName)s إلى %(email)s الذي لا يرتبط بحسابك",
-    "Join the discussion": "انضم للنقاش",
-    "Try to join anyway": "حاول الانضمام على أي حال",
-    "You can only join it with a working invite.": "لا يمكن الإنضمام إليها إلا بدعوة صالحة.",
     "unknown error code": "رمز خطأٍ غير معروف",
-    "Something went wrong with your invite to %(roomName)s": "حدث خطأ في دعوتك إلى %(roomName)s",
-    "You were banned from %(roomName)s by %(memberName)s": "لقد حُظِرت من غرفة %(roomName)s من قِبَل %(memberName)s",
-    "Re-join": "أعِد الانضمام",
-    "Forget this room": "انسَ هذه الغرفة",
-    "Reason: %(reason)s": "السبب: %(reason)s",
-    "Sign Up": "سجل",
-    "Join the conversation with an account": "انضم للمحادثة بحساب",
-    "Historical": "تاريخي",
-    "Low priority": "أولوية منخفضة",
-    "Add room": "أضف غرفة",
-    "Rooms": "الغرف",
-    "Show Widgets": "إظهار عناصر الواجهة",
-    "Hide Widgets": "إخفاء عناصر الواجهة",
-    "Forget room": "انسَ الغرفة",
     "Join Room": "انضم للغرفة",
     "(~%(count)s results)": {
         "one": "(~%(count)s نتيجة)",
         "other": "(~%(count)s نتائج)"
     },
     "Unnamed room": "غرفة بلا اسم",
-    "Replying": "الرد",
     "%(duration)sd": "%(duration)sي",
     "%(duration)sh": "%(duration)sس",
     "%(duration)sm": "%(duration)sد",
     "%(duration)ss": "%(duration)sث",
-    "Italics": "مائل",
-    "You do not have permission to post to this room": "ليس لديك إذن للنشر في هذه الغرفة",
-    "This room has been replaced and is no longer active.": "تم استبدال هذه الغرفة ولم تعد نشطة.",
-    "The conversation continues here.": "تستمر المحادثة هنا.",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (قوة %(powerLevelNumber)s)",
-    "Filter room members": "تصفية أعضاء الغرفة",
-    "Invited": "مدعو",
     "and %(count)s others...": {
         "one": "وواحدة أخرى...",
         "other": "و %(count)s أخر..."
@@ -489,7 +447,10 @@
         "profile": "الملف الشخصي",
         "display_name": "الاسم الظاهر",
         "user_avatar": "الصورة الشخصية",
-        "authentication": "المصادقة"
+        "authentication": "المصادقة",
+        "rooms": "الغرف",
+        "low_priority": "أولوية منخفضة",
+        "historical": "تاريخي"
     },
     "action": {
         "continue": "واصِل",
@@ -575,7 +536,13 @@
         "placeholder_reply_encrypted": "أرسل جواباً مشفراً …",
         "placeholder_reply": "أرسل جواباً …",
         "placeholder_encrypted": "أرسل رسالة مشفرة …",
-        "placeholder": "أرسل رسالة …"
+        "placeholder": "أرسل رسالة …",
+        "room_upgraded_link": "تستمر المحادثة هنا.",
+        "room_upgraded_notice": "تم استبدال هذه الغرفة ولم تعد نشطة.",
+        "no_perms_notice": "ليس لديك إذن للنشر في هذه الغرفة",
+        "poll_button_no_perms_title": "التصريح مطلوب",
+        "format_italics": "مائل",
+        "replying_title": "الرد"
     },
     "power_level": {
         "default": "المبدئي",
@@ -1231,7 +1198,8 @@
         },
         "show_less": "أظهر أقل",
         "notification_options": "خيارات الإشعارات",
-        "breadcrumbs_empty": "لا توجد غرف تمت زيارتها مؤخرًا"
+        "breadcrumbs_empty": "لا توجد غرف تمت زيارتها مؤخرًا",
+        "add_room_label": "أضف غرفة"
     },
     "a11y": {
         "n_unread_messages_mentions": {
@@ -1418,9 +1386,40 @@
             "unfavourite": "فُضلت",
             "favourite": "تفضيل",
             "low_priority": "أولوية منخفضة",
-            "forget": "انسَ الغرفة"
+            "forget": "انسَ الغرفة",
+            "title": "خيارات الغرفة"
         },
-        "invite_this_room": "ادع لهذه الغرفة"
+        "invite_this_room": "ادع لهذه الغرفة",
+        "header": {
+            "forget_room_button": "انسَ الغرفة",
+            "hide_widgets_button": "إخفاء عناصر الواجهة",
+            "show_widgets_button": "إظهار عناصر الواجهة"
+        },
+        "join_title_account": "انضم للمحادثة بحساب",
+        "join_button_account": "سجل",
+        "kick_reason": "السبب: %(reason)s",
+        "forget_room": "انسَ هذه الغرفة",
+        "rejoin_button": "أعِد الانضمام",
+        "banned_from_room_by": "لقد حُظِرت من غرفة %(roomName)s من قِبَل %(memberName)s",
+        "3pid_invite_error_title_room": "حدث خطأ في دعوتك إلى %(roomName)s",
+        "3pid_invite_error_invite_subtitle": "لا يمكن الإنضمام إليها إلا بدعوة صالحة.",
+        "3pid_invite_error_invite_action": "حاول الانضمام على أي حال",
+        "join_the_discussion": "انضم للنقاش",
+        "3pid_invite_email_not_found_account_room": "تم إرسال الدعوة إلى %(roomName)s إلى %(email)s الذي لا يرتبط بحسابك",
+        "link_email_to_receive_3pid_invite": "اربط هذا البريد الإلكتروني بحسابك في الإعدادات لتلقي الدعوات مباشرةً في%(brand)s.",
+        "invite_sent_to_email_room": "الدعوة إلى %(roomName)s أرسلت إلى %(email)s",
+        "3pid_invite_no_is_subtitle": "استخدم خادم هوية في الإعدادات لتلقي الدعوات مباشرة في %(brand)s.",
+        "invite_email_mismatch_suggestion": "شارك هذا البريد الإلكتروني في الإعدادات لتلقي الدعوات مباشرةً في %(brand)s.",
+        "dm_invite_title": "هل تريد محادثة %(user)s؟",
+        "dm_invite_subtitle": "<userName/> يريد محادثتك",
+        "dm_invite_action": "ابدأ المحادثة",
+        "invite_title": "هل تريد أن تنضم إلى %(roomName)s؟",
+        "invite_subtitle": "<userName/> دعاك",
+        "invite_reject_ignore": "رفض الدعوة وتجاهل الداعي",
+        "peek_join_prompt": "أنت تعاين %(roomName)s. تريد الانضمام إليها؟",
+        "no_peek_join_prompt": "لا يمكن معاينة %(roomName)s. هل تريد الانضمام إليها؟",
+        "not_found_title_name": "الغرفة %(roomName)s ليست موجودة.",
+        "inaccessible_name": "لا يمكن الوصول إلى %(roomName)s في الوقت الحالي."
     },
     "space": {
         "context_menu": {
@@ -1533,5 +1532,10 @@
         "description_optional": "استخدام خادم الهوية اختياري. إذا اخترت عدم استخدام خادم هوية ، فلن يتمكن المستخدمون الآخرون من اكتشافك ولن تتمكن من دعوة الآخرين عبر البريد الإلكتروني أو الهاتف.",
         "do_not_use": "لا تستخدم خادم هوية",
         "url_field_label": "أدخل خادم هوية جديدًا"
+    },
+    "member_list": {
+        "invited_list_heading": "مدعو",
+        "filter_placeholder": "تصفية أعضاء الغرفة",
+        "power_label": "%(userName)s (قوة %(powerLevelNumber)s)"
     }
 }

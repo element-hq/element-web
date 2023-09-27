@@ -1,5 +1,4 @@
 {
-    "Permission Required": "Tillating er Naudsynt",
     "Sun": "su",
     "Mon": "må",
     "Tue": "ty",
@@ -43,27 +42,17 @@
         "other": "og %(count)s andre...",
         "one": "og ein annan..."
     },
-    "Invited": "Invitert",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (tilgangsnivå %(powerLevelNumber)s)",
-    "You do not have permission to post to this room": "Du har ikkje lov til å senda meldingar i dette rommet",
     "%(duration)ss": "%(duration)ss",
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)st",
     "%(duration)sd": "%(duration)sd",
-    "Replying": "Svarar",
     "Unnamed room": "Rom utan namn",
     "(~%(count)s results)": {
         "other": "(~%(count)s resultat)",
         "one": "(~%(count)s resultat)"
     },
     "Join Room": "Bli med i rom",
-    "Forget room": "Gløym rom",
     "Share room": "Del rom",
-    "Rooms": "Rom",
-    "Low priority": "Låg prioritet",
-    "Historical": "Historiske",
-    "%(roomName)s does not exist.": "%(roomName)s eksisterar ikkje.",
-    "%(roomName)s is not accessible at this time.": "%(roomName)s er ikkje tilgjengeleg no.",
     "unknown error code": "ukjend feilkode",
     "Failed to forget room %(errCode)s": "Fekk ikkje til å gløyma rommet %(errCode)s",
     "Search…": "Søk…",
@@ -152,7 +141,6 @@
     "Enter passphrase": "Skriv inn passfrase",
     "Confirm passphrase": "Stadfest passfrase",
     "Jump to read receipt": "Hopp til lesen-lappen",
-    "Filter room members": "Filtrer rommedlemmar",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Du held på å verta teken til ei tredje-partisside so du kan godkjenna brukaren din til bruk med %(integrationsUrl)s. Vil du gå fram?",
     "Add an Integration": "Legg tillegg til",
     "Custom level": "Tilpassa nivå",
@@ -168,7 +156,6 @@
     "Only room administrators will see this warning": "Berre rom-administratorar vil sjå denne åtvaringa",
     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Meldinga di vart ikkje send, for denne heimetenaren har nådd grensa for maksimalt aktive brukarar pr. månad. Kontakt <a>systemadministratoren</a> for å vidare nytte denne tenesta.",
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Denne meldingen vart ikkje send fordi heimetenaren har nådd grensa for tilgjengelege systemressursar. Kontakt <a>systemadministratoren</a> for å vidare nytta denne tenesta.",
-    "Add room": "Legg til rom",
     "Could not load user profile": "Klarde ikkje å laste brukarprofilen",
     "Your password has been reset.": "Passodet ditt vart nullstilt.",
     "Invalid homeserver discovery response": "Feil svar frå heimetenaren (discovery response)",
@@ -207,33 +194,7 @@
     "Deactivate user": "Deaktiver brukar",
     "Failed to deactivate user": "Fekk ikkje til å deaktivere brukaren",
     "Remove recent messages": "Fjern nyare meldingar",
-    "The conversation continues here.": "Samtalen held fram her.",
-    "This room has been replaced and is no longer active.": "Dette rommet er erstatta og er ikkje lenger aktivt.",
-    "Italics": "Kursiv",
     "Direct Messages": "Folk",
-    "Join the conversation with an account": "Bli med i samtalen med ein konto",
-    "Sign Up": "Registrer deg",
-    "Reason: %(reason)s": "Grunn: %(reason)s",
-    "Forget this room": "Gløym dette rommet",
-    "Re-join": "Bli med på nytt",
-    "You were banned from %(roomName)s by %(memberName)s": "Du vart blokkert frå %(roomName)s av %(memberName)s",
-    "Something went wrong with your invite to %(roomName)s": "Noko gjekk gale med invitasjonen din for %(roomName)s",
-    "You can only join it with a working invite.": "Du kan berre bli med med ein fungerande invitasjon.",
-    "Try to join anyway": "Prøv å bli med likevel",
-    "Join the discussion": "Bli med i diskusjonen",
-    "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "Invitasjonen til %(roomName)s vart sendt til %(email)s, som ikkje er tilknytta din konto",
-    "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Knytt denne e-posten opp til kontoen din under Innstillingar, for å direkte ta i mot invitasjonar i %(brand)s.",
-    "This invite to %(roomName)s was sent to %(email)s": "Denne invitasjonen for %(roomName)s vart sendt til %(email)s",
-    "Use an identity server in Settings to receive invites directly in %(brand)s.": "Bruk ein identitetstenar under Innstillingar, for å direkte ta i mot invitasjonar i %(brand)s.",
-    "Share this email in Settings to receive invites directly in %(brand)s.": "Del denne e-postadresa i Innstillingar, for å direkte ta i mot invitasjonar i %(brand)s.",
-    "Do you want to chat with %(user)s?": "Ynskjer du å chatte med %(user)s?",
-    "<userName/> wants to chat": "<userName/> vil chatte med deg",
-    "Start chatting": "Start chatting",
-    "Do you want to join %(roomName)s?": "Ynskjer du å bli med i %(roomName)s?",
-    "<userName/> invited you": "<userName/> inviterte deg",
-    "Reject & Ignore user": "Avslå og ignorer brukar",
-    "You're previewing %(roomName)s. Want to join it?": "Du førehandsviser %(roomName)s. Ynskjer du å bli med ?",
-    "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s kan ikkje førehandsvisast. Ynskjer du å bli med ?",
     "Failed to revoke invite": "Fekk ikkje til å trekke invitasjonen",
     "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Fekk ikkje til å ta attende invitasjonen. Det kan ha oppstått ein mellombels feil på tenaren, eller så har ikkje du tilstrekkelege rettar for å ta attende invitasjonen.",
     "Revoke invite": "Trekk invitasjon",
@@ -308,8 +269,6 @@
     "The poll has ended. No votes were cast.": "Røystinga er ferdig. Ingen røyster vart mottekne.",
     "Sorry, you can't edit a poll after votes have been cast.": "Beklagar, du kan ikkje endra ei røysting som er i gang.",
     "Can't edit poll": "Røystinga kan ikkje endrast",
-    "Poll": "Røysting",
-    "You do not have permission to start polls in this room.": "Du har ikkje lov til å starte nye røystingar i dette rommet.",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Er du sikker på at du vil avslutta denne røystinga ? Dette vil gjelde for alle, og dei endelege resultata vil bli presentert.",
     "Results will be visible when the poll is ended": "Resultata vil bli synlege når røystinga er ferdig",
     "Close sidebar": "Lat att sidestolpen",
@@ -372,7 +331,10 @@
         "general": "Generelt",
         "profile": "Brukar",
         "display_name": "Visningsnamn",
-        "authentication": "Authentisering"
+        "authentication": "Authentisering",
+        "rooms": "Rom",
+        "low_priority": "Låg prioritet",
+        "historical": "Historiske"
     },
     "action": {
         "continue": "Fortset",
@@ -464,7 +426,15 @@
             "@room_description": "Varsle heile rommet",
             "notification_description": "Romvarsel",
             "user_description": "Brukarar"
-        }
+        },
+        "room_upgraded_link": "Samtalen held fram her.",
+        "room_upgraded_notice": "Dette rommet er erstatta og er ikkje lenger aktivt.",
+        "no_perms_notice": "Du har ikkje lov til å senda meldingar i dette rommet",
+        "poll_button_no_perms_title": "Tillating er Naudsynt",
+        "poll_button_no_perms_description": "Du har ikkje lov til å starte nye røystingar i dette rommet.",
+        "poll_button": "Røysting",
+        "format_italics": "Kursiv",
+        "replying_title": "Svarar"
     },
     "Code": "Kode",
     "power_level": {
@@ -1087,7 +1057,8 @@
         "sublist_options": "Sjå alternativ",
         "show_less": "Vis mindre",
         "failed_remove_tag": "Fekk ikkje til å fjerna merket %(tagName)s frå rommet",
-        "failed_add_tag": "Fekk ikkje til å leggja merket %(tagName)s til i rommet"
+        "failed_add_tag": "Fekk ikkje til å leggja merket %(tagName)s til i rommet",
+        "add_room_label": "Legg til rom"
     },
     "a11y": {
         "n_unread_messages": {
@@ -1149,7 +1120,35 @@
             "favourite": "Yndling",
             "low_priority": "Lågrett"
         },
-        "invite_this_room": "Inviter til dette rommet"
+        "invite_this_room": "Inviter til dette rommet",
+        "header": {
+            "forget_room_button": "Gløym rom"
+        },
+        "join_title_account": "Bli med i samtalen med ein konto",
+        "join_button_account": "Registrer deg",
+        "kick_reason": "Grunn: %(reason)s",
+        "forget_room": "Gløym dette rommet",
+        "rejoin_button": "Bli med på nytt",
+        "banned_from_room_by": "Du vart blokkert frå %(roomName)s av %(memberName)s",
+        "3pid_invite_error_title_room": "Noko gjekk gale med invitasjonen din for %(roomName)s",
+        "3pid_invite_error_invite_subtitle": "Du kan berre bli med med ein fungerande invitasjon.",
+        "3pid_invite_error_invite_action": "Prøv å bli med likevel",
+        "join_the_discussion": "Bli med i diskusjonen",
+        "3pid_invite_email_not_found_account_room": "Invitasjonen til %(roomName)s vart sendt til %(email)s, som ikkje er tilknytta din konto",
+        "link_email_to_receive_3pid_invite": "Knytt denne e-posten opp til kontoen din under Innstillingar, for å direkte ta i mot invitasjonar i %(brand)s.",
+        "invite_sent_to_email_room": "Denne invitasjonen for %(roomName)s vart sendt til %(email)s",
+        "3pid_invite_no_is_subtitle": "Bruk ein identitetstenar under Innstillingar, for å direkte ta i mot invitasjonar i %(brand)s.",
+        "invite_email_mismatch_suggestion": "Del denne e-postadresa i Innstillingar, for å direkte ta i mot invitasjonar i %(brand)s.",
+        "dm_invite_title": "Ynskjer du å chatte med %(user)s?",
+        "dm_invite_subtitle": "<userName/> vil chatte med deg",
+        "dm_invite_action": "Start chatting",
+        "invite_title": "Ynskjer du å bli med i %(roomName)s?",
+        "invite_subtitle": "<userName/> inviterte deg",
+        "invite_reject_ignore": "Avslå og ignorer brukar",
+        "peek_join_prompt": "Du førehandsviser %(roomName)s. Ynskjer du å bli med ?",
+        "no_peek_join_prompt": "%(roomName)s kan ikkje førehandsvisast. Ynskjer du å bli med ?",
+        "not_found_title_name": "%(roomName)s eksisterar ikkje.",
+        "inaccessible_name": "%(roomName)s er ikkje tilgjengeleg no."
     },
     "file_panel": {
         "guest_note": "Du må <a>melda deg inn</a> for å bruka denne funksjonen",
@@ -1285,5 +1284,10 @@
         "disconnect_warning": "Ved å fjerne koplinga mot din identitetstenar, vil ikkje brukaren din bli oppdaga av andre brukarar, og du kan heller ikkje invitera andre med e-post eller telefonnummer.",
         "description_optional": "Å bruka ein identitetstenar er frivillig. Om du vel å ikkje bruka dette, vil ikkje brukaren din bli oppdaga av andre brukarar, og du kan ikkje invitera andre med e-post eller telefonnummer.",
         "url_field_label": "Skriv inn ein ny identitetstenar"
+    },
+    "member_list": {
+        "invited_list_heading": "Invitert",
+        "filter_placeholder": "Filtrer rommedlemmar",
+        "power_label": "%(userName)s (tilgangsnivå %(powerLevelNumber)s)"
     }
 }

@@ -103,7 +103,6 @@
     "Tue": "Uto",
     "Mon": "Pon",
     "Sun": "Ned",
-    "Permission Required": "Potrebno dopuštenje",
     "common": {
         "analytics": "Analitika",
         "error": "Geška",
@@ -193,5 +192,8 @@
     },
     "identity_server": {
         "error_connection": "Nije moguće spojiti se na poslužitelja identiteta"
+    },
+    "composer": {
+        "poll_button_no_perms_title": "Potrebno dopuštenje"
     }
 }

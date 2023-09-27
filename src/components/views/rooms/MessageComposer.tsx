@@ -535,7 +535,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                     className="mx_MessageComposer_roomReplaced_link"
                     onClick={this.onTombstoneClick}
                 >
-                    {_t("The conversation continues here.")}
+                    {_t("composer|room_upgraded_link")}
                 </a>
             ) : (
                 ""
@@ -551,7 +551,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                             src={require("../../../../res/img/room_replaced.svg").default}
                         />
                         <span className="mx_MessageComposer_roomReplaced_header">
-                            {_t("This room has been replaced and is no longer active.")}
+                            {_t("composer|room_upgraded_notice")}
                         </span>
                         <br />
                         {continuesLink}
@@ -561,7 +561,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         } else {
             controls.push(
                 <div key="controls_error" className="mx_MessageComposer_noperm_error">
-                    {_t("You do not have permission to post to this room")}
+                    {_t("composer|no_perms_notice")}
                 </div>,
             );
         }
@@ -649,7 +649,9 @@ export class MessageComposer extends React.Component<IProps, IState> {
                                 <SendButton
                                     key="controls_send"
                                     onClick={this.sendMessage}
-                                    title={this.state.haveRecording ? _t("Send voice message") : undefined}
+                                    title={
+                                        this.state.haveRecording ? _t("composer|send_button_voice_message") : undefined
+                                    }
                                 />
                             )}
                         </div>

@@ -212,9 +212,12 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
         menu = (
             <IconizedContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
                 <IconizedContextMenuOptionList>
-                    <IconizedContextMenuOption label={_t("Video call (Jitsi)")} onClick={onJitsiClick} />
                     <IconizedContextMenuOption
-                        label={_t("Video call (%(brand)s)", { brand })}
+                        label={_t("room|header|video_call_button_jitsi")}
+                        onClick={onJitsiClick}
+                    />
+                    <IconizedContextMenuOption
+                        label={_t("room|header|video_call_button_ec", { brand })}
                         onClick={onElementClick}
                     />
                 </IconizedContextMenuOptionList>
@@ -412,13 +415,13 @@ const CallLayoutSelector: FC<CallLayoutSelectorProps> = ({ call }) => {
                 <IconizedContextMenuOptionList>
                     <IconizedContextMenuRadio
                         iconClassName="mx_LegacyRoomHeader_freedomIcon"
-                        label={_t("Freedom")}
+                        label={_t("room|header|video_call_ec_layout_freedom")}
                         active={layout === Layout.Tile}
                         onClick={onFreedomClick}
                     />
                     <IconizedContextMenuRadio
                         iconClassName="mx_LegacyRoomHeader_spotlightIcon"
-                        label={_t("Spotlight")}
+                        label={_t("room|header|video_call_ec_layout_spotlight")}
                         active={layout === Layout.Spotlight}
                         onClick={onSpotlightClick}
                     />
@@ -436,7 +439,7 @@ const CallLayoutSelector: FC<CallLayoutSelectorProps> = ({ call }) => {
                     "mx_LegacyRoomHeader_layoutButton--spotlight": layout === Layout.Spotlight,
                 })}
                 onClick={onClick}
-                title={_t("Change layout")}
+                title={_t("room|header|video_call_ec_change_layout")}
                 alignment={Alignment.Bottom}
                 key="layout"
             />
@@ -589,7 +592,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                 <AccessibleTooltipButton
                     className="mx_LegacyRoomHeader_button mx_LegacyRoomHeader_forgetButton"
                     onClick={this.props.onForgetClick}
-                    title={_t("Forget room")}
+                    title={_t("room|header|forget_room_button")}
                     alignment={Alignment.Bottom}
                     key="forget"
                 />,
@@ -603,7 +606,11 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                         mx_LegacyRoomHeader_appsButton_highlight: this.props.appsShown,
                     })}
                     onClick={this.props.onAppsClick}
-                    title={this.props.appsShown ? _t("Hide Widgets") : _t("Show Widgets")}
+                    title={
+                        this.props.appsShown
+                            ? _t("room|header|hide_widgets_button")
+                            : _t("room|header|show_widgets_button")
+                    }
                     aria-checked={this.props.appsShown}
                     alignment={Alignment.Bottom}
                     key="apps"
@@ -643,7 +650,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                     <AccessibleButton
                         className="mx_LegacyRoomHeader_button mx_LegacyRoomHeader_closeButton"
                         onClick={this.onHideCallClick}
-                        title={_t("Close call")}
+                        title={_t("room|header|close_call_button")}
                         key="close"
                     />,
                 );
@@ -652,7 +659,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                     <AccessibleTooltipButton
                         className="mx_LegacyRoomHeader_button mx_LegacyRoomHeader_minimiseButton"
                         onClick={this.onHideCallClick}
-                        title={_t("View chat timeline")}
+                        title={_t("room|header|video_room_view_chat_button")}
                         alignment={Alignment.Bottom}
                         key="minimise"
                     />,
@@ -718,7 +725,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                     className="mx_LegacyRoomHeader_name"
                     onClick={this.onContextMenuOpenClick}
                     isExpanded={!!this.state.contextMenuPosition}
-                    title={_t("Room options")}
+                    title={_t("room|context_menu|title")}
                     alignment={Alignment.Bottom}
                 >
                     {roomName}

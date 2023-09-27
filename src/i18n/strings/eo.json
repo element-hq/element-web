@@ -38,10 +38,6 @@
         "other": "kaj %(count)s aliaj…",
         "one": "kaj unu alia…"
     },
-    "Invited": "Invititaj",
-    "Filter room members": "Filtri ĉambranojn",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (povnivelo je %(powerLevelNumber)s)",
-    "You do not have permission to post to this room": "Mankas al vi permeso afiŝi en tiu ĉambro",
     "%(duration)ss": "%(duration)ss",
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)sh",
@@ -52,12 +48,6 @@
         "one": "(~%(count)s rezulto)"
     },
     "Join Room": "Aliĝi al ĉambro",
-    "Forget room": "Forgesi ĉambron",
-    "Rooms": "Ĉambroj",
-    "Low priority": "Malpli gravaj",
-    "Historical": "Estintaj",
-    "%(roomName)s does not exist.": "%(roomName)s ne ekzistas.",
-    "%(roomName)s is not accessible at this time.": "%(roomName)s ne estas atingebla nun.",
     "unknown error code": "nekonata kodo de eraro",
     "Failed to forget room %(errCode)s": "Malsukcesis forgesi ĉambron %(errCode)s",
     "Jump to first unread message.": "Salti al unua nelegita mesaĝo.",
@@ -122,7 +112,6 @@
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Tio ĉi permesos al vi enporti ĉifrajn ŝlosilojn, kiujn vi antaŭe elportis el alia kliento de Matrix. Poste vi povos malĉifri la samajn mesaĝojn, kiujn la alia kliento povis.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "La elportita dosiero estos protektata de pasfrazo. Por malĉifri ĝin, enigu la pasfrazon ĉi tien.",
     "File to import": "Enportota dosiero",
-    "Replying": "Respondante",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
     "Sunday": "Dimanĉo",
     "Today": "Hodiaŭ",
@@ -144,7 +133,6 @@
     "Logs sent": "Protokolo sendiĝis",
     "Failed to send logs: ": "Malsukcesis sendi protokolon: ",
     "Preparing to send logs": "Pretigante sendon de protokolo",
-    "Permission Required": "Necesas permeso",
     "<a>In reply to</a> <pill>": "<a>Responde al</a> <pill>",
     "Dog": "Hundo",
     "Cat": "Kato",
@@ -242,21 +230,6 @@
     "Edit message": "Redakti mesaĝon",
     "This room has already been upgraded.": "Ĉi tiu ĉambro jam gradaltiĝis.",
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Ĉi tiu ĉambro uzas ĉambran version <roomVersion />, kiun la hejmservilo markis kiel <i>nestabilan</i>.",
-    "Join the conversation with an account": "Aliĝu al la interparolo per konto",
-    "Sign Up": "Registriĝi",
-    "Reason: %(reason)s": "Kialo: %(reason)s",
-    "Forget this room": "Forgesi ĉi tiun ĉambron",
-    "Re-join": "Re-aliĝi",
-    "You were banned from %(roomName)s by %(memberName)s": "%(memberName)s vin forbaris de %(roomName)s",
-    "Something went wrong with your invite to %(roomName)s": "Io misokazis al via invito al %(roomName)s",
-    "You can only join it with a working invite.": "Vi povas aliĝi nur kun funkcianta invito.",
-    "Join the discussion": "Aliĝi al la diskuto",
-    "Try to join anyway": "Tamen provi aliĝi",
-    "Do you want to chat with %(user)s?": "Ĉu vi volas babili kun %(user)s?",
-    "Do you want to join %(roomName)s?": "Ĉu vi volas aliĝi al %(roomName)s?",
-    "<userName/> invited you": "<userName/> vin invitis",
-    "You're previewing %(roomName)s. Want to join it?": "Vi antaŭrigardas ĉambron %(roomName)s. Ĉu vi volas aliĝi?",
-    "%(roomName)s can't be previewed. Do you want to join it?": "Vi ne povas antaŭrigardi ĉambron %(roomName)s. Ĉu vi al ĝi volas aliĝi?",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Gradaltigo de la ĉambro forigos la nunan ĉambron kaj kreos novan kun la sama nomo.",
     "You don't currently have any stickerpacks enabled": "Vi havas neniujn ŝaltitajn glumarkarojn",
     "Add some now": "Iujn aldoni",
@@ -294,7 +267,6 @@
     "Unable to load backup status": "Ne povas legi staton de savkopio",
     "This homeserver would like to make sure you are not a robot.": "Ĉi tiu hejmservilo volas certigi, ke vi ne estas roboto.",
     "Join millions for free on the largest public server": "Senpage aliĝu al milionoj sur la plej granda publika servilo",
-    "Add room": "Aldoni ĉambron",
     "Start using Key Backup": "Ekuzi Savkopiadon de ŝlosiloj",
     "Edited at %(date)s. Click to view edits.": "Redaktita je %(date)s. Klaku por vidi redaktojn.",
     "The following users may not exist": "La jenaj uzantoj eble ne ekzistas",
@@ -308,8 +280,6 @@
     "I don't want my encrypted messages": "Mi ne volas miajn ĉifritajn mesaĝojn",
     "No backup found!": "Neniu savkopio troviĝis!",
     "Go to Settings": "Iri al agordoj",
-    "The conversation continues here.": "La interparolo daŭras ĉi tie.",
-    "This room has been replaced and is no longer active.": "Ĉi tiu ĉambro estas anstataŭita, kaj ne plu aktivas.",
     "Only room administrators will see this warning": "Nur administrantoj de ĉambro vidos ĉi tiun averton",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Ne povas enlegi la responditan okazon; aŭ ĝi ne ekzistas, aŭ vi ne rajtas vidi ĝin.",
     "Clear all data": "Vakigi ĉiujn datumojn",
@@ -374,13 +344,7 @@
     "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "Malaktivigo de ĉi tiu uzanto adiaŭigos ĝin, kaj malebligos, ke ĝi resalutu. Plie, ĝi foriros de ĉiuj enataj ĉambroj. Tiu ago ne povas malfariĝi. Ĉu vi certe volas malaktivigi ĉi tiun uzanton?",
     "Deactivate user": "Malaktivigi uzanton",
     "Remove recent messages": "Forigi freŝajn mesaĝojn",
-    "Italics": "Kursive",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Provu rulumi supren tra la historio por kontroli, ĉu ne estas iuj pli fruaj.",
-    "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "Ĉi tiu invito al %(roomName)s sendiĝis al %(email)s, kiu ne estas ligita al via konto",
-    "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Ligu ĉi tiun retpoŝtadreson al via konto en Agordoj por ricevadi invitojn rekte per %(brand)s.",
-    "This invite to %(roomName)s was sent to %(email)s": "La invito al %(roomName)s sendiĝis al %(email)s",
-    "Use an identity server in Settings to receive invites directly in %(brand)s.": "Uzu identigan servilon en Agordoj por ricevadi invitojn rekte per %(brand)s.",
-    "Share this email in Settings to receive invites directly in %(brand)s.": "Havigu ĉi tiun retpoŝtadreson per Agordoj por ricevadi invitojn rekte per %(brand)s.",
     "Failed to deactivate user": "Malsukcesis malaktivigi uzanton",
     "This client does not support end-to-end encryption.": "Ĉi tiu kliento ne subtenas tutvojan ĉifradon.",
     "Messages in this room are not end-to-end encrypted.": "Mesaĝoj en ĉi tiu ĉambro ne estas tutvoje ĉifrataj.",
@@ -406,9 +370,6 @@
     "Everyone in this room is verified": "Ĉiu en la ĉambro estas kontrolita",
     "Unencrypted": "Neĉifrita",
     "Direct Messages": "Individuaj ĉambroj",
-    "<userName/> wants to chat": "<userName/> volas babili",
-    "Start chatting": "Ekbabili",
-    "Reject & Ignore user": "Rifuzi kaj malatenti uzanton",
     "Failed to connect to integration manager": "Malsukcesis konekton al kunigilo",
     "Verify User": "Kontroli uzanton",
     "For extra security, verify this user by checking a one-time code on both of your devices.": "Por plia sekureco, kontrolu ĉi tiun uzanton per unufoja kodo aperonta sur ambaŭ el viaj aparatoj.",
@@ -565,7 +526,6 @@
     "Ok": "Bone",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "La aŭtentikeco de ĉi tiu ĉifrita mesaĝo ne povas esti garantiita sur ĉi tiu aparato.",
     "Message preview": "Antaŭrigardo al mesaĝo",
-    "Room options": "Elektebloj pri ĉambro",
     "Wrong file type": "Neĝusta dosiertipo",
     "Looks good!": "Ŝajnas bona!",
     "Security Phrase": "Sekureca frazo",
@@ -619,8 +579,6 @@
     "You can only pin up to %(count)s widgets": {
         "other": "Vi povas fiksi maksimume %(count)s fenestraĵojn"
     },
-    "Show Widgets": "Montri fenestraĵojn",
-    "Hide Widgets": "Kaŝi fenestraĵojn",
     "Backup version:": "Repaŝa versio:",
     "Data on this screen is shared with %(widgetDomain)s": "Datumoj sur tiu ĉi ekrano estas havigataj al %(widgetDomain)s",
     "Uzbekistan": "Uzbekujo",
@@ -912,7 +870,6 @@
     "Open dial pad": "Malfermi ciferplaton",
     "Dial pad": "Ciferplato",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Ĉi tiu kutime influas nur traktadon de la ĉambro servil-flanke. Se vi spertas problemojn pri via %(brand)s, bonvolu raporti eraron.",
-    "Suggested Rooms": "Rekomendataj ĉambroj",
     "<inviter/> invites you": "<inviter/> invitas vin",
     "No results found": "Neniuj rezultoj troviĝis",
     "%(count)s rooms": {
@@ -988,10 +945,6 @@
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Se vi tamen tion faras, sciu ke neniu el viaj mesaĝoj foriĝos, sed via sperto pri serĉado povas malboniĝi momente, dum la indekso estas refarata",
     "You most likely do not want to reset your event index store": "Plej verŝajne, vi ne volas restarigi vian deponejon de indeksoj de okazoj",
     "Reset event store?": "Ĉu restarigi deponejon de okazoj?",
-    "Currently joining %(count)s rooms": {
-        "one": "Nun aliĝante al %(count)s ĉambro",
-        "other": "Nun aliĝante al %(count)s ĉambroj"
-    },
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Via %(brand)so ne permesas al vi uzi kunigilon por tio. Bonvolu kontakti administranton.",
     "This space has no local addresses": "Ĉi tiu aro ne havas lokajn adresojn",
     "Stop recording": "Malŝalti registradon",
@@ -1003,7 +956,6 @@
     "Unable to copy room link": "Ne povas kopii ligilon al ĉambro",
     "Error downloading audio": "Eraris elŝuto de sondosiero",
     "Unnamed audio": "Sennoma sondosiero",
-    "Add space": "Aldoni aron",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Sciu, ke gradaltigo kreos novan version de la ĉambro</b>. Ĉiuj nunaj mesaĝoj restos en ĉi tiu arĥivita ĉambro.",
     "Automatically invite members from this room to the new one": "Memage inviti anojn de ĉi tiu ĉambro al la nova",
     "Other spaces or rooms you might not know": "Aliaj aroj aŭ ĉambroj, kiujn vi eble ne konas",
@@ -1063,7 +1015,6 @@
     "Don't leave any rooms": "Foriru de neniuj ĉambroj",
     "Some encryption parameters have been changed.": "Ŝanĝiĝis iuj parametroj de ĉifrado.",
     "Role in <RoomName/>": "Rolo en <RoomName/>",
-    "Message didn't send. Click for info.": "Mesaĝo ne sendiĝis. Klaku por akiri informojn.",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Ĉu vi certas, ke vi volas fini ĉi tiun balotenketon? Ĉi tio montros la finajn rezultojn de la balotenketo kaj malhelpos personojn povi voĉdoni.",
     "End Poll": "Finu Balotenketon",
     "Sorry, the poll did not end. Please try again.": "Pardonu, la balotenketo ne finiĝis. Bonvolu reprovi.",
@@ -1073,7 +1024,6 @@
     "Results will be visible when the poll is ended": "Rezultoj estos videblaj kiam la balotenketo finiĝos",
     "Sorry, you can't edit a poll after votes have been cast.": "Pardonu, vi ne povas redakti balotenketon post voĉdonado.",
     "Can't edit poll": "Ne povas redakti balotenketon",
-    "Poll": "Balotenketo",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s kaj %(count)s alia",
         "other": "%(spaceName)s kaj %(count)s aliaj"
@@ -1198,7 +1148,10 @@
         "authentication": "Aŭtentikigo",
         "public_room": "Publika ĉambro",
         "public_space": "Publika aro",
-        "private_space": "Privata aro"
+        "private_space": "Privata aro",
+        "rooms": "Ĉambroj",
+        "low_priority": "Malpli gravaj",
+        "historical": "Estintaj"
     },
     "action": {
         "continue": "Daŭrigi",
@@ -1428,7 +1381,15 @@
             "space_a11y": "Memaga finfaro de aro",
             "user_description": "Uzantoj",
             "user_a11y": "Memkompletigo de uzantoj"
-        }
+        },
+        "room_upgraded_link": "La interparolo daŭras ĉi tie.",
+        "room_upgraded_notice": "Ĉi tiu ĉambro estas anstataŭita, kaj ne plu aktivas.",
+        "no_perms_notice": "Mankas al vi permeso afiŝi en tiu ĉambro",
+        "send_button_voice_message": "Sendi voĉmesaĝon",
+        "poll_button_no_perms_title": "Necesas permeso",
+        "poll_button": "Balotenketo",
+        "format_italics": "Kursive",
+        "replying_title": "Respondante"
     },
     "Code": "Kodo",
     "power_level": {
@@ -2674,7 +2635,14 @@
         "failed_remove_tag": "Malsukcesis forigi etikedon %(tagName)s el la ĉambro",
         "failed_add_tag": "Malsukcesis aldoni etikedon %(tagName)s al ĉambro",
         "breadcrumbs_label": "Freŝe vizititiaj ĉambroj",
-        "breadcrumbs_empty": "Neniuj freŝdate vizititaj ĉambroj"
+        "breadcrumbs_empty": "Neniuj freŝdate vizititaj ĉambroj",
+        "add_room_label": "Aldoni ĉambron",
+        "suggested_rooms_heading": "Rekomendataj ĉambroj",
+        "add_space_label": "Aldoni aron",
+        "joining_rooms_status": {
+            "one": "Nun aliĝante al %(count)s ĉambro",
+            "other": "Nun aliĝante al %(count)s ĉambroj"
+        }
     },
     "report_content": {
         "missing_reason": "Bonvolu skribi, kial vi raportas.",
@@ -3032,9 +3000,40 @@
             "unfavourite": "Elstarigita",
             "favourite": "Elstarigi",
             "low_priority": "Malalta prioritato",
-            "forget": "Forgesi ĉambron"
+            "forget": "Forgesi ĉambron",
+            "title": "Elektebloj pri ĉambro"
         },
-        "invite_this_room": "Inviti al ĉi tiu ĉambro"
+        "invite_this_room": "Inviti al ĉi tiu ĉambro",
+        "header": {
+            "forget_room_button": "Forgesi ĉambron",
+            "hide_widgets_button": "Kaŝi fenestraĵojn",
+            "show_widgets_button": "Montri fenestraĵojn"
+        },
+        "join_title_account": "Aliĝu al la interparolo per konto",
+        "join_button_account": "Registriĝi",
+        "kick_reason": "Kialo: %(reason)s",
+        "forget_room": "Forgesi ĉi tiun ĉambron",
+        "rejoin_button": "Re-aliĝi",
+        "banned_from_room_by": "%(memberName)s vin forbaris de %(roomName)s",
+        "3pid_invite_error_title_room": "Io misokazis al via invito al %(roomName)s",
+        "3pid_invite_error_invite_subtitle": "Vi povas aliĝi nur kun funkcianta invito.",
+        "3pid_invite_error_invite_action": "Tamen provi aliĝi",
+        "join_the_discussion": "Aliĝi al la diskuto",
+        "3pid_invite_email_not_found_account_room": "Ĉi tiu invito al %(roomName)s sendiĝis al %(email)s, kiu ne estas ligita al via konto",
+        "link_email_to_receive_3pid_invite": "Ligu ĉi tiun retpoŝtadreson al via konto en Agordoj por ricevadi invitojn rekte per %(brand)s.",
+        "invite_sent_to_email_room": "La invito al %(roomName)s sendiĝis al %(email)s",
+        "3pid_invite_no_is_subtitle": "Uzu identigan servilon en Agordoj por ricevadi invitojn rekte per %(brand)s.",
+        "invite_email_mismatch_suggestion": "Havigu ĉi tiun retpoŝtadreson per Agordoj por ricevadi invitojn rekte per %(brand)s.",
+        "dm_invite_title": "Ĉu vi volas babili kun %(user)s?",
+        "dm_invite_subtitle": "<userName/> volas babili",
+        "dm_invite_action": "Ekbabili",
+        "invite_title": "Ĉu vi volas aliĝi al %(roomName)s?",
+        "invite_subtitle": "<userName/> vin invitis",
+        "invite_reject_ignore": "Rifuzi kaj malatenti uzanton",
+        "peek_join_prompt": "Vi antaŭrigardas ĉambron %(roomName)s. Ĉu vi volas aliĝi?",
+        "no_peek_join_prompt": "Vi ne povas antaŭrigardi ĉambron %(roomName)s. Ĉu vi al ĝi volas aliĝi?",
+        "not_found_title_name": "%(roomName)s ne ekzistas.",
+        "inaccessible_name": "%(roomName)s ne estas atingebla nun."
     },
     "file_panel": {
         "guest_note": "Vi devas <a>registriĝî</a> por uzi tiun ĉi funkcion",
@@ -3168,7 +3167,8 @@
         "class_other": "Alia",
         "mentions_keywords": "Mencioj kaj ĉefvortoj",
         "default": "Ordinara",
-        "all_messages": "Ĉiuj mesaĝoj"
+        "all_messages": "Ĉiuj mesaĝoj",
+        "message_didnt_send": "Mesaĝo ne sendiĝis. Klaku por akiri informojn."
     },
     "mobile_guide": {
         "toast_title": "Uzu aplikaĵon por pli bona sperto",
@@ -3222,5 +3222,10 @@
         "description_optional": "Vi ne devas uzi identigan servilon. Se vi tion elektos, vi ne povos troviĝi de aliaj uzantoj, kaj vi ne povos memage inviti ilin per retpoŝto aŭ telefono.",
         "do_not_use": "Ne uzi identigan servilon",
         "url_field_label": "Enigi novan identigan servilon"
+    },
+    "member_list": {
+        "invited_list_heading": "Invititaj",
+        "filter_placeholder": "Filtri ĉambranojn",
+        "power_label": "%(userName)s (povnivelo je %(powerLevelNumber)s)"
     }
 }

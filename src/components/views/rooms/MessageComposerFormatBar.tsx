@@ -52,7 +52,7 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
             mx_MessageComposerFormatBar_shown: this.state.visible,
         });
         return (
-            <Toolbar className={classes} ref={this.formatBarRef} aria-label={_t("Formatting")}>
+            <Toolbar className={classes} ref={this.formatBarRef} aria-label={_t("composer|formatting_toolbar_label")}>
                 <FormatButton
                     label={_t("composer|format_bold")}
                     onClick={() => this.props.onAction(Formatting.Bold)}
@@ -61,7 +61,7 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
                     visible={this.state.visible}
                 />
                 <FormatButton
-                    label={_t("Italics")}
+                    label={_t("composer|format_italics")}
                     onClick={() => this.props.onAction(Formatting.Italics)}
                     icon="Italic"
                     shortcut={this.props.shortcuts.italics}
@@ -88,7 +88,7 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
                     visible={this.state.visible}
                 />
                 <FormatButton
-                    label={_t("Insert link")}
+                    label={_t("composer|format_insert_link")}
                     onClick={() => this.props.onAction(Formatting.InsertLink)}
                     icon="InsertLink"
                     shortcut={this.props.shortcuts.insert_link}

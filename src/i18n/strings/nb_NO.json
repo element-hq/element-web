@@ -12,7 +12,6 @@
     "Thursday": "Torsdag",
     "Yesterday": "I går",
     "Saturday": "Lørdag",
-    "Permission Required": "Tillatelse kreves",
     "Send": "Send",
     "Sun": "Søn",
     "Mon": "Man",
@@ -74,11 +73,7 @@
     "Folder": "Mappe",
     "Are you sure?": "Er du sikker?",
     "Admin Tools": "Adminverktøy",
-    "Invited": "Invitert",
-    "Italics": "Kursiv",
     "Direct Messages": "Direktemeldinger",
-    "Rooms": "Rom",
-    "Sign Up": "Registrer deg",
     "All Rooms": "Alle rom",
     "Search…": "Søk …",
     "Download %(text)s": "Last ned %(text)s",
@@ -132,17 +127,7 @@
     "%(duration)sh": "%(duration)st",
     "%(duration)sd": "%(duration)sd",
     "Join Room": "Bli med i rommet",
-    "Forget room": "Glem rommet",
     "Share room": "Del rommet",
-    "Low priority": "Lavprioritet",
-    "Historical": "Historisk",
-    "Forget this room": "Glem dette rommet",
-    "Re-join": "Bli med igjen",
-    "Join the discussion": "Bli med i diskusjonen",
-    "<userName/> wants to chat": "<userName/> ønsker å chatte",
-    "<userName/> invited you": "<userName/> inviterte deg",
-    "%(roomName)s does not exist.": "%(roomName)s eksisterer ikke.",
-    "%(roomName)s is not accessible at this time.": "%(roomName)s er ikke tilgjengelig for øyeblikket.",
     "This Room": "Dette rommet",
     "Main address": "Hovedadresse",
     "not specified": "ikke spesifisert",
@@ -177,7 +162,6 @@
     "No backup found!": "Ingen sikkerhetskopier ble funnet!",
     "Country Dropdown": "Nedfallsmeny over land",
     "Email (optional)": "E-post (valgfritt)",
-    "Add room": "Legg til et rom",
     "Search failed": "Søket mislyktes",
     "No more results": "Ingen flere resultater",
     "Return to login screen": "Gå tilbake til påloggingsskjermen",
@@ -193,9 +177,6 @@
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "For å rapportere inn et Matrix-relatert sikkerhetsproblem, vennligst less Matrix.org sine <a>Retningslinjer for sikkerhetspublisering</a>.",
     "Scroll to most recent messages": "Hopp bort til de nyeste meldingene",
     "Share Link to User": "Del en lenke til brukeren",
-    "Filter room members": "Filtrer rommets medlemmer",
-    "Replying": "Svarer på",
-    "Start chatting": "Begynn å chatte",
     "You don't currently have any stickerpacks enabled": "Du har ikke skrudd på noen klistremerkepakker for øyeblikket",
     "Add some now": "Legg til noen nå",
     "No other published addresses yet, add one below": "Det er ingen publiserte adresser enda, legg til en nedenfor",
@@ -217,7 +198,6 @@
     "Import room keys": "Importer romnøkler",
     "Go to Settings": "Gå til Innstillinger",
     "Enter passphrase": "Skriv inn passordfrase",
-    "Try to join anyway": "Forsøk å bli med likevel",
     "Room avatar": "Rommets avatar",
     "Start Verification": "Begynn verifisering",
     "Verify User": "Verifiser bruker",
@@ -247,13 +227,6 @@
         "other": "og %(count)s andre …",
         "one": "og én annen …"
     },
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (styrkenivå %(powerLevelNumber)s)",
-    "The conversation continues here.": "Samtalen fortsetter her.",
-    "Reason: %(reason)s": "Årsak: %(reason)s",
-    "You were banned from %(roomName)s by %(memberName)s": "Du ble bannlyst fra %(roomName)s av %(memberName)s",
-    "Do you want to chat with %(user)s?": "Vil du prate med %(user)s?",
-    "Do you want to join %(roomName)s?": "Vil du bli med i %(roomName)s?",
-    "Reject & Ignore user": "Avslå og ignorer brukeren",
     "This room has already been upgraded.": "Dette rommet har allerede blitt oppgradert.",
     "Revoke invite": "Trekk tilbake invitasjonen",
     "Invited by %(sender)s": "Invitert av %(sender)s",
@@ -280,7 +253,6 @@
     "That matches!": "Det samsvarer!",
     "That doesn't match.": "Det samsvarer ikke.",
     "Go back to set it again.": "Gå tilbake for å velge på nytt.",
-    "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s kan ikke forhåndsvises. Vil du bli med i den?",
     "Messages in this room are end-to-end encrypted.": "Meldinger i dette rommet er start-til-slutt-kryptert.",
     "Messages in this room are not end-to-end encrypted.": "Meldinger i dette rommet er ikke start-til-slutt-kryptert.",
     "Use a different passphrase?": "Vil du bruke en annen passfrase?",
@@ -328,7 +300,6 @@
     "Set up Secure Messages": "Sett opp sikre meldinger",
     "To help us prevent this in future, please <a>send us logs</a>.": "For å hjelpe oss med å forhindre dette i fremtiden, vennligst <a>send oss loggfiler</a>.",
     "Lock": "Lås",
-    "Room options": "Rominnstillinger",
     "Your messages are not secure": "Dine meldinger er ikke sikre",
     "Edited at %(date)s": "Redigert den %(date)s",
     "Click to view edits": "Klikk for å vise redigeringer",
@@ -395,7 +366,6 @@
     "Invite to %(roomName)s": "Inviter til %(roomName)s",
     "Resume": "Fortsett",
     "Avatar": "Profilbilde",
-    "Suggested Rooms": "Foreslåtte rom",
     "%(count)s members": {
         "one": "%(count)s medlem",
         "other": "%(count)s medlemmer"
@@ -450,8 +420,6 @@
     "You cancelled verification.": "Du avbrøt verifiseringen.",
     "Ask %(displayName)s to scan your code:": "Be %(displayName)s om å skanne koden:",
     "Failed to deactivate user": "Mislyktes i å deaktivere brukeren",
-    "Show Widgets": "Vis moduler",
-    "Hide Widgets": "Skjul moduler",
     "Dial pad": "Nummerpanel",
     "Zimbabwe": "Zimbabwe",
     "Yemen": "Jemen",
@@ -741,7 +709,10 @@
         "user_avatar": "Profilbilde",
         "authentication": "Autentisering",
         "public_space": "Offentlig område",
-        "private_space": "Privat område"
+        "private_space": "Privat område",
+        "rooms": "Rom",
+        "low_priority": "Lavprioritet",
+        "historical": "Historisk"
     },
     "action": {
         "continue": "Fortsett",
@@ -899,7 +870,11 @@
             "emoji_a11y": "Auto-fullfør emojier",
             "@room_description": "Varsle hele rommet",
             "user_description": "Brukere"
-        }
+        },
+        "room_upgraded_link": "Samtalen fortsetter her.",
+        "poll_button_no_perms_title": "Tillatelse kreves",
+        "format_italics": "Kursiv",
+        "replying_title": "Svarer på"
     },
     "Code": "Kode",
     "power_level": {
@@ -1570,7 +1545,9 @@
         "notification_options": "Varselsinnstillinger",
         "failed_remove_tag": "Kunne ikke fjerne tagg %(tagName)s fra rommet",
         "failed_add_tag": "Kunne ikke legge til tagg %(tagName)s til rom",
-        "breadcrumbs_label": "Nylig besøkte rom"
+        "breadcrumbs_label": "Nylig besøkte rom",
+        "add_room_label": "Legg til et rom",
+        "suggested_rooms_heading": "Foreslåtte rom"
     },
     "onboarding": {
         "has_avatar_label": "Flott, det vil hjelp folk å ha tillit til at det er deg",
@@ -1704,9 +1681,31 @@
             "unfavourite": "Favorittmerket",
             "favourite": "Favoritt",
             "low_priority": "Lav Prioritet",
-            "forget": "Glem rommet"
+            "forget": "Glem rommet",
+            "title": "Rominnstillinger"
         },
-        "invite_this_room": "Inviter til dette rommet"
+        "invite_this_room": "Inviter til dette rommet",
+        "header": {
+            "forget_room_button": "Glem rommet",
+            "hide_widgets_button": "Skjul moduler",
+            "show_widgets_button": "Vis moduler"
+        },
+        "join_button_account": "Registrer deg",
+        "kick_reason": "Årsak: %(reason)s",
+        "forget_room": "Glem dette rommet",
+        "rejoin_button": "Bli med igjen",
+        "banned_from_room_by": "Du ble bannlyst fra %(roomName)s av %(memberName)s",
+        "3pid_invite_error_invite_action": "Forsøk å bli med likevel",
+        "join_the_discussion": "Bli med i diskusjonen",
+        "dm_invite_title": "Vil du prate med %(user)s?",
+        "dm_invite_subtitle": "<userName/> ønsker å chatte",
+        "dm_invite_action": "Begynn å chatte",
+        "invite_title": "Vil du bli med i %(roomName)s?",
+        "invite_subtitle": "<userName/> inviterte deg",
+        "invite_reject_ignore": "Avslå og ignorer brukeren",
+        "no_peek_join_prompt": "%(roomName)s kan ikke forhåndsvises. Vil du bli med i den?",
+        "not_found_title_name": "%(roomName)s eksisterer ikke.",
+        "inaccessible_name": "%(roomName)s er ikke tilgjengelig for øyeblikket."
     },
     "file_panel": {
         "peek_note": "Du må bli med i rommet for å se filene dens"
@@ -1805,5 +1804,10 @@
         "use_im": "Bruk en integreringsbehandler til å behandle botter, moduler, og klistremerkepakker.",
         "manage_title": "Behandle integreringer",
         "explainer": "Integreringsbehandlere mottar oppsettsdata, og kan endre på moduler, sende rominvitasjoner, og bestemme styrkenivåer på dine vegne."
+    },
+    "member_list": {
+        "invited_list_heading": "Invitert",
+        "filter_placeholder": "Filtrer rommets medlemmer",
+        "power_label": "%(userName)s (styrkenivå %(powerLevelNumber)s)"
     }
 }

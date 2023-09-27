@@ -1,5 +1,4 @@
 {
-    "Permission Required": "Tasiregt tlaq",
     "Sun": "Iṭij",
     "Mon": "Ari",
     "Tue": "Ara",
@@ -42,7 +41,6 @@
     "Folder": "Akaram",
     "Show more": "Sken-d ugar",
     "Warning!": "Ɣur-k·m!",
-    "Sign Up": "Jerred",
     "Are you sure?": "Tebɣiḍ s tidet?",
     "Sunday": "Acer",
     "Monday": "Arim",
@@ -150,24 +148,11 @@
         "other": "d %(count)s wiyaḍ...",
         "one": "d wayeḍ-nniḍen..."
     },
-    "Filter room members": "Sizdeg iɛeggalen n texxamt",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (i iǧehden %(powerLevelNumber)s",
-    "Italics": "Uknan",
-    "Replying": "Tiririt",
     "(~%(count)s results)": {
         "one": "(~%(count)s igmaḍ)",
         "other": "(~%(count)s igmaḍ)"
     },
     "Join Room": "Rnu ɣer texxamt",
-    "Forget room": "Tettuḍ taxxamt",
-    "Rooms": "Timɣiwent",
-    "Join the conversation with an account": "Ttekki deg udiwenni s umiḍan",
-    "Re-join": "Ales attekki",
-    "Try to join anyway": "Ɣas akken ɛreḍ ad tettekkiḍ",
-    "Join the discussion": "Ttekki deg udiwenni",
-    "Start chatting": "Bdu adiwenni",
-    "%(roomName)s is not accessible at this time.": "%(roomName)s ulac anekcum ɣer-s akka tura.",
-    "Add room": "Rnu taxxamt",
     "This Room": "Taxxamt-a",
     "Search…": "Nadi…",
     "Add some now": "Rnu kra tura",
@@ -285,10 +270,6 @@
     "Guitar": "Tagitaṛt",
     "Trumpet": "Lɣiḍa",
     "Bell": "Anayna",
-    "Forget this room": "Ttu taxxamt-a",
-    "Reject & Ignore user": "Agi & Zgel aseqdac",
-    "%(roomName)s does not exist.": "%(roomName)s ulac-it.",
-    "Room options": "Tixtiṛiyin n texxamt",
     "All Rooms": "Akk tixxamin",
     "Error creating address": "Tuccḍa deg tmerna n tensa",
     "Error removing address": "Tuccḍa deg tukksa n tensa",
@@ -367,10 +348,6 @@
     "Encrypted by an unverified session": "Yettuwgelhen s tɣimit ur nettwasenqed ara",
     "Unencrypted": "Ur yettwawgelhen ara",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "Asesteb n yizen-a awgelhen ur yettwaḍman ara deg yibenk-a.",
-    "Invited": "Yettwancad",
-    "The conversation continues here.": "Adiwenni yettkemmil dagi.",
-    "This room has been replaced and is no longer active.": "Taxxamt-a ad tettusmelsi, dayen d tarurmidt.",
-    "You do not have permission to post to this room": "Ur tesεiḍ ara tasiregt ad d-tsuffɣeḍ deg texxamt-a",
     "%(duration)ss": "%(duration)ss",
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)sh",
@@ -378,24 +355,7 @@
     "Unnamed room": "Taxxamt war isem",
     "Share room": "Bḍu taxxamt",
     "Create new room": "Rnu taxxamt tamaynut",
-    "Low priority": "Tazwart taddayt",
-    "Historical": "Amazray",
-    "Reason: %(reason)s": "Taɣzint: %(reason)s",
-    "You were banned from %(roomName)s by %(memberName)s": "Tettwaɛezleḍ-d seg %(roomName)s sɣur %(memberName)s",
-    "Something went wrong with your invite to %(roomName)s": "Yella wayen ur nteddu ara akken ilaq d tinubga-ik·im ɣer %(roomName)s",
     "unknown error code": "tangalt n tuccḍa tarussint",
-    "You can only join it with a working invite.": "Tzemreḍ kan ad ternuḍ ɣer-s ala s tinubga n uxeddim.",
-    "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "Tinubga-a ɣer %(roomName)s tettwazen i %(email)s ur nettwacudd ara d umiḍan-ik·im",
-    "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Qqen imayl-a ɣer umiḍan-ik·im deg yiɣewwaren i wakken ad d-tremseḍ tinubgiwin srid deg %(brand)s.",
-    "This invite to %(roomName)s was sent to %(email)s": "Tinubga-a ɣer %(roomName)s tettwazen i %(email)s",
-    "Use an identity server in Settings to receive invites directly in %(brand)s.": "Seqdec aqeddac n timagit deg yiɣewwaren i wakken ad d-tremseḍ tinubgiwin srid deg %(brand)s.",
-    "Share this email in Settings to receive invites directly in %(brand)s.": "Bḍu imayl-a deg yiɣewwaren i wakken ad d-tremseḍ tinubgiwin srid deg %(brand)s.",
-    "Do you want to chat with %(user)s?": "Tebɣiḍ ad temmeslayeḍ d %(user)s?",
-    "<userName/> wants to chat": "<userName/> yebɣa ad immeslay",
-    "Do you want to join %(roomName)s?": "Tebɣiḍ ad tettekkiḍ deg %(roomName)s?",
-    "<userName/> invited you": "<userName/> inced-ik·im",
-    "You're previewing %(roomName)s. Want to join it?": "Tessenqadeḍ %(roomName)s. Tebɣiḍ ad ternuḍ ɣur-s?",
-    "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s ur tezmir ara ad tettwasenqed. Tebɣiḍ ad ternuḍ ɣer-s?",
     "This room has already been upgraded.": "Taxxamt-a tettuleqqam yakan.",
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Taxxamt-a tesedday lqem n texxamt <roomVersion />, i yecreḍ uqeddac-a agejdan <i>ur yerkid ara</i>.",
     "Only room administrators will see this warning": "Ala inedbalen kan n texxamt ara iwalin tuccḍa-a",
@@ -920,7 +880,10 @@
         "profile": "Amaɣnu",
         "display_name": "Sken isem",
         "user_avatar": "Tugna n umaɣnu",
-        "authentication": "Asesteb"
+        "authentication": "Asesteb",
+        "rooms": "Timɣiwent",
+        "low_priority": "Tazwart taddayt",
+        "historical": "Amazray"
     },
     "action": {
         "continue": "Kemmel",
@@ -1088,7 +1051,13 @@
             "room_a11y": "Asmad awurman n texxamt",
             "user_description": "Iseqdacen",
             "user_a11y": "Asmad awurman n useqdac"
-        }
+        },
+        "room_upgraded_link": "Adiwenni yettkemmil dagi.",
+        "room_upgraded_notice": "Taxxamt-a ad tettusmelsi, dayen d tarurmidt.",
+        "no_perms_notice": "Ur tesεiḍ ara tasiregt ad d-tsuffɣeḍ deg texxamt-a",
+        "poll_button_no_perms_title": "Tasiregt tlaq",
+        "format_italics": "Uknan",
+        "replying_title": "Tiririt"
     },
     "Code": "Tangalt",
     "power_level": {
@@ -1934,7 +1903,8 @@
         "notification_options": "Tixtiṛiyin n wulɣu",
         "failed_remove_tag": "Tukksa n tebzimt %(tagName)s seg texxamt ur yeddi ara",
         "failed_add_tag": "Timerna n tebzimt %(tagName)s ɣer texxamt ur yeddi ara",
-        "breadcrumbs_empty": "Ulac taxxamt yemmeẓren melmi kan"
+        "breadcrumbs_empty": "Ulac taxxamt yemmeẓren melmi kan",
+        "add_room_label": "Rnu taxxamt"
     },
     "report_content": {
         "missing_reason": "Ttxil-k·m ini-aɣ-d ayɣer i d-tettazneḍ alɣu.",
@@ -2087,9 +2057,38 @@
             "unfavourite": "Yettusmenyaf",
             "favourite": "Asmenyif",
             "low_priority": "Tazwart taddayt",
-            "forget": "Tettuḍ taxxamt"
+            "forget": "Tettuḍ taxxamt",
+            "title": "Tixtiṛiyin n texxamt"
         },
-        "invite_this_room": "Nced-d ɣer texxamt-a"
+        "invite_this_room": "Nced-d ɣer texxamt-a",
+        "header": {
+            "forget_room_button": "Tettuḍ taxxamt"
+        },
+        "join_title_account": "Ttekki deg udiwenni s umiḍan",
+        "join_button_account": "Jerred",
+        "kick_reason": "Taɣzint: %(reason)s",
+        "forget_room": "Ttu taxxamt-a",
+        "rejoin_button": "Ales attekki",
+        "banned_from_room_by": "Tettwaɛezleḍ-d seg %(roomName)s sɣur %(memberName)s",
+        "3pid_invite_error_title_room": "Yella wayen ur nteddu ara akken ilaq d tinubga-ik·im ɣer %(roomName)s",
+        "3pid_invite_error_invite_subtitle": "Tzemreḍ kan ad ternuḍ ɣer-s ala s tinubga n uxeddim.",
+        "3pid_invite_error_invite_action": "Ɣas akken ɛreḍ ad tettekkiḍ",
+        "join_the_discussion": "Ttekki deg udiwenni",
+        "3pid_invite_email_not_found_account_room": "Tinubga-a ɣer %(roomName)s tettwazen i %(email)s ur nettwacudd ara d umiḍan-ik·im",
+        "link_email_to_receive_3pid_invite": "Qqen imayl-a ɣer umiḍan-ik·im deg yiɣewwaren i wakken ad d-tremseḍ tinubgiwin srid deg %(brand)s.",
+        "invite_sent_to_email_room": "Tinubga-a ɣer %(roomName)s tettwazen i %(email)s",
+        "3pid_invite_no_is_subtitle": "Seqdec aqeddac n timagit deg yiɣewwaren i wakken ad d-tremseḍ tinubgiwin srid deg %(brand)s.",
+        "invite_email_mismatch_suggestion": "Bḍu imayl-a deg yiɣewwaren i wakken ad d-tremseḍ tinubgiwin srid deg %(brand)s.",
+        "dm_invite_title": "Tebɣiḍ ad temmeslayeḍ d %(user)s?",
+        "dm_invite_subtitle": "<userName/> yebɣa ad immeslay",
+        "dm_invite_action": "Bdu adiwenni",
+        "invite_title": "Tebɣiḍ ad tettekkiḍ deg %(roomName)s?",
+        "invite_subtitle": "<userName/> inced-ik·im",
+        "invite_reject_ignore": "Agi & Zgel aseqdac",
+        "peek_join_prompt": "Tessenqadeḍ %(roomName)s. Tebɣiḍ ad ternuḍ ɣur-s?",
+        "no_peek_join_prompt": "%(roomName)s ur tezmir ara ad tettwasenqed. Tebɣiḍ ad ternuḍ ɣer-s?",
+        "not_found_title_name": "%(roomName)s ulac-it.",
+        "inaccessible_name": "%(roomName)s ulac anekcum ɣer-s akka tura."
     },
     "file_panel": {
         "guest_note": "Ilaq-ak·am <a>ad teskelseḍ</a> i wakken ad tesxedmeḍ tamahilt-a",
@@ -2223,5 +2222,10 @@
         "description_optional": "Aseqdec n uqeddac n timagit d afrayan. Ma yella tferneḍ ur tesseqdaceḍ ara aqeddac n timagit, dayen ur tettuɣaleḍ ara ad tettwafeḍ sɣur iseqdac wiyaḍ rnu ur tettizmireḍ ara ad d-necdeḍ s yimayl neɣ s tiliɣri.",
         "do_not_use": "Ur seqdac ara aqeddac n timagt",
         "url_field_label": "Sekcem aqeddac n timagit amaynut"
+    },
+    "member_list": {
+        "invited_list_heading": "Yettwancad",
+        "filter_placeholder": "Sizdeg iɛeggalen n texxamt",
+        "power_label": "%(userName)s (i iǧehden %(powerLevelNumber)s"
     }
 }

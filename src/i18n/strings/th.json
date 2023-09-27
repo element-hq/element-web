@@ -1,7 +1,6 @@
 {
     "Decrypt %(text)s": "ถอดรหัส %(text)s",
     "Download %(text)s": "ดาวน์โหลด %(text)s",
-    "Low priority": "ความสำคัญต่ำ",
     "unknown error code": "รหัสข้อผิดพลาดที่ไม่รู้จัก",
     "Failed to forget room %(errCode)s": "การลืมห้องล้มเหลว %(errCode)s",
     "%(items)s and %(lastItem)s": "%(items)s และ %(lastItem)s",
@@ -18,11 +17,7 @@
     "Failed to ban user": "การแบนผู้ใช้ล้มเหลว",
     "Failed to reject invite": "การปฏิเสธคำเชิญล้มเหลว",
     "Failed to reject invitation": "การปฏิเสธคำเชิญล้มเหลว",
-    "Filter room members": "กรองสมาชิกห้อง",
-    "Forget room": "ลืมห้อง",
-    "Historical": "ประวัติแชทเก่า",
     "Invalid file%(extra)s": "ไฟล์ %(extra)s ไม่ถูกต้อง",
-    "Invited": "เชิญแล้ว",
     "Join Room": "เข้าร่วมห้อง",
     "Jump to first unread message.": "ข้ามไปยังข้อความแรกที่ยังไม่ได้อ่าน",
     "Moderator": "ผู้ช่วยดูแล",
@@ -32,7 +27,6 @@
     "Please check your email and click on the link it contains. Once this is done, click continue.": "กรุณาเช็คอีเมลและคลิกลิงก์ข้างใน หลังจากนั้น คลิกดำเนินการต่อ",
     "Reject invitation": "ปฏิเสธคำเชิญ",
     "Return to login screen": "กลับไปยังหน้าลงชื่อเข้าใช้",
-    "Rooms": "ห้องสนทนา",
     "Search failed": "การค้นหาล้มเหลว",
     "Server may be unavailable, overloaded, or search timed out :(": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือการค้นหาหมดเวลา :(",
     "Create new room": "สร้างห้องใหม่",
@@ -76,9 +70,7 @@
     },
     "A new password must be entered.": "กรุณากรอกรหัสผ่านใหม่",
     "Custom level": "กำหนดระดับเอง",
-    "%(roomName)s does not exist.": "ไม่มีห้อง %(roomName)s อยู่จริง",
     "Enter passphrase": "กรอกรหัสผ่าน",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (ระดับอำนาจ %(powerLevelNumber)s)",
     "Verification Pending": "รอการตรวจสอบ",
     "Error decrypting image": "เกิดข้อผิดพลาดในการถอดรหัสรูป",
     "Error decrypting video": "เกิดข้อผิดพลาดในการถอดรหัสวิดิโอ",
@@ -105,7 +97,6 @@
     "A connection error occurred while trying to contact the server.": "เกิดข้อผิดพลาดในการเชื่อมต่อขณะพยายามติดต่อกับเซิร์ฟเวอร์.",
     "Your area is experiencing difficulties connecting to the internet.": "พื้นที่ของคุณประสบปัญหาในการเชื่อมต่ออินเทอร์เน็ต.",
     "The server has denied your request.": "เซิร์ฟเวอร์ปฏิเสธคำขอของคุณ.",
-    "Permission Required": "ต้องได้รับอนุญาต",
     "Session ID": "รหัสเซสชัน",
     "Encryption not enabled": "ไม่ได้เปิดใช้งานการเข้ารหัส",
     "Deactivate user": "ปิดใช้งานผู้ใช้",
@@ -208,7 +199,10 @@
         "advanced": "ขึ้นสูง",
         "general": "ทั่วไป",
         "profile": "โปรไฟล์",
-        "authentication": "การยืนยันตัวตน"
+        "authentication": "การยืนยันตัวตน",
+        "rooms": "ห้องสนทนา",
+        "low_priority": "ความสำคัญต่ำ",
+        "historical": "ประวัติแชทเก่า"
     },
     "action": {
         "continue": "ดำเนินการต่อ",
@@ -265,7 +259,8 @@
         "autocomplete": {
             "command_description": "คำสั่ง",
             "user_description": "ผู้ใช้"
-        }
+        },
+        "poll_button_no_perms_title": "ต้องได้รับอนุญาต"
     },
     "Link": "ลิงค์",
     "Code": "โค้ด",
@@ -544,7 +539,11 @@
             "favourite": "รายการโปรด",
             "low_priority": "ความสำคัญต่ำ"
         },
-        "invite_this_room": "เชิญเข้าห้องนี้"
+        "invite_this_room": "เชิญเข้าห้องนี้",
+        "header": {
+            "forget_room_button": "ลืมห้อง"
+        },
+        "not_found_title_name": "ไม่มีห้อง %(roomName)s อยู่จริง"
     },
     "failed_load_async_component": "ไม่สามารถโหลดได้! ตรวจสอบการเชื่อมต่อเครือข่ายของคุณแล้วลองอีกครั้ง.",
     "upload_failed_generic": "ไฟล์ '%(fileName)s' อัปโหลดไม่สำเร็จ.",
@@ -596,5 +595,10 @@
     },
     "encryption": {
         "not_supported": "<ไม่รองรับ>"
+    },
+    "member_list": {
+        "invited_list_heading": "เชิญแล้ว",
+        "filter_placeholder": "กรองสมาชิกห้อง",
+        "power_label": "%(userName)s (ระดับอำนาจ %(powerLevelNumber)s)"
     }
 }

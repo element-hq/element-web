@@ -48,8 +48,6 @@ const filterConditions: Record<TagID, MSC3575Filter> = {
     [DefaultTagID.Favourite]: {
         tags: ["m.favourite"],
     },
-    // TODO https://github.com/vector-im/element-web/issues/23207
-    // DefaultTagID.SavedItems,
     [DefaultTagID.DM]: {
         is_dm: true,
         is_invite: false,

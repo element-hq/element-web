@@ -1,6 +1,5 @@
 {
     "All Rooms": "सारे कमरे",
-    "Permission Required": "अनुमति आवश्यक है",
     "Sun": "रवि",
     "Mon": "सोम",
     "Tue": "मंगल",
@@ -45,12 +44,6 @@
         "other": "और %(count)s अन्य ...",
         "one": "और एक अन्य..."
     },
-    "Invited": "आमंत्रित",
-    "Filter room members": "रूम के सदस्यों को फ़िल्टर करें",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (शक्ति %(powerLevelNumber)s)",
-    "This room has been replaced and is no longer active.": "इस रूम को बदल दिया गया है और अब सक्रिय नहीं है।",
-    "The conversation continues here.": "वार्तालाप यहां जारी है।",
-    "You do not have permission to post to this room": "आपको इस रूम में पोस्ट करने की अनुमति नहीं है",
     "%(duration)ss": "%(duration)s सेकंड",
     "%(duration)sm": "%(duration)s मिनट",
     "%(duration)sh": "%(duration)s घंटा",
@@ -589,7 +582,11 @@
     },
     "composer": {
         "placeholder_reply_encrypted": "एक एन्क्रिप्टेड उत्तर भेजें …",
-        "placeholder_encrypted": "एक एन्क्रिप्टेड संदेश भेजें …"
+        "placeholder_encrypted": "एक एन्क्रिप्टेड संदेश भेजें …",
+        "room_upgraded_link": "वार्तालाप यहां जारी है।",
+        "room_upgraded_notice": "इस रूम को बदल दिया गया है और अब सक्रिय नहीं है।",
+        "no_perms_notice": "आपको इस रूम में पोस्ट करने की अनुमति नहीं है",
+        "poll_button_no_perms_title": "अनुमति आवश्यक है"
     },
     "encryption": {
         "verification": {
@@ -759,5 +756,10 @@
         "default": "डिफ़ॉल्ट",
         "all_messages": "सारे संदेश"
     },
-    "room_summary_card_back_action_label": "रूम जानकारी"
+    "room_summary_card_back_action_label": "रूम जानकारी",
+    "member_list": {
+        "invited_list_heading": "आमंत्रित",
+        "filter_placeholder": "रूम के सदस्यों को फ़िल्टर करें",
+        "power_label": "%(userName)s (शक्ति %(powerLevelNumber)s)"
+    }
 }

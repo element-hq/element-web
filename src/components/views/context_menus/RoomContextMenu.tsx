@@ -164,7 +164,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
             <IconizedContextMenuCheckbox
                 onClick={(e) => onTagRoom(e, DefaultTagID.LowPriority)}
                 active={isLowPriority}
-                label={_t("Low priority")}
+                label={_t("common|low_priority")}
                 iconClassName="mx_RoomTile_iconArrowDown"
             />
         );

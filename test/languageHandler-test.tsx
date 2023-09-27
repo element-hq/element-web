@@ -171,7 +171,7 @@ describe("languageHandler", () => {
 
 describe("languageHandler JSX", function () {
     // See setupLanguage.ts for how we are stubbing out translations to provide fixture data for these tests
-    const basicString = "Rooms";
+    const basicString = "common|rooms";
     const selfClosingTagSub = "Accept <policyLink /> to continue:" as TranslationKey;
     const textInTagSub = "<a>Upgrade</a> to your own domain" as TranslationKey;
     const plurals = "and %(count)s others...";

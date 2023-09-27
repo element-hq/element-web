@@ -2,20 +2,14 @@
     "A new password must be entered.": "Deve ser introduzida uma nova palavra-passe.",
     "Are you sure you want to reject the invitation?": "Você tem certeza que deseja rejeitar este convite?",
     "Failed to reject invitation": "Falha ao tentar rejeitar convite",
-    "Filter room members": "Filtrar integrantes da sala",
-    "Forget room": "Esquecer sala",
-    "Historical": "Histórico",
-    "Low priority": "Baixa prioridade",
     "Moderator": "Moderador/a",
     "New passwords must match each other.": "Novas palavras-passe devem coincidir.",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Por favor verifique seu email e clique no link enviado. Quando finalizar este processo, clique para continuar.",
     "Reject invitation": "Rejeitar convite",
     "Return to login screen": "Retornar à tela de login",
-    "Rooms": "Salas",
     "Session ID": "Identificador de sessão",
     "unknown error code": "código de erro desconhecido",
     "Verification Pending": "Verificação pendente",
-    "You do not have permission to post to this room": "Você não tem permissão de postar nesta sala",
     "Sun": "Dom",
     "Mon": "Seg",
     "Tue": "Ter",
@@ -87,7 +81,6 @@
     "Add an Integration": "Adicionar uma integração",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Este processo faz com que você possa importar as chaves de criptografia que tinha previamente exportado de outro cliente Matrix. Você poderá então descriptografar todas as mensagens que o outro cliente pôde criptografar.",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?",
-    "Invited": "Convidada(o)",
     "Are you sure you want to leave the room '%(roomName)s'?": "Você tem certeza que deseja sair da sala '%(roomName)s'?",
     "Custom level": "Nível personalizado",
     "Create new room": "Criar nova sala",
@@ -97,14 +90,11 @@
     },
     "Uploading %(filename)s": "Enviando o arquivo %(filename)s",
     "Admin Tools": "Ferramentas de Administração",
-    "%(roomName)s does not exist.": "%(roomName)s não existe.",
     "(~%(count)s results)": {
         "other": "(~%(count)s resultados)",
         "one": "(~%(count)s resultado)"
     },
     "Home": "Início",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (nível de permissão %(powerLevelNumber)s)",
-    "%(roomName)s is not accessible at this time.": "%(roomName)s não está acessível neste momento.",
     "AM": "AM",
     "PM": "PM",
     "This will allow you to reset your password and receive notifications.": "Isto irá permitir-lhe redefinir a sua palavra-passe e receber notificações.",
@@ -146,7 +136,6 @@
     "Albania": "Albânia",
     "Åland Islands": "Ilhas Åland",
     "Afghanistan": "Afeganistão",
-    "Permission Required": "Permissão Requerida",
     "Antigua & Barbuda": "Antígua e Barbuda",
     "Andorra": "Andorra",
     "Cocos (Keeling) Islands": "Ilhas Cocos (Keeling)",
@@ -230,7 +219,6 @@
     "Lesotho": "Lesoto",
     "Maldives": "Maldivas",
     "Mali": "Mali",
-    "<userName/> wants to chat": "<userName/> quer falar",
     "Start a conversation with someone using their name or username (like <userId/>).": "Comece uma conversa com alguém a partir do nome ou nome de utilizador (por exemplo: <userId/>).",
     "Malta": "Malta",
     "Lebanon": "Líbano",
@@ -259,7 +247,6 @@
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Apenas um aviso, se não adicionar um email e depois esquecer a sua palavra-passe, poderá <b>perder permanentemente o acesso à sua conta</b>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Convide alguém a partir do nome, endereço de email, nome de utilizador (como <userId/>) ou <a>partilhe este espaço</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Convide alguém a partir do nome, email ou nome de utilizador (como <userId/>) ou <a>partilhe esta sala</a>.",
-    "<userName/> invited you": "<userName/> convidou-o",
     "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "Ninguém poderá reutilizar o seu nome de utilizador (MXID), incluindo o próprio: este nome de utilizador permanecerá indisponível",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "Comece uma conversa com alguém a partir do nome, endereço de email ou nome de utilizador (por exemplo: <userId/>).",
     "Zambia": "Zâmbia",
@@ -416,7 +403,10 @@
         "copied": "Copiado!",
         "advanced": "Avançado",
         "profile": "Perfil",
-        "authentication": "Autenticação"
+        "authentication": "Autenticação",
+        "rooms": "Salas",
+        "low_priority": "Baixa prioridade",
+        "historical": "Histórico"
     },
     "action": {
         "continue": "Continuar",
@@ -769,7 +759,9 @@
         "autocomplete": {
             "command_description": "Comandos",
             "user_description": "Usuários"
-        }
+        },
+        "no_perms_notice": "Você não tem permissão de postar nesta sala",
+        "poll_button_no_perms_title": "Permissão Requerida"
     },
     "room": {
         "drop_file_prompt": "Arraste um arquivo aqui para enviar",
@@ -777,7 +769,14 @@
             "favourite": "Favorito",
             "low_priority": "Baixa prioridade"
         },
-        "invite_this_room": "Convidar para esta sala"
+        "invite_this_room": "Convidar para esta sala",
+        "header": {
+            "forget_room_button": "Esquecer sala"
+        },
+        "dm_invite_subtitle": "<userName/> quer falar",
+        "invite_subtitle": "<userName/> convidou-o",
+        "not_found_title_name": "%(roomName)s não existe.",
+        "inaccessible_name": "%(roomName)s não está acessível neste momento."
     },
     "file_panel": {
         "guest_note": "Você deve <a>se registrar</a> para poder usar esta funcionalidade",
@@ -908,5 +907,10 @@
         "url_not_https": "O link do servidor de identidade deve começar com HTTPS",
         "error_invalid": "Servidor de Identidade inválido (código de status %(code)s)",
         "disconnect_personal_data_warning_2": "Recomendamos que remova seus endereços de email e números de telefone do servidor de identidade antes de se desconectar."
+    },
+    "member_list": {
+        "invited_list_heading": "Convidada(o)",
+        "filter_placeholder": "Filtrar integrantes da sala",
+        "power_label": "%(userName)s (nível de permissão %(powerLevelNumber)s)"
     }
 }

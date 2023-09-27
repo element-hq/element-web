@@ -6,9 +6,7 @@
     "An error has occurred.": "D’imigh earráid éigin.",
     "A new password must be entered.": "Caithfear focal faire nua a iontráil.",
     "%(items)s and %(lastItem)s": "%(items)s agus %(lastItem)s",
-    "Reject & Ignore user": "Diúltaigh ⁊ Neamaird do úsáideoir",
     "%(weekDayName)s %(time)s": "%(weekDayName)s ar a %(time)s",
-    "Permission Required": "Is Teastáil Cead",
     "Transfer": "Aistrigh",
     "Hold": "Fan",
     "Resume": "Tosaigh arís",
@@ -200,7 +198,6 @@
     "Accepting…": "ag Glacadh leis…",
     "Lock": "Glasáil",
     "Unencrypted": "Gan chriptiú",
-    "Italics": "Iodálach",
     "Success!": "Rath!",
     "Home": "Tús",
     "Removing…": "ag Baint…",
@@ -220,17 +217,12 @@
     "Monday": "Dé Luain",
     "Sunday": "Dé Domhnaigh",
     "Search…": "Cuardaigh…",
-    "Re-join": "Téigh ar ais isteach",
-    "Historical": "Stairiúil",
-    "Rooms": "Seomraí",
-    "Replying": "Ag freagairt",
     "%(duration)sd": "%(duration)sl",
     "%(duration)sh": "%(duration)su",
     "%(duration)sm": "%(duration)sn",
     "%(duration)ss": "%(duration)ss",
     "Light bulb": "Bolgán solais",
     "Thumbs up": "Ordógí suas",
-    "Invited": "Le cuireadh",
     "Demote": "Bain ceadanna",
     "Warning!": "Aire!",
     "Folder": "Fillteán",
@@ -332,9 +324,7 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "Rooms and spaces": "Seomraí agus spásanna",
-    "Low priority": "Tosaíocht íseal",
     "Share room": "Roinn seomra",
-    "Forget room": "Déan dearmad ar an seomra",
     "Join Room": "Téigh isteach an seomra",
     "(~%(count)s results)": {
         "one": "(~%(count)s toradh)",
@@ -420,7 +410,10 @@
         "profile": "Próifíl",
         "display_name": "Ainm Taispeána",
         "user_avatar": "Pictiúr próifíle",
-        "authentication": "Fíordheimhniú"
+        "authentication": "Fíordheimhniú",
+        "rooms": "Seomraí",
+        "low_priority": "Tosaíocht íseal",
+        "historical": "Stairiúil"
     },
     "action": {
         "continue": "Lean ar aghaidh",
@@ -531,7 +524,10 @@
         "autocomplete": {
             "command_description": "Ordú",
             "user_description": "Úsáideoirí"
-        }
+        },
+        "poll_button_no_perms_title": "Is Teastáil Cead",
+        "format_italics": "Iodálach",
+        "replying_title": "Ag freagairt"
     },
     "Code": "Cód",
     "power_level": {
@@ -855,7 +851,12 @@
         "context_menu": {
             "unfavourite": "Roghnaithe",
             "favourite": "Cuir mar ceanán"
-        }
+        },
+        "header": {
+            "forget_room_button": "Déan dearmad ar an seomra"
+        },
+        "rejoin_button": "Téigh ar ais isteach",
+        "invite_reject_ignore": "Diúltaigh ⁊ Neamaird do úsáideoir"
     },
     "labs_mjolnir": {
         "ban_reason": "Neamhairde/Tachta",
@@ -901,5 +902,8 @@
     },
     "create_space": {
         "address_label": "Seoladh"
+    },
+    "member_list": {
+        "invited_list_heading": "Le cuireadh"
     }
 }

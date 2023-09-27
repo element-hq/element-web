@@ -1,8 +1,4 @@
 {
-    "Filter room members": "Filter medlemmer",
-    "Rooms": "Rum",
-    "Low priority": "Lav prioritet",
-    "Historical": "Historisk",
     "New passwords must match each other.": "Nye adgangskoder skal matche hinanden.",
     "A new password must be entered.": "Der skal indtastes en ny adgangskode.",
     "Session ID": "Sessions ID",
@@ -59,7 +55,6 @@
     "Logs sent": "Logfiler sendt",
     "Failed to send logs: ": "Kunne ikke sende logfiler: ",
     "Preparing to send logs": "Forbereder afsendelse af logfiler",
-    "Permission Required": "Tilladelse påkrævet",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s. %(monthName)s %(fullYear)s",
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "Enter passphrase": "Indtast kodeord",
@@ -68,7 +63,6 @@
     "Add a new server": "Tilføj en ny server",
     "Local address": "Lokal adresse",
     "This room has no local addresses": "Dette rum har ingen lokal adresse",
-    "The conversation continues here.": "Samtalen fortsætter her.",
     "France": "Frankrig",
     "Finland": "Finland",
     "Egypt": "Egypten",
@@ -346,7 +340,10 @@
         "off": "Slukket",
         "advanced": "Avanceret",
         "profile": "Profil",
-        "user_avatar": "Profil billede"
+        "user_avatar": "Profil billede",
+        "rooms": "Rum",
+        "low_priority": "Lav prioritet",
+        "historical": "Historisk"
     },
     "action": {
         "continue": "Fortsæt",
@@ -626,7 +623,9 @@
         "placeholder": "Send en besked…",
         "autocomplete": {
             "command_description": "Kommandoer"
-        }
+        },
+        "room_upgraded_link": "Samtalen fortsætter her.",
+        "poll_button_no_perms_title": "Tilladelse påkrævet"
     },
     "voip": {
         "call_failed": "Opkald mislykkedes",
@@ -867,5 +866,8 @@
     },
     "identity_server": {
         "checking": "Tjekker server"
+    },
+    "member_list": {
+        "filter_placeholder": "Filter medlemmer"
     }
 }

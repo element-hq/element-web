@@ -81,7 +81,6 @@ interface IState {
 
 export const TAG_ORDER: TagID[] = [
     DefaultTagID.Invite,
-    DefaultTagID.SavedItems,
     DefaultTagID.Favourite,
     DefaultTagID.DM,
     DefaultTagID.Untagged,
@@ -357,8 +356,8 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                     onClick={openMenu}
                     className="mx_RoomSublist_auxButton"
                     tooltipClassName="mx_RoomSublist_addRoomTooltip"
-                    aria-label={_t("Add room")}
-                    title={_t("Add room")}
+                    aria-label={_t("room_list|add_room_label")}
+                    title={_t("room_list|add_room_label")}
                     isExpanded={menuDisplayed}
                     inputRef={handle}
                 />
@@ -382,11 +381,6 @@ const TAG_AESTHETICS: TagAestheticsMap = {
         isInvite: false,
         defaultHidden: false,
     },
-    [DefaultTagID.SavedItems]: {
-        sectionLabel: _td("Saved Items"),
-        isInvite: false,
-        defaultHidden: false,
-    },
     [DefaultTagID.DM]: {
         sectionLabel: _td("common|people"),
         isInvite: false,
@@ -394,13 +388,13 @@ const TAG_AESTHETICS: TagAestheticsMap = {
         AuxButtonComponent: DmAuxButton,
     },
     [DefaultTagID.Untagged]: {
-        sectionLabel: _td("Rooms"),
+        sectionLabel: _td("common|rooms"),
         isInvite: false,
         defaultHidden: false,
         AuxButtonComponent: UntaggedAuxButton,
     },
     [DefaultTagID.LowPriority]: {
-        sectionLabel: _td("Low priority"),
+        sectionLabel: _td("common|low_priority"),
         isInvite: false,
         defaultHidden: false,
     },
@@ -412,13 +406,13 @@ const TAG_AESTHETICS: TagAestheticsMap = {
 
     // TODO: Replace with archived view: https://github.com/vector-im/element-web/issues/14038
     [DefaultTagID.Archived]: {
-        sectionLabel: _td("Historical"),
+        sectionLabel: _td("common|historical"),
         isInvite: false,
         defaultHidden: true,
     },
 
     [DefaultTagID.Suggested]: {
-        sectionLabel: _td("Suggested Rooms"),
+        sectionLabel: _td("room_list|suggested_rooms_heading"),
         isInvite: false,
         defaultHidden: false,
     },
@@ -654,7 +648,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         onKeyDown={onKeyDownHandler}
                         className="mx_RoomList"
                         role="tree"
-                        aria-label={_t("Rooms")}
+                        aria-label={_t("common|rooms")}
                         ref={this.treeRef}
                     >
                         {sublists}

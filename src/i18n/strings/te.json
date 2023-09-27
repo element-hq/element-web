@@ -1,6 +1,5 @@
 {
     "Admin Tools": "నిర్వాహకుని ఉపకరణాలు",
-    "You do not have permission to post to this room": "మీకు ఈ గదికి పోస్ట్ చేయడానికి అనుమతి లేదు",
     "A new password must be entered.": "కొత్త పాస్ వర్డ్ ను తప్పక నమోదు చేయాలి.",
     "An error has occurred.": "ఒక లోపము సంభవించినది.",
     "Are you sure?": "మీరు చెప్పేది నిజమా?",
@@ -157,7 +156,8 @@
     "composer": {
         "autocomplete": {
             "command_description": "కమ్మండ్స్"
-        }
+        },
+        "no_perms_notice": "మీకు ఈ గదికి పోస్ట్ చేయడానికి అనుమతి లేదు"
     },
     "room_settings": {
         "permissions": {

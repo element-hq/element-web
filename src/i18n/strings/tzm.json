@@ -44,7 +44,6 @@
     "edited": "infel",
     "Home": "Asnubeg",
     "Search…": "Arezzu…",
-    "Re-join": "als-lkem",
     "%(duration)sd": "%(duration)sas",
     "Folder": "Asdaw",
     "Guitar": "Agiṭaṛ",
@@ -187,5 +186,8 @@
     },
     "labs_mjolnir": {
         "rules_empty": "Walu"
+    },
+    "room": {
+        "rejoin_button": "als-lkem"
     }
 }

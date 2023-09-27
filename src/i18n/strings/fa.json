@@ -20,8 +20,6 @@
     "Yesterday": "دیروز",
     "Ok": "تأیید",
     "Set up": "برپایی",
-    "Forget room": "فراموش کردن اتاق",
-    "Filter room members": "فیلتر کردن اعضای اتاق",
     "Failed to ban user": "کاربر مسدود نشد",
     "Error decrypting attachment": "خطا در رمزگشایی پیوست",
     "Email address": "آدرس ایمیل",
@@ -58,7 +56,6 @@
     "Tue": "سه‌شنبه",
     "Mon": "دوشنبه",
     "Sun": "یکشنبه",
-    "Permission Required": "اجازه نیاز است",
     "Moderator": "معاون",
     "Restricted": "ممنوع",
     "Zimbabwe": "زیمبابوه",
@@ -628,55 +625,16 @@
     "Room avatar": "آواتار اتاق",
     "Room Topic": "موضوع اتاق",
     "Room Name": "نام اتاق",
-    "%(roomName)s is not accessible at this time.": "در حال حاضر %(roomName)s قابل دسترسی نیست.",
-    "%(roomName)s does not exist.": "%(roomName)s وجود ندارد.",
-    "%(roomName)s can't be previewed. Do you want to join it?": "پیش بینی %(roomName)s امکان پذیر نیست. آیا می خواهید به آن بپیوندید؟",
-    "You're previewing %(roomName)s. Want to join it?": "شما در حال پیش نمایش %(roomName)s هستید. می خواهید به آن بپیوندید؟",
-    "Reject & Ignore user": "رد کردن و نادیده گرفتن کاربر",
-    "<userName/> invited you": "<userName/> شما را دعوت کرد",
-    "Do you want to join %(roomName)s?": "آیا می خواهید ب %(roomName)s بپیوندید؟",
-    "Start chatting": "گپ زدن را شروع کن",
-    "<userName/> wants to chat": "<userName/> می‌خواهد چت کند",
-    "Do you want to chat with %(user)s?": "آیا می خواهید با %(user)s چت کنید؟",
-    "Share this email in Settings to receive invites directly in %(brand)s.": "برای دریافت مستقیم دعوت در %(brand)s این ایمیل را در تنظیمات به اشتراک بگذارید.",
-    "Use an identity server in Settings to receive invites directly in %(brand)s.": "برای دریافت مستقیم دعوت در %(brand)s یک سرور هویت‌سنجی در تنظیمات مشخص کنید.",
-    "This invite to %(roomName)s was sent to %(email)s": "این دعوت به %(roomName)s به %(email)s ارسال شد",
-    "Link this email with your account in Settings to receive invites directly in %(brand)s.": "برای دریافت مستقیم دعوت در %(brand)s این ایمیل را به حساب خود در تنظیمات متصل کنید.",
-    "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "این دعوت به %(roomName)s به %(email)s ارسال شده است که با حساب شما مرتبط نیست",
-    "Join the discussion": "به بحث بپیوندید",
-    "Try to join anyway": "به هر حال عضو شدن را تلاش کن",
-    "You can only join it with a working invite.": "فقط با یک دعوت نامه معتبر می توانید به آن بپیوندید.",
-    "Something went wrong with your invite to %(roomName)s": "در دعوت شما به %(roomName)s مشکلی پیش آمده است",
-    "You were banned from %(roomName)s by %(memberName)s": "شما از %(roomName)s توسط %(memberName)s محروم شدید",
-    "Re-join": "دوباره بپیوندید",
-    "Forget this room": "فراموش کردن این اتاق",
-    "Reason: %(reason)s": "دلیل: %(reason)s",
-    "Sign Up": "ثبت نام",
-    "Join the conversation with an account": "پیوستن به گفتگو با یک حساب کاربری",
-    "Suggested Rooms": "اتاق‌های پیشنهادی",
-    "Historical": "تاریخی",
-    "Low priority": "اولویت کم",
-    "Add room": "افزودن اتاق",
-    "Rooms": "اتاق‌ها",
     "Open dial pad": "باز کردن صفحه شماره‌گیری",
-    "Show Widgets": "نمایش ابزارک‌ها",
-    "Hide Widgets": "پنهان‌کردن ابزارک‌ها",
     "Join Room": "به اتاق بپیوندید",
     "(~%(count)s results)": {
         "one": "(~%(count)s نتیجه)",
         "other": "(~%(count)s نتیجه)"
     },
-    "Replying": "پاسخ دادن",
     "%(duration)sd": "%(duration)s روز",
     "%(duration)sh": "%(duration)s ساعت",
     "%(duration)sm": "%(duration)s دقیقه",
     "%(duration)ss": "%(duration)s ثانیه",
-    "Italics": "مورب",
-    "You do not have permission to post to this room": "شما اجازه ارسال در این اتاق را ندارید",
-    "This room has been replaced and is no longer active.": "این اتاق جایگزین شده‌است و دیگر فعال نیست.",
-    "The conversation continues here.": "گفتگو در اینجا ادامه دارد.",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (سطح قدرت %(powerLevelNumber)s)",
-    "Invited": "دعوت شد",
     "and %(count)s others...": {
         "one": "و یکی دیگر ...",
         "other": "و %(count)s مورد دیگر ..."
@@ -802,7 +760,6 @@
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "این اتاق از نسخه اتاق <roomVersion /> استفاده می کند، که این سرور آن را به عنوان <i> ناپایدار</i> علامت گذاری کرده است.",
     "This room has already been upgraded.": "این اتاق قبلاً ارتقا یافته است.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "با ارتقا این اتاق نسخه فعلی اتاق خاموش شده و یک اتاق ارتقا یافته به همین نام ایجاد می شود.",
-    "Room options": "تنظیمات اتاق",
     "Create a space": "ساختن یک محیط",
     "Folder": "پوشه",
     "Headphones": "هدفون",
@@ -993,7 +950,6 @@
     },
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s و %(space2Name)s",
     "Close sidebar": "بستن نوارکناری",
-    "Hide stickers": "پنهان سازی استیکرها",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "عبارت امنیتی خود را وارد کنید و یا <button>کلید امنیتی خود را استفاده کنید</button>.",
     "Developer": "توسعه دهنده",
     "Experimental": "تجربی",
@@ -1085,7 +1041,10 @@
         "user_avatar": "تصویر پروفایل",
         "authentication": "احراز هویت",
         "public_space": "محیط عمومی",
-        "private_space": "محیط خصوصی"
+        "private_space": "محیط خصوصی",
+        "rooms": "اتاق‌ها",
+        "low_priority": "اولویت کم",
+        "historical": "تاریخی"
     },
     "action": {
         "continue": "ادامه",
@@ -1310,7 +1269,14 @@
             "space_a11y": "تکمیل خودکار فضای کاری",
             "user_description": "کاربران",
             "user_a11y": "تکمیل خودکار کاربر"
-        }
+        },
+        "room_upgraded_link": "گفتگو در اینجا ادامه دارد.",
+        "room_upgraded_notice": "این اتاق جایگزین شده‌است و دیگر فعال نیست.",
+        "no_perms_notice": "شما اجازه ارسال در این اتاق را ندارید",
+        "close_sticker_picker": "پنهان سازی استیکرها",
+        "poll_button_no_perms_title": "اجازه نیاز است",
+        "format_italics": "مورب",
+        "replying_title": "پاسخ دادن"
     },
     "Code": "کد",
     "power_level": {
@@ -2369,7 +2335,9 @@
         "failed_remove_tag": "خطا در حذف کلیدواژه‌ی %(tagName)s از گپ",
         "failed_add_tag": "در افزودن تگ %(tagName)s موفقیت‌آمیز نبود",
         "breadcrumbs_label": "اتاق‌هایی که به تازگی بازدید کرده‌اید",
-        "breadcrumbs_empty": "اخیراً از اتاقی بازدید نشده است"
+        "breadcrumbs_empty": "اخیراً از اتاقی بازدید نشده است",
+        "add_room_label": "افزودن اتاق",
+        "suggested_rooms_heading": "اتاق‌های پیشنهادی"
     },
     "report_content": {
         "missing_reason": "لطفا توضیح دهید که چرا گزارش می‌دهید.",
@@ -2699,9 +2667,40 @@
             "unfavourite": "مورد علاقه",
             "favourite": "علاقه‌مندی‌ها",
             "low_priority": "کم اهمیت",
-            "forget": "اتاق را فراموش کن"
+            "forget": "اتاق را فراموش کن",
+            "title": "تنظیمات اتاق"
         },
-        "invite_this_room": "دعوت به این گپ"
+        "invite_this_room": "دعوت به این گپ",
+        "header": {
+            "forget_room_button": "فراموش کردن اتاق",
+            "hide_widgets_button": "پنهان‌کردن ابزارک‌ها",
+            "show_widgets_button": "نمایش ابزارک‌ها"
+        },
+        "join_title_account": "پیوستن به گفتگو با یک حساب کاربری",
+        "join_button_account": "ثبت نام",
+        "kick_reason": "دلیل: %(reason)s",
+        "forget_room": "فراموش کردن این اتاق",
+        "rejoin_button": "دوباره بپیوندید",
+        "banned_from_room_by": "شما از %(roomName)s توسط %(memberName)s محروم شدید",
+        "3pid_invite_error_title_room": "در دعوت شما به %(roomName)s مشکلی پیش آمده است",
+        "3pid_invite_error_invite_subtitle": "فقط با یک دعوت نامه معتبر می توانید به آن بپیوندید.",
+        "3pid_invite_error_invite_action": "به هر حال عضو شدن را تلاش کن",
+        "join_the_discussion": "به بحث بپیوندید",
+        "3pid_invite_email_not_found_account_room": "این دعوت به %(roomName)s به %(email)s ارسال شده است که با حساب شما مرتبط نیست",
+        "link_email_to_receive_3pid_invite": "برای دریافت مستقیم دعوت در %(brand)s این ایمیل را به حساب خود در تنظیمات متصل کنید.",
+        "invite_sent_to_email_room": "این دعوت به %(roomName)s به %(email)s ارسال شد",
+        "3pid_invite_no_is_subtitle": "برای دریافت مستقیم دعوت در %(brand)s یک سرور هویت‌سنجی در تنظیمات مشخص کنید.",
+        "invite_email_mismatch_suggestion": "برای دریافت مستقیم دعوت در %(brand)s این ایمیل را در تنظیمات به اشتراک بگذارید.",
+        "dm_invite_title": "آیا می خواهید با %(user)s چت کنید؟",
+        "dm_invite_subtitle": "<userName/> می‌خواهد چت کند",
+        "dm_invite_action": "گپ زدن را شروع کن",
+        "invite_title": "آیا می خواهید ب %(roomName)s بپیوندید؟",
+        "invite_subtitle": "<userName/> شما را دعوت کرد",
+        "invite_reject_ignore": "رد کردن و نادیده گرفتن کاربر",
+        "peek_join_prompt": "شما در حال پیش نمایش %(roomName)s هستید. می خواهید به آن بپیوندید؟",
+        "no_peek_join_prompt": "پیش بینی %(roomName)s امکان پذیر نیست. آیا می خواهید به آن بپیوندید؟",
+        "not_found_title_name": "%(roomName)s وجود ندارد.",
+        "inaccessible_name": "در حال حاضر %(roomName)s قابل دسترسی نیست."
     },
     "file_panel": {
         "guest_note": "برای استفاده از این قابلیت باید <a>ثبت نام</a> کنید",
@@ -2883,5 +2882,10 @@
         "description_optional": "استفاده از سرور هویت‌سنجی اختیاری است. اگر تصمیم بگیرید از سرور هویت‌سنجی استفاده نکنید، شما با استفاده از آدرس ایمیل و شماره تلفن قابل یافته‌شدن و دعوت‌شدن توسط سایر کاربران نخواهید بود.",
         "do_not_use": "از سرور هویت‌سنجی استفاده نکن",
         "url_field_label": "یک سرور هویت‌سنجی جدید وارد کنید"
+    },
+    "member_list": {
+        "invited_list_heading": "دعوت شد",
+        "filter_placeholder": "فیلتر کردن اعضای اتاق",
+        "power_label": "%(userName)s (سطح قدرت %(powerLevelNumber)s)"
     }
 }

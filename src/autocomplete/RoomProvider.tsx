@@ -134,7 +134,7 @@ export default class RoomProvider extends AutocompleteProvider {
     }
 
     public getName(): string {
-        return _t("Rooms");
+        return _t("common|rooms");
     }
 
     public renderCompletions(completions: React.ReactNode[]): React.ReactNode {

@@ -169,7 +169,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                     identityAccessToken!,
                 );
                 if (!("mxid" in result)) {
-                    throw new UserFriendlyError("Unable to find user by email");
+                    throw new UserFriendlyError("room|error_3pid_invite_email_lookup");
                 }
                 this.setState({ invitedEmailMxid: result.mxid });
             } catch (err) {
@@ -329,9 +329,9 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         switch (messageCase) {
             case MessageCase.Joining: {
                 if (this.props.oobData?.roomType || isSpace) {
-                    title = isSpace ? _t("Joining space…") : _t("Joining room…");
+                    title = isSpace ? _t("room|joining_space") : _t("room|joining_room");
                 } else {
-                    title = _t("Joining…");
+                    title = _t("room|joining");
                 }
 
                 showSpinner = true;
@@ -343,7 +343,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 break;
             }
             case MessageCase.Rejecting: {
-                title = _t("Rejecting invite…");
+                title = _t("room|rejecting");
                 showSpinner = true;
                 break;
             }
@@ -353,15 +353,15 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                     ModuleRunner.instance.invoke(RoomViewLifecycle.PreviewRoomNotLoggedIn, opts, this.props.roomId);
                 }
                 if (opts.canJoin) {
-                    title = _t("Join the room to participate");
+                    title = _t("room|join_title");
                     primaryActionLabel = _t("action|join");
                     primaryActionHandler = () => {
                         ModuleRunner.instance.invoke(RoomViewLifecycle.JoinFromRoomPreview, this.props.roomId);
                     };
                 } else {
-                    title = _t("Join the conversation with an account");
+                    title = _t("room|join_title_account");
                     if (SettingsStore.getValue(UIFeature.Registration)) {
-                        primaryActionLabel = _t("Sign Up");
+                        primaryActionLabel = _t("room|join_button_account");
                         primaryActionHandler = this.onRegisterClick;
                     }
                     secondaryActionLabel = _t("action|sign_in");
@@ -371,7 +371,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                     footer = (
                         <div>
                             <Spinner w={20} h={20} />
-                            {_t("Loading preview")}
+                            {_t("room|loading_preview")}
                         </div>
                     );
                 }
@@ -380,16 +380,16 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             case MessageCase.Kicked: {
                 const { memberName, reason } = this.getKickOrBanInfo();
                 if (roomName) {
-                    title = _t("You were removed from %(roomName)s by %(memberName)s", { memberName, roomName });
+                    title = _t("room|kicked_from_room_by", { memberName, roomName });
                 } else {
-                    title = _t("You were removed by %(memberName)s", { memberName });
+                    title = _t("room|kicked_by", { memberName });
                 }
-                subTitle = reason ? _t("Reason: %(reason)s", { reason }) : undefined;
+                subTitle = reason ? _t("room|kick_reason", { reason }) : undefined;
 
                 if (isSpace) {
-                    primaryActionLabel = _t("Forget this space");
+                    primaryActionLabel = _t("room|forget_space");
                 } else {
-                    primaryActionLabel = _t("Forget this room");
+                    primaryActionLabel = _t("room|forget_room");
                 }
                 primaryActionHandler = this.props.onForgetClick;
 
@@ -397,22 +397,20 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                     secondaryActionLabel = primaryActionLabel;
                     secondaryActionHandler = primaryActionHandler;
 
-                    primaryActionLabel = _t("Re-join");
+                    primaryActionLabel = _t("room|rejoin_button");
                     primaryActionHandler = this.props.onJoinClick;
                 }
                 break;
             }
             case MessageCase.RequestDenied: {
-                title = _t("You have been denied access");
+                title = _t("room|knock_denied_title");
 
-                subTitle = _t(
-                    "As you have been denied access, you cannot rejoin unless you are invited by the admin or moderator of the group.",
-                );
+                subTitle = _t("room|knock_denied_subtitle");
 
                 if (isSpace) {
-                    primaryActionLabel = _t("Forget this space");
+                    primaryActionLabel = _t("room|forget_space");
                 } else {
-                    primaryActionLabel = _t("Forget this room");
+                    primaryActionLabel = _t("room|forget_room");
                 }
                 primaryActionHandler = this.props.onForgetClick;
                 break;
@@ -420,44 +418,43 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             case MessageCase.Banned: {
                 const { memberName, reason } = this.getKickOrBanInfo();
                 if (roomName) {
-                    title = _t("You were banned from %(roomName)s by %(memberName)s", { memberName, roomName });
+                    title = _t("room|banned_from_room_by", { memberName, roomName });
                 } else {
-                    title = _t("You were banned by %(memberName)s", { memberName });
+                    title = _t("room|banned_by", { memberName });
                 }
-                subTitle = reason ? _t("Reason: %(reason)s", { reason }) : undefined;
+                subTitle = reason ? _t("room|kick_reason", { reason }) : undefined;
                 if (isSpace) {
-                    primaryActionLabel = _t("Forget this space");
+                    primaryActionLabel = _t("room|forget_space");
                 } else {
-                    primaryActionLabel = _t("Forget this room");
+                    primaryActionLabel = _t("room|forget_room");
                 }
                 primaryActionHandler = this.props.onForgetClick;
                 break;
             }
             case MessageCase.OtherThreePIDError: {
                 if (roomName) {
-                    title = _t("Something went wrong with your invite to %(roomName)s", { roomName });
+                    title = _t("room|3pid_invite_error_title_room", { roomName });
                 } else {
-                    title = _t("Something went wrong with your invite.");
+                    title = _t("room|3pid_invite_error_title");
                 }
                 const joinRule = this.joinRule();
-                const errCodeMessage = _t(
-                    "An error (%(errcode)s) was returned while trying to validate your invite. You could try to pass this information on to the person who invited you.",
-                    { errcode: this.state.threePidFetchError?.errcode || _t("unknown error code") },
-                );
+                const errCodeMessage = _t("room|3pid_invite_error_description", {
+                    errcode: this.state.threePidFetchError?.errcode || _t("unknown error code"),
+                });
                 switch (joinRule) {
                     case "invite":
-                        subTitle = [_t("You can only join it with a working invite."), errCodeMessage];
-                        primaryActionLabel = _t("Try to join anyway");
+                        subTitle = [_t("room|3pid_invite_error_invite_subtitle"), errCodeMessage];
+                        primaryActionLabel = _t("room|3pid_invite_error_invite_action");
                         primaryActionHandler = this.props.onJoinClick;
                         break;
                     case "public":
-                        subTitle = _t("You can still join here.");
-                        primaryActionLabel = _t("Join the discussion");
+                        subTitle = _t("room|3pid_invite_error_public_subtitle");
+                        primaryActionLabel = _t("room|join_the_discussion");
                         primaryActionHandler = this.props.onJoinClick;
                         break;
                     default:
                         subTitle = errCodeMessage;
-                        primaryActionLabel = _t("Try to join anyway");
+                        primaryActionLabel = _t("room|3pid_invite_error_invite_action");
                         primaryActionHandler = this.props.onJoinClick;
                         break;
                 }
@@ -465,56 +462,50 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             }
             case MessageCase.InvitedEmailNotFoundInAccount: {
                 if (roomName) {
-                    title = _t(
-                        "This invite to %(roomName)s was sent to %(email)s which is not associated with your account",
-                        {
-                            roomName,
-                            email: this.props.invitedEmail,
-                        },
-                    );
+                    title = _t("room|3pid_invite_email_not_found_account_room", {
+                        roomName,
+                        email: this.props.invitedEmail,
+                    });
                 } else {
-                    title = _t("This invite was sent to %(email)s which is not associated with your account", {
+                    title = _t("room|3pid_invite_email_not_found_account", {
                         email: this.props.invitedEmail,
                     });
                 }
 
-                subTitle = _t(
-                    "Link this email with your account in Settings to receive invites directly in %(brand)s.",
-                    { brand },
-                );
-                primaryActionLabel = _t("Join the discussion");
+                subTitle = _t("room|link_email_to_receive_3pid_invite", { brand });
+                primaryActionLabel = _t("room|join_the_discussion");
                 primaryActionHandler = this.props.onJoinClick;
                 break;
             }
             case MessageCase.InvitedEmailNoIdentityServer: {
                 if (roomName) {
-                    title = _t("This invite to %(roomName)s was sent to %(email)s", {
+                    title = _t("room|invite_sent_to_email_room", {
                         roomName,
                         email: this.props.invitedEmail,
                     });
                 } else {
-                    title = _t("This invite was sent to %(email)s", { email: this.props.invitedEmail });
+                    title = _t("room|invite_sent_to_email", { email: this.props.invitedEmail });
                 }
 
-                subTitle = _t("Use an identity server in Settings to receive invites directly in %(brand)s.", {
+                subTitle = _t("room|3pid_invite_no_is_subtitle", {
                     brand,
                 });
-                primaryActionLabel = _t("Join the discussion");
+                primaryActionLabel = _t("room|join_the_discussion");
                 primaryActionHandler = this.props.onJoinClick;
                 break;
             }
             case MessageCase.InvitedEmailMismatch: {
                 if (roomName) {
-                    title = _t("This invite to %(roomName)s was sent to %(email)s", {
+                    title = _t("room|invite_sent_to_email_room", {
                         roomName,
                         email: this.props.invitedEmail,
                     });
                 } else {
-                    title = _t("This invite was sent to %(email)s", { email: this.props.invitedEmail });
+                    title = _t("room|invite_sent_to_email", { email: this.props.invitedEmail });
                 }
 
-                subTitle = _t("Share this email in Settings to receive invites directly in %(brand)s.", { brand });
-                primaryActionLabel = _t("Join the discussion");
+                subTitle = _t("room|invite_email_mismatch_suggestion", { brand });
+                primaryActionLabel = _t("room|join_the_discussion");
                 primaryActionHandler = this.props.onJoinClick;
                 break;
             }
@@ -536,14 +527,14 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
 
                 const isDM = this.isDMInvite();
                 if (isDM) {
-                    title = _t("Do you want to chat with %(user)s?", {
+                    title = _t("room|dm_invite_title", {
                         user: inviteMember?.name ?? this.props.inviterName,
                     });
-                    subTitle = [avatar, _t("<userName/> wants to chat", {}, { userName: () => inviterElement })];
-                    primaryActionLabel = _t("Start chatting");
+                    subTitle = [avatar, _t("room|dm_invite_subtitle", {}, { userName: () => inviterElement })];
+                    primaryActionLabel = _t("room|dm_invite_action");
                 } else {
-                    title = _t("Do you want to join %(roomName)s?", { roomName });
-                    subTitle = [avatar, _t("<userName/> invited you", {}, { userName: () => inviterElement })];
+                    title = _t("room|invite_title", { roomName });
+                    subTitle = [avatar, _t("room|invite_subtitle", {}, { userName: () => inviterElement })];
                     primaryActionLabel = _t("action|accept");
                 }
 
@@ -567,7 +558,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 if (this.props.onRejectAndIgnoreClick) {
                     extraComponents.push(
                         <AccessibleButton kind="secondary" onClick={this.props.onRejectAndIgnoreClick} key="ignore">
-                            {_t("Reject & Ignore user")}
+                            {_t("room|invite_reject_ignore")}
                         </AccessibleButton>,
                     );
                 }
@@ -575,35 +566,35 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             }
             case MessageCase.ViewingRoom: {
                 if (this.props.canPreview) {
-                    title = _t("You're previewing %(roomName)s. Want to join it?", { roomName });
+                    title = _t("room|peek_join_prompt", { roomName });
                 } else if (roomName) {
-                    title = _t("%(roomName)s can't be previewed. Do you want to join it?", { roomName });
+                    title = _t("room|no_peek_join_prompt", { roomName });
                 } else {
-                    title = _t("There's no preview, would you like to join?");
+                    title = _t("room|no_peek_no_name_join_prompt");
                 }
-                primaryActionLabel = _t("Join the discussion");
+                primaryActionLabel = _t("room|join_the_discussion");
                 primaryActionHandler = this.props.onJoinClick;
                 break;
             }
             case MessageCase.RoomNotFound: {
                 if (roomName) {
-                    title = _t("%(roomName)s does not exist.", { roomName });
+                    title = _t("room|not_found_title_name", { roomName });
                 } else {
-                    title = _t("This room or space does not exist.");
+                    title = _t("room|not_found_title");
                 }
-                subTitle = _t("Are you sure you're at the right place?");
+                subTitle = _t("room|not_found_subtitle");
                 break;
             }
             case MessageCase.OtherError: {
                 if (roomName) {
-                    title = _t("%(roomName)s is not accessible at this time.", { roomName });
+                    title = _t("room|inaccessible_name", { roomName });
                 } else {
-                    title = _t("This room or space is not accessible at this time.");
+                    title = _t("room|inaccessible");
                 }
                 subTitle = [
-                    _t("Try again later, or ask a room or space admin to check if you have access."),
+                    _t("room|inaccessible_subtitle_1"),
                     _t(
-                        "%(errcode)s was returned while trying to access the room or space. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.",
+                        "room|inaccessible_subtitle_2",
                         { errcode: String(this.props.error?.errcode) },
                         {
                             issueLink: (label) => (
@@ -622,18 +613,13 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             }
             case MessageCase.PromptAskToJoin: {
                 if (roomName) {
-                    title = _t("Ask to join %(roomName)s?", { roomName });
+                    title = _t("room|knock_prompt_name", { roomName });
                 } else {
-                    title = _t("Ask to join?");
+                    title = _t("room|knock_prompt");
                 }
 
                 const avatar = <RoomAvatar room={this.props.room} oobData={this.props.oobData} />;
-                subTitle = [
-                    avatar,
-                    _t(
-                        "You need to be granted access to this room in order to view or participate in the conversation. You can send a request to join below.",
-                    ),
-                ];
+                subTitle = [avatar, _t("room|knock_subtitle")];
 
                 reasonElement = (
                     <Field
@@ -641,7 +627,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                         className="mx_RoomPreviewBar_fullWidth"
                         element="textarea"
                         onChange={this.onChangeReason}
-                        placeholder={_t("Message (optional)")}
+                        placeholder={_t("room|knock_message_field_placeholder")}
                         type="text"
                         value={this.state.reason ?? ""}
                     />
@@ -649,22 +635,22 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
 
                 primaryActionHandler = () =>
                     this.props.onSubmitAskToJoin && this.props.onSubmitAskToJoin(this.state.reason);
-                primaryActionLabel = _t("Request access");
+                primaryActionLabel = _t("room|knock_send_action");
 
                 break;
             }
             case MessageCase.Knocked: {
-                title = _t("Request to join sent");
+                title = _t("room|knock_sent");
 
                 subTitle = [
                     <>
                         <AskToJoinIcon className="mx_Icon mx_Icon_16 mx_RoomPreviewBar_icon" />
-                        {_t("Your request to join is pending.")}
+                        {_t("room|knock_sent_subtitle")}
                     </>,
                 ];
 
                 secondaryActionHandler = this.props.onCancelAskToJoin;
-                secondaryActionLabel = _t("Cancel request");
+                secondaryActionLabel = _t("room|knock_cancel_action");
 
                 break;
             }

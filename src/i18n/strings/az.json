@@ -27,13 +27,7 @@
     "Failed to ban user": "İstifadəçini bloklamağı bacarmadı",
     "Failed to mute user": "İstifadəçini kəsməyi bacarmadı",
     "Are you sure?": "Siz əminsiniz?",
-    "Invited": "Dəvət edilmişdir",
-    "Filter room members": "İştirakçılara görə axtarış",
-    "You do not have permission to post to this room": "Siz bu otağa yaza bilmirsiniz",
     "Join Room": "Otağa girmək",
-    "Forget room": "Otağı unutmaq",
-    "Low priority": "Əhəmiyyətsizlər",
-    "Historical": "Arxiv",
     "unknown error code": "naməlum səhv kodu",
     "Failed to forget room %(errCode)s": "Otağı unutmağı bacarmadı: %(errCode)s",
     "Sunday": "Bazar",
@@ -59,7 +53,6 @@
     "New passwords must match each other.": "Yeni şifrələr uyğun olmalıdır.",
     "Return to login screen": "Girişin ekranına qayıtmaq",
     "Confirm passphrase": "Şifrəni təsdiqləyin",
-    "Permission Required": "İzn tələb olunur",
     "Send": "Göndər",
     "PM": "24:00",
     "AM": "12:00",
@@ -82,7 +75,9 @@
         "on": "Qoşmaq",
         "advanced": "Təfərrüatlar",
         "profile": "Profil",
-        "authentication": "Müəyyənləşdirilmə"
+        "authentication": "Müəyyənləşdirilmə",
+        "low_priority": "Əhəmiyyətsizlər",
+        "historical": "Arxiv"
     },
     "action": {
         "continue": "Davam etmək",
@@ -276,7 +271,9 @@
         "autocomplete": {
             "command_description": "Komandalar",
             "user_description": "İstifadəçilər"
-        }
+        },
+        "no_perms_notice": "Siz bu otağa yaza bilmirsiniz",
+        "poll_button_no_perms_title": "İzn tələb olunur"
     },
     "space": {
         "context_menu": {
@@ -339,6 +336,9 @@
         "upgrade_error_description": "Serverinizin seçilmiş otaq versiyasını dəstəklədiyini  bir daha yoxlayın və yenidən cəhd edin.",
         "context_menu": {
             "favourite": "Seçilmiş"
+        },
+        "header": {
+            "forget_room_button": "Otağı unutmaq"
         }
     },
     "notifications": {
@@ -351,5 +351,9 @@
     },
     "error": {
         "update_power_level": "Hüquqların səviyyəsini dəyişdirməyi bacarmadı"
+    },
+    "member_list": {
+        "invited_list_heading": "Dəvət edilmişdir",
+        "filter_placeholder": "İştirakçılara görə axtarış"
     }
 }

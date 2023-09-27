@@ -100,7 +100,9 @@ export function ReadReceiptGroup({
     const [{ showTooltip, hideTooltip }, tooltip] = useTooltip({
         label: (
             <>
-                <div className="mx_Tooltip_title">{_t("Seen by %(count)s people", { count: readReceipts.length })}</div>
+                <div className="mx_Tooltip_title">
+                    {_t("timeline|read_receipt_title", { count: readReceipts.length })}
+                </div>
                 <div className="mx_Tooltip_sub">{tooltipText}</div>
             </>
         ),
@@ -176,7 +178,7 @@ export function ReadReceiptGroup({
             <ContextMenu menuClassName="mx_ReadReceiptGroup_popup" onFinished={closeMenu} {...aboveLeftOf(buttonRect)}>
                 <AutoHideScrollbar>
                     <SectionHeader className="mx_ReadReceiptGroup_title">
-                        {_t("Seen by %(count)s people", { count: readReceipts.length })}
+                        {_t("timeline|read_receipt_title", { count: readReceipts.length })}
                     </SectionHeader>
                     {readReceipts.map((receipt) => (
                         <ReadReceiptPerson
@@ -193,7 +195,7 @@ export function ReadReceiptGroup({
 
     return (
         <div className="mx_EventTile_msgOption">
-            <div className="mx_ReadReceiptGroup" role="group" aria-label={_t("Read receipts")}>
+            <div className="mx_ReadReceiptGroup" role="group" aria-label={_t("timeline|read_receipts_label")}>
                 <AccessibleButton
                     className="mx_ReadReceiptGroup_button"
                     inputRef={button}

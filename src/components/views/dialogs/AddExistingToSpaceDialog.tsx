@@ -387,7 +387,7 @@ const defaultRendererFactory =
             </div>
         );
 
-export const defaultRoomsRenderer = defaultRendererFactory(_td("Rooms"));
+export const defaultRoomsRenderer = defaultRendererFactory(_td("common|rooms"));
 export const defaultSpacesRenderer = defaultRendererFactory(_td("common|spaces"));
 export const defaultDmsRenderer = defaultRendererFactory(_td("Direct Messages"));
 
