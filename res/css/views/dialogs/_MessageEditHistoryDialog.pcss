@@ -72,6 +72,22 @@ limitations under the License.
                 margin-right: 0px;
             }
         }
+        &::before {
+            content: "";
+            position: absolute;
+            top: -1px;
+            bottom: -1px;
+            left: -10px;
+            right: -10px;
+            z-index: -1;
+            border-radius: 4px;
+        }
+
+        &:hover {
+            &::before {
+                background: $eventbubble-bg-hover;
+            }
+        }
     }
 
     .mx_MessageActionBar .mx_AccessibleButton {
