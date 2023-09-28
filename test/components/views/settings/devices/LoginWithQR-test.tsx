@@ -51,6 +51,7 @@ function makeClient() {
         currentState: {
             on: jest.fn(),
         },
+        getClientWellKnown: jest.fn().mockReturnValue({}),
     } as unknown as MatrixClient);
 }
 

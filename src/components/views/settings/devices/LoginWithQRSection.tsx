@@ -20,6 +20,7 @@ import {
     IServerVersions,
     UNSTABLE_MSC3882_CAPABILITY,
     Capabilities,
+    IClientWellKnown,
 } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
@@ -30,6 +31,7 @@ interface IProps {
     onShowQr: () => void;
     versions?: IServerVersions;
     capabilities?: Capabilities;
+    wellKnown?: IClientWellKnown;
 }
 
 export default class LoginWithQRSection extends React.Component<IProps> {
@@ -43,7 +45,9 @@ export default class LoginWithQRSection extends React.Component<IProps> {
         const capability = UNSTABLE_MSC3882_CAPABILITY.findIn<IMSC3882GetLoginTokenCapability>(this.props.capabilities);
         const msc3882Supported =
             !!this.props.versions?.unstable_features?.["org.matrix.msc3882"] || !!capability?.enabled;
-        const msc3886Supported = !!this.props.versions?.unstable_features?.["org.matrix.msc3886"];
+        const msc3886Supported =
+            !!this.props.versions?.unstable_features?.["org.matrix.msc3886"] ||
+            this.props.wellKnown?.["io.element.rendezvous"]?.server;
         const offerShowQr = msc3882Supported && msc3886Supported;
 
         // don't show anything if no method is available
