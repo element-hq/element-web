@@ -359,8 +359,7 @@ exports[`<MatrixChat /> with an existing session onAction() room actions leave_r
         Cancel
       </button>
       <button
-        class="mx_Dialog_primary focus-visible"
-        data-focus-visible-added=""
+        class="mx_Dialog_primary"
         data-testid="dialog-primary-button"
         type="button"
       >
@@ -416,8 +415,7 @@ exports[`<MatrixChat /> with an existing session onAction() room actions leave_r
         Cancel
       </button>
       <button
-        class="mx_Dialog_primary focus-visible"
-        data-focus-visible-added=""
+        class="mx_Dialog_primary"
         data-testid="dialog-primary-button"
         type="button"
       >

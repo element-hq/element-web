@@ -17,7 +17,6 @@ limitations under the License.
 import React from "react";
 import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { Mocked, mocked } from "jest-mock";
-import "focus-visible"; // to fix context menus
 import { prettyDOM, render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
