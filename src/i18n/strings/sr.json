@@ -106,16 +106,6 @@
     "New passwords must match each other.": "Нове лозинке се морају подударати.",
     "Return to login screen": "Врати ме на екран за пријаву",
     "Session ID": "ИД сесије",
-    "Passphrases must match": "Фразе се морају подударати",
-    "Passphrase must not be empty": "Фразе не смеју бити празне",
-    "Export room keys": "Извези кључеве собе",
-    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Ова радња вам омогућава да извезете кључеве за примљене поруке у шифрованим собама у локалну датотеку. Онда ћете моћи да увезете датотеку у други Матрикс клијент, у будућности, тако да ће тај клијент моћи да дешифрује ове поруке.",
-    "Enter passphrase": "Унеси фразу",
-    "Confirm passphrase": "Потврди фразу",
-    "Import room keys": "Увези кључеве собе",
-    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Ова радња вам омогућава да увезете кључеве за шифровање које сте претходно извезли из другог Матрикс клијента. Након тога ћете моћи да дешифрујете било коју поруку коју је други клијент могао да дешифрује.",
-    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Извезена датотека ће бити заштићена са фразом. Требало би да унесете фразу овде, да бисте дешифровали датотеку.",
-    "File to import": "Датотека за увоз",
     "Sunday": "Недеља",
     "Today": "Данас",
     "Friday": "Петак",
@@ -436,9 +426,6 @@
     "Removing…": "Уклањам…",
     "Clear all data in this session?": "Да очистим све податке у овој сесији?",
     "Reason (optional)": "Разлог (опционо)",
-    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ако нисте ви уклонили начин опоравка, нападач можда покушава да приступи вашем налогу. Промените своју лозинку и поставите нови начин опоравка у поставкама, одмах.",
-    "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Ако сте то случајно учинили, безбедне поруке можете подесити у овој сесији, која ће поново шифровати историју порука сесије помоћу новог начина опоравка.",
-    "This session has detected that your Security Phrase and key for Secure Messages have been removed.": "Сесија је открила да су ваша безбедносна фраза и кључ за безбедне поруке уклоњени.",
     "Hide sessions": "Сакриј сесије",
     "Room settings": "Поставке собе",
     "Not encrypted": "Није шифровано",
@@ -514,12 +501,6 @@
     "Cancel search": "Откажи претрагу",
     "Confirm this user's session by comparing the following with their User Settings:": "Потврдите сесију овог корисника упоређивањем следећег са њиховим корисничким подешавањима:",
     "Confirm by comparing the following with the User Settings in your other session:": "Потврдите упоређивањем следећег са корисничким подешавањима у вашој другој сесији:",
-    "You can also set up Secure Backup & manage your keys in Settings.": "Такође можете да подесите Сигурносну копију и управљате својим тастерима у подешавањима.",
-    "Go to Settings": "Идите на подешавања",
-    "You'll need to authenticate with the server to confirm the upgrade.": "Да бисте потврдили надоградњу, мораћете да се пријавите на серверу.",
-    "Restore your key backup to upgrade your encryption": "Вратите сигурносну копију кључа да бисте надоградили шифровање",
-    "Enter your account password to confirm the upgrade:": "Унесите лозинку за налог да бисте потврдили надоградњу:",
-    "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Заштитите од губитка приступа шифрованим порукама и подацима је подржан сигурносном копијом кључева за шифровање на серверу.",
     "Clear all data": "Очисти све податке",
     "Couldn't load page": "Учитавање странице није успело",
     "Sign in with SSO": "Пријавите се помоћу SSO",
@@ -597,7 +578,8 @@
         "authentication": "Идентификација",
         "rooms": "Собе",
         "low_priority": "Ниска важност",
-        "historical": "Историја"
+        "historical": "Историја",
+        "go_to_settings": "Идите на подешавања"
     },
     "action": {
         "continue": "Настави",
@@ -831,6 +813,27 @@
             "error_add_email": "Не могу да додам мејл адресу",
             "email_address_label": "Е-адреса",
             "msisdn_label": "Број телефона"
+        },
+        "key_backup": {
+            "setup_secure_backup": {
+                "description": "Заштитите од губитка приступа шифрованим порукама и подацима је подржан сигурносном копијом кључева за шифровање на серверу.",
+                "requires_password_confirmation": "Унесите лозинку за налог да бисте потврдили надоградњу:",
+                "requires_key_restore": "Вратите сигурносну копију кључа да бисте надоградили шифровање",
+                "requires_server_authentication": "Да бисте потврдили надоградњу, мораћете да се пријавите на серверу.",
+                "settings_reminder": "Такође можете да подесите Сигурносну копију и управљате својим тастерима у подешавањима."
+            }
+        },
+        "key_export_import": {
+            "export_title": "Извези кључеве собе",
+            "export_description_1": "Ова радња вам омогућава да извезете кључеве за примљене поруке у шифрованим собама у локалну датотеку. Онда ћете моћи да увезете датотеку у други Матрикс клијент, у будућности, тако да ће тај клијент моћи да дешифрује ове поруке.",
+            "enter_passphrase": "Унеси фразу",
+            "confirm_passphrase": "Потврди фразу",
+            "phrase_cannot_be_empty": "Фразе не смеју бити празне",
+            "phrase_must_match": "Фразе се морају подударати",
+            "import_title": "Увези кључеве собе",
+            "import_description_1": "Ова радња вам омогућава да увезете кључеве за шифровање које сте претходно извезли из другог Матрикс клијента. Након тога ћете моћи да дешифрујете било коју поруку коју је други клијент могао да дешифрује.",
+            "import_description_2": "Извезена датотека ће бити заштићена са фразом. Требало би да унесете фразу овде, да бисте дешифровали датотеку.",
+            "file_to_import": "Датотека за увоз"
         }
     },
     "devtools": {
@@ -1212,7 +1215,12 @@
         "set_up_toast_description": "Заштитите се од губитка приступа шифрованим порукама и подацима",
         "verify_toast_description": "Други корисници можда немају поверења у то",
         "cross_signing_unsupported": "Ваш домаћи сервер не подржава међу-потписивање.",
-        "not_supported": "<није подржано>"
+        "not_supported": "<није подржано>",
+        "recovery_method_removed": {
+            "description_1": "Сесија је открила да су ваша безбедносна фраза и кључ за безбедне поруке уклоњени.",
+            "description_2": "Ако сте то случајно учинили, безбедне поруке можете подесити у овој сесији, која ће поново шифровати историју порука сесије помоћу новог начина опоравка.",
+            "warning": "Ако нисте ви уклонили начин опоравка, нападач можда покушава да приступи вашем налогу. Промените своју лозинку и поставите нови начин опоравка у поставкама, одмах."
+        }
     },
     "emoji": {
         "category_smileys_people": "Смешци и особе",

@@ -64,22 +64,12 @@
     "Error decrypting attachment": "Erro ao descriptografar o anexo",
     "Invalid file%(extra)s": "Arquivo inválido %(extra)s",
     "Warning!": "Atenção!",
-    "Passphrases must match": "As frases-passe devem coincidir",
-    "Passphrase must not be empty": "A frase-passe não pode estar vazia",
-    "Export room keys": "Exportar chaves de sala",
-    "Enter passphrase": "Introduza a frase-passe",
-    "Confirm passphrase": "Confirmar frase-passe",
-    "Import room keys": "Importar chaves de sala",
-    "File to import": "Arquivo para importar",
-    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Este processo permite que você exporte as chaves para mensagens que você recebeu em salas criptografadas para um arquivo local. Você poderá então importar o arquivo para outro cliente Matrix no futuro, de modo que este cliente também poderá descriptografar suas mensagens.",
-    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "O ficheiro de exportação será protegido com uma frase-passe. Deve introduzir a frase-passe aqui, para desencriptar o ficheiro.",
     "Confirm Removal": "Confirmar Remoção",
     "Unable to restore session": "Não foi possível restaurar a sessão",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Se você já usou antes uma versão mais recente do %(brand)s, a sua sessão pode ser incompatível com esta versão. Feche esta janela e tente abrir com a versão mais recente.",
     "Error decrypting image": "Erro ao descriptografar a imagem",
     "Error decrypting video": "Erro ao descriptografar o vídeo",
     "Add an Integration": "Adicionar uma integração",
-    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Este processo faz com que você possa importar as chaves de criptografia que tinha previamente exportado de outro cliente Matrix. Você poderá então descriptografar todas as mensagens que o outro cliente pôde criptografar.",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?",
     "Are you sure you want to leave the room '%(roomName)s'?": "Você tem certeza que deseja sair da sala '%(roomName)s'?",
     "Custom level": "Nível personalizado",
@@ -544,6 +534,18 @@
         "voip": {
             "audio_input_empty": "Não foi detetado nenhum microfone",
             "video_input_empty": "Não foi detetada nenhuma Webcam"
+        },
+        "key_export_import": {
+            "export_title": "Exportar chaves de sala",
+            "export_description_1": "Este processo permite que você exporte as chaves para mensagens que você recebeu em salas criptografadas para um arquivo local. Você poderá então importar o arquivo para outro cliente Matrix no futuro, de modo que este cliente também poderá descriptografar suas mensagens.",
+            "enter_passphrase": "Introduza a frase-passe",
+            "confirm_passphrase": "Confirmar frase-passe",
+            "phrase_cannot_be_empty": "A frase-passe não pode estar vazia",
+            "phrase_must_match": "As frases-passe devem coincidir",
+            "import_title": "Importar chaves de sala",
+            "import_description_1": "Este processo faz com que você possa importar as chaves de criptografia que tinha previamente exportado de outro cliente Matrix. Você poderá então descriptografar todas as mensagens que o outro cliente pôde criptografar.",
+            "import_description_2": "O ficheiro de exportação será protegido com uma frase-passe. Deve introduzir a frase-passe aqui, para desencriptar o ficheiro.",
+            "file_to_import": "Arquivo para importar"
         }
     },
     "devtools": {

@@ -52,7 +52,6 @@
     "A new password must be entered.": "Yeni parolu daxil edin.",
     "New passwords must match each other.": "Yeni şifrələr uyğun olmalıdır.",
     "Return to login screen": "Girişin ekranına qayıtmaq",
-    "Confirm passphrase": "Şifrəni təsdiqləyin",
     "Send": "Göndər",
     "PM": "24:00",
     "AM": "12:00",
@@ -147,6 +146,9 @@
             "error_remove_3pid": "Əlaqə məlumatlarının silməyi bacarmadı",
             "error_invalid_email": "Yanlış email",
             "error_add_email": "Email-i əlavə etməyə müvəffəq olmur"
+        },
+        "key_export_import": {
+            "confirm_passphrase": "Şifrəni təsdiqləyin"
         }
     },
     "timeline": {

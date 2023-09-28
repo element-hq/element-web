@@ -14,10 +14,6 @@
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Irakurri zure e-maila eta egin klik dakarren estekan. Behin eginda, egin klik Jarraitu botoian.",
     "This room has no local addresses": "Gela honek ez du tokiko helbiderik",
     "Session ID": "Saioaren IDa",
-    "Export room keys": "Esportatu gelako gakoak",
-    "Enter passphrase": "Idatzi pasaesaldia",
-    "Confirm passphrase": "Berretsi pasaesaldia",
-    "Import room keys": "Inportatu gelako gakoak",
     "Moderator": "Moderatzailea",
     "Admin Tools": "Administrazio-tresnak",
     "An error has occurred.": "Errore bat gertatu da.",
@@ -78,12 +74,6 @@
         "one": "(~%(count)s emaitza)",
         "other": "(~%(count)s emaitza)"
     },
-    "Passphrases must match": "Pasaesaldiak bat etorri behar dira",
-    "Passphrase must not be empty": "Pasaesaldia ezin da hutsik egon",
-    "File to import": "Inportatu beharreko fitxategia",
-    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Prozesu honek zifratutako gelatan jaso dituzun mezuentzako gakoak tokiko fitxategi batera esportatzea ahalbidetzen dizu. Fitxategia beste Matrix bezero batean inportatu dezakezu, bezero hori ere mezuak deszifratzeko gai izan dadin.",
-    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Prozesu honek aurretik beste Matrix bezero batetik esportatu dituzun zifratze gakoak inportatzea ahalbidetzen dizu. Gero beste bezeroak deszifratu zitzakeen mezuak deszifratu ahal izango dituzu.",
-    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Esportatutako fitxategia pasaesaldi batez babestuko da. Pasaesaldia bertan idatzi behar duzu, fitxategia deszifratzeko.",
     "Confirm Removal": "Berretsi kentzea",
     "Unable to restore session": "Ezin izan da saioa berreskuratu",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Aurretik %(brand)s bertsio berriago bat erabili baduzu, zure saioa bertsio honekin bateraezina izan daiteke. Itxi leiho hau eta itzuli bertsio berriagora.",
@@ -174,10 +164,6 @@
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Zure txaten historiala ez galtzeko, zure gelako gakoak esportatu behar dituzu saioa amaitu aurretik. %(brand)s-en bertsio berriagora bueltatu behar zara hau egiteko",
     "Incompatible Database": "Datu-base bateraezina",
     "Continue With Encryption Disabled": "Jarraitu zifratzerik gabe",
-    "That matches!": "Bat dator!",
-    "That doesn't match.": "Ez dator bat.",
-    "Go back to set it again.": "Joan atzera eta berriro ezarri.",
-    "Unable to create key backup": "Ezin izan da gakoaren babes-kopia sortu",
     "Unable to load backup status": "Ezin izan da babes-kopiaren egoera kargatu",
     "Unable to restore backup": "Ezin izan da babes-kopia berrezarri",
     "No backup found!": "Ez da babes-kopiarik aurkitu!",
@@ -185,12 +171,8 @@
     "Invalid homeserver discovery response": "Baliogabeko hasiera-zerbitzarien bilaketaren erantzuna",
     "Set up": "Ezarri",
     "General failure": "Hutsegite orokorra",
-    "New Recovery Method": "Berreskuratze metodo berria",
-    "Set up Secure Messages": "Ezarri mezu seguruak",
-    "Go to Settings": "Joan ezarpenetara",
     "Unable to load commit detail: %(msg)s": "Ezin izan dira xehetasunak kargatu: %(msg)s",
     "Invalid identity server discovery response": "Baliogabeko erantzuna identitate zerbitzariaren bilaketan",
-    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ez baduzu berreskuratze sistema berria ezarri, erasotzaile bat zure kontua atzitzen saiatzen egon daiteke. Aldatu zure kontuaren pasahitza eta ezarri berreskuratze metodo berria berehala ezarpenetan.",
     "The following users may not exist": "Hurrengo erabiltzaileak agian ez dira existitzen",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Ezin izan dira behean zerrendatutako Matrix ID-een profilak, berdin gonbidatu nahi dituzu?",
     "Invite anyway and never warn me again": "Gonbidatu edonola ere eta ez abisatu inoiz gehiago",
@@ -249,7 +231,6 @@
     "Couldn't load page": "Ezin izan da orria kargatu",
     "Main address": "Helbide nagusia",
     "Your password has been reset.": "Zure pasahitza berrezarri da.",
-    "Recovery Method Removed": "Berreskuratze metodoa kendu da",
     "Start using Key Backup": "Hasi gakoen babes-kopia egiten",
     "Back up your keys before signing out to avoid losing them.": "Egin gakoen babes-kopia bat saioa amaitu aurretik, galdu nahi ez badituzu.",
     "Headphones": "Aurikularrak",
@@ -276,9 +257,6 @@
     "You'll lose access to your encrypted messages": "Zure zifratutako mezuetara sarbidea galduko duzu",
     "Are you sure you want to sign out?": "Ziur saioa amaitu nahi duzula?",
     "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Abisua:</b>: Gakoen babeskopia fidagarria den gailu batetik egin beharko zenuke beti.",
-    "Your keys are being backed up (the first backup could take a few minutes).": "Zure gakoen babes-kopia egiten ari da (lehen babes-kopiak minutu batzuk behar ditzake).",
-    "Success!": "Ongi!",
-    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ez baduzu berreskuratze metodoa kendu, agian erasotzaile bat zure mezuen historialera sarbidea lortu nahi du. Aldatu kontuaren pasahitza eta ezarri berreskuratze metodo berri bat berehala ezarpenetan.",
     "Scissors": "Artaziak",
     "Error updating main address": "Errorea helbide nagusia eguneratzean",
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "Errore bat gertatu da gelaren helbide nagusia eguneratzean. Agian zerbitzariak ez du hau baimentzen, edo une bateko hutsegitea izan da.",
@@ -326,9 +304,7 @@
     "Clear all data": "Garbitu datu guztiak",
     "Your homeserver doesn't seem to support this feature.": "Antza zure hasiera-zerbitzariak ez du ezaugarri hau onartzen.",
     "Resend %(unsentCount)s reaction(s)": "Birbidali %(unsentCount)s erreakzio",
-    "Clear personal data": "Garbitu datu pertsonalak",
     "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Esaguzu zer ez den behar bezala ibili edo, hobe oraindik, sortu GitHub txosten bat zure arazoa deskribatuz.",
-    "Failed to re-authenticate due to a homeserver problem": "Berriro autentifikatzean huts egin du hasiera-zerbitzariaren arazo bat dela eta",
     "Find others by phone or email": "Aurkitu besteak telefonoa edo e-maila erabiliz",
     "Be found by phone or email": "Izan telefonoa edo e-maila erabiliz aurkigarria",
     "Deactivate account": "Desaktibatu kontua",
@@ -380,7 +356,6 @@
     "Upgrade public room": "Eguneratu gela publikoa",
     "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Gela eguneratzea ekintza aurreratu bat da eta akatsen, falta diren ezaugarrien, edo segurtasun arazoen erruz gela ezegonkorra denean aholkatzen da.",
     "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Gela hau <oldVersion /> bertsiotik <newVersion /> bertsiora eguneratuko duzu.",
-    "Unable to set up secret storage": "Ezin izan da biltegi sekretua ezarri",
     "Language Dropdown": "Hizkuntza menua",
     "Country Dropdown": "Herrialde menua",
     "Show more": "Erakutsi gehiago",
@@ -397,9 +372,6 @@
     "Verify User": "Egiaztatu erabiltzailea",
     "For extra security, verify this user by checking a one-time code on both of your devices.": "Segurtasun gehiagorako, egiaztatu erabiltzaile hau aldi-bakarrerako kode bat bi gailuetan egiaztatuz.",
     "Start Verification": "Hasi egiaztaketa",
-    "Enter your account password to confirm the upgrade:": "Sartu zure kontuaren pasa-hitza eguneraketa baieztatzeko:",
-    "You'll need to authenticate with the server to confirm the upgrade.": "Zerbitzariarekin autentifikatu beharko duzu eguneraketa baieztatzeko.",
-    "Upgrade your encryption": "Eguneratu zure zifratzea",
     "This backup is trusted because it has been restored on this session": "Babes-kopia hau fidagarritzat jotzen da saio honetan berrekuratu delako",
     "This user has not verified all of their sessions.": "Erabiltzaile honek ez ditu bere saio guztiak egiaztatu.",
     "You have not verified this user.": "Ez duzu erabiltzaile hau egiaztatu.",
@@ -441,11 +413,6 @@
     "Destroy cross-signing keys?": "Suntsitu zeharkako sinatzerako gakoak?",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Zeharkako sinatzerako gakoak ezabatzea behin betiko da. Egiaztatu dituzunak segurtasun abisu bat jasoko dute.  Ziur aski ez duzu hau egin nahi, zeharkako sinatzea ahalbidetzen dizun gailu oro galdu ez baduzu.",
     "Clear cross-signing keys": "Garbitu zeharkako sinatzerako gakoak",
-    "Restore your key backup to upgrade your encryption": "Berreskuratu zure gakoen babes-kopia zure zifratzea eguneratzeko",
-    "Upgrade this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.": "Eguneratu saio hau beste saioak egiaztatu ahal ditzan, zifratutako mezuetara sarbidea emanez eta beste erabiltzaileei fidagarri gisa agertu daitezen.",
-    "Create key backup": "Sortu gakoen babes-kopia",
-    "This session is encrypting history using the new recovery method.": "Saio honek historiala zifratzen du berreskuratze metodo berria erabiliz.",
-    "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Nahi gabe egin baduzu hau, Mezu seguruak ezarri ditzakezu saio honetan eta saioaren mezuen historiala berriro zifratuko da berreskuratze metodo berriarekin.",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Matrix-ekin lotutako segurtasun arazo baten berri emateko, irakurri <a>Segurtasun ezagutarazte gidalerroak</a>.",
     "Scroll to most recent messages": "Korritu azken mezuetara",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Errore bat gertatu da gelaren ordezko helbideak eguneratzean. Agian zerbitzariak ez du onartzen edo une bateko akatsa izan da.",
@@ -495,7 +462,6 @@
     "Submit logs": "Bidali egunkariak",
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Oroigarria: Ez dugu zure nabigatzailearentzako euskarririk, ezin da zure esperientzia nolakoa izango den aurreikusi.",
     "Unable to upload": "Ezin izan da igo",
-    "Unable to query secret storage status": "Ezin izan da biltegi sekretuaren egoera kontsultatu",
     "You signed in to a new session without verifying it:": "Saio berria hasi duzu hau egiaztatu gabe:",
     "Verify your other session using one of the options below.": "Egiaztatu zure beste saioa beheko aukeretako batekin.",
     "IRC display name width": "IRC-ko pantaila izenaren zabalera",
@@ -523,7 +489,6 @@
     "This address is already in use": "Gelaren helbide hau erabilita dago",
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "%(brand)s bertsio berriago bat erabili duzu saio honekin. Berriro bertsio hau muturretik muturrerako zifratzearekin erabiltzeko, saioa amaitu eta berriro hasi beharko duzu.",
     "Switch theme": "Aldatu azala",
-    "Use a different passphrase?": "Erabili pasa-esaldi desberdin bat?",
     "This room is public": "Gela hau publikoa da",
     "Click to view edits": "Klik egin edizioak ikusteko",
     "The server is offline.": "Zerbitzaria lineaz kanpo dago.",
@@ -598,7 +563,9 @@
         "authentication": "Autentifikazioa",
         "rooms": "Gelak",
         "low_priority": "Lehentasun baxua",
-        "historical": "Historiala"
+        "historical": "Historiala",
+        "go_to_settings": "Joan ezarpenetara",
+        "setup_secure_messages": "Ezarri mezu seguruak"
     },
     "action": {
         "continue": "Jarraitu",
@@ -985,6 +952,37 @@
             "remove_msisdn_prompt": "Kendu %(phone)s?",
             "add_msisdn_instructions": "SMS mezu bat bidali zaizu +%(msisdn)s zenbakira. Sartu hemen mezu horrek daukan egiaztatze-kodea.",
             "msisdn_label": "Telefono zenbakia"
+        },
+        "key_backup": {
+            "backup_in_progress": "Zure gakoen babes-kopia egiten ari da (lehen babes-kopiak minutu batzuk behar ditzake).",
+            "backup_success": "Ongi!",
+            "create_title": "Sortu gakoen babes-kopia",
+            "cannot_create_backup": "Ezin izan da gakoaren babes-kopia sortu",
+            "setup_secure_backup": {
+                "requires_password_confirmation": "Sartu zure kontuaren pasa-hitza eguneraketa baieztatzeko:",
+                "requires_key_restore": "Berreskuratu zure gakoen babes-kopia zure zifratzea eguneratzeko",
+                "requires_server_authentication": "Zerbitzariarekin autentifikatu beharko duzu eguneraketa baieztatzeko.",
+                "session_upgrade_description": "Eguneratu saio hau beste saioak egiaztatu ahal ditzan, zifratutako mezuetara sarbidea emanez eta beste erabiltzaileei fidagarri gisa agertu daitezen.",
+                "pass_phrase_match_success": "Bat dator!",
+                "use_different_passphrase": "Erabili pasa-esaldi desberdin bat?",
+                "pass_phrase_match_failed": "Ez dator bat.",
+                "set_phrase_again": "Joan atzera eta berriro ezarri.",
+                "secret_storage_query_failure": "Ezin izan da biltegi sekretuaren egoera kontsultatu",
+                "title_upgrade_encryption": "Eguneratu zure zifratzea",
+                "unable_to_setup": "Ezin izan da biltegi sekretua ezarri"
+            }
+        },
+        "key_export_import": {
+            "export_title": "Esportatu gelako gakoak",
+            "export_description_1": "Prozesu honek zifratutako gelatan jaso dituzun mezuentzako gakoak tokiko fitxategi batera esportatzea ahalbidetzen dizu. Fitxategia beste Matrix bezero batean inportatu dezakezu, bezero hori ere mezuak deszifratzeko gai izan dadin.",
+            "enter_passphrase": "Idatzi pasaesaldia",
+            "confirm_passphrase": "Berretsi pasaesaldia",
+            "phrase_cannot_be_empty": "Pasaesaldia ezin da hutsik egon",
+            "phrase_must_match": "Pasaesaldiak bat etorri behar dira",
+            "import_title": "Inportatu gelako gakoak",
+            "import_description_1": "Prozesu honek aurretik beste Matrix bezero batetik esportatu dituzun zifratze gakoak inportatzea ahalbidetzen dizu. Gero beste bezeroak deszifratu zitzakeen mezuak deszifratu ahal izango dituzu.",
+            "import_description_2": "Esportatutako fitxategia pasaesaldi batez babestuko da. Pasaesaldia bertan idatzi behar duzu, fitxategia deszifratzeko.",
+            "file_to_import": "Inportatu beharreko fitxategia"
         }
     },
     "devtools": {
@@ -1431,7 +1429,17 @@
         "verify_toast_description": "Beste erabiltzaile batzuk ez fidagarritzat jo lezakete",
         "cross_signing_unsupported": "Zure hasiera-zerbitzariak ez du zeharkako sinatzea onartzen.",
         "cross_signing_untrusted": "Zure kontuak zeharkako sinatze identitate bat du biltegi sekretuan, baina saio honek ez du oraindik fidagarritzat.",
-        "not_supported": "<euskarririk gabe>"
+        "not_supported": "<euskarririk gabe>",
+        "new_recovery_method_detected": {
+            "title": "Berreskuratze metodo berria",
+            "description_2": "Saio honek historiala zifratzen du berreskuratze metodo berria erabiliz.",
+            "warning": "Ez baduzu berreskuratze sistema berria ezarri, erasotzaile bat zure kontua atzitzen saiatzen egon daiteke. Aldatu zure kontuaren pasahitza eta ezarri berreskuratze metodo berria berehala ezarpenetan."
+        },
+        "recovery_method_removed": {
+            "title": "Berreskuratze metodoa kendu da",
+            "description_2": "Nahi gabe egin baduzu hau, Mezu seguruak ezarri ditzakezu saio honetan eta saioaren mezuen historiala berriro zifratuko da berreskuratze metodo berriarekin.",
+            "warning": "Ez baduzu berreskuratze metodoa kendu, agian erasotzaile bat zure mezuen historialera sarbidea lortu nahi du. Aldatu kontuaren pasahitza eta ezarri berreskuratze metodo berri bat berehala ezarpenetan."
+        }
     },
     "emoji": {
         "category_frequently_used": "Maiz erabilia",
@@ -1520,7 +1528,9 @@
         "autodiscovery_unexpected_error_hs": "Ustekabeko errorea hasiera-zerbitzariaren konfigurazioa ebaztean",
         "autodiscovery_unexpected_error_is": "Ustekabeko errorea identitate-zerbitzariaren konfigurazioa ebaztean",
         "incorrect_credentials_detail": "Kontuan izan %(hs)s zerbitzarira elkartu zarela, ez matrix.org.",
-        "create_account_title": "Sortu kontua"
+        "create_account_title": "Sortu kontua",
+        "failed_soft_logout_homeserver": "Berriro autentifikatzean huts egin du hasiera-zerbitzariaren arazo bat dela eta",
+        "soft_logout_subheading": "Garbitu datu pertsonalak"
     },
     "export_chat": {
         "messages": "Mezuak"

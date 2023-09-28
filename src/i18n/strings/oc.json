@@ -74,7 +74,6 @@
     "Upload files": "Mandar de fichièrs",
     "Home": "Dorsièr personal",
     "Search failed": "La recèrca a fracassat",
-    "Success!": "Capitada !",
     "common": {
         "mute": "Copar lo son",
         "no_results": "Pas cap de resultat",
@@ -298,6 +297,9 @@
         },
         "voip": {
             "audio_output": "Sortida àudio"
+        },
+        "key_backup": {
+            "backup_success": "Capitada !"
         }
     },
     "auth": {

@@ -68,16 +68,6 @@
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "Connectivity to the server has been lost.": "Connectivity to the server has been lost.",
     "Sent messages will be stored until your connection has returned.": "Sent messages will be stored until your connection has returned.",
-    "Passphrases must match": "Passphrases must match",
-    "Passphrase must not be empty": "Passphrase must not be empty",
-    "Export room keys": "Export room keys",
-    "Enter passphrase": "Enter passphrase",
-    "Confirm passphrase": "Confirm passphrase",
-    "Import room keys": "Import room keys",
-    "File to import": "File to import",
-    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.",
-    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.",
-    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.",
     "Confirm Removal": "Confirm Removal",
     "Unable to restore session": "Unable to restore session",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.",
@@ -273,6 +263,18 @@
         "voip": {
             "audio_input_empty": "No Microphones detected",
             "video_input_empty": "No Webcams detected"
+        },
+        "key_export_import": {
+            "export_title": "Export room keys",
+            "export_description_1": "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.",
+            "enter_passphrase": "Enter passphrase",
+            "confirm_passphrase": "Confirm passphrase",
+            "phrase_cannot_be_empty": "Passphrase must not be empty",
+            "phrase_must_match": "Passphrases must match",
+            "import_title": "Import room keys",
+            "import_description_1": "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.",
+            "import_description_2": "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.",
+            "file_to_import": "File to import"
         }
     },
     "timeline": {

@@ -93,7 +93,6 @@
     "Cancel All": "Avbryt alt",
     "Home": "Hjem",
     "Your password has been reset.": "Passordet ditt har blitt tilbakestilt.",
-    "Success!": "Suksess!",
     "Set up": "Sett opp",
     "Lion": "Løve",
     "Pig": "Gris",
@@ -165,8 +164,6 @@
     "Search failed": "Søket mislyktes",
     "No more results": "Ingen flere resultater",
     "Return to login screen": "Gå tilbake til påloggingsskjermen",
-    "File to import": "Filen som skal importeres",
-    "Upgrade your encryption": "Oppgrader krypteringen din",
     "Not Trusted": "Ikke betrodd",
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "Show more": "Vis mer",
@@ -194,10 +191,6 @@
     "Logs sent": "Loggbøkene ble sendt",
     "Recent Conversations": "Nylige samtaler",
     "Room Settings - %(roomName)s": "Rominnstillinger - %(roomName)s",
-    "Export room keys": "Eksporter romnøkler",
-    "Import room keys": "Importer romnøkler",
-    "Go to Settings": "Gå til Innstillinger",
-    "Enter passphrase": "Skriv inn passordfrase",
     "Room avatar": "Rommets avatar",
     "Start Verification": "Begynn verifisering",
     "Verify User": "Verifiser bruker",
@@ -246,16 +239,8 @@
     "Could not load user profile": "Klarte ikke å laste inn brukerprofilen",
     "A new password must be entered.": "Et nytt passord må bli skrevet inn.",
     "New passwords must match each other.": "De nye passordene må samsvare med hverandre.",
-    "Clear personal data": "Tøm personlige data",
-    "Passphrases must match": "Passfrasene må samsvare",
-    "Passphrase must not be empty": "Passfrasen kan ikke være tom",
-    "Confirm passphrase": "Bekreft passfrasen",
-    "That matches!": "Det samsvarer!",
-    "That doesn't match.": "Det samsvarer ikke.",
-    "Go back to set it again.": "Gå tilbake for å velge på nytt.",
     "Messages in this room are end-to-end encrypted.": "Meldinger i dette rommet er start-til-slutt-kryptert.",
     "Messages in this room are not end-to-end encrypted.": "Meldinger i dette rommet er ikke start-til-slutt-kryptert.",
-    "Use a different passphrase?": "Vil du bruke en annen passfrase?",
     "Jump to read receipt": "Hopp til lesekvitteringen",
     "Verify your other session using one of the options below.": "Verifiser den andre økten din med en av metodene nedenfor.",
     "Ok": "OK",
@@ -296,8 +281,6 @@
     "You seem to be uploading files, are you sure you want to quit?": "Du ser til å laste opp filer, er du sikker på at du vil avslutte?",
     "Switch theme": "Bytt tema",
     "Confirm encryption setup": "Bekreft krypteringsoppsett",
-    "Create key backup": "Opprett nøkkelsikkerhetskopi",
-    "Set up Secure Messages": "Sett opp sikre meldinger",
     "To help us prevent this in future, please <a>send us logs</a>.": "For å hjelpe oss med å forhindre dette i fremtiden, vennligst <a>send oss loggfiler</a>.",
     "Lock": "Lås",
     "Your messages are not secure": "Dine meldinger er ikke sikre",
@@ -398,9 +381,6 @@
     "Security Key": "Sikkerhetsnøkkel",
     "Invalid Security Key": "Ugyldig sikkerhetsnøkkel",
     "Wrong Security Key": "Feil sikkerhetsnøkkel",
-    "New Recovery Method": "Ny gjenopprettingsmetode",
-    "Generate a Security Key": "Generer en sikkerhetsnøkkel",
-    "Confirm your Security Phrase": "Bekreft sikkerhetsfrasen din",
     "This address is already in use": "Denne adressen er allerede i bruk",
     "<a>In reply to</a> <pill>": "<a>Som svar på</a> <pill>",
     "Information": "Informasjon",
@@ -712,7 +692,9 @@
         "private_space": "Privat område",
         "rooms": "Rom",
         "low_priority": "Lavprioritet",
-        "historical": "Historisk"
+        "historical": "Historisk",
+        "go_to_settings": "Gå til Innstillinger",
+        "setup_secure_messages": "Sett opp sikre meldinger"
     },
     "action": {
         "continue": "Fortsett",
@@ -1057,6 +1039,28 @@
             "email_address_label": "E-postadresse",
             "remove_msisdn_prompt": "Vil du fjerne %(phone)s?",
             "msisdn_label": "Telefonnummer"
+        },
+        "key_backup": {
+            "backup_success": "Suksess!",
+            "create_title": "Opprett nøkkelsikkerhetskopi",
+            "setup_secure_backup": {
+                "generate_security_key_title": "Generer en sikkerhetsnøkkel",
+                "pass_phrase_match_success": "Det samsvarer!",
+                "use_different_passphrase": "Vil du bruke en annen passfrase?",
+                "pass_phrase_match_failed": "Det samsvarer ikke.",
+                "set_phrase_again": "Gå tilbake for å velge på nytt.",
+                "confirm_security_phrase": "Bekreft sikkerhetsfrasen din",
+                "title_upgrade_encryption": "Oppgrader krypteringen din"
+            }
+        },
+        "key_export_import": {
+            "export_title": "Eksporter romnøkler",
+            "enter_passphrase": "Skriv inn passordfrase",
+            "confirm_passphrase": "Bekreft passfrasen",
+            "phrase_cannot_be_empty": "Passfrasen kan ikke være tom",
+            "phrase_must_match": "Passfrasene må samsvare",
+            "import_title": "Importer romnøkler",
+            "file_to_import": "Filen som skal importeres"
         }
     },
     "devtools": {
@@ -1454,7 +1458,10 @@
         "upgrade_toast_title": "Krypteringsoppdatering tilgjengelig",
         "verify_toast_title": "Verifiser denne økten",
         "verify_toast_description": "Andre brukere kan kanskje mistro den",
-        "not_supported": "<ikke støttet>"
+        "not_supported": "<ikke støttet>",
+        "new_recovery_method_detected": {
+            "title": "Ny gjenopprettingsmetode"
+        }
     },
     "emoji": {
         "category_frequently_used": "Ofte brukte",
@@ -1530,7 +1537,8 @@
         },
         "reset_password_email_not_found_title": "Denne e-postadressen ble ikke funnet",
         "misconfigured_title": "Ditt %(brand)s-oppsett er feiloppsatt",
-        "create_account_title": "Opprett konto"
+        "create_account_title": "Opprett konto",
+        "soft_logout_subheading": "Tøm personlige data"
     },
     "room_list": {
         "show_previews": "Vis forhåndsvisninger av meldinger",

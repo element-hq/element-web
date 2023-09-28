@@ -296,29 +296,7 @@
     "Identity server URL does not appear to be a valid identity server": "De identiteitsserver-URL lykt geen geldige identiteitsserver te zyn",
     "General failure": "Algemene foute",
     "Session ID": "Sessie-ID",
-    "Passphrases must match": "Paswoordn moetn overeenkommn",
-    "Passphrase must not be empty": "Paswoord meug nie leeg zyn",
-    "Export room keys": "Gesprekssleuters exporteern",
-    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Hiermee ku je de sleuters van jen ontvangn berichtn in versleuterde gesprekkn noar e lokoal bestand exporteern. Je kut dit bestand loater in een andere Matrix-cliënt importeern, zodat ook die cliënt deze berichtn ga kunn ountsleutern.",
-    "Enter passphrase": "Gif ’t paswoord in",
-    "Confirm passphrase": "Bevestig ’t paswoord",
-    "Import room keys": "Gesprekssleuters importeern",
-    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Hiermee ku je de versleuteriengssleuters da j’uut een andere Matrix-cliënt had geëxporteerd importeern, zoda j’alle berichtn da ’t ander programma kostege ountsleutern ook hier goa kunn leezn.",
-    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "’t Geëxporteerd bestand is beveiligd met e paswoord. Gift da paswoord hier in vo ’t bestand t’ountsleutern.",
-    "File to import": "T’importeern bestand",
-    "That matches!": "Da komt overeen!",
-    "That doesn't match.": "Da kom nie overeen.",
-    "Go back to set it again.": "Goa were vo ’t herin te stelln.",
-    "Your keys are being backed up (the first backup could take a few minutes).": "’t Wordt e back-up van je sleuters gemakt (den eesten back-up kut e poar minuutn deurn).",
-    "Success!": "Gereed!",
-    "Unable to create key backup": "Kostege de sleuterback-up nie anmoakn",
     "Set up": "Instelln",
-    "New Recovery Method": "Nieuwe herstelmethode",
-    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "A je gy deze nieuwe herstelmethode nie èt ingesteld, is ’t meuglik dat der een anvaller toegank tout jen account probeert te verkrygn. Wyzigt ounmiddellik jen accountpaswoord en stelt e nieuwe herstelmethode in in d’instelliengn.",
-    "Go to Settings": "Goa noa d’instelliengn",
-    "Set up Secure Messages": "Beveiligde berichtn instelln",
-    "Recovery Method Removed": "Herstelmethode verwyderd",
-    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "A je de herstelmethode nie è verwyderd, is ’t meuglik dat der een anvaller toegank tout jen account probeert te verkrygn. Wyzigt ounmiddellik jen accountpaswoord en stelt e nieuwe herstelmethode in in d’instelliengn.",
     "Edited at %(date)s. Click to view edits.": "Bewerkt ip %(date)s. Klikt vo de bewerkiengn te bekykn.",
     "Message edits": "Berichtbewerkiengn",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Dit gesprek bywerkn vereist da je d’huudige instantie dervan ofsluut en in de plekke dervan e nieuw gesprek anmakt. Vo de gespreksleedn de best meuglike ervoarienge te biedn, goan me:",
@@ -328,10 +306,8 @@
     "Clear all data": "Alle gegeevns wissn",
     "Your homeserver doesn't seem to support this feature.": "Je thuusserver biedt geen oundersteunienge vo deze functie.",
     "Resend %(unsentCount)s reaction(s)": "%(unsentCount)s reactie(s) herverstuurn",
-    "Failed to re-authenticate due to a homeserver problem": "’t Heranmeldn is mislukt omwille van e probleem me de thuusserver",
     "Find others by phone or email": "Viendt andere menschn via hunder telefongnumero of e-mailadresse",
     "Be found by phone or email": "Wor gevoundn via je telefongnumero of e-mailadresse",
-    "Clear personal data": "Persoonlike gegeevns wissn",
     "Deactivate account": "Account deactiveern",
     "Command Help": "Hulp by ipdrachtn",
     "common": {
@@ -382,7 +358,9 @@
         "authentication": "Authenticoasje",
         "rooms": "Gesprekkn",
         "low_priority": "Leige prioriteit",
-        "historical": "Historisch"
+        "historical": "Historisch",
+        "go_to_settings": "Goa noa d’instelliengn",
+        "setup_secure_messages": "Beveiligde berichtn instelln"
     },
     "action": {
         "continue": "Verdergoan",
@@ -595,6 +573,28 @@
             "remove_msisdn_prompt": "%(phone)s verwydern?",
             "add_msisdn_instructions": "’t Is een smse versteur noa +%(msisdn)s. Gift de verificoasjecode in da derin stoat.",
             "msisdn_label": "Telefongnumero"
+        },
+        "key_backup": {
+            "backup_in_progress": "’t Wordt e back-up van je sleuters gemakt (den eesten back-up kut e poar minuutn deurn).",
+            "backup_success": "Gereed!",
+            "cannot_create_backup": "Kostege de sleuterback-up nie anmoakn",
+            "setup_secure_backup": {
+                "pass_phrase_match_success": "Da komt overeen!",
+                "pass_phrase_match_failed": "Da kom nie overeen.",
+                "set_phrase_again": "Goa were vo ’t herin te stelln."
+            }
+        },
+        "key_export_import": {
+            "export_title": "Gesprekssleuters exporteern",
+            "export_description_1": "Hiermee ku je de sleuters van jen ontvangn berichtn in versleuterde gesprekkn noar e lokoal bestand exporteern. Je kut dit bestand loater in een andere Matrix-cliënt importeern, zodat ook die cliënt deze berichtn ga kunn ountsleutern.",
+            "enter_passphrase": "Gif ’t paswoord in",
+            "confirm_passphrase": "Bevestig ’t paswoord",
+            "phrase_cannot_be_empty": "Paswoord meug nie leeg zyn",
+            "phrase_must_match": "Paswoordn moetn overeenkommn",
+            "import_title": "Gesprekssleuters importeern",
+            "import_description_1": "Hiermee ku je de versleuteriengssleuters da j’uut een andere Matrix-cliënt had geëxporteerd importeern, zoda j’alle berichtn da ’t ander programma kostege ountsleutern ook hier goa kunn leezn.",
+            "import_description_2": "’t Geëxporteerd bestand is beveiligd met e paswoord. Gift da paswoord hier in vo ’t bestand t’ountsleutern.",
+            "file_to_import": "T’importeern bestand"
         }
     },
     "devtools": {
@@ -919,7 +919,15 @@
         "export_unsupported": "Je browser oundersteunt de benodigde cryptografie-extensies nie",
         "import_invalid_keyfile": "Geen geldig %(brand)s-sleuterbestand",
         "import_invalid_passphrase": "Anmeldiengscontrole mislukt: verkeerd paswoord?",
-        "not_supported": "<nie oundersteund>"
+        "not_supported": "<nie oundersteund>",
+        "new_recovery_method_detected": {
+            "title": "Nieuwe herstelmethode",
+            "warning": "A je gy deze nieuwe herstelmethode nie èt ingesteld, is ’t meuglik dat der een anvaller toegank tout jen account probeert te verkrygn. Wyzigt ounmiddellik jen accountpaswoord en stelt e nieuwe herstelmethode in in d’instelliengn."
+        },
+        "recovery_method_removed": {
+            "title": "Herstelmethode verwyderd",
+            "warning": "A je de herstelmethode nie è verwyderd, is ’t meuglik dat der een anvaller toegank tout jen account probeert te verkrygn. Wyzigt ounmiddellik jen accountpaswoord en stelt e nieuwe herstelmethode in in d’instelliengn."
+        }
     },
     "auth": {
         "sign_in_with_sso": "Anmeldn met enkele anmeldienge",
@@ -988,7 +996,9 @@
         "autodiscovery_unexpected_error_hs": "Ounverwachte foute by ’t controleern van de thuusserverconfiguroasje",
         "autodiscovery_unexpected_error_is": "Ounverwachte foute by ’t iplossn van d’identiteitsserverconfiguroasje",
         "incorrect_credentials_detail": "Zy je dervan bewust da je jen anmeldt by de %(hs)s-server, nie by matrix.org.",
-        "create_account_title": "Account anmoakn"
+        "create_account_title": "Account anmoakn",
+        "failed_soft_logout_homeserver": "’t Heranmeldn is mislukt omwille van e probleem me de thuusserver",
+        "soft_logout_subheading": "Persoonlike gegeevns wissn"
     },
     "export_chat": {
         "messages": "Berichtn"

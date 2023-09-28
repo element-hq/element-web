@@ -102,9 +102,6 @@
     },
     "Uploading %(filename)s": "Pujant %(filename)s",
     "Session ID": "ID de la sessió",
-    "Export room keys": "Exporta les claus de la sala",
-    "Confirm passphrase": "Introduïu una contrasenya",
-    "Import room keys": "Importa les claus de la sala",
     "Sunday": "Diumenge",
     "Today": "Avui",
     "Friday": "Divendres",
@@ -142,9 +139,6 @@
     "Power level": "Nivell d'autoritat",
     "e.g. my-room": "p.e. la-meva-sala",
     "New published address (e.g. #alias:server)": "Nova adreça publicada (p.e. #alias:server)",
-    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Si no has eliminat el mètode de recuperació, pot ser que un atacant estigui intentant accedir al teu compte. Canvia la teva contrasenya i configura un nou mètode de recuperació a Configuració, immediatament.",
-    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Si no has configurat el teu mètode de recuperació, pot ser que un atacant estigui intentant accedir al teu compte. Canvia la teva contrasenya i configura un nou mètode de recuperació a Configuració, immediatament.",
-    "You can also set up Secure Backup & manage your keys in Settings.": "També pots configurar la còpia de seguretat segura i gestionar les teves claus a Configuració.",
     "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Prèviament has fet servir %(brand)s a %(host)s amb la càrrega mandrosa de membres activada. En aquesta versió la càrrega mandrosa està desactivada. Com que la memòria cau local no és compatible entre les dues versions, %(brand)s necessita tornar a sincronitzar el teu compte.",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. <default>Utilitza el predeterminat (%(defaultIdentityServerName)s)</default> o gestiona'l a <settings>Configuració</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. Gestiona'l a <settings>Configuració</settings>.",
@@ -154,7 +148,6 @@
     "Confirm this user's session by comparing the following with their User Settings:": "Confirma aquesta sessió d'usuari comparant amb la seva configuració d'usuari, el següent:",
     "Confirm by comparing the following with the User Settings in your other session:": "Confirma comparant el següent amb la configuració d'usuari de la teva altra sessió:",
     "Room settings": "Configuració de sala",
-    "Go to Settings": "Ves a Configuració",
     "To continue, use Single Sign On to prove your identity.": "Per continuar, utilitza la inscripció única SSO (per demostrar la teva identitat).",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Confirma la desactivació del teu compte mitjançant la inscripció única SSO (per demostrar la teva identitat).",
     "common": {
@@ -190,7 +183,8 @@
         "authentication": "Autenticació",
         "rooms": "Sales",
         "low_priority": "Baixa prioritat",
-        "historical": "Històric"
+        "historical": "Històric",
+        "go_to_settings": "Ves a Configuració"
     },
     "action": {
         "continue": "Continua",
@@ -330,6 +324,16 @@
             "error_invalid_email_detail": "Sembla que aquest correu electrònic no és vàlid",
             "error_add_email": "No s'ha pogut afegir el correu electrònic",
             "msisdn_label": "Número de telèfon"
+        },
+        "key_backup": {
+            "setup_secure_backup": {
+                "settings_reminder": "També pots configurar la còpia de seguretat segura i gestionar les teves claus a Configuració."
+            }
+        },
+        "key_export_import": {
+            "export_title": "Exporta les claus de la sala",
+            "confirm_passphrase": "Introduïu una contrasenya",
+            "import_title": "Importa les claus de la sala"
         }
     },
     "devtools": {
@@ -725,7 +729,13 @@
         "bootstrap_title": "Configurant claus",
         "export_unsupported": "El vostre navegador no és compatible amb els complements criptogràfics necessaris",
         "import_invalid_keyfile": "El fitxer no és un fitxer de claus de %(brand)s vàlid",
-        "import_invalid_passphrase": "Ha fallat l'autenticació: heu introduït correctament la contrasenya?"
+        "import_invalid_passphrase": "Ha fallat l'autenticació: heu introduït correctament la contrasenya?",
+        "new_recovery_method_detected": {
+            "warning": "Si no has configurat el teu mètode de recuperació, pot ser que un atacant estigui intentant accedir al teu compte. Canvia la teva contrasenya i configura un nou mètode de recuperació a Configuració, immediatament."
+        },
+        "recovery_method_removed": {
+            "warning": "Si no has eliminat el mètode de recuperació, pot ser que un atacant estigui intentant accedir al teu compte. Canvia la teva contrasenya i configura un nou mètode de recuperació a Configuració, immediatament."
+        }
     },
     "labs_mjolnir": {
         "error_adding_ignore": "Error afegint usuari/servidor ignorat",

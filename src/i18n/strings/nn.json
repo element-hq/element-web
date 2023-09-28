@@ -136,10 +136,6 @@
     "New passwords must match each other.": "Dei nye passorda må vera like.",
     "Return to login screen": "Gå attende til innlogging",
     "Session ID": "Økt-ID",
-    "Passphrases must match": "Passfrasane må vere identiske",
-    "Passphrase must not be empty": "Passfrasefeltet kan ikkje stå tomt",
-    "Enter passphrase": "Skriv inn passfrase",
-    "Confirm passphrase": "Stadfest passfrase",
     "Jump to read receipt": "Hopp til lesen-lappen",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Du held på å verta teken til ei tredje-partisside so du kan godkjenna brukaren din til bruk med %(integrationsUrl)s. Vil du gå fram?",
     "Add an Integration": "Legg tillegg til",
@@ -147,12 +143,6 @@
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Klarte ikkje å lasta handlinga som vert svara til. Anten finst ho ikkje elles har du ikkje tilgang til å sjå ho.",
     "Filter results": "Filtrer resultat",
     "Server may be unavailable, overloaded, or search timed out :(": "Tenaren er kanskje utilgjengeleg, overlasta, elles så vart søket tidsavbrote :(",
-    "Export room keys": "Eksporter romnøklar",
-    "Import room keys": "Importer romnøklar",
-    "File to import": "Fil til import",
-    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Dette tillèt deg å henta nøklane for meldingar du har sendt i krypterte rom ut til ei lokal fil. Då kan du importera fila i ein annan Matrix-klient i framtida, slik at den klienten òg kan dekryptera meldingane.",
-    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Dette tillèt deg å importere krypteringsnøklar som du tidlegare har eksportert frå ein annan Matrix-klient. Du har deretter moglegheit for å dekryptere alle meldingane som den andre klienten kunne dekryptere.",
-    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Den eksporterte fila vil bli verna med ein passfrase. Du bør skriva passfrasen her, for å dekryptere fila.",
     "Only room administrators will see this warning": "Berre rom-administratorar vil sjå denne åtvaringa",
     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Meldinga di vart ikkje send, for denne heimetenaren har nådd grensa for maksimalt aktive brukarar pr. månad. Kontakt <a>systemadministratoren</a> for å vidare nytte denne tenesta.",
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Denne meldingen vart ikkje send fordi heimetenaren har nådd grensa for tilgjengelege systemressursar. Kontakt <a>systemadministratoren</a> for å vidare nytta denne tenesta.",
@@ -166,21 +156,7 @@
     "Invalid base_url for m.identity_server": "Feil base_url for m.identity_server",
     "Identity server URL does not appear to be a valid identity server": "URL-adressa virkar ikkje til å vere ein gyldig identitetstenar",
     "General failure": "Generell feil",
-    "Failed to re-authenticate due to a homeserver problem": "Fekk ikkje til å re-authentisere grunna ein feil på heimetenaren",
-    "Clear personal data": "Fjern personlege data",
-    "That matches!": "Dette stemmer!",
-    "That doesn't match.": "Dette stemmer ikkje.",
-    "Go back to set it again.": "Gå tilbake for å sette den på nytt.",
-    "Your keys are being backed up (the first backup could take a few minutes).": "Nøklane dine blir sikkerheitskopiert (den første kopieringa kan ta nokre minutt).",
-    "Success!": "Suksess!",
-    "Unable to create key backup": "Klarte ikkje å lage sikkerheitskopi av nøkkelen",
     "Set up": "Sett opp",
-    "New Recovery Method": "Ny gjenopprettingsmetode",
-    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Har du ikkje satt opp den nye gjenopprettingsmetoden, kan ein angripar prøve å bryte seg inn på kontoen din.  Endre ditt kontopassord og sett opp gjenoppretting umiddelbart under instillingane.",
-    "Go to Settings": "Gå til innstillingar",
-    "Set up Secure Messages": "Sett opp sikre meldingar (Secure Messages)",
-    "Recovery Method Removed": "Gjenopprettingsmetode fjerna",
-    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Viss du ikkje fjerna gjenopprettingsmetoden, kan ein angripar prøve å bryte seg inn på kontoen din. Endre kontopassordet ditt og sett ein opp ein ny gjenopprettingsmetode umidellbart under Innstillingar.",
     "Scroll to most recent messages": "Gå til dei nyaste meldingane",
     "No recent messages by %(user)s found": "Fann ingen nyare meldingar frå %(user)s",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Prøv å rulle oppover i historikken for å sjå om det finst nokon eldre.",
@@ -224,7 +200,6 @@
     "Enter the name of a new server you want to explore.": "Skriv inn namn på ny tenar du ynskjer å utforske.",
     "Command Help": "Kommandohjelp",
     "To help us prevent this in future, please <a>send us logs</a>.": "For å bistå med å forhindre dette i framtida, gjerne <a>send oss loggar</a>.",
-    "Unable to set up secret storage": "Oppsett av hemmeleg lager feila",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Krypterte meldingar er sikra med ende-til-ende kryptering. Berre du og mottakar(ane) har nøklane for å lese desse meldingane.",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "For å rapportere eit Matrix-relatert sikkerheitsproblem, les Matrix.org sin <a>Security Disclosure Policy</a>.",
     "This room is end-to-end encrypted": "Dette rommet er ende-til-ende kryptert",
@@ -334,7 +309,9 @@
         "authentication": "Authentisering",
         "rooms": "Rom",
         "low_priority": "Låg prioritet",
-        "historical": "Historiske"
+        "historical": "Historiske",
+        "go_to_settings": "Gå til innstillingar",
+        "setup_secure_messages": "Sett opp sikre meldingar (Secure Messages)"
     },
     "action": {
         "continue": "Fortset",
@@ -617,6 +594,29 @@
         },
         "sidebar": {
             "title": "Sidestolpe"
+        },
+        "key_backup": {
+            "backup_in_progress": "Nøklane dine blir sikkerheitskopiert (den første kopieringa kan ta nokre minutt).",
+            "backup_success": "Suksess!",
+            "cannot_create_backup": "Klarte ikkje å lage sikkerheitskopi av nøkkelen",
+            "setup_secure_backup": {
+                "pass_phrase_match_success": "Dette stemmer!",
+                "pass_phrase_match_failed": "Dette stemmer ikkje.",
+                "set_phrase_again": "Gå tilbake for å sette den på nytt.",
+                "unable_to_setup": "Oppsett av hemmeleg lager feila"
+            }
+        },
+        "key_export_import": {
+            "export_title": "Eksporter romnøklar",
+            "export_description_1": "Dette tillèt deg å henta nøklane for meldingar du har sendt i krypterte rom ut til ei lokal fil. Då kan du importera fila i ein annan Matrix-klient i framtida, slik at den klienten òg kan dekryptera meldingane.",
+            "enter_passphrase": "Skriv inn passfrase",
+            "confirm_passphrase": "Stadfest passfrase",
+            "phrase_cannot_be_empty": "Passfrasefeltet kan ikkje stå tomt",
+            "phrase_must_match": "Passfrasane må vere identiske",
+            "import_title": "Importer romnøklar",
+            "import_description_1": "Dette tillèt deg å importere krypteringsnøklar som du tidlegare har eksportert frå ein annan Matrix-klient. Du har deretter moglegheit for å dekryptere alle meldingane som den andre klienten kunne dekryptere.",
+            "import_description_2": "Den eksporterte fila vil bli verna med ein passfrase. Du bør skriva passfrasen her, for å dekryptere fila.",
+            "file_to_import": "Fil til import"
         }
     },
     "devtools": {
@@ -1044,7 +1044,9 @@
         "reset_password_email_not_found_title": "Denne epostadressa var ikkje funnen",
         "misconfigured_title": "%(brand)s-klienten din er sett opp feil",
         "incorrect_credentials_detail": "Merk deg at du loggar inn på %(hs)s-tenaren, ikkje matrix.org.",
-        "create_account_title": "Lag konto"
+        "create_account_title": "Lag konto",
+        "failed_soft_logout_homeserver": "Fekk ikkje til å re-authentisere grunna ein feil på heimetenaren",
+        "soft_logout_subheading": "Fjern personlege data"
     },
     "export_chat": {
         "messages": "Meldingar"
@@ -1184,7 +1186,15 @@
         "upgrade_toast_title": "Kryptering kan oppgraderast",
         "verify_toast_title": "Stadfest denne økta",
         "cross_signing_untrusted": "Kontoen din har ein kryss-signert identitet det hemmelege lageret, økta di stolar ikkje på denne enno.",
-        "not_supported": "<ikkje støtta>"
+        "not_supported": "<ikkje støtta>",
+        "new_recovery_method_detected": {
+            "title": "Ny gjenopprettingsmetode",
+            "warning": "Har du ikkje satt opp den nye gjenopprettingsmetoden, kan ein angripar prøve å bryte seg inn på kontoen din.  Endre ditt kontopassord og sett opp gjenoppretting umiddelbart under instillingane."
+        },
+        "recovery_method_removed": {
+            "title": "Gjenopprettingsmetode fjerna",
+            "warning": "Viss du ikkje fjerna gjenopprettingsmetoden, kan ein angripar prøve å bryte seg inn på kontoen din. Endre kontopassordet ditt og sett ein opp ein ny gjenopprettingsmetode umidellbart under Innstillingar."
+        }
     },
     "poll": {
         "create_poll_title": "Opprett røysting",

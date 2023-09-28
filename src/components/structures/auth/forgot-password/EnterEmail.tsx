@@ -46,7 +46,7 @@ export const EnterEmail: React.FC<EnterEmailProps> = ({
     onLoginClick,
     onSubmitForm,
 }) => {
-    const submitButtonChild = loading ? <Spinner w={16} h={16} /> : _t("Send email");
+    const submitButtonChild = loading ? <Spinner w={16} h={16} /> : _t("auth|forgot_password_send_email");
 
     const emailFieldRef = useRef<Field>(null);
 

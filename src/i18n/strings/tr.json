@@ -14,7 +14,6 @@
     "Decrypt %(text)s": "%(text)s metninin şifresini çöz",
     "Download %(text)s": "%(text)s metnini indir",
     "Email address": "E-posta Adresi",
-    "Enter passphrase": "Şifre deyimi Girin",
     "Error decrypting attachment": "Ek şifresini çözme hatası",
     "Failed to ban user": "Kullanıcı yasaklama(Ban) başarısız",
     "Failed to forget room %(errCode)s": "Oda unutulması başarısız oldu %(errCode)s",
@@ -79,15 +78,6 @@
         "other": "(~%(count)s sonuçlar)"
     },
     "Create new room": "Yeni Oda Oluştur",
-    "Passphrases must match": "Şifrenin eşleşmesi gerekir",
-    "Passphrase must not be empty": "Şifrenin boş olmaması gerekir",
-    "Export room keys": "Oda anahtarlarını dışa aktar",
-    "Confirm passphrase": "Şifreyi onayla",
-    "Import room keys": "Oda anahtarlarını içe aktar",
-    "File to import": "Alınacak Dosya",
-    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Bu işlem şifreli odalarda aldığınız iletilerin anahtarlarını yerel dosyaya vermenizi sağlar . Bundan sonra dosyayı ileride başka bir Matrix istemcisine de aktarabilirsiniz , böylece istemci bu mesajların şifresini çözebilir (decryption).",
-    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Bu işlem , geçmişte başka Matrix istemcisinden dışa aktardığınız şifreleme anahtarlarınızı içe aktarmanızı sağlar . Böylece diğer istemcinin çözebileceği tüm iletilerin şifresini çözebilirsiniz.",
-    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Dışa aktarma dosyası bir şifre ile korunacaktır . Dosyanın şifresini çözmek için buraya şifre girmelisiniz.",
     "Confirm Removal": "Kaldırma İşlemini Onayla",
     "Unable to restore session": "Oturum geri yüklenemiyor",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Eğer daha önce %(brand)s'un daha yeni bir versiyonunu kullandıysanız , oturumunuz bu sürümle uyumsuz olabilir . Bu pencereyi kapatın ve daha yeni sürüme geri dönün.",
@@ -175,14 +165,6 @@
     "Could not load user profile": "Kullanıcı profili yüklenemedi",
     "Your password has been reset.": "Parolanız sıfırlandı.",
     "General failure": "Genel başarısızlık",
-    "Clear personal data": "Kişisel veri temizle",
-    "That matches!": "Eşleşti!",
-    "That doesn't match.": "Eşleşmiyor.",
-    "Success!": "Başarılı!",
-    "Unable to create key backup": "Anahtar yedeği oluşturulamıyor",
-    "New Recovery Method": "Yeni Kurtarma Yöntemi",
-    "Go to Settings": "Ayarlara Git",
-    "Recovery Method Removed": "Kurtarma Yöntemi Silindi",
     "Robot": "Robot",
     "Hat": "Şapka",
     "Glasses": "Gözlük",
@@ -306,10 +288,6 @@
     "Failed to get autodiscovery configuration from server": "Sunucudan otokeşif yapılandırması alınması başarısız",
     "Homeserver URL does not appear to be a valid Matrix homeserver": "Anasunucu URL i geçerli bir Matrix anasunucusu olarak gözükmüyor",
     "Invalid identity server discovery response": "Geçersiz kimlik sunucu keşfi yanıtı",
-    "Go back to set it again.": "Geri git ve yeniden ayarla.",
-    "Upgrade your encryption": "Şifrelemenizi güncelleyin",
-    "Create key backup": "Anahtar yedeği oluştur",
-    "Set up Secure Messages": "Güvenli Mesajları Ayarla",
     "Show more": "Daha fazla göster",
     "This backup is trusted because it has been restored on this session": "Bu yedek güvenilir çünkü bu oturumda geri döndürüldü",
     "This user has not verified all of their sessions.": "Bu kullanıcı bütün oturumlarında doğrulanmamış.",
@@ -351,10 +329,6 @@
     "Invalid base_url for m.homeserver": "m.anasunucu için geçersiz base_url",
     "Invalid base_url for m.identity_server": "m.kimlik_sunucu için geçersiz base_url",
     "Identity server URL does not appear to be a valid identity server": "Kimlik sunucu adresi geçerli bir kimlik sunucu adresi gibi gözükmüyor",
-    "Enter your account password to confirm the upgrade:": "Güncellemeyi başlatmak için hesap şifreni gir:",
-    "You'll need to authenticate with the server to confirm the upgrade.": "Güncellemeyi teyit etmek için sunucuda oturum açmaya ihtiyacınız var.",
-    "Unable to set up secret storage": "Sır deposu ayarlanamıyor",
-    "Your keys are being backed up (the first backup could take a few minutes).": "Anahtarlarınız yedekleniyor (ilk yedek bir kaç dakika sürebilir).",
     "Set up": "Ayarla",
     "Upgrade public room": "Açık odayı güncelle",
     "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Bu odayı <oldVersion /> versiyonundan <newVersion /> versiyonuna güncelleyeceksiniz.",
@@ -374,7 +348,6 @@
     "Signature upload failed": "İmza yükleme başarısız",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Bu dosyalar yükleme için <b>çok büyük</b>. Dosya boyut limiti %(limit)s.",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Bazı dosyalar yükleme için <b>çok büyük</b>. Dosya boyutu limiti %(limit)s.",
-    "Failed to re-authenticate due to a homeserver problem": "Anasunucu problemi yüzünden yeniden kimlik doğrulama başarısız",
     "PM": "24:00",
     "AM": "12:00",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) yeni oturuma doğrulamadan giriş yaptı:",
@@ -798,7 +771,9 @@
         "authentication": "Doğrulama",
         "rooms": "Odalar",
         "low_priority": "Düşük öncelikli",
-        "historical": "Tarihi"
+        "historical": "Tarihi",
+        "go_to_settings": "Ayarlara Git",
+        "setup_secure_messages": "Güvenli Mesajları Ayarla"
     },
     "action": {
         "continue": "Devam Et",
@@ -1234,6 +1209,33 @@
             "remove_msisdn_prompt": "%(phone)s sil?",
             "add_msisdn_instructions": "Bir metin mesajı gönderildi: +%(msisdn)s. Lütfen içerdiği doğrulama kodunu girin.",
             "msisdn_label": "Telefon Numarası"
+        },
+        "key_backup": {
+            "backup_in_progress": "Anahtarlarınız yedekleniyor (ilk yedek bir kaç dakika sürebilir).",
+            "backup_success": "Başarılı!",
+            "create_title": "Anahtar yedeği oluştur",
+            "cannot_create_backup": "Anahtar yedeği oluşturulamıyor",
+            "setup_secure_backup": {
+                "requires_password_confirmation": "Güncellemeyi başlatmak için hesap şifreni gir:",
+                "requires_server_authentication": "Güncellemeyi teyit etmek için sunucuda oturum açmaya ihtiyacınız var.",
+                "pass_phrase_match_success": "Eşleşti!",
+                "pass_phrase_match_failed": "Eşleşmiyor.",
+                "set_phrase_again": "Geri git ve yeniden ayarla.",
+                "title_upgrade_encryption": "Şifrelemenizi güncelleyin",
+                "unable_to_setup": "Sır deposu ayarlanamıyor"
+            }
+        },
+        "key_export_import": {
+            "export_title": "Oda anahtarlarını dışa aktar",
+            "export_description_1": "Bu işlem şifreli odalarda aldığınız iletilerin anahtarlarını yerel dosyaya vermenizi sağlar . Bundan sonra dosyayı ileride başka bir Matrix istemcisine de aktarabilirsiniz , böylece istemci bu mesajların şifresini çözebilir (decryption).",
+            "enter_passphrase": "Şifre deyimi Girin",
+            "confirm_passphrase": "Şifreyi onayla",
+            "phrase_cannot_be_empty": "Şifrenin boş olmaması gerekir",
+            "phrase_must_match": "Şifrenin eşleşmesi gerekir",
+            "import_title": "Oda anahtarlarını içe aktar",
+            "import_description_1": "Bu işlem , geçmişte başka Matrix istemcisinden dışa aktardığınız şifreleme anahtarlarınızı içe aktarmanızı sağlar . Böylece diğer istemcinin çözebileceği tüm iletilerin şifresini çözebilirsiniz.",
+            "import_description_2": "Dışa aktarma dosyası bir şifre ile korunacaktır . Dosyanın şifresini çözmek için buraya şifre girmelisiniz.",
+            "file_to_import": "Alınacak Dosya"
         }
     },
     "devtools": {
@@ -1756,7 +1758,13 @@
         "cross_signing_ready": "Çapraz imzalama zaten kullanılıyor.",
         "cross_signing_untrusted": "Hesabınız gizli belleğinde çapraz imzalama kimliği barındırıyor ancak bu oturumda daha kullanılmış değil.",
         "cross_signing_not_ready": "Çapraz imzalama ayarlanmamış.",
-        "not_supported": "<Desteklenmiyor>"
+        "not_supported": "<Desteklenmiyor>",
+        "new_recovery_method_detected": {
+            "title": "Yeni Kurtarma Yöntemi"
+        },
+        "recovery_method_removed": {
+            "title": "Kurtarma Yöntemi Silindi"
+        }
     },
     "emoji": {
         "category_frequently_used": "Sıklıkla Kullanılan",
@@ -1852,7 +1860,9 @@
         "autodiscovery_unexpected_error_hs": "Ana sunucu yapılandırması çözümlenirken beklenmeyen hata",
         "autodiscovery_unexpected_error_is": "Kimlik sunucu yapılandırması çözümlenirken beklenmeyen hata",
         "incorrect_credentials_detail": "Lütfen %(hs)s sunucusuna oturum açtığınızın farkında olun. Bu sunucu matrix.org değil.",
-        "create_account_title": "Yeni hesap"
+        "create_account_title": "Yeni hesap",
+        "failed_soft_logout_homeserver": "Anasunucu problemi yüzünden yeniden kimlik doğrulama başarısız",
+        "soft_logout_subheading": "Kişisel veri temizle"
     },
     "room_list": {
         "sort_unread_first": "Önce okunmamış mesajları olan odaları göster",

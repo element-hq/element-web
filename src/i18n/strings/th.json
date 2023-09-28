@@ -58,10 +58,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "Export room keys": "ส่งออกกุณแจห้อง",
-    "Confirm passphrase": "ยืนยันรหัสผ่าน",
-    "Import room keys": "นำเข้ากุณแจห้อง",
-    "File to import": "ไฟล์ที่จะนำเข้า",
     "Confirm Removal": "ยืนยันการลบ",
     "Home": "เมนูหลัก",
     "(~%(count)s results)": {
@@ -70,7 +66,6 @@
     },
     "A new password must be entered.": "กรุณากรอกรหัสผ่านใหม่",
     "Custom level": "กำหนดระดับเอง",
-    "Enter passphrase": "กรอกรหัสผ่าน",
     "Verification Pending": "รอการตรวจสอบ",
     "Error decrypting image": "เกิดข้อผิดพลาดในการถอดรหัสรูป",
     "Error decrypting video": "เกิดข้อผิดพลาดในการถอดรหัสวิดิโอ",
@@ -367,6 +362,13 @@
         "voip": {
             "audio_input_empty": "ไม่พบไมโครโฟน",
             "video_input_empty": "ไม่พบกล้องเว็บแคม"
+        },
+        "key_export_import": {
+            "export_title": "ส่งออกกุณแจห้อง",
+            "enter_passphrase": "กรอกรหัสผ่าน",
+            "confirm_passphrase": "ยืนยันรหัสผ่าน",
+            "import_title": "นำเข้ากุณแจห้อง",
+            "file_to_import": "ไฟล์ที่จะนำเข้า"
         }
     },
     "timeline": {

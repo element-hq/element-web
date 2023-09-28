@@ -155,7 +155,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         try {
             credentials = await sendLoginRequest(hsUrl, isUrl, loginType, loginParams);
         } catch (e) {
-            let errorText = _t("Failed to re-authenticate due to a homeserver problem");
+            let errorText = _t("auth|failed_soft_logout_homeserver");
             if (
                 e instanceof MatrixError &&
                 e.errcode === "M_FORBIDDEN" &&
@@ -311,12 +311,8 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                     <h2>{_t("action|sign_in")}</h2>
                     <div>{this.renderSignInSection()}</div>
 
-                    <h2>{_t("Clear personal data")}</h2>
-                    <p>
-                        {_t(
-                            "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.",
-                        )}
-                    </p>
+                    <h2>{_t("auth|soft_logout_subheading")}</h2>
+                    <p>{_t("auth|soft_logout_warning")}</p>
                     <div>
                         <AccessibleButton onClick={this.onClearAll} kind="danger">
                             {_t("Clear all data")}

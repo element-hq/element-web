@@ -99,8 +99,6 @@
     "Cancel search": "nu co'u sisku",
     "Search failed": ".i da nabmi lo nu sisku",
     "Switch theme": "nu basti fi le ka jvinu",
-    "That matches!": ".i du",
-    "Success!": ".i snada",
     "Verify your other session using one of the options below.": ".i ko cuxna da le di'e cei'i le ka tadji lo nu do co'a lacri",
     "Ask this user to verify their session, or manually verify it below.": ".i ko cpedu le ka co'a lacri le se samtcise'u kei le pilno vau ja pilno le di'e cei'i le ka co'a lacri",
     "Not Trusted": "na se lacri",
@@ -248,6 +246,12 @@
             "error_share_msisdn_discovery": ".i da nabmi fi lo nu jungau le du'u fonjudri",
             "incorrect_msisdn_verification": ".i na'e drani ke lacri lerpoi",
             "error_set_name": ".i pu fliba lo nu galfi lo cmene"
+        },
+        "key_backup": {
+            "backup_success": ".i snada",
+            "setup_secure_backup": {
+                "pass_phrase_match_success": ".i du"
+            }
         }
     },
     "create_room": {

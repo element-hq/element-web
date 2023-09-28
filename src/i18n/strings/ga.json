@@ -198,7 +198,6 @@
     "Accepting…": "ag Glacadh leis…",
     "Lock": "Glasáil",
     "Unencrypted": "Gan chriptiú",
-    "Success!": "Rath!",
     "Home": "Tús",
     "Removing…": "ag Baint…",
     "Changelog": "Loga na n-athruithe",
@@ -339,7 +338,6 @@
     "Failed to forget room %(errCode)s": "Níor dhearnadh dearmad ar an seomra %(errCode)s",
     "Failed to ban user": "Níor éiríodh leis an úsáideoir a thoirmeasc",
     "Error decrypting attachment": "Earráid le ceangaltán a dhíchriptiú",
-    "Enter passphrase": "Iontráil pasfrása",
     "Email address": "Seoladh ríomhphoist",
     "Download %(text)s": "Íoslódáil %(text)s",
     "Decrypt %(text)s": "Díchriptigh %(text)s",
@@ -587,6 +585,12 @@
         "voip": {
             "audio_input_empty": "Níor braitheadh aon micreafón",
             "video_input_empty": "Níor braitheadh aon ceamara gréasáin"
+        },
+        "key_backup": {
+            "backup_success": "Rath!"
+        },
+        "key_export_import": {
+            "enter_passphrase": "Iontráil pasfrása"
         }
     },
     "devtools": {

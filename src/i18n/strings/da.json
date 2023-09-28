@@ -57,7 +57,6 @@
     "Preparing to send logs": "Forbereder afsendelse af logfiler",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s. %(monthName)s %(fullYear)s",
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
-    "Enter passphrase": "Indtast kodeord",
     "Headphones": "Hovedtelefoner",
     "Show more": "Vis mere",
     "Add a new server": "Tilføj en ny server",
@@ -447,6 +446,9 @@
             "password_change_success": "Din adgangskode blev ændret.",
             "deactivate_section": "Deaktiver brugerkonto",
             "msisdn_verification_field_label": "Verifikationskode"
+        },
+        "key_export_import": {
+            "enter_passphrase": "Indtast kodeord"
         }
     },
     "devtools": {

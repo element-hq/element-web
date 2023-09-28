@@ -17,7 +17,6 @@
     "Custom level": "맞춤 등급",
     "Decrypt %(text)s": "%(text)s 복호화",
     "Download %(text)s": "%(text)s 다운로드",
-    "Enter passphrase": "암호 입력",
     "Error decrypting attachment": "첨부 파일 복호화 중 오류",
     "Failed to ban user": "사용자 출입 금지에 실패함",
     "Failed to load timeline position": "타임라인 위치 불러오기에 실패함",
@@ -25,7 +24,6 @@
     "Failed to reject invite": "초대 거부에 실패함",
     "Failed to reject invitation": "초대 거절에 실패함",
     "Home": "홈",
-    "Import room keys": "방 키 가져오기",
     "Invalid file%(extra)s": "잘못된 파일%(extra)s",
     "Join Room": "방에 참가",
     "Jump to first unread message.": "읽지 않은 첫 메시지로 건너뜁니다.",
@@ -80,15 +78,7 @@
         "one": "(~%(count)s개의 결과)",
         "other": "(~%(count)s개의 결과)"
     },
-    "Passphrases must match": "암호가 일치해야 함",
-    "Passphrase must not be empty": "암호를 입력해야 함",
-    "Export room keys": "방 키 내보내기",
-    "Confirm passphrase": "암호 확인",
-    "File to import": "가져올 파일",
     "Confirm Removal": "삭제 확인",
-    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "이 과정으로 암호화한 방에서 받은 메시지의 키를 로컬 파일로 내보낼 수 있습니다. 그런 다음 나중에 다른 Matrix 클라이언트에서 파일을 가져와서, 해당 클라이언트에서도 이 메시지를 복호화할 수 있도록 할 수 있습니다.",
-    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "이 과정으로 다른 Matrix 클라이언트에서 내보낸 암호화 키를 가져올 수 있습니다. 그런 다음 이전 클라이언트에서 복호화할 수 있는 모든 메시지를 복호화할 수 있습니다.",
-    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "내보낸 파일이 암호로 보호되어 있습니다. 파일을 복호화하려면, 여기에 암호를 입력해야 합니다.",
     "Unable to restore session": "세션을 복구할 수 없음",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "이전에 최근 버전의 %(brand)s을 썼다면, 세션이 이 버전과 맞지 않을 것입니다. 창을 닫고 최근 버전으로 돌아가세요.",
     "Error decrypting image": "사진 복호화 중 오류",
@@ -320,21 +310,7 @@
     "Invalid base_url for m.identity_server": "잘못된 m.identity_server 용 base_url",
     "Identity server URL does not appear to be a valid identity server": "ID 서버 URL이 올바른 ID 서버가 아님",
     "General failure": "일반적인 실패",
-    "Failed to re-authenticate due to a homeserver problem": "홈서버 문제로 다시 인증에 실패함",
-    "Clear personal data": "개인 정보 지우기",
-    "That matches!": "맞습니다!",
-    "That doesn't match.": "맞지 않습니다.",
-    "Go back to set it again.": "돌아가서 다시 설정하기.",
-    "Your keys are being backed up (the first backup could take a few minutes).": "키를 백업했습니다 (처음 백업에는 시간이 걸릴 수 있습니다).",
-    "Success!": "성공!",
-    "Unable to create key backup": "키 백업을 만들 수 없음",
     "Set up": "설정",
-    "New Recovery Method": "새 복구 방식",
-    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "새 복구 방식을 설정하지 않으면, 공격자가 계정에 접근을 시도할 지도 모릅니다. 설정에서 계정 비밀번호를 바꾸고 즉시 새 복구 방식을 설정하세요.",
-    "Go to Settings": "설정으로 가기",
-    "Set up Secure Messages": "보안 메시지 설정",
-    "Recovery Method Removed": "복구 방식 제거됨",
-    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "이 복구 방식을 제거하지 않으면, 공격자가 계정에 접근을 시도할 지도 모릅니다. 설정에서 계정 비밀번호를 바꾸고 즉시 새 복구 방식을 설정하세요.",
     "Deactivate user?": "사용자를 비활성화합니까?",
     "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "사용자를 비활성화하면 사용자는 로그아웃되며 다시 로그인할 수 없게 됩니다. 또한 사용자는 모든 방에서 떠나게 됩니다. 이 작업은 돌이킬 수 없습니다. 이 사용자를 비활성화하겠습니까?",
     "Deactivate user": "사용자 비활성화",
@@ -489,7 +465,9 @@
         "private_space": "비공개 스페이스",
         "rooms": "방",
         "low_priority": "중요하지 않음",
-        "historical": "기록"
+        "historical": "기록",
+        "go_to_settings": "설정으로 가기",
+        "setup_secure_messages": "보안 메시지 설정"
     },
     "action": {
         "continue": "계속하기",
@@ -775,6 +753,28 @@
         "sidebar": {
             "title": "사이드바",
             "metaspaces_home_all_rooms": "모든 방 목록 보기"
+        },
+        "key_backup": {
+            "backup_in_progress": "키를 백업했습니다 (처음 백업에는 시간이 걸릴 수 있습니다).",
+            "backup_success": "성공!",
+            "cannot_create_backup": "키 백업을 만들 수 없음",
+            "setup_secure_backup": {
+                "pass_phrase_match_success": "맞습니다!",
+                "pass_phrase_match_failed": "맞지 않습니다.",
+                "set_phrase_again": "돌아가서 다시 설정하기."
+            }
+        },
+        "key_export_import": {
+            "export_title": "방 키 내보내기",
+            "export_description_1": "이 과정으로 암호화한 방에서 받은 메시지의 키를 로컬 파일로 내보낼 수 있습니다. 그런 다음 나중에 다른 Matrix 클라이언트에서 파일을 가져와서, 해당 클라이언트에서도 이 메시지를 복호화할 수 있도록 할 수 있습니다.",
+            "enter_passphrase": "암호 입력",
+            "confirm_passphrase": "암호 확인",
+            "phrase_cannot_be_empty": "암호를 입력해야 함",
+            "phrase_must_match": "암호가 일치해야 함",
+            "import_title": "방 키 가져오기",
+            "import_description_1": "이 과정으로 다른 Matrix 클라이언트에서 내보낸 암호화 키를 가져올 수 있습니다. 그런 다음 이전 클라이언트에서 복호화할 수 있는 모든 메시지를 복호화할 수 있습니다.",
+            "import_description_2": "내보낸 파일이 암호로 보호되어 있습니다. 파일을 복호화하려면, 여기에 암호를 입력해야 합니다.",
+            "file_to_import": "가져올 파일"
         }
     },
     "devtools": {
@@ -1182,7 +1182,15 @@
         "import_invalid_passphrase": "인증 확인 실패: 비밀번호를 틀리셨나요?",
         "upgrade_toast_title": "암호화 업그레이드 가능",
         "verify_toast_title": "이 세션 검증",
-        "not_supported": "<지원하지 않음>"
+        "not_supported": "<지원하지 않음>",
+        "new_recovery_method_detected": {
+            "title": "새 복구 방식",
+            "warning": "새 복구 방식을 설정하지 않으면, 공격자가 계정에 접근을 시도할 지도 모릅니다. 설정에서 계정 비밀번호를 바꾸고 즉시 새 복구 방식을 설정하세요."
+        },
+        "recovery_method_removed": {
+            "title": "복구 방식 제거됨",
+            "warning": "이 복구 방식을 제거하지 않으면, 공격자가 계정에 접근을 시도할 지도 모릅니다. 설정에서 계정 비밀번호를 바꾸고 즉시 새 복구 방식을 설정하세요."
+        }
     },
     "emoji": {
         "category_frequently_used": "자주 사용함",
@@ -1268,7 +1276,9 @@
         "autodiscovery_unexpected_error_hs": "홈서버 설정을 해결하는 중 예기치 않은 오류",
         "autodiscovery_unexpected_error_is": "ID 서버 설정을 해결하는 중 예기치 않은 오류",
         "incorrect_credentials_detail": "지금 %(hs)s 서버로 로그인하고 있는데, matrix.org로 로그인해야 합니다.",
-        "create_account_title": "계정 만들기"
+        "create_account_title": "계정 만들기",
+        "failed_soft_logout_homeserver": "홈서버 문제로 다시 인증에 실패함",
+        "soft_logout_subheading": "개인 정보 지우기"
     },
     "export_chat": {
         "title": "대화 내보내기",

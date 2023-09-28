@@ -110,7 +110,7 @@ export function getUserLanguage(): string {
  *     }
  * }
  */
-export type TranslationKey = Leaves<typeof Translations, "|", string | { other: string }>;
+export type TranslationKey = Leaves<typeof Translations, "|", string | { other: string }, 4>;
 
 // Function which only purpose is to mark that a string is translatable
 // Does not actually do anything. It's helpful for automatic extraction of translatable strings
