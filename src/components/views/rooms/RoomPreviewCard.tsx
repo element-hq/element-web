@@ -173,14 +173,14 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
 
     let notice: string | null = null;
     if (cannotJoin) {
-        notice = _t("To view %(roomName)s, you need an invite", {
+        notice = _t("room|join_failed_needs_invite", {
             roomName: room.name,
         });
     } else if (isVideoRoom && !videoRoomsEnabled) {
         notice =
             myMembership === "join"
-                ? _t("To view, please enable video rooms in Labs first")
-                : _t("To join, please enable video rooms in Labs first");
+                ? _t("room|view_failed_enable_video_rooms")
+                : _t("room|join_failed_enable_video_rooms");
 
         joinButtons = (
             <AccessibleButton kind="primary" onClick={viewLabs}>

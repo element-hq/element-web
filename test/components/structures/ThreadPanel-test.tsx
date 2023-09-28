@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "focus-visible"; // to fix context menus
 import { mocked } from "jest-mock";
 import {
     MatrixClient,

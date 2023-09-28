@@ -81,7 +81,6 @@ interface IState {
 
 export const TAG_ORDER: TagID[] = [
     DefaultTagID.Invite,
-    DefaultTagID.SavedItems,
     DefaultTagID.Favourite,
     DefaultTagID.DM,
     DefaultTagID.Untagged,
@@ -132,7 +131,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                     <IconizedContextMenuOptionList first>
                         {showCreateRooms && (
                             <IconizedContextMenuOption
-                                label={_t("Start new chat")}
+                                label={_t("action|start_new_chat")}
                                 iconClassName="mx_RoomList_iconStartChat"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -148,7 +147,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                         )}
                         {showInviteUsers && (
                             <IconizedContextMenuOption
-                                label={_t("Invite to space")}
+                                label={_t("action|invite_to_space")}
                                 iconClassName="mx_RoomList_iconInvite"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -172,8 +171,8 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                     onClick={openMenu}
                     className="mx_RoomSublist_auxButton"
                     tooltipClassName="mx_RoomSublist_addRoomTooltip"
-                    aria-label={_t("Add people")}
-                    title={_t("Add people")}
+                    aria-label={_t("action|add_people")}
+                    title={_t("action|add_people")}
                     isExpanded={menuDisplayed}
                     inputRef={handle}
                 />
@@ -222,7 +221,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
         contextMenuContent = (
             <IconizedContextMenuOptionList first>
                 <IconizedContextMenuOption
-                    label={_t("Explore rooms")}
+                    label={_t("action|explore_rooms")}
                     iconClassName="mx_RoomList_iconExplore"
                     onClick={(e) => {
                         e.preventDefault();
@@ -239,7 +238,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                 {showCreateRoom ? (
                     <>
                         <IconizedContextMenuOption
-                            label={_t("New room")}
+                            label={_t("action|new_room")}
                             iconClassName="mx_RoomList_iconNewRoom"
                             onClick={(e) => {
                                 e.preventDefault();
@@ -253,7 +252,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                         />
                         {videoRoomsEnabled && (
                             <IconizedContextMenuOption
-                                label={_t("New video room")}
+                                label={_t("action|new_video_room")}
                                 iconClassName="mx_RoomList_iconNewVideoRoom"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -271,7 +270,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                             </IconizedContextMenuOption>
                         )}
                         <IconizedContextMenuOption
-                            label={_t("Add existing room")}
+                            label={_t("action|add_existing_room")}
                             iconClassName="mx_RoomList_iconAddExistingRoom"
                             onClick={(e) => {
                                 e.preventDefault();
@@ -292,7 +291,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                 {showCreateRoom && (
                     <>
                         <IconizedContextMenuOption
-                            label={_t("New room")}
+                            label={_t("action|new_room")}
                             iconClassName="mx_RoomList_iconNewRoom"
                             onClick={(e) => {
                                 e.preventDefault();
@@ -304,7 +303,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                         />
                         {videoRoomsEnabled && (
                             <IconizedContextMenuOption
-                                label={_t("New video room")}
+                                label={_t("action|new_video_room")}
                                 iconClassName="mx_RoomList_iconNewVideoRoom"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -325,7 +324,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                 )}
                 {showExploreRooms ? (
                     <IconizedContextMenuOption
-                        label={_t("Explore public rooms")}
+                        label={_t("action|explore_public_rooms")}
                         iconClassName="mx_RoomList_iconExplore"
                         onClick={(e) => {
                             e.preventDefault();
@@ -357,8 +356,8 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                     onClick={openMenu}
                     className="mx_RoomSublist_auxButton"
                     tooltipClassName="mx_RoomSublist_addRoomTooltip"
-                    aria-label={_t("Add room")}
-                    title={_t("Add room")}
+                    aria-label={_t("room_list|add_room_label")}
+                    title={_t("room_list|add_room_label")}
                     isExpanded={menuDisplayed}
                     inputRef={handle}
                 />
@@ -382,11 +381,6 @@ const TAG_AESTHETICS: TagAestheticsMap = {
         isInvite: false,
         defaultHidden: false,
     },
-    [DefaultTagID.SavedItems]: {
-        sectionLabel: _td("Saved Items"),
-        isInvite: false,
-        defaultHidden: false,
-    },
     [DefaultTagID.DM]: {
         sectionLabel: _td("common|people"),
         isInvite: false,
@@ -394,13 +388,13 @@ const TAG_AESTHETICS: TagAestheticsMap = {
         AuxButtonComponent: DmAuxButton,
     },
     [DefaultTagID.Untagged]: {
-        sectionLabel: _td("Rooms"),
+        sectionLabel: _td("common|rooms"),
         isInvite: false,
         defaultHidden: false,
         AuxButtonComponent: UntaggedAuxButton,
     },
     [DefaultTagID.LowPriority]: {
-        sectionLabel: _td("Low priority"),
+        sectionLabel: _td("common|low_priority"),
         isInvite: false,
         defaultHidden: false,
     },
@@ -412,13 +406,13 @@ const TAG_AESTHETICS: TagAestheticsMap = {
 
     // TODO: Replace with archived view: https://github.com/vector-im/element-web/issues/14038
     [DefaultTagID.Archived]: {
-        sectionLabel: _td("Historical"),
+        sectionLabel: _td("common|historical"),
         isInvite: false,
         defaultHidden: true,
     },
 
     [DefaultTagID.Suggested]: {
-        sectionLabel: _td("Suggested Rooms"),
+        sectionLabel: _td("room_list|suggested_rooms_heading"),
         isInvite: false,
         defaultHidden: false,
     },
@@ -654,7 +648,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         onKeyDown={onKeyDownHandler}
                         className="mx_RoomList"
                         role="tree"
-                        aria-label={_t("Rooms")}
+                        aria-label={_t("common|rooms")}
                         ref={this.treeRef}
                     >
                         {sublists}

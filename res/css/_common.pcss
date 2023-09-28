@@ -230,7 +230,7 @@ textarea:focus {
 /* accessible (focusable) components. Not intended for buttons, but */
 /* should be used on things like focusable containers where the outline */
 /* is usually not helping anyone. */
-*:focus:not(.focus-visible) {
+*:focus:not(:focus-visible) {
     outline: none;
 }
 
@@ -585,7 +585,7 @@ legend {
     cursor: pointer;
     display: inline-block;
 
-    &:not(.focus-visible) {
+    &:not(:focus-visible) {
         outline: none;
     }
 }

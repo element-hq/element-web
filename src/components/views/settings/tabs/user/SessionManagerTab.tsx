@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -180,6 +180,7 @@ const SessionManagerTab: React.FC = () => {
     const currentUserMember = (userId && matrixClient?.getUser(userId)) || undefined;
     const clientVersions = useAsyncMemo(() => matrixClient.getVersions(), [matrixClient]);
     const capabilities = useAsyncMemo(async () => matrixClient?.getCapabilities(), [matrixClient]);
+    const wellKnown = useMemo(() => matrixClient?.getClientWellKnown(), [matrixClient]);
 
     const onDeviceExpandToggle = (deviceId: ExtendedDevice["device_id"]): void => {
         if (expandedDeviceIds.includes(deviceId)) {
@@ -302,9 +303,7 @@ const SessionManagerTab: React.FC = () => {
                                 disabled={!!signingOutDeviceIds.length}
                             />
                         }
-                        description={_t(
-                            "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.",
-                        )}
+                        description={_t("settings|sessions|best_security_note")}
                         data-testid="other-sessions-section"
                         stretchContent
                     >
@@ -331,7 +330,12 @@ const SessionManagerTab: React.FC = () => {
                         />
                     </SettingsSubsection>
                 )}
-                <LoginWithQRSection onShowQr={onShowQrClicked} versions={clientVersions} capabilities={capabilities} />
+                <LoginWithQRSection
+                    onShowQr={onShowQrClicked}
+                    versions={clientVersions}
+                    capabilities={capabilities}
+                    wellKnown={wellKnown}
+                />
             </SettingsSection>
         </SettingsTab>
     );

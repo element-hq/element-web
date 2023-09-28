@@ -161,6 +161,8 @@ describe("Lifecycle", () => {
         accessToken,
     };
 
+    const refreshToken = "test-refresh-token";
+
     const encryptedTokenShapedObject = {
         ciphertext: expect.any(String),
         iv: expect.any(String),
@@ -285,6 +287,45 @@ describe("Lifecycle", () => {
 
                     expect(MatrixClientPeg.start).toHaveBeenCalled();
                 });
+
+                describe("with a refresh token", () => {
+                    beforeEach(() => {
+                        initLocalStorageMock({
+                            ...localStorageSession,
+                            mx_refresh_token: refreshToken,
+                        });
+                        initIdbMock(idbStorageSession);
+                    });
+
+                    it("should persist credentials", async () => {
+                        expect(await restoreFromLocalStorage()).toEqual(true);
+
+                        // refresh token from storage is re-persisted
+                        expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_refresh_token", "true");
+                        expect(StorageManager.idbSave).toHaveBeenCalledWith(
+                            "account",
+                            "mx_refresh_token",
+                            refreshToken,
+                        );
+                    });
+
+                    it("should create new matrix client with credentials", async () => {
+                        expect(await restoreFromLocalStorage()).toEqual(true);
+
+                        expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith({
+                            userId,
+                            accessToken,
+                            // refreshToken included in credentials
+                            refreshToken,
+                            homeserverUrl,
+                            identityServerUrl,
+                            deviceId,
+                            freshLogin: false,
+                            guest: false,
+                            pickleKey: undefined,
+                        });
+                    });
+                });
             });
 
             describe("with a pickle key", () => {
@@ -342,6 +383,47 @@ describe("Lifecycle", () => {
                         freshLogin: true,
                         guest: false,
                         pickleKey: expect.any(String),
+                    });
+                });
+
+                describe("with a refresh token", () => {
+                    beforeEach(async () => {
+                        initLocalStorageMock({});
+                        initIdbMock({});
+                        // setup storage with a session with encrypted token
+                        await setLoggedIn({
+                            ...credentials,
+                            refreshToken,
+                        });
+                    });
+
+                    it("should persist credentials", async () => {
+                        expect(await restoreFromLocalStorage()).toEqual(true);
+
+                        // refresh token from storage is re-persisted
+                        expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_refresh_token", "true");
+                        expect(StorageManager.idbSave).toHaveBeenCalledWith(
+                            "account",
+                            "mx_refresh_token",
+                            encryptedTokenShapedObject,
+                        );
+                    });
+
+                    it("should create new matrix client with credentials", async () => {
+                        expect(await restoreFromLocalStorage()).toEqual(true);
+
+                        expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith({
+                            userId,
+                            accessToken,
+                            // refreshToken included in credentials
+                            refreshToken,
+                            homeserverUrl,
+                            identityServerUrl,
+                            deviceId,
+                            freshLogin: false,
+                            guest: false,
+                            pickleKey: expect.any(String),
+                        });
                     });
                 });
             });

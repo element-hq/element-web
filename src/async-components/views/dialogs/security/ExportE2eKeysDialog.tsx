@@ -158,29 +158,21 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
             <BaseDialog
                 className="mx_exportE2eKeysDialog"
                 onFinished={this.props.onFinished}
-                title={_t("Export room keys")}
+                title={_t("settings|key_export_import|export_title")}
             >
                 <form onSubmit={this.onPassphraseFormSubmit}>
                     <div className="mx_Dialog_content">
-                        <p>
-                            {_t(
-                                "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.",
-                            )}
-                        </p>
-                        <p>
-                            {_t(
-                                "The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a unique passphrase below, which will only be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.",
-                            )}
-                        </p>
+                        <p>{_t("settings|key_export_import|export_description_1")}</p>
+                        <p>{_t("settings|key_export_import|export_description_2")}</p>
                         <div className="error">{this.state.errStr}</div>
                         <div className="mx_E2eKeysDialog_inputTable">
                             <div className="mx_E2eKeysDialog_inputRow">
                                 <PassphraseField
                                     minScore={3}
-                                    label={_td("Enter passphrase")}
-                                    labelEnterPassword={_td("Enter passphrase")}
-                                    labelStrongPassword={_td("Great! This passphrase looks strong enough")}
-                                    labelAllowedButUnsafe={_td("Great! This passphrase looks strong enough")}
+                                    label={_td("settings|key_export_import|enter_passphrase")}
+                                    labelEnterPassword={_td("settings|key_export_import|enter_passphrase")}
+                                    labelStrongPassword={_td("settings|key_export_import|phrase_strong_enough")}
+                                    labelAllowedButUnsafe={_td("settings|key_export_import|phrase_strong_enough")}
                                     value={this.state.passphrase1}
                                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                         this.onPassphraseChange(e, "passphrase1")
@@ -196,9 +188,9 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
                             <div className="mx_E2eKeysDialog_inputRow">
                                 <PassphraseConfirmField
                                     password={this.state.passphrase1}
-                                    label={_td("Confirm passphrase")}
-                                    labelRequired={_td("Passphrase must not be empty")}
-                                    labelInvalid={_td("Passphrases must match")}
+                                    label={_td("settings|key_export_import|confirm_passphrase")}
+                                    labelRequired={_td("settings|key_export_import|phrase_cannot_be_empty")}
+                                    labelInvalid={_td("settings|key_export_import|phrase_must_match")}
                                     value={this.state.passphrase2}
                                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                         this.onPassphraseChange(e, "passphrase2")

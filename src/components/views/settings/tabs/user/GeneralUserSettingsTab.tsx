@@ -282,16 +282,16 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
         const errorMessage = extractErrorMessageFromError(
             err,
-            _t("Unknown password change error (%(stringifiedError)s)", {
+            _t("settings|general|error_password_change_unknown", {
                 stringifiedError: String(err),
             }),
         );
 
         let errorMessageToDisplay = errorMessage;
         if (underlyingError instanceof HTTPError && underlyingError.httpStatus === 403) {
-            errorMessageToDisplay = _t("Failed to change password. Is your password correct?");
+            errorMessageToDisplay = _t("settings|general|error_password_change_403");
         } else if (underlyingError instanceof HTTPError) {
-            errorMessageToDisplay = _t("%(errorMessage)s (HTTP status %(httpStatus)s)", {
+            errorMessageToDisplay = _t("settings|general|error_password_change_http", {
                 errorMessage,
                 httpStatus: underlyingError.httpStatus,
             });
@@ -299,13 +299,13 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
         // TODO: Figure out a design that doesn't involve replacing the current dialog
         Modal.createDialog(ErrorDialog, {
-            title: _t("Error changing password"),
+            title: _t("settings|general|error_password_change_title"),
             description: errorMessageToDisplay,
         });
     };
 
     private onPasswordChanged = (): void => {
-        const description = _t("Your password was successfully changed.");
+        const description = _t("settings|general|password_change_success");
         // TODO: Figure out a design that doesn't involve replacing the current dialog
         Modal.createDialog(ErrorDialog, {
             title: _t("common|success"),
@@ -346,7 +346,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             threepidSection = (
                 <>
                     <SettingsSubsection
-                        heading={_t("Email addresses")}
+                        heading={_t("settings|general|emails_heading")}
                         stretchContent
                         data-testid="mx_AccountEmailAddresses"
                     >
@@ -354,7 +354,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                     </SettingsSubsection>
 
                     <SettingsSubsection
-                        heading={_t("Phone numbers")}
+                        heading={_t("settings|general|msisdns_heading")}
                         stretchContent
                         data-testid="mx_AccountPhoneNumbers"
                     >
@@ -368,7 +368,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         if (this.state.canChangePassword) {
             passwordChangeSection = (
                 <>
-                    <SettingsSubsectionText>{_t("Set a new account password…")}</SettingsSubsectionText>
+                    <SettingsSubsectionText>{_t("settings|general|password_change_section")}</SettingsSubsectionText>
                     <ChangePassword
                         className="mx_GeneralUserSettingsTab_section--account_changePassword"
                         rowClassName=""
@@ -388,7 +388,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                 <>
                     <SettingsSubsectionText data-testid="external-account-management-outer">
                         {_t(
-                            "Your account details are managed separately at <code>%(hostname)s</code>.",
+                            "settings|general|external_account_management",
                             { hostname },
                             { code: (sub) => <code>{sub}</code> },
                         )}
@@ -457,10 +457,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         if (this.state.requiredPolicyInfo.hasTerms) {
             const intro = (
                 <SettingsSubsectionText>
-                    {_t(
-                        "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.",
-                        { serverName: this.state.idServerName },
-                    )}
+                    {_t("settings|general|discovery_needs_terms", { serverName: this.state.idServerName })}
                 </SettingsSubsectionText>
             );
             return (
@@ -504,14 +501,14 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     private renderManagementSection(): JSX.Element {
         // TODO: Improve warning text for account deactivation
         return (
-            <SettingsSection heading={_t("Deactivate account")}>
+            <SettingsSection heading={_t("settings|general|deactivate_section")}>
                 <SettingsSubsection
-                    heading={_t("Account management")}
+                    heading={_t("settings|general|account_management_section")}
                     data-testid="account-management-section"
-                    description={_t("Deactivating your account is a permanent action — be careful!")}
+                    description={_t("settings|general|deactivate_warning")}
                 >
                     <AccessibleButton onClick={this.onDeactivateClicked} kind="danger">
-                        {_t("Deactivate Account")}
+                        {_t("settings|general|deactivate_section")}
                     </AccessibleButton>
                 </SettingsSubsection>
             </SettingsSection>
@@ -549,7 +546,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             const heading = (
                 <Heading size="2">
                     {discoWarning}
-                    {_t("Discovery")}
+                    {_t("settings|general|discovery_section")}
                 </Heading>
             );
             discoverySection = (

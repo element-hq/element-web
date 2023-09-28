@@ -1,5 +1,4 @@
 {
-    "Permission Required": "Permisul Obligatoriu",
     "Send": "Trimite",
     "Sun": "Dum",
     "Mon": "Lun",
@@ -26,7 +25,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s%(monthName)s%(day)s%(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s%(monthName)s%(day)s%(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s%(monthName)s%(day)s%(fullYear)s%(time)s",
-    "Explore rooms": "Explorează camerele",
     "common": {
         "analytics": "Analizarea",
         "error": "Eroare"
@@ -35,7 +33,8 @@
         "ok": "OK",
         "sign_in": "Autentificare",
         "dismiss": "Închide",
-        "confirm": "Confirmă"
+        "confirm": "Confirmă",
+        "explore_rooms": "Explorează camerele"
     },
     "voip": {
         "call_failed": "Apel eșuat",
@@ -92,5 +91,8 @@
     "create_room": {
         "generic_error": "Serverul poate fi indisponibil, supraîncărcat sau ați lovit un bug.",
         "error_title": "Eșecul de a crea spațiu"
+    },
+    "composer": {
+        "poll_button_no_perms_title": "Permisul Obligatoriu"
     }
 }

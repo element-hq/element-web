@@ -103,8 +103,6 @@
     "Tue": "Uto",
     "Mon": "Pon",
     "Sun": "Ned",
-    "Permission Required": "Potrebno dopuštenje",
-    "Could not connect to identity server": "Nije moguće spojiti se na poslužitelja identiteta",
     "common": {
         "analytics": "Analitika",
         "error": "Geška",
@@ -191,5 +189,11 @@
     },
     "notifier": {
         "m.key.verification.request": "%(name)s traži potvrdu"
+    },
+    "identity_server": {
+        "error_connection": "Nije moguće spojiti se na poslužitelja identiteta"
+    },
+    "composer": {
+        "poll_button_no_perms_title": "Potrebno dopuštenje"
     }
 }

@@ -156,7 +156,13 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
         return (
             <SettingsTab>
                 <SettingsSection heading={_t("common|advanced")}>
-                    <SettingsSubsection heading={room.isSpaceRoom() ? _t("Space information") : _t("Room information")}>
+                    <SettingsSubsection
+                        heading={
+                            room.isSpaceRoom()
+                                ? _t("room_settings|advanced|information_section_space")
+                                : _t("room_settings|advanced|information_section_room")
+                        }
+                    >
                         <div>
                             <span>{_t("room_settings|advanced|room_id")}</span>
                             <CopyableText getTextToCopy={() => this.props.room.roomId}>

@@ -125,7 +125,7 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
     let addressesSection: JSX.Element | undefined;
     if (space.getJoinRule() === JoinRule.Public) {
         addressesSection = (
-            <SettingsSection heading={_t("Address")}>
+            <SettingsSection heading={_t("room_settings|visibility|alias_section")}>
                 <AliasSettings
                     roomId={space.roomId}
                     canSetCanonicalAlias={canSetCanonical}

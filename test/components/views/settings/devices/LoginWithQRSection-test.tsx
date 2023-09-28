@@ -16,13 +16,13 @@ limitations under the License.
 
 import { render } from "@testing-library/react";
 import { mocked } from "jest-mock";
-import { IServerVersions, MatrixClient, UNSTABLE_MSC3882_CAPABILITY } from "matrix-js-sdk/src/matrix";
+import { IClientWellKnown, IServerVersions, MatrixClient, UNSTABLE_MSC3882_CAPABILITY } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
 import LoginWithQRSection from "../../../../../src/components/views/settings/devices/LoginWithQRSection";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 
-function makeClient() {
+function makeClient(wellKnown: IClientWellKnown) {
     return mocked({
         getUser: jest.fn(),
         isGuest: jest.fn().mockReturnValue(false),
@@ -37,6 +37,7 @@ function makeClient() {
         currentState: {
             on: jest.fn(),
         },
+        getClientWellKnown: jest.fn().mockReturnValue(wellKnown),
     } as unknown as MatrixClient);
 }
 
@@ -49,12 +50,13 @@ function makeVersions(unstableFeatures: Record<string, boolean>): IServerVersion
 
 describe("<LoginWithQRSection />", () => {
     beforeAll(() => {
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(makeClient());
+        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(makeClient({}));
     });
 
     const defaultProps = {
         onShowQr: () => {},
         versions: makeVersions({}),
+        wellKnown: {},
     };
 
     const getComponent = (props = {}) => <LoginWithQRSection {...defaultProps} {...props} />;
@@ -110,6 +112,23 @@ describe("<LoginWithQRSection />", () => {
                     capabilities: {
                         [UNSTABLE_MSC3882_CAPABILITY.name]: { enabled: true },
                     },
+                }),
+            );
+            expect(container).toMatchSnapshot();
+        });
+
+        it("MSC3882 r1 + .well-known", async () => {
+            const wellKnown = {
+                "io.element.rendezvous": {
+                    server: "https://rz.local",
+                },
+            };
+            jest.spyOn(MatrixClientPeg, "get").mockReturnValue(makeClient(wellKnown));
+            const { container } = render(
+                getComponent({
+                    versions: makeVersions({}),
+                    capabilities: { [UNSTABLE_MSC3882_CAPABILITY.name]: { enabled: true } },
+                    wellKnown,
                 }),
             );
             expect(container).toMatchSnapshot();

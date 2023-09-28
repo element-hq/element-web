@@ -1,30 +1,15 @@
 {
     "A new password must be entered.": "Deve ser introduzida uma nova palavra-passe.",
     "Are you sure you want to reject the invitation?": "Você tem certeza que deseja rejeitar este convite?",
-    "Deactivate Account": "Desativar conta",
-    "Default": "Padrão",
-    "Failed to change password. Is your password correct?": "Falha ao alterar a palavra-passe. A sua palavra-passe está correta?",
     "Failed to reject invitation": "Falha ao tentar rejeitar convite",
-    "Failed to unban": "Não foi possível desfazer o banimento",
-    "Filter room members": "Filtrar integrantes da sala",
-    "Forget room": "Esquecer sala",
-    "Historical": "Histórico",
-    "Invalid Email Address": "Endereço de email inválido",
-    "Low priority": "Baixa prioridade",
     "Moderator": "Moderador/a",
     "New passwords must match each other.": "Novas palavras-passe devem coincidir.",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Por favor verifique seu email e clique no link enviado. Quando finalizar este processo, clique para continuar.",
     "Reject invitation": "Rejeitar convite",
     "Return to login screen": "Retornar à tela de login",
-    "Rooms": "Salas",
     "Session ID": "Identificador de sessão",
-    "This doesn't appear to be a valid email address": "Este não aparenta ser um endereço de email válido",
-    "Unable to add email address": "Não foi possível adicionar endereço de email",
-    "Unable to remove contact information": "Não foi possível remover informação de contato",
-    "Unable to verify email address.": "Não foi possível verificar o endereço de email.",
     "unknown error code": "código de erro desconhecido",
     "Verification Pending": "Verificação pendente",
-    "You do not have permission to post to this room": "Você não tem permissão de postar nesta sala",
     "Sun": "Dom",
     "Mon": "Seg",
     "Tue": "Ter",
@@ -46,7 +31,6 @@
     "Dec": "Dez",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s às %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s às %(time)s",
-    "Reason": "Razão",
     "Connectivity to the server has been lost.": "A conexão com o servidor foi perdida. Verifique sua conexão de internet.",
     "Sent messages will be stored until your connection has returned.": "Imagens enviadas ficarão armazenadas até que sua conexão seja reestabelecida.",
     "Failed to forget room %(errCode)s": "Falha ao esquecer a sala %(errCode)s",
@@ -63,8 +47,6 @@
     "Failed to load timeline position": "Não foi possível carregar a posição na linha do tempo",
     "Failed to mute user": "Não foi possível remover notificações da/do usuária/o",
     "Failed to reject invite": "Não foi possível rejeitar o convite",
-    "Failed to set display name": "Houve falha ao definir o nome público",
-    "Incorrect verification code": "Código de verificação incorreto",
     "Join Room": "Ingressar na sala",
     "Jump to first unread message.": "Ir diretamente para a primeira das mensagens não lidas.",
     "not specified": "não especificado",
@@ -77,32 +59,18 @@
     "You seem to be in a call, are you sure you want to quit?": "Parece que você está em uma chamada. Tem certeza que quer sair?",
     "You seem to be uploading files, are you sure you want to quit?": "Parece que você está enviando arquivos. Tem certeza que quer sair?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Você não poderá desfazer esta mudança, pois estará dando a este(a) usuário(a) o mesmo nível de permissões que você.",
-    "Authentication": "Autenticação",
     "An error has occurred.": "Ocorreu um erro.",
     "Email address": "Endereço de email",
     "Error decrypting attachment": "Erro ao descriptografar o anexo",
     "Invalid file%(extra)s": "Arquivo inválido %(extra)s",
     "Warning!": "Atenção!",
-    "Passphrases must match": "As frases-passe devem coincidir",
-    "Passphrase must not be empty": "A frase-passe não pode estar vazia",
-    "Export room keys": "Exportar chaves de sala",
-    "Enter passphrase": "Introduza a frase-passe",
-    "Confirm passphrase": "Confirmar frase-passe",
-    "Import room keys": "Importar chaves de sala",
-    "File to import": "Arquivo para importar",
-    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Este processo permite que você exporte as chaves para mensagens que você recebeu em salas criptografadas para um arquivo local. Você poderá então importar o arquivo para outro cliente Matrix no futuro, de modo que este cliente também poderá descriptografar suas mensagens.",
-    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "O ficheiro de exportação será protegido com uma frase-passe. Deve introduzir a frase-passe aqui, para desencriptar o ficheiro.",
     "Confirm Removal": "Confirmar Remoção",
     "Unable to restore session": "Não foi possível restaurar a sessão",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Se você já usou antes uma versão mais recente do %(brand)s, a sua sessão pode ser incompatível com esta versão. Feche esta janela e tente abrir com a versão mais recente.",
     "Error decrypting image": "Erro ao descriptografar a imagem",
     "Error decrypting video": "Erro ao descriptografar o vídeo",
     "Add an Integration": "Adicionar uma integração",
-    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Este processo faz com que você possa importar as chaves de criptografia que tinha previamente exportado de outro cliente Matrix. Você poderá então descriptografar todas as mensagens que o outro cliente pôde criptografar.",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?",
-    "Invited": "Convidada(o)",
-    "No Microphones detected": "Não foi detetado nenhum microfone",
-    "No Webcams detected": "Não foi detetada nenhuma Webcam",
     "Are you sure you want to leave the room '%(roomName)s'?": "Você tem certeza que deseja sair da sala '%(roomName)s'?",
     "Custom level": "Nível personalizado",
     "Create new room": "Criar nova sala",
@@ -112,19 +80,14 @@
     },
     "Uploading %(filename)s": "Enviando o arquivo %(filename)s",
     "Admin Tools": "Ferramentas de Administração",
-    "%(roomName)s does not exist.": "%(roomName)s não existe.",
     "(~%(count)s results)": {
         "other": "(~%(count)s resultados)",
         "one": "(~%(count)s resultado)"
     },
     "Home": "Início",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (nível de permissão %(powerLevelNumber)s)",
-    "%(roomName)s is not accessible at this time.": "%(roomName)s não está acessível neste momento.",
     "AM": "AM",
     "PM": "PM",
     "This will allow you to reset your password and receive notifications.": "Isto irá permitir-lhe redefinir a sua palavra-passe e receber notificações.",
-    "Unignore": "Deixar de ignorar",
-    "Banned by %(displayName)s": "Banido por %(displayName)s",
     "Sunday": "Domingo",
     "Today": "Hoje",
     "Friday": "Sexta-feira",
@@ -137,18 +100,13 @@
     "Unnamed room": "Sala sem nome",
     "Saturday": "Sábado",
     "Monday": "Segunda-feira",
-    "Invite to this room": "Convidar para esta sala",
     "Send": "Enviar",
-    "All messages": "Todas as mensagens",
     "All Rooms": "Todas as salas",
     "You cannot delete this message. (%(code)s)": "Não pode apagar esta mensagem. (%(code)s)",
     "Thursday": "Quinta-feira",
     "Yesterday": "Ontem",
     "Wednesday": "Quarta-feira",
     "Thank you!": "Obrigado!",
-    "Explore rooms": "Explorar rooms",
-    "Not a valid identity server (status code %(code)s)": "Servidor de Identidade inválido (código de status %(code)s)",
-    "Identity server URL must be HTTPS": "O link do servidor de identidade deve começar com HTTPS",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s-%(monthName)s-%(fullYear)s",
     "Anguilla": "Anguilla",
     "United States": "Estados Unidos",
@@ -168,7 +126,6 @@
     "Albania": "Albânia",
     "Åland Islands": "Ilhas Åland",
     "Afghanistan": "Afeganistão",
-    "Permission Required": "Permissão Requerida",
     "Antigua & Barbuda": "Antígua e Barbuda",
     "Andorra": "Andorra",
     "Cocos (Keeling) Islands": "Ilhas Cocos (Keeling)",
@@ -247,13 +204,11 @@
     "Gambia": "Gâmbia",
     "Georgia": "Geórgia",
     "Mayotte": "Mayotte",
-    "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Recomendamos que remova seus endereços de email e números de telefone do servidor de identidade antes de se desconectar.",
     "Macau": "Macau",
     "Malaysia": "Malásia",
     "Lesotho": "Lesoto",
     "Maldives": "Maldivas",
     "Mali": "Mali",
-    "<userName/> wants to chat": "<userName/> quer falar",
     "Start a conversation with someone using their name or username (like <userId/>).": "Comece uma conversa com alguém a partir do nome ou nome de utilizador (por exemplo: <userId/>).",
     "Malta": "Malta",
     "Lebanon": "Líbano",
@@ -279,12 +234,9 @@
     "Liberia": "Libéria",
     "Mexico": "México",
     "Moldova": "Moldávia",
-    "Discovery options will appear once you have added an email above.": "As opções de descoberta vão aparecer assim que adicione um e-mail acima.",
-    "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Enviámos-lhe um email para confirmar o seu endereço. Por favor siga as instruções no email e depois clique no botão abaixo.",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Apenas um aviso, se não adicionar um email e depois esquecer a sua palavra-passe, poderá <b>perder permanentemente o acesso à sua conta</b>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Convide alguém a partir do nome, endereço de email, nome de utilizador (como <userId/>) ou <a>partilhe este espaço</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Convide alguém a partir do nome, email ou nome de utilizador (como <userId/>) ou <a>partilhe esta sala</a>.",
-    "<userName/> invited you": "<userName/> convidou-o",
     "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "Ninguém poderá reutilizar o seu nome de utilizador (MXID), incluindo o próprio: este nome de utilizador permanecerá indisponível",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "Comece uma conversa com alguém a partir do nome, endereço de email ou nome de utilizador (por exemplo: <userId/>).",
     "Zambia": "Zâmbia",
@@ -440,7 +392,11 @@
         "off": "Desativado",
         "copied": "Copiado!",
         "advanced": "Avançado",
-        "profile": "Perfil"
+        "profile": "Perfil",
+        "authentication": "Autenticação",
+        "rooms": "Salas",
+        "low_priority": "Baixa prioridade",
+        "historical": "Histórico"
     },
     "action": {
         "continue": "Continuar",
@@ -480,7 +436,9 @@
         "import": "Importar",
         "export": "Exportar",
         "submit": "Enviar",
-        "unban": "Desfazer banimento"
+        "unban": "Desfazer banimento",
+        "unignore": "Deixar de ignorar",
+        "explore_rooms": "Explorar rooms"
     },
     "keyboard": {
         "home": "Início"
@@ -560,7 +518,34 @@
             "add_msisdn_confirm_button": "Confirme que quer adicionar o número de telefone",
             "add_msisdn_confirm_body": "Pressione o botão abaixo para confirmar a adição este número de telefone.",
             "add_msisdn_dialog_title": "Adicione número de telefone",
-            "name_placeholder": "Sem nome público de usuária(o)"
+            "name_placeholder": "Sem nome público de usuária(o)",
+            "error_password_change_403": "Falha ao alterar a palavra-passe. A sua palavra-passe está correta?",
+            "deactivate_section": "Desativar conta",
+            "error_email_verification": "Não foi possível verificar o endereço de email.",
+            "discovery_email_empty": "As opções de descoberta vão aparecer assim que adicione um e-mail acima.",
+            "incorrect_msisdn_verification": "Código de verificação incorreto",
+            "error_set_name": "Houve falha ao definir o nome público",
+            "error_remove_3pid": "Não foi possível remover informação de contato",
+            "error_invalid_email": "Endereço de email inválido",
+            "error_invalid_email_detail": "Este não aparenta ser um endereço de email válido",
+            "error_add_email": "Não foi possível adicionar endereço de email",
+            "add_email_instructions": "Enviámos-lhe um email para confirmar o seu endereço. Por favor siga as instruções no email e depois clique no botão abaixo."
+        },
+        "voip": {
+            "audio_input_empty": "Não foi detetado nenhum microfone",
+            "video_input_empty": "Não foi detetada nenhuma Webcam"
+        },
+        "key_export_import": {
+            "export_title": "Exportar chaves de sala",
+            "export_description_1": "Este processo permite que você exporte as chaves para mensagens que você recebeu em salas criptografadas para um arquivo local. Você poderá então importar o arquivo para outro cliente Matrix no futuro, de modo que este cliente também poderá descriptografar suas mensagens.",
+            "enter_passphrase": "Introduza a frase-passe",
+            "confirm_passphrase": "Confirmar frase-passe",
+            "phrase_cannot_be_empty": "A frase-passe não pode estar vazia",
+            "phrase_must_match": "As frases-passe devem coincidir",
+            "import_title": "Importar chaves de sala",
+            "import_description_1": "Este processo faz com que você possa importar as chaves de criptografia que tinha previamente exportado de outro cliente Matrix. Você poderá então descriptografar todas as mensagens que o outro cliente pôde criptografar.",
+            "import_description_2": "O ficheiro de exportação será protegido com uma frase-passe. Deve introduzir a frase-passe aqui, para desencriptar o ficheiro.",
+            "file_to_import": "Arquivo para importar"
         }
     },
     "devtools": {
@@ -776,14 +761,24 @@
         "autocomplete": {
             "command_description": "Comandos",
             "user_description": "Usuários"
-        }
+        },
+        "no_perms_notice": "Você não tem permissão de postar nesta sala",
+        "poll_button_no_perms_title": "Permissão Requerida"
     },
     "room": {
         "drop_file_prompt": "Arraste um arquivo aqui para enviar",
         "context_menu": {
             "favourite": "Favorito",
             "low_priority": "Baixa prioridade"
-        }
+        },
+        "invite_this_room": "Convidar para esta sala",
+        "header": {
+            "forget_room_button": "Esquecer sala"
+        },
+        "dm_invite_subtitle": "<userName/> quer falar",
+        "invite_subtitle": "<userName/> convidou-o",
+        "not_found_title_name": "%(roomName)s não existe.",
+        "inaccessible_name": "%(roomName)s não está acessível neste momento."
     },
     "file_panel": {
         "guest_note": "Você deve <a>se registrar</a> para poder usar esta funcionalidade",
@@ -800,7 +795,10 @@
             "no_privileged_users": "Nenhum/a usuário/a possui privilégios específicos nesta sala",
             "privileged_users_section": "Usuárias/os privilegiadas/os",
             "banned_users_section": "Usuárias/os banidas/os",
-            "permissions_section": "Permissões"
+            "permissions_section": "Permissões",
+            "error_unbanning": "Não foi possível desfazer o banimento",
+            "banned_by": "Banido por %(displayName)s",
+            "ban_reason": "Razão"
         },
         "security": {
             "history_visibility_legend": "Quem pode ler o histórico da sala?",
@@ -810,7 +808,8 @@
             "publish_toggle": "Publicar esta sala ao público no diretório de salas de %(domain)s's?",
             "user_url_previews_default_on": "Você <a>habilitou</a> pré-visualizações de links por padrão.",
             "user_url_previews_default_off": "Você <a>desabilitou</a> pré-visualizações de links por padrão.",
-            "url_previews_section": "Pré-visualização de links"
+            "url_previews_section": "Pré-visualização de links",
+            "other_section": "Outros"
         },
         "advanced": {
             "unfederated": "Esta sala não é acessível para servidores Matrix remotos"
@@ -899,9 +898,21 @@
     },
     "notifications": {
         "enable_prompt_toast_title": "Notificações",
-        "class_other": "Outros"
+        "class_other": "Outros",
+        "default": "Padrão",
+        "all_messages": "Todas as mensagens"
     },
     "onboarding": {
         "create_account": "Criar conta"
+    },
+    "identity_server": {
+        "url_not_https": "O link do servidor de identidade deve começar com HTTPS",
+        "error_invalid": "Servidor de Identidade inválido (código de status %(code)s)",
+        "disconnect_personal_data_warning_2": "Recomendamos que remova seus endereços de email e números de telefone do servidor de identidade antes de se desconectar."
+    },
+    "member_list": {
+        "invited_list_heading": "Convidada(o)",
+        "filter_placeholder": "Filtrar integrantes da sala",
+        "power_label": "%(userName)s (nível de permissão %(powerLevelNumber)s)"
     }
 }

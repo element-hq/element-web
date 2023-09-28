@@ -67,9 +67,7 @@ const SidebarUserSettingsTab: React.FC = () => {
             <SettingsSection heading={_t("settings|sidebar|title")}>
                 <SettingsSubsection
                     heading={_t("settings|sidebar|metaspaces_subsection")}
-                    description={_t(
-                        "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.",
-                    )}
+                    description={_t("settings|sidebar|spaces_explainer")}
                 >
                     <StyledCheckbox
                         checked={!!homeEnabled}

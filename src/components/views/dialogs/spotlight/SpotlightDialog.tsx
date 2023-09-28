@@ -788,7 +788,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     role="group"
                     aria-labelledby="mx_SpotlightDialog_section_rooms"
                 >
-                    <h4 id="mx_SpotlightDialog_section_rooms">{_t("Rooms")}</h4>
+                    <h4 id="mx_SpotlightDialog_section_rooms">{_t("common|rooms")}</h4>
                     <div>{results[Section.Rooms].slice(0, SECTION_LIMIT).map(resultMapper)}</div>
                 </div>
             );

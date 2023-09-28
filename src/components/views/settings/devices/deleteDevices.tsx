@@ -71,7 +71,7 @@ export const deleteDevicesWithInteractiveAuth = async (
             },
         };
         Modal.createDialog(InteractiveAuthDialog, {
-            title: _t("Authentication"),
+            title: _t("common|authentication"),
             matrixClient: matrixClient,
             authData: error.data as IAuthData,
             onFinished,

@@ -35,8 +35,6 @@ import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { DecryptionError } from "matrix-js-sdk/src/crypto/algorithms";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 
-// focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by various components
-import "focus-visible";
 // what-input helps improve keyboard accessibility
 import "what-input";
 

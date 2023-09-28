@@ -31,10 +31,11 @@ function safariVersionCheck(ua: string): boolean {
             const safariVersionStr = safariVersionMatch[2];
             const macOSVersion = macOSVersionStr.split("_").map((n) => parseInt(n, 10));
             const safariVersion = safariVersionStr.split(".").map((n) => parseInt(n, 10));
-            const colrFontSupported = macOSVersion[0] >= 10 && macOSVersion[1] >= 14 && safariVersion[0] >= 12;
-            // https://www.colorfonts.wtf/ states safari supports COLR fonts from this version on
+            const colrFontSupported =
+                macOSVersion[0] >= 10 && macOSVersion[1] >= 14 && safariVersion[0] >= 12 && safariVersion[0] < 17;
+            // https://www.colorfonts.wtf/ states Safari supports COLR fonts from this version on but Safari 17 breaks it
             logger.log(
-                `COLR support on Safari requires macOS 10.14 and Safari 12, ` +
+                `COLR support on Safari requires macOS 10.14 and Safari 12-16, ` +
                     `detected Safari ${safariVersionStr} on macOS ${macOSVersionStr}, ` +
                     `COLR supported: ${colrFontSupported}`,
             );

@@ -84,7 +84,7 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
             .catch((err) => {
                 logger.error("Unable to remove contact information: " + err);
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Unable to remove contact information"),
+                    title: _t("settings|general|error_remove_3pid"),
                     description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
                 });
             });
@@ -95,7 +95,7 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
             return (
                 <div className="mx_GeneralUserSettingsTab_section--discovery_existing">
                     <span className="mx_GeneralUserSettingsTab_section--discovery_existing_promptText">
-                        {_t("Remove %(phone)s?", { phone: this.props.msisdn.address })}
+                        {_t("settings|general|remove_msisdn_prompt", { phone: this.props.msisdn.address })}
                     </span>
                     <AccessibleButton
                         onClick={this.onActuallyRemove}
@@ -244,11 +244,11 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
 
                 if (underlyingError.errcode !== "M_THREEPID_AUTH_FAILED") {
                     Modal.createDialog(ErrorDialog, {
-                        title: _t("Unable to verify phone number."),
+                        title: _t("settings|general|error_msisdn_verification"),
                         description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
                     });
                 } else {
-                    this.setState({ verifyError: _t("Incorrect verification code") });
+                    this.setState({ verifyError: _t("settings|general|incorrect_msisdn_verification") });
                 }
             });
     };
@@ -279,17 +279,14 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
             addVerifySection = (
                 <div>
                     <div>
-                        {_t(
-                            "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.",
-                            { msisdn: msisdn },
-                        )}
+                        {_t("settings|general|add_msisdn_instructions", { msisdn: msisdn })}
                         <br />
                         {this.state.verifyError}
                     </div>
                     <form onSubmit={this.onContinueClick} autoComplete="off" noValidate={true}>
                         <Field
                             type="text"
-                            label={_t("Verification code")}
+                            label={_t("settings|general|msisdn_verification_field_label")}
                             autoComplete="off"
                             disabled={this.props.disabled || this.state.continueDisabled}
                             value={this.state.newPhoneNumberCode}
@@ -329,7 +326,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
                     <div className="mx_PhoneNumbers_input">
                         <Field
                             type="text"
-                            label={_t("Phone Number")}
+                            label={_t("settings|general|msisdn_label")}
                             autoComplete="tel-national"
                             disabled={this.props.disabled || this.state.verifying}
                             prefixComponent={phoneCountry}

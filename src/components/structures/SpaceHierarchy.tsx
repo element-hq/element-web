@@ -384,7 +384,7 @@ export const showRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
         oob_data: {
             avatarUrl: room?.avatar_url,
             // XXX: This logic is duplicated from the JS SDK which would normally decide what the name is.
-            name: room?.name || roomAlias || _t("Unnamed room"),
+            name: room?.name || roomAlias || _t("common|unnamed_room"),
             roomType,
         } as IOOBData,
         metricsTrigger: "RoomDirectory",

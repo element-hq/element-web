@@ -30,8 +30,7 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
           [36m>[39m
             [36m<li[39m
               [33maria-label[39m=[32m"Space home"[39m
-              [33mclass[39m=[32m"mx_AccessibleButton mx_IconizedContextMenu_item focus-visible"[39m
-              [33mdata-focus-visible-added[39m=[32m""[39m
+              [33mclass[39m=[32m"mx_AccessibleButton mx_IconizedContextMenu_item"[39m
               [33mrole[39m=[32m"menuitem"[39m
               [33mtabindex[39m=[32m"0"[39m
             [36m>[39m

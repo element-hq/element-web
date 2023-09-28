@@ -124,7 +124,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                     {canCreateRoom && (
                         <>
                             <IconizedContextMenuOption
-                                label={_t("New room")}
+                                label={_t("action|new_room")}
                                 iconClassName="mx_RoomList_iconNewRoom"
                                 onClick={async (e): Promise<void> => {
                                     e.preventDefault();
@@ -139,7 +139,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                             />
                             {videoRoomsEnabled && (
                                 <IconizedContextMenuOption
-                                    label={_t("New video room")}
+                                    label={_t("action|new_video_room")}
                                     iconClassName="mx_RoomList_iconNewVideoRoom"
                                     onClick={async (e): Promise<void> => {
                                         e.preventDefault();
@@ -164,7 +164,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                         </>
                     )}
                     <IconizedContextMenuOption
-                        label={_t("Add existing room")}
+                        label={_t("action|add_existing_room")}
                         iconClassName="mx_RoomList_iconAddExistingRoom"
                         onClick={(e) => {
                             e.preventDefault();
@@ -175,7 +175,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                     />
                     {canCreateSpace && (
                         <IconizedContextMenuOption
-                            label={_t("Add space")}
+                            label={_t("room_list|add_space_label")}
                             iconClassName="mx_RoomList_iconPlus"
                             onClick={(e) => {
                                 e.preventDefault();

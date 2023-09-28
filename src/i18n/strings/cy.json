@@ -1,8 +1,8 @@
 {
-    "Explore rooms": "Archwilio Ystafelloedd",
     "action": {
         "dismiss": "Wfftio",
-        "sign_in": "Mewngofnodi"
+        "sign_in": "Mewngofnodi",
+        "explore_rooms": "Archwilio Ystafelloedd"
     },
     "common": {
         "identity_server": "Gweinydd Adnabod"

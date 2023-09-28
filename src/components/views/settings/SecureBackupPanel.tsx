@@ -311,7 +311,11 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                     </tr>
                     <tr>
                         <th scope="row">{_t("settings|security|key_backup_active_version")}</th>
-                        <td>{this.state.activeBackupVersion === null ? _t("None") : this.state.activeBackupVersion}</td>
+                        <td>
+                            {this.state.activeBackupVersion === null
+                                ? _t("settings|security|key_backup_active_version_none")
+                                : this.state.activeBackupVersion}
+                        </td>
                     </tr>
                 </>
             );

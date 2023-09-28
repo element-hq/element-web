@@ -51,13 +51,13 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
     let roomType: string;
     if (isVideoRoom) {
         iconClass = "mx_RoomInfoLine_video";
-        roomType = _t("Video room");
+        roomType = _t("common|video_room");
     } else if (joinRule === JoinRule.Public) {
         iconClass = "mx_RoomInfoLine_public";
-        roomType = room.isSpaceRoom() ? _t("Public space") : _t("Public room");
+        roomType = room.isSpaceRoom() ? _t("common|public_space") : _t("common|public_room");
     } else {
         iconClass = "mx_RoomInfoLine_private";
-        roomType = room.isSpaceRoom() ? _t("Private space") : _t("Private room");
+        roomType = room.isSpaceRoom() ? _t("common|private_space") : _t("common|private_room");
     }
 
     let members: JSX.Element | undefined;

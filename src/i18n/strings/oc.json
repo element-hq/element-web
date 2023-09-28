@@ -1,20 +1,7 @@
 {
     "Admin Tools": "Aisinas d’administrator",
-    "Invite to this room": "Convidar a aquesta sala",
-    "Invited": "Convidat",
     "Unnamed room": "Sala sens nom",
     "Share room": "Partejar la sala",
-    "Rooms": "Salas",
-    "Low priority": "Febla prioritat",
-    "Reason: %(reason)s": "Rason : %(reason)s",
-    "Forget this room": "Oblidar aquesta sala",
-    "Do you want to chat with %(user)s?": "Volètz charrar amb %(user)s ?",
-    "<userName/> wants to chat": "<userName/> vòl charrar",
-    "Start chatting": "Començar de charrar",
-    "Do you want to join %(roomName)s?": "Volètz rejonher %(roomName)s ?",
-    "<userName/> invited you": "<userName/> vos convidèt",
-    "Reject & Ignore user": "Regetar e ignorar",
-    "%(roomName)s does not exist.": "%(roomName)s existís pas.",
     "This Room": "Aquesta sala",
     "All Rooms": "Totas les salas",
     "Search…": "Cercar…",
@@ -39,10 +26,8 @@
     "Dec": "Dec",
     "PM": "PM",
     "AM": "AM",
-    "Default": "Predefinit",
     "Moderator": "Moderator",
     "Thank you!": "Mercés !",
-    "Reason": "Rason",
     "Ok": "Validar",
     "Set up": "Parametrar",
     "Fish": "Pes",
@@ -63,17 +48,7 @@
     "Headphones": "Escotadors",
     "Folder": "Dorsièr",
     "Show more": "Ne veire mai",
-    "Authentication": "Autentificacion",
-    "Unignore": "Ignorar pas",
-    "Audio Output": "Sortida àudio",
-    "Bridges": "Bridges",
-    "Sounds": "Sons",
-    "Browse": "Percórrer",
-    "Phone Number": "Numèro de telefòn",
     "Unencrypted": "Pas chifrat",
-    "Italics": "Italicas",
-    "Historical": "Istoric",
-    "Sign Up": "S’inscriure",
     "Demote": "Retrogradar",
     "Are you sure?": "O volètz vertadièrament ?",
     "Sunday": "Dimenge",
@@ -99,8 +74,6 @@
     "Upload files": "Mandar de fichièrs",
     "Home": "Dorsièr personal",
     "Search failed": "La recèrca a fracassat",
-    "Success!": "Capitada !",
-    "Explore rooms": "Percórrer las salas",
     "common": {
         "mute": "Copar lo son",
         "no_results": "Pas cap de resultat",
@@ -142,7 +115,11 @@
         "advanced": "Avançat",
         "general": "General",
         "profile": "Perfil",
-        "display_name": "Nom d'afichatge"
+        "display_name": "Nom d'afichatge",
+        "authentication": "Autentificacion",
+        "rooms": "Salas",
+        "low_priority": "Febla prioritat",
+        "historical": "Istoric"
     },
     "action": {
         "continue": "Contunhar",
@@ -207,7 +184,9 @@
         "export": "Exportar",
         "refresh": "Actualizada",
         "submit": "Mandar",
-        "unban": "Reabilitar"
+        "unban": "Reabilitar",
+        "unignore": "Ignorar pas",
+        "explore_rooms": "Percórrer las salas"
     },
     "keyboard": {
         "home": "Dorsièr personal",
@@ -233,7 +212,8 @@
         "autocomplete": {
             "command_description": "Comandas",
             "user_description": "Utilizaires"
-        }
+        },
+        "format_italics": "Italicas"
     },
     "power_level": {
         "default": "Predefinit",
@@ -312,7 +292,14 @@
             "confirm_adding_email_title": "Confirmar l'adicion de l'adressa e-mail",
             "confirm_adding_email_body": "Clicatz sus lo boton aicí dejós per confirmar l'adicion de l'adreça e-mail.",
             "add_email_dialog_title": "Ajustar una adreça electronica",
-            "add_msisdn_dialog_title": "Ajustar un numèro de telefòn"
+            "add_msisdn_dialog_title": "Ajustar un numèro de telefòn",
+            "msisdn_label": "Numèro de telefòn"
+        },
+        "voip": {
+            "audio_output": "Sortida àudio"
+        },
+        "key_backup": {
+            "backup_success": "Capitada !"
         }
     },
     "auth": {
@@ -361,10 +348,21 @@
     },
     "room_settings": {
         "permissions": {
-            "permissions_section": "Permissions"
+            "permissions_section": "Permissions",
+            "ban_reason": "Rason"
         },
         "security": {
             "title": "Seguretat e vida privada"
+        },
+        "bridges": {
+            "title": "Bridges"
+        },
+        "general": {
+            "other_section": "Autre"
+        },
+        "notifications": {
+            "sounds_section": "Sons",
+            "browse_button": "Percórrer"
         }
     },
     "encryption": {
@@ -379,7 +377,8 @@
         "enable_prompt_toast_title": "Notificacions",
         "colour_bold": "Gras",
         "mark_all_read": "Tot marcar coma legit",
-        "class_other": "Autre"
+        "class_other": "Autre",
+        "default": "Predefinit"
     },
     "quick_settings": {
         "sidebar_settings": "Autras opcions"
@@ -392,10 +391,24 @@
         "context_menu": {
             "favourite": "Favorit",
             "low_priority": "Prioritat bassa"
-        }
+        },
+        "invite_this_room": "Convidar a aquesta sala",
+        "join_button_account": "S’inscriure",
+        "kick_reason": "Rason : %(reason)s",
+        "forget_room": "Oblidar aquesta sala",
+        "dm_invite_title": "Volètz charrar amb %(user)s ?",
+        "dm_invite_subtitle": "<userName/> vòl charrar",
+        "dm_invite_action": "Començar de charrar",
+        "invite_title": "Volètz rejonher %(roomName)s ?",
+        "invite_subtitle": "<userName/> vos convidèt",
+        "invite_reject_ignore": "Regetar e ignorar",
+        "not_found_title_name": "%(roomName)s existís pas."
     },
     "lightbox": {
         "rotate_left": "Pivotar cap a èrra",
         "rotate_right": "Pivotar cap a drecha"
+    },
+    "member_list": {
+        "invited_list_heading": "Convidat"
     }
 }

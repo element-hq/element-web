@@ -63,7 +63,9 @@ const monitorSyncedRule = async (
     const primaryRuleVectorState = definition.ruleToVectorState(primaryRule);
 
     const outOfSyncRules = syncedRules.filter(
-        (syncedRule) => definition.ruleToVectorState(syncedRule) !== primaryRuleVectorState,
+        (syncedRule) =>
+            syncedRule.enabled !== primaryRule.enabled ||
+            definition.ruleToVectorState(syncedRule) !== primaryRuleVectorState,
     );
 
     if (outOfSyncRules.length) {
@@ -71,7 +73,7 @@ const monitorSyncedRule = async (
             matrixClient,
             // eslint-disable-next-line camelcase, @typescript-eslint/naming-convention
             outOfSyncRules.map(({ rule_id }) => rule_id),
-            primaryRule.actions,
+            primaryRule.enabled ? primaryRule.actions : undefined,
         );
     }
 };

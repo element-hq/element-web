@@ -47,7 +47,7 @@ export default class ReplyPreview extends React.Component<IProps> {
             <div className="mx_ReplyPreview">
                 <div className="mx_ReplyPreview_section">
                     <div className="mx_ReplyPreview_header">
-                        <span>{_t("Replying")}</span>
+                        <span>{_t("composer|replying_title")}</span>
                         <AccessibleButton
                             className="mx_ReplyPreview_header_cancel"
                             onClick={() => cancelQuoting(this.context.timelineRenderingType)}

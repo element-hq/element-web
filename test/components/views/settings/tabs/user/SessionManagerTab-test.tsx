@@ -1279,7 +1279,7 @@ describe("<SessionManagerTab />", () => {
 
             await flushPromises();
 
-            expect(logSpy).toHaveBeenCalledWith("Error setting session display name", error);
+            expect(logSpy).toHaveBeenCalledWith("Error setting device name", error);
 
             // error displayed
             expect(getByTestId("device-rename-error")).toBeTruthy();

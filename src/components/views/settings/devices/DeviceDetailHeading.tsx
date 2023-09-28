@@ -49,7 +49,7 @@ const DeviceNameEditor: React.FC<Props & { stopEditing: () => void }> = ({ devic
             await saveDeviceName(deviceName);
             stopEditing();
         } catch (error) {
-            setError(_t("Failed to set display name"));
+            setError(_t("settings|sessions|error_set_name"));
             setIsLoading(false);
         }
     };

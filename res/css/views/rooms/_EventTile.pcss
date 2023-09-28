@@ -224,7 +224,7 @@ $left-gutter: 64px;
             }
         }
 
-        &.focus-visible:focus-within,
+        &:focus-visible:focus-within,
         &.mx_EventTile_actionBarFocused,
         &.mx_EventTile_isEditing,
         &.mx_EventTile_selected {
@@ -870,7 +870,7 @@ $left-gutter: 64px;
         border: 1px solid transparent;
 
         .mx_EventTile:hover &,
-        .mx_EventTile.focus-visible:focus-within & {
+        .mx_EventTile:focus-visible:focus-within & {
             border: 1px solid $tertiary-content;
         }
     }
@@ -993,7 +993,7 @@ $left-gutter: 64px;
 .mx_EventTile:hover .mx_MessageActionBar,
 .mx_EventTile.mx_EventTile_actionBarFocused .mx_MessageActionBar,
 [data-whatinput="keyboard"] .mx_EventTile:focus-within .mx_MessageActionBar,
-.mx_EventTile.focus-visible:focus-within .mx_MessageActionBar {
+.mx_EventTile:focus-visible:focus-within .mx_MessageActionBar {
     visibility: visible;
 }
 
@@ -1002,7 +1002,7 @@ $left-gutter: 64px;
 /* animation for when it's shown which means duplicating the style definition in */
 /* multiple places. */
 .mx_EventTile:not(:hover):not(.mx_EventTile_actionBarFocused):not([data-whatinput="keyboard"] :focus-within) {
-    &:not(.focus-visible:focus-within) .mx_MessageActionBar .mx_Indicator {
+    &:not(:focus-visible:focus-within) .mx_MessageActionBar .mx_Indicator {
         animation: none;
     }
 }

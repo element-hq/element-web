@@ -1,9 +1,6 @@
 {
     "AM": "AM",
     "PM": "PM",
-    "No Microphones detected": "No Microphones detected",
-    "No Webcams detected": "No Webcams detected",
-    "Authentication": "Authentication",
     "%(items)s and %(lastItem)s": "%(items)s and %(lastItem)s",
     "and %(count)s others...": {
         "other": "and %(count)s others...",
@@ -15,55 +12,35 @@
     "Are you sure you want to leave the room '%(roomName)s'?": "Are you sure you want to leave the room '%(roomName)s'?",
     "Are you sure you want to reject the invitation?": "Are you sure you want to reject the invitation?",
     "Custom level": "Custom level",
-    "Deactivate Account": "Deactivate Account",
     "Decrypt %(text)s": "Decrypt %(text)s",
-    "Default": "Default",
     "Download %(text)s": "Download %(text)s",
     "Email address": "Email address",
     "Error decrypting attachment": "Error decrypting attachment",
     "Failed to ban user": "Failed to ban user",
-    "Failed to change password. Is your password correct?": "Failed to change password. Is your password correct?",
     "Failed to forget room %(errCode)s": "Failed to forget room %(errCode)s",
     "Failed to load timeline position": "Failed to load timeline position",
     "Failed to mute user": "Failed to mute user",
     "Failed to reject invite": "Failed to reject invite",
     "Failed to reject invitation": "Failed to reject invitation",
-    "Failed to set display name": "Failed to set display name",
-    "Failed to unban": "Failed to unban",
-    "Filter room members": "Filter room members",
-    "Forget room": "Forget room",
-    "Historical": "Historical",
-    "Incorrect verification code": "Incorrect verification code",
-    "Invalid Email Address": "Invalid Email Address",
     "Invalid file%(extra)s": "Invalid file%(extra)s",
-    "Invited": "Invited",
     "Join Room": "Join Room",
     "Jump to first unread message.": "Jump to first unread message.",
-    "Unignore": "Unignore",
-    "Low priority": "Low priority",
     "Moderator": "Moderator",
     "New passwords must match each other.": "New passwords must match each other.",
     "not specified": "not specified",
     "No more results": "No more results",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Please check your email and click on the link it contains. Once this is done, click continue.",
-    "Reason": "Reason",
     "Reject invitation": "Reject invitation",
     "Return to login screen": "Return to login screen",
-    "Rooms": "Rooms",
     "Search failed": "Search failed",
     "Server may be unavailable, overloaded, or search timed out :(": "Server may be unavailable, overloaded, or search timed out :(",
     "Session ID": "Session ID",
     "This room has no local addresses": "This room has no local addresses",
-    "This doesn't appear to be a valid email address": "This doesn't appear to be a valid email address",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Tried to load a specific point in this room's timeline, but was unable to find it.",
-    "Unable to add email address": "Unable to add email address",
-    "Unable to remove contact information": "Unable to remove contact information",
-    "Unable to verify email address.": "Unable to verify email address.",
     "unknown error code": "unknown error code",
     "Verification Pending": "Verification Pending",
     "Warning!": "Warning!",
-    "You do not have permission to post to this room": "You do not have permission to post to this room",
     "You seem to be in a call, are you sure you want to quit?": "You seem to be in a call, are you sure you want to quit?",
     "You seem to be uploading files, are you sure you want to quit?": "You seem to be uploading files, are you sure you want to quit?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.",
@@ -91,17 +68,6 @@
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "Connectivity to the server has been lost.": "Connectivity to the server has been lost.",
     "Sent messages will be stored until your connection has returned.": "Sent messages will be stored until your connection has returned.",
-    "Banned by %(displayName)s": "Banned by %(displayName)s",
-    "Passphrases must match": "Passphrases must match",
-    "Passphrase must not be empty": "Passphrase must not be empty",
-    "Export room keys": "Export room keys",
-    "Enter passphrase": "Enter passphrase",
-    "Confirm passphrase": "Confirm passphrase",
-    "Import room keys": "Import room keys",
-    "File to import": "File to import",
-    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.",
-    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.",
-    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.",
     "Confirm Removal": "Confirm Removal",
     "Unable to restore session": "Unable to restore session",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.",
@@ -112,14 +78,11 @@
     "Admin Tools": "Admin Tools",
     "Create new room": "Create new room",
     "Home": "Home",
-    "%(roomName)s does not exist.": "%(roomName)s does not exist.",
-    "%(roomName)s is not accessible at this time.": "%(roomName)s is not accessible at this time.",
     "Uploading %(filename)s": "Uploading %(filename)s",
     "Uploading %(filename)s and %(count)s others": {
         "one": "Uploading %(filename)s and %(count)s other",
         "other": "Uploading %(filename)s and %(count)s others"
     },
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",
     "(~%(count)s results)": {
         "one": "(~%(count)s result)",
         "other": "(~%(count)s results)"
@@ -139,18 +102,14 @@
     "All Rooms": "All Rooms",
     "Wednesday": "Wednesday",
     "Send": "Send",
-    "All messages": "All messages",
-    "Invite to this room": "Invite to this room",
     "You cannot delete this message. (%(code)s)": "You cannot delete this message. (%(code)s)",
     "Thursday": "Thursday",
     "Yesterday": "Yesterday",
-    "Permission Required": "Permission Required",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "Restricted": "Restricted",
     "Spanner": "Wrench",
     "Aeroplane": "Airplane",
     "Cat": "Cat",
-    "Explore rooms": "Explore rooms",
     "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait while we resynchronize with the server!",
     "common": {
         "analytics": "Analytics",
@@ -178,7 +137,11 @@
         "on": "On",
         "off": "Off",
         "advanced": "Advanced",
-        "profile": "Profile"
+        "profile": "Profile",
+        "authentication": "Authentication",
+        "rooms": "Rooms",
+        "low_priority": "Low priority",
+        "historical": "Historical"
     },
     "action": {
         "continue": "Continue",
@@ -215,7 +178,9 @@
         "import": "Import",
         "export": "Export",
         "submit": "Submit",
-        "unban": "Unban"
+        "unban": "Unban",
+        "unignore": "Unignore",
+        "explore_rooms": "Explore rooms"
     },
     "keyboard": {
         "home": "Home"
@@ -284,7 +249,32 @@
             "add_msisdn_confirm_button": "Confirm adding phone number",
             "add_msisdn_confirm_body": "Click the button below to confirm adding this phone number.",
             "add_msisdn_dialog_title": "Add Phone Number",
-            "name_placeholder": "No display name"
+            "name_placeholder": "No display name",
+            "error_password_change_403": "Failed to change password. Is your password correct?",
+            "deactivate_section": "Deactivate Account",
+            "error_email_verification": "Unable to verify email address.",
+            "incorrect_msisdn_verification": "Incorrect verification code",
+            "error_set_name": "Failed to set display name",
+            "error_remove_3pid": "Unable to remove contact information",
+            "error_invalid_email": "Invalid Email Address",
+            "error_invalid_email_detail": "This doesn't appear to be a valid email address",
+            "error_add_email": "Unable to add email address"
+        },
+        "voip": {
+            "audio_input_empty": "No Microphones detected",
+            "video_input_empty": "No Webcams detected"
+        },
+        "key_export_import": {
+            "export_title": "Export room keys",
+            "export_description_1": "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.",
+            "enter_passphrase": "Enter passphrase",
+            "confirm_passphrase": "Confirm passphrase",
+            "phrase_cannot_be_empty": "Passphrase must not be empty",
+            "phrase_must_match": "Passphrases must match",
+            "import_title": "Import room keys",
+            "import_description_1": "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.",
+            "import_description_2": "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.",
+            "file_to_import": "File to import"
         }
     },
     "timeline": {
@@ -488,7 +478,9 @@
         "autocomplete": {
             "command_description": "Commands",
             "user_description": "Users"
-        }
+        },
+        "no_perms_notice": "You do not have permission to post to this room",
+        "poll_button_no_perms_title": "Permission Required"
     },
     "room": {
         "drop_file_prompt": "Drop file here to upload",
@@ -498,7 +490,13 @@
             "unfavourite": "Favorited",
             "favourite": "Favorite",
             "low_priority": "Low Priority"
-        }
+        },
+        "invite_this_room": "Invite to this room",
+        "header": {
+            "forget_room_button": "Forget room"
+        },
+        "not_found_title_name": "%(roomName)s does not exist.",
+        "inaccessible_name": "%(roomName)s is not accessible at this time."
     },
     "file_panel": {
         "guest_note": "You must <a>register</a> to use this functionality",
@@ -514,7 +512,10 @@
             "no_privileged_users": "No users have specific privileges in this room",
             "privileged_users_section": "Privileged Users",
             "banned_users_section": "Banned users",
-            "permissions_section": "Permissions"
+            "permissions_section": "Permissions",
+            "error_unbanning": "Failed to unban",
+            "banned_by": "Banned by %(displayName)s",
+            "ban_reason": "Reason"
         },
         "security": {
             "history_visibility_legend": "Who can read history?",
@@ -524,7 +525,8 @@
             "publish_toggle": "Publish this room to the public in %(domain)s's room directory?",
             "user_url_previews_default_on": "You have <a>enabled</a> URL previews by default.",
             "user_url_previews_default_off": "You have <a>disabled</a> URL previews by default.",
-            "url_previews_section": "URL Previews"
+            "url_previews_section": "URL Previews",
+            "other_section": "Other"
         },
         "advanced": {
             "unfederated": "This room is not accessible by remote Matrix servers"
@@ -590,6 +592,13 @@
     },
     "notifications": {
         "enable_prompt_toast_title": "Notifications",
-        "class_other": "Other"
+        "class_other": "Other",
+        "default": "Default",
+        "all_messages": "All messages"
+    },
+    "member_list": {
+        "invited_list_heading": "Invited",
+        "filter_placeholder": "Filter room members",
+        "power_label": "%(userName)s (power %(powerLevelNumber)s)"
     }
 }

@@ -24,50 +24,31 @@
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
-    "Default": "Подразумевано",
     "Restricted": "Ограничено",
     "Moderator": "Модератор",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
-    "Reason": "Разлог",
     "Send": "Пошаљи",
-    "Incorrect verification code": "Нетачни потврдни код",
-    "Authentication": "Идентификација",
-    "Failed to set display name": "Нисам успео да поставим приказно име",
     "Failed to ban user": "Неуспех при забрањивању приступа кориснику",
     "Failed to mute user": "Неуспех при пригушивању корисника",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Нећете моћи да опозовете ове промене јер себи смањујете овлашћења. Ако сте последњи овлашћени корисник у соби, немогуће је да поново добијете овлашћења.",
     "Are you sure?": "Да ли сте сигурни?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Нећете моћи да опозовете ову измену јер унапређујете корисника тако да има исти ниво снаге као и ви.",
-    "Unignore": "Не занемаруј више",
     "Jump to read receipt": "Скочи на потврду о прочитаности",
     "Admin Tools": "Админ алатке",
     "and %(count)s others...": {
         "other": "и %(count)s других...",
         "one": "и још један други..."
     },
-    "Invited": "Позван",
-    "Filter room members": "Филтрирај чланове собе",
-    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (снага %(powerLevelNumber)s)",
-    "You do not have permission to post to this room": "Немате овлашћење за писање у овој соби",
     "%(duration)ss": "%(duration)sс",
     "%(duration)sm": "%(duration)sм",
     "%(duration)sh": "%(duration)sч",
     "%(duration)sd": "%(duration)sд",
-    "Replying": "Одговара",
     "Unnamed room": "Неименована соба",
     "(~%(count)s results)": {
         "other": "(~%(count)s резултата)",
         "one": "(~%(count)s резултат)"
     },
     "Join Room": "Приступи соби",
-    "Forget room": "Заборави собу",
-    "Rooms": "Собе",
-    "Low priority": "Ниска важност",
-    "Historical": "Историја",
-    "%(roomName)s does not exist.": "Соба %(roomName)s не постоји.",
-    "%(roomName)s is not accessible at this time.": "Соба %(roomName)s није доступна у овом тренутку.",
-    "Failed to unban": "Нисам успео да скинем забрану",
-    "Banned by %(displayName)s": "Приступ забранио %(displayName)s",
     "unknown error code": "непознати код грешке",
     "Failed to forget room %(errCode)s": "Нисам успео да заборавим собу %(errCode)s",
     "Jump to first unread message.": "Скочи на прву непрочитану поруку.",
@@ -93,16 +74,11 @@
         "other": "И %(count)s других..."
     },
     "Confirm Removal": "Потврди уклањање",
-    "Deactivate Account": "Деактивирај налог",
     "An error has occurred.": "Догодила се грешка.",
     "Unable to restore session": "Не могу да повратим сесију",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Ако сте претходно користили новије издање апликације %(brand)s, ваша сесија може бити некомпатибилна са овим издањем. Затворите овај прозор и вратите се на новије издање.",
-    "Invalid Email Address": "Неисправна мејл адреса",
-    "This doesn't appear to be a valid email address": "Ово не изгледа као исправна адреса е-поште",
     "Verification Pending": "Чека се на проверу",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Проверите ваш мејл и кликните на везу унутар њега. Када ово урадите, кликните на дугме „настави“.",
-    "Unable to add email address": "Не могу да додам мејл адресу",
-    "Unable to verify email address.": "Не могу да проверим мејл адресу.",
     "This will allow you to reset your password and receive notifications.": "Ово омогућава поновно постављање лозинке и примање обавештења.",
     "Reject invitation": "Одбиј позивницу",
     "Are you sure you want to reject the invitation?": "Да ли сте сигурни да желите одбити позивницу?",
@@ -126,24 +102,10 @@
         "one": "Отпремам датотеку %(filename)s и %(count)s других датотека"
     },
     "Uploading %(filename)s": "Отпремам датотеку %(filename)s",
-    "Failed to change password. Is your password correct?": "Нисам успео да променим лозинку. Да ли је ваша лозинка тачна?",
-    "Unable to remove contact information": "Не могу да уклоним контакт податке",
-    "No Microphones detected": "Нема уочених микрофона",
-    "No Webcams detected": "Нема уочених веб камера",
     "A new password must be entered.": "Морате унети нову лозинку.",
     "New passwords must match each other.": "Нове лозинке се морају подударати.",
     "Return to login screen": "Врати ме на екран за пријаву",
     "Session ID": "ИД сесије",
-    "Passphrases must match": "Фразе се морају подударати",
-    "Passphrase must not be empty": "Фразе не смеју бити празне",
-    "Export room keys": "Извези кључеве собе",
-    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Ова радња вам омогућава да извезете кључеве за примљене поруке у шифрованим собама у локалну датотеку. Онда ћете моћи да увезете датотеку у други Матрикс клијент, у будућности, тако да ће тај клијент моћи да дешифрује ове поруке.",
-    "Enter passphrase": "Унеси фразу",
-    "Confirm passphrase": "Потврди фразу",
-    "Import room keys": "Увези кључеве собе",
-    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Ова радња вам омогућава да увезете кључеве за шифровање које сте претходно извезли из другог Матрикс клијента. Након тога ћете моћи да дешифрујете било коју поруку коју је други клијент могао да дешифрује.",
-    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Извезена датотека ће бити заштићена са фразом. Требало би да унесете фразу овде, да бисте дешифровали датотеку.",
-    "File to import": "Датотека за увоз",
     "Sunday": "Недеља",
     "Today": "Данас",
     "Friday": "Петак",
@@ -157,8 +119,6 @@
     "Monday": "Понедељак",
     "All Rooms": "Све собе",
     "Wednesday": "Среда",
-    "All messages": "Све поруке",
-    "Invite to this room": "Позови у ову собу",
     "You cannot delete this message. (%(code)s)": "Не можете обрисати ову поруку. (%(code)s)",
     "Thursday": "Четвртак",
     "Yesterday": "Јуче",
@@ -179,9 +139,6 @@
     "Share User": "Подели корисника",
     "Share Room Message": "Подели поруку у соби",
     "Link to selected message": "Веза ка изабраној поруци",
-    "No Audio Outputs detected": "Нема уочених излаза звука",
-    "Audio Output": "Излаз звука",
-    "Permission Required": "Неопходна је дозвола",
     "This event could not be displayed": "Овај догађај не може бити приказан",
     "Demote yourself?": "Рашчињавате себе?",
     "Demote": "Рашчини",
@@ -189,20 +146,9 @@
     "Email (optional)": "Мејл (изборно)",
     "Are you sure you want to sign out?": "Заиста желите да се одјавите?",
     "Show more": "Прикажи више",
-    "Email addresses": "Мејл адресе",
-    "Phone numbers": "Бројеви телефона",
-    "Discovery": "Откриће",
-    "None": "Ништа",
-    "Discovery options will appear once you have added an email above.": "Опције откривања појавиће се након што додате мејл адресу изнад.",
-    "Discovery options will appear once you have added a phone number above.": "Опције откривања појавиће се након што додате број телефона изнад.",
-    "Email Address": "Е-адреса",
-    "Phone Number": "Број телефона",
     "Encrypted by an unverified session": "Шифровано од стране непотврђене сесије",
     "Scroll to most recent messages": "Пребаци на најновије поруке",
     "Direct Messages": "Директне поруке",
-    "Forget this room": "Заборави ову собу",
-    "Start chatting": "Започни ћаскање",
-    "Room options": "Опције собе",
     "Room Name": "Назив собе",
     "Room Topic": "Тема собе",
     "Messages in this room are end-to-end encrypted.": "Поруке у овој соби су шифроване с краја на крај.",
@@ -220,10 +166,6 @@
     "Resend %(unsentCount)s reaction(s)": "Поново пошаљи укупно %(unsentCount)s реакција",
     "General failure": "Општа грешка",
     "Light bulb": "сијалица",
-    "Voice & Video": "Глас и видео",
-    "Unable to revoke sharing for email address": "Не могу да опозовем дељење ове мејл адресе",
-    "Unable to revoke sharing for phone number": "Не могу да опозовем дељење броја телефона",
-    "No recently visited rooms": "Нема недавно посећених соба",
     "Failed to revoke invite": "Неуспех при отказивању позивнице",
     "Revoke invite": "Откажи позивницу",
     "Looks good": "Изгледа добро",
@@ -484,9 +426,6 @@
     "Removing…": "Уклањам…",
     "Clear all data in this session?": "Да очистим све податке у овој сесији?",
     "Reason (optional)": "Разлог (опционо)",
-    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ако нисте ви уклонили начин опоравка, нападач можда покушава да приступи вашем налогу. Промените своју лозинку и поставите нови начин опоравка у поставкама, одмах.",
-    "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Ако сте то случајно учинили, безбедне поруке можете подесити у овој сесији, која ће поново шифровати историју порука сесије помоћу новог начина опоравка.",
-    "This session has detected that your Security Phrase and key for Secure Messages have been removed.": "Сесија је открила да су ваша безбедносна фраза и кључ за безбедне поруке уклоњени.",
     "Hide sessions": "Сакриј сесије",
     "Room settings": "Поставке собе",
     "Not encrypted": "Није шифровано",
@@ -494,10 +433,7 @@
     "Edit widgets, bridges & bots": "Уреди виџете, мостове и ботове",
     "Widgets": "Виџети",
     "Set my room layout for everyone": "Постави мој распоред собе за сваког",
-    "Error changing power level requirement": "Грешка при промени захтеваног нивоа снаге",
-    "Error changing power level": "Грешка при промени нивоа снаге",
     "Power level": "Ниво снаге",
-    "Explore rooms": "Истражи собе",
     "Folder": "фасцикла",
     "Headphones": "слушалице",
     "Anchor": "сидро",
@@ -565,19 +501,6 @@
     "Cancel search": "Откажи претрагу",
     "Confirm this user's session by comparing the following with their User Settings:": "Потврдите сесију овог корисника упоређивањем следећег са њиховим корисничким подешавањима:",
     "Confirm by comparing the following with the User Settings in your other session:": "Потврдите упоређивањем следећег са корисничким подешавањима у вашој другој сесији:",
-    "You can also set up Secure Backup & manage your keys in Settings.": "Такође можете да подесите Сигурносну копију и управљате својим тастерима у подешавањима.",
-    "Go to Settings": "Идите на подешавања",
-    "Share this email in Settings to receive invites directly in %(brand)s.": "Поделите ову е-пошту у подешавањима да бисте директно добијали позиве у %(brand)s.",
-    "Use an identity server in Settings to receive invites directly in %(brand)s.": "Користите сервер за идентитет у Подешавањима за директно примање позивница %(brand)s.",
-    "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Повежите ову е-пошту са својим налогом у Подешавањима да бисте директно добијали позиве у %(brand)s.",
-    "Verification code": "Верификациони код",
-    "Please enter verification code sent via text.": "Унесите верификациони код послат путем текста.",
-    "Unable to verify phone number.": "Није могуће верификовати број телефона.",
-    "Unable to share phone number": "Није могуће делити телефонски број",
-    "You'll need to authenticate with the server to confirm the upgrade.": "Да бисте потврдили надоградњу, мораћете да се пријавите на серверу.",
-    "Restore your key backup to upgrade your encryption": "Вратите сигурносну копију кључа да бисте надоградили шифровање",
-    "Enter your account password to confirm the upgrade:": "Унесите лозинку за налог да бисте потврдили надоградњу:",
-    "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Заштитите од губитка приступа шифрованим порукама и подацима је подржан сигурносном копијом кључева за шифровање на серверу.",
     "Clear all data": "Очисти све податке",
     "Couldn't load page": "Учитавање странице није успело",
     "Sign in with SSO": "Пријавите се помоћу SSO",
@@ -586,13 +509,11 @@
     "This homeserver would like to make sure you are not a robot.": "Овај кућни сервер жели да се увери да нисте робот.",
     "End": "",
     "Deactivate account": "Деактивирај налог",
-    "Account management": "Управљање профилом",
     "Server name": "Име сервера",
     "Enter the name of a new server you want to explore.": "Унесите име новог сервера који желите да истражите.",
     "Add a new server": "Додајте нови сервер",
     "Your server": "Ваш сервер",
     "This room is public": "Ова соба је јавна",
-    "Browse": "Прегледајте",
     "Use the <a>Desktop app</a> to see all encrypted files": "Користи <a> десктоп апликација </a> да видиш све шифроване датотеке",
     "Not Trusted": "Није поуздано",
     "Ask this user to verify their session, or manually verify it below.": "Питајте овог корисника да потврди његову сесију или ручно да потврди у наставку.",
@@ -653,7 +574,12 @@
         "general": "Опште",
         "profile": "Профил",
         "display_name": "Прикажи име",
-        "user_avatar": "Слика профила"
+        "user_avatar": "Слика профила",
+        "authentication": "Идентификација",
+        "rooms": "Собе",
+        "low_priority": "Ниска важност",
+        "historical": "Историја",
+        "go_to_settings": "Идите на подешавања"
     },
     "action": {
         "continue": "Настави",
@@ -714,7 +640,9 @@
         "mention": "Спомени",
         "submit": "Пошаљи",
         "unban": "Скини забрану",
-        "show_advanced": "Прикажи напредно"
+        "show_advanced": "Прикажи напредно",
+        "unignore": "Не занемаруј више",
+        "explore_rooms": "Истражи собе"
     },
     "labs": {
         "pinning": "Закачене поруке",
@@ -750,7 +678,10 @@
             "@room_description": "Обавести све у соби",
             "notification_description": "Собно обавештење",
             "user_description": "Корисници"
-        }
+        },
+        "no_perms_notice": "Немате овлашћење за писање у овој соби",
+        "poll_button_no_perms_title": "Неопходна је дозвола",
+        "replying_title": "Одговара"
     },
     "Code": "Код",
     "power_level": {
@@ -831,10 +762,16 @@
             "bulk_options_accept_all_invites": "Прихвати све %(invitedRooms)s позивнице",
             "bulk_options_reject_all_invites": "Одбиј све позивнице за собе %(invitedRooms)s",
             "message_search_section": "Претрага порука",
-            "message_search_disabled": "Сигурно локално кеширајте шифроване поруке да би се појавиле у резултатима претраге."
+            "message_search_disabled": "Сигурно локално кеширајте шифроване поруке да би се појавиле у резултатима претраге.",
+            "key_backup_active_version_none": "Ништа"
         },
         "voip": {
-            "mirror_local_feed": "Копирај довод локалног видеа"
+            "mirror_local_feed": "Копирај довод локалног видеа",
+            "audio_output": "Излаз звука",
+            "audio_output_empty": "Нема уочених излаза звука",
+            "audio_input_empty": "Нема уочених микрофона",
+            "video_input_empty": "Нема уочених веб камера",
+            "title": "Глас и видео"
         },
         "sessions": {
             "session_id": "ИД сесије"
@@ -852,7 +789,51 @@
             "add_msisdn_confirm_button": "Потврда додавања броја телефона",
             "add_msisdn_confirm_body": "Кликните на дугме испод за потврду додавања броја телефона.",
             "add_msisdn_dialog_title": "Додај број телефона",
-            "name_placeholder": "Нема приказног имена"
+            "name_placeholder": "Нема приказног имена",
+            "error_password_change_403": "Нисам успео да променим лозинку. Да ли је ваша лозинка тачна?",
+            "emails_heading": "Мејл адресе",
+            "msisdns_heading": "Бројеви телефона",
+            "deactivate_section": "Деактивирај налог",
+            "account_management_section": "Управљање профилом",
+            "discovery_section": "Откриће",
+            "error_revoke_email_discovery": "Не могу да опозовем дељење ове мејл адресе",
+            "error_email_verification": "Не могу да проверим мејл адресу.",
+            "discovery_email_empty": "Опције откривања појавиће се након што додате мејл адресу изнад.",
+            "error_revoke_msisdn_discovery": "Не могу да опозовем дељење броја телефона",
+            "error_share_msisdn_discovery": "Није могуће делити телефонски број",
+            "error_msisdn_verification": "Није могуће верификовати број телефона.",
+            "incorrect_msisdn_verification": "Нетачни потврдни код",
+            "msisdn_verification_instructions": "Унесите верификациони код послат путем текста.",
+            "msisdn_verification_field_label": "Верификациони код",
+            "discovery_msisdn_empty": "Опције откривања појавиће се након што додате број телефона изнад.",
+            "error_set_name": "Нисам успео да поставим приказно име",
+            "error_remove_3pid": "Не могу да уклоним контакт податке",
+            "error_invalid_email": "Неисправна мејл адреса",
+            "error_invalid_email_detail": "Ово не изгледа као исправна адреса е-поште",
+            "error_add_email": "Не могу да додам мејл адресу",
+            "email_address_label": "Е-адреса",
+            "msisdn_label": "Број телефона"
+        },
+        "key_backup": {
+            "setup_secure_backup": {
+                "description": "Заштитите од губитка приступа шифрованим порукама и подацима је подржан сигурносном копијом кључева за шифровање на серверу.",
+                "requires_password_confirmation": "Унесите лозинку за налог да бисте потврдили надоградњу:",
+                "requires_key_restore": "Вратите сигурносну копију кључа да бисте надоградили шифровање",
+                "requires_server_authentication": "Да бисте потврдили надоградњу, мораћете да се пријавите на серверу.",
+                "settings_reminder": "Такође можете да подесите Сигурносну копију и управљате својим тастерима у подешавањима."
+            }
+        },
+        "key_export_import": {
+            "export_title": "Извези кључеве собе",
+            "export_description_1": "Ова радња вам омогућава да извезете кључеве за примљене поруке у шифрованим собама у локалну датотеку. Онда ћете моћи да увезете датотеку у други Матрикс клијент, у будућности, тако да ће тај клијент моћи да дешифрује ове поруке.",
+            "enter_passphrase": "Унеси фразу",
+            "confirm_passphrase": "Потврди фразу",
+            "phrase_cannot_be_empty": "Фразе не смеју бити празне",
+            "phrase_must_match": "Фразе се морају подударати",
+            "import_title": "Увези кључеве собе",
+            "import_description_1": "Ова радња вам омогућава да увезете кључеве за шифровање које сте претходно извезли из другог Матрикс клијента. Након тога ћете моћи да дешифрујете било коју поруку коју је други клијент могао да дешифрује.",
+            "import_description_2": "Извезена датотека ће бити заштићена са фразом. Требало би да унесете фразу овде, да бисте дешифровали датотеку.",
+            "file_to_import": "Датотека за увоз"
         }
     },
     "devtools": {
@@ -1176,7 +1157,12 @@
             "muted_users_section": "Утишани корисници",
             "banned_users_section": "Корисници са забраном приступа",
             "title": "Улоге и дозволе",
-            "permissions_section": "Овлашћења"
+            "permissions_section": "Овлашћења",
+            "error_unbanning": "Нисам успео да скинем забрану",
+            "banned_by": "Приступ забранио %(displayName)s",
+            "ban_reason": "Разлог",
+            "error_changing_pl_reqs_title": "Грешка при промени захтеваног нивоа снаге",
+            "error_changing_pl_title": "Грешка при промени нивоа снаге"
         },
         "security": {
             "enable_encryption_confirm_title": "Омогућити шифровање?",
@@ -1197,12 +1183,16 @@
             "default_url_previews_off": "УРЛ прегледи су подразумевано искључени за чланове ове собе.",
             "url_previews_section": "УРЛ прегледи",
             "error_save_space_settings": "Чување подешавања простора није успело.",
-            "description_space": "Уредите поставке које се односе на ваш простор."
+            "description_space": "Уредите поставке које се односе на ваш простор.",
+            "other_section": "Остало"
         },
         "advanced": {
             "unfederated": "Ова соба није доступна са удаљених Матрикс сервера"
         },
-        "upload_avatar_label": "Отпреми аватар"
+        "upload_avatar_label": "Отпреми аватар",
+        "notifications": {
+            "browse_button": "Прегледајте"
+        }
     },
     "encryption": {
         "verification": {
@@ -1225,7 +1215,12 @@
         "set_up_toast_description": "Заштитите се од губитка приступа шифрованим порукама и подацима",
         "verify_toast_description": "Други корисници можда немају поверења у то",
         "cross_signing_unsupported": "Ваш домаћи сервер не подржава међу-потписивање.",
-        "not_supported": "<није подржано>"
+        "not_supported": "<није подржано>",
+        "recovery_method_removed": {
+            "description_1": "Сесија је открила да су ваша безбедносна фраза и кључ за безбедне поруке уклоњени.",
+            "description_2": "Ако сте то случајно учинили, безбедне поруке можете подесити у овој сесији, која ће поново шифровати историју порука сесије помоћу новог начина опоравка.",
+            "warning": "Ако нисте ви уклонили начин опоравка, нападач можда покушава да приступи вашем налогу. Промените своју лозинку и поставите нови начин опоравка у поставкама, одмах."
+        }
     },
     "emoji": {
         "category_smileys_people": "Смешци и особе",
@@ -1308,7 +1303,8 @@
         "sublist_options": "Прикажи опције",
         "notification_options": "Опције обавештавања",
         "failed_remove_tag": "Нисам успео да скинем ознаку %(tagName)s са собе",
-        "failed_add_tag": "Нисам успео да додам ознаку %(tagName)s на собу"
+        "failed_add_tag": "Нисам успео да додам ознаку %(tagName)s на собу",
+        "breadcrumbs_empty": "Нема недавно посећених соба"
     },
     "report_content": {
         "report_content_to_homeserver": "Пријави садржај администратору вашег домаћег сервера"
@@ -1436,8 +1432,20 @@
         "context_menu": {
             "favourite": "Омиљено",
             "low_priority": "Најмања важност",
-            "forget": "Заборави собу"
-        }
+            "forget": "Заборави собу",
+            "title": "Опције собе"
+        },
+        "invite_this_room": "Позови у ову собу",
+        "header": {
+            "forget_room_button": "Заборави собу"
+        },
+        "forget_room": "Заборави ову собу",
+        "link_email_to_receive_3pid_invite": "Повежите ову е-пошту са својим налогом у Подешавањима да бисте директно добијали позиве у %(brand)s.",
+        "3pid_invite_no_is_subtitle": "Користите сервер за идентитет у Подешавањима за директно примање позивница %(brand)s.",
+        "invite_email_mismatch_suggestion": "Поделите ову е-пошту у подешавањима да бисте директно добијали позиве у %(brand)s.",
+        "dm_invite_action": "Започни ћаскање",
+        "not_found_title_name": "Соба %(roomName)s не постоји.",
+        "inaccessible_name": "Соба %(roomName)s није доступна у овом тренутку."
     },
     "file_panel": {
         "guest_note": "Морате се <a>регистровати</a> да бисте користили ову могућност",
@@ -1463,7 +1471,8 @@
     },
     "labs_mjolnir": {
         "rules_user": "Корисничка правила",
-        "advanced_warning": "⚠ Ова подешавања су намењена напредним корисницима."
+        "advanced_warning": "⚠ Ова подешавања су намењена напредним корисницима.",
+        "rules_empty": "Ништа"
     },
     "failed_load_async_component": "Не могу да учитам! Проверите повезаност и пробајте поново.",
     "upload_failed_generic": "Фајл „%(fileName)s“ није отпремљен.",
@@ -1510,12 +1519,19 @@
         "colour_none": "Ништа",
         "error_change_title": "Промените подешавања обавештења",
         "mark_all_read": "Означи све као прочитано",
-        "class_other": "Остало"
+        "class_other": "Остало",
+        "default": "Подразумевано",
+        "all_messages": "Све поруке"
     },
     "quick_settings": {
         "all_settings": "Сва подешавања"
     },
     "integration_manager": {
         "error_connecting_heading": "Не могу се повезати на управника уградњи"
+    },
+    "member_list": {
+        "invited_list_heading": "Позван",
+        "filter_placeholder": "Филтрирај чланове собе",
+        "power_label": "%(userName)s (снага %(powerLevelNumber)s)"
     }
 }

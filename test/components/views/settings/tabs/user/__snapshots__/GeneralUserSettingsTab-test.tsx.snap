@@ -237,7 +237,7 @@ exports[`<GeneralUserSettingsTab /> deactive account should render section when 
   <h2
     class="mx_Heading_h3"
   >
-    Deactivate account
+    Deactivate Account
   </h2>
   <div
     class="mx_SettingsSection_subSections"

@@ -164,7 +164,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
             <IconizedContextMenuCheckbox
                 onClick={(e) => onTagRoom(e, DefaultTagID.LowPriority)}
                 active={isLowPriority}
-                label={_t("Low priority")}
+                label={_t("common|low_priority")}
                 iconClassName="mx_RoomTile_iconArrowDown"
             />
         );
@@ -174,11 +174,11 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
         let iconClassName: string | undefined;
         switch (echoChamber.notificationVolume) {
             case RoomNotifState.AllMessages:
-                notificationLabel = _t("Default");
+                notificationLabel = _t("notifications|default");
                 iconClassName = "mx_RoomTile_iconNotificationsDefault";
                 break;
             case RoomNotifState.AllMessagesLoud:
-                notificationLabel = _t("All messages");
+                notificationLabel = _t("notifications|all_messages");
                 iconClassName = "mx_RoomTile_iconNotificationsAllMessages";
                 break;
             case RoomNotifState.MentionsOnly:

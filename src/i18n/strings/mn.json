@@ -1,8 +1,8 @@
 {
-    "Explore rooms": "Өрөөнүүд үзэх",
     "action": {
         "dismiss": "Орхих",
-        "sign_in": "Нэвтрэх"
+        "sign_in": "Нэвтрэх",
+        "explore_rooms": "Өрөөнүүд үзэх"
     },
     "auth": {
         "register_action": "Хэрэглэгч үүсгэх"

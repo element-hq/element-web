@@ -81,14 +81,14 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
     return (
         <LabelledToggleSwitch
             data-testid="element-call-switch"
-            label={_t("Enable %(brand)s as an additional calling option in this room", { brand })}
-            caption={_t("%(brand)s is end-to-end encrypted, but is currently limited to smaller numbers of users.", {
+            label={_t("room_settings|voip|enable_element_call_label", { brand })}
+            caption={_t("room_settings|voip|enable_element_call_caption", {
                 brand,
             })}
             value={elementCallEnabled}
             onChange={onChange}
             disabled={!maySend}
-            tooltip={_t("You do not have sufficient permissions to change this.")}
+            tooltip={_t("room_settings|voip|enable_element_call_no_permissions_tooltip")}
         />
     );
 };
@@ -100,8 +100,8 @@ interface Props {
 export const VoipRoomSettingsTab: React.FC<Props> = ({ room }) => {
     return (
         <SettingsTab>
-            <SettingsSection heading={_t("Voice & Video")}>
-                <SettingsSubsection heading={_t("Call type")}>
+            <SettingsSection heading={_t("settings|voip|title")}>
+                <SettingsSubsection heading={_t("room_settings|voip|call_type_section")}>
                     <ElementCallSwitch room={room} />
                 </SettingsSubsection>
             </SettingsSection>

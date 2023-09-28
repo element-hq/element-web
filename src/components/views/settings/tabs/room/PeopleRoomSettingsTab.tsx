@@ -52,7 +52,7 @@ const SeeMoreOrLess: VFC<{ roomMember: RoomMember }> = ({ roomMember }) => {
             </p>
             {shouldTruncate && (
                 <AccessibleButton kind="link" onClick={() => setSeeMore(!seeMore)}>
-                    {seeMore ? _t("See less") : _t("See more")}
+                    {seeMore ? _t("room_settings|people|see_less") : _t("room_settings|people|see_more")}
                 </AccessibleButton>
             )}
         </>
@@ -151,7 +151,7 @@ export const PeopleRoomSettingsTab: VFC<{ room: Room }> = ({ room }) => {
     return (
         <SettingsTab>
             <SettingsSection heading={_t("common|people")}>
-                <SettingsFieldset legend={_t("Asking to join")}>
+                <SettingsFieldset legend={_t("room_settings|people|knock_section")}>
                     {knockMembers.length ? (
                         knockMembers.map((knockMember) => (
                             <Knock
@@ -164,7 +164,7 @@ export const PeopleRoomSettingsTab: VFC<{ room: Room }> = ({ room }) => {
                             />
                         ))
                     ) : (
-                        <p className="mx_PeopleRoomSettingsTab_paragraph">{_t("No requests")}</p>
+                        <p className="mx_PeopleRoomSettingsTab_paragraph">{_t("room_settings|people|knock_empty")}</p>
                     )}
                 </SettingsFieldset>
             </SettingsSection>
