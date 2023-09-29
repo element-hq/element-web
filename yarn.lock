@@ -8921,7 +8921,7 @@ matrix-events-sdk@0.0.1:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "28.2.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d59bb240fa50b736ac6c3cbfff935ee08b697663"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/74193ad057346aa2b3f04ab1094a6ccc9e567f60"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^1.2.3-alpha.0"
@@ -8961,9 +8961,6 @@ matrix-react-sdk@3.81.1:
     "@testing-library/react-hooks" "^8.0.1"
     "@vector-im/compound-design-tokens" "^0.0.5"
     "@vector-im/compound-web" "^0.4.0"
-    "@zxcvbn-ts/core" "^3.0.4"
-    "@zxcvbn-ts/language-common" "^3.0.4"
-    "@zxcvbn-ts/language-en" "^3.0.2"
     await-lock "^2.1.0"
     blurhash "^1.1.3"
     classnames "^2.2.6"
@@ -8992,7 +8989,7 @@ matrix-react-sdk@3.81.1:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "28.2.0"
     matrix-widget-api "^1.5.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
@@ -9017,6 +9014,7 @@ matrix-react-sdk@3.81.1:
     ua-parser-js "^1.0.2"
     uuid "^9.0.0"
     what-input "^5.2.10"
+    zxcvbn "^4.4.2"
 
 matrix-web-i18n@^3.1.1:
   version "3.1.1"
