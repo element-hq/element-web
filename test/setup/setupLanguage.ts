@@ -25,6 +25,6 @@ fetchMock.config.overwriteRoutes = false;
 
 export function setupLanguageMock() {
     reactSetupLanguageMock();
-    fetchMock.get("end:en_EN.json", _.merge(en, reactEn), { overwriteRoutes: true });
+    fetchMock.get("end:en_EN.json", _.merge({}, en, reactEn), { overwriteRoutes: true });
 }
 setupLanguageMock();
