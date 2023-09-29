@@ -1,3 +1,9 @@
+Changes in [3.81.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.81.1) (2023-09-29)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix Emoji font on Safari 17 ([\#11673](https://github.com/matrix-org/matrix-react-sdk/pull/11673)).
+
 Changes in [3.81.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.81.0) (2023-09-26)
 =====================================================================================================
 
