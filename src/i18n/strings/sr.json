@@ -28,13 +28,6 @@
     "Moderator": "Модератор",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
     "Send": "Пошаљи",
-    "Failed to ban user": "Неуспех при забрањивању приступа кориснику",
-    "Failed to mute user": "Неуспех при пригушивању корисника",
-    "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Нећете моћи да опозовете ове промене јер себи смањујете овлашћења. Ако сте последњи овлашћени корисник у соби, немогуће је да поново добијете овлашћења.",
-    "Are you sure?": "Да ли сте сигурни?",
-    "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Нећете моћи да опозовете ову измену јер унапређујете корисника тако да има исти ниво снаге као и ви.",
-    "Jump to read receipt": "Скочи на потврду о прочитаности",
-    "Admin Tools": "Админ алатке",
     "and %(count)s others...": {
         "other": "и %(count)s других...",
         "one": "и још један други..."
@@ -51,9 +44,7 @@
     "Join Room": "Приступи соби",
     "unknown error code": "непознати код грешке",
     "Failed to forget room %(errCode)s": "Нисам успео да заборавим собу %(errCode)s",
-    "Jump to first unread message.": "Скочи на прву непрочитану поруку.",
     "not specified": "није наведено",
-    "This room has no local addresses": "Ова соба нема локалних адреса",
     "Error decrypting attachment": "Грешка при дешифровању прилога",
     "Decrypt %(text)s": "Дешифруј %(text)s",
     "Download %(text)s": "Преузми %(text)s",
@@ -110,20 +101,16 @@
     "Today": "Данас",
     "Friday": "Петак",
     "Changelog": "Записник о изменама",
-    "This Room": "Ова соба",
     "Unavailable": "Недоступан",
     "Filter results": "Филтрирај резултате",
-    "Search…": "Претрага…",
     "Tuesday": "Уторак",
     "Saturday": "Субота",
     "Monday": "Понедељак",
-    "All Rooms": "Све собе",
     "Wednesday": "Среда",
     "You cannot delete this message. (%(code)s)": "Не можете обрисати ову поруку. (%(code)s)",
     "Thursday": "Четвртак",
     "Yesterday": "Јуче",
     "Thank you!": "Хвала вам!",
-    "You don't currently have any stickerpacks enabled": "Тренутно немате омогућено било које паковање са налепницама",
     "Preparing to send logs": "Припремам се за слање записника",
     "Logs sent": "Записници су послати",
     "Failed to send logs: ": "Нисам успео да пошаљем записнике: ",
@@ -132,42 +119,26 @@
     "We encountered an error trying to restore your previous session.": "Наишли смо на грешку приликом повраћаја ваше претходне сесије.",
     "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Чишћење складишта вашег прегледача може решити проблем али ће вас то одјавити и учинити шифровани историјат ћаскања нечитљивим.",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Не могу да учитам догађај на који је послат одговор, или не постоји или немате овлашћење да га погледате.",
-    "Share Link to User": "Подели везу са корисником",
-    "Share room": "Подели собу",
     "Share Room": "Подели собу",
     "Link to most recent message": "Веза ка најновијој поруци",
     "Share User": "Подели корисника",
     "Share Room Message": "Подели поруку у соби",
     "Link to selected message": "Веза ка изабраној поруци",
-    "This event could not be displayed": "Овај догађај не може бити приказан",
-    "Demote yourself?": "Рашчињавате себе?",
-    "Demote": "Рашчини",
     "Join millions for free on the largest public server": "Придружите се милионима других бесплатно на највећем јавном серверу",
     "Email (optional)": "Мејл (изборно)",
     "Are you sure you want to sign out?": "Заиста желите да се одјавите?",
-    "Show more": "Прикажи више",
-    "Encrypted by an unverified session": "Шифровано од стране непотврђене сесије",
-    "Scroll to most recent messages": "Пребаци на најновије поруке",
     "Direct Messages": "Директне поруке",
-    "Room Name": "Назив собе",
-    "Room Topic": "Тема собе",
-    "Messages in this room are end-to-end encrypted.": "Поруке у овој соби су шифроване с краја на крај.",
-    "Messages in this room are not end-to-end encrypted.": "Поруке у овој соби нису шифроване с краја на крај.",
     "%(count)s verified sessions": {
         "other": "потврђених сесија: %(count)s",
         "one": "1 потврђена сесија"
     },
-    "Hide verified sessions": "Сакриј потврђене сесије",
     "Remove recent messages by %(user)s": "Уклони недавне поруке корисника %(user)s",
-    "Remove recent messages": "Уклони недавне поруке",
     "Encryption not enabled": "Шифровање није омогућено",
     "The encryption used by this room isn't supported.": "Начин шифровања унутар ове собе није подржан.",
     "Room Settings - %(roomName)s": "Подешавања собе - %(roomName)s",
     "Resend %(unsentCount)s reaction(s)": "Поново пошаљи укупно %(unsentCount)s реакција",
     "General failure": "Општа грешка",
     "Light bulb": "сијалица",
-    "Failed to revoke invite": "Неуспех при отказивању позивнице",
-    "Revoke invite": "Откажи позивницу",
     "Looks good": "Изгледа добро",
     "Recent Conversations": "Недавни разговори",
     "Recently Direct Messaged": "Недавне директне поруке",
@@ -420,19 +391,12 @@
     "Afghanistan": "Авганистан",
     "United States": "Сједињене Америчке Државе",
     "United Kingdom": "Уједињено Краљевство",
-    "Your homeserver": "Ваш домаћи сервер",
     "Your homeserver has exceeded one of its resource limits.": "Ваш домаћи сервер је прекорачио ограничење неког ресурса.",
     "Your homeserver has exceeded its user limit.": "Ваш домаћи сервер је прекорачио ограничење корисника.",
     "Removing…": "Уклањам…",
     "Clear all data in this session?": "Да очистим све податке у овој сесији?",
     "Reason (optional)": "Разлог (опционо)",
-    "Hide sessions": "Сакриј сесије",
-    "Room settings": "Поставке собе",
     "Not encrypted": "Није шифровано",
-    "Add widgets, bridges & bots": "Додај виџете, мостове и ботове",
-    "Edit widgets, bridges & bots": "Уреди виџете, мостове и ботове",
-    "Widgets": "Виџети",
-    "Set my room layout for everyone": "Постави мој распоред собе за сваког",
     "Power level": "Ниво снаге",
     "Folder": "фасцикла",
     "Headphones": "слушалице",
@@ -579,7 +543,9 @@
         "rooms": "Собе",
         "low_priority": "Ниска важност",
         "historical": "Историја",
-        "go_to_settings": "Идите на подешавања"
+        "go_to_settings": "Идите на подешавања",
+        "show_more": "Прикажи више",
+        "are_you_sure": "Да ли сте сигурни?"
     },
     "action": {
         "continue": "Настави",
@@ -1037,7 +1003,8 @@
         "creation_summary_room": "Корисник %(creator)s је направио и подесио собу.",
         "context_menu": {
             "external_url": "Адреса извора"
-        }
+        },
+        "error_no_renderer": "Овај догађај не може бити приказан"
     },
     "slash_command": {
         "shrug": "Придодаје ¯\\_(ツ)_/¯ обичној поруци",
@@ -1184,7 +1151,10 @@
             "url_previews_section": "УРЛ прегледи",
             "error_save_space_settings": "Чување подешавања простора није успело.",
             "description_space": "Уредите поставке које се односе на ваш простор.",
-            "other_section": "Остало"
+            "other_section": "Остало",
+            "no_aliases_room": "Ова соба нема локалних адреса",
+            "name_field_label": "Назив собе",
+            "topic_field_label": "Тема собе"
         },
         "advanced": {
             "unfederated": "Ова соба није доступна са удаљених Матрикс сервера"
@@ -1220,6 +1190,10 @@
             "description_1": "Сесија је открила да су ваша безбедносна фраза и кључ за безбедне поруке уклоњени.",
             "description_2": "Ако сте то случајно учинили, безбедне поруке можете подесити у овој сесији, која ће поново шифровати историју порука сесије помоћу новог начина опоравка.",
             "warning": "Ако нисте ви уклонили начин опоравка, нападач можда покушава да приступи вашем налогу. Промените своју лозинку и поставите нови начин опоравка у поставкама, одмах."
+        },
+        "event_shield_reason_mismatched_sender_key": "Шифровано од стране непотврђене сесије",
+        "messages_not_secure": {
+            "cause_1": "Ваш домаћи сервер"
         }
     },
     "emoji": {
@@ -1403,7 +1377,8 @@
         "unencrypted_warning": "Виџети не користе шифровање порука.",
         "added_by": "Додао је виџет",
         "cookie_warning": "Овај виџет може користити колачиће.",
-        "popout": "Виџет за искакање"
+        "popout": "Виџет за искакање",
+        "set_room_layout": "Постави мој распоред собе за сваког"
     },
     "create_space": {
         "private_personal_heading": "Са ким радите?"
@@ -1445,7 +1420,14 @@
         "invite_email_mismatch_suggestion": "Поделите ову е-пошту у подешавањима да бисте директно добијали позиве у %(brand)s.",
         "dm_invite_action": "Започни ћаскање",
         "not_found_title_name": "Соба %(roomName)s не постоји.",
-        "inaccessible_name": "Соба %(roomName)s није доступна у овом тренутку."
+        "inaccessible_name": "Соба %(roomName)s није доступна у овом тренутку.",
+        "jump_to_bottom_button": "Пребаци на најновије поруке",
+        "search": {
+            "this_room": "Ова соба",
+            "all_rooms": "Све собе",
+            "field_placeholder": "Претрага…"
+        },
+        "jump_read_marker": "Скочи на прву непрочитану поруку."
     },
     "file_panel": {
         "guest_note": "Морате се <a>регистровати</a> да бисте користили ову могућност",
@@ -1533,5 +1515,33 @@
         "invited_list_heading": "Позван",
         "filter_placeholder": "Филтрирај чланове собе",
         "power_label": "%(userName)s (снага %(powerLevelNumber)s)"
+    },
+    "stickers": {
+        "empty": "Тренутно немате омогућено било које паковање са налепницама"
+    },
+    "user_info": {
+        "error_revoke_3pid_invite_title": "Неуспех при отказивању позивнице",
+        "admin_tools_section": "Админ алатке",
+        "revoke_invite": "Откажи позивницу",
+        "room_encrypted": "Поруке у овој соби су шифроване с краја на крај.",
+        "room_unencrypted": "Поруке у овој соби нису шифроване с краја на крај.",
+        "hide_verified_sessions": "Сакриј потврђене сесије",
+        "hide_sessions": "Сакриј сесије",
+        "jump_to_rr_button": "Скочи на потврду о прочитаности",
+        "share_button": "Подели везу са корисником",
+        "demote_self_confirm_title": "Рашчињавате себе?",
+        "demote_self_confirm_room": "Нећете моћи да опозовете ове промене јер себи смањујете овлашћења. Ако сте последњи овлашћени корисник у соби, немогуће је да поново добијете овлашћења.",
+        "demote_button": "Рашчини",
+        "redact_button": "Уклони недавне поруке",
+        "error_ban_user": "Неуспех при забрањивању приступа кориснику",
+        "error_mute_user": "Неуспех при пригушивању корисника",
+        "promote_warning": "Нећете моћи да опозовете ову измену јер унапређујете корисника тако да има исти ниво снаге као и ви."
+    },
+    "right_panel": {
+        "widgets_section": "Виџети",
+        "edit_integrations": "Уреди виџете, мостове и ботове",
+        "add_integrations": "Додај виџете, мостове и ботове",
+        "share_button": "Подели собу",
+        "settings_button": "Поставке собе"
     }
 }

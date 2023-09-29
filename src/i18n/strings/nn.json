@@ -28,16 +28,6 @@
     "Moderator": "Moderator",
     "Send": "Send",
     "Warning!": "Åtvaring!",
-    "This event could not be displayed": "Denne hendingen kunne ikkje visast",
-    "Failed to ban user": "Fekk ikkje til å stenge ute brukaren",
-    "Demote yourself?": "Senke ditt eige tilgangsnivå?",
-    "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Du kan ikkje gjera om på denne endringa sidan du senkar tilgangsnivået ditt. Viss du er den siste privilegerte brukaren i rommet vil det bli umogleg å få tilbake tilgangsrettane.",
-    "Demote": "Degrader",
-    "Failed to mute user": "Fekk ikkje til å dempe brukaren",
-    "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Du kan ikkje angre denne endringa, fordi brukaren du forfremmar vil få same tilgangsnivå som du har no.",
-    "Are you sure?": "Er du sikker?",
-    "Share Link to User": "Del ei lenke til brukaren",
-    "Admin Tools": "Administratorverktøy",
     "and %(count)s others...": {
         "other": "og %(count)s andre...",
         "one": "og ein annan..."
@@ -52,15 +42,8 @@
         "one": "(~%(count)s resultat)"
     },
     "Join Room": "Bli med i rom",
-    "Share room": "Del rom",
     "unknown error code": "ukjend feilkode",
     "Failed to forget room %(errCode)s": "Fekk ikkje til å gløyma rommet %(errCode)s",
-    "Search…": "Søk…",
-    "This Room": "Dette rommet",
-    "All Rooms": "Alle rom",
-    "You don't currently have any stickerpacks enabled": "Du har for tida ikkje skrudd nokre klistremerkepakkar på",
-    "Jump to first unread message.": "Hopp til den fyrste uleste meldinga.",
-    "This room has no local addresses": "Dette rommet har ingen lokale adresser",
     "Sunday": "søndag",
     "Monday": "måndag",
     "Tuesday": "tysdag",
@@ -136,14 +119,12 @@
     "New passwords must match each other.": "Dei nye passorda må vera like.",
     "Return to login screen": "Gå attende til innlogging",
     "Session ID": "Økt-ID",
-    "Jump to read receipt": "Hopp til lesen-lappen",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Du held på å verta teken til ei tredje-partisside so du kan godkjenna brukaren din til bruk med %(integrationsUrl)s. Vil du gå fram?",
     "Add an Integration": "Legg tillegg til",
     "Custom level": "Tilpassa nivå",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Klarte ikkje å lasta handlinga som vert svara til. Anten finst ho ikkje elles har du ikkje tilgang til å sjå ho.",
     "Filter results": "Filtrer resultat",
     "Server may be unavailable, overloaded, or search timed out :(": "Tenaren er kanskje utilgjengeleg, overlasta, elles så vart søket tidsavbrote :(",
-    "Only room administrators will see this warning": "Berre rom-administratorar vil sjå denne åtvaringa",
     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Meldinga di vart ikkje send, for denne heimetenaren har nådd grensa for maksimalt aktive brukarar pr. månad. Kontakt <a>systemadministratoren</a> for å vidare nytte denne tenesta.",
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Denne meldingen vart ikkje send fordi heimetenaren har nådd grensa for tilgjengelege systemressursar. Kontakt <a>systemadministratoren</a> for å vidare nytta denne tenesta.",
     "Could not load user profile": "Klarde ikkje å laste brukarprofilen",
@@ -156,8 +137,6 @@
     "Invalid base_url for m.identity_server": "Feil base_url for m.identity_server",
     "Identity server URL does not appear to be a valid identity server": "URL-adressa virkar ikkje til å vere ein gyldig identitetstenar",
     "General failure": "Generell feil",
-    "Set up": "Sett opp",
-    "Scroll to most recent messages": "Gå til dei nyaste meldingane",
     "No recent messages by %(user)s found": "Fann ingen nyare meldingar frå %(user)s",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Prøv å rulle oppover i historikken for å sjå om det finst nokon eldre.",
     "Remove recent messages by %(user)s": "Fjern nyare meldingar frå %(user)s",
@@ -166,31 +145,8 @@
         "other": "Fjern %(count)s meldingar",
         "one": "Fjern 1 melding"
     },
-    "Deactivate user?": "Deaktivere brukar?",
-    "Deactivate user": "Deaktiver brukar",
-    "Failed to deactivate user": "Fekk ikkje til å deaktivere brukaren",
-    "Remove recent messages": "Fjern nyare meldingar",
     "Direct Messages": "Folk",
-    "Failed to revoke invite": "Fekk ikkje til å trekke invitasjonen",
-    "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Fekk ikkje til å ta attende invitasjonen. Det kan ha oppstått ein mellombels feil på tenaren, eller så har ikkje du tilstrekkelege rettar for å ta attende invitasjonen.",
-    "Revoke invite": "Trekk invitasjon",
-    "Invited by %(sender)s": "Invitert av %(sender)s",
-    "Error updating main address": "Feil under oppdatering av hovedadresse",
-    "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "Det skjedde ein feil under oppdatering av hovudadressa for rommet. Det kan hende at dette er ein mellombels feil, eller at det ikkje er tillate på tenaren.",
-    "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Feil under oppdatering av alternativ adresse. Det kan hende at dette er mellombels, eller at det ikkje er tillate på tenaren.",
-    "Main address": "Hovudadresse",
-    "Local address": "Lokal adresse",
-    "Published Addresses": "Publisert adresse",
-    "Other published addresses:": "Andre publiserte adresser:",
-    "No other published addresses yet, add one below": "Ingen publiserte adresser til no, legg til ei under",
-    "New published address (e.g. #alias:server)": "Ny publisert adresse  (t.d. #alias:tenar)",
-    "Local Addresses": "Lokale adresser",
-    "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "Sett adresse for dette rommet, slik at brukarar kan finne rommet på din heimetenar (%(localDomain)s)",
-    "Room Name": "Romnamn",
-    "Room Topic": "Romemne",
-    "Room avatar": "Rom-avatar",
     "Power level": "Tilgangsnivå",
-    "Show more": "Vis meir",
     "Invalid theme schema.": "",
     "Can't find this server or its room list": "Klarde ikkje å finna tenaren eller romkatalogen til den",
     "Upload completed": "Opplasting fullført",
@@ -202,12 +158,7 @@
     "To help us prevent this in future, please <a>send us logs</a>.": "For å bistå med å forhindre dette i framtida, gjerne <a>send oss loggar</a>.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Krypterte meldingar er sikra med ende-til-ende kryptering. Berre du og mottakar(ane) har nøklane for å lese desse meldingane.",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "For å rapportere eit Matrix-relatert sikkerheitsproblem, les Matrix.org sin <a>Security Disclosure Policy</a>.",
-    "This room is end-to-end encrypted": "Dette rommet er ende-til-ende kryptert",
-    "Encrypted by an unverified session": "Kryptert av ein ikkje-verifisert sesjon",
     "Encrypted by a deleted session": "Kryptert av ein sletta sesjon",
-    "Messages in this room are end-to-end encrypted.": "Meldingar i dette rommet er ende-til-ende kryptert.",
-    "Messages in this room are not end-to-end encrypted.": "Meldingar i dette rommet er ikkje ende-til-ende kryptert.",
-    "In encrypted rooms, your messages are secured and only you and the recipient have the unique keys to unlock them.": "Når du nyttar krypterte rom er meldingane din sikra. Berre du og mottakaren har unike nøklar som kan gjere meldingane lesbare.",
     "This client does not support end-to-end encryption.": "Denne klienten støttar ikkje ende-til-ende kryptering.",
     "Add a new server": "Legg til ein ny tenar",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Tømming av data frå denne sesjonen er permanent. Krypterte meldingar vil gå tapt med mindre krypteringsnøklane har blitt sikkerheitskopierte.",
@@ -249,7 +200,6 @@
     "Close sidebar": "Lat att sidestolpen",
     "Expand quotes": "Utvid sitat",
     "Deactivate account": "Avliv brukarkontoen",
-    "Room settings": "Rominnstillingar",
     "Join the conference from the room information card on the right": "Bli med i konferanse frå rominfo-kortet til høgre",
     "Final result based on %(count)s votes": {
         "one": "Endeleg resultat basert etter %(count)s stemme",
@@ -311,7 +261,9 @@
         "low_priority": "Låg prioritet",
         "historical": "Historiske",
         "go_to_settings": "Gå til innstillingar",
-        "setup_secure_messages": "Sett opp sikre meldingar (Secure Messages)"
+        "setup_secure_messages": "Sett opp sikre meldingar (Secure Messages)",
+        "show_more": "Vis meir",
+        "are_you_sure": "Er du sikker?"
     },
     "action": {
         "continue": "Fortset",
@@ -808,7 +760,8 @@
         },
         "url_preview": {
             "close": "Lukk førehandsvisninga"
-        }
+        },
+        "error_no_renderer": "Denne hendingen kunne ikkje visast"
     },
     "slash_command": {
         "shrug": "Sett inn ¯\\_(ツ)_/¯ i ein rein-tekst melding",
@@ -977,7 +930,22 @@
             "url_preview_explainer": "Når nokon legg ein URL med i meldinga si, kan ei URL-førehandsvising visast for å gje meir info om lenkja slik som tittelen, skildringa, og eit bilete frå nettsida.",
             "url_previews_section": "URL-førehandsvisingar",
             "aliases_section": "Romadresser",
-            "other_section": "Anna"
+            "other_section": "Anna",
+            "error_updating_canonical_alias_title": "Feil under oppdatering av hovedadresse",
+            "error_updating_canonical_alias_description": "Det skjedde ein feil under oppdatering av hovudadressa for rommet. Det kan hende at dette er ein mellombels feil, eller at det ikkje er tillate på tenaren.",
+            "error_updating_alias_description": "Feil under oppdatering av alternativ adresse. Det kan hende at dette er mellombels, eller at det ikkje er tillate på tenaren.",
+            "canonical_alias_field_label": "Hovudadresse",
+            "no_aliases_room": "Dette rommet har ingen lokale adresser",
+            "local_alias_field_label": "Lokal adresse",
+            "published_aliases_section": "Publisert adresse",
+            "aliases_items_label": "Andre publiserte adresser:",
+            "aliases_no_items_label": "Ingen publiserte adresser til no, legg til ei under",
+            "new_alias_placeholder": "Ny publisert adresse  (t.d. #alias:tenar)",
+            "local_aliases_section": "Lokale adresser",
+            "local_aliases_explainer_room": "Sett adresse for dette rommet, slik at brukarar kan finne rommet på din heimetenar (%(localDomain)s)",
+            "name_field_label": "Romnamn",
+            "topic_field_label": "Romemne",
+            "avatar_field_label": "Rom-avatar"
         },
         "advanced": {
             "unfederated": "Rommet er ikkje tilgjengeleg for andre Matrix-heimtenarar",
@@ -1150,7 +1118,15 @@
         "peek_join_prompt": "Du førehandsviser %(roomName)s. Ynskjer du å bli med ?",
         "no_peek_join_prompt": "%(roomName)s kan ikkje førehandsvisast. Ynskjer du å bli med ?",
         "not_found_title_name": "%(roomName)s eksisterar ikkje.",
-        "inaccessible_name": "%(roomName)s er ikkje tilgjengeleg no."
+        "inaccessible_name": "%(roomName)s er ikkje tilgjengeleg no.",
+        "jump_to_bottom_button": "Gå til dei nyaste meldingane",
+        "upgrade_warning_bar_admins": "Berre rom-administratorar vil sjå denne åtvaringa",
+        "search": {
+            "this_room": "Dette rommet",
+            "all_rooms": "Alle rom",
+            "field_placeholder": "Søk…"
+        },
+        "jump_read_marker": "Hopp til den fyrste uleste meldinga."
     },
     "file_panel": {
         "guest_note": "Du må <a>melda deg inn</a> for å bruka denne funksjonen",
@@ -1194,7 +1170,12 @@
         "recovery_method_removed": {
             "title": "Gjenopprettingsmetode fjerna",
             "warning": "Viss du ikkje fjerna gjenopprettingsmetoden, kan ein angripar prøve å bryte seg inn på kontoen din. Endre kontopassordet ditt og sett ein opp ein ny gjenopprettingsmetode umidellbart under Innstillingar."
-        }
+        },
+        "setup_secure_backup": {
+            "title": "Sett opp"
+        },
+        "cross_signing_room_normal": "Dette rommet er ende-til-ende kryptert",
+        "event_shield_reason_mismatched_sender_key": "Kryptert av ein ikkje-verifisert sesjon"
     },
     "poll": {
         "create_poll_title": "Opprett røysting",
@@ -1299,5 +1280,34 @@
         "invited_list_heading": "Invitert",
         "filter_placeholder": "Filtrer rommedlemmar",
         "power_label": "%(userName)s (tilgangsnivå %(powerLevelNumber)s)"
+    },
+    "stickers": {
+        "empty": "Du har for tida ikkje skrudd nokre klistremerkepakkar på"
+    },
+    "user_info": {
+        "error_revoke_3pid_invite_title": "Fekk ikkje til å trekke invitasjonen",
+        "error_revoke_3pid_invite_description": "Fekk ikkje til å ta attende invitasjonen. Det kan ha oppstått ein mellombels feil på tenaren, eller så har ikkje du tilstrekkelege rettar for å ta attende invitasjonen.",
+        "admin_tools_section": "Administratorverktøy",
+        "revoke_invite": "Trekk invitasjon",
+        "invited_by": "Invitert av %(sender)s",
+        "room_encrypted": "Meldingar i dette rommet er ende-til-ende kryptert.",
+        "room_unencrypted": "Meldingar i dette rommet er ikkje ende-til-ende kryptert.",
+        "room_unencrypted_detail": "Når du nyttar krypterte rom er meldingane din sikra. Berre du og mottakaren har unike nøklar som kan gjere meldingane lesbare.",
+        "jump_to_rr_button": "Hopp til lesen-lappen",
+        "share_button": "Del ei lenke til brukaren",
+        "demote_self_confirm_title": "Senke ditt eige tilgangsnivå?",
+        "demote_self_confirm_room": "Du kan ikkje gjera om på denne endringa sidan du senkar tilgangsnivået ditt. Viss du er den siste privilegerte brukaren i rommet vil det bli umogleg å få tilbake tilgangsrettane.",
+        "demote_button": "Degrader",
+        "redact_button": "Fjern nyare meldingar",
+        "error_ban_user": "Fekk ikkje til å stenge ute brukaren",
+        "error_mute_user": "Fekk ikkje til å dempe brukaren",
+        "promote_warning": "Du kan ikkje angre denne endringa, fordi brukaren du forfremmar vil få same tilgangsnivå som du har no.",
+        "deactivate_confirm_title": "Deaktivere brukar?",
+        "deactivate_confirm_action": "Deaktiver brukar",
+        "error_deactivate": "Fekk ikkje til å deaktivere brukaren"
+    },
+    "right_panel": {
+        "share_button": "Del rom",
+        "settings_button": "Rominnstillingar"
     }
 }

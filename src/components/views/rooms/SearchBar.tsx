@@ -104,7 +104,7 @@ export default class SearchBar extends React.Component<IProps, IState> {
                             aria-checked={this.state.scope === SearchScope.Room}
                             role="radio"
                         >
-                            {_t("This Room")}
+                            {_t("room|search|this_room")}
                         </AccessibleButton>
                         <AccessibleButton
                             className={allRoomsClasses}
@@ -112,7 +112,7 @@ export default class SearchBar extends React.Component<IProps, IState> {
                             aria-checked={this.state.scope === SearchScope.All}
                             role="radio"
                         >
-                            {_t("All Rooms")}
+                            {_t("room|search|all_rooms")}
                         </AccessibleButton>
                     </div>
                     <div className="mx_SearchBar_input mx_textinput">
@@ -120,9 +120,11 @@ export default class SearchBar extends React.Component<IProps, IState> {
                             ref={this.searchTerm}
                             type="text"
                             autoFocus={true}
-                            placeholder={_t("Search…")}
+                            placeholder={_t("room|search|field_placeholder")}
                             aria-label={
-                                this.state.scope === SearchScope.Room ? _t("Search this room") : _t("Search all rooms")
+                                this.state.scope === SearchScope.Room
+                                    ? _t("room|search|this_room_button")
+                                    : _t("room|search|all_rooms_button")
                             }
                             onKeyDown={this.onSearchChange}
                         />

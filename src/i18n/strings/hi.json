@@ -1,5 +1,4 @@
 {
-    "All Rooms": "सारे कमरे",
     "Sun": "रवि",
     "Mon": "सोम",
     "Tue": "मंगल",
@@ -29,17 +28,6 @@
     "Moderator": "मध्यस्थ",
     "Send": "भेजें",
     "Warning!": "चेतावनी!",
-    "This event could not be displayed": "यह घटना प्रदर्शित नहीं की जा सकी",
-    "Failed to ban user": "उपयोगकर्ता को प्रतिबंधित करने में विफल",
-    "Demote yourself?": "खुद को अवनत करें?",
-    "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "आप इस बदलाव को पूर्ववत नहीं कर पाएंगे क्योंकि आप स्वयं को अवनत कर रहे हैं, अगर आप रूम में आखिरी विशेषाधिकार प्राप्त उपयोगकर्ता हैं तो विशेषाधिकार हासिल करना असंभव होगा।",
-    "Demote": "अवनत",
-    "Failed to mute user": "उपयोगकर्ता को म्यूट करने में विफल",
-    "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "आप इस परिवर्तन को पूर्ववत नहीं कर पाएंगे क्योंकि आप उपयोगकर्ता को अपने आप से समान शक्ति स्तर रखने के लिए प्रोत्साहित कर रहे हैं।",
-    "Are you sure?": "क्या आपको यकीन है?",
-    "Jump to read receipt": "पढ़ी हुई रसीद में कूदें",
-    "Share Link to User": "उपयोगकर्ता को लिंक साझा करें",
-    "Admin Tools": "व्यवस्थापक उपकरण",
     "and %(count)s others...": {
         "other": "और %(count)s अन्य ...",
         "one": "और एक अन्य..."
@@ -110,7 +98,6 @@
     "Headphones": "हेडफोन",
     "Folder": "फ़ोल्डर",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "एन्क्रिप्ट किए गए संदेश एंड-टू-एंड एन्क्रिप्शन के साथ सुरक्षित हैं। केवल आपके और प्राप्तकर्ता के पास ही इन संदेशों को पढ़ने की कुंजी है।",
-    "Back up your keys before signing out to avoid losing them.": "उन्हें खोने से बचने के लिए साइन आउट करने से पहले अपनी कुंजियों का बैकअप लें।",
     "Start using Key Backup": "कुंजी बैकअप का उपयोग करना शुरू करें",
     "Scissors": "कैंची",
     "Mongolia": "मंगोलिया",
@@ -290,7 +277,8 @@
         "profile": "प्रोफाइल",
         "display_name": "प्रदर्शित होने वाला नाम",
         "user_avatar": "प्रोफ़ाइल फोटो",
-        "authentication": "प्रमाणीकरण"
+        "authentication": "प्रमाणीकरण",
+        "are_you_sure": "क्या आपको यकीन है?"
     },
     "action": {
         "continue": "आगे बढ़ें",
@@ -497,7 +485,8 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s ने %(powerLevelDiffText)s के पावर स्तर को बदल दिया।",
             "user_from_to": "%(userId)s का %(fromPowerLevel)s से %(toPowerLevel)s"
-        }
+        },
+        "error_no_renderer": "यह घटना प्रदर्शित नहीं की जा सकी"
     },
     "slash_command": {
         "shrug": "एक सादे पाठ संदेश के लिए ¯\\_(ツ)_/¯ प्रस्तुत करता है",
@@ -601,7 +590,10 @@
         },
         "export_unsupported": "आपका ब्राउज़र आवश्यक क्रिप्टोग्राफी एक्सटेंशन का समर्थन नहीं करता है",
         "import_invalid_passphrase": "प्रमाणीकरण जांच विफल: गलत पासवर्ड?",
-        "not_supported": "<समर्थित नहीं>"
+        "not_supported": "<समर्थित नहीं>",
+        "setup_secure_backup": {
+            "explainer": "उन्हें खोने से बचने के लिए साइन आउट करने से पहले अपनी कुंजियों का बैकअप लें।"
+        }
     },
     "auth": {
         "sso": "केवल हस्ताक्षर के ऊपर",
@@ -670,7 +662,10 @@
     },
     "room": {
         "drop_file_prompt": "अपलोड करने के लिए यहां फ़ाइल ड्रॉप करें",
-        "error_join_incompatible_version_2": "कृपया अपने होमसर्वर व्यवस्थापक से संपर्क करें।"
+        "error_join_incompatible_version_2": "कृपया अपने होमसर्वर व्यवस्थापक से संपर्क करें।",
+        "search": {
+            "all_rooms": "सारे कमरे"
+        }
     },
     "space": {
         "context_menu": {
@@ -761,5 +756,16 @@
         "invited_list_heading": "आमंत्रित",
         "filter_placeholder": "रूम के सदस्यों को फ़िल्टर करें",
         "power_label": "%(userName)s (शक्ति %(powerLevelNumber)s)"
+    },
+    "user_info": {
+        "admin_tools_section": "व्यवस्थापक उपकरण",
+        "jump_to_rr_button": "पढ़ी हुई रसीद में कूदें",
+        "share_button": "उपयोगकर्ता को लिंक साझा करें",
+        "demote_self_confirm_title": "खुद को अवनत करें?",
+        "demote_self_confirm_room": "आप इस बदलाव को पूर्ववत नहीं कर पाएंगे क्योंकि आप स्वयं को अवनत कर रहे हैं, अगर आप रूम में आखिरी विशेषाधिकार प्राप्त उपयोगकर्ता हैं तो विशेषाधिकार हासिल करना असंभव होगा।",
+        "demote_button": "अवनत",
+        "error_ban_user": "उपयोगकर्ता को प्रतिबंधित करने में विफल",
+        "error_mute_user": "उपयोगकर्ता को म्यूट करने में विफल",
+        "promote_warning": "आप इस परिवर्तन को पूर्ववत नहीं कर पाएंगे क्योंकि आप उपयोगकर्ता को अपने आप से समान शक्ति स्तर रखने के लिए प्रोत्साहित कर रहे हैं।"
     }
 }

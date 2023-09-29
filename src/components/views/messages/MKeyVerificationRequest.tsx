@@ -155,7 +155,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             } else if (request.phase === VerificationPhase.Cancelled) {
                 stateLabel = this.cancelledLabel(request.cancellingUserId!);
             } else if (request.accepting) {
-                stateLabel = _t("Accepting…");
+                stateLabel = _t("encryption|verification|accepting");
             } else if (request.declining) {
                 stateLabel = _t("Declining…");
             }

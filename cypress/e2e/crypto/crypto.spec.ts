@@ -364,7 +364,7 @@ describe("Cryptography", function () {
                 .should("contain", "test unencrypted")
                 .find(".mx_EventTile_e2eIcon")
                 .should("have.class", "mx_EventTile_e2eIcon_warning")
-                .should("have.attr", "aria-label", "Unencrypted");
+                .should("have.attr", "aria-label", "Not encrypted");
 
             /* Should show no padlock for an unverified user */
             // bob sends a valid event

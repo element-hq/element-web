@@ -118,7 +118,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
                     </span>
 
                     <AccessibleButton onClick={this.onTileClicked} kind="link">
-                        {_t("View message")}
+                        {_t("common|view_message")}
                     </AccessibleButton>
                 </div>
             </div>

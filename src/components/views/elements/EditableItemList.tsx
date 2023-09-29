@@ -61,7 +61,7 @@ export class EditableItem extends React.Component<IItemProps, IItemState> {
         if (this.state.verifyRemove) {
             return (
                 <div className="mx_EditableItem">
-                    <span className="mx_EditableItem_promptText">{_t("Are you sure?")}</span>
+                    <span className="mx_EditableItem_promptText">{_t("common|are_you_sure")}</span>
                     <AccessibleButton
                         onClick={this.onActuallyRemove}
                         kind="primary_sm"

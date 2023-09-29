@@ -86,7 +86,6 @@
     "Trumpet": "tabra",
     "Bell": "janbe",
     "Headphones": "selsnapra",
-    "Search…": "nu sisku",
     "Sunday": "li jy. dy. ze detri",
     "Monday": "li jy. dy. pa detri",
     "Tuesday": "li jy. dy. re detri",
@@ -103,21 +102,14 @@
     "Ask this user to verify their session, or manually verify it below.": ".i ko cpedu le ka co'a lacri le se samtcise'u kei le pilno vau ja pilno le di'e cei'i le ka co'a lacri",
     "Not Trusted": "na se lacri",
     "Ok": "je'e",
-    "Messages in this room are end-to-end encrypted.": ".i ro zilbe'i be fo le cei'i cu mifra",
-    "Messages in this room are not end-to-end encrypted.": ".i na pa zilbe'i be fo le cei'i cu mifra",
     "%(count)s verified sessions": {
         "other": ".i lacri %(count)s se samtcise'u",
         "one": ".i lacri pa se samtcise'u"
     },
-    "Hide verified sessions": "nu ro se samtcise'u poi se lacri cu zilmipri",
     "%(count)s sessions": {
         "other": ".i samtcise'u %(count)s da",
         "one": ".i samtcise'u %(count)s da"
     },
-    "Hide sessions": "nu ro se samtcise'u cu zilmipri",
-    "This room is end-to-end encrypted": ".i ro zilbe'i be fo le cei'i cu mifra",
-    "Everyone in this room is verified": ".i do lacri ro pagbu be le se zilbe'i",
-    "Revoke invite": "nu zukte le ka na ckaji le se friti",
     "collapse": "nu tcila be na ku viska",
     "expand": "nu tcila viska",
     "Are you sure you want to sign out?": ".i xu do birti le du'u do kaidji le ka co'u se jaspu",
@@ -127,13 +119,9 @@
     },
     "Are you sure you want to leave the room '%(roomName)s'?": ".i xu do birti le du'u do kaidji le ka co'u pagbu le se zilbe'i be fo la'o zoi. %(roomName)s .zoi",
     "<a>In reply to</a> <pill>": ".i nu <a>spuda</a> tu'a la'o zoi. <pill> .zoi",
-    "Edit message": "nu basti fi le ka notci",
-    "Share room": "nu jungau fi le du'u ve zilbe'i",
-    "Share Link to User": "nu jungau pa pilno le du'u judri",
     "Share Room": "nu jungau fi le du'u ve zilbe'i",
     "Share User": "nu jungau fi le du'u pilno",
     "Share Room Message": "nu jungau fi le du'u notci",
-    "Waiting for %(displayName)s to accept…": ".i ca'o denpa lo nu la'o zoi. %(displayName)s .zoi zanru",
     "Ask %(displayName)s to scan your code:": ".i ko cpedu le ka gau ce'u kacma samymo'i le sinxa kei la'o zoi. %(displayName)s .zoi",
     "Almost there! Is %(displayName)s showing the same shield?": ".uo ru'e .i xu la'o zoi. %(displayName)s .zoi jarco ta'i tu'a pa sinxa poi mapti",
     "You've successfully verified %(displayName)s!": ".i do mo'u co'a lacri la'o zoi. %(displayName)s .zoi",
@@ -403,7 +391,8 @@
         "autocomplete": {
             "user_description": "pilno"
         },
-        "poll_button_no_perms_title": ".i lo nu curmi cu sarcu"
+        "poll_button_no_perms_title": ".i lo nu curmi cu sarcu",
+        "edit_composer_label": "nu basti fi le ka notci"
     },
     "room_settings": {
         "permissions": {
@@ -432,12 +421,15 @@
             "complete_action": "je'e",
             "waiting_other_user": ".i ca'o denpa lo nu la'o zoi. %(displayName)s .zoi mo'u co'a lacri",
             "cancelling": ".i ca'o co'u co'e",
-            "unverified_sessions_toast_reject": "nu ca na co'e"
+            "unverified_sessions_toast_reject": "nu ca na co'e",
+            "waiting_for_user_accept": ".i ca'o denpa lo nu la'o zoi. %(displayName)s .zoi zanru"
         },
         "export_unsupported": ".i le kibrbrauzero na ka'e pilno le mifra ciste poi jai sarcu",
         "import_invalid_passphrase": ".i pu fliba lo nu birti lo du'u curmi lo nu do jonse .i na'e drani xu japyvla",
         "verify_toast_title": "nu co'a lacri le se samtcise'u",
-        "verify_toast_description": ".i la'a na pa na du be do cu lacri"
+        "verify_toast_description": ".i la'a na pa na du be do cu lacri",
+        "cross_signing_room_normal": ".i ro zilbe'i be fo le cei'i cu mifra",
+        "cross_signing_room_verified": ".i do lacri ro pagbu be le se zilbe'i"
     },
     "export_chat": {
         "messages": "notci"
@@ -520,10 +512,24 @@
         "invite_this_room": "nu friti le ka ziljmina le se zilbe'i",
         "join_button_account": "nu co'a na'o jaspu",
         "dm_invite_subtitle": ".i la'o zoi. <userName/> .zoi kaidji le ka tavla do",
-        "invite_subtitle": ".i la'o zoi. <userName/> .zoi friti le ka ziljmina kei do"
+        "invite_subtitle": ".i la'o zoi. <userName/> .zoi friti le ka ziljmina kei do",
+        "search": {
+            "field_placeholder": "nu sisku"
+        }
     },
     "notifications": {
         "class_other": "drata",
         "default": "zmiselcu'a"
+    },
+    "user_info": {
+        "revoke_invite": "nu zukte le ka na ckaji le se friti",
+        "room_encrypted": ".i ro zilbe'i be fo le cei'i cu mifra",
+        "room_unencrypted": ".i na pa zilbe'i be fo le cei'i cu mifra",
+        "hide_verified_sessions": "nu ro se samtcise'u poi se lacri cu zilmipri",
+        "hide_sessions": "nu ro se samtcise'u cu zilmipri",
+        "share_button": "nu jungau pa pilno le du'u judri"
+    },
+    "right_panel": {
+        "share_button": "nu jungau fi le du'u ve zilbe'i"
     }
 }

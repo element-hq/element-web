@@ -31,11 +31,11 @@ export function EventTileThreadToolbar({
     copyLinkToThread: (evt: ButtonEvent) => void;
 }): JSX.Element {
     return (
-        <Toolbar className="mx_MessageActionBar" aria-label={_t("Message Actions")} aria-live="off">
+        <Toolbar className="mx_MessageActionBar" aria-label={_t("timeline|mab|label")} aria-live="off">
             <RovingAccessibleTooltipButton
                 className="mx_MessageActionBar_iconButton"
                 onClick={viewInRoom}
-                title={_t("View in room")}
+                title={_t("timeline|mab|view_in_room")}
                 key="view_in_room"
             >
                 <ViewInRoomIcon />
@@ -43,7 +43,7 @@ export function EventTileThreadToolbar({
             <RovingAccessibleTooltipButton
                 className="mx_MessageActionBar_iconButton"
                 onClick={copyLinkToThread}
-                title={_t("Copy link to thread")}
+                title={_t("timeline|mab|copy_link_thread")}
                 key="copy_link_to_thread"
             >
                 <LinkIcon />

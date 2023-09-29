@@ -240,7 +240,7 @@ const Tile: React.FC<ITileProps> = ({
 
     let joinedSection: ReactElement | undefined;
     if (joinedRoom) {
-        joinedSection = <div className="mx_SpaceHierarchy_roomTile_joined">{_t("Joined")}</div>;
+        joinedSection = <div className="mx_SpaceHierarchy_roomTile_joined">{_t("common|joined")}</div>;
     }
 
     let suggestedSection: ReactElement | undefined;

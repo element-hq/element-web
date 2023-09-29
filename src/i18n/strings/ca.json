@@ -32,13 +32,6 @@
     "Moderator": "Moderador",
     "Send": "Envia",
     "This room is not public. You will not be able to rejoin without an invite.": "Aquesta sala no és pública. No podreu tronar a entrar sense invitació.",
-    "Failed to ban user": "No s'ha pogut expulsar l'usuari",
-    "Failed to mute user": "No s'ha pogut silenciar l'usuari",
-    "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "No podràs desfer aquest canvi ja que t'estàs baixant de rang, si ets l'últim usuari de la sala amb privilegis, et serà impossible recuperar-los.",
-    "Are you sure?": "Estàs segur?",
-    "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "No podràs desfer aquest canvi ja que estàs donant a l'usuari el mateix nivell d'autoritat que el teu.",
-    "Jump to read receipt": "Vés a l'últim missatge llegit",
-    "Admin Tools": "Eines d'administració",
     "and %(count)s others...": {
         "other": "i %(count)s altres...",
         "one": "i un altre..."
@@ -53,9 +46,7 @@
         "one": "(~%(count)s resultat)"
     },
     "Join Room": "Entra a la sala",
-    "Jump to first unread message.": "Salta al primer missatge no llegit.",
     "not specified": "sense especificar",
-    "This room has no local addresses": "Aquesta sala no té adreces locals",
     "Error decrypting attachment": "Error desxifrant fitxer adjunt",
     "Decrypt %(text)s": "Desxifra %(text)s",
     "Download %(text)s": "Baixa %(text)s",
@@ -107,15 +98,12 @@
     "Friday": "Divendres",
     "Changelog": "Registre de canvis",
     "Failed to send logs: ": "No s'han pogut enviar els logs: ",
-    "This Room": "Aquesta sala",
     "Unavailable": "No disponible",
     "Filter results": "Resultats del filtre",
-    "Search…": "Cerca…",
     "Tuesday": "Dimarts",
     "Preparing to send logs": "Preparant l'enviament de logs",
     "Saturday": "Dissabte",
     "Monday": "Dilluns",
-    "All Rooms": "Totes les sales",
     "Wednesday": "Dimecres",
     "You cannot delete this message. (%(code)s)": "No podeu eliminar aquest missatge. (%(code)s)",
     "Thursday": "Dijous",
@@ -129,16 +117,8 @@
     "Upload Error": "Error de pujada",
     "A connection error occurred while trying to contact the server.": "S'ha produït un error de connexió mentre s'intentava connectar al servidor.",
     "%(brand)s encountered an error during upload of:": "%(brand)s ha trobat un error durant la pujada de:",
-    "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "S'ha produït un error en actualitzar l'adreça principal de la sala. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
-    "Error updating main address": "Error actualitzant adreça principal",
-    "Error creating address": "Error creant adreça",
-    "Error removing address": "Error eliminant adreça",
-    "There was an error removing that address. It may no longer exist or a temporary error occurred.": "S'ha produït un error en eliminar l'adreça. Pot ser que ja no existeixi o que s'hagi produït un error temporal.",
-    "There was an error creating that address. It may not be allowed by the server or a temporary failure occurred.": "S'ha produït un error en crear l'adreça. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
-    "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "S'ha produït un error en actualitzar l'adreça alternativa de la sala. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
     "Power level": "Nivell d'autoritat",
     "e.g. my-room": "p.e. la-meva-sala",
-    "New published address (e.g. #alias:server)": "Nova adreça publicada (p.e. #alias:server)",
     "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Prèviament has fet servir %(brand)s a %(host)s amb la càrrega mandrosa de membres activada. En aquesta versió la càrrega mandrosa està desactivada. Com que la memòria cau local no és compatible entre les dues versions, %(brand)s necessita tornar a sincronitzar el teu compte.",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. <default>Utilitza el predeterminat (%(defaultIdentityServerName)s)</default> o gestiona'l a <settings>Configuració</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. Gestiona'l a <settings>Configuració</settings>.",
@@ -147,7 +127,6 @@
     "Room Settings - %(roomName)s": "Configuració de sala - %(roomName)s",
     "Confirm this user's session by comparing the following with their User Settings:": "Confirma aquesta sessió d'usuari comparant amb la seva configuració d'usuari, el següent:",
     "Confirm by comparing the following with the User Settings in your other session:": "Confirma comparant el següent amb la configuració d'usuari de la teva altra sessió:",
-    "Room settings": "Configuració de sala",
     "To continue, use Single Sign On to prove your identity.": "Per continuar, utilitza la inscripció única SSO (per demostrar la teva identitat).",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Confirma la desactivació del teu compte mitjançant la inscripció única SSO (per demostrar la teva identitat).",
     "common": {
@@ -184,7 +163,8 @@
         "rooms": "Sales",
         "low_priority": "Baixa prioritat",
         "historical": "Històric",
-        "go_to_settings": "Ves a Configuració"
+        "go_to_settings": "Ves a Configuració",
+        "are_you_sure": "Estàs segur?"
     },
     "action": {
         "continue": "Continua",
@@ -600,7 +580,16 @@
             "default_url_previews_on": "Les previsualitzacions dels URL estan habilitades per defecte per als membres d'aquesta sala.",
             "default_url_previews_off": "Les previsualitzacions dels URL estan inhabilitades per defecte per als membres d'aquesta sala.",
             "url_previews_section": "Previsualitzacions dels URL",
-            "other_section": "Altres"
+            "other_section": "Altres",
+            "error_updating_canonical_alias_title": "Error actualitzant adreça principal",
+            "error_updating_canonical_alias_description": "S'ha produït un error en actualitzar l'adreça principal de la sala. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
+            "error_updating_alias_description": "S'ha produït un error en actualitzar l'adreça alternativa de la sala. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
+            "error_creating_alias_title": "Error creant adreça",
+            "error_creating_alias_description": "S'ha produït un error en crear l'adreça. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
+            "error_deleting_alias_description": "S'ha produït un error en eliminar l'adreça. Pot ser que ja no existeixi o que s'hagi produït un error temporal.",
+            "error_deleting_alias_title": "Error eliminant adreça",
+            "no_aliases_room": "Aquesta sala no té adreces locals",
+            "new_alias_placeholder": "Nova adreça publicada (p.e. #alias:server)"
         },
         "advanced": {
             "unfederated": "Aquesta sala no és accessible per a servidors de Matrix remots"
@@ -710,7 +699,13 @@
         "3pid_invite_no_is_subtitle": "Per rebre invitacions directament a %(brand)s, utilitza un servidor d'identitat a Configuració.",
         "invite_email_mismatch_suggestion": "Per rebre invitacions directament a %(brand)s, comparteix aquest correu electrònic a Configuració.",
         "not_found_title_name": "La sala %(roomName)s no existeix.",
-        "inaccessible_name": "La sala %(roomName)s no és accessible en aquest moment."
+        "inaccessible_name": "La sala %(roomName)s no és accessible en aquest moment.",
+        "search": {
+            "this_room": "Aquesta sala",
+            "all_rooms": "Totes les sales",
+            "field_placeholder": "Cerca…"
+        },
+        "jump_read_marker": "Salta al primer missatge no llegit."
     },
     "file_panel": {
         "guest_note": "Per poder utilitzar aquesta funcionalitat has de <a>registrar-te</a>",
@@ -824,5 +819,16 @@
         "invited_list_heading": "Convidat",
         "filter_placeholder": "Filtra els membres de la sala",
         "power_label": "%(userName)s (autoritat %(powerLevelNumber)s)"
+    },
+    "user_info": {
+        "admin_tools_section": "Eines d'administració",
+        "jump_to_rr_button": "Vés a l'últim missatge llegit",
+        "demote_self_confirm_room": "No podràs desfer aquest canvi ja que t'estàs baixant de rang, si ets l'últim usuari de la sala amb privilegis, et serà impossible recuperar-los.",
+        "error_ban_user": "No s'ha pogut expulsar l'usuari",
+        "error_mute_user": "No s'ha pogut silenciar l'usuari",
+        "promote_warning": "No podràs desfer aquest canvi ja que estàs donant a l'usuari el mateix nivell d'autoritat que el teu."
+    },
+    "right_panel": {
+        "settings_button": "Configuració de sala"
     }
 }

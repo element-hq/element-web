@@ -1,10 +1,5 @@
 {
-    "Admin Tools": "Aisinas d’administrator",
     "Unnamed room": "Sala sens nom",
-    "Share room": "Partejar la sala",
-    "This Room": "Aquesta sala",
-    "All Rooms": "Totas les salas",
-    "Search…": "Cercar…",
     "Sun": "Dg",
     "Mon": "Dl",
     "Tue": "Dm",
@@ -29,7 +24,6 @@
     "Moderator": "Moderator",
     "Thank you!": "Mercés !",
     "Ok": "Validar",
-    "Set up": "Parametrar",
     "Fish": "Pes",
     "Butterfly": "Parpalhòl",
     "Tree": "Arborescéncia",
@@ -47,10 +41,6 @@
     "Anchor": "Ancorar",
     "Headphones": "Escotadors",
     "Folder": "Dorsièr",
-    "Show more": "Ne veire mai",
-    "Unencrypted": "Pas chifrat",
-    "Demote": "Retrogradar",
-    "Are you sure?": "O volètz vertadièrament ?",
     "Sunday": "Dimenge",
     "Monday": "Diluns",
     "Tuesday": "Dimars",
@@ -119,7 +109,10 @@
         "authentication": "Autentificacion",
         "rooms": "Salas",
         "low_priority": "Febla prioritat",
-        "historical": "Istoric"
+        "historical": "Istoric",
+        "unencrypted": "Pas chifrat",
+        "show_more": "Ne veire mai",
+        "are_you_sure": "O volètz vertadièrament ?"
     },
     "action": {
         "continue": "Contunhar",
@@ -368,6 +361,9 @@
     "encryption": {
         "verification": {
             "cancelling": "Anullacion…"
+        },
+        "setup_secure_backup": {
+            "title": "Parametrar"
         }
     },
     "invite": {
@@ -402,7 +398,12 @@
         "invite_title": "Volètz rejonher %(roomName)s ?",
         "invite_subtitle": "<userName/> vos convidèt",
         "invite_reject_ignore": "Regetar e ignorar",
-        "not_found_title_name": "%(roomName)s existís pas."
+        "not_found_title_name": "%(roomName)s existís pas.",
+        "search": {
+            "this_room": "Aquesta sala",
+            "all_rooms": "Totas les salas",
+            "field_placeholder": "Cercar…"
+        }
     },
     "lightbox": {
         "rotate_left": "Pivotar cap a èrra",
@@ -410,5 +411,12 @@
     },
     "member_list": {
         "invited_list_heading": "Convidat"
+    },
+    "user_info": {
+        "admin_tools_section": "Aisinas d’administrator",
+        "demote_button": "Retrogradar"
+    },
+    "right_panel": {
+        "share_button": "Partejar la sala"
     }
 }

@@ -106,10 +106,8 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
                 this.setState({ invited: true });
 
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Failed to revoke invite"),
-                    description: _t(
-                        "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.",
-                    ),
+                    title: _t("user_info|error_revoke_3pid_invite_title"),
+                    description: _t("user_info|error_revoke_3pid_invite_description"),
                 });
             });
 
@@ -122,9 +120,9 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         if (this.state.canKick && this.state.invited) {
             adminTools = (
                 <div className="mx_MemberInfo_container">
-                    <h3>{_t("Admin Tools")}</h3>
+                    <h3>{_t("user_info|admin_tools_section")}</h3>
                     <AccessibleButton className="mx_MemberInfo_field" onClick={this.onKickClick}>
-                        {_t("Revoke invite")}
+                        {_t("user_info|revoke_invite")}
                     </AccessibleButton>
                 </div>
             );
@@ -153,7 +151,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
                     <h2>{this.state.displayName}</h2>
                 </div>
                 <div className="mx_MemberInfo_container mx_MemberInfo_container--profile">
-                    {_t("Invited by %(sender)s", { sender: this.state.senderName })}
+                    {_t("user_info|invited_by", { sender: this.state.senderName })}
                 </div>
                 {adminTools}
             </div>

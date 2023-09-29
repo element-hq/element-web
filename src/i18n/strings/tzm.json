@@ -43,7 +43,6 @@
     "Send": "Azen",
     "edited": "infel",
     "Home": "Asnubeg",
-    "Search…": "Arezzu…",
     "%(duration)sd": "%(duration)sas",
     "Folder": "Asdaw",
     "Guitar": "Agiṭaṛ",
@@ -188,6 +187,9 @@
         "rules_empty": "Walu"
     },
     "room": {
-        "rejoin_button": "als-lkem"
+        "rejoin_button": "als-lkem",
+        "search": {
+            "field_placeholder": "Arezzu…"
+        }
     }
 }

@@ -39,7 +39,7 @@ const JumpToBottomButton: React.FC<IProps> = (props) => {
         <div className={className}>
             <AccessibleButton
                 className="mx_JumpToBottomButton_scrollDown"
-                title={_t("Scroll to most recent messages")}
+                title={_t("room|jump_to_bottom_button")}
                 onClick={props.onScrollToBottomClick}
             />
             {badge}

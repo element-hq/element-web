@@ -78,15 +78,15 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
         ) {
             Modal.createDialog(ErrorDialog, {
                 headerImage: require("../../../../res/img/e2e/warning-deprecated.svg").default,
-                title: _t("Your messages are not secure"),
+                title: _t("encryption|messages_not_secure|title"),
                 description: (
                     <div>
-                        {_t("One of the following may be compromised:")}
+                        {_t("encryption|messages_not_secure|heading")}
                         <ul>
-                            <li>{_t("Your homeserver")}</li>
-                            <li>{_t("The homeserver the user you're verifying is connected to")}</li>
-                            <li>{_t("Yours, or the other users' internet connection")}</li>
-                            <li>{_t("Yours, or the other users' session")}</li>
+                            <li>{_t("encryption|messages_not_secure|cause_1")}</li>
+                            <li>{_t("encryption|messages_not_secure|cause_2")}</li>
+                            <li>{_t("encryption|messages_not_secure|cause_3")}</li>
+                            <li>{_t("encryption|messages_not_secure|cause_4")}</li>
                         </ul>
                     </div>
                 ),
@@ -117,8 +117,8 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
 
             Modal.createDialog(ErrorDialog, {
                 headerImage: require("../../../../res/img/e2e/warning.svg").default,
-                title: _t("Error starting verification"),
-                description: _t("We were unable to start a chat with the other user."),
+                title: _t("encryption|verification|error_starting_title"),
+                description: _t("encryption|verification|error_starting_description"),
             });
             return;
         }

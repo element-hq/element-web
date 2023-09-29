@@ -283,12 +283,12 @@ function DevicesSection({
             }
         }
         expandCountCaption = _t("%(count)s verified sessions", { count: expandSectionDevices.length });
-        expandHideCaption = _t("Hide verified sessions");
+        expandHideCaption = _t("user_info|hide_verified_sessions");
         expandIconClasses += " mx_E2EIcon_verified";
     } else {
         expandSectionDevices = devices;
         expandCountCaption = _t("%(count)s sessions", { count: devices.length });
-        expandHideCaption = _t("Hide sessions");
+        expandHideCaption = _t("user_info|hide_sessions");
         expandIconClasses += " mx_E2EIcon_normal";
     }
 
@@ -381,14 +381,8 @@ export const UserOptionsSection: React.FC<{
     const ignore = useCallback(async () => {
         const name = (member instanceof User ? member.displayName : member.name) || member.userId;
         const { finished } = Modal.createDialog(QuestionDialog, {
-            title: _t("Ignore %(user)s", { user: name }),
-            description: (
-                <div>
-                    {_t(
-                        "All messages and invites from this user will be hidden. Are you sure you want to ignore them?",
-                    )}
-                </div>
-            ),
+            title: _t("user_info|ignore_confirm_title", { user: name }),
+            description: <div>{_t("user_info|ignore_confirm_description")}</div>,
             button: _t("action|ignore"),
         });
         const [confirmed] = await finished;
@@ -438,7 +432,7 @@ export const UserOptionsSection: React.FC<{
             if (room?.getEventReadUpTo(member.userId)) {
                 readReceiptButton = (
                     <AccessibleButton kind="link" onClick={onReadReceiptButton} className="mx_UserInfo_field">
-                        {_t("Jump to read receipt")}
+                        {_t("user_info|jump_to_rr_button")}
                     </AccessibleButton>
                 );
             }
@@ -497,7 +491,7 @@ export const UserOptionsSection: React.FC<{
 
     const shareUserButton = (
         <AccessibleButton kind="link" onClick={onShareUserClick} className="mx_UserInfo_field">
-            {_t("Share Link to User")}
+            {_t("user_info|share_button")}
         </AccessibleButton>
     );
 
@@ -520,19 +514,15 @@ export const UserOptionsSection: React.FC<{
 
 export const warnSelfDemote = async (isSpace: boolean): Promise<boolean> => {
     const { finished } = Modal.createDialog(QuestionDialog, {
-        title: _t("Demote yourself?"),
+        title: _t("user_info|demote_self_confirm_title"),
         description: (
             <div>
                 {isSpace
-                    ? _t(
-                          "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.",
-                      )
-                    : _t(
-                          "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.",
-                      )}
+                    ? _t("user_info|demote_self_confirm_description_space")
+                    : _t("user_info|demote_self_confirm_room")}
             </div>
         ),
-        button: _t("Demote"),
+        button: _t("user_info|demote_button"),
     });
 
     const [confirmed] = await finished;
@@ -544,7 +534,7 @@ const GenericAdminToolsContainer: React.FC<{
 }> = ({ children }) => {
     return (
         <div className="mx_UserInfo_container">
-            <h3>{_t("Admin Tools")}</h3>
+            <h3>{_t("user_info|admin_tools_section")}</h3>
             <div className="mx_UserInfo_buttons">{children}</div>
         </div>
     );
@@ -631,15 +621,15 @@ export const RoomKickButton = ({
             member,
             action: room.isSpaceRoom()
                 ? member.membership === "invite"
-                    ? _t("Disinvite from space")
-                    : _t("Remove from space")
+                    ? _t("user_info|disinvite_button_space")
+                    : _t("user_info|kick_button_space")
                 : member.membership === "invite"
-                ? _t("Disinvite from room")
-                : _t("Remove from room"),
+                ? _t("user_info|disinvite_button_room")
+                : _t("user_info|kick_button_room"),
             title:
                 member.membership === "invite"
-                    ? _t("Disinvite from %(roomName)s", { roomName: room.name })
-                    : _t("Remove from %(roomName)s", { roomName: room.name }),
+                    ? _t("user_info|disinvite_button_room_name", { roomName: room.name })
+                    : _t("user_info|kick_button_room_name", { roomName: room.name }),
             askReason: member.membership === "join",
             danger: true,
         };
@@ -664,9 +654,9 @@ export const RoomKickButton = ({
                             child.currentState.hasSufficientPowerLevelFor("kick", myMember.powerLevel)
                         );
                     },
-                    allLabel: _t("Remove them from everything I'm able to"),
-                    specificLabel: _t("Remove them from specific things I'm able to"),
-                    warningMessage: _t("They'll still be able to access whatever you're not an admin of."),
+                    allLabel: _t("user_info|kick_button_space_everything"),
+                    specificLabel: _t("user_info|kick_space_specific"),
+                    warningMessage: _t("user_info|kick_space_warning"),
                 },
                 "mx_ConfirmSpaceUserActionDialog_wrapper",
             ));
@@ -690,7 +680,7 @@ export const RoomKickButton = ({
                 function (err) {
                     logger.error("Kick error: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: _t("Failed to remove user"),
+                        title: _t("user_info|error_kicking_user"),
                         description: err && err.message ? err.message : "Operation failed",
                     });
                 },
@@ -702,11 +692,11 @@ export const RoomKickButton = ({
 
     const kickLabel = room.isSpaceRoom()
         ? member.membership === "invite"
-            ? _t("Disinvite from space")
-            : _t("Remove from space")
+            ? _t("user_info|disinvite_button_space")
+            : _t("user_info|kick_button_space")
         : member.membership === "invite"
-        ? _t("Disinvite from room")
-        : _t("Remove from room");
+        ? _t("user_info|disinvite_button_room")
+        : _t("user_info|kick_button_room");
 
     return (
         <AccessibleButton
@@ -740,7 +730,7 @@ const RedactMessagesButton: React.FC<IBaseProps> = ({ member }) => {
             className="mx_UserInfo_field mx_UserInfo_destructive"
             onClick={onRedactAllMessages}
         >
-            {_t("Remove recent messages")}
+            {_t("user_info|redact_button")}
         </AccessibleButton>
     );
 };
@@ -763,14 +753,14 @@ export const BanToggleButton = ({
             member,
             action: room.isSpaceRoom()
                 ? isBanned
-                    ? _t("Unban from space")
-                    : _t("Ban from space")
+                    ? _t("user_info|unban_button_space")
+                    : _t("user_info|ban_button_space")
                 : isBanned
-                ? _t("Unban from room")
-                : _t("Ban from room"),
+                ? _t("user_info|unban_button_room")
+                : _t("user_info|ban_button_room"),
             title: isBanned
-                ? _t("Unban from %(roomName)s", { roomName: room.name })
-                : _t("Ban from %(roomName)s", { roomName: room.name }),
+                ? _t("user_info|unban_room_confirm_title", { roomName: room.name })
+                : _t("user_info|ban_room_confirm_title", { roomName: room.name }),
             askReason: !isBanned,
             danger: !isBanned,
         };
@@ -808,15 +798,9 @@ export const BanToggleButton = ({
                                   child.currentState.hasSufficientPowerLevelFor("ban", myMember.powerLevel)
                               );
                           },
-                    allLabel: isBanned
-                        ? _t("Unban them from everything I'm able to")
-                        : _t("Ban them from everything I'm able to"),
-                    specificLabel: isBanned
-                        ? _t("Unban them from specific things I'm able to")
-                        : _t("Ban them from specific things I'm able to"),
-                    warningMessage: isBanned
-                        ? _t("They won't be able to access whatever you're not an admin of.")
-                        : _t("They'll still be able to access whatever you're not an admin of."),
+                    allLabel: isBanned ? _t("user_info|unban_space_everything") : _t("user_info|ban_space_everything"),
+                    specificLabel: isBanned ? _t("user_info|unban_space_specific") : _t("user_info|ban_space_specific"),
+                    warningMessage: isBanned ? _t("user_info|unban_space_warning") : _t("user_info|kick_space_warning"),
                 },
                 "mx_ConfirmSpaceUserActionDialog_wrapper",
             ));
@@ -849,7 +833,7 @@ export const BanToggleButton = ({
                     logger.error("Ban error: " + err);
                     Modal.createDialog(ErrorDialog, {
                         title: _t("common|error"),
-                        description: _t("Failed to ban user"),
+                        description: _t("user_info|error_ban_user"),
                     });
                 },
             )
@@ -858,9 +842,9 @@ export const BanToggleButton = ({
             });
     };
 
-    let label = room.isSpaceRoom() ? _t("Ban from space") : _t("Ban from room");
+    let label = room.isSpaceRoom() ? _t("user_info|ban_button_space") : _t("user_info|ban_button_room");
     if (isBanned) {
-        label = room.isSpaceRoom() ? _t("Unban from space") : _t("Unban from room");
+        label = room.isSpaceRoom() ? _t("user_info|unban_button_space") : _t("user_info|unban_button_room");
     }
 
     const classes = classNames("mx_UserInfo_field", {
@@ -931,7 +915,7 @@ const MuteToggleButton: React.FC<IBaseRoomProps> = ({
                     logger.error("Mute error: " + err);
                     Modal.createDialog(ErrorDialog, {
                         title: _t("common|error"),
-                        description: _t("Failed to mute user"),
+                        description: _t("user_info|error_mute_user"),
                     });
                 },
             )
@@ -1179,14 +1163,12 @@ export const PowerLevelEditor: React.FC<{
             const myPower = powerLevelEvent.getContent().users[myUserId || ""];
             if (myPower && parseInt(myPower) <= powerLevel && myUserId !== target) {
                 const { finished } = Modal.createDialog(QuestionDialog, {
-                    title: _t("Warning!"),
+                    title: _t("common|warning"),
                     description: (
                         <div>
-                            {_t(
-                                "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.",
-                            )}
+                            {_t("user_info|promote_warning")}
                             <br />
-                            {_t("Are you sure?")}
+                            {_t("common|are_you_sure")}
                         </div>
                     ),
                     button: _t("action|continue"),
@@ -1348,15 +1330,9 @@ const BasicUserInfo: React.FC<{
 
     const onSynapseDeactivate = useCallback(async () => {
         const { finished } = Modal.createDialog(QuestionDialog, {
-            title: _t("Deactivate user?"),
-            description: (
-                <div>
-                    {_t(
-                        "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?",
-                    )}
-                </div>
-            ),
-            button: _t("Deactivate user"),
+            title: _t("user_info|deactivate_confirm_title"),
+            description: <div>{_t("user_info|deactivate_confirm_description")}</div>,
+            button: _t("user_info|deactivate_confirm_action"),
             danger: true,
         });
 
@@ -1371,7 +1347,7 @@ const BasicUserInfo: React.FC<{
             const description = err instanceof Error ? err.message : _t("invite|failed_generic");
 
             Modal.createDialog(ErrorDialog, {
-                title: _t("Failed to deactivate user"),
+                title: _t("user_info|error_deactivate"),
                 description,
             });
         }
@@ -1390,7 +1366,7 @@ const BasicUserInfo: React.FC<{
                 className="mx_UserInfo_field mx_UserInfo_destructive"
                 onClick={onSynapseDeactivate}
             >
-                {_t("Deactivate user")}
+                {_t("user_info|deactivate_confirm_action")}
             </AccessibleButton>
         );
     }
@@ -1404,7 +1380,7 @@ const BasicUserInfo: React.FC<{
                 <div className="mx_UserInfo_container">
                     <h3>
                         {_t(
-                            "Role in <RoomName/>",
+                            "user_info|role_label",
                             {},
                             {
                                 RoomName: () => <b>{room.name}</b>,
@@ -1449,10 +1425,10 @@ const BasicUserInfo: React.FC<{
         if (!cryptoEnabled) {
             text = _t("This client does not support end-to-end encryption.");
         } else if (room && !room.isSpaceRoom()) {
-            text = _t("Messages in this room are not end-to-end encrypted.");
+            text = _t("user_info|room_unencrypted");
         }
     } else if (!room.isSpaceRoom()) {
-        text = _t("Messages in this room are end-to-end encrypted.");
+        text = _t("user_info|room_encrypted");
     }
 
     let verifyButton;

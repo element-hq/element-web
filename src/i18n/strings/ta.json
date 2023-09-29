@@ -1,10 +1,7 @@
 {
-    "All Rooms": "அனைத்து அறைகள்",
     "Changelog": "மாற்றப்பதிவு",
     "Failed to forget room %(errCode)s": "அறையை மறப்பதில் தோல்வி %(errCode)s",
-    "Search…": "தேடு…",
     "Send": "அனுப்பு",
-    "This Room": "இந்த அறை",
     "Unavailable": "இல்லை",
     "unknown error code": "தெரியாத பிழை குறி",
     "Unnamed room": "பெயரிடப்படாத அறை",
@@ -189,7 +186,12 @@
             "favourite": "விருப்பமான",
             "low_priority": "குறைந்த முன்னுரிமை"
         },
-        "invite_this_room": "இந்த அறைக்கு அழை"
+        "invite_this_room": "இந்த அறைக்கு அழை",
+        "search": {
+            "this_room": "இந்த அறை",
+            "all_rooms": "அனைத்து அறைகள்",
+            "field_placeholder": "தேடு…"
+        }
     },
     "composer": {
         "poll_button_no_perms_title": "அனுமதி தேவை"

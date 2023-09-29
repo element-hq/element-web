@@ -861,7 +861,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             case Phase.PassphraseConfirm:
                 return _t("settings|key_backup|setup_secure_backup|title_confirm_phrase");
             case Phase.ConfirmSkip:
-                return _t("Are you sure?");
+                return _t("common|are_you_sure");
             case Phase.ShowKey:
                 return _t("settings|key_backup|setup_secure_backup|title_save_key");
             case Phase.Storing:

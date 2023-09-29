@@ -39,26 +39,20 @@
         "other": "e %(count)s outros...",
         "one": "e um outro..."
     },
-    "Are you sure?": "Você tem certeza?",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s de %(fullYear)s às %(time)s",
     "Decrypt %(text)s": "Descriptografar %(text)s",
     "Download %(text)s": "Baixar %(text)s",
-    "Failed to ban user": "Não foi possível banir o/a usuário/a",
     "Failed to load timeline position": "Não foi possível carregar a posição na linha do tempo",
-    "Failed to mute user": "Não foi possível remover notificações da/do usuária/o",
     "Failed to reject invite": "Não foi possível rejeitar o convite",
     "Join Room": "Ingressar na sala",
-    "Jump to first unread message.": "Ir diretamente para a primeira das mensagens não lidas.",
     "not specified": "não especificado",
     "No more results": "Não há mais resultados",
     "Search failed": "Busca falhou",
     "Server may be unavailable, overloaded, or search timed out :(": "O servidor pode estar indisponível, sobrecarregado, ou a busca ultrapassou o tempo limite :(",
-    "This room has no local addresses": "Esta sala não tem endereços locais",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Tentei carregar um ponto específico na linha do tempo desta sala, mas parece que você não tem permissões para ver a mensagem em questão.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Tentei carregar um ponto específico na linha do tempo desta sala, mas não o encontrei.",
     "You seem to be in a call, are you sure you want to quit?": "Parece que você está em uma chamada. Tem certeza que quer sair?",
     "You seem to be uploading files, are you sure you want to quit?": "Parece que você está enviando arquivos. Tem certeza que quer sair?",
-    "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Você não poderá desfazer esta mudança, pois estará dando a este(a) usuário(a) o mesmo nível de permissões que você.",
     "An error has occurred.": "Ocorreu um erro.",
     "Email address": "Endereço de email",
     "Error decrypting attachment": "Erro ao descriptografar o anexo",
@@ -79,7 +73,6 @@
         "other": "Enviando o arquivo %(filename)s e %(count)s outros arquivos"
     },
     "Uploading %(filename)s": "Enviando o arquivo %(filename)s",
-    "Admin Tools": "Ferramentas de Administração",
     "(~%(count)s results)": {
         "other": "(~%(count)s resultados)",
         "one": "(~%(count)s resultado)"
@@ -92,16 +85,13 @@
     "Today": "Hoje",
     "Friday": "Sexta-feira",
     "Changelog": "Histórico de alterações",
-    "This Room": "Esta sala",
     "Unavailable": "Indisponível",
     "Filter results": "Filtrar resultados",
     "Tuesday": "Terça-feira",
-    "Search…": "Pesquisar…",
     "Unnamed room": "Sala sem nome",
     "Saturday": "Sábado",
     "Monday": "Segunda-feira",
     "Send": "Enviar",
-    "All Rooms": "Todas as salas",
     "You cannot delete this message. (%(code)s)": "Não pode apagar esta mensagem. (%(code)s)",
     "Thursday": "Quinta-feira",
     "Yesterday": "Ontem",
@@ -396,7 +386,8 @@
         "authentication": "Autenticação",
         "rooms": "Salas",
         "low_priority": "Baixa prioridade",
-        "historical": "Histórico"
+        "historical": "Histórico",
+        "are_you_sure": "Você tem certeza?"
     },
     "action": {
         "continue": "Continuar",
@@ -778,7 +769,13 @@
         "dm_invite_subtitle": "<userName/> quer falar",
         "invite_subtitle": "<userName/> convidou-o",
         "not_found_title_name": "%(roomName)s não existe.",
-        "inaccessible_name": "%(roomName)s não está acessível neste momento."
+        "inaccessible_name": "%(roomName)s não está acessível neste momento.",
+        "search": {
+            "this_room": "Esta sala",
+            "all_rooms": "Todas as salas",
+            "field_placeholder": "Pesquisar…"
+        },
+        "jump_read_marker": "Ir diretamente para a primeira das mensagens não lidas."
     },
     "file_panel": {
         "guest_note": "Você deve <a>se registrar</a> para poder usar esta funcionalidade",
@@ -809,7 +806,8 @@
             "user_url_previews_default_on": "Você <a>habilitou</a> pré-visualizações de links por padrão.",
             "user_url_previews_default_off": "Você <a>desabilitou</a> pré-visualizações de links por padrão.",
             "url_previews_section": "Pré-visualização de links",
-            "other_section": "Outros"
+            "other_section": "Outros",
+            "no_aliases_room": "Esta sala não tem endereços locais"
         },
         "advanced": {
             "unfederated": "Esta sala não é acessível para servidores Matrix remotos"
@@ -914,5 +912,11 @@
         "invited_list_heading": "Convidada(o)",
         "filter_placeholder": "Filtrar integrantes da sala",
         "power_label": "%(userName)s (nível de permissão %(powerLevelNumber)s)"
+    },
+    "user_info": {
+        "admin_tools_section": "Ferramentas de Administração",
+        "error_ban_user": "Não foi possível banir o/a usuário/a",
+        "error_mute_user": "Não foi possível remover notificações da/do usuária/o",
+        "promote_warning": "Você não poderá desfazer esta mudança, pois estará dando a este(a) usuário(a) o mesmo nível de permissões que você."
     }
 }

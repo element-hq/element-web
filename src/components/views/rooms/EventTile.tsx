@@ -512,12 +512,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             if (this.props.highlightLink) {
                 return (
                     <a className="mx_ThreadSummary_icon" href={this.props.highlightLink}>
-                        {_t("From a thread")}
+                        {_t("timeline|thread_info_basic")}
                     </a>
                 );
             }
 
-            return <p className="mx_ThreadSummary_icon">{_t("From a thread")}</p>;
+            return <p className="mx_ThreadSummary_icon">{_t("timeline|thread_info_basic")}</p>;
         }
     }
 
@@ -741,25 +741,23 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     break;
 
                 case EventShieldReason.UNVERIFIED_IDENTITY:
-                    shieldReasonMessage = _t("Encrypted by an unverified user.");
+                    shieldReasonMessage = _t("encryption|event_shield_reason_unverified_identity");
                     break;
 
                 case EventShieldReason.UNSIGNED_DEVICE:
-                    shieldReasonMessage = _t("Encrypted by a device not verified by its owner.");
+                    shieldReasonMessage = _t("encryption|event_shield_reason_unsigned_device");
                     break;
 
                 case EventShieldReason.UNKNOWN_DEVICE:
-                    shieldReasonMessage = _t("Encrypted by an unknown or deleted device.");
+                    shieldReasonMessage = _t("encryption|event_shield_reason_unknown_device");
                     break;
 
                 case EventShieldReason.AUTHENTICITY_NOT_GUARANTEED:
-                    shieldReasonMessage = _t(
-                        "The authenticity of this encrypted message can't be guaranteed on this device.",
-                    );
+                    shieldReasonMessage = _t("encryption|event_shield_reason_authenticity_not_guaranteed");
                     break;
 
                 case EventShieldReason.MISMATCHED_SENDER_KEY:
-                    shieldReasonMessage = _t("Encrypted by an unverified session");
+                    shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender_key");
                     break;
             }
 
@@ -936,7 +934,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             logger.warn(`Event type not supported: type:${eventType} isState:${mxEvent.isState()}`);
             return (
                 <div className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
-                    <div className="mx_EventTile_line">{_t("This event could not be displayed")}</div>
+                    <div className="mx_EventTile_line">{_t("timeline|error_no_renderer")}</div>
                 </div>
             );
         }
@@ -1468,16 +1466,12 @@ const SafeEventTile = forwardRef<UnwrappedEventTile, EventTileProps>((props, ref
 export default SafeEventTile;
 
 function E2ePadlockUnencrypted(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {
-    return <E2ePadlock title={_t("Unencrypted")} icon={E2ePadlockIcon.Warning} {...props} />;
+    return <E2ePadlock title={_t("common|unencrypted")} icon={E2ePadlockIcon.Warning} {...props} />;
 }
 
 function E2ePadlockDecryptionFailure(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {
     return (
-        <E2ePadlock
-            title={_t("This message could not be decrypted")}
-            icon={E2ePadlockIcon.DecryptionFailure}
-            {...props}
-        />
+        <E2ePadlock title={_t("timeline|undecryptable_tooltip")} icon={E2ePadlockIcon.DecryptionFailure} {...props} />
     );
 }
 
@@ -1556,13 +1550,13 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
         nonCssBadge = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
     }
 
-    let label = _t("Sending your message…");
+    let label = _t("timeline|send_state_sending");
     if (messageState === "encrypting") {
-        label = _t("Encrypting your message…");
+        label = _t("timeline|send_state_encrypting");
     } else if (isSent) {
-        label = _t("Your message was sent");
+        label = _t("timeline|send_state_sent");
     } else if (isFailed) {
-        label = _t("Failed to send");
+        label = _t("timeline|send_state_failed");
     }
     const [{ showTooltip, hideTooltip }, tooltip] = useTooltip({
         id: tooltipId,

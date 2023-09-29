@@ -109,7 +109,7 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
                         {isMainSplitTimelineShown && (
                             <IconizedContextMenuOption
                                 onClick={(e) => viewInRoom(e)}
-                                label={_t("View in room")}
+                                label={_t("timeline|mab|view_in_room")}
                                 iconClassName="mx_ThreadPanel_viewInRoom"
                             />
                         )}
@@ -117,7 +117,7 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
                             <IconizedContextMenuOption
                                 data-testid="copy-thread-link"
                                 onClick={(e) => copyLinkToThread(e)}
-                                label={_t("Copy link to thread")}
+                                label={_t("timeline|mab|copy_link_thread")}
                                 iconClassName="mx_ThreadPanel_copyLinkToThread"
                             />
                         )}

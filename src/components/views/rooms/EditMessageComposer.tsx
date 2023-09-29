@@ -482,7 +482,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                     room={room}
                     threadId={this.props.editState?.getEvent()?.getThread()?.id}
                     initialCaret={this.props.editState.getCaret() ?? undefined}
-                    label={_t("Edit message")}
+                    label={_t("composer|edit_composer_label")}
                     onChange={this.onChange}
                 />
                 <div className="mx_EditMessageComposer_buttons">

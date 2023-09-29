@@ -120,9 +120,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
             const { mxEvent } = this.props;
             logger.warn(`Event type not supported: type:${mxEvent.getType()} isState:${mxEvent.isState()}`);
             return (
-                <div className="mx_ReplyTile mx_ReplyTile_info mx_MNoticeBody">
-                    {_t("This event could not be displayed")}
-                </div>
+                <div className="mx_ReplyTile mx_ReplyTile_info mx_MNoticeBody">{_t("timeline|error_no_renderer")}</div>
             );
         }
 

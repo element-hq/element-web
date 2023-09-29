@@ -2,7 +2,6 @@
     "Create new room": "إنشاء غرفة جديدة",
     "Send": "إرسال",
     "Unavailable": "غير متوفر",
-    "All Rooms": "كل الغُرف",
     "Changelog": "سِجل التغييرات",
     "Thank you!": "شكرًا !",
     "Sun": "الأحد",
@@ -79,7 +78,6 @@
     "Download %(text)s": "تحميل %(text)s",
     "Decrypt %(text)s": "فك تشفير %(text)s",
     "Error decrypting attachment": "تعذر فك تشفير المرفق",
-    "Message Actions": "إجراءات الرسائل",
     "The encryption used by this room isn't supported.": "التشفير الذي تستخدمه هذه الغرفة غير مدعوم.",
     "Encryption not enabled": "التشفير غير مفعل",
     "Ignored attempt to disable encryption": "تم تجاهل محاولة تعطيل التشفير",
@@ -99,39 +97,8 @@
     "Start verification again from the notification.": "ابدأ التحقق مرة أخرى من الإشعار.",
     "You've successfully verified %(displayName)s!": "لقد تحققت بنجاح من %(displayName)s!",
     "You've successfully verified %(deviceName)s (%(deviceId)s)!": "لقد تحققت بنجاح من %(deviceName)s (%(deviceId)s)!",
-    "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "قم بتعيين العناوين لهذه الغرفة حتى يتمكن المستخدمون من العثور على هذه الغرفة من خلال خادمك الوسيط (%(localDomain)s)",
-    "Local Addresses": "عناوين محلية",
-    "New published address (e.g. #alias:server)": "عنوان منشور جديد (على سبيل المثال #alias:server)",
-    "No other published addresses yet, add one below": "لا توجد عناوين أخرى منشورة بعد ، أضف واحدًا أدناه",
-    "Other published addresses:": "عناوين منشورة أخرى:",
-    "Published Addresses": "العناوين المنشورة",
-    "Local address": "العنوان المحلي",
-    "This room has no local addresses": "هذه الغرفة ليس لها عناوين محلية",
     "not specified": "غير محدد",
-    "Main address": "العنوان الرئيسي",
-    "Error removing address": "تعذرت إزالة العنوان",
-    "There was an error removing that address. It may no longer exist or a temporary error occurred.": "تعذرت إزالة ذاك العنوان. ربما لم يعد موجودًا أو حدث خطأ مؤقت.",
-    "You don't have permission to delete the address.": "ليس لديك الصلاحية لحذف العنوان.",
-    "There was an error creating that address. It may not be allowed by the server or a temporary failure occurred.": "تعذر إنشاء ذاك العنوان. قد لا يسمح به الخادم أو حدث فشل مؤقت.",
-    "Error creating address": "تعذر إنشاء العنوان",
-    "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "حدث خطأ أثناء تحديث العناوين البديلة للغرفة. قد لا يسمح به الخادم أو حدث فشل مؤقت.",
-    "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "حدث خطأ أثناء تحديث العنوان الرئيسي للغرفة. قد لا يسمح به الخادم أو حدث فشل مؤقت.",
-    "Error updating main address": "تعذر تحديث العنوان الرئيسي",
-    "Jump to first unread message.": "الانتقال إلى أول رسالة غير مقروءة.",
-    "Invited by %(sender)s": "دُعيت من %(sender)s",
-    "Revoke invite": "إبطال الدعوة",
-    "Admin Tools": "أدوات المدير",
-    "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "تعذر إبطال الدعوة. قد يواجه الخادم مشكلة مؤقتة أو ليس لديك صلاحيات كافية لإلغاء الدعوة.",
-    "Failed to revoke invite": "تعذر إبطال الدعوة",
-    "Add some now": "أضف البعض الآن",
-    "You don't currently have any stickerpacks enabled": "ليس لديك حاليًا أي حزم ملصقات ممكّنة",
     "Failed to connect to integration manager": "تعذر الاتصال بمدير التكامل",
-    "Search…": "بحث …",
-    "This Room": "هذه الغرفة",
-    "Only room administrators will see this warning": "لن يرى هذا التحذير سوى مديرو الغرفة",
-    "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "هذه الغرفة تشغل إصدار الغرفة <roomVersion /> ، والذي عده الخادم الوسيط هذا بأنه<i> غير مستقر </i>.",
-    "This room has already been upgraded.": "سبق وأن تمت ترقية هذه الغرفة.",
-    "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "ستؤدي ترقية هذه الغرفة إلى إغلاق النسخة الحالية للغرفة وإنشاء غرفة تمت ترقيتها بنفس الاسم.",
     "unknown error code": "رمز خطأٍ غير معروف",
     "Join Room": "انضم للغرفة",
     "(~%(count)s results)": {
@@ -147,14 +114,9 @@
         "one": "وواحدة أخرى...",
         "other": "و %(count)s أخر..."
     },
-    "Scroll to most recent messages": "انتقل إلى أحدث الرسائل",
-    "The authenticity of this encrypted message can't be guaranteed on this device.": "لا يمكن ضمان موثوقية هذه الرسالة المشفرة على هذا الجهاز.",
     "Encrypted by a deleted session": "مشفرة باتصال محذوف",
-    "Unencrypted": "غير مشفر",
-    "Encrypted by an unverified session": "مشفرة باتصال لم يتم التحقق منه",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "للإبلاغ عن مشكلة أمنية متعلقة بMatrix ، يرجى قراءة <a>سياسة الإفصاح الأمني</a> في Matrix.org.",
     "Deactivate account": "تعطيل الحساب",
-    "Back up your keys before signing out to avoid losing them.": "أضف مفاتيحك للاحتياطي قبل تسجيل الخروج لتتجنب ضياعها.",
     "Backup version:": "نسخة الاحتياطي:",
     "This backup is trusted because it has been restored on this session": "هذا الاحتياطي موثوق به لأنه تمت استعادته في هذا الاتصال",
     "You've successfully verified your device!": "لقد نجحت في التحقق من جهازك!",
@@ -166,15 +128,6 @@
     "Ask %(displayName)s to scan your code:": "اطلب من %(displayName)s مسح رمزك:",
     "Verify by scanning": "تحقق بالمسح",
     "This client does not support end-to-end encryption.": "لا يدعم هذا العميل التشفير من طرف إلى طرف.",
-    "Failed to deactivate user": "تعذر إلغاء نشاط المستخدم",
-    "Deactivate user": "إلغاء نشاط المستخدم",
-    "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "سيؤدي إلغاء نشاط هذا المستخدم إلى تسجيل خروجهم ومنعهم من تسجيل الدخول مرة أخرى. بالإضافة إلى ذلك ، سيغادرون جميع الغرف التي يتواجدون فيها. لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد أنك تريد إلغاء نشاط هذا المستخدم؟",
-    "Deactivate user?": "إلغاء نشاط المستخدم؟",
-    "Are you sure?": "هل متأكد أنت؟",
-    "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "لن تكون قادرًا على التراجع عن هذا التغيير لأنك ترقي المستخدم ليكون له نفس مستوى الطاقة لديك.",
-    "Failed to mute user": "تعذر كتم المستخدم",
-    "Failed to ban user": "تعذر حذف المستخدم",
-    "Remove recent messages": "احذف الرسائل الحديثة",
     "Remove %(count)s messages": {
         "one": "احذف رسالة واحدة",
         "other": "احذف %(count)s رسائل"
@@ -183,58 +136,18 @@
     "Remove recent messages by %(user)s": "قم بإزالة رسائل %(user)s الأخيرة",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "حاول الصعود في المخطط الزمني لمعرفة ما إذا كانت هناك سابقات.",
     "No recent messages by %(user)s found": "لم يتم العثور على رسائل حديثة من %(user)s",
-    "Demote": "تخفيض",
-    "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "لن تتمكن من التراجع عن هذا التغيير لأنك تقوم بتخفيض رتبتك ، إذا كنت آخر مستخدم ذي امتياز في الغرفة ، فسيكون من المستحيل استعادة الامتيازات.",
-    "Demote yourself?": "خفض مرتبة نفسك؟",
-    "Share Link to User": "مشاركة رابط للمستخدم",
-    "Jump to read receipt": "انتقل لإيصال قراءة",
-    "Hide sessions": "اخف الاتصالات",
     "%(count)s sessions": {
         "one": "%(count)s اتصال",
         "other": "%(count)s اتصالات"
     },
-    "Hide verified sessions": "اخف الاتصالات المحققة",
     "%(count)s verified sessions": {
         "one": "اتصال واحد محقق",
         "other": "%(count)s اتصالات محققة"
     },
-    "Room settings": "إعدادات الغرفة",
-    "Share room": "شارك الغرفة",
     "Not encrypted": "غير مشفر",
-    "Add widgets, bridges & bots": "إضافة عناصر الواجهة والجسور والروبوتات",
-    "Edit widgets, bridges & bots": "تعديل عناصر الواجهة والجسور والروبوتات",
-    "Widgets": "عناصر الواجهة",
-    "You can only pin up to %(count)s widgets": {
-        "other": "تثبيت عناصر واجهة المستخدم ممكن إلى %(count)s بحدٍ أعلى"
-    },
-    "Your homeserver": "خادمك الوسيط",
-    "One of the following may be compromised:": "قد يتم اختراق أي مما يلي:",
-    "Your messages are not secure": "رسائلك ليست آمنة",
-    "For extra security, verify this user by checking a one-time code on both of your devices.": "لمزيد من الأمان ، تحقق من هذا المستخدم عن طريق التحقق من رمز لمرة واحدة على كلا الجهازين.",
-    "Verify User": "تحقق من المستخدم",
-    "In encrypted rooms, your messages are secured and only you and the recipient have the unique keys to unlock them.": "في الغرف المشفرة ، يتم تأمين رسائلك ولا يمتلك أحد سواك أنت والمتلقي المفاتيح الفريدة لفتحها.",
-    "Messages in this room are not end-to-end encrypted.": "الرسائل الموجودة في هذه الغرفة غير مشفرة من طرف إلى طرف.",
-    "Your messages are secured and only you and the recipient have the unique keys to unlock them.": "رسائلك مؤمنة وليس لأحد المفاتيح الفريدة لفكها إلا أنت والمتلقي.",
-    "Messages in this room are end-to-end encrypted.": "يتم تشفير الرسائل الموجودة في هذه الغرفة بين الطرفين.",
-    "Start Verification": "ابدأ التحقق",
-    "Accepting…": "جارٍ القبول …",
-    "Waiting for %(displayName)s to accept…": "بانتظار %(displayName)s ليقبل …",
-    "Room avatar": "صورة الغرفة",
-    "Room Topic": "موضوع الغرفة",
-    "Room Name": "اسم الغرفة",
-    "Set up": "تأسيس",
     "Warning!": "إنذار!",
-    "Show more": "أظهر أكثر",
     "Dog": "كلب",
     "IRC display name width": "عرض الاسم الظاهر لIRC",
-    "This event could not be displayed": "تعذر عرض هذا الحدث",
-    "Edit message": "تعديل الرسالة",
-    "Everyone in this room is verified": "تم التحقق من جميع من في هذه الغرفة",
-    "This room is end-to-end encrypted": "هذه الغرفة مشفرة من طرف إلى طرف",
-    "Someone is using an unknown session": "شخص ما يستخدم اتصالاً غير معروف",
-    "You have verified this user. This user has verified all of their sessions.": "لقد تحققت من هذا المستخدم. لقد تحقق هذا المستخدم من جميع اتصالاته.",
-    "You have not verified this user.": "أنت لم تتحقق من هذا المستخدم.",
-    "This user has not verified all of their sessions.": "هذا المستخدم لم يتحقق من جميع اتصالاته.",
     "Ok": "حسنا",
     "Your homeserver has exceeded one of its resource limits.": "لقد تجاوز خادمك أحد حدود موارده.",
     "Your homeserver has exceeded its user limit.": "لقد تجاوز خادمك حد عدد المستخدمين.",
@@ -450,7 +363,10 @@
         "authentication": "المصادقة",
         "rooms": "الغرف",
         "low_priority": "أولوية منخفضة",
-        "historical": "تاريخي"
+        "historical": "تاريخي",
+        "unencrypted": "غير مشفر",
+        "show_more": "أظهر أكثر",
+        "are_you_sure": "هل متأكد أنت؟"
     },
     "action": {
         "continue": "واصِل",
@@ -542,7 +458,8 @@
         "no_perms_notice": "ليس لديك إذن للنشر في هذه الغرفة",
         "poll_button_no_perms_title": "التصريح مطلوب",
         "format_italics": "مائل",
-        "replying_title": "الرد"
+        "replying_title": "الرد",
+        "edit_composer_label": "تعديل الرسالة"
     },
     "power_level": {
         "default": "المبدئي",
@@ -887,6 +804,10 @@
         },
         "url_preview": {
             "close": "إغلاق المعاينة"
+        },
+        "error_no_renderer": "تعذر عرض هذا الحدث",
+        "mab": {
+            "label": "إجراءات الرسائل"
         }
     },
     "slash_command": {
@@ -1084,7 +1005,27 @@
             "url_preview_explainer": "عندما يضع شخص ما عنوان URL في رسالته ، يمكن عرض معاينة عنوان URL لإعطاء مزيد من المعلومات حول هذا الرابط مثل العنوان والوصف وصورة من موقع الويب.",
             "url_previews_section": "معاينة الروابط",
             "aliases_section": "عناوين الغرف",
-            "other_section": "أخرى"
+            "other_section": "أخرى",
+            "error_updating_canonical_alias_title": "تعذر تحديث العنوان الرئيسي",
+            "error_updating_canonical_alias_description": "حدث خطأ أثناء تحديث العنوان الرئيسي للغرفة. قد لا يسمح به الخادم أو حدث فشل مؤقت.",
+            "error_updating_alias_description": "حدث خطأ أثناء تحديث العناوين البديلة للغرفة. قد لا يسمح به الخادم أو حدث فشل مؤقت.",
+            "error_creating_alias_title": "تعذر إنشاء العنوان",
+            "error_creating_alias_description": "تعذر إنشاء ذاك العنوان. قد لا يسمح به الخادم أو حدث فشل مؤقت.",
+            "error_deleting_alias_description_forbidden": "ليس لديك الصلاحية لحذف العنوان.",
+            "error_deleting_alias_description": "تعذرت إزالة ذاك العنوان. ربما لم يعد موجودًا أو حدث خطأ مؤقت.",
+            "error_deleting_alias_title": "تعذرت إزالة العنوان",
+            "canonical_alias_field_label": "العنوان الرئيسي",
+            "no_aliases_room": "هذه الغرفة ليس لها عناوين محلية",
+            "local_alias_field_label": "العنوان المحلي",
+            "published_aliases_section": "العناوين المنشورة",
+            "aliases_items_label": "عناوين منشورة أخرى:",
+            "aliases_no_items_label": "لا توجد عناوين أخرى منشورة بعد ، أضف واحدًا أدناه",
+            "new_alias_placeholder": "عنوان منشور جديد (على سبيل المثال #alias:server)",
+            "local_aliases_section": "عناوين محلية",
+            "local_aliases_explainer_room": "قم بتعيين العناوين لهذه الغرفة حتى يتمكن المستخدمون من العثور على هذه الغرفة من خلال خادمك الوسيط (%(localDomain)s)",
+            "name_field_label": "اسم الغرفة",
+            "topic_field_label": "موضوع الغرفة",
+            "avatar_field_label": "صورة الغرفة"
         },
         "advanced": {
             "unfederated": "لا يمكن الوصول إلى هذه الغرفة بواسطة خوادم Matrix البعيدة",
@@ -1125,7 +1066,10 @@
             "waiting_other_user": "بانتظار %(displayName)s للتحقق…",
             "cancelling": "جارٍ الإلغاء…",
             "unverified_sessions_toast_reject": "لاحقاً",
-            "unverified_session_toast_title": "تسجيل دخول جديد. هل كان ذاك أنت؟"
+            "unverified_session_toast_title": "تسجيل دخول جديد. هل كان ذاك أنت؟",
+            "waiting_for_user_accept": "بانتظار %(displayName)s ليقبل …",
+            "accepting": "جارٍ القبول …",
+            "start_button": "ابدأ التحقق"
         },
         "cancel_entering_passphrase_title": "هل تريد إلغاء إدخال عبارة المرور؟",
         "cancel_entering_passphrase_description": "هل أنت متأكد من أنك تريد إلغاء إدخال عبارة المرور؟",
@@ -1139,7 +1083,24 @@
         "cross_signing_ready": "التوقيع المتبادل جاهز للاستخدام.",
         "cross_signing_untrusted": "يحتوي حسابك على هوية توقيع متبادل في وحدة تخزين سرية ، لكن هذا الاتصال لم يثق به بعد.",
         "cross_signing_not_ready": "لم يتم إعداد التوقيع المتبادل.",
-        "not_supported": "<غير معتمد>"
+        "not_supported": "<غير معتمد>",
+        "setup_secure_backup": {
+            "explainer": "أضف مفاتيحك للاحتياطي قبل تسجيل الخروج لتتجنب ضياعها.",
+            "title": "تأسيس"
+        },
+        "cross_signing_user_warning": "هذا المستخدم لم يتحقق من جميع اتصالاته.",
+        "cross_signing_user_normal": "أنت لم تتحقق من هذا المستخدم.",
+        "cross_signing_user_verified": "لقد تحققت من هذا المستخدم. لقد تحقق هذا المستخدم من جميع اتصالاته.",
+        "cross_signing_room_warning": "شخص ما يستخدم اتصالاً غير معروف",
+        "cross_signing_room_normal": "هذه الغرفة مشفرة من طرف إلى طرف",
+        "cross_signing_room_verified": "تم التحقق من جميع من في هذه الغرفة",
+        "event_shield_reason_authenticity_not_guaranteed": "لا يمكن ضمان موثوقية هذه الرسالة المشفرة على هذا الجهاز.",
+        "event_shield_reason_mismatched_sender_key": "مشفرة باتصال لم يتم التحقق منه",
+        "messages_not_secure": {
+            "title": "رسائلك ليست آمنة",
+            "heading": "قد يتم اختراق أي مما يلي:",
+            "cause_1": "خادمك الوسيط"
+        }
     },
     "emoji": {
         "category_frequently_used": "كثيرة الاستعمال",
@@ -1419,7 +1380,18 @@
         "peek_join_prompt": "أنت تعاين %(roomName)s. تريد الانضمام إليها؟",
         "no_peek_join_prompt": "لا يمكن معاينة %(roomName)s. هل تريد الانضمام إليها؟",
         "not_found_title_name": "الغرفة %(roomName)s ليست موجودة.",
-        "inaccessible_name": "لا يمكن الوصول إلى %(roomName)s في الوقت الحالي."
+        "inaccessible_name": "لا يمكن الوصول إلى %(roomName)s في الوقت الحالي.",
+        "jump_to_bottom_button": "انتقل إلى أحدث الرسائل",
+        "upgrade_warning_bar": "ستؤدي ترقية هذه الغرفة إلى إغلاق النسخة الحالية للغرفة وإنشاء غرفة تمت ترقيتها بنفس الاسم.",
+        "upgrade_warning_bar_upgraded": "سبق وأن تمت ترقية هذه الغرفة.",
+        "upgrade_warning_bar_unstable": "هذه الغرفة تشغل إصدار الغرفة <roomVersion /> ، والذي عده الخادم الوسيط هذا بأنه<i> غير مستقر </i>.",
+        "upgrade_warning_bar_admins": "لن يرى هذا التحذير سوى مديرو الغرفة",
+        "search": {
+            "this_room": "هذه الغرفة",
+            "all_rooms": "كل الغُرف",
+            "field_placeholder": "بحث …"
+        },
+        "jump_read_marker": "الانتقال إلى أول رسالة غير مقروءة."
     },
     "space": {
         "context_menu": {
@@ -1537,5 +1509,49 @@
         "invited_list_heading": "مدعو",
         "filter_placeholder": "تصفية أعضاء الغرفة",
         "power_label": "%(userName)s (قوة %(powerLevelNumber)s)"
+    },
+    "stickers": {
+        "empty": "ليس لديك حاليًا أي حزم ملصقات ممكّنة",
+        "empty_add_prompt": "أضف البعض الآن"
+    },
+    "user_info": {
+        "error_revoke_3pid_invite_title": "تعذر إبطال الدعوة",
+        "error_revoke_3pid_invite_description": "تعذر إبطال الدعوة. قد يواجه الخادم مشكلة مؤقتة أو ليس لديك صلاحيات كافية لإلغاء الدعوة.",
+        "admin_tools_section": "أدوات المدير",
+        "revoke_invite": "إبطال الدعوة",
+        "invited_by": "دُعيت من %(sender)s",
+        "room_encrypted": "يتم تشفير الرسائل الموجودة في هذه الغرفة بين الطرفين.",
+        "room_encrypted_detail": "رسائلك مؤمنة وليس لأحد المفاتيح الفريدة لفكها إلا أنت والمتلقي.",
+        "room_unencrypted": "الرسائل الموجودة في هذه الغرفة غير مشفرة من طرف إلى طرف.",
+        "room_unencrypted_detail": "في الغرف المشفرة ، يتم تأمين رسائلك ولا يمتلك أحد سواك أنت والمتلقي المفاتيح الفريدة لفتحها.",
+        "verify_button": "تحقق من المستخدم",
+        "verify_explainer": "لمزيد من الأمان ، تحقق من هذا المستخدم عن طريق التحقق من رمز لمرة واحدة على كلا الجهازين.",
+        "hide_verified_sessions": "اخف الاتصالات المحققة",
+        "hide_sessions": "اخف الاتصالات",
+        "jump_to_rr_button": "انتقل لإيصال قراءة",
+        "share_button": "مشاركة رابط للمستخدم",
+        "demote_self_confirm_title": "خفض مرتبة نفسك؟",
+        "demote_self_confirm_room": "لن تتمكن من التراجع عن هذا التغيير لأنك تقوم بتخفيض رتبتك ، إذا كنت آخر مستخدم ذي امتياز في الغرفة ، فسيكون من المستحيل استعادة الامتيازات.",
+        "demote_button": "تخفيض",
+        "redact_button": "احذف الرسائل الحديثة",
+        "error_ban_user": "تعذر حذف المستخدم",
+        "error_mute_user": "تعذر كتم المستخدم",
+        "promote_warning": "لن تكون قادرًا على التراجع عن هذا التغيير لأنك ترقي المستخدم ليكون له نفس مستوى الطاقة لديك.",
+        "deactivate_confirm_title": "إلغاء نشاط المستخدم؟",
+        "deactivate_confirm_description": "سيؤدي إلغاء نشاط هذا المستخدم إلى تسجيل خروجهم ومنعهم من تسجيل الدخول مرة أخرى. بالإضافة إلى ذلك ، سيغادرون جميع الغرف التي يتواجدون فيها. لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد أنك تريد إلغاء نشاط هذا المستخدم؟",
+        "deactivate_confirm_action": "إلغاء نشاط المستخدم",
+        "error_deactivate": "تعذر إلغاء نشاط المستخدم"
+    },
+    "right_panel": {
+        "pinned_messages": {
+            "limits": {
+                "other": "تثبيت عناصر واجهة المستخدم ممكن إلى %(count)s بحدٍ أعلى"
+            }
+        },
+        "widgets_section": "عناصر الواجهة",
+        "edit_integrations": "تعديل عناصر الواجهة والجسور والروبوتات",
+        "add_integrations": "إضافة عناصر الواجهة والجسور والروبوتات",
+        "share_button": "شارك الغرفة",
+        "settings_button": "إعدادات الغرفة"
     }
 }

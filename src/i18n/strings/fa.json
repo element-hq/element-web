@@ -3,9 +3,7 @@
     "Today": "امروز",
     "Friday": "آدینه",
     "Changelog": "تغییراتِ به‌وجودآمده",
-    "This Room": "این گپ",
     "Unavailable": "غیرقابل‌دسترسی",
-    "All Rooms": "همه‌ی گپ‌ها",
     "Tuesday": "سه‌شنبه",
     "Unnamed room": "گپ نام‌گذاری نشده",
     "Saturday": "شنبه",
@@ -16,18 +14,14 @@
     "unknown error code": "کد خطای ناشناخته",
     "You cannot delete this message. (%(code)s)": "شما نمی‌توانید این پیام را پاک کنید. (%(code)s)",
     "Thursday": "پنج‌شنبه",
-    "Search…": "جستجو…",
     "Yesterday": "دیروز",
     "Ok": "تأیید",
-    "Set up": "برپایی",
-    "Failed to ban user": "کاربر مسدود نشد",
     "Error decrypting attachment": "خطا در رمزگشایی پیوست",
     "Email address": "آدرس ایمیل",
     "Download %(text)s": "دانلود 2%(text)s",
     "Decrypt %(text)s": "رمزگشایی %(text)s",
     "Are you sure you want to reject the invitation?": "آیا مطمئن هستید که می خواهید دعوت را رد کنید؟",
     "Are you sure you want to leave the room '%(roomName)s'?": "آیا مطمئن هستید که می خواهید از اتاق '2%(roomName)s' خارج شوید؟",
-    "Are you sure?": "مطمئنی؟",
     "An error has occurred.": "خطایی رخ داده است.",
     "A new password must be entered.": "گذواژه جدید باید وارد شود.",
     "Home": "خانه",
@@ -529,7 +523,6 @@
     "Show image": "نمایش تصویر",
     "Error decrypting image": "خطا در رمزگشایی تصویر",
     "Invalid file%(extra)s": "پرونده نامعتبر%(extra)s",
-    "Message Actions": "اقدامات پیام",
     "The encryption used by this room isn't supported.": "رمزگذاری استفاده شده توسط این اتاق پشتیبانی نمی شود.",
     "Encryption not enabled": "رمزگذاری فعال نیست",
     "Ignored attempt to disable encryption": "تلاش برای غیرفعال کردن رمزگذاری نادیده گرفته شد",
@@ -550,13 +543,6 @@
     "Verify by scanning": "با اسکن تأیید کنید",
     "Edit devices": "ویرایش دستگاه‌ها",
     "This client does not support end-to-end encryption.": "این کلاینت از رمزگذاری سرتاسر پشتیبانی نمی کند.",
-    "Failed to deactivate user": "غیرفعال کردن کاربر انجام نشد",
-    "Deactivate user": "غیرفعال کردن کاربر",
-    "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "با غیرفعال کردن این کاربر، او از سیستم خارج شده و از ورود مجدد وی جلوگیری می‌شود. علاوه بر این، او تمام اتاق هایی را که در آن هست ترک می کند. این عمل قابل برگشت نیست. آیا مطمئن هستید که می خواهید این کاربر را غیرفعال کنید؟",
-    "Deactivate user?": "کاربر غیرفعال شود؟",
-    "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "شما نمی توانید این تغییر را باطل کنید زیرا در حال ارتقا سطح قدرت یک کاربر به سطح قدرت خود هستید.",
-    "Failed to mute user": "کاربر بی صدا نشد",
-    "Remove recent messages": "حذف پیام‌های اخیر",
     "Remove %(count)s messages": {
         "one": "حذف ۱ پیام",
         "other": "حذف %(count)s پیام"
@@ -565,48 +551,16 @@
     "Remove recent messages by %(user)s": "حذف پیام‌های اخیر %(user)s",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "در پیام‌ها بالا بروید تا ببینید آیا موارد قدیمی وجود دارد یا خیر.",
     "No recent messages by %(user)s found": "هیچ پیام جدیدی برای %(user)s یافت نشد",
-    "Demote": "تنزل رتبه",
-    "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "شما نمی توانید این تغییر را لغو کنید زیرا در حال تنزل خود هستید، اگر آخرین کاربر ممتاز در اتاق باشید بازپس گیری امتیازات غیرممکن است.",
-    "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.": "شما نمی توانید این تغییر را لغو کنید زیرا در حال تنزل خود هستید، اگر آخرین کاربر ممتاز در فضای کاری باشید، بازپس گیری امتیازات غیرممکن است.",
-    "Demote yourself?": "خودتان را تنزل می‌دهید؟",
-    "Share Link to User": "اشتراک لینک برای کاربر",
-    "Jump to read receipt": "پرش به آخرین پیام خوانده شده",
-    "Hide sessions": "مخفی کردن نشست‌ها",
     "%(count)s sessions": {
         "one": "%(count)s نشست",
         "other": "%(count)s نشست"
     },
-    "Hide verified sessions": "مخفی کردن نشست‌های تأیید شده",
     "%(count)s verified sessions": {
         "one": "1 نشست تأیید شده",
         "other": "%(count)s نشست تایید شده"
     },
-    "Room settings": "تنظیمات اتاق",
-    "Share room": "به اشتراک گذاری اتاق",
     "Not encrypted": "رمزگذاری نشده",
-    "Add widgets, bridges & bots": "افزودن ابزارک‌ها، پل‌ها و ربات‌ها",
-    "Edit widgets, bridges & bots": "ویرایش ابزارک ها ، پل ها و ربات ها",
-    "Widgets": "ابزارک ها",
-    "Set my room layout for everyone": "چیدمان اتاق من را برای همه تنظیم کن",
-    "You can only pin up to %(count)s widgets": {
-        "other": "فقط می توانید تا %(count)s ابزارک را پین کنید"
-    },
-    "One of the following may be compromised:": "ممکن است یکی از موارد زیر به در معرض خطر باشد:",
-    "Your homeserver": "سرور شما",
-    "Your messages are not secure": "پیام های شما ایمن نیستند",
-    "For extra security, verify this user by checking a one-time code on both of your devices.": "برای امنیت بیشتر، با بررسی کد یکبارمصرف در هر دو دستگاه، این کاربر را تأیید کنید.",
-    "Verify User": "تأیید هویت کاربر",
-    "In encrypted rooms, your messages are secured and only you and the recipient have the unique keys to unlock them.": "در اتاق‌های رمزگذاری شده، پیام‌های شما امن هستند و فقط شما و گیرنده کلیدهای منحصر به فرد برای باز کردن قفل آن‌ها را دارید.",
-    "Messages in this room are not end-to-end encrypted.": "پیام های موجود در این اتاق به صورت سرتاسر رمزگذاری نشده‌اند.",
-    "Your messages are secured and only you and the recipient have the unique keys to unlock them.": "پیام‌های شما امن هستند و فقط شما و گیرنده کلیدهای منحصر به فرد برای باز کردن قفل آنها را دارید.",
     "Direct Messages": "پیام مستقیم",
-    "Messages in this room are end-to-end encrypted.": "پیام‌های موجود در این اتاق به صورت سرتاسر رمزگذاری شده‌اند.",
-    "Start Verification": "شروع تایید هویت",
-    "Accepting…": "پذیرش…",
-    "Waiting for %(displayName)s to accept…": "منتظر قبول کردن توسط %(displayName)s…",
-    "Room avatar": "آواتار اتاق",
-    "Room Topic": "موضوع اتاق",
-    "Room Name": "نام اتاق",
     "Open dial pad": "باز کردن صفحه شماره‌گیری",
     "Join Room": "به اتاق بپیوندید",
     "(~%(count)s results)": {
@@ -621,15 +575,8 @@
         "one": "و یکی دیگر ...",
         "other": "و %(count)s مورد دیگر ..."
     },
-    "Scroll to most recent messages": "به جدیدترین پیام‌ها بروید",
-    "Failed to send": "ارسال با خطا مواجه شد",
-    "Your message was sent": "پیام شما ارسال شد",
-    "The authenticity of this encrypted message can't be guaranteed on this device.": "صحت این پیام رمزگذاری شده در این دستگاه تضمین نمی شود.",
     "Encrypted by a deleted session": "با یک نشست حذف شده رمزگذاری شده است",
-    "Unencrypted": "رمزگذاری نشده",
-    "Encrypted by an unverified session": "توسط یک نشست تأیید نشده رمزگذاری شده است",
     "Language Dropdown": "منو زبان",
-    "View message": "مشاهده پیام",
     "Information": "اطلاعات",
     "%(count)s people you know have already joined": {
         "one": "%(count)s نفر از افرادی که می شناسید قبلاً پیوسته‌اند",
@@ -666,52 +613,11 @@
     "You declined": "شما رد کردید",
     "%(name)s accepted": "%(name)s پذیرفت",
     "You accepted": "پذیرفتید",
-    "Everyone in this room is verified": "همه‌ی اعضای این اتاق تائید شده‌اند",
-    "This room is end-to-end encrypted": "این اتاق به صورت سرتاسر رمزشده است",
-    "Someone is using an unknown session": "فردی از یک نشست ناشناس استفاده می‌کند",
-    "You have verified this user. This user has verified all of their sessions.": "شما این کاربر را تائید کرده‌اید. این کاربر تمام نشست‌های خود را تائيد کرده‌است.",
-    "You have not verified this user.": "شما این کاربر را تائید نکرده‌اید.",
-    "This user has not verified all of their sessions.": "این کاربر هیچ‌کدام از نشست‌های خود را تائید نکرده است.",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "برای گزارش مشکلات امنیتی مربوط به ماتریکس، لطفا سایت Matrix.org بخش <a>Security Disclosure Policy</a> را مطالعه فرمائید.",
-    "Back up your keys before signing out to avoid losing them.": "پیش از خروج از حساب کاربری، از کلید‌های خود پشتیبان بگیرید تا آن‌ها را از دست ندهید.",
     "Backup version:": "نسخه‌ی پشتیبان:",
     "This backup is trusted because it has been restored on this session": "این نسخه‌ی پشتیبان قابل اعتماد است چرا که بر روی این نشست بازیابی شد",
-    "Show more": "نمایش بیشتر",
-    "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "آدرس‌های این اتاق را تنظیم کنید تا کاربران بتوانند این اتاق را از طریق سرور شما پیدا کنند (%(localDomain)s)",
-    "Local Addresses": "آدرس‌های محلی",
-    "New published address (e.g. #alias:server)": "آدرس جدید منتشر شده (به عنوان مثال #alias:server)",
-    "No other published addresses yet, add one below": "آدرس دیگری منتشر نشده است، در زیر اضافه کنید",
-    "Other published addresses:": "دیگر آدرس‌های منتشر شده:",
-    "Published Addresses": "آدرس‌های منتشر شده",
-    "Local address": "آدرس محلی",
-    "This room has no local addresses": "این اتاق آدرس محلی ندارد",
     "not specified": "مشخص نشده",
-    "Main address": "آدرس اصلی",
-    "Error removing address": "خطا در حذف آدرس",
-    "There was an error removing that address. It may no longer exist or a temporary error occurred.": "هنگام حذف آدرس خطایی روی داد. ممکن است دیگر وجود نداشته باشد یا خطایی موقت روی داده باشد.",
-    "You don't have permission to delete the address.": "شما اجازه حذف آدرس را ندارید.",
-    "There was an error creating that address. It may not be allowed by the server or a temporary failure occurred.": "هنگام ایجاد آدرس خطایی روی داد. ممکن است سرور مجاز نباشد و یا اینکه خطایی موقت رخ داده باشد.",
-    "Error creating address": "خطا در ایجاد آدرس",
-    "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "در به روزرسانی آدرس های جایگزین اتاق خطایی روی داد. ممکن است سرور مجاز نباشد و یا اینکه خطایی موقت رخ داده باشد.",
-    "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "در به روزرسانی آدرس اصلی اتاق خطایی روی داد. ممکن است سرور مجاز نباشد و یا خطای موقتی رخ داده باشد.",
-    "Error updating main address": "خطا در به روزرسانی آدرس اصلی",
-    "We didn't find a microphone on your device. Please check your settings and try again.": "ما میکروفونی در دستگاه شما پیدا نکردیم. لطفاً تنظیمات خود را بررسی کنید و دوباره امتحان کنید.",
-    "No microphone found": "میکروفونی یافت نشد",
-    "We were unable to access your microphone. Please check your browser settings and try again.": "ما نتوانستیم به میکروفون شما دسترسی پیدا کنیم. لطفا تنظیمات مرورگر خود را بررسی کنید و دوباره سعی کنید.",
-    "Unable to access your microphone": "دسترسی به میکروفن شما امکان پذیر نیست",
-    "Jump to first unread message.": "رفتن به اولین پیام خوانده نشده.",
-    "Invited by %(sender)s": "دعوت شده توسط %(sender)s",
-    "Revoke invite": "لغو دعوت",
-    "Admin Tools": "ابزارهای مدیریت",
-    "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "دعوت لغو نشد. ممکن است سرور با یک مشکل موقتی روبرو شده باشد و یا اینکه شما مجوز کافی برای لغو دعوت را نداشته باشید.",
-    "Failed to revoke invite": "دعوت لغو نشد",
-    "Add some now": "اکنون چندتایی اضافه کنید",
-    "You don't currently have any stickerpacks enabled": "شما در حال حاضر هیچ بسته برچسب فعالی ندارید",
     "Failed to connect to integration manager": "اتصال به سیستم مدیریت ادغام انجام نشد",
-    "Only room administrators will see this warning": "فقط مدیران اتاق این هشدار را مشاهده خواهند کرد",
-    "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "این اتاق از نسخه اتاق <roomVersion /> استفاده می کند، که این سرور آن را به عنوان <i> ناپایدار</i> علامت گذاری کرده است.",
-    "This room has already been upgraded.": "این اتاق قبلاً ارتقا یافته است.",
-    "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "با ارتقا این اتاق نسخه فعلی اتاق خاموش شده و یک اتاق ارتقا یافته به همین نام ایجاد می شود.",
     "Create a space": "ساختن یک محیط",
     "Folder": "پوشه",
     "Headphones": "هدفون",
@@ -778,8 +684,6 @@
     "Dog": "سگ",
     "Dial pad": "صفحه شماره‌گیری",
     "IRC display name width": "عرض نمایش نام‌های IRC",
-    "This event could not be displayed": "امکان نمایش این رخداد وجود ندارد",
-    "Edit message": "ویرایش پیام",
     "Return to login screen": "بازگشت به صفحه‌ی ورود",
     "Your password has been reset.": "گذرواژه‌ی شما با موفقیت تغییر کرد.",
     "New passwords must match each other.": "گذرواژه‌ی جدید باید مطابقت داشته باشند.",
@@ -996,7 +900,11 @@
         "low_priority": "اولویت کم",
         "historical": "تاریخی",
         "go_to_settings": "برو به تنظیمات",
-        "setup_secure_messages": "پیام‌رسانی امن را تنظیم کنید"
+        "setup_secure_messages": "پیام‌رسانی امن را تنظیم کنید",
+        "unencrypted": "رمزگذاری نشده",
+        "view_message": "مشاهده پیام",
+        "show_more": "نمایش بیشتر",
+        "are_you_sure": "مطمئنی؟"
     },
     "action": {
         "continue": "ادامه",
@@ -1228,7 +1136,8 @@
         "close_sticker_picker": "پنهان سازی استیکرها",
         "poll_button_no_perms_title": "اجازه نیاز است",
         "format_italics": "مورب",
-        "replying_title": "پاسخ دادن"
+        "replying_title": "پاسخ دادن",
+        "edit_composer_label": "ویرایش پیام"
     },
     "Code": "کد",
     "power_level": {
@@ -1867,6 +1776,12 @@
         },
         "url_preview": {
             "close": "بستن پیش نمایش"
+        },
+        "error_no_renderer": "امکان نمایش این رخداد وجود ندارد",
+        "send_state_sent": "پیام شما ارسال شد",
+        "send_state_failed": "ارسال با خطا مواجه شد",
+        "mab": {
+            "label": "اقدامات پیام"
         }
     },
     "slash_command": {
@@ -2042,7 +1957,11 @@
         "hide_sidebar_button": "پنهان سازی نوار کناری",
         "show_sidebar_button": "نمایش نوار کناری",
         "unknown_person": "فرد ناشناس",
-        "connecting": "در حال اتصال"
+        "connecting": "در حال اتصال",
+        "unable_to_access_audio_input_title": "دسترسی به میکروفن شما امکان پذیر نیست",
+        "unable_to_access_audio_input_description": "ما نتوانستیم به میکروفون شما دسترسی پیدا کنیم. لطفا تنظیمات مرورگر خود را بررسی کنید و دوباره سعی کنید.",
+        "no_audio_input_title": "میکروفونی یافت نشد",
+        "no_audio_input_description": "ما میکروفونی در دستگاه شما پیدا نکردیم. لطفاً تنظیمات خود را بررسی کنید و دوباره امتحان کنید."
     },
     "Other": "دیگر",
     "room_settings": {
@@ -2109,7 +2028,27 @@
             "save": "ذخیره تغییرات",
             "leave_space": "ترک فضای کاری",
             "aliases_section": "آدرس‌های اتاق",
-            "other_section": "دیگر"
+            "other_section": "دیگر",
+            "error_updating_canonical_alias_title": "خطا در به روزرسانی آدرس اصلی",
+            "error_updating_canonical_alias_description": "در به روزرسانی آدرس اصلی اتاق خطایی روی داد. ممکن است سرور مجاز نباشد و یا خطای موقتی رخ داده باشد.",
+            "error_updating_alias_description": "در به روزرسانی آدرس های جایگزین اتاق خطایی روی داد. ممکن است سرور مجاز نباشد و یا اینکه خطایی موقت رخ داده باشد.",
+            "error_creating_alias_title": "خطا در ایجاد آدرس",
+            "error_creating_alias_description": "هنگام ایجاد آدرس خطایی روی داد. ممکن است سرور مجاز نباشد و یا اینکه خطایی موقت رخ داده باشد.",
+            "error_deleting_alias_description_forbidden": "شما اجازه حذف آدرس را ندارید.",
+            "error_deleting_alias_description": "هنگام حذف آدرس خطایی روی داد. ممکن است دیگر وجود نداشته باشد یا خطایی موقت روی داده باشد.",
+            "error_deleting_alias_title": "خطا در حذف آدرس",
+            "canonical_alias_field_label": "آدرس اصلی",
+            "no_aliases_room": "این اتاق آدرس محلی ندارد",
+            "local_alias_field_label": "آدرس محلی",
+            "published_aliases_section": "آدرس‌های منتشر شده",
+            "aliases_items_label": "دیگر آدرس‌های منتشر شده:",
+            "aliases_no_items_label": "آدرس دیگری منتشر نشده است، در زیر اضافه کنید",
+            "new_alias_placeholder": "آدرس جدید منتشر شده (به عنوان مثال #alias:server)",
+            "local_aliases_section": "آدرس‌های محلی",
+            "local_aliases_explainer_room": "آدرس‌های این اتاق را تنظیم کنید تا کاربران بتوانند این اتاق را از طریق سرور شما پیدا کنند (%(localDomain)s)",
+            "name_field_label": "نام اتاق",
+            "topic_field_label": "موضوع اتاق",
+            "avatar_field_label": "آواتار اتاق"
         },
         "advanced": {
             "unfederated": "این اتاق توسط سرورهای ماتریکس در دسترس نیست",
@@ -2154,7 +2093,10 @@
             "unverified_sessions_toast_reject": "بعداً",
             "unverified_session_toast_title": "ورود جدید. آیا شما بودید؟",
             "request_toast_detail": "%(deviceId)s از %(ip)s",
-            "verification_description": "با تائید هویت خود به پیام‌های رمزشده دسترسی یافته و هویت خود را به دیگران ثابت می‌کنید."
+            "verification_description": "با تائید هویت خود به پیام‌های رمزشده دسترسی یافته و هویت خود را به دیگران ثابت می‌کنید.",
+            "waiting_for_user_accept": "منتظر قبول کردن توسط %(displayName)s…",
+            "accepting": "پذیرش…",
+            "start_button": "شروع تایید هویت"
         },
         "old_version_detected_title": "داده‌های رمزنگاری قدیمی شناسایی شد",
         "old_version_detected_description": "داده هایی از نسخه قدیمی %(brand)s شناسایی شده است. این امر باعث اختلال در رمزنگاری سرتاسر در نسخه قدیمی شده است. پیام های رمزگذاری شده سرتاسر که اخیراً رد و بدل شده اند ممکن است با استفاده از نسخه قدیمی رمزگشایی نشوند. همچنین ممکن است پیام های رد و بدل شده با این نسخه با مشکل مواجه شود. اگر مشکلی رخ داد، از سیستم خارج شوید و مجددا وارد شوید. برای حفظ سابقه پیام، کلیدهای خود را خروجی گرفته و دوباره وارد کنید.",
@@ -2186,6 +2128,23 @@
             "description_1": "نشست فعلی تشخیص داده که عبارت امنیتی و کلید لازم شما برای پیام‌رسانی امن حذف شده‌است.",
             "description_2": "اگر این کار را به صورت تصادفی انجام دادید، می‌توانید سازوکار پیام امن را برای این نشست تنظیم کرده که باعث می‌شود تمام تاریخچه‌ی این نشست با استفاده از یک روش جدیدِ بازیابی، مجددا رمزشود.",
             "warning": "اگر متد بازیابی را حذف نکرده‌اید، ممکن است حمله‌کننده‌ای سعی در دسترسی به حساب‌کاربری شما داشته باشد. گذرواژه حساب کاربری خود را تغییر داده و فورا یک روش بازیابی را از بخش تنظیمات خود تنظیم کنید."
+        },
+        "setup_secure_backup": {
+            "explainer": "پیش از خروج از حساب کاربری، از کلید‌های خود پشتیبان بگیرید تا آن‌ها را از دست ندهید.",
+            "title": "برپایی"
+        },
+        "cross_signing_user_warning": "این کاربر هیچ‌کدام از نشست‌های خود را تائید نکرده است.",
+        "cross_signing_user_normal": "شما این کاربر را تائید نکرده‌اید.",
+        "cross_signing_user_verified": "شما این کاربر را تائید کرده‌اید. این کاربر تمام نشست‌های خود را تائيد کرده‌است.",
+        "cross_signing_room_warning": "فردی از یک نشست ناشناس استفاده می‌کند",
+        "cross_signing_room_normal": "این اتاق به صورت سرتاسر رمزشده است",
+        "cross_signing_room_verified": "همه‌ی اعضای این اتاق تائید شده‌اند",
+        "event_shield_reason_authenticity_not_guaranteed": "صحت این پیام رمزگذاری شده در این دستگاه تضمین نمی شود.",
+        "event_shield_reason_mismatched_sender_key": "توسط یک نشست تأیید نشده رمزگذاری شده است",
+        "messages_not_secure": {
+            "title": "پیام های شما ایمن نیستند",
+            "heading": "ممکن است یکی از موارد زیر به در معرض خطر باشد:",
+            "cause_1": "سرور شما"
         }
     },
     "emoji": {
@@ -2470,7 +2429,8 @@
         "unencrypted_warning": "ابزارک ها از رمزگذاری پیام استفاده نمی کنند.",
         "added_by": "ابزارک اضافه شده توسط",
         "cookie_warning": "این ابزارک ممکن است از کوکی استفاده کند.",
-        "popout": "بیرون انداختن ابزارک"
+        "popout": "بیرون انداختن ابزارک",
+        "set_room_layout": "چیدمان اتاق من را برای همه تنظیم کن"
     },
     "feedback": {
         "sent": "بازخورد ارسال شد",
@@ -2710,7 +2670,18 @@
         "peek_join_prompt": "شما در حال پیش نمایش %(roomName)s هستید. می خواهید به آن بپیوندید؟",
         "no_peek_join_prompt": "پیش بینی %(roomName)s امکان پذیر نیست. آیا می خواهید به آن بپیوندید؟",
         "not_found_title_name": "%(roomName)s وجود ندارد.",
-        "inaccessible_name": "در حال حاضر %(roomName)s قابل دسترسی نیست."
+        "inaccessible_name": "در حال حاضر %(roomName)s قابل دسترسی نیست.",
+        "jump_to_bottom_button": "به جدیدترین پیام‌ها بروید",
+        "upgrade_warning_bar": "با ارتقا این اتاق نسخه فعلی اتاق خاموش شده و یک اتاق ارتقا یافته به همین نام ایجاد می شود.",
+        "upgrade_warning_bar_upgraded": "این اتاق قبلاً ارتقا یافته است.",
+        "upgrade_warning_bar_unstable": "این اتاق از نسخه اتاق <roomVersion /> استفاده می کند، که این سرور آن را به عنوان <i> ناپایدار</i> علامت گذاری کرده است.",
+        "upgrade_warning_bar_admins": "فقط مدیران اتاق این هشدار را مشاهده خواهند کرد",
+        "search": {
+            "this_room": "این گپ",
+            "all_rooms": "همه‌ی گپ‌ها",
+            "field_placeholder": "جستجو…"
+        },
+        "jump_read_marker": "رفتن به اولین پیام خوانده نشده."
     },
     "file_panel": {
         "guest_note": "برای استفاده از این قابلیت باید <a>ثبت نام</a> کنید",
@@ -2897,5 +2868,50 @@
         "invited_list_heading": "دعوت شد",
         "filter_placeholder": "فیلتر کردن اعضای اتاق",
         "power_label": "%(userName)s (سطح قدرت %(powerLevelNumber)s)"
+    },
+    "stickers": {
+        "empty": "شما در حال حاضر هیچ بسته برچسب فعالی ندارید",
+        "empty_add_prompt": "اکنون چندتایی اضافه کنید"
+    },
+    "user_info": {
+        "error_revoke_3pid_invite_title": "دعوت لغو نشد",
+        "error_revoke_3pid_invite_description": "دعوت لغو نشد. ممکن است سرور با یک مشکل موقتی روبرو شده باشد و یا اینکه شما مجوز کافی برای لغو دعوت را نداشته باشید.",
+        "admin_tools_section": "ابزارهای مدیریت",
+        "revoke_invite": "لغو دعوت",
+        "invited_by": "دعوت شده توسط %(sender)s",
+        "room_encrypted": "پیام‌های موجود در این اتاق به صورت سرتاسر رمزگذاری شده‌اند.",
+        "room_encrypted_detail": "پیام‌های شما امن هستند و فقط شما و گیرنده کلیدهای منحصر به فرد برای باز کردن قفل آنها را دارید.",
+        "room_unencrypted": "پیام های موجود در این اتاق به صورت سرتاسر رمزگذاری نشده‌اند.",
+        "room_unencrypted_detail": "در اتاق‌های رمزگذاری شده، پیام‌های شما امن هستند و فقط شما و گیرنده کلیدهای منحصر به فرد برای باز کردن قفل آن‌ها را دارید.",
+        "verify_button": "تأیید هویت کاربر",
+        "verify_explainer": "برای امنیت بیشتر، با بررسی کد یکبارمصرف در هر دو دستگاه، این کاربر را تأیید کنید.",
+        "hide_verified_sessions": "مخفی کردن نشست‌های تأیید شده",
+        "hide_sessions": "مخفی کردن نشست‌ها",
+        "jump_to_rr_button": "پرش به آخرین پیام خوانده شده",
+        "share_button": "اشتراک لینک برای کاربر",
+        "demote_self_confirm_title": "خودتان را تنزل می‌دهید؟",
+        "demote_self_confirm_description_space": "شما نمی توانید این تغییر را لغو کنید زیرا در حال تنزل خود هستید، اگر آخرین کاربر ممتاز در فضای کاری باشید، بازپس گیری امتیازات غیرممکن است.",
+        "demote_self_confirm_room": "شما نمی توانید این تغییر را لغو کنید زیرا در حال تنزل خود هستید، اگر آخرین کاربر ممتاز در اتاق باشید بازپس گیری امتیازات غیرممکن است.",
+        "demote_button": "تنزل رتبه",
+        "redact_button": "حذف پیام‌های اخیر",
+        "error_ban_user": "کاربر مسدود نشد",
+        "error_mute_user": "کاربر بی صدا نشد",
+        "promote_warning": "شما نمی توانید این تغییر را باطل کنید زیرا در حال ارتقا سطح قدرت یک کاربر به سطح قدرت خود هستید.",
+        "deactivate_confirm_title": "کاربر غیرفعال شود؟",
+        "deactivate_confirm_description": "با غیرفعال کردن این کاربر، او از سیستم خارج شده و از ورود مجدد وی جلوگیری می‌شود. علاوه بر این، او تمام اتاق هایی را که در آن هست ترک می کند. این عمل قابل برگشت نیست. آیا مطمئن هستید که می خواهید این کاربر را غیرفعال کنید؟",
+        "deactivate_confirm_action": "غیرفعال کردن کاربر",
+        "error_deactivate": "غیرفعال کردن کاربر انجام نشد"
+    },
+    "right_panel": {
+        "pinned_messages": {
+            "limits": {
+                "other": "فقط می توانید تا %(count)s ابزارک را پین کنید"
+            }
+        },
+        "widgets_section": "ابزارک ها",
+        "edit_integrations": "ویرایش ابزارک ها ، پل ها و ربات ها",
+        "add_integrations": "افزودن ابزارک‌ها، پل‌ها و ربات‌ها",
+        "share_button": "به اشتراک گذاری اتاق",
+        "settings_button": "تنظیمات اتاق"
     }
 }

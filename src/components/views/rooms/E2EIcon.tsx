@@ -33,14 +33,14 @@ export enum E2EState {
 }
 
 const crossSigningUserTitles: { [key in E2EState]?: TranslationKey } = {
-    [E2EState.Warning]: _td("This user has not verified all of their sessions."),
-    [E2EState.Normal]: _td("You have not verified this user."),
-    [E2EState.Verified]: _td("You have verified this user. This user has verified all of their sessions."),
+    [E2EState.Warning]: _td("encryption|cross_signing_user_warning"),
+    [E2EState.Normal]: _td("encryption|cross_signing_user_normal"),
+    [E2EState.Verified]: _td("encryption|cross_signing_user_verified"),
 };
 const crossSigningRoomTitles: { [key in E2EState]?: TranslationKey } = {
-    [E2EState.Warning]: _td("Someone is using an unknown session"),
-    [E2EState.Normal]: _td("This room is end-to-end encrypted"),
-    [E2EState.Verified]: _td("Everyone in this room is verified"),
+    [E2EState.Warning]: _td("encryption|cross_signing_room_warning"),
+    [E2EState.Normal]: _td("encryption|cross_signing_room_normal"),
+    [E2EState.Verified]: _td("encryption|cross_signing_room_verified"),
 };
 
 interface Props {

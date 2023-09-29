@@ -6,18 +6,15 @@
     "Today": "ഇന്ന്",
     "Friday": "വെള്ളി",
     "Changelog": "മാറ്റങ്ങളുടെ നാള്‍വഴി",
-    "This Room": "ഈ മുറി",
     "Unavailable": "ലഭ്യമല്ല",
     "Tuesday": "ചൊവ്വ",
     "Unnamed room": "പേരില്ലാത്ത റൂം",
     "Saturday": "ശനി",
     "Monday": "തിങ്കള്‍",
-    "All Rooms": "എല്ലാ മുറികളും കാണുക",
     "Wednesday": "ബുധന്‍",
     "You cannot delete this message. (%(code)s)": "നിങ്ങള്‍ക്ക് ഈ സന്ദേശം നീക്കം ചെയ്യാനാകില്ല. (%(code)s)",
     "Send": "അയയ്ക്കുക",
     "Thursday": "വ്യാഴം",
-    "Search…": "തിരയുക…",
     "Yesterday": "ഇന്നലെ",
     "common": {
         "error": "എറര്‍",
@@ -107,6 +104,11 @@
             "favourite": "പ്രിയപ്പെട്ടവ",
             "low_priority": "താഴ്ന്ന പരിഗണന"
         },
-        "invite_this_room": "ഈ റൂമിലേക്ക് ക്ഷണിക്കുക"
+        "invite_this_room": "ഈ റൂമിലേക്ക് ക്ഷണിക്കുക",
+        "search": {
+            "this_room": "ഈ മുറി",
+            "all_rooms": "എല്ലാ മുറികളും കാണുക",
+            "field_placeholder": "തിരയുക…"
+        }
     }
 }

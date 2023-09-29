@@ -71,7 +71,7 @@ export const LinkModal: React.FC<LinkModalProps> = ({
     return (
         <BaseDialog
             className="mx_LinkModal"
-            title={isEditing ? _t("Edit link") : _t("Create a link")}
+            title={isEditing ? _t("composer|link_modal|title_edit") : _t("composer|link_modal|title_create")}
             hasCancel={true}
             onFinished={onFinished}
         >
@@ -96,7 +96,7 @@ export const LinkModal: React.FC<LinkModalProps> = ({
                     <Field
                         required={true}
                         autoFocus={true}
-                        label={_t("Text")}
+                        label={_t("composer|link_modal|text_field_label")}
                         value={fields.text}
                         className="mx_LinkModal_Field"
                         placeholder=""
@@ -108,7 +108,7 @@ export const LinkModal: React.FC<LinkModalProps> = ({
                 <Field
                     required={true}
                     autoFocus={!hasText}
-                    label={_t("Link")}
+                    label={_t("composer|link_modal|link_field_label")}
                     value={fields.link}
                     className="mx_LinkModal_Field"
                     placeholder=""

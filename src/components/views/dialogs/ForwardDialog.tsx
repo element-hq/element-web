@@ -130,7 +130,7 @@ const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, 
     } else {
         className = "mx_ForwardList_sendFailed";
         disabled = true;
-        title = _t("Failed to send");
+        title = _t("timeline|send_state_failed");
         icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
     }
 

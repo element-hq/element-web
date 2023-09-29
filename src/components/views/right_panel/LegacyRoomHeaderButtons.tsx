@@ -94,7 +94,7 @@ const PinnedMessagesHeaderButton: React.FC<IHeaderButtonProps> = ({ room, isHigh
     return (
         <HeaderButton
             name="pinnedMessagesButton"
-            title={_t("Pinned messages")}
+            title={_t("right_panel|pinned_messages|title")}
             isHighlighted={isHighlighted}
             isUnread={!!unreadIndicator}
             onClick={onClick}
@@ -114,7 +114,12 @@ const TimelineCardHeaderButton: React.FC<IHeaderButtonProps> = ({ room, isHighli
             unreadIndicator = <UnreadIndicator color={color} />;
     }
     return (
-        <HeaderButton name="timelineCardButton" title={_t("Chat")} isHighlighted={isHighlighted} onClick={onClick}>
+        <HeaderButton
+            name="timelineCardButton"
+            title={_t("right_panel|video_room_chat|title")}
+            isHighlighted={isHighlighted}
+            onClick={onClick}
+        >
             {unreadIndicator}
         </HeaderButton>
     );
@@ -304,7 +309,7 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
             <HeaderButton
                 key="roomSummaryButton"
                 name="roomSummaryButton"
-                title={_t("Room info")}
+                title={_t("right_panel|room_summary_card|title")}
                 isHighlighted={this.isPhase(ROOM_INFO_PHASES)}
                 onClick={this.onRoomSummaryClicked}
             />,

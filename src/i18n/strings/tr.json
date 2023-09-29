@@ -1,5 +1,4 @@
 {
-    "Admin Tools": "Admin Araçları",
     "%(items)s and %(lastItem)s": "%(items)s ve %(lastItem)s",
     "and %(count)s others...": {
         "one": "ve bir diğeri...",
@@ -7,7 +6,6 @@
     },
     "A new password must be entered.": "Yeni bir şifre girilmelidir.",
     "An error has occurred.": "Bir hata oluştu.",
-    "Are you sure?": "Emin misiniz ?",
     "Are you sure you want to leave the room '%(roomName)s'?": "'%(roomName)s' odasından ayrılmak istediğinize emin misiniz ?",
     "Are you sure you want to reject the invitation?": "Daveti reddetmek istediğinizden emin misiniz ?",
     "Custom level": "Özel seviye",
@@ -15,16 +13,13 @@
     "Download %(text)s": "%(text)s metnini indir",
     "Email address": "E-posta Adresi",
     "Error decrypting attachment": "Ek şifresini çözme hatası",
-    "Failed to ban user": "Kullanıcı yasaklama(Ban) başarısız",
     "Failed to forget room %(errCode)s": "Oda unutulması başarısız oldu %(errCode)s",
     "Failed to load timeline position": "Zaman çizelgesi konumu yüklenemedi",
-    "Failed to mute user": "Kullanıcıyı sessize almak başarısız oldu",
     "Failed to reject invite": "Daveti reddetme başarısız oldu",
     "Failed to reject invitation": "Davetiyeyi reddetme başarısız oldu",
     "Home": "Ev",
     "Invalid file%(extra)s": "Geçersiz dosya %(extra)s'ı",
     "Join Room": "Odaya Katıl",
-    "Jump to first unread message.": "İlk okunmamış iletiye atla.",
     "Moderator": "Moderatör",
     "New passwords must match each other.": "Yeni şifreler birbirleriyle eşleşmelidir.",
     "not specified": "Belirtilmemiş",
@@ -35,7 +30,6 @@
     "Search failed": "Arama başarısız",
     "Server may be unavailable, overloaded, or search timed out :(": "Sunucu kullanılamıyor , aşırı yüklenmiş veya arama zaman aşımına uğramış olabilir :(",
     "Session ID": "Oturum ID",
-    "This room has no local addresses": "Bu oda hiçbir yerel adrese sahip değil",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Bu odanın zaman çizelgesinde belirli bir nokta yüklemeye çalışıldı , ama geçerli mesajı görüntülemeye izniniz yok.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Bu odanın akışında belirli bir noktaya yüklemeye çalışıldı , ancak bulunamadı.",
     "unknown error code": "bilinmeyen hata kodu",
@@ -48,7 +42,6 @@
     "Warning!": "Uyarı!",
     "You seem to be in a call, are you sure you want to quit?": "Bir çağrıda gözüküyorsunuz , çıkmak istediğinizden emin misiniz ?",
     "You seem to be uploading files, are you sure you want to quit?": "Dosya yüklüyorsunuz gibi görünüyor , çıkmak istediğinizden emin misiniz ?",
-    "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Kullanıcıyı sizinle aynı güç seviyesine yükseltirken , bu değişikliği geri alamazsınız.",
     "Sun": "Pzt",
     "Mon": "Pazartesi",
     "Tue": "Salı",
@@ -90,18 +83,15 @@
     "Today": "Bugün",
     "Friday": "Cuma",
     "Changelog": "Değişiklikler",
-    "This Room": "Bu Oda",
     "Unavailable": "Kullanım dışı",
     "Tuesday": "Salı",
     "Unnamed room": "İsimsiz oda",
     "Saturday": "Cumartesi",
     "Monday": "Pazartesi",
-    "All Rooms": "Tüm Odalar",
     "Wednesday": "Çarşamba",
     "Send": "Gönder",
     "You cannot delete this message. (%(code)s)": "Bu mesajı silemezsiniz (%(code)s)",
     "Thursday": "Perşembe",
-    "Search…": "Arama…",
     "Yesterday": "Dün",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s%(monthName)s%(day)s%(fullYear)s",
     "Restricted": "Sınırlı",
@@ -223,38 +213,20 @@
     "Cake": "Kek",
     "Heart": "Kalp",
     "Trophy": "Ödül",
-    "Edit message": "Mesajı düzenle",
-    "Unencrypted": "Şifrelenmemiş",
     "Remove %(count)s messages": {
         "other": "%(count)s mesajı sil",
         "one": "1 mesajı sil"
     },
     "Rooster": "Horoz",
-    "Deactivate user?": "Kullanıcıyı pasifleştir?",
-    "Deactivate user": "Kullanıcıyı pasifleştir",
-    "Failed to deactivate user": "Kullanıcı pasifleştirme başarısız",
-    "Share Link to User": "Kullanıcıya Link Paylaş",
     "%(duration)ss": "%(duration)ssn",
     "%(duration)sm": "%(duration)sdk",
     "%(duration)sh": "%(duration)ssa",
     "%(duration)sd": "%(duration)sgün",
-    "Share room": "Oda paylaş",
-    "This room has already been upgraded.": "Bu ıda zaten güncellenmiş.",
-    "Only room administrators will see this warning": "Bu uyarıyı sadece oda yöneticileri görür",
     "Failed to connect to integration manager": "Entegrasyon yöneticisine bağlanma başarısız",
-    "Add some now": "Şimdi biraz ekle",
-    "Failed to revoke invite": "Davetin geri çekilmesi başarısız",
-    "Revoke invite": "Davet geri çekildi",
-    "Invited by %(sender)s": "%(sender)s tarafından davet",
-    "Error updating main address": "Ana adresi güncellemede hata",
-    "Main address": "Ana adres",
-    "Room Name": "Oda Adı",
-    "Hide verified sessions": "Onaylı oturumları gizle",
     "%(count)s verified sessions": {
         "other": "%(count)s doğrulanmış oturum",
         "one": "1 doğrulanmış oturum"
     },
-    "Message Actions": "Mesaj Eylemleri",
     "Show image": "Resim göster",
     "You verified %(name)s": "%(name)s yı doğruladınız",
     "You cancelled verifying %(name)s": "%(name)s doğrulaması iptal edildi",
@@ -266,12 +238,6 @@
     "You sent a verification request": "Doğrulama isteği gönderdiniz",
     "edited": "düzenlendi",
     "Deactivate account": "Hesabı pasifleştir",
-    "This event could not be displayed": "Bu olay görüntülenemedi",
-    "Demote yourself?": "Kendinin rütbeni düşür?",
-    "Demote": "Rütbe Düşür",
-    "Remove recent messages": "Son mesajları sil",
-    "You don't currently have any stickerpacks enabled": "Açılmış herhangi bir çıkartma paketine sahip değilsiniz",
-    "Room Topic": "Oda Başlığı",
     "And %(count)s more...": {
         "other": "ve %(count)s kez daha..."
     },
@@ -288,22 +254,13 @@
     "Failed to get autodiscovery configuration from server": "Sunucudan otokeşif yapılandırması alınması başarısız",
     "Homeserver URL does not appear to be a valid Matrix homeserver": "Anasunucu URL i geçerli bir Matrix anasunucusu olarak gözükmüyor",
     "Invalid identity server discovery response": "Geçersiz kimlik sunucu keşfi yanıtı",
-    "Show more": "Daha fazla göster",
     "This backup is trusted because it has been restored on this session": "Bu yedek güvenilir çünkü bu oturumda geri döndürüldü",
-    "This user has not verified all of their sessions.": "Bu kullanıcı bütün oturumlarında doğrulanmamış.",
-    "You have not verified this user.": "Bu kullanıcıyı doğrulamadınız.",
-    "Someone is using an unknown session": "Birisi bilinmeyen bir oturum kullanıyor",
-    "Everyone in this room is verified": "Bu odadaki herkes doğrulanmış",
     "Upload %(count)s other files": {
         "other": "%(count)s diğer dosyaları yükle",
         "one": "%(count)s dosyayı sağla"
     },
     "Remember my selection for this widget": "Bu görsel bileşen işin seçimimi hatırla",
     "Direct Messages": "Doğrudan Mesajlar",
-    "Start Verification": "Doğrulamayı Başlat",
-    "Verify User": "Kullanıcı Doğrula",
-    "Your messages are not secure": "Mesajlarınız korunmuyor",
-    "Your homeserver": "Ana sunucunuz",
     "Not Trusted": "Güvenilmiyor",
     "%(count)s sessions": {
         "other": "%(count)s oturum",
@@ -320,16 +277,11 @@
     "Recent Conversations": "Güncel Sohbetler",
     "Recently Direct Messaged": "Güncel Doğrudan Mesajlar",
     "Lock": "Kilit",
-    "You have verified this user. This user has verified all of their sessions.": "Bu kullanıcıyı doğruladınız. Bu kullanıcı tüm oturumlarını doğruladı.",
-    "This room is end-to-end encrypted": "Bu oda uçtan uça şifreli",
-    "Encrypted by an unverified session": "Doğrulanmamış bir oturum tarafından şifrelenmiş",
     "Encrypted by a deleted session": "Silinen bir oturumla şifrelenmiş",
-    "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Davet geri çekilemiyor. Sunucu geçici bir problem yaşıyor olabilir yada daveti geri çekmek için gerekli izinlere sahip değilsin.",
     "Incoming Verification Request": "Gelen Doğrulama İsteği",
     "Invalid base_url for m.homeserver": "m.anasunucu için geçersiz base_url",
     "Invalid base_url for m.identity_server": "m.kimlik_sunucu için geçersiz base_url",
     "Identity server URL does not appear to be a valid identity server": "Kimlik sunucu adresi geçerli bir kimlik sunucu adresi gibi gözükmüyor",
-    "Set up": "Ayarla",
     "Upgrade public room": "Açık odayı güncelle",
     "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Bu odayı <oldVersion /> versiyonundan <newVersion /> versiyonuna güncelleyeceksiniz.",
     "We encountered an error trying to restore your previous session.": "Önceki oturumunuzu geri yüklerken bir hatayla karşılaştık.",
@@ -352,9 +304,6 @@
     "AM": "12:00",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) yeni oturuma doğrulamadan giriş yaptı:",
     "Ask this user to verify their session, or manually verify it below.": "Kullanıcıya oturumunu doğrulamasını söyle, ya da aşağıdan doğrula.",
-    "Local address": "Yerel adres",
-    "Local Addresses": "Yerel Adresler",
-    "Hide sessions": "Oturumları gizle",
     "Verify by scanning": "Taramayla doğrula",
     "Verify by emoji": "Emojiyle doğrula",
     "Verify by comparing unique emoji.": "Eşsiz emoji eşleştirme ile doğrulama.",
@@ -612,17 +561,6 @@
     "%(displayName)s cancelled verification.": "%(displayName)s doğrulamayı iptal etti.",
     "Verification timed out.": "Doğrulama zaman aşımına uğradı.",
     "IRC display name width": "IRC görünen ad genişliği",
-    "New published address (e.g. #alias:server)": "Yeni yayınlanmış adresler (e.g. #alias:server)",
-    "Published Addresses": "Yayınlanmış adresler",
-    "No other published addresses yet, add one below": "Henüz yayınlanmış başka adres yok, aşağıdan bir tane ekle",
-    "Other published addresses:": "Diğer yayınlanmış adresler:",
-    "Error removing address": "Adres kaldırılırken hata",
-    "There was an error removing that address. It may no longer exist or a temporary error occurred.": "Adres kaldırılırken bir hata ile karşılaşıldı. Artık mevcut olmayabilir yada geçici bir oluştu.",
-    "You don't have permission to delete the address.": "Bu adresi silmeye yetkiniz yok.",
-    "There was an error creating that address. It may not be allowed by the server or a temporary failure occurred.": "Adres oluşturulurken hata ile karşılaşıldı. Sunucu tarafından izin verilmemiş yada geçici bir hata olabilir.",
-    "Error creating address": "Adres oluşturulurken hata",
-    "Scroll to most recent messages": "En son mesajlara git",
-    "The authenticity of this encrypted message can't be guaranteed on this device.": "Bu şifrelenmiş mesajın güvenilirliği bu cihazda garanti edilemez.",
     "Australia": "Avustralya",
     "Aruba": "Aruba",
     "Armenia": "Ermenistan",
@@ -646,10 +584,8 @@
     "Dial pad": "Arama tuşları",
     "Verify all users in a room to ensure it's secure.": "Güvenli olduğuna emin olmak için odadaki tüm kullanıcıları onaylayın.",
     "No recent messages by %(user)s found": "%(user)s kullanıcısın hiç yeni ileti yok",
-    "Room settings": "Oda ayarları",
     "Not encrypted": "Şifrelenmemiş",
     "Backup version:": "Yedekleme sürümü:",
-    "Widgets": "Widgetlar",
     "Looks good!": "İyi görünüyor!",
     "Security Key": "Güvenlik anahtarı",
     "Switch theme": "Temayı değiştir",
@@ -662,10 +598,7 @@
     "Hold": "Beklet",
     "Resume": "Devam et",
     "Information": "Bilgi",
-    "Accepting…": "Kabul ediliyor…",
-    "Room avatar": "Oda avatarı",
     "Open dial pad": "Arama tuşlarını aç",
-    "Back up your keys before signing out to avoid losing them.": "Anahtarlarını kaybetmemek için, çıkış yapmadan önce önleri yedekle.",
     "Enter a server name": "Sunucu adı girin",
     "Can't find this server or its room list": "Sunucuda veya oda listesinde bulunamıyor",
     "Add a new server": "Yeni sunucu ekle",
@@ -673,29 +606,13 @@
     "Preparing to download logs": "Loglar indirilmeye hazırlanıyor",
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Hatırlatma:Tarayıcınız desteklenmiyor, deneyiminiz öngörülemiyor.",
     "This client does not support end-to-end encryption.": "Bu istemci uçtan uca şifrelemeyi desteklemiyor.",
-    "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "Bu kullanıcı etkisizleştirmek onu bir daha oturum açmasını engeller.Ek olarak da bulundukları bütün odalardan atılırlar. Bu eylem geri dönüştürülebilir. Bu kullanıcıyı etkisizleştirmek istediğinize emin misiniz?",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Çok sayıda ileti için bu biraz sürebilir. Lütfen bu sürede kullandığınız istemciyi yenilemeyin.",
     "Remove recent messages by %(user)s": "%(user)s kullanıcısından en son iletileri kaldır",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Daha önceden kalma iletilerin var olup olmadığını kontrol etmek için zaman çizelgesinde yukarı doğru kaydırın.",
-    "Set my room layout for everyone": "Oda düzenimi herkes için ayarla",
-    "For extra security, verify this user by checking a one-time code on both of your devices.": "Fazladan güvenlik sağlamak için bu kullanıcıyı cihazlarınızdaki tek kezlik kod ile doğrulayın.",
-    "In encrypted rooms, your messages are secured and only you and the recipient have the unique keys to unlock them.": "Şifrelenmiş odalarda iletileriniz şifreledir ve yalnızca sizde ve gönderdiğiniz kullanıcılarda iletileri açmak için anahtarlar vardır.",
-    "Messages in this room are not end-to-end encrypted.": "Bu odadaki iletiler uçtan uca şifreli değildir.",
-    "Messages in this room are end-to-end encrypted.": "Bu odadaki iletiler uçtan uca şifrelenmiştir.",
-    "Your messages are secured and only you and the recipient have the unique keys to unlock them.": "İletileriniz şifreledir ve yalnızca sizde ve gönderdiğiniz kullanıcılarda iletileri açmak için anahtarlar vardır.",
-    "Waiting for %(displayName)s to accept…": "%(displayName)s kullanıcısın onaylaması için bekleniliyor…",
-    "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Adanın alternatif adresini güncellerken bir hata oluştu. Bu eylem, sunucu tarafından izin verilmemiş olabilir ya da geçici bir sorun oluşmuş olabilir.",
-    "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "Odanın ana adresini güncellerken bir sorun oluştu. Bu eylem, sunucu tarafından izin verilmemiş olabilir ya da geçici bir sorun oluşmuş olabilir.",
-    "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Bu oda, <roomVersion /> oda sürümünü kullanmaktadır ve ana sunucunuz tarafından <i>tutarsız</i> olarak işaretlenmiştir.",
-    "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Bu odayı güncellerseniz bu oda kapanacak ve yerine aynı adlı, güncellenmiş bir oda geçecek.",
     "You've successfully verified %(displayName)s!": "%(displayName)s başarıyla doğruladınız!",
     "You've successfully verified %(deviceName)s (%(deviceId)s)!": "%(deviceName)s (%(deviceId)s) başarıyla doğruladınız!",
     "You've successfully verified your device!": "Cihazınızı başarıyla doğruladınız!",
     "Edit devices": "Cihazları düzenle",
-    "We didn't find a microphone on your device. Please check your settings and try again.": "Cihazınızda bir mikrofon bulamadık. Lütfen ayarlarınızı kontrol edin ve tekrar deneyin.",
-    "No microphone found": "Mikrofon bulunamadı",
-    "View message": "Mesajı görüntüle",
-    "Your message was sent": "Mesajınız gönderildi",
     "common": {
         "about": "Hakkında",
         "analytics": "Analitik",
@@ -773,7 +690,11 @@
         "low_priority": "Düşük öncelikli",
         "historical": "Tarihi",
         "go_to_settings": "Ayarlara Git",
-        "setup_secure_messages": "Güvenli Mesajları Ayarla"
+        "setup_secure_messages": "Güvenli Mesajları Ayarla",
+        "unencrypted": "Şifrelenmemiş",
+        "view_message": "Mesajı görüntüle",
+        "show_more": "Daha fazla göster",
+        "are_you_sure": "Emin misiniz ?"
     },
     "action": {
         "continue": "Devam Et",
@@ -935,7 +856,8 @@
         "no_perms_notice": "Bu odaya göndermeye izniniz yok",
         "poll_button_no_perms_title": "İzin Gerekli",
         "format_italics": "Eğik",
-        "replying_title": "Cevap yazıyor"
+        "replying_title": "Cevap yazıyor",
+        "edit_composer_label": "Mesajı düzenle"
     },
     "Code": "Kod",
     "power_level": {
@@ -1492,6 +1414,11 @@
         },
         "url_preview": {
             "close": "Önizlemeyi kapat"
+        },
+        "error_no_renderer": "Bu olay görüntülenemedi",
+        "send_state_sent": "Mesajınız gönderildi",
+        "mab": {
+            "label": "Mesaj Eylemleri"
         }
     },
     "slash_command": {
@@ -1636,7 +1563,9 @@
         "no_permission_conference_description": "Bu odada bir konferans başlatmak için izniniz yok",
         "default_device": "Varsayılan Cihaz",
         "no_media_perms_title": "Medya izinleri yok",
-        "no_media_perms_description": "%(brand)s'un mikrofonunuza / web kameranıza el le erişmesine izin vermeniz gerekebilir"
+        "no_media_perms_description": "%(brand)s'un mikrofonunuza / web kameranıza el le erişmesine izin vermeniz gerekebilir",
+        "no_audio_input_title": "Mikrofon bulunamadı",
+        "no_audio_input_description": "Cihazınızda bir mikrofon bulamadık. Lütfen ayarlarınızı kontrol edin ve tekrar deneyin."
     },
     "Other": "Diğer",
     "room_settings": {
@@ -1695,7 +1624,26 @@
             "url_previews_section": "URL önizlemeleri",
             "save": "Değişiklikleri Kaydet",
             "aliases_section": "Oda Adresleri",
-            "other_section": "Diğer"
+            "other_section": "Diğer",
+            "error_updating_canonical_alias_title": "Ana adresi güncellemede hata",
+            "error_updating_canonical_alias_description": "Odanın ana adresini güncellerken bir sorun oluştu. Bu eylem, sunucu tarafından izin verilmemiş olabilir ya da geçici bir sorun oluşmuş olabilir.",
+            "error_updating_alias_description": "Adanın alternatif adresini güncellerken bir hata oluştu. Bu eylem, sunucu tarafından izin verilmemiş olabilir ya da geçici bir sorun oluşmuş olabilir.",
+            "error_creating_alias_title": "Adres oluşturulurken hata",
+            "error_creating_alias_description": "Adres oluşturulurken hata ile karşılaşıldı. Sunucu tarafından izin verilmemiş yada geçici bir hata olabilir.",
+            "error_deleting_alias_description_forbidden": "Bu adresi silmeye yetkiniz yok.",
+            "error_deleting_alias_description": "Adres kaldırılırken bir hata ile karşılaşıldı. Artık mevcut olmayabilir yada geçici bir oluştu.",
+            "error_deleting_alias_title": "Adres kaldırılırken hata",
+            "canonical_alias_field_label": "Ana adres",
+            "no_aliases_room": "Bu oda hiçbir yerel adrese sahip değil",
+            "local_alias_field_label": "Yerel adres",
+            "published_aliases_section": "Yayınlanmış adresler",
+            "aliases_items_label": "Diğer yayınlanmış adresler:",
+            "aliases_no_items_label": "Henüz yayınlanmış başka adres yok, aşağıdan bir tane ekle",
+            "new_alias_placeholder": "Yeni yayınlanmış adresler (e.g. #alias:server)",
+            "local_aliases_section": "Yerel Adresler",
+            "name_field_label": "Oda Adı",
+            "topic_field_label": "Oda Başlığı",
+            "avatar_field_label": "Oda avatarı"
         },
         "advanced": {
             "unfederated": "Bu oda uzak Matrix Sunucuları tarafından erişilebilir değil",
@@ -1740,7 +1688,10 @@
             "waiting_other_user": "%(displayName)s ın doğrulaması için bekleniyor…",
             "cancelling": "İptal ediliyor…",
             "unverified_sessions_toast_reject": "Sonra",
-            "unverified_session_toast_title": "Yeni giriş. Bu siz miydiniz?"
+            "unverified_session_toast_title": "Yeni giriş. Bu siz miydiniz?",
+            "waiting_for_user_accept": "%(displayName)s kullanıcısın onaylaması için bekleniliyor…",
+            "accepting": "Kabul ediliyor…",
+            "start_button": "Doğrulamayı Başlat"
         },
         "old_version_detected_title": "Eski kriptolama verisi tespit edildi",
         "cancel_entering_passphrase_title": "Parola girişini iptal et?",
@@ -1764,6 +1715,22 @@
         },
         "recovery_method_removed": {
             "title": "Kurtarma Yöntemi Silindi"
+        },
+        "setup_secure_backup": {
+            "explainer": "Anahtarlarını kaybetmemek için, çıkış yapmadan önce önleri yedekle.",
+            "title": "Ayarla"
+        },
+        "cross_signing_user_warning": "Bu kullanıcı bütün oturumlarında doğrulanmamış.",
+        "cross_signing_user_normal": "Bu kullanıcıyı doğrulamadınız.",
+        "cross_signing_user_verified": "Bu kullanıcıyı doğruladınız. Bu kullanıcı tüm oturumlarını doğruladı.",
+        "cross_signing_room_warning": "Birisi bilinmeyen bir oturum kullanıyor",
+        "cross_signing_room_normal": "Bu oda uçtan uça şifreli",
+        "cross_signing_room_verified": "Bu odadaki herkes doğrulanmış",
+        "event_shield_reason_authenticity_not_guaranteed": "Bu şifrelenmiş mesajın güvenilirliği bu cihazda garanti edilemez.",
+        "event_shield_reason_mismatched_sender_key": "Doğrulanmamış bir oturum tarafından şifrelenmiş",
+        "messages_not_secure": {
+            "title": "Mesajlarınız korunmuyor",
+            "cause_1": "Ana sunucunuz"
         }
     },
     "emoji": {
@@ -1982,7 +1949,8 @@
         "shared_data_url": "%(brand)s Linki",
         "shared_data_room_id": "Oda ID",
         "shared_data_widget_id": "Görsel Bileşen ID si",
-        "popout": "Görsel bileşeni göster"
+        "popout": "Görsel bileşeni göster",
+        "set_room_layout": "Oda düzenimi herkes için ayarla"
     },
     "zxcvbn": {
         "suggestions": {
@@ -2120,7 +2088,18 @@
         "peek_join_prompt": "%(roomName)s odasını inceliyorsunuz. Katılmak ister misiniz?",
         "no_peek_join_prompt": "%(roomName)s odasında önizleme yapılamaz. Katılmak ister misin?",
         "not_found_title_name": "%(roomName)s mevcut değil.",
-        "inaccessible_name": "%(roomName)s şu anda erişilebilir değil."
+        "inaccessible_name": "%(roomName)s şu anda erişilebilir değil.",
+        "jump_to_bottom_button": "En son mesajlara git",
+        "upgrade_warning_bar": "Bu odayı güncellerseniz bu oda kapanacak ve yerine aynı adlı, güncellenmiş bir oda geçecek.",
+        "upgrade_warning_bar_upgraded": "Bu ıda zaten güncellenmiş.",
+        "upgrade_warning_bar_unstable": "Bu oda, <roomVersion /> oda sürümünü kullanmaktadır ve ana sunucunuz tarafından <i>tutarsız</i> olarak işaretlenmiştir.",
+        "upgrade_warning_bar_admins": "Bu uyarıyı sadece oda yöneticileri görür",
+        "search": {
+            "this_room": "Bu Oda",
+            "all_rooms": "Tüm Odalar",
+            "field_placeholder": "Arama…"
+        },
+        "jump_read_marker": "İlk okunmamış iletiye atla."
     },
     "file_panel": {
         "guest_note": "Bu işlevi kullanmak için <a> Kayıt Olun </a>",
@@ -2271,5 +2250,40 @@
         "invited_list_heading": "Davet Edildi",
         "filter_placeholder": "Oda üyelerini Filtrele",
         "power_label": "%(userName)s (güç %(powerLevelNumber)s)"
+    },
+    "stickers": {
+        "empty": "Açılmış herhangi bir çıkartma paketine sahip değilsiniz",
+        "empty_add_prompt": "Şimdi biraz ekle"
+    },
+    "user_info": {
+        "error_revoke_3pid_invite_title": "Davetin geri çekilmesi başarısız",
+        "error_revoke_3pid_invite_description": "Davet geri çekilemiyor. Sunucu geçici bir problem yaşıyor olabilir yada daveti geri çekmek için gerekli izinlere sahip değilsin.",
+        "admin_tools_section": "Admin Araçları",
+        "revoke_invite": "Davet geri çekildi",
+        "invited_by": "%(sender)s tarafından davet",
+        "room_encrypted": "Bu odadaki iletiler uçtan uca şifrelenmiştir.",
+        "room_encrypted_detail": "İletileriniz şifreledir ve yalnızca sizde ve gönderdiğiniz kullanıcılarda iletileri açmak için anahtarlar vardır.",
+        "room_unencrypted": "Bu odadaki iletiler uçtan uca şifreli değildir.",
+        "room_unencrypted_detail": "Şifrelenmiş odalarda iletileriniz şifreledir ve yalnızca sizde ve gönderdiğiniz kullanıcılarda iletileri açmak için anahtarlar vardır.",
+        "verify_button": "Kullanıcı Doğrula",
+        "verify_explainer": "Fazladan güvenlik sağlamak için bu kullanıcıyı cihazlarınızdaki tek kezlik kod ile doğrulayın.",
+        "hide_verified_sessions": "Onaylı oturumları gizle",
+        "hide_sessions": "Oturumları gizle",
+        "share_button": "Kullanıcıya Link Paylaş",
+        "demote_self_confirm_title": "Kendinin rütbeni düşür?",
+        "demote_button": "Rütbe Düşür",
+        "redact_button": "Son mesajları sil",
+        "error_ban_user": "Kullanıcı yasaklama(Ban) başarısız",
+        "error_mute_user": "Kullanıcıyı sessize almak başarısız oldu",
+        "promote_warning": "Kullanıcıyı sizinle aynı güç seviyesine yükseltirken , bu değişikliği geri alamazsınız.",
+        "deactivate_confirm_title": "Kullanıcıyı pasifleştir?",
+        "deactivate_confirm_description": "Bu kullanıcı etkisizleştirmek onu bir daha oturum açmasını engeller.Ek olarak da bulundukları bütün odalardan atılırlar. Bu eylem geri dönüştürülebilir. Bu kullanıcıyı etkisizleştirmek istediğinize emin misiniz?",
+        "deactivate_confirm_action": "Kullanıcıyı pasifleştir",
+        "error_deactivate": "Kullanıcı pasifleştirme başarısız"
+    },
+    "right_panel": {
+        "widgets_section": "Widgetlar",
+        "share_button": "Oda paylaş",
+        "settings_button": "Oda ayarları"
     }
 }

@@ -248,7 +248,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_profile_controls">
                         <Field
-                            label={_t("Room Name")}
+                            label={_t("room_settings|general|name_field_label")}
                             type="text"
                             value={this.state.displayName}
                             autoComplete="off"
@@ -261,7 +261,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
                                 "mx_ProfileSettings_profile_controls_topic--room",
                             )}
                             id="profileTopic" // See: NewRoomIntro.tsx
-                            label={_t("Room Topic")}
+                            label={_t("room_settings|general|topic_field_label")}
                             disabled={!this.state.canSetTopic}
                             type="text"
                             value={this.state.topic}
@@ -273,7 +273,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
                     <AvatarSetting
                         avatarUrl={this.state.avatarUrl ?? undefined}
                         avatarName={this.state.displayName || this.props.roomId}
-                        avatarAltText={_t("Room avatar")}
+                        avatarAltText={_t("room_settings|general|avatar_field_label")}
                         uploadAvatar={this.state.canSetAvatar ? this.uploadAvatar : undefined}
                         removeAvatar={this.state.canSetAvatar ? this.removeAvatar : undefined}
                     />

@@ -38,15 +38,12 @@
     "Today": "I dag",
     "Friday": "Fredag",
     "Changelog": "Ændringslog",
-    "This Room": "Dette rum",
     "Unavailable": "Utilgængelig",
     "Filter results": "Filtrér resultater",
-    "Search…": "Søg…",
     "Tuesday": "Tirsdag",
     "Saturday": "Lørdag",
     "Monday": "Mandag",
     "Send": "Send",
-    "All Rooms": "Alle rum",
     "You cannot delete this message. (%(code)s)": "Du kan ikke slette denne besked. (%(code)s)",
     "Thursday": "Torsdag",
     "Yesterday": "I går",
@@ -58,10 +55,7 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s. %(monthName)s %(fullYear)s",
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "Headphones": "Hovedtelefoner",
-    "Show more": "Vis mere",
     "Add a new server": "Tilføj en ny server",
-    "Local address": "Lokal adresse",
-    "This room has no local addresses": "Dette rum har ingen lokal adresse",
     "France": "Frankrig",
     "Finland": "Finland",
     "Egypt": "Egypten",
@@ -342,7 +336,8 @@
         "user_avatar": "Profil billede",
         "rooms": "Rum",
         "low_priority": "Lav prioritet",
-        "historical": "Historisk"
+        "historical": "Historisk",
+        "show_more": "Vis mere"
     },
     "action": {
         "continue": "Fortsæt",
@@ -793,7 +788,9 @@
             "encryption_permanent": "Efter aktivering er det ikke muligt at slå kryptering fra."
         },
         "general": {
-            "other_section": "Andre"
+            "other_section": "Andre",
+            "no_aliases_room": "Dette rum har ingen lokal adresse",
+            "local_alias_field_label": "Lokal adresse"
         },
         "notifications": {
             "custom_sound_prompt": "Sæt en ny brugerdefineret lyd"
@@ -853,7 +850,12 @@
             "favourite": "Favorit",
             "low_priority": "Lav prioritet"
         },
-        "invite_this_room": "Inviter til dette rum"
+        "invite_this_room": "Inviter til dette rum",
+        "search": {
+            "this_room": "Dette rum",
+            "all_rooms": "Alle rum",
+            "field_placeholder": "Søg…"
+        }
     },
     "items_and_n_others": {
         "other": "<Items/> og %(count)s andre",

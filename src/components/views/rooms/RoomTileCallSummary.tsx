@@ -41,7 +41,7 @@ export const RoomTileCallSummary: FC<Props> = ({ call }) => {
             break;
         case ConnectionState.Connected:
         case ConnectionState.Disconnecting:
-            text = _t("Joined");
+            text = _t("common|joined");
             active = true;
             break;
     }

@@ -184,7 +184,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
 
         joinButtons = (
             <AccessibleButton kind="primary" onClick={viewLabs}>
-                {_t("Show Labs settings")}
+                {_t("room|show_labs_settings")}
             </AccessibleButton>
         );
     }

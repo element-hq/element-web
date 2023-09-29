@@ -24,9 +24,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
     "Moderator": "Moderator",
     "not specified": "qeyd edilmədi",
-    "Failed to ban user": "İstifadəçini bloklamağı bacarmadı",
-    "Failed to mute user": "İstifadəçini kəsməyi bacarmadı",
-    "Are you sure?": "Siz əminsiniz?",
     "Join Room": "Otağa girmək",
     "unknown error code": "naməlum səhv kodu",
     "Failed to forget room %(errCode)s": "Otağı unutmağı bacarmadı: %(errCode)s",
@@ -76,7 +73,8 @@
         "profile": "Profil",
         "authentication": "Müəyyənləşdirilmə",
         "low_priority": "Əhəmiyyətsizlər",
-        "historical": "Arxiv"
+        "historical": "Arxiv",
+        "are_you_sure": "Siz əminsiniz?"
     },
     "action": {
         "continue": "Davam etmək",
@@ -357,5 +355,9 @@
     "member_list": {
         "invited_list_heading": "Dəvət edilmişdir",
         "filter_placeholder": "İştirakçılara görə axtarış"
+    },
+    "user_info": {
+        "error_ban_user": "İstifadəçini bloklamağı bacarmadı",
+        "error_mute_user": "İstifadəçini kəsməyi bacarmadı"
     }
 }

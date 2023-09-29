@@ -23,7 +23,7 @@ import { IBodyProps } from "./IBodyProps";
 function getErrorMessage(mxEvent?: MatrixEvent): string {
     return mxEvent?.isEncryptedDisabledForUnverifiedDevices
         ? _t("The sender has blocked you from receiving this message")
-        : _t("Unable to decrypt message");
+        : _t("threads|unable_to_decrypt");
 }
 
 // A placeholder element for messages that could not be decrypted

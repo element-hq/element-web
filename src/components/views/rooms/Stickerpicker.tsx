@@ -94,7 +94,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                     return this.scalarClient;
                 })
                 .catch((e) => {
-                    this.imError(_td("Failed to connect to integration manager"), e);
+                    this.imError(_td("integration_manager|error_connecting_heading"), e);
                 });
         } else {
             IntegrationManagers.sharedInstance().openNoManagerDialog();
@@ -213,8 +213,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     private defaultStickerpickerContent(): JSX.Element {
         return (
             <AccessibleButton onClick={this.launchManageIntegrations} className="mx_Stickers_contentPlaceholder">
-                <p>{_t("You don't currently have any stickerpacks enabled")}</p>
-                <p className="mx_Stickers_addLink">{_t("Add some now")}</p>
+                <p>{_t("stickers|empty")}</p>
+                <p className="mx_Stickers_addLink">{_t("stickers|empty_add_prompt")}</p>
                 <img src={require("../../../../res/img/stickerpack-placeholder.png")} alt="" />
             </AccessibleButton>
         );

@@ -30,7 +30,7 @@ export default class TopUnreadMessagesBar extends React.PureComponent<IProps> {
             <div className="mx_TopUnreadMessagesBar">
                 <AccessibleButton
                     className="mx_TopUnreadMessagesBar_scrollUp"
-                    title={_t("Jump to first unread message.")}
+                    title={_t("room|jump_read_marker")}
                     onClick={this.props.onScrollUpClick}
                 />
                 <AccessibleButton

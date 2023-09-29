@@ -59,7 +59,7 @@ const ThreadSummary: React.FC<IProps> = ({ mxEvent, thread, ...props }) => {
                 });
                 PosthogTrackers.trackInteraction("WebRoomTimelineThreadSummaryButton", ev);
             }}
-            aria-label={_t("Open thread")}
+            aria-label={_t("threads|open_thread")}
         >
             <span className="mx_ThreadSummary_replies_amount">{countSection}</span>
             <ThreadMessagePreview thread={thread} showDisplayname={!roomContext.narrow} />
@@ -111,9 +111,9 @@ export const ThreadMessagePreview: React.FC<IPreviewProps> = ({ thread, showDisp
             {lastReply.isDecryptionFailure() ? (
                 <div
                     className="mx_ThreadSummary_content mx_DecryptionFailureBody"
-                    title={_t("Unable to decrypt message")}
+                    title={_t("threads|unable_to_decrypt")}
                 >
-                    <span className="mx_ThreadSummary_message-preview">{_t("Unable to decrypt message")}</span>
+                    <span className="mx_ThreadSummary_message-preview">{_t("threads|unable_to_decrypt")}</span>
                 </div>
             ) : (
                 <div className="mx_ThreadSummary_content" title={preview}>

@@ -176,7 +176,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
                         "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.",
                     )}
                 </p>
-                <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
+                <p>{_t("encryption|setup_secure_backup|explainer")}</p>
             </div>
         );
 

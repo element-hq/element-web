@@ -77,7 +77,7 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
             title = _t("Device verified");
         } else if (phase === Phase.ConfirmSkip) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
-            title = _t("Are you sure?");
+            title = _t("common|are_you_sure");
         } else if (phase === Phase.Busy) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
             title = _t("Verify this device");

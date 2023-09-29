@@ -208,7 +208,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
         tabs.push(
             new Tab(
                 RoomSettingsTab.PollHistory,
-                _td("Poll history"),
+                _td("right_panel|polls_button"),
                 "mx_RoomSettingsDialog_pollsIcon",
                 <PollHistoryTab room={this.state.room} onFinished={() => this.props.onFinished(true)} />,
             ),

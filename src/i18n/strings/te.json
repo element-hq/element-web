@@ -1,8 +1,6 @@
 {
-    "Admin Tools": "నిర్వాహకుని ఉపకరణాలు",
     "A new password must be entered.": "కొత్త పాస్ వర్డ్ ను తప్పక నమోదు చేయాలి.",
     "An error has occurred.": "ఒక లోపము సంభవించినది.",
-    "Are you sure?": "మీరు చెప్పేది నిజమా?",
     "Are you sure you want to leave the room '%(roomName)s'?": "మీరు ఖచ్చితంగా గది '%(roomName)s' వదిలివేయాలనుకుంటున్నారా?",
     "Are you sure you want to reject the invitation?": "మీరు ఖచ్చితంగా ఆహ్వానాన్ని తిరస్కరించాలనుకుంటున్నారా?",
     "Custom level": "అనుకూల స్థాయి",
@@ -41,11 +39,9 @@
     "Changelog": "మార్పు వివరణ",
     "Tuesday": "మంగళవారం",
     "Monday": "సోమవారం",
-    "All Rooms": "అన్ని గదులు",
     "Wednesday": "బుధవారం",
     "Send": "పంపండి",
     "Thursday": "గురువారం",
-    "Search…": "శోధన…",
     "Yesterday": "నిన్న",
     "Saturday": "శనివారం",
     "common": {
@@ -59,7 +55,8 @@
         "on": "వేయుము",
         "off": "ఆపు",
         "advanced": "ఆధునిక",
-        "authentication": "ప్రామాణీకరణ"
+        "authentication": "ప్రామాణీకరణ",
+        "are_you_sure": "మీరు చెప్పేది నిజమా?"
     },
     "action": {
         "continue": "కొనసాగించు",
@@ -194,6 +191,13 @@
             "favourite": "గుర్తుంచు",
             "low_priority": "తక్కువ ప్రాధాన్యత"
         },
-        "invite_this_room": "ఈ గదికి ఆహ్వానించండి"
+        "invite_this_room": "ఈ గదికి ఆహ్వానించండి",
+        "search": {
+            "all_rooms": "అన్ని గదులు",
+            "field_placeholder": "శోధన…"
+        }
+    },
+    "user_info": {
+        "admin_tools_section": "నిర్వాహకుని ఉపకరణాలు"
     }
 }

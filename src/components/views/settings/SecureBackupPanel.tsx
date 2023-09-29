@@ -346,14 +346,12 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                     <SettingsSubsectionText>
                         {_t("settings|security|key_backup_inactive_warning", {}, { b: (sub) => <b>{sub}</b> })}
                     </SettingsSubsectionText>
-                    <SettingsSubsectionText>
-                        {_t("Back up your keys before signing out to avoid losing them.")}
-                    </SettingsSubsectionText>
+                    <SettingsSubsectionText>{_t("encryption|setup_secure_backup|explainer")}</SettingsSubsectionText>
                 </>
             );
             actions.push(
                 <AccessibleButton key="setup" kind="primary" onClick={this.startNewBackup}>
-                    {_t("Set up")}
+                    {_t("encryption|setup_secure_backup|title")}
                 </AccessibleButton>,
             );
         }

@@ -676,7 +676,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             viewInRoomButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconViewInRoom"
-                    label={_t("View in room")}
+                    label={_t("timeline|mab|view_in_room")}
                     onClick={this.viewInRoom}
                 />
             );

@@ -91,20 +91,8 @@
     "Headphones": "Koptelefong",
     "Folder": "Mappe",
     "Warning!": "Let ip!",
-    "Are you sure?": "Zy je zeker?",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Versleuterde berichtn zyn beveiligd me eind-tout-eind-versleuterienge. Alleene d’ountvanger(s) en gy èn de sleuters vo deze berichtn te leezn.",
-    "Back up your keys before signing out to avoid losing them.": "Makt een back-up van je sleuters vooraleer da je jen afmeldt vo ze nie kwyt te speeln.",
     "Start using Key Backup": "Begint me de sleuterback-up te gebruukn",
-    "This event could not be displayed": "Deze gebeurtenisse kostege nie weergegeevn wordn",
-    "Failed to ban user": "Verbann van gebruuker es mislukt",
-    "Demote yourself?": "Jen eigen degradeern?",
-    "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Je kut deze actie nie oungedoan moakn omda je jen eigen degradeert. A je de latste bevoorrechte gebruuker in ’t gesprek zyt, is ’t ounmeuglik van deze rechtn were te krygn.",
-    "Demote": "Degradeern",
-    "Failed to mute user": "Dempn van gebruuker es mislukt",
-    "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Je kut deze veranderiengn nie oungedoan moakn angezien da je de gebruuker tout ’tzelfste niveau als jen eigen promoveert.",
-    "Jump to read receipt": "Noar ’t latst geleezn bericht goan",
-    "Share Link to User": "Koppelienge me de gebruuker deeln",
-    "Admin Tools": "Beheerdersgereedschap",
     "and %(count)s others...": {
         "other": "en %(count)s anderen…",
         "one": "en één andere…"
@@ -119,29 +107,7 @@
         "one": "(~%(count)s resultoat)"
     },
     "Join Room": "Gesprek toetreedn",
-    "Share room": "Gesprek deeln",
-    "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Dit gesprek actualiseern goat de huudige instantie van ’t gesprek sluutn, en e geactualiseerde versie ounder dezelfste noame anmoakn.",
-    "This room has already been upgraded.": "Dit gesprek es al ipgewoardeerd gewist.",
-    "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Dit gesprek droait ip groepsgespreksversie <roomVersion />, da deur deze thuusserver als <i>ounstabiel</i> gemarkeerd gewist es.",
-    "Only room administrators will see this warning": "Alleene de gespreksbeheerders goan deze woarschuwienge zien",
-    "This Room": "Dit gesprek",
-    "All Rooms": "Alle gesprekkn",
-    "Search…": "Zoekn…",
-    "You don't currently have any stickerpacks enabled": "J’è vo de moment geen stickerpakkettn ingeschoakeld",
-    "Add some now": "Voegt der nu e poar toe",
-    "Failed to revoke invite": "Intrekkn van d’uutnodigienge is mislukt",
-    "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Kostege d’uutnodigienge nie intrekkn. De server oundervindt meuglik e tydelik probleem, of j’èt ounvoldoende rechtn vo d’uutnodigienge in te trekkn.",
-    "Revoke invite": "Uutnodigienge intrekkn",
-    "Invited by %(sender)s": "Uutgenodigd deur %(sender)s",
-    "Jump to first unread message.": "Spriengt noa ’t eeste oungeleezn bericht.",
-    "Error updating main address": "Foute by ’t bywerkn van ’t hoofdadresse",
-    "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "’t Es e foute ipgetreedn by ’t bywerkn van ’t hoofdadresse van ’t gesprek. Dit wor meugliks nie toegeloatn deur de server, of der es een tydelik probleem ipgetreedn.",
-    "Main address": "Hoofdadresse",
     "not specified": "nie ingegeevn",
-    "This room has no local addresses": "Dit gesprek è geen lokoale adressn",
-    "Room avatar": "Gespreksavatar",
-    "Room Name": "Gespreksnoame",
-    "Room Topic": "Gespreksounderwerp",
     "Sunday": "Zundag",
     "Monday": "Moandag",
     "Tuesday": "Diesndag",
@@ -164,7 +130,6 @@
     "Create new room": "E nieuw gesprek anmoakn",
     "collapse": "toeklappn",
     "expand": "uutklappn",
-    "Edit message": "Bericht bewerkn",
     "Power level": "Machtsniveau",
     "Custom level": "Angepast niveau",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Kostege de gebeurtenisse woarip da der gereageerd gewist was nie loadn. Allichte bestoa ze nie, of è je geen toeloatienge vo ze te bekykn.",
@@ -296,7 +261,6 @@
     "Identity server URL does not appear to be a valid identity server": "De identiteitsserver-URL lykt geen geldige identiteitsserver te zyn",
     "General failure": "Algemene foute",
     "Session ID": "Sessie-ID",
-    "Set up": "Instelln",
     "Edited at %(date)s. Click to view edits.": "Bewerkt ip %(date)s. Klikt vo de bewerkiengn te bekykn.",
     "Message edits": "Berichtbewerkiengn",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Dit gesprek bywerkn vereist da je d’huudige instantie dervan ofsluut en in de plekke dervan e nieuw gesprek anmakt. Vo de gespreksleedn de best meuglike ervoarienge te biedn, goan me:",
@@ -360,7 +324,8 @@
         "low_priority": "Leige prioriteit",
         "historical": "Historisch",
         "go_to_settings": "Goa noa d’instelliengn",
-        "setup_secure_messages": "Beveiligde berichtn instelln"
+        "setup_secure_messages": "Beveiligde berichtn instelln",
+        "are_you_sure": "Zy je zeker?"
     },
     "action": {
         "continue": "Verdergoan",
@@ -444,7 +409,8 @@
         "room_upgraded_notice": "Dit gesprek is vervangn gewist en is nie langer actief.",
         "no_perms_notice": "J’èt geen toestemmienge voor in dit gesprek te postn",
         "poll_button_no_perms_title": "Toestemmienge vereist",
-        "replying_title": "An ’t beantwoordn"
+        "replying_title": "An ’t beantwoordn",
+        "edit_composer_label": "Bericht bewerkn"
     },
     "Code": "Code",
     "power_level": {
@@ -767,7 +733,8 @@
         },
         "context_menu": {
             "external_url": "Bron-URL"
-        }
+        },
+        "error_no_renderer": "Deze gebeurtenisse kostege nie weergegeevn wordn"
     },
     "slash_command": {
         "shrug": "Plakt ¯\\_(ツ)_/¯ vóór e bericht zounder ipmoak",
@@ -884,7 +851,14 @@
             "url_preview_explainer": "A ’t er etwien een URL in e bericht invoegt, kut er een URL-voorvertonienge getoogd wordn me meer informoasje over de koppelienge, gelyk den titel, omschryvienge en e fotootje van de website.",
             "url_previews_section": "URL-voorvertoniengn",
             "aliases_section": "Gespreksadressn",
-            "other_section": "Overige"
+            "other_section": "Overige",
+            "error_updating_canonical_alias_title": "Foute by ’t bywerkn van ’t hoofdadresse",
+            "error_updating_canonical_alias_description": "’t Es e foute ipgetreedn by ’t bywerkn van ’t hoofdadresse van ’t gesprek. Dit wor meugliks nie toegeloatn deur de server, of der es een tydelik probleem ipgetreedn.",
+            "canonical_alias_field_label": "Hoofdadresse",
+            "no_aliases_room": "Dit gesprek è geen lokoale adressn",
+            "name_field_label": "Gespreksnoame",
+            "topic_field_label": "Gespreksounderwerp",
+            "avatar_field_label": "Gespreksavatar"
         },
         "advanced": {
             "unfederated": "Dit gesprek es nie toegankelik voor externe Matrix-servers",
@@ -927,6 +901,10 @@
         "recovery_method_removed": {
             "title": "Herstelmethode verwyderd",
             "warning": "A je de herstelmethode nie è verwyderd, is ’t meuglik dat der een anvaller toegank tout jen account probeert te verkrygn. Wyzigt ounmiddellik jen accountpaswoord en stelt e nieuwe herstelmethode in in d’instelliengn."
+        },
+        "setup_secure_backup": {
+            "explainer": "Makt een back-up van je sleuters vooraleer da je jen afmeldt vo ze nie kwyt te speeln.",
+            "title": "Instelln"
         }
     },
     "auth": {
@@ -1091,7 +1069,17 @@
         "peek_join_prompt": "Je bekykt %(roomName)s. Wil je deran deelneemn?",
         "no_peek_join_prompt": "%(roomName)s ku nie bekeekn wordn. Wil je deran deelneemn?",
         "not_found_title_name": "%(roomName)s bestoa nie.",
-        "inaccessible_name": "%(roomName)s es vo de moment nie toegankelik."
+        "inaccessible_name": "%(roomName)s es vo de moment nie toegankelik.",
+        "upgrade_warning_bar": "Dit gesprek actualiseern goat de huudige instantie van ’t gesprek sluutn, en e geactualiseerde versie ounder dezelfste noame anmoakn.",
+        "upgrade_warning_bar_upgraded": "Dit gesprek es al ipgewoardeerd gewist.",
+        "upgrade_warning_bar_unstable": "Dit gesprek droait ip groepsgespreksversie <roomVersion />, da deur deze thuusserver als <i>ounstabiel</i> gemarkeerd gewist es.",
+        "upgrade_warning_bar_admins": "Alleene de gespreksbeheerders goan deze woarschuwienge zien",
+        "search": {
+            "this_room": "Dit gesprek",
+            "all_rooms": "Alle gesprekkn",
+            "field_placeholder": "Zoekn…"
+        },
+        "jump_read_marker": "Spriengt noa ’t eeste oungeleezn bericht."
     },
     "file_panel": {
         "guest_note": "Je moe je <a>registreern</a> vo deze functie te gebruukn",
@@ -1204,5 +1192,27 @@
         "invited_list_heading": "Uutgenodigd",
         "filter_placeholder": "Gespreksleedn filtern",
         "power_label": "%(userName)s (macht %(powerLevelNumber)s)"
+    },
+    "stickers": {
+        "empty": "J’è vo de moment geen stickerpakkettn ingeschoakeld",
+        "empty_add_prompt": "Voegt der nu e poar toe"
+    },
+    "user_info": {
+        "error_revoke_3pid_invite_title": "Intrekkn van d’uutnodigienge is mislukt",
+        "error_revoke_3pid_invite_description": "Kostege d’uutnodigienge nie intrekkn. De server oundervindt meuglik e tydelik probleem, of j’èt ounvoldoende rechtn vo d’uutnodigienge in te trekkn.",
+        "admin_tools_section": "Beheerdersgereedschap",
+        "revoke_invite": "Uutnodigienge intrekkn",
+        "invited_by": "Uutgenodigd deur %(sender)s",
+        "jump_to_rr_button": "Noar ’t latst geleezn bericht goan",
+        "share_button": "Koppelienge me de gebruuker deeln",
+        "demote_self_confirm_title": "Jen eigen degradeern?",
+        "demote_self_confirm_room": "Je kut deze actie nie oungedoan moakn omda je jen eigen degradeert. A je de latste bevoorrechte gebruuker in ’t gesprek zyt, is ’t ounmeuglik van deze rechtn were te krygn.",
+        "demote_button": "Degradeern",
+        "error_ban_user": "Verbann van gebruuker es mislukt",
+        "error_mute_user": "Dempn van gebruuker es mislukt",
+        "promote_warning": "Je kut deze veranderiengn nie oungedoan moakn angezien da je de gebruuker tout ’tzelfste niveau als jen eigen promoveert."
+    },
+    "right_panel": {
+        "share_button": "Gesprek deeln"
     }
 }

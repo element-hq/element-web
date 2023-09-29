@@ -178,10 +178,10 @@ const PinnedMessagesCard: React.FC<IProps> = ({ room, onClose, permalinkCreator 
                     </div>
 
                     <Heading size="4" className="mx_PinnedMessagesCard_empty_header">
-                        {_t("Nothing pinned, yet")}
+                        {_t("right_panel|pinned_messages|empty")}
                     </Heading>
                     {_t(
-                        "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.",
+                        "right_panel|pinned_messages|explainer",
                         {},
                         {
                             b: (sub) => <b>{sub}</b>,
@@ -223,7 +223,7 @@ const PinnedMessagesCard: React.FC<IProps> = ({ room, onClose, permalinkCreator 
             header={
                 <div className="mx_BaseCard_header_title">
                     <Heading size="4" className="mx_BaseCard_header_title_heading">
-                        {_t("Pinned messages")}
+                        {_t("right_panel|pinned_messages|title")}
                     </Heading>
                 </div>
             }

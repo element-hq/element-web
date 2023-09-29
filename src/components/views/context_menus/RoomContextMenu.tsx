@@ -265,7 +265,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
                     RightPanelStore.instance.pushCard({ phase: RightPanelPhases.FilePanel }, false);
                     onFinished();
                 }}
-                label={_t("Files")}
+                label={_t("right_panel|files_button")}
                 iconClassName="mx_RoomTile_iconFiles"
             />
         );
@@ -286,7 +286,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
                     RightPanelStore.instance.pushCard({ phase: RightPanelPhases.PinnedMessages }, false);
                     onFinished();
                 }}
-                label={_t("Pinned")}
+                label={_t("right_panel|pinned_messages_button")}
                 iconClassName="mx_RoomTile_iconPins"
             >
                 {pinCount > 0 && <span className="mx_IconizedContextMenu_sublabel">{pinCount}</span>}
@@ -306,7 +306,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
                     RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomSummary }, false);
                     onFinished();
                 }}
-                label={_t("Widgets")}
+                label={_t("right_panel|widgets_section")}
                 iconClassName="mx_RoomTile_iconWidgets"
             />
         );
@@ -323,7 +323,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
                     Modal.createDialog(ExportDialog, { room });
                     onFinished();
                 }}
-                label={_t("Export chat")}
+                label={_t("right_panel|export_chat_button")}
                 iconClassName="mx_RoomTile_iconExport"
             />
         );
