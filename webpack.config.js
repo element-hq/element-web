@@ -80,7 +80,15 @@ function parseOverridesToReplacements(overrides) {
             // because the input is effectively defined by the person running the build, we don't
             // need to do anything special to protect against regex overrunning, etc.
             new RegExp(oldPath.replace(/\//g, "[\\/\\\\]").replace(/\./g, "\\.")),
-            path.resolve(__dirname, newPath),
+            function (resource) {
+                resource.request = path.resolve(__dirname, newPath);
+                resource.createData.resource = path.resolve(__dirname, newPath);
+                // Starting with Webpack 5 we also need to set the context as otherwise replacing
+                // files in e.g. matrix-react-sdk with files from element-web will try to resolve
+                // them within matrix-react-sdk (https://github.com/webpack/webpack/issues/17716)
+                resource.context = path.dirname(resource.request)
+                resource.createData.context = path.dirname(resource.createData.resource);
+              }
         );
     });
 }
