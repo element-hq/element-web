@@ -1,3 +1,9 @@
+Changes in [1.11.45](https://github.com/vector-im/element-web/releases/tag/v1.11.45) (2023-09-29)
+=================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix Emoji font on Safari 17 ([\#11673](https://github.com/matrix-org/matrix-react-sdk/pull/11673)).
+
 Changes in [1.11.44](https://github.com/vector-im/element-web/releases/tag/v1.11.44) (2023-09-26)
 =================================================================================================
 
