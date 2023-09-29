@@ -176,7 +176,7 @@ describe("Read receipts", () => {
                 assertUnread(room2, 30);
 
                 // When I jump to one of the older messages
-                jumpTo(room2, "Msg1");
+                jumpTo(room2, "Msg0001");
 
                 // Then the room is still unread, but some messages were read
                 assertUnreadLessThan(room2, 30);
@@ -321,7 +321,7 @@ describe("Read receipts", () => {
                 assertUnread(room2, 21);
 
                 // When I read an older message in the thread
-                jumpTo(room2, "InThread1", true);
+                jumpTo(room2, "InThread0001", true);
                 assertUnreadLessThan(room2, 21);
                 // TODO: for some reason, we can't find the first message
                 // "InThread0", so I am using the second here. Also, they appear
@@ -488,7 +488,7 @@ describe("Read receipts", () => {
                 assertUnread(room2, 62); // Sanity
 
                 // When I jump to an old message and read the thread
-                jumpTo(room2, "beforeThread0");
+                jumpTo(room2, "beforeThread0000");
                 openThread("ThreadRoot");
 
                 // Then the thread root is marked as read in the main timeline,

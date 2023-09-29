@@ -372,7 +372,7 @@ export function pageUp() {
  * @param howMany the number of strings to generate
  */
 export function many(prefix: string, howMany: number): Array<string> {
-    return Array.from(Array(howMany).keys()).map((i) => prefix + i.toFixed());
+    return Array.from(Array(howMany).keys()).map((i) => prefix + i.toString().padStart(4, "0"));
 }
 
 /**
