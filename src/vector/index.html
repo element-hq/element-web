@@ -52,7 +52,7 @@
     <% for (const tag of htmlWebpackPlugin.tags.headTags) {
         let path = tag.attributes && tag.attributes.href;
         if (path && path.includes("/Inter/")) { %>
-            <link rel="preload" as="font" href=".<%= path %>" crossorigin="anonymous"/>
+            <link rel="preload" as="font" href="<%= path %>" crossorigin="anonymous"/>
         <% }
     } %>
 
