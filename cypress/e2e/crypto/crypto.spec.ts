@@ -20,6 +20,7 @@ import type { CypressBot } from "../../support/bot";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { UserCredentials } from "../../support/login";
 import {
+    createSharedRoomWithUser,
     doTwoWaySasVerification,
     downloadKey,
     enableKeyBackup,
@@ -284,16 +285,7 @@ describe("Cryptography", function () {
         autoJoin(this.bob);
 
         // we need to have a room with the other user present, so we can open the verification panel
-        let roomId: string;
-        cy.createRoom({ name: "TestRoom", invite: [this.bob.getUserId()] }).then((_room1Id) => {
-            roomId = _room1Id;
-            cy.log(`Created test room ${roomId}`);
-            cy.visit(`/#/room/${roomId}`);
-            // wait for Bob to join the room, otherwise our attempt to open his user details may race
-            // with his join.
-            cy.findByText("Bob joined the room").should("exist");
-        });
-
+        createSharedRoomWithUser(this.bob.getUserId());
         verify.call(this);
     });
 
@@ -305,21 +297,15 @@ describe("Cryptography", function () {
             autoJoin(bob);
 
             // create an encrypted room
-            cy.createRoom({ name: "TestRoom", invite: [bob.getUserId()] })
+            createSharedRoomWithUser(bob.getUserId())
                 .as("testRoomId")
                 .then((roomId) => {
                     testRoomId = roomId;
-                    cy.log(`Created test room ${roomId}`);
-                    cy.visit(`/#/room/${roomId}`);
 
                     // enable encryption
                     cy.getClient().then((cli) => {
                         cli.sendStateEvent(roomId, "m.room.encryption", { algorithm: "m.megolm.v1.aes-sha2" });
                     });
-
-                    // wait for Bob to join the room, otherwise our attempt to open his user details may race
-                    // with his join.
-                    cy.findByText("Bob joined the room").should("exist");
                 });
         });
 

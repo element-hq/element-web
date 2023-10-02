@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import type { ICreateRoomOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api";
 
 export type EmojiMapping = [emoji: string, name: string];
@@ -199,4 +199,29 @@ export function downloadKey() {
     // Clicking download instead of Copy because of https://github.com/cypress-io/cypress/issues/2851
     cy.findByRole("button", { name: "Download" }).click();
     cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
+}
+
+/**
+ * Create a shared, unencrypted room with the given user, and wait for them to join
+ *
+ * @param other - UserID of the other user
+ * @param opts - other options for the createRoom call
+ *
+ * @returns a cypress chainable which will yield the room ID
+ */
+export function createSharedRoomWithUser(
+    other: string,
+    opts: Omit<ICreateRoomOpts, "invite"> = { name: "TestRoom" },
+): Cypress.Chainable<string> {
+    return cy.createRoom({ ...opts, invite: [other] }).then((roomId) => {
+        cy.log(`Created test room ${roomId}`);
+        cy.viewRoomById(roomId);
+
+        // wait for the other user to join the room, otherwise our attempt to open his user details may race
+        // with his join.
+        cy.findByText(" joined the room", { exact: false }).should("exist");
+
+        // Cypress complains if we return an immediate here rather than a promise.
+        return Promise.resolve(roomId);
+    });
 }
