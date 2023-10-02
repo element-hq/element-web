@@ -39,7 +39,7 @@ import type EN from "./i18n/strings/en_EN.json";
  * which we know will be injected by webpack.
  */
 
-export type TranslationKey = Leaves<typeof EN & typeof ReactEN, "|", string | { other: string }>;
+export type TranslationKey = Leaves<typeof EN & typeof ReactEN, "|", string | { other: string }, 4>;
 
 export class UserFriendlyError extends ReactUserFriendlyError {
     public constructor(message: TranslationKey, substitutionVariablesAndCause?: IVariables & ErrorOptions) {

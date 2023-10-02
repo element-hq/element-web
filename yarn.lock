@@ -6389,11 +6389,6 @@ focus-lock@^0.11.6:
   dependencies:
     tslib "^2.0.3"
 
-focus-visible@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/focus-visible/-/focus-visible-5.2.0.tgz#3a9e41fccf587bd25dcc2ef045508284f0a4d6b3"
-  integrity sha512-Rwix9pBtC1Nuy5wysTmKy+UjbDJpIfg8eHjw0rjZ1mX4GNLz1Bmd16uDpI3Gk1i70Fgcs8Csg2lPm8HULFg9DQ==
-
 follow-redirects@^1.0.0:
   version "1.15.2"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
@@ -8921,7 +8916,7 @@ matrix-events-sdk@0.0.1:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "28.2.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d59bb240fa50b736ac6c3cbfff935ee08b697663"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/74193ad057346aa2b3f04ab1094a6ccc9e567f60"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^1.2.3-alpha.0"
@@ -8946,8 +8941,8 @@ matrix-mock-request@^2.5.0:
     expect "^28.1.0"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.81.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/13aed62a91e7151246fc38f6c15a79df116792ba"
+  version "3.81.1"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/695049729ce9c8472b36feec1e062e4eb5788857"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.7.0"
@@ -8974,7 +8969,6 @@ matrix-mock-request@^2.5.0:
     escape-html "^1.0.3"
     file-saver "^2.0.5"
     filesize "10.0.12"
-    focus-visible "^5.2.0"
     gfm.css "^1.1.2"
     glob-to-regexp "^0.4.1"
     graphemer "^1.4.0"
