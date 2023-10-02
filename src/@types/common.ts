@@ -23,40 +23,7 @@ export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 
 export type ComponentClass = keyof JSX.IntrinsicElements | JSXElementConstructor<any>;
 
-/**
- * Utility type for string dot notation for accessing nested object properties.
- * Based on https://stackoverflow.com/a/58436959
- * @example
- *  {
- *      "a": {
- *          "b": {
- *              "c": "value"
- *          },
- *          "d": "foobar"
- *      }
- *  }
- *  will yield a type of `"a.b.c" | "a.d"` with Separator="."
- * @typeParam Target the target type to generate leaf keys for
- * @typeParam Separator the separator to use between key segments when accessing nested objects
- * @typeParam LeafType the type which leaves of this object extend, used to determine when to stop recursion
- * @typeParam MaxDepth the maximum depth to recurse to
- * @returns a union type representing all dot (Separator) string notation keys which can access a Leaf (of LeafType)
- */
-export type Leaves<Target, Separator extends string = ".", LeafType = string, MaxDepth extends number = 3> = [
-    MaxDepth,
-] extends [never]
-    ? never
-    : Target extends LeafType
-    ? ""
-    : {
-          [K in keyof Target]-?: Join<K, Leaves<Target[K], Separator, LeafType, Prev[MaxDepth]>, Separator>;
-      }[keyof Target];
-type Prev = [never, 0, 1, 2, 3, ...0[]];
-type Join<K, P, S extends string = "."> = K extends string | number
-    ? P extends string | number
-        ? `${K}${"" extends P ? "" : S}${P}`
-        : never
-    : never;
+export type { Leaves } from "matrix-web-i18n";
 
 export type RecursivePartial<T> = {
     [P in keyof T]?: T[P] extends (infer U)[]
