@@ -81,10 +81,12 @@ describe("Read receipts", () => {
                 // Invite the bot to both rooms
                 cy.inviteUser(alphaRoomId, bot.getUserId());
                 cy.viewRoomById(alphaRoomId);
+                cy.get(".mx_LegacyRoomHeader").within(() => cy.findByTitle(roomAlpha).should("exist"));
                 cy.findByText(botName + " joined the room").should("exist");
 
                 cy.inviteUser(betaRoomId, bot.getUserId());
                 cy.viewRoomById(betaRoomId);
+                cy.get(".mx_LegacyRoomHeader").within(() => cy.findByTitle(roomBeta).should("exist"));
                 cy.findByText(botName + " joined the room").should("exist");
             });
     });
