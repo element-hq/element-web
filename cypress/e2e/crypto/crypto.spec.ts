@@ -317,12 +317,16 @@ describe("Cryptography", function () {
             });
 
             /* Should show an error for a decryption failure */
-            cy.wrap(0).then(() =>
-                bob.sendEvent(testRoomId, "m.room.encrypted", {
-                    algorithm: "m.megolm.v1.aes-sha2",
-                    ciphertext: "the bird is in the hand",
-                }),
-            );
+            cy.log("Testing decryption failure");
+
+            cy.wrap(0)
+                .then(() =>
+                    bob.sendEvent(testRoomId, "m.room.encrypted", {
+                        algorithm: "m.megolm.v1.aes-sha2",
+                        ciphertext: "the bird is in the hand",
+                    }),
+                )
+                .then((resp) => cy.log(`Bob sent undecryptable event ${resp.event_id}`));
 
             cy.get(".mx_EventTile_last")
                 .should("contain", "Unable to decrypt message")
@@ -331,6 +335,7 @@ describe("Cryptography", function () {
                 .should("have.attr", "aria-label", "This message could not be decrypted");
 
             /* Should show a red padlock for an unencrypted message in an e2e room */
+            cy.log("Testing unencrypted message");
             cy.wrap(0)
                 .then(() =>
                     bob.http.authedRequest<ISendEventResponse>(
@@ -353,6 +358,8 @@ describe("Cryptography", function () {
                 .should("have.attr", "aria-label", "Not encrypted");
 
             /* Should show no padlock for an unverified user */
+            cy.log("Testing message from unverified user");
+
             // bob sends a valid event
             cy.wrap(0)
                 .then(() => bob.sendTextMessage(testRoomId, "test encrypted 1"))
@@ -365,6 +372,8 @@ describe("Cryptography", function () {
                 .should("not.have.descendants", ".mx_EventTile_e2eIcon");
 
             /* Now verify Bob */
+            cy.log("Verifying Bob");
+
             verify.call(this);
 
             /* Existing message should be updated when user is verified. */
@@ -374,6 +383,7 @@ describe("Cryptography", function () {
                 .should("not.have.descendants", ".mx_EventTile_e2eIcon");
 
             /* should show no padlock, and be verified, for a message from a verified device */
+            cy.log("Testing message from verified device");
             cy.wrap(0)
                 .then(() => bob.sendTextMessage(testRoomId, "test encrypted 2"))
                 .then((resp) => cy.log(`Bob sent second message from primary device with event id ${resp.event_id}`));
@@ -384,6 +394,7 @@ describe("Cryptography", function () {
                 .should("not.have.descendants", ".mx_EventTile_e2eIcon");
 
             /* should show red padlock for a message from an unverified device */
+            cy.log("Testing message from unverified device of verified user");
             cy.wrap(0)
                 .then(() => bobSecondDevice.sendTextMessage(testRoomId, "test encrypted from unverified"))
                 .then((resp) => cy.log(`Bob sent message from unverified device with event id ${resp.event_id}`));
@@ -395,11 +406,44 @@ describe("Cryptography", function () {
                 .should("have.attr", "aria-label", "Encrypted by a device not verified by its owner.");
 
             /* Should show a grey padlock for a message from an unknown device */
+            cy.log("Testing message from unknown device");
 
-            // bob deletes his second device, making the encrypted event from the unverified device "unknown".
+            // bob deletes his second device
             cy.wrap(0)
                 .then(() => bobSecondDevice.logout(true))
                 .then(() => cy.log(`Bob logged out second device`));
+
+            // wait for the logout to propagate. Workaround for https://github.com/vector-im/element-web/issues/26263 by repeatedly closing and reopening Bob's user info.
+            function awaitOneDevice(iterations = 1) {
+                let sessionCountText: string;
+                cy.get(".mx_RightPanel")
+                    .within(() => {
+                        cy.findByRole("button", { name: "Room members" }).click();
+                        cy.findByText("Bob").click();
+                        return cy
+                            .get(".mx_UserInfo_devices")
+                            .findByText(" session", { exact: false })
+                            .then((data) => {
+                                sessionCountText = data.text();
+                            });
+                    })
+                    .then(() => {
+                        cy.log(`At ${new Date().toISOString()}: Bob has '${sessionCountText}'`);
+                        // cf https://github.com/vector-im/element-web/issues/26279: Element-R uses the wrong text here
+                        if (sessionCountText != "1 session" && sessionCountText != "1 verified session") {
+                            if (iterations >= 10) {
+                                throw new Error(`Bob still has ${sessionCountText} after 10 iterations`);
+                            }
+                            awaitOneDevice(iterations + 1);
+                        }
+                    });
+            }
+
+            awaitOneDevice();
+
+            // close and reopen the room, to get the shield to update.
+            cy.viewRoomByName("Bob");
+            cy.viewRoomByName("TestRoom");
 
             // some debate over whether this should have a red or a grey shield. Legacy crypto shows a grey shield,
             // Rust crypto a red one.
