@@ -15,7 +15,66 @@ limitations under the License.
 */
 
 import type { MatrixClient, MatrixEvent, Room, IndexedDBStore } from "matrix-js-sdk/src/matrix";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import Chainable = Cypress.Chainable;
+
+/**
+ * Set up for a read receipt test:
+ * - Create a user with the supplied name
+ * - As that user, create two rooms with the supplied names
+ * - Create a bot with the supplied name
+ * - Invite the bot to both rooms and ensure that it has joined
+ */
+export class ReadReceiptSetup {
+    roomAlpha: string;
+    roomBeta: string;
+    alphaRoomId: string;
+    betaRoomId: string;
+    bot: MatrixClient;
+
+    constructor(
+        homeserver: HomeserverInstance,
+        userName: string,
+        botName: string,
+        roomAlpha: string,
+        roomBeta: string,
+    ) {
+        this.roomAlpha = roomAlpha;
+        this.roomBeta = roomBeta;
+
+        // Create a user
+        cy.initTestUser(homeserver, userName)
+            // Create 2 rooms
+            .then(() => {
+                cy.createRoom({ name: roomAlpha }).then((createdRoomId) => {
+                    this.alphaRoomId = createdRoomId;
+                });
+            })
+            .then(() => {
+                cy.createRoom({ name: roomBeta }).then((createdRoomId) => {
+                    this.betaRoomId = createdRoomId;
+                });
+            })
+            // Create a bot
+            .then(() => {
+                cy.getBot(homeserver, { displayName: botName }).then((botClient) => {
+                    this.bot = botClient;
+                });
+            })
+            // Invite the bot to both rooms
+            .then(() => {
+                cy.inviteUser(this.alphaRoomId, this.bot.getUserId());
+                cy.viewRoomById(this.alphaRoomId);
+                cy.get(".mx_LegacyRoomHeader").within(() => cy.findByTitle(roomAlpha).should("exist"));
+                cy.findByText(botName + " joined the room").should("exist");
+
+                cy.inviteUser(this.betaRoomId, this.bot.getUserId());
+                cy.viewRoomById(this.betaRoomId);
+                cy.get(".mx_LegacyRoomHeader").within(() => cy.findByTitle(roomBeta).should("exist"));
+                cy.findByText(botName + " joined the room").should("exist");
+            });
+    }
+}
 
 /**
  * A utility that is able to find messages based on their content, by looking
