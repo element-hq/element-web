@@ -81,7 +81,7 @@ export const PollDetail: React.FC<Props> = ({ poll, permalinkCreator, requestMod
                     onClick={onLinkClick}
                     rel="noreferrer noopener"
                 >
-                    {_t("View poll in timeline")}
+                    {_t("right_panel|poll|view_in_timeline")}
                 </AccessibleButton>
             </div>
         </>

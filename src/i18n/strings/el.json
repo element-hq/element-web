@@ -7,10 +7,7 @@
         "other": "και %(count)s άλλοι..."
     },
     "Custom level": "Προσαρμοσμένο επίπεδο",
-    "Decrypt %(text)s": "Αποκρυπτογράφηση %(text)s",
-    "Download %(text)s": "Λήψη %(text)s",
     "Email address": "Ηλεκτρονική διεύθυνση",
-    "Error decrypting attachment": "Σφάλμα κατά την αποκρυπτογράφηση της επισύναψης",
     "Join Room": "Είσοδος σε δωμάτιο",
     "Moderator": "Συντονιστής",
     "Create new room": "Δημιουργία νέου δωματίου",
@@ -44,10 +41,7 @@
     },
     "Confirm Removal": "Επιβεβαίωση αφαίρεσης",
     "Unable to restore session": "Αδυναμία επαναφοράς συνεδρίας",
-    "Error decrypting image": "Σφάλμα κατά την αποκρυπτογράφηση της εικόνας",
-    "Error decrypting video": "Σφάλμα κατά την αποκρυπτογράφηση του βίντεο",
     "Add an Integration": "Προσθήκη ενσωμάτωσης",
-    "Invalid file%(extra)s": "Μη έγκυρο αρχείο %(extra)s",
     "not specified": "μη καθορισμένο",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Παρακαλούμε ελέγξτε την ηλεκτρονική σας αλληλογραφία και κάντε κλικ στον σύνδεσμο που περιέχει. Μόλις γίνει αυτό, κάντε κλίκ στο κουμπί συνέχεια.",
     "Verification Pending": "Εκκρεμεί επιβεβαίωση",
@@ -422,9 +416,6 @@
         "other": "Αφαίρεση %(count)s μηνυμάτων",
         "one": "Αφαίρεση 1 μηνύματος"
     },
-    "Sorry, you can't edit a poll after votes have been cast.": "Λυπούμαστε, δεν μπορείτε να επεξεργαστείτε μια δημοσκόπηση μετά την ψηφοφορία.",
-    "Can't edit poll": "Αδυναμία επεξεργασίας δημοσκόπησης",
-    "You sent a verification request": "Στείλατε ένα αίτημα επαλήθευσης",
     "Recently viewed": "Προβλήθηκε πρόσφατα",
     "Encrypted by a deleted session": "Κρυπτογραφήθηκε από μια διαγραμμένη συνεδρία",
     "Your homeserver doesn't seem to support this feature.": "Ο διακομιστής σας δε φαίνεται να υποστηρίζει αυτήν τη δυνατότητα.",
@@ -565,32 +556,7 @@
     "%(name)s wants to verify": "%(name)s θέλει να επαληθεύσει",
     "%(name)s cancelled": "%(name)s ακύρωσε",
     "%(name)s declined": "%(name)s αρνήθηκε",
-    "You cancelled": "Ακυρώσατε",
-    "You declined": "Αρνηθήκατε",
     "%(name)s accepted": "Ο/η %(name)s αποδέχθηκε",
-    "You accepted": "Αποδεχθήκατε",
-    "%(name)s cancelled verifying": "%(name)s ακύρωσε την επαλήθευση",
-    "You cancelled verifying %(name)s": "Ακυρώσατε την επαλήθευση του χρήστη %(name)s",
-    "You verified %(name)s": "Επαληθεύσατε τον χρήστη %(name)s",
-    "Video conference started by %(senderName)s": "Η τηλεδιάσκεψη ξεκίνησε από %(senderName)s",
-    "Video conference updated by %(senderName)s": "Η τηλεδιάσκεψη ενημερώθηκε από %(senderName)s",
-    "Video conference ended by %(senderName)s": "Η τηλεδιάσκεψη τερματίστηκε από %(senderName)s",
-    "Join the conference at the top of this room": "Συμμετάσχετε στην τηλεδιάσκεψη από την κορυφή του δωματίου αυτού",
-    "Join the conference from the room information card on the right": "Συμμετάσχετε στην τηλεδιάσκεψη από την κάρτα πληροφοριών στα δεξιά",
-    "Show image": "Εμφάνιση εικόνας",
-    "Click": "Κλικ",
-    "Expand quotes": "Ανάπτυξη εισαγωγικών",
-    "Collapse quotes": "Σύμπτυξη εισαγωγικών",
-    "Can't create a thread from an event with an existing relation": "Δεν είναι δυνατή η δημιουργία νήματος από ένα συμβάν με μια υπάρχουσα σχέση",
-    "Reply in thread": "Απάντηση στο νήμα",
-    "Error processing audio message": "Σφάλμα επεξεργασίας του ηχητικού μηνύματος",
-    "Pick a date to jump to": "Επιλέξτε μια ημερομηνία για να μεταβείτε",
-    "Message pending moderation": "Μήνυμα σε εκκρεμότητα συντονισμού",
-    "Message pending moderation: %(reason)s": "Μήνυμα σε εκκρεμότητα συντονισμού: %(reason)s",
-    "The encryption used by this room isn't supported.": "Η κρυπτογράφηση που χρησιμοποιείται από αυτό το δωμάτιο δεν υποστηρίζεται.",
-    "Encryption not enabled": "Η κρυπτογράφηση δεν ενεργοποιήθηκε",
-    "Ignored attempt to disable encryption": "Αγνοήθηκε προσπάθεια απενεργοποίησης κρυπτογράφησης",
-    "Some encryption parameters have been changed.": "Ορισμένες παράμετροι κρυπτογράφησης έχουν αλλάξει.",
     "%(count)s reply": {
         "one": "%(count)s απάντηση",
         "other": "%(count)s απαντήσεις"
@@ -618,61 +584,11 @@
     "Edited at %(date)s": "Τροποποιήθηκε στις %(date)s",
     "Click to view edits": "Κάντε κλικ για να δείτε τις τροποποιήσεις",
     "Add reaction": "Προσθέστε αντίδραση",
-    "Error processing voice message": "Σφάλμα επεξεργασίας του φωνητικού μηνύματος",
     "%(count)s votes": {
         "one": "%(count)s ψήφος",
         "other": "%(count)s ψήφοι"
     },
     "edited": "επεξεργάστηκε",
-    "Based on %(count)s votes": {
-        "one": "Με βάση %(count)s ψήφο",
-        "other": "Με βάση %(count)s ψήφους"
-    },
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s ψήφος. Ψηφίστε για να δείτε τα αποτελέσματα",
-        "other": "%(count)s ψήφοι. Ψηφίστε για να δείτε τα αποτελέσματα"
-    },
-    "No votes cast": "Καμία ψήφος",
-    "Results will be visible when the poll is ended": "Τα αποτελέσματα θα είναι ορατά όταν τελειώσει η δημοσκόπηση",
-    "Final result based on %(count)s votes": {
-        "one": "Τελικό αποτέλεσμα με βάση %(count)s ψήφο",
-        "other": "Τελικό αποτέλεσμα με βάση %(count)s ψήφους"
-    },
-    "Sorry, your vote was not registered. Please try again.": "Λυπούμαστε, η ψήφος σας δεν καταχωρήθηκε. Παρακαλώ προσπαθήστε ξανά.",
-    "Vote not registered": "Η ψήφος δεν έχει καταχωρηθεί",
-    "Decrypting": "Αποκρυπτογράφηση",
-    "Downloading": "Γίνεται λήψη",
-    "Jump to date": "Μετάβαση σε ημερομηνία",
-    "The beginning of the room": "Η αρχή του δωματίου",
-    "The call is in an unknown state!": "Η κλήση βρίσκεται σε άγνωστη κατάσταση!",
-    "Missed call": "Αναπάντητη κλήση",
-    "Unknown failure: %(reason)s": "Άγνωστο σφάλμα: %(reason)s",
-    "An unknown error occurred": "Συνέβη ένα άγνωστο σφάλμα",
-    "Their device couldn't start the camera or microphone": "Η συσκευή τους δεν μπόρεσε να ξεκινήσει την κάμερα ή το μικρόφωνο",
-    "Connection failed": "Αποτυχία σύνδεσης",
-    "No answer": "Καμία απάντηση",
-    "Call back": "Καλέστε πίσω",
-    "Call declined": "Η κλήση απορρίφθηκε",
-    "You cancelled verification.": "Ακυρώσατε την επαλήθευση.",
-    "%(displayName)s cancelled verification.": "%(displayName)s ακύρωσε την επαλύθευση.",
-    "You cancelled verification on your other device.": "Ακυρώσατε την επαλήθευση στην άλλη συσκευή σας.",
-    "Verification timed out.": "Η επαλήθευση έληξε.",
-    "Start verification again from their profile.": "Ξεκινήστε ξανά την επαλήθευση από το προφίλ τους.",
-    "Start verification again from the notification.": "Ξεκινήστε ξανά την επαλήθευση από την ειδοποίηση.",
-    "You've successfully verified %(displayName)s!": "Επαληθεύσατε με επιτυχία τον χρήστη %(displayName)s!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Επαληθεύσατε με επιτυχία το %(deviceName)s %(deviceId)s!",
-    "You've successfully verified your device!": "Επαληθεύσατε με επιτυχία τη συσκευή σας!",
-    "In encrypted rooms, verify all users to ensure it's secure.": "Σε κρυπτογραφημένα δωμάτια, επαληθεύστε όλους τους χρήστες για να βεβαιωθείτε ότι είναι ασφαλές.",
-    "Verify all users in a room to ensure it's secure.": "Επαληθεύστε όλους τους χρήστες σε ένα δωμάτιο για να βεβαιωθείτε ότι είναι ασφαλές.",
-    "Almost there! Is %(displayName)s showing the same shield?": "Σχεδόν έτοιμοι! Εμφανίζεται η ίδια ασπίδα και στον χρήστη %(displayName)s;",
-    "Almost there! Is your other device showing the same shield?": "Σχεδόν έτοιμοι! Εμφανίζεται η ίδια ασπίδα και στην άλλη συσκευή σας;",
-    "Verify by emoji": "Επαλήθευση με emoji",
-    "Verify by comparing unique emoji.": "Επαληθεύστε συγκρίνοντας μοναδικά emoji.",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Εάν δεν μπορείτε να σαρώσετε τον παραπάνω κώδικα, επαληθεύστε το συγκρίνοντας μοναδικά emoji.",
-    "Ask %(displayName)s to scan your code:": "Ζητήστε από τον χρήστη %(displayName)s να σαρώσει τον κωδικό σας:",
-    "Verify by scanning": "Επαλήθευση με σάρωση",
-    "Edit devices": "Επεξεργασία συσκευών",
-    "This client does not support end-to-end encryption.": "Αυτό το πρόγραμμα-πελάτης δεν υποστηρίζει κρυπτογράφηση από άκρο σε άκρο.",
     "%(count)s sessions": {
         "one": "%(count)s συνεδρία",
         "other": "%(count)s συνεδρίες"
@@ -760,7 +676,6 @@
     "%(displayName)s's live location": "Η τρέχουσα τοποθεσία του/της %(displayName)s",
     "%(brand)s could not send your location. Please try again later.": "Το %(brand)s δεν μπόρεσε να στείλει την τοποθεσία σας. Παρακαλώ δοκιμάστε ξανά αργότερα.",
     "We couldn't send your location": "Αδυναμία αποστολής της τοποθεσίας σας",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Έχετε αγνοήσει αυτόν τον χρήστη, επομένως τα μηνύματα του είναι κρυφά. <a>Εμφάνιση ούτως ή άλλως.</a>",
     "Spanner": "Γερμανικό κλειδί",
     "Switch theme": "Αλλαγή θέματος",
     "<inviter/> invites you": "<inviter/> σας προσκαλεί",
@@ -786,7 +701,6 @@
     "Enter a server name": "Εισαγάγετε ένα όνομα διακομιστή",
     "Join millions for free on the largest public server": "Συμμετέχετε δωρεάν στον μεγαλύτερο δημόσιο διακομιστή",
     "toggle event": "μεταβολή συμβάντος",
-    "Could not connect media": "Δεν ήταν δυνατή η σύνδεση πολυμέσων",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Δεν είναι δυνατή η εύρεση προφίλ για τα αναγνωριστικά Matrix που αναφέρονται παρακάτω - θα θέλατε να τα προσκαλέσετε ούτως ή άλλως;",
     "Adding spaces has moved.": "Η προσθήκη χώρων μετακινήθηκε.",
     "And %(count)s more...": {
@@ -1150,7 +1064,9 @@
         "new_room": "Νέο δωμάτιο",
         "new_video_room": "Νέο δωμάτιο βίντεο",
         "add_existing_room": "Προσθήκη υπάρχοντος δωματίου",
-        "explore_public_rooms": "Εξερευνήστε δημόσια δωμάτια"
+        "explore_public_rooms": "Εξερευνήστε δημόσια δωμάτια",
+        "reply_in_thread": "Απάντηση στο νήμα",
+        "click": "Κλικ"
     },
     "a11y": {
         "user_menu": "Μενού χρήστη",
@@ -1844,7 +1760,17 @@
             "voice_call": "Ο %(senderName)s έκανε μία ηχητική κλήση.",
             "voice_call_unsupported": "Ο %(senderName)s έκανε μια ηχητική κλήση. (δεν υποστηρίζεται από το πρόγραμμα περιήγησης)",
             "video_call": "Ο %(senderName)s έκανε μία κλήση βίντεο.",
-            "video_call_unsupported": "Ο %(senderName)s έκανε μια κλήση βίντεο. (δεν υποστηρίζεται από το πρόγραμμα περιήγησης)"
+            "video_call_unsupported": "Ο %(senderName)s έκανε μια κλήση βίντεο. (δεν υποστηρίζεται από το πρόγραμμα περιήγησης)",
+            "declined": "Η κλήση απορρίφθηκε",
+            "call_back_prompt": "Καλέστε πίσω",
+            "missed_call": "Αναπάντητη κλήση",
+            "no_answer": "Καμία απάντηση",
+            "failed_connect_media": "Δεν ήταν δυνατή η σύνδεση πολυμέσων",
+            "failed_connection": "Αποτυχία σύνδεσης",
+            "failed_opponent_media": "Η συσκευή τους δεν μπόρεσε να ξεκινήσει την κάμερα ή το μικρόφωνο",
+            "unknown_error": "Συνέβη ένα άγνωστο σφάλμα",
+            "unknown_failure": "Άγνωστο σφάλμα: %(reason)s",
+            "unknown_state": "Η κλήση βρίσκεται σε άγνωστη κατάσταση!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s αποδέχθηκε την πρόσκληση για %(displayName)s",
@@ -1894,7 +1820,6 @@
             "forbidden": "Ο %(senderDisplayName)s απέτρεψε τους επισκέπτες από το να μπαίνουν στο δωμάτιο.",
             "unknown": "Ο %(senderDisplayName)s άλλαξε την πρόσβαση επισκεπτών σε %(rule)s"
         },
-        "m.image": "Ο %(senderDisplayName)s έστειλε μια φωτογραφία.",
         "m.sticker": "Ο %(senderDisplayName)s έστειλε ένα αυτοκόλλητο.",
         "m.room.server_acl": {
             "set": "Ο %(senderDisplayName)s όρισε τα ACLs του διακομιστή για αυτό το δωμάτιο.",
@@ -1938,7 +1863,12 @@
         "m.widget": {
             "modified": "Έγινε αλλαγή στη μικροεφαρμογή %(widgetName)s από τον/την %(senderName)s",
             "added": "Προστέθηκε η μικροεφαρμογή %(widgetName)s από τον/την %(senderName)s",
-            "removed": "Η μικροεφαρμογή %(widgetName)s αφαιρέθηκε από τον/την %(senderName)s"
+            "removed": "Η μικροεφαρμογή %(widgetName)s αφαιρέθηκε από τον/την %(senderName)s",
+            "jitsi_join_top_prompt": "Συμμετάσχετε στην τηλεδιάσκεψη από την κορυφή του δωματίου αυτού",
+            "jitsi_join_right_prompt": "Συμμετάσχετε στην τηλεδιάσκεψη από την κάρτα πληροφοριών στα δεξιά",
+            "jitsi_ended": "Η τηλεδιάσκεψη τερματίστηκε από %(senderName)s",
+            "jitsi_updated": "Η τηλεδιάσκεψη ενημερώθηκε από %(senderName)s",
+            "jitsi_started": "Η τηλεδιάσκεψη ξεκίνησε από %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s έχει ενημερώσει τη διάταξη του δωματίου",
         "m.location": {
@@ -1949,7 +1879,6 @@
         "self_redaction": "Το μήνυμα διαγράφηκε",
         "redaction": "Το μήνυμα διαγράφηκε από %(name)s",
         "m.poll.start": "%(senderName)s ξεκίνησε μια δημοσκόπηση - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s τερμάτισε μία δημοσκόπηση",
         "typing_indicator": {
             "one_user": "%(displayName)s πληκτρολογεί …",
             "two_users": "%(names)s και %(lastPerson)s πληκτρολογούν …",
@@ -2113,7 +2042,8 @@
             "changed_rule_users": "%(senderName)s άλλαξε έναν κανόνα που απαγόρευε την αντιστοίχιση χρηστών %(oldGlob)s σε αντιστοίχιση %(newGlob)s για %(reason)s",
             "changed_rule_rooms": "%(senderName)s άλλαξε έναν κανόνα που απαγόρευε την αντιστοίχιση δωματίων %(oldGlob)s σε αντιστοίχιση %(newGlob)s για %(reason)s",
             "changed_rule_servers": "%(senderName)s άλλαξε έναν κανόνα που απαγόρευε την αντιστοίχιση διακομιστών %(oldGlob)s σε αντιστοίχιση %(newGlob)s για %(reason)s",
-            "changed_rule_glob": "%(senderName)s ενημέρωσε έναν κανόνα απαγόρευσης που αντιστοιχούσε %(oldGlob)s σε αντιστοίχιση %(newGlob)s για %(reason)s"
+            "changed_rule_glob": "%(senderName)s ενημέρωσε έναν κανόνα απαγόρευσης που αντιστοιχούσε %(oldGlob)s σε αντιστοίχιση %(newGlob)s για %(reason)s",
+            "message_hidden": "Έχετε αγνοήσει αυτόν τον χρήστη, επομένως τα μηνύματα του είναι κρυφά. <a>Εμφάνιση ούτως ή άλλως.</a>"
         },
         "no_permission_messages_before_invite": "Δεν έχετε άδεια προβολής των μηνυμάτων που δημιουργήθηκαν πριν από την πρόσκληση σας.",
         "no_permission_messages_before_join": "Δεν έχετε άδεια προβολής των μηνυμάτων που δημιουργήθηκαν πριν από την εγγραφή σας.",
@@ -2156,18 +2086,60 @@
         "mab": {
             "label": "Ενέργειες μηνυμάτων",
             "view_in_room": "Δείτε στο δωμάτιο",
-            "copy_link_thread": "Αντιγραφή συνδέσμου στο νήμα εκτέλεσης"
+            "copy_link_thread": "Αντιγραφή συνδέσμου στο νήμα εκτέλεσης",
+            "collapse_reply_chain": "Σύμπτυξη εισαγωγικών",
+            "expand_reply_chain": "Ανάπτυξη εισαγωγικών"
         },
         "m.audio": {
             "unnamed_audio": "Ήχος χωρίς όνομα",
-            "error_downloading_audio": "Σφάλμα λήψης ήχου"
+            "error_downloading_audio": "Σφάλμα λήψης ήχου",
+            "error_processing_audio": "Σφάλμα επεξεργασίας του ηχητικού μηνύματος",
+            "error_processing_voice_message": "Σφάλμα επεξεργασίας του φωνητικού μηνύματος"
         },
         "load_error": {
             "no_permission": "Προσπαθήσατε να φορτώσετε ένα συγκεκριμένο σημείο στο χρονολόγιο του δωματίου, αλλά δεν έχετε δικαίωμα να δείτε το εν λόγω μήνυμα.",
             "unable_to_find": "Προσπαθήσατε να φορτώσετε ένα συγκεκριμένο σημείο στο χρονολόγιο του δωματίου, αλλά δεν καταφέρατε να το βρείτε.",
             "title": "Δεν ήταν δυνατή η φόρτωση της θέσης του χρονολόγιου"
         },
-        "error_no_renderer": "Δεν ήταν δυνατή η εμφάνιση αυτού του συμβάντος"
+        "error_no_renderer": "Δεν ήταν δυνατή η εμφάνιση αυτού του συμβάντος",
+        "download_action_downloading": "Γίνεται λήψη",
+        "download_action_decrypting": "Αποκρυπτογράφηση",
+        "m.room.encryption": {
+            "parameters_changed": "Ορισμένες παράμετροι κρυπτογράφησης έχουν αλλάξει.",
+            "disable_attempt": "Αγνοήθηκε προσπάθεια απενεργοποίησης κρυπτογράφησης",
+            "disabled": "Η κρυπτογράφηση δεν ενεργοποιήθηκε",
+            "unsupported": "Η κρυπτογράφηση που χρησιμοποιείται από αυτό το δωμάτιο δεν υποστηρίζεται."
+        },
+        "pending_moderation_reason": "Μήνυμα σε εκκρεμότητα συντονισμού: %(reason)s",
+        "pending_moderation": "Μήνυμα σε εκκρεμότητα συντονισμού",
+        "m.file": {
+            "download_label": "Λήψη %(text)s",
+            "error_decrypting": "Σφάλμα κατά την αποκρυπτογράφηση της επισύναψης",
+            "decrypt_label": "Αποκρυπτογράφηση %(text)s",
+            "error_invalid": "Μη έγκυρο αρχείο %(extra)s"
+        },
+        "m.image": {
+            "sent": "Ο %(senderDisplayName)s έστειλε μια φωτογραφία.",
+            "error_decrypting": "Σφάλμα κατά την αποκρυπτογράφηση της εικόνας",
+            "show_image": "Εμφάνιση εικόνας"
+        },
+        "m.key.verification.done": "Επαληθεύσατε τον χρήστη %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Ακυρώσατε την επαλήθευση του χρήστη %(name)s",
+            "user_cancelled": "%(name)s ακύρωσε την επαλήθευση"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Αποδεχθήκατε",
+            "you_declined": "Αρνηθήκατε",
+            "you_cancelled": "Ακυρώσατε",
+            "you_started": "Στείλατε ένα αίτημα επαλήθευσης"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s τερμάτισε μία δημοσκόπηση"
+        },
+        "m.video": {
+            "error_decrypting": "Σφάλμα κατά την αποκρυπτογράφηση του βίντεο"
+        }
     },
     "slash_command": {
         "spoiler": "Στέλνει το δοθέν μήνυμα ως spoiler",
@@ -2594,7 +2566,25 @@
                 "reset_confirmation": "Είστε σίγουρος ότι θέλετε να επαναφέρετε τα κλειδιά επαλήθευσης;",
                 "skip_verification": "Παράβλεψη επαλήθευσης προς το παρόν"
             },
-            "accepting": "Αποδοχή …"
+            "accepting": "Αποδοχή …",
+            "scan_qr": "Επαλήθευση με σάρωση",
+            "scan_qr_explainer": "Ζητήστε από τον χρήστη %(displayName)s να σαρώσει τον κωδικό σας:",
+            "verify_emoji_prompt_qr": "Εάν δεν μπορείτε να σαρώσετε τον παραπάνω κώδικα, επαληθεύστε το συγκρίνοντας μοναδικά emoji.",
+            "verify_emoji_prompt": "Επαληθεύστε συγκρίνοντας μοναδικά emoji.",
+            "verify_emoji": "Επαλήθευση με emoji",
+            "qr_reciprocate_same_shield_device": "Σχεδόν έτοιμοι! Εμφανίζεται η ίδια ασπίδα και στην άλλη συσκευή σας;",
+            "qr_reciprocate_same_shield_user": "Σχεδόν έτοιμοι! Εμφανίζεται η ίδια ασπίδα και στον χρήστη %(displayName)s;",
+            "prompt_encrypted": "Επαληθεύστε όλους τους χρήστες σε ένα δωμάτιο για να βεβαιωθείτε ότι είναι ασφαλές.",
+            "prompt_unencrypted": "Σε κρυπτογραφημένα δωμάτια, επαληθεύστε όλους τους χρήστες για να βεβαιωθείτε ότι είναι ασφαλές.",
+            "successful_own_device": "Επαληθεύσατε με επιτυχία τη συσκευή σας!",
+            "successful_device": "Επαληθεύσατε με επιτυχία το %(deviceName)s %(deviceId)s!",
+            "successful_user": "Επαληθεύσατε με επιτυχία τον χρήστη %(displayName)s!",
+            "prompt_self": "Ξεκινήστε ξανά την επαλήθευση από την ειδοποίηση.",
+            "prompt_user": "Ξεκινήστε ξανά την επαλήθευση από το προφίλ τους.",
+            "timed_out": "Η επαλήθευση έληξε.",
+            "cancelled_self": "Ακυρώσατε την επαλήθευση στην άλλη συσκευή σας.",
+            "cancelled_user": "%(displayName)s ακύρωσε την επαλύθευση.",
+            "cancelled": "Ακυρώσατε την επαλήθευση."
         },
         "old_version_detected_title": "Εντοπίστηκαν παλιά δεδομένα κρυπτογράφησης",
         "old_version_detected_description": "Έχουν εντοπιστεί δεδομένα από μια παλαιότερη έκδοση του %(brand)s. Αυτό θα έχει προκαλέσει δυσλειτουργία της κρυπτογράφησης από άκρο σε άκρο στην παλαιότερη έκδοση. Τα κρυπτογραφημένα μηνύματα από άκρο σε άκρο που ανταλλάχθηκαν πρόσφατα κατά τη χρήση της παλαιότερης έκδοσης ενδέχεται να μην μπορούν να αποκρυπτογραφηθούν σε αυτήν την έκδοση. Αυτό μπορεί επίσης να προκαλέσει την αποτυχία των μηνυμάτων που ανταλλάσσονται με αυτήν την έκδοση. Εάν αντιμετωπίζετε προβλήματα, αποσυνδεθείτε και συνδεθείτε ξανά. Για να διατηρήσετε το ιστορικό μηνυμάτων, εξάγετε και εισαγάγετε ξανά τα κλειδιά σας.",
@@ -2647,7 +2637,8 @@
         "cross_signing_user_normal": "Δεν έχετε επαληθεύσει αυτόν τον χρήστη.",
         "cross_signing_room_warning": "Κάποιος χρησιμοποιεί μια άγνωστη συνεδρία",
         "cross_signing_room_verified": "Όλοι σε αυτό το δωμάτιο έχουν επαληθευτεί",
-        "cross_signing_room_normal": "Αυτό το δωμάτιο έχει κρυπτογράφηση από άκρο σε άκρο"
+        "cross_signing_room_normal": "Αυτό το δωμάτιο έχει κρυπτογράφηση από άκρο σε άκρο",
+        "unsupported": "Αυτό το πρόγραμμα-πελάτης δεν υποστηρίζει κρυπτογράφηση από άκρο σε άκρο."
     },
     "emoji": {
         "category_frequently_used": "Συχνά χρησιμοποιούμενα",
@@ -3048,7 +3039,8 @@
         "show_all_threads": "Εμφάνιση όλων των νημάτων",
         "empty_explainer": "Τα νήματα σας βοηθούν να οργανώνετε και να παρακολουθείτε καλύτερα τις συνομιλίες σας.",
         "empty_heading": "Διατηρήστε τις συζητήσεις οργανωμένες με νήματα",
-        "open_thread": "Άνοιγμα νήματος"
+        "open_thread": "Άνοιγμα νήματος",
+        "error_start_thread_existing_relation": "Δεν είναι δυνατή η δημιουργία νήματος από ένα συμβάν με μια υπάρχουσα σχέση"
     },
     "theme": {
         "light_high_contrast": "Ελαφριά υψηλή αντίθεση",
@@ -3303,7 +3295,10 @@
         "jump_to_bottom_button": "Κύλιση στα πιο πρόσφατα μηνύματα",
         "jump_read_marker": "Πηγαίνετε στο πρώτο μη αναγνωσμένο μήνυμα.",
         "inviter_unknown": "Άγνωστο",
-        "failed_reject_invite": "Δεν ήταν δυνατή η απόρριψη της πρόσκλησης"
+        "failed_reject_invite": "Δεν ήταν δυνατή η απόρριψη της πρόσκλησης",
+        "jump_to_date_beginning": "Η αρχή του δωματίου",
+        "jump_to_date": "Μετάβαση σε ημερομηνία",
+        "jump_to_date_prompt": "Επιλέξτε μια ημερομηνία για να μεταβείτε"
     },
     "file_panel": {
         "guest_note": "Πρέπει να <a>εγγραφείτε</a> για να χρησιμοποιήσετε αυτή την λειτουργία",
@@ -3345,7 +3340,21 @@
         "options_placeholder": "Γράψτε μια επιλογή",
         "options_add_button": "Προσθήκη επιλογής",
         "disclosed_notes": "Οι ψηφοφόροι βλέπουν τα αποτελέσματα μόλις ψηφίσουν",
-        "notes": "Τα αποτελέσματα αποκαλύπτονται μόνο όταν τελειώσετε τη δημοσκόπηση"
+        "notes": "Τα αποτελέσματα αποκαλύπτονται μόνο όταν τελειώσετε τη δημοσκόπηση",
+        "unable_edit_title": "Αδυναμία επεξεργασίας δημοσκόπησης",
+        "unable_edit_description": "Λυπούμαστε, δεν μπορείτε να επεξεργαστείτε μια δημοσκόπηση μετά την ψηφοφορία.",
+        "error_voting_title": "Η ψήφος δεν έχει καταχωρηθεί",
+        "error_voting_description": "Λυπούμαστε, η ψήφος σας δεν καταχωρήθηκε. Παρακαλώ προσπαθήστε ξανά.",
+        "total_not_ended": "Τα αποτελέσματα θα είναι ορατά όταν τελειώσει η δημοσκόπηση",
+        "total_no_votes": "Καμία ψήφος",
+        "total_n_votes": {
+            "one": "%(count)s ψήφος. Ψηφίστε για να δείτε τα αποτελέσματα",
+            "other": "%(count)s ψήφοι. Ψηφίστε για να δείτε τα αποτελέσματα"
+        },
+        "total_n_votes_voted": {
+            "one": "Με βάση %(count)s ψήφο",
+            "other": "Με βάση %(count)s ψήφους"
+        }
     },
     "failed_load_async_component": "Αδυναμία φόρτωσης! Ελέγξτε την σύνδεση του δικτύου και προσπαθήστε ξανά.",
     "upload_failed_generic": "Απέτυχε το ανέβασμα του αρχείου '%(fileName)s'.",
@@ -3540,7 +3549,8 @@
         "deactivate_confirm_description": "Η απενεργοποίηση αυτού του χρήστη θα τον αποσυνδεθεί και θα αποτραπεί η επανασύνδεσή του. Επιπλέον, θα αποχωρήσει από όλα τα δωμάτια στα οποία συμμετέχει. Αυτή η ενέργεια δεν μπορεί να αντιστραφεί. Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε αυτόν τον χρήστη;",
         "deactivate_confirm_action": "Απενεργοποίηση χρήστη",
         "error_deactivate": "Η απενεργοποίηση χρήστη απέτυχε",
-        "role_label": "Ρόλος στο <RoomName/>"
+        "role_label": "Ρόλος στο <RoomName/>",
+        "edit_own_devices": "Επεξεργασία συσκευών"
     },
     "stickers": {
         "empty": "Προς το παρόν δεν έχετε ενεργοποιημένο κάποιο πακέτο αυτοκόλλητων",
@@ -3565,7 +3575,13 @@
         "pinned_messages_button": "Καρφιτσωμένο",
         "export_chat_button": "Εξαγωγή συνομιλίας",
         "share_button": "Κοινή χρήση δωματίου",
-        "settings_button": "Ρυθμίσεις δωματίου"
+        "settings_button": "Ρυθμίσεις δωματίου",
+        "poll": {
+            "final_result": {
+                "one": "Τελικό αποτέλεσμα με βάση %(count)s ψήφο",
+                "other": "Τελικό αποτέλεσμα με βάση %(count)s ψήφους"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Απόρριψη πρόσκλησης",

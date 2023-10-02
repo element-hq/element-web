@@ -15,10 +15,7 @@
     "Thursday": "پنج‌شنبه",
     "Yesterday": "دیروز",
     "Ok": "تأیید",
-    "Error decrypting attachment": "خطا در رمزگشایی پیوست",
     "Email address": "آدرس ایمیل",
-    "Download %(text)s": "دانلود 2%(text)s",
-    "Decrypt %(text)s": "رمزگشایی %(text)s",
     "An error has occurred.": "خطایی رخ داده است.",
     "Home": "خانه",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s.%(day)s.%(fullYear)s.%(time)s",
@@ -481,38 +478,6 @@
         "other": "%(count)s اتاق",
         "one": "%(count)s اتاق"
     },
-    "%(name)s cancelled verifying": "%(name)s تأیید هویت را لغو کرد",
-    "You cancelled verifying %(name)s": "شما تأیید هویت %(name)s را لغو کردید",
-    "You verified %(name)s": "شما هویت %(name)s را تأیید کردید",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "شما این کاربر را نادیده گرفته‌اید، بنابراین پیام او نمایش داده نمی‌شود. <a>نمایش بده.</a>",
-    "Video conference started by %(senderName)s": "کنفرانس ویدئویی توسط %(senderName)s آغاز شده است",
-    "Video conference updated by %(senderName)s": "کنفرانس ویدیویی توسط %(senderName)s به روز شد",
-    "Video conference ended by %(senderName)s": "کنفرانس ویدیویی توسط %(senderName)s به پایان رسید",
-    "Join the conference from the room information card on the right": "از طریق کارت اطلاعات اتاق در سمت راست، به کنفرانس بپیوندید",
-    "Join the conference at the top of this room": "از بالای این اتاق به کنفرانس بپوندید",
-    "Show image": "نمایش تصویر",
-    "Error decrypting image": "خطا در رمزگشایی تصویر",
-    "Invalid file%(extra)s": "پرونده نامعتبر%(extra)s",
-    "The encryption used by this room isn't supported.": "رمزگذاری استفاده شده توسط این اتاق پشتیبانی نمی شود.",
-    "Encryption not enabled": "رمزگذاری فعال نیست",
-    "Ignored attempt to disable encryption": "تلاش برای غیرفعال کردن رمزگذاری نادیده گرفته شد",
-    "You cancelled verification.": "شما تأیید هویت را لغو کردید.",
-    "%(displayName)s cancelled verification.": "%(displayName)s تایید هویت را لغو کرد.",
-    "Verification timed out.": "مهلت تأیید تمام شد.",
-    "Start verification again from their profile.": "دوباره تأیید را از نمایه آنها شروع کنید.",
-    "Start verification again from the notification.": "از اعلان دوباره تأیید را شروع کنید.",
-    "You've successfully verified %(displayName)s!": "شما%(displayName)s را با موفقیت تأیید کردید!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "شما با موفقیت %(deviceName)s (%(deviceId)s) را تأیید کردید!",
-    "You've successfully verified your device!": "شما با موفقیت دستگاه خود را تأیید کردید!",
-    "Verify all users in a room to ensure it's secure.": "برای اطمینان از امنیت اتاق، هویت همه‌ی کاربران حاضر در اتاق را تأیید کنید.",
-    "Almost there! Is %(displayName)s showing the same shield?": "تقریباً تمام شد! آیا %(displayName)s نیز سپر مشابهی را نشان می‌دهد؟",
-    "Verify by emoji": "تأیید توسط شکلک",
-    "Verify by comparing unique emoji.": "با مقایسه شکلک تأیید کنید.",
-    "If you can't scan the code above, verify by comparing unique emoji.": "اگر نمی توانید کد بالا را اسکن کنید ، با مقایسه شکلک منحصر به فرد، او را تأیید کنید.",
-    "Ask %(displayName)s to scan your code:": "از %(displayName)s بخواهید که کد شما را اسکن کند:",
-    "Verify by scanning": "با اسکن تأیید کنید",
-    "Edit devices": "ویرایش دستگاه‌ها",
-    "This client does not support end-to-end encryption.": "این کلاینت از رمزگذاری سرتاسر پشتیبانی نمی کند.",
     "Remove %(count)s messages": {
         "one": "حذف ۱ پیام",
         "other": "حذف %(count)s پیام"
@@ -572,16 +537,10 @@
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "شما در آستانه هدایت شدن به یک سایت ثالث هستید بنابراین می توانید حساب خود را برای استفاده با %(integrationsUrl)s احراز هویت کنید. آیا مایل هستید ادامه دهید؟",
     "Add an Integration": "یکپارچه سازی اضافه کنید",
     "Add reaction": "افزودن واکنش",
-    "Error processing voice message": "خطا در پردازش پیام صوتی",
-    "Error decrypting video": "خطا در رمزگشایی ویدیو",
-    "You sent a verification request": "شما یک درخواست تأیید هویت ارسال کرده‌اید",
     "%(name)s wants to verify": "%(name)s می‌خواهد تأیید هویت کند",
     "%(name)s cancelled": "%(name)s لغو کرد",
     "%(name)s declined": "%(name)s رد کرد",
-    "You cancelled": "شما لغو کردید",
-    "You declined": "شما رد کردید",
     "%(name)s accepted": "%(name)s پذیرفت",
-    "You accepted": "پذیرفتید",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "برای گزارش مشکلات امنیتی مربوط به ماتریکس، لطفا سایت Matrix.org بخش <a>Security Disclosure Policy</a> را مطالعه فرمائید.",
     "Backup version:": "نسخه‌ی پشتیبان:",
     "This backup is trusted because it has been restored on this session": "این نسخه‌ی پشتیبان قابل اعتماد است چرا که بر روی این نشست بازیابی شد",
@@ -1528,7 +1487,6 @@
             "forbidden": "%(senderDisplayName)s از پیوستن مهمان به اتاق جلوگیری کرد.",
             "unknown": "%(senderDisplayName)s دسترسی مهمانان را به %(rule)s تغییر داد"
         },
-        "m.image": "%(senderDisplayName)s تصویری ارسال کرد.",
         "m.sticker": "%(senderDisplayName)s یک برچسب فرستاد.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s ACL های سرور را برای این اتاق تنظیم کرده است.",
@@ -1570,7 +1528,12 @@
         "m.widget": {
             "modified": "ویجت %(widgetName)s توسط %(senderName)s تغییر کرد",
             "added": "ویجت %(widgetName)s توسط %(senderName)s اضافه شد",
-            "removed": "ویجت %(widgetName)s توسط %(senderName)s حذف گردید"
+            "removed": "ویجت %(widgetName)s توسط %(senderName)s حذف گردید",
+            "jitsi_join_top_prompt": "از بالای این اتاق به کنفرانس بپوندید",
+            "jitsi_join_right_prompt": "از طریق کارت اطلاعات اتاق در سمت راست، به کنفرانس بپیوندید",
+            "jitsi_ended": "کنفرانس ویدیویی توسط %(senderName)s به پایان رسید",
+            "jitsi_updated": "کنفرانس ویدیویی توسط %(senderName)s به روز شد",
+            "jitsi_started": "کنفرانس ویدئویی توسط %(senderName)s آغاز شده است"
         },
         "io.element.widgets.layout": "%(senderName)s قالب نمایش اتاق را تغییر داد",
         "m.location": {
@@ -1579,7 +1542,6 @@
         "self_redaction": "پیغام پاک شد",
         "redaction": "پیام توسط %(name)s حذف شد",
         "m.poll.start": "%(senderName)s یک نظر سنجی را شروع کرد - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s به نظر سنجی پایان داد",
         "typing_indicator": {
             "one_user": "%(displayName)s در حال نوشتن…",
             "two_users": "%(names)s و %(lastPerson)s در حال نوشتن…",
@@ -1703,7 +1665,8 @@
             "changed_rule_users": "%(senderName)s یک قاعده تحریم کاربران را که با %(oldGlob)s تطابق داشت، به دلیل (دلایل) %(reason)s به گونه‌ای تغییر داد که با %(newGlob)s تطابق داشته باشد",
             "changed_rule_rooms": "%(senderName)s یک قاعده تحریم اتاق‌ها را که با %(oldGlob)s تطابق داشت، به دلیل (دلایل) %(reason)s به گونه‌ای تغییر داد که با %(newGlob)s تطابق داشته باشد",
             "changed_rule_servers": "%(senderName)s یک قاعده تحریم سرورها را که با %(oldGlob)s تطابق داشت، به دلیل (دلایل) %(reason)s به گونه‌ای تغییر داد که با %(newGlob)s تطابق داشته باشد",
-            "changed_rule_glob": "%(senderName)s یک قاعده تحریم را که با %(oldGlob)s تطابق داشت، به دلیل (دلایل) %(reason)s به گونه‌ای به‌روزرسانی کرد که با %(newGlob)s تطابق داشته باشد"
+            "changed_rule_glob": "%(senderName)s یک قاعده تحریم را که با %(oldGlob)s تطابق داشت، به دلیل (دلایل) %(reason)s به گونه‌ای به‌روزرسانی کرد که با %(newGlob)s تطابق داشته باشد",
+            "message_hidden": "شما این کاربر را نادیده گرفته‌اید، بنابراین پیام او نمایش داده نمی‌شود. <a>نمایش بده.</a>"
         },
         "redacted": {
             "tooltip": "پیام در %(date)s حذف شد"
@@ -1733,7 +1696,43 @@
             "unable_to_find": "سعی شد یک نقطه‌ی زمانی خاص در پیام‌های این اتاق بارگیری و نمایش داده شود، اما پیداکردن آن میسر نیست.",
             "title": "بارگیری و نمایش پیام‌ها با مشکل مواجه شد"
         },
-        "error_no_renderer": "امکان نمایش این رخداد وجود ندارد"
+        "error_no_renderer": "امکان نمایش این رخداد وجود ندارد",
+        "m.room.encryption": {
+            "disable_attempt": "تلاش برای غیرفعال کردن رمزگذاری نادیده گرفته شد",
+            "disabled": "رمزگذاری فعال نیست",
+            "unsupported": "رمزگذاری استفاده شده توسط این اتاق پشتیبانی نمی شود."
+        },
+        "m.file": {
+            "download_label": "دانلود 2%(text)s",
+            "error_decrypting": "خطا در رمزگشایی پیوست",
+            "decrypt_label": "رمزگشایی %(text)s",
+            "error_invalid": "پرونده نامعتبر%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s تصویری ارسال کرد.",
+            "error_decrypting": "خطا در رمزگشایی تصویر",
+            "show_image": "نمایش تصویر"
+        },
+        "m.key.verification.done": "شما هویت %(name)s را تأیید کردید",
+        "m.key.verification.cancel": {
+            "you_cancelled": "شما تأیید هویت %(name)s را لغو کردید",
+            "user_cancelled": "%(name)s تأیید هویت را لغو کرد"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "پذیرفتید",
+            "you_declined": "شما رد کردید",
+            "you_cancelled": "شما لغو کردید",
+            "you_started": "شما یک درخواست تأیید هویت ارسال کرده‌اید"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s به نظر سنجی پایان داد"
+        },
+        "m.video": {
+            "error_decrypting": "خطا در رمزگشایی ویدیو"
+        },
+        "m.audio": {
+            "error_processing_voice_message": "خطا در پردازش پیام صوتی"
+        }
     },
     "slash_command": {
         "spoiler": "پیام داده شده را به عنوان اسپویلر ارسال می کند",
@@ -2046,7 +2045,22 @@
             "verification_description": "با تائید هویت خود به پیام‌های رمزشده دسترسی یافته و هویت خود را به دیگران ثابت می‌کنید.",
             "waiting_for_user_accept": "منتظر قبول کردن توسط %(displayName)s…",
             "start_button": "شروع تایید هویت",
-            "accepting": "پذیرش…"
+            "accepting": "پذیرش…",
+            "scan_qr": "با اسکن تأیید کنید",
+            "scan_qr_explainer": "از %(displayName)s بخواهید که کد شما را اسکن کند:",
+            "verify_emoji_prompt_qr": "اگر نمی توانید کد بالا را اسکن کنید ، با مقایسه شکلک منحصر به فرد، او را تأیید کنید.",
+            "verify_emoji_prompt": "با مقایسه شکلک تأیید کنید.",
+            "verify_emoji": "تأیید توسط شکلک",
+            "qr_reciprocate_same_shield_user": "تقریباً تمام شد! آیا %(displayName)s نیز سپر مشابهی را نشان می‌دهد؟",
+            "prompt_encrypted": "برای اطمینان از امنیت اتاق، هویت همه‌ی کاربران حاضر در اتاق را تأیید کنید.",
+            "successful_own_device": "شما با موفقیت دستگاه خود را تأیید کردید!",
+            "successful_device": "شما با موفقیت %(deviceName)s (%(deviceId)s) را تأیید کردید!",
+            "successful_user": "شما%(displayName)s را با موفقیت تأیید کردید!",
+            "prompt_self": "از اعلان دوباره تأیید را شروع کنید.",
+            "prompt_user": "دوباره تأیید را از نمایه آنها شروع کنید.",
+            "timed_out": "مهلت تأیید تمام شد.",
+            "cancelled_user": "%(displayName)s تایید هویت را لغو کرد.",
+            "cancelled": "شما تأیید هویت را لغو کردید."
         },
         "old_version_detected_title": "داده‌های رمزنگاری قدیمی شناسایی شد",
         "old_version_detected_description": "داده هایی از نسخه قدیمی %(brand)s شناسایی شده است. این امر باعث اختلال در رمزنگاری سرتاسر در نسخه قدیمی شده است. پیام های رمزگذاری شده سرتاسر که اخیراً رد و بدل شده اند ممکن است با استفاده از نسخه قدیمی رمزگشایی نشوند. همچنین ممکن است پیام های رد و بدل شده با این نسخه با مشکل مواجه شود. اگر مشکلی رخ داد، از سیستم خارج شوید و مجددا وارد شوید. برای حفظ سابقه پیام، کلیدهای خود را خروجی گرفته و دوباره وارد کنید.",
@@ -2095,7 +2109,8 @@
         "cross_signing_user_normal": "شما این کاربر را تائید نکرده‌اید.",
         "cross_signing_room_warning": "فردی از یک نشست ناشناس استفاده می‌کند",
         "cross_signing_room_verified": "همه‌ی اعضای این اتاق تائید شده‌اند",
-        "cross_signing_room_normal": "این اتاق به صورت سرتاسر رمزشده است"
+        "cross_signing_room_normal": "این اتاق به صورت سرتاسر رمزشده است",
+        "unsupported": "این کلاینت از رمزگذاری سرتاسر پشتیبانی نمی کند."
     },
     "emoji": {
         "category_frequently_used": "متداول",
@@ -2880,7 +2895,8 @@
         "deactivate_confirm_title": "کاربر غیرفعال شود؟",
         "deactivate_confirm_description": "با غیرفعال کردن این کاربر، او از سیستم خارج شده و از ورود مجدد وی جلوگیری می‌شود. علاوه بر این، او تمام اتاق هایی را که در آن هست ترک می کند. این عمل قابل برگشت نیست. آیا مطمئن هستید که می خواهید این کاربر را غیرفعال کنید؟",
         "deactivate_confirm_action": "غیرفعال کردن کاربر",
-        "error_deactivate": "غیرفعال کردن کاربر انجام نشد"
+        "error_deactivate": "غیرفعال کردن کاربر انجام نشد",
+        "edit_own_devices": "ویرایش دستگاه‌ها"
     },
     "stickers": {
         "empty": "شما در حال حاضر هیچ بسته برچسب فعالی ندارید",

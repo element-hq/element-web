@@ -30,7 +30,7 @@ export const PollDetailHeader: React.FC<Props> = ({ filter, onNavigateBack }) =>
     return (
         <AccessibleButton kind="content_inline" onClick={onNavigateBack} className="mx_PollDetailHeader">
             <LeftCaretIcon className="mx_PollDetailHeader_icon" />
-            {filter === "ACTIVE" ? _t("Active polls") : _t("Past polls")}
+            {filter === "ACTIVE" ? _t("right_panel|poll|active_heading") : _t("right_panel|poll|past_heading")}
         </AccessibleButton>
     );
 };

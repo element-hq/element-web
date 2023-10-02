@@ -8,9 +8,7 @@
         "one": "ja yksi muu..."
     },
     "Custom level": "Mukautettu taso",
-    "Download %(text)s": "Lataa %(text)s",
     "Email address": "Sähköpostiosoite",
-    "Error decrypting attachment": "Virhe purettaessa liitteen salausta",
     "Join Room": "Liity huoneeseen",
     "Moderator": "Valvoja",
     "not specified": "ei määritetty",
@@ -18,7 +16,6 @@
     "PM": "ip.",
     "Session ID": "Istuntotunniste",
     "Home": "Etusivu",
-    "Invalid file%(extra)s": "Virheellinen tiedosto%(extra)s",
     "Warning!": "Varoitus!",
     "Sun": "su",
     "Mon": "ma",
@@ -33,7 +30,6 @@
     },
     "Confirm Removal": "Varmista poistaminen",
     "Unable to restore session": "Istunnon palautus epäonnistui",
-    "Decrypt %(text)s": "Pura %(text)s",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Ole hyvä ja tarkista sähköpostisi ja seuraa sen sisältämää linkkiä. Kun olet valmis, napsauta Jatka.",
     "Verification Pending": "Varmennus odottaa",
     "Jan": "tammi",
@@ -48,8 +44,6 @@
     "Oct": "loka",
     "Nov": "marras",
     "Dec": "joulu",
-    "Error decrypting image": "Virhe purettaessa kuvan salausta",
-    "Error decrypting video": "Virhe purettaessa videon salausta",
     "Add an Integration": "Lisää integraatio",
     "This will allow you to reset your password and receive notifications.": "Tämä sallii sinun uudelleenalustaa salasanasi ja vastaanottaa ilmoituksia.",
     "Restricted": "Rajoitettu",
@@ -243,21 +237,12 @@
     },
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Suuren viestimäärän tapauksessa toiminto voi kestää jonkin aikaa. Älä lataa asiakasohjelmaasi uudelleen sillä aikaa.",
     "e.g. my-room": "esim. oma-huone",
-    "Show image": "Näytä kuva",
     "Close dialog": "Sulje dialogi",
     "Cancel search": "Peruuta haku",
     "Failed to connect to integration manager": "Yhdistäminen integraatioiden lähteeseen epäonnistui",
-    "This client does not support end-to-end encryption.": "Tämä asiakasohjelma ei tue päästä päähän -salausta.",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Olet sivuuttanut tämän käyttäjän, joten hänen viestinsä on piilotettu. <a>Näytä silti.</a>",
-    "You verified %(name)s": "Varmensit käyttäjän %(name)s",
-    "You cancelled verifying %(name)s": "Peruutit käyttäjän %(name)s varmennuksen",
-    "%(name)s cancelled verifying": "%(name)s peruutti varmennuksen",
-    "You accepted": "Hyväksyit",
     "%(name)s accepted": "%(name)s hyväksyi",
-    "You cancelled": "Peruutit",
     "%(name)s cancelled": "%(name)s peruutti",
     "%(name)s wants to verify": "%(name)s haluaa varmentaa",
-    "You sent a verification request": "Lähetit varmennuspyynnön",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Käytä identiteettipalvelinta kutsuaksesi henkilöitä sähköpostilla. <default>Käytä oletusta (%(defaultIdentityServerName)s)</default> tai aseta toinen palvelin <settings>asetuksissa</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Käytä identiteettipalvelinta kutsuaksesi käyttäjiä sähköpostilla. Voit vaihtaa identiteettipalvelimen <settings>asetuksissa</settings>.",
     "Integrations are disabled": "Integraatiot ovat pois käytöstä",
@@ -285,9 +270,6 @@
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Kaikkien tämän istunnon tietojen poistaminen on pysyvää. Salatut viestit menetetään, ellei niiden avaimia ole varmuuskopioitu.",
     "Session name": "Istunnon nimi",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Raportoidaksesi Matrixiin liittyvän tietoturvaongelman, lue Matrix.orgin <a>tietoturvaongelmien julkaisukäytäntö</a>.",
-    "Encryption not enabled": "Salaus pois käytöstä",
-    "The encryption used by this room isn't supported.": "Tämän huoneen käyttämää salausta ei tueta.",
-    "You declined": "Kieltäydyit",
     "%(name)s declined": "%(name)s kieltäytyi",
     "Something went wrong trying to invite the users.": "Käyttäjien kutsumisessa meni jotain pieleen.",
     "We couldn't invite those users. Please check the users you want to invite and try again.": "Emme voineet kutsua kyseisiä käyttäjiä. Tarkista käyttäjät, jotka haluat kutsua ja yritä uudelleen.",
@@ -300,7 +282,6 @@
     "Your server": "Palvelimesi",
     "Add a new server": "Lisää uusi palvelin",
     "Server name": "Palvelimen nimi",
-    "Ask %(displayName)s to scan your code:": "Pyydä käyttäjää %(displayName)s lukemaan koodisi:",
     "Sign in with SSO": "Kirjaudu kertakirjautumista käyttäen",
     "Can't load this message": "Tätä viestiä ei voi ladata",
     "Submit logs": "Lähetä lokit",
@@ -308,7 +289,6 @@
     "There was a problem communicating with the server. Please try again.": "Palvelinyhteydessä oli ongelma. Yritä uudelleen.",
     "You signed in to a new session without verifying it:": "Olet kirjautunut uuteen istuntoon varmentamatta sitä:",
     "Verify your other session using one of the options below.": "Varmenna toinen istuntosi käyttämällä yhtä seuraavista tavoista.",
-    "Almost there! Is %(displayName)s showing the same shield?": "Melkein valmista! Näyttääkö %(displayName)s saman kilven?",
     "To continue, use Single Sign On to prove your identity.": "Todista henkilöllisyytesi kertakirjautumisen avulla jatkaaksesi.",
     "If they don't match, the security of your communication may be compromised.": "Jos ne eivät täsmää, viestinnän turvallisuus saattaa olla vaarantunut.",
     "Restoring keys from backup": "Palautetaan avaimia varmuuskopiosta",
@@ -318,19 +298,6 @@
     "IRC display name width": "IRC-näyttönimen leveys",
     "This backup is trusted because it has been restored on this session": "Tähän varmuuskopioon luotetaan, koska se on palautettu tässä istunnossa",
     "Encrypted by a deleted session": "Salattu poistetun istunnon toimesta",
-    "Verify by scanning": "Varmenna skannaamalla",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Jos et pysty skannaamaan yläpuolella olevaa koodia, varmenna vertaamalla emojia.",
-    "Verify by comparing unique emoji.": "Varmenna vertaamalla uniikkia emojia.",
-    "Verify by emoji": "Varmenna emojilla",
-    "Verify all users in a room to ensure it's secure.": "Varmenna kaikki huoneen käyttäjät varmistaaksesi, että se on turvallinen.",
-    "You've successfully verified your device!": "Olet onnistuneesti varmentanut laitteesi!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Olet onnistuneesti varmentanut laitteen %(deviceName)s (%(deviceId)s)!",
-    "You've successfully verified %(displayName)s!": "Olet varmentanut käyttäjän %(displayName)s!",
-    "Start verification again from the notification.": "Aloita varmennus uudelleen ilmoituksesta.",
-    "Start verification again from their profile.": "Aloita varmennus uudelleen hänen profiilista.",
-    "Verification timed out.": "Varmennuksessa kesti liikaa.",
-    "%(displayName)s cancelled verification.": "%(displayName)s peruutti varmennuksen.",
-    "You cancelled verification.": "Peruutit varmennuksen.",
     "Enter the name of a new server you want to explore.": "Syötä sen uuden palvelimen nimi, jota haluat selata.",
     "Destroy cross-signing keys?": "Tuhoa ristiinvarmennuksen avaimet?",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Ristiinvarmennuksen avainten tuhoamista ei voi kumota. Jokainen, jonka olet varmentanut, tulee näkemään turvallisuushälytyksiä. Et todennäköisesti halua tehdä tätä, ellet ole hukannut kaikkia laitteitasi, joista pystyit ristiinvarmentamaan.",
@@ -356,11 +323,6 @@
     "This address is already in use": "Tämä osoite on jo käytössä",
     "Switch theme": "Vaihda teemaa",
     "Looks good!": "Hyvältä näyttää!",
-    "Video conference started by %(senderName)s": "%(senderName)s aloitti ryhmävideopuhelun",
-    "Video conference updated by %(senderName)s": "%(senderName)s päivitti ryhmävideopuhelun",
-    "Video conference ended by %(senderName)s": "%(senderName)s päätti ryhmävideopuhelun",
-    "Join the conference from the room information card on the right": "Liity ryhmäpuheluun oikealla olevasta huoneen tiedoista",
-    "Join the conference at the top of this room": "Liity ryhmäpuheluun huoneen ylälaidassa",
     "Wrong file type": "Väärä tiedostotyyppi",
     "Room address": "Huoneen osoite",
     "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Palvelimesi ei vastaa joihinkin pyynnöistäsi. Alla on joitakin todennäköisimpiä syitä.",
@@ -633,7 +595,6 @@
     "This version of %(brand)s does not support viewing some encrypted files": "Tämä %(brand)s-versio ei tue joidenkin salattujen tiedostojen katselua",
     "Use the <a>Desktop app</a> to see all encrypted files": "Voit tarkastella kaikkia salattuja tiedostoja <a>työpöytäsovelluksella</a>",
     "Use the <a>Desktop app</a> to search encrypted messages": "Käytä salattuja viestejä <a>työpöytäsovelluksella</a>",
-    "Ignored attempt to disable encryption": "Ohitettu yritys poistaa salaus käytöstä",
     "This widget would like to:": "Tämä sovelma haluaa:",
     "The server has denied your request.": "Palvelin eväsi pyyntösi.",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Huomio: jos et lisää sähköpostia ja unohdat salasanasi, saatat <b>menettää pääsyn tiliisi pysyvästi</b>.",
@@ -669,7 +630,6 @@
     "Remember this": "Muista tämä",
     "Invite to %(roomName)s": "Kutsu huoneeseen %(roomName)s",
     "Create a new room": "Luo uusi huone",
-    "Edit devices": "Muokkaa laitteita",
     "Sending": "Lähetetään",
     "The server is not configured to indicate what the problem is (CORS).": "Palvelinta ei ole säädetty ilmoittamaan, mikä ongelma on kyseessä (CORS).",
     "Invited people will be able to read old messages.": "Kutsutut ihmiset voivat lukea vanhoja viestejä.",
@@ -691,7 +651,6 @@
         "other": "Näytä kaikki %(count)s jäsentä"
     },
     "Add reaction": "Lisää reaktio",
-    "Error processing voice message": "Virhe ääniviestin käsittelyssä",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s-instanssisi ei salli sinun käyttävän integraatioiden lähdettä tämän tekemiseen. Ota yhteys ylläpitäjääsi.",
     "Search spaces": "Etsi avaruuksia",
     "You may contact me if you have any follow up questions": "Voitte olla yhteydessä minuun, jos teillä on lisäkysymyksiä",
@@ -701,15 +660,6 @@
     "Server did not require any authentication": "Palvelin ei vaatinut mitään tunnistautumista",
     "Only people invited will be able to find and join this space.": "Vain kutsutut ihmiset voivat löytää tämän avaruuden ja liittyä siihen.",
     "Including %(commaSeparatedMembers)s": "Mukaan lukien %(commaSeparatedMembers)s",
-    "Error processing audio message": "Virhe ääniviestiä käsiteltäessä",
-    "Decrypting": "Puretaan salausta",
-    "The call is in an unknown state!": "Puhelu on tuntemattomassa tilassa!",
-    "Missed call": "Vastaamaton puhelu",
-    "Unknown failure: %(reason)s": "Tuntematon virhe: %(reason)s",
-    "An unknown error occurred": "Tapahtui tuntematon virhe",
-    "Their device couldn't start the camera or microphone": "Laite ei voinut käyynnistää kameraa tai mikrofonia",
-    "Connection failed": "Yhteys epäonnistui",
-    "No answer": "Ei vastausta",
     "Space visibility": "Avaruuden näkyvyys",
     "Leave space": "Poistu avaruudesta",
     "Would you like to leave the rooms in this space?": "Haluatko poistua tässä avaruudessa olevista huoneista?",
@@ -734,15 +684,12 @@
     "MB": "Mt",
     "Server did not return valid authentication information.": "Palvelin ei palauttanut kelvollista tunnistautumistietoa.",
     "Please provide an address": "Määritä osoite",
-    "Call back": "Soita takaisin",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Huomaa, että päivittäminen tekee huoneesta uuden version.</b> Kaikki nykyiset viestit pysyvät tässä arkistoidussa huoneessa.",
     "Leave some rooms": "Poistu joistakin huoneista",
     "Leave all rooms": "Poistu kaikista huoneista",
     "Don't leave any rooms": "Älä poistu mistään huoneesta",
     "Or send invite link": "Tai lähetä kutsulinkki",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Viestihaun alustus epäonnistui. Lisätietoa <a>asetuksissa</a>.",
-    "Some encryption parameters have been changed.": "Joitakin salausparametreja on muutettu.",
-    "Downloading": "Ladataan",
     "%(count)s reply": {
         "one": "%(count)s vastaus",
         "other": "%(count)s vastausta"
@@ -779,31 +726,10 @@
         "one": "%(count)s ääni",
         "other": "%(count)s ääntä"
     },
-    "Based on %(count)s votes": {
-        "one": "Perustuu %(count)s ääneen",
-        "other": "Perustuu %(count)s ääneen"
-    },
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s ääni annettu. Äänestä nähdäksesi tulokset",
-        "other": "%(count)s ääntä annettu. Äänestä nähdäksesi tulokset"
-    },
-    "No votes cast": "Ääniä ei annettu",
-    "Final result based on %(count)s votes": {
-        "one": "Lopullinen tulos %(count)s äänen perusteella",
-        "other": "Lopullinen tulos %(count)s äänen perusteella"
-    },
-    "Sorry, your vote was not registered. Please try again.": "Valitettavasti ääntäsi ei rekisteröity. Yritä uudelleen.",
-    "Vote not registered": "Ääntä ei rekisteröity",
-    "Almost there! Is your other device showing the same shield?": "Melkein valmista! Näyttääkö toinen laitteesi saman kilven?",
     "In reply to <a>this message</a>": "Vastauksena <a>tähän viestiin</a>",
     "My current location": "Tämänhetkinen sijaintini",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s ei voinut lähettää sijaintiasi. Yritä myöhemmin uudelleen.",
     "Could not fetch location": "Sijaintia ei voitu noutaa",
-    "Results will be visible when the poll is ended": "Tulokset näkyvät, kun kysely on päättynyt",
-    "Sorry, you can't edit a poll after votes have been cast.": "Et voi muokata kyselyä äänestyksen jälkeen.",
-    "Can't edit poll": "Kyselyä ei voi muokata",
-    "Pick a date to jump to": "Valitse päivämäärä, mihin siirrytään",
-    "Jump to date": "Siirry päivämäärään",
     "Recent searches": "Viimeaikaiset haut",
     "Other searches": "Muut haut",
     "Public rooms": "Julkiset huoneet",
@@ -828,7 +754,6 @@
     "Feedback sent! Thanks, we appreciate it!": "Palaute lähetetty. Kiitos, arvostamme sitä!",
     "%(featureName)s Beta feedback": "Ominaisuuden %(featureName)s beetapalaute",
     "Including you, %(commaSeparatedMembers)s": "Mukaan lukien sinä, %(commaSeparatedMembers)s",
-    "The beginning of the room": "Huoneen alku",
     "%(count)s participants": {
         "one": "1 osallistuja",
         "other": "%(count)s osallistujaa"
@@ -843,7 +768,6 @@
     "To continue, please enter your account password:": "Jatka kirjoittamalla tilisi salasana:",
     "Preserve system messages": "Säilytä järjestelmän viestit",
     "What location type do you want to share?": "Minkä sijaintityypin haluat jakaa?",
-    "Call declined": "Puhelu hylätty",
     "%(members)s and %(last)s": "%(members)s ja %(last)s",
     "Developer": "Kehittäjä",
     "Close sidebar": "Sulje sivupalkki",
@@ -856,9 +780,6 @@
     "Open room": "Avaa huone",
     "You will not be able to reactivate your account": "Et voi ottaa tiliäsi uudelleen käyttöön",
     "Confirm that you would like to deactivate your account. If you proceed:": "Vahvista, että haluat deaktivoida eli poistaa tilisi. Jos jatkat:",
-    "Expand quotes": "Laajenna lainaukset",
-    "Collapse quotes": "Supista lainaukset",
-    "Could not connect media": "Ei voitu yhdistää mediaa",
     "Recently viewed": "Äskettäin katsottu",
     "%(members)s and more": "%(members)s ja enemmän",
     "Messaging": "Viestintä",
@@ -901,20 +822,13 @@
     "Who will you chat to the most?": "Kenen kanssa keskustelet eniten?",
     "Choose a locale": "Valitse maa-asetusto",
     "You don't have permission to share locations": "Sinulla ei ole oikeutta jakaa sijainteja",
-    "Message pending moderation": "Viesti odottaa moderointia",
-    "Message pending moderation: %(reason)s": "Viesti odottaa moderointia: %(reason)s",
-    "Messages in this chat will be end-to-end encrypted.": "Tässä keskustelussa olevat viestit salataan päästä päähän.",
-    "Video call ended": "Videopuhelu päättyi",
     "%(name)s started a video call": "%(name)s aloitti videopuhelun",
     "Search for": "Etsittävät kohteet",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Kutsu käyttäen nimeä, sähköpostiosoitetta, käyttäjänimeä (kuten <userId/>) tai <a>jaa tämä huone</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Kutsu käyttäen nimeä, sähköpostiosoitetta, käyttäjänimeä (kuten <userId/>) tai <a>jaa tämä avaruus</a>.",
     "To search messages, look for this icon at the top of a room <icon/>": "Etsi viesteistä huoneen yläosassa olevalla kuvakkeella <icon/>",
     "Use \"%(query)s\" to search": "Etsitään \"%(query)s\"",
-    "Error downloading image": "Virhe kuvaa ladatessa",
-    "Unable to show image due to error": "Kuvan näyttäminen epäonnistui virheen vuoksi",
     "Saved Items": "Tallennetut kohteet",
-    "Reply in thread": "Vastaa ketjuun",
     "This address had invalid server or is already in use": "Tässä osoitteessa on virheellinen palvelin tai se on jo käytössä",
     "Drop a Pin": "Sijoita karttaneula",
     "<w>WARNING:</w> <description/>": "<w>VAROITUS:</w> <description/>",
@@ -932,31 +846,9 @@
     "Adding…": "Lisätään…",
     "Message from %(user)s": "Viesti käyttäjältä %(user)s",
     "Message in %(room)s": "Viesti huoneessa %(room)s",
-    "Answered elsewhere": "Vastattu muualla",
-    "The sender has blocked you from receiving this message": "Lähettäjä on estänyt sinua saamasta tätä viestiä",
     "unavailable": "ei saatavilla",
     "unknown status code": "tuntematon tilakoodi",
-    "Server returned %(statusCode)s with error code %(errorCode)s": "Palvelin palautti tilakoodin %(statusCode)s ja virhekoodin %(errorCode)s",
-    "View poll": "Näytä kysely",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "Menneitä kyselyitä ei ole viimeisen vuorokauden ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
-        "other": "Menneitä kyselyitä ei ole viimeisen %(count)s päivän ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt."
-    },
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "Aktiivisia kyselyitä ei ole viimeisen vuorokauden ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
-        "other": "Aktiivisia kyselyitä ei ole viimeisen %(count)s päivän ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt."
-    },
-    "There are no past polls. Load more polls to view polls for previous months": "Menneitä kyselyitä ei ole. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
-    "There are no active polls. Load more polls to view polls for previous months": "Aktiivisia kyselyitä ei ole. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
-    "There are no past polls in this room": "Tässä huoneessa ei ole menneitä kyselyitä",
-    "There are no active polls in this room": "Tässä huoneessa ei ole aktiivisia kyselyitä",
-    "Load more polls": "Lataa lisää kyselyitä",
-    "Loading polls": "Ladataan kyselyitä",
-    "Past polls": "Menneet kyselyt",
-    "Active polls": "Aktiiviset kyselyt",
-    "View poll in timeline": "Näytä kysely aikajanalla",
     "Requires your server to support the stable version of MSC3827": "Edellyttää palvelimesi tukevan MSC3827:n vakaata versiota",
-    "Error details": "Virheen tiedot",
     "common": {
         "about": "Tietoa",
         "analytics": "Analytiikka",
@@ -1193,7 +1085,8 @@
         "new_room": "Uusi huone",
         "new_video_room": "Uusi videohuone",
         "add_existing_room": "Lisää olemassa oleva huone",
-        "explore_public_rooms": "Selaa julkisia huoneita"
+        "explore_public_rooms": "Selaa julkisia huoneita",
+        "reply_in_thread": "Vastaa ketjuun"
     },
     "a11y": {
         "user_menu": "Käyttäjän valikko",
@@ -2051,13 +1944,25 @@
     "timeline": {
         "m.call": {
             "video_call_started": "Videopuhelu alkoi huoneessa %(roomName)s.",
-            "video_call_started_unsupported": "Videopuhelu alkoi huoneessa %(roomName)s. (ei tuettu selaimesi toimesta)"
+            "video_call_started_unsupported": "Videopuhelu alkoi huoneessa %(roomName)s. (ei tuettu selaimesi toimesta)",
+            "video_call_ended": "Videopuhelu päättyi"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s soitti äänipuhelun.",
             "voice_call_unsupported": "%(senderName)s soitti äänipuhelun. (selaimesi ei tue äänipuheluita)",
             "video_call": "%(senderName)s soitti videopuhelun.",
-            "video_call_unsupported": "%(senderName)s soitti videopuhelun (selaimesi ei tue videopuheluita)"
+            "video_call_unsupported": "%(senderName)s soitti videopuhelun (selaimesi ei tue videopuheluita)",
+            "declined": "Puhelu hylätty",
+            "call_back_prompt": "Soita takaisin",
+            "answered_elsewhere": "Vastattu muualla",
+            "missed_call": "Vastaamaton puhelu",
+            "no_answer": "Ei vastausta",
+            "failed_connect_media": "Ei voitu yhdistää mediaa",
+            "failed_connection": "Yhteys epäonnistui",
+            "failed_opponent_media": "Laite ei voinut käyynnistää kameraa tai mikrofonia",
+            "unknown_error": "Tapahtui tuntematon virhe",
+            "unknown_failure": "Tuntematon virhe: %(reason)s",
+            "unknown_state": "Puhelu on tuntemattomassa tilassa!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s hyväksyi kutsun %(displayName)s:tä",
@@ -2108,7 +2013,6 @@
             "forbidden": "%(senderDisplayName)s on estänyt vieraiden liittymisen huoneeseen.",
             "unknown": "%(senderDisplayName)s vaihtoi vieraiden pääsyn tilaan %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s lähetti kuvan.",
         "m.sticker": "%(senderDisplayName)s lähetti tarran.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s loi tämän huoneen palvelinten pääsynvalvontalistan.",
@@ -2152,7 +2056,12 @@
         "m.widget": {
             "modified": "%(senderName)s muokkasi sovelmaa %(widgetName)s",
             "added": "%(senderName)s lisäsi sovelman %(widgetName)s",
-            "removed": "%(senderName)s poisti sovelman %(widgetName)s"
+            "removed": "%(senderName)s poisti sovelman %(widgetName)s",
+            "jitsi_join_top_prompt": "Liity ryhmäpuheluun huoneen ylälaidassa",
+            "jitsi_join_right_prompt": "Liity ryhmäpuheluun oikealla olevasta huoneen tiedoista",
+            "jitsi_ended": "%(senderName)s päätti ryhmävideopuhelun",
+            "jitsi_updated": "%(senderName)s päivitti ryhmävideopuhelun",
+            "jitsi_started": "%(senderName)s aloitti ryhmävideopuhelun"
         },
         "io.element.widgets.layout": "%(senderName)s on päivittänyt huoneen asettelun",
         "m.location": {
@@ -2163,7 +2072,6 @@
         "self_redaction": "Viesti poistettu",
         "redaction": "%(name)s poisti viestin",
         "m.poll.start": "%(senderName)s on aloittanut kyselyn - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s on lopettanut kyselyn",
         "typing_indicator": {
             "one_user": "%(displayName)s kirjoittaa…",
             "two_users": "%(names)s ja %(lastPerson)s kirjoittavat…",
@@ -2319,7 +2227,8 @@
             "changed_rule_users": "%(senderName)s muutti sääntöä, joka esti käyttäjiä säännöllä %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
             "changed_rule_rooms": "%(senderName)s muutti sääntöä, joka esti huoneita säännöllä %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
             "changed_rule_servers": "%(senderName)s muutti sääntöä, joka esti palvelimia säännöllä %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
-            "changed_rule_glob": "%(senderName)s muutti estosääntöä muodosta %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s"
+            "changed_rule_glob": "%(senderName)s muutti estosääntöä muodosta %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
+            "message_hidden": "Olet sivuuttanut tämän käyttäjän, joten hänen viestinsä on piilotettu. <a>Näytä silti.</a>"
         },
         "no_permission_messages_before_invite": "Sinulla ei ole oikeutta nähdä viestejä ajalta ennen kutsumistasi.",
         "no_permission_messages_before_join": "Sinulla ei ole oikeutta nähdä viestejä ajalta ennen liittymistäsi.",
@@ -2369,18 +2278,64 @@
         "mab": {
             "label": "Viestitoiminnot",
             "view_in_room": "Näytä huoneessa",
-            "copy_link_thread": "Kopioi linkki ketjuun"
+            "copy_link_thread": "Kopioi linkki ketjuun",
+            "collapse_reply_chain": "Supista lainaukset",
+            "expand_reply_chain": "Laajenna lainaukset"
         },
         "m.audio": {
             "unnamed_audio": "Nimetön ääni",
-            "error_downloading_audio": "Virhe ääntä ladattaessa"
+            "error_downloading_audio": "Virhe ääntä ladattaessa",
+            "error_processing_audio": "Virhe ääniviestiä käsiteltäessä",
+            "error_processing_voice_message": "Virhe ääniviestin käsittelyssä"
         },
         "load_error": {
             "no_permission": "Aikajanan tietty hetki yritettiin ladata, mutta sinulla ei ole oikeutta nähdä kyseistä viestiä.",
             "unable_to_find": "Huoneen aikajanan tietty hetki yritettiin ladata, mutta sitä ei löytynyt.",
             "title": "Aikajanapaikan lataaminen epäonnistui"
         },
-        "error_no_renderer": "Tätä tapahtumaa ei voitu näyttää"
+        "error_no_renderer": "Tätä tapahtumaa ei voitu näyttää",
+        "decryption_failure_blocked": "Lähettäjä on estänyt sinua saamasta tätä viestiä",
+        "download_action_downloading": "Ladataan",
+        "download_action_decrypting": "Puretaan salausta",
+        "m.room.encryption": {
+            "parameters_changed": "Joitakin salausparametreja on muutettu.",
+            "enabled_local": "Tässä keskustelussa olevat viestit salataan päästä päähän.",
+            "disable_attempt": "Ohitettu yritys poistaa salaus käytöstä",
+            "disabled": "Salaus pois käytöstä",
+            "unsupported": "Tämän huoneen käyttämää salausta ei tueta."
+        },
+        "pending_moderation_reason": "Viesti odottaa moderointia: %(reason)s",
+        "pending_moderation": "Viesti odottaa moderointia",
+        "m.file": {
+            "download_label": "Lataa %(text)s",
+            "error_decrypting": "Virhe purettaessa liitteen salausta",
+            "decrypt_label": "Pura %(text)s",
+            "error_invalid": "Virheellinen tiedosto%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s lähetti kuvan.",
+            "error": "Kuvan näyttäminen epäonnistui virheen vuoksi",
+            "error_decrypting": "Virhe purettaessa kuvan salausta",
+            "error_downloading": "Virhe kuvaa ladatessa",
+            "show_image": "Näytä kuva"
+        },
+        "m.key.verification.done": "Varmensit käyttäjän %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Peruutit käyttäjän %(name)s varmennuksen",
+            "user_cancelled": "%(name)s peruutti varmennuksen"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Hyväksyit",
+            "you_declined": "Kieltäydyit",
+            "you_cancelled": "Peruutit",
+            "you_started": "Lähetit varmennuspyynnön"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s on lopettanut kyselyn"
+        },
+        "m.video": {
+            "error_decrypting": "Virhe purettaessa videon salausta"
+        }
     },
     "slash_command": {
         "spoiler": "Lähettää annetun viestin spoilerina",
@@ -2835,7 +2790,23 @@
                 "device_verified": "Laite vahvistettu",
                 "skip_verification": "Ohita vahvistus toistaiseksi"
             },
-            "accepting": "Hyväksytään…"
+            "accepting": "Hyväksytään…",
+            "scan_qr": "Varmenna skannaamalla",
+            "scan_qr_explainer": "Pyydä käyttäjää %(displayName)s lukemaan koodisi:",
+            "verify_emoji_prompt_qr": "Jos et pysty skannaamaan yläpuolella olevaa koodia, varmenna vertaamalla emojia.",
+            "verify_emoji_prompt": "Varmenna vertaamalla uniikkia emojia.",
+            "verify_emoji": "Varmenna emojilla",
+            "qr_reciprocate_same_shield_device": "Melkein valmista! Näyttääkö toinen laitteesi saman kilven?",
+            "qr_reciprocate_same_shield_user": "Melkein valmista! Näyttääkö %(displayName)s saman kilven?",
+            "prompt_encrypted": "Varmenna kaikki huoneen käyttäjät varmistaaksesi, että se on turvallinen.",
+            "successful_own_device": "Olet onnistuneesti varmentanut laitteesi!",
+            "successful_device": "Olet onnistuneesti varmentanut laitteen %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "Olet varmentanut käyttäjän %(displayName)s!",
+            "prompt_self": "Aloita varmennus uudelleen ilmoituksesta.",
+            "prompt_user": "Aloita varmennus uudelleen hänen profiilista.",
+            "timed_out": "Varmennuksessa kesti liikaa.",
+            "cancelled_user": "%(displayName)s peruutti varmennuksen.",
+            "cancelled": "Peruutit varmennuksen."
         },
         "old_version_detected_title": "Vanhaa salaustietoa havaittu",
         "old_version_detected_description": "Tunnistimme dataa, joka on lähtöisin vanhasta %(brand)sin versiosta. Tämä aiheuttaa toimintahäiriöitä päästä päähän -salauksessa vanhassa versiossa. Viestejä, jotka on salattu päästä päähän -salauksella vanhalla versiolla, ei välttämättä voida purkaa tällä versiolla. Tämä voi myös aiheuttaa epäonnistumisia viestien välityksessä tämän version kanssa. Jos kohtaat ongelmia, kirjaudu ulos ja takaisin sisään. Säilyttääksesi viestihistoriasi, vie salausavaimesi ja tuo ne uudelleen.",
@@ -2884,7 +2855,8 @@
         "cross_signing_user_normal": "Et ole varmentanut tätä käyttäjää.",
         "cross_signing_room_warning": "Joku käyttää tuntematonta istuntoa",
         "cross_signing_room_verified": "Kaikki tämän huoneen käyttäjät on varmennettu",
-        "cross_signing_room_normal": "Tämä huone käyttää päästä päähän -salausta"
+        "cross_signing_room_normal": "Tämä huone käyttää päästä päähän -salausta",
+        "unsupported": "Tämä asiakasohjelma ei tue päästä päähän -salausta."
     },
     "emoji": {
         "category_frequently_used": "Usein käytetyt",
@@ -3584,7 +3556,12 @@
         "jump_to_bottom_button": "Vieritä tuoreimpiin viesteihin",
         "jump_read_marker": "Hyppää ensimmäiseen lukemattomaan viestiin.",
         "inviter_unknown": "Tuntematon",
-        "failed_reject_invite": "Kutsun hylkääminen epäonnistui"
+        "failed_reject_invite": "Kutsun hylkääminen epäonnistui",
+        "error_jump_to_date": "Palvelin palautti tilakoodin %(statusCode)s ja virhekoodin %(errorCode)s",
+        "error_jump_to_date_details": "Virheen tiedot",
+        "jump_to_date_beginning": "Huoneen alku",
+        "jump_to_date": "Siirry päivämäärään",
+        "jump_to_date_prompt": "Valitse päivämäärä, mihin siirrytään"
     },
     "file_panel": {
         "guest_note": "Sinun pitää <a>rekisteröityä</a> käyttääksesi tätä toiminnallisuutta",
@@ -3627,7 +3604,21 @@
         "options_placeholder": "Kirjoita vaihtoehto",
         "options_add_button": "Lisää vaihtoehto",
         "disclosed_notes": "Äänestäjät näkevät tulokset heti äänestettyään",
-        "notes": "Tulokset paljastetaan vasta kun päätät kyselyn"
+        "notes": "Tulokset paljastetaan vasta kun päätät kyselyn",
+        "unable_edit_title": "Kyselyä ei voi muokata",
+        "unable_edit_description": "Et voi muokata kyselyä äänestyksen jälkeen.",
+        "error_voting_title": "Ääntä ei rekisteröity",
+        "error_voting_description": "Valitettavasti ääntäsi ei rekisteröity. Yritä uudelleen.",
+        "total_not_ended": "Tulokset näkyvät, kun kysely on päättynyt",
+        "total_no_votes": "Ääniä ei annettu",
+        "total_n_votes": {
+            "one": "%(count)s ääni annettu. Äänestä nähdäksesi tulokset",
+            "other": "%(count)s ääntä annettu. Äänestä nähdäksesi tulokset"
+        },
+        "total_n_votes_voted": {
+            "one": "Perustuu %(count)s ääneen",
+            "other": "Perustuu %(count)s ääneen"
+        }
     },
     "failed_load_async_component": "Lataaminen epäonnistui! Tarkista verkkoyhteytesi ja yritä uudelleen.",
     "upload_failed_generic": "Tiedoston '%(fileName)s' lähettäminen ei onnistunut.",
@@ -3842,7 +3833,8 @@
         "deactivate_confirm_description": "Käyttäjän poistaminen kirjaa hänet ulos ja estää häntä kirjautumasta takaisin sisään. Lisäksi hän poistuu kaikista huoneista, joissa hän on. Tätä toimintoa ei voi kumota. Oletko varma, että haluat pysyvästi poistaa tämän käyttäjän?",
         "deactivate_confirm_action": "Poista käyttäjä pysyvästi",
         "error_deactivate": "Käyttäjän poistaminen epäonnistui",
-        "role_label": "Rooli huoneessa <RoomName/>"
+        "role_label": "Rooli huoneessa <RoomName/>",
+        "edit_own_devices": "Muokkaa laitteita"
     },
     "stickers": {
         "empty": "Sinulla ei ole tarrapaketteja käytössä",
@@ -3870,7 +3862,31 @@
         "pinned_messages_button": "Kiinnitetty",
         "export_chat_button": "Vie keskustelu",
         "share_button": "Jaa huone",
-        "settings_button": "Huoneen asetukset"
+        "settings_button": "Huoneen asetukset",
+        "poll": {
+            "view_in_timeline": "Näytä kysely aikajanalla",
+            "active_heading": "Aktiiviset kyselyt",
+            "past_heading": "Menneet kyselyt",
+            "loading": "Ladataan kyselyitä",
+            "load_more": "Lataa lisää kyselyitä",
+            "empty_active": "Tässä huoneessa ei ole aktiivisia kyselyitä",
+            "empty_past": "Tässä huoneessa ei ole menneitä kyselyitä",
+            "empty_active_load_more": "Aktiivisia kyselyitä ei ole. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
+            "empty_past_load_more": "Menneitä kyselyitä ei ole. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
+            "empty_active_load_more_n_days": {
+                "one": "Aktiivisia kyselyitä ei ole viimeisen vuorokauden ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
+                "other": "Aktiivisia kyselyitä ei ole viimeisen %(count)s päivän ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt."
+            },
+            "empty_past_load_more_n_days": {
+                "one": "Menneitä kyselyitä ei ole viimeisen vuorokauden ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
+                "other": "Menneitä kyselyitä ei ole viimeisen %(count)s päivän ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt."
+            },
+            "view_poll": "Näytä kysely",
+            "final_result": {
+                "one": "Lopullinen tulos %(count)s äänen perusteella",
+                "other": "Lopullinen tulos %(count)s äänen perusteella"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Hylkää kutsu",

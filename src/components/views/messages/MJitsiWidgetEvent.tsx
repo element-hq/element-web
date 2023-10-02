@@ -42,9 +42,9 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
         const widgetId = this.props.mxEvent.getStateKey();
         const widget = WidgetStore.instance.getRoom(room.roomId, true).widgets.find((w) => w.id === widgetId);
 
-        let joinCopy: string | null = _t("Join the conference at the top of this room");
+        let joinCopy: string | null = _t("timeline|m.widget|jitsi_join_top_prompt");
         if (widget && WidgetLayoutStore.instance.isInContainer(room, widget, Container.Right)) {
-            joinCopy = _t("Join the conference from the room information card on the right");
+            joinCopy = _t("timeline|m.widget|jitsi_join_right_prompt");
         } else if (!widget) {
             joinCopy = null;
         }
@@ -54,7 +54,7 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
             return (
                 <EventTileBubble
                     className="mx_MJitsiWidgetEvent"
-                    title={_t("Video conference ended by %(senderName)s", { senderName })}
+                    title={_t("timeline|m.widget|jitsi_ended", { senderName })}
                     timestamp={this.props.timestamp}
                 />
             );
@@ -63,7 +63,7 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
             return (
                 <EventTileBubble
                     className="mx_MJitsiWidgetEvent"
-                    title={_t("Video conference updated by %(senderName)s", { senderName })}
+                    title={_t("timeline|m.widget|jitsi_updated", { senderName })}
                     subtitle={joinCopy}
                     timestamp={this.props.timestamp}
                 />
@@ -73,7 +73,7 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
             return (
                 <EventTileBubble
                     className="mx_MJitsiWidgetEvent"
-                    title={_t("Video conference started by %(senderName)s", { senderName })}
+                    title={_t("timeline|m.widget|jitsi_started", { senderName })}
                     subtitle={joinCopy}
                     timestamp={this.props.timestamp}
                 />

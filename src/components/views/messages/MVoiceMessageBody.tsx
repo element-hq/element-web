@@ -29,7 +29,7 @@ export default class MVoiceMessageBody extends MAudioBody {
         if (this.state.error) {
             return (
                 <MediaProcessingError className="mx_MVoiceMessageBody">
-                    {_t("Error processing voice message")}
+                    {_t("timeline|m.audio|error_processing_voice_message")}
                 </MediaProcessingError>
             );
         }

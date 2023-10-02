@@ -1,7 +1,6 @@
 {
     "An error has occurred.": "Telah terjadi kesalahan.",
     "Email address": "Alamat email",
-    "Download %(text)s": "Unduh %(text)s",
     "Session ID": "ID Sesi",
     "unknown error code": "kode kesalahan tidak diketahui",
     "Verification Pending": "Verifikasi Menunggu",
@@ -26,7 +25,6 @@
     "Nov": "Nov",
     "Dec": "Des",
     "%(items)s and %(lastItem)s": "%(items)s dan %(lastItem)s",
-    "Decrypt %(text)s": "Dekripsi %(text)s",
     "Sunday": "Minggu",
     "Today": "Hari Ini",
     "Changelog": "Changelog",
@@ -395,14 +393,11 @@
         "other": "(~%(count)s hasil)"
     },
     "Confirm Removal": "Konfirmasi Penghapusan",
-    "Invalid file%(extra)s": "File tidak absah%(extra)s",
     "not specified": "tidak ditentukan",
     "Join Room": "Bergabung dengan Ruangan",
     "Sent": "Terkirim",
     "MB": "MB",
     "Custom level": "Tingkat kustom",
-    "Decrypting": "Mendekripsi",
-    "Downloading": "Mengunduh",
     "Hold": "Jeda",
     "Transfer": "Pindah",
     "Sending": "Mengirim",
@@ -421,7 +416,6 @@
         "other": "dan %(count)s lainnya..."
     },
     "Encrypted by a deleted session": "Terenkripsi oleh sesi yang terhapus",
-    "Reply in thread": "Balas di utasan",
     "%(count)s reply": {
         "one": "%(count)s balasan",
         "other": "%(count)s balasan"
@@ -434,61 +428,10 @@
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Anda akan dialihkan ke situs pihak ketiga sehingga Anda dapat mengautentikasi akun Anda untuk digunakan dengan %(integrationsUrl)s. Apakah Anda yakin untuk melanjutkan?",
     "Add an Integration": "Tambahkan sebuah Integrasi",
     "Add reaction": "Tambahkan reaksi",
-    "Error processing voice message": "Terjadi kesalahan mengolah pesan suara",
-    "Error decrypting video": "Terjadi kesalahan mendekripsi video",
-    "You sent a verification request": "Anda mengirim sebuah permintaan verifikasi",
     "%(name)s wants to verify": "%(name)s ingin memverifikasi",
     "%(name)s cancelled": "%(name)s membatalkan",
     "%(name)s declined": "%(name)s menolak",
-    "You cancelled": "Anda membatalkan",
-    "You declined": "Anda menolak",
     "%(name)s accepted": "%(name)s menerima",
-    "You accepted": "Anda menerima",
-    "%(name)s cancelled verifying": "%(name)s membatalkan verifikasi",
-    "You cancelled verifying %(name)s": "Anda membatalkan memverifikasi %(name)s",
-    "You verified %(name)s": "Anda memverifikasi %(name)s",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Anda telah mengabaikan pengguna ini, jadi pesannya disembunyikan. <a>Tampilkan saja.</a>",
-    "Video conference started by %(senderName)s": "Konferensi video dimulai oleh %(senderName)s",
-    "Video conference updated by %(senderName)s": "Konferensi video diperbarui oleh %(senderName)s",
-    "Video conference ended by %(senderName)s": "Konferensi video diakhiri oleh %(senderName)s",
-    "Join the conference from the room information card on the right": "Bergabung dengan konferensinya di kartu informasi ruangan di sebelah kanan",
-    "Join the conference at the top of this room": "Bergabung dengan konferensi di atas ruangan ini",
-    "Show image": "Tampilkan gambar",
-    "Error decrypting image": "Terjadi kesalahan mendekripsi gambar",
-    "Error decrypting attachment": "Terjadi kesalahan mendekripsi lampiran",
-    "Error processing audio message": "Terjadi kesalahan mengolah pesan suara",
-    "The encryption used by this room isn't supported.": "Enkripsi yang digunakan di ruangan ini tidak didukung.",
-    "Encryption not enabled": "Enkripsi tidak diaktifkan",
-    "Ignored attempt to disable encryption": "Mengabaikan percobaan untuk menonaktifkan enkripsi",
-    "Some encryption parameters have been changed.": "Beberapa parameter enkripsi telah diubah.",
-    "The call is in an unknown state!": "Panggilan ini berada di status yang tidak diketahui!",
-    "Missed call": "Panggilan terlewat",
-    "Unknown failure: %(reason)s": "Kegagalan yang tidak diketahui: %(reason)s",
-    "An unknown error occurred": "Sebuah kesalahan yang tidak diketahui terjadi",
-    "Their device couldn't start the camera or microphone": "Perangkatnya tidak dapat memulai kamera atau mikrofonnya",
-    "Connection failed": "Koneksi gagal",
-    "Could not connect media": "Tidak dapat menghubung media",
-    "No answer": "Tidak ada jawaban",
-    "Call back": "Panggil ulang",
-    "Call declined": "Panggilan ditolak",
-    "You cancelled verification.": "Anda membatalkan verifikasi.",
-    "%(displayName)s cancelled verification.": "%(displayName)s membatalkan verifikasi.",
-    "Verification timed out.": "Waktu habis untuk memverifikasi.",
-    "Start verification again from their profile.": "Mulai memverifikasi lagi dari profilnya.",
-    "Start verification again from the notification.": "Mulai memverifikasi lagi dari notifikasinya.",
-    "You've successfully verified %(displayName)s!": "Anda berhasil memverifikasi %(displayName)s!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Anda berhasil memverifikasi %(deviceName)s (%(deviceId)s)!",
-    "You've successfully verified your device!": "Anda berhasil memverifikasi perangkat Anda!",
-    "In encrypted rooms, verify all users to ensure it's secure.": "Di ruangan terenkripsi, verifikasi semua pengguna untuk memastikan keamanannya.",
-    "Verify all users in a room to ensure it's secure.": "Verifikasi semua pengguna di sebuah ruangan untuk memastikan keamanannya.",
-    "Almost there! Is %(displayName)s showing the same shield?": "Hampir selesai! Apakah %(displayName)s menampilkan perisai yang sama?",
-    "Verify by emoji": "Verifikasi dengan emoji",
-    "Verify by comparing unique emoji.": "Verifikasi dengan membandingkan emoji unik.",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Jika Anda tidak dapat memindai kode di atas, verifikasi dengan membandingkan emoji yang unik.",
-    "Ask %(displayName)s to scan your code:": "Tanyakan %(displayName)s untuk memindai kode Anda:",
-    "Verify by scanning": "Verifikasi dengan memindai",
-    "Edit devices": "Edit perangkat",
-    "This client does not support end-to-end encryption.": "Klien ini tidak mendukung enkripsi ujung ke ujung.",
     "Remove %(count)s messages": {
         "one": "Hapus 1 pesan",
         "other": "Hapus %(count)s pesan"
@@ -813,10 +756,6 @@
     "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Verifikasi perangkat ini untuk menandainya sebagai terpercaya. Mempercayai perangkat ini akan memberikan Anda dan pengguna lain ketenangan saat menggunakan pesan terenkripsi secara ujung ke ujung.",
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Memverifikasi pengguna ini akan menandai sesinya sebagai terpercaya, dan juga menandai sesi Anda sebagai terpercaya kepadanya.",
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Verifikasi pengguna ini untuk menandainya sebagai terpercaya. Mempercayai pengguna memberikan Anda ketenangan saat menggunakan pesan terenkripsi secara ujung ke ujung.",
-    "Based on %(count)s votes": {
-        "one": "Berdasarkan oleh %(count)s suara",
-        "other": "Berdasarkan oleh %(count)s suara"
-    },
     "%(count)s votes": {
         "one": "%(count)s suara",
         "other": "%(count)s suara"
@@ -825,8 +764,6 @@
         "one": "%(spaceName)s dan %(count)s lainnya",
         "other": "%(spaceName)s dan %(count)s lainnya"
     },
-    "Sorry, your vote was not registered. Please try again.": "Maaf, suara Anda tidak didaftarkan. Silakan coba lagi.",
-    "Vote not registered": "Suara tidak didaftarkan",
     "Developer": "Pengembang",
     "Experimental": "Eksperimental",
     "Themes": "Tema",
@@ -834,21 +771,12 @@
     "Messaging": "Perpesanan",
     "Spaces you know that contain this space": "Space yang Anda tahu yang berisi space ini",
     "Recently viewed": "Baru saja dilihat",
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s suara. Vote untuk melihat hasilnya",
-        "other": "%(count)s suara. Vote untuk melihat hasilnya"
-    },
-    "No votes cast": "Tidak ada suara",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Apakah Anda yakin untuk mengakhiri poll ini? Ini akan menampilkan hasil akhir dari poll dan orang-orang tidak dapat memberikan suara lagi.",
     "End Poll": "Akhiri Poll",
     "Sorry, the poll did not end. Please try again.": "Maaf, poll tidak berakhir. Silakan coba lagi.",
     "Failed to end poll": "Gagal untuk mengakhiri poll",
     "The poll has ended. Top answer: %(topAnswer)s": "Poll telah berakhir. Jawaban teratas: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Poll telah berakhir. Tidak ada yang memberi suara.",
-    "Final result based on %(count)s votes": {
-        "other": "Hasil akhir bedasarkan dari %(count)s suara",
-        "one": "Hasil akhir bedasarkan dari %(count)s suara"
-    },
     "Link to room": "Tautan ke ruangan",
     "Recent searches": "Pencarian terkini",
     "To search messages, look for this icon at the top of a room <icon/>": "Untuk mencari pesan-pesan, lihat ikon ini di atas ruangan <icon/>",
@@ -866,23 +794,13 @@
     "Missing domain separator e.g. (:domain.org)": "Kurang pemisah domain mis. (:domain.org)",
     "This address had invalid server or is already in use": "Alamat ini memiliki server yang tidak absah atau telah digunakan",
     "Verify other device": "Verifikasi perangkat lain",
-    "You cancelled verification on your other device.": "Anda membatalkan verifikasi di perangkat Anda yang lain.",
-    "Almost there! Is your other device showing the same shield?": "Hampir selesai! Apakah perangkat lain Anda menampilkan perisai yang sama?",
     "Could not fetch location": "Tidak dapat mendapatkan lokasi",
-    "Message pending moderation: %(reason)s": "Pesan akan dimoderasikan: %(reason)s",
-    "Message pending moderation": "Pesan akan dimoderasikan",
-    "Pick a date to jump to": "Pilih sebuah tanggal untuk pergi ke tanggalnya",
-    "Jump to date": "Pergi ke tanggal",
-    "The beginning of the room": "Awalan ruangan",
     "This address does not point at this room": "Alamat ini tidak mengarah ke ruangan ini",
     "Location": "Lokasi",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s dan %(space2Name)s",
     "Use <arrows/> to scroll": "Gunakan <arrows/> untuk menggulirkan",
     "Feedback sent! Thanks, we appreciate it!": "Masukan terkirim! Terima kasih, kami mengapresiasinya!",
-    "Sorry, you can't edit a poll after votes have been cast.": "Maaf, Anda tidak dapat mengedit sebuah poll setelah suara-suara diberikan.",
-    "Can't edit poll": "Tidak dapat mengedit poll",
     "Join %(roomAddress)s": "Bergabung dengan %(roomAddress)s",
-    "Results will be visible when the poll is ended": "Hasil akan tersedia setelah pemungutan suara berakhir",
     "Search Dialog": "Dialog Pencarian",
     "What location type do you want to share?": "Tipe lokasi apa yang Anda ingin bagikan?",
     "Drop a Pin": "Drop sebuah Pin",
@@ -890,10 +808,6 @@
     "My current location": "Lokasi saya saat ini",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s tidak dapat mengirimkan lokasi Anda. Silakan coba lagi nanti.",
     "We couldn't send your location": "Kami tidak dapat mengirimkan lokasi Anda",
-    "Click": "Klik",
-    "Expand quotes": "Buka kutip",
-    "Collapse quotes": "Tutup kutip",
-    "Can't create a thread from an event with an existing relation": "Tidak dapat membuat utasan dari sebuah peristiwa dengan relasi yang sudah ada",
     "You are sharing your live location": "Anda membagikan lokasi langsung Anda",
     "%(displayName)s's live location": "Lokasi langsung %(displayName)s",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Jangan centang jika Anda juga ingin menghapus pesan-pesan sistem pada pengguna ini (mis. perubahan keanggotaan, perubahan profil…)",
@@ -911,7 +825,6 @@
     },
     "%(featureName)s Beta feedback": "Masukan %(featureName)s Beta",
     "Live location ended": "Lokasi langsung berakhir",
-    "View live location": "Tampilkan lokasi langsung",
     "Live location enabled": "Lokasi langsung diaktifkan",
     "Live location error": "Kesalahan lokasi langsung",
     "Live until %(expiryTime)s": "Langsung sampai %(expiryTime)s",
@@ -969,26 +882,18 @@
     "You're in": "Anda telah masuk",
     "You need to have the right permissions in order to share locations in this room.": "Anda harus mempunyai izin yang diperlukan untuk membagikan lokasi di ruangan ini.",
     "You don't have permission to share locations": "Anda tidak memiliki izin untuk membagikan lokasi",
-    "Messages in this chat will be end-to-end encrypted.": "Pesan di obrolan ini akan dienkripsi secara ujung ke ujung.",
     "Saved Items": "Item yang Tersimpan",
     "Choose a locale": "Pilih locale",
     "Interactively verify by emoji": "Verifikasi secara interaktif sengan emoji",
     "Manually verify by text": "Verifikasi secara manual dengan teks",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s atau %(recoveryFile)s",
-    "Video call ended": "Panggilan video berakhir",
     "%(name)s started a video call": "%(name)s memulai sebuah panggilan video",
-    "Error downloading image": "Kesalahan mengunduh gambar",
-    "Unable to show image due to error": "Tidak dapat menampilkan gambar karena kesalahan",
     "Thread root ID: %(threadRootId)s": "ID akar utasan: %(threadRootId)s",
     "<w>WARNING:</w> <description/>": "<w>PERINGATAN:</w> <description/>",
     " in <strong>%(room)s</strong>": " di <strong>%(room)s</strong>",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Anda tidak dapat memulai sebuah pesan suara karena Anda saat ini merekam sebuah siaran langsung. Silakan mengakhiri siaran langsung Anda untuk memulai merekam sebuah pesan suara.",
     "Can't start voice message": "Tidak dapat memulai pesan suara",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "unknown": "tidak diketahui",
-    "Declining…": "Menolak…",
-    "There are no past polls in this room": "Tidak ada pemungutan suara sebelumnya di ruangan ini",
-    "There are no active polls in this room": "Tidak ada pemungutan suara yang aktif di ruangan ini",
     "Enable '%(manageIntegrations)s' in Settings to do this.": "Aktifkan '%(manageIntegrations)s' di Pengaturan untuk melakukan ini.",
     "Loading live location…": "Memuat lokasi langsung…",
     "Fetching keys from server…": "Mendapatkan kunci- dari server…",
@@ -996,46 +901,18 @@
     "Waiting for partner to confirm…": "Menunggu pengguna untuk konfirmasi…",
     "Adding…": "Menambahkan…",
     "Starting export process…": "Memulai proses pengeksporan…",
-    "Loading polls": "Memuat pemungutan suara",
-    "Ended a poll": "Mengakhiri sebuah pemungutan suara",
-    "Due to decryption errors, some votes may not be counted": "Karena kesalahan pendekripsian, beberapa suara tidak dihitung",
-    "The sender has blocked you from receiving this message": "Pengirim telah memblokir Anda supaya tidak menerima pesan ini",
-    "Answered elsewhere": "Dijawab di tempat lain",
-    "View poll": "Tampilkan pemungutan suara",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "Tidak ada pemungutan suara untuk hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
-        "other": "Tidak ada pemungutan suara untuk %(count)s hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir"
-    },
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "Tidak ada pemungutan suara untuk hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
-        "other": "Tidak ada pemungutan suara yang aktif %(count)s hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir"
-    },
-    "There are no past polls. Load more polls to view polls for previous months": "Tidak ada pemungutan suara sebelumnya. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
-    "There are no active polls. Load more polls to view polls for previous months": "Tidak ada pemungutan suara yang aktif. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
-    "Load more polls": "Muat lebih banyak pemungutan suara",
-    "Past polls": "Pemungutan suara sebelumnya",
-    "Active polls": "Pemungutan suara yang aktif",
-    "View poll in timeline": "Tampilkan pemungutan suara di lini masa",
     "Invites by email can only be sent one at a time": "Undangan lewat surel hanya dapat dikirim satu-satu",
     "Desktop app logo": "Logo aplikasi desktop",
     "Requires your server to support the stable version of MSC3827": "Mengharuslkan server Anda mendukung versi MSC3827 yang stabil",
     "Message from %(user)s": "Pesan dari %(user)s",
     "Message in %(room)s": "Pesan dalam %(room)s",
-    "Error details": "Detail kesalahan",
-    "Unable to find event at that date": "Tidak dapat menemukan peristiwa di tanggal itu",
-    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Silakan kirim <debugLogsLink>catatan pengawakutu</debugLogsLink> untuk membantu kami melacak masalah.",
     "unavailable": "tidak tersedia",
     "unknown status code": "kode keadaan tidak diketahui",
-    "Server returned %(statusCode)s with error code %(errorCode)s": "Server merespons dengan %(statusCode)s dengan kode kesalahan %(errorCode)s",
-    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Kami tidak dapat menemukan peristiwa sebelumnya dari %(dateString)s. Coba pilih tanggal yang lebih awal.",
-    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Sebuah kesalahan jaringan terjadi saat mencari dan menuju ke tanggal yang diberikan. Homeserver Anda mungkin tidak tersedia atau ada masalah sementara dengan koneksi internet Anda. Silakan coba lagi. Jika ini masih berlanjut, silakan hubungi administrator homeserver Anda.",
     "Start DM anyway": "Mulai percakapan langsung saja",
     "Start DM anyway and never warn me again": "Mulai percakapan langsung saja dan jangan peringatkan saya lagi",
     "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "Tidak dapat menemukan profil untuk ID Matrix yang disertakan di bawah — apakah Anda ingin memulai percakapan langsung saja?",
     "Are you sure you wish to remove (delete) this event?": "Apakah Anda yakin ingin menghilangkan (menghapus) peristiwa ini?",
     "Note that removing room changes like this could undo the change.": "Diingat bahwa menghilangkan perubahan ruangan dapat mengurungkan perubahannya.",
-    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.": "Pesan-pesan di sini dienkripsi secara ujung ke ujung. Verifikasi %(displayName)s di profilnya — ketuk pada profilnya.",
-    "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "Pesan-pesan di ruangan ini dienkripsi secara ujung ke ujung. Ketika orang-orang bergabung, Anda dapat memverifikasi mereka di profil mereka dengan mengetuk pada foto profil mereka.",
     "Upgrade room": "Tingkatkan ruangan",
     "Other spaces you know": "Space lainnya yang Anda tahu",
     "Failed to query public rooms": "Gagal melakukan kueri ruangan publik",
@@ -1277,7 +1154,9 @@
         "new_room": "Ruangan baru",
         "new_video_room": "Ruangan video baru",
         "add_existing_room": "Tambahkan ruangan yang sudah ada",
-        "explore_public_rooms": "Jelajahi ruangan publik"
+        "explore_public_rooms": "Jelajahi ruangan publik",
+        "reply_in_thread": "Balas di utasan",
+        "click": "Klik"
     },
     "a11y": {
         "user_menu": "Menu pengguna",
@@ -2278,13 +2157,25 @@
     "timeline": {
         "m.call": {
             "video_call_started": "Panggilan video dimulai di %(roomName)s.",
-            "video_call_started_unsupported": "Panggilan video dimulai di %(roomName)s. (tidak didukung oleh peramban ini)"
+            "video_call_started_unsupported": "Panggilan video dimulai di %(roomName)s. (tidak didukung oleh peramban ini)",
+            "video_call_ended": "Panggilan video berakhir"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s melakukan panggilan video.",
             "voice_call_unsupported": "%(senderName)s melakukan panggilan suara. (tidak didukung oleh browser ini)",
             "video_call": "%(senderName)s melakukan panggilan video.",
-            "video_call_unsupported": "%(senderName)s melakukan panggilan video. (tidak didukung oleh browser ini)"
+            "video_call_unsupported": "%(senderName)s melakukan panggilan video. (tidak didukung oleh browser ini)",
+            "declined": "Panggilan ditolak",
+            "call_back_prompt": "Panggil ulang",
+            "answered_elsewhere": "Dijawab di tempat lain",
+            "missed_call": "Panggilan terlewat",
+            "no_answer": "Tidak ada jawaban",
+            "failed_connect_media": "Tidak dapat menghubung media",
+            "failed_connection": "Koneksi gagal",
+            "failed_opponent_media": "Perangkatnya tidak dapat memulai kamera atau mikrofonnya",
+            "unknown_error": "Sebuah kesalahan yang tidak diketahui terjadi",
+            "unknown_failure": "Kegagalan yang tidak diketahui: %(reason)s",
+            "unknown_state": "Panggilan ini berada di status yang tidak diketahui!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s menerima undangan %(displayName)s",
@@ -2336,7 +2227,6 @@
             "forbidden": "%(senderDisplayName)s telah mencegah tamu untuk bergabung dengan ruangan ini.",
             "unknown": "%(senderDisplayName)s mengubah akses tamu ke %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s mengirim sebuah gambar.",
         "m.sticker": "%(senderDisplayName)s mengirim sebuah stiker.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s mengatur ACL server untuk ruangan ini.",
@@ -2380,7 +2270,12 @@
         "m.widget": {
             "modified": "Widget %(widgetName)s diubah oleh %(senderName)s",
             "added": "Widget %(widgetName)s ditambahkan oleh %(senderName)s",
-            "removed": "Widget %(widgetName)s dihapus oleh %(senderName)s"
+            "removed": "Widget %(widgetName)s dihapus oleh %(senderName)s",
+            "jitsi_join_top_prompt": "Bergabung dengan konferensi di atas ruangan ini",
+            "jitsi_join_right_prompt": "Bergabung dengan konferensinya di kartu informasi ruangan di sebelah kanan",
+            "jitsi_ended": "Konferensi video diakhiri oleh %(senderName)s",
+            "jitsi_updated": "Konferensi video diperbarui oleh %(senderName)s",
+            "jitsi_started": "Konferensi video dimulai oleh %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s telah memperbarui tata letak ruangan",
         "m.location": {
@@ -2391,7 +2286,6 @@
         "self_redaction": "Pesan dihapus",
         "redaction": "Pesan dihapus oleh %(name)s",
         "m.poll.start": "%(senderName)s telah memulai sebuah pungutan suara — %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s telah mengakhiri sebuah poll",
         "typing_indicator": {
             "one_user": "%(displayName)s sedang mengetik …",
             "two_users": "%(names)s dan %(lastPerson)s sedang mengetik …",
@@ -2563,7 +2457,8 @@
             "changed_rule_users": "%(senderName)s mengubah sebuah peraturan pencekalan pengguna yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",
             "changed_rule_rooms": "%(senderName)s mengubah sebuah peraturan pencekalan ruangan yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",
             "changed_rule_servers": "%(senderName)s mengubah sebuah peraturan pencekalan server yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",
-            "changed_rule_glob": "%(senderName)s memperbarui sebuah peraturan pencekalan yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s"
+            "changed_rule_glob": "%(senderName)s memperbarui sebuah peraturan pencekalan yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",
+            "message_hidden": "Anda telah mengabaikan pengguna ini, jadi pesannya disembunyikan. <a>Tampilkan saja.</a>"
         },
         "no_permission_messages_before_invite": "Anda tidak memiliki izin untuk melihat pesan-pesan sebelum Anda diundang.",
         "no_permission_messages_before_join": "Anda tidak memiliki izin untuk melihat pesan-pesan sebelum Anda bergabung.",
@@ -2617,18 +2512,72 @@
         "mab": {
             "label": "Aksi Pesan",
             "view_in_room": "Tampilkan di ruangan",
-            "copy_link_thread": "Salin tautan ke utasan"
+            "copy_link_thread": "Salin tautan ke utasan",
+            "collapse_reply_chain": "Tutup kutip",
+            "expand_reply_chain": "Buka kutip"
         },
         "m.audio": {
             "unnamed_audio": "Audio tidak dinamai",
-            "error_downloading_audio": "Terjadi kesalahan mengunduh audio"
+            "error_downloading_audio": "Terjadi kesalahan mengunduh audio",
+            "error_processing_audio": "Terjadi kesalahan mengolah pesan suara",
+            "error_processing_voice_message": "Terjadi kesalahan mengolah pesan suara"
         },
         "load_error": {
             "no_permission": "Mencoba memuat titik spesifik di lini masa ruangan ini, tetapi Anda tidak memiliki izin untuk menampilkan pesannya.",
             "unable_to_find": "Mencoba memuat titik spesifik di lini masa ruangan ini, tetapi tidak dapat menemukannya.",
             "title": "Gagal untuk memuat posisi lini masa"
         },
-        "error_no_renderer": "Peristiwa ini tidak dapat ditampilkan"
+        "error_no_renderer": "Peristiwa ini tidak dapat ditampilkan",
+        "decryption_failure_blocked": "Pengirim telah memblokir Anda supaya tidak menerima pesan ini",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_downloading": "Mengunduh",
+        "download_action_decrypting": "Mendekripsi",
+        "m.room.encryption": {
+            "parameters_changed": "Beberapa parameter enkripsi telah diubah.",
+            "enabled_dm": "Pesan-pesan di sini dienkripsi secara ujung ke ujung. Verifikasi %(displayName)s di profilnya — ketuk pada profilnya.",
+            "enabled_local": "Pesan di obrolan ini akan dienkripsi secara ujung ke ujung.",
+            "enabled": "Pesan-pesan di ruangan ini dienkripsi secara ujung ke ujung. Ketika orang-orang bergabung, Anda dapat memverifikasi mereka di profil mereka dengan mengetuk pada foto profil mereka.",
+            "disable_attempt": "Mengabaikan percobaan untuk menonaktifkan enkripsi",
+            "disabled": "Enkripsi tidak diaktifkan",
+            "unsupported": "Enkripsi yang digunakan di ruangan ini tidak didukung."
+        },
+        "pending_moderation_reason": "Pesan akan dimoderasikan: %(reason)s",
+        "pending_moderation": "Pesan akan dimoderasikan",
+        "m.beacon_info": {
+            "view_live_location": "Tampilkan lokasi langsung"
+        },
+        "m.file": {
+            "download_label": "Unduh %(text)s",
+            "error_decrypting": "Terjadi kesalahan mendekripsi lampiran",
+            "decrypt_label": "Dekripsi %(text)s",
+            "error_invalid": "File tidak absah%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s mengirim sebuah gambar.",
+            "error": "Tidak dapat menampilkan gambar karena kesalahan",
+            "error_decrypting": "Terjadi kesalahan mendekripsi gambar",
+            "error_downloading": "Kesalahan mengunduh gambar",
+            "show_image": "Tampilkan gambar"
+        },
+        "m.key.verification.done": "Anda memverifikasi %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Anda membatalkan memverifikasi %(name)s",
+            "user_cancelled": "%(name)s membatalkan verifikasi"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Anda menerima",
+            "you_declined": "Anda menolak",
+            "you_cancelled": "Anda membatalkan",
+            "declining": "Menolak…",
+            "you_started": "Anda mengirim sebuah permintaan verifikasi"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s telah mengakhiri sebuah poll",
+            "ended": "Mengakhiri sebuah pemungutan suara"
+        },
+        "m.video": {
+            "error_decrypting": "Terjadi kesalahan mendekripsi video"
+        }
     },
     "slash_command": {
         "spoiler": "Mengirim pesan sebagai spoiler",
@@ -3121,7 +3070,25 @@
                 "reset_confirmation": "Benar-benar ingin mengatur ulang kunci-kunci verifikasi?",
                 "skip_verification": "Lewatkan verifikasi untuk sementara"
             },
-            "accepting": "Menerima…"
+            "accepting": "Menerima…",
+            "scan_qr": "Verifikasi dengan memindai",
+            "scan_qr_explainer": "Tanyakan %(displayName)s untuk memindai kode Anda:",
+            "verify_emoji_prompt_qr": "Jika Anda tidak dapat memindai kode di atas, verifikasi dengan membandingkan emoji yang unik.",
+            "verify_emoji_prompt": "Verifikasi dengan membandingkan emoji unik.",
+            "verify_emoji": "Verifikasi dengan emoji",
+            "qr_reciprocate_same_shield_device": "Hampir selesai! Apakah perangkat lain Anda menampilkan perisai yang sama?",
+            "qr_reciprocate_same_shield_user": "Hampir selesai! Apakah %(displayName)s menampilkan perisai yang sama?",
+            "prompt_encrypted": "Verifikasi semua pengguna di sebuah ruangan untuk memastikan keamanannya.",
+            "prompt_unencrypted": "Di ruangan terenkripsi, verifikasi semua pengguna untuk memastikan keamanannya.",
+            "successful_own_device": "Anda berhasil memverifikasi perangkat Anda!",
+            "successful_device": "Anda berhasil memverifikasi %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "Anda berhasil memverifikasi %(displayName)s!",
+            "prompt_self": "Mulai memverifikasi lagi dari notifikasinya.",
+            "prompt_user": "Mulai memverifikasi lagi dari profilnya.",
+            "timed_out": "Waktu habis untuk memverifikasi.",
+            "cancelled_self": "Anda membatalkan verifikasi di perangkat Anda yang lain.",
+            "cancelled_user": "%(displayName)s membatalkan verifikasi.",
+            "cancelled": "Anda membatalkan verifikasi."
         },
         "old_version_detected_title": "Data kriptografi lama terdeteksi",
         "old_version_detected_description": "Data dari %(brand)s versi lama telah terdeteksi. Ini akan menyebabkan kriptografi ujung ke ujung tidak berfungsi di versi yang lebih lama. Pesan terenkripsi secara ujung ke ujung yang dipertukarkan baru-baru ini saat menggunakan versi yang lebih lama mungkin tidak dapat didekripsi dalam versi ini. Ini juga dapat menyebabkan pesan yang dipertukarkan dengan versi ini gagal. Jika Anda mengalami masalah, keluar dan masuk kembali. Untuk menyimpan riwayat pesan, ekspor dan impor ulang kunci Anda.",
@@ -3174,7 +3141,8 @@
         "cross_signing_user_normal": "Anda belum memverifikasi pengguna ini.",
         "cross_signing_room_warning": "Seseorang menggunakan sesi yang tidak dikenal",
         "cross_signing_room_verified": "Semuanya di ruangan ini telah terverifikasi",
-        "cross_signing_room_normal": "Ruangan ini dienkripsi secara ujung ke ujung"
+        "cross_signing_room_normal": "Ruangan ini dienkripsi secara ujung ke ujung",
+        "unsupported": "Klien ini tidak mendukung enkripsi ujung ke ujung."
     },
     "emoji": {
         "category_frequently_used": "Sering Digunakan",
@@ -3669,7 +3637,8 @@
         "empty_tip": "<b>Tip:</b> Gunakan “%(replyInThread)s” ketika kursor di atas pesan.",
         "empty_heading": "Buat diskusi tetap teratur dengan utasan",
         "unable_to_decrypt": "Tidak dapat mendekripsi pesan",
-        "open_thread": "Buka utasan"
+        "open_thread": "Buka utasan",
+        "error_start_thread_existing_relation": "Tidak dapat membuat utasan dari sebuah peristiwa dengan relasi yang sudah ada"
     },
     "theme": {
         "light_high_contrast": "Kontras tinggi terang",
@@ -3975,7 +3944,16 @@
         "jump_read_marker": "Pergi ke pesan pertama yang belum dibaca.",
         "inviter_unknown": "Tidak Dikenal",
         "failed_reject_invite": "Gagal untuk menolak undangan",
-        "creating_room_text": "Kami sedang membuat sebuah ruangan dengan %(names)s"
+        "creating_room_text": "Kami sedang membuat sebuah ruangan dengan %(names)s",
+        "error_jump_to_date_connection": "Sebuah kesalahan jaringan terjadi saat mencari dan menuju ke tanggal yang diberikan. Homeserver Anda mungkin tidak tersedia atau ada masalah sementara dengan koneksi internet Anda. Silakan coba lagi. Jika ini masih berlanjut, silakan hubungi administrator homeserver Anda.",
+        "error_jump_to_date_not_found": "Kami tidak dapat menemukan peristiwa sebelumnya dari %(dateString)s. Coba pilih tanggal yang lebih awal.",
+        "error_jump_to_date": "Server merespons dengan %(statusCode)s dengan kode kesalahan %(errorCode)s",
+        "error_jump_to_date_send_logs_prompt": "Silakan kirim <debugLogsLink>catatan pengawakutu</debugLogsLink> untuk membantu kami melacak masalah.",
+        "error_jump_to_date_title": "Tidak dapat menemukan peristiwa di tanggal itu",
+        "error_jump_to_date_details": "Detail kesalahan",
+        "jump_to_date_beginning": "Awalan ruangan",
+        "jump_to_date": "Pergi ke tanggal",
+        "jump_to_date_prompt": "Pilih sebuah tanggal untuk pergi ke tanggalnya"
     },
     "file_panel": {
         "guest_note": "Anda harus <a>mendaftar</a> untuk menggunakan kegunaan ini",
@@ -4018,7 +3996,22 @@
         "options_placeholder": "Tulis sebuah opsi",
         "options_add_button": "Tambahkan opsi",
         "disclosed_notes": "Pemberi suara akan melihat hasilnya ketika mereka telah memberikan suara",
-        "notes": "Hasil hanya akan disediakan ketika Anda mengakhiri pemungutan suara"
+        "notes": "Hasil hanya akan disediakan ketika Anda mengakhiri pemungutan suara",
+        "unable_edit_title": "Tidak dapat mengedit poll",
+        "unable_edit_description": "Maaf, Anda tidak dapat mengedit sebuah poll setelah suara-suara diberikan.",
+        "error_voting_title": "Suara tidak didaftarkan",
+        "error_voting_description": "Maaf, suara Anda tidak didaftarkan. Silakan coba lagi.",
+        "total_decryption_errors": "Karena kesalahan pendekripsian, beberapa suara tidak dihitung",
+        "total_not_ended": "Hasil akan tersedia setelah pemungutan suara berakhir",
+        "total_no_votes": "Tidak ada suara",
+        "total_n_votes": {
+            "one": "%(count)s suara. Vote untuk melihat hasilnya",
+            "other": "%(count)s suara. Vote untuk melihat hasilnya"
+        },
+        "total_n_votes_voted": {
+            "one": "Berdasarkan oleh %(count)s suara",
+            "other": "Berdasarkan oleh %(count)s suara"
+        }
     },
     "failed_load_async_component": "Tidak dapat memuat! Periksa koneksi jaringan Anda dan coba lagi.",
     "upload_failed_generic": "File '%(fileName)s' gagal untuk diunggah.",
@@ -4252,7 +4245,8 @@
         "deactivate_confirm_description": "Menonaktifkan pengguna ini akan mengeluarkan dan mencegahnya masuk ke akun lagi. Pengguna itu juga akan meninggalkan semua ruangan yang pengguna itu berada. Aksi ini tidak dapat dibatalkan. Apakah Anda yakin Anda ingin menonaktifkan pengguna ini?",
         "deactivate_confirm_action": "Nonaktifkan pengguna",
         "error_deactivate": "Gagal untuk menonaktifkan pengguna",
-        "role_label": "Peran di <RoomName/>"
+        "role_label": "Peran di <RoomName/>",
+        "edit_own_devices": "Edit perangkat"
     },
     "stickers": {
         "empty": "Anda saat ini tidak memiliki paket stiker apa pun yang diaktifkan",
@@ -4281,7 +4275,31 @@
         "pinned_messages_button": "Disematkan",
         "export_chat_button": "Ekspor obrolan",
         "share_button": "Bagikan ruangan",
-        "settings_button": "Pengaturan ruangan"
+        "settings_button": "Pengaturan ruangan",
+        "poll": {
+            "view_in_timeline": "Tampilkan pemungutan suara di lini masa",
+            "active_heading": "Pemungutan suara yang aktif",
+            "past_heading": "Pemungutan suara sebelumnya",
+            "loading": "Memuat pemungutan suara",
+            "load_more": "Muat lebih banyak pemungutan suara",
+            "empty_active": "Tidak ada pemungutan suara yang aktif di ruangan ini",
+            "empty_past": "Tidak ada pemungutan suara sebelumnya di ruangan ini",
+            "empty_active_load_more": "Tidak ada pemungutan suara yang aktif. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
+            "empty_past_load_more": "Tidak ada pemungutan suara sebelumnya. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
+            "empty_active_load_more_n_days": {
+                "one": "Tidak ada pemungutan suara untuk hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
+                "other": "Tidak ada pemungutan suara yang aktif %(count)s hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir"
+            },
+            "empty_past_load_more_n_days": {
+                "one": "Tidak ada pemungutan suara untuk hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
+                "other": "Tidak ada pemungutan suara untuk %(count)s hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir"
+            },
+            "view_poll": "Tampilkan pemungutan suara",
+            "final_result": {
+                "other": "Hasil akhir bedasarkan dari %(count)s suara",
+                "one": "Hasil akhir bedasarkan dari %(count)s suara"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Tolak undangan",

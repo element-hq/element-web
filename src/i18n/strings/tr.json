@@ -6,12 +6,8 @@
     },
     "An error has occurred.": "Bir hata oluştu.",
     "Custom level": "Özel seviye",
-    "Decrypt %(text)s": "%(text)s metninin şifresini çöz",
-    "Download %(text)s": "%(text)s metnini indir",
     "Email address": "E-posta Adresi",
-    "Error decrypting attachment": "Ek şifresini çözme hatası",
     "Home": "Ev",
-    "Invalid file%(extra)s": "Geçersiz dosya %(extra)s'ı",
     "Join Room": "Odaya Katıl",
     "Moderator": "Moderatör",
     "not specified": "Belirtilmemiş",
@@ -50,8 +46,6 @@
     "Confirm Removal": "Kaldırma İşlemini Onayla",
     "Unable to restore session": "Oturum geri yüklenemiyor",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Eğer daha önce %(brand)s'un daha yeni bir versiyonunu kullandıysanız , oturumunuz bu sürümle uyumsuz olabilir . Bu pencereyi kapatın ve daha yeni sürüme geri dönün.",
-    "Error decrypting image": "Resim şifre çözme hatası",
-    "Error decrypting video": "Video şifre çözme hatası",
     "Add an Integration": "Entegrasyon ekleyin",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Hesabınızı %(integrationsUrl)s ile kullanmak üzere doğrulayabilmeniz için üçüncü taraf bir siteye götürülmek üzeresiniz. Devam etmek istiyor musunuz ?",
     "This will allow you to reset your password and receive notifications.": "Bu şifrenizi sıfırlamanızı ve bildirimler almanızı sağlayacak.",
@@ -197,15 +191,9 @@
         "other": "%(count)s doğrulanmış oturum",
         "one": "1 doğrulanmış oturum"
     },
-    "Show image": "Resim göster",
-    "You verified %(name)s": "%(name)s yı doğruladınız",
-    "You cancelled verifying %(name)s": "%(name)s doğrulaması iptal edildi",
-    "You accepted": "Kabul ettiniz",
     "%(name)s accepted": "%(name)s kabul etti",
-    "You cancelled": "İptal ettiniz",
     "%(name)s cancelled": "%(name)s iptal etti",
     "%(name)s wants to verify": "%(name)s doğrulamak istiyor",
-    "You sent a verification request": "Doğrulama isteği gönderdiniz",
     "edited": "düzenlendi",
     "Deactivate account": "Hesabı pasifleştir",
     "And %(count)s more...": {
@@ -232,7 +220,6 @@
         "other": "%(count)s oturum",
         "one": "%(count)s oturum"
     },
-    "%(name)s cancelled verifying": "%(name)s doğrulama iptal edildi",
     "Cancel search": "Aramayı iptal et",
     "Delete Widget": "Görsel Bileşen Sil",
     "Destroy cross-signing keys?": "Çarpraz-imzalama anahtarlarını imha et?",
@@ -266,9 +253,6 @@
     "AM": "12:00",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) yeni oturuma doğrulamadan giriş yaptı:",
     "Ask this user to verify their session, or manually verify it below.": "Kullanıcıya oturumunu doğrulamasını söyle, ya da aşağıdan doğrula.",
-    "Verify by scanning": "Taramayla doğrula",
-    "Verify by emoji": "Emojiyle doğrula",
-    "Verify by comparing unique emoji.": "Eşsiz emoji eşleştirme ile doğrulama.",
     "Edited at %(date)s. Click to view edits.": "%(date)s tarihinde düzenlendi. Düzenlemeleri görmek için tıkla.",
     "You signed in to a new session without verifying it:": "Yeni bir oturuma, doğrulamadan oturum açtınız:",
     "Verify your other session using one of the options below.": "Diğer oturumunuzu aşağıdaki seçeneklerden birini kullanarak doğrulayın.",
@@ -511,17 +495,6 @@
     "Click to view edits": "Düzenlemeleri görmek için tıkla",
     "Edited at %(date)s": "%(date)s tarihinde düzenlendi",
     "%(name)s declined": "%(name)s reddetti",
-    "You declined": "Reddettiniz",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Bu kullanıcıyı yok saydınız, bu yüzden mesajları gizlidir. <a>Yine de göster.</a>",
-    "Video conference started by %(senderName)s": "Video konferans %(senderName)s tarafından başlatıldı",
-    "Video conference updated by %(senderName)s": "Video konferans %(senderName)s tarafından güncellendi",
-    "Video conference ended by %(senderName)s": "Video konferans %(senderName)s tarafından sonlandırıldı",
-    "The encryption used by this room isn't supported.": "Bu odada kullanılan şifreleme desteklenmiyor.",
-    "Encryption not enabled": "Şifreleme etkin değil",
-    "Ignored attempt to disable encryption": "Şifrelemeyi devre dışı bırakma denemesi yok sayıldı",
-    "You cancelled verification.": "Doğrulamayı iptal ettiniz.",
-    "%(displayName)s cancelled verification.": "%(displayName)s doğrulamayı iptal etti.",
-    "Verification timed out.": "Doğrulama zaman aşımına uğradı.",
     "IRC display name width": "IRC görünen ad genişliği",
     "Australia": "Avustralya",
     "Aruba": "Aruba",
@@ -544,7 +517,6 @@
     "Spanner": "Anahtar",
     "Smiley": "Gülen yüz",
     "Dial pad": "Arama tuşları",
-    "Verify all users in a room to ensure it's secure.": "Güvenli olduğuna emin olmak için odadaki tüm kullanıcıları onaylayın.",
     "No recent messages by %(user)s found": "%(user)s kullanıcısın hiç yeni ileti yok",
     "Not encrypted": "Şifrelenmemiş",
     "Backup version:": "Yedekleme sürümü:",
@@ -566,14 +538,9 @@
     "Enter the name of a new server you want to explore.": "Keşfetmek istediğiniz sunucunun adını girin.",
     "Preparing to download logs": "Loglar indirilmeye hazırlanıyor",
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Hatırlatma:Tarayıcınız desteklenmiyor, deneyiminiz öngörülemiyor.",
-    "This client does not support end-to-end encryption.": "Bu istemci uçtan uca şifrelemeyi desteklemiyor.",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Çok sayıda ileti için bu biraz sürebilir. Lütfen bu sürede kullandığınız istemciyi yenilemeyin.",
     "Remove recent messages by %(user)s": "%(user)s kullanıcısından en son iletileri kaldır",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Daha önceden kalma iletilerin var olup olmadığını kontrol etmek için zaman çizelgesinde yukarı doğru kaydırın.",
-    "You've successfully verified %(displayName)s!": "%(displayName)s başarıyla doğruladınız!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "%(deviceName)s (%(deviceId)s) başarıyla doğruladınız!",
-    "You've successfully verified your device!": "Cihazınızı başarıyla doğruladınız!",
-    "Edit devices": "Cihazları düzenle",
     "common": {
         "about": "Hakkında",
         "analytics": "Analitik",
@@ -1190,7 +1157,6 @@
             "forbidden": "Odaya misafirlerin girişini engelleyen %(senderDisplayName)s.",
             "unknown": "%(senderDisplayName)s misafir erişim kuralını %(rule)s şeklinde değiştirdi"
         },
-        "m.image": "%(senderDisplayName)s bir resim gönderdi.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s bu oda için sunucu ACL'lerini ayarladı.",
             "changed": "%(senderDisplayName)s bu oda için sunucu ACL'lerini değiştirdi.",
@@ -1231,7 +1197,10 @@
         "m.widget": {
             "modified": "%(widgetName)s görsel bileşeni %(senderName)s tarafından düzenlendi",
             "added": "%(widgetName)s görsel bileşeni %(senderName)s tarafından eklendi",
-            "removed": "%(widgetName)s görsel bileşeni %(senderName)s tarafından silindi"
+            "removed": "%(widgetName)s görsel bileşeni %(senderName)s tarafından silindi",
+            "jitsi_ended": "Video konferans %(senderName)s tarafından sonlandırıldı",
+            "jitsi_updated": "Video konferans %(senderName)s tarafından güncellendi",
+            "jitsi_started": "Video konferans %(senderName)s tarafından başlatıldı"
         },
         "self_redaction": "Mesaj silindi",
         "redaction": "Mesaj %(name)s tarafından silindi",
@@ -1354,7 +1323,8 @@
             "changed_rule_users": "%(senderName)s %(oldGlob)s ile eşleşen kullanıcıları banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
             "changed_rule_rooms": "%(senderName)s %(oldGlob)s ile eşleşen odaları banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
             "changed_rule_servers": "%(senderName)s %(oldGlob)s ile eşleşen sunucuları banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
-            "changed_rule_glob": "%(senderName)s %(oldGlob)s ile eşleşen banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s"
+            "changed_rule_glob": "%(senderName)s %(oldGlob)s ile eşleşen banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
+            "message_hidden": "Bu kullanıcıyı yok saydınız, bu yüzden mesajları gizlidir. <a>Yine de göster.</a>"
         },
         "redacted": {
             "tooltip": "Mesaj %(date)s tarihinde silindi"
@@ -1384,7 +1354,37 @@
             "unable_to_find": "Bu odanın akışında belirli bir noktaya yüklemeye çalışıldı , ancak bulunamadı.",
             "title": "Zaman çizelgesi konumu yüklenemedi"
         },
-        "error_no_renderer": "Bu olay görüntülenemedi"
+        "error_no_renderer": "Bu olay görüntülenemedi",
+        "m.room.encryption": {
+            "disable_attempt": "Şifrelemeyi devre dışı bırakma denemesi yok sayıldı",
+            "disabled": "Şifreleme etkin değil",
+            "unsupported": "Bu odada kullanılan şifreleme desteklenmiyor."
+        },
+        "m.file": {
+            "download_label": "%(text)s metnini indir",
+            "error_decrypting": "Ek şifresini çözme hatası",
+            "decrypt_label": "%(text)s metninin şifresini çöz",
+            "error_invalid": "Geçersiz dosya %(extra)s'ı"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s bir resim gönderdi.",
+            "error_decrypting": "Resim şifre çözme hatası",
+            "show_image": "Resim göster"
+        },
+        "m.key.verification.done": "%(name)s yı doğruladınız",
+        "m.key.verification.cancel": {
+            "you_cancelled": "%(name)s doğrulaması iptal edildi",
+            "user_cancelled": "%(name)s doğrulama iptal edildi"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Kabul ettiniz",
+            "you_declined": "Reddettiniz",
+            "you_cancelled": "İptal ettiniz",
+            "you_started": "Doğrulama isteği gönderdiniz"
+        },
+        "m.video": {
+            "error_decrypting": "Video şifre çözme hatası"
+        }
     },
     "slash_command": {
         "spoiler": "Mesajı sürprizbozan olarak gönder",
@@ -1655,7 +1655,17 @@
             "unverified_session_toast_title": "Yeni giriş. Bu siz miydiniz?",
             "waiting_for_user_accept": "%(displayName)s kullanıcısın onaylaması için bekleniliyor…",
             "start_button": "Doğrulamayı Başlat",
-            "accepting": "Kabul ediliyor…"
+            "accepting": "Kabul ediliyor…",
+            "scan_qr": "Taramayla doğrula",
+            "verify_emoji_prompt": "Eşsiz emoji eşleştirme ile doğrulama.",
+            "verify_emoji": "Emojiyle doğrula",
+            "prompt_encrypted": "Güvenli olduğuna emin olmak için odadaki tüm kullanıcıları onaylayın.",
+            "successful_own_device": "Cihazınızı başarıyla doğruladınız!",
+            "successful_device": "%(deviceName)s (%(deviceId)s) başarıyla doğruladınız!",
+            "successful_user": "%(displayName)s başarıyla doğruladınız!",
+            "timed_out": "Doğrulama zaman aşımına uğradı.",
+            "cancelled_user": "%(displayName)s doğrulamayı iptal etti.",
+            "cancelled": "Doğrulamayı iptal ettiniz."
         },
         "old_version_detected_title": "Eski kriptolama verisi tespit edildi",
         "cancel_entering_passphrase_title": "Parola girişini iptal et?",
@@ -1695,7 +1705,8 @@
         "cross_signing_user_normal": "Bu kullanıcıyı doğrulamadınız.",
         "cross_signing_room_warning": "Birisi bilinmeyen bir oturum kullanıyor",
         "cross_signing_room_verified": "Bu odadaki herkes doğrulanmış",
-        "cross_signing_room_normal": "Bu oda uçtan uça şifreli"
+        "cross_signing_room_normal": "Bu oda uçtan uça şifreli",
+        "unsupported": "Bu istemci uçtan uca şifrelemeyi desteklemiyor."
     },
     "emoji": {
         "category_frequently_used": "Sıklıkla Kullanılan",
@@ -2262,7 +2273,8 @@
         "deactivate_confirm_title": "Kullanıcıyı pasifleştir?",
         "deactivate_confirm_description": "Bu kullanıcı etkisizleştirmek onu bir daha oturum açmasını engeller.Ek olarak da bulundukları bütün odalardan atılırlar. Bu eylem geri dönüştürülebilir. Bu kullanıcıyı etkisizleştirmek istediğinize emin misiniz?",
         "deactivate_confirm_action": "Kullanıcıyı pasifleştir",
-        "error_deactivate": "Kullanıcı pasifleştirme başarısız"
+        "error_deactivate": "Kullanıcı pasifleştirme başarısız",
+        "edit_own_devices": "Cihazları düzenle"
     },
     "stickers": {
         "empty": "Açılmış herhangi bir çıkartma paketine sahip değilsiniz",

@@ -97,7 +97,7 @@ const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent, closeMen
     return (
         <IconizedContextMenuOption
             iconClassName="mx_MessageContextMenu_iconReplyInThread"
-            label={_t("Reply in thread")}
+            label={_t("action|reply_in_thread")}
             onClick={onClick}
         />
     );

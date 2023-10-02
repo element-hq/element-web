@@ -250,7 +250,9 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
 
         if (this.state.error !== null) {
             return (
-                <MediaProcessingError className="mx_MVideoBody">{_t("Error decrypting video")}</MediaProcessingError>
+                <MediaProcessingError className="mx_MVideoBody">
+                    {_t("timeline|m.video|error_decrypting")}
+                </MediaProcessingError>
             );
         }
 

@@ -1423,7 +1423,7 @@ const BasicUserInfo: React.FC<{
     let text;
     if (!isRoomEncrypted) {
         if (!cryptoEnabled) {
-            text = _t("This client does not support end-to-end encryption.");
+            text = _t("encryption|unsupported");
         } else if (room && !room.isSpaceRoom()) {
             text = _t("user_info|room_unencrypted");
         }
@@ -1487,7 +1487,7 @@ const BasicUserInfo: React.FC<{
                         });
                     }}
                 >
-                    {_t("Edit devices")}
+                    {_t("user_info|edit_own_devices")}
                 </AccessibleButton>
             </div>
         );

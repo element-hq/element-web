@@ -430,49 +430,10 @@
     "This version of %(brand)s does not support viewing some encrypted files": "גרסה זו של %(brand)s אינה תומכת בצפייה בקבצים מוצפנים מסוימים",
     "Use the <a>Desktop app</a> to search encrypted messages": "השתמשו ב <a> אפליקציית שולחן העבודה </a> לחיפוש הודעות מוצפנות",
     "Use the <a>Desktop app</a> to see all encrypted files": "השתמשו ב <a> אפליקציית שולחן העבודה </a> כדי לראות את כל הקבצים המוצפנים",
-    "Error decrypting video": "שגיאה בפענוח וידאו",
-    "You sent a verification request": "שלחתם בקשה לקוד אימות",
     "%(name)s wants to verify": "%(name)s רוצה לאמת",
     "%(name)s cancelled": "%(name)s ביטל",
     "%(name)s declined": "%(name)s סרב",
-    "You cancelled": "ביטלתם",
-    "You declined": "דחיתם",
     "%(name)s accepted": "%(name)s אישרו",
-    "You accepted": "אשרתם",
-    "%(name)s cancelled verifying": "%(name)s ביטל את האימות",
-    "You cancelled verifying %(name)s": "בטלתם אימות עם %(name)s",
-    "You verified %(name)s": "אימתת את %(name)s",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "התעלמת ממשתמש זה, ולכן המסר שלו מוסתר. <a> הצג בכל מקרה. </a>",
-    "Video conference started by %(senderName)s": "ועידת וידאו התחילה על ידי %(senderName)s",
-    "Video conference updated by %(senderName)s": "ועידת הווידאו עודכנה על ידי %(senderName)s",
-    "Video conference ended by %(senderName)s": "ועידת הווידיאו הסתיימה ב- %(senderName)s",
-    "Join the conference from the room information card on the right": "הצטרפו לכנס מכרטיס המידע על החדר בצד ימין",
-    "Join the conference at the top of this room": "הצטרף לכנס בחלק העליון של החדר הזה",
-    "Show image": "הצג תמונה",
-    "Error decrypting image": "שגיאה בפענוח הודעה",
-    "Invalid file%(extra)s": "קובץ לא תקין %(extra)s",
-    "Download %(text)s": "הורד %(text)s",
-    "Decrypt %(text)s": "פענח %(text)s",
-    "Error decrypting attachment": "שגיאה בפענוח קבצים מצורפים",
-    "The encryption used by this room isn't supported.": "ההצפנה בה משתמשים בחדר זה אינה נתמכת.",
-    "Encryption not enabled": "ההצפנה לא מופעלת",
-    "Ignored attempt to disable encryption": "התעלם מהניסיון להשבית את ההצפנה",
-    "You cancelled verification.": "בטלתם את האימות.",
-    "%(displayName)s cancelled verification.": "הצג אימותים מבוטלים %(displayName)s.",
-    "Verification timed out.": "תם הזמן הקצוב לאימות.",
-    "Start verification again from their profile.": "התחל לאמת שוב מהפרופיל שלהם.",
-    "Start verification again from the notification.": "התחל אימות שוב מההודעה.",
-    "You've successfully verified %(displayName)s!": "אמתתם בהצלחה את %(displayName)s!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "אימתת בהצלחה את %(deviceName)s (%(deviceId)s)!",
-    "You've successfully verified your device!": "אימתת בהצלחה את המכשיר שלך!",
-    "Verify all users in a room to ensure it's secure.": "אמת את כל המשתמשים בחדר כדי לוודא שהוא מאובטח.",
-    "Almost there! Is %(displayName)s showing the same shield?": "כמעט שם! האם %(displayName)s מציג את אותו מגן?",
-    "Verify by emoji": "אמת על ידי אמוג'י",
-    "Verify by comparing unique emoji.": "אמת את זה על ידי השוואת אמוג'י ייחודי.",
-    "If you can't scan the code above, verify by comparing unique emoji.": "אם אינך יכול לסרוק את הקוד לעיל, ודא על ידי השוואת אמוג'י ייחודי.",
-    "Ask %(displayName)s to scan your code:": "בקש מ- %(displayName)s לסרוק את הקוד שלכם:",
-    "Verify by scanning": "אמת על ידי סריקה",
-    "This client does not support end-to-end encryption.": "לקוח זה אינו תומך בהצפנה מקצה לקצה.",
     "Remove %(count)s messages": {
         "one": "הסר הודעה 1",
         "other": "הסר %(count)s הודעות"
@@ -687,7 +648,6 @@
     "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.": "לא ניתן לפענח גיבוי עם ביטוי אבטחה זה: אנא ודא שהזנת את ביטוי האבטחה הנכון.",
     "Incorrect Security Phrase": "ביטוי אבטחה שגוי",
     "Message search initialisation failed, check <a>your settings</a> for more information": "אתחול חיפוש ההודעות נכשל. בדוק את <a>ההגדרות שלך</a> למידע נוסף",
-    "Connection failed": "החיבור נכשל",
     "Developer": "מפתח",
     "Experimental": "נִסיוֹנִי",
     "Messaging": "הודעות",
@@ -695,9 +655,6 @@
     "Create a space": "צור מרחב עבודה",
     "Not a valid Security Key": "מפתח האבטחה לא חוקי",
     "Failed to end poll": "תקלה בסגירת הסקר",
-    "Results will be visible when the poll is ended": "תוצאות יהיו זמינות כאשר הסקר יסתיים",
-    "Sorry, you can't edit a poll after votes have been cast.": "סליחה, אתם לא יכולים לערוך את שאלות הסקר לאחר שבוצעו הצבעות.",
-    "Can't edit poll": "לא ניתן לערוךסקר",
     "Preserve system messages": "שמור את הודעות המערכת",
     "Friends and family": "חברים ומשפחה",
     "An error occurred whilst sharing your live location, please try again": "אירעה שגיאה במהלך שיתוף המיקום החי שלכם, אנא נסו שוב",
@@ -707,13 +664,6 @@
     "%(count)s rooms": {
         "other": "%(count)s חדרים"
     },
-    "Based on %(count)s votes": {
-        "one": "מתבסס על %(count)s הצבעות",
-        "other": "מתבסס על %(count)s הצבעות"
-    },
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s.קולות הצביעו כדי לראות את התוצאות"
-    },
     "User Directory": "ספריית משתמשים",
     "MB": "MB",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "האם אתם בטוחים שברצונכם לסיים את הסקר הזה? זה יציג את התוצאות הסופיות של הסקר וימנע מאנשים את האפשרות להצביע.",
@@ -722,13 +672,6 @@
     "The poll has ended. Top answer: %(topAnswer)s": "הסקר הסתיים. תשובה הכי נפוצה: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "הסקר הסתיים. לא היו הצבעות.",
     "Thread options": "אפשרויות שרשור",
-    "Can't create a thread from an event with an existing relation": "לא ניתן ליצור שרשור מאירוע עם קשר קיים",
-    "Reply in thread": "מענה בשרשור",
-    "Messages in this chat will be end-to-end encrypted.": "הודעות בצ'אט זה יוצפו מקצה לקצה.",
-    "Some encryption parameters have been changed.": "מספר פרמטרים של הצפנה שונו.",
-    "Decrypting": "מפענח",
-    "Downloading": "מוריד",
-    "Jump to date": "קיפצו לתאריך",
     "You may contact me if you have any follow up questions": "אתם יכולים לתקשר איתי אם יש לכם שאלות המשך",
     "Feedback sent! Thanks, we appreciate it!": "משוב נשלח! תודה, אנחנו מודים לכם",
     "Search for rooms or people": "חפשו אנשים או חדרים",
@@ -751,7 +694,6 @@
     "%(space1Name)s and %(space2Name)s": "%(space1Name)sו%(space2Name)s",
     "To leave the beta, visit your settings.": "כדי לעזוב את התכונה הניסיונית, כנסו להגדרות.",
     "Location": "מיקום",
-    "Edit devices": "הגדרת מכשירים",
     "Close sidebar": "סגור סרגל צד",
     "common": {
         "about": "אודות",
@@ -951,7 +893,8 @@
         "invite_to_space": "הזמינו אל מרחב העבודה",
         "explore_rooms": "גלה חדרים",
         "new_room": "חדר חדש",
-        "explore_public_rooms": "שוטט בחדרים ציבוריים"
+        "explore_public_rooms": "שוטט בחדרים ציבוריים",
+        "reply_in_thread": "מענה בשרשור"
     },
     "a11y": {
         "user_menu": "תפריט משתמש",
@@ -1554,7 +1497,8 @@
             "voice_call": "%(senderName)s התחיל שיחה קולית.",
             "voice_call_unsupported": "%(senderName)s התחיל שיחה קולית. (אינו נתמך בדפדפן זה)",
             "video_call": "%(senderName)s התחיל שיחת וידאו.",
-            "video_call_unsupported": "%(senderName)s התחיל שיחת וידאו. (אינו נתמך בדפדפן זה)"
+            "video_call_unsupported": "%(senderName)s התחיל שיחת וידאו. (אינו נתמך בדפדפן זה)",
+            "failed_connection": "החיבור נכשל"
         },
         "m.room.member": {
             "invite": "%(senderName)s הזמין/ה את %(targetName)s",
@@ -1595,7 +1539,6 @@
             "forbidden": "%(senderDisplayName)s מנע אפשרות מאורחים להכנס אל החדר.",
             "unknown": "%(senderDisplayName)s שינה את כללי הכניסה לאורחים ל- %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s שלח תמונה.",
         "m.sticker": "%(senderDisplayName)s שלח מדבקה",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s הגדיר את רשימת הכניסה של השרת עבור חדר זה.",
@@ -1638,7 +1581,12 @@
         "m.widget": {
             "modified": "היישומון %(widgetName)s שונה על ידי %(senderName)s",
             "added": "היישומון %(widgetName)s התווסף על ידי %(senderName)s",
-            "removed": "היישומון %(widgetName)s הוסר על ידי %(senderName)s"
+            "removed": "היישומון %(widgetName)s הוסר על ידי %(senderName)s",
+            "jitsi_join_top_prompt": "הצטרף לכנס בחלק העליון של החדר הזה",
+            "jitsi_join_right_prompt": "הצטרפו לכנס מכרטיס המידע על החדר בצד ימין",
+            "jitsi_ended": "ועידת הווידיאו הסתיימה ב- %(senderName)s",
+            "jitsi_updated": "ועידת הווידאו עודכנה על ידי %(senderName)s",
+            "jitsi_started": "ועידת וידאו התחילה על ידי %(senderName)s"
         },
         "m.location": {
             "full": "%(senderName)s שיתף/ה מיקום"
@@ -1646,7 +1594,6 @@
         "self_redaction": "הודעה נמחקה",
         "redaction": "הודעה נמחקה על ידיד%(name)s",
         "m.poll.start": "%(senderName)s התחיל סקר - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)sסיים סקר",
         "typing_indicator": {
             "one_user": "%(displayName)s כותב…",
             "two_users": "%(names)s ו%(lastPerson)s כותבים…",
@@ -1785,7 +1732,8 @@
             "changed_rule_users": "%(senderName)s שינה כלל אשר חסם משתמשים שתאמו ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
             "changed_rule_rooms": "%(senderName)s שינה כלל אשר חסם חדרים התואמים ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
             "changed_rule_servers": "%(senderName)sשינה כלל אשר חסם שרתים שתאמו ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
-            "changed_rule_glob": "%(senderName)s עדכן כלל חסימה אשר תאם ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s"
+            "changed_rule_glob": "%(senderName)s עדכן כלל חסימה אשר תאם ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
+            "message_hidden": "התעלמת ממשתמש זה, ולכן המסר שלו מוסתר. <a> הצג בכל מקרה. </a>"
         },
         "historical_messages_unavailable": "לא ניתן לצפות בהודעות קודמות",
         "redacted": {
@@ -1819,7 +1767,44 @@
             "unable_to_find": "ניסה לטעון נקודה מסוימת בציר הזמן של החדר הזה, אך לא הצליח למצוא אותה.",
             "title": "טעינת מיקום ציר הזמן נכשלה"
         },
-        "error_no_renderer": "לא ניתן להציג את הארוע הזה"
+        "error_no_renderer": "לא ניתן להציג את הארוע הזה",
+        "download_action_downloading": "מוריד",
+        "download_action_decrypting": "מפענח",
+        "m.room.encryption": {
+            "parameters_changed": "מספר פרמטרים של הצפנה שונו.",
+            "enabled_local": "הודעות בצ'אט זה יוצפו מקצה לקצה.",
+            "disable_attempt": "התעלם מהניסיון להשבית את ההצפנה",
+            "disabled": "ההצפנה לא מופעלת",
+            "unsupported": "ההצפנה בה משתמשים בחדר זה אינה נתמכת."
+        },
+        "m.file": {
+            "download_label": "הורד %(text)s",
+            "error_decrypting": "שגיאה בפענוח קבצים מצורפים",
+            "decrypt_label": "פענח %(text)s",
+            "error_invalid": "קובץ לא תקין %(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s שלח תמונה.",
+            "error_decrypting": "שגיאה בפענוח הודעה",
+            "show_image": "הצג תמונה"
+        },
+        "m.key.verification.done": "אימתת את %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "בטלתם אימות עם %(name)s",
+            "user_cancelled": "%(name)s ביטל את האימות"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "אשרתם",
+            "you_declined": "דחיתם",
+            "you_cancelled": "ביטלתם",
+            "you_started": "שלחתם בקשה לקוד אימות"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)sסיים סקר"
+        },
+        "m.video": {
+            "error_decrypting": "שגיאה בפענוח וידאו"
+        }
     },
     "slash_command": {
         "spoiler": "שולח הודעה ומסמן אותה כספוילר",
@@ -2203,7 +2188,22 @@
                 "verify_this_device": "אמתו את מכשיר זה",
                 "device_verified": "המכשיר אומת"
             },
-            "accepting": "מקבל…"
+            "accepting": "מקבל…",
+            "scan_qr": "אמת על ידי סריקה",
+            "scan_qr_explainer": "בקש מ- %(displayName)s לסרוק את הקוד שלכם:",
+            "verify_emoji_prompt_qr": "אם אינך יכול לסרוק את הקוד לעיל, ודא על ידי השוואת אמוג'י ייחודי.",
+            "verify_emoji_prompt": "אמת את זה על ידי השוואת אמוג'י ייחודי.",
+            "verify_emoji": "אמת על ידי אמוג'י",
+            "qr_reciprocate_same_shield_user": "כמעט שם! האם %(displayName)s מציג את אותו מגן?",
+            "prompt_encrypted": "אמת את כל המשתמשים בחדר כדי לוודא שהוא מאובטח.",
+            "successful_own_device": "אימתת בהצלחה את המכשיר שלך!",
+            "successful_device": "אימתת בהצלחה את %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "אמתתם בהצלחה את %(displayName)s!",
+            "prompt_self": "התחל אימות שוב מההודעה.",
+            "prompt_user": "התחל לאמת שוב מהפרופיל שלהם.",
+            "timed_out": "תם הזמן הקצוב לאימות.",
+            "cancelled_user": "הצג אימותים מבוטלים %(displayName)s.",
+            "cancelled": "בטלתם את האימות."
         },
         "old_version_detected_title": "נתגלו נתוני הצפנה ישנים",
         "old_version_detected_description": "נתגלו גרסאות ישנות יותר של %(brand)s. זה יגרום לתקלה בקריפטוגרפיה מקצה לקצה בגרסה הישנה יותר. הודעות מוצפנות מקצה לקצה שהוחלפו לאחרונה בעת השימוש בגרסה הישנה עשויות שלא להיות ניתנות לפענוח בגירסה זו. זה עלול גם לגרום להודעות שהוחלפו עם גרסה זו להיכשל. אם אתה נתקל בבעיות, צא וחזור שוב. כדי לשמור על היסטוריית ההודעות, ייצא וייבא מחדש את המפתחות שלך.",
@@ -2250,7 +2250,8 @@
         "cross_signing_user_normal": "לא אימתת משתמש זה.",
         "cross_signing_room_warning": "מישהו משתמש בהפעלה לא ידועה",
         "cross_signing_room_verified": "כולם מאומתים בחדר זה",
-        "cross_signing_room_normal": "חדר זה מוצפן מקצה לקצה"
+        "cross_signing_room_normal": "חדר זה מוצפן מקצה לקצה",
+        "unsupported": "לקוח זה אינו תומך בהצפנה מקצה לקצה."
     },
     "emoji": {
         "category_frequently_used": "לעיתים קרובות בשימוש",
@@ -2604,7 +2605,8 @@
         "empty_explainer": "שרשורים עוזרים לשמור על השיחות שלכם בנושא וקל למעקב.",
         "empty_tip": "<b>טיפ:</b> השתמש ב-\"%(replyInThread)s\" כשאתם מרחפים מעל הודעה.",
         "empty_heading": "שימרו על דיונים מאורגנים בשרשורים",
-        "open_thread": "פתיחת שרשור"
+        "open_thread": "פתיחת שרשור",
+        "error_start_thread_existing_relation": "לא ניתן ליצור שרשור מאירוע עם קשר קיים"
     },
     "space": {
         "landing_welcome": "ברוכים הבאים אל <name/>",
@@ -2810,7 +2812,8 @@
         "jump_read_marker": "קפצו להודעה הראשונה שלא נקראה.",
         "inviter_unknown": "לא ידוע",
         "failed_reject_invite": "דחיית הזמנה נכשלה",
-        "creating_room_text": "יצרנו חדר עם %(names)s"
+        "creating_room_text": "יצרנו חדר עם %(names)s",
+        "jump_to_date": "קיפצו לתאריך"
     },
     "file_panel": {
         "guest_note": "עליך <a> להירשם </a> כדי להשתמש בפונקציונליות זו",
@@ -2843,7 +2846,17 @@
         "type_open": "פתח סקר",
         "type_closed": "סגר סקר",
         "topic_heading": "מה השאלה או הנושא שלכם בסקר?",
-        "notes": "תוצאות יהיה זמינות להצגה רק עם סגירת הסקר"
+        "notes": "תוצאות יהיה זמינות להצגה רק עם סגירת הסקר",
+        "unable_edit_title": "לא ניתן לערוךסקר",
+        "unable_edit_description": "סליחה, אתם לא יכולים לערוך את שאלות הסקר לאחר שבוצעו הצבעות.",
+        "total_not_ended": "תוצאות יהיו זמינות כאשר הסקר יסתיים",
+        "total_n_votes": {
+            "one": "%(count)s.קולות הצביעו כדי לראות את התוצאות"
+        },
+        "total_n_votes_voted": {
+            "one": "מתבסס על %(count)s הצבעות",
+            "other": "מתבסס על %(count)s הצבעות"
+        }
     },
     "failed_load_async_component": "טעינת הדף נכשלה. אנא בדקו את החיבור שלכם לאינטרנט ונסו שנית.",
     "upload_failed_generic": "נכשלה העלאת הקובץ %(fileName)s.",
@@ -3026,7 +3039,8 @@
         "deactivate_confirm_description": "השבתת משתמש זה תנתק אותו וימנע ממנו להתחבר חזרה. בנוסף, הם יעזבו את כל החדרים בהם הם נמצאים. לא ניתן לבטל פעולה זו. האם אתה בטוח שברצונך להשבית משתמש זה?",
         "deactivate_confirm_action": "השבת משתמש",
         "error_deactivate": "השבתת משתמש נכשלה",
-        "role_label": "תפקיד בחדר <RoomName/>"
+        "role_label": "תפקיד בחדר <RoomName/>",
+        "edit_own_devices": "הגדרת מכשירים"
     },
     "stickers": {
         "empty": "כרגע אין לך חבילות מדבקה מופעלות",

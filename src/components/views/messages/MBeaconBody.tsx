@@ -228,7 +228,7 @@ const MBeaconBody = React.forwardRef<HTMLDivElement, IBodyProps>(({ mxEvent, get
                     className="mx_MBeaconBody_chin"
                     beacon={beacon}
                     displayStatus={displayStatus}
-                    label={_t("View live location")}
+                    label={_t("timeline|m.beacon_info|view_live_location")}
                     withIcon
                 />
             )}

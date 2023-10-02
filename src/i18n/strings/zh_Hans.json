@@ -1,9 +1,5 @@
 {
-    "Decrypt %(text)s": "解密 %(text)s",
-    "Download %(text)s": "下载 %(text)s",
     "Email address": "邮箱地址",
-    "Error decrypting attachment": "解密附件时出错",
-    "Invalid file%(extra)s": "无效文件 %(extra)s",
     "Session ID": "会话 ID",
     "An error has occurred.": "发生了一个错误。",
     "Join Room": "加入房间",
@@ -23,8 +19,6 @@
     "Please check your email and click on the link it contains. Once this is done, click continue.": "请检查你的电子邮箱并点击里面包含的链接。完成时请点击继续。",
     "AM": "上午",
     "PM": "下午",
-    "Error decrypting image": "解密图像时出错",
-    "Error decrypting video": "解密视频时出错",
     "Verification Pending": "验证等待中",
     "(~%(count)s results)": {
         "one": "（~%(count)s 个结果）",
@@ -231,37 +225,10 @@
         "other": "删除 %(count)s 条消息",
         "one": "删除 1 条消息"
     },
-    "This client does not support end-to-end encryption.": "此客户端不支持端到端加密。",
-    "Verify by scanning": "扫码验证",
-    "Ask %(displayName)s to scan your code:": "请 %(displayName)s 扫描你的代码：",
-    "If you can't scan the code above, verify by comparing unique emoji.": "如果你不能扫描以上代码，请通过比较唯一的表情符号来验证。",
-    "Verify by comparing unique emoji.": "通过比较唯一的表情符号来验证。",
-    "Verify by emoji": "通过表情符号验证",
-    "Almost there! Is %(displayName)s showing the same shield?": "快完成了！%(displayName)s 显示了同样的盾牌吗？",
-    "Verify all users in a room to ensure it's secure.": "验证房间中所有用户以确保其安全。",
-    "You've successfully verified your device!": "你成功验证了你的设备！",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "你成功验证了 %(deviceName)s （%(deviceId)s）！",
-    "You've successfully verified %(displayName)s!": "你成功验证了 %(displayName)s！",
-    "Start verification again from the notification.": "请从提示重新开始验证。",
-    "Start verification again from their profile.": "请从对方资料重新开始验证。",
-    "Verification timed out.": "验证超时。",
-    "%(displayName)s cancelled verification.": "%(displayName)s 取消了验证。",
-    "You cancelled verification.": "你取消了验证。",
-    "Encryption not enabled": "未启用加密",
-    "The encryption used by this room isn't supported.": "不支持此房间使用的加密方式。",
-    "Show image": "显示图像",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "你已忽略此用户，所以其消息已被隐藏。<a>仍然显示。</a>",
-    "You verified %(name)s": "你验证了 %(name)s",
-    "You cancelled verifying %(name)s": "你取消了 %(name)s 的验证",
-    "%(name)s cancelled verifying": "%(name)s 取消了验证",
-    "You accepted": "你接受了",
     "%(name)s accepted": "%(name)s 接受了",
-    "You declined": "你拒绝了",
-    "You cancelled": "你取消了",
     "%(name)s declined": "%(name)s 拒绝了",
     "%(name)s cancelled": "%(name)s 取消了",
     "%(name)s wants to verify": "%(name)s 想要验证",
-    "You sent a verification request": "你发送了一个验证请求",
     "Edited at %(date)s": "编辑于 %(date)s",
     "Click to view edits": "点击查看编辑历史",
     "Edited at %(date)s. Click to view edits.": "编辑于 %(date)s。点击以查看编辑历史。",
@@ -557,15 +524,9 @@
     "This widget would like to:": "此挂件想要：",
     "Approve widget permissions": "批准挂件权限",
     "Modal Widget": "模态框挂件（Modal Widget）",
-    "Join the conference at the top of this room": "点击房间顶部加入会议",
-    "Join the conference from the room information card on the right": "从右侧的房间信息卡片加入会议",
-    "Video conference ended by %(senderName)s": "由 %(senderName)s 结束的视频会议",
-    "Video conference updated by %(senderName)s": "由 %(senderName)s 更新的视频会议",
-    "Video conference started by %(senderName)s": "由 %(senderName)s 发起的视频会议",
     "Space selection": "空间选择",
     "Invite to %(roomName)s": "邀请至 %(roomName)s",
     "Invite by email": "通过邮箱邀请",
-    "Edit devices": "编辑设备",
     "Zimbabwe": "津巴布韦",
     "Zambia": "赞比亚",
     "Western Sahara": "西撒哈拉",
@@ -643,7 +604,6 @@
     "Marshall Islands": "马绍尔群岛",
     "Malta": "马耳他",
     "Mali": "马里",
-    "Ignored attempt to disable encryption": "已忽略禁用加密的尝试",
     "Sint Maarten": "圣马丁岛",
     "Slovenia": "斯洛文尼亚",
     "Singapore": "新加坡",
@@ -731,7 +691,6 @@
     "Use the <a>Desktop app</a> to search encrypted messages": "使用<a>桌面端英语</a>来搜索加密消息",
     "Use the <a>Desktop app</a> to see all encrypted files": "使用<a>桌面端应用</a>来查看所有加密文件",
     "Add reaction": "添加反应",
-    "Error processing voice message": "处理语音消息时发生错误",
     "Failed to start livestream": "开始流直播失败",
     "Unable to start audio streaming.": "无法开始音频流媒体。",
     "Hold": "挂起",
@@ -780,19 +739,6 @@
     "Create a new space": "创建新空间",
     "Want to add a new space instead?": "想要添加一个新空间？",
     "Add existing space": "增加现有的空间",
-    "Error processing audio message": "处理音频消息时出错",
-    "Decrypting": "解密中",
-    "The call is in an unknown state!": "通话处于未知状态！",
-    "Missed call": "未接来电",
-    "Unknown failure: %(reason)s": "未知错误：%(reason)s",
-    "An unknown error occurred": "出现未知错误",
-    "Their device couldn't start the camera or microphone": "他们的设备无法启动摄像头或麦克风",
-    "Connection failed": "连接失败",
-    "Could not connect media": "无法连接媒体",
-    "No answer": "无响应",
-    "Call back": "回拨",
-    "Call declined": "拒绝通话",
-    "Some encryption parameters have been changed.": "一些加密参数已更改。",
     "To join a space you'll need an invite.": "要加入一个空间，你需要一个邀请。",
     "Would you like to leave the rooms in this space?": "你想俩开此空间内的房间吗？",
     "You are about to leave <spaceName/>.": "你即将离开 <spaceName/>。",
@@ -801,7 +747,6 @@
     "Don't leave any rooms": "不离开任何房间",
     "MB": "MB",
     "In reply to <a>this message</a>": "答复<a>此消息</a>",
-    "Downloading": "下载中",
     "%(count)s reply": {
         "one": "%(count)s 条回复",
         "other": "%(count)s 条回复"
@@ -809,24 +754,16 @@
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "输入安全短语或<button>使用安全密钥</button>以继续。",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "重新获取账户访问权限并恢复存储在此会话中的加密密钥。 没有它们，您将无法在任何会话中阅读所有安全消息。",
     "If you can't see who you're looking for, send them your invite link below.": "如果您看不到您要找的人，请将您的邀请链接发送给他们。",
-    "In encrypted rooms, verify all users to ensure it's secure.": "在加密房间中，验证所有用户以确保其安全。",
     "Thread options": "消息列选项",
-    "Reply in thread": "在消息列中回复",
     "Forget": "忘记",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s 和其他 %(count)s 个空间",
         "other": "%(spaceName)s 和其他 %(count)s 个空间"
     },
-    "Based on %(count)s votes": {
-        "one": "基于 %(count)s 票",
-        "other": "基于 %(count)s 票"
-    },
     "%(count)s votes": {
         "one": "%(count)s 票",
         "other": "%(count)s 票"
     },
-    "Sorry, your vote was not registered. Please try again.": "抱歉，你的投票未登记。请重试。",
-    "Vote not registered": "投票未登记",
     "Developer": "开发者",
     "Experimental": "实验性",
     "Themes": "主题",
@@ -834,21 +771,12 @@
     "Messaging": "消息传递",
     "Spaces you know that contain this space": "你知道的包含这个空间的空间",
     "Recently viewed": "最近查看",
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "票数已达 %(count)s 票。要查看结果请亲自投票",
-        "other": "票数已达 %(count)s 票。要查看结果请亲自投票"
-    },
-    "No votes cast": "尚无投票",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "您确定要结束此投票吗？ 这将显示投票的最终结果并阻止人们投票。",
     "End Poll": "结束投票",
     "Sorry, the poll did not end. Please try again.": "抱歉，投票没有结束。 请再试一次。",
     "Failed to end poll": "结束投票失败",
     "The poll has ended. Top answer: %(topAnswer)s": "投票已经结束。 得票最多答案：%(topAnswer)s",
     "The poll has ended. No votes were cast.": "投票已经结束。 没有投票。",
-    "Final result based on %(count)s votes": {
-        "one": "基于 %(count)s 票数的最终结果",
-        "other": "基于 %(count)s 票数的最终结果"
-    },
     "Link to room": "房间链接",
     "Recent searches": "最近的搜索",
     "To search messages, look for this icon at the top of a room <icon/>": "要搜索消息，请在房间顶部查找此图标<icon/>",
@@ -873,7 +801,6 @@
     "%(members)s and more": "%(members)s和更多",
     "If you can't find the room you're looking for, ask for an invite or create a new room.": "若你找不到要找的房间，请请求邀请或创建新房间。",
     "Explore public spaces in the new search dialog": "在新的搜索对话框中探索公开空间",
-    "Can't create a thread from an event with an existing relation": "无法从既有关系的事件创建消息列",
     "%(featureName)s Beta feedback": "%(featureName)sBeta反馈",
     "Use <arrows/> to scroll": "用<arrows/>来滚动",
     "Feedback sent! Thanks, we appreciate it!": "反馈已发送！谢谢，我们很感激！",
@@ -884,21 +811,6 @@
     "Missing room name or separator e.g. (my-room:domain.org)": "缺少房间名称或分隔符，例子（my-room:domain.org）",
     "Missing domain separator e.g. (:domain.org)": "缺少域分隔符，例子（:domain.org）",
     "toggle event": "切换事件",
-    "Results will be visible when the poll is ended": "结果将在投票结束时可见",
-    "Sorry, you can't edit a poll after votes have been cast.": "抱歉，你无法在有人投票后编辑投票。",
-    "Can't edit poll": "无法编辑投票",
-    "Click": "点击",
-    "Expand quotes": "展开引号",
-    "Collapse quotes": "折叠引号",
-    "View live location": "查看实时位置",
-    "Pick a date to jump to": "选个日期以跳转",
-    "Message pending moderation": "待审核的消息",
-    "Message pending moderation: %(reason)s": "消息待审核：%(reason)s",
-    "Messages in this chat will be end-to-end encrypted.": "此聊天中的消息会被端到端加密。",
-    "Jump to date": "跳至日期",
-    "The beginning of the room": "房间的开头",
-    "You cancelled verification on your other device.": "你在其他设备上取消了验证。",
-    "Almost there! Is your other device showing the same shield?": "快完成了！你的其他设备显示相同盾牌吗？",
     "What location type do you want to share?": "你想分享什么位置类型？",
     "Drop a Pin": "放置图钉",
     "My live location": "我的实时位置",
@@ -1191,7 +1103,9 @@
         "new_room": "新房间",
         "new_video_room": "新视频房间",
         "add_existing_room": "添加现有的房间",
-        "explore_public_rooms": "探索公共房间"
+        "explore_public_rooms": "探索公共房间",
+        "reply_in_thread": "在消息列中回复",
+        "click": "点击"
     },
     "a11y": {
         "user_menu": "用户菜单",
@@ -2027,7 +1941,17 @@
             "voice_call": "%(senderName)s 发起了语音通话。",
             "voice_call_unsupported": "%(senderName)s 发起了语音通话。（此浏览器不支持）",
             "video_call": "%(senderName)s 发起了视频通话。",
-            "video_call_unsupported": "%(senderName)s 发起了视频通话。（此浏览器不支持）"
+            "video_call_unsupported": "%(senderName)s 发起了视频通话。（此浏览器不支持）",
+            "declined": "拒绝通话",
+            "call_back_prompt": "回拨",
+            "missed_call": "未接来电",
+            "no_answer": "无响应",
+            "failed_connect_media": "无法连接媒体",
+            "failed_connection": "连接失败",
+            "failed_opponent_media": "他们的设备无法启动摄像头或麦克风",
+            "unknown_error": "出现未知错误",
+            "unknown_failure": "未知错误：%(reason)s",
+            "unknown_state": "通话处于未知状态！"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s 已接受 %(displayName)s 的邀请",
@@ -2078,7 +2002,6 @@
             "forbidden": "%(senderDisplayName)s 将此房间改为游客禁入。",
             "unknown": "%(senderDisplayName)s 将此房间的游客加入规则改为 %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s 发送了一张图片。",
         "m.sticker": "%(senderDisplayName)s 发送了一张贴纸。",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s 为此房间设置了服务器 ACL。",
@@ -2122,7 +2045,12 @@
         "m.widget": {
             "modified": "%(senderName)s 修改了 %(widgetName)s 挂件",
             "added": "%(senderName)s 添加了 %(widgetName)s 挂件",
-            "removed": "%(senderName)s 移除了 %(widgetName)s 挂件"
+            "removed": "%(senderName)s 移除了 %(widgetName)s 挂件",
+            "jitsi_join_top_prompt": "点击房间顶部加入会议",
+            "jitsi_join_right_prompt": "从右侧的房间信息卡片加入会议",
+            "jitsi_ended": "由 %(senderName)s 结束的视频会议",
+            "jitsi_updated": "由 %(senderName)s 更新的视频会议",
+            "jitsi_started": "由 %(senderName)s 发起的视频会议"
         },
         "io.element.widgets.layout": "%(senderName)s 更新了房间布局",
         "m.location": {
@@ -2133,7 +2061,6 @@
         "self_redaction": "消息已删除",
         "redaction": "消息被 %(name)s 删除",
         "m.poll.start": "%(senderName)s 发起了投票：%(pollQuestion)s",
-        "m.poll.end": "%(senderName)s 结束了投票",
         "typing_indicator": {
             "one_user": "%(displayName)s 正在输入…",
             "two_users": "%(names)s和%(lastPerson)s正在输入……",
@@ -2297,7 +2224,8 @@
             "changed_rule_users": "%(senderName)s 更改了一个由于%(reason)s而禁止用户%(oldGlob)s跟%(newGlob)s匹配的规则",
             "changed_rule_rooms": "%(senderName)s更改了一个由于%(reason)s而禁止房间%(oldGlob)s跟%(newGlob)s匹配的规则",
             "changed_rule_servers": "%(senderName)s 更新了一个由于%(reason)s而禁止服务器%(oldGlob)s跟%(newGlob)s匹配的规则",
-            "changed_rule_glob": "%(senderName)s 更新了一个由于%(reason)s而禁止%(oldGlob)s跟%(newGlob)s匹配的规则"
+            "changed_rule_glob": "%(senderName)s 更新了一个由于%(reason)s而禁止%(oldGlob)s跟%(newGlob)s匹配的规则",
+            "message_hidden": "你已忽略此用户，所以其消息已被隐藏。<a>仍然显示。</a>"
         },
         "no_permission_messages_before_invite": "你没有权限查看你被邀请之前的消息。",
         "no_permission_messages_before_join": "你没有权限查看你加入前的消息。",
@@ -2342,18 +2270,64 @@
         "mab": {
             "label": "消息操作",
             "view_in_room": "在房间内查看",
-            "copy_link_thread": "复制到消息列的链接"
+            "copy_link_thread": "复制到消息列的链接",
+            "collapse_reply_chain": "折叠引号",
+            "expand_reply_chain": "展开引号"
         },
         "m.audio": {
             "unnamed_audio": "未命名的音频",
-            "error_downloading_audio": "下载音频时出错"
+            "error_downloading_audio": "下载音频时出错",
+            "error_processing_audio": "处理音频消息时出错",
+            "error_processing_voice_message": "处理语音消息时发生错误"
         },
         "load_error": {
             "no_permission": "尝试了加载此房间时间线上的特定点，但你没有查看相关消息的权限。",
             "unable_to_find": "尝试加载此房间的时间线的特定时间点，但是无法找到。",
             "title": "加载时间线位置失败"
         },
-        "error_no_renderer": "无法显示此事件"
+        "error_no_renderer": "无法显示此事件",
+        "download_action_downloading": "下载中",
+        "download_action_decrypting": "解密中",
+        "m.room.encryption": {
+            "parameters_changed": "一些加密参数已更改。",
+            "enabled_local": "此聊天中的消息会被端到端加密。",
+            "disable_attempt": "已忽略禁用加密的尝试",
+            "disabled": "未启用加密",
+            "unsupported": "不支持此房间使用的加密方式。"
+        },
+        "pending_moderation_reason": "消息待审核：%(reason)s",
+        "pending_moderation": "待审核的消息",
+        "m.beacon_info": {
+            "view_live_location": "查看实时位置"
+        },
+        "m.file": {
+            "download_label": "下载 %(text)s",
+            "error_decrypting": "解密附件时出错",
+            "decrypt_label": "解密 %(text)s",
+            "error_invalid": "无效文件 %(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s 发送了一张图片。",
+            "error_decrypting": "解密图像时出错",
+            "show_image": "显示图像"
+        },
+        "m.key.verification.done": "你验证了 %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "你取消了 %(name)s 的验证",
+            "user_cancelled": "%(name)s 取消了验证"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "你接受了",
+            "you_declined": "你拒绝了",
+            "you_cancelled": "你取消了",
+            "you_started": "你发送了一个验证请求"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s 结束了投票"
+        },
+        "m.video": {
+            "error_decrypting": "解密视频时出错"
+        }
     },
     "slash_command": {
         "spoiler": "此消息包含剧透",
@@ -2815,7 +2789,25 @@
                 "reset_confirmation": "确实要重置验证密钥？",
                 "skip_verification": "暂时跳过验证"
             },
-            "accepting": "正在接受……"
+            "accepting": "正在接受……",
+            "scan_qr": "扫码验证",
+            "scan_qr_explainer": "请 %(displayName)s 扫描你的代码：",
+            "verify_emoji_prompt_qr": "如果你不能扫描以上代码，请通过比较唯一的表情符号来验证。",
+            "verify_emoji_prompt": "通过比较唯一的表情符号来验证。",
+            "verify_emoji": "通过表情符号验证",
+            "qr_reciprocate_same_shield_device": "快完成了！你的其他设备显示相同盾牌吗？",
+            "qr_reciprocate_same_shield_user": "快完成了！%(displayName)s 显示了同样的盾牌吗？",
+            "prompt_encrypted": "验证房间中所有用户以确保其安全。",
+            "prompt_unencrypted": "在加密房间中，验证所有用户以确保其安全。",
+            "successful_own_device": "你成功验证了你的设备！",
+            "successful_device": "你成功验证了 %(deviceName)s （%(deviceId)s）！",
+            "successful_user": "你成功验证了 %(displayName)s！",
+            "prompt_self": "请从提示重新开始验证。",
+            "prompt_user": "请从对方资料重新开始验证。",
+            "timed_out": "验证超时。",
+            "cancelled_self": "你在其他设备上取消了验证。",
+            "cancelled_user": "%(displayName)s 取消了验证。",
+            "cancelled": "你取消了验证。"
         },
         "old_version_detected_title": "检测到旧的加密数据",
         "old_version_detected_description": "已检测到旧版%(brand)s的数据，这将导致端到端加密在旧版本中发生故障。在此版本中，使用旧版本交换的端到端加密消息可能无法解密。这也可能导致与此版本交换的消息失败。如果你遇到问题，请登出并重新登录。要保留历史消息，请先导出并在重新登录后导入你的密钥。",
@@ -2868,7 +2860,8 @@
         "cross_signing_user_normal": "你没有验证此用户。",
         "cross_signing_room_warning": "有人在使用未知会话",
         "cross_signing_room_verified": "房间中所有人都已被验证",
-        "cross_signing_room_normal": "此房间是端到端加密的"
+        "cross_signing_room_normal": "此房间是端到端加密的",
+        "unsupported": "此客户端不支持端到端加密。"
     },
     "emoji": {
         "category_frequently_used": "经常使用",
@@ -3293,7 +3286,8 @@
         "empty_explainer": "消息列帮助保持你的对话切题并易于追踪。",
         "empty_tip": "<b>实用提示：</b>悬停在消息上时使用“%(replyInThread)s”。",
         "empty_heading": "用消息列使讨论井然有序",
-        "open_thread": "打开消息列"
+        "open_thread": "打开消息列",
+        "error_start_thread_existing_relation": "无法从既有关系的事件创建消息列"
     },
     "theme": {
         "light_high_contrast": "浅色高对比",
@@ -3564,7 +3558,10 @@
         "jump_read_marker": "跳到第一条未读消息。",
         "inviter_unknown": "未知的",
         "failed_reject_invite": "拒绝邀请失败",
-        "creating_room_text": "正在创建房间%(names)s"
+        "creating_room_text": "正在创建房间%(names)s",
+        "jump_to_date_beginning": "房间的开头",
+        "jump_to_date": "跳至日期",
+        "jump_to_date_prompt": "选个日期以跳转"
     },
     "file_panel": {
         "guest_note": "你必须 <a>注册</a> 以使用此功能",
@@ -3606,7 +3603,21 @@
         "options_placeholder": "写个选项",
         "options_add_button": "添加选项",
         "disclosed_notes": "投票者一投完票就能看到结果",
-        "notes": "结果仅在你结束投票后展示"
+        "notes": "结果仅在你结束投票后展示",
+        "unable_edit_title": "无法编辑投票",
+        "unable_edit_description": "抱歉，你无法在有人投票后编辑投票。",
+        "error_voting_title": "投票未登记",
+        "error_voting_description": "抱歉，你的投票未登记。请重试。",
+        "total_not_ended": "结果将在投票结束时可见",
+        "total_no_votes": "尚无投票",
+        "total_n_votes": {
+            "one": "票数已达 %(count)s 票。要查看结果请亲自投票",
+            "other": "票数已达 %(count)s 票。要查看结果请亲自投票"
+        },
+        "total_n_votes_voted": {
+            "one": "基于 %(count)s 票",
+            "other": "基于 %(count)s 票"
+        }
     },
     "failed_load_async_component": "无法加载！请检查你的网络连接并重试。",
     "upload_failed_generic": "文件《%(fileName)s》上传失败。",
@@ -3825,7 +3836,8 @@
         "deactivate_confirm_description": "停用此用户将会使其登出并阻止其再次登入。而且此用户也会离开其所在的所有房间。此操作不可逆。你确定要停用此用户吗？",
         "deactivate_confirm_action": "停用用户",
         "error_deactivate": "停用用户失败",
-        "role_label": "<RoomName/> 中的角色"
+        "role_label": "<RoomName/> 中的角色",
+        "edit_own_devices": "编辑设备"
     },
     "stickers": {
         "empty": "你目前未启用任何贴纸包",
@@ -3853,7 +3865,13 @@
         "pinned_messages_button": "已固定",
         "export_chat_button": "导出聊天",
         "share_button": "分享房间",
-        "settings_button": "房间设置"
+        "settings_button": "房间设置",
+        "poll": {
+            "final_result": {
+                "one": "基于 %(count)s 票数的最终结果",
+                "other": "基于 %(count)s 票数的最终结果"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "拒绝邀请",

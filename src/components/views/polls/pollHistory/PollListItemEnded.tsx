@@ -100,7 +100,7 @@ export const PollListItemEnded: React.FC<Props> = ({ event, poll, onClick }) => 
 
     return (
         <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItemEnded" onClick={onClick}>
-            <TooltipTarget label={_t("View poll")} alignment={Alignment.Top}>
+            <TooltipTarget label={_t("right_panel|poll|view_poll")} alignment={Alignment.Top}>
                 <div className="mx_PollListItemEnded_content">
                     <div className="mx_PollListItemEnded_title">
                         <PollIcon className="mx_PollListItemEnded_icon" />
@@ -124,7 +124,7 @@ export const PollListItemEnded: React.FC<Props> = ({ event, poll, onClick }) => 
                         </div>
                     )}
                     <div className="mx_PollListItemEnded_voteCount">
-                        <Caption>{_t("Final result based on %(count)s votes", { count: totalVoteCount })}</Caption>
+                        <Caption>{_t("right_panel|poll|final_result", { count: totalVoteCount })}</Caption>
                     </div>
                 </div>
             </TooltipTarget>

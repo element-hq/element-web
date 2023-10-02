@@ -147,7 +147,7 @@ const EmptyThread: React.FC<EmptyThreadIProps> = ({ hasThreads, filterOption, sh
             <>
                 <p>
                     {_t("threads|empty_has_threads_tip", {
-                        replyInThread: _t("Reply in thread"),
+                        replyInThread: _t("action|reply_in_thread"),
                     })}
                 </p>
                 <p>
@@ -168,7 +168,7 @@ const EmptyThread: React.FC<EmptyThreadIProps> = ({ hasThreads, filterOption, sh
                     {_t(
                         "threads|empty_tip",
                         {
-                            replyInThread: _t("Reply in thread"),
+                            replyInThread: _t("action|reply_in_thread"),
                         },
                         {
                             b: (sub) => <b>{sub}</b>,

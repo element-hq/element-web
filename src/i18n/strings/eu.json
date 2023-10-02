@@ -11,11 +11,7 @@
     "Moderator": "Moderatzailea",
     "An error has occurred.": "Errore bat gertatu da.",
     "Custom level": "Maila pertsonalizatua",
-    "Decrypt %(text)s": "Deszifratu %(text)s",
     "%(items)s and %(lastItem)s": "%(items)s eta %(lastItem)s",
-    "Download %(text)s": "Deskargatu %(text)s",
-    "Error decrypting attachment": "Errorea eranskina deszifratzean",
-    "Invalid file%(extra)s": "Fitxategi %(extra)s baliogabea",
     "not specified": "zehaztu gabe",
     "Sun": "Ig",
     "Mon": "Al",
@@ -46,8 +42,6 @@
     "Confirm Removal": "Berretsi kentzea",
     "Unable to restore session": "Ezin izan da saioa berreskuratu",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Aurretik %(brand)s bertsio berriago bat erabili baduzu, zure saioa bertsio honekin bateraezina izan daiteke. Itxi leiho hau eta itzuli bertsio berriagora.",
-    "Error decrypting image": "Errorea audioa deszifratzean",
-    "Error decrypting video": "Errorea bideoa deszifratzean",
     "Add an Integration": "Gehitu integrazioa",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Kanpo webgune batetara eramango zaizu zure kontua %(integrationsUrl)s helbidearekin erabiltzeko egiaztatzeko. Jarraitu nahi duzu?",
     "This will allow you to reset your password and receive notifications.": "Honek zure pasahitza berrezarri eta jakinarazpenak jasotzea ahalbidetuko dizu.",
@@ -241,24 +235,15 @@
         "other": "Kendu %(count)s mezu",
         "one": "Kendu mezu 1"
     },
-    "Show image": "Erakutsi irudia",
     "e.g. my-room": "adib. nire-gela",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Erabili identitate-zerbitzari bat e-mail bidez gonbidatzeko. <default>Erabili lehenetsitakoa (%(defaultIdentityServerName)s)</default> edo gehitu bat <settings>Ezarpenak</settings> atalean.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Erabili identitate-zerbitzari bat e-mail bidez gonbidatzeko. Kudeatu <settings>Ezarpenak</settings> atalean.",
     "Close dialog": "Itxi elkarrizketa-koadroa",
-    "This client does not support end-to-end encryption.": "Bezero honek ez du muturretik muturrerako zifratzea onartzen.",
     "Cancel search": "Ezeztatu bilaketa",
-    "You verified %(name)s": "%(name)s egiaztatu duzu",
-    "You cancelled verifying %(name)s": "%(name)s egiaztatzeari utzi diozu",
-    "%(name)s cancelled verifying": "%(name)s(e)k egiaztaketa utzi du",
-    "You accepted": "Onartu duzu",
     "%(name)s accepted": "%(name)s onartuta",
-    "You cancelled": "Utzi duzu",
     "%(name)s cancelled": "%(name)s utzita",
     "%(name)s wants to verify": "%(name)s(e)k egiaztatu nahi du",
-    "You sent a verification request": "Egiaztaketa eskari bat bidali duzu",
     "Failed to connect to integration manager": "Huts egin du integrazio kudeatzailera konektatzean",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Erabiltzaile hau ezikusi duzu, beraz bere mezua ezkutatuta dago. <a>Erakutsi hala ere.</a>",
     "Integrations are disabled": "Integrazioak desgaituta daude",
     "Integrations not allowed": "Integrazioak ez daude baimenduta",
     "Verification Request": "Egiaztaketa eskaria",
@@ -285,13 +270,6 @@
         "other": "%(count)s saio",
         "one": "saio %(count)s"
     },
-    "Verify by emoji": "Egiaztatu emoji bidez",
-    "Verify by comparing unique emoji.": "Egiaztatu emoji bakanak konparatuz.",
-    "Ask %(displayName)s to scan your code:": "Eskatu %(displayName)s erabiltzaileari zure kodea eskaneatu dezan:",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Ezin baduzu goiko kodea eskaneatu, egiaztatu emoji bakanak konparatuz.",
-    "You've successfully verified %(displayName)s!": "Ongi egiaztatu duzu %(displayName)s!",
-    "Encryption not enabled": "Zifratzea gaitu gabe",
-    "The encryption used by this room isn't supported.": "Gela honetan erabilitako zifratzea ez da onartzen.",
     "Clear all data in this session?": "Garbitu saio honetako datu guztiak?",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Saio honetako datuak garbitzea behin betirako da. Zifratutako mezuak galdu egingo dira gakoen babes-kopia egin ez bada.",
     "Session name": "Saioaren izena",
@@ -302,8 +280,6 @@
     "Not Trusted": "Ez konfiantzazkoa",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) erabiltzaileak saio berria hasi du hau egiaztatu gabe:",
     "Ask this user to verify their session, or manually verify it below.": "Eskatu erabiltzaile honi saioa egiaztatu dezala, edo egiaztatu eskuz azpian.",
-    "Verify by scanning": "Egiaztatu eskaneatuz",
-    "You declined": "Ukatu egin duzu",
     "%(name)s declined": "%(name)s erabiltzaileak ukatu du",
     "Destroy cross-signing keys?": "Suntsitu zeharkako sinatzerako gakoak?",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Zeharkako sinatzerako gakoak ezabatzea behin betiko da. Egiaztatu dituzunak segurtasun abisu bat jasoko dute.  Ziur aski ez duzu hau egin nahi, zeharkako sinatzea ahalbidetzen dizun gailu oro galdu ez baduzu.",
@@ -328,15 +304,7 @@
     "Confirm by comparing the following with the User Settings in your other session:": "Berretsi honako hau zure beste saioaren erabiltzaile-ezarpenetan agertzen denarekin alderatuz:",
     "Confirm this user's session by comparing the following with their User Settings:": "Egiaztatu erabiltzailearen saio hau, honako hau bestearen erabiltzaile-ezarpenekin alderatuz:",
     "If they don't match, the security of your communication may be compromised.": "Ez badatoz bat, komunikazioaren segurtasuna konprometitua egon daiteke.",
-    "Verify all users in a room to ensure it's secure.": "Egiaztatu gela bateko erabiltzaile guztiak segurua dela baieztatzeko.",
     "Sign in with SSO": "Hasi saioa SSO-rekin",
-    "Almost there! Is %(displayName)s showing the same shield?": "Ia amaitu duzu! %(displayName)s gailuak ezkutu bera erakusten du?",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Ongi egiaztatu duzu %(deviceName)s (%(deviceId)s)!",
-    "Start verification again from the notification.": "Hasi egiaztaketa berriro jakinarazpenetik.",
-    "Start verification again from their profile.": "Hasi egiaztaketa berriro bere profiletik.",
-    "Verification timed out.": "Egiaztaketarako denbora-muga agortu da.",
-    "%(displayName)s cancelled verification.": "%(displayName)s-k egiaztaketa ezeztatu du.",
-    "You cancelled verification.": "Egiaztaketa ezeztatu duzu.",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Berretsi zure kontua desgaitzea Single sign-on bidez zure identitatea frogatuz.",
     "Are you sure you want to deactivate your account? This is irreversible.": "Ziur kontua desaktibatu nahi duzula? Ez dago gero atzera egiterik.",
     "Confirm account deactivation": "Baieztatu kontua desaktibatzea",
@@ -350,7 +318,6 @@
     "You signed in to a new session without verifying it:": "Saio berria hasi duzu hau egiaztatu gabe:",
     "Verify your other session using one of the options below.": "Egiaztatu zure beste saioa beheko aukeretako batekin.",
     "IRC display name width": "IRC-ko pantaila izenaren zabalera",
-    "You've successfully verified your device!": "Ongi egiaztatu duzu zure gailua!",
     "To continue, use Single Sign On to prove your identity.": "Jarraitzeko, erabili Single Sign On zure identitatea frogatzeko.",
     "Confirm to continue": "Berretsi jarraitzeko",
     "Click the button below to confirm your identity.": "Sakatu azpiko botoia zure identitatea frogatzeko.",
@@ -913,7 +880,6 @@
             "forbidden": "%(senderDisplayName)s bisitariak gelara elkartzea eragotzi du.",
             "unknown": "%(senderDisplayName)s erabiltzaileak bisitarien araua aldatu du: %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s erabiltzaileak irudi bat bidali du.",
         "m.room.canonical_alias": {
             "set": "%(senderName)s erabiltzileak %(address)s ezarri du gela honetako helbide nagusi gisa.",
             "removed": "%(senderName)s erabiltzaileak gela honen helbide nagusia kendu du.",
@@ -1073,7 +1039,8 @@
             "changed_rule_users": "%(senderName)s erabiltzaileak erabiltzaileak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
             "changed_rule_rooms": "%(senderName)s erabiltzaileak gelak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
             "changed_rule_servers": "%(senderName)s erabiltzaileak zerbitzariak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
-            "changed_rule_glob": "%(senderName)s erabiltzaileak debeku arau bat aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s"
+            "changed_rule_glob": "%(senderName)s erabiltzaileak debeku arau bat aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
+            "message_hidden": "Erabiltzaile hau ezikusi duzu, beraz bere mezua ezkutatuta dago. <a>Erakutsi hala ere.</a>"
         },
         "reactions": {
             "tooltip": "<reactors/> erabiltzaileak <reactedWith>%(shortName)s batekin erreakzionatu du</reactedWith>"
@@ -1102,7 +1069,36 @@
             "unable_to_find": "Gela honen denbora-lerroko puntu zehatz bat kargatzen saiatu da, baina ezin izan da aurkitu.",
             "title": "Huts egin du denbora-lerroko puntua kargatzean"
         },
-        "error_no_renderer": "Ezin izan da gertakari hau bistaratu"
+        "error_no_renderer": "Ezin izan da gertakari hau bistaratu",
+        "m.room.encryption": {
+            "disabled": "Zifratzea gaitu gabe",
+            "unsupported": "Gela honetan erabilitako zifratzea ez da onartzen."
+        },
+        "m.file": {
+            "download_label": "Deskargatu %(text)s",
+            "error_decrypting": "Errorea eranskina deszifratzean",
+            "decrypt_label": "Deszifratu %(text)s",
+            "error_invalid": "Fitxategi %(extra)s baliogabea"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s erabiltzaileak irudi bat bidali du.",
+            "error_decrypting": "Errorea audioa deszifratzean",
+            "show_image": "Erakutsi irudia"
+        },
+        "m.key.verification.done": "%(name)s egiaztatu duzu",
+        "m.key.verification.cancel": {
+            "you_cancelled": "%(name)s egiaztatzeari utzi diozu",
+            "user_cancelled": "%(name)s(e)k egiaztaketa utzi du"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Onartu duzu",
+            "you_declined": "Ukatu egin duzu",
+            "you_cancelled": "Utzi duzu",
+            "you_started": "Egiaztaketa eskari bat bidali duzu"
+        },
+        "m.video": {
+            "error_decrypting": "Errorea bideoa deszifratzean"
+        }
     },
     "slash_command": {
         "shrug": "¯\\_(ツ)_/¯ jartzen du testu soileko mezu baten aurrean",
@@ -1328,7 +1324,22 @@
             "unverified_session_toast_title": "Saio berria. Zu izan zara?",
             "waiting_for_user_accept": "%(displayName)s(e)k onartu bitartean zain…",
             "start_button": "Hasi egiaztaketa",
-            "accepting": "Onartzen…"
+            "accepting": "Onartzen…",
+            "scan_qr": "Egiaztatu eskaneatuz",
+            "scan_qr_explainer": "Eskatu %(displayName)s erabiltzaileari zure kodea eskaneatu dezan:",
+            "verify_emoji_prompt_qr": "Ezin baduzu goiko kodea eskaneatu, egiaztatu emoji bakanak konparatuz.",
+            "verify_emoji_prompt": "Egiaztatu emoji bakanak konparatuz.",
+            "verify_emoji": "Egiaztatu emoji bidez",
+            "qr_reciprocate_same_shield_user": "Ia amaitu duzu! %(displayName)s gailuak ezkutu bera erakusten du?",
+            "prompt_encrypted": "Egiaztatu gela bateko erabiltzaile guztiak segurua dela baieztatzeko.",
+            "successful_own_device": "Ongi egiaztatu duzu zure gailua!",
+            "successful_device": "Ongi egiaztatu duzu %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "Ongi egiaztatu duzu %(displayName)s!",
+            "prompt_self": "Hasi egiaztaketa berriro jakinarazpenetik.",
+            "prompt_user": "Hasi egiaztaketa berriro bere profiletik.",
+            "timed_out": "Egiaztaketarako denbora-muga agortu da.",
+            "cancelled_user": "%(displayName)s-k egiaztaketa ezeztatu du.",
+            "cancelled": "Egiaztaketa ezeztatu duzu."
         },
         "old_version_detected_title": "Kriptografia datu zaharrak atzeman dira",
         "old_version_detected_description": "%(brand)s bertsio zahar batek datuak antzeman dira. Honek bertsio zaharrean  muturretik muturrerako zifratzea ez funtzionatzea eragingo du. Azkenaldian bertsio zaharrean bidali edo jasotako zifratutako mezuak agian ezin izango dira deszifratu bertsio honetan. Honek ere Bertsio honekin egindako mezu trukeak huts egitea ekar dezake. Arazoak badituzu, amaitu saioa eta hasi berriro saioa. Mezuen historiala gordetzeko, esportatu eta berriro inportatu zure gakoak.",
@@ -1368,7 +1379,8 @@
         "cross_signing_user_normal": "Ez duzu erabiltzaile hau egiaztatu.",
         "cross_signing_room_warning": "Baten batek saio ezezagun bat erabiltzen du",
         "cross_signing_room_verified": "Gelako guztiak egiaztatuta daude",
-        "cross_signing_room_normal": "Gela hau muturretik muturrera zifratuta dago"
+        "cross_signing_room_normal": "Gela hau muturretik muturrera zifratuta dago",
+        "unsupported": "Bezero honek ez du muturretik muturrerako zifratzea onartzen."
     },
     "emoji": {
         "category_frequently_used": "Maiz erabilia",

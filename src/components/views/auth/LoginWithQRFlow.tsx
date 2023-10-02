@@ -112,7 +112,7 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                         cancellationMessage = _t("auth|qr_code_login|error_request_cancelled");
                         break;
                 }
-                title = _t("Connection failed");
+                title = _t("timeline|m.call.invite|failed_connection");
                 centreTitle = true;
                 titleIcon = <WarningBadge className="error" />;
                 backButton = false;

@@ -41,7 +41,7 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
 
     return (
         <form className="mx_JumpToDatePicker_form" onSubmit={onJumpToDateSubmit}>
-            <span className="mx_JumpToDatePicker_label">{_t("Jump to date")}</span>
+            <span className="mx_JumpToDatePicker_label">{_t("room|jump_to_date")}</span>
             <Field
                 element="input"
                 type="date"
@@ -51,7 +51,7 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
                 // events there anyway).
                 max={formatDateForInput(new Date())}
                 className="mx_JumpToDatePicker_datePicker"
-                label={_t("Pick a date to jump to")}
+                label={_t("room|jump_to_date_prompt")}
                 onFocus={onFocus}
                 inputRef={ref}
                 tabIndex={isActive ? 0 : -1}

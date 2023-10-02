@@ -604,11 +604,11 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         const content = this.props.mxEvent.getContent<ImageContent>();
 
         if (this.state.error) {
-            let errorText = _t("Unable to show image due to error");
+            let errorText = _t("timeline|m.image|error");
             if (this.state.error instanceof DecryptError) {
-                errorText = _t("Error decrypting image");
+                errorText = _t("timeline|m.image|error_decrypting");
             } else if (this.state.error instanceof DownloadError) {
-                errorText = _t("Error downloading image");
+                errorText = _t("timeline|m.image|error_downloading");
             }
 
             return <MediaProcessingError className="mx_MImageBody">{errorText}</MediaProcessingError>;
@@ -651,7 +651,7 @@ export class HiddenImagePlaceholder extends React.PureComponent<PlaceholderIProp
             <div className={className} style={{ maxWidth: `min(100%, ${maxWidth}px)` }}>
                 <div className="mx_HiddenImagePlaceholder_button">
                     <span className="mx_HiddenImagePlaceholder_eye" />
-                    <span>{_t("Show image")}</span>
+                    <span>{_t("timeline|m.image|show_image")}</span>
                 </div>
             </div>
         );

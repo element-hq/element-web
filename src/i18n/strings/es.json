@@ -5,11 +5,7 @@
         "one": "y otro más…"
     },
     "An error has occurred.": "Un error ha ocurrido.",
-    "Decrypt %(text)s": "Descifrar %(text)s",
-    "Download %(text)s": "Descargar %(text)s",
     "Email address": "Dirección de correo electrónico",
-    "Error decrypting attachment": "Error al descifrar adjunto",
-    "Invalid file%(extra)s": "Archivo inválido %(extra)s",
     "Join Room": "Unirme a la sala",
     "Custom level": "Nivel personalizado",
     "Home": "Inicio",
@@ -76,8 +72,6 @@
         "other": "(~%(count)s resultados)",
         "one": "(~%(count)s resultado)"
     },
-    "Error decrypting image": "Error al descifrar imagen",
-    "Error decrypting video": "Error al descifrar el vídeo",
     "Add an Integration": "Añadir una Integración",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Estás a punto de ir a un sitio externo para que puedas iniciar sesión con tu cuenta y usarla en %(integrationsUrl)s. ¿Quieres seguir?",
     "Delete Widget": "Eliminar accesorio",
@@ -296,36 +290,10 @@
         "other": "%(count)s sesiones",
         "one": "%(count)s sesión"
     },
-    "This client does not support end-to-end encryption.": "Este cliente no es compatible con el cifrado de extremo a extremo.",
-    "Verify by scanning": "Verificar mediante escaneo",
-    "Ask %(displayName)s to scan your code:": "Pídele a %(displayName)s que escanee tu código:",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Si no puedes escanear el código de arriba, verifica comparando emoji únicos.",
-    "Verify by comparing unique emoji.": "Verifica comparando emoji únicos.",
-    "Verify by emoji": "Verificar con emoji",
-    "Almost there! Is %(displayName)s showing the same shield?": "¡Ya casi está! ¿Está %(displayName)s mostrando el mismo escudo?",
-    "Verify all users in a room to ensure it's secure.": "Verifica a todos los usuarios de una sala para asegurar que es segura.",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Has verificado con éxito %(deviceName)s (%(deviceId)s)",
-    "You've successfully verified %(displayName)s!": "¡Has verificado con éxito a %(displayName)s!",
-    "Start verification again from the notification.": "Inicie la verificación nuevamente a partir de la notificación.",
-    "Start verification again from their profile.": "Empieza la verificación de nuevo desde su perfil.",
-    "Verification timed out.": "El tiempo máximo para la verificación se ha agotado.",
-    "%(displayName)s cancelled verification.": "%(displayName)s canceló la verificación.",
-    "You cancelled verification.": "Has cancelado la verificación.",
-    "Encryption not enabled": "El cifrado no está activado",
-    "The encryption used by this room isn't supported.": "El cifrado usado por esta sala no es compatible.",
-    "Show image": "Ver imagen",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Ha ignorado a esta cuenta, así que su mensaje está oculto. <a>Ver de todos modos.</a>",
-    "You verified %(name)s": "Has verificado a %(name)s",
-    "You cancelled verifying %(name)s": "Has cancelado la verificación de %(name)s",
-    "%(name)s cancelled verifying": "%(name)s canceló la verificación",
-    "You accepted": "Aceptaste",
     "%(name)s accepted": "%(name)s aceptó",
-    "You declined": "Declinaste",
-    "You cancelled": "Cancelaste",
     "%(name)s declined": "%(name)s declinó",
     "%(name)s cancelled": "%(name)s canceló",
     "%(name)s wants to verify": "%(name)s quiere verificar",
-    "You sent a verification request": "Has enviado solicitud de verificación",
     "Edited at %(date)s. Click to view edits.": "Última vez editado: %(date)s. Haz clic para ver los cambios.",
     "edited": "editado",
     "Can't load this message": "No se ha podido cargar este mensaje",
@@ -361,7 +329,6 @@
     "IRC display name width": "Ancho del nombre de visualización de IRC",
     "Backup version:": "Versión de la copia de seguridad:",
     "Not encrypted": "Sin cifrar",
-    "You've successfully verified your device!": "¡Ha verificado correctamente su dispositivo!",
     "Edited at %(date)s": "Última vez editado: %(date)s",
     "Click to view edits": "Haz clic para ver las ediciones",
     "Information": "Información",
@@ -394,10 +361,6 @@
     "Confirm encryption setup": "Confirmar la configuración de cifrado",
     "Click the button below to confirm setting up encryption.": "Haz clic en el botón de abajo para confirmar la configuración del cifrado.",
     "This version of %(brand)s does not support searching encrypted messages": "Esta versión de %(brand)s no puede buscar mensajes cifrados",
-    "Video conference ended by %(senderName)s": "Videoconferencia terminada por %(senderName)s",
-    "Join the conference from the room information card on the right": "Únete a la conferencia desde el panel de información de la sala de la derecha",
-    "Join the conference at the top of this room": "Únete a la conferencia en la parte de arriba de la sala",
-    "Ignored attempt to disable encryption": "Se ha ignorado un intento de desactivar el cifrado",
     "This looks like a valid Security Key!": "¡Parece que es una clave de seguridad válida!",
     "Not a valid Security Key": "No es una clave de seguridad válida",
     "Zimbabwe": "Zimbabue",
@@ -583,8 +546,6 @@
     "This version of %(brand)s does not support viewing some encrypted files": "Esta versión de %(brand)s no permite ver algunos archivos cifrados",
     "Use the <a>Desktop app</a> to search encrypted messages": "Usa la <a>aplicación de escritorio</a> para buscar en los mensajes cifrados",
     "Use the <a>Desktop app</a> to see all encrypted files": "Usa la <a>aplicación de escritorio</a> para ver todos los archivos cifrados",
-    "Video conference started by %(senderName)s": "Videoconferencia iniciada por %(senderName)s",
-    "Video conference updated by %(senderName)s": "Videoconferencia actualizada por %(senderName)s",
     "Reason (optional)": "Motivo (opcional)",
     "Server Options": "Opciones del servidor",
     "Dial pad": "Teclado numérico",
@@ -710,7 +671,6 @@
         "other": "%(count)s salas"
     },
     "Invite to %(roomName)s": "Invitar a %(roomName)s",
-    "Edit devices": "Gestionar dispositivos",
     "Consult first": "Consultar primero",
     "Invited people will be able to read old messages.": "Las personas que invites podrán leer los mensajes antiguos.",
     "We couldn't create your DM.": "No hemos podido crear tu mensaje directo.",
@@ -740,7 +700,6 @@
     },
     "Not all selected were added": "No se han añadido todas las seleccionadas",
     "You are not allowed to view this server's rooms list": "No tienes permiso para ver la lista de salas de este servidor",
-    "Error processing voice message": "Ha ocurrido un error al procesar el mensaje de voz",
     "You may contact me if you have any follow up questions": "Os podéis poner en contacto conmigo si tenéis alguna pregunta",
     "To leave the beta, visit your settings.": "Para salir de la beta, ve a tus ajustes.",
     "Add reaction": "Reaccionar",
@@ -754,14 +713,6 @@
     "Message search initialisation failed, check <a>your settings</a> for more information": "Ha fallado el sistema de búsqueda de mensajes. Comprueba <a>tus ajustes</a> para más información",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Tu aplicación %(brand)s no te permite usar un gestor de integración para hacer esto. Por favor, contacta con un administrador.",
     "User Directory": "Lista de usuarios",
-    "Error processing audio message": "Error al procesar el mensaje de audio",
-    "Could not connect media": "No se ha podido conectar con los dispositivos multimedia",
-    "Their device couldn't start the camera or microphone": "El dispositivo de la otra persona no ha podido iniciar la cámara o micrófono",
-    "The call is in an unknown state!": "¡La llamada está en un estado desconocido!",
-    "Call back": "Devolver llamada",
-    "No answer": "Sin respuesta",
-    "An unknown error occurred": "Ha ocurrido un error desconocido",
-    "Connection failed": "Ha fallado la conexión",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Ten en cuenta que actualizar crea una nueva versión de la sala</b>. Todos los mensajes hasta ahora quedarán archivados aquí, en esta sala.",
     "Automatically invite members from this room to the new one": "Invitar a la nueva sala automáticamente a los miembros que tiene ahora",
     "These are likely ones other room admins are a part of.": "Otros administradores de la sala estarán dentro.",
@@ -788,11 +739,6 @@
     "Create a new space": "Crear un nuevo espacio",
     "Want to add a new space instead?": "¿Quieres añadir un espacio nuevo en su lugar?",
     "Add existing space": "Añadir un espacio ya existente",
-    "Decrypting": "Descifrando",
-    "Missed call": "Llamada perdida",
-    "Call declined": "Llamada rechazada",
-    "Unknown failure: %(reason)s": "Fallo desconocido: %(reason)s",
-    "Some encryption parameters have been changed.": "Algunos parámetros del cifrado han cambiado.",
     "To join a space you'll need an invite.": "Para unirte a un espacio, necesitas que te inviten a él.",
     "Don't leave any rooms": "No salir de ninguna sala",
     "Leave all rooms": "Salir de todas las salas",
@@ -801,16 +747,13 @@
     "You are about to leave <spaceName/>.": "Estás a punto de salirte de <spaceName/>.",
     "MB": "MB",
     "In reply to <a>this message</a>": "En respuesta a <a>este mensaje</a>",
-    "Downloading": "Descargando",
     "%(count)s reply": {
         "one": "%(count)s respuesta",
         "other": "%(count)s respuestas"
     },
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Escribe tu frase de seguridad o <button>usa tu clave de seguridad</button> para continuar.",
-    "In encrypted rooms, verify all users to ensure it's secure.": "En salas cifradas, verifica a todos los usuarios para asegurarte de que es segura.",
     "If you can't see who you're looking for, send them your invite link below.": "Si no encuentras a quien buscas, envíale tu enlace de invitación que encontrarás abajo.",
     "Thread options": "Ajustes del hilo",
-    "Reply in thread": "Responder en hilo",
     "Forget": "Olvidar",
     "%(count)s votes": {
         "one": "%(count)s voto",
@@ -841,21 +784,6 @@
     "The poll has ended. Top answer: %(topAnswer)s": "La encuesta ha terminado. Opción ganadora: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "La encuesta ha terminado. Nadie ha votado.",
     "Including you, %(commaSeparatedMembers)s": "Además de ti, %(commaSeparatedMembers)s",
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s voto. Vota para ver los resultados",
-        "other": "%(count)s votos. Vota para ver los resultados"
-    },
-    "No votes cast": "Ningún voto",
-    "Final result based on %(count)s votes": {
-        "one": "Resultados finales (%(count)s voto)",
-        "other": "Resultados finales (%(count)s votos)"
-    },
-    "Sorry, your vote was not registered. Please try again.": "Lo sentimos, no se ha podido registrar el voto. Inténtalo otra vez.",
-    "Vote not registered": "Voto no emitido",
-    "Based on %(count)s votes": {
-        "other": "%(count)s votos",
-        "one": "%(count)s voto"
-    },
     "Recently viewed": "Visto recientemente",
     "Open in OpenStreetMap": "Abrir en OpenStreetMap",
     "Verify other device": "Verificar otro dispositivo",
@@ -866,13 +794,6 @@
     "Sections to show": "Secciones que mostrar",
     "Could not fetch location": "No se ha podido conseguir la ubicación",
     "toggle event": "activar o desactivar el evento",
-    "You cancelled verification on your other device.": "Has cancelado la verificación en tu otro dispositivo.",
-    "Almost there! Is your other device showing the same shield?": "¡Ya casi estás! ¿Ves el mismo escudo en el otro dispositivo?",
-    "Message pending moderation": "Mensaje esperando revisión",
-    "Message pending moderation: %(reason)s": "Mensaje esperando revisión: %(reason)s",
-    "Pick a date to jump to": "Elige la fecha a la que saltar",
-    "Jump to date": "Saltar a una fecha",
-    "The beginning of the room": "Inicio de la sala",
     "Feedback sent! Thanks, we appreciate it!": "¡Opinión enviada! Gracias, te lo agradecemos.",
     "Use <arrows/> to scroll": "Usa <arrows/> para desplazarte",
     "Location": "Ubicación",
@@ -887,14 +808,7 @@
     "My current location": "Mi ubicación actual",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s no ha podido enviar tu ubicación. Por favor, inténtalo de nuevo más tarde.",
     "We couldn't send your location": "No hemos podido enviar tu ubicación",
-    "Results will be visible when the poll is ended": "Los resultados podrán verse cuando la encuesta termine",
-    "Sorry, you can't edit a poll after votes have been cast.": "Lo siento, no puedes editar una encuesta después de que alguien haya votado en ella.",
-    "Can't edit poll": "Encuesta no editable",
-    "Can't create a thread from an event with an existing relation": "No ha sido posible crear un hilo a partir de un evento con una relación existente",
     "You are sharing your live location": "Estás compartiendo tu ubicación en tiempo real",
-    "Click": "Clic",
-    "Expand quotes": "Expandir citas",
-    "Collapse quotes": "Plegar citas",
     "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
         "other": "Estás a punto de borrar %(count)s mensajes de %(user)s. También se borrarán permanentemente de los dispositivos de todos en la conversación. ¿Quieres continuar?",
         "one": "Estás a punto de borrar %(count)s mensajes de %(user)s. También se borrarán permanentemente de los dispositivos de todos en la conversación. ¿Quieres continuar?"
@@ -913,7 +827,6 @@
     "Live location error": "Error en la ubicación en tiempo real",
     "Live location ended": "La ubicación en tiempo real ha terminado",
     "Live until %(expiryTime)s": "En directo hasta %(expiryTime)s",
-    "View live location": "Ver ubicación en tiempo real",
     "An error occurred while stopping your live location, please try again": "Ha ocurrido un error al dejar de compartir tu ubicación en tiempo real. Por favor, inténtalo de nuevo",
     "An error occurred while stopping your live location": "Ha ocurrido un error al dejar de compartir tu ubicación en tiempo real",
     "Close sidebar": "Cerrar barra lateral",
@@ -970,15 +883,11 @@
     "You're in": "Estás en",
     "You don't have permission to share locations": "No tienes permiso para compartir ubicaciones",
     "Saved Items": "Elementos guardados",
-    "Messages in this chat will be end-to-end encrypted.": "Los mensajes en esta conversación serán cifrados de extremo a extremo.",
     "Choose a locale": "Elige un idioma",
     "Interactively verify by emoji": "Verificar interactivamente usando emojis",
     "Manually verify by text": "Verificar manualmente usando un texto",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s o %(recoveryFile)s",
-    "Video call ended": "Videollamada terminada",
     "%(name)s started a video call": "%(name)s comenzó una videollamada",
-    "Unable to show image due to error": "No es posible mostrar la imagen debido a un error",
-    "Error downloading image": "Error al descargar la imagen",
     "Thread root ID: %(threadRootId)s": "ID del hilo raíz: %(threadRootId)s",
     "<w>WARNING:</w> <description/>": "<w>ADVERTENCIA :</w> <description/>",
     " in <strong>%(room)s</strong>": " en <strong>%(room)s</strong>",
@@ -987,30 +896,16 @@
     "Checking…": "Comprobando…",
     "Adding…": "Añadiendo…",
     "Message in %(room)s": "Mensaje en %(room)s",
-    "Declining…": "Rechazando…",
-    "Answered elsewhere": "Respondido en otro sitio",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
-    "Error details": "Detalles del error",
     "unavailable": "no disponible",
     "unknown status code": "error de estado desconocido",
-    "View poll": "Ver encuesta",
-    "Load more polls": "Cargar más encuestas",
-    "Loading polls": "Cargando encuestas",
-    "Active polls": "Encuestas activas",
     "unknown": "desconocido",
     "Starting export process…": "Iniciando el proceso de exportación…",
-    "Ended a poll": "Cerró una encuesta",
     "Requires your server to support the stable version of MSC3827": "Requiere que tu servidor sea compatible con la versión estable de MSC3827",
     "This session is backing up your keys.": "",
     "Desktop app logo": "Logotipo de la aplicación de escritorio",
-    "Past polls": "Encuestas anteriores",
     "Enable '%(manageIntegrations)s' in Settings to do this.": "Activa «%(manageIntegrations)s» en ajustes para poder hacer esto.",
     "Start DM anyway and never warn me again": "Enviar mensaje directo de todos modos y no avisar más",
     "Can't start voice message": "No se ha podido empezar el mensaje de voz",
-    "There are no active polls in this room": "Esta sala no tiene encuestas activas",
-    "There are no past polls in this room": "Esta sala no tiene encuestas anteriores",
-    "Server returned %(statusCode)s with error code %(errorCode)s": "El servidor devolvió un %(statusCode)s con el código de error %(errorCode)s",
-    "The sender has blocked you from receiving this message": "La persona que ha enviado este mensaje te ha bloqueado, no puedes recibir el mensaje",
     "Waiting for partner to confirm…": "Esperando a que la otra persona confirme…",
     "Message from %(user)s": "Mensaje de %(user)s",
     "Enable MSC3946 (to support late-arriving room archives)": "",
@@ -1249,7 +1144,9 @@
         "new_room": "Nueva sala",
         "new_video_room": "Nueva sala de vídeo",
         "add_existing_room": "Añadir sala ya existente",
-        "explore_public_rooms": "Buscar salas públicas"
+        "explore_public_rooms": "Buscar salas públicas",
+        "reply_in_thread": "Responder en hilo",
+        "click": "Clic"
     },
     "a11y": {
         "user_menu": "Menú del Usuario",
@@ -2164,13 +2061,25 @@
     "timeline": {
         "m.call": {
             "video_call_started": "Videollamada empezada en %(roomName)s.",
-            "video_call_started_unsupported": "Videollamada empezada en %(roomName)s. (no compatible con este navegador)"
+            "video_call_started_unsupported": "Videollamada empezada en %(roomName)s. (no compatible con este navegador)",
+            "video_call_ended": "Videollamada terminada"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s hizo una llamada de voz.",
             "voice_call_unsupported": "%(senderName)s hizo una llamada de voz. (no soportada por este navegador)",
             "video_call": "%(senderName)s hizo una llamada de vídeo.",
-            "video_call_unsupported": "%(senderName)s hizo una llamada de vídeo (no soportada por este navegador)"
+            "video_call_unsupported": "%(senderName)s hizo una llamada de vídeo (no soportada por este navegador)",
+            "declined": "Llamada rechazada",
+            "call_back_prompt": "Devolver llamada",
+            "answered_elsewhere": "Respondido en otro sitio",
+            "missed_call": "Llamada perdida",
+            "no_answer": "Sin respuesta",
+            "failed_connect_media": "No se ha podido conectar con los dispositivos multimedia",
+            "failed_connection": "Ha fallado la conexión",
+            "failed_opponent_media": "El dispositivo de la otra persona no ha podido iniciar la cámara o micrófono",
+            "unknown_error": "Ha ocurrido un error desconocido",
+            "unknown_failure": "Fallo desconocido: %(reason)s",
+            "unknown_state": "¡La llamada está en un estado desconocido!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s ha aceptado la invitación a %(displayName)s",
@@ -2221,7 +2130,6 @@
             "forbidden": "%(senderDisplayName)s ha prohibido que los invitados se unan a la sala.",
             "unknown": "%(senderDisplayName)s ha cambiado el acceso de invitados a %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s envió una imagen.",
         "m.sticker": "%(senderDisplayName)s envió una pegatina.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s ha establecido los permisos de la sala.",
@@ -2265,7 +2173,12 @@
         "m.widget": {
             "modified": "%(senderName)s modificó el accesorio %(widgetName)s%(widgetName)sx",
             "added": "%(senderName)s añadió el accesorio %(widgetName)s",
-            "removed": "componente %(widgetName)s eliminado por %(senderName)s"
+            "removed": "componente %(widgetName)s eliminado por %(senderName)s",
+            "jitsi_join_top_prompt": "Únete a la conferencia en la parte de arriba de la sala",
+            "jitsi_join_right_prompt": "Únete a la conferencia desde el panel de información de la sala de la derecha",
+            "jitsi_ended": "Videoconferencia terminada por %(senderName)s",
+            "jitsi_updated": "Videoconferencia actualizada por %(senderName)s",
+            "jitsi_started": "Videoconferencia iniciada por %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s actualizó la disposición de la sala",
         "m.location": {
@@ -2276,7 +2189,6 @@
         "self_redaction": "Mensaje eliminado",
         "redaction": "Mensaje eliminado por %(name)s",
         "m.poll.start": "%(senderName)s ha empezado una encuesta – %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s ha terminado una encuesta",
         "typing_indicator": {
             "one_user": "%(displayName)s está escribiendo…",
             "two_users": "%(names)s y %(lastPerson)s están escribiendo…",
@@ -2440,7 +2352,8 @@
             "changed_rule_users": "%(senderName)s cambió una regla que estaba bloqueando a usuarios que coinciden con %(oldGlob)s a %(newGlob)s por %(reason)s",
             "changed_rule_rooms": "%(senderName)s cambió una regla que estaba bloqueando a salas que coinciden con %(oldGlob)s a %(newGlob)s por %(reason)s",
             "changed_rule_servers": "%(senderName)s cambió una regla que estaba bloqueando a servidores que coinciden con %(oldGlob)s a %(newGlob)s por %(reason)s",
-            "changed_rule_glob": "%(senderName)s actualizó una regla de bloqueo que correspondía a %(oldGlob)s a %(newGlob)s por %(reason)s"
+            "changed_rule_glob": "%(senderName)s actualizó una regla de bloqueo que correspondía a %(oldGlob)s a %(newGlob)s por %(reason)s",
+            "message_hidden": "Ha ignorado a esta cuenta, así que su mensaje está oculto. <a>Ver de todos modos.</a>"
         },
         "no_permission_messages_before_invite": "No tienes permisos para ver mensajes enviados antes de que te invitaran.",
         "no_permission_messages_before_join": "No tienes permisos para ver mensajes enviados antes de que te unieras.",
@@ -2488,18 +2401,70 @@
         "mab": {
             "label": "Acciones de mensaje",
             "view_in_room": "Ver en la sala",
-            "copy_link_thread": "Copiar enlace al hilo"
+            "copy_link_thread": "Copiar enlace al hilo",
+            "collapse_reply_chain": "Plegar citas",
+            "expand_reply_chain": "Expandir citas"
         },
         "m.audio": {
             "unnamed_audio": "Audio sin título",
-            "error_downloading_audio": "Error al descargar el audio"
+            "error_downloading_audio": "Error al descargar el audio",
+            "error_processing_audio": "Error al procesar el mensaje de audio",
+            "error_processing_voice_message": "Ha ocurrido un error al procesar el mensaje de voz"
         },
         "load_error": {
             "no_permission": "Se ha intentado cargar cierto punto en la cronología de esta sala, pero no tiene permiso para ver el mensaje solicitado.",
             "unable_to_find": "Se ha intentado cargar cierto punto en la cronología de esta sala, pero no se ha podido encontrarlo.",
             "title": "Fallo al cargar el historial"
         },
-        "error_no_renderer": "No se ha podido mostrar este evento"
+        "error_no_renderer": "No se ha podido mostrar este evento",
+        "decryption_failure_blocked": "La persona que ha enviado este mensaje te ha bloqueado, no puedes recibir el mensaje",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_downloading": "Descargando",
+        "download_action_decrypting": "Descifrando",
+        "m.room.encryption": {
+            "parameters_changed": "Algunos parámetros del cifrado han cambiado.",
+            "enabled_local": "Los mensajes en esta conversación serán cifrados de extremo a extremo.",
+            "disable_attempt": "Se ha ignorado un intento de desactivar el cifrado",
+            "disabled": "El cifrado no está activado",
+            "unsupported": "El cifrado usado por esta sala no es compatible."
+        },
+        "pending_moderation_reason": "Mensaje esperando revisión: %(reason)s",
+        "pending_moderation": "Mensaje esperando revisión",
+        "m.beacon_info": {
+            "view_live_location": "Ver ubicación en tiempo real"
+        },
+        "m.file": {
+            "download_label": "Descargar %(text)s",
+            "error_decrypting": "Error al descifrar adjunto",
+            "decrypt_label": "Descifrar %(text)s",
+            "error_invalid": "Archivo inválido %(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s envió una imagen.",
+            "error": "No es posible mostrar la imagen debido a un error",
+            "error_decrypting": "Error al descifrar imagen",
+            "error_downloading": "Error al descargar la imagen",
+            "show_image": "Ver imagen"
+        },
+        "m.key.verification.done": "Has verificado a %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Has cancelado la verificación de %(name)s",
+            "user_cancelled": "%(name)s canceló la verificación"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Aceptaste",
+            "you_declined": "Declinaste",
+            "you_cancelled": "Cancelaste",
+            "declining": "Rechazando…",
+            "you_started": "Has enviado solicitud de verificación"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s ha terminado una encuesta",
+            "ended": "Cerró una encuesta"
+        },
+        "m.video": {
+            "error_decrypting": "Error al descifrar el vídeo"
+        }
     },
     "slash_command": {
         "spoiler": "Envía el mensaje como un spoiler",
@@ -2972,7 +2937,25 @@
                 "reset_confirmation": "¿De verdad quieres restablecer las claves de verificación?",
                 "skip_verification": "Saltar la verificación por ahora"
             },
-            "accepting": "Aceptando…"
+            "accepting": "Aceptando…",
+            "scan_qr": "Verificar mediante escaneo",
+            "scan_qr_explainer": "Pídele a %(displayName)s que escanee tu código:",
+            "verify_emoji_prompt_qr": "Si no puedes escanear el código de arriba, verifica comparando emoji únicos.",
+            "verify_emoji_prompt": "Verifica comparando emoji únicos.",
+            "verify_emoji": "Verificar con emoji",
+            "qr_reciprocate_same_shield_device": "¡Ya casi estás! ¿Ves el mismo escudo en el otro dispositivo?",
+            "qr_reciprocate_same_shield_user": "¡Ya casi está! ¿Está %(displayName)s mostrando el mismo escudo?",
+            "prompt_encrypted": "Verifica a todos los usuarios de una sala para asegurar que es segura.",
+            "prompt_unencrypted": "En salas cifradas, verifica a todos los usuarios para asegurarte de que es segura.",
+            "successful_own_device": "¡Ha verificado correctamente su dispositivo!",
+            "successful_device": "Has verificado con éxito %(deviceName)s (%(deviceId)s)",
+            "successful_user": "¡Has verificado con éxito a %(displayName)s!",
+            "prompt_self": "Inicie la verificación nuevamente a partir de la notificación.",
+            "prompt_user": "Empieza la verificación de nuevo desde su perfil.",
+            "timed_out": "El tiempo máximo para la verificación se ha agotado.",
+            "cancelled_self": "Has cancelado la verificación en tu otro dispositivo.",
+            "cancelled_user": "%(displayName)s canceló la verificación.",
+            "cancelled": "Has cancelado la verificación."
         },
         "old_version_detected_title": "Se detectó información de criptografía antigua",
         "old_version_detected_description": "Se detectó una versión más antigua de %(brand)s. Esto habrá provocado que la criptografía de extremo a extremo funcione incorrectamente en la versión más antigua. Los mensajes cifrados de extremo a extremo intercambiados recientemente mientras usaba la versión más antigua puede que no sean descifrables con esta versión. Esto también puede hacer que fallen con la más reciente. Si experimenta problemas, desconecte y vuelva a ingresar. Para conservar el historial de mensajes, exporte y vuelva a importar sus claves.",
@@ -3025,7 +3008,8 @@
         "cross_signing_user_normal": "No has verificado a este usuario.",
         "cross_signing_room_warning": "Alguien está usando una sesión desconocida",
         "cross_signing_room_verified": "Todos los participantes en esta sala están verificados",
-        "cross_signing_room_normal": "Esta sala usa cifrado de extremo a extremo"
+        "cross_signing_room_normal": "Esta sala usa cifrado de extremo a extremo",
+        "unsupported": "Este cliente no es compatible con el cifrado de extremo a extremo."
     },
     "emoji": {
         "category_frequently_used": "Frecuente",
@@ -3491,7 +3475,8 @@
         "empty_tip": "<b>Consejo:</b> Usa «%(replyInThread)s» mientras pasas el ratón sobre un mensaje.",
         "empty_heading": "Organiza los temas de conversación en hilos",
         "unable_to_decrypt": "No se ha podido descifrar el mensaje",
-        "open_thread": "Abrir hilo"
+        "open_thread": "Abrir hilo",
+        "error_start_thread_existing_relation": "No ha sido posible crear un hilo a partir de un evento con una relación existente"
     },
     "theme": {
         "light_high_contrast": "Claro con contraste alto",
@@ -3781,7 +3766,12 @@
         "jump_read_marker": "Ir al primer mensaje no leído.",
         "inviter_unknown": "Desconocido",
         "failed_reject_invite": "Falló al rechazar invitación",
-        "creating_room_text": "Estamos creando una sala con %(names)s"
+        "creating_room_text": "Estamos creando una sala con %(names)s",
+        "error_jump_to_date": "El servidor devolvió un %(statusCode)s con el código de error %(errorCode)s",
+        "error_jump_to_date_details": "Detalles del error",
+        "jump_to_date_beginning": "Inicio de la sala",
+        "jump_to_date": "Saltar a una fecha",
+        "jump_to_date_prompt": "Elige la fecha a la que saltar"
     },
     "file_panel": {
         "guest_note": "<a>Regístrate</a> para usar esta funcionalidad",
@@ -3824,7 +3814,21 @@
         "options_placeholder": "Escribe una opción",
         "options_add_button": "Añadir opción",
         "disclosed_notes": "Quienes voten podrán ver los resultados",
-        "notes": "Los resultados se mostrarán cuando cierres la encuesta"
+        "notes": "Los resultados se mostrarán cuando cierres la encuesta",
+        "unable_edit_title": "Encuesta no editable",
+        "unable_edit_description": "Lo siento, no puedes editar una encuesta después de que alguien haya votado en ella.",
+        "error_voting_title": "Voto no emitido",
+        "error_voting_description": "Lo sentimos, no se ha podido registrar el voto. Inténtalo otra vez.",
+        "total_not_ended": "Los resultados podrán verse cuando la encuesta termine",
+        "total_no_votes": "Ningún voto",
+        "total_n_votes": {
+            "one": "%(count)s voto. Vota para ver los resultados",
+            "other": "%(count)s votos. Vota para ver los resultados"
+        },
+        "total_n_votes_voted": {
+            "other": "%(count)s votos",
+            "one": "%(count)s voto"
+        }
     },
     "failed_load_async_component": "No se ha podido cargar. Comprueba tu conexión de red e inténtalo de nuevo.",
     "upload_failed_generic": "La subida del archivo «%(fileName)s ha fallado.",
@@ -4047,7 +4051,8 @@
         "deactivate_confirm_description": "Desactivar este usuario le cerrará la sesión y desconectará. No podrá volver a iniciar sesión. Además, saldrá de todas las salas a que se había unido. Esta acción no puede deshacerse. ¿Desactivar este usuario?",
         "deactivate_confirm_action": "Desactivar usuario",
         "error_deactivate": "Error en desactivar usuario",
-        "role_label": "Rol en <RoomName/>"
+        "role_label": "Rol en <RoomName/>",
+        "edit_own_devices": "Gestionar dispositivos"
     },
     "stickers": {
         "empty": "Actualmente no tienes ningún paquete de pegatinas activado",
@@ -4076,7 +4081,20 @@
         "pinned_messages_button": "Fijado",
         "export_chat_button": "Exportar conversación",
         "share_button": "Compartir la sala",
-        "settings_button": "Configuración de la sala"
+        "settings_button": "Configuración de la sala",
+        "poll": {
+            "active_heading": "Encuestas activas",
+            "past_heading": "Encuestas anteriores",
+            "loading": "Cargando encuestas",
+            "load_more": "Cargar más encuestas",
+            "empty_active": "Esta sala no tiene encuestas activas",
+            "empty_past": "Esta sala no tiene encuestas anteriores",
+            "view_poll": "Ver encuesta",
+            "final_result": {
+                "one": "Resultados finales (%(count)s voto)",
+                "other": "Resultados finales (%(count)s votos)"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Rechazar invitación",

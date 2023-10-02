@@ -71,7 +71,6 @@
     "Headphones": "Hodetelefoner",
     "Folder": "Mappe",
     "Direct Messages": "Direktemeldinger",
-    "Download %(text)s": "Last ned %(text)s",
     "Cancel search": "Avbryt søket",
     "collapse": "skjul",
     "expand": "utvid",
@@ -116,10 +115,6 @@
     "%(duration)sd": "%(duration)sd",
     "Join Room": "Bli med i rommet",
     "not specified": "ikke spesifisert",
-    "Show image": "Vis bilde",
-    "You accepted": "Du aksepterte",
-    "You declined": "Du avslo",
-    "You cancelled": "Du avbrøt",
     "edited": "redigert",
     "Delete Widget": "Slett modul",
     "Power level": "Styrkenivå",
@@ -147,7 +142,6 @@
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Krypterte meldinger er sikret med punkt-til-punkt-kryptering. Bare du og mottakeren(e) har nøklene til å lese disse meldingene.",
     "Start using Key Backup": "Begynn å bruke Nøkkelsikkerhetskopiering",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "For å rapportere inn et Matrix-relatert sikkerhetsproblem, vennligst less Matrix.org sine <a>Retningslinjer for sikkerhetspublisering</a>.",
-    "Encryption not enabled": "Kryptering er ikke skrudd på",
     "Create new room": "Opprett et nytt rom",
     "Language Dropdown": "Språk-nedfallsmeny",
     "Custom level": "Tilpasset nivå",
@@ -165,8 +159,6 @@
         "other": "%(count)s økter",
         "one": "%(count)s økt"
     },
-    "Verify by scanning": "Verifiser med skanning",
-    "Verify by emoji": "Verifiser med emoji",
     "%(name)s accepted": "%(name)s aksepterte",
     "%(name)s declined": "%(name)s avslo",
     "%(name)s cancelled": "%(name)s avbrøt",
@@ -180,8 +172,6 @@
         "other": "og %(count)s andre …",
         "one": "og én annen …"
     },
-    "Decrypt %(text)s": "Dekrypter %(text)s",
-    "You verified %(name)s": "Du verifiserte %(name)s",
     "Some characters not allowed": "Noen tegn er ikke tillatt",
     "Invite anyway": "Inviter likevel",
     "a key signature": "en nøkkelsignatur",
@@ -196,11 +186,6 @@
         "other": "Slett %(count)s meldinger",
         "one": "Slett 1 melding"
     },
-    "You've successfully verified your device!": "Du har vellykket verifisert enheten din!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Du har vellykket verifisert %(deviceName)s (%(deviceId)s)!",
-    "You've successfully verified %(displayName)s!": "Du har vellykket verifisert %(displayName)s!",
-    "You sent a verification request": "Du sendte en verifiseringsforespørsel",
-    "Error decrypting video": "Feil under dekryptering av video",
     "Add an Integration": "Legg til en integrering",
     "Can't load this message": "Klarte ikke å laste inn denne meldingen",
     "Room address": "Rommets adresse",
@@ -281,7 +266,6 @@
     "Åland Islands": "Åland",
     "Afghanistan": "Afghanistan",
     "United Kingdom": "Storbritannia",
-    "Edit devices": "Rediger enheter",
     "Invite to %(roomName)s": "Inviter til %(roomName)s",
     "Resume": "Fortsett",
     "%(count)s members": {
@@ -316,9 +300,6 @@
     "This address is already in use": "Denne adressen er allerede i bruk",
     "<a>In reply to</a> <pill>": "<a>Som svar på</a> <pill>",
     "Information": "Informasjon",
-    "%(name)s cancelled verifying": "%(name)s avbrøt verifiseringen",
-    "You cancelled verifying %(name)s": "Du avbrøt verifiseringen av %(name)s",
-    "Invalid file%(extra)s": "Ugyldig fil%(extra)s",
     "Not encrypted": "Ikke kryptert",
     "Continuing without email": "Fortsetter uten E-post",
     "Are you sure you want to sign out?": "Er du sikker på at du vil logge av?",
@@ -326,8 +307,6 @@
     "Invite by email": "Inviter gjennom E-post",
     "Reason (optional)": "Årsak (valgfritt)",
     "Upgrade Room Version": "Oppgrader romversjon",
-    "You cancelled verification.": "Du avbrøt verifiseringen.",
-    "Ask %(displayName)s to scan your code:": "Be %(displayName)s om å skanne koden:",
     "Dial pad": "Nummerpanel",
     "Zimbabwe": "Zimbabwe",
     "Yemen": "Jemen",
@@ -526,8 +505,6 @@
     "Sending": "Sender",
     "MB": "MB",
     "Add reaction": "Legg til reaksjon",
-    "Downloading": "Laster ned",
-    "Connection failed": "Tilkobling mislyktes",
     "Corn": "Mais",
     "Cloud": "Sky",
     "St. Pierre & Miquelon": "Saint-Pierre og Miquelon",
@@ -1066,7 +1043,6 @@
             "forbidden": "%(senderDisplayName)s har hindret gjester fra å bli med i rommet.",
             "unknown": "%(senderDisplayName)s endret gjestetilgangen til %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s sendte et bilde.",
         "m.room.canonical_alias": {
             "removed": "%(senderName)s fjernet hovedadressen til dette rommet.",
             "changed": "%(senderName)s endret adressene til dette rommet."
@@ -1191,6 +1167,36 @@
         "send_state_sent": "Meldingen ble sendt",
         "mab": {
             "label": "Meldingshandlinger"
+        },
+        "download_action_downloading": "Laster ned",
+        "m.room.encryption": {
+            "disabled": "Kryptering er ikke skrudd på"
+        },
+        "m.call.invite": {
+            "failed_connection": "Tilkobling mislyktes"
+        },
+        "m.file": {
+            "download_label": "Last ned %(text)s",
+            "decrypt_label": "Dekrypter %(text)s",
+            "error_invalid": "Ugyldig fil%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s sendte et bilde.",
+            "show_image": "Vis bilde"
+        },
+        "m.key.verification.done": "Du verifiserte %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Du avbrøt verifiseringen av %(name)s",
+            "user_cancelled": "%(name)s avbrøt verifiseringen"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Du aksepterte",
+            "you_declined": "Du avslo",
+            "you_cancelled": "Du avbrøt",
+            "you_started": "Du sendte en verifiseringsforespørsel"
+        },
+        "m.video": {
+            "error_decrypting": "Feil under dekryptering av video"
         }
     },
     "slash_command": {
@@ -1398,7 +1404,14 @@
             "request_toast_detail": "%(deviceId)s fra %(ip)s",
             "waiting_for_user_accept": "Venter på at %(displayName)s skal akseptere …",
             "start_button": "Begynn verifisering",
-            "accepting": "Aksepterer …"
+            "accepting": "Aksepterer …",
+            "scan_qr": "Verifiser med skanning",
+            "scan_qr_explainer": "Be %(displayName)s om å skanne koden:",
+            "verify_emoji": "Verifiser med emoji",
+            "successful_own_device": "Du har vellykket verifisert enheten din!",
+            "successful_device": "Du har vellykket verifisert %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "Du har vellykket verifisert %(displayName)s!",
+            "cancelled": "Du avbrøt verifiseringen."
         },
         "verification_requested_toast_title": "Verifisering ble forespurt",
         "bootstrap_title": "Setter opp nøkler",
@@ -1819,7 +1832,8 @@
         "error_ban_user": "Mislyktes i å bannlyse brukeren",
         "deactivate_confirm_title": "Vil du deaktivere brukeren?",
         "deactivate_confirm_action": "Deaktiver brukeren",
-        "error_deactivate": "Mislyktes i å deaktivere brukeren"
+        "error_deactivate": "Mislyktes i å deaktivere brukeren",
+        "edit_own_devices": "Rediger enheter"
     },
     "stickers": {
         "empty": "Du har ikke skrudd på noen klistremerkepakker for øyeblikket",

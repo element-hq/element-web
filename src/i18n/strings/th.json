@@ -1,6 +1,4 @@
 {
-    "Decrypt %(text)s": "ถอดรหัส %(text)s",
-    "Download %(text)s": "ดาวน์โหลด %(text)s",
     "unknown error code": "รหัสข้อผิดพลาดที่ไม่รู้จัก",
     "%(items)s and %(lastItem)s": "%(items)s และ %(lastItem)s",
     "and %(count)s others...": {
@@ -9,8 +7,6 @@
     },
     "An error has occurred.": "เกิดข้อผิดพลาด",
     "Email address": "ที่อยู่อีเมล",
-    "Error decrypting attachment": "การถอดรหัสไฟล์แนบผิดพลาด",
-    "Invalid file%(extra)s": "ไฟล์ %(extra)s ไม่ถูกต้อง",
     "Join Room": "เข้าร่วมห้อง",
     "Moderator": "ผู้ช่วยดูแล",
     "not specified": "ไม่ได้ระบุ",
@@ -47,8 +43,6 @@
     },
     "Custom level": "กำหนดระดับเอง",
     "Verification Pending": "รอการตรวจสอบ",
-    "Error decrypting image": "เกิดข้อผิดพลาดในการถอดรหัสรูป",
-    "Error decrypting video": "เกิดข้อผิดพลาดในการถอดรหัสวิดิโอ",
     "Sunday": "วันอาทิตย์",
     "Today": "วันนี้",
     "Friday": "วันศุกร์",
@@ -70,7 +64,6 @@
     "Your area is experiencing difficulties connecting to the internet.": "พื้นที่ของคุณประสบปัญหาในการเชื่อมต่ออินเทอร์เน็ต.",
     "The server has denied your request.": "เซิร์ฟเวอร์ปฏิเสธคำขอของคุณ.",
     "Session ID": "รหัสเซสชัน",
-    "Encryption not enabled": "ไม่ได้เปิดใช้งานการเข้ารหัส",
     "Barbados": "บาร์เบโดส",
     "Bangladesh": "บังคลาเทศ",
     "Bahrain": "บาห์เรน",
@@ -321,7 +314,6 @@
             "remove": "%(senderDisplayName)s ลบชื่อห้อง",
             "set": "%(senderDisplayName)s เปลี่ยนชื่อห้องไปเป็น %(roomName)s"
         },
-        "m.image": "%(senderDisplayName)s ได้ส่งรูป",
         "m.room.third_party_invite": {
             "sent": "%(senderName)s ได้ส่งคำเชิญให้ %(targetDisplayName)s เข้าร่วมห้อง"
         },
@@ -335,6 +327,22 @@
             "label": "การดำเนินการกับข้อความ",
             "view_in_room": "ดูในห้อง",
             "copy_link_thread": "คัดลอกลิงค์ไปยังกระทู้"
+        },
+        "m.room.encryption": {
+            "disabled": "ไม่ได้เปิดใช้งานการเข้ารหัส"
+        },
+        "m.file": {
+            "download_label": "ดาวน์โหลด %(text)s",
+            "error_decrypting": "การถอดรหัสไฟล์แนบผิดพลาด",
+            "decrypt_label": "ถอดรหัส %(text)s",
+            "error_invalid": "ไฟล์ %(extra)s ไม่ถูกต้อง"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s ได้ส่งรูป",
+            "error_decrypting": "เกิดข้อผิดพลาดในการถอดรหัสรูป"
+        },
+        "m.video": {
+            "error_decrypting": "เกิดข้อผิดพลาดในการถอดรหัสวิดิโอ"
         }
     },
     "slash_command": {

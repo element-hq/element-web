@@ -30,20 +30,14 @@
         "other": "und %(count)s weitere …",
         "one": "und ein weiterer …"
     },
-    "Decrypt %(text)s": "%(text)s entschlüsseln",
-    "Download %(text)s": "%(text)s herunterladen",
     "Join Room": "Raum betreten",
     "not specified": "nicht angegeben",
     "%(items)s and %(lastItem)s": "%(items)s und %(lastItem)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s. %(monthName)s %(fullYear)s %(time)s",
     "An error has occurred.": "Ein Fehler ist aufgetreten.",
     "Email address": "E-Mail-Adresse",
-    "Error decrypting attachment": "Fehler beim Entschlüsseln des Anhangs",
-    "Invalid file%(extra)s": "Ungültige Datei%(extra)s",
     "Confirm Removal": "Entfernen bestätigen",
     "Unable to restore session": "Sitzungswiederherstellung fehlgeschlagen",
-    "Error decrypting image": "Entschlüsselung des Bilds fehlgeschlagen",
-    "Error decrypting video": "Videoentschlüsselung fehlgeschlagen",
     "Add an Integration": "Eine Integration hinzufügen",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Wenn du zuvor eine aktuellere Version von %(brand)s verwendet hast, ist deine Sitzung eventuell inkompatibel mit dieser Version. Bitte schließe dieses Fenster und kehre zur aktuelleren Version zurück.",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Um dein Konto für die Verwendung von %(integrationsUrl)s zu authentifizieren, wirst du jetzt auf die Website eines Drittanbieters weitergeleitet. Möchtest du fortfahren?",
@@ -221,20 +215,12 @@
         "other": "%(count)s Sitzungen",
         "one": "%(count)s Sitzung"
     },
-    "Encryption not enabled": "Verschlüsselung nicht aktiviert",
-    "You verified %(name)s": "Du hast %(name)s verifiziert",
-    "You cancelled verifying %(name)s": "Du hast die Verifizierung von %(name)s abgebrochen",
-    "%(name)s cancelled verifying": "%(name)s hat die Verifizierung abgebrochen",
     "%(name)s accepted": "%(name)s hat akzeptiert",
     "%(name)s declined": "%(name)s hat abgelehnt",
     "%(name)s cancelled": "%(name)s hat abgebrochen",
     "%(name)s wants to verify": "%(name)s will eine Verifizierung",
     "Session name": "Sitzungsname",
     "Sign out and remove encryption keys?": "Abmelden und Verschlüsselungsschlüssel entfernen?",
-    "Ask %(displayName)s to scan your code:": "Bitte %(displayName)s, deinen Code zu scannen:",
-    "Verify by emoji": "Mit Emojis verifizieren",
-    "Verify by comparing unique emoji.": "Durch den Vergleich einzigartiger Emojis verifizieren.",
-    "You've successfully verified %(displayName)s!": "Du hast %(displayName)s erfolgreich verifiziert!",
     "Remove recent messages by %(user)s": "Kürzlich gesendete Nachrichten von %(user)s entfernen",
     "Remove %(count)s messages": {
         "other": "%(count)s Nachrichten entfernen",
@@ -242,7 +228,6 @@
     },
     "This backup is trusted because it has been restored on this session": "Dieser Sicherung wird vertraut, da sie während dieser Sitzung wiederhergestellt wurde",
     "Encrypted by a deleted session": "Von einer gelöschten Sitzung verschlüsselt",
-    "The encryption used by this room isn't supported.": "Die von diesem Raum verwendete Verschlüsselung wird nicht unterstützt.",
     "e.g. my-room": "z. B. mein-raum",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Verwende einen Identitäts-Server, um per E-Mail einzuladen. <default>Nutze den Standardidentitäts-Server (%(defaultIdentityServerName)s)</default> oder konfiguriere einen in den <settings>Einstellungen</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Verwende einen Identitäts-Server, um per E-Mail-Adresse einladen zu können. Lege einen in den <settings>Einstellungen</settings> fest.",
@@ -260,22 +245,6 @@
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Versuche nach oben zu scrollen, um zu sehen ob sich dort frühere Nachrichten befinden.",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Dies kann bei vielen Nachrichten einige Zeit dauern. Bitte lade die Anwendung in dieser Zeit nicht neu.",
     "Failed to connect to integration manager": "Fehler beim Verbinden mit dem Integrations-Server",
-    "This client does not support end-to-end encryption.": "Diese Anwendung unterstützt keine Ende-zu-Ende-Verschlüsselung.",
-    "Verify by scanning": "Verifizierung durch Scannen eines QR-Codes",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Wenn du obigen Code nicht erfassen kannst, verifiziere stattdessen durch den Vergleich von Emojis.",
-    "Verify all users in a room to ensure it's secure.": "Verifiziere alle Benutzer in einem Raum um die vollständige Sicherheit zu gewährleisten.",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Du hast %(deviceName)s (%(deviceId)s) erfolgreich verifiziert!",
-    "Start verification again from the notification.": "Starte die Verifikation aus der Benachrichtigung erneut.",
-    "Start verification again from their profile.": "Starte die Verifikation aus dem Benutzerprofil erneut.",
-    "Verification timed out.": "Verifikationsanfrage abgelaufen.",
-    "%(displayName)s cancelled verification.": "%(displayName)s hat die Verifikationsanfrage abgelehnt.",
-    "You cancelled verification.": "Du hast die Verifikation abgebrochen.",
-    "Show image": "Bild anzeigen",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Du blockierst diesen Benutzer, deshalb werden seine Nachrichten nicht angezeigt. <a>Trotzdem anzeigen.</a>",
-    "You accepted": "Du hast angenommen",
-    "You declined": "Du hast abgelehnt",
-    "You cancelled": "Du brachst ab",
-    "You sent a verification request": "Du hast eine Verifizierungsanfrage gesendet",
     "Edited at %(date)s. Click to view edits.": "Am %(date)s geändert. Klicke, um Änderungen anzuzeigen.",
     "Can't load this message": "Diese Nachricht kann nicht geladen werden",
     "Submit logs": "Protokolldateien senden",
@@ -334,7 +303,6 @@
     "Resend %(unsentCount)s reaction(s)": "%(unsentCount)s Reaktion(en) erneut senden",
     "Sign in with SSO": "Einmalanmeldung verwenden",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Um ein Matrix-bezogenes Sicherheitsproblem zu melden, lies bitte die Matrix.org <a>Sicherheitsrichtlinien</a>.",
-    "Almost there! Is %(displayName)s showing the same shield?": "Fast geschafft! Wird bei %(displayName)s das gleiche Schild angezeigt?",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Das Löschen von Quersignierungsschlüsseln ist dauerhaft. Alle, mit dem du dich verifiziert hast, werden Sicherheitswarnungen angezeigt bekommen. Du möchtest dies mit ziemlicher Sicherheit nicht tun, es sei denn, du hast jedes Gerät verloren, von dem aus du quersignieren kannst.",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Das Löschen aller Daten aus dieser Sitzung ist dauerhaft. Verschlüsselte Nachrichten gehen verloren, sofern deine Schlüssel nicht gesichert wurden.",
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Wenn du diesen Benutzer verifizierst werden seine Sitzungen für dich und deine Sitzungen für ihn als vertrauenswürdig markiert.",
@@ -354,7 +322,6 @@
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Um diesen Raum zu aktualisieren, muss die aktuelle Instanz des Raums geschlossen und an ihrer Stelle ein neuer Raum erstellt werden. Um den Raummitgliedern die bestmögliche Erfahrung zu bieten, werden wir:",
     "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Eine Raumaktualisierung ist ein komplexer Vorgang, der üblicherweise empfohlen wird, wenn ein Raum aufgrund von Fehlern, fehlenden Funktionen oder Sicherheitslücken instabil ist.",
     "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Einige Sitzungsdaten, einschließlich der Verschlüsselungsschlüssel, fehlen. Melde dich ab, wieder an und stelle die Schlüssel aus der Sicherung wieder her um dies zu beheben.",
-    "You've successfully verified your device!": "Du hast dein Gerät erfolgreich verifiziert!",
     "To continue, use Single Sign On to prove your identity.": "Zum Fortfahren, nutze „Single Sign-On“ um deine Identität zu bestätigen.",
     "Confirm to continue": "Bestätige um fortzufahren",
     "Click the button below to confirm your identity.": "Klicke den Button unten um deine Identität zu bestätigen.",
@@ -401,12 +368,6 @@
     "Use the <a>Desktop app</a> to search encrypted messages": "Nutze die <a>Desktop-App</a> um verschlüsselte Nachrichten zu durchsuchen",
     "This version of %(brand)s does not support viewing some encrypted files": "Diese Version von %(brand)s kann nicht alle verschlüsselten Dateien anzuzeigen",
     "This version of %(brand)s does not support searching encrypted messages": "Diese Version von %(brand)s kann verschlüsselte Nachrichten nicht durchsuchen",
-    "Join the conference at the top of this room": "An Konferenz oberhalb des Verlaufs teilnehmen",
-    "Join the conference from the room information card on the right": "An der Konferenz kannst du über die rechte Seitenleiste (Rauminfo) teilnehmen",
-    "Video conference ended by %(senderName)s": "Videokonferenz von %(senderName)s beendet",
-    "Video conference updated by %(senderName)s": "Videokonferenz wurde von %(senderName)s aktualisiert",
-    "Video conference started by %(senderName)s": "Videokonferenz von %(senderName)s gestartet",
-    "Ignored attempt to disable encryption": "Versuch, die Verschlüsselung zu deaktivieren, wurde ignoriert",
     "Data on this screen is shared with %(widgetDomain)s": "Daten auf diesem Bildschirm werden mit %(widgetDomain)s geteilt",
     "Modal Widget": "Modales Widget",
     "Uzbekistan": "Usbekistan",
@@ -710,7 +671,6 @@
     "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Lade Leute mittels Anzeigename oder Benutzername (z. B. <userId/>) ein oder <a>teile diesen Space</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Lade Leute mittels Anzeigename, E-Mail-Adresse oder Benutzername (z. B. <userId/>) ein oder <a>teile diesen Space</a>.",
     "Invite to %(roomName)s": "In %(roomName)s einladen",
-    "Edit devices": "Sitzungen anzeigen",
     "We couldn't create your DM.": "Wir konnten deine Direktnachricht nicht erstellen.",
     "Add existing rooms": "Bestehende Räume hinzufügen",
     "Space selection": "Space-Auswahl",
@@ -734,7 +694,6 @@
     "Sending": "Senden",
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Falls du es wirklich willst: Es werden keine Nachrichten gelöscht. Außerdem wird die Suche, während der Index erstellt wird, etwas langsamer sein",
     "Including %(commaSeparatedMembers)s": "Inklusive %(commaSeparatedMembers)s",
-    "Error processing voice message": "Fehler beim Verarbeiten der Sprachnachricht",
     "Want to add a new room instead?": "Willst du einen neuen Raum hinzufügen?",
     "Adding rooms... (%(progress)s out of %(count)s)": {
         "one": "Raum hinzufügen …",
@@ -754,21 +713,12 @@
     "Message search initialisation failed, check <a>your settings</a> for more information": "Initialisierung der Suche fehlgeschlagen, für weitere Informationen öffne <a>deine Einstellungen</a>",
     "User Directory": "Benutzerverzeichnis",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s erlaubt dir nicht, eine Integrationsverwaltung zu verwenden, um dies zu tun. Bitte kontaktiere einen Administrator.",
-    "Error processing audio message": "Fehler beim Verarbeiten der Audionachricht",
-    "The call is in an unknown state!": "Dieser Anruf ist in einem unbekannten Zustand!",
-    "Call back": "Zurückrufen",
-    "Connection failed": "Verbindung fehlgeschlagen",
-    "An unknown error occurred": "Ein unbekannter Fehler ist aufgetreten",
-    "Missed call": "Verpasster Anruf",
-    "Call declined": "Anruf abgelehnt",
     "Adding spaces has moved.": "Das Hinzufügen von Spaces ist umgezogen.",
     "Search for rooms": "Räume suchen",
     "Search for spaces": "Spaces suchen",
     "Create a new space": "Neuen Space erstellen",
     "Want to add a new space instead?": "Willst du stattdessen einen neuen Space hinzufügen?",
     "Add existing space": "Existierenden Space hinzufügen",
-    "Decrypting": "Entschlüsseln",
-    "Unknown failure: %(reason)s": "Unbekannter Fehler: %(reason)s",
     "Automatically invite members from this room to the new one": "Mitglieder automatisch in den neuen Raum einladen",
     "Search spaces": "Spaces durchsuchen",
     "Select spaces": "Spaces wählen",
@@ -787,13 +737,11 @@
     "Spaces you know that contain this room": "Spaces, in denen du Mitglied bist und die diesen Raum enthalten",
     "You're removing all spaces. Access will default to invite only": "Du entfernst alle Spaces. Der Zutritt wird auf den Standard (Privat) zurückgesetzt",
     "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "Entscheide, welche Spaces auf den Raum zugreifen können. Mitglieder ausgewählter Spaces können <RoomName/> betreten.",
-    "Their device couldn't start the camera or microphone": "Mikrofon oder Kamera des Gesprächspartners konnte nicht gestartet werden",
     "To join a space you'll need an invite.": "Um einen Space zu betreten, brauchst du eine Einladung.",
     "You are about to leave <spaceName/>.": "Du bist dabei, <spaceName/> zu verlassen.",
     "Leave some rooms": "Zu verlassende Räume auswählen",
     "Leave all rooms": "Alle Räume verlassen",
     "Don't leave any rooms": "Keine Räume und Subspaces verlassen",
-    "Some encryption parameters have been changed.": "Einige Verschlüsselungsoptionen wurden geändert.",
     "%(count)s reply": {
         "one": "%(count)s Antwort",
         "other": "%(count)s Antworten"
@@ -802,16 +750,11 @@
     "Would you like to leave the rooms in this space?": "Willst du die Räume in diesem Space verlassen?",
     "MB": "MB",
     "In reply to <a>this message</a>": "Antwort auf <a>diese Nachricht</a>",
-    "Downloading": "Herunterladen",
-    "No answer": "Keine Antwort",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Zugriff auf dein Konto wiederherstellen und in dieser Sitzung gespeicherte Verschlüsselungs-Schlüssel wiederherstellen. Ohne diese wirst du nicht all deine verschlüsselten Nachrichten lesen können.",
     "Thread options": "Thread-Optionen",
     "These are likely ones other room admins are a part of.": "Das sind vermutliche solche, in denen andere Raumadministratoren Mitglieder sind.",
     "If you can't see who you're looking for, send them your invite link below.": "Wenn du die gesuchte Person nicht findest, sende ihr den Einladungslink zu.",
     "Add a space to a space you manage.": "Einen Space zu einem Space den du verwaltest hinzufügen.",
-    "Could not connect media": "Konnte Medien nicht verbinden",
-    "In encrypted rooms, verify all users to ensure it's secure.": "Verifiziere alle Benutzer in verschlüsselten Räumen, um die Sicherheit zu garantieren.",
-    "Reply in thread": "In Thread antworten",
     "Forget": "Vergessen",
     "%(count)s votes": {
         "one": "%(count)s Stimme",
@@ -843,51 +786,22 @@
     "Failed to end poll": "Beenden der Umfrage fehlgeschlagen",
     "The poll has ended. Top answer: %(topAnswer)s": "Umfrage beendet. Beliebteste Antwort: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Umfrage beendet. Es wurden keine Stimmen abgegeben.",
-    "Based on %(count)s votes": {
-        "one": "%(count)s Stimme abgegeben",
-        "other": "%(count)s Stimmen abgegeben"
-    },
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s Stimme abgegeben. Stimme ab, um die Ergebnisse zu sehen",
-        "other": "%(count)s Stimmen abgegeben. Stimme ab, um die Ergebnisse zu sehen"
-    },
-    "No votes cast": "Es wurden noch keine Stimmen abgegeben",
-    "Final result based on %(count)s votes": {
-        "one": "Es wurde %(count)s Stimme abgegeben",
-        "other": "Es wurden %(count)s Stimmen abgegeben"
-    },
-    "Sorry, your vote was not registered. Please try again.": "Wir konnten deine Stimme leider nicht erfassen. Versuche es bitte erneut.",
-    "Vote not registered": "Stimme nicht erfasst",
     "Messaging": "Kommunikation",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Gruppiere Unterhaltungen mit Mitgliedern dieses Spaces. Diese Option zu deaktivieren, wird die Unterhaltungen aus %(spaceName)s ausblenden.",
     "Including you, %(commaSeparatedMembers)s": "Mit dir, %(commaSeparatedMembers)s",
     "Could not fetch location": "Standort konnte nicht abgerufen werden",
-    "You cancelled verification on your other device.": "Verifizierung am anderen Gerät abgebrochen.",
-    "Almost there! Is your other device showing the same shield?": "Fast geschafft! Zeigen beide Geräte das selbe Wappen an?",
     "Verify other device": "Anderes Gerät verifizieren",
     "Missing room name or separator e.g. (my-room:domain.org)": "Fehlender Raumname oder Doppelpunkt (z. B. dein-raum:domain.org)",
     "Missing domain separator e.g. (:domain.org)": "Fehlender Doppelpunkt vor Server (z. B. :domain.org)",
-    "Message pending moderation: %(reason)s": "Nachricht erwartet Moderation: %(reason)s",
-    "Message pending moderation": "Nachricht erwartet Moderation",
     "toggle event": "Event umschalten",
     "This address had invalid server or is already in use": "Diese Adresse hat einen ungültigen Server oder wird bereits verwendet",
     "This address does not point at this room": "Diese Adresse verweist nicht auf diesen Raum",
-    "Pick a date to jump to": "Wähle eine Datum aus",
-    "Jump to date": "Zu Datum springen",
-    "The beginning of the room": "Der Anfang des Raums",
     "Location": "Standort",
     "Feedback sent! Thanks, we appreciate it!": "Rückmeldung gesendet! Danke, wir wissen es zu schätzen!",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s und %(space2Name)s",
     "Use <arrows/> to scroll": "Benutze <arrows/> zum scrollen",
     "Search Dialog": "Suchdialog",
     "Join %(roomAddress)s": "%(roomAddress)s betreten",
-    "Results will be visible when the poll is ended": "Ergebnisse werden nach Abschluss der Umfrage sichtbar",
-    "Sorry, you can't edit a poll after votes have been cast.": "Du kannst Umfragen nicht bearbeiten, sobald Stimmen abgegeben wurden.",
-    "Can't edit poll": "Umfrage kann nicht bearbeitet werden",
-    "Click": "Klick",
-    "Expand quotes": "Zitate ausklappen",
-    "Collapse quotes": "Zitate einklappen",
-    "Can't create a thread from an event with an existing relation": "Du kannst keinen Thread in einem Thread starten",
     "What location type do you want to share?": "Wie willst du deinen Standort teilen?",
     "Drop a Pin": "Standort setzen",
     "My live location": "Mein Echtzeit-Standort",
@@ -902,7 +816,6 @@
         "other": "Du bist gerade dabei, %(count)s Nachrichten von %(user)s Benutzern zu löschen. Die Nachrichten werden für niemanden mehr sichtbar sein. Willst du fortfahren?"
     },
     "%(displayName)s's live location": "Echtzeit-Standort von %(displayName)s",
-    "View live location": "Echtzeit-Standort anzeigen",
     "%(count)s participants": {
         "one": "1 Teilnehmer",
         "other": "%(count)s Teilnehmer"
@@ -962,7 +875,6 @@
     "Friends and family": "Freunde und Familie",
     "You need to have the right permissions in order to share locations in this room.": "Du benötigst die entsprechenden Berechtigungen, um deinen Echtzeit-Standort in diesem Raum freizugeben.",
     "Who will you chat to the most?": "Mit wem wirst du am meisten schreiben?",
-    "Messages in this chat will be end-to-end encrypted.": "Nachrichten in dieser Unterhaltung werden Ende-zu-Ende-verschlüsselt.",
     "Online community members": "Online Community-Mitglieder",
     "You don't have permission to share locations": "Dir fehlt die Berechtigung, Echtzeit-Standorte freigeben zu dürfen",
     "Start a group chat": "Gruppenunterhaltung beginnen",
@@ -975,20 +887,13 @@
     "Choose a locale": "Wähle ein Gebietsschema",
     "Saved Items": "Gespeicherte Elemente",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s oder %(recoveryFile)s",
-    "Video call ended": "Videoanruf beendet",
     "%(name)s started a video call": "%(name)s hat einen Videoanruf begonnen",
-    "Error downloading image": "Fehler beim Herunterladen des Bildes",
-    "Unable to show image due to error": "Kann Bild aufgrund eines Fehlers nicht anzeigen",
     "Thread root ID: %(threadRootId)s": "Thread-Ursprungs-ID: %(threadRootId)s",
     "<w>WARNING:</w> <description/>": "<w>WARNUNG:</w> <description/>",
     " in <strong>%(room)s</strong>": " in <strong>%(room)s</strong>",
     "Can't start voice message": "Kann Sprachnachricht nicht beginnen",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Du kannst keine Sprachnachricht beginnen, da du im Moment eine Echtzeitübertragung aufzeichnest. Bitte beende deine Sprachübertragung, um ein Gespräch zu beginnen.",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "unknown": "unbekannt",
-    "Declining…": "Ablehnen …",
-    "There are no past polls in this room": "In diesem Raum gibt es keine abgeschlossenen Umfragen",
-    "There are no active polls in this room": "In diesem Raum gibt es keine aktiven Umfragen",
     "Loading live location…": "Lade Live-Standort …",
     "Fetching keys from server…": "Lade Schlüssel vom Server …",
     "Checking…": "Überprüfe …",
@@ -996,46 +901,18 @@
     "Waiting for partner to confirm…": "Warte auf Bestätigung des Gesprächspartners …",
     "Adding…": "Füge hinzu …",
     "Starting export process…": "Beginne Exportvorgang …",
-    "Loading polls": "Lade Umfragen",
-    "The sender has blocked you from receiving this message": "Der Absender hat dich vom Erhalt dieser Nachricht ausgeschlossen",
-    "Due to decryption errors, some votes may not be counted": "Evtl. werden infolge von Entschlüsselungsfehlern einige Stimmen nicht gezählt",
-    "Ended a poll": "Eine Umfrage beendet",
-    "Answered elsewhere": "Anderswo beantwortet",
-    "View poll": "Umfrage ansehen",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "Für den vergangenen Tag sind keine beendeten Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
-        "other": "Für die vergangenen %(count)s Tage sind keine beendeten Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen"
-    },
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "Für den vergangenen Tag sind keine aktiven Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
-        "other": "Für die vergangenen %(count)s Tage sind keine aktiven Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen"
-    },
-    "There are no past polls. Load more polls to view polls for previous months": "Es sind keine vergangenen Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
-    "There are no active polls. Load more polls to view polls for previous months": "Es sind keine aktiven Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
-    "Load more polls": "Weitere Umfragen laden",
-    "Past polls": "Vergangene Umfragen",
-    "Active polls": "Aktive Umfragen",
-    "View poll in timeline": "Umfrage im Verlauf anzeigen",
     "Invites by email can only be sent one at a time": "E-Mail-Einladungen können nur nacheinander gesendet werden",
     "Desktop app logo": "Desktop-App-Logo",
     "Requires your server to support the stable version of MSC3827": "Dafür muss dein Server die fertige Fassung der MSC3827 unterstützen",
     "Message from %(user)s": "Nachricht von %(user)s",
     "Message in %(room)s": "Nachricht in %(room)s",
-    "Error details": "Fehlerdetails",
-    "Unable to find event at that date": "Wir konnten kein Ereignis für diesen Zeitpunkt finden",
-    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Bitte übermittel <debugLogsLink>Debug-Protokolle</debugLogsLink>, um uns beim Finden des Problems zu helfen.",
     "unavailable": "Nicht verfügbar",
     "unknown status code": "Unbekannter Statuscode",
-    "Server returned %(statusCode)s with error code %(errorCode)s": "Der Server gab %(statusCode)s mit dem Fehlercode %(errorCode)s zurück",
-    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Wir konnten kein Ereignis nach dem %(dateString)s finden. Versuche, einen früheren Zeitpunkt zu wählen.",
-    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Während des Versuchs, zum Datum zu springen, trat ein Netzwerkfehler auf. Möglicherweise ist dein Heim-Server nicht erreichbar oder es liegt ein temporäres Problem mit deiner Internetverbindung vor. Bitte versuche es erneut. Falls dieser Fehler weiterhin auftritt, kontaktiere bitte deine Heim-Server-Administration.",
     "Start DM anyway": "Dennoch DM beginnen",
     "Start DM anyway and never warn me again": "Dennoch DM beginnen und mich nicht mehr warnen",
     "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "Konnte keine Profile für die folgenden Matrix-IDs finden – möchtest du dennoch eine Direktnachricht beginnen?",
     "Are you sure you wish to remove (delete) this event?": "Möchtest du dieses Ereignis wirklich entfernen (löschen)?",
     "Note that removing room changes like this could undo the change.": "Beachte, dass das Entfernen von Raumänderungen diese rückgängig machen könnte.",
-    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.": "Nachrichten hier sind Ende-zu-Ende-verschlüsselt. Verifiziere %(displayName)s in deren Profil – klicke auf deren Profilbild.",
-    "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "Nachrichten in diesem Raum sind Ende-zu-Ende-verschlüsselt. Wenn Personen beitreten, kannst du sie in ihrem Profil verifizieren, indem du auf deren Profilbild klickst.",
     "Upgrade room": "Raum aktualisieren",
     "Other spaces you know": "Andere dir bekannte Spaces",
     "Failed to query public rooms": "Abfrage öffentlicher Räume fehlgeschlagen",
@@ -1277,7 +1154,9 @@
         "new_room": "Neuer Raum",
         "new_video_room": "Neuer Videoraum",
         "add_existing_room": "Existierenden Raum hinzufügen",
-        "explore_public_rooms": "Öffentliche Räume erkunden"
+        "explore_public_rooms": "Öffentliche Räume erkunden",
+        "reply_in_thread": "In Thread antworten",
+        "click": "Klick"
     },
     "a11y": {
         "user_menu": "Benutzermenü",
@@ -2278,13 +2157,25 @@
     "timeline": {
         "m.call": {
             "video_call_started": "Ein Videoanruf hat in %(roomName)s begonnen.",
-            "video_call_started_unsupported": "Ein Videoanruf hat in %(roomName)s begonnen. (Von diesem Browser nicht unterstützt)"
+            "video_call_started_unsupported": "Ein Videoanruf hat in %(roomName)s begonnen. (Von diesem Browser nicht unterstützt)",
+            "video_call_ended": "Videoanruf beendet"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s hat einen Sprachanruf getätigt.",
             "voice_call_unsupported": "%(senderName)s hat einen Sprachanruf getätigt. (Nicht von diesem Browser unterstützt)",
             "video_call": "%(senderName)s hat einen Videoanruf getätigt.",
-            "video_call_unsupported": "%(senderName)s hat einen Videoanruf getätigt. (Nicht von diesem Browser unterstützt)"
+            "video_call_unsupported": "%(senderName)s hat einen Videoanruf getätigt. (Nicht von diesem Browser unterstützt)",
+            "declined": "Anruf abgelehnt",
+            "call_back_prompt": "Zurückrufen",
+            "answered_elsewhere": "Anderswo beantwortet",
+            "missed_call": "Verpasster Anruf",
+            "no_answer": "Keine Antwort",
+            "failed_connect_media": "Konnte Medien nicht verbinden",
+            "failed_connection": "Verbindung fehlgeschlagen",
+            "failed_opponent_media": "Mikrofon oder Kamera des Gesprächspartners konnte nicht gestartet werden",
+            "unknown_error": "Ein unbekannter Fehler ist aufgetreten",
+            "unknown_failure": "Unbekannter Fehler: %(reason)s",
+            "unknown_state": "Dieser Anruf ist in einem unbekannten Zustand!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s hat die Einladung für %(displayName)s akzeptiert",
@@ -2336,7 +2227,6 @@
             "forbidden": "%(senderDisplayName)s hat Gästen verboten, diesem Raum beizutreten.",
             "unknown": "%(senderDisplayName)s änderte den Gastzutritt auf „%(rule)s“"
         },
-        "m.image": "%(senderDisplayName)s hat ein Bild gesendet.",
         "m.sticker": "%(senderDisplayName)s hat einen Sticker gesendet.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s hat die Server-ACLs für diesen Raum gesetzt.",
@@ -2380,7 +2270,12 @@
         "m.widget": {
             "modified": "Das Widget „%(widgetName)s“ wurde von %(senderName)s bearbeitet",
             "added": "%(senderName)s hat das Widget %(widgetName)s hinzugefügt",
-            "removed": "%(senderName)s hat das Widget %(widgetName)s entfernt"
+            "removed": "%(senderName)s hat das Widget %(widgetName)s entfernt",
+            "jitsi_join_top_prompt": "An Konferenz oberhalb des Verlaufs teilnehmen",
+            "jitsi_join_right_prompt": "An der Konferenz kannst du über die rechte Seitenleiste (Rauminfo) teilnehmen",
+            "jitsi_ended": "Videokonferenz von %(senderName)s beendet",
+            "jitsi_updated": "Videokonferenz wurde von %(senderName)s aktualisiert",
+            "jitsi_started": "Videokonferenz von %(senderName)s gestartet"
         },
         "io.element.widgets.layout": "%(senderName)s hat das Raumlayout geändert",
         "m.location": {
@@ -2391,7 +2286,6 @@
         "self_redaction": "Nachricht gelöscht",
         "redaction": "Nachricht von %(name)s gelöscht",
         "m.poll.start": "%(senderName)s hat eine Umfrage begonnen – %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s hat eine Abstimmung beendet",
         "typing_indicator": {
             "one_user": "%(displayName)s tippt …",
             "two_users": "%(names)s und %(lastPerson)s tippen …",
@@ -2563,7 +2457,8 @@
             "changed_rule_users": "%(senderName)s ändert eine Ausschlussregel von %(oldGlob)s nach %(newGlob)s, wegen %(reason)s",
             "changed_rule_rooms": "%(senderName)s ändert eine Ausschlussregel für Räume von %(oldGlob)s nach %(newGlob)s, wegen %(reason)s",
             "changed_rule_servers": "%(senderName)s änderte eine Ausschlussregel für Server von %(oldGlob)s nach %(newGlob)s wegen %(reason)s",
-            "changed_rule_glob": "%(senderName)s aktualisierte eine Ausschlussregel von %(oldGlob)s nach %(newGlob)s wegen %(reason)s"
+            "changed_rule_glob": "%(senderName)s aktualisierte eine Ausschlussregel von %(oldGlob)s nach %(newGlob)s wegen %(reason)s",
+            "message_hidden": "Du blockierst diesen Benutzer, deshalb werden seine Nachrichten nicht angezeigt. <a>Trotzdem anzeigen.</a>"
         },
         "no_permission_messages_before_invite": "Du kannst keine Nachrichten lesen, die gesendet wurden, bevor du eingeladen wurdest.",
         "no_permission_messages_before_join": "Du kannst keine Nachrichten lesen, die gesendet wurden, bevor du beigetreten bist.",
@@ -2617,18 +2512,72 @@
         "mab": {
             "label": "Nachrichtenaktionen",
             "view_in_room": "Im Raum anzeigen",
-            "copy_link_thread": "Link zu Thread kopieren"
+            "copy_link_thread": "Link zu Thread kopieren",
+            "collapse_reply_chain": "Zitate einklappen",
+            "expand_reply_chain": "Zitate ausklappen"
         },
         "m.audio": {
             "unnamed_audio": "Unbenannte Audiodatei",
-            "error_downloading_audio": "Fehler beim Herunterladen der Audiodatei"
+            "error_downloading_audio": "Fehler beim Herunterladen der Audiodatei",
+            "error_processing_audio": "Fehler beim Verarbeiten der Audionachricht",
+            "error_processing_voice_message": "Fehler beim Verarbeiten der Sprachnachricht"
         },
         "load_error": {
             "no_permission": "Dir fehlt die Berechtigung, diese alten Nachrichten zu lesen.",
             "unable_to_find": "Das Laden einer bestimmten Stelle im Verlauf des Raumes zu laden ist gescheitert, da sie nicht gefunden wurde.",
             "title": "Laden der Verlaufsposition fehlgeschlagen"
         },
-        "error_no_renderer": "Dieses Ereignis konnte nicht angezeigt werden"
+        "error_no_renderer": "Dieses Ereignis konnte nicht angezeigt werden",
+        "decryption_failure_blocked": "Der Absender hat dich vom Erhalt dieser Nachricht ausgeschlossen",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_downloading": "Herunterladen",
+        "download_action_decrypting": "Entschlüsseln",
+        "m.room.encryption": {
+            "parameters_changed": "Einige Verschlüsselungsoptionen wurden geändert.",
+            "enabled_dm": "Nachrichten hier sind Ende-zu-Ende-verschlüsselt. Verifiziere %(displayName)s in deren Profil – klicke auf deren Profilbild.",
+            "enabled_local": "Nachrichten in dieser Unterhaltung werden Ende-zu-Ende-verschlüsselt.",
+            "enabled": "Nachrichten in diesem Raum sind Ende-zu-Ende-verschlüsselt. Wenn Personen beitreten, kannst du sie in ihrem Profil verifizieren, indem du auf deren Profilbild klickst.",
+            "disable_attempt": "Versuch, die Verschlüsselung zu deaktivieren, wurde ignoriert",
+            "disabled": "Verschlüsselung nicht aktiviert",
+            "unsupported": "Die von diesem Raum verwendete Verschlüsselung wird nicht unterstützt."
+        },
+        "pending_moderation_reason": "Nachricht erwartet Moderation: %(reason)s",
+        "pending_moderation": "Nachricht erwartet Moderation",
+        "m.beacon_info": {
+            "view_live_location": "Echtzeit-Standort anzeigen"
+        },
+        "m.file": {
+            "download_label": "%(text)s herunterladen",
+            "error_decrypting": "Fehler beim Entschlüsseln des Anhangs",
+            "decrypt_label": "%(text)s entschlüsseln",
+            "error_invalid": "Ungültige Datei%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s hat ein Bild gesendet.",
+            "error": "Kann Bild aufgrund eines Fehlers nicht anzeigen",
+            "error_decrypting": "Entschlüsselung des Bilds fehlgeschlagen",
+            "error_downloading": "Fehler beim Herunterladen des Bildes",
+            "show_image": "Bild anzeigen"
+        },
+        "m.key.verification.done": "Du hast %(name)s verifiziert",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Du hast die Verifizierung von %(name)s abgebrochen",
+            "user_cancelled": "%(name)s hat die Verifizierung abgebrochen"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Du hast angenommen",
+            "you_declined": "Du hast abgelehnt",
+            "you_cancelled": "Du brachst ab",
+            "declining": "Ablehnen …",
+            "you_started": "Du hast eine Verifizierungsanfrage gesendet"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s hat eine Abstimmung beendet",
+            "ended": "Eine Umfrage beendet"
+        },
+        "m.video": {
+            "error_decrypting": "Videoentschlüsselung fehlgeschlagen"
+        }
     },
     "slash_command": {
         "spoiler": "Die gegebene Nachricht als Spoiler senden",
@@ -3121,7 +3070,25 @@
                 "reset_confirmation": "Willst du deine Verifizierungsschlüssel wirklich zurücksetzen?",
                 "skip_verification": "Verifizierung vorläufig überspringen"
             },
-            "accepting": "Annehmen…"
+            "accepting": "Annehmen…",
+            "scan_qr": "Verifizierung durch Scannen eines QR-Codes",
+            "scan_qr_explainer": "Bitte %(displayName)s, deinen Code zu scannen:",
+            "verify_emoji_prompt_qr": "Wenn du obigen Code nicht erfassen kannst, verifiziere stattdessen durch den Vergleich von Emojis.",
+            "verify_emoji_prompt": "Durch den Vergleich einzigartiger Emojis verifizieren.",
+            "verify_emoji": "Mit Emojis verifizieren",
+            "qr_reciprocate_same_shield_device": "Fast geschafft! Zeigen beide Geräte das selbe Wappen an?",
+            "qr_reciprocate_same_shield_user": "Fast geschafft! Wird bei %(displayName)s das gleiche Schild angezeigt?",
+            "prompt_encrypted": "Verifiziere alle Benutzer in einem Raum um die vollständige Sicherheit zu gewährleisten.",
+            "prompt_unencrypted": "Verifiziere alle Benutzer in verschlüsselten Räumen, um die Sicherheit zu garantieren.",
+            "successful_own_device": "Du hast dein Gerät erfolgreich verifiziert!",
+            "successful_device": "Du hast %(deviceName)s (%(deviceId)s) erfolgreich verifiziert!",
+            "successful_user": "Du hast %(displayName)s erfolgreich verifiziert!",
+            "prompt_self": "Starte die Verifikation aus der Benachrichtigung erneut.",
+            "prompt_user": "Starte die Verifikation aus dem Benutzerprofil erneut.",
+            "timed_out": "Verifikationsanfrage abgelaufen.",
+            "cancelled_self": "Verifizierung am anderen Gerät abgebrochen.",
+            "cancelled_user": "%(displayName)s hat die Verifikationsanfrage abgelehnt.",
+            "cancelled": "Du hast die Verifikation abgebrochen."
         },
         "old_version_detected_title": "Alte Kryptografiedaten erkannt",
         "old_version_detected_description": "Es wurden Daten von einer älteren Version von %(brand)s entdeckt. Dies wird zu Fehlern in der Ende-zu-Ende-Verschlüsselung der älteren Version geführt haben. Ende-zu-Ende verschlüsselte Nachrichten, die ausgetauscht wruden, während die ältere Version genutzt wurde, werden in dieser Version nicht entschlüsselbar sein. Es kann auch zu Fehlern mit Nachrichten führen, die mit dieser Version versendet werden. Wenn du Probleme feststellst, melde dich ab und wieder an. Um die Historie zu behalten, ex- und reimportiere deine Schlüssel.",
@@ -3174,7 +3141,8 @@
         "cross_signing_user_normal": "Du hast diesen Nutzer nicht verifiziert.",
         "cross_signing_room_warning": "Jemand verwendet eine unbekannte Sitzung",
         "cross_signing_room_verified": "Alle in diesem Raum sind verifiziert",
-        "cross_signing_room_normal": "Dieser Raum ist Ende-zu-Ende verschlüsselt"
+        "cross_signing_room_normal": "Dieser Raum ist Ende-zu-Ende verschlüsselt",
+        "unsupported": "Diese Anwendung unterstützt keine Ende-zu-Ende-Verschlüsselung."
     },
     "emoji": {
         "category_frequently_used": "Oft verwendet",
@@ -3669,7 +3637,8 @@
         "empty_tip": "<b>Tipp:</b> Nutze “%(replyInThread)s” beim Schweben über eine Nachricht.",
         "empty_heading": "Organisiere Diskussionen mit Threads",
         "unable_to_decrypt": "Nachrichten-Entschlüsselung nicht möglich",
-        "open_thread": "Thread anzeigen"
+        "open_thread": "Thread anzeigen",
+        "error_start_thread_existing_relation": "Du kannst keinen Thread in einem Thread starten"
     },
     "theme": {
         "light_high_contrast": "Hell kontrastreich",
@@ -3975,7 +3944,16 @@
         "jump_read_marker": "Zur ersten ungelesenen Nachricht springen.",
         "inviter_unknown": "Unbekannt",
         "failed_reject_invite": "Ablehnen der Einladung ist fehlgeschlagen",
-        "creating_room_text": "Wir erstellen einen Raum mit %(names)s"
+        "creating_room_text": "Wir erstellen einen Raum mit %(names)s",
+        "error_jump_to_date_connection": "Während des Versuchs, zum Datum zu springen, trat ein Netzwerkfehler auf. Möglicherweise ist dein Heim-Server nicht erreichbar oder es liegt ein temporäres Problem mit deiner Internetverbindung vor. Bitte versuche es erneut. Falls dieser Fehler weiterhin auftritt, kontaktiere bitte deine Heim-Server-Administration.",
+        "error_jump_to_date_not_found": "Wir konnten kein Ereignis nach dem %(dateString)s finden. Versuche, einen früheren Zeitpunkt zu wählen.",
+        "error_jump_to_date": "Der Server gab %(statusCode)s mit dem Fehlercode %(errorCode)s zurück",
+        "error_jump_to_date_send_logs_prompt": "Bitte übermittel <debugLogsLink>Debug-Protokolle</debugLogsLink>, um uns beim Finden des Problems zu helfen.",
+        "error_jump_to_date_title": "Wir konnten kein Ereignis für diesen Zeitpunkt finden",
+        "error_jump_to_date_details": "Fehlerdetails",
+        "jump_to_date_beginning": "Der Anfang des Raums",
+        "jump_to_date": "Zu Datum springen",
+        "jump_to_date_prompt": "Wähle eine Datum aus"
     },
     "file_panel": {
         "guest_note": "Du musst dich <a>registrieren</a>, um diese Funktionalität nutzen zu können",
@@ -4018,7 +3996,22 @@
         "options_placeholder": "Antwortmöglichkeit verfassen",
         "options_add_button": "Antwortmöglichkeit hinzufügen",
         "disclosed_notes": "Abstimmende können die Ergebnisse nach Stimmabgabe sehen",
-        "notes": "Die Ergebnisse werden erst sichtbar, sobald du die Umfrage beendest"
+        "notes": "Die Ergebnisse werden erst sichtbar, sobald du die Umfrage beendest",
+        "unable_edit_title": "Umfrage kann nicht bearbeitet werden",
+        "unable_edit_description": "Du kannst Umfragen nicht bearbeiten, sobald Stimmen abgegeben wurden.",
+        "error_voting_title": "Stimme nicht erfasst",
+        "error_voting_description": "Wir konnten deine Stimme leider nicht erfassen. Versuche es bitte erneut.",
+        "total_decryption_errors": "Evtl. werden infolge von Entschlüsselungsfehlern einige Stimmen nicht gezählt",
+        "total_not_ended": "Ergebnisse werden nach Abschluss der Umfrage sichtbar",
+        "total_no_votes": "Es wurden noch keine Stimmen abgegeben",
+        "total_n_votes": {
+            "one": "%(count)s Stimme abgegeben. Stimme ab, um die Ergebnisse zu sehen",
+            "other": "%(count)s Stimmen abgegeben. Stimme ab, um die Ergebnisse zu sehen"
+        },
+        "total_n_votes_voted": {
+            "one": "%(count)s Stimme abgegeben",
+            "other": "%(count)s Stimmen abgegeben"
+        }
     },
     "failed_load_async_component": "Konnte nicht geladen werden! Überprüfe die Netzwerkverbindung und versuche es erneut.",
     "upload_failed_generic": "Die Datei „%(fileName)s“ konnte nicht hochgeladen werden.",
@@ -4252,7 +4245,8 @@
         "deactivate_confirm_description": "Beim Deaktivieren wirst du abgemeldet und ein erneutes Anmelden verhindert. Zusätzlich wirst du aus allen Räumen entfernt. Diese Aktion kann nicht rückgängig gemacht werden. Bist du sicher, dass du dieses Konto deaktivieren willst?",
         "deactivate_confirm_action": "Konto deaktivieren",
         "error_deactivate": "Benutzer konnte nicht deaktiviert werden",
-        "role_label": "Rolle in <RoomName/>"
+        "role_label": "Rolle in <RoomName/>",
+        "edit_own_devices": "Sitzungen anzeigen"
     },
     "stickers": {
         "empty": "Keine Sticker-Pakete aktiviert",
@@ -4281,7 +4275,31 @@
         "pinned_messages_button": "Angeheftet",
         "export_chat_button": "Unterhaltung exportieren",
         "share_button": "Raum teilen",
-        "settings_button": "Raumeinstellungen"
+        "settings_button": "Raumeinstellungen",
+        "poll": {
+            "view_in_timeline": "Umfrage im Verlauf anzeigen",
+            "active_heading": "Aktive Umfragen",
+            "past_heading": "Vergangene Umfragen",
+            "loading": "Lade Umfragen",
+            "load_more": "Weitere Umfragen laden",
+            "empty_active": "In diesem Raum gibt es keine aktiven Umfragen",
+            "empty_past": "In diesem Raum gibt es keine abgeschlossenen Umfragen",
+            "empty_active_load_more": "Es sind keine aktiven Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
+            "empty_past_load_more": "Es sind keine vergangenen Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
+            "empty_active_load_more_n_days": {
+                "one": "Für den vergangenen Tag sind keine aktiven Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
+                "other": "Für die vergangenen %(count)s Tage sind keine aktiven Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen"
+            },
+            "empty_past_load_more_n_days": {
+                "one": "Für den vergangenen Tag sind keine beendeten Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
+                "other": "Für die vergangenen %(count)s Tage sind keine beendeten Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen"
+            },
+            "view_poll": "Umfrage ansehen",
+            "final_result": {
+                "one": "Es wurde %(count)s Stimme abgegeben",
+                "other": "Es wurden %(count)s Stimmen abgegeben"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Einladung ablehnen",

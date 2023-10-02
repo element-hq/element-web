@@ -157,23 +157,23 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
             if (gotRejected) {
                 return (
                     <div className="mx_LegacyCallEvent_content">
-                        {_t("Call declined")}
-                        {this.renderCallBackButton(_t("Call back"))}
+                        {_t("timeline|m.call.invite|declined")}
+                        {this.renderCallBackButton(_t("timeline|m.call.invite|call_back_prompt"))}
                         {this.props.timestamp}
                     </div>
                 );
             } else if (hangupReason === CallErrorCode.AnsweredElsewhere) {
                 return (
                     <div className="mx_LegacyCallEvent_content">
-                        {_t("Answered elsewhere")}
+                        {_t("timeline|m.call.invite|answered_elsewhere")}
                         {this.props.timestamp}
                     </div>
                 );
             } else if (this.props.callEventGrouper.callWasMissed) {
                 return (
                     <div className="mx_LegacyCallEvent_content">
-                        {_t("Missed call")}
-                        {this.renderCallBackButton(_t("Call back"))}
+                        {_t("timeline|m.call.invite|missed_call")}
+                        {this.renderCallBackButton(_t("timeline|m.call.invite|call_back_prompt"))}
                         {this.props.timestamp}
                     </div>
                 );
@@ -198,8 +198,8 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
             } else if (hangupReason === CallErrorCode.InviteTimeout) {
                 return (
                     <div className="mx_LegacyCallEvent_content">
-                        {_t("No answer")}
-                        {this.renderCallBackButton(_t("Call back"))}
+                        {_t("timeline|m.call.invite|no_answer")}
+                        {this.renderCallBackButton(_t("timeline|m.call.invite|call_back_prompt"))}
                         {this.props.timestamp}
                     </div>
                 );
@@ -208,22 +208,22 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
             let reason;
             if (hangupReason === CallErrorCode.IceFailed) {
                 // We couldn't establish a connection at all
-                reason = _t("Could not connect media");
+                reason = _t("timeline|m.call.invite|failed_connect_media");
             } else if (hangupReason === "ice_timeout") {
                 // We established a connection but it died
-                reason = _t("Connection failed");
+                reason = _t("timeline|m.call.invite|failed_connection");
             } else if (hangupReason === CallErrorCode.NoUserMedia) {
                 // The other side couldn't open capture devices
-                reason = _t("Their device couldn't start the camera or microphone");
+                reason = _t("timeline|m.call.invite|failed_opponent_media");
             } else if (hangupReason === "unknown_error") {
                 // An error code the other side doesn't have a way to express
                 // (as opposed to an error code they gave but we don't know about,
                 // in which case we show the error code)
-                reason = _t("An unknown error occurred");
+                reason = _t("timeline|m.call.invite|unknown_error");
             } else if (hangupReason === CallErrorCode.UserBusy) {
                 reason = _t("voip|user_busy_description");
             } else {
-                reason = _t("Unknown failure: %(reason)s", { reason: hangupReason });
+                reason = _t("timeline|m.call.invite|unknown_failure", { reason: hangupReason });
             }
 
             return (
@@ -233,7 +233,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
                         className="mx_LegacyCallEvent_content_tooltip"
                         kind={InfoTooltipKind.Warning}
                     />
-                    {_t("Connection failed")}
+                    {_t("timeline|m.call.invite|failed_connection")}
                     {this.renderCallBackButton(_t("action|retry"))}
                     {this.props.timestamp}
                 </div>
@@ -258,7 +258,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
 
         return (
             <div className="mx_LegacyCallEvent_content">
-                {_t("The call is in an unknown state!")}
+                {_t("timeline|m.call.invite|unknown_state")}
                 {this.props.timestamp}
             </div>
         );

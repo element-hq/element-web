@@ -6,12 +6,8 @@
     },
     "An error has occurred.": "Ett fel har inträffat.",
     "Custom level": "Anpassad nivå",
-    "Decrypt %(text)s": "Avkryptera %(text)s",
-    "Download %(text)s": "Ladda ner %(text)s",
     "Email address": "E-postadress",
-    "Error decrypting attachment": "Fel vid avkryptering av bilagan",
     "Home": "Hem",
-    "Invalid file%(extra)s": "Felaktig fil%(extra)s",
     "Join Room": "Gå med i rum",
     "Moderator": "Moderator",
     "not specified": "inte specificerad",
@@ -90,8 +86,6 @@
     "collapse": "fäll ihop",
     "expand": "fäll ut",
     "<a>In reply to</a> <pill>": "<a>Som svar på</a> <pill>",
-    "Error decrypting image": "Fel vid avkryptering av bild",
-    "Error decrypting video": "Fel vid avkryptering av video",
     "Add an Integration": "Lägg till integration",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Du kommer att skickas till en tredjepartswebbplats så att du kan autentisera ditt konto för användning med %(integrationsUrl)s. Vill du fortsätta?",
     "Share Room": "Dela rum",
@@ -221,17 +215,9 @@
     "Edited at %(date)s. Click to view edits.": "Redigerat vid %(date)s. Klicka för att visa redigeringar.",
     "edited": "redigerat",
     "Failed to connect to integration manager": "Kunde inte ansluta till integrationshanterare",
-    "Show image": "Visa bild",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Du har ignorerat den här användaren, så dess meddelande är dolt. <a>Visa ändå.</a>",
-    "You verified %(name)s": "Du verifierade %(name)s",
-    "You cancelled verifying %(name)s": "Du avbröt verifiering av %(name)s",
-    "%(name)s cancelled verifying": "%(name)s avbröt verifiering",
-    "You accepted": "Du accepterade",
     "%(name)s accepted": "%(name)s accepterade",
-    "You cancelled": "Du avbröt",
     "%(name)s cancelled": "%(name)s avbröt",
     "%(name)s wants to verify": "%(name)s vill verifiera",
-    "You sent a verification request": "Du skickade en verifieringsbegäran",
     "Cancel search": "Avbryt sökningen",
     "Language Dropdown": "Språkmeny",
     "e.g. my-room": "t.ex. mitt-rum",
@@ -278,25 +264,6 @@
         "other": "%(count)s sessioner",
         "one": "%(count)s session"
     },
-    "This client does not support end-to-end encryption.": "Den här klienten stöder inte totalsträckskryptering.",
-    "Verify by scanning": "Verifiera med skanning",
-    "Ask %(displayName)s to scan your code:": "Be %(displayName)s att skanna din kod:",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Om du inte kan skanna koden ovan, verifiera genom att jämföra unika emojier.",
-    "Verify by comparing unique emoji.": "Verifiera genom att jämföra unika emojier.",
-    "Verify by emoji": "Verifiera med emoji",
-    "Almost there! Is %(displayName)s showing the same shield?": "Nästan klar! Visar %(displayName)s samma sköld?",
-    "Verify all users in a room to ensure it's secure.": "Verifiera alla användare i ett rum för att försäkra att det är säkert.",
-    "You've successfully verified your device!": "Du har verifierat din enhet framgångsrikt!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Du har verifierat %(deviceName)s (%(deviceId)s) framgångsrikt!",
-    "You've successfully verified %(displayName)s!": "Du har verifierat %(displayName)s framgångsrikt!",
-    "Start verification again from the notification.": "Starta verifiering igen från aviseringen.",
-    "Start verification again from their profile.": "Starta verifiering igen från deras profil.",
-    "Verification timed out.": "Verifieringen löpte ut.",
-    "%(displayName)s cancelled verification.": "%(displayName)s avbröt verifiering.",
-    "You cancelled verification.": "Du avbröt verifiering.",
-    "Encryption not enabled": "Kryptering är inte aktiverad",
-    "The encryption used by this room isn't supported.": "Krypteringen som används i det här rummet stöds inte.",
-    "You declined": "Du avslog",
     "%(name)s declined": "%(name)s avslog",
     "Edited at %(date)s": "Redigerat vid %(date)s",
     "Click to view edits": "Klicka för att visa redigeringar",
@@ -396,12 +363,6 @@
     "Start a conversation with someone using their name or username (like <userId/>).": "Starta en konversation med någon med deras namn eller användarnamn (som <userId/>).",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Bjud in någon med deras namn eller användarnamn (som <userId/>) eller <a>dela det här rummet</a>.",
     "Unable to set up keys": "Kunde inte ställa in nycklar",
-    "Ignored attempt to disable encryption": "Ignorerade försök att inaktivera kryptering",
-    "Join the conference at the top of this room": "Gå med i gruppsamtalet på toppen av det här rummet",
-    "Join the conference from the room information card on the right": "Gå med i gruppsamtalet ifrån informationskortet till höger",
-    "Video conference ended by %(senderName)s": "Videogruppsamtal avslutat av %(senderName)s",
-    "Video conference updated by %(senderName)s": "Videogruppsamtal uppdaterat av %(senderName)s",
-    "Video conference started by %(senderName)s": "Videogruppsamtal startat av %(senderName)s",
     "Use the <a>Desktop app</a> to see all encrypted files": "Använd <a>skrivbordsappen</a> för att se alla krypterade filer",
     "Use the <a>Desktop app</a> to search encrypted messages": "Använd <a>skrivbordsappen</a> söka bland krypterade meddelanden",
     "This version of %(brand)s does not support viewing some encrypted files": "Den här versionen av %(brand)s stöder inte visning av vissa krypterade filer",
@@ -710,7 +671,6 @@
     },
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Detta påverkar normalt bara hur rummet hanteras på serven. Om du upplever problem med din %(brand)s, vänligen rapportera en bugg.",
     "Invite to %(roomName)s": "Bjud in till %(roomName)s",
-    "Edit devices": "Redigera enheter",
     "%(count)s people you know have already joined": {
         "other": "%(count)s personer du känner har redan gått med",
         "one": "%(count)s person du känner har redan gått med"
@@ -743,7 +703,6 @@
     "Not all selected were added": "Inte alla valda tillades",
     "You are not allowed to view this server's rooms list": "Du tillåts inte att se den här serverns rumslista",
     "Add reaction": "Lägg till reaktion",
-    "Error processing voice message": "Fel vid hantering av röstmeddelande",
     "Or send invite link": "Eller skicka inbjudningslänk",
     "Some suggestions may be hidden for privacy.": "Vissa förslag kan vara dolda av sekretesskäl.",
     "Search for rooms or people": "Sök efter rum eller personer",
@@ -751,18 +710,6 @@
     "Sent": "Skickat",
     "You don't have permission to do this": "Du har inte behörighet att göra detta",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Din %(brand)s tillåter dig inte att använda en integrationshanterare för att göra detta. Vänligen kontakta en administratör.",
-    "Error processing audio message": "Fel vid hantering av ljudmeddelande",
-    "Decrypting": "Avkrypterar",
-    "The call is in an unknown state!": "Det här samtalet är i ett okänt läge!",
-    "Missed call": "Missat samtal",
-    "Unknown failure: %(reason)s": "Okänt fel: %(reason)s",
-    "An unknown error occurred": "Ett okänt fel inträffade",
-    "Their device couldn't start the camera or microphone": "Deras enhet kunde inte starta kameran eller mikrofonen",
-    "Connection failed": "Anslutning misslyckad",
-    "Could not connect media": "Kunde inte ansluta media",
-    "No answer": "Inget svar",
-    "Call back": "Ring tillbaka",
-    "Call declined": "Samtal nekat",
     "Please provide an address": "Ange en adress, tack",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Initialisering av meddelandesök misslyckades, kolla <a>dina inställningar</a> för mer information",
     "Adding spaces has moved.": "Tilläggning av utrymmen har flyttats.",
@@ -792,7 +739,6 @@
     "Anyone in <SpaceName/> will be able to find and join.": "Vem som helst i <SpaceName/> kommer kunna hitta och gå med.",
     "Private space (invite only)": "Privat utrymme (endast inbjudan)",
     "Space visibility": "Utrymmessynlighet",
-    "Some encryption parameters have been changed.": "Vissa krypteringsparametrar har ändrats.",
     "To join a space you'll need an invite.": "För att gå med i ett utrymme så behöver du en inbjudan.",
     "Would you like to leave the rooms in this space?": "Vill du lämna rummen i det här utrymmet?",
     "You are about to leave <spaceName/>.": "Du kommer att lämna <spaceName/>.",
@@ -800,7 +746,6 @@
     "Leave all rooms": "Lämna alla rum",
     "Don't leave any rooms": "Lämna inga rum",
     "In reply to <a>this message</a>": "Som svar på <a>detta meddelande</a>",
-    "Downloading": "Laddar ner",
     "%(count)s reply": {
         "one": "%(count)s svar",
         "other": "%(count)s svar"
@@ -810,7 +755,6 @@
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Återfå åtkomst till ditt konto och få tillbaka krypteringsnycklar lagrade i den här sessionen. Utan dem kommer du inte kunna läsa alla dina säkra meddelanden i någon session.",
     "Thread options": "Trådalternativ",
     "If you can't see who you're looking for, send them your invite link below.": "Om du inte ser den du letar efter, skicka din inbjudningslänk nedan till denne.",
-    "In encrypted rooms, verify all users to ensure it's secure.": "I krypterade rum, verifiera alla användare för att försäkra att det är säkert.",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s och %(count)s till",
         "other": "%(spaceName)s och %(count)s till"
@@ -820,15 +764,6 @@
     "Themes": "Teman",
     "Moderation": "Moderering",
     "Messaging": "Meddelanden",
-    "Vote not registered": "Röst registrerades inte",
-    "Reply in thread": "Svara i tråd",
-    "Pick a date to jump to": "Välj ett datum att hoppa till",
-    "Message pending moderation": "Meddelandet inväntar moderering",
-    "Message pending moderation: %(reason)s": "Meddelandet inväntar moderering: %(reason)s",
-    "Jump to date": "Hoppa till datum",
-    "The beginning of the room": "Början av rummet",
-    "You cancelled verification on your other device.": "Du avbröt verifiering på din andra enhet.",
-    "Almost there! Is your other device showing the same shield?": "Nästan klar! Visar din andra enhet samma sköld?",
     "Recently viewed": "Nyligen sedda",
     "Including you, %(commaSeparatedMembers)s": "Inklusive dig, %(commaSeparatedMembers)s",
     "Could not fetch location": "Kunde inte hämta plats",
@@ -838,20 +773,6 @@
         "one": "%(count)s röst",
         "other": "%(count)s röster"
     },
-    "Based on %(count)s votes": {
-        "one": "Baserat på %(count)s röst",
-        "other": "Baserat på %(count)s röster"
-    },
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s röst avgiven. Rösta för att ser resultatet",
-        "other": "%(count)s röster avgivna. Rösta för att se resultatet"
-    },
-    "No votes cast": "Inga röster avgivna",
-    "Final result based on %(count)s votes": {
-        "one": "Slutgiltigt resultat baserat på %(count)s röst",
-        "other": "Slutgiltigt resultat baserat på %(count)s röster"
-    },
-    "Sorry, your vote was not registered. Please try again.": "Tyvärr så registrerades inte din röst. Vänligen pröva igen.",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Det här grupperar dina chattar med medlemmar i det här utrymmet. Att stänga av det kommer att dölja dessa chattar från din vy av %(spaceName)s.",
     "Sections to show": "Sektioner att visa",
     "Link to room": "Länk till rum",
@@ -880,18 +801,11 @@
     "Feedback sent! Thanks, we appreciate it!": "Återkoppling skickad! Tack, vi uppskattar det!",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s och %(space2Name)s",
     "Join %(roomAddress)s": "Gå med i %(roomAddress)s",
-    "Sorry, you can't edit a poll after votes have been cast.": "Tyvärr kan du inte redigera en omröstning efter att röster har avgivits.",
-    "Can't edit poll": "Kan inte redigera omröstning",
     "Search Dialog": "Sökdialog",
-    "Results will be visible when the poll is ended": "Resultat kommer att visas när omröstningen avslutas",
     "%(count)s participants": {
         "one": "1 deltagare",
         "other": "%(count)s deltagare"
     },
-    "Click": "Klicka",
-    "Expand quotes": "Expandera citat",
-    "Collapse quotes": "Kollapsa citat",
-    "Can't create a thread from an event with an existing relation": "Kan inte skapa tråd från en händelse med en existerande relation",
     "An error occurred while stopping your live location, please try again": "Ett fel inträffade medans din platsdelning avslutades, försök igen",
     "Live location enabled": "Realtidsposition aktiverad",
     "You are sharing your live location": "Du delar din position i realtid",
@@ -919,7 +833,6 @@
     "%(displayName)s's live location": "Realtidsposition för %(displayName)s",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s kunde inte skicka din position. Försök igen senare.",
     "We couldn't send your location": "Vi kunde inte skicka din positoin",
-    "View live location": "Se realtidsposition",
     "Hide my messages from new joiners": "Dölj mina meddelanden för nya som går med",
     "Your old messages will still be visible to people who received them, just like emails you sent in the past. Would you like to hide your sent messages from people who join rooms in the future?": "Kommer dina meddelanden fortfarande vara synliga för folk som har tagit emot dem, precis som e-post du har skickat tidigare. Vill du dölja dina skickade meddelanden från personer som går med i rum i framtiden?",
     "You will be removed from the identity server: your friends will no longer be able to find you with your email or phone number": "Kommer du tas bort från din identitetsserver: dina vänner kommer inte längre kunna hitta dig med din e-postadress eller ditt telefonnummer",
@@ -969,26 +882,18 @@
     "You're in": "Du är inne",
     "You need to have the right permissions in order to share locations in this room.": "Du behöver rätt behörighet för att dela platser i det här rummet.",
     "You don't have permission to share locations": "Du är inte behörig att dela platser",
-    "Messages in this chat will be end-to-end encrypted.": "Meddelanden i den här chatten kommer att vara totalsträckskypterade.",
     "Saved Items": "Sparade föremål",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s eller %(recoveryFile)s",
     "Interactively verify by emoji": "Verifiera interaktivt med emoji",
     "Manually verify by text": "Verifiera manuellt med text",
     "Choose a locale": "Välj en lokalisering",
     "<w>WARNING:</w> <description/>": "<w>VARNING:</w> <description/>",
-    "Error downloading image": "Fel vid nedladdning av bild",
-    "Unable to show image due to error": "Kunde inte visa bild på grund av fel",
-    "Video call ended": "Videosamtal avslutades",
     "%(name)s started a video call": "%(name)s startade ett videosamtal",
     "Thread root ID: %(threadRootId)s": "Trådens rot-ID: %(threadRootId)s",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Du kan inte starta ett röstmeddelande eftersom du spelar in en direktsändning. Vänligen avsluta din direktsändning för att starta inspelning av ett röstmeddelande.",
     "Can't start voice message": "Kan inte starta röstmeddelanden",
     " in <strong>%(room)s</strong>": " i <strong>%(room)s</strong>",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "unknown": "okänd",
-    "Declining…": "Nekar…",
-    "There are no past polls in this room": "Det finns inga gamla omröstningar i det här rummet",
-    "There are no active polls in this room": "Det finns inga aktiva omröstningar i det här rummet",
     "Enable '%(manageIntegrations)s' in Settings to do this.": "Aktivera '%(manageIntegrations)s' i inställningarna för att göra detta.",
     "Loading live location…": "Laddar realtidsposition …",
     "Fetching keys from server…": "Hämtar nycklar från server …",
@@ -997,41 +902,15 @@
     "Adding…": "Lägger till …",
     "Starting export process…": "Startar exportprocessen …",
     "Requires your server to support the stable version of MSC3827": "Kräver att din server stöder den stabila versionen av MSC3827",
-    "View poll": "Visa omröstning",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "Det finns inga tidigare omröstningar för det senaste dygnet. Ladda fler omröstningar för att se omröstningar för tidigare månader",
-        "other": "Det finns inga tidigare omröstningar under de senaste %(count)s dagarna. Ladda fler omröstningar för att se omröstningar för tidigare månader"
-    },
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "Det finns inga aktiva omröstningar det senaste dygnet. Ladda fler omröstningar för att se omröstningar för tidigare månader",
-        "other": "Det finns inga aktiva omröstningar under de senaste %(count)s dagarna. Ladda fler omröstningar för att se omröstningar för tidigare månader"
-    },
-    "There are no past polls. Load more polls to view polls for previous months": "Det finns inga tidigare omröstningar. Ladda fler omröstningar för att se omröstningar för tidigare månader",
-    "There are no active polls. Load more polls to view polls for previous months": "Det finns inga aktiva omröstningar. Ladda fler omröstningar för att se omröstningar för tidigare månader",
-    "Load more polls": "Ladda fler omröstningar",
-    "Loading polls": "Laddar omröstningar",
-    "Past polls": "Tidigare omröstningar",
-    "Active polls": "Aktiva omröstningar",
-    "View poll in timeline": "Se omröstningen i tidslinjen",
-    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Ett nätverksfel uppstod vid försök att hitta och hoppa till det angivna datumet. Din hemserver kanske är nere eller så var det vara ett tillfälligt problem med din internetuppkoppling. Var god försök igen. Om detta fortsätter, kontakta din hemserveradministratör.",
-    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Vi kunde inte hitta en händelse från %(dateString)s eller senare. Pröva att välja ett tidigare datum.",
     "unavailable": "otillgänglig",
-    "Due to decryption errors, some votes may not be counted": "På grund av avkrypteringsfel kanske inte vissa röster räknas",
     "Message from %(user)s": "Meddelande från %(user)s",
-    "Answered elsewhere": "Besvarat på annat håll",
     "unknown status code": "okänd statuskod",
-    "Error details": "Feldetaljer",
     "Desktop app logo": "Skrivbordsappslogga",
     "Message in %(room)s": "Meddelande i rum %(room)s",
-    "The sender has blocked you from receiving this message": "Avsändaren har blockerat dig från att ta emot det här meddelandet",
-    "Ended a poll": "Avslutade en omröstning",
     "Start DM anyway and never warn me again": "Starta DM ändå och varna mig aldrig igen",
     "Start DM anyway": "Starta DM ändå",
-    "Server returned %(statusCode)s with error code %(errorCode)s": "Servern gav svar %(statusCode)s med felkoden %(errorCode)s",
     "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "Kunde inte hitta profiler för Matrix-ID:n nedan — skulle du vilja starta ett DM ändå?",
-    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Vänligen skicka in <debugLogsLink>felsökningsloggar</debugLogsLink> för att hjälpa oss att spåra problemet.",
     "Invites by email can only be sent one at a time": "Inbjudningar via e-post kan endast skickas en i taget",
-    "Unable to find event at that date": "Kunde inte hitta händelse vid det datumet",
     "Are you sure you wish to remove (delete) this event?": "Är du säker på att du vill ta bort (radera) den här händelsen?",
     "Note that removing room changes like this could undo the change.": "Observera att om du tar bort rumsändringar som den här kanske det ångrar ändringen.",
     "common": {
@@ -1270,7 +1149,9 @@
         "new_room": "Nytt rum",
         "new_video_room": "Nytt videorum",
         "add_existing_room": "Lägg till existerande rum",
-        "explore_public_rooms": "Utforska offentliga rum"
+        "explore_public_rooms": "Utforska offentliga rum",
+        "reply_in_thread": "Svara i tråd",
+        "click": "Klicka"
     },
     "a11y": {
         "user_menu": "Användarmeny",
@@ -2238,13 +2119,25 @@
     "timeline": {
         "m.call": {
             "video_call_started": "Videosamtal startade i %(roomName)s.",
-            "video_call_started_unsupported": "Videosamtal startade i %(roomName)s. (stöds inte av den här webbläsaren)"
+            "video_call_started_unsupported": "Videosamtal startade i %(roomName)s. (stöds inte av den här webbläsaren)",
+            "video_call_ended": "Videosamtal avslutades"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s ringde ett röstsamtal.",
             "voice_call_unsupported": "%(senderName)s ringde ett röstsamtal. (stöds inte av denna webbläsare)",
             "video_call": "%(senderName)s ringde ett videosamtal.",
-            "video_call_unsupported": "%(senderName)s ringde ett videosamtal. (stöds inte av denna webbläsare)"
+            "video_call_unsupported": "%(senderName)s ringde ett videosamtal. (stöds inte av denna webbläsare)",
+            "declined": "Samtal nekat",
+            "call_back_prompt": "Ring tillbaka",
+            "answered_elsewhere": "Besvarat på annat håll",
+            "missed_call": "Missat samtal",
+            "no_answer": "Inget svar",
+            "failed_connect_media": "Kunde inte ansluta media",
+            "failed_connection": "Anslutning misslyckad",
+            "failed_opponent_media": "Deras enhet kunde inte starta kameran eller mikrofonen",
+            "unknown_error": "Ett okänt fel inträffade",
+            "unknown_failure": "Okänt fel: %(reason)s",
+            "unknown_state": "Det här samtalet är i ett okänt läge!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s accepterade inbjudan för %(displayName)s",
@@ -2296,7 +2189,6 @@
             "forbidden": "%(senderDisplayName)s har nekat gäster att gå med i rummet.",
             "unknown": "%(senderDisplayName)s ändrade gäståtkomst till %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s skickade en bild.",
         "m.sticker": "%(senderDisplayName)s skickade en dekal.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s ställde in server-ACL:er för det här rummet.",
@@ -2340,7 +2232,12 @@
         "m.widget": {
             "modified": "%(widgetName)s-widget har ändrats av %(senderName)s",
             "added": "%(widgetName)s-widget har lagts till av %(senderName)s",
-            "removed": "%(widgetName)s-widget har tagits bort av %(senderName)s"
+            "removed": "%(widgetName)s-widget har tagits bort av %(senderName)s",
+            "jitsi_join_top_prompt": "Gå med i gruppsamtalet på toppen av det här rummet",
+            "jitsi_join_right_prompt": "Gå med i gruppsamtalet ifrån informationskortet till höger",
+            "jitsi_ended": "Videogruppsamtal avslutat av %(senderName)s",
+            "jitsi_updated": "Videogruppsamtal uppdaterat av %(senderName)s",
+            "jitsi_started": "Videogruppsamtal startat av %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s har uppdaterat rummets arrangemang",
         "m.location": {
@@ -2351,7 +2248,6 @@
         "self_redaction": "Meddelande raderat",
         "redaction": "Meddelande raderat av %(name)s",
         "m.poll.start": "%(senderName)s har startat en omröstning - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s har avslutat en omröstning",
         "typing_indicator": {
             "one_user": "%(displayName)s skriver …",
             "two_users": "%(names)s och %(lastPerson)s skriver …",
@@ -2515,7 +2411,8 @@
             "changed_rule_users": "%(senderName)s ändrade en regel som bannade användare som matchade %(oldGlob)s till att matcha %(newGlob)s på grund av %(reason)s",
             "changed_rule_rooms": "%(senderName)s ändrade en regel som bannade rum som matchade %(oldGlob)s till att matcha %(newGlob)s på grund av %(reason)s",
             "changed_rule_servers": "%(senderName)s ändrade en regel som bannade servrar som matchade %(oldGlob)s till att matcha %(newGlob)s på grund av %(reason)s",
-            "changed_rule_glob": "%(senderName)s uppdaterade en bannregel som matchade %(oldGlob)s till att matcha %(newGlob)s på grund av %(reason)s"
+            "changed_rule_glob": "%(senderName)s uppdaterade en bannregel som matchade %(oldGlob)s till att matcha %(newGlob)s på grund av %(reason)s",
+            "message_hidden": "Du har ignorerat den här användaren, så dess meddelande är dolt. <a>Visa ändå.</a>"
         },
         "no_permission_messages_before_invite": "Du är inte behörig att se meddelanden från innan du bjöds in.",
         "no_permission_messages_before_join": "Du är inte behörig att se meddelanden från innan du gick med.",
@@ -2569,18 +2466,70 @@
         "mab": {
             "label": "Meddelandeåtgärder",
             "view_in_room": "Visa i rum",
-            "copy_link_thread": "Kopiera länk till tråd"
+            "copy_link_thread": "Kopiera länk till tråd",
+            "collapse_reply_chain": "Kollapsa citat",
+            "expand_reply_chain": "Expandera citat"
         },
         "m.audio": {
             "unnamed_audio": "Namnlöst ljud",
-            "error_downloading_audio": "Fel vid nedladdning av ljud"
+            "error_downloading_audio": "Fel vid nedladdning av ljud",
+            "error_processing_audio": "Fel vid hantering av ljudmeddelande",
+            "error_processing_voice_message": "Fel vid hantering av röstmeddelande"
         },
         "load_error": {
             "no_permission": "Försökte ladda en viss punkt i det här rummets tidslinje, men du är inte behörig att visa det aktuella meddelandet.",
             "unable_to_find": "Försökte ladda en specifik punkt i det här rummets tidslinje, men kunde inte hitta den.",
             "title": "Misslyckades att hämta positionen på tidslinjen"
         },
-        "error_no_renderer": "Den här händelsen kunde inte visas"
+        "error_no_renderer": "Den här händelsen kunde inte visas",
+        "decryption_failure_blocked": "Avsändaren har blockerat dig från att ta emot det här meddelandet",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_downloading": "Laddar ner",
+        "download_action_decrypting": "Avkrypterar",
+        "m.room.encryption": {
+            "parameters_changed": "Vissa krypteringsparametrar har ändrats.",
+            "enabled_local": "Meddelanden i den här chatten kommer att vara totalsträckskypterade.",
+            "disable_attempt": "Ignorerade försök att inaktivera kryptering",
+            "disabled": "Kryptering är inte aktiverad",
+            "unsupported": "Krypteringen som används i det här rummet stöds inte."
+        },
+        "pending_moderation_reason": "Meddelandet inväntar moderering: %(reason)s",
+        "pending_moderation": "Meddelandet inväntar moderering",
+        "m.beacon_info": {
+            "view_live_location": "Se realtidsposition"
+        },
+        "m.file": {
+            "download_label": "Ladda ner %(text)s",
+            "error_decrypting": "Fel vid avkryptering av bilagan",
+            "decrypt_label": "Avkryptera %(text)s",
+            "error_invalid": "Felaktig fil%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s skickade en bild.",
+            "error": "Kunde inte visa bild på grund av fel",
+            "error_decrypting": "Fel vid avkryptering av bild",
+            "error_downloading": "Fel vid nedladdning av bild",
+            "show_image": "Visa bild"
+        },
+        "m.key.verification.done": "Du verifierade %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Du avbröt verifiering av %(name)s",
+            "user_cancelled": "%(name)s avbröt verifiering"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Du accepterade",
+            "you_declined": "Du avslog",
+            "you_cancelled": "Du avbröt",
+            "declining": "Nekar…",
+            "you_started": "Du skickade en verifieringsbegäran"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s har avslutat en omröstning",
+            "ended": "Avslutade en omröstning"
+        },
+        "m.video": {
+            "error_decrypting": "Fel vid avkryptering av video"
+        }
     },
     "slash_command": {
         "spoiler": "Skickar det angivna meddelandet som en spoiler",
@@ -3066,7 +3015,25 @@
                 "reset_confirmation": "Återställ verkligen verifieringsnycklar?",
                 "skip_verification": "Hoppa över verifiering för tillfället"
             },
-            "accepting": "Accepterar…"
+            "accepting": "Accepterar…",
+            "scan_qr": "Verifiera med skanning",
+            "scan_qr_explainer": "Be %(displayName)s att skanna din kod:",
+            "verify_emoji_prompt_qr": "Om du inte kan skanna koden ovan, verifiera genom att jämföra unika emojier.",
+            "verify_emoji_prompt": "Verifiera genom att jämföra unika emojier.",
+            "verify_emoji": "Verifiera med emoji",
+            "qr_reciprocate_same_shield_device": "Nästan klar! Visar din andra enhet samma sköld?",
+            "qr_reciprocate_same_shield_user": "Nästan klar! Visar %(displayName)s samma sköld?",
+            "prompt_encrypted": "Verifiera alla användare i ett rum för att försäkra att det är säkert.",
+            "prompt_unencrypted": "I krypterade rum, verifiera alla användare för att försäkra att det är säkert.",
+            "successful_own_device": "Du har verifierat din enhet framgångsrikt!",
+            "successful_device": "Du har verifierat %(deviceName)s (%(deviceId)s) framgångsrikt!",
+            "successful_user": "Du har verifierat %(displayName)s framgångsrikt!",
+            "prompt_self": "Starta verifiering igen från aviseringen.",
+            "prompt_user": "Starta verifiering igen från deras profil.",
+            "timed_out": "Verifieringen löpte ut.",
+            "cancelled_self": "Du avbröt verifiering på din andra enhet.",
+            "cancelled_user": "%(displayName)s avbröt verifiering.",
+            "cancelled": "Du avbröt verifiering."
         },
         "old_version_detected_title": "Gammal kryptografidata upptäckt",
         "old_version_detected_description": "Data från en äldre version av %(brand)s has upptäckts. Detta ska ha orsakat att totalsträckskryptering inte fungerat i den äldre versionen. Krypterade meddelanden som nyligen har skickats medans den äldre versionen användes kanske inte kan avkrypteras i denna version. Detta kan även orsaka att meddelanden skickade med denna version inte fungerar. Om du upplever problem, logga ut och in igen. För att behålla meddelandehistoriken, exportera dina nycklar och importera dem igen.",
@@ -3119,7 +3086,8 @@
         "cross_signing_user_normal": "Du har inte verifierat den här användaren.",
         "cross_signing_room_warning": "Någon använder en okänd session",
         "cross_signing_room_verified": "Alla i det här rummet är verifierade",
-        "cross_signing_room_normal": "Det här rummet är totalsträckskrypterat"
+        "cross_signing_room_normal": "Det här rummet är totalsträckskrypterat",
+        "unsupported": "Den här klienten stöder inte totalsträckskryptering."
     },
     "emoji": {
         "category_frequently_used": "Ofta använda",
@@ -3612,7 +3580,8 @@
         "empty_tip": "<b>Tips:</b> Välj \"%(replyInThread)s\" när du håller över ett meddelande.",
         "empty_heading": "Håll diskussioner organiserade med trådar",
         "unable_to_decrypt": "Kunde inte avkryptera meddelande",
-        "open_thread": "Öppna tråd"
+        "open_thread": "Öppna tråd",
+        "error_start_thread_existing_relation": "Kan inte skapa tråd från en händelse med en existerande relation"
     },
     "theme": {
         "light_high_contrast": "Ljust högkontrast",
@@ -3909,7 +3878,16 @@
         "jump_read_marker": "Hoppa till första olästa meddelandet.",
         "inviter_unknown": "Okänt",
         "failed_reject_invite": "Misslyckades att avböja inbjudan",
-        "creating_room_text": "Vi skapar ett rum med %(names)s"
+        "creating_room_text": "Vi skapar ett rum med %(names)s",
+        "error_jump_to_date_connection": "Ett nätverksfel uppstod vid försök att hitta och hoppa till det angivna datumet. Din hemserver kanske är nere eller så var det vara ett tillfälligt problem med din internetuppkoppling. Var god försök igen. Om detta fortsätter, kontakta din hemserveradministratör.",
+        "error_jump_to_date_not_found": "Vi kunde inte hitta en händelse från %(dateString)s eller senare. Pröva att välja ett tidigare datum.",
+        "error_jump_to_date": "Servern gav svar %(statusCode)s med felkoden %(errorCode)s",
+        "error_jump_to_date_send_logs_prompt": "Vänligen skicka in <debugLogsLink>felsökningsloggar</debugLogsLink> för att hjälpa oss att spåra problemet.",
+        "error_jump_to_date_title": "Kunde inte hitta händelse vid det datumet",
+        "error_jump_to_date_details": "Feldetaljer",
+        "jump_to_date_beginning": "Början av rummet",
+        "jump_to_date": "Hoppa till datum",
+        "jump_to_date_prompt": "Välj ett datum att hoppa till"
     },
     "file_panel": {
         "guest_note": "Du måste <a>registrera dig</a> för att använda den här funktionaliteten",
@@ -3952,7 +3930,22 @@
         "options_placeholder": "Skriv ett alternativ",
         "options_add_button": "Lägg till alternativ",
         "disclosed_notes": "Röstare ser resultatet så fort de har röstat",
-        "notes": "Resultat avslöjas inte förrän du avslutar omröstningen"
+        "notes": "Resultat avslöjas inte förrän du avslutar omröstningen",
+        "unable_edit_title": "Kan inte redigera omröstning",
+        "unable_edit_description": "Tyvärr kan du inte redigera en omröstning efter att röster har avgivits.",
+        "error_voting_title": "Röst registrerades inte",
+        "error_voting_description": "Tyvärr så registrerades inte din röst. Vänligen pröva igen.",
+        "total_decryption_errors": "På grund av avkrypteringsfel kanske inte vissa röster räknas",
+        "total_not_ended": "Resultat kommer att visas när omröstningen avslutas",
+        "total_no_votes": "Inga röster avgivna",
+        "total_n_votes": {
+            "one": "%(count)s röst avgiven. Rösta för att ser resultatet",
+            "other": "%(count)s röster avgivna. Rösta för att se resultatet"
+        },
+        "total_n_votes_voted": {
+            "one": "Baserat på %(count)s röst",
+            "other": "Baserat på %(count)s röster"
+        }
     },
     "failed_load_async_component": "Kan inte ladda! Kolla din nätverksuppkoppling och försök igen.",
     "upload_failed_generic": "Filen '%(fileName)s' kunde inte laddas upp.",
@@ -4185,7 +4178,8 @@
         "deactivate_confirm_description": "Vid inaktivering av användare loggas den ut och förhindras från att logga in igen. Den kommer dessutom att lämna alla rum den befinner sig i. Den här åtgärden kan inte ångras. Är du säker på att du vill inaktivera den här användaren?",
         "deactivate_confirm_action": "Inaktivera användaren",
         "error_deactivate": "Misslyckades att inaktivera användaren",
-        "role_label": "Roll i <RoomName/>"
+        "role_label": "Roll i <RoomName/>",
+        "edit_own_devices": "Redigera enheter"
     },
     "stickers": {
         "empty": "Du har för närvarande inga dekalpaket aktiverade",
@@ -4214,7 +4208,31 @@
         "pinned_messages_button": "Fäst",
         "export_chat_button": "Exportera chatt",
         "share_button": "Dela rum",
-        "settings_button": "Rumsinställningar"
+        "settings_button": "Rumsinställningar",
+        "poll": {
+            "view_in_timeline": "Se omröstningen i tidslinjen",
+            "active_heading": "Aktiva omröstningar",
+            "past_heading": "Tidigare omröstningar",
+            "loading": "Laddar omröstningar",
+            "load_more": "Ladda fler omröstningar",
+            "empty_active": "Det finns inga aktiva omröstningar i det här rummet",
+            "empty_past": "Det finns inga gamla omröstningar i det här rummet",
+            "empty_active_load_more": "Det finns inga aktiva omröstningar. Ladda fler omröstningar för att se omröstningar för tidigare månader",
+            "empty_past_load_more": "Det finns inga tidigare omröstningar. Ladda fler omröstningar för att se omröstningar för tidigare månader",
+            "empty_active_load_more_n_days": {
+                "one": "Det finns inga aktiva omröstningar det senaste dygnet. Ladda fler omröstningar för att se omröstningar för tidigare månader",
+                "other": "Det finns inga aktiva omröstningar under de senaste %(count)s dagarna. Ladda fler omröstningar för att se omröstningar för tidigare månader"
+            },
+            "empty_past_load_more_n_days": {
+                "one": "Det finns inga tidigare omröstningar för det senaste dygnet. Ladda fler omröstningar för att se omröstningar för tidigare månader",
+                "other": "Det finns inga tidigare omröstningar under de senaste %(count)s dagarna. Ladda fler omröstningar för att se omröstningar för tidigare månader"
+            },
+            "view_poll": "Visa omröstning",
+            "final_result": {
+                "one": "Slutgiltigt resultat baserat på %(count)s röst",
+                "other": "Slutgiltigt resultat baserat på %(count)s röster"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Avböj inbjudan",

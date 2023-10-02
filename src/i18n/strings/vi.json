@@ -373,38 +373,10 @@
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Bạn sắp được đưa đến trang web của bên thứ ba để bạn có thể xác thực tài khoản của mình để sử dụng với %(integrationsUrl)s. Bạn có muốn tiếp tục không?",
     "Add an Integration": "Thêm tích hợp",
     "Add reaction": "Thêm phản ứng",
-    "Error processing voice message": "Lỗi khi xử lý tin nhắn thoại",
-    "Error decrypting video": "Lỗi khi giải mã video",
-    "You sent a verification request": "Bạn đã gửi một yêu cầu xác thực",
     "%(name)s wants to verify": "%(name)s muốn xác thực",
     "%(name)s cancelled": "%(name)s đã bị hủy",
     "%(name)s declined": "%(name)s đã từ chối",
-    "You cancelled": "Bạn đã hủy bỏ",
-    "You declined": "Bạn đã từ chối",
     "%(name)s accepted": "%(name)s được chấp nhận",
-    "You accepted": "Bạn đã chấp nhận",
-    "%(name)s cancelled verifying": "%(name)s đã hủy xác thực",
-    "You cancelled verifying %(name)s": "Bạn đã hủy xác thực %(name)s",
-    "You verified %(name)s": "Bạn đã xác thực %(name)s",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Bạn đã bỏ qua người dùng này, vì vậy tin nhắn của họ bị ẩn. Hiển thị cũng được <a>Show anyways.</a>",
-    "Video conference started by %(senderName)s": "Hội nghị truyền hình bắt đầu bởi %(senderName)s",
-    "Video conference updated by %(senderName)s": "Hội nghị truyền hình được %(senderName)s cập nhật",
-    "Video conference ended by %(senderName)s": "Hội nghị truyền hình đã kết thúc trước%(senderName)s",
-    "Join the conference from the room information card on the right": "Tham gia hội nghị từ thẻ thông tin phòng bên phải",
-    "Join the conference at the top of this room": "Tham gia hội nghị ở đầu phòng này",
-    "Show image": "Hiển thị hình ảnh",
-    "Error decrypting image": "Lỗi khi giải mã hình ảnh",
-    "Invalid file%(extra)s": "Tệp%(extra)s không hợp lệ",
-    "Decrypt %(text)s": "Giải mã %(text)s",
-    "Error decrypting attachment": "Lỗi khi giải mã tệp đính kèm",
-    "Download %(text)s": "Tải xuống %(text)s",
-    "Error processing audio message": "Lỗi khi xử lý tin nhắn âm thanh",
-    "The encryption used by this room isn't supported.": "Mã hóa mà phòng này sử dụng không được hỗ trợ.",
-    "Encryption not enabled": "Mã hóa không được bật",
-    "Ignored attempt to disable encryption": "Bỏ qua nỗ lực vô hiệu hóa mã hóa",
-    "Some encryption parameters have been changed.": "Một số thông số mã hóa vừa được thay đổi.",
-    "Decrypting": "Đang giải mã",
-    "Downloading": "Đang tải xuống",
     "Yesterday": "Hôm qua",
     "Today": "Hôm nay",
     "Saturday": "Thứ bảy",
@@ -414,33 +386,6 @@
     "Tuesday": "Thứ ba",
     "Monday": "Thứ hai",
     "Sunday": "Chủ nhật",
-    "The call is in an unknown state!": "Cuộc gọi ở trạng thái không xác định!",
-    "Missed call": "Cuộc gọi nhỡ",
-    "Unknown failure: %(reason)s": "Lỗi không xác định: %(reason)s",
-    "An unknown error occurred": "Đã xảy ra lỗi không xác định",
-    "Their device couldn't start the camera or microphone": "Thiết bị của họ không thể khởi động máy ảnh hoặc micrô",
-    "Connection failed": "Kết nối thất bại",
-    "Could not connect media": "Không thể kết nối phương tiện",
-    "No answer": "Không trả lời",
-    "Call back": "Gọi lại",
-    "Call declined": "Cuộc gọi bị từ chối",
-    "You cancelled verification.": "Bạn đã hủy xác thực.",
-    "%(displayName)s cancelled verification.": "%(displayName)s đã hủy xác thực.",
-    "Verification timed out.": "Đã hết thời gian xác thực.",
-    "Start verification again from their profile.": "Bắt đầu xác thực lại từ hồ sơ của họ.",
-    "Start verification again from the notification.": "Bắt đầu xác thực lại từ thông báo.",
-    "You've successfully verified %(displayName)s!": "Bạn đã xác thực thành công %(displayName)s!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Bạn đã xác minh thành công %(deviceName)s (%(deviceId)s)!",
-    "You've successfully verified your device!": "Bạn đã xác minh thành công thiết bị của mình!",
-    "Verify all users in a room to ensure it's secure.": "Xác thực tất cả người dùng trong một phòng để đảm bảo phòng đó an toàn.",
-    "Almost there! Is %(displayName)s showing the same shield?": "Sắp xong rồi! %(displayName)s có hiển thị cùng một lá chắn không?",
-    "Verify by emoji": "Xác thực bằng biểu tượng cảm xúc",
-    "Verify by comparing unique emoji.": "Xác thực bằng cách so sánh biểu tượng cảm xúc độc đáo.",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Nếu bạn không thể quét mã ở trên, hãy xác thực bằng cách so sánh biểu tượng cảm xúc duy nhất.",
-    "Ask %(displayName)s to scan your code:": "Yêu cầu %(displayName)s quét mã của bạn:",
-    "Verify by scanning": "Xác thực bằng cách quét",
-    "Edit devices": "Chỉnh sửa thiết bị",
-    "This client does not support end-to-end encryption.": "Ứng dụng khách này không hỗ trợ mã hóa đầu cuối.",
     "Filter results": "Lọc kết quả",
     "Remove %(count)s messages": {
         "one": "Bỏ một tin nhắn",
@@ -816,20 +761,7 @@
         "one": "%(count)s phiếu bầu",
         "other": "%(count)s phiếu bầu"
     },
-    "Based on %(count)s votes": {
-        "one": "Dựa theo %(count)s phiếu bầu",
-        "other": "Dựa theo %(count)s phiếu bầu"
-    },
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s phiếu bầu. Bỏ phiếu để xem kết quả",
-        "other": "%(count)s phiếu bầu. Bỏ phiếu để xem kết quả"
-    },
-    "No votes cast": "Không có phiếu",
-    "Sorry, your vote was not registered. Please try again.": "Xin lỗi, phiếu bầu của bạn đã không được đăng ký. Vui lòng thử lại.",
-    "Vote not registered": "Bỏ phiếu không đăng ký",
-    "In encrypted rooms, verify all users to ensure it's secure.": "Trong các phòng mã hóa, xác thực tất cả người dùng để đảm bảo an toàn.",
     "Recently viewed": "Được xem gần đây",
-    "Reply in thread": "Trả lời theo chủ đề",
     "Developer": "Nhà phát triển",
     "Experimental": "Thử nghiệm",
     "Themes": "Chủ đề",
@@ -862,12 +794,6 @@
     "Missing domain separator e.g. (:domain.org)": "Thiếu dấu tách tên miền. Ví dụ: (:domain.org)",
     "Including you, %(commaSeparatedMembers)s": "Bao gồm bạn, %(commaSeparatedMembers)s",
     "toggle event": "chuyển đổi sự kiện",
-    "Final result based on %(count)s votes": {
-        "one": "Kết quả cuối cùng dựa trên %(count)s phiếu bầu",
-        "other": "Kết quả cuối cùng dựa trên %(count)s phiếu bầu"
-    },
-    "You cancelled verification on your other device.": "Bạn đã hủy xác thực trên thiết bị khác của bạn.",
-    "Almost there! Is your other device showing the same shield?": "Sắp xong rồi! Có phải thiết bị khác của bạn hiển thị cùng một lá chắn không?",
     "Explore public spaces in the new search dialog": "Khám phá các space công cộng trong hộp thoại tìm kiếm mới",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s và %(space2Name)s",
     "unknown": "không rõ",
@@ -879,15 +805,11 @@
     "Fetching keys from server…": "Đang lấy các khóa từ máy chủ…",
     "Feedback sent! Thanks, we appreciate it!": "Đã gửi phản hồi! Cảm ơn bạn, chúng tôi đánh giá cao các phản hồi này!",
     "%(members)s and more": "%(members)s và nhiều người khác",
-    "Messages in this chat will be end-to-end encrypted.": "Tin nhắn trong phòng này sẽ được mã hóa đầu-cuối.",
     "%(count)s participants": {
         "one": "1 người tham gia",
         "other": "%(count)s người tham gia"
     },
-    "The sender has blocked you from receiving this message": "Người gửi không cho bạn nhận tin nhắn này",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "Invites by email can only be sent one at a time": "Chỉ có thể gửi một thư điện tử mời mỗi lần",
-    "The beginning of the room": "Bắt đầu phòng",
     "Open room": "Mở phòng",
     "%(members)s and %(last)s": "%(members)s và %(last)s",
     "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "Khi bạn đăng xuất, các khóa sẽ được xóa khỏi thiết bị này, tức là bạn không thể đọc các tin nhắn được mã hóa trừ khi bạn có khóa cho chúng trong thiết bị khác, hoặc sao lưu chúng lên máy chủ.",
@@ -900,7 +822,6 @@
     "Some results may be hidden": "Một số kết quả có thể bị ẩn",
     "Waiting for partner to confirm…": "Đang đợi bên kia xác nhận…",
     "Enable '%(manageIntegrations)s' in Settings to do this.": "Bật '%(manageIntegrations)s' trong cài đặt để thực hiện.",
-    "Answered elsewhere": "Trả lời ở nơi khác",
     "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "Không thể tìm hồ sơ cho định danh Matrix được liệt kê - bạn có muốn tiếp tục tạo phòng nhắn tin riêng?",
     "Other options": "Lựa chọn khác",
     "Input devices": "Thiết bị đầu vào",
@@ -917,16 +838,8 @@
     "Show spaces": "Hiện spaces",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s hay %(recoveryFile)s",
     "Cameras": "Máy quay",
-    "Past polls": "Các cuộc bỏ phiếu trước",
-    "Active polls": "Các cuộc bỏ phiếu hiện tại",
     "unavailable": "không có sẵn",
-    "Error details": "Chi tiết lỗi",
-    "Jump to date": "Nhảy đến ngày",
-    "Message pending moderation: %(reason)s": "Tin nhắn chờ duyệt: %(reason)s",
     "%(name)s started a video call": "%(name)s đã bắt đầu một cuộc gọi truyền hình",
-    "Video call ended": "Cuộc gọi truyền hình đã kết thúc",
-    "View poll in timeline": "Xem cuộc bỏ phiếu trong dòng thời gian",
-    "Click": "Nhấn",
     "You will not be able to reactivate your account": "Bạn sẽ không thể kích hoạt lại tài khoản của bạn",
     "You will no longer be able to log in": "Bạn sẽ không thể đăng nhập lại",
     "Location": "Vị trí",
@@ -937,7 +850,6 @@
     "Confirm that you would like to deactivate your account. If you proceed:": "Xác nhận bạn muốn vô hiệu hóa tài khoản. Nếu bạn tiếp tục:",
     "You will leave all rooms and DMs that you are in": "Bạn sẽ rời tất cả phòng và tin nhắn trực tiếp mà bạn đã tham gia",
     "You will be removed from the identity server: your friends will no longer be able to find you with your email or phone number": "Bạn sẽ bị xóa khỏi máy chủ định danh: bạn bè của bạn sẽ không tìm thấy bạn bằng địa chỉ thư điện tử hay số điện thoại",
-    "Message pending moderation": "Tin nhắn chờ duyệt",
     "Message in %(room)s": "Tin nhắn trong %(room)s",
     "Message from %(user)s": "Tin nhắn từ %(user)s",
     "Show: Matrix rooms": "Hiện: Phòng Matrix",
@@ -946,10 +858,7 @@
     "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "Không ai có thể dùng lại tên người dùng của bạn (MXID), kể cả bạn: tên người dùng này sẽ trở thành không có sẵn",
     "<w>WARNING:</w> <description/>": "",
     "Shared their location: ": "",
-    "Error downloading image": "Lỗi khi tải hình ảnh",
-    "Unable to show image due to error": "Không thể hiển thị hình ảnh do lỗi",
     "To continue, please enter your account password:": "Để tiếp tục, vui lòng nhập mật khẩu tài khoản của bạn:",
-    "Declining…": "Đang từ chối…",
     "common": {
         "about": "Giới thiệu",
         "analytics": "Về dữ liệu phân tích",
@@ -1184,7 +1093,9 @@
         "new_room": "Tạo phòng",
         "new_video_room": "Tạo phòng truyền hình",
         "add_existing_room": "Thêm phòng hiện có",
-        "explore_public_rooms": "Khám phá các phòng chung"
+        "explore_public_rooms": "Khám phá các phòng chung",
+        "reply_in_thread": "Trả lời theo chủ đề",
+        "click": "Nhấn"
     },
     "a11y": {
         "user_menu": "Menu người dùng",
@@ -2085,13 +1996,25 @@
     "timeline": {
         "m.call": {
             "video_call_started": "Cuộc gọi truyền hình đã bắt đầu trong %(roomName)s.",
-            "video_call_started_unsupported": "Cuộc gọi truyền hình đã được bắt đầu ở %(roomName)s. (không được trình duyệt này hỗ trợ)"
+            "video_call_started_unsupported": "Cuộc gọi truyền hình đã được bắt đầu ở %(roomName)s. (không được trình duyệt này hỗ trợ)",
+            "video_call_ended": "Cuộc gọi truyền hình đã kết thúc"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s đã thực hiện một cuộc gọi thoại.",
             "voice_call_unsupported": "%(senderName)s đã thực hiện một cuộc gọi thoại. (không được hỗ trợ bởi trình duyệt này)",
             "video_call": "%(senderName)s đã thực hiện một cuộc gọi điện video.",
-            "video_call_unsupported": "%(senderName)s đã thực hiện một cuộc gọi điện video. (không được hỗ trợ bởi trình duyệt này)"
+            "video_call_unsupported": "%(senderName)s đã thực hiện một cuộc gọi điện video. (không được hỗ trợ bởi trình duyệt này)",
+            "declined": "Cuộc gọi bị từ chối",
+            "call_back_prompt": "Gọi lại",
+            "answered_elsewhere": "Trả lời ở nơi khác",
+            "missed_call": "Cuộc gọi nhỡ",
+            "no_answer": "Không trả lời",
+            "failed_connect_media": "Không thể kết nối phương tiện",
+            "failed_connection": "Kết nối thất bại",
+            "failed_opponent_media": "Thiết bị của họ không thể khởi động máy ảnh hoặc micrô",
+            "unknown_error": "Đã xảy ra lỗi không xác định",
+            "unknown_failure": "Lỗi không xác định: %(reason)s",
+            "unknown_state": "Cuộc gọi ở trạng thái không xác định!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s đã chấp nhận lời mời cho %(displayName)s",
@@ -2143,7 +2066,6 @@
             "forbidden": "%(senderDisplayName)s vừa cấm khách có thể tham gia phòng.",
             "unknown": "%(senderDisplayName)s vừa đổi chính sách tham gia của khách thành %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s đã gửi một hình.",
         "m.sticker": "%(senderDisplayName)s đã gửi một sticker.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s đặt danh sách truy cập máy chủ cho phòng này.",
@@ -2187,7 +2109,12 @@
         "m.widget": {
             "modified": "%(widgetName)s được sửa tên bởi %(senderName)s",
             "added": "%(widgetName)s widget được thêm vào bởi %(senderName)s",
-            "removed": "%(widgetName)s widget được gỡ bởi %(senderName)s"
+            "removed": "%(widgetName)s widget được gỡ bởi %(senderName)s",
+            "jitsi_join_top_prompt": "Tham gia hội nghị ở đầu phòng này",
+            "jitsi_join_right_prompt": "Tham gia hội nghị từ thẻ thông tin phòng bên phải",
+            "jitsi_ended": "Hội nghị truyền hình đã kết thúc trước%(senderName)s",
+            "jitsi_updated": "Hội nghị truyền hình được %(senderName)s cập nhật",
+            "jitsi_started": "Hội nghị truyền hình bắt đầu bởi %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s đã cập nhật bố trí của phòng",
         "m.location": {
@@ -2196,7 +2123,6 @@
         "self_redaction": "Tin nhắn đã xóa",
         "redaction": "Tin nhắn đã bị %(name)s xóa",
         "m.poll.start": "%(senderName)s vừa bắt đầu một cuộc bình chọn - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s vừa kết thúc một cuộc bình chọn",
         "typing_indicator": {
             "one_user": "%(displayName)s đang gõ …",
             "two_users": "%(names)s và %(lastPerson)s đang gõ …",
@@ -2356,7 +2282,8 @@
             "changed_rule_users": "%(senderName)s đã thay đổi quy tắc cấm người dùng khớp %(oldGlob)s thành %(newGlob)s vì %(reason)s",
             "changed_rule_rooms": "%(senderName)s đã thay đổi quy tắc cấm các phòng khớp với %(oldGlob)s thành khớp với %(newGlob)s vì %(reason)s",
             "changed_rule_servers": "%(senderName)s đã thay đổi một quy tắc cấm các máy chủ khớp với %(oldGlob)s để khớp với %(newGlob)s vì %(reason)s",
-            "changed_rule_glob": "%(senderName)s đã cập nhật quy tắc cấm khớp %(oldGlob)s sang %(newGlob)s cho %(reason)s"
+            "changed_rule_glob": "%(senderName)s đã cập nhật quy tắc cấm khớp %(oldGlob)s sang %(newGlob)s cho %(reason)s",
+            "message_hidden": "Bạn đã bỏ qua người dùng này, vì vậy tin nhắn của họ bị ẩn. Hiển thị cũng được <a>Show anyways.</a>"
         },
         "no_permission_messages_before_invite": "Bạn không có quyền xem tin nhắn trước lúc bạn được mời.",
         "no_permission_messages_before_join": "Bạn không có quyền xem tin nhắn trước lúc bạn tham gia.",
@@ -2411,14 +2338,60 @@
         },
         "m.audio": {
             "unnamed_audio": "Âm thanh không tên",
-            "error_downloading_audio": "Lỗi khi tải xuống âm thanh"
+            "error_downloading_audio": "Lỗi khi tải xuống âm thanh",
+            "error_processing_audio": "Lỗi khi xử lý tin nhắn âm thanh",
+            "error_processing_voice_message": "Lỗi khi xử lý tin nhắn thoại"
         },
         "load_error": {
             "no_permission": "Đã cố gắng tải một điểm cụ thể trong dòng thời gian của phòng này, nhưng bạn không có quyền xem tin nhắn được đề cập.",
             "unable_to_find": "Đã cố gắng tải một điểm cụ thể trong dòng thời gian của phòng này, nhưng không thể tìm thấy nó.",
             "title": "Không tải được vị trí dòng thời gian"
         },
-        "error_no_renderer": "Sự kiện này không thể được hiển thị"
+        "error_no_renderer": "Sự kiện này không thể được hiển thị",
+        "decryption_failure_blocked": "Người gửi không cho bạn nhận tin nhắn này",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_downloading": "Đang tải xuống",
+        "download_action_decrypting": "Đang giải mã",
+        "m.room.encryption": {
+            "parameters_changed": "Một số thông số mã hóa vừa được thay đổi.",
+            "enabled_local": "Tin nhắn trong phòng này sẽ được mã hóa đầu-cuối.",
+            "disable_attempt": "Bỏ qua nỗ lực vô hiệu hóa mã hóa",
+            "disabled": "Mã hóa không được bật",
+            "unsupported": "Mã hóa mà phòng này sử dụng không được hỗ trợ."
+        },
+        "pending_moderation_reason": "Tin nhắn chờ duyệt: %(reason)s",
+        "pending_moderation": "Tin nhắn chờ duyệt",
+        "m.file": {
+            "download_label": "Tải xuống %(text)s",
+            "error_decrypting": "Lỗi khi giải mã tệp đính kèm",
+            "decrypt_label": "Giải mã %(text)s",
+            "error_invalid": "Tệp%(extra)s không hợp lệ"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s đã gửi một hình.",
+            "error": "Không thể hiển thị hình ảnh do lỗi",
+            "error_decrypting": "Lỗi khi giải mã hình ảnh",
+            "error_downloading": "Lỗi khi tải hình ảnh",
+            "show_image": "Hiển thị hình ảnh"
+        },
+        "m.key.verification.done": "Bạn đã xác thực %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Bạn đã hủy xác thực %(name)s",
+            "user_cancelled": "%(name)s đã hủy xác thực"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Bạn đã chấp nhận",
+            "you_declined": "Bạn đã từ chối",
+            "you_cancelled": "Bạn đã hủy bỏ",
+            "declining": "Đang từ chối…",
+            "you_started": "Bạn đã gửi một yêu cầu xác thực"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s vừa kết thúc một cuộc bình chọn"
+        },
+        "m.video": {
+            "error_decrypting": "Lỗi khi giải mã video"
+        }
     },
     "slash_command": {
         "spoiler": "Đánh dấu tin nhắn chỉ định thành một tin nhắn ẩn",
@@ -2905,7 +2878,25 @@
                 "reset_confirmation": "Thực sự đặt lại các khóa xác minh?",
                 "skip_verification": "Bỏ qua xác thực ngay bây giờ"
             },
-            "accepting": "Đang chấp nhận…"
+            "accepting": "Đang chấp nhận…",
+            "scan_qr": "Xác thực bằng cách quét",
+            "scan_qr_explainer": "Yêu cầu %(displayName)s quét mã của bạn:",
+            "verify_emoji_prompt_qr": "Nếu bạn không thể quét mã ở trên, hãy xác thực bằng cách so sánh biểu tượng cảm xúc duy nhất.",
+            "verify_emoji_prompt": "Xác thực bằng cách so sánh biểu tượng cảm xúc độc đáo.",
+            "verify_emoji": "Xác thực bằng biểu tượng cảm xúc",
+            "qr_reciprocate_same_shield_device": "Sắp xong rồi! Có phải thiết bị khác của bạn hiển thị cùng một lá chắn không?",
+            "qr_reciprocate_same_shield_user": "Sắp xong rồi! %(displayName)s có hiển thị cùng một lá chắn không?",
+            "prompt_encrypted": "Xác thực tất cả người dùng trong một phòng để đảm bảo phòng đó an toàn.",
+            "prompt_unencrypted": "Trong các phòng mã hóa, xác thực tất cả người dùng để đảm bảo an toàn.",
+            "successful_own_device": "Bạn đã xác minh thành công thiết bị của mình!",
+            "successful_device": "Bạn đã xác minh thành công %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "Bạn đã xác thực thành công %(displayName)s!",
+            "prompt_self": "Bắt đầu xác thực lại từ thông báo.",
+            "prompt_user": "Bắt đầu xác thực lại từ hồ sơ của họ.",
+            "timed_out": "Đã hết thời gian xác thực.",
+            "cancelled_self": "Bạn đã hủy xác thực trên thiết bị khác của bạn.",
+            "cancelled_user": "%(displayName)s đã hủy xác thực.",
+            "cancelled": "Bạn đã hủy xác thực."
         },
         "old_version_detected_title": "Đã phát hiện dữ liệu mật mã cũ",
         "old_version_detected_description": "Dữ liệu từ phiên bản cũ hơn của %(brand)s đã được phát hiện. Điều này sẽ khiến mật mã end-to-end bị trục trặc trong phiên bản cũ hơn. Các tin nhắn được mã hóa end-to-end được trao đổi gần đây trong khi sử dụng phiên bản cũ hơn có thể không giải mã được trong phiên bản này. Điều này cũng có thể khiến các tin nhắn được trao đổi với phiên bản này bị lỗi. Nếu bạn gặp sự cố, hãy đăng xuất và đăng nhập lại. Để lưu lại lịch sử tin nhắn, hãy export và re-import các khóa của bạn.",
@@ -2958,7 +2949,8 @@
         "cross_signing_user_normal": "Bạn chưa xác thực người dùng này.",
         "cross_signing_room_warning": "Ai đó đang sử dụng một phiên không xác định",
         "cross_signing_room_verified": "Mọi người trong phòng này đã được xác thực",
-        "cross_signing_room_normal": "Phòng này được mã hóa end-to-end"
+        "cross_signing_room_normal": "Phòng này được mã hóa end-to-end",
+        "unsupported": "Ứng dụng khách này không hỗ trợ mã hóa đầu cuối."
     },
     "emoji": {
         "category_frequently_used": "Thường xuyên sử dụng",
@@ -3677,7 +3669,10 @@
         "jump_to_bottom_button": "Di chuyển đến các tin nhắn gần đây nhất",
         "jump_read_marker": "Chuyển đến tin nhắn chưa đọc đầu tiên.",
         "inviter_unknown": "Không xác định",
-        "failed_reject_invite": "Không thể từ chối lời mời"
+        "failed_reject_invite": "Không thể từ chối lời mời",
+        "error_jump_to_date_details": "Chi tiết lỗi",
+        "jump_to_date_beginning": "Bắt đầu phòng",
+        "jump_to_date": "Nhảy đến ngày"
     },
     "file_panel": {
         "guest_note": "Bạn phải đăng ký <a>register</a> để sử dụng chức năng này",
@@ -3717,7 +3712,18 @@
         "options_heading": "Tạo tùy chọn",
         "options_label": "Tùy chọn %(number)s",
         "options_placeholder": "Viết tùy chọn",
-        "options_add_button": "Thêm tùy chọn"
+        "options_add_button": "Thêm tùy chọn",
+        "error_voting_title": "Bỏ phiếu không đăng ký",
+        "error_voting_description": "Xin lỗi, phiếu bầu của bạn đã không được đăng ký. Vui lòng thử lại.",
+        "total_no_votes": "Không có phiếu",
+        "total_n_votes": {
+            "one": "%(count)s phiếu bầu. Bỏ phiếu để xem kết quả",
+            "other": "%(count)s phiếu bầu. Bỏ phiếu để xem kết quả"
+        },
+        "total_n_votes_voted": {
+            "one": "Dựa theo %(count)s phiếu bầu",
+            "other": "Dựa theo %(count)s phiếu bầu"
+        }
     },
     "failed_load_async_component": "Không thể tải dữ liệu! Kiểm tra kết nối mạng và thử lại.",
     "upload_failed_generic": "Không tải lên được tập tin '%(fileName)s' .",
@@ -3949,7 +3955,8 @@
         "deactivate_confirm_description": "Việc hủy kích hoạt người dùng này sẽ đăng xuất họ và ngăn họ đăng nhập lại. Ngoài ra, họ sẽ rời khỏi tất cả các phòng mà họ đang ở. Không thể hoàn tác hành động này. Bạn có chắc chắn muốn hủy kích hoạt người dùng này không?",
         "deactivate_confirm_action": "Hủy kích hoạt người dùng",
         "error_deactivate": "Không thể hủy kích hoạt người dùng",
-        "role_label": "Vai trò trong <RoomName/>"
+        "role_label": "Vai trò trong <RoomName/>",
+        "edit_own_devices": "Chỉnh sửa thiết bị"
     },
     "stickers": {
         "empty": "Bạn hiện chưa bật bất kỳ gói nhãn dán nào",
@@ -3978,7 +3985,16 @@
         "pinned_messages_button": "Đã ghim",
         "export_chat_button": "Xuất trò chuyện",
         "share_button": "Phòng chia sẻ",
-        "settings_button": "Cài đặt phòng"
+        "settings_button": "Cài đặt phòng",
+        "poll": {
+            "view_in_timeline": "Xem cuộc bỏ phiếu trong dòng thời gian",
+            "active_heading": "Các cuộc bỏ phiếu hiện tại",
+            "past_heading": "Các cuộc bỏ phiếu trước",
+            "final_result": {
+                "one": "Kết quả cuối cùng dựa trên %(count)s phiếu bầu",
+                "other": "Kết quả cuối cùng dựa trên %(count)s phiếu bầu"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Từ chối lời mời",

@@ -49,7 +49,6 @@
     "Saturday": "Sed",
     "Today": "Ass-a",
     "Yesterday": "Iḍelli",
-    "Error decrypting attachment": "Tuccḍa deg uwgelhen n tceqquft yeddan",
     "edited": "yettwaẓreg",
     "collapse": "fneẓ",
     "Server name": "Isem n uqeddac",
@@ -132,19 +131,7 @@
         "one": "Kkes 1 izen",
         "other": "Kkes iznan n %(count)s"
     },
-    "Verify by scanning": "Senqed s usiggez",
-    "Verify by emoji": "Senqed s yimujit",
-    "Verification timed out.": "Yemmed wakud n usenqed.",
-    "%(displayName)s cancelled verification.": "%(displayName)s isefsex asenqed.",
-    "You cancelled verification.": "Tesfesxeḍ asenqed.",
-    "Decrypt %(text)s": "Wgelhen %(text)s",
-    "Download %(text)s": "Sader %(text)s",
-    "You verified %(name)s": "Tezsneqdeḍ %(name)s",
-    "%(name)s cancelled verifying": "%(name)s isefsex asenqed",
-    "You accepted": "Tqebleḍ",
     "%(name)s accepted": "%(name)s yettwaqbel",
-    "You declined": "Tugiḍ",
-    "You cancelled": "Tesfesxeḍ",
     "%(name)s declined": "%(name)s yettwagi",
     "%(name)s cancelled": "%(name)s yettwasefsex",
     "%(name)s wants to verify": "%(name)s yebɣa ad isenqed",
@@ -243,22 +230,6 @@
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Ɛreḍ adrurem deg wazemzakud i wakken ad twaliḍ ma yella llan wid yellan uqbel.",
     "Remove recent messages by %(user)s": "Kkes iznan n melmi kan sɣur %(user)s",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "I tugget meqqren n yiznan, ayagi yezmer ad yeṭṭef kra n wakud. Ṛǧu ur sirin ara amsaɣ-ik·im deg leɛḍil.",
-    "This client does not support end-to-end encryption.": "Amsaɣ-a ur yessefrak ara awgelhen seg yixef ɣer yixef.",
-    "Ask %(displayName)s to scan your code:": "Suter deg %(displayName)s aḍummu n tengalt-ik·im:",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Ma yella ur tezmireḍ ara ad tḍummeḍ tangalt nnig, senqed s userwes s yimujiten asufen.",
-    "Verify by comparing unique emoji.": "Senqed s userwes s yimujiten asufen.",
-    "Almost there! Is %(displayName)s showing the same shield?": "Qrib ad tawḍeḍ! Wissen ma yella%(displayName)s kifkif aɣar i d-yeskanay?",
-    "Verify all users in a room to ensure it's secure.": "Senqed akk iseqdacen yellan deg texxamt i wakken ad tḍemneḍ d taɣelsant.",
-    "You've successfully verified your device!": "Tesneqdeḍ akken iwata ibenk-inek·inem!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Tesneqdeḍ akken iwata %(deviceName)s (%(deviceId)s)!",
-    "You've successfully verified %(displayName)s!": "Tesneqdeḍ akken iwata %(displayName)s!",
-    "Start verification again from the notification.": "Bdu asenqed daɣen seg ulɣu.",
-    "Start verification again from their profile.": "Bdu asenqed daɣen seg umaɣnu-nsen.",
-    "Encryption not enabled": "Awgelhen ur yermid ara",
-    "The encryption used by this room isn't supported.": "Awgelhen yettusqedcen ur yettusefrak ara s texxamt-a.",
-    "Invalid file%(extra)s": "D afaylu %(extra)s arameɣtu",
-    "Error decrypting image": "Tuccḍa deg uwgelhen n tugna",
-    "Show image": "Sken tugna",
     "Your homeserver has exceeded its user limit.": "Aqeddac-inek·inem agejdan yewweḍ ɣer talast n useqdac.",
     "Your homeserver has exceeded one of its resource limits.": "Aqeddac-inek·inem agejdan iɛedda yiwet seg tlisa-ines tiɣbula.",
     "%(duration)ss": "%(duration)ss",
@@ -310,10 +281,6 @@
     "Paperclip": "Tamessakt n lkaɣeḍ",
     "Cactus": "Akermus",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "I wakken ad d-tazneḍ ugur n tɣellist i icudden ɣer Matrix, ttxil-k·m ɣer <a>tasertit n ukcaf n tɣellist</a> deg Matrix.org.",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Tzegleḍ useqdac-a, ihi iznan-ines ffren. <a>Ɣas akken sken-iten-id.</a>",
-    "You cancelled verifying %(name)s": "Tesfesxeḍ asenqed n %(name)s",
-    "You sent a verification request": "Tuzneḍ asuter n usenqed",
-    "Error decrypting video": "Tuccḍa deg uwgelhen n tvidyut",
     "Edited at %(date)s": "Yettwaẓreg deg %(date)s",
     "Click to view edits": "Sit i wakken ad twaliḍ aseẓreg",
     "Edited at %(date)s. Click to view edits.": "Yettwaẓreg deg %(date)s. Sit i wakken ad twaliḍ iseẓrag.",
@@ -1226,7 +1193,6 @@
             "forbidden": "%(senderDisplayName)s ur yeǧǧi ara i yimerza ad kecmen ɣer texxamt.",
             "unknown": "%(senderDisplayName)s ibeddel anekcum n yimerza s %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s yuzen-d tugna.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s yesbadu ACLs n uqeddac i texxamt-a.",
             "changed": "%(senderDisplayName)s isenfel iɣewwaren n unekcum ɣer texxamt-a.",
@@ -1391,7 +1357,8 @@
             "changed_rule_users": "%(senderName)s ibeddel alugen i yugin iseqdacen yemṣadan d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s",
             "changed_rule_rooms": "%(senderName)s ibeddel alugen i yugin tixxamin yemṣadan d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s",
             "changed_rule_servers": "%(senderName)s ibeddel alugen i yugin tixxamin iqeddacen d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s",
-            "changed_rule_glob": "%(senderName)s ibeddel alugen i yemṣadan d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s"
+            "changed_rule_glob": "%(senderName)s ibeddel alugen i yemṣadan d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s",
+            "message_hidden": "Tzegleḍ useqdac-a, ihi iznan-ines ffren. <a>Ɣas akken sken-iten-id.</a>"
         },
         "redacted": {
             "tooltip": "Izen yettwakkes deg %(date)s"
@@ -1423,7 +1390,36 @@
             "unable_to_find": "Ɛerḍeɣ ad d-saliɣ tazmilt tufrint tesnakudt n texxamt-a, maca ur ssawḍeɣ ara ad t-naf.",
             "title": "Asali n yideg n tesnakudt ur yeddi ara"
         },
-        "error_no_renderer": "Tadyant-a ur tezmir ad d-tettwaskan"
+        "error_no_renderer": "Tadyant-a ur tezmir ad d-tettwaskan",
+        "m.room.encryption": {
+            "disabled": "Awgelhen ur yermid ara",
+            "unsupported": "Awgelhen yettusqedcen ur yettusefrak ara s texxamt-a."
+        },
+        "m.file": {
+            "download_label": "Sader %(text)s",
+            "error_decrypting": "Tuccḍa deg uwgelhen n tceqquft yeddan",
+            "decrypt_label": "Wgelhen %(text)s",
+            "error_invalid": "D afaylu %(extra)s arameɣtu"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s yuzen-d tugna.",
+            "error_decrypting": "Tuccḍa deg uwgelhen n tugna",
+            "show_image": "Sken tugna"
+        },
+        "m.key.verification.done": "Tezsneqdeḍ %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Tesfesxeḍ asenqed n %(name)s",
+            "user_cancelled": "%(name)s isefsex asenqed"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Tqebleḍ",
+            "you_declined": "Tugiḍ",
+            "you_cancelled": "Tesfesxeḍ",
+            "you_started": "Tuzneḍ asuter n usenqed"
+        },
+        "m.video": {
+            "error_decrypting": "Tuccḍa deg uwgelhen n tvidyut"
+        }
     },
     "slash_command": {
         "shrug": "Yerna ¯\\_(ツ)_/¯ ɣer yizen n uḍris arewway",
@@ -1674,7 +1670,22 @@
             "unverified_session_toast_title": "Anekcam amaynut. D kečč/kemm?",
             "waiting_for_user_accept": "Aṛaǧu n %(displayName)s i uqbal…",
             "start_button": "Bdu asenqed",
-            "accepting": "Aqbal…"
+            "accepting": "Aqbal…",
+            "scan_qr": "Senqed s usiggez",
+            "scan_qr_explainer": "Suter deg %(displayName)s aḍummu n tengalt-ik·im:",
+            "verify_emoji_prompt_qr": "Ma yella ur tezmireḍ ara ad tḍummeḍ tangalt nnig, senqed s userwes s yimujiten asufen.",
+            "verify_emoji_prompt": "Senqed s userwes s yimujiten asufen.",
+            "verify_emoji": "Senqed s yimujit",
+            "qr_reciprocate_same_shield_user": "Qrib ad tawḍeḍ! Wissen ma yella%(displayName)s kifkif aɣar i d-yeskanay?",
+            "prompt_encrypted": "Senqed akk iseqdacen yellan deg texxamt i wakken ad tḍemneḍ d taɣelsant.",
+            "successful_own_device": "Tesneqdeḍ akken iwata ibenk-inek·inem!",
+            "successful_device": "Tesneqdeḍ akken iwata %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "Tesneqdeḍ akken iwata %(displayName)s!",
+            "prompt_self": "Bdu asenqed daɣen seg ulɣu.",
+            "prompt_user": "Bdu asenqed daɣen seg umaɣnu-nsen.",
+            "timed_out": "Yemmed wakud n usenqed.",
+            "cancelled_user": "%(displayName)s isefsex asenqed.",
+            "cancelled": "Tesfesxeḍ asenqed."
         },
         "old_version_detected_title": "Ala isefka iweglehnen i d-iteffɣen",
         "old_version_detected_description": "Isefka n lqem aqbur n %(brand)s ttwafen. Ayagi ad d-yeglu s yir tamahalt n uwgelhen seg yixef ɣer yixef deg lqem aqbur. Iznan yettwawgelhen seg yixef ɣer yixef yettumbeddalen yakan mi akken yettuseqdac lqem aqbur yezmer ur asen-ittekkes ara uwgelhen deg lqem-a. Aya yezmer daɣen ad d-yeglu asefsex n yiznan yettumbeddalen s lqem-a. Ma yella temlaleḍ-d uguren, ffeɣ syen tuɣaleḍ-d tikkelt-nniḍen. I wakken ad tḥerzeḍ amazray n yiznan, sifeḍ rnu ales kter tisura-ik·im.",
@@ -1720,7 +1731,8 @@
         "cross_signing_user_normal": "Ur tesneqdeḍ aea aseqdac-a.",
         "cross_signing_room_warning": "Yella win yesseqdacen tiɣimit tarussint",
         "cross_signing_room_verified": "Yal yiwen deg taxxamt-a yettwasenqed",
-        "cross_signing_room_normal": "Taxxamt-a tettwawgelhen seg yixef ɣer yixef"
+        "cross_signing_room_normal": "Taxxamt-a tettwawgelhen seg yixef ɣer yixef",
+        "unsupported": "Amsaɣ-a ur yessefrak ara awgelhen seg yixef ɣer yixef."
     },
     "emoji": {
         "category_frequently_used": "Yettuseqdac s waṭas",

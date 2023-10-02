@@ -38,9 +38,9 @@ const HiddenBody = React.forwardRef<any, IProps | IBodyProps>(({ mxEvent }, ref)
             throw new Error("HiddenBody should only be applied to hidden messages");
         case false:
             if (visibility.reason) {
-                text = _t("Message pending moderation: %(reason)s", { reason: visibility.reason });
+                text = _t("timeline|pending_moderation_reason", { reason: visibility.reason });
             } else {
-                text = _t("Message pending moderation");
+                text = _t("timeline|pending_moderation");
             }
             break;
     }

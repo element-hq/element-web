@@ -551,27 +551,6 @@
     "You don't have permission to do this": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເຮັດສິ່ງນີ້",
     "An error occurred while stopping your live location": "ເກີດຄວາມຜິດພາດໃນຂະນະທີ່ຢຸດສະຖານທີ່ສະຖານທີ່ຂອງທ່ານ",
     "%(name)s accepted": "ຍອມຮັບ %(name)s",
-    "You accepted": "ທ່ານຍອມຮັບ",
-    "%(name)s cancelled verifying": "ຍົກເລີກການຢັ້ງຢືນ %(name)s",
-    "You cancelled verifying %(name)s": "ທ່ານໄດ້ຍົກເລີກການຢືນຢັນ %(name)s",
-    "You verified %(name)s": "ທ່ານໄດ້ຢັ້ງຢືນ %(name)s",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "ທ່ານໄດ້ບໍ່ສົນໃຈຜູ້ໃຊ້ນີ້, ດັ່ງນັ້ນຂໍ້ຄວາມຂອງພວກເຂົາຖືກເຊື່ອງໄວ້. <a>ສະແດງຕໍ່ໄປ.</a>",
-    "Video conference started by %(senderName)s": "ກອງປະຊຸມວິດີໂອເລີ່ມຕົ້ນໂດຍ %(senderName)s",
-    "Video conference updated by %(senderName)s": "ວິດີໂອກອງປະຊຸມປັບປຸງໂດຍ %(senderName)s",
-    "Video conference ended by %(senderName)s": "ກອງປະຊຸມວິດີໂອໄດ້ສິ້ນສຸດລົງໂດຍ %(senderName)s",
-    "Join the conference from the room information card on the right": "ເຂົ້າຮ່ວມກອງປະຊຸມຈາກບັດຂໍ້ມູນຫ້ອງຢູ່ເບື້ອງຂວາ",
-    "Join the conference at the top of this room": "ເຂົ້າຮ່ວມກອງປະຊຸມຢູ່ເທິງສຸດຂອງຫ້ອງນີ້",
-    "Show image": "ສະແດງຮູບພາບ",
-    "Error decrypting image": "ການຖອດລະຫັດຮູບພາບຜິດພາດ",
-    "Invalid file%(extra)s": "ໄຟລ໌ບໍ່ຖືກຕ້ອງ%(extra)s",
-    "Decrypt %(text)s": "ຖອດລະຫັດ %(text)s",
-    "Error decrypting attachment": "ເກີດຄວາມຜິດພາດໃນການຖອດລະຫັດໄຟລ໌ຄັດຕິດ",
-    "Download %(text)s": "ດາວໂຫລດ %(text)s",
-    "Click": "ກົດ",
-    "Expand quotes": "ຂະຫຍາຍວົງຢືມ",
-    "Collapse quotes": "ຫຍໍ້ວົງຢືມ",
-    "Can't create a thread from an event with an existing relation": "ບໍ່ສາມາດສ້າງກະທູ້ຈາກເຫດການທີ່ມີຄວາມສໍາພັນທີ່ມີຢູ່ແລ້ວ",
-    "View live location": "ເບິ່ງສະຖານທີ່ປັດຈຸບັນ",
     "Language Dropdown": "ເລື່ອນພາສາລົງ",
     "Information": "ຂໍ້ມູນ",
     "expand": "ຂະຫຍາຍ",
@@ -618,7 +597,6 @@
     "The poll has ended. Top answer: %(topAnswer)s": "ການສໍາຫຼວດໄດ້ສິ້ນສຸດລົງ. ຄຳຕອບສູງສຸດ: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "ການສໍາຫຼວດໄດ້ສິ້ນສຸດລົງ. ບໍ່ມີການລົງຄະແນນສຽງ.",
     "IRC display name width": "ຄວາມກວ້າງຂອງຊື່ສະແດງ IRC",
-    "Reply in thread": "ຕອບໃນກະທູ້",
     "Developer": "ນັກພັດທະນາ",
     "Experimental": "ທົດລອງ",
     "Themes": "ຫົວຂໍ້",
@@ -642,37 +620,14 @@
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "ທ່ານກໍາລັງຈະຖືກນໍາໄປຫາເວັບໄຊທ໌ພາກສ່ວນທີສາມເພື່ອໃຫ້ທ່ານສາມາດພິສູດຢືນຢັນບັນຊີຂອງທ່ານເພື່ອໃຊ້ກັບ %(integrationsUrl)s. ທ່ານຕ້ອງການສືບຕໍ່ບໍ?",
     "Add an Integration": "ເພີ່ມການປະສົມປະສານ",
     "Add reaction": "ເພີ່ມການຕອບໂຕ້",
-    "Error processing voice message": "ການປະມວນຜົນຂໍ້ຄວາມສຽງຜິດພາດ",
-    "Error decrypting video": "ການຖອດລະຫັດວິດີໂອຜິດພາດ",
     "%(count)s votes": {
         "one": "%(count)s ລົງຄະແນນສຽງ",
         "other": "%(count)s ຄະແນນສຽງ"
     },
     "edited": "ດັດແກ້",
-    "Based on %(count)s votes": {
-        "one": "ອີງຕາມການລົງຄະແນນສຽງ %(count)s",
-        "other": "ອີງຕາມ %(count)s ການລົງຄະເເນນສຽງ"
-    },
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s ລົງຄະແນນສຽງ. ລົງຄະແນນສຽງເພື່ອເບິ່ງຜົນໄດ້ຮັບ",
-        "other": "%(count)s ລົງຄະແນນສຽງ. ລົງຄະແນນສຽງເພື່ອເບິ່ງຜົນໄດ້ຮັບ"
-    },
-    "No votes cast": "ບໍ່ມີການລົງຄະແນນສຽງ",
-    "Results will be visible when the poll is ended": "ຜົນໄດ້ຮັບຈະເຫັນໄດ້ເມື່ອການສໍາຫຼວດສິ້ນສຸດລົງ",
-    "Final result based on %(count)s votes": {
-        "one": "ຜົນສຸດທ້າຍໂດຍອີງໃສ່ %(count)s ຄະແນນສຽງ",
-        "other": "ຜົນສຸດທ້າຍໂດຍອີງໃສ່ %(count)s ຄະແນນສຽງ"
-    },
-    "Sorry, your vote was not registered. Please try again.": "ຂໍອະໄພ, ການລົງຄະແນນສຽງຂອງທ່ານບໍ່ໄດ້ລົງທະບຽນ. ກະລຸນາລອງອີກຄັ້ງ.",
-    "Vote not registered": "ລົງຄະແນນສຽງບໍ່ໄດ້ລົງທະບຽນ",
-    "Sorry, you can't edit a poll after votes have been cast.": "ຂໍອະໄພ, ທ່ານບໍ່ສາມາດແກ້ໄຂແບບສຳຫຼວດໄດ້ຫຼັງຈາກລົງຄະແນນສຽງແລ້ວ.",
-    "Can't edit poll": "ບໍ່ສາມາດແກ້ໄຂແບບສຳຫຼວດໄດ້",
-    "You sent a verification request": "ທ່ານໄດ້ສົ່ງຄໍາຮ້ອງຂໍການຢັ້ງຢືນ",
     "%(name)s wants to verify": "%(name)s ຕ້ອງການກວດສອບ",
     "%(name)s cancelled": "%(name)s ຖືກຍົກເລີກ",
     "%(name)s declined": "%(name)s ປະຕິເສດ",
-    "You cancelled": "ທ່ານໄດ້ຍົກເລີກ",
-    "You declined": "ທ່ານປະຕິເສດ",
     "Home": "ໜ້າຫຼັກ",
     "Ok": "ຕົກລົງ",
     "Your homeserver has exceeded one of its resource limits.": "homeserver ຂອງທ່ານເກີນຂີດຈຳກັດຊັບພະຍາກອນແລ້ວ.",
@@ -690,36 +645,6 @@
     "Tuesday": "ວັນອັງຄານ",
     "Monday": "ວັນຈັນ",
     "Sunday": "ວັນອາທິດ",
-    "The call is in an unknown state!": "ການໂທຢູ່ໃນສະຖານະທີ່ບໍ່ຮູ້ຈັກ!",
-    "Missed call": "ສາຍບໍ່ໄດ້ຮັບ",
-    "Unknown failure: %(reason)s": "ຄວາມບໍ່ສຳເລັດ: %(reason)s",
-    "An unknown error occurred": "ເກີດຄວາມຜິດພາດທີ່ບໍ່ຮູ້ຈັກຂຶ້ນ",
-    "Their device couldn't start the camera or microphone": "ອຸປະກອນຂອງເຂົາເຈົ້າບໍ່ສາມາດເລີ່ມກ້ອງຖ່າຍຮູບ ຫຼື ໄມໂຄຣໂຟນໄດ້",
-    "Connection failed": "ການເຊື່ອມຕໍ່ບໍ່ສຳເລັດ",
-    "Could not connect media": "ບໍ່ສາມາດເຊື່ອມຕໍ່ສື່ໄດ້",
-    "No answer": "ບໍ່ມີຄໍາຕອບ",
-    "Call back": "ໂທກັບ",
-    "Call declined": "ປະຕິເສດການໂທ",
-    "You cancelled verification.": "ທ່ານໄດ້ຍົກເລີກການຢັ້ງຢືນແລ້ວ.",
-    "%(displayName)s cancelled verification.": "%(displayName)s ຍົກເລີກການຢັ້ງຢືນ.",
-    "You cancelled verification on your other device.": "ທ່ານໄດ້ຍົກເລີກການຢັ້ງຢືນໃນອຸປະກອນອື່ນຂອງທ່ານ.",
-    "Verification timed out.": "ການຢັ້ງຢືນໝົດເວລາ.",
-    "Start verification again from their profile.": "ເລີ່ມການຢັ້ງຢືນອີກຄັ້ງຈາກໂປຣໄຟລ໌ຂອງເຂົາເຈົ້າ.",
-    "Start verification again from the notification.": "ເລີ່ມການຢັ້ງຢືນອີກຄັ້ງຈາກການແຈ້ງເຕືອນ.",
-    "You've successfully verified %(displayName)s!": "ທ່ານໄດ້ຢືນຢັນສຳເລັດແລ້ວ %(displayName)s!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "ທ່ານໄດ້ຢືນຢັນສຳເລັດແລ້ວ %(deviceName)s (%(deviceId)s)!",
-    "You've successfully verified your device!": "ທ່ານໄດ້ຢັ້ງຢືນອຸປະກອນຂອງທ່ານສຳເລັດແລ້ວ!",
-    "In encrypted rooms, verify all users to ensure it's secure.": "ໃນຫ້ອງທີ່ເຂົ້າລະຫັດໄວ້, ໃຫ້ກວດສອບຜູ້ໃຊ້ທັງໝົດເພື່ອຮັບປະກັນວ່າປອດໄພ.",
-    "Verify all users in a room to ensure it's secure.": "ຢັ້ງຢືນຜູ້ໃຊ້ທັງໝົດຢູ່ໃນຫ້ອງເພື່ອຮັບປະກັນວ່າມີຄວາມປອດໄພ.",
-    "Almost there! Is %(displayName)s showing the same shield?": "ໃກ້ສຳເລັດແລ້ວ! %(displayName)s ສະແດງການປ້ອງກັນແບບດຽວກັນບໍ?",
-    "Almost there! Is your other device showing the same shield?": "ເກືອບສຳເລັດແລ້ວ! ອຸປະກອນອື່ນຂອງທ່ານສະແດງການປ້ອງກັນຄືກັນບໍ?",
-    "Verify by emoji": "ຢືນຢັນໂດຍ emoji",
-    "Verify by comparing unique emoji.": "ຢັ້ງຢືນໂດຍການປຽບທຽບ emoji ທີ່ເປັນເອກະລັກ.",
-    "If you can't scan the code above, verify by comparing unique emoji.": "ຖ້າທ່ານບໍ່ສາມາດສະແກນລະຫັດຂ້າງເທິງໄດ້, ໃຫ້ກວດສອບໂດຍການປຽບທຽບອີໂມຈິທີ່ເປັນເອກະລັກ.",
-    "Ask %(displayName)s to scan your code:": "ໃຫ້ %(displayName)s ສະແກນລະຫັດຂອງທ່ານ:",
-    "Verify by scanning": "ຢືນຢັນໂດຍການສະແກນ",
-    "Edit devices": "ແກ້ໄຂອຸປະກອນ",
-    "This client does not support end-to-end encryption.": "ລູກຄ້ານີ້ບໍ່ຮອງຮັບການເຂົ້າລະຫັດແບບຕົ້ນທາງເຖິງປາຍທາງ.",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "ການລຶບລ້າງຂໍ້ມູນທັງໝົດຈາກລະບົບນີ້ຖາວອນ. ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດຈະສູນເສຍເວັ້ນເສຍແຕ່ກະແຈຂອງເຂົາເຈົ້າໄດ້ຮັບການສໍາຮອງຂໍ້ມູນ.",
     "%(duration)sd": "%(duration)sd",
     "unknown error code": "ລະຫັດຜິດພາດທີ່ບໍ່ຮູ້ຈັກ",
@@ -793,18 +718,6 @@
     "Lion": "ຊ້າງ",
     "Cat": "ແມວ",
     "Dog": "ໝາ",
-    "Error processing audio message": "ການປະມວນຜົນຂໍ້ຄວາມສຽງຜິດພາດ",
-    "Pick a date to jump to": "ເລືອກວັນທີເພື່ອໄປຫາ",
-    "Message pending moderation": "ຂໍ້ຄວາມທີ່ລໍຖ້າການກວດກາ",
-    "Message pending moderation: %(reason)s": "ຂໍ້ຄວາມທີ່ລໍຖ້າການກວດກາ: %(reason)s",
-    "The encryption used by this room isn't supported.": "ບໍ່ຮອງຮັບການເຂົ້າລະຫັດທີ່ໃຊ້ໂດຍຫ້ອງນີ້.",
-    "Encryption not enabled": "ບໍ່ໄດ້ເປີດໃຊ້ການເຂົ້າລະຫັດ",
-    "Ignored attempt to disable encryption": "ປະຕິເສດຄວາມພະຍາຍາມປິດການເຂົ້າລະຫັດ",
-    "Some encryption parameters have been changed.": "ບາງຕົວກໍານົດການເຂົ້າລະຫັດໄດ້ຖືກປ່ຽນແປງ.",
-    "Decrypting": "ການຖອດລະຫັດ",
-    "Downloading": "ກຳລັງດາວໂຫຼດ",
-    "Jump to date": "ໄປຫາວັນທີ",
-    "The beginning of the room": "ຈຸດເລີ່ມຕົ້ນຂອງຫ້ອງ",
     "Yesterday": "ມື້ວານນີ້",
     "Today": "ມື້ນີ້",
     "Saturday": "ວັນເສົາ",
@@ -1153,7 +1066,9 @@
         "new_room": "ຫ້ອງໃຫມ່",
         "new_video_room": "ຫ້ອງວິດີໂອໃຫມ່",
         "add_existing_room": "ເພີ່ມຫ້ອງທີ່ມີຢູ່",
-        "explore_public_rooms": "ສຳຫຼວດຫ້ອງສາທາລະນະ"
+        "explore_public_rooms": "ສຳຫຼວດຫ້ອງສາທາລະນະ",
+        "reply_in_thread": "ຕອບໃນກະທູ້",
+        "click": "ກົດ"
     },
     "a11y": {
         "user_menu": "ເມນູຜູ້ໃຊ້",
@@ -1838,7 +1753,17 @@
             "voice_call": "%(senderName)s ໂທອອກ.",
             "voice_call_unsupported": "%(senderName)s ການໂທດ້ວຍສຽງ. (ບຣາວເຊີນີ້ບໍ່ຮອງຮັບ)",
             "video_call": "%(senderName)s ໂທດ້ວຍວິດີໂອ.",
-            "video_call_unsupported": "%(senderName)s ໄດ້ໂທດ້ວຍວິດີໂອ. (ບຣາວເຊີນີ້ບໍ່ຮອງຮັບ)"
+            "video_call_unsupported": "%(senderName)s ໄດ້ໂທດ້ວຍວິດີໂອ. (ບຣາວເຊີນີ້ບໍ່ຮອງຮັບ)",
+            "declined": "ປະຕິເສດການໂທ",
+            "call_back_prompt": "ໂທກັບ",
+            "missed_call": "ສາຍບໍ່ໄດ້ຮັບ",
+            "no_answer": "ບໍ່ມີຄໍາຕອບ",
+            "failed_connect_media": "ບໍ່ສາມາດເຊື່ອມຕໍ່ສື່ໄດ້",
+            "failed_connection": "ການເຊື່ອມຕໍ່ບໍ່ສຳເລັດ",
+            "failed_opponent_media": "ອຸປະກອນຂອງເຂົາເຈົ້າບໍ່ສາມາດເລີ່ມກ້ອງຖ່າຍຮູບ ຫຼື ໄມໂຄຣໂຟນໄດ້",
+            "unknown_error": "ເກີດຄວາມຜິດພາດທີ່ບໍ່ຮູ້ຈັກຂຶ້ນ",
+            "unknown_failure": "ຄວາມບໍ່ສຳເລັດ: %(reason)s",
+            "unknown_state": "ການໂທຢູ່ໃນສະຖານະທີ່ບໍ່ຮູ້ຈັກ!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s ຍອມຮັບຄຳເຊີນສຳລັບ %(displayName)s",
@@ -1888,7 +1813,6 @@
             "forbidden": "%(senderDisplayName)s ໄດ້ປ້ອງກັນບໍ່ໃຫ້ແຂກເຂົ້າຮ່ວມຫ້ອງ.",
             "unknown": "%(senderDisplayName)s ໄດ້ປ່ຽນການເຂົ້າເຖິງຂອງແຂກເປັນ %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s ສົ່ງຮູບ.",
         "m.sticker": "%(senderDisplayName)s ສົ່ງສະຕິກເກີ.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s ຕັ້ງ ACL ຂອງເຊີບເວີສໍາລັບຫ້ອງນີ້.",
@@ -1932,7 +1856,12 @@
         "m.widget": {
             "modified": "ວິດເຈັດ %(widgetName)s ດັດແກ້ໂດຍ %(senderName)s",
             "added": "%(widgetName)s ວິດ widget ເພີ່ມໂດຍ %(senderName)s",
-            "removed": "%(widgetName)s ຖືກລຶບອອກໂດຍ %(senderName)s"
+            "removed": "%(widgetName)s ຖືກລຶບອອກໂດຍ %(senderName)s",
+            "jitsi_join_top_prompt": "ເຂົ້າຮ່ວມກອງປະຊຸມຢູ່ເທິງສຸດຂອງຫ້ອງນີ້",
+            "jitsi_join_right_prompt": "ເຂົ້າຮ່ວມກອງປະຊຸມຈາກບັດຂໍ້ມູນຫ້ອງຢູ່ເບື້ອງຂວາ",
+            "jitsi_ended": "ກອງປະຊຸມວິດີໂອໄດ້ສິ້ນສຸດລົງໂດຍ %(senderName)s",
+            "jitsi_updated": "ວິດີໂອກອງປະຊຸມປັບປຸງໂດຍ %(senderName)s",
+            "jitsi_started": "ກອງປະຊຸມວິດີໂອເລີ່ມຕົ້ນໂດຍ %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s ໄດ້ອັບເດດຮູບແບບຫ້ອງແລ້ວ",
         "m.location": {
@@ -1943,7 +1872,6 @@
         "self_redaction": "ຂໍ້ຄວາມຖືກລຶບແລ້ວ",
         "redaction": "ຂໍ້ຄວາມຖືກລຶບໂດຍ %(name)s",
         "m.poll.start": "%(senderName)s ໄດ້ເລີ່ມສຳຫຼວດ - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)sໄດ້ສິ້ນສຸດການສໍາຫຼວດ",
         "typing_indicator": {
             "one_user": "%(displayName)s ກຳລັງພິມ…",
             "two_users": "%(names)s ແລະ %(lastPerson)s ກຳລັງພິມ…",
@@ -2107,7 +2035,8 @@
             "changed_rule_users": "%(senderName)s ໄດ້ປ່ຽນກົດລະບຽບທີ່ຫ້າມຜູ້ໃຊ້ທີ່ຈັບຄູ່ກັນ%(oldGlob)s ເປັນການຈັບຄູ່%(newGlob)s ສໍາລັບ %(reason)s",
             "changed_rule_rooms": "%(senderName)s ໄດ້ປ່ຽນກົດລະບຽບທີ່ຫ້າມການຈັບຄູ່ຫ້ອງ %(oldGlob)s ເປັນການຈັບຄູ່ %(newGlob)s ສໍາລັບ %(reason)s",
             "changed_rule_servers": "%(senderName)s ໄດ້ປ່ຽນກົດລະບຽບທີ່ຫ້າມເຊີບເວີຈັບຄູ່ກັນ %(oldGlob)s ເປັນການຈັບຄູ່%(newGlob)s ສໍາລັບ %(reason)s",
-            "changed_rule_glob": "%(senderName)s ອັບເດດກົດລະບຽບການຫ້າມຈັບຄູ່ກັນ %(oldGlob)s ການຈັບຄູ່ກັນ%(newGlob)s ສໍາລັບ %(reason)s"
+            "changed_rule_glob": "%(senderName)s ອັບເດດກົດລະບຽບການຫ້າມຈັບຄູ່ກັນ %(oldGlob)s ການຈັບຄູ່ກັນ%(newGlob)s ສໍາລັບ %(reason)s",
+            "message_hidden": "ທ່ານໄດ້ບໍ່ສົນໃຈຜູ້ໃຊ້ນີ້, ດັ່ງນັ້ນຂໍ້ຄວາມຂອງພວກເຂົາຖືກເຊື່ອງໄວ້. <a>ສະແດງຕໍ່ໄປ.</a>"
         },
         "no_permission_messages_before_invite": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເບິ່ງຂໍ້ຄວາມ ກ່ອນທີ່ທ່ານໄດ້ຖືກເຊີນ.",
         "no_permission_messages_before_join": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເບິ່ງຂໍ້ຄວາມ ກ່ອນທີ່ທ່ານເຂົ້າຮ່ວມ.",
@@ -2152,18 +2081,63 @@
         "mab": {
             "label": "ການດຳເນີນການທາງຂໍ້ຄວາມ",
             "view_in_room": "ເບິ່ງຢູ່ໃນຫ້ອງ",
-            "copy_link_thread": "ສຳເນົາລິ້ງໃສ່ກະທູ້"
+            "copy_link_thread": "ສຳເນົາລິ້ງໃສ່ກະທູ້",
+            "collapse_reply_chain": "ຫຍໍ້ວົງຢືມ",
+            "expand_reply_chain": "ຂະຫຍາຍວົງຢືມ"
         },
         "m.audio": {
             "unnamed_audio": "ສຽງບໍ່ມີຊື່",
-            "error_downloading_audio": "ເກີດຄວາມຜິດພາດໃນການດາວໂຫຼດສຽງ"
+            "error_downloading_audio": "ເກີດຄວາມຜິດພາດໃນການດາວໂຫຼດສຽງ",
+            "error_processing_audio": "ການປະມວນຜົນຂໍ້ຄວາມສຽງຜິດພາດ",
+            "error_processing_voice_message": "ການປະມວນຜົນຂໍ້ຄວາມສຽງຜິດພາດ"
         },
         "load_error": {
             "no_permission": "ພະຍາຍາມໂຫຼດຈຸດສະເພາະຢູ່ໃນທາມລາຍຂອງຫ້ອງນີ້, ແຕ່ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເບິ່ງຂໍ້ຄວາມທີ່ເປັນຄໍາຖາມ.",
             "unable_to_find": "ພະຍາຍາມໂຫຼດຈຸດສະເພາະໃນທາມລາຍຂອງຫ້ອງນີ້, ແຕ່ບໍ່ສາມາດຊອກຫາມັນໄດ້.",
             "title": "ໂຫຼດຕໍາແໜ່ງທາມລາຍບໍ່ສຳເລັດ"
         },
-        "error_no_renderer": "ເຫດການນີ້ບໍ່ສາມາດສະແດງໄດ້"
+        "error_no_renderer": "ເຫດການນີ້ບໍ່ສາມາດສະແດງໄດ້",
+        "download_action_downloading": "ກຳລັງດາວໂຫຼດ",
+        "download_action_decrypting": "ການຖອດລະຫັດ",
+        "m.room.encryption": {
+            "parameters_changed": "ບາງຕົວກໍານົດການເຂົ້າລະຫັດໄດ້ຖືກປ່ຽນແປງ.",
+            "disable_attempt": "ປະຕິເສດຄວາມພະຍາຍາມປິດການເຂົ້າລະຫັດ",
+            "disabled": "ບໍ່ໄດ້ເປີດໃຊ້ການເຂົ້າລະຫັດ",
+            "unsupported": "ບໍ່ຮອງຮັບການເຂົ້າລະຫັດທີ່ໃຊ້ໂດຍຫ້ອງນີ້."
+        },
+        "pending_moderation_reason": "ຂໍ້ຄວາມທີ່ລໍຖ້າການກວດກາ: %(reason)s",
+        "pending_moderation": "ຂໍ້ຄວາມທີ່ລໍຖ້າການກວດກາ",
+        "m.beacon_info": {
+            "view_live_location": "ເບິ່ງສະຖານທີ່ປັດຈຸບັນ"
+        },
+        "m.file": {
+            "download_label": "ດາວໂຫລດ %(text)s",
+            "error_decrypting": "ເກີດຄວາມຜິດພາດໃນການຖອດລະຫັດໄຟລ໌ຄັດຕິດ",
+            "decrypt_label": "ຖອດລະຫັດ %(text)s",
+            "error_invalid": "ໄຟລ໌ບໍ່ຖືກຕ້ອງ%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s ສົ່ງຮູບ.",
+            "error_decrypting": "ການຖອດລະຫັດຮູບພາບຜິດພາດ",
+            "show_image": "ສະແດງຮູບພາບ"
+        },
+        "m.key.verification.done": "ທ່ານໄດ້ຢັ້ງຢືນ %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "ທ່ານໄດ້ຍົກເລີກການຢືນຢັນ %(name)s",
+            "user_cancelled": "ຍົກເລີກການຢັ້ງຢືນ %(name)s"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "ທ່ານຍອມຮັບ",
+            "you_declined": "ທ່ານປະຕິເສດ",
+            "you_cancelled": "ທ່ານໄດ້ຍົກເລີກ",
+            "you_started": "ທ່ານໄດ້ສົ່ງຄໍາຮ້ອງຂໍການຢັ້ງຢືນ"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)sໄດ້ສິ້ນສຸດການສໍາຫຼວດ"
+        },
+        "m.video": {
+            "error_decrypting": "ການຖອດລະຫັດວິດີໂອຜິດພາດ"
+        }
     },
     "slash_command": {
         "spoiler": "ສົ່ງຂໍ້ຄວາມທີ່ກຳນົດເປັນ spoiler",
@@ -2594,7 +2568,25 @@
                 "reset_confirmation": "ຕັ້ງຄ່າຢືນຢັນກະແຈຄືນໃໝ່ບໍ?",
                 "skip_verification": "ຂ້າມການຢັ້ງຢືນດຽວນີ້"
             },
-            "accepting": "ກຳລັງຍອມຮັບ…"
+            "accepting": "ກຳລັງຍອມຮັບ…",
+            "scan_qr": "ຢືນຢັນໂດຍການສະແກນ",
+            "scan_qr_explainer": "ໃຫ້ %(displayName)s ສະແກນລະຫັດຂອງທ່ານ:",
+            "verify_emoji_prompt_qr": "ຖ້າທ່ານບໍ່ສາມາດສະແກນລະຫັດຂ້າງເທິງໄດ້, ໃຫ້ກວດສອບໂດຍການປຽບທຽບອີໂມຈິທີ່ເປັນເອກະລັກ.",
+            "verify_emoji_prompt": "ຢັ້ງຢືນໂດຍການປຽບທຽບ emoji ທີ່ເປັນເອກະລັກ.",
+            "verify_emoji": "ຢືນຢັນໂດຍ emoji",
+            "qr_reciprocate_same_shield_device": "ເກືອບສຳເລັດແລ້ວ! ອຸປະກອນອື່ນຂອງທ່ານສະແດງການປ້ອງກັນຄືກັນບໍ?",
+            "qr_reciprocate_same_shield_user": "ໃກ້ສຳເລັດແລ້ວ! %(displayName)s ສະແດງການປ້ອງກັນແບບດຽວກັນບໍ?",
+            "prompt_encrypted": "ຢັ້ງຢືນຜູ້ໃຊ້ທັງໝົດຢູ່ໃນຫ້ອງເພື່ອຮັບປະກັນວ່າມີຄວາມປອດໄພ.",
+            "prompt_unencrypted": "ໃນຫ້ອງທີ່ເຂົ້າລະຫັດໄວ້, ໃຫ້ກວດສອບຜູ້ໃຊ້ທັງໝົດເພື່ອຮັບປະກັນວ່າປອດໄພ.",
+            "successful_own_device": "ທ່ານໄດ້ຢັ້ງຢືນອຸປະກອນຂອງທ່ານສຳເລັດແລ້ວ!",
+            "successful_device": "ທ່ານໄດ້ຢືນຢັນສຳເລັດແລ້ວ %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "ທ່ານໄດ້ຢືນຢັນສຳເລັດແລ້ວ %(displayName)s!",
+            "prompt_self": "ເລີ່ມການຢັ້ງຢືນອີກຄັ້ງຈາກການແຈ້ງເຕືອນ.",
+            "prompt_user": "ເລີ່ມການຢັ້ງຢືນອີກຄັ້ງຈາກໂປຣໄຟລ໌ຂອງເຂົາເຈົ້າ.",
+            "timed_out": "ການຢັ້ງຢືນໝົດເວລາ.",
+            "cancelled_self": "ທ່ານໄດ້ຍົກເລີກການຢັ້ງຢືນໃນອຸປະກອນອື່ນຂອງທ່ານ.",
+            "cancelled_user": "%(displayName)s ຍົກເລີກການຢັ້ງຢືນ.",
+            "cancelled": "ທ່ານໄດ້ຍົກເລີກການຢັ້ງຢືນແລ້ວ."
         },
         "old_version_detected_title": "ກວດພົບຂໍ້ມູນການເຂົ້າລະຫັດລັບເກົ່າ",
         "old_version_detected_description": "ກວດພົບຂໍ້ມູນຈາກ%(brand)s ລຸ້ນເກົ່າກວ່າ. ອັນນີ້ຈະເຮັດໃຫ້ການເຂົ້າລະຫັດລັບແບບຕົ້ນທາງເຖິງປາຍທາງເຮັດວຽກຜິດປົກກະຕິໃນລຸ້ນເກົ່າ. ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດແບບຕົ້ນທາງເຖິງປາຍທາງທີ່ໄດ້ແລກປ່ຽນເມື່ອບໍ່ດົນມານີ້ ໃນຂະນະທີ່ໃຊ້ເວີຊັນເກົ່າອາດຈະບໍ່ສາມາດຖອດລະຫັດໄດ້ໃນລູ້ນນີ້. ນີ້ອາດຈະເຮັດໃຫ້ຂໍ້ຄວາມທີ່ແລກປ່ຽນກັບລູ້ນນີ້ບໍ່ສຳເລັດ. ຖ້າເຈົ້າປະສົບບັນຫາ, ໃຫ້ອອກຈາກລະບົບ ແລະ ກັບມາໃໝ່ອີກຄັ້ງ. ເພື່ອຮັກສາປະຫວັດຂໍ້ຄວາມ, ສົ່ງອອກ ແລະ ນໍາເຂົ້າລະຫັດຂອງທ່ານຄືນໃໝ່.",
@@ -2647,7 +2639,8 @@
         "cross_signing_user_normal": "ທ່ານຍັງບໍ່ໄດ້ຢືນຢັນຜູ້ໃຊ້ນີ້.",
         "cross_signing_room_warning": "ບາງຄົນກໍາລັງໃຊ້ເງື່ອນໄຂທີ່ບໍ່ຮູ້ຈັກ",
         "cross_signing_room_verified": "ທຸກຄົນຢູ່ໃນຫ້ອງນີ້ໄດ້ຮັບການຢັ້ງຢືນແລ້ວ",
-        "cross_signing_room_normal": "ຫ້ອງນີ້ຖືກເຂົ້າລະຫັດແບບຕົ້ນທາງ-ເຖິງປາຍທາງ"
+        "cross_signing_room_normal": "ຫ້ອງນີ້ຖືກເຂົ້າລະຫັດແບບຕົ້ນທາງ-ເຖິງປາຍທາງ",
+        "unsupported": "ລູກຄ້ານີ້ບໍ່ຮອງຮັບການເຂົ້າລະຫັດແບບຕົ້ນທາງເຖິງປາຍທາງ."
     },
     "emoji": {
         "category_frequently_used": "ໃຊ້ເປັນປະຈຳ",
@@ -3057,7 +3050,8 @@
         "empty_explainer": "ກະທູ້ຊ່ວຍໃຫ້ການສົນທະນາຂອງທ່ານຢູ່ໃນຫົວຂໍ້ ແລະ ງ່າຍຕໍ່ການຕິດຕາມ.",
         "empty_tip": "<b>ເຄັດລັບ:</b> ໃຊ້ “%(replyInThread)s” ເມື່ອເລື່ອນໃສ່ຂໍ້ຄວາມ.",
         "empty_heading": "ຮັກສາການສົນທະນາທີ່ມີການຈັດລະບຽບ",
-        "open_thread": "ເປີດກະທູ້"
+        "open_thread": "ເປີດກະທູ້",
+        "error_start_thread_existing_relation": "ບໍ່ສາມາດສ້າງກະທູ້ຈາກເຫດການທີ່ມີຄວາມສໍາພັນທີ່ມີຢູ່ແລ້ວ"
     },
     "theme": {
         "light_high_contrast": "ແສງສະຫວ່າງຄວາມຄົມຊັດສູງ",
@@ -3317,7 +3311,10 @@
         "jump_to_bottom_button": "ເລື່ອນໄປຫາຂໍ້ຄວາມຫຼ້າສຸດ",
         "jump_read_marker": "ຂ້າມໄປຫາຂໍ້ຄວາມທຳອິດທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
         "inviter_unknown": "ບໍ່ຮູ້ຈັກ",
-        "failed_reject_invite": "ປະຕິເສດຄຳເຊີນບໍ່ສຳເລັດ"
+        "failed_reject_invite": "ປະຕິເສດຄຳເຊີນບໍ່ສຳເລັດ",
+        "jump_to_date_beginning": "ຈຸດເລີ່ມຕົ້ນຂອງຫ້ອງ",
+        "jump_to_date": "ໄປຫາວັນທີ",
+        "jump_to_date_prompt": "ເລືອກວັນທີເພື່ອໄປຫາ"
     },
     "file_panel": {
         "guest_note": "ທ່ານຕ້ອງ <a>ລົງທະບຽນ</a> ເພື່ອໃຊ້ຟັງຊັນນີ້",
@@ -3359,7 +3356,21 @@
         "options_placeholder": "ຂຽນຕົວເລືອກ",
         "options_add_button": "ເພີ່ມຕົວເລືອກ",
         "disclosed_notes": "ຜູ້ລົງຄະແນນເຫັນຜົນທັນທີທີ່ເຂົາເຈົ້າໄດ້ລົງຄະແນນສຽງ",
-        "notes": "ຜົນໄດ້ຮັບຈະຖືກເປີດເຜີຍເມື່ອທ່ານສິ້ນສຸດແບບສຳຫຼວດເທົ່ານັ້ນ"
+        "notes": "ຜົນໄດ້ຮັບຈະຖືກເປີດເຜີຍເມື່ອທ່ານສິ້ນສຸດແບບສຳຫຼວດເທົ່ານັ້ນ",
+        "unable_edit_title": "ບໍ່ສາມາດແກ້ໄຂແບບສຳຫຼວດໄດ້",
+        "unable_edit_description": "ຂໍອະໄພ, ທ່ານບໍ່ສາມາດແກ້ໄຂແບບສຳຫຼວດໄດ້ຫຼັງຈາກລົງຄະແນນສຽງແລ້ວ.",
+        "error_voting_title": "ລົງຄະແນນສຽງບໍ່ໄດ້ລົງທະບຽນ",
+        "error_voting_description": "ຂໍອະໄພ, ການລົງຄະແນນສຽງຂອງທ່ານບໍ່ໄດ້ລົງທະບຽນ. ກະລຸນາລອງອີກຄັ້ງ.",
+        "total_not_ended": "ຜົນໄດ້ຮັບຈະເຫັນໄດ້ເມື່ອການສໍາຫຼວດສິ້ນສຸດລົງ",
+        "total_no_votes": "ບໍ່ມີການລົງຄະແນນສຽງ",
+        "total_n_votes": {
+            "one": "%(count)s ລົງຄະແນນສຽງ. ລົງຄະແນນສຽງເພື່ອເບິ່ງຜົນໄດ້ຮັບ",
+            "other": "%(count)s ລົງຄະແນນສຽງ. ລົງຄະແນນສຽງເພື່ອເບິ່ງຜົນໄດ້ຮັບ"
+        },
+        "total_n_votes_voted": {
+            "one": "ອີງຕາມການລົງຄະແນນສຽງ %(count)s",
+            "other": "ອີງຕາມ %(count)s ການລົງຄະເເນນສຽງ"
+        }
     },
     "failed_load_async_component": "ບໍ່ສາມາດໂຫຼດໄດ້! ກະລຸນາກວດເບິ່ງການເຊື່ອມຕໍ່ເຄືອຂ່າຍຂອງທ່ານ ແລະ ລອງໃໝ່ອີກຄັ້ງ.",
     "upload_failed_generic": "ໄຟລ໌ '%(fileName)s' ບໍ່ສາມາດອັບໂຫລດໄດ້.",
@@ -3556,7 +3567,8 @@
         "deactivate_confirm_description": "ການປິດໃຊ້ງານຜູ້ໃຊ້ນີ້ຈະອອກຈາກລະບົບ ແລະປ້ອງກັນບໍ່ໃຫ້ເຂົາເຈົ້າເຂົ້າສູ່ລະບົບຄືນອີກ. ນອກຈາກນັ້ນ, ເຂົາເຈົ້າຈະອອກຈາກຫ້ອງທັງໝົດທີ່ເຂົາເຈົ້າຢູ່ໃນ. ຄຳສັ່ງນີ້ບໍ່ສາມາດຍົກເລີກໄດ້. ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການປິດກາໃຊ້ງານຜູ້ໃຊ້ນີ້?",
         "deactivate_confirm_action": "ປິດໃຊ້ງານຜູ້ໃຊ້",
         "error_deactivate": "ປິດໃຊ້ງານຜູ້ໃຊ້ບໍ່ສຳເລັດ",
-        "role_label": "ບົດບາດໃນ <RoomName />"
+        "role_label": "ບົດບາດໃນ <RoomName />",
+        "edit_own_devices": "ແກ້ໄຂອຸປະກອນ"
     },
     "stickers": {
         "empty": "ທ່ານບໍ່ໄດ້ເປີດໃຊ້ສະຕິກເກີແພັກເກັດໃນປັດຈຸບັນ",
@@ -3581,7 +3593,13 @@
         "pinned_messages_button": "ໄດ້ປັກໝຸດ",
         "export_chat_button": "ສົ່ງການສົນທະນາອອກ",
         "share_button": "ແບ່ງປັນຫ້ອງ",
-        "settings_button": "ການຕັ້ງຄ່າຫ້ອງ"
+        "settings_button": "ການຕັ້ງຄ່າຫ້ອງ",
+        "poll": {
+            "final_result": {
+                "one": "ຜົນສຸດທ້າຍໂດຍອີງໃສ່ %(count)s ຄະແນນສຽງ",
+                "other": "ຜົນສຸດທ້າຍໂດຍອີງໃສ່ %(count)s ຄະແນນສຽງ"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "ປະຕິເສດຄຳເຊີນ",

@@ -44,12 +44,6 @@
     },
     "Join Room": "Присъединяване към стаята",
     "not specified": "неопределен",
-    "Error decrypting attachment": "Грешка при разшифроване на прикачен файл",
-    "Decrypt %(text)s": "Разшифровай %(text)s",
-    "Download %(text)s": "Изтегли %(text)s",
-    "Invalid file%(extra)s": "Невалиден файл%(extra)s",
-    "Error decrypting image": "Грешка при разшифроване на снимка",
-    "Error decrypting video": "Грешка при разшифроване на видео",
     "Add an Integration": "Добавяне на интеграция",
     "Email address": "Имейл адрес",
     "Delete Widget": "Изтриване на приспособление",
@@ -246,24 +240,15 @@
     },
     "e.g. my-room": "например my-room",
     "Close dialog": "Затвори прозореца",
-    "This client does not support end-to-end encryption.": "Този клиент не поддържа шифроване от край до край.",
-    "Show image": "Покажи снимката",
     "Cancel search": "Отмени търсенето",
-    "You verified %(name)s": "Потвърдихте %(name)s",
-    "You cancelled verifying %(name)s": "Отказахте потвърждаването за %(name)s",
-    "%(name)s cancelled verifying": "%(name)s отказа потвърждаването",
-    "You accepted": "Приехте",
     "%(name)s accepted": "%(name)s прие",
-    "You cancelled": "Отказахте потвърждаването",
     "%(name)s cancelled": "%(name)s отказа",
     "%(name)s wants to verify": "%(name)s иска да извърши потвърждение",
-    "You sent a verification request": "Изпратихте заявка за потвърждение",
     "Failed to connect to integration manager": "Неуспешна връзка с мениджъра на интеграции",
     "%(count)s verified sessions": {
         "other": "%(count)s потвърдени сесии",
         "one": "1 потвърдена сесия"
     },
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Игнорирали сте този потребител, така че съобщението им е скрито. <a>Покажи така или иначе.</a>",
     "Language Dropdown": "Падащо меню за избор на език",
     "Integrations are disabled": "Интеграциите са изключени",
     "Integrations not allowed": "Интеграциите не са разрешени",
@@ -288,23 +273,6 @@
         "other": "%(count)s сесии",
         "one": "%(count)s сесия"
     },
-    "Verify by scanning": "Верифицирай чрез сканиране",
-    "Ask %(displayName)s to scan your code:": "Попитайте %(displayName)s да сканира вашия код:",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Ако не можете да сканирате кода по-горе, верифицирайте сравнявайки уникални емоджита.",
-    "Verify by comparing unique emoji.": "Верифицирай чрез сравняване на уникални емоджита.",
-    "Verify by emoji": "Верифицирай чрез емоджи",
-    "Almost there! Is %(displayName)s showing the same shield?": "Почти е готово! Сесията %(displayName)s показва ли същия щит?",
-    "Verify all users in a room to ensure it's secure.": "Верифицирай всички потребители в стаята за да подсигурите безопасността.",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Успешно верифицирахте %(deviceName)s (%(deviceId)s)!",
-    "You've successfully verified %(displayName)s!": "Успешно верифицирахте %(displayName)s!",
-    "Start verification again from the notification.": "Започнете верифициране отново от уведомлението.",
-    "Start verification again from their profile.": "Започнете верифициране отново от профила им.",
-    "Verification timed out.": "Изтече времето за верификация.",
-    "%(displayName)s cancelled verification.": "%(displayName)s отказа верификацията.",
-    "You cancelled verification.": "Отказахте верификацията.",
-    "Encryption not enabled": "Шифроването не е включено",
-    "The encryption used by this room isn't supported.": "Шифроването използвано от тази стая не се поддържа.",
-    "You declined": "Отказахте",
     "%(name)s declined": "%(name)s отказа",
     "Can't load this message": "Съобщението не може да се зареди",
     "Submit logs": "Изпрати логове",
@@ -338,7 +306,6 @@
     "We couldn't invite those users. Please check the users you want to invite and try again.": "Не можахме да поканим тези потребители. Проверете потребителите, които искате да поканите и опитайте пак.",
     "Recently Direct Messaged": "Скорошни директни чатове",
     "IRC display name width": "Ширина на IRC името",
-    "You've successfully verified your device!": "Успешно потвърдихте устройството си!",
     "To continue, use Single Sign On to prove your identity.": "За да продължите, използвайте Single Sign On за да потвърдите самоличността си.",
     "Confirm to continue": "Потвърдете за да продължите",
     "Click the button below to confirm your identity.": "Кликнете бутона по-долу за да потвърдите самоличността си.",
@@ -404,12 +371,6 @@
     "Use the <a>Desktop app</a> to see all encrypted files": "Използвайте <a>Desktop приложението</a> за да видите всички шифровани файлове",
     "Click to view edits": "Кликнете за да видите редакциите",
     "Edited at %(date)s": "Редактирано на %(date)s",
-    "Video conference started by %(senderName)s": "Видео конференцията беше стартирана от %(senderName)s",
-    "Video conference updated by %(senderName)s": "Видео конференцията беше обновена от %(senderName)s",
-    "Video conference ended by %(senderName)s": "Видео конференцията беше прекратена от %(senderName)s",
-    "Join the conference from the room information card on the right": "Присъединете се към конференцията от информацията за стаята в дясно",
-    "Join the conference at the top of this room": "Присъединете се към конференцията в горната част на стаята",
-    "Ignored attempt to disable encryption": "Опитът за изключване на шифроването беше игнориран",
     "Not encrypted": "Не е шифровано",
     "Backup version:": "Версия на резервното копие:",
     "Anguilla": "Ангила",
@@ -1265,7 +1226,6 @@
             "forbidden": "%(senderDisplayName)s спря достъпа на гости за влизане в стаята.",
             "unknown": "%(senderDisplayName)s промени правилото за достъп на гости на %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s изпрати снимка.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s зададе ACLs на сървър за тази стая.",
             "changed": "%(senderDisplayName)s промени сървърните разрешения за контрол на достъпа до тази стая.",
@@ -1303,7 +1263,12 @@
         "m.widget": {
             "modified": "Приспособлението %(widgetName)s беше променено от %(senderName)s",
             "added": "Приспособлението %(widgetName)s беше добавено от %(senderName)s",
-            "removed": "Приспособлението %(widgetName)s беше премахнато от %(senderName)s"
+            "removed": "Приспособлението %(widgetName)s беше премахнато от %(senderName)s",
+            "jitsi_join_top_prompt": "Присъединете се към конференцията в горната част на стаята",
+            "jitsi_join_right_prompt": "Присъединете се към конференцията от информацията за стаята в дясно",
+            "jitsi_ended": "Видео конференцията беше прекратена от %(senderName)s",
+            "jitsi_updated": "Видео конференцията беше обновена от %(senderName)s",
+            "jitsi_started": "Видео конференцията беше стартирана от %(senderName)s"
         },
         "self_redaction": "Съобщението беше изтрито",
         "redaction": "Съобщението беше изтрито от %(name)s",
@@ -1430,7 +1395,8 @@
             "changed_rule_users": "%(senderName)s промени правило блокиращо достъпа на потребители отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
             "changed_rule_rooms": "%(senderName)s промени правило блокиращо достъпа до стаи отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
             "changed_rule_servers": "%(senderName)s промени правило блокиращо достъпа до сървъри отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
-            "changed_rule_glob": "%(senderName)s промени правило блокиращо достъпа до неща отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s"
+            "changed_rule_glob": "%(senderName)s промени правило блокиращо достъпа до неща отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
+            "message_hidden": "Игнорирали сте този потребител, така че съобщението им е скрито. <a>Покажи така или иначе.</a>"
         },
         "redacted": {
             "tooltip": "Съобщението изтрито на %(date)s"
@@ -1463,7 +1429,37 @@
             "unable_to_find": "Беше направен опит да се зареди конкретна точка в хронологията на тази стая, но не я намери.",
             "title": "Неуспешно зареждане на позицията в хронологията"
         },
-        "error_no_renderer": "Това събитие не може да бъде показано"
+        "error_no_renderer": "Това събитие не може да бъде показано",
+        "m.room.encryption": {
+            "disable_attempt": "Опитът за изключване на шифроването беше игнориран",
+            "disabled": "Шифроването не е включено",
+            "unsupported": "Шифроването използвано от тази стая не се поддържа."
+        },
+        "m.file": {
+            "download_label": "Изтегли %(text)s",
+            "error_decrypting": "Грешка при разшифроване на прикачен файл",
+            "decrypt_label": "Разшифровай %(text)s",
+            "error_invalid": "Невалиден файл%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s изпрати снимка.",
+            "error_decrypting": "Грешка при разшифроване на снимка",
+            "show_image": "Покажи снимката"
+        },
+        "m.key.verification.done": "Потвърдихте %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Отказахте потвърждаването за %(name)s",
+            "user_cancelled": "%(name)s отказа потвърждаването"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Приехте",
+            "you_declined": "Отказахте",
+            "you_cancelled": "Отказахте потвърждаването",
+            "you_started": "Изпратихте заявка за потвърждение"
+        },
+        "m.video": {
+            "error_decrypting": "Грешка при разшифроване на видео"
+        }
     },
     "slash_command": {
         "spoiler": "Изпраща даденото съобщение като спойлер",
@@ -1734,7 +1730,22 @@
             "request_toast_detail": "%(deviceId)s от %(ip)s",
             "waiting_for_user_accept": "Изчаква се %(displayName)s да приеме…",
             "start_button": "Започни верификация",
-            "accepting": "Приемане…"
+            "accepting": "Приемане…",
+            "scan_qr": "Верифицирай чрез сканиране",
+            "scan_qr_explainer": "Попитайте %(displayName)s да сканира вашия код:",
+            "verify_emoji_prompt_qr": "Ако не можете да сканирате кода по-горе, верифицирайте сравнявайки уникални емоджита.",
+            "verify_emoji_prompt": "Верифицирай чрез сравняване на уникални емоджита.",
+            "verify_emoji": "Верифицирай чрез емоджи",
+            "qr_reciprocate_same_shield_user": "Почти е готово! Сесията %(displayName)s показва ли същия щит?",
+            "prompt_encrypted": "Верифицирай всички потребители в стаята за да подсигурите безопасността.",
+            "successful_own_device": "Успешно потвърдихте устройството си!",
+            "successful_device": "Успешно верифицирахте %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "Успешно верифицирахте %(displayName)s!",
+            "prompt_self": "Започнете верифициране отново от уведомлението.",
+            "prompt_user": "Започнете верифициране отново от профила им.",
+            "timed_out": "Изтече времето за верификация.",
+            "cancelled_user": "%(displayName)s отказа верификацията.",
+            "cancelled": "Отказахте верификацията."
         },
         "old_version_detected_title": "Бяха открити стари криптографски данни",
         "old_version_detected_description": "Засечени са данни от по-стара версия на %(brand)s. Това ще доведе до неправилна работа на криптографията от край до край в по-старата версия. Шифрованите от край до край съобщения, които са били обменени наскоро (при използването на по-стара версия), може да не успеят да бъдат разшифровани в тази версия. Това също може да доведе до неуспех в обмяната на съобщения в тази версия. Ако имате проблеми, излезте и влезте отново в профила си. За да запазите историята на съобщенията, експортирайте и импортирайте отново Вашите ключове.",
@@ -1782,7 +1793,8 @@
         "cross_signing_user_normal": "Не сте верифицирали този потребител.",
         "cross_signing_room_warning": "Някой използва непозната сесия",
         "cross_signing_room_verified": "Всички в тази стая са верифицирани",
-        "cross_signing_room_normal": "Тази стая е шифрована от-край-до-край"
+        "cross_signing_room_normal": "Тази стая е шифрована от-край-до-край",
+        "unsupported": "Този клиент не поддържа шифроване от край до край."
     },
     "emoji": {
         "category_frequently_used": "Често използвани",

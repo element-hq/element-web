@@ -44,12 +44,6 @@
     "Join Room": "Приступи соби",
     "unknown error code": "непознати код грешке",
     "not specified": "није наведено",
-    "Error decrypting attachment": "Грешка при дешифровању прилога",
-    "Decrypt %(text)s": "Дешифруј %(text)s",
-    "Download %(text)s": "Преузми %(text)s",
-    "Invalid file%(extra)s": "Неисправна датотека %(extra)s",
-    "Error decrypting image": "Грешка при дешифровању слике",
-    "Error decrypting video": "Грешка при дешифровању видеа",
     "Add an Integration": "Додај уградњу",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Бићете пребачени на сајт треће стране да бисте се идентификовали са својим налогом зарад коришћења уградње %(integrationsUrl)s. Да ли желите да наставите?",
     "Email address": "Мејл адреса",
@@ -108,8 +102,6 @@
         "one": "1 потврђена сесија"
     },
     "Remove recent messages by %(user)s": "Уклони недавне поруке корисника %(user)s",
-    "Encryption not enabled": "Шифровање није омогућено",
-    "The encryption used by this room isn't supported.": "Начин шифровања унутар ове собе није подржан.",
     "Room Settings - %(roomName)s": "Подешавања собе - %(roomName)s",
     "Resend %(unsentCount)s reaction(s)": "Поново пошаљи укупно %(unsentCount)s реакција",
     "Light bulb": "сијалица",
@@ -806,7 +798,6 @@
             "forbidden": "%(senderDisplayName)s је спречио госте да се придруже у соби.",
             "unknown": "%(senderDisplayName)s је изменио гостински приступ на %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s је послао слику.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s је подесио ACL сервере за ову собу.",
             "changed": "%(senderDisplayName)s је променио ACL сервере за ову собу.",
@@ -977,7 +968,24 @@
             "unable_to_find": "Покушао сам да учитам одређену тачку у временској линији ове собе али нисам могао да је нађем.",
             "title": "Нисам могао да учитам позицију у временској линији"
         },
-        "error_no_renderer": "Овај догађај не може бити приказан"
+        "error_no_renderer": "Овај догађај не може бити приказан",
+        "m.room.encryption": {
+            "disabled": "Шифровање није омогућено",
+            "unsupported": "Начин шифровања унутар ове собе није подржан."
+        },
+        "m.file": {
+            "download_label": "Преузми %(text)s",
+            "error_decrypting": "Грешка при дешифровању прилога",
+            "decrypt_label": "Дешифруј %(text)s",
+            "error_invalid": "Неисправна датотека %(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s је послао слику.",
+            "error_decrypting": "Грешка при дешифровању слике"
+        },
+        "m.video": {
+            "error_decrypting": "Грешка при дешифровању видеа"
+        }
     },
     "slash_command": {
         "shrug": "Придодаје ¯\\_(ツ)_/¯ обичној поруци",

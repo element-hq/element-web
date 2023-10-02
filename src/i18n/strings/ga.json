@@ -301,7 +301,6 @@
     "Sign out and remove encryption keys?": "Sínigh amach agus scrios eochracha criptiúcháin?",
     "Clear Storage and Sign Out": "Scrios Stóras agus Sínigh Amach",
     "Are you sure you want to sign out?": "An bhfuil tú cinnte go dteastaíonn uait sínigh amach?",
-    "Decrypting": "Ag Díchriptiú",
     "Sent": "Seolta",
     "Sending": "Ag Seoladh",
     "Unnamed room": "Seomra gan ainm",
@@ -313,12 +312,7 @@
         "one": "(~%(count)s toradh)",
         "other": "(~%(count)s torthaí)"
     },
-    "No answer": "Gan freagair",
-    "Unknown failure: %(reason)s": "Teip anaithnid: %(reason)s",
-    "Error decrypting attachment": "Earráid le ceangaltán a dhíchriptiú",
     "Email address": "Seoladh ríomhphoist",
-    "Download %(text)s": "Íoslódáil %(text)s",
-    "Decrypt %(text)s": "Díchriptigh %(text)s",
     "Custom level": "Leibhéal saincheaptha",
     "common": {
         "about": "Faoi",
@@ -616,6 +610,16 @@
         },
         "load_error": {
             "title": "Níor lódáladh áit amlíne"
+        },
+        "download_action_decrypting": "Ag Díchriptiú",
+        "m.call.invite": {
+            "no_answer": "Gan freagair",
+            "unknown_failure": "Teip anaithnid: %(reason)s"
+        },
+        "m.file": {
+            "download_label": "Íoslódáil %(text)s",
+            "error_decrypting": "Earráid le ceangaltán a dhíchriptiú",
+            "decrypt_label": "Díchriptigh %(text)s"
         }
     },
     "slash_command": {

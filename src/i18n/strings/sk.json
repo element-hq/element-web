@@ -37,12 +37,6 @@
     "Join Room": "Vstúpiť do miestnosti",
     "unknown error code": "neznámy kód chyby",
     "not specified": "nezadané",
-    "Error decrypting attachment": "Chyba pri dešifrovaní prílohy",
-    "Decrypt %(text)s": "Dešifrovať %(text)s",
-    "Download %(text)s": "Stiahnuť %(text)s",
-    "Invalid file%(extra)s": "Neplatný súbor%(extra)s",
-    "Error decrypting image": "Chyba pri dešifrovaní obrázka",
-    "Error decrypting video": "Chyba pri dešifrovaní videa",
     "Add an Integration": "Pridať integráciu",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Budete presmerovaní na stránku tretej strany, aby ste mohli overiť svoj účet na použitie s %(integrationsUrl)s. Chcete pokračovať?",
     "Email address": "Emailová adresa",
@@ -214,9 +208,6 @@
     "Removing…": "Odstraňovanie…",
     "IRC display name width": "Šírka zobrazovaného mena IRC",
     "Lock": "Zámka",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Ak sa vám nepodarí naskenovať uvedený kód, overte pomocou porovnania jedinečných emotikonov.",
-    "Verify by comparing unique emoji.": "Overenie porovnaním jedinečnej kombinácie emotikonov.",
-    "Verify by emoji": "Overiť pomocou emotikonov",
     "This backup is trusted because it has been restored on this session": "Táto záloha je dôveryhodná, lebo už bola načítaná v tejto relácii",
     "Your homeserver has exceeded its user limit.": "Na vašom domovskom serveri bol prekročený limit počtu používateľov.",
     "Your homeserver has exceeded one of its resource limits.": "Na vašom domovskom serveri bol prekročený jeden z limitov systémových zdrojov.",
@@ -472,21 +463,15 @@
     "United States": "Spojené Štáty",
     "United Kingdom": "Spojené Kráľovstvo",
     "Encrypted by a deleted session": "Šifrované odstránenou reláciou",
-    "You cancelled": "Zrušili ste overenie",
-    "You cancelled verifying %(name)s": "Zrušili ste overenie používateľa %(name)s",
-    "You cancelled verification.": "Zrušili ste overenie.",
     "%(name)s wants to verify": "%(name)s chce overiť",
-    "Encryption not enabled": "Šifrovanie nie je zapnuté",
     "Search spaces": "Hľadať priestory",
     "Search for spaces": "Hľadať priestory",
-    "You sent a verification request": "Odoslali ste žiadosť o overenie",
     "Remove %(count)s messages": {
         "other": "Odstrániť %(count)s správ",
         "one": "Odstrániť 1 správu"
     },
     "Create a new space": "Vytvoriť nový priestor",
     "Create a space": "Vytvoriť priestor",
-    "Edit devices": "Upraviť zariadenia",
     "%(count)s verified sessions": {
         "one": "1 overená relácia",
         "other": "%(count)s overených relácií"
@@ -504,32 +489,20 @@
     "Private space (invite only)": "Súkromný priestor (len pre pozvaných)",
     "Some suggestions may be hidden for privacy.": "Niektoré návrhy môžu byť skryté kvôli ochrane súkromia.",
     "You're all caught up.": "Všetko ste už stihli.",
-    "In encrypted rooms, verify all users to ensure it's secure.": "V šifrovaných miestnostiach overte všetkých používateľov, aby ste zaistili ich bezpečnosť.",
-    "Verify all users in a room to ensure it's secure.": "Overte všetkých používateľov v miestnosti, aby ste sa uistili, že je zabezpečená.",
     "Allow this widget to verify your identity": "Umožniť tomuto widgetu overiť vašu totožnosť",
-    "Verify by scanning": "Overte naskenovaním",
-    "%(name)s cancelled verifying": "%(name)s zrušil/a overovanie",
     "Only do this if you have no other device to complete verification with.": "Urobte to len vtedy, ak nemáte iné zariadenie, pomocou ktorého by ste mohli dokončiť overenie.",
-    "Start verification again from their profile.": "Znova začnite overovanie z ich profilu.",
-    "Start verification again from the notification.": "Znova spustiť overovanie z oznámenia.",
-    "%(displayName)s cancelled verification.": "%(displayName)s zrušil/a overenie.",
-    "Verification timed out.": "Čas overovania vypršal.",
     "Server name": "Názov servera",
     "Your server": "Váš server",
     "%(name)s declined": "%(name)s odmietol/a",
-    "You declined": "Zamietli ste overenie",
     "Session key": "Kľúč relácie",
     "Session name": "Názov relácie",
     "Verification Request": "Žiadosť o overenie",
-    "Show image": "Zobraziť obrázok",
     "e.g. my-room": "napr. moja-miestnost",
     "Upload all": "Nahrať všetko",
     "Cancel All": "Zrušiť všetky",
     "Developer": "Vývojárske",
     "Experimental": "Experimentálne",
-    "Downloading": "Preberanie",
     "MB": "MB",
-    "Decrypting": "Dešifrovanie",
     "Sent": "Odoslané",
     "Sending": "Odosielanie",
     "Notes": "Poznámky",
@@ -548,7 +521,6 @@
     "Leave all rooms": "Opustiť všetky miestnosti",
     "Don't leave any rooms": "Neopustiť žiadne miestnosti",
     "Would you like to leave the rooms in this space?": "Chcete opustiť miestnosti v tomto priestore?",
-    "Error processing voice message": "Chyba pri spracovaní hlasovej správy",
     "Invited people will be able to read old messages.": "Pozvaní ľudia si budú môcť prečítať staré správy.",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Pozvite niekoho pomocou jeho mena, používateľského mena (napríklad <userId/>) alebo <a>zdieľate túto miestnosť</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Pozvite niekoho pomocou jeho mena, e-mailovej adresy, používateľského mena (napríklad <userId/>) alebo <a>zdieľajte túto miestnosť</a>.",
@@ -587,7 +559,6 @@
     "Cancelled signature upload": "Zrušené nahrávanie podpisu",
     "Integrations not allowed": "Integrácie nie sú povolené",
     "Integrations are disabled": "Integrácie sú zakázané",
-    "You verified %(name)s": "Overili ste používateľa %(name)s",
     "Clear all data": "Vymazať všetky údaje",
     "edited": "upravené",
     "Message edits": "Úpravy správy",
@@ -627,21 +598,14 @@
     "Leave %(spaceName)s": "Opustiť %(spaceName)s",
     "Preparing to download logs": "Príprava na prevzatie záznamov",
     "Failed to connect to integration manager": "Nepodarilo sa pripojiť k správcovi integrácie",
-    "You accepted": "Prijali ste",
     "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Ste jediným správcom niektorých miestností alebo priestorov, ktoré chcete opustiť. Ich opustenie ich ponechá bez administrátorov.",
     "You're the only admin of this space. Leaving it will mean no one has control over it.": "Ste jediným správcom tohto priestoru. Jeho opustenie bude znamenať, že nad ním nikto nebude mať kontrolu.",
     "Your firewall or anti-virus is blocking the request.": "Požiadavku blokuje váš firewall alebo antivírus.",
     "Your homeserver doesn't seem to support this feature.": "Zdá sa, že váš domovský server túto funkciu nepodporuje.",
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Pri tejto relácii ste už predtým použili novšiu verziu %(brand)s. Ak chcete túto verziu znovu používať s end-to-end šifrovaním, budete sa musieť odhlásiť a znova prihlásiť.",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Úspešne ste overili %(deviceName)s (%(deviceId)s)!",
-    "You've successfully verified %(displayName)s!": "Úspešne ste overili %(displayName)s!",
-    "You've successfully verified your device!": "Úspešne ste overili svoje zariadenie!",
     "You won't be able to rejoin unless you are re-invited.": "Nebudete sa môcť znova pripojiť, kým nebudete opätovne pozvaní.",
-    "Ask %(displayName)s to scan your code:": "Požiadajte %(displayName)s, aby naskenoval váš kód:",
     "Approve widget permissions": "Schváliť oprávnenia widgetu",
     "Anyone will be able to find and join this space, not just members of <SpaceName/>.": "Ktokoľvek bude môcť nájsť tento priestor a pripojiť sa k nemu, nielen členovia <SpaceName/>.",
-    "An unknown error occurred": "Vyskytla sa neznáma chyba",
-    "Almost there! Is %(displayName)s showing the same shield?": "Už je to takmer hotové! Zobrazuje sa %(displayName)s rovnaký štít?",
     "Add reaction": "Pridať reakciu",
     "Adding spaces has moved.": "Pridávanie priestorov bolo presunuté.",
     "Adding rooms... (%(progress)s out of %(count)s)": {
@@ -660,7 +624,6 @@
     "Remember my selection for this widget": "Zapamätať si môj výber pre tento widget",
     "Open in OpenStreetMap": "Otvoriť v OpenStreetMap",
     "Message preview": "Náhľad správy",
-    "Unknown failure: %(reason)s": "Neznáma chyba: %(reason)s",
     "Enter Security Key": "Zadajte bezpečnostný kľúč",
     "Enter Security Phrase": "Zadať bezpečnostnú frázu",
     "Incorrect Security Phrase": "Nesprávna bezpečnostná fráza",
@@ -674,10 +637,6 @@
         "one": "%(count)s odpoveď",
         "other": "%(count)s odpovedí"
     },
-    "Missed call": "Zmeškaný hovor",
-    "Call declined": "Hovor odmietnutý",
-    "Call back": "Zavolať späť",
-    "Connection failed": "Pripojenie zlyhalo",
     "Remember this": "Zapamätať si toto",
     "Dial pad": "Číselník",
     "Decline All": "Zamietnuť všetky",
@@ -720,7 +679,6 @@
     "Server did not require any authentication": "Server nevyžadoval žiadne overenie",
     "Upload completed": "Nahrávanie dokončené",
     "Enter a server name": "Zadajte názov servera",
-    "The encryption used by this room isn't supported.": "Šifrovanie používané v tejto miestnosti nie je podporované.",
     "Language Dropdown": "Rozbaľovací zoznam jazykov",
     "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Aktualizácia miestnosti je pokročilá akcia a zvyčajne sa odporúča, keď je miestnosť nestabilná kvôli chybám, chýbajúcim funkciám alebo bezpečnostným zraniteľnostiam.",
     "Be found by phone or email": "Byť nájdený pomocou telefónu alebo e-mailu",
@@ -731,21 +689,6 @@
         "one": "%(count)s hlas",
         "other": "%(count)s hlasov"
     },
-    "Based on %(count)s votes": {
-        "one": "Na základe %(count)s hlasu",
-        "other": "Na základe %(count)s hlasov"
-    },
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s odovzdaný hlas. Hlasujte a pozrite si výsledky",
-        "other": "%(count)s odovzdaných hlasov. Hlasujte a pozrite si výsledky"
-    },
-    "Final result based on %(count)s votes": {
-        "one": "Konečný výsledok na základe %(count)s hlasu",
-        "other": "Konečný výsledok na základe %(count)s hlasov"
-    },
-    "Sorry, your vote was not registered. Please try again.": "Je nám ľúto, váš hlas nebol zaregistrovaný. Skúste to prosím znova.",
-    "Vote not registered": "Hlasovanie nie je zaregistrované",
-    "No votes cast": "Žiadne odovzdané hlasy",
     "Thread options": "Možnosti vlákna",
     "Server Options": "Možnosti servera",
     "Themes": "Vzhľad",
@@ -770,8 +713,6 @@
     "Something went wrong trying to invite the users.": "Pri pokuse o pozvanie používateľov sa niečo pokazilo.",
     "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Nasledujúci používatelia nemusia existovať alebo sú neplatní a nemožno ich pozvať: %(csvNames)s",
     "Failed to find the following users": "Nepodarilo sa nájsť týchto používateľov",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Tohto používateľa ste ignorovali, takže jeho správa je skrytá. <a>Ukázať aj tak.</a>",
-    "This client does not support end-to-end encryption.": "Tento klient nepodporuje end-to-end šifrovanie.",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Pri veľkom množstve správ to môže trvať určitý čas. Medzitým prosím neobnovujte svojho klienta.",
     "No recent messages by %(user)s found": "Nenašli sa žiadne nedávne správy od používateľa %(user)s",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Na pozvanie e-mailom použite server identity. Vykonajte zmeny v <settings>Nastaveniach</settings>.",
@@ -784,14 +725,7 @@
     "Missing domain separator e.g. (:domain.org)": "Chýbajúci oddeľovač domény, napr. (:domena.sk)",
     "Missing room name or separator e.g. (my-room:domain.org)": "Chýbajúci názov miestnosti alebo oddeľovač, napr. (moja-miestnost:domena.sk)",
     "This address had invalid server or is already in use": "Táto adresa mala neplatný server alebo sa už používa",
-    "Almost there! Is your other device showing the same shield?": "Už je to takmer hotové! Zobrazuje vaše druhé zariadenie rovnaký štít?",
-    "You cancelled verification on your other device.": "Zrušili ste overovanie na vašom druhom zariadení.",
     "Could not fetch location": "Nepodarilo sa načítať polohu",
-    "Message pending moderation": "Správa čaká na moderovanie",
-    "The beginning of the room": "Začiatok miestnosti",
-    "Jump to date": "Prejsť na dátum",
-    "Pick a date to jump to": "Vyberte dátum, na ktorý chcete prejsť",
-    "Message pending moderation: %(reason)s": "Správa čaká na moderáciu: %(reason)s",
     "Missing session data": "Chýbajú údaje relácie",
     "Only people invited will be able to find and join this space.": "Tento priestor budú môcť nájsť a pripojiť sa k nemu len pozvaní ľudia.",
     "Want to add an existing space instead?": "Chcete radšej pridať už existujúci priestor?",
@@ -808,20 +742,11 @@
     "Use your Security Key to continue.": "Ak chcete pokračovať, použite bezpečnostný kľúč.",
     "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Ak všetko obnovíte, reštartujete bez dôveryhodných relácií, bez dôveryhodných používateľov a možno nebudete môcť vidieť predchádzajúce správy.",
     "The widget will verify your user ID, but won't be able to perform actions for you:": "Widget overí vaše ID používateľa, ale nebude môcť vykonávať akcie za vás:",
-    "Their device couldn't start the camera or microphone": "Ich zariadenie nemohlo spustiť kameru alebo mikrofón",
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Ak tak urobíte, upozorňujeme, že žiadna z vašich správ nebude vymazaná, ale vyhľadávanie môže byť na niekoľko okamihov zhoršené, kým sa index znovu vytvorí",
     "Reset event store": "Obnoviť úložisko udalostí",
     "You most likely do not want to reset your event index store": "S najväčšou pravdepodobnosťou nechcete obnoviť indexové úložisko udalostí",
     "Reset event store?": "Obnoviť úložisko udalostí?",
     "Can't load this message": "Nemožno načítať túto správu",
-    "Error processing audio message": "Chyba pri spracovaní hlasovej správy",
-    "Some encryption parameters have been changed.": "Niektoré parametre šifrovania boli zmenené.",
-    "Join the conference from the room information card on the right": "Pripojte sa ku konferencii z informačnej karty miestnosti vpravo",
-    "Join the conference at the top of this room": "Pripojte sa ku konferencii v hornej časti tejto miestnosti",
-    "Video conference ended by %(senderName)s": "Videokonferencia ukončená používateľom %(senderName)s",
-    "Video conference updated by %(senderName)s": "Videokonferencia aktualizovaná používateľom %(senderName)s",
-    "Video conference started by %(senderName)s": "Videokonferencia spustená používateľom %(senderName)s",
-    "No answer": "Žiadna odpoveď",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Len upozorňujeme, že ak si nepridáte e-mail a zabudnete heslo, môžete <b>navždy stratiť prístup k svojmu účtu</b>.",
     "Data on this screen is shared with %(widgetDomain)s": "Údaje na tejto obrazovke sú zdieľané s %(widgetDomain)s",
     "If they don't match, the security of your communication may be compromised.": "Ak sa nezhodujú, môže byť ohrozená bezpečnosť vašej komunikácie.",
@@ -861,7 +786,6 @@
     "The poll has ended. Top answer: %(topAnswer)s": "Anketa sa skončila. Najčastejšia odpoveď: %(topAnswer)s",
     "Failed to end poll": "Nepodarilo sa ukončiť anketu",
     "Sorry, the poll did not end. Please try again.": "Ospravedlňujeme sa, ale anketa sa neskončila. Skúste to prosím znova.",
-    "Reply in thread": "Odpovedať vo vlákne",
     "Transfer": "Presmerovať",
     "A call can only be transferred to a single user.": "Hovor je možné presmerovať len na jedného používateľa.",
     "Sign in with SSO": "Prihlásiť sa pomocou jednotného prihlásenia SSO",
@@ -875,12 +799,6 @@
     "Server did not return valid authentication information.": "Server nevrátil späť platné informácie o overení.",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Potvrďte deaktiváciu konta pomocou jednotného prihlásenia SSO na preukázanie svojej totožnosti.",
     "toggle event": "prepnúť udalosť",
-    "Results will be visible when the poll is ended": "Výsledky budú viditeľné po ukončení ankety",
-    "Sorry, you can't edit a poll after votes have been cast.": "Je nám ľúto, ale po odovzdaní hlasov nie je možné anketu upravovať.",
-    "Can't edit poll": "Nie je možné upraviť anketu",
-    "Ignored attempt to disable encryption": "Ignorovaný pokus o vypnutie šifrovania",
-    "The call is in an unknown state!": "Hovor je v neznámom stave!",
-    "Could not connect media": "Nepodarilo sa pripojiť médiá",
     "Command Help": "Pomocník príkazov",
     "My live location": "Moja poloha v reálnom čase",
     "My current location": "Moja aktuálna poloha",
@@ -888,10 +806,6 @@
     "What location type do you want to share?": "Aký typ polohy chcete zdieľať?",
     "We couldn't send your location": "Nepodarilo sa nám odoslať vašu polohu",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s nemohol odoslať vašu polohu. Skúste to prosím neskôr.",
-    "Collapse quotes": "Zbaliť citácie",
-    "Expand quotes": "Rozbaliť citácie",
-    "Click": "Kliknúť",
-    "Can't create a thread from an event with an existing relation": "Nie je možné vytvoriť vlákno z udalosti s existujúcim vzťahom",
     "Resend %(unsentCount)s reaction(s)": "Opätovné odoslanie %(unsentCount)s reakcií",
     "Consult first": "Najprv konzultovať",
     "You are sharing your live location": "Zdieľate svoju polohu v reálnom čase",
@@ -911,7 +825,6 @@
     },
     "%(featureName)s Beta feedback": "%(featureName)s Beta spätná väzba",
     "Live location ended": "Ukončenie polohy v reálnom čase",
-    "View live location": "Zobraziť polohu v reálnom čase",
     "Live until %(expiryTime)s": "Poloha v reálnom čase do %(expiryTime)s",
     "Live location enabled": "Poloha v reálnom čase zapnutá",
     "Live location error": "Chyba polohy v reálnom čase",
@@ -969,73 +882,37 @@
     "You're in": "Ste v",
     "You need to have the right permissions in order to share locations in this room.": "Na zdieľanie polôh v tejto miestnosti musíte mať príslušné oprávnenia.",
     "You don't have permission to share locations": "Nemáte oprávnenie na zdieľanie polôh",
-    "Messages in this chat will be end-to-end encrypted.": "Správy v tejto konverzácii sú šifrované od vás až k príjemcovi.",
     "Saved Items": "Uložené položky",
     "Choose a locale": "Vyberte si jazyk",
     "Interactively verify by emoji": "Interaktívne overte pomocou emotikonov",
     "Manually verify by text": "Manuálne overte pomocou textu",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s alebo %(recoveryFile)s",
-    "Video call ended": "Videohovor ukončený",
     "%(name)s started a video call": "%(name)s začal/a videohovor",
-    "Error downloading image": "Chyba pri sťahovaní obrázku",
-    "Unable to show image due to error": "Nie je možné zobraziť obrázok kvôli chybe",
     "Thread root ID: %(threadRootId)s": "ID koreňového vlákna: %(threadRootId)s",
     "<w>WARNING:</w> <description/>": "<w>UPOZORNENIE:</w> <description/>",
     " in <strong>%(room)s</strong>": " v <strong>%(room)s</strong>",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Nemôžete spustiť hlasovú správu, pretože práve nahrávate živé vysielanie. Ukončite prosím živé vysielanie, aby ste mohli začať nahrávať hlasovú správu.",
     "Can't start voice message": "Nemožno spustiť hlasovú správu",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "unknown": "neznáme",
-    "Declining…": "Odmietanie …",
     "Loading live location…": "Načítavanie polohy v reálnom čase…",
-    "There are no past polls in this room": "V tejto miestnosti nie sú žiadne predchádzajúce ankety",
-    "There are no active polls in this room": "V tejto miestnosti nie sú žiadne aktívne ankety",
     "Fetching keys from server…": "Získavanie kľúčov zo servera…",
     "Checking…": "Kontrolovanie…",
     "Enable '%(manageIntegrations)s' in Settings to do this.": "Ak to chcete urobiť, povoľte v Nastaveniach položku \"%(manageIntegrations)s\".",
     "Waiting for partner to confirm…": "Čakanie na potvrdenie od partnera…",
     "Adding…": "Pridávanie…",
     "Starting export process…": "Spustenie procesu exportu…",
-    "Loading polls": "Načítavanie ankiet",
-    "Ended a poll": "Ukončil anketu",
-    "Due to decryption errors, some votes may not be counted": "Z dôvodu chýb v dešifrovaní sa niektoré hlasy nemusia započítať",
-    "The sender has blocked you from receiving this message": "Odosielateľ vám zablokoval príjem tejto správy",
-    "Answered elsewhere": "Hovor prijatý inde",
-    "View poll": "Zobraziť anketu",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "Za posledný deň nie sú k dispozícii žiadne minulé ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
-        "other": "Za posledných %(count)s dní nie sú žiadne predchádzajúce ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace"
-    },
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "Za uplynulý deň nie sú žiadne aktívne ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
-        "other": "Za posledných %(count)s dní nie sú aktívne žiadne ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace"
-    },
-    "There are no past polls. Load more polls to view polls for previous months": "Nie sú žiadne predchádzajúce ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
-    "There are no active polls. Load more polls to view polls for previous months": "Nie sú aktívne žiadne ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
-    "Load more polls": "Načítať ďalšie ankety",
-    "Past polls": "Predchádzajúce ankety",
-    "Active polls": "Aktívne ankety",
-    "View poll in timeline": "Zobraziť anketu na časovej osi",
     "Invites by email can only be sent one at a time": "Pozvánky e-mailom sa môžu posielať len po jednej",
     "Desktop app logo": "Logo aplikácie pre stolové počítače",
     "Requires your server to support the stable version of MSC3827": "Vyžaduje, aby váš server podporoval stabilnú verziu MSC3827",
     "Message from %(user)s": "Správa od %(user)s",
     "Message in %(room)s": "Správa v %(room)s",
-    "Error details": "Podrobnosti o chybe",
-    "Unable to find event at that date": "Nie je možné nájsť udalosť k danému dátumu",
-    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Odošlite prosím <debugLogsLink>ladiace záznamy</debugLogsLink>, aby ste nám pomohli nájsť problém.",
     "unavailable": "nedostupný",
     "unknown status code": "neznámy kód stavu",
-    "Server returned %(statusCode)s with error code %(errorCode)s": "Server vrátil %(statusCode)s s kódom chyby %(errorCode)s",
-    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Nepodarilo sa nám nájsť udalosť od dátumu %(dateString)s. Skúste vybrať skorší dátum.",
-    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Pri pokuse nájsť a prejsť na daný dátum došlo k sieťovej chybe. Váš domovský server môže byť vypnutý alebo sa vyskytol len dočasný problém s internetovým pripojením. Skúste to prosím znova. Ak to bude pokračovať, obráťte sa na správcu domovského servera.",
     "Start DM anyway": "Spustiť priamu správu aj tak",
     "Start DM anyway and never warn me again": "Spustiť priamu správu aj tak a nikdy ma už nevarovať",
     "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "Nie je možné nájsť používateľské profily pre Matrix ID zobrazené nižšie - chcete aj tak začať priamu správu?",
     "Are you sure you wish to remove (delete) this event?": "Ste si istí, že chcete túto udalosť odstrániť (vymazať)?",
     "Note that removing room changes like this could undo the change.": "Upozorňujeme, že odstránením takýchto zmien v miestnosti by sa zmena mohla zvrátiť.",
-    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.": "Správy sú tu end-to-end šifrované. Overte %(displayName)s v ich profile - ťuknite na ich profilový obrázok.",
-    "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "Správy v tejto miestnosti sú šifrované od vás až k príjemcovi. Keď sa ľudia pridajú, môžete ich overiť v ich profile, stačí len ťuknúť na ich profilový obrázok.",
     "Upgrade room": "Aktualizovať miestnosť",
     "Other spaces you know": "Ďalšie priestory, ktoré poznáte",
     "Failed to query public rooms": "Nepodarilo sa vyhľadať verejné miestnosti",
@@ -1276,7 +1153,9 @@
         "new_room": "Nová miestnosť",
         "new_video_room": "Nová video miestnosť",
         "add_existing_room": "Pridať existujúcu miestnosť",
-        "explore_public_rooms": "Preskúmajte verejné miestnosti"
+        "explore_public_rooms": "Preskúmajte verejné miestnosti",
+        "reply_in_thread": "Odpovedať vo vlákne",
+        "click": "Kliknúť"
     },
     "a11y": {
         "user_menu": "Používateľské menu",
@@ -2277,13 +2156,25 @@
     "timeline": {
         "m.call": {
             "video_call_started": "Videohovor sa začal v %(roomName)s.",
-            "video_call_started_unsupported": "Videohovor sa začal v %(roomName)s. (nie je podporované v tomto prehliadači)"
+            "video_call_started_unsupported": "Videohovor sa začal v %(roomName)s. (nie je podporované v tomto prehliadači)",
+            "video_call_ended": "Videohovor ukončený"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s uskutočnil telefonát.",
             "voice_call_unsupported": "%(senderName)s uskutočnil telefonát. (Nepodporované týmto prehliadačom)",
             "video_call": "%(senderName)s uskutočnil video hovor.",
-            "video_call_unsupported": "%(senderName)s uskutočnil video hovor. (Nepodporované týmto prehliadačom)"
+            "video_call_unsupported": "%(senderName)s uskutočnil video hovor. (Nepodporované týmto prehliadačom)",
+            "declined": "Hovor odmietnutý",
+            "call_back_prompt": "Zavolať späť",
+            "answered_elsewhere": "Hovor prijatý inde",
+            "missed_call": "Zmeškaný hovor",
+            "no_answer": "Žiadna odpoveď",
+            "failed_connect_media": "Nepodarilo sa pripojiť médiá",
+            "failed_connection": "Pripojenie zlyhalo",
+            "failed_opponent_media": "Ich zariadenie nemohlo spustiť kameru alebo mikrofón",
+            "unknown_error": "Vyskytla sa neznáma chyba",
+            "unknown_failure": "Neznáma chyba: %(reason)s",
+            "unknown_state": "Hovor je v neznámom stave!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s prijal/a pozvanie pre %(displayName)s",
@@ -2335,7 +2226,6 @@
             "forbidden": "%(senderDisplayName)s zamedzil hosťom vstúpiť do miestnosti.",
             "unknown": "%(senderDisplayName)s zmenil prístup hostí na %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s poslal obrázok.",
         "m.sticker": "%(senderDisplayName)s poslal nálepku.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s nastavil ACL servera pre túto miestnosť.",
@@ -2379,7 +2269,12 @@
         "m.widget": {
             "modified": "%(senderName)s zmenil widget %(widgetName)s",
             "added": "%(senderName)s pridal widget %(widgetName)s",
-            "removed": "%(senderName)s odstránil widget %(widgetName)s"
+            "removed": "%(senderName)s odstránil widget %(widgetName)s",
+            "jitsi_join_top_prompt": "Pripojte sa ku konferencii v hornej časti tejto miestnosti",
+            "jitsi_join_right_prompt": "Pripojte sa ku konferencii z informačnej karty miestnosti vpravo",
+            "jitsi_ended": "Videokonferencia ukončená používateľom %(senderName)s",
+            "jitsi_updated": "Videokonferencia aktualizovaná používateľom %(senderName)s",
+            "jitsi_started": "Videokonferencia spustená používateľom %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s aktualizoval usporiadanie miestnosti",
         "m.location": {
@@ -2390,7 +2285,6 @@
         "self_redaction": "Správa vymazaná",
         "redaction": "Správa vymazaná používateľom %(name)s",
         "m.poll.start": "%(senderName)s spustil anketu - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s ukončil anketu",
         "typing_indicator": {
             "one_user": "%(displayName)s píše …",
             "two_users": "%(names)s a %(lastPerson)s píšu …",
@@ -2562,7 +2456,8 @@
             "changed_rule_users": "%(senderName)s zmenil pravidlo zakázať vstúpiť používateľom pôvodne zhodujúcich sa s %(oldGlob)s na používateľov zhodujúcich sa s %(newGlob)s, dôvod: %(reason)s",
             "changed_rule_rooms": "%(senderName)s zmenil pravidlo zakázať vstúpiť do miestností pôvodne zhodujúcich sa s %(oldGlob)s na miestnosti zhodujúce sa s %(newGlob)s, dôvod: %(reason)s",
             "changed_rule_servers": "%(senderName)s zmenil pravidlo, ktoré zakazovalo servery zodpovedajúce %(oldGlob)s na zodpovedajúce %(newGlob)s z %(reason)s",
-            "changed_rule_glob": "%(senderName)s aktualizoval pravidlo zakázať vstúpiť pôvodne sa zhodujúce s %(oldGlob)s na %(newGlob)s, dôvod: %(reason)s"
+            "changed_rule_glob": "%(senderName)s aktualizoval pravidlo zakázať vstúpiť pôvodne sa zhodujúce s %(oldGlob)s na %(newGlob)s, dôvod: %(reason)s",
+            "message_hidden": "Tohto používateľa ste ignorovali, takže jeho správa je skrytá. <a>Ukázať aj tak.</a>"
         },
         "no_permission_messages_before_invite": "Nemáte povolenie na zobrazenie správ z obdobia pred vaším pozvaním.",
         "no_permission_messages_before_join": "Nemáte oprávnenie na zobrazenie správ z obdobia pred vaším vstupom.",
@@ -2616,18 +2511,72 @@
         "mab": {
             "label": "Akcie správy",
             "view_in_room": "Zobraziť v miestnosti",
-            "copy_link_thread": "Kopírovať odkaz na vlákno"
+            "copy_link_thread": "Kopírovať odkaz na vlákno",
+            "collapse_reply_chain": "Zbaliť citácie",
+            "expand_reply_chain": "Rozbaliť citácie"
         },
         "m.audio": {
             "unnamed_audio": "Nepomenovaný zvukový záznam",
-            "error_downloading_audio": "Chyba pri sťahovaní zvuku"
+            "error_downloading_audio": "Chyba pri sťahovaní zvuku",
+            "error_processing_audio": "Chyba pri spracovaní hlasovej správy",
+            "error_processing_voice_message": "Chyba pri spracovaní hlasovej správy"
         },
         "load_error": {
             "no_permission": "Pri pokuse načítať konkrétny bod v histórii tejto miestnosti sa vyskytla chyba, nemáte povolenie na zobrazenie zodpovedajúcej správy.",
             "unable_to_find": "Pokus o načítanie konkrétneho bodu na časovej osi tejto miestnosti, ale nepodarilo sa ho nájsť.",
             "title": "Nepodarilo sa načítať pozíciu na časovej osi"
         },
-        "error_no_renderer": "Nie je možné zobraziť túto udalosť"
+        "error_no_renderer": "Nie je možné zobraziť túto udalosť",
+        "decryption_failure_blocked": "Odosielateľ vám zablokoval príjem tejto správy",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_downloading": "Preberanie",
+        "download_action_decrypting": "Dešifrovanie",
+        "m.room.encryption": {
+            "parameters_changed": "Niektoré parametre šifrovania boli zmenené.",
+            "enabled_dm": "Správy sú tu end-to-end šifrované. Overte %(displayName)s v ich profile - ťuknite na ich profilový obrázok.",
+            "enabled_local": "Správy v tejto konverzácii sú šifrované od vás až k príjemcovi.",
+            "enabled": "Správy v tejto miestnosti sú šifrované od vás až k príjemcovi. Keď sa ľudia pridajú, môžete ich overiť v ich profile, stačí len ťuknúť na ich profilový obrázok.",
+            "disable_attempt": "Ignorovaný pokus o vypnutie šifrovania",
+            "disabled": "Šifrovanie nie je zapnuté",
+            "unsupported": "Šifrovanie používané v tejto miestnosti nie je podporované."
+        },
+        "pending_moderation_reason": "Správa čaká na moderáciu: %(reason)s",
+        "pending_moderation": "Správa čaká na moderovanie",
+        "m.beacon_info": {
+            "view_live_location": "Zobraziť polohu v reálnom čase"
+        },
+        "m.file": {
+            "download_label": "Stiahnuť %(text)s",
+            "error_decrypting": "Chyba pri dešifrovaní prílohy",
+            "decrypt_label": "Dešifrovať %(text)s",
+            "error_invalid": "Neplatný súbor%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s poslal obrázok.",
+            "error": "Nie je možné zobraziť obrázok kvôli chybe",
+            "error_decrypting": "Chyba pri dešifrovaní obrázka",
+            "error_downloading": "Chyba pri sťahovaní obrázku",
+            "show_image": "Zobraziť obrázok"
+        },
+        "m.key.verification.done": "Overili ste používateľa %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Zrušili ste overenie používateľa %(name)s",
+            "user_cancelled": "%(name)s zrušil/a overovanie"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Prijali ste",
+            "you_declined": "Zamietli ste overenie",
+            "you_cancelled": "Zrušili ste overenie",
+            "declining": "Odmietanie …",
+            "you_started": "Odoslali ste žiadosť o overenie"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s ukončil anketu",
+            "ended": "Ukončil anketu"
+        },
+        "m.video": {
+            "error_decrypting": "Chyba pri dešifrovaní videa"
+        }
     },
     "slash_command": {
         "spoiler": "Odošle danú správu ako spojler",
@@ -3114,7 +3063,25 @@
                 "reset_confirmation": "Skutočne vynulovať overovacie kľúče?",
                 "skip_verification": "Vynechať zatiaľ overovanie"
             },
-            "accepting": "Akceptovanie…"
+            "accepting": "Akceptovanie…",
+            "scan_qr": "Overte naskenovaním",
+            "scan_qr_explainer": "Požiadajte %(displayName)s, aby naskenoval váš kód:",
+            "verify_emoji_prompt_qr": "Ak sa vám nepodarí naskenovať uvedený kód, overte pomocou porovnania jedinečných emotikonov.",
+            "verify_emoji_prompt": "Overenie porovnaním jedinečnej kombinácie emotikonov.",
+            "verify_emoji": "Overiť pomocou emotikonov",
+            "qr_reciprocate_same_shield_device": "Už je to takmer hotové! Zobrazuje vaše druhé zariadenie rovnaký štít?",
+            "qr_reciprocate_same_shield_user": "Už je to takmer hotové! Zobrazuje sa %(displayName)s rovnaký štít?",
+            "prompt_encrypted": "Overte všetkých používateľov v miestnosti, aby ste sa uistili, že je zabezpečená.",
+            "prompt_unencrypted": "V šifrovaných miestnostiach overte všetkých používateľov, aby ste zaistili ich bezpečnosť.",
+            "successful_own_device": "Úspešne ste overili svoje zariadenie!",
+            "successful_device": "Úspešne ste overili %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "Úspešne ste overili %(displayName)s!",
+            "prompt_self": "Znova spustiť overovanie z oznámenia.",
+            "prompt_user": "Znova začnite overovanie z ich profilu.",
+            "timed_out": "Čas overovania vypršal.",
+            "cancelled_self": "Zrušili ste overovanie na vašom druhom zariadení.",
+            "cancelled_user": "%(displayName)s zrušil/a overenie.",
+            "cancelled": "Zrušili ste overenie."
         },
         "old_version_detected_title": "Nájdené zastaralé kryptografické údaje",
         "old_version_detected_description": "Boli zistené údaje zo staršej verzie %(brand)s. To spôsobilo nefunkčnosť end-to-end kryptografie v staršej verzii. End-to-end šifrované správy, ktoré boli nedávno vymenené pri používaní staršej verzie, sa v tejto verzii nemusia dať dešifrovať. To môže spôsobiť aj zlyhanie správ vymenených pomocou tejto verzie. Ak sa vyskytnú problémy, odhláste sa a znova sa prihláste. Ak chcete zachovať históriu správ, exportujte a znovu importujte svoje kľúče.",
@@ -3167,7 +3134,8 @@
         "cross_signing_user_normal": "Tohto používateľa ste neoverili.",
         "cross_signing_room_warning": "Niekto používa neznámu reláciu",
         "cross_signing_room_verified": "Všetci v tejto miestnosti sú overení",
-        "cross_signing_room_normal": "Táto miestnosť je end-to-end šifrovaná"
+        "cross_signing_room_normal": "Táto miestnosť je end-to-end šifrovaná",
+        "unsupported": "Tento klient nepodporuje end-to-end šifrovanie."
     },
     "emoji": {
         "category_frequently_used": "Často používané",
@@ -3662,7 +3630,8 @@
         "empty_tip": "<b>Tip:</b> Použite položku “%(replyInThread)s”, keď prejdete ponad správu.",
         "empty_heading": "Udržujte diskusie organizované pomocou vlákien",
         "unable_to_decrypt": "Nie je možné dešifrovať správu",
-        "open_thread": "Otvoriť vlákno"
+        "open_thread": "Otvoriť vlákno",
+        "error_start_thread_existing_relation": "Nie je možné vytvoriť vlákno z udalosti s existujúcim vzťahom"
     },
     "theme": {
         "light_high_contrast": "Ľahký vysoký kontrast",
@@ -3968,7 +3937,16 @@
         "jump_read_marker": "Preskočiť na prvú neprečítanú správu.",
         "inviter_unknown": "Neznámy",
         "failed_reject_invite": "Nepodarilo sa odmietnuť pozvanie",
-        "creating_room_text": "Vytvárame miestnosť s %(names)s"
+        "creating_room_text": "Vytvárame miestnosť s %(names)s",
+        "error_jump_to_date_connection": "Pri pokuse nájsť a prejsť na daný dátum došlo k sieťovej chybe. Váš domovský server môže byť vypnutý alebo sa vyskytol len dočasný problém s internetovým pripojením. Skúste to prosím znova. Ak to bude pokračovať, obráťte sa na správcu domovského servera.",
+        "error_jump_to_date_not_found": "Nepodarilo sa nám nájsť udalosť od dátumu %(dateString)s. Skúste vybrať skorší dátum.",
+        "error_jump_to_date": "Server vrátil %(statusCode)s s kódom chyby %(errorCode)s",
+        "error_jump_to_date_send_logs_prompt": "Odošlite prosím <debugLogsLink>ladiace záznamy</debugLogsLink>, aby ste nám pomohli nájsť problém.",
+        "error_jump_to_date_title": "Nie je možné nájsť udalosť k danému dátumu",
+        "error_jump_to_date_details": "Podrobnosti o chybe",
+        "jump_to_date_beginning": "Začiatok miestnosti",
+        "jump_to_date": "Prejsť na dátum",
+        "jump_to_date_prompt": "Vyberte dátum, na ktorý chcete prejsť"
     },
     "file_panel": {
         "guest_note": "Aby ste mohli použiť túto vlastnosť, musíte byť <a>zaregistrovaný</a>",
@@ -4011,7 +3989,22 @@
         "options_placeholder": "Napíšte možnosť",
         "options_add_button": "Pridať možnosť",
         "disclosed_notes": "Hlasujúci uvidia výsledky hneď po hlasovaní",
-        "notes": "Výsledky sa zobrazia až po ukončení ankety"
+        "notes": "Výsledky sa zobrazia až po ukončení ankety",
+        "unable_edit_title": "Nie je možné upraviť anketu",
+        "unable_edit_description": "Je nám ľúto, ale po odovzdaní hlasov nie je možné anketu upravovať.",
+        "error_voting_title": "Hlasovanie nie je zaregistrované",
+        "error_voting_description": "Je nám ľúto, váš hlas nebol zaregistrovaný. Skúste to prosím znova.",
+        "total_decryption_errors": "Z dôvodu chýb v dešifrovaní sa niektoré hlasy nemusia započítať",
+        "total_not_ended": "Výsledky budú viditeľné po ukončení ankety",
+        "total_no_votes": "Žiadne odovzdané hlasy",
+        "total_n_votes": {
+            "one": "%(count)s odovzdaný hlas. Hlasujte a pozrite si výsledky",
+            "other": "%(count)s odovzdaných hlasov. Hlasujte a pozrite si výsledky"
+        },
+        "total_n_votes_voted": {
+            "one": "Na základe %(count)s hlasu",
+            "other": "Na základe %(count)s hlasov"
+        }
     },
     "failed_load_async_component": "Nie je možné načítať! Skontrolujte prístup na internet a skúste neskôr.",
     "upload_failed_generic": "Nepodarilo sa nahrať súbor „%(fileName)s“.",
@@ -4245,7 +4238,8 @@
         "deactivate_confirm_description": "Deaktivácia tohto používateľa ho odhlási a zabráni mu v opätovnom prihlásení. Okrem toho opustí všetky miestnosti, v ktorých sa nachádza. Túto akciu nie je možné vrátiť späť. Ste si istí, že chcete tohto používateľa deaktivovať?",
         "deactivate_confirm_action": "Deaktivovať používateľa",
         "error_deactivate": "Nepodarilo sa deaktivovať používateľa",
-        "role_label": "Rola v <RoomName/>"
+        "role_label": "Rola v <RoomName/>",
+        "edit_own_devices": "Upraviť zariadenia"
     },
     "stickers": {
         "empty": "Momentálne nemáte aktívne žiadne balíčky s nálepkami",
@@ -4274,7 +4268,31 @@
         "pinned_messages_button": "Pripnuté",
         "export_chat_button": "Exportovať konverzáciu",
         "share_button": "Zdieľať miestnosť",
-        "settings_button": "Nastavenia miestnosti"
+        "settings_button": "Nastavenia miestnosti",
+        "poll": {
+            "view_in_timeline": "Zobraziť anketu na časovej osi",
+            "active_heading": "Aktívne ankety",
+            "past_heading": "Predchádzajúce ankety",
+            "loading": "Načítavanie ankiet",
+            "load_more": "Načítať ďalšie ankety",
+            "empty_active": "V tejto miestnosti nie sú žiadne aktívne ankety",
+            "empty_past": "V tejto miestnosti nie sú žiadne predchádzajúce ankety",
+            "empty_active_load_more": "Nie sú aktívne žiadne ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
+            "empty_past_load_more": "Nie sú žiadne predchádzajúce ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
+            "empty_active_load_more_n_days": {
+                "one": "Za uplynulý deň nie sú žiadne aktívne ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
+                "other": "Za posledných %(count)s dní nie sú aktívne žiadne ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace"
+            },
+            "empty_past_load_more_n_days": {
+                "one": "Za posledný deň nie sú k dispozícii žiadne minulé ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
+                "other": "Za posledných %(count)s dní nie sú žiadne predchádzajúce ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace"
+            },
+            "view_poll": "Zobraziť anketu",
+            "final_result": {
+                "one": "Konečný výsledok na základe %(count)s hlasu",
+                "other": "Konečný výsledok na základe %(count)s hlasov"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Odmietnuť pozvanie",

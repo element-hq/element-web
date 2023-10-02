@@ -126,8 +126,8 @@ export function launchPollEditor(mxEvent: MatrixEvent, getRelationsForEvent?: Ge
     const room = MatrixClientPeg.safeGet().getRoom(mxEvent.getRoomId());
     if (pollAlreadyHasVotes(mxEvent, getRelationsForEvent)) {
         Modal.createDialog(ErrorDialog, {
-            title: _t("Can't edit poll"),
-            description: _t("Sorry, you can't edit a poll after votes have been cast."),
+            title: _t("poll|unable_edit_title"),
+            description: _t("poll|unable_edit_description"),
         });
     } else if (room) {
         Modal.createDialog(
@@ -229,8 +229,8 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
             console.error("Failed to submit poll response event:", e);
 
             Modal.createDialog(ErrorDialog, {
-                title: _t("Vote not registered"),
-                description: _t("Sorry, your vote was not registered. Please try again."),
+                title: _t("poll|error_voting_title"),
+                description: _t("poll|error_voting_description"),
             });
         });
 
@@ -306,19 +306,19 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
         let totalText: string;
         if (showResults && poll.undecryptableRelationsCount) {
-            totalText = _t("Due to decryption errors, some votes may not be counted");
+            totalText = _t("poll|total_decryption_errors");
         } else if (poll.isEnded) {
-            totalText = _t("Final result based on %(count)s votes", { count: totalVotes });
+            totalText = _t("right_panel|poll|final_result", { count: totalVotes });
         } else if (!disclosed) {
-            totalText = _t("Results will be visible when the poll is ended");
+            totalText = _t("poll|total_not_ended");
         } else if (myVote === undefined) {
             if (totalVotes === 0) {
-                totalText = _t("No votes cast");
+                totalText = _t("poll|total_no_votes");
             } else {
-                totalText = _t("%(count)s votes cast. Vote to see the results", { count: totalVotes });
+                totalText = _t("poll|total_n_votes", { count: totalVotes });
             }
         } else {
-            totalText = _t("Based on %(count)s votes", { count: totalVotes });
+            totalText = _t("poll|total_n_votes_voted", { count: totalVotes });
         }
 
         const editedSpan = this.props.mxEvent.replacingEvent() ? (

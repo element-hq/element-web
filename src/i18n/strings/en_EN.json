@@ -741,8 +741,10 @@
         "go": "Go",
         "retry": "Retry",
         "react": "React",
+        "reply_in_thread": "Reply in thread",
         "edit": "Edit",
         "reply": "Reply",
+        "click": "Click",
         "minimise": "Minimise",
         "copy": "Copy",
         "done": "Done",
@@ -1269,6 +1271,24 @@
             "sas_description": "Compare a unique set of emoji if you don't have a camera on either device",
             "qr_or_sas": "%(qrCode)s or %(emojiCompare)s",
             "qr_or_sas_header": "Verify this device by completing one of the following:",
+            "scan_qr": "Verify by scanning",
+            "scan_qr_explainer": "Ask %(displayName)s to scan your code:",
+            "verify_emoji_prompt_qr": "If you can't scan the code above, verify by comparing unique emoji.",
+            "verify_emoji_prompt": "Verify by comparing unique emoji.",
+            "verify_emoji": "Verify by emoji",
+            "qr_reciprocate_same_shield_device": "Almost there! Is your other device showing the same shield?",
+            "qr_reciprocate_same_shield_user": "Almost there! Is %(displayName)s showing the same shield?",
+            "prompt_encrypted": "Verify all users in a room to ensure it's secure.",
+            "prompt_unencrypted": "In encrypted rooms, verify all users to ensure it's secure.",
+            "successful_own_device": "You've successfully verified your device!",
+            "successful_device": "You've successfully verified %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "You've successfully verified %(displayName)s!",
+            "prompt_self": "Start verification again from the notification.",
+            "prompt_user": "Start verification again from their profile.",
+            "timed_out": "Verification timed out.",
+            "cancelled_self": "You cancelled verification on your other device.",
+            "cancelled_user": "%(displayName)s cancelled verification.",
+            "cancelled": "You cancelled verification.",
             "after_new_login": {
                 "unable_to_verify": "Unable to verify this device",
                 "verify_this_device": "Verify this device",
@@ -1323,6 +1343,7 @@
             "cause_3": "Yours, or the other users' internet connection",
             "cause_4": "Yours, or the other users' session"
         },
+        "unsupported": "This client does not support end-to-end encryption.",
         "old_version_detected_title": "Old cryptography data detected",
         "old_version_detected_description": "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.",
         "verification_requested_toast_title": "Verification requested",
@@ -1434,13 +1455,25 @@
     "timeline": {
         "m.call": {
             "video_call_started": "Video call started in %(roomName)s.",
-            "video_call_started_unsupported": "Video call started in %(roomName)s. (not supported by this browser)"
+            "video_call_started_unsupported": "Video call started in %(roomName)s. (not supported by this browser)",
+            "video_call_ended": "Video call ended"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s placed a voice call.",
             "voice_call_unsupported": "%(senderName)s placed a voice call. (not supported by this browser)",
             "video_call": "%(senderName)s placed a video call.",
-            "video_call_unsupported": "%(senderName)s placed a video call. (not supported by this browser)"
+            "video_call_unsupported": "%(senderName)s placed a video call. (not supported by this browser)",
+            "declined": "Call declined",
+            "call_back_prompt": "Call back",
+            "answered_elsewhere": "Answered elsewhere",
+            "missed_call": "Missed call",
+            "no_answer": "No answer",
+            "failed_connect_media": "Could not connect media",
+            "failed_connection": "Connection failed",
+            "failed_opponent_media": "Their device couldn't start the camera or microphone",
+            "unknown_error": "An unknown error occurred",
+            "unknown_failure": "Unknown failure: %(reason)s",
+            "unknown_state": "The call is in an unknown state!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s accepted the invitation for %(displayName)s",
@@ -1497,7 +1530,13 @@
             "changed": "%(senderDisplayName)s changed the server ACLs for this room.",
             "all_servers_banned": "🎉 All servers are banned from participating! This room can no longer be used."
         },
-        "m.image": "%(senderDisplayName)s sent an image.",
+        "m.image": {
+            "sent": "%(senderDisplayName)s sent an image.",
+            "error": "Unable to show image due to error",
+            "error_decrypting": "Error decrypting image",
+            "error_downloading": "Error downloading image",
+            "show_image": "Show image"
+        },
         "m.sticker": "%(senderDisplayName)s sent a sticker.",
         "m.room.canonical_alias": {
             "set": "%(senderName)s set the main address for this room to %(address)s.",
@@ -1540,7 +1579,12 @@
         "m.widget": {
             "modified": "%(widgetName)s widget modified by %(senderName)s",
             "added": "%(widgetName)s widget added by %(senderName)s",
-            "removed": "%(widgetName)s widget removed by %(senderName)s"
+            "removed": "%(widgetName)s widget removed by %(senderName)s",
+            "jitsi_join_top_prompt": "Join the conference at the top of this room",
+            "jitsi_join_right_prompt": "Join the conference from the room information card on the right",
+            "jitsi_ended": "Video conference ended by %(senderName)s",
+            "jitsi_updated": "Video conference updated by %(senderName)s",
+            "jitsi_started": "Video conference started by %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s has updated the room layout",
         "mjolnir": {
@@ -1560,7 +1604,8 @@
             "changed_rule_users": "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s",
             "changed_rule_rooms": "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s",
             "changed_rule_servers": "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s",
-            "changed_rule_glob": "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s"
+            "changed_rule_glob": "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s",
+            "message_hidden": "You have ignored this user, so their message is hidden. <a>Show anyways.</a>"
         },
         "m.location": {
             "full": "%(senderName)s has shared their location",
@@ -1570,7 +1615,10 @@
         "self_redaction": "Message deleted",
         "redaction": "Message deleted by %(name)s",
         "m.poll.start": "%(senderName)s has started a poll - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s has ended a poll",
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s has ended a poll",
+            "ended": "Ended a poll"
+        },
         "typing_indicator": {
             "one_user": "%(displayName)s is typing …",
             "more_users": {
@@ -1612,7 +1660,54 @@
         "mab": {
             "label": "Message Actions",
             "view_in_room": "View in room",
-            "copy_link_thread": "Copy link to thread"
+            "copy_link_thread": "Copy link to thread",
+            "collapse_reply_chain": "Collapse quotes",
+            "expand_reply_chain": "Expand quotes"
+        },
+        "decryption_failure_blocked": "The sender has blocked you from receiving this message",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_downloading": "Downloading",
+        "download_action_decrypting": "Decrypting",
+        "m.room.encryption": {
+            "parameters_changed": "Some encryption parameters have been changed.",
+            "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.",
+            "enabled_local": "Messages in this chat will be end-to-end encrypted.",
+            "enabled": "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
+            "disable_attempt": "Ignored attempt to disable encryption",
+            "disabled": "Encryption not enabled",
+            "unsupported": "The encryption used by this room isn't supported."
+        },
+        "pending_moderation_reason": "Message pending moderation: %(reason)s",
+        "pending_moderation": "Message pending moderation",
+        "m.audio": {
+            "error_processing_audio": "Error processing audio message",
+            "error_processing_voice_message": "Error processing voice message",
+            "unnamed_audio": "Unnamed audio",
+            "error_downloading_audio": "Error downloading audio"
+        },
+        "m.beacon_info": {
+            "view_live_location": "View live location"
+        },
+        "m.file": {
+            "download_label": "Download %(text)s",
+            "error_decrypting": "Error decrypting attachment",
+            "decrypt_label": "Decrypt %(text)s",
+            "error_invalid": "Invalid file%(extra)s"
+        },
+        "m.key.verification.done": "You verified %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "You cancelled verifying %(name)s",
+            "user_cancelled": "%(name)s cancelled verifying"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "You accepted",
+            "you_declined": "You declined",
+            "you_cancelled": "You cancelled",
+            "declining": "Declining…",
+            "you_started": "You sent a verification request"
+        },
+        "m.video": {
+            "error_decrypting": "Error decrypting video"
         },
         "reactions": {
             "label": "%(reactors)s reacted with %(content)s",
@@ -1773,10 +1868,6 @@
             "collapse_reply_thread": "Collapse reply thread",
             "view_related_event": "View related event",
             "report": "Report"
-        },
-        "m.audio": {
-            "unnamed_audio": "Unnamed audio",
-            "error_downloading_audio": "Error downloading audio"
         },
         "creation_summary_dm": "%(creator)s created this DM.",
         "creation_summary_room": "%(creator)s created and configured the room.",
@@ -2011,6 +2102,15 @@
             "all_rooms_button": "Search all rooms"
         },
         "jump_read_marker": "Jump to first unread message.",
+        "error_jump_to_date_connection": "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.",
+        "error_jump_to_date_not_found": "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.",
+        "error_jump_to_date": "Server returned %(statusCode)s with error code %(errorCode)s",
+        "error_jump_to_date_send_logs_prompt": "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.",
+        "error_jump_to_date_title": "Unable to find event at that date",
+        "error_jump_to_date_details": "Error details",
+        "jump_to_date_beginning": "The beginning of the room",
+        "jump_to_date": "Jump to date",
+        "jump_to_date_prompt": "Pick a date to jump to",
         "edit_topic": "Edit topic",
         "read_topic": "Click to read topic",
         "drop_file_prompt": "Drop file here to upload",
@@ -3078,7 +3178,8 @@
         "deactivate_confirm_description": "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?",
         "deactivate_confirm_action": "Deactivate user",
         "error_deactivate": "Failed to deactivate user",
-        "role_label": "Role in <RoomName/>"
+        "role_label": "Role in <RoomName/>",
+        "edit_own_devices": "Edit devices"
     },
     "%(count)s reply": {
         "other": "%(count)s replies",
@@ -3087,6 +3188,7 @@
     "threads": {
         "open_thread": "Open thread",
         "unable_to_decrypt": "Unable to decrypt message",
+        "error_start_thread_existing_relation": "Can't create a thread from an event with an existing relation",
         "all_threads": "All threads",
         "all_threads_description": "Shows all threads from current room",
         "my_threads": "My threads",
@@ -3123,7 +3225,31 @@
         "pinned_messages_button": "Pinned",
         "export_chat_button": "Export chat",
         "share_button": "Share room",
-        "settings_button": "Room settings"
+        "settings_button": "Room settings",
+        "poll": {
+            "view_in_timeline": "View poll in timeline",
+            "active_heading": "Active polls",
+            "past_heading": "Past polls",
+            "loading": "Loading polls",
+            "load_more": "Load more polls",
+            "empty_active": "There are no active polls in this room",
+            "empty_past": "There are no past polls in this room",
+            "empty_active_load_more": "There are no active polls. Load more polls to view polls for previous months",
+            "empty_past_load_more": "There are no past polls. Load more polls to view polls for previous months",
+            "empty_active_load_more_n_days": {
+                "other": "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months",
+                "one": "There are no active polls for the past day. Load more polls to view polls for previous months"
+            },
+            "empty_past_load_more_n_days": {
+                "other": "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months",
+                "one": "There are no past polls for the past day. Load more polls to view polls for previous months"
+            },
+            "view_poll": "View poll",
+            "final_result": {
+                "other": "Final result based on %(count)s votes",
+                "one": "Final result based on %(count)s vote"
+            }
+        }
     },
     "%(count)s verified sessions": {
         "other": "%(count)s verified sessions",
@@ -3133,141 +3259,52 @@
         "other": "%(count)s sessions",
         "one": "%(count)s session"
     },
-    "This client does not support end-to-end encryption.": "This client does not support end-to-end encryption.",
-    "Edit devices": "Edit devices",
-    "Verify by scanning": "Verify by scanning",
-    "Ask %(displayName)s to scan your code:": "Ask %(displayName)s to scan your code:",
-    "If you can't scan the code above, verify by comparing unique emoji.": "If you can't scan the code above, verify by comparing unique emoji.",
-    "Verify by comparing unique emoji.": "Verify by comparing unique emoji.",
-    "Verify by emoji": "Verify by emoji",
-    "Almost there! Is your other device showing the same shield?": "Almost there! Is your other device showing the same shield?",
-    "Almost there! Is %(displayName)s showing the same shield?": "Almost there! Is %(displayName)s showing the same shield?",
-    "Verify all users in a room to ensure it's secure.": "Verify all users in a room to ensure it's secure.",
-    "In encrypted rooms, verify all users to ensure it's secure.": "In encrypted rooms, verify all users to ensure it's secure.",
-    "You've successfully verified your device!": "You've successfully verified your device!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "You've successfully verified %(deviceName)s (%(deviceId)s)!",
-    "You've successfully verified %(displayName)s!": "You've successfully verified %(displayName)s!",
-    "Start verification again from the notification.": "Start verification again from the notification.",
-    "Start verification again from their profile.": "Start verification again from their profile.",
-    "Verification timed out.": "Verification timed out.",
-    "You cancelled verification on your other device.": "You cancelled verification on your other device.",
-    "%(displayName)s cancelled verification.": "%(displayName)s cancelled verification.",
-    "You cancelled verification.": "You cancelled verification.",
     "%(count)s votes": {
         "other": "%(count)s votes",
         "one": "%(count)s vote"
     },
-    "View poll in timeline": "View poll in timeline",
-    "Active polls": "Active polls",
-    "Past polls": "Past polls",
-    "Loading polls": "Loading polls",
-    "Load more polls": "Load more polls",
-    "There are no active polls in this room": "There are no active polls in this room",
-    "There are no past polls in this room": "There are no past polls in this room",
-    "There are no active polls. Load more polls to view polls for previous months": "There are no active polls. Load more polls to view polls for previous months",
-    "There are no past polls. Load more polls to view polls for previous months": "There are no past polls. Load more polls to view polls for previous months",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "other": "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months",
-        "one": "There are no active polls for the past day. Load more polls to view polls for previous months"
-    },
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "other": "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months",
-        "one": "There are no past polls for the past day. Load more polls to view polls for previous months"
-    },
-    "View poll": "View poll",
-    "Final result based on %(count)s votes": {
-        "other": "Final result based on %(count)s votes",
-        "one": "Final result based on %(count)s vote"
-    },
     "%(name)s started a video call": "%(name)s started a video call",
-    "Video call ended": "Video call ended",
-    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.",
-    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.",
-    "Server returned %(statusCode)s with error code %(errorCode)s": "Server returned %(statusCode)s with error code %(errorCode)s",
     "unknown status code": "unknown status code",
     "unavailable": "unavailable",
-    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.",
-    "Unable to find event at that date": "Unable to find event at that date",
-    "Error details": "Error details",
-    "The beginning of the room": "The beginning of the room",
-    "Jump to date": "Jump to date",
-    "The sender has blocked you from receiving this message": "The sender has blocked you from receiving this message",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
-    "Downloading": "Downloading",
-    "Decrypting": "Decrypting",
-    "Some encryption parameters have been changed.": "Some encryption parameters have been changed.",
-    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.",
-    "Messages in this chat will be end-to-end encrypted.": "Messages in this chat will be end-to-end encrypted.",
-    "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
-    "Ignored attempt to disable encryption": "Ignored attempt to disable encryption",
-    "Encryption not enabled": "Encryption not enabled",
-    "The encryption used by this room isn't supported.": "The encryption used by this room isn't supported.",
-    "Message pending moderation: %(reason)s": "Message pending moderation: %(reason)s",
-    "Message pending moderation": "Message pending moderation",
-    "Pick a date to jump to": "Pick a date to jump to",
-    "Call declined": "Call declined",
-    "Call back": "Call back",
-    "Answered elsewhere": "Answered elsewhere",
-    "Missed call": "Missed call",
-    "No answer": "No answer",
-    "Could not connect media": "Could not connect media",
-    "Connection failed": "Connection failed",
-    "Their device couldn't start the camera or microphone": "Their device couldn't start the camera or microphone",
-    "An unknown error occurred": "An unknown error occurred",
-    "Unknown failure: %(reason)s": "Unknown failure: %(reason)s",
-    "The call is in an unknown state!": "The call is in an unknown state!",
-    "Error processing audio message": "Error processing audio message",
-    "View live location": "View live location",
-    "Reply in thread": "Reply in thread",
-    "Can't create a thread from an event with an existing relation": "Can't create a thread from an event with an existing relation",
-    "Collapse quotes": "Collapse quotes",
-    "Expand quotes": "Expand quotes",
-    "Click": "Click",
-    "Download %(text)s": "Download %(text)s",
-    "Error decrypting attachment": "Error decrypting attachment",
-    "Decrypt %(text)s": "Decrypt %(text)s",
-    "Invalid file%(extra)s": "Invalid file%(extra)s",
-    "Unable to show image due to error": "Unable to show image due to error",
-    "Error decrypting image": "Error decrypting image",
-    "Error downloading image": "Error downloading image",
-    "Show image": "Show image",
-    "Join the conference at the top of this room": "Join the conference at the top of this room",
-    "Join the conference from the room information card on the right": "Join the conference from the room information card on the right",
-    "Video conference ended by %(senderName)s": "Video conference ended by %(senderName)s",
-    "Video conference updated by %(senderName)s": "Video conference updated by %(senderName)s",
-    "Video conference started by %(senderName)s": "Video conference started by %(senderName)s",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "You have ignored this user, so their message is hidden. <a>Show anyways.</a>",
-    "You verified %(name)s": "You verified %(name)s",
-    "You cancelled verifying %(name)s": "You cancelled verifying %(name)s",
-    "%(name)s cancelled verifying": "%(name)s cancelled verifying",
-    "You accepted": "You accepted",
     "%(name)s accepted": "%(name)s accepted",
-    "You declined": "You declined",
-    "You cancelled": "You cancelled",
     "%(name)s declined": "%(name)s declined",
     "%(name)s cancelled": "%(name)s cancelled",
-    "Declining…": "Declining…",
     "%(name)s wants to verify": "%(name)s wants to verify",
-    "You sent a verification request": "You sent a verification request",
-    "Can't edit poll": "Can't edit poll",
-    "Sorry, you can't edit a poll after votes have been cast.": "Sorry, you can't edit a poll after votes have been cast.",
-    "Vote not registered": "Vote not registered",
-    "Sorry, your vote was not registered. Please try again.": "Sorry, your vote was not registered. Please try again.",
-    "Due to decryption errors, some votes may not be counted": "Due to decryption errors, some votes may not be counted",
-    "Results will be visible when the poll is ended": "Results will be visible when the poll is ended",
-    "No votes cast": "No votes cast",
-    "%(count)s votes cast. Vote to see the results": {
-        "other": "%(count)s votes cast. Vote to see the results",
-        "one": "%(count)s vote cast. Vote to see the results"
-    },
-    "Based on %(count)s votes": {
-        "other": "Based on %(count)s votes",
-        "one": "Based on %(count)s vote"
+    "poll": {
+        "unable_edit_title": "Can't edit poll",
+        "unable_edit_description": "Sorry, you can't edit a poll after votes have been cast.",
+        "error_voting_title": "Vote not registered",
+        "error_voting_description": "Sorry, your vote was not registered. Please try again.",
+        "total_decryption_errors": "Due to decryption errors, some votes may not be counted",
+        "total_not_ended": "Results will be visible when the poll is ended",
+        "total_no_votes": "No votes cast",
+        "total_n_votes": {
+            "other": "%(count)s votes cast. Vote to see the results",
+            "one": "%(count)s vote cast. Vote to see the results"
+        },
+        "total_n_votes_voted": {
+            "other": "Based on %(count)s votes",
+            "one": "Based on %(count)s vote"
+        },
+        "create_poll_title": "Create poll",
+        "create_poll_action": "Create Poll",
+        "edit_poll_title": "Edit poll",
+        "failed_send_poll_title": "Failed to post poll",
+        "failed_send_poll_description": "Sorry, the poll you tried to create was not posted.",
+        "type_heading": "Poll type",
+        "type_open": "Open poll",
+        "type_closed": "Closed poll",
+        "topic_heading": "What is your poll question or topic?",
+        "topic_label": "Question or topic",
+        "topic_placeholder": "Write something…",
+        "options_heading": "Create options",
+        "options_label": "Option %(number)s",
+        "options_placeholder": "Write an option",
+        "options_add_button": "Add option",
+        "disclosed_notes": "Voters see results as soon as they have voted",
+        "notes": "Results are only revealed when you end the poll"
     },
     "edited": "edited",
-    "Ended a poll": "Ended a poll",
-    "Error decrypting video": "Error decrypting video",
-    "Error processing voice message": "Error processing voice message",
     "Add reaction": "Add reaction",
     "Custom reaction": "Custom reaction",
     "Add an Integration": "Add an Integration",
@@ -3382,25 +3419,6 @@
     "Language Dropdown": "Language Dropdown",
     "Message in %(room)s": "Message in %(room)s",
     "Message from %(user)s": "Message from %(user)s",
-    "poll": {
-        "create_poll_title": "Create poll",
-        "create_poll_action": "Create Poll",
-        "edit_poll_title": "Edit poll",
-        "failed_send_poll_title": "Failed to post poll",
-        "failed_send_poll_description": "Sorry, the poll you tried to create was not posted.",
-        "type_heading": "Poll type",
-        "type_open": "Open poll",
-        "type_closed": "Closed poll",
-        "topic_heading": "What is your poll question or topic?",
-        "topic_label": "Question or topic",
-        "topic_placeholder": "Write something…",
-        "options_heading": "Create options",
-        "options_label": "Option %(number)s",
-        "options_placeholder": "Write an option",
-        "options_add_button": "Add option",
-        "disclosed_notes": "Voters see results as soon as they have voted",
-        "notes": "Results are only revealed when you end the poll"
-    },
     "Power level": "Power level",
     "Custom level": "Custom level",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.",

@@ -170,17 +170,14 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                 let friendlyErrorMessage = "An error occured while trying to find and jump to the given date.";
                 let submitDebugLogsContent: JSX.Element = <></>;
                 if (err instanceof ConnectionError) {
-                    friendlyErrorMessage = _t(
-                        "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.",
-                    );
+                    friendlyErrorMessage = _t("room|error_jump_to_date_connection");
                 } else if (err instanceof MatrixError) {
                     if (err?.errcode === "M_NOT_FOUND") {
-                        friendlyErrorMessage = _t(
-                            "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.",
-                            { dateString: formatFullDateNoDay(new Date(unixTimestamp)) },
-                        );
+                        friendlyErrorMessage = _t("room|error_jump_to_date_not_found", {
+                            dateString: formatFullDateNoDay(new Date(unixTimestamp)),
+                        });
                     } else {
-                        friendlyErrorMessage = _t("Server returned %(statusCode)s with error code %(errorCode)s", {
+                        friendlyErrorMessage = _t("room|error_jump_to_date", {
                             statusCode: err?.httpStatus || _t("unknown status code"),
                             errorCode: err?.errcode || _t("unavailable"),
                         });
@@ -192,7 +189,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                     submitDebugLogsContent = (
                         <p>
                             {_t(
-                                "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.",
+                                "room|error_jump_to_date_send_logs_prompt",
                                 {},
                                 {
                                     debugLogsLink: (sub) => (
@@ -215,13 +212,13 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                 }
 
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Unable to find event at that date"),
+                    title: _t("room|error_jump_to_date_title"),
                     description: (
                         <div data-testid="jump-to-date-error-content">
                             <p>{friendlyErrorMessage}</p>
                             {submitDebugLogsContent}
                             <details>
-                                <summary>{_t("Error details")}</summary>
+                                <summary>{_t("room|error_jump_to_date_details")}</summary>
                                 <p>{String(err)}</p>
                             </details>
                         </div>
@@ -285,7 +282,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                             data-testid="jump-to-date-last-month"
                         />
                         <IconizedContextMenuOption
-                            label={_t("The beginning of the room")}
+                            label={_t("room|jump_to_date_beginning")}
                             onClick={this.onTheBeginningClicked}
                             data-testid="jump-to-date-beginning"
                         />
@@ -304,7 +301,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                 data-testid="jump-to-date-separator-button"
                 onClick={this.onContextMenuOpenClick}
                 isExpanded={!!this.state.contextMenuPosition}
-                title={_t("Jump to date")}
+                title={_t("room|jump_to_date")}
             >
                 <h2 className="mx_DateSeparator_dateHeading" aria-hidden="true">
                     {this.getLabel()}

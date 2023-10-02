@@ -150,7 +150,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 imgSrc: DOWNLOAD_ICON_URL,
                 imgStyle: null,
                 style: computedStyle(this.dummyLink.current),
-                textContent: _t("Download %(text)s", { text }),
+                textContent: _t("timeline|m.file|download_label", { text }),
             },
         });
     }
@@ -174,7 +174,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
             logger.warn("Unable to decrypt attachment: ", err);
             Modal.createDialog(ErrorDialog, {
                 title: _t("common|error"),
-                description: _t("Error decrypting attachment"),
+                description: _t("timeline|m.file|error_decrypting"),
             });
         }
     };
@@ -248,7 +248,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                         {showDownloadLink && (
                             <div className="mx_MFileBody_download">
                                 <AccessibleButton onClick={this.decryptFile}>
-                                    {_t("Decrypt %(text)s", { text: this.linkText })}
+                                    {_t("timeline|m.file|decrypt_label", { text: this.linkText })}
                                 </AccessibleButton>
                             </div>
                         )}
@@ -346,7 +346,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                         <div className="mx_MFileBody_download">
                             <a {...downloadProps}>
                                 <span className="mx_MFileBody_download_icon" />
-                                {_t("Download %(text)s", { text: this.linkText })}
+                                {_t("timeline|m.file|download_label", { text: this.linkText })}
                             </a>
                             {this.context.timelineRenderingType === TimelineRenderingType.File && (
                                 <div className="mx_MImageBody_size">
@@ -362,7 +362,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
             return (
                 <span className="mx_MFileBody">
                     {placeholder}
-                    {_t("Invalid file%(extra)s", { extra: extra })}
+                    {_t("timeline|m.file|error_invalid", { extra: extra })}
                 </span>
             );
         }

@@ -98,7 +98,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         if (this.state.error) {
             return (
                 <MediaProcessingError className="mx_MAudioBody">
-                    {_t("Error processing audio message")}
+                    {_t("timeline|m.audio|error_processing_audio")}
                 </MediaProcessingError>
             );
         }

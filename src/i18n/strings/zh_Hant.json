@@ -1,19 +1,13 @@
 {
     "An error has occurred.": "出現一個錯誤。",
     "%(items)s and %(lastItem)s": "%(items)s 和 %(lastItem)s",
-    "Decrypt %(text)s": "解密 %(text)s",
-    "Download %(text)s": "下載 %(text)s",
     "Email address": "電子郵件地址",
-    "Error decrypting attachment": "解密附件時出錯",
-    "Invalid file%(extra)s": "不存在的文件 %(extra)s",
     "Join Room": "加入聊天室",
     "Session ID": "工作階段 ID",
     "Sun": "週日",
     "Mon": "週一",
     "Tue": "週二",
     "unknown error code": "未知的錯誤代碼",
-    "Error decrypting image": "解密圖片出錯",
-    "Error decrypting video": "解密影片出錯",
     "Add an Integration": "新增整合器",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "您即將被帶到第三方網站，以便您可以驗證帳戶來使用 %(integrationsUrl)s。請問您要繼續嗎？",
     "Create new room": "建立新聊天室",
@@ -245,19 +239,10 @@
     },
     "e.g. my-room": "例如：my-room",
     "Close dialog": "關閉對話框",
-    "Show image": "顯示圖片",
-    "This client does not support end-to-end encryption.": "此客戶端不支援端對端加密。",
     "Cancel search": "取消搜尋",
-    "You verified %(name)s": "您驗證了 %(name)s",
-    "You cancelled verifying %(name)s": "您已取消驗證 %(name)s",
-    "%(name)s cancelled verifying": "%(name)s 已取消驗證",
-    "You accepted": "您已接受",
     "%(name)s accepted": "%(name)s 已接受",
-    "You cancelled": "您已取消",
     "%(name)s cancelled": "%(name)s 已取消",
     "%(name)s wants to verify": "%(name)s 想要驗證",
-    "You sent a verification request": "您已傳送了驗證請求",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "您已忽略這個使用者，所以他們的訊息會隱藏。<a>無論如何都顯示。</a>",
     "Failed to connect to integration manager": "無法連線到整合服務伺服器",
     "Integrations are disabled": "整合已停用",
     "Integrations not allowed": "不允許整合",
@@ -286,18 +271,11 @@
         "other": "%(count)s 個工作階段",
         "one": "%(count)s 個工作階段"
     },
-    "Verify by emoji": "透過表情符號驗證",
-    "Verify by comparing unique emoji.": "透過比對獨特的表情符號來進行驗證。",
-    "Ask %(displayName)s to scan your code:": "要求 %(displayName)s 掃描您的條碼：",
-    "If you can't scan the code above, verify by comparing unique emoji.": "如果您無法掃描上面的條碼，請透過比較獨特的表情符號驗證。",
-    "You've successfully verified %(displayName)s!": "您已成功驗證 %(displayName)s！",
     "Clear all data in this session?": "清除此工作階段中的所有資料？",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "將會永久清除此工作階段的所有資料。除非已備份金鑰，否則將會遺失所有加密訊息。",
     "Session name": "工作階段名稱",
     "Session key": "工作階段金鑰",
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "驗證此使用者將會把他們的工作階段標記為受信任，並同時為他們標記您的工作階段為可信任。",
-    "Encryption not enabled": "加密未啟用",
-    "The encryption used by this room isn't supported.": "不支援此聊天室使用的加密。",
     "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "驗證此裝置，並標記為可受信任。由您將裝置標記為可受信任後，可讓聊天夥伴傳送端到端加密訊息時能更加放心。",
     "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "驗證此裝置將會將其標記為受信任，且已驗證您的使用者將會信任此裝置。",
     "Destroy cross-signing keys?": "摧毀交叉簽署金鑰？",
@@ -306,8 +284,6 @@
     "Not Trusted": "未受信任",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s （%(userId)s）登入到未驗證的新工作階段：",
     "Ask this user to verify their session, or manually verify it below.": "要求此使用者驗證他們的工作階段，或在下方手動驗證。",
-    "Verify by scanning": "透過掃描來驗證",
-    "You declined": "您拒絕了",
     "%(name)s declined": "%(name)s 拒絕了",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "要回報與 Matrix 有關的安全性問題，請閱讀 Matrix.org 的<a>安全性揭露政策</a>。",
     "Enter a server name": "輸入伺服器名稱",
@@ -329,15 +305,7 @@
     "Confirm by comparing the following with the User Settings in your other session:": "透過將下列內容與您其他工作階段中的「使用者設定」所顯示的內容來確認：",
     "Confirm this user's session by comparing the following with their User Settings:": "將以下內容與對方的「使用者設定」當中顯示的內容進行比對，來確認對方的工作階段：",
     "If they don't match, the security of your communication may be compromised.": "如果它們不相符，則可能會威脅到您的通訊安全。",
-    "Verify all users in a room to ensure it's secure.": "請驗證聊天室中的所有使用者來確保安全。",
     "Sign in with SSO": "使用 SSO 登入",
-    "Almost there! Is %(displayName)s showing the same shield?": "差不多了！%(displayName)s 是否顯示相同的盾牌？",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "您已成功驗證了 %(deviceName)s (%(deviceId)s)!",
-    "Start verification again from the notification.": "從通知再次開始驗證。",
-    "Start verification again from their profile.": "從他們的個人簡介再次開始驗證。",
-    "Verification timed out.": "驗證逾時。",
-    "%(displayName)s cancelled verification.": "%(displayName)s 取消驗證。",
-    "You cancelled verification.": "您取消了驗證。",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "透過使用單一登入系統來證您的身分以確認停用您的帳號。",
     "Are you sure you want to deactivate your account? This is irreversible.": "確定您想要停用您的帳號嗎？此為不可逆的操作。",
     "Confirm account deactivation": "確認停用帳號",
@@ -354,7 +322,6 @@
     "Successfully restored %(sessionCount)s keys": "成功復原 %(sessionCount)s 金鑰",
     "You signed in to a new session without verifying it:": "您已登入新的工作階段但未驗證：",
     "Verify your other session using one of the options below.": "使用下方的其中一個選項來驗證您其他工作階段。",
-    "You've successfully verified your device!": "您已成功驗證您的裝置！",
     "To continue, use Single Sign On to prove your identity.": "要繼續，使用單一登入系統來證明您的身分。",
     "Confirm to continue": "確認以繼續",
     "Click the button below to confirm your identity.": "點擊下方按鈕以確認您的身分。",
@@ -401,12 +368,6 @@
     "Use the <a>Desktop app</a> to search encrypted messages": "使用<a>桌面應用程式</a>搜尋加密訊息",
     "This version of %(brand)s does not support viewing some encrypted files": "此版本的 %(brand)s 不支援檢視某些加密檔案",
     "This version of %(brand)s does not support searching encrypted messages": "此版本的 %(brand)s 不支援搜尋加密訊息",
-    "Join the conference at the top of this room": "加入此聊天室頂部的會議",
-    "Join the conference from the room information card on the right": "從右側的聊天室資訊卡片加入會議",
-    "Video conference ended by %(senderName)s": "視訊會議由 %(senderName)s 結束",
-    "Video conference updated by %(senderName)s": "視訊會議由 %(senderName)s 更新",
-    "Video conference started by %(senderName)s": "視訊會議由 %(senderName)s 開始",
-    "Ignored attempt to disable encryption": "已忽略嘗試停用加密",
     "Data on this screen is shared with %(widgetDomain)s": "在此畫面上的資料會與 %(widgetDomain)s 分享",
     "Modal Widget": "程式小工具",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "使用某人的名字、電子郵件地址、使用者名稱（如 <userId/>）或<a>分享此聊天空間</a>來邀請人。",
@@ -711,7 +672,6 @@
     },
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "這通常只影響伺服器如何處理聊天室。如果您的 %(brand)s 遇到問題，請回報錯誤。",
     "Invite to %(roomName)s": "邀請加入 %(roomName)s",
-    "Edit devices": "編輯裝置",
     "%(count)s people you know have already joined": {
         "other": "%(count)s 個您認識的人已加入",
         "one": "%(count)s 個您認識的人已加入"
@@ -741,7 +701,6 @@
     },
     "Not all selected were added": "並非所有選定的都被新增了",
     "You are not allowed to view this server's rooms list": "您不被允許檢視此伺服器的聊天室清單",
-    "Error processing voice message": "處理語音訊息時發生錯誤",
     "You may contact me if you have any follow up questions": "如果後續有任何問題，可以聯絡我",
     "To leave the beta, visit your settings.": "請到設定頁面離開 Beta 測試版。",
     "Add reaction": "新增反應",
@@ -752,16 +711,8 @@
     "You don't have permission to do this": "您沒有權限執行此動作",
     "Please provide an address": "請提供位址",
     "Message search initialisation failed, check <a>your settings</a> for more information": "訊息搜尋初始化失敗，請檢查<a>您的設定</a>以取得更多資訊",
-    "Error processing audio message": "處理音訊訊息時出現問題",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "您的 %(brand)s 不允許您使用整合管理員來執行此動作。請聯絡管理員。",
     "User Directory": "使用者目錄",
-    "The call is in an unknown state!": "通話處於未知狀態！",
-    "Call back": "回撥",
-    "No answer": "無回應",
-    "An unknown error occurred": "出現未知錯誤",
-    "Their device couldn't start the camera or microphone": "他們的裝置無法啟動相機或麥克風",
-    "Connection failed": "連線失敗",
-    "Could not connect media": "無法連結媒體",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>請注意，升級會讓聊天室變成全新的版本</b>。目前所有的訊息都只會留在被封存的聊天室。",
     "Automatically invite members from this room to the new one": "自動將該聊天室的成員邀請至新的聊天室",
     "These are likely ones other room admins are a part of.": "這些可能是其他聊天室管理員的一部分。",
@@ -788,11 +739,6 @@
     "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "您是將要離開的聊天室與聊天空間唯一的管理員。您離開之後會讓它們沒有任何管理員。",
     "You're the only admin of this space. Leaving it will mean no one has control over it.": "您是此聊天空間唯一的管理員。離開將代表沒有人可以控制它。",
     "You won't be able to rejoin unless you are re-invited.": "您將無法重新加入，除非您再次被邀請。",
-    "Decrypting": "正在解密",
-    "Missed call": "未接來電",
-    "Call declined": "已拒絕通話",
-    "Unknown failure: %(reason)s": "未知錯誤：%(reason)s",
-    "Some encryption parameters have been changed.": "部份加密參數已變更。",
     "To join a space you'll need an invite.": "若要加入聊天空間，您必須被邀請。",
     "Would you like to leave the rooms in this space?": "您想要離開此聊天空間中的聊天室嗎？",
     "You are about to leave <spaceName/>.": "您將要離開 <spaceName/>。",
@@ -801,7 +747,6 @@
     "Don't leave any rooms": "不要離開任何聊天室",
     "MB": "MB",
     "In reply to <a>this message</a>": "回覆<a>此訊息</a>",
-    "Downloading": "正在下載",
     "%(count)s reply": {
         "one": "%(count)s 回覆",
         "other": "%(count)s 回覆"
@@ -809,14 +754,8 @@
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "輸入您的安全密語或<button>使用您的安全金鑰</button>以繼續。",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "重新存取您的帳號並復原儲存在此工作階段中的加密金鑰。沒有它們，您將無法在任何工作階段中閱讀所有安全訊息。",
     "If you can't see who you're looking for, send them your invite link below.": "如果您看不到您要找的人，請將您的邀請連結傳送給他們。",
-    "In encrypted rooms, verify all users to ensure it's secure.": "在加密的聊天適中，驗證所有使用者以確保其安全。",
     "Thread options": "討論串選項",
-    "Reply in thread": "在討論串中回覆",
     "Forget": "忘記",
-    "Based on %(count)s votes": {
-        "one": "總票數 %(count)s 票",
-        "other": "總票數 %(count)s 票"
-    },
     "%(count)s votes": {
         "one": "%(count)s 個投票",
         "other": "%(count)s 個投票"
@@ -825,8 +764,6 @@
         "one": "%(spaceName)s 與 %(count)s 個其他的",
         "other": "%(spaceName)s 與 %(count)s 個其他的"
     },
-    "Sorry, your vote was not registered. Please try again.": "抱歉，您的投票未計入。請再試一次。",
-    "Vote not registered": "投票未計入",
     "Developer": "開發者",
     "Experimental": "實驗性",
     "Themes": "主題",
@@ -834,21 +771,12 @@
     "Messaging": "訊息傳遞",
     "Spaces you know that contain this space": "您知道的包含此聊天空間的聊天空間",
     "Recently viewed": "最近檢視過",
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "已投 %(count)s 票。投票後即可檢視結果",
-        "other": "已投 %(count)s 票。投票後即可檢視結果"
-    },
-    "No votes cast": "尚無投票",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "您確定您想要結束此投票？這將會顯示最終投票結果並阻止人們投票。",
     "End Poll": "結束投票",
     "Sorry, the poll did not end. Please try again.": "抱歉，投票沒有結束。請再試一次。",
     "Failed to end poll": "無法結束投票",
     "The poll has ended. Top answer: %(topAnswer)s": "投票已結束。最佳答案：%(topAnswer)s",
     "The poll has ended. No votes were cast.": "投票已結束。沒有投票。",
-    "Final result based on %(count)s votes": {
-        "one": "共計 %(count)s 票所獲得的投票結果",
-        "other": "共計 %(count)s 票所獲得的投票結果"
-    },
     "Link to room": "連結到聊天室",
     "Recent searches": "近期搜尋",
     "To search messages, look for this icon at the top of a room <icon/>": "要搜尋訊息，請在聊天室頂部尋找此圖示 <icon/>",
@@ -866,34 +794,20 @@
     "Missing room name or separator e.g. (my-room:domain.org)": "缺少聊天室名稱或分隔符號，例如 (my-room:domain.org)",
     "Missing domain separator e.g. (:domain.org)": "缺少網域名分隔符號，例如 (:domain.org)",
     "Verify other device": "驗證其他裝置",
-    "You cancelled verification on your other device.": "您在其他裝置上取消了驗證。",
-    "Almost there! Is your other device showing the same shield?": "快好了！您的其他裝置是否顯示了相同的盾牌？",
     "Could not fetch location": "無法取得位置",
-    "Message pending moderation": "待審核的訊息",
-    "Message pending moderation: %(reason)s": "待審核的訊息：%(reason)s",
-    "Pick a date to jump to": "挑選要跳至的日期",
-    "Jump to date": "跳至日期",
-    "The beginning of the room": "聊天室開頭",
     "This address does not point at this room": "此位址並未指向此聊天室",
     "Location": "位置",
     "Use <arrows/> to scroll": "使用 <arrows/> 捲動",
     "Feedback sent! Thanks, we appreciate it!": "已傳送回饋！謝謝，我們感激不盡！",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s 與 %(space2Name)s",
     "Join %(roomAddress)s": "加入 %(roomAddress)s",
-    "Sorry, you can't edit a poll after votes have been cast.": "抱歉，您無法在有人投票後編輯投票。",
-    "Can't edit poll": "無法編輯投票",
     "Search Dialog": "搜尋對話方塊",
-    "Results will be visible when the poll is ended": "結果將在投票結束時可見",
     "What location type do you want to share?": "您要分享哪種位置類型？",
     "Drop a Pin": "自訂位置",
     "My live location": "我的即時位置",
     "My current location": "我目前的位置",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s 無法傳送您的位置。請稍後再試。",
     "We couldn't send your location": "我們無法傳送您的位置",
-    "Click": "點擊",
-    "Expand quotes": "展開引號",
-    "Collapse quotes": "收折引號",
-    "Can't create a thread from an event with an existing relation": "無法從討論串既有的關係建立活動",
     "You are sharing your live location": "您正在分享您的即時位置",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "若您也想移除此使用者的系統訊息（例如成員資格變更、個人資料變更…），請取消勾選",
     "Preserve system messages": "保留系統訊息",
@@ -911,7 +825,6 @@
         "other": "%(count)s 個參與者"
     },
     "Live location ended": "即時位置已結束",
-    "View live location": "檢視即時位置",
     "Live location enabled": "即時位置已啟用",
     "Live location error": "即時位置錯誤",
     "Live until %(expiryTime)s": "即時分享直到 %(expiryTime)s",
@@ -969,26 +882,18 @@
     "You're in": "加入成功！",
     "You need to have the right permissions in order to share locations in this room.": "您必須有正確的權限才能在此聊天室中分享位置。",
     "You don't have permission to share locations": "您沒有權限分享位置",
-    "Messages in this chat will be end-to-end encrypted.": "此聊天中的訊息將使用端對端加密。",
     "Saved Items": "已儲存的項目",
     "Choose a locale": "選擇語系",
     "Interactively verify by emoji": "透過表情符號互動來驗證",
     "Manually verify by text": "透過文字手動驗證",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s 或 %(recoveryFile)s",
-    "Video call ended": "視訊通話已結束",
     "%(name)s started a video call": "%(name)s 開始了視訊通話",
-    "Error downloading image": "下載圖片時發生錯誤",
-    "Unable to show image due to error": "因為錯誤而無法顯示圖片",
     "Thread root ID: %(threadRootId)s": "討論串根 ID：%(threadRootId)s",
     "<w>WARNING:</w> <description/>": "<w>警告：</w> <description/>",
     " in <strong>%(room)s</strong>": " 在 <strong>%(room)s</strong>",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "您無法開始語音訊息，因為您目前正在錄製直播。請結束您的直播以開始錄製語音訊息。",
     "Can't start voice message": "無法開始語音訊息",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "unknown": "未知",
-    "There are no past polls in this room": "此聊天室沒有過去的投票",
-    "There are no active polls in this room": "此聊天室沒有正在進行的投票",
-    "Declining…": "正在拒絕…",
     "Enable '%(manageIntegrations)s' in Settings to do this.": "在設定中啟用「%(manageIntegrations)s」來執行此動作。",
     "Loading live location…": "正在載入即時位置…",
     "Fetching keys from server…": "正在取得來自伺服器的金鑰…",
@@ -996,46 +901,18 @@
     "Waiting for partner to confirm…": "正在等待夥伴確認…",
     "Adding…": "正在新增…",
     "Starting export process…": "正在開始匯出流程…",
-    "Loading polls": "正在載入投票",
-    "Ended a poll": "投票已結束",
-    "Due to decryption errors, some votes may not be counted": "因為解密錯誤，不會計算部份投票",
-    "The sender has blocked you from receiving this message": "傳送者已封鎖您，因此無法接收此訊息",
-    "View poll": "檢視投票",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "過去一天沒有過去的投票。載入更多投票以檢視前幾個月的投票",
-        "other": "過去 %(count)s 天沒有過去的投票。載入更多投票以檢視前幾個月的投票"
-    },
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "過去一天沒有進行中的投票。載入更多投票以檢視前幾個月的投票",
-        "other": "過去 %(count)s 天沒有進行中的投票。載入更多投票以檢視前幾個月的投票"
-    },
-    "There are no past polls. Load more polls to view polls for previous months": "沒有過去的投票。載入更多投票以檢視前幾個月的投票",
-    "There are no active polls. Load more polls to view polls for previous months": "沒有進行中的投票。載入更多投票以檢視前幾個月的投票",
-    "Load more polls": "載入更多投票",
-    "Past polls": "過去的投票",
-    "Active polls": "進行中的投票",
-    "View poll in timeline": "在時間軸中檢視投票",
-    "Answered elsewhere": "在別處回答",
     "Invites by email can only be sent one at a time": "透過電子郵件傳送的邀請一次只能傳送一個",
     "Desktop app logo": "桌面應用程式標誌",
     "Requires your server to support the stable version of MSC3827": "您的伺服器必須支援穩定版本的 MSC3827",
     "Message from %(user)s": "來自 %(user)s 的訊息",
     "Message in %(room)s": "%(room)s 中的訊息",
-    "Error details": "錯誤詳細資訊",
-    "Unable to find event at that date": "找不到該日期的事件",
-    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "請遞交<debugLogsLink>除錯紀錄檔</debugLogsLink>以協助我們追蹤問題。",
     "unavailable": "無法使用",
     "unknown status code": "未知狀態代碼",
-    "Server returned %(statusCode)s with error code %(errorCode)s": "伺服器回傳 %(statusCode)s，錯誤代碼為 %(errorCode)s",
-    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "我們無法從 %(dateString)s 中找到期待的事件。嘗試選擇一個較早的日期。",
-    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "嘗試尋找並前往指定日期時發生網路錯誤。您的家伺服器可能已關閉，或者您的網際網路連線只是暫時出現問題。請再試一次。如果這種情況繼續存在，請聯絡您的家伺服器管理員。",
     "Start DM anyway": "開始直接訊息",
     "Start DM anyway and never warn me again": "開始直接訊息且不要再次警告",
     "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "找不到下方列出的 Matrix ID 個人檔案，您是否仍要開始直接訊息？",
     "Upgrade room": "升級聊天室",
     "Note that removing room changes like this could undo the change.": "請注意，像這樣移除聊天是變更可能會還原變更。",
-    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.": "此處的訊息為端到端加密。請在其個人檔案中驗證 %(displayName)s - 點擊其個人檔案圖片。",
-    "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "此聊天室中的訊息為端到端加密。當人們加入時，您可以在他們的個人檔案中驗證他們，點擊他們的個人檔案就可以了。",
     "Are you sure you wish to remove (delete) this event?": "您真的想要移除（刪除）此活動嗎？",
     "Other spaces you know": "您知道的其他空間",
     "Failed to query public rooms": "檢索公開聊天室失敗",
@@ -1276,7 +1153,9 @@
         "new_room": "新聊天室",
         "new_video_room": "新視訊聊天室",
         "add_existing_room": "新增既有的聊天室",
-        "explore_public_rooms": "探索公開聊天室"
+        "explore_public_rooms": "探索公開聊天室",
+        "reply_in_thread": "在討論串中回覆",
+        "click": "點擊"
     },
     "a11y": {
         "user_menu": "使用者選單",
@@ -2277,13 +2156,25 @@
     "timeline": {
         "m.call": {
             "video_call_started": "視訊通話在 %(roomName)s 開始。",
-            "video_call_started_unsupported": "視訊通話在 %(roomName)s 開始。（此瀏覽器不支援）"
+            "video_call_started_unsupported": "視訊通話在 %(roomName)s 開始。（此瀏覽器不支援）",
+            "video_call_ended": "視訊通話已結束"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s 撥打了語音通話。",
             "voice_call_unsupported": "%(senderName)s 撥打了語音通話。（不被此瀏覽器支援）",
             "video_call": "%(senderName)s 撥打了視訊通話。",
-            "video_call_unsupported": "%(senderName)s 撥打了視訊通話。（不被此瀏覽器支援）"
+            "video_call_unsupported": "%(senderName)s 撥打了視訊通話。（不被此瀏覽器支援）",
+            "declined": "已拒絕通話",
+            "call_back_prompt": "回撥",
+            "answered_elsewhere": "在別處回答",
+            "missed_call": "未接來電",
+            "no_answer": "無回應",
+            "failed_connect_media": "無法連結媒體",
+            "failed_connection": "連線失敗",
+            "failed_opponent_media": "他們的裝置無法啟動相機或麥克風",
+            "unknown_error": "出現未知錯誤",
+            "unknown_failure": "未知錯誤：%(reason)s",
+            "unknown_state": "通話處於未知狀態！"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s 已接受 %(displayName)s 的邀請",
@@ -2335,7 +2226,6 @@
             "forbidden": "%(senderDisplayName)s 已拒絕訪客加入聊天室。",
             "unknown": "%(senderDisplayName)s 將訪客存取權限更改為 %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s 傳了一張圖片。",
         "m.sticker": "%(senderDisplayName)s 傳送了貼圖。",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s 已為此聊天室設置伺服器的存取控制列表。",
@@ -2379,7 +2269,12 @@
         "m.widget": {
             "modified": "%(widgetName)s 小工具已被 %(senderName)s 修改",
             "added": "%(widgetName)s 小工具是由 %(senderName)s 所新增",
-            "removed": "%(widgetName)s 小工具是由 %(senderName)s 所移除"
+            "removed": "%(widgetName)s 小工具是由 %(senderName)s 所移除",
+            "jitsi_join_top_prompt": "加入此聊天室頂部的會議",
+            "jitsi_join_right_prompt": "從右側的聊天室資訊卡片加入會議",
+            "jitsi_ended": "視訊會議由 %(senderName)s 結束",
+            "jitsi_updated": "視訊會議由 %(senderName)s 更新",
+            "jitsi_started": "視訊會議由 %(senderName)s 開始"
         },
         "io.element.widgets.layout": "%(senderName)s 已更新聊天室佈局",
         "m.location": {
@@ -2390,7 +2285,6 @@
         "self_redaction": "訊息已刪除",
         "redaction": "訊息已被 %(name)s 刪除",
         "m.poll.start": "%(senderName)s 啟動了投票 - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s 結束了投票",
         "typing_indicator": {
             "one_user": "%(displayName)s 正在打字…",
             "two_users": "%(names)s 與 %(lastPerson)s 正在打字…",
@@ -2562,7 +2456,8 @@
             "changed_rule_users": "%(senderName)s 將封鎖符合 %(oldGlob)s 的使用者規則變更為 %(newGlob)s 因為 %(reason)s",
             "changed_rule_rooms": "%(senderName)s 將封鎖符合 %(oldGlob)s 聊天室的規則變更為 %(newGlob)s，因為 %(reason)s",
             "changed_rule_servers": "%(senderName)s 將封鎖符合 %(oldGlob)s 伺服器的規則變更為 %(newGlob)s，因為 %(reason)s",
-            "changed_rule_glob": "%(senderName)s 將封鎖符合 %(oldGlob)s 的規則更新為 %(newGlob)s，因為 %(reason)s"
+            "changed_rule_glob": "%(senderName)s 將封鎖符合 %(oldGlob)s 的規則更新為 %(newGlob)s，因為 %(reason)s",
+            "message_hidden": "您已忽略這個使用者，所以他們的訊息會隱藏。<a>無論如何都顯示。</a>"
         },
         "no_permission_messages_before_invite": "您沒有權限檢視您被邀請前的訊息。",
         "no_permission_messages_before_join": "您沒有權限檢視加入前的訊息。",
@@ -2616,18 +2511,72 @@
         "mab": {
             "label": "訊息動作",
             "view_in_room": "在聊天室中檢視",
-            "copy_link_thread": "複製討論串連結"
+            "copy_link_thread": "複製討論串連結",
+            "collapse_reply_chain": "收折引號",
+            "expand_reply_chain": "展開引號"
         },
         "m.audio": {
             "unnamed_audio": "未命名的音訊",
-            "error_downloading_audio": "下載音訊時發生錯誤"
+            "error_downloading_audio": "下載音訊時發生錯誤",
+            "error_processing_audio": "處理音訊訊息時出現問題",
+            "error_processing_voice_message": "處理語音訊息時發生錯誤"
         },
         "load_error": {
             "no_permission": "嘗試載入此聊天室時間軸上的特定時間點，但您沒有權限檢視相關的訊息。",
             "unable_to_find": "嘗試載入此聊天室時間軸上的特定時間點，但是找不到。",
             "title": "無法載入時間軸位置"
         },
-        "error_no_renderer": "此活動無法顯示"
+        "error_no_renderer": "此活動無法顯示",
+        "decryption_failure_blocked": "傳送者已封鎖您，因此無法接收此訊息",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_downloading": "正在下載",
+        "download_action_decrypting": "正在解密",
+        "m.room.encryption": {
+            "parameters_changed": "部份加密參數已變更。",
+            "enabled_dm": "此處的訊息為端到端加密。請在其個人檔案中驗證 %(displayName)s - 點擊其個人檔案圖片。",
+            "enabled_local": "此聊天中的訊息將使用端對端加密。",
+            "enabled": "此聊天室中的訊息為端到端加密。當人們加入時，您可以在他們的個人檔案中驗證他們，點擊他們的個人檔案就可以了。",
+            "disable_attempt": "已忽略嘗試停用加密",
+            "disabled": "加密未啟用",
+            "unsupported": "不支援此聊天室使用的加密。"
+        },
+        "pending_moderation_reason": "待審核的訊息：%(reason)s",
+        "pending_moderation": "待審核的訊息",
+        "m.beacon_info": {
+            "view_live_location": "檢視即時位置"
+        },
+        "m.file": {
+            "download_label": "下載 %(text)s",
+            "error_decrypting": "解密附件時出錯",
+            "decrypt_label": "解密 %(text)s",
+            "error_invalid": "不存在的文件 %(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s 傳了一張圖片。",
+            "error": "因為錯誤而無法顯示圖片",
+            "error_decrypting": "解密圖片出錯",
+            "error_downloading": "下載圖片時發生錯誤",
+            "show_image": "顯示圖片"
+        },
+        "m.key.verification.done": "您驗證了 %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "您已取消驗證 %(name)s",
+            "user_cancelled": "%(name)s 已取消驗證"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "您已接受",
+            "you_declined": "您拒絕了",
+            "you_cancelled": "您已取消",
+            "declining": "正在拒絕…",
+            "you_started": "您已傳送了驗證請求"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s 結束了投票",
+            "ended": "投票已結束"
+        },
+        "m.video": {
+            "error_decrypting": "解密影片出錯"
+        }
     },
     "slash_command": {
         "spoiler": "將指定訊息以劇透傳送",
@@ -3114,7 +3063,25 @@
                 "reset_confirmation": "真的要重設驗證金鑰？",
                 "skip_verification": "暫時略過驗證"
             },
-            "accepting": "正在接受…"
+            "accepting": "正在接受…",
+            "scan_qr": "透過掃描來驗證",
+            "scan_qr_explainer": "要求 %(displayName)s 掃描您的條碼：",
+            "verify_emoji_prompt_qr": "如果您無法掃描上面的條碼，請透過比較獨特的表情符號驗證。",
+            "verify_emoji_prompt": "透過比對獨特的表情符號來進行驗證。",
+            "verify_emoji": "透過表情符號驗證",
+            "qr_reciprocate_same_shield_device": "快好了！您的其他裝置是否顯示了相同的盾牌？",
+            "qr_reciprocate_same_shield_user": "差不多了！%(displayName)s 是否顯示相同的盾牌？",
+            "prompt_encrypted": "請驗證聊天室中的所有使用者來確保安全。",
+            "prompt_unencrypted": "在加密的聊天適中，驗證所有使用者以確保其安全。",
+            "successful_own_device": "您已成功驗證您的裝置！",
+            "successful_device": "您已成功驗證了 %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "您已成功驗證 %(displayName)s！",
+            "prompt_self": "從通知再次開始驗證。",
+            "prompt_user": "從他們的個人簡介再次開始驗證。",
+            "timed_out": "驗證逾時。",
+            "cancelled_self": "您在其他裝置上取消了驗證。",
+            "cancelled_user": "%(displayName)s 取消驗證。",
+            "cancelled": "您取消了驗證。"
         },
         "old_version_detected_title": "偵測到舊的加密資料",
         "old_version_detected_description": "偵測到來自舊版 %(brand)s 的資料。這將會造成舊版的端對端加密失敗。在此版本中使用最近在舊版本交換的金鑰可能無法解密訊息。這也會造成與此版本的訊息交換失敗。若您遇到問題，請登出並重新登入。要保留訊息歷史，請匯出並重新匯入您的金鑰。",
@@ -3167,7 +3134,8 @@
         "cross_signing_user_normal": "您尚未驗證此使用者。",
         "cross_signing_room_warning": "某人正在使用未知的工作階段",
         "cross_signing_room_verified": "此聊天室中每個人都已驗證",
-        "cross_signing_room_normal": "此聊天室已端對端加密"
+        "cross_signing_room_normal": "此聊天室已端對端加密",
+        "unsupported": "此客戶端不支援端對端加密。"
     },
     "emoji": {
         "category_frequently_used": "經常使用",
@@ -3662,7 +3630,8 @@
         "empty_tip": "<b>秘訣：</b>在滑鼠游標停於訊息上時使用「%(replyInThread)s」。",
         "empty_heading": "使用「討論串」功能，讓討論保持有條不紊",
         "unable_to_decrypt": "無法解密訊息",
-        "open_thread": "開啟討論串"
+        "open_thread": "開啟討論串",
+        "error_start_thread_existing_relation": "無法從討論串既有的關係建立活動"
     },
     "theme": {
         "light_high_contrast": "亮色高對比",
@@ -3968,7 +3937,16 @@
         "jump_read_marker": "跳到第一則未讀訊息。",
         "inviter_unknown": "未知",
         "failed_reject_invite": "無法拒絕邀請",
-        "creating_room_text": "正在建立包含 %(names)s 的聊天室"
+        "creating_room_text": "正在建立包含 %(names)s 的聊天室",
+        "error_jump_to_date_connection": "嘗試尋找並前往指定日期時發生網路錯誤。您的家伺服器可能已關閉，或者您的網際網路連線只是暫時出現問題。請再試一次。如果這種情況繼續存在，請聯絡您的家伺服器管理員。",
+        "error_jump_to_date_not_found": "我們無法從 %(dateString)s 中找到期待的事件。嘗試選擇一個較早的日期。",
+        "error_jump_to_date": "伺服器回傳 %(statusCode)s，錯誤代碼為 %(errorCode)s",
+        "error_jump_to_date_send_logs_prompt": "請遞交<debugLogsLink>除錯紀錄檔</debugLogsLink>以協助我們追蹤問題。",
+        "error_jump_to_date_title": "找不到該日期的事件",
+        "error_jump_to_date_details": "錯誤詳細資訊",
+        "jump_to_date_beginning": "聊天室開頭",
+        "jump_to_date": "跳至日期",
+        "jump_to_date_prompt": "挑選要跳至的日期"
     },
     "file_panel": {
         "guest_note": "您必須<a>註冊</a>以使用此功能",
@@ -4011,7 +3989,22 @@
         "options_placeholder": "編寫選項",
         "options_add_button": "新增選項",
         "disclosed_notes": "投票者在投票後可以立刻看到投票結果",
-        "notes": "結果僅在您結束投票後顯示"
+        "notes": "結果僅在您結束投票後顯示",
+        "unable_edit_title": "無法編輯投票",
+        "unable_edit_description": "抱歉，您無法在有人投票後編輯投票。",
+        "error_voting_title": "投票未計入",
+        "error_voting_description": "抱歉，您的投票未計入。請再試一次。",
+        "total_decryption_errors": "因為解密錯誤，不會計算部份投票",
+        "total_not_ended": "結果將在投票結束時可見",
+        "total_no_votes": "尚無投票",
+        "total_n_votes": {
+            "one": "已投 %(count)s 票。投票後即可檢視結果",
+            "other": "已投 %(count)s 票。投票後即可檢視結果"
+        },
+        "total_n_votes_voted": {
+            "one": "總票數 %(count)s 票",
+            "other": "總票數 %(count)s 票"
+        }
     },
     "failed_load_async_component": "無法載入！請檢查您的網路連線狀態並再試一次。",
     "upload_failed_generic": "無法上傳檔案「%(fileName)s」。",
@@ -4245,7 +4238,8 @@
         "deactivate_confirm_description": "停用此使用者將會把他們登出並防止他們再次登入。另外，他們也將會離開所有加入的聊天室。此動作不可逆。您確定您想要停用此使用者嗎？",
         "deactivate_confirm_action": "停用使用者",
         "error_deactivate": "無法停用使用者",
-        "role_label": "<RoomName/> 中的角色"
+        "role_label": "<RoomName/> 中的角色",
+        "edit_own_devices": "編輯裝置"
     },
     "stickers": {
         "empty": "您目前沒有啟用任何貼圖包",
@@ -4274,7 +4268,31 @@
         "pinned_messages_button": "已釘選",
         "export_chat_button": "匯出聊天",
         "share_button": "分享聊天室",
-        "settings_button": "聊天室設定"
+        "settings_button": "聊天室設定",
+        "poll": {
+            "view_in_timeline": "在時間軸中檢視投票",
+            "active_heading": "進行中的投票",
+            "past_heading": "過去的投票",
+            "loading": "正在載入投票",
+            "load_more": "載入更多投票",
+            "empty_active": "此聊天室沒有正在進行的投票",
+            "empty_past": "此聊天室沒有過去的投票",
+            "empty_active_load_more": "沒有進行中的投票。載入更多投票以檢視前幾個月的投票",
+            "empty_past_load_more": "沒有過去的投票。載入更多投票以檢視前幾個月的投票",
+            "empty_active_load_more_n_days": {
+                "one": "過去一天沒有進行中的投票。載入更多投票以檢視前幾個月的投票",
+                "other": "過去 %(count)s 天沒有進行中的投票。載入更多投票以檢視前幾個月的投票"
+            },
+            "empty_past_load_more_n_days": {
+                "one": "過去一天沒有過去的投票。載入更多投票以檢視前幾個月的投票",
+                "other": "過去 %(count)s 天沒有過去的投票。載入更多投票以檢視前幾個月的投票"
+            },
+            "view_poll": "檢視投票",
+            "final_result": {
+                "one": "共計 %(count)s 票所獲得的投票結果",
+                "other": "共計 %(count)s 票所獲得的投票結果"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "拒絕邀請",

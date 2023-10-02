@@ -83,7 +83,6 @@
     "Session name": "Назва сеансу",
     "Session ID": "ID сеансу",
     "Session key": "Ключ сеансу",
-    "You sent a verification request": "Ви надіслали запит перевірки",
     "Direct Messages": "Особисті повідомлення",
     "Room Settings - %(roomName)s": "Налаштування кімнати - %(roomName)s",
     "You signed in to a new session without verifying it:": "Ви увійшли в новий сеанс, не звіривши його:",
@@ -180,12 +179,7 @@
     "I don't want my encrypted messages": "Мені не потрібні мої зашифровані повідомлення",
     "You'll lose access to your encrypted messages": "Ви втратите доступ до ваших зашифрованих повідомлень",
     "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Бракує деяких даних сеансу, включно з ключами зашифрованих повідомлень. Вийдіть та зайдіть знову щоб виправити цю проблему, відновлюючи ключі з дубля.",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Якщо ви не можете сканувати зазначений код, звірте порівнянням унікальних емодзі.",
-    "Verify by comparing unique emoji.": "Звірити порівнянням унікальних емодзі.",
-    "Verify by emoji": "Звірити за допомогою емодзі",
     "Failed to connect to integration manager": "Не вдалось з'єднатись з менеджером інтеграцій",
-    "Show image": "Показати зображення",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Ви ігноруєте цього користувача, тож його повідомлення приховано. <a>Все одно показати.</a>",
     "Add an Integration": "Додати інтеграцію",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Підтвердьте деактивацію свого облікового запису через єдиний вхід, щоб підтвердити вашу особу.",
     "Comoros": "Коморські Острови",
@@ -441,16 +435,11 @@
     "You're all caught up.": "Все готово.",
     "Click the button below to confirm setting up encryption.": "Клацніть на кнопку внизу, щоб підтвердити налаштування шифрування.",
     "Confirm encryption setup": "Підтвердити налаштування шифрування",
-    "The encryption used by this room isn't supported.": "Шифрування, використане цією кімнатою не підтримується.",
-    "Encryption not enabled": "Шифрування не ввімкнено",
-    "Ignored attempt to disable encryption": "Знехтувані спроби вимкнути шифрування",
-    "This client does not support end-to-end encryption.": "Цей клієнт не підтримує наскрізного шифрування.",
     "<a>In reply to</a> <pill>": "<a>У відповідь на</a> <pill>",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Ваш %(brand)s не дозволяє вам користуватись для цього менеджером інтеграцій. Зверніться до адміністратора.",
     "This backup is trusted because it has been restored on this session": "Ця резервна копія довірена, оскільки її було відновлено у цьому сеансі",
     "Link to most recent message": "Посилання на останнє повідомлення",
     "Share Room": "Поділитись кімнатою",
-    "Join the conference from the room information card on the right": "Приєднуйтесь до групового виклику з інформаційної картки кімнати праворуч",
     "edited": "змінено",
     "Edited at %(date)s. Click to view edits.": "Змінено %(date)s. Натисніть, щоб переглянути зміни.",
     "Edited at %(date)s": "Змінено %(date)s",
@@ -461,17 +450,10 @@
     "Recently Direct Messaged": "Недавно надіслані особисті повідомлення",
     "User Directory": "Каталог користувачів",
     "Preparing to download logs": "Приготування до завантаження журналів",
-    "Download %(text)s": "Завантажити %(text)s",
     "Share User": "Поділитися користувачем",
     "Some suggestions may be hidden for privacy.": "Деякі пропозиції можуть бути сховані для приватності.",
     "You may contact me if you have any follow up questions": "Можете зв’язатися зі мною, якщо у вас виникнуть додаткові запитання",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Ви успішно звірили %(deviceName)s (%(deviceId)s)!",
-    "You've successfully verified your device!": "Ви успішно звірили свій пристрій!",
-    "You've successfully verified %(displayName)s!": "Ви успішно звірили %(displayName)s!",
-    "Almost there! Is %(displayName)s showing the same shield?": "Майже готово! Ваш %(displayName)s показує той самий щит?",
-    "Verify by scanning": "Звірити скануванням",
     "Remove recent messages by %(user)s": "Вилучити останні повідомлення від %(user)s",
-    "Edit devices": "Керувати пристроями",
     "Home": "Домівка",
     "Server Options": "Опції сервера",
     "Allow this widget to verify your identity": "Дозволити цьому віджету перевіряти вашу особу",
@@ -567,10 +549,6 @@
     "Sending": "Надсилання",
     "MB": "МБ",
     "In reply to <a>this message</a>": "У відповідь на <a>це повідомлення</a>",
-    "Decrypt %(text)s": "Розшифрувати %(text)s",
-    "Decrypting": "Розшифрування",
-    "Downloading": "Завантаження",
-    "Missed call": "Пропущений виклик",
     "%(count)s sessions": {
         "one": "%(count)s сеанс",
         "other": "Сеансів: %(count)s"
@@ -625,16 +603,12 @@
         "other": "%(spaceName)s і %(count)s інших"
     },
     "Thread options": "Параметри гілки",
-    "Reply in thread": "Відповісти у гілці",
     "Developer": "Розробка",
     "Moderation": "Модерування",
     "Experimental": "Експериментально",
     "Themes": "Теми",
     "Messaging": "Спілкування",
-    "Vote not registered": "Голос не зареєстрований",
-    "Sorry, your vote was not registered. Please try again.": "Не вдалося зареєструвати ваш голос. Просимо спробувати ще.",
     "Spaces you know that contain this space": "Відомі вам простори, до яких входить цей",
-    "No votes cast": "Жодного голосу",
     "Failed to end poll": "Не вдалося завершити опитування",
     "The poll has ended. No votes were cast.": "Опитування завершене. Жодного голосу не було.",
     "The poll has ended. Top answer: %(topAnswer)s": "Опитування завершене. Перемогла відповідь: %(topAnswer)s",
@@ -643,11 +617,6 @@
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Точно завершити опитування? Буде показано підсумки опитування, і більше ніхто не зможе голосувати.",
     "Link to room": "Посилання на кімнату",
     "Command Help": "Допомога команди",
-    "Could not connect media": "Не вдалося під'єднати медіа",
-    "Connection failed": "Не вдалося зʼєднатися",
-    "Their device couldn't start the camera or microphone": "Їхній пристрій не зміг запустити камеру чи мікрофон",
-    "An unknown error occurred": "Трапилась невідома помилка",
-    "Call back": "Перетелефонувати",
     "Automatically invite members from this room to the new one": "Автоматично запросити учасників цієї кімнати до нової",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Зауважте, поліпшення створить нову версію кімнати</b>. Усі наявні повідомлення залишаться в цій архівованій кімнаті.",
     "Anyone in <SpaceName/> will be able to find and join.": "Будь-хто в <SpaceName/> зможе знайти й приєднатись.",
@@ -656,7 +625,6 @@
     "You're the only admin of this space. Leaving it will mean no one has control over it.": "Ви єдиний адміністратор цього простору. Вихід із нього залишить його без керівництва.",
     "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Ви єдиний адміністратор кімнат чи просторів, з яких ви бажаєте вийти. Вихід із них залишить їх без адміністраторів.",
     "Leave %(spaceName)s": "Вийти з %(spaceName)s",
-    "Call declined": "Виклик відхилено",
     "To join a space you'll need an invite.": "Щоб приєднатись до простору, вам потрібне запрошення.",
     "You are about to leave <spaceName/>.": "Ви збираєтеся вийти з <spaceName/>.",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Введіть свою фразу безпеки чи <button>скористайтесь ключем безпеки</button> для продовження.",
@@ -713,54 +681,14 @@
     "Submit logs": "Надіслати журнали",
     "Click to view edits": "Натисніть, щоб переглянути зміни",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Ви будете спрямовані до стороннього сайту, щоб автентифікувати використання облікового запису в %(integrationsUrl)s. Продовжити?",
-    "Error processing voice message": "Помилка обробки голосового повідомлення",
-    "Error decrypting video": "Помилка розшифрування відео",
     "%(count)s votes": {
         "one": "%(count)s голос",
         "other": "%(count)s голосів"
     },
-    "Based on %(count)s votes": {
-        "one": "На підставі %(count)s голосу",
-        "other": "На підставі %(count)s голосів"
-    },
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s голос надісланий. Проголосуйте, щоб побачити результати",
-        "other": "%(count)s голосів надіслано. Проголосуйте, щоб побачити результати"
-    },
-    "Final result based on %(count)s votes": {
-        "one": "Остаточний результат на підставі %(count)s голосу",
-        "other": "Остаточний результат на підставі %(count)s голосів"
-    },
     "%(name)s wants to verify": "%(name)s бажає звірити",
     "%(name)s cancelled": "%(name)s скасовує",
     "%(name)s declined": "%(name)s відхиляє",
-    "You cancelled": "Ви скасували",
-    "You declined": "Ви відхилили",
     "%(name)s accepted": "%(name)s погоджується",
-    "You accepted": "Ви погодились",
-    "%(name)s cancelled verifying": "%(name)s скасовує звірку",
-    "You cancelled verifying %(name)s": "Ви скасували звірку %(name)s",
-    "You verified %(name)s": "Ви звірили %(name)s",
-    "Video conference started by %(senderName)s": "%(senderName)s починає груповий відеовиклик",
-    "Video conference updated by %(senderName)s": "%(senderName)s оновлює груповий відеовиклик",
-    "Video conference ended by %(senderName)s": "%(senderName)s завершує груповий відеовиклик",
-    "Join the conference at the top of this room": "Приєднуйтеся до групового виклику вгорі цієї кімнати",
-    "Error decrypting image": "Помилка розшифрування зображення",
-    "Invalid file%(extra)s": "Пошкоджений файл%(extra)s",
-    "Error decrypting attachment": "Помилка розшифрування вкладення",
-    "Error processing audio message": "Помилка обробки аудіоповідомлення",
-    "Some encryption parameters have been changed.": "Деякі параметри шифрування змінилися.",
-    "The call is in an unknown state!": "Стан виклику невідомий!",
-    "Unknown failure: %(reason)s": "Невідомий збій: %(reason)s",
-    "No answer": "Без відповіді",
-    "You cancelled verification.": "Ви скасували звірку.",
-    "%(displayName)s cancelled verification.": "%(displayName)s скасовує звірку.",
-    "Verification timed out.": "Термін дії звірки завершився.",
-    "Start verification again from their profile.": "Почніть звірку заново з їхнього профілю.",
-    "Start verification again from the notification.": "Почніть звірку заново зі сповіщення.",
-    "In encrypted rooms, verify all users to ensure it's secure.": "У зашифрованих кімнатах, звіряйте всіх користувачів, щоб спілкуватися було безпечно.",
-    "Verify all users in a room to ensure it's secure.": "Звірте всіх користувачів у кімнаті, щоб забезпечити її захищеність.",
-    "Ask %(displayName)s to scan your code:": "Попросіть %(displayName)s відсканувати ваш код:",
     "Remove %(count)s messages": {
         "one": "Видалити 1 повідомлення",
         "other": "Видалити %(count)s повідомлень"
@@ -866,23 +794,13 @@
     "Missing room name or separator e.g. (my-room:domain.org)": "Бракує назви кімнати чи розділювача (my-room:domain.org)",
     "Missing domain separator e.g. (:domain.org)": "Бракує розділювача домену (:domain.org)",
     "Verify other device": "Звірити інший пристрій",
-    "You cancelled verification on your other device.": "Ви скасували звірення на іншому пристрої.",
-    "Almost there! Is your other device showing the same shield?": "Майже готово! Чи показує інший пристрій такий самий щит?",
     "Could not fetch location": "Не вдалося отримати місцеперебування",
-    "Message pending moderation": "Повідомлення очікує модерування",
-    "Message pending moderation: %(reason)s": "Повідомлення очікує модерування: %(reason)s",
-    "Pick a date to jump to": "Виберіть до якої дати перейти",
-    "Jump to date": "Перейти до дати",
-    "The beginning of the room": "Початок кімнати",
     "This address does not point at this room": "Ця адреса не вказує на цю кімнату",
     "Location": "Місцеперебування",
     "Use <arrows/> to scroll": "Використовуйте <arrows/>, щоб прокручувати",
     "Feedback sent! Thanks, we appreciate it!": "Відгук надісланий! Дякуємо, візьмемо до уваги!",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s і %(space2Name)s",
-    "Sorry, you can't edit a poll after votes have been cast.": "Ви не можете редагувати опитування після завершення голосування.",
-    "Can't edit poll": "Неможливо редагувати опитування",
     "Join %(roomAddress)s": "Приєднатися до %(roomAddress)s",
-    "Results will be visible when the poll is ended": "Результати будуть видимі після завершення опитування",
     "Search Dialog": "Вікно пошуку",
     "What location type do you want to share?": "Який вид місцеперебування поширити?",
     "Drop a Pin": "Маркер на карті",
@@ -890,10 +808,6 @@
     "My current location": "Лише поточне місцеперебування",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s не вдалося надіслати ваше місцеперебування. Повторіть спробу пізніше.",
     "We couldn't send your location": "Не вдалося надіслати ваше місцеперебування",
-    "Click": "Клацнути",
-    "Expand quotes": "Розгорнути цитати",
-    "Collapse quotes": "Згорнути цитати",
-    "Can't create a thread from an event with an existing relation": "Неможливо створити гілку з події з наявним відношенням",
     "You are sharing your live location": "Ви ділитеся місцеперебуванням",
     "%(displayName)s's live location": "Місцеперебування %(displayName)s наживо",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Вимкніть, щоб також видалити системні повідомлення про користувача (зміни членства, редагування профілю…)",
@@ -911,7 +825,6 @@
     },
     "%(featureName)s Beta feedback": "%(featureName)s — відгук про бетаверсію",
     "Live location ended": "Показ місцеперебування наживо завершено",
-    "View live location": "Показувати місцеперебування наживо",
     "Live location enabled": "Показ місцеперебування наживо ввімкнено",
     "Live location error": "Помилка показу місцеперебування наживо",
     "Live until %(expiryTime)s": "Наживо до %(expiryTime)s",
@@ -969,26 +882,18 @@
     "Who will you chat to the most?": "З ким ви спілкуватиметеся найбільше?",
     "You're in": "Ви увійшли",
     "You need to have the right permissions in order to share locations in this room.": "Вам потрібно мати відповідні дозволи, щоб ділитися геоданими в цій кімнаті.",
-    "Messages in this chat will be end-to-end encrypted.": "Повідомлення в цій бесіді будуть захищені наскрізним шифруванням.",
     "Saved Items": "Збережені елементи",
     "Choose a locale": "Вибрати локаль",
     "Interactively verify by emoji": "Звірити інтерактивно за допомогою емоджі",
     "Manually verify by text": "Звірити вручну за допомогою тексту",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s або %(recoveryFile)s",
-    "Video call ended": "Відеовиклик завершено",
     "%(name)s started a video call": "%(name)s розпочинає відеовиклик",
-    "Error downloading image": "Помилка завантаження зображення",
-    "Unable to show image due to error": "Не вдалося показати зображення через помилку",
     "Thread root ID: %(threadRootId)s": "ID кореневої гілки: %(threadRootId)s",
     "<w>WARNING:</w> <description/>": "<w>ПОПЕРЕДЖЕННЯ:</w> <description/>",
     " in <strong>%(room)s</strong>": " в <strong>%(room)s</strong>",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Ви не можете розпочати запис голосового повідомлення, оскільки зараз відбувається запис трансляції наживо. Завершіть трансляцію, щоб розпочати запис голосового повідомлення.",
     "Can't start voice message": "Не можливо запустити запис голосового повідомлення",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "unknown": "невідомо",
-    "Declining…": "Відхилення…",
-    "There are no past polls in this room": "У цій кімнаті ще не проводилися опитувань",
-    "There are no active polls in this room": "У цій кімнаті немає активних опитувань",
     "Enable '%(manageIntegrations)s' in Settings to do this.": "Увімкніть «%(manageIntegrations)s» в Налаштуваннях, щоб зробити це.",
     "Loading live location…": "Завантаження місця перебування наживо…",
     "Fetching keys from server…": "Отримання ключів із сервера…",
@@ -996,46 +901,18 @@
     "Waiting for partner to confirm…": "Очікування підтвердження партнером…",
     "Adding…": "Додавання…",
     "Starting export process…": "Початок процесу експорту…",
-    "Loading polls": "Завантаження опитувань",
-    "Ended a poll": "Завершує опитування",
-    "Due to decryption errors, some votes may not be counted": "Через помилки розшифрування деякі голоси можуть бути не враховані",
-    "The sender has blocked you from receiving this message": "Відправник заблокував вам отримання цього повідомлення",
-    "Answered elsewhere": "Відповіли деінде",
-    "View poll": "Переглянути опитування",
-    "Past polls": "Минулі опитування",
-    "Active polls": "Активні опитування",
-    "View poll in timeline": "Переглянути опитування у стрічці",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "За попередній день немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
-        "other": "За останні %(count)s днів немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці"
-    },
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "За попередній день немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
-        "other": "За останні %(count)s днів немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці"
-    },
-    "There are no past polls. Load more polls to view polls for previous months": "Немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
-    "There are no active polls. Load more polls to view polls for previous months": "Немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
-    "Load more polls": "Завантажити більше опитувань",
     "Invites by email can only be sent one at a time": "Запрошення електронною поштою можна надсилати лише одне за раз",
     "Desktop app logo": "Логотип комп'ютерного застосунку",
     "Requires your server to support the stable version of MSC3827": "Потрібно, щоб ваш сервер підтримував стабільну версію MSC3827",
     "Message from %(user)s": "Повідомлення від %(user)s",
     "Message in %(room)s": "Повідомлення в %(room)s",
-    "Error details": "Подробиці помилки",
-    "Unable to find event at that date": "Не вдалося знайти подію на цю дату",
-    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Надішліть <debugLogsLink>журнал зневадження</debugLogsLink>, щоб допомогти нам відстежити проблему.",
     "unavailable": "недоступний",
     "unknown status code": "невідомий код стану",
-    "Server returned %(statusCode)s with error code %(errorCode)s": "Сервер повернув %(statusCode)s з кодом помилки %(errorCode)s",
-    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Ми не змогли знайти подію, після %(dateString)s. Спробуйте вибрати ранішу дату.",
-    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Виникла помилка мережі під час спроби знайти та перейти до вказаної дати. Можливо, ваш домашній сервер не працює або виникли тимчасові проблеми з інтернет-з'єднанням. Повторіть спробу ще раз. Якщо це не допоможе, зверніться до адміністратора вашого домашнього сервера.",
     "Start DM anyway": "Усе одно розпочати особисте спілкування",
     "Start DM anyway and never warn me again": "Усе одно розпочати особисте спілкування і більше ніколи не попереджати мене",
     "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "Не вдалося знайти профілі для перелічених далі Matrix ID — ви все одно хочете розпочати особисте спілкування?",
-    "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "Повідомлення в цій кімнаті наскрізно зашифровані. Коли люди приєднуються, ви можете перевірити їх у їхньому профілі, просто торкнувшись зображення профілю.",
     "Are you sure you wish to remove (delete) this event?": "Ви впевнені, що хочете вилучити (видалити) цю подію?",
     "Upgrade room": "Поліпшити кімнату",
-    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.": "Повідомлення тут наскрізно зашифровані. Перевірте %(displayName)s у їхньому профілі - торкніться їхнього зображення профілю.",
     "Note that removing room changes like this could undo the change.": "Зауважте, що вилучення таких змін у кімнаті може призвести до їхнього скасування.",
     "Other spaces you know": "Інші відомі вам простори",
     "Failed to query public rooms": "Не вдалося зробити запит до загальнодоступних кімнат",
@@ -1276,7 +1153,9 @@
         "new_room": "Нова кімната",
         "new_video_room": "Нова відеокімната",
         "add_existing_room": "Додати наявну кімнату",
-        "explore_public_rooms": "Переглянути загальнодоступні кімнати"
+        "explore_public_rooms": "Переглянути загальнодоступні кімнати",
+        "reply_in_thread": "Відповісти у гілці",
+        "click": "Клацнути"
     },
     "a11y": {
         "user_menu": "Користувацьке меню",
@@ -2277,13 +2156,25 @@
     "timeline": {
         "m.call": {
             "video_call_started": "Відеовиклик розпочато о %(roomName)s.",
-            "video_call_started_unsupported": "Відеовиклик розпочато о %(roomName)s. (не підтримується цим браузером)"
+            "video_call_started_unsupported": "Відеовиклик розпочато о %(roomName)s. (не підтримується цим браузером)",
+            "video_call_ended": "Відеовиклик завершено"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s розпочинає голосовий виклик.",
             "voice_call_unsupported": "%(senderName)s розпочинає голосовий виклик. (не підтримується цим браузером)",
             "video_call": "%(senderName)s розпочинає відеовиклик.",
-            "video_call_unsupported": "%(senderName)s розпочинає відеовиклик. (не підтримується цим браузером)"
+            "video_call_unsupported": "%(senderName)s розпочинає відеовиклик. (не підтримується цим браузером)",
+            "declined": "Виклик відхилено",
+            "call_back_prompt": "Перетелефонувати",
+            "answered_elsewhere": "Відповіли деінде",
+            "missed_call": "Пропущений виклик",
+            "no_answer": "Без відповіді",
+            "failed_connect_media": "Не вдалося під'єднати медіа",
+            "failed_connection": "Не вдалося зʼєднатися",
+            "failed_opponent_media": "Їхній пристрій не зміг запустити камеру чи мікрофон",
+            "unknown_error": "Трапилась невідома помилка",
+            "unknown_failure": "Невідомий збій: %(reason)s",
+            "unknown_state": "Стан виклику невідомий!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s приймає запрошення до %(displayName)s",
@@ -2335,7 +2226,6 @@
             "forbidden": "%(senderDisplayName)s забороняє гостям приєднуватися до кімнати.",
             "unknown": "%(senderDisplayName)s змінює гостьовий доступ на \"%(rule)s\""
         },
-        "m.image": "%(senderDisplayName)s надсилає зображення.",
         "m.sticker": "%(senderDisplayName)s надсилає наліпку.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s встановлює серверні права доступу для цієї кімнати.",
@@ -2379,7 +2269,12 @@
         "m.widget": {
             "modified": "%(senderName)s змінює віджет %(widgetName)s",
             "added": "%(senderName)s додає віджет %(widgetName)s",
-            "removed": "%(senderName)s вилучає віджет %(widgetName)s"
+            "removed": "%(senderName)s вилучає віджет %(widgetName)s",
+            "jitsi_join_top_prompt": "Приєднуйтеся до групового виклику вгорі цієї кімнати",
+            "jitsi_join_right_prompt": "Приєднуйтесь до групового виклику з інформаційної картки кімнати праворуч",
+            "jitsi_ended": "%(senderName)s завершує груповий відеовиклик",
+            "jitsi_updated": "%(senderName)s оновлює груповий відеовиклик",
+            "jitsi_started": "%(senderName)s починає груповий відеовиклик"
         },
         "io.element.widgets.layout": "%(senderName)s оновлює макет кімнати",
         "m.location": {
@@ -2390,7 +2285,6 @@
         "self_redaction": "Повідомлення видалено",
         "redaction": "Повідомлення видалено %(name)s",
         "m.poll.start": "%(senderName)s починає опитування - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s завершує опитування",
         "typing_indicator": {
             "one_user": "%(displayName)s пише…",
             "two_users": "%(names)s та %(lastPerson)s пишуть…",
@@ -2562,7 +2456,8 @@
             "changed_rule_users": "%(senderName)s змінює правило блокування користувачів зі збігу з %(oldGlob)s на збіг з %(newGlob)s через %(reason)s",
             "changed_rule_rooms": "%(senderName)s змінює правило блокування кімнат зі збігу з %(oldGlob)s на збіг з %(newGlob)s через %(reason)s",
             "changed_rule_servers": "%(senderName)s змінює правило блокування серверів зі збігу з %(oldGlob)s на збіг з %(newGlob)s через %(reason)s",
-            "changed_rule_glob": "%(senderName)s змінює правило блокування зі збігу з %(oldGlob)s на збіг з %(newGlob)s через %(reason)s"
+            "changed_rule_glob": "%(senderName)s змінює правило блокування зі збігу з %(oldGlob)s на збіг з %(newGlob)s через %(reason)s",
+            "message_hidden": "Ви ігноруєте цього користувача, тож його повідомлення приховано. <a>Все одно показати.</a>"
         },
         "no_permission_messages_before_invite": "Ви не маєте дозволу на перегляд повідомлень, давніших за ваше запрошення.",
         "no_permission_messages_before_join": "Ви не маєте дозволу на перегляд повідомлень, давніших за ваше приєднання.",
@@ -2616,18 +2511,72 @@
         "mab": {
             "label": "Дії з повідомленням",
             "view_in_room": "Дивитися в кімнаті",
-            "copy_link_thread": "Копіювати посилання на гілку"
+            "copy_link_thread": "Копіювати посилання на гілку",
+            "collapse_reply_chain": "Згорнути цитати",
+            "expand_reply_chain": "Розгорнути цитати"
         },
         "m.audio": {
             "unnamed_audio": "Аудіо без назви",
-            "error_downloading_audio": "Помилка завантаження аудіо"
+            "error_downloading_audio": "Помилка завантаження аудіо",
+            "error_processing_audio": "Помилка обробки аудіоповідомлення",
+            "error_processing_voice_message": "Помилка обробки голосового повідомлення"
         },
         "load_error": {
             "no_permission": "У вас нема дозволу на перегляд повідомлення за вказаною позицією в стрічці цієї кімнати.",
             "unable_to_find": "Не вдалося знайти вказаної позиції в стрічці цієї кімнати.",
             "title": "Не вдалося завантажити позицію стрічки"
         },
-        "error_no_renderer": "Неможливо показати цю подію"
+        "error_no_renderer": "Неможливо показати цю подію",
+        "decryption_failure_blocked": "Відправник заблокував вам отримання цього повідомлення",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_downloading": "Завантаження",
+        "download_action_decrypting": "Розшифрування",
+        "m.room.encryption": {
+            "parameters_changed": "Деякі параметри шифрування змінилися.",
+            "enabled_dm": "Повідомлення тут наскрізно зашифровані. Перевірте %(displayName)s у їхньому профілі - торкніться їхнього зображення профілю.",
+            "enabled_local": "Повідомлення в цій бесіді будуть захищені наскрізним шифруванням.",
+            "enabled": "Повідомлення в цій кімнаті наскрізно зашифровані. Коли люди приєднуються, ви можете перевірити їх у їхньому профілі, просто торкнувшись зображення профілю.",
+            "disable_attempt": "Знехтувані спроби вимкнути шифрування",
+            "disabled": "Шифрування не ввімкнено",
+            "unsupported": "Шифрування, використане цією кімнатою не підтримується."
+        },
+        "pending_moderation_reason": "Повідомлення очікує модерування: %(reason)s",
+        "pending_moderation": "Повідомлення очікує модерування",
+        "m.beacon_info": {
+            "view_live_location": "Показувати місцеперебування наживо"
+        },
+        "m.file": {
+            "download_label": "Завантажити %(text)s",
+            "error_decrypting": "Помилка розшифрування вкладення",
+            "decrypt_label": "Розшифрувати %(text)s",
+            "error_invalid": "Пошкоджений файл%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s надсилає зображення.",
+            "error": "Не вдалося показати зображення через помилку",
+            "error_decrypting": "Помилка розшифрування зображення",
+            "error_downloading": "Помилка завантаження зображення",
+            "show_image": "Показати зображення"
+        },
+        "m.key.verification.done": "Ви звірили %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Ви скасували звірку %(name)s",
+            "user_cancelled": "%(name)s скасовує звірку"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Ви погодились",
+            "you_declined": "Ви відхилили",
+            "you_cancelled": "Ви скасували",
+            "declining": "Відхилення…",
+            "you_started": "Ви надіслали запит перевірки"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s завершує опитування",
+            "ended": "Завершує опитування"
+        },
+        "m.video": {
+            "error_decrypting": "Помилка розшифрування відео"
+        }
     },
     "slash_command": {
         "spoiler": "Надсилає вказане повідомлення згорненим",
@@ -3114,7 +3063,25 @@
                 "reset_confirmation": "Точно скинути ключі звірки?",
                 "skip_verification": "На разі пропустити звірку"
             },
-            "accepting": "Прийняття…"
+            "accepting": "Прийняття…",
+            "scan_qr": "Звірити скануванням",
+            "scan_qr_explainer": "Попросіть %(displayName)s відсканувати ваш код:",
+            "verify_emoji_prompt_qr": "Якщо ви не можете сканувати зазначений код, звірте порівнянням унікальних емодзі.",
+            "verify_emoji_prompt": "Звірити порівнянням унікальних емодзі.",
+            "verify_emoji": "Звірити за допомогою емодзі",
+            "qr_reciprocate_same_shield_device": "Майже готово! Чи показує інший пристрій такий самий щит?",
+            "qr_reciprocate_same_shield_user": "Майже готово! Ваш %(displayName)s показує той самий щит?",
+            "prompt_encrypted": "Звірте всіх користувачів у кімнаті, щоб забезпечити її захищеність.",
+            "prompt_unencrypted": "У зашифрованих кімнатах, звіряйте всіх користувачів, щоб спілкуватися було безпечно.",
+            "successful_own_device": "Ви успішно звірили свій пристрій!",
+            "successful_device": "Ви успішно звірили %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "Ви успішно звірили %(displayName)s!",
+            "prompt_self": "Почніть звірку заново зі сповіщення.",
+            "prompt_user": "Почніть звірку заново з їхнього профілю.",
+            "timed_out": "Термін дії звірки завершився.",
+            "cancelled_self": "Ви скасували звірення на іншому пристрої.",
+            "cancelled_user": "%(displayName)s скасовує звірку.",
+            "cancelled": "Ви скасували звірку."
         },
         "old_version_detected_title": "Виявлено старі криптографічні дані",
         "old_version_detected_description": "Було виявлено дані зі старої версії %(brand)s. Це призведе до збоїння наскрізного шифрування у старій версії. Наскрізно зашифровані повідомлення, що обмінювані нещодавно, під час використання старої версії, можуть бути недешифровними у цій версії. Це може призвести до збоїв повідомлень, обмінюваних також і з цією версією. У разі виникнення проблем вийдіть з програми та зайдіть знову. Задля збереження історії повідомлень експортуйте та переімпортуйте ваші ключі.",
@@ -3167,7 +3134,8 @@
         "cross_signing_user_normal": "Ви не звіряли цього користувача.",
         "cross_signing_room_warning": "Хтось користується невідомим сеансом",
         "cross_signing_room_verified": "Усі в цій кімнаті звірені",
-        "cross_signing_room_normal": "Ця кімната є наскрізно зашифрованою"
+        "cross_signing_room_normal": "Ця кімната є наскрізно зашифрованою",
+        "unsupported": "Цей клієнт не підтримує наскрізного шифрування."
     },
     "emoji": {
         "category_frequently_used": "Часто використовувані",
@@ -3662,7 +3630,8 @@
         "empty_tip": "<b>Порада:</b> Використовуйте «%(replyInThread)s» навівши вказівник на повідомлення.",
         "empty_heading": "Упорядкуйте обговорення за допомогою гілок",
         "unable_to_decrypt": "Не вдалося розшифрувати повідомлення",
-        "open_thread": "Відкрити гілку"
+        "open_thread": "Відкрити гілку",
+        "error_start_thread_existing_relation": "Неможливо створити гілку з події з наявним відношенням"
     },
     "theme": {
         "light_high_contrast": "Контрастна світла",
@@ -3968,7 +3937,16 @@
         "jump_read_marker": "Перейти до першого непрочитаного повідомлення.",
         "inviter_unknown": "Невідомо",
         "failed_reject_invite": "Не вдалось відхилити запрошення",
-        "creating_room_text": "Ми створюємо кімнату з %(names)s"
+        "creating_room_text": "Ми створюємо кімнату з %(names)s",
+        "error_jump_to_date_connection": "Виникла помилка мережі під час спроби знайти та перейти до вказаної дати. Можливо, ваш домашній сервер не працює або виникли тимчасові проблеми з інтернет-з'єднанням. Повторіть спробу ще раз. Якщо це не допоможе, зверніться до адміністратора вашого домашнього сервера.",
+        "error_jump_to_date_not_found": "Ми не змогли знайти подію, після %(dateString)s. Спробуйте вибрати ранішу дату.",
+        "error_jump_to_date": "Сервер повернув %(statusCode)s з кодом помилки %(errorCode)s",
+        "error_jump_to_date_send_logs_prompt": "Надішліть <debugLogsLink>журнал зневадження</debugLogsLink>, щоб допомогти нам відстежити проблему.",
+        "error_jump_to_date_title": "Не вдалося знайти подію на цю дату",
+        "error_jump_to_date_details": "Подробиці помилки",
+        "jump_to_date_beginning": "Початок кімнати",
+        "jump_to_date": "Перейти до дати",
+        "jump_to_date_prompt": "Виберіть до якої дати перейти"
     },
     "file_panel": {
         "guest_note": "<a>Зареєструйтеся</a>, щоб скористатись цим функціоналом",
@@ -4011,7 +3989,22 @@
         "options_placeholder": "Вписати варіант",
         "options_add_button": "Додати варіант",
         "disclosed_notes": "Респонденти бачитимуть результати, як тільки вони проголосують",
-        "notes": "Результати показуються лише після завершення опитування"
+        "notes": "Результати показуються лише після завершення опитування",
+        "unable_edit_title": "Неможливо редагувати опитування",
+        "unable_edit_description": "Ви не можете редагувати опитування після завершення голосування.",
+        "error_voting_title": "Голос не зареєстрований",
+        "error_voting_description": "Не вдалося зареєструвати ваш голос. Просимо спробувати ще.",
+        "total_decryption_errors": "Через помилки розшифрування деякі голоси можуть бути не враховані",
+        "total_not_ended": "Результати будуть видимі після завершення опитування",
+        "total_no_votes": "Жодного голосу",
+        "total_n_votes": {
+            "one": "%(count)s голос надісланий. Проголосуйте, щоб побачити результати",
+            "other": "%(count)s голосів надіслано. Проголосуйте, щоб побачити результати"
+        },
+        "total_n_votes_voted": {
+            "one": "На підставі %(count)s голосу",
+            "other": "На підставі %(count)s голосів"
+        }
     },
     "failed_load_async_component": "Завантаження неможливе! Перевірте інтернет-зʼєднання та спробуйте ще.",
     "upload_failed_generic": "Не вдалося вивантажити файл '%(fileName)s'.",
@@ -4245,7 +4238,8 @@
         "deactivate_confirm_description": "Деактивація цього користувача виведе їх з системи й унеможливить вхід у майбутньому. До того ж вони вийдуть з усіх кімнат, у яких перебувають. Ця дія безповоротна. Ви впевнені, що хочете деактивувати цього користувача?",
         "deactivate_confirm_action": "Деактивувати користувача",
         "error_deactivate": "Не вдалося деактивувати користувача",
-        "role_label": "Роль у <RoomName/>"
+        "role_label": "Роль у <RoomName/>",
+        "edit_own_devices": "Керувати пристроями"
     },
     "stickers": {
         "empty": "У вас поки немає пакунків наліпок",
@@ -4274,7 +4268,31 @@
         "pinned_messages_button": "Закріплені",
         "export_chat_button": "Експортувати бесіду",
         "share_button": "Поділитись кімнатою",
-        "settings_button": "Налаштування кімнати"
+        "settings_button": "Налаштування кімнати",
+        "poll": {
+            "view_in_timeline": "Переглянути опитування у стрічці",
+            "active_heading": "Активні опитування",
+            "past_heading": "Минулі опитування",
+            "loading": "Завантаження опитувань",
+            "load_more": "Завантажити більше опитувань",
+            "empty_active": "У цій кімнаті немає активних опитувань",
+            "empty_past": "У цій кімнаті ще не проводилися опитувань",
+            "empty_active_load_more": "Немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
+            "empty_past_load_more": "Немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
+            "empty_active_load_more_n_days": {
+                "one": "За попередній день немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
+                "other": "За останні %(count)s днів немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці"
+            },
+            "empty_past_load_more_n_days": {
+                "one": "За попередній день немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
+                "other": "За останні %(count)s днів немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці"
+            },
+            "view_poll": "Переглянути опитування",
+            "final_result": {
+                "one": "Остаточний результат на підставі %(count)s голосу",
+                "other": "Остаточний результат на підставі %(count)s голосів"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Відхилити запрошення",

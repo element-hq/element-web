@@ -450,7 +450,6 @@
             "forbidden": "%(senderDisplayName)s ने मेहमानों को कमरे में शामिल होने से रोका है।",
             "unknown": "%(senderDisplayName)s ने अतिथि पहुंच %(rule)s में बदल दी"
         },
-        "m.image": "%(senderDisplayName)s ने एक छवि भेजी।",
         "m.room.canonical_alias": {
             "set": "%(senderName)s ने इस कमरे के लिए मुख्य पता %(address)s पर सेट किया।",
             "removed": "%(senderName)s ने इस कमरे के लिए मुख्य पता हटा दिया।"
@@ -486,7 +485,10 @@
             "changed": "%(senderName)s ने %(powerLevelDiffText)s के पावर स्तर को बदल दिया।",
             "user_from_to": "%(userId)s का %(fromPowerLevel)s से %(toPowerLevel)s"
         },
-        "error_no_renderer": "यह घटना प्रदर्शित नहीं की जा सकी"
+        "error_no_renderer": "यह घटना प्रदर्शित नहीं की जा सकी",
+        "m.image": {
+            "sent": "%(senderDisplayName)s ने एक छवि भेजी।"
+        }
     },
     "slash_command": {
         "shrug": "एक सादे पाठ संदेश के लिए ¯\\_(ツ)_/¯ प्रस्तुत करता है",

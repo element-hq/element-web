@@ -31,20 +31,14 @@
         "other": "e %(count)s outros..."
     },
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s de %(fullYear)s às %(time)s",
-    "Decrypt %(text)s": "Descriptografar %(text)s",
-    "Download %(text)s": "Baixar %(text)s",
     "Join Room": "Ingressar na sala",
     "not specified": "não especificado",
     "An error has occurred.": "Ocorreu um erro.",
     "Email address": "Endereço de e-mail",
-    "Error decrypting attachment": "Erro ao descriptografar o anexo",
-    "Invalid file%(extra)s": "Arquivo inválido %(extra)s",
     "Warning!": "Atenção!",
     "Confirm Removal": "Confirmar a remoção",
     "Unable to restore session": "Não foi possível restaurar a sessão",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Se você já usou antes uma versão mais recente do %(brand)s, a sua sessão pode ser incompatível com esta versão. Feche esta janela e tente abrir com a versão mais recente.",
-    "Error decrypting image": "Erro ao descriptografar a imagem",
-    "Error decrypting video": "Erro ao descriptografar o vídeo",
     "Add an Integration": "Adicionar uma integração",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será redirecionado para um site de terceiros para poder autenticar a sua conta, tendo em vista usar o serviço %(integrationsUrl)s. Deseja prosseguir?",
     "Custom level": "Nível personalizado",
@@ -202,16 +196,6 @@
     "Lock": "Cadeado",
     "This backup is trusted because it has been restored on this session": "Este backup é confiável, pois foi restaurado nesta sessão",
     "Encrypted by a deleted session": "Criptografada por uma sessão já apagada",
-    "This client does not support end-to-end encryption.": "A sua versão do aplicativo não suporta a criptografia de ponta a ponta.",
-    "Verify by scanning": "Confirmar através de QR Code",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Se você não consegue escanear o código acima, confirme comparando emojis únicos.",
-    "Verify by comparing unique emoji.": "Confirmar comparando emojis únicos.",
-    "Verify by emoji": "Confirmar por emojis",
-    "Verify all users in a room to ensure it's secure.": "Verifique todos os usuários em uma sala para se certificar de que ela está segura.",
-    "Start verification again from the notification.": "Iniciar a confirmação novamente, após a notificação.",
-    "Start verification again from their profile.": "Iniciar a confirmação novamente, a partir do perfil deste usuário.",
-    "Encryption not enabled": "Criptografia desativada",
-    "The encryption used by this room isn't supported.": "A criptografia usada nesta sala não é suportada.",
     "%(name)s wants to verify": "%(name)s solicita confirmação",
     "Enter the name of a new server you want to explore.": "Digite o nome do novo servidor que você deseja explorar.",
     "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Por favor, diga-nos o que aconteceu de errado ou, ainda melhor, crie um bilhete de erro no GitHub que descreva o problema.",
@@ -232,14 +216,9 @@
     "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Atenção</b>: você só deve configurar o backup de chave em um computador de sua confiança.",
     "Confirm encryption setup": "Confirmar a configuração de criptografia",
     "Click the button below to confirm setting up encryption.": "Clique no botão abaixo para confirmar a configuração da criptografia.",
-    "You cancelled verifying %(name)s": "Você cancelou a confirmação de %(name)s",
-    "You accepted": "Você aceitou",
     "%(name)s accepted": "%(name)s aceitou",
-    "You declined": "Você recusou",
-    "You cancelled": "Você cancelou",
     "%(name)s declined": "%(name)s recusou",
     "%(name)s cancelled": "%(name)s cancelou",
-    "You sent a verification request": "Você enviou uma solicitação de confirmação",
     "Edited at %(date)s": "Editado em %(date)s",
     "Click to view edits": "Clicar para ver edições",
     "Edited at %(date)s. Click to view edits.": "Editado em %(date)s. Clique para ver edições.",
@@ -268,7 +247,6 @@
     "Server did not return valid authentication information.": "O servidor não retornou informações de autenticação válidas.",
     "Integrations are disabled": "As integrações estão desativadas",
     "Integrations not allowed": "As integrações não estão permitidas",
-    "%(name)s cancelled verifying": "%(name)s cancelou a confirmação",
     "Power level": "Nível de permissão",
     "Looks good": "Muito bem",
     "Close dialog": "Fechar caixa de diálogo",
@@ -295,13 +273,6 @@
         "other": "Apagar %(count)s mensagens para todos",
         "one": "Remover 1 mensagem"
     },
-    "You've successfully verified your device!": "Você confirmou o seu aparelho com êxito!",
-    "Verification timed out.": "O tempo de confirmação se esgotou.",
-    "%(displayName)s cancelled verification.": "%(displayName)s cancelou a confirmação.",
-    "You cancelled verification.": "Você cancelou a confirmação.",
-    "Show image": "Mostrar imagem",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Você bloqueou este usuário, portanto, a mensagem dele foi escondida. <a>Mostrar mesmo assim.</a>",
-    "You verified %(name)s": "Você confirmou %(name)s",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Use um servidor de identidade para convidar por e-mail. <default>Use o padrão (%(defaultIdentityServerName)s)</default> ou um servidor personalizado em <settings>Configurações</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Use um servidor de identidade para convidar por e-mail. Gerencie o servidor em <settings>Configurações</settings>.",
     "Destroy cross-signing keys?": "Destruir chaves autoverificadas?",
@@ -358,9 +329,6 @@
     "Successfully restored %(sessionCount)s keys": "%(sessionCount)s chaves foram restauradas com sucesso",
     "Join millions for free on the largest public server": "Junte-se a milhões de pessoas gratuitamente no maior servidor público",
     "Switch theme": "Escolha um tema",
-    "Ask %(displayName)s to scan your code:": "Peça para %(displayName)s escanear o seu código:",
-    "Almost there! Is %(displayName)s showing the same shield?": "Quase lá! Este escudo também aparece para %(displayName)s?",
-    "You've successfully verified %(displayName)s!": "Você confirmou %(displayName)s com sucesso!",
     "Confirm this user's session by comparing the following with their User Settings:": "Confirme a sessão deste usuário comparando o seguinte com as configurações deste usuário:",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Apagar chaves de autoverificação é permanente. Qualquer pessoa com quem você se confirmou receberá alertas de segurança. Não é aconselhável fazer isso, a menos que você tenha perdido todos os aparelhos nos quais fez a autoverificação.",
     "Clear cross-signing keys": "Limpar chaves autoverificadas",
@@ -380,7 +348,6 @@
     "Message edits": "Edições na mensagem",
     "A browser extension is preventing the request.": "Uma extensão do navegador está impedindo a solicitação.",
     "The server has denied your request.": "O servidor recusou a sua solicitação.",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Você confirmou %(deviceName)s (%(deviceId)s) com êxito!",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Tente rolar para cima na conversa para ver se há mensagens anteriores.",
     "Use the <a>Desktop app</a> to see all encrypted files": "Use o <a>app para Computador</a> para ver todos os arquivos criptografados",
     "Use the <a>Desktop app</a> to search encrypted messages": "Use o <a>app para Computador</a> para buscar mensagens criptografadas",
@@ -389,12 +356,6 @@
     "Information": "Informação",
     "Backup version:": "Versão do backup:",
     "Not encrypted": "Não criptografada",
-    "Ignored attempt to disable encryption": "A tentativa de desativar a criptografia foi ignorada",
-    "Join the conference at the top of this room": "Entre na chamada em grupo no topo desta sala",
-    "Join the conference from the room information card on the right": "Participe da chamada em grupo, clicando no botão de informações da sala, à direita da tela",
-    "Video conference ended by %(senderName)s": "Chamada de vídeo em grupo encerrada por %(senderName)s",
-    "Video conference updated by %(senderName)s": "Chamada de vídeo em grupo atualizada por %(senderName)s",
-    "Video conference started by %(senderName)s": "Chamada de vídeo em grupo iniciada por %(senderName)s",
     "Preparing to download logs": "Preparando os relatórios para download",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Prove a sua identidade por meio do seu Acesso único, para confirmar a desativação da sua conta.",
     "To continue, use Single Sign On to prove your identity.": "Para continuar, use o Acesso único para provar a sua identidade.",
@@ -734,21 +695,6 @@
     },
     "Message search initialisation failed, check <a>your settings</a> for more information": "Falha na inicialização da pesquisa por mensagem, confire <a>suas configurações</a> para mais informações",
     "Add reaction": "Adicionar reação",
-    "Error processing voice message": "Erro ao processar a mensagem de voz",
-    "Error processing audio message": "Erro ao processar a mensagem de áudio",
-    "Some encryption parameters have been changed.": "Alguns parâmetros de criptografia foram modificados.",
-    "Decrypting": "Decriptando",
-    "The call is in an unknown state!": "A chamada está em um estado desconhecido!",
-    "Missed call": "Chamada perdida",
-    "Unknown failure: %(reason)s": "Falha desconhecida: %(reason)s",
-    "An unknown error occurred": "Um erro desconhecido ocorreu",
-    "Their device couldn't start the camera or microphone": "Este dispositivo não conseguiu iniciar a câmera ou microfone",
-    "Connection failed": "Falha na conexão",
-    "Could not connect media": "Não foi possível conectar-se à mídia",
-    "No answer": "Sem resposta",
-    "Call back": "Chamar de volta",
-    "Call declined": "Chamada recusada",
-    "Edit devices": "Editar dispositivos",
     "MB": "MB",
     "In reply to <a>this message</a>": "Em resposta a <a>esta mensagem</a>",
     "Space selection": "Seleção de Espaços",
@@ -766,25 +712,7 @@
         "one": "%(count)s voto",
         "other": "%(count)s votos"
     },
-    "Based on %(count)s votes": {
-        "one": "Com base na votação de %(count)s",
-        "other": "Com base em %(count)s votos"
-    },
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s votos expressos. Vote para ver os resultados",
-        "other": "%(count)s votos expressos. Vote para ver os resultados"
-    },
-    "No votes cast": "Sem votos expressos",
-    "Final result based on %(count)s votes": {
-        "one": "Resultado final baseado em %(count)s votos",
-        "other": "Resultado final baseado em %(count)s votos"
-    },
-    "Sorry, your vote was not registered. Please try again.": "Desculpe, seu voto não foi registrado. Por favor, tente novamente.",
-    "Vote not registered": "Voto não registrado",
-    "Downloading": "Baixando",
-    "In encrypted rooms, verify all users to ensure it's secure.": "Em salas criptografadas, verifique todos os usuários para garantir a segurança.",
     "Recently viewed": "Visualizado recentemente",
-    "Reply in thread": "Responder no tópico",
     "%(count)s reply": {
         "one": "%(count)s resposta",
         "other": "%(count)s respostas"
@@ -793,7 +721,6 @@
     "Leave some rooms": "Sair de algumas salas",
     "Leave all rooms": "Sair de todas as salas",
     "Don't leave any rooms": "Não saia de nenhuma sala",
-    "Jump to date": "Ir para Data",
     "Public rooms": "Salas públicas",
     "Add new server…": "Adicionar um novo servidor…",
     "%(count)s participants": {
@@ -1014,7 +941,8 @@
         "new_room": "Nova sala",
         "new_video_room": "Nova sala de vídeo",
         "add_existing_room": "Adicionar sala existente",
-        "explore_public_rooms": "Explorar salas públicas"
+        "explore_public_rooms": "Explorar salas públicas",
+        "reply_in_thread": "Responder no tópico"
     },
     "a11y": {
         "user_menu": "Menu do usuário",
@@ -1647,7 +1575,17 @@
             "voice_call": "%(senderName)s iniciou uma chamada de voz.",
             "voice_call_unsupported": "%(senderName)s iniciou uma chamada de voz. (não suportada por este navegador)",
             "video_call": "%(senderName)s iniciou uma chamada de vídeo.",
-            "video_call_unsupported": "%(senderName)s iniciou uma chamada de vídeo. (não suportada por este navegador)"
+            "video_call_unsupported": "%(senderName)s iniciou uma chamada de vídeo. (não suportada por este navegador)",
+            "declined": "Chamada recusada",
+            "call_back_prompt": "Chamar de volta",
+            "missed_call": "Chamada perdida",
+            "no_answer": "Sem resposta",
+            "failed_connect_media": "Não foi possível conectar-se à mídia",
+            "failed_connection": "Falha na conexão",
+            "failed_opponent_media": "Este dispositivo não conseguiu iniciar a câmera ou microfone",
+            "unknown_error": "Um erro desconhecido ocorreu",
+            "unknown_failure": "Falha desconhecida: %(reason)s",
+            "unknown_state": "A chamada está em um estado desconhecido!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s aceitou o convite para %(displayName)s",
@@ -1697,7 +1635,6 @@
             "forbidden": "%(senderDisplayName)s impediu que convidados entrassem na sala.",
             "unknown": "%(senderDisplayName)s alterou a permissão de acesso de convidados para %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s enviou uma imagem.",
         "m.sticker": "%(senderDisplayName)s enviou uma figurinha.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s definiu a lista de controle de acesso do servidor para esta sala.",
@@ -1741,7 +1678,12 @@
         "m.widget": {
             "modified": "O widget %(widgetName)s foi modificado por %(senderName)s",
             "added": "O widget %(widgetName)s foi criado por %(senderName)s",
-            "removed": "O widget %(widgetName)s foi removido por %(senderName)s"
+            "removed": "O widget %(widgetName)s foi removido por %(senderName)s",
+            "jitsi_join_top_prompt": "Entre na chamada em grupo no topo desta sala",
+            "jitsi_join_right_prompt": "Participe da chamada em grupo, clicando no botão de informações da sala, à direita da tela",
+            "jitsi_ended": "Chamada de vídeo em grupo encerrada por %(senderName)s",
+            "jitsi_updated": "Chamada de vídeo em grupo atualizada por %(senderName)s",
+            "jitsi_started": "Chamada de vídeo em grupo iniciada por %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s atualizou o layout da sala",
         "m.location": {
@@ -1750,7 +1692,6 @@
         "self_redaction": "Mensagem apagada",
         "redaction": "Mensagem apagada por %(name)s",
         "m.poll.start": "%(senderName)s começou uma enquete - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s encerrou uma enquete",
         "typing_indicator": {
             "one_user": "%(displayName)s está digitando…",
             "two_users": "%(names)s e %(lastPerson)s estão digitando…",
@@ -1882,7 +1823,8 @@
             "changed_rule_users": "%(senderName)s alterou uma regra que bania usuários que correspondiam a %(oldGlob)s para corresponder a %(newGlob)s devido à %(reason)s",
             "changed_rule_rooms": "%(senderName)s alterou uma regra que bania salas que correspondiam a %(oldGlob)s para corresponder a %(newGlob)s devido à %(reason)s",
             "changed_rule_servers": "%(senderName)s alterou uma regra que bania servidores que correspondiam a %(oldGlob)s para corresponder a %(newGlob)s devido à %(reason)s",
-            "changed_rule_glob": "%(senderName)s alterou uma regra que bania o que correspondia a %(oldGlob)s para corresponder a %(newGlob)s devido à %(reason)s"
+            "changed_rule_glob": "%(senderName)s alterou uma regra que bania o que correspondia a %(oldGlob)s para corresponder a %(newGlob)s devido à %(reason)s",
+            "message_hidden": "Você bloqueou este usuário, portanto, a mensagem dele foi escondida. <a>Mostrar mesmo assim.</a>"
         },
         "encrypted_historical_messages_unavailable": "As mensagens criptografadas antes deste ponto não estão disponíveis.",
         "historical_messages_unavailable": "Você não pode ver as mensagens anteriores",
@@ -1929,7 +1871,47 @@
             "unable_to_find": "Não foi possível carregar um trecho específico da conversa desta sala.",
             "title": "Não foi possível carregar um trecho da conversa"
         },
-        "error_no_renderer": "Este evento não pôde ser exibido"
+        "error_no_renderer": "Este evento não pôde ser exibido",
+        "download_action_downloading": "Baixando",
+        "download_action_decrypting": "Decriptando",
+        "m.room.encryption": {
+            "parameters_changed": "Alguns parâmetros de criptografia foram modificados.",
+            "disable_attempt": "A tentativa de desativar a criptografia foi ignorada",
+            "disabled": "Criptografia desativada",
+            "unsupported": "A criptografia usada nesta sala não é suportada."
+        },
+        "m.audio": {
+            "error_processing_audio": "Erro ao processar a mensagem de áudio",
+            "error_processing_voice_message": "Erro ao processar a mensagem de voz"
+        },
+        "m.file": {
+            "download_label": "Baixar %(text)s",
+            "error_decrypting": "Erro ao descriptografar o anexo",
+            "decrypt_label": "Descriptografar %(text)s",
+            "error_invalid": "Arquivo inválido %(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s enviou uma imagem.",
+            "error_decrypting": "Erro ao descriptografar a imagem",
+            "show_image": "Mostrar imagem"
+        },
+        "m.key.verification.done": "Você confirmou %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Você cancelou a confirmação de %(name)s",
+            "user_cancelled": "%(name)s cancelou a confirmação"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Você aceitou",
+            "you_declined": "Você recusou",
+            "you_cancelled": "Você cancelou",
+            "you_started": "Você enviou uma solicitação de confirmação"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s encerrou uma enquete"
+        },
+        "m.video": {
+            "error_decrypting": "Erro ao descriptografar o vídeo"
+        }
     },
     "slash_command": {
         "spoiler": "Envia esta mensagem como spoiler",
@@ -2338,7 +2320,23 @@
             "request_toast_detail": "%(deviceId)s de %(ip)s",
             "waiting_for_user_accept": "Aguardando %(displayName)s aceitar…",
             "start_button": "Iniciar confirmação",
-            "accepting": "Aceitando…"
+            "accepting": "Aceitando…",
+            "scan_qr": "Confirmar através de QR Code",
+            "scan_qr_explainer": "Peça para %(displayName)s escanear o seu código:",
+            "verify_emoji_prompt_qr": "Se você não consegue escanear o código acima, confirme comparando emojis únicos.",
+            "verify_emoji_prompt": "Confirmar comparando emojis únicos.",
+            "verify_emoji": "Confirmar por emojis",
+            "qr_reciprocate_same_shield_user": "Quase lá! Este escudo também aparece para %(displayName)s?",
+            "prompt_encrypted": "Verifique todos os usuários em uma sala para se certificar de que ela está segura.",
+            "prompt_unencrypted": "Em salas criptografadas, verifique todos os usuários para garantir a segurança.",
+            "successful_own_device": "Você confirmou o seu aparelho com êxito!",
+            "successful_device": "Você confirmou %(deviceName)s (%(deviceId)s) com êxito!",
+            "successful_user": "Você confirmou %(displayName)s com sucesso!",
+            "prompt_self": "Iniciar a confirmação novamente, após a notificação.",
+            "prompt_user": "Iniciar a confirmação novamente, a partir do perfil deste usuário.",
+            "timed_out": "O tempo de confirmação se esgotou.",
+            "cancelled_user": "%(displayName)s cancelou a confirmação.",
+            "cancelled": "Você cancelou a confirmação."
         },
         "old_version_detected_title": "Dados de criptografia antigos foram detectados",
         "old_version_detected_description": "Detectamos uma versão mais antiga do %(brand)s. Isso fará com que a criptografia de ponta a ponta não funcione corretamente. As mensagens criptografadas de ponta a ponta trocadas recentemente, enquanto você usava a versão mais antiga, talvez não sejam descriptografáveis na nova versão. Isso também poderá fazer com que as mensagens trocadas nesta sessão falhem na mais atual. Se você tiver problemas, desconecte-se e entre novamente. Para manter o histórico de mensagens, exporte e reimporte suas chaves.",
@@ -2390,7 +2388,8 @@
         "cross_signing_user_normal": "Você não confirmou este usuário.",
         "cross_signing_room_warning": "Alguém está usando uma sessão desconhecida",
         "cross_signing_room_verified": "Todos nesta sala estão confirmados",
-        "cross_signing_room_normal": "Esta sala é criptografada de ponta a ponta"
+        "cross_signing_room_normal": "Esta sala é criptografada de ponta a ponta",
+        "unsupported": "A sua versão do aplicativo não suporta a criptografia de ponta a ponta."
     },
     "emoji": {
         "category_frequently_used": "Mais usados",
@@ -2931,7 +2930,8 @@
         "jump_to_bottom_button": "Ir para as mensagens recentes",
         "jump_read_marker": "Ir diretamente para a primeira das mensagens não lidas.",
         "inviter_unknown": "Desconhecido",
-        "failed_reject_invite": "Não foi possível recusar o convite"
+        "failed_reject_invite": "Não foi possível recusar o convite",
+        "jump_to_date": "Ir para Data"
     },
     "file_panel": {
         "guest_note": "Você deve <a>se registrar</a> para usar este recurso",
@@ -2955,7 +2955,18 @@
         "inline_intro_text": "Aceitar <policyLink /> para continuar:"
     },
     "poll": {
-        "create_poll_title": "Criar enquete"
+        "create_poll_title": "Criar enquete",
+        "error_voting_title": "Voto não registrado",
+        "error_voting_description": "Desculpe, seu voto não foi registrado. Por favor, tente novamente.",
+        "total_no_votes": "Sem votos expressos",
+        "total_n_votes": {
+            "one": "%(count)s votos expressos. Vote para ver os resultados",
+            "other": "%(count)s votos expressos. Vote para ver os resultados"
+        },
+        "total_n_votes_voted": {
+            "one": "Com base na votação de %(count)s",
+            "other": "Com base em %(count)s votos"
+        }
     },
     "failed_load_async_component": "Não foi possível carregar! Verifique sua conexão de rede e tente novamente.",
     "upload_failed_generic": "O envio do arquivo '%(fileName)s' falhou.",
@@ -3156,7 +3167,8 @@
         "deactivate_confirm_description": "Desativar este usuário irá desconectá-lo e impedi-lo de fazer o login novamente. Além disso, ele sairá de todas as salas em que estiver. Esta ação não pode ser revertida. Tem certeza de que deseja desativar este usuário?",
         "deactivate_confirm_action": "Desativar usuário",
         "error_deactivate": "Falha ao desativar o usuário",
-        "role_label": "Cargo em <RoomName/>"
+        "role_label": "Cargo em <RoomName/>",
+        "edit_own_devices": "Editar dispositivos"
     },
     "stickers": {
         "empty": "No momento, você não tem pacotes de figurinhas ativados",
@@ -3180,7 +3192,13 @@
         "files_button": "Arquivos",
         "export_chat_button": "Exportar conversa",
         "share_button": "Compartilhar sala",
-        "settings_button": "Configurações da sala"
+        "settings_button": "Configurações da sala",
+        "poll": {
+            "final_result": {
+                "one": "Resultado final baseado em %(count)s votos",
+                "other": "Resultado final baseado em %(count)s votos"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Recusar o convite",

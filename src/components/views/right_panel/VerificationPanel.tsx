@@ -147,9 +147,9 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         if (showQR) {
             qrBlock = (
                 <div className="mx_UserInfo_container">
-                    <h3>{_t("Verify by scanning")}</h3>
+                    <h3>{_t("encryption|verification|scan_qr")}</h3>
                     <p>
-                        {_t("Ask %(displayName)s to scan your code:", {
+                        {_t("encryption|verification|scan_qr_explainer", {
                             displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
                         })}
                     </p>
@@ -165,13 +165,13 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         if (showSAS) {
             const disabled = this.state.emojiButtonClicked;
             const sasLabel = showQR
-                ? _t("If you can't scan the code above, verify by comparing unique emoji.")
-                : _t("Verify by comparing unique emoji.");
+                ? _t("encryption|verification|verify_emoji_prompt_qr")
+                : _t("encryption|verification|verify_emoji_prompt");
 
             // Note: mx_VerificationPanel_verifyByEmojiButton is for the end-to-end tests
             sasBlock = (
                 <div className="mx_UserInfo_container">
-                    <h3>{_t("Verify by emoji")}</h3>
+                    <h3>{_t("encryption|verification|verify_emoji")}</h3>
                     <p>{sasLabel}</p>
                     <AccessibleButton
                         disabled={disabled}
@@ -179,7 +179,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                         className="mx_UserInfo_wideButton mx_VerificationPanel_verifyByEmojiButton"
                         onClick={this.startSAS}
                     >
-                        {_t("Verify by emoji")}
+                        {_t("encryption|verification|verify_emoji")}
                     </AccessibleButton>
                 </div>
             );
@@ -230,8 +230,8 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
     private renderQRReciprocatePhase(): JSX.Element {
         const { member, request } = this.props;
         const description = request.isSelfVerification
-            ? _t("Almost there! Is your other device showing the same shield?")
-            : _t("Almost there! Is %(displayName)s showing the same shield?", {
+            ? _t("encryption|verification|qr_reciprocate_same_shield_device")
+            : _t("encryption|verification|qr_reciprocate_same_shield_user", {
                   displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
               });
         let body: JSX.Element;
@@ -268,7 +268,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         }
         return (
             <div className="mx_UserInfo_container mx_VerificationPanel_reciprocate_section">
-                <h3>{_t("Verify by scanning")}</h3>
+                <h3>{_t("encryption|verification|scan_qr")}</h3>
                 {body}
             </div>
         );
@@ -280,9 +280,9 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         let text: string | undefined;
         if (!request.isSelfVerification) {
             if (this.props.isRoomEncrypted) {
-                text = _t("Verify all users in a room to ensure it's secure.");
+                text = _t("encryption|verification|prompt_encrypted");
             } else {
-                text = _t("In encrypted rooms, verify all users to ensure it's secure.");
+                text = _t("encryption|verification|prompt_unencrypted");
             }
         }
 
@@ -293,15 +293,15 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                 // This can happen if the device is logged out while we're still showing verification
                 // UI for it.
                 logger.warn("Verified device we don't know about: " + this.props.request.otherDeviceId);
-                description = _t("You've successfully verified your device!");
+                description = _t("encryption|verification|successful_own_device");
             } else {
-                description = _t("You've successfully verified %(deviceName)s (%(deviceId)s)!", {
+                description = _t("encryption|verification|successful_device", {
                     deviceName: device.displayName,
                     deviceId: device.deviceId,
                 });
             }
         } else {
-            description = _t("You've successfully verified %(displayName)s!", {
+            description = _t("encryption|verification|successful_user", {
                 displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
             });
         }
@@ -323,25 +323,25 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
         let startAgainInstruction: string;
         if (request.isSelfVerification) {
-            startAgainInstruction = _t("Start verification again from the notification.");
+            startAgainInstruction = _t("encryption|verification|prompt_self");
         } else {
-            startAgainInstruction = _t("Start verification again from their profile.");
+            startAgainInstruction = _t("encryption|verification|prompt_user");
         }
 
         let text: string;
         if (request.cancellationCode === "m.timeout") {
-            text = _t("Verification timed out.") + ` ${startAgainInstruction}`;
+            text = _t("encryption|verification|timed_out") + ` ${startAgainInstruction}`;
         } else if (request.cancellingUserId === request.otherUserId) {
             if (request.isSelfVerification) {
-                text = _t("You cancelled verification on your other device.");
+                text = _t("encryption|verification|cancelled_self");
             } else {
-                text = _t("%(displayName)s cancelled verification.", {
+                text = _t("encryption|verification|cancelled_user", {
                     displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
                 });
             }
             text = `${text} ${startAgainInstruction}`;
         } else {
-            text = _t("You cancelled verification.") + ` ${startAgainInstruction}`;
+            text = _t("encryption|verification|cancelled") + ` ${startAgainInstruction}`;
         }
 
         return (

@@ -109,7 +109,7 @@ export const MPollEndBody = React.forwardRef<any, IBodyProps>(({ mxEvent, ...pro
 
     return (
         <div ref={ref}>
-            <Caption>{_t("Ended a poll")}</Caption>
+            <Caption>{_t("timeline|m.poll.end|ended")}</Caption>
             <MPollBody mxEvent={pollStartEvent} {...props} />
         </div>
     );

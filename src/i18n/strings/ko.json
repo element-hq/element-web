@@ -9,11 +9,7 @@
         "other": "외 %(count)s명..."
     },
     "Custom level": "맞춤 등급",
-    "Decrypt %(text)s": "%(text)s 복호화",
-    "Download %(text)s": "%(text)s 다운로드",
-    "Error decrypting attachment": "첨부 파일 복호화 중 오류",
     "Home": "홈",
-    "Invalid file%(extra)s": "잘못된 파일%(extra)s",
     "Join Room": "방에 참가",
     "Moderator": "조정자",
     "not specified": "지정되지 않음",
@@ -50,8 +46,6 @@
     "Confirm Removal": "삭제 확인",
     "Unable to restore session": "세션을 복구할 수 없음",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "이전에 최근 버전의 %(brand)s을 썼다면, 세션이 이 버전과 맞지 않을 것입니다. 창을 닫고 최근 버전으로 돌아가세요.",
-    "Error decrypting image": "사진 복호화 중 오류",
-    "Error decrypting video": "영상 복호화 중 오류",
     "Add an Integration": "통합 추가",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "%(integrationsUrl)s에서 쓸 수 있도록 계정을 인증하려고 다른 사이트로 이동하고 있습니다. 계속하겠습니까?",
     "This will allow you to reset your password and receive notifications.": "이렇게 하면 비밀번호를 다시 설정하고 알림을 받을 수 있습니다.",
@@ -245,19 +239,10 @@
     },
     "e.g. my-room": "예: my-room",
     "Close dialog": "대화 상자 닫기",
-    "Show image": "이미지 보이기",
     "Cancel search": "검색 취소",
-    "This client does not support end-to-end encryption.": "이 클라이언트는 종단간 암호화를 지원하지 않습니다.",
-    "You verified %(name)s": "%(name)s님을 확인했습니다",
-    "You cancelled verifying %(name)s": "%(name)s님의 확인을 취소했습니다",
-    "%(name)s cancelled verifying": "%(name)s님이 확인을 취소했습니다",
-    "You accepted": "당신이 수락했습니다",
     "%(name)s accepted": "%(name)s님이 수락했습니다",
-    "You cancelled": "당신이 취소했습니다",
     "%(name)s cancelled": "%(name)s님이 취소했습니다",
     "%(name)s wants to verify": "%(name)s님이 확인을 요청합니다",
-    "You sent a verification request": "확인 요청을 보냈습니다",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "이 사용자를 무시했습니다. 사용자의 메시지는 숨겨집니다. <a>무시하고 보이기.</a>",
     "Search for": "검색 기준",
     "Search for rooms or people": "방 또는 사람 검색",
     "Search for rooms": "방 검색",
@@ -735,7 +720,6 @@
             "forbidden": "%(senderDisplayName)s님이 손님이 방에 들어가지 못하도록 했습니다.",
             "unknown": "%(senderDisplayName)s님이 손님 접근을 %(rule)s(으)로 변경했습니다"
         },
-        "m.image": "%(senderDisplayName)s님이 사진을 보냈습니다.",
         "m.sticker": "%(senderDisplayName)s님이 스티커를 전송했습니다.",
         "m.room.canonical_alias": {
             "set": "%(senderName)s님이 이 방의 메인 주소를 %(address)s(으)로 설정했습니다.",
@@ -889,7 +873,34 @@
             "unable_to_find": "이 방의 타임라인에서 특정 시점을 불러오려고 했지만, 찾을 수 없었습니다.",
             "title": "타임라인 위치 불러오기에 실패함"
         },
-        "error_no_renderer": "이 이벤트를 표시할 수 없음"
+        "error_no_renderer": "이 이벤트를 표시할 수 없음",
+        "m.file": {
+            "download_label": "%(text)s 다운로드",
+            "error_decrypting": "첨부 파일 복호화 중 오류",
+            "decrypt_label": "%(text)s 복호화",
+            "error_invalid": "잘못된 파일%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s님이 사진을 보냈습니다.",
+            "error_decrypting": "사진 복호화 중 오류",
+            "show_image": "이미지 보이기"
+        },
+        "mjolnir": {
+            "message_hidden": "이 사용자를 무시했습니다. 사용자의 메시지는 숨겨집니다. <a>무시하고 보이기.</a>"
+        },
+        "m.key.verification.done": "%(name)s님을 확인했습니다",
+        "m.key.verification.cancel": {
+            "you_cancelled": "%(name)s님의 확인을 취소했습니다",
+            "user_cancelled": "%(name)s님이 확인을 취소했습니다"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "당신이 수락했습니다",
+            "you_cancelled": "당신이 취소했습니다",
+            "you_started": "확인 요청을 보냈습니다"
+        },
+        "m.video": {
+            "error_decrypting": "영상 복호화 중 오류"
+        }
     },
     "slash_command": {
         "spoiler": "스포일러로서 주어진 메시지를 전송",
@@ -1113,7 +1124,8 @@
         "setup_secure_backup": {
             "explainer": "잃어버리지 않도록 로그아웃하기 전에 키를 백업하세요.",
             "title": "설정"
-        }
+        },
+        "unsupported": "이 클라이언트는 종단간 암호화를 지원하지 않습니다."
     },
     "emoji": {
         "category_frequently_used": "자주 사용함",

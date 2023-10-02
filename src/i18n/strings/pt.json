@@ -31,20 +31,14 @@
         "one": "e um outro..."
     },
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s de %(fullYear)s às %(time)s",
-    "Decrypt %(text)s": "Descriptografar %(text)s",
-    "Download %(text)s": "Baixar %(text)s",
     "Join Room": "Ingressar na sala",
     "not specified": "não especificado",
     "An error has occurred.": "Ocorreu um erro.",
     "Email address": "Endereço de email",
-    "Error decrypting attachment": "Erro ao descriptografar o anexo",
-    "Invalid file%(extra)s": "Arquivo inválido %(extra)s",
     "Warning!": "Atenção!",
     "Confirm Removal": "Confirmar Remoção",
     "Unable to restore session": "Não foi possível restaurar a sessão",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Se você já usou antes uma versão mais recente do %(brand)s, a sua sessão pode ser incompatível com esta versão. Feche esta janela e tente abrir com a versão mais recente.",
-    "Error decrypting image": "Erro ao descriptografar a imagem",
-    "Error decrypting video": "Erro ao descriptografar o vídeo",
     "Add an Integration": "Adicionar uma integração",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?",
     "Custom level": "Nível personalizado",
@@ -530,7 +524,6 @@
             "remove": "%(senderDisplayName)s apagou o nome da sala.",
             "set": "%(senderDisplayName)s alterou o nome da sala para %(roomName)s."
         },
-        "m.image": "%(senderDisplayName)s enviou uma imagem.",
         "m.room.third_party_invite": {
             "sent": "%(senderName)s enviou um convite para %(targetDisplayName)s entrar na sala."
         },
@@ -562,6 +555,19 @@
             "no_permission": "Tentei carregar um ponto específico na linha do tempo desta sala, mas parece que você não tem permissões para ver a mensagem em questão.",
             "unable_to_find": "Tentei carregar um ponto específico na linha do tempo desta sala, mas não o encontrei.",
             "title": "Não foi possível carregar a posição na linha do tempo"
+        },
+        "m.file": {
+            "download_label": "Baixar %(text)s",
+            "error_decrypting": "Erro ao descriptografar o anexo",
+            "decrypt_label": "Descriptografar %(text)s",
+            "error_invalid": "Arquivo inválido %(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s enviou uma imagem.",
+            "error_decrypting": "Erro ao descriptografar a imagem"
+        },
+        "m.video": {
+            "error_decrypting": "Erro ao descriptografar o vídeo"
         }
     },
     "slash_command": {

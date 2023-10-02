@@ -473,7 +473,6 @@
             "forbidden": "%(senderDisplayName)s har forhindret gæster i at tilgå rummet.",
             "unknown": "%(senderDisplayName)s ændrede gæsteadgang til %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s sendte et billed.",
         "m.room.canonical_alias": {
             "set": "%(senderName)s satte hovedadressen af dette rum til %(address)s.",
             "removed": "%(senderName)s fjernede hovedadressen for dette rum.",
@@ -538,6 +537,9 @@
         },
         "context_menu": {
             "external_url": "Kilde URL"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s sendte et billed."
         }
     },
     "slash_command": {

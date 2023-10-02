@@ -23,10 +23,7 @@
     "unknown error code": "neznámý kód chyby",
     "An error has occurred.": "Nastala chyba.",
     "Custom level": "Vlastní úroveň",
-    "Decrypt %(text)s": "Dešifrovat %(text)s",
-    "Download %(text)s": "Stáhnout %(text)s",
     "Email address": "E-mailová adresa",
-    "Error decrypting attachment": "Chyba při dešifrování přílohy",
     "and %(count)s others...": {
         "other": "a %(count)s další...",
         "one": "a někdo další..."
@@ -43,8 +40,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "Delete Widget": "Smazat widget",
-    "Error decrypting image": "Chyba při dešifrování obrázku",
-    "Error decrypting video": "Chyba při dešifrování videa",
     "Unnamed room": "Nepojmenovaná místnost",
     "(~%(count)s results)": {
         "other": "(~%(count)s výsledků)",
@@ -56,7 +51,6 @@
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)sh",
     "%(duration)sd": "%(duration)sd",
-    "Invalid file%(extra)s": "Neplatný soubor%(extra)s",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Budete přesměrováni na stránku třetí strany k ověření svého účtu pro používání s %(integrationsUrl)s. Chcete pokračovat?",
     "%(items)s and %(lastItem)s": "%(items)s a také %(lastItem)s",
     "And %(count)s more...": {
@@ -241,24 +235,15 @@
         "other": "Odstranit %(count)s zpráv",
         "one": "Odstranit zprávu"
     },
-    "This client does not support end-to-end encryption.": "Tento klient nepodporuje koncové šifrování.",
-    "Show image": "Zobrazit obrázek",
-    "You verified %(name)s": "Ověřili jste %(name)s",
-    "You cancelled verifying %(name)s": "Zrušili jste ověření %(name)s",
-    "%(name)s cancelled verifying": "%(name)s zrušil(a) ověření",
-    "You accepted": "Přijali jste",
     "%(name)s accepted": "%(name)s přijal(a)",
-    "You cancelled": "Zrušili jste",
     "%(name)s cancelled": "%(name)s zrušil(a)",
     "%(name)s wants to verify": "%(name)s chce ověřit",
-    "You sent a verification request": "Poslali jste požadavek na ověření",
     "Edited at %(date)s. Click to view edits.": "Upraveno v %(date)s. Klinutím zobrazíte změny.",
     "Cancel search": "Zrušit hledání",
     "e.g. my-room": "např. moje-mistnost",
     "Upload all": "Nahrát vše",
     "Resend %(unsentCount)s reaction(s)": "Poslat %(unsentCount)s reakcí znovu",
     "Failed to connect to integration manager": "Nepovedlo se připojit ke správci integrací",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Tohoto uživatele ignorujete, takže jsou jeho zprávy skryté. <a>Přesto zobrazit.</a>",
     "Integrations are disabled": "Integrace jsou zakázané",
     "Integrations not allowed": "Integrace nejsou povolené",
     "Upgrade private room": "Aktualizovat soukromou místnost",
@@ -280,13 +265,6 @@
         "other": "%(count)s relací",
         "one": "%(count)s relace"
     },
-    "Verify by emoji": "Ověřit pomocí emoji",
-    "Verify by comparing unique emoji.": "Ověření porovnáním několika emoji.",
-    "Ask %(displayName)s to scan your code:": "Požádejte uživatele %(displayName)s o naskenování tohoto kódu pro vaše ověření:",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Pokud vám skenování kódů nefunguje, ověřte se porovnáním emoji.",
-    "You've successfully verified %(displayName)s!": "Úspěšně jste ověřili uživatele %(displayName)s!",
-    "Encryption not enabled": "Šifrování je vypnuté",
-    "The encryption used by this room isn't supported.": "Šifrování používané v této místnosti není podporované.",
     "Clear all data in this session?": "Smazat všechna data v této relaci?",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Výmaz všech dat v relaci je nevratný. Pokud nemáte zálohované šifrovací klíče, přijdete o šifrované zprávy.",
     "Session name": "Název relace",
@@ -306,22 +284,11 @@
     "Not Trusted": "Nedůvěryhodné",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) se přihlásil(a) do nové relace bez ověření:",
     "Ask this user to verify their session, or manually verify it below.": "Požádejte tohoto uživatele, aby ověřil svou relaci, nebo jí níže můžete ověřit manuálně.",
-    "Verify by scanning": "Ověřte naskenováním",
-    "You declined": "Odmítli jste",
     "%(name)s declined": "%(name)s odmítl(a)",
-    "Verify all users in a room to ensure it's secure.": "Ověřit všechny uživatele v místnosti, abyste se přesvědčili o bezpečnosti.",
     "Enter a server name": "Zadejte jméno serveru",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Pro hlášení bezpečnostních problémů s Matrixem si prosím přečtěte <a>naší Bezpečnostní politiku</a> (anglicky).",
-    "Almost there! Is %(displayName)s showing the same shield?": "Téměř hotovo! Je relace %(displayName)s také ověřená?",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Ověřili jste %(deviceName)s (%(deviceId)s)!",
     "You signed in to a new session without verifying it:": "Přihlásili jste se do nové relace, aniž byste ji ověřili:",
     "Verify your other session using one of the options below.": "Ověřte další relaci jedním z následujících způsobů.",
-    "You've successfully verified your device!": "Úspěšně jste ověřili vaše zařízení!",
-    "Start verification again from the notification.": "Začít proces ověření znovu pomocí notifikace.",
-    "Start verification again from their profile.": "Proces ověření začněte znovu z profilu kontaktu.",
-    "Verification timed out.": "Ověření vypršelo.",
-    "%(displayName)s cancelled verification.": "%(displayName)s zrušil(a) proces ověření.",
-    "You cancelled verification.": "Zrušili jste proces ověření.",
     "Can't load this message": "Tuto zprávu nelze načíst",
     "Submit logs": "Odeslat záznamy o chybě",
     "Looks good": "To vypadá dobře",
@@ -548,7 +515,6 @@
     "Unable to set up keys": "Nepovedlo se nastavit klíče",
     "Not encrypted": "Není šifrováno",
     "Approve widget permissions": "Schválit oprávnění widgetu",
-    "Ignored attempt to disable encryption": "Ignorovaný pokus o deaktivaci šifrování",
     "Zimbabwe": "Zimbabwe",
     "Zambia": "Zambie",
     "Yemen": "Jemen",
@@ -657,9 +623,6 @@
     "Restoring keys from backup": "Obnovení klíčů ze zálohy",
     "%(completed)s of %(total)s keys restored": "Obnoveno %(completed)s z %(total)s klíčů",
     "Continuing without email": "Pokračuje se bez e-mailu",
-    "Video conference started by %(senderName)s": "Videokonferenci byla zahájena uživatelem %(senderName)s",
-    "Video conference updated by %(senderName)s": "Videokonference byla aktualizována uživatelem %(senderName)s",
-    "Video conference ended by %(senderName)s": "Videokonference byla ukončena uživatelem %(senderName)s",
     "A browser extension is preventing the request.": "Rozšíření prohlížeče brání požadavku.",
     "Your firewall or anti-virus is blocking the request.": "Váš firewall nebo antivirový program blokuje požadavek.",
     "The server (%(serverName)s) took too long to respond.": "Serveru (%(serverName)s) trvalo příliš dlouho, než odpověděl.",
@@ -667,8 +630,6 @@
     "a device cross-signing signature": "zařízení používající křížový podpis",
     "This widget would like to:": "Tento widget by chtěl:",
     "Modal Widget": "Modální widget",
-    "Join the conference from the room information card on the right": "Připojte se ke konferenci z informační karty místnosti napravo",
-    "Join the conference at the top of this room": "Připojte se ke konferenci v horní části této místnosti",
     "Transfer": "Přepojit",
     "A call can only be transferred to a single user.": "Hovor lze přepojit pouze jednomu uživateli.",
     "Dial pad": "Číselník",
@@ -710,7 +671,6 @@
         "other": "%(count)s místností"
     },
     "Invite to %(roomName)s": "Pozvat do %(roomName)s",
-    "Edit devices": "Upravit zařízení",
     "%(count)s people you know have already joined": {
         "one": "%(count)s osoba, kterou znáte, se již připojila",
         "other": "%(count)s lidí, které znáte, se již připojili"
@@ -740,7 +700,6 @@
     },
     "Not all selected were added": "Ne všechny vybrané byly přidány",
     "You are not allowed to view this server's rooms list": "Namáte oprávnění zobrazit seznam místností tohoto serveru",
-    "Error processing voice message": "Chyba při zpracování hlasové zprávy",
     "You may contact me if you have any follow up questions": "V případě dalších dotazů se na mě můžete obrátit",
     "To leave the beta, visit your settings.": "Chcete-li opustit beta verzi, jděte do nastavení.",
     "Add reaction": "Přidat reakci",
@@ -752,7 +711,6 @@
     "You don't have permission to do this": "K tomu nemáte povolení",
     "Please provide an address": "Uveďte prosím adresu",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Inicializace vyhledávání zpráv se nezdařila, zkontrolujte <a>svá nastavení</a>",
-    "Error processing audio message": "Došlo k chybě při zpracovávání hlasové zprávy",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Váš %(brand)s neumožňuje použít správce integrací. Kontaktujte prosím správce.",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Upozorňujeme, že aktualizací vznikne nová verze místnosti</b>. Všechny aktuální zprávy zůstanou v této archivované místnosti.",
     "Automatically invite members from this room to the new one": "Automaticky pozvat členy této místnosti do nové místnosti",
@@ -764,13 +722,6 @@
     "Select spaces": "Vybrané prostory",
     "You're removing all spaces. Access will default to invite only": "Odstraňujete všechny prostory. Přístup bude ve výchozím nastavení pouze na pozvánky",
     "User Directory": "Adresář uživatelů",
-    "No answer": "Žádná odpověď",
-    "An unknown error occurred": "Došlo k neznámé chybě",
-    "Their device couldn't start the camera or microphone": "Jejich zařízení nemohlo spustit kameru nebo mikrofon",
-    "Connection failed": "Spojení se nezdařilo",
-    "Could not connect media": "Nepodařilo se připojit média",
-    "The call is in an unknown state!": "Hovor je v neznámém stavu!",
-    "Call back": "Zavolat zpět",
     "Add existing space": "Přidat stávající prostor",
     "Leave %(spaceName)s": "Opustit %(spaceName)s",
     "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Jste jediným správcem některých místností nebo prostorů, které chcete opustit. Jejich opuštěním zůstanou bez správců.",
@@ -788,11 +739,6 @@
     "Search for spaces": "Hledat prostory",
     "Create a new space": "Vytvořit nový prostor",
     "Want to add a new space instead?": "Chcete místo toho přidat nový prostor?",
-    "Decrypting": "Dešifrování",
-    "Missed call": "Zmeškaný hovor",
-    "Call declined": "Hovor odmítnut",
-    "Unknown failure: %(reason)s": "Neznámá chyba: %(reason)s",
-    "Some encryption parameters have been changed.": "Byly změněny některé parametry šifrování.",
     "To join a space you'll need an invite.": "Pro připojení k prostoru potřebujete pozvánku.",
     "Would you like to leave the rooms in this space?": "Chcete odejít z místností v tomto prostoru?",
     "You are about to leave <spaceName/>.": "Odcházíte z <spaceName/>.",
@@ -801,7 +747,6 @@
     "Leave all rooms": "Odejít ze všech místností",
     "MB": "MB",
     "In reply to <a>this message</a>": "V odpovědi na <a>tuto zprávu</a>",
-    "Downloading": "Stahování",
     "%(count)s reply": {
         "one": "%(count)s odpověď",
         "other": "%(count)s odpovědí"
@@ -809,14 +754,8 @@
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Zadejte bezpečnostní frázi nebo <button>použijte bezpečnostní klíč</button> pro pokračování.",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Obnovte přístup ke svému účtu a šifrovací klíče uložené v této relaci. Bez nich nebudete moci číst všechny své zabezpečené zprávy v žádné relaci.",
     "If you can't see who you're looking for, send them your invite link below.": "Pokud nevidíte, koho hledáte, pošlete mu odkaz na pozvánku níže.",
-    "In encrypted rooms, verify all users to ensure it's secure.": "V šifrovaných místnostech ověřte všechny uživatele, abyste zajistili bezpečnost komunikace.",
     "Thread options": "Možnosti vláken",
-    "Reply in thread": "Odpovědět ve vlákně",
     "Forget": "Zapomenout",
-    "Based on %(count)s votes": {
-        "one": "Na základě %(count)s hlasu",
-        "other": "Na základě %(count)s hlasů"
-    },
     "%(count)s votes": {
         "one": "%(count)s hlas",
         "other": "%(count)s hlasů"
@@ -825,8 +764,6 @@
         "one": "%(spaceName)s a %(count)s další",
         "other": "%(spaceName)s and %(count)s dalších"
     },
-    "Sorry, your vote was not registered. Please try again.": "Je nám líto, váš hlas nebyl zaregistrován. Zkuste to prosím znovu.",
-    "Vote not registered": "Hlasování není registrováno",
     "Developer": "Pro vývojáře",
     "Experimental": "Experimentální",
     "Themes": "Motivy vzhledu",
@@ -834,21 +771,12 @@
     "Messaging": "Zprávy",
     "Spaces you know that contain this space": "Prostory, které znáte obsahující tento prostor",
     "Recently viewed": "Nedávno zobrazené",
-    "%(count)s votes cast. Vote to see the results": {
-        "other": "%(count)s hlasů. Hlasujte a podívejte se na výsledky",
-        "one": "%(count)s hlas. Hlasujte a podívejte se na výsledky"
-    },
-    "No votes cast": "Nikdo nehlasoval",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Chcete ukončit toto hlasování? Zobrazí se konečné výsledky hlasování a lidé nebudou moci dále hlasovat.",
     "End Poll": "Ukončit hlasování",
     "Sorry, the poll did not end. Please try again.": "Omlouváme se, ale hlasování neskončilo. Zkuste to prosím znovu.",
     "Failed to end poll": "Nepodařilo se ukončit hlasování",
     "The poll has ended. Top answer: %(topAnswer)s": "Hlasování skončilo. Nejčastější odpověď: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Hlasování skončilo. Nikdo nehlasoval.",
-    "Final result based on %(count)s votes": {
-        "one": "Konečný výsledek na základě %(count)s hlasu",
-        "other": "Konečný výsledek na základě %(count)s hlasů"
-    },
     "Link to room": "Odkaz na místnost",
     "Recent searches": "Nedávná vyhledávání",
     "To search messages, look for this icon at the top of a room <icon/>": "Pro vyhledávání zpráv hledejte tuto ikonu v horní části místnosti <icon/>",
@@ -866,23 +794,13 @@
     "Missing domain separator e.g. (:domain.org)": "Chybí oddělovač domény, např. (:domain.org)",
     "Missing room name or separator e.g. (my-room:domain.org)": "Chybí název místnosti nebo oddělovač, např. (my-room:domain.org)",
     "Verify other device": "Ověřit jiné zařízení",
-    "You cancelled verification on your other device.": "Ověřování na jiném zařízení jste zrušili.",
-    "Almost there! Is your other device showing the same shield?": "Už to skoro je! Zobrazuje vaše druhé zařízení stejný štít?",
     "Could not fetch location": "Nepodařilo se zjistit polohu",
-    "Message pending moderation": "Zpráva čeká na moderaci",
-    "Message pending moderation: %(reason)s": "Zpráva čeká na moderaci: %(reason)s",
-    "Pick a date to jump to": "Vyberte datum, na které chcete přejít",
-    "Jump to date": "Přejít na datum",
-    "The beginning of the room": "Začátek místnosti",
     "This address does not point at this room": "Tato adresa neukazuje na tuto místnost",
     "Location": "Poloha",
     "Use <arrows/> to scroll": "K pohybu použijte <arrows/>",
     "Feedback sent! Thanks, we appreciate it!": "Zpětná vazba odeslána! Děkujeme, vážíme si toho!",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s a %(space2Name)s",
     "Join %(roomAddress)s": "Vstoupit do %(roomAddress)s",
-    "Sorry, you can't edit a poll after votes have been cast.": "Je nám líto, ale po odevzdání hlasů nelze hlasování upravovat.",
-    "Can't edit poll": "Nelze upravit hlasování",
-    "Results will be visible when the poll is ended": "Výsledky se zobrazí po ukončení hlasování",
     "Search Dialog": "Dialogové okno hledání",
     "What location type do you want to share?": "Jaký typ polohy chcete sdílet?",
     "Drop a Pin": "Zvolená poloha",
@@ -890,10 +808,6 @@
     "My current location": "Moje současná poloha",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s nemohl odeslat vaši polohu. Zkuste to prosím později.",
     "We couldn't send your location": "Vaši polohu se nepodařilo odeslat",
-    "Click": "Kliknutí",
-    "Expand quotes": "Rozbalit citace",
-    "Collapse quotes": "Sbalit citace",
-    "Can't create a thread from an event with an existing relation": "Nelze založit vlákno ve vlákně",
     "You are sharing your live location": "Sdílíte svoji polohu živě",
     "%(displayName)s's live location": "Poloha %(displayName)s živě",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Zrušte zaškrtnutí, pokud chcete odstranit i systémové zprávy tohoto uživatele (např. změna členství, změna profilu...)",
@@ -911,7 +825,6 @@
     },
     "%(featureName)s Beta feedback": "Zpětná vazba beta funkce %(featureName)s",
     "Live location ended": "Sdílení polohy živě skončilo",
-    "View live location": "Zobrazit polohu živě",
     "Live location enabled": "Poloha živě povolena",
     "Live location error": "Chyba polohy živě",
     "Live until %(expiryTime)s": "Živě do %(expiryTime)s",
@@ -969,26 +882,18 @@
     "Coworkers and teams": "Spolupracovníci a týmy",
     "Friends and family": "Přátelé a rodina",
     "We'll help you get connected.": "Pomůžeme vám připojit se.",
-    "Messages in this chat will be end-to-end encrypted.": "Zprávy v této místnosti budou koncově šifrovány.",
     "Saved Items": "Uložené položky",
     "Choose a locale": "Zvolte jazyk",
     "Interactively verify by emoji": "Interaktivní ověření pomocí emoji",
     "Manually verify by text": "Ruční ověření pomocí textu",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s nebo %(recoveryFile)s",
-    "Video call ended": "Videohovor ukončen",
     "%(name)s started a video call": "%(name)s zahájil(a) videohovor",
-    "Error downloading image": "Chyba při stahování obrázku",
-    "Unable to show image due to error": "Obrázek nelze zobrazit kvůli chybě",
     "Thread root ID: %(threadRootId)s": "ID kořenového vlákna: %(threadRootId)s",
     "<w>WARNING:</w> <description/>": "<w>UPOZORNĚNÍ:</w> <description/>",
     " in <strong>%(room)s</strong>": " v <strong>%(room)s</strong>",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Hlasovou zprávu nelze spustit, protože právě nahráváte živé vysílání. Ukončete prosím živé vysílání, abyste mohli začít nahrávat hlasovou zprávu.",
     "Can't start voice message": "Nelze spustit hlasovou zprávu",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "unknown": "neznámé",
-    "Declining…": "Odmítání…",
-    "There are no past polls in this room": "V této místnosti nejsou žádná minulá hlasování",
-    "There are no active polls in this room": "V této místnosti nejsou žádná aktivní hlasování",
     "Enable '%(manageIntegrations)s' in Settings to do this.": "Pro provedení povolte v Nastavení položku '%(manageIntegrations)s'.",
     "Loading live location…": "Načítání polohy živě…",
     "Fetching keys from server…": "Načítání klíčů ze serveru…",
@@ -996,45 +901,17 @@
     "Waiting for partner to confirm…": "Čekání na potvrzení partnerem…",
     "Adding…": "Přidání…",
     "Starting export process…": "Zahájení procesu exportu…",
-    "Loading polls": "Načítání hlasování",
-    "The sender has blocked you from receiving this message": "Odesílatel vám zablokoval přijetí této zprávy",
-    "Due to decryption errors, some votes may not be counted": "Kvůli chybám v dešifrování nemusí být některé hlasy započítány",
-    "Ended a poll": "Ukončil hlasování",
-    "Answered elsewhere": "Hovor přijat jinde",
-    "View poll": "Zobrazit hlasování",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "Za uplynulý den nejsou k dispozici žádná hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
-        "other": "Za posledních %(count)s dní nejsou k dispozici žádná minulá hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování"
-    },
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
-        "one": "Za poslední den nejsou k dispozici žádná aktivní hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
-        "other": "Za posledních %(count)s dní nejsou žádná aktivní hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování"
-    },
-    "There are no past polls. Load more polls to view polls for previous months": "Nejsou k dispozici žádná minulá hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
-    "There are no active polls. Load more polls to view polls for previous months": "Nejsou zde žádná aktivní hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
-    "Load more polls": "Načíst další hlasování",
-    "Past polls": "Minulá hlasování",
-    "Active polls": "Aktivní hlasování",
-    "View poll in timeline": "Zobrazit hlasování na časové ose",
     "Invites by email can only be sent one at a time": "Pozvánky e-mailem lze zasílat pouze po jedné",
     "Desktop app logo": "Logo desktopové aplikace",
     "Requires your server to support the stable version of MSC3827": "Vyžaduje, aby váš server podporoval stabilní verzi MSC3827",
     "Message from %(user)s": "Zpráva od %(user)s",
     "Message in %(room)s": "Zpráva v %(room)s",
-    "Error details": "Podrobnosti o chybě",
-    "Unable to find event at that date": "Nelze najít událost k danému datu",
-    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Odešlete prosím <debugLogsLink>ladící záznamy</debugLogsLink>, abyste nám pomohli problém najít.",
     "unavailable": "nedostupný",
     "unknown status code": "neznámý kód stavu",
-    "Server returned %(statusCode)s with error code %(errorCode)s": "Server vrátil %(statusCode)s s kódem chyby %(errorCode)s",
-    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Nepodařilo se nám najít událost od data %(dateString)s. Zkuste zvolit dřívější datum.",
-    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Při pokusu o vyhledání a přechod na zadané datum došlo k chybě sítě. Váš domovský server může být nefunkční nebo došlo jen k dočasnému problému s internetovým připojením. Zkuste to prosím znovu. Pokud tento problém přetrvává, obraťte se na správce domovského serveru.",
     "Start DM anyway": "Zahájit přímou zprávu i přesto",
     "Start DM anyway and never warn me again": "Zahájit přímou zprávu i přesto a nikdy už mě nevarovat",
     "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "Není možné najít uživatelské profily pro níže uvedené Matrix ID - chcete přesto založit DM?",
     "Note that removing room changes like this could undo the change.": "Upozorňujeme, že odstranění takových změn v místnosti by mohlo vést ke zrušení změny.",
-    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.": "Zprávy jsou zde koncově šifrovány. Ověřte %(displayName)s v jeho profilu - klepněte na jeho profilový obrázek.",
-    "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "Zprávy v této místnosti jsou koncově šifrovány. Když lidé vstoupí, můžete je ověřit v jejich profilu, stačí klepnout na jejich profilový obrázek.",
     "Are you sure you wish to remove (delete) this event?": "Opravdu chcete tuto událost odstranit (smazat)?",
     "Upgrade room": "Aktualizovat místnost",
     "Other spaces you know": "Další prostory, které znáte",
@@ -1277,7 +1154,9 @@
         "new_room": "Nová místnost",
         "new_video_room": "Nová video místnost",
         "add_existing_room": "Přidat existující místnost",
-        "explore_public_rooms": "Prozkoumat veřejné místnosti"
+        "explore_public_rooms": "Prozkoumat veřejné místnosti",
+        "reply_in_thread": "Odpovědět ve vlákně",
+        "click": "Kliknutí"
     },
     "a11y": {
         "user_menu": "Uživatelská nabídka",
@@ -2278,13 +2157,25 @@
     "timeline": {
         "m.call": {
             "video_call_started": "Videohovor byl zahájen v %(roomName)s.",
-            "video_call_started_unsupported": "Videohovor byl zahájen v %(roomName)s. (není podporováno tímto prohlížečem)"
+            "video_call_started_unsupported": "Videohovor byl zahájen v %(roomName)s. (není podporováno tímto prohlížečem)",
+            "video_call_ended": "Videohovor ukončen"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s zahájil(a) hovor.",
             "voice_call_unsupported": "%(senderName)s zahájil(a) hovor. (není podporováno tímto prohlížečem)",
             "video_call": "%(senderName)s zahájil(a) videohovor.",
-            "video_call_unsupported": "%(senderName)s zahájil(a) videohovor. (není podporováno tímto prohlížečem)"
+            "video_call_unsupported": "%(senderName)s zahájil(a) videohovor. (není podporováno tímto prohlížečem)",
+            "declined": "Hovor odmítnut",
+            "call_back_prompt": "Zavolat zpět",
+            "answered_elsewhere": "Hovor přijat jinde",
+            "missed_call": "Zmeškaný hovor",
+            "no_answer": "Žádná odpověď",
+            "failed_connect_media": "Nepodařilo se připojit média",
+            "failed_connection": "Spojení se nezdařilo",
+            "failed_opponent_media": "Jejich zařízení nemohlo spustit kameru nebo mikrofon",
+            "unknown_error": "Došlo k neznámé chybě",
+            "unknown_failure": "Neznámá chyba: %(reason)s",
+            "unknown_state": "Hovor je v neznámém stavu!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s přijal(a) pozvání do %(displayName)s",
@@ -2336,7 +2227,6 @@
             "forbidden": "%(senderDisplayName)s zakázal(a) přístup hostům.",
             "unknown": "%(senderDisplayName)s změnil(a) pravidlo pro přístup hostů na %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s poslal(a) obrázek.",
         "m.sticker": "%(senderDisplayName)s poslal(a) nálepku.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s nastavil seznam přístupů serveru pro tuto místnost.",
@@ -2380,7 +2270,12 @@
         "m.widget": {
             "modified": "%(senderName)s upravil(a) widget %(widgetName)s",
             "added": "%(senderName)s přidal(a) widget %(widgetName)s",
-            "removed": "%(senderName)s odstranil(a) widget %(widgetName)s"
+            "removed": "%(senderName)s odstranil(a) widget %(widgetName)s",
+            "jitsi_join_top_prompt": "Připojte se ke konferenci v horní části této místnosti",
+            "jitsi_join_right_prompt": "Připojte se ke konferenci z informační karty místnosti napravo",
+            "jitsi_ended": "Videokonference byla ukončena uživatelem %(senderName)s",
+            "jitsi_updated": "Videokonference byla aktualizována uživatelem %(senderName)s",
+            "jitsi_started": "Videokonferenci byla zahájena uživatelem %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s aktualizoval rozvržení místnosti",
         "m.location": {
@@ -2391,7 +2286,6 @@
         "self_redaction": "Zpráva smazána",
         "redaction": "Zpráva smazána uživatelem %(name)s",
         "m.poll.start": "%(senderName)s zahájil(a) hlasování - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s ukončil(a) hlasování",
         "typing_indicator": {
             "one_user": "%(displayName)s píše …",
             "two_users": "%(names)s a %(lastPerson)s píšou …",
@@ -2563,7 +2457,8 @@
             "changed_rule_users": "%(senderName)s změnil(a) pravidlo blokující uživatele odpovídající %(oldGlob)s na uživatele odpovídající %(newGlob)s z důvodu %(reason)s",
             "changed_rule_rooms": "%(senderName)s změnil(a) pravidlo blokující místnosti odpovídající %(oldGlob)s na místnosti odpovídající %(newGlob)s z důvodu %(reason)s",
             "changed_rule_servers": "%(senderName)s změnil(a) pravidlo blokující servery odpovídající %(oldGlob)s na servery odpovídající %(newGlob)s z důvodu %(reason)s",
-            "changed_rule_glob": "%(senderName)s změnil(a) blokovací pravidlo odpovídající %(oldGlob)s na odpovídající %(newGlob)s z důvodu %(reason)s"
+            "changed_rule_glob": "%(senderName)s změnil(a) blokovací pravidlo odpovídající %(oldGlob)s na odpovídající %(newGlob)s z důvodu %(reason)s",
+            "message_hidden": "Tohoto uživatele ignorujete, takže jsou jeho zprávy skryté. <a>Přesto zobrazit.</a>"
         },
         "no_permission_messages_before_invite": "Nemáte oprávnění zobrazovat zprávy z doby před pozváním.",
         "no_permission_messages_before_join": "Nemáte oprávnění zobrazovat zprávy z doby, než jste se připojili.",
@@ -2617,18 +2512,72 @@
         "mab": {
             "label": "Akce zprávy",
             "view_in_room": "Zobrazit v místnosti",
-            "copy_link_thread": "Kopírovat odkaz na vlákno"
+            "copy_link_thread": "Kopírovat odkaz na vlákno",
+            "collapse_reply_chain": "Sbalit citace",
+            "expand_reply_chain": "Rozbalit citace"
         },
         "m.audio": {
             "unnamed_audio": "Nepojmenovaný audio soubor",
-            "error_downloading_audio": "Chyba při stahování audia"
+            "error_downloading_audio": "Chyba při stahování audia",
+            "error_processing_audio": "Došlo k chybě při zpracovávání hlasové zprávy",
+            "error_processing_voice_message": "Chyba při zpracování hlasové zprávy"
         },
         "load_error": {
             "no_permission": "Pokusili jste se načíst bod v časové ose místnosti, ale pro zobrazení zpráv z daného časového úseku nemáte oprávnění.",
             "unable_to_find": "Pokusili jste se načíst bod na časové ose místnosti, ale nepodařilo se ho najít.",
             "title": "Nepodařilo se načíst pozici na časové ose"
         },
-        "error_no_renderer": "Tato událost nemohla být zobrazena"
+        "error_no_renderer": "Tato událost nemohla být zobrazena",
+        "decryption_failure_blocked": "Odesílatel vám zablokoval přijetí této zprávy",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_downloading": "Stahování",
+        "download_action_decrypting": "Dešifrování",
+        "m.room.encryption": {
+            "parameters_changed": "Byly změněny některé parametry šifrování.",
+            "enabled_dm": "Zprávy jsou zde koncově šifrovány. Ověřte %(displayName)s v jeho profilu - klepněte na jeho profilový obrázek.",
+            "enabled_local": "Zprávy v této místnosti budou koncově šifrovány.",
+            "enabled": "Zprávy v této místnosti jsou koncově šifrovány. Když lidé vstoupí, můžete je ověřit v jejich profilu, stačí klepnout na jejich profilový obrázek.",
+            "disable_attempt": "Ignorovaný pokus o deaktivaci šifrování",
+            "disabled": "Šifrování je vypnuté",
+            "unsupported": "Šifrování používané v této místnosti není podporované."
+        },
+        "pending_moderation_reason": "Zpráva čeká na moderaci: %(reason)s",
+        "pending_moderation": "Zpráva čeká na moderaci",
+        "m.beacon_info": {
+            "view_live_location": "Zobrazit polohu živě"
+        },
+        "m.file": {
+            "download_label": "Stáhnout %(text)s",
+            "error_decrypting": "Chyba při dešifrování přílohy",
+            "decrypt_label": "Dešifrovat %(text)s",
+            "error_invalid": "Neplatný soubor%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s poslal(a) obrázek.",
+            "error": "Obrázek nelze zobrazit kvůli chybě",
+            "error_decrypting": "Chyba při dešifrování obrázku",
+            "error_downloading": "Chyba při stahování obrázku",
+            "show_image": "Zobrazit obrázek"
+        },
+        "m.key.verification.done": "Ověřili jste %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Zrušili jste ověření %(name)s",
+            "user_cancelled": "%(name)s zrušil(a) ověření"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Přijali jste",
+            "you_declined": "Odmítli jste",
+            "you_cancelled": "Zrušili jste",
+            "declining": "Odmítání…",
+            "you_started": "Poslali jste požadavek na ověření"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s ukončil(a) hlasování",
+            "ended": "Ukončil hlasování"
+        },
+        "m.video": {
+            "error_decrypting": "Chyba při dešifrování videa"
+        }
     },
     "slash_command": {
         "spoiler": "Odešle danou zprávu jako spoiler",
@@ -3121,7 +3070,25 @@
                 "reset_confirmation": "Opravdu chcete resetovat ověřovací klíče?",
                 "skip_verification": "Prozatím přeskočit ověřování"
             },
-            "accepting": "Přijímání…"
+            "accepting": "Přijímání…",
+            "scan_qr": "Ověřte naskenováním",
+            "scan_qr_explainer": "Požádejte uživatele %(displayName)s o naskenování tohoto kódu pro vaše ověření:",
+            "verify_emoji_prompt_qr": "Pokud vám skenování kódů nefunguje, ověřte se porovnáním emoji.",
+            "verify_emoji_prompt": "Ověření porovnáním několika emoji.",
+            "verify_emoji": "Ověřit pomocí emoji",
+            "qr_reciprocate_same_shield_device": "Už to skoro je! Zobrazuje vaše druhé zařízení stejný štít?",
+            "qr_reciprocate_same_shield_user": "Téměř hotovo! Je relace %(displayName)s také ověřená?",
+            "prompt_encrypted": "Ověřit všechny uživatele v místnosti, abyste se přesvědčili o bezpečnosti.",
+            "prompt_unencrypted": "V šifrovaných místnostech ověřte všechny uživatele, abyste zajistili bezpečnost komunikace.",
+            "successful_own_device": "Úspěšně jste ověřili vaše zařízení!",
+            "successful_device": "Ověřili jste %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "Úspěšně jste ověřili uživatele %(displayName)s!",
+            "prompt_self": "Začít proces ověření znovu pomocí notifikace.",
+            "prompt_user": "Proces ověření začněte znovu z profilu kontaktu.",
+            "timed_out": "Ověření vypršelo.",
+            "cancelled_self": "Ověřování na jiném zařízení jste zrušili.",
+            "cancelled_user": "%(displayName)s zrušil(a) proces ověření.",
+            "cancelled": "Zrušili jste proces ověření."
         },
         "old_version_detected_title": "Nalezeny starší šifrované datové zprávy",
         "old_version_detected_description": "Byla zjištěna data ze starší verze %(brand)s. To bude mít za následek nefunkčnost koncové kryptografie ve starší verzi. Koncově šifrované zprávy vyměněné nedávno při používání starší verze nemusí být v této verzi dešifrovatelné. To může také způsobit selhání zpráv vyměňovaných s touto verzí. Pokud narazíte na problémy, odhlaste se a znovu se přihlaste. Chcete-li zachovat historii zpráv, exportujte a znovu importujte klíče.",
@@ -3174,7 +3141,8 @@
         "cross_signing_user_normal": "Tohoto uživatele jste neověřili.",
         "cross_signing_room_warning": "Někdo používá neznámou relaci",
         "cross_signing_room_verified": "V této místnosti jsou všichni ověřeni",
-        "cross_signing_room_normal": "Místnost je koncově šifrovaná"
+        "cross_signing_room_normal": "Místnost je koncově šifrovaná",
+        "unsupported": "Tento klient nepodporuje koncové šifrování."
     },
     "emoji": {
         "category_frequently_used": "Často používané",
@@ -3669,7 +3637,8 @@
         "empty_tip": "<b>Tip:</b> Použijte \"%(replyInThread)s\" při najetí na zprávu.",
         "empty_heading": "Udržujte diskuse organizované pomocí vláken",
         "unable_to_decrypt": "Nepodařilo se dešifrovat zprávu",
-        "open_thread": "Otevřít vlákno"
+        "open_thread": "Otevřít vlákno",
+        "error_start_thread_existing_relation": "Nelze založit vlákno ve vlákně"
     },
     "theme": {
         "light_high_contrast": "Světlý vysoký kontrast",
@@ -3975,7 +3944,16 @@
         "jump_read_marker": "Přejít na první nepřečtenou zprávu.",
         "inviter_unknown": "Neznámý",
         "failed_reject_invite": "Nepodařilo se odmítnout pozvánku",
-        "creating_room_text": "Vytváříme místnost s %(names)s"
+        "creating_room_text": "Vytváříme místnost s %(names)s",
+        "error_jump_to_date_connection": "Při pokusu o vyhledání a přechod na zadané datum došlo k chybě sítě. Váš domovský server může být nefunkční nebo došlo jen k dočasnému problému s internetovým připojením. Zkuste to prosím znovu. Pokud tento problém přetrvává, obraťte se na správce domovského serveru.",
+        "error_jump_to_date_not_found": "Nepodařilo se nám najít událost od data %(dateString)s. Zkuste zvolit dřívější datum.",
+        "error_jump_to_date": "Server vrátil %(statusCode)s s kódem chyby %(errorCode)s",
+        "error_jump_to_date_send_logs_prompt": "Odešlete prosím <debugLogsLink>ladící záznamy</debugLogsLink>, abyste nám pomohli problém najít.",
+        "error_jump_to_date_title": "Nelze najít událost k danému datu",
+        "error_jump_to_date_details": "Podrobnosti o chybě",
+        "jump_to_date_beginning": "Začátek místnosti",
+        "jump_to_date": "Přejít na datum",
+        "jump_to_date_prompt": "Vyberte datum, na které chcete přejít"
     },
     "file_panel": {
         "guest_note": "Pro využívání této funkce se <a>zaregistrujte</a>",
@@ -4018,7 +3996,22 @@
         "options_placeholder": "Napište volbu",
         "options_add_button": "Přidat volbu",
         "disclosed_notes": "Hlasující uvidí výsledky ihned po hlasování",
-        "notes": "Výsledky se zobrazí až po ukončení hlasování"
+        "notes": "Výsledky se zobrazí až po ukončení hlasování",
+        "unable_edit_title": "Nelze upravit hlasování",
+        "unable_edit_description": "Je nám líto, ale po odevzdání hlasů nelze hlasování upravovat.",
+        "error_voting_title": "Hlasování není registrováno",
+        "error_voting_description": "Je nám líto, váš hlas nebyl zaregistrován. Zkuste to prosím znovu.",
+        "total_decryption_errors": "Kvůli chybám v dešifrování nemusí být některé hlasy započítány",
+        "total_not_ended": "Výsledky se zobrazí po ukončení hlasování",
+        "total_no_votes": "Nikdo nehlasoval",
+        "total_n_votes": {
+            "other": "%(count)s hlasů. Hlasujte a podívejte se na výsledky",
+            "one": "%(count)s hlas. Hlasujte a podívejte se na výsledky"
+        },
+        "total_n_votes_voted": {
+            "one": "Na základě %(count)s hlasu",
+            "other": "Na základě %(count)s hlasů"
+        }
     },
     "failed_load_async_component": "Stránku se nepovedlo načíst! Zkontrolujte prosím své připojení k internetu a zkuste to znovu.",
     "upload_failed_generic": "Soubor '%(fileName)s' se nepodařilo nahrát.",
@@ -4252,7 +4245,8 @@
         "deactivate_confirm_description": "Deaktivování uživatele ho odhlásí a zabrání mu v opětovném přihlášení. Navíc bude odstraněn ze všech místností. Akci nelze vzít zpět. Opravdu chcete uživatele deaktivovat?",
         "deactivate_confirm_action": "Deaktivovat uživatele",
         "error_deactivate": "Deaktivace uživatele se nezdařila",
-        "role_label": "Role v <RoomName/>"
+        "role_label": "Role v <RoomName/>",
+        "edit_own_devices": "Upravit zařízení"
     },
     "stickers": {
         "empty": "Momentálně nemáte aktivní žádné balíčky s nálepkami",
@@ -4281,7 +4275,31 @@
         "pinned_messages_button": "Připnuto",
         "export_chat_button": "Exportovat chat",
         "share_button": "Sdílet místnost",
-        "settings_button": "Nastavení místnosti"
+        "settings_button": "Nastavení místnosti",
+        "poll": {
+            "view_in_timeline": "Zobrazit hlasování na časové ose",
+            "active_heading": "Aktivní hlasování",
+            "past_heading": "Minulá hlasování",
+            "loading": "Načítání hlasování",
+            "load_more": "Načíst další hlasování",
+            "empty_active": "V této místnosti nejsou žádná aktivní hlasování",
+            "empty_past": "V této místnosti nejsou žádná minulá hlasování",
+            "empty_active_load_more": "Nejsou zde žádná aktivní hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
+            "empty_past_load_more": "Nejsou k dispozici žádná minulá hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
+            "empty_active_load_more_n_days": {
+                "one": "Za poslední den nejsou k dispozici žádná aktivní hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
+                "other": "Za posledních %(count)s dní nejsou žádná aktivní hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování"
+            },
+            "empty_past_load_more_n_days": {
+                "one": "Za uplynulý den nejsou k dispozici žádná hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
+                "other": "Za posledních %(count)s dní nejsou k dispozici žádná minulá hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování"
+            },
+            "view_poll": "Zobrazit hlasování",
+            "final_result": {
+                "one": "Konečný výsledek na základě %(count)s hlasu",
+                "other": "Konečný výsledek na základě %(count)s hlasů"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Odmítnout pozvání",

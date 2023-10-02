@@ -49,19 +49,14 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp
         const dmPartner = DMRoomMap.shared().getUserIdForRoomId(roomId);
         const room = cli?.getRoom(roomId);
         if (prevContent.algorithm === ALGORITHM) {
-            subtitle = _t("Some encryption parameters have been changed.");
+            subtitle = _t("timeline|m.room.encryption|parameters_changed");
         } else if (dmPartner) {
             const displayName = room?.getMember(dmPartner)?.rawDisplayName || dmPartner;
-            subtitle = _t(
-                "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.",
-                { displayName },
-            );
+            subtitle = _t("timeline|m.room.encryption|enabled_dm", { displayName });
         } else if (room && isLocalRoom(room)) {
-            subtitle = _t("Messages in this chat will be end-to-end encrypted.");
+            subtitle = _t("timeline|m.room.encryption|enabled_local");
         } else {
-            subtitle = _t(
-                "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
-            );
+            subtitle = _t("timeline|m.room.encryption|enabled");
         }
 
         return (
@@ -79,7 +74,7 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp
             <EventTileBubble
                 className="mx_cryptoEvent mx_cryptoEvent_icon"
                 title={_t("common|encryption_enabled")}
-                subtitle={_t("Ignored attempt to disable encryption")}
+                subtitle={_t("timeline|m.room.encryption|disable_attempt")}
                 timestamp={timestamp}
             />
         );
@@ -88,8 +83,8 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp
     return (
         <EventTileBubble
             className="mx_cryptoEvent mx_cryptoEvent_icon mx_cryptoEvent_icon_warning"
-            title={_t("Encryption not enabled")}
-            subtitle={_t("The encryption used by this room isn't supported.")}
+            title={_t("timeline|m.room.encryption|disabled")}
+            subtitle={_t("timeline|m.room.encryption|unsupported")}
             ref={ref}
             timestamp={timestamp}
         />

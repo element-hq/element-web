@@ -29,8 +29,6 @@
     "Sunday": "Bazar",
     "Friday": "Cümə",
     "Today": "Bu gün",
-    "Decrypt %(text)s": "Şifrini açmaq %(text)s",
-    "Download %(text)s": "Yükləmək %(text)s",
     "Create new room": "Otağı yaratmaq",
     "Home": "Başlanğıc",
     "%(items)s and %(lastItem)s": "%(items)s və %(lastItem)s",
@@ -167,6 +165,10 @@
         },
         "load_error": {
             "title": "Xronologiyadan nişanı yükləməyi bacarmadı"
+        },
+        "m.file": {
+            "download_label": "Yükləmək %(text)s",
+            "decrypt_label": "Şifrini açmaq %(text)s"
         }
     },
     "slash_command": {

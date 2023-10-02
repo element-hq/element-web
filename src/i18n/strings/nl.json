@@ -31,13 +31,9 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s, %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s, %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s, %(time)s",
-    "Decrypt %(text)s": "%(text)s ontsleutelen",
-    "Download %(text)s": "%(text)s downloaden",
     "Email address": "E-mailadres",
     "Custom level": "Aangepast niveau",
-    "Error decrypting attachment": "Fout bij het ontsleutelen van de bijlage",
     "Home": "Home",
-    "Invalid file%(extra)s": "Ongeldig bestand %(extra)s",
     "Join Room": "Kamer toetreden",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Bekijk je e-mail en klik op de koppeling daarin. Klik vervolgens op ‘Verder gaan’.",
     "Session ID": "Sessie-ID",
@@ -50,8 +46,6 @@
     "Confirm Removal": "Verwijdering bevestigen",
     "Unable to restore session": "Herstellen van sessie mislukt",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Als je een recentere versie van %(brand)s hebt gebruikt is je sessie mogelijk niet geschikt voor deze versie. Sluit dit venster en ga terug naar die recentere versie.",
-    "Error decrypting image": "Fout bij het ontsleutelen van de afbeelding",
-    "Error decrypting video": "Fout bij het ontsleutelen van de video",
     "Add an Integration": "Voeg een integratie toe",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Je wordt zo dadelijk naar een derdepartijwebsite gebracht zodat je de account kunt legitimeren voor gebruik met %(integrationsUrl)s. Wil je doorgaan?",
     "This will allow you to reset your password and receive notifications.": "Zo kan je een nieuw wachtwoord instellen en meldingen ontvangen.",
@@ -244,7 +238,6 @@
     },
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Gebruik een identiteitsserver om uit te nodigen op e-mailadres. <default>Gebruik de standaardserver (%(defaultIdentityServerName)s)</default> of beheer de server in de <settings>Instellingen</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Gebruik een identiteitsserver om anderen uit te nodigen via e-mail. Beheer de server in de <settings>Instellingen</settings>.",
-    "Show image": "Afbeelding tonen",
     "e.g. my-room": "bv. mijn-kamer",
     "Close dialog": "Dialoog sluiten",
     "Lock": "Hangslot",
@@ -263,27 +256,10 @@
         "other": "%(count)s sessies",
         "one": "%(count)s sessie"
     },
-    "This client does not support end-to-end encryption.": "Deze cliënt biedt geen ondersteuning voor eind-tot-eind-versleuteling.",
-    "Verify by scanning": "Verifiëren met scan",
-    "Ask %(displayName)s to scan your code:": "Vraag %(displayName)s om jouw code te scannen:",
-    "Verify by emoji": "Verifiëren met emoji",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Als je bovenstaande code niet kan scannen, verifieer dan door unieke emoji te vergelijken.",
-    "Verify by comparing unique emoji.": "Verifieer door unieke emoji te vergelijken.",
-    "You've successfully verified %(displayName)s!": "Je hebt %(displayName)s geverifieerd!",
-    "Encryption not enabled": "Versleuteling niet ingeschakeld",
-    "The encryption used by this room isn't supported.": "De versleuteling gebruikt in deze kamer wordt niet ondersteund.",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Je hebt deze persoon genegeerd, dus de berichten worden verborgen. <a>Toch tonen?</a>",
-    "You verified %(name)s": "Je hebt %(name)s geverifieerd",
-    "You cancelled verifying %(name)s": "Je hebt de verificatie van %(name)s geannuleerd",
-    "%(name)s cancelled verifying": "%(name)s heeft de verificatie geannuleerd",
-    "You accepted": "Je hebt aanvaard",
     "%(name)s accepted": "%(name)s heeft aanvaard",
-    "You declined": "Je hebt geweigerd",
-    "You cancelled": "Je hebt geannuleerd",
     "%(name)s declined": "%(name)s heeft geweigerd",
     "%(name)s cancelled": "%(name)s heeft geannuleerd",
     "%(name)s wants to verify": "%(name)s wil verifiëren",
-    "You sent a verification request": "Je hebt een verificatieverzoek verstuurd",
     "Cancel search": "Zoeken annuleren",
     "Language Dropdown": "Taalselectie",
     "Destroy cross-signing keys?": "Sleutels voor kruiselings ondertekenen verwijderen?",
@@ -339,14 +315,6 @@
     "Afghanistan": "Afghanistan",
     "United States": "Verenigde Staten",
     "United Kingdom": "Verenigd Koninkrijk",
-    "Video conference started by %(senderName)s": "Videovergadering gestart door %(senderName)s",
-    "Video conference updated by %(senderName)s": "Videovergadering geüpdatet door %(senderName)s",
-    "Video conference ended by %(senderName)s": "Videovergadering beëindigd door %(senderName)s",
-    "Join the conference from the room information card on the right": "Neem deel aan de vergadering via de informatiekaart rechts",
-    "You cancelled verification.": "Je hebt de verificatie geannuleerd.",
-    "%(displayName)s cancelled verification.": "%(displayName)s heeft de verificatie geannuleerd.",
-    "Verification timed out.": "Verificatie verlopen.",
-    "Start verification again from their profile.": "Begin verificatie opnieuw vanaf hun profiel.",
     "Romania": "Roemenië",
     "St. Martin": "Sint Maarten/Sint-Maarten",
     "St. Kitts & Nevis": "Saint Kitts en Nevis",
@@ -587,12 +555,6 @@
     "Can't load this message": "Dit bericht kan niet geladen worden",
     "Click to view edits": "Klik om bewerkingen te zien",
     "Edited at %(date)s": "Bewerkt op %(date)s",
-    "Join the conference at the top of this room": "Deelnemen aan de vergadering bovenaan deze kamer",
-    "Ignored attempt to disable encryption": "Poging om versleuteling uit te schakelen genegeerd",
-    "Start verification again from the notification.": "Verificatie opnieuw beginnen vanuit de melding.",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Je hebt %(deviceName)s (%(deviceId)s) geverifieerd!",
-    "You've successfully verified your device!": "Je hebt je apparaat geverifieerd!",
-    "Almost there! Is %(displayName)s showing the same shield?": "Bijna klaar! Toont %(displayName)s hetzelfde schild?",
     "Not encrypted": "Niet versleuteld",
     "The server has denied your request.": "De server heeft je verzoek afgewezen.",
     "The server is offline.": "De server is offline.",
@@ -686,7 +648,6 @@
     "Preparing to download logs": "Klaarmaken om logs te downloaden",
     "Enter the name of a new server you want to explore.": "Voer de naam in van een nieuwe server die je wilt ontdekken.",
     "Submit logs": "Logs versturen",
-    "Verify all users in a room to ensure it's secure.": "Controleer alle personen in een kamer om er zeker van te zijn dat het veilig is.",
     "Dial pad": "Kiestoetsen",
     "IRC display name width": "Breedte IRC-weergavenaam",
     "To continue, use Single Sign On to prove your identity.": "Om verder te gaan, gebruik je eenmalige aanmelding om je identiteit te bewijzen.",
@@ -710,7 +671,6 @@
     },
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Normaal gesproken heeft dit alleen invloed op het verwerken van de kamer op de server. Als je problemen ervaart met %(brand)s, stuur dan een bugmelding.",
     "Invite to %(roomName)s": "Uitnodiging voor %(roomName)s",
-    "Edit devices": "Apparaten bewerken",
     "You most likely do not want to reset your event index store": "Je wilt waarschijnlijk niet jouw gebeurtenisopslag-index resetten",
     "Reset event store?": "Gebeurtenisopslag resetten?",
     "Reset event store": "Gebeurtenisopslag resetten",
@@ -740,7 +700,6 @@
     },
     "Not all selected were added": "Niet alle geselecteerden zijn toegevoegd",
     "You are not allowed to view this server's rooms list": "Je hebt geen toegang tot deze server zijn kamergids",
-    "Error processing voice message": "Fout bij verwerking spraakbericht",
     "You may contact me if you have any follow up questions": "Je mag contact met mij opnemen als je nog vervolg vragen heeft",
     "To leave the beta, visit your settings.": "Om de beta te verlaten, ga naar je instellingen.",
     "Add reaction": "Reactie toevoegen",
@@ -752,16 +711,8 @@
     "You don't have permission to do this": "Je hebt geen rechten om dit te doen",
     "Please provide an address": "Geef een adres op",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Bericht zoeken initialisatie mislukt, controleer <a>je instellingen</a> voor meer informatie",
-    "Error processing audio message": "Fout bij verwerking audiobericht",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Jouw %(brand)s laat je geen integratiebeheerder gebruiken om dit te doen. Neem contact op met een beheerder.",
     "User Directory": "Personengids",
-    "The call is in an unknown state!": "Deze oproep heeft een onbekende status!",
-    "Call back": "Terugbellen",
-    "No answer": "Geen antwoord",
-    "An unknown error occurred": "Er is een onbekende fout opgetreden",
-    "Their device couldn't start the camera or microphone": "Het andere apparaat kon de camera of microfoon niet starten",
-    "Connection failed": "Verbinding mislukt",
-    "Could not connect media": "Mediaverbinding mislukt",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Let op bijwerken maakt een nieuwe versie van deze kamer</b>. Alle huidige berichten blijven in deze gearchiveerde kamer.",
     "Automatically invite members from this room to the new one": "Automatisch leden uitnodigen van deze kamer in de nieuwe",
     "These are likely ones other room admins are a part of.": "Dit zijn waarschijnlijk kamers waar andere kamerbeheerders deel van uitmaken.",
@@ -788,11 +739,6 @@
     "Create a new space": "Maak een nieuwe Space",
     "Want to add a new space instead?": "Een nieuwe Space toevoegen?",
     "Add existing space": "Bestaande Space toevoegen",
-    "Decrypting": "Ontsleutelen",
-    "Missed call": "Oproep gemist",
-    "Call declined": "Oproep geweigerd",
-    "Unknown failure: %(reason)s": "Onbekende fout: %(reason)s",
-    "Some encryption parameters have been changed.": "Enkele versleutingsparameters zijn gewijzigd.",
     "To join a space you'll need an invite.": "Om te kunnen deelnemen aan een space heb je een uitnodiging nodig.",
     "Would you like to leave the rooms in this space?": "Wil je de kamers verlaten in deze Space?",
     "You are about to leave <spaceName/>.": "Je staat op het punt <spaceName/> te verlaten.",
@@ -802,7 +748,6 @@
     "MB": "MB",
     "In reply to <a>this message</a>": "In antwoord op <a>dit bericht</a>",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Voer uw veiligheidswachtwoord in of <button>gebruik uw veiligheidssleutel</button> om door te gaan.",
-    "Downloading": "Downloaden",
     "%(count)s reply": {
         "one": "%(count)s reactie",
         "other": "%(count)s reacties"
@@ -810,23 +755,15 @@
     "Thread options": "Draad opties",
     "Forget": "Vergeet",
     "If you can't see who you're looking for, send them your invite link below.": "Als je niet kan vinden wie je zoekt, stuur ze dan je uitnodigingslink hieronder.",
-    "Based on %(count)s votes": {
-        "one": "Gebaseerd op %(count)s stem",
-        "other": "Gebaseerd op %(count)s stemmen"
-    },
     "%(count)s votes": {
         "one": "%(count)s stem",
         "other": "%(count)s stemmen"
     },
-    "In encrypted rooms, verify all users to ensure it's secure.": "Controleer alle personen in versleutelde kamers om er zeker van te zijn dat het veilig is.",
-    "Reply in thread": "Reageer in draad",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s en %(count)s andere",
         "other": "%(spaceName)s en %(count)s andere"
     },
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Ontvang toegang tot je account en herstel de tijdens deze sessie opgeslagen versleutelingssleutels, zonder deze sleutels zijn sommige van je versleutelde berichten in je sessies onleesbaar.",
-    "Sorry, your vote was not registered. Please try again.": "Sorry, jouw stem is niet geregistreerd. Probeer het alstublieft opnieuw.",
-    "Vote not registered": "Stem niet geregistreerd",
     "Developer": "Ontwikkelaar",
     "Experimental": "Experimenteel",
     "Themes": "Thema's",
@@ -834,21 +771,12 @@
     "Messaging": "Messaging",
     "Spaces you know that contain this space": "Spaces die je kent met deze Space",
     "Recently viewed": "Recent bekeken",
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s stem uitgebracht. Stem om de resultaten te zien",
-        "other": "%(count)s stemmen uitgebracht. Stem om de resultaten te zien"
-    },
-    "No votes cast": "Geen stemmen uitgebracht",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Weet je zeker dat je de poll wil sluiten? Dit zal zichtbaar zijn in de einduitslag van de poll en personen kunnen dan niet langer stemmen.",
     "End Poll": "Poll sluiten",
     "Sorry, the poll did not end. Please try again.": "Helaas, de poll is niet gesloten. Probeer het opnieuw.",
     "Failed to end poll": "Poll sluiten is mislukt",
     "The poll has ended. Top answer: %(topAnswer)s": "De poll is gesloten. Meest gestemd: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "De poll is gesloten. Er kan niet meer worden gestemd.",
-    "Final result based on %(count)s votes": {
-        "one": "Einduitslag gebaseerd op %(count)s stem",
-        "other": "Einduitslag gebaseerd op %(count)s stemmen"
-    },
     "Open in OpenStreetMap": "In OpenStreetMap openen",
     "Recent searches": "Recente zoekopdrachten",
     "To search messages, look for this icon at the top of a room <icon/>": "Om berichten te zoeken, zoek naar dit icoon bovenaan een kamer <icon/>",
@@ -866,15 +794,8 @@
     "Missing room name or separator e.g. (my-room:domain.org)": "Ontbrekende kamernaam of scheidingsteken, bijv. (mijn-kamer:voorbeeld.nl)",
     "Missing domain separator e.g. (:domain.org)": "Ontbrekend domeinscheidingsteken, bijv. (:voorbeeld.nl)",
     "toggle event": "wissel gebeurtenis",
-    "You cancelled verification on your other device.": "Je hebt de verificatie geannuleerd op het andere apparaat.",
-    "Almost there! Is your other device showing the same shield?": "Je bent er bijna! Toont het andere apparaat hetzelfde schild?",
     "Could not fetch location": "Kan locatie niet ophalen",
-    "Message pending moderation": "Bericht in afwachting van moderatie",
-    "Message pending moderation: %(reason)s": "Bericht in afwachting van moderatie: %(reason)s",
     "This address does not point at this room": "Dit adres verwijst niet naar deze kamer",
-    "Pick a date to jump to": "Kies een datum om naar toe te springen",
-    "Jump to date": "Spring naar datum",
-    "The beginning of the room": "Het begin van de kamer",
     "Location": "Locatie",
     "Use <arrows/> to scroll": "Gebruik <arrows/> om te scrollen",
     "Feedback sent! Thanks, we appreciate it!": "Reactie verzonden! Bedankt, we waarderen het!",
@@ -897,13 +818,6 @@
     "%(displayName)s's live location": "De live locatie van %(displayName)s",
     "We couldn't send your location": "We kunnen jouw locatie niet versturen",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s kan jouw locatie niet versturen. Probeer het later opnieuw.",
-    "Results will be visible when the poll is ended": "Resultaten zijn zichtbaar wanneer de poll is afgelopen",
-    "Sorry, you can't edit a poll after votes have been cast.": "Sorry, je kan een poll niet bewerken nadat er gestemd is.",
-    "Can't edit poll": "Kan poll niet bewerken",
-    "Click": "Klik",
-    "Expand quotes": "Citaten uitvouwen",
-    "Collapse quotes": "Citaten invouwen",
-    "Can't create a thread from an event with an existing relation": "Kan geen discussie maken van een gebeurtenis met een bestaande relatie",
     "%(count)s participants": {
         "one": "1 deelnemer",
         "other": "%(count)s deelnemers"
@@ -914,7 +828,6 @@
     "Live location error": "Live locatie error",
     "Live location ended": "Live locatie beëindigd",
     "Live until %(expiryTime)s": "Live tot %(expiryTime)s",
-    "View live location": "Bekijk live locatie",
     "Close sidebar": "Zijbalk sluiten",
     "View List": "Toon Lijst",
     "View list": "Toon lijst",
@@ -969,13 +882,11 @@
     "You're in": "Je bent binnen",
     "You need to have the right permissions in order to share locations in this room.": "Je dient de juiste rechten te hebben om locaties in deze ruimte te delen.",
     "You don't have permission to share locations": "Je bent niet gemachtigd om locaties te delen",
-    "Messages in this chat will be end-to-end encrypted.": "Berichten in deze chat worden eind-tot-eind versleuteld.",
     "Saved Items": "Opgeslagen items",
     "Choose a locale": "Kies een landinstelling",
     "Interactively verify by emoji": "Interactief verifiëren door emoji",
     "Manually verify by text": "Handmatig verifiëren via tekst",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s of %(recoveryFile)s",
-    "Video call ended": "Video oproep beëindigd",
     "%(name)s started a video call": "%(name)s is een videogesprek gestart",
     "common": {
         "about": "Over",
@@ -1208,7 +1119,9 @@
         "new_room": "Nieuwe kamer",
         "new_video_room": "Nieuwe video kamer",
         "add_existing_room": "Bestaande kamers toevoegen",
-        "explore_public_rooms": "Publieke kamers ontdekken"
+        "explore_public_rooms": "Publieke kamers ontdekken",
+        "reply_in_thread": "Reageer in draad",
+        "click": "Klik"
     },
     "a11y": {
         "user_menu": "Persoonsmenu",
@@ -2037,13 +1950,24 @@
     "timeline": {
         "m.call": {
             "video_call_started": "Videogesprek gestart in %(roomName)s.",
-            "video_call_started_unsupported": "Videogesprek gestart in %(roomName)s. (niet ondersteund door deze browser)"
+            "video_call_started_unsupported": "Videogesprek gestart in %(roomName)s. (niet ondersteund door deze browser)",
+            "video_call_ended": "Video oproep beëindigd"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s probeert je te bellen.",
             "voice_call_unsupported": "%(senderName)s poogt je te bellen, maar jouw browser ondersteunt dat niet",
             "video_call": "%(senderName)s doet een video-oproep.",
-            "video_call_unsupported": "%(senderName)s doet een video-oproep, maar jouw browser ondersteunt dat niet"
+            "video_call_unsupported": "%(senderName)s doet een video-oproep, maar jouw browser ondersteunt dat niet",
+            "declined": "Oproep geweigerd",
+            "call_back_prompt": "Terugbellen",
+            "missed_call": "Oproep gemist",
+            "no_answer": "Geen antwoord",
+            "failed_connect_media": "Mediaverbinding mislukt",
+            "failed_connection": "Verbinding mislukt",
+            "failed_opponent_media": "Het andere apparaat kon de camera of microfoon niet starten",
+            "unknown_error": "Er is een onbekende fout opgetreden",
+            "unknown_failure": "Onbekende fout: %(reason)s",
+            "unknown_state": "Deze oproep heeft een onbekende status!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s accepteerde de uitnodiging voor %(displayName)s",
@@ -2093,7 +2017,6 @@
             "forbidden": "%(senderDisplayName)s heeft gasten de toegang tot de kamer ontzegd.",
             "unknown": "%(senderDisplayName)s heeft de toegangsregel voor gasten op ‘%(rule)s’ ingesteld"
         },
-        "m.image": "%(senderDisplayName)s heeft een afbeelding gestuurd.",
         "m.sticker": "%(senderDisplayName)s Verstuurde een sticker.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s stelde de server ACL's voor deze kamer in.",
@@ -2137,7 +2060,12 @@
         "m.widget": {
             "modified": "%(widgetName)s-widget aangepast door %(senderName)s",
             "added": "%(widgetName)s-widget toegevoegd door %(senderName)s",
-            "removed": "%(widgetName)s-widget verwijderd door %(senderName)s"
+            "removed": "%(widgetName)s-widget verwijderd door %(senderName)s",
+            "jitsi_join_top_prompt": "Deelnemen aan de vergadering bovenaan deze kamer",
+            "jitsi_join_right_prompt": "Neem deel aan de vergadering via de informatiekaart rechts",
+            "jitsi_ended": "Videovergadering beëindigd door %(senderName)s",
+            "jitsi_updated": "Videovergadering geüpdatet door %(senderName)s",
+            "jitsi_started": "Videovergadering gestart door %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s heeft de kamerindeling bijgewerkt",
         "m.location": {
@@ -2148,7 +2076,6 @@
         "self_redaction": "Bericht verwijderd",
         "redaction": "Bericht verwijderd door %(name)s",
         "m.poll.start": "%(senderName)s is een poll gestart - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s heeft een poll beëindigd",
         "typing_indicator": {
             "one_user": "%(displayName)s is aan het typen…",
             "two_users": "%(names)s en %(lastPerson)s zijn aan het typen…",
@@ -2312,7 +2239,8 @@
             "changed_rule_users": "%(senderName)s heeft het patroon van een banregel voor personen wegens %(reason)s aangepast van %(oldGlob)s tot %(newGlob)s",
             "changed_rule_rooms": "%(senderName)s heeft het patroon van een banregel voor kamers wegens %(reason)s aangepast van %(oldGlob)s tot %(newGlob)s",
             "changed_rule_servers": "%(senderName)s heeft het patroon van een banregel voor servers wegens %(reason)s aangepast van %(oldGlob)s tot %(newGlob)s",
-            "changed_rule_glob": "%(senderName)s heeft het patroon van een banregel wegens %(reason)s aangepast van %(oldGlob)s tot %(newGlob)s"
+            "changed_rule_glob": "%(senderName)s heeft het patroon van een banregel wegens %(reason)s aangepast van %(oldGlob)s tot %(newGlob)s",
+            "message_hidden": "Je hebt deze persoon genegeerd, dus de berichten worden verborgen. <a>Toch tonen?</a>"
         },
         "no_permission_messages_before_invite": "Je bent niet gemachtigd om berichten te bekijken van voordat je werd uitgenodigd.",
         "no_permission_messages_before_join": "Je hebt geen toestemming om berichten te bekijken voor voordat je lid werd.",
@@ -2357,18 +2285,64 @@
         "mab": {
             "label": "Berichtacties",
             "view_in_room": "In kamer bekijken",
-            "copy_link_thread": "Kopieer link naar draad"
+            "copy_link_thread": "Kopieer link naar draad",
+            "collapse_reply_chain": "Citaten invouwen",
+            "expand_reply_chain": "Citaten uitvouwen"
         },
         "m.audio": {
             "unnamed_audio": "Naamloze audio",
-            "error_downloading_audio": "Fout bij downloaden van audio"
+            "error_downloading_audio": "Fout bij downloaden van audio",
+            "error_processing_audio": "Fout bij verwerking audiobericht",
+            "error_processing_voice_message": "Fout bij verwerking spraakbericht"
         },
         "load_error": {
             "no_permission": "Je probeert een punt in de tijdlijn van deze kamer te laden, maar je hebt niet voldoende rechten om het bericht te lezen.",
             "unable_to_find": "Geprobeerd een gegeven punt in de tijdslijn van deze kamer te laden, maar kon dit niet vinden.",
             "title": "Laden van tijdslijnpositie is mislukt"
         },
-        "error_no_renderer": "Deze gebeurtenis kon niet weergegeven worden"
+        "error_no_renderer": "Deze gebeurtenis kon niet weergegeven worden",
+        "download_action_downloading": "Downloaden",
+        "download_action_decrypting": "Ontsleutelen",
+        "m.room.encryption": {
+            "parameters_changed": "Enkele versleutingsparameters zijn gewijzigd.",
+            "enabled_local": "Berichten in deze chat worden eind-tot-eind versleuteld.",
+            "disable_attempt": "Poging om versleuteling uit te schakelen genegeerd",
+            "disabled": "Versleuteling niet ingeschakeld",
+            "unsupported": "De versleuteling gebruikt in deze kamer wordt niet ondersteund."
+        },
+        "pending_moderation_reason": "Bericht in afwachting van moderatie: %(reason)s",
+        "pending_moderation": "Bericht in afwachting van moderatie",
+        "m.beacon_info": {
+            "view_live_location": "Bekijk live locatie"
+        },
+        "m.file": {
+            "download_label": "%(text)s downloaden",
+            "error_decrypting": "Fout bij het ontsleutelen van de bijlage",
+            "decrypt_label": "%(text)s ontsleutelen",
+            "error_invalid": "Ongeldig bestand %(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s heeft een afbeelding gestuurd.",
+            "error_decrypting": "Fout bij het ontsleutelen van de afbeelding",
+            "show_image": "Afbeelding tonen"
+        },
+        "m.key.verification.done": "Je hebt %(name)s geverifieerd",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Je hebt de verificatie van %(name)s geannuleerd",
+            "user_cancelled": "%(name)s heeft de verificatie geannuleerd"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Je hebt aanvaard",
+            "you_declined": "Je hebt geweigerd",
+            "you_cancelled": "Je hebt geannuleerd",
+            "you_started": "Je hebt een verificatieverzoek verstuurd"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s heeft een poll beëindigd"
+        },
+        "m.video": {
+            "error_decrypting": "Fout bij het ontsleutelen van de video"
+        }
     },
     "slash_command": {
         "spoiler": "Verstuurt het bericht als een spoiler",
@@ -2820,7 +2794,25 @@
                 "reset_confirmation": "Echt je verificatiesleutels resetten?",
                 "skip_verification": "Verificatie voorlopig overslaan"
             },
-            "accepting": "Toestaan…"
+            "accepting": "Toestaan…",
+            "scan_qr": "Verifiëren met scan",
+            "scan_qr_explainer": "Vraag %(displayName)s om jouw code te scannen:",
+            "verify_emoji_prompt_qr": "Als je bovenstaande code niet kan scannen, verifieer dan door unieke emoji te vergelijken.",
+            "verify_emoji_prompt": "Verifieer door unieke emoji te vergelijken.",
+            "verify_emoji": "Verifiëren met emoji",
+            "qr_reciprocate_same_shield_device": "Je bent er bijna! Toont het andere apparaat hetzelfde schild?",
+            "qr_reciprocate_same_shield_user": "Bijna klaar! Toont %(displayName)s hetzelfde schild?",
+            "prompt_encrypted": "Controleer alle personen in een kamer om er zeker van te zijn dat het veilig is.",
+            "prompt_unencrypted": "Controleer alle personen in versleutelde kamers om er zeker van te zijn dat het veilig is.",
+            "successful_own_device": "Je hebt je apparaat geverifieerd!",
+            "successful_device": "Je hebt %(deviceName)s (%(deviceId)s) geverifieerd!",
+            "successful_user": "Je hebt %(displayName)s geverifieerd!",
+            "prompt_self": "Verificatie opnieuw beginnen vanuit de melding.",
+            "prompt_user": "Begin verificatie opnieuw vanaf hun profiel.",
+            "timed_out": "Verificatie verlopen.",
+            "cancelled_self": "Je hebt de verificatie geannuleerd op het andere apparaat.",
+            "cancelled_user": "%(displayName)s heeft de verificatie geannuleerd.",
+            "cancelled": "Je hebt de verificatie geannuleerd."
         },
         "old_version_detected_title": "Oude cryptografiegegevens gedetecteerd",
         "old_version_detected_description": "Er zijn gegevens van een oudere versie van %(brand)s gevonden, die problemen veroorzaakt hebben met de eind-tot-eind-versleuteling in de oude versie. Onlangs vanuit de oude versie verzonden eind-tot-eind-versleutelde berichten zijn mogelijk onontsleutelbaar in deze versie. Ook kunnen berichten die met deze versie uitgewisseld zijn falen. Mocht je problemen ervaren, log dan opnieuw in. Exporteer je sleutels en importeer ze weer om je berichtgeschiedenis te behouden.",
@@ -2873,7 +2865,8 @@
         "cross_signing_user_normal": "Je hebt deze persoon niet geverifieerd.",
         "cross_signing_room_warning": "Iemand gebruikt een onbekende sessie",
         "cross_signing_room_verified": "Iedereen in deze kamer is geverifieerd",
-        "cross_signing_room_normal": "Deze kamer is eind-tot-eind-versleuteld"
+        "cross_signing_room_normal": "Deze kamer is eind-tot-eind-versleuteld",
+        "unsupported": "Deze cliënt biedt geen ondersteuning voor eind-tot-eind-versleuteling."
     },
     "emoji": {
         "category_frequently_used": "Vaak gebruikt",
@@ -3311,7 +3304,8 @@
         "empty_explainer": "Threads helpen jou gesprekken on-topic te houden en gemakkelijk bij te houden.",
         "empty_tip": "<b>Tip:</b> Gebruik “%(replyInThread)s” met de muiscursor boven een bericht.",
         "empty_heading": "Houd threads georganiseerd",
-        "open_thread": "Open discussie"
+        "open_thread": "Open discussie",
+        "error_start_thread_existing_relation": "Kan geen discussie maken van een gebeurtenis met een bestaande relatie"
     },
     "theme": {
         "light_high_contrast": "Lichte hoog contrast",
@@ -3587,7 +3581,10 @@
         "jump_read_marker": "Spring naar het eerste ongelezen bericht.",
         "inviter_unknown": "Onbekend",
         "failed_reject_invite": "Weigeren van uitnodiging is mislukt",
-        "creating_room_text": "We maken een kamer aan met %(names)s"
+        "creating_room_text": "We maken een kamer aan met %(names)s",
+        "jump_to_date_beginning": "Het begin van de kamer",
+        "jump_to_date": "Spring naar datum",
+        "jump_to_date_prompt": "Kies een datum om naar toe te springen"
     },
     "file_panel": {
         "guest_note": "Je dient je te <a>registreren</a> om deze functie te gebruiken",
@@ -3629,7 +3626,21 @@
         "options_placeholder": "Schrijf een optie",
         "options_add_button": "Optie toevoegen",
         "disclosed_notes": "Kiezers zien resultaten zodra ze hebben gestemd",
-        "notes": "Resultaten worden pas onthuld als je de poll beëindigt"
+        "notes": "Resultaten worden pas onthuld als je de poll beëindigt",
+        "unable_edit_title": "Kan poll niet bewerken",
+        "unable_edit_description": "Sorry, je kan een poll niet bewerken nadat er gestemd is.",
+        "error_voting_title": "Stem niet geregistreerd",
+        "error_voting_description": "Sorry, jouw stem is niet geregistreerd. Probeer het alstublieft opnieuw.",
+        "total_not_ended": "Resultaten zijn zichtbaar wanneer de poll is afgelopen",
+        "total_no_votes": "Geen stemmen uitgebracht",
+        "total_n_votes": {
+            "one": "%(count)s stem uitgebracht. Stem om de resultaten te zien",
+            "other": "%(count)s stemmen uitgebracht. Stem om de resultaten te zien"
+        },
+        "total_n_votes_voted": {
+            "one": "Gebaseerd op %(count)s stem",
+            "other": "Gebaseerd op %(count)s stemmen"
+        }
     },
     "failed_load_async_component": "Laden mislukt! Controleer je netwerktoegang en probeer het nogmaals.",
     "upload_failed_generic": "Het bestand ‘%(fileName)s’ kon niet geüpload worden.",
@@ -3843,7 +3854,8 @@
         "deactivate_confirm_description": "Deze persoon deactiveren zal deze persoon uitloggen en verhinderen dat de persoon weer inlogt. Bovendien zal de persoon alle kamers waaraan de persoon deelneemt verlaten. Deze actie is niet terug te draaien. Weet je zeker dat je deze persoon wilt deactiveren?",
         "deactivate_confirm_action": "Persoon deactiveren",
         "error_deactivate": "Deactiveren van persoon is mislukt",
-        "role_label": "Rol in <RoomName/>"
+        "role_label": "Rol in <RoomName/>",
+        "edit_own_devices": "Apparaten bewerken"
     },
     "stickers": {
         "empty": "Je hebt momenteel geen stickerpakketten ingeschakeld",
@@ -3871,7 +3883,13 @@
         "pinned_messages_button": "Vastgezet",
         "export_chat_button": "Chat exporteren",
         "share_button": "Kamer delen",
-        "settings_button": "Kamerinstellingen"
+        "settings_button": "Kamerinstellingen",
+        "poll": {
+            "final_result": {
+                "one": "Einduitslag gebaseerd op %(count)s stem",
+                "other": "Einduitslag gebaseerd op %(count)s stemmen"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Uitnodiging weigeren",

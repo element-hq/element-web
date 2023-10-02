@@ -120,12 +120,6 @@
     "Share Room": "nu jungau fi le du'u ve zilbe'i",
     "Share User": "nu jungau fi le du'u pilno",
     "Share Room Message": "nu jungau fi le du'u notci",
-    "Ask %(displayName)s to scan your code:": ".i ko cpedu le ka gau ce'u kacma samymo'i le sinxa kei la'o zoi. %(displayName)s .zoi",
-    "Almost there! Is %(displayName)s showing the same shield?": ".uo ru'e .i xu la'o zoi. %(displayName)s .zoi jarco ta'i tu'a pa sinxa poi mapti",
-    "You've successfully verified %(displayName)s!": ".i do mo'u co'a lacri la'o zoi. %(displayName)s .zoi",
-    "%(displayName)s cancelled verification.": ".i la'o zoi. %(displayName)s .zoi co'u co'a lacri",
-    "Decrypt %(text)s": "nu facki le du'u mifra la'o zoi. %(text)s .zoi",
-    "Download %(text)s": "nu kibycpa la'o zoi. %(text)s .zoi",
     "common": {
         "analytics": "lanli datni",
         "error": "nabmi",
@@ -270,7 +264,6 @@
             "can_join": ".i la'o zoi. %(senderDisplayName)s .zoi curmi lo nu ro na te friti cu ka'e ziljmina le se zilbe'i",
             "forbidden": ".i la'o zoi. %(senderDisplayName)s .zoi na curmi lo nu ro na te friti cu ka'e ziljmina le se zilbe'i"
         },
-        "m.image": ".i pa pixra cu zilbe'i fi la'o zoi. %(senderDisplayName)s .zoi",
         "m.room.canonical_alias": {
             "set": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(address)s .zoi co'a ralju le'i judri be le ve zilbe'i",
             "removed": ".i gau la'o zoi. %(senderName)s .zoi da co'u ralju le'i judri be le ve zilbe'i",
@@ -319,6 +312,13 @@
         "m.room.power_levels": {
             "changed": ".i la'o ly. %(senderName)s .ly. gafygau %(powerLevelDiffText)s",
             "user_from_to": "lo ni la'o ny. %(userId)s .ny. vlipa noi pu du %(fromPowerLevel)s ku %(toPowerLevel)s"
+        },
+        "m.file": {
+            "download_label": "nu kibycpa la'o zoi. %(text)s .zoi",
+            "decrypt_label": "nu facki le du'u mifra la'o zoi. %(text)s .zoi"
+        },
+        "m.image": {
+            "sent": ".i pa pixra cu zilbe'i fi la'o zoi. %(senderDisplayName)s .zoi"
         }
     },
     "slash_command": {
@@ -420,7 +420,11 @@
             "waiting_other_user": ".i ca'o denpa lo nu la'o zoi. %(displayName)s .zoi mo'u co'a lacri",
             "cancelling": ".i ca'o co'u co'e",
             "unverified_sessions_toast_reject": "nu ca na co'e",
-            "waiting_for_user_accept": ".i ca'o denpa lo nu la'o zoi. %(displayName)s .zoi zanru"
+            "waiting_for_user_accept": ".i ca'o denpa lo nu la'o zoi. %(displayName)s .zoi zanru",
+            "scan_qr_explainer": ".i ko cpedu le ka gau ce'u kacma samymo'i le sinxa kei la'o zoi. %(displayName)s .zoi",
+            "qr_reciprocate_same_shield_user": ".uo ru'e .i xu la'o zoi. %(displayName)s .zoi jarco ta'i tu'a pa sinxa poi mapti",
+            "successful_user": ".i do mo'u co'a lacri la'o zoi. %(displayName)s .zoi",
+            "cancelled_user": ".i la'o zoi. %(displayName)s .zoi co'u co'a lacri"
         },
         "export_unsupported": ".i le kibrbrauzero na ka'e pilno le mifra ciste poi jai sarcu",
         "import_invalid_passphrase": ".i pu fliba lo nu birti lo du'u curmi lo nu do jonse .i na'e drani xu japyvla",

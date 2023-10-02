@@ -35,7 +35,7 @@ export default class MjolnirBody extends React.Component<IBodyProps> {
             <div className="mx_MjolnirBody">
                 <i>
                     {_t(
-                        "You have ignored this user, so their message is hidden. <a>Show anyways.</a>",
+                        "timeline|mjolnir|message_hidden",
                         {},
                         {
                             a: (sub) => (

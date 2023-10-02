@@ -55,7 +55,7 @@ export default class DisambiguatedProfile extends React.Component<IProps> {
             if (member?.disambiguate) {
                 mxidElement = <span className="mx_DisambiguatedProfile_mxid">{identifier}</span>;
             }
-            title = _t("%(displayName)s (%(matrixId)s)", {
+            title = _t("timeline|disambiguated_profile", {
                 displayName: rawDisplayName,
                 matrixId: identifier,
             });

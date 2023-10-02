@@ -33,7 +33,7 @@ const LoadingPolls: React.FC<{ noResultsYet?: boolean }> = ({ noResultsYet }) =>
         })}
     >
         <InlineSpinner />
-        {_t("Loading polls")}
+        {_t("right_panel|poll|loading")}
     </div>
 );
 
@@ -44,7 +44,7 @@ const LoadMorePolls: React.FC<{ loadMorePolls?: () => void; isLoading?: boolean 
             kind="link_inline"
             onClick={() => loadMorePolls()}
         >
-            {_t("Load more polls")}
+            {_t("right_panel|poll|load_more")}
             {isLoading && <InlineSpinner />}
         </AccessibleButton>
     ) : null;
@@ -56,25 +56,20 @@ const getNoResultsMessage = (
     loadMorePolls?: () => void,
 ): string => {
     if (!loadMorePolls) {
-        return filter === "ACTIVE"
-            ? _t("There are no active polls in this room")
-            : _t("There are no past polls in this room");
+        return filter === "ACTIVE" ? _t("right_panel|poll|empty_active") : _t("right_panel|poll|empty_past");
     }
 
     // we don't know how much history has been fetched
     if (!oldestEventTimestamp) {
         return filter === "ACTIVE"
-            ? _t("There are no active polls. Load more polls to view polls for previous months")
-            : _t("There are no past polls. Load more polls to view polls for previous months");
+            ? _t("right_panel|poll|empty_active_load_more")
+            : _t("right_panel|poll|empty_past_load_more");
     }
 
     const fetchedHistoryDaysCount = Math.ceil((Date.now() - oldestEventTimestamp) / ONE_DAY_MS);
     return filter === "ACTIVE"
-        ? _t(
-              "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months",
-              { count: fetchedHistoryDaysCount },
-          )
-        : _t("There are no past polls for the past %(count)s days. Load more polls to view polls for previous months", {
+        ? _t("right_panel|poll|empty_active_load_more_n_days", { count: fetchedHistoryDaysCount })
+        : _t("right_panel|poll|empty_past_load_more_n_days", {
               count: fetchedHistoryDaysCount,
           });
 };

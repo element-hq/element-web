@@ -22,7 +22,7 @@ import { IBodyProps } from "./IBodyProps";
 
 function getErrorMessage(mxEvent?: MatrixEvent): string {
     return mxEvent?.isEncryptedDisabledForUnverifiedDevices
-        ? _t("The sender has blocked you from receiving this message")
+        ? _t("timeline|decryption_failure_blocked")
         : _t("threads|unable_to_decrypt");
 }
 

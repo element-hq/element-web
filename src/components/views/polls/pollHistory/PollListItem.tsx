@@ -37,7 +37,7 @@ export const PollListItem: React.FC<Props> = ({ event, onClick }) => {
     const formattedDate = formatLocalDateShort(event.getTs());
     return (
         <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItem" onClick={onClick}>
-            <TooltipTarget label={_t("View poll")} alignment={Alignment.Top}>
+            <TooltipTarget label={_t("right_panel|poll|view_poll")} alignment={Alignment.Top}>
                 <div className="mx_PollListItem_content">
                     <span>{formattedDate}</span>
                     <PollIcon className="mx_PollListItem_icon" />

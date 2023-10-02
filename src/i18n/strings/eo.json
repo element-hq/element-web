@@ -44,12 +44,6 @@
     "Join Room": "Aliĝi al ĉambro",
     "unknown error code": "nekonata kodo de eraro",
     "not specified": "nespecifita",
-    "Error decrypting attachment": "Malĉifro de aldonaĵo eraris",
-    "Decrypt %(text)s": "Malĉifri %(text)s",
-    "Download %(text)s": "Elŝuti %(text)s",
-    "Invalid file%(extra)s": "Malvalida dosiero%(extra)s",
-    "Error decrypting image": "Malĉifro de bildo eraris",
-    "Error decrypting video": "Malĉifro de filmo eraris",
     "Add an Integration": "Aldoni kunigon",
     "Email address": "Retpoŝtadreso",
     "Delete Widget": "Forigi fenestraĵon",
@@ -241,17 +235,9 @@
         "one": "Forigi 1 mesaĝon"
     },
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Provu rulumi supren tra la historio por kontroli, ĉu ne estas iuj pli fruaj.",
-    "This client does not support end-to-end encryption.": "Ĉi tiu kliento ne subtenas tutvojan ĉifradon.",
-    "Show image": "Montri bildon",
-    "You verified %(name)s": "Vi kontrolis %(name)s",
-    "You cancelled verifying %(name)s": "Vi nuligis kontrolon de %(name)s",
-    "%(name)s cancelled verifying": "%(name)s nuligis kontrolon",
-    "You accepted": "Vi akceptis",
     "%(name)s accepted": "%(name)s akceptis",
-    "You cancelled": "Vi nuligis",
     "%(name)s cancelled": "%(name)s nuligis",
     "%(name)s wants to verify": "%(name)s volas kontroli",
-    "You sent a verification request": "Vi sendis peton de kontrolo",
     "Cancel search": "Nuligi serĉon",
     "e.g. my-room": "ekzemple mia-chambro",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Uzu identigan servilon por inviti per retpoŝto. <default>Uzu la norman (%(defaultIdentityServerName)s)</default> aŭ administru per <settings>Agordoj</settings>.",
@@ -279,16 +265,6 @@
         "other": "%(count)s salutaĵoj",
         "one": "%(count)s salutaĵo"
     },
-    "Verify by scanning": "Kontroli per skanado",
-    "Ask %(displayName)s to scan your code:": "Petu de %(displayName)s skani vian kodon:",
-    "Verify by emoji": "Kontroli per bildsignoj",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Se vi ne povas skani la supran kodon, kontrolu per komparo de unikaj bildsignoj.",
-    "Verify by comparing unique emoji.": "Kontrolu per komparo de unikaj bildsignoj.",
-    "You've successfully verified %(displayName)s!": "Vi sukcese kontrolis uzanton %(displayName)s!",
-    "Encryption not enabled": "Ĉifrado ne estas ŝaltita",
-    "The encryption used by this room isn't supported.": "La ĉifro uzata de ĉi tiu ĉambro ne estas subtenata.",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Vi malatentis ĉi tiun uzanton, ĝia mesaĝo estas do kaŝita. <a>Tamen montri.</a>",
-    "You declined": "Vi rifuzis",
     "%(name)s declined": "%(name)s rifuzis",
     "Language Dropdown": "Lingva falmenuo",
     "Destroy cross-signing keys?": "Ĉu detrui delege ĉifrajn ŝlosilojn?",
@@ -330,16 +306,8 @@
     "Confirm by comparing the following with the User Settings in your other session:": "Konfirmu per komparo de la sekva kun la agardoj de uzanto en via alia salutaĵo:",
     "Confirm this user's session by comparing the following with their User Settings:": "Konfirmu la salutaĵon de ĉi tiu uzanto per komparo de la sekva kun ĝiaj agordoj de uzanto:",
     "If they don't match, the security of your communication may be compromised.": "Se ili ne akordas, la sekureco de via komunikado eble estas rompita.",
-    "Verify all users in a room to ensure it's secure.": "Kontrolu ĉiujn uzantojn en ĉambro por certigi, ke ĝi sekuras.",
     "You signed in to a new session without verifying it:": "Vi salutis novan salutaĵon sen kontrolo:",
     "Verify your other session using one of the options below.": "Kontrolu vian alian salutaĵon per unu el la ĉi-subaj elektebloj.",
-    "Almost there! Is %(displayName)s showing the same shield?": "Preskaŭ finite! Ĉu %(displayName)s montras la saman ŝildon?",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Vi sukcese kontrolis %(deviceName)s (%(deviceId)s)!",
-    "Start verification again from the notification.": "Rekomencu kontroladon el la sciigo.",
-    "Start verification again from their profile.": "Rekomencu kontroladon el ĝia profilo.",
-    "Verification timed out.": "Kontrolo atingis tempolimon.",
-    "%(displayName)s cancelled verification.": "%(displayName)s nuligis kontrolon.",
-    "You cancelled verification.": "Vi nuligis kontrolon.",
     "Can't load this message": "Ne povas enlegi ĉi tiun mesaĝon",
     "Submit logs": "Alŝuti protokolon",
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Rememorigo: via foliumilo ne estas subtenata, kaj via sperto do povas esti stranga.",
@@ -355,7 +323,6 @@
     "Keys restored": "Ŝlosiloj rehaviĝis",
     "Successfully restored %(sessionCount)s keys": "Sukcese rehavis %(sessionCount)s ŝlosilojn",
     "Sign in with SSO": "Saluti per ununura saluto",
-    "You've successfully verified your device!": "Vi sukcese kontrolis vian aparaton!",
     "To continue, use Single Sign On to prove your identity.": "Por daŭrigi, pruvu vian identecon per ununura saluto.",
     "Confirm to continue": "Konfirmu por daŭrigi",
     "Click the button below to confirm your identity.": "Klaku sube la butonon por konfirmi vian identecon.",
@@ -399,12 +366,6 @@
     "This version of %(brand)s does not support viewing some encrypted files": "Ĉi tiu versio de %(brand)s ne subtenas montradon de iuj ĉifritaj dosieroj",
     "Use the <a>Desktop app</a> to search encrypted messages": "Uzu la <a>labortablan aplikaĵon</a> por serĉi ĉifritajn mesaĝojn",
     "Use the <a>Desktop app</a> to see all encrypted files": "Uzu la <a>labortablan aplikaĵon</a> por vidi ĉiujn ĉifritajn dosierojn",
-    "Video conference started by %(senderName)s": "Grupan vidvokon komencis %(senderName)s",
-    "Video conference updated by %(senderName)s": "Grupan vidvokon ĝisdatigis %(senderName)s",
-    "Video conference ended by %(senderName)s": "Grupan vidvokon finis %(senderName)s",
-    "Join the conference from the room information card on the right": "Aliĝu al la grupa voko per la dekstraflanka karto kun informoj pri ĉambro",
-    "Join the conference at the top of this room": "Aliĝu al la grupa voko supre je la ĉambro",
-    "Ignored attempt to disable encryption": "Malatentis provon malŝalti ĉifradon",
     "Not encrypted": "Neĉifrita",
     "Backup version:": "Repaŝa versio:",
     "Data on this screen is shared with %(widgetDomain)s": "Datumoj sur tiu ĉi ekrano estas havigataj al %(widgetDomain)s",
@@ -708,7 +669,6 @@
     "Invite to %(roomName)s": "Inviti al %(roomName)s",
     "Create a new room": "Krei novan ĉambron",
     "Space selection": "Elekto de aro",
-    "Edit devices": "Redakti aparatojn",
     "Leave space": "Forlasi aron",
     "Create a space": "Krei aron",
     "Invited people will be able to read old messages.": "Invititoj povos legi malnovajn mesaĝojn.",
@@ -733,7 +693,6 @@
     "Not all selected were added": "Ne ĉiuj elektitoj aldoniĝis",
     "You are not allowed to view this server's rooms list": "Vi ne rajtas vidi liston de ĉambroj de tu ĉi servilo",
     "Add reaction": "Aldoni reagon",
-    "Error processing voice message": "Eraris traktado de voĉmesaĝo",
     "Modal Widget": "Reĝima fenestraĵo",
     "Consult first": "Unue konsulti",
     "Sending": "Sendante",
@@ -779,34 +738,18 @@
     "Add existing space": "Aldoni jaman aron",
     "Please provide an address": "Bonvolu doni adreson",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Malsukcesis komencigo de serĉado de mesaĝoj, kontrolu <a>viajn agordojn</a> por pliaj informoj",
-    "Error processing audio message": "Eraris traktado de sonmesaĝo",
-    "Decrypting": "Malĉifrante",
-    "The call is in an unknown state!": "La voko estas en nekonata stato!",
-    "Unknown failure: %(reason)s": "Malsukceso nekonata: %(reason)s",
-    "No answer": "Sen respondo",
-    "An unknown error occurred": "Okazis nekonata eraro",
-    "Their device couldn't start the camera or microphone": "Ĝia aparato ne povis startigi la filmilon aŭ la mikrofonon",
-    "Connection failed": "Malsukcesis konekto",
-    "Could not connect media": "Ne povis konekti vidaŭdaĵon",
-    "Missed call": "Nerespondita voko",
-    "Call back": "Revoki",
-    "Call declined": "Voko rifuziĝis",
     "To join a space you'll need an invite.": "Por aliĝi al aro, vi bezonas inviton.",
     "Would you like to leave the rooms in this space?": "Ĉu vi volus foriri de la ĉambroj en ĉi tiu aro?",
     "You are about to leave <spaceName/>.": "Vi foriros de <spaceName/>.",
     "Leave some rooms": "Foriri de iuj ĉambroj",
     "Leave all rooms": "Foriri de ĉiuj ĉambroj",
     "Don't leave any rooms": "Foriru de neniuj ĉambroj",
-    "Some encryption parameters have been changed.": "Ŝanĝiĝis iuj parametroj de ĉifrado.",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Ĉu vi certas, ke vi volas fini ĉi tiun balotenketon? Ĉi tio montros la finajn rezultojn de la balotenketo kaj malhelpos personojn povi voĉdoni.",
     "End Poll": "Finu Balotenketon",
     "Sorry, the poll did not end. Please try again.": "Pardonu, la balotenketo ne finiĝis. Bonvolu reprovi.",
     "Failed to end poll": "Malsukcesis fini balotenketon",
     "The poll has ended. Top answer: %(topAnswer)s": "La balotado finiĝis. Plej alta respondo: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "La balotenketo finiĝis. Neniuj voĉoj estis ĵetitaj.",
-    "Results will be visible when the poll is ended": "Rezultoj estos videblaj kiam la balotenketo finiĝos",
-    "Sorry, you can't edit a poll after votes have been cast.": "Pardonu, vi ne povas redakti balotenketon post voĉdonado.",
-    "Can't edit poll": "Ne povas redakti balotenketon",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s kaj %(count)s alia",
         "other": "%(spaceName)s kaj %(count)s aliaj"
@@ -1627,7 +1570,17 @@
             "voice_call": "%(senderName)s ekigis voĉvokon.",
             "voice_call_unsupported": "%(senderName)s ekigis voĉvokon. (mankas subteno en ĉi tiu foliumilo)",
             "video_call": "%(senderName)s ekigis vidvokon.",
-            "video_call_unsupported": "%(senderName)s ekigis vidvokon. (mankas subteno en ĉi tiu foliumilo)"
+            "video_call_unsupported": "%(senderName)s ekigis vidvokon. (mankas subteno en ĉi tiu foliumilo)",
+            "declined": "Voko rifuziĝis",
+            "call_back_prompt": "Revoki",
+            "missed_call": "Nerespondita voko",
+            "no_answer": "Sen respondo",
+            "failed_connect_media": "Ne povis konekti vidaŭdaĵon",
+            "failed_connection": "Malsukcesis konekto",
+            "failed_opponent_media": "Ĝia aparato ne povis startigi la filmilon aŭ la mikrofonon",
+            "unknown_error": "Okazis nekonata eraro",
+            "unknown_failure": "Malsukceso nekonata: %(reason)s",
+            "unknown_state": "La voko estas en nekonata stato!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s akceptis la inviton por %(displayName)s",
@@ -1677,7 +1630,6 @@
             "forbidden": "%(senderDisplayName)s malpermesis al gastoj aliĝi al la ĉambro.",
             "unknown": "%(senderDisplayName)s ŝanĝis aliron de gastoj al %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s sendis bildon.",
         "m.sticker": "%(senderDisplayName)s sendis glumarkon.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s agordis la servilblokajn listojn por ĉi tiu ĉambro.",
@@ -1721,7 +1673,12 @@
         "m.widget": {
             "modified": "Fenestraĵon %(widgetName)s ŝanĝis %(senderName)s",
             "added": "Fenestraĵon %(widgetName)s aldonis %(senderName)s",
-            "removed": "Fenestraĵon %(widgetName)s forigis %(senderName)s"
+            "removed": "Fenestraĵon %(widgetName)s forigis %(senderName)s",
+            "jitsi_join_top_prompt": "Aliĝu al la grupa voko supre je la ĉambro",
+            "jitsi_join_right_prompt": "Aliĝu al la grupa voko per la dekstraflanka karto kun informoj pri ĉambro",
+            "jitsi_ended": "Grupan vidvokon finis %(senderName)s",
+            "jitsi_updated": "Grupan vidvokon ĝisdatigis %(senderName)s",
+            "jitsi_started": "Grupan vidvokon komencis %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s ĝisdatigis la aranĝon de ĉambro",
         "m.location": {
@@ -1732,7 +1689,6 @@
         "self_redaction": "Mesaĝo foriĝis",
         "redaction": "Mesaĝon forigis %(name)s",
         "m.poll.start": "%(senderName)s komencis balotenketon - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s finis balotenketon",
         "typing_indicator": {
             "one_user": "%(displayName)s tajpas…",
             "two_users": "%(names)s kaj %(lastPerson)s tajpas…",
@@ -1864,7 +1820,8 @@
             "changed_rule_users": "%(senderName)s ŝanĝis regulon forbarintan uzantojn, kiuj akordis kun %(oldGlob)s, al akordo kun %(newGlob)s, pro %(reason)s",
             "changed_rule_rooms": "%(senderName)s ŝanĝis regulon forbarintan ĉambrojn, kiuj akordis kun %(oldGlob)s, al akordo kun %(newGlob)s, pro %(reason)s",
             "changed_rule_servers": "%(senderName)s ŝanĝis regulon forbarintan servilojn, kiuj akordis kun %(oldGlob)s, al akordo kun %(newGlob)s, pro %(reason)s",
-            "changed_rule_glob": "%(senderName)s ĝisdatigis forbaran regulon, kiu akordis kun %(oldGlob)s, al akordo kun %(newGlob)s, pro %(reason)s"
+            "changed_rule_glob": "%(senderName)s ĝisdatigis forbaran regulon, kiu akordis kun %(oldGlob)s, al akordo kun %(newGlob)s, pro %(reason)s",
+            "message_hidden": "Vi malatentis ĉi tiun uzanton, ĝia mesaĝo estas do kaŝita. <a>Tamen montri.</a>"
         },
         "redacted": {
             "tooltip": "Mesaĝo forigita je %(date)s"
@@ -1904,14 +1861,51 @@
         },
         "m.audio": {
             "unnamed_audio": "Sennoma sondosiero",
-            "error_downloading_audio": "Eraris elŝuto de sondosiero"
+            "error_downloading_audio": "Eraris elŝuto de sondosiero",
+            "error_processing_audio": "Eraris traktado de sonmesaĝo",
+            "error_processing_voice_message": "Eraris traktado de voĉmesaĝo"
         },
         "load_error": {
             "no_permission": "Provis enlegi certan parton de ĉi tiu historio, sed vi ne havas permeson vidi ĝin.",
             "unable_to_find": "Provis enlegi certan parton de ĉi tiu historio, sed malsukcesis ĝin trovi.",
             "title": "Malsukcesis enlegi lokon en historio"
         },
-        "error_no_renderer": "Ĉi tiu okazo ne povis montriĝi"
+        "error_no_renderer": "Ĉi tiu okazo ne povis montriĝi",
+        "download_action_decrypting": "Malĉifrante",
+        "m.room.encryption": {
+            "parameters_changed": "Ŝanĝiĝis iuj parametroj de ĉifrado.",
+            "disable_attempt": "Malatentis provon malŝalti ĉifradon",
+            "disabled": "Ĉifrado ne estas ŝaltita",
+            "unsupported": "La ĉifro uzata de ĉi tiu ĉambro ne estas subtenata."
+        },
+        "m.file": {
+            "download_label": "Elŝuti %(text)s",
+            "error_decrypting": "Malĉifro de aldonaĵo eraris",
+            "decrypt_label": "Malĉifri %(text)s",
+            "error_invalid": "Malvalida dosiero%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s sendis bildon.",
+            "error_decrypting": "Malĉifro de bildo eraris",
+            "show_image": "Montri bildon"
+        },
+        "m.key.verification.done": "Vi kontrolis %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Vi nuligis kontrolon de %(name)s",
+            "user_cancelled": "%(name)s nuligis kontrolon"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Vi akceptis",
+            "you_declined": "Vi rifuzis",
+            "you_cancelled": "Vi nuligis",
+            "you_started": "Vi sendis peton de kontrolo"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s finis balotenketon"
+        },
+        "m.video": {
+            "error_decrypting": "Malĉifro de filmo eraris"
+        }
     },
     "slash_command": {
         "spoiler": "Sendas la donitan mesaĝon kiel malkaŝon de intrigo",
@@ -2322,7 +2316,22 @@
             "verify_later": "Kontrolu poste",
             "waiting_for_user_accept": "Atendante akcepton de %(displayName)s…",
             "start_button": "Komenci kontrolon",
-            "accepting": "Akceptante…"
+            "accepting": "Akceptante…",
+            "scan_qr": "Kontroli per skanado",
+            "scan_qr_explainer": "Petu de %(displayName)s skani vian kodon:",
+            "verify_emoji_prompt_qr": "Se vi ne povas skani la supran kodon, kontrolu per komparo de unikaj bildsignoj.",
+            "verify_emoji_prompt": "Kontrolu per komparo de unikaj bildsignoj.",
+            "verify_emoji": "Kontroli per bildsignoj",
+            "qr_reciprocate_same_shield_user": "Preskaŭ finite! Ĉu %(displayName)s montras la saman ŝildon?",
+            "prompt_encrypted": "Kontrolu ĉiujn uzantojn en ĉambro por certigi, ke ĝi sekuras.",
+            "successful_own_device": "Vi sukcese kontrolis vian aparaton!",
+            "successful_device": "Vi sukcese kontrolis %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "Vi sukcese kontrolis uzanton %(displayName)s!",
+            "prompt_self": "Rekomencu kontroladon el la sciigo.",
+            "prompt_user": "Rekomencu kontroladon el ĝia profilo.",
+            "timed_out": "Kontrolo atingis tempolimon.",
+            "cancelled_user": "%(displayName)s nuligis kontrolon.",
+            "cancelled": "Vi nuligis kontrolon."
         },
         "old_version_detected_title": "Malnovaj datumoj de ĉifroteĥnikaro troviĝis",
         "old_version_detected_description": "Datumoj el malnova versio de %(brand)s troviĝis. Ĉi tio malfunkciigos tutvojan ĉifradon en la malnova versio. Tutvoje ĉifritaj mesaĝoj interŝanĝitaj freŝtempe per la malnova versio eble ne malĉifreblos. Tio povas kaŭzi malsukceson ankaŭ al mesaĝoj interŝanĝitaj kun tiu ĉi versio. Se vin trafos problemoj, adiaŭu kaj resalutu. Por reteni mesaĝan historion, elportu kaj reenportu viajn ŝlosilojn.",
@@ -2372,7 +2381,8 @@
         "cross_signing_user_normal": "Vi ne kontrolis tiun ĉi uzanton.",
         "cross_signing_room_warning": "Iu uzas nekonatan salutaĵon",
         "cross_signing_room_verified": "Ĉiu en la ĉambro estas kontrolita",
-        "cross_signing_room_normal": "Ĉi tiu ĉambro uzas tutvojan ĉifradon"
+        "cross_signing_room_normal": "Ĉi tiu ĉambro uzas tutvojan ĉifradon",
+        "unsupported": "Ĉi tiu kliento ne subtenas tutvojan ĉifradon."
     },
     "emoji": {
         "category_frequently_used": "Ofte uzataj",
@@ -3026,7 +3036,10 @@
         "failed_send_poll_description": "Pardonu, la balotenketo, kiun vi provis krei, ne estis afiŝita.",
         "type_heading": "Balotspeco",
         "topic_heading": "Kio estas via balotenketo demando aŭ temo?",
-        "notes": "Rezultoj estas malkaŝitaj nur kiam vi finas la balotenketo"
+        "notes": "Rezultoj estas malkaŝitaj nur kiam vi finas la balotenketo",
+        "unable_edit_title": "Ne povas redakti balotenketon",
+        "unable_edit_description": "Pardonu, vi ne povas redakti balotenketon post voĉdonado.",
+        "total_not_ended": "Rezultoj estos videblaj kiam la balotenketo finiĝos"
     },
     "failed_load_async_component": "Ne eblas enlegi! Kontrolu vian retan konekton kaj reprovu.",
     "upload_failed_generic": "Malsukcesis alŝuti dosieron « %(fileName)s ».",
@@ -3215,7 +3228,8 @@
         "deactivate_confirm_description": "Malaktivigo de ĉi tiu uzanto adiaŭigos ĝin, kaj malebligos, ke ĝi resalutu. Plie, ĝi foriros de ĉiuj enataj ĉambroj. Tiu ago ne povas malfariĝi. Ĉu vi certe volas malaktivigi ĉi tiun uzanton?",
         "deactivate_confirm_action": "Malaktivigi uzanton",
         "error_deactivate": "Malsukcesis malaktivigi uzanton",
-        "role_label": "Rolo en <RoomName/>"
+        "role_label": "Rolo en <RoomName/>",
+        "edit_own_devices": "Redakti aparatojn"
     },
     "stickers": {
         "empty": "Vi havas neniujn ŝaltitajn glumarkarojn",

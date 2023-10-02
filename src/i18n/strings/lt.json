@@ -46,11 +46,6 @@
         "other": "(~%(count)s rezultatų(-ai))",
         "one": "(~%(count)s rezultatas)"
     },
-    "Error decrypting attachment": "Klaida iššifruojant priedą",
-    "Decrypt %(text)s": "Iššifruoti %(text)s",
-    "Download %(text)s": "Atsisiųsti %(text)s",
-    "Error decrypting image": "Klaida iššifruojant vaizdą",
-    "Error decrypting video": "Klaida iššifruojant vaizdo įrašą",
     "Email address": "El. pašto adresas",
     "Delete Widget": "Ištrinti valdiklį",
     "Session ID": "Seanso ID",
@@ -58,7 +53,6 @@
     "%(duration)sm": "%(duration)s min",
     "%(duration)sh": "%(duration)s val",
     "%(duration)sd": "%(duration)s d",
-    "Invalid file%(extra)s": "Neteisingas failas %(extra)s",
     "Create new room": "Sukurti naują kambarį",
     "collapse": "suskleisti",
     "expand": "išskleisti",
@@ -113,9 +107,6 @@
     "Command Help": "Komandų pagalba",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Užšifruotos žinutės yra apsaugotos visapusiu šifravimu. Tik jūs ir gavėjas(-ai) turi raktus šioms žinutėms perskaityti.",
     "Start using Key Backup": "Pradėti naudoti atsarginę raktų kopiją",
-    "You verified %(name)s": "Jūs patvirtinote %(name)s",
-    "You cancelled verifying %(name)s": "Jūs atšaukėte %(name)s patvirtinimą",
-    "%(name)s cancelled verifying": "%(name)s atšaukė patvirtinimą",
     "%(name)s accepted": "%(name)s priimtas",
     "%(name)s declined": "%(name)s atmestas",
     "%(name)s cancelled": "%(name)s atšauktas",
@@ -140,11 +131,6 @@
         "other": "%(count)s seansai(-ų)",
         "one": "%(count)s seansas"
     },
-    "Verify by scanning": "Patvirtinti nuskaitant",
-    "Verify all users in a room to ensure it's secure.": "Patvirtinkite visus vartotojus kambaryje, kad užtikrintumėte jo saugumą.",
-    "%(displayName)s cancelled verification.": "%(displayName)s atšaukė patvirtinimą.",
-    "You cancelled verification.": "Jūs atšaukėte patvirtinimą.",
-    "Encryption not enabled": "Šifravimas neįjungtas",
     "Are you sure you want to deactivate your account? This is irreversible.": "Ar tikrai norite deaktyvuoti savo paskyrą? Tai yra negrįžtama.",
     "Are you sure you want to sign out?": "Ar tikrai norite atsijungti?",
     "Dog": "Šuo",
@@ -211,11 +197,6 @@
     "Headphones": "Ausinės",
     "Folder": "Aplankas",
     "Encrypted by a deleted session": "Užšifruota ištrinto seanso",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Jei nuskaityti aukščiau esančio kodo negalite, patvirtinkite palygindami unikalius jaustukus.",
-    "You've successfully verified your device!": "Jūs sėkmingai patvirtinote savo įrenginį!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Jūs sėkmingai patvirtinote %(deviceName)s (%(deviceId)s)!",
-    "You've successfully verified %(displayName)s!": "Jūs sėkmingai patvirtinote %(displayName)s!",
-    "Start verification again from the notification.": "Pradėkite patvirtinimą iš naujo pranešime.",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Norėdami pakviesti nurodydami el. paštą, naudokite tapatybės serverį. <default>Naudokite numatytajį (%(defaultIdentityServerName)s)</default> arba tvarkykite <settings>Nustatymuose</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Norėdami pakviesti nurodydami el. paštą, naudokite tapatybės serverį. Tvarkykite <settings>Nustatymuose</settings>.",
     "Destroy cross-signing keys?": "Sunaikinti kryžminio pasirašymo raktus?",
@@ -225,19 +206,11 @@
     "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Šio įrenginio patvirtinimas pažymės jį kaip patikimą, ir vartotojai, kurie patvirtino su jumis, pasitikės šiuo įrenginiu.",
     "a new cross-signing key signature": "naujas kryžminio pasirašymo rakto parašas",
     "a device cross-signing signature": "įrenginio kryžminio pasirašymo parašas",
-    "Almost there! Is %(displayName)s showing the same shield?": "Beveik atlikta! Ar %(displayName)s rodo tokį patį skydą?",
     "IRC display name width": "IRC rodomo vardo plotis",
-    "Verify by comparing unique emoji.": "Patvirtinti palyginant unikalius jaustukus.",
-    "Verify by emoji": "Patvirtinti naudojant jaustukus",
-    "Show image": "Rodyti vaizdą",
     "Create a new room with the same name, description and avatar": "Sukurti naują kambarį su tuo pačiu pavadinimu, aprašymu ir pseudoportretu",
     "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Kambario atnaujinimas yra sudėtingas veiksmas ir paprastai rekomenduojamas, kai kambarys nestabilus dėl klaidų, trūkstamų funkcijų ar saugos spragų.",
     "To help us prevent this in future, please <a>send us logs</a>.": "Norėdami padėti mums išvengti to ateityje, <a>atsiųskite mums žurnalus</a>.",
     "Ask this user to verify their session, or manually verify it below.": "Paprašykite šio vartotojo patvirtinti savo seansą, arba patvirtinkite jį rankiniu būdu žemiau.",
-    "This client does not support end-to-end encryption.": "Šis klientas nepalaiko visapusio šifravimo.",
-    "Start verification again from their profile.": "Pradėkite patvirtinimą iš naujo jų profilyje.",
-    "The encryption used by this room isn't supported.": "Šiame kambaryje naudojamas šifravimas nėra palaikomas.",
-    "You sent a verification request": "Jūs išsiuntėte patvirtinimo užklausą",
     "Continue With Encryption Disabled": "Tęsti išjungus šifravimą",
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Patvirtinkite šį vartotoją, kad pažymėtumėte jį kaip patikimą. Vartotojų pažymėjimas patikimais suteikia jums papildomos ramybės naudojant visapusiškai užšifruotas žinutes.",
     "Sign out and remove encryption keys?": "Atsijungti ir pašalinti šifravimo raktus?",
@@ -265,10 +238,7 @@
     "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s dabar naudoja 3-5 kartus mažiau atminties, įkeliant vartotojų informaciją tik prireikus. Palaukite, kol mes iš naujo sinchronizuosime su serveriu!",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Jūs būsite nukreipti į trečiosios šalies svetainę, kad galėtumėte patvirtinti savo paskyrą naudojimui su %(integrationsUrl)s. Ar norite tęsti?",
     "Join millions for free on the largest public server": "Prisijunkite prie milijonų didžiausiame viešame serveryje nemokamai",
-    "Join the conference from the room information card on the right": "Prisijunkite prie konferencijos kambario informacijos kortelėje dešinėje",
-    "Join the conference at the top of this room": "Prisijunkite prie konferencijos šio kambario viršuje",
     "Join Room": "Prisijungti prie kambario",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Jūs ignoravote šį vartotoją, todėl jo žinutė yra paslėpta. <a>Rodyti vistiek.</a>",
     "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Neleisti vartotojams kalbėti senoje kambario versijoje ir paskelbti pranešimą, kuriame vartotojams patariama persikelti į naują kambarį",
     "Update any local room aliases to point to the new room": "Atnaujinkite vietinių kambarių slapyvardžius, kad nurodytumėte į naująjį kambarį",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Norint atnaujinti šį kambarį, reikia uždaryti esamą kambario instanciją ir vietoje jo sukurti naują kambarį. Norėdami suteikti kambario nariams kuo geresnę patirtį, mes:",
@@ -284,9 +254,6 @@
         "one": "Pašalinti 1 žinutę",
         "other": "Pašalinti %(count)s žinutes(-ų)"
     },
-    "Video conference started by %(senderName)s": "%(senderName)s pradėjo video konferenciją",
-    "Video conference updated by %(senderName)s": "%(senderName)s atnaujino video konferenciją",
-    "Video conference ended by %(senderName)s": "%(senderName)s užbaigė video konferenciją",
     "Backup version:": "Atsarginės kopijos versija:",
     "Your area is experiencing difficulties connecting to the internet.": "Jūsų vietovėje kyla sunkumų prisijungiant prie interneto.",
     "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Jūsų serveris neatsako į kai kurias jūsų užklausas. Žemiau pateikiamos kelios labiausiai tikėtinos priežastys.",
@@ -332,16 +299,8 @@
     "Click to view edits": "Spustelėkite kad peržiūrėti pakeitimus",
     "Add an Integration": "Pridėti Integraciją",
     "Add reaction": "Pridėti reakciją",
-    "Error processing voice message": "Klaida apdorojant balso pranešimą",
-    "Ignored attempt to disable encryption": "Bandymas išjungti šifravimą buvo ignoruotas",
-    "Verification timed out.": "Pasibaigė laikas patikrinimui.",
-    "Ask %(displayName)s to scan your code:": "Paprašykite %(displayName)s nuskaityti jūsų kodą:",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Dideliam žinučių kiekiui tai gali užtrukti kurį laiką. Prašome neperkrauti savo kliento.",
     "No recent messages by %(user)s found": "Nerasta jokių naujesnių %(user)s žinučių",
-    "You cancelled": "Jūs atšaukėte",
-    "You declined": "Jūs atsisakėte",
-    "You accepted": "Jūs priėmėte",
-    "Edit devices": "Redaguoti įrenginius",
     "Not encrypted": "Neužšifruota",
     "Mexico": "Meksika",
     "Malaysia": "Malaizija",
@@ -521,24 +480,6 @@
     "Myanmar": "Mianmaras",
     "Mozambique": "Mozambikas",
     "Bahamas": "Bahamų salos",
-    "Their device couldn't start the camera or microphone": "Jų įrenginys negalėjo įjungti kameros arba mikrofono",
-    "Connection failed": "Nepavyko prisijungti",
-    "Could not connect media": "Nepavyko prijungti medijos",
-    "No answer": "Jokio atsakymo",
-    "Call back": "Perskambinti",
-    "Call declined": "Skambutis atmestas",
-    "Pick a date to jump to": "Pasirinkite datą, į kurią norite pereiti",
-    "Message pending moderation": "Žinutė laukia moderavimo",
-    "Message pending moderation: %(reason)s": "Žinutė laukia moderavimo: %(reason)s",
-    "Messages in this chat will be end-to-end encrypted.": "Žinutės šiame pokalbyje bus visapusiškai užšifruotos.",
-    "Some encryption parameters have been changed.": "Pakeisti kai kurie šifravimo parametrai.",
-    "Decrypting": "Iššifruojama",
-    "Downloading": "Atsiunčiama",
-    "Jump to date": "Peršokti į datą",
-    "The beginning of the room": "Kambario pradžia",
-    "You cancelled verification on your other device.": "Atšaukėte patvirtinimą kitame įrenginyje.",
-    "In encrypted rooms, verify all users to ensure it's secure.": "Užšifruotuose kambariuose patvirtinkite visus naudotojus, kad įsitikintumėte, jog jie yra saugūs.",
-    "Almost there! Is your other device showing the same shield?": "Jau beveik! Ar kitas jūsų įrenginys rodo tą patį skydą?",
     "%(count)s reply": {
         "one": "%(count)s atsakymas",
         "other": "%(count)s atsakymai"
@@ -549,7 +490,6 @@
     },
     "<inviter/> invites you": "<inviter/> kviečia jus",
     "Explore public spaces in the new search dialog": "Tyrinėkite viešas erdves naujajame paieškos lange",
-    "Reply in thread": "Atsakyti temoje",
     "Developer": "Kūrėjas",
     "Experimental": "Eksperimentinis",
     "Themes": "Temos",
@@ -778,7 +718,8 @@
         "new_room": "Naujas kambarys",
         "new_video_room": "Naujas vaizdo kambarys",
         "add_existing_room": "Pridėti esamą kambarį",
-        "explore_public_rooms": "Tyrinėti viešuosius kambarius"
+        "explore_public_rooms": "Tyrinėti viešuosius kambarius",
+        "reply_in_thread": "Atsakyti temoje"
     },
     "labs": {
         "video_rooms": "Vaizdo kambariai",
@@ -1372,7 +1313,13 @@
             "voice_call": "%(senderName)s pradėjo balso skambutį.",
             "voice_call_unsupported": "%(senderName)s pradėjo vaizdo skambutį. (nepalaikoma šios naršyklės)",
             "video_call": "%(senderName)s pradėjo vaizdo skambutį.",
-            "video_call_unsupported": "%(senderName)s pradėjo vaizdo skambutį. (nepalaikoma šios naršyklės)"
+            "video_call_unsupported": "%(senderName)s pradėjo vaizdo skambutį. (nepalaikoma šios naršyklės)",
+            "declined": "Skambutis atmestas",
+            "call_back_prompt": "Perskambinti",
+            "no_answer": "Jokio atsakymo",
+            "failed_connect_media": "Nepavyko prijungti medijos",
+            "failed_connection": "Nepavyko prisijungti",
+            "failed_opponent_media": "Jų įrenginys negalėjo įjungti kameros arba mikrofono"
         },
         "m.room.member": {
             "ban": "%(senderName)s užblokavo %(targetName)s",
@@ -1418,7 +1365,6 @@
             "forbidden": "%(senderDisplayName)s uždraudė svečiams prisijungti prie kambario.",
             "unknown": "%(senderDisplayName)s pakeitė svečių prieigą prie %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s išsiuntė vaizdą.",
         "m.sticker": "%(senderDisplayName)s nusiuntė lipduką.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s nustatė serverio prieigos kontrolės sąrašus šiam kambariui.",
@@ -1462,7 +1408,12 @@
         "m.widget": {
             "modified": "%(senderName)s modifikavo %(widgetName)s valdiklį",
             "added": "%(senderName)s pridėjo %(widgetName)s valdiklį",
-            "removed": "%(senderName)s pašalino %(widgetName)s valdiklį"
+            "removed": "%(senderName)s pašalino %(widgetName)s valdiklį",
+            "jitsi_join_top_prompt": "Prisijunkite prie konferencijos šio kambario viršuje",
+            "jitsi_join_right_prompt": "Prisijunkite prie konferencijos kambario informacijos kortelėje dešinėje",
+            "jitsi_ended": "%(senderName)s užbaigė video konferenciją",
+            "jitsi_updated": "%(senderName)s atnaujino video konferenciją",
+            "jitsi_started": "%(senderName)s pradėjo video konferenciją"
         },
         "io.element.widgets.layout": "%(senderName)s atnaujino kambario išdėstymą",
         "m.location": {
@@ -1471,7 +1422,6 @@
         "self_redaction": "Žinutė ištrinta",
         "redaction": "Žinutė, ištrinta %(name)s",
         "m.poll.start": "%(senderName)s pradėjo apklausą - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s užbaigė apklausą",
         "typing_indicator": {
             "one_user": "%(displayName)s rašo …",
             "two_users": "%(names)s ir %(lastPerson)s rašo …",
@@ -1595,7 +1545,8 @@
             "changed_rule_users": "%(senderName)s pakeitė taisyklę, kuri draudė vartotojus, sutampančius su %(oldGlob)s į sutampančius su %(newGlob)s dėl %(reason)s",
             "changed_rule_rooms": "%(senderName)s pakeitė taisyklę, kuri draudė kambarius, sutampančius su %(oldGlob)s į sutampančius su %(newGlob)s dėl %(reason)s",
             "changed_rule_servers": "%(senderName)s pakeitė taisyklę, kuri draudė serverius, sutampančius su %(oldGlob)s į sutampančius su %(newGlob)s dėl %(reason)s",
-            "changed_rule_glob": "%(senderName)s atnaujino draudimo taisyklę, kuri sutapo su %(oldGlob)s į sutampančią su %(newGlob)s dėl %(reason)s"
+            "changed_rule_glob": "%(senderName)s atnaujino draudimo taisyklę, kuri sutapo su %(oldGlob)s į sutampančią su %(newGlob)s dėl %(reason)s",
+            "message_hidden": "Jūs ignoravote šį vartotoją, todėl jo žinutė yra paslėpta. <a>Rodyti vistiek.</a>"
         },
         "no_permission_messages_before_invite": "Neturite leidimo peržiūrėti žinučių, rašytų prieš jūsų pakvietimą.",
         "no_permission_messages_before_join": "Neturite leidimo peržiūrėti žinučių, rašytų prieš jums prisijungiant.",
@@ -1642,7 +1593,49 @@
             "unable_to_find": "Bandyta įkelti konkrečią vietą šio kambario laiko juostoje, bet nepavyko jos rasti.",
             "title": "Nepavyko įkelti laiko juostos pozicijos"
         },
-        "error_no_renderer": "Nepavyko parodyti šio įvykio"
+        "error_no_renderer": "Nepavyko parodyti šio įvykio",
+        "download_action_downloading": "Atsiunčiama",
+        "download_action_decrypting": "Iššifruojama",
+        "m.room.encryption": {
+            "parameters_changed": "Pakeisti kai kurie šifravimo parametrai.",
+            "enabled_local": "Žinutės šiame pokalbyje bus visapusiškai užšifruotos.",
+            "disable_attempt": "Bandymas išjungti šifravimą buvo ignoruotas",
+            "disabled": "Šifravimas neįjungtas",
+            "unsupported": "Šiame kambaryje naudojamas šifravimas nėra palaikomas."
+        },
+        "pending_moderation_reason": "Žinutė laukia moderavimo: %(reason)s",
+        "pending_moderation": "Žinutė laukia moderavimo",
+        "m.file": {
+            "download_label": "Atsisiųsti %(text)s",
+            "error_decrypting": "Klaida iššifruojant priedą",
+            "decrypt_label": "Iššifruoti %(text)s",
+            "error_invalid": "Neteisingas failas %(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s išsiuntė vaizdą.",
+            "error_decrypting": "Klaida iššifruojant vaizdą",
+            "show_image": "Rodyti vaizdą"
+        },
+        "m.key.verification.done": "Jūs patvirtinote %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Jūs atšaukėte %(name)s patvirtinimą",
+            "user_cancelled": "%(name)s atšaukė patvirtinimą"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Jūs priėmėte",
+            "you_declined": "Jūs atsisakėte",
+            "you_cancelled": "Jūs atšaukėte",
+            "you_started": "Jūs išsiuntėte patvirtinimo užklausą"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s užbaigė apklausą"
+        },
+        "m.video": {
+            "error_decrypting": "Klaida iššifruojant vaizdo įrašą"
+        },
+        "m.audio": {
+            "error_processing_voice_message": "Klaida apdorojant balso pranešimą"
+        }
     },
     "slash_command": {
         "shrug": "Prideda ¯\\_(ツ)_/¯ prie paprasto teksto žinutės",
@@ -2031,7 +2024,25 @@
             "waiting_for_user_accept": "Laukiama kol %(displayName)s sutiks…",
             "start_button": "Pradėti patvirtinimą",
             "self_verification_hint": "Jei norite tęsti, priimkite patvirtinimo prašymą kitame savo įrenginyje.",
-            "accepting": "Priimama…"
+            "accepting": "Priimama…",
+            "scan_qr": "Patvirtinti nuskaitant",
+            "scan_qr_explainer": "Paprašykite %(displayName)s nuskaityti jūsų kodą:",
+            "verify_emoji_prompt_qr": "Jei nuskaityti aukščiau esančio kodo negalite, patvirtinkite palygindami unikalius jaustukus.",
+            "verify_emoji_prompt": "Patvirtinti palyginant unikalius jaustukus.",
+            "verify_emoji": "Patvirtinti naudojant jaustukus",
+            "qr_reciprocate_same_shield_device": "Jau beveik! Ar kitas jūsų įrenginys rodo tą patį skydą?",
+            "qr_reciprocate_same_shield_user": "Beveik atlikta! Ar %(displayName)s rodo tokį patį skydą?",
+            "prompt_encrypted": "Patvirtinkite visus vartotojus kambaryje, kad užtikrintumėte jo saugumą.",
+            "prompt_unencrypted": "Užšifruotuose kambariuose patvirtinkite visus naudotojus, kad įsitikintumėte, jog jie yra saugūs.",
+            "successful_own_device": "Jūs sėkmingai patvirtinote savo įrenginį!",
+            "successful_device": "Jūs sėkmingai patvirtinote %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "Jūs sėkmingai patvirtinote %(displayName)s!",
+            "prompt_self": "Pradėkite patvirtinimą iš naujo pranešime.",
+            "prompt_user": "Pradėkite patvirtinimą iš naujo jų profilyje.",
+            "timed_out": "Pasibaigė laikas patikrinimui.",
+            "cancelled_self": "Atšaukėte patvirtinimą kitame įrenginyje.",
+            "cancelled_user": "%(displayName)s atšaukė patvirtinimą.",
+            "cancelled": "Jūs atšaukėte patvirtinimą."
         },
         "old_version_detected_title": "Aptikti seni kriptografijos duomenys",
         "cancel_entering_passphrase_title": "Atšaukti slaptafrazės įvedimą?",
@@ -2080,7 +2091,8 @@
         "cross_signing_user_normal": "Jūs nepatvirtinote šio vartotojo.",
         "cross_signing_room_warning": "Kažkas naudoja nežinomą seansą",
         "cross_signing_room_verified": "Visi šiame kambaryje yra patvirtinti",
-        "cross_signing_room_normal": "Šis kambarys visapusiškai užšifruotas"
+        "cross_signing_room_normal": "Šis kambarys visapusiškai užšifruotas",
+        "unsupported": "Šis klientas nepalaiko visapusio šifravimo."
     },
     "emoji": {
         "category_frequently_used": "Dažnai Naudojama",
@@ -2547,7 +2559,10 @@
         "jump_to_bottom_button": "Slinkite prie naujausių žinučių",
         "jump_read_marker": "Pereiti prie pirmos neperskaitytos žinutės.",
         "inviter_unknown": "Nežinoma",
-        "failed_reject_invite": "Nepavyko atmesti pakvietimo"
+        "failed_reject_invite": "Nepavyko atmesti pakvietimo",
+        "jump_to_date_beginning": "Kambario pradžia",
+        "jump_to_date": "Peršokti į datą",
+        "jump_to_date_prompt": "Pasirinkite datą, į kurią norite pereiti"
     },
     "file_panel": {
         "peek_note": "Norėdami pamatyti jo failus, turite prisijungti prie kambario"
@@ -2771,7 +2786,8 @@
         "deactivate_confirm_description": "Šio vartotojo deaktyvavimas atjungs juos ir neleis jiems vėl prisijungti atgal. Taip pat jie išeis iš visų kambarių, kuriuose jie yra. Šis veiksmas negali būti atšauktas. Ar tikrai norite deaktyvuoti šį vartotoją?",
         "deactivate_confirm_action": "Deaktyvuoti vartotoją",
         "error_deactivate": "Nepavyko deaktyvuoti vartotojo",
-        "role_label": "Rolė <RoomName/>"
+        "role_label": "Rolė <RoomName/>",
+        "edit_own_devices": "Redaguoti įrenginius"
     },
     "threads": {
         "open_thread": "Atidaryti temą"

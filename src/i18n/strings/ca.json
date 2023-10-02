@@ -45,12 +45,6 @@
     },
     "Join Room": "Entra a la sala",
     "not specified": "sense especificar",
-    "Error decrypting attachment": "Error desxifrant fitxer adjunt",
-    "Decrypt %(text)s": "Desxifra %(text)s",
-    "Download %(text)s": "Baixa %(text)s",
-    "Invalid file%(extra)s": "Fitxer invàlid%(extra)s",
-    "Error decrypting image": "Error desxifrant imatge",
-    "Error decrypting video": "Error desxifrant video",
     "Add an Integration": "Afegeix una integració",
     "Email address": "Correu electrònic",
     "<a>In reply to</a> <pill>": "<a>En resposta a</a> <pill>",
@@ -322,7 +316,6 @@
             "forbidden": "%(senderDisplayName)s ha prohibit l'entrada a la sala als visitants.",
             "unknown": "%(senderDisplayName)s ha canviat l'accés dels visitants a %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s ha enviat una imatge.",
         "m.room.canonical_alias": {
             "set": "%(senderName)s ha canviat l'adreça principal d'aquesta sala a %(address)s.",
             "removed": "%(senderName)s ha retirat l'adreça principal d'aquesta sala."
@@ -456,6 +449,19 @@
             "no_permission": "S'ha intentat carregar un punt específic dins la línia de temps d'aquesta sala, però no teniu permís per veure el missatge en qüestió.",
             "unable_to_find": "S'ha intentat carregar un punt específic de la línia de temps d'aquesta sala, però no s'ha pogut trobar.",
             "title": "No s'ha pogut carregar aquesta posició de la línia de temps"
+        },
+        "m.file": {
+            "download_label": "Baixa %(text)s",
+            "error_decrypting": "Error desxifrant fitxer adjunt",
+            "decrypt_label": "Desxifra %(text)s",
+            "error_invalid": "Fitxer invàlid%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s ha enviat una imatge.",
+            "error_decrypting": "Error desxifrant imatge"
+        },
+        "m.video": {
+            "error_decrypting": "Error desxifrant video"
         }
     },
     "slash_command": {

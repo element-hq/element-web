@@ -41,7 +41,6 @@
     "Saturday": "Laugardagur",
     "Today": "Í dag",
     "Yesterday": "Í gær",
-    "Error decrypting attachment": "Villa við afkóðun viðhengis",
     "Email address": "Tölvupóstfang",
     "Home": "Forsíða",
     "collapse": "fella saman",
@@ -81,7 +80,6 @@
     "Recently Direct Messaged": "Nýsend bein skilaboð",
     "Direct Messages": "Bein skilaboð",
     "Preparing to download logs": "Undirbý niðurhal atvikaskráa",
-    "Download %(text)s": "Niðurhala %(text)s",
     "%(count)s verified sessions": {
         "one": "1 sannreynd seta",
         "other": "%(count)s sannreyndar setur"
@@ -423,13 +421,6 @@
         "one": "%(count)s atkvæði",
         "other": "%(count)s atkvæði"
     },
-    "Show image": "Birta mynd",
-    "Decrypting": "Afkóðun",
-    "Downloading": "Sæki",
-    "Missed call": "Ósvarað símtal",
-    "An unknown error occurred": "Óþekkt villa kom upp",
-    "Connection failed": "Tenging mistókst",
-    "Edit devices": "Breyta tækjum",
     "Recently viewed": "Nýlega skoðað",
     "Deactivate account": "Gera notandaaðgang óvirkann",
     "Space selection": "Val svæðis",
@@ -453,20 +444,12 @@
     "Pizza": "Flatbökur",
     "Apple": "Epli",
     "Messaging": "Skilaboð",
-    "Video conference started by %(senderName)s": "Myndfjarfundur hafinn af %(senderName)s",
-    "Video conference updated by %(senderName)s": "Myndfjarfundur uppfærður af %(senderName)s",
-    "Video conference ended by %(senderName)s": "Myndfjarfundi lokið af %(senderName)s",
-    "Join the conference from the room information card on the right": "Taka þátt í fjarfundinum á upplýsingaspjaldi spjallrásaarinnar til hægri",
-    "Join the conference at the top of this room": "Taka þátt í fjarfundinum efst í þessari spjallrás",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Prófaðu að skruna upp í tímalínunni til að sjá hvort það séu einhver eldri.",
     "Approve widget permissions": "Samþykkja heimildir viðmótshluta",
     "Clear cache and resync": "Hreinsa skyndiminni og endursamstilla",
     "Incompatible local cache": "Ósamhæft staðvært skyndiminni",
     "Feedback sent! Thanks, we appreciate it!": "Umsögn send! Takk, við kunnum að meta þetta!",
     "Continue With Encryption Disabled": "Halda áfram með dulritun óvirka",
-    "Encryption not enabled": "Dulritun ekki virk",
-    "Ignored attempt to disable encryption": "Hunsaði tilraun til að gera dulritun óvirka",
-    "This client does not support end-to-end encryption.": "Þetta forrit styður ekki enda-í-enda dulritun.",
     "Your homeserver has exceeded one of its resource limits.": "Heimaþjóninn þinn er kominn fram yfir takmörk á tilföngum.",
     "Your homeserver has exceeded its user limit.": "Heimaþjóninn þinn er kominn fram yfir takmörk á fjölda notenda.",
     "Reset everything": "Frumstilla allt",
@@ -480,8 +463,6 @@
     "Your server": "Netþjónninn þinn",
     "Can't find this server or its room list": "Fann ekki þennan netþjón eða spjallrásalista hans",
     "This address is already in use": "Þetta vistfang er nú þegar í notkun",
-    "No answer": "Ekkert svar",
-    "Call back": "Hringja til baka",
     "(~%(count)s results)": {
         "one": "(~%(count)s niðurstaða)",
         "other": "(~%(count)s niðurstöður)"
@@ -513,15 +494,10 @@
     "If they don't match, the security of your communication may be compromised.": "Ef þetta samsvarar ekki, getur verið að samskiptin þín séu berskjölduð.",
     "Confirm by comparing the following with the User Settings in your other session:": "Staðfestu með því að bera eftirfarandi saman við 'Stillingar notanda' í hinni setunni þinni:",
     "Start using Key Backup": "Byrja að nota öryggisafrit dulritunarlykla",
-    "No votes cast": "Engin atkvæði greidd",
     "Spanner": "Skrúflykill",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Til að tilkynna Matrix-tengd öryggisvandamál, skaltu lesa <a>Security Disclosure Policy</a> á matrix.org.",
     "Spaces you know that contain this room": "Svæði sem þú veist að innihalda þetta svæði",
     "Spaces you know that contain this space": "Svæði sem þú veist að innihalda þetta svæði",
-    "Pick a date to jump to": "Veldu dagsetningu til að hoppa á",
-    "Message pending moderation": "Efni sem bíður yfirferðar",
-    "Message pending moderation: %(reason)s": "Efni sem bíður yfirferðar: %(reason)s",
-    "Jump to date": "Hoppa á dagsetningu",
     "Not a valid Security Key": "Ekki gildur öryggislykill",
     "This looks like a valid Security Key!": "Þetta lítur út eins og gildur öryggislykill!",
     "Enter Security Key": "Settu inn öryggislykil",
@@ -551,7 +527,6 @@
     "Invite anyway and never warn me again": "Bjóða samt og ekki vara mig við aftur",
     "The following users may not exist": "Eftirfarandi notendur eru mögulega ekki til",
     "Create a new space": "Búa til nýtt svæði",
-    "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Þú hefur hunsað þennan notanda, þannig að skilaboð frá honum eru falin. <a>Birta samts.</a>",
     "Integrations are disabled": "Samþættingar eru óvirkar",
     "Your homeserver doesn't seem to support this feature.": "Heimaþjóninn þinn virðist ekki styðja þennan eiginleika.",
     "Including %(commaSeparatedMembers)s": "Þar með taldir %(commaSeparatedMembers)s",
@@ -575,37 +550,6 @@
     "Click to view edits": "Smelltu hér til að skoða breytingar",
     "Edited at %(date)s": "Breytt þann %(date)s",
     "Add reaction": "Bæta við viðbrögðum",
-    "Error processing voice message": "Villa við meðhöndlun talskilaboða",
-    "Error decrypting video": "Villa við afkóðun myndskeiðs",
-    "Based on %(count)s votes": {
-        "one": "Byggt á %(count)s atkvæði",
-        "other": "Byggt á %(count)s atkvæðum"
-    },
-    "%(count)s votes cast. Vote to see the results": {
-        "one": "%(count)s atkvæði greitt. Greiddu atkvæði til að sjá útkomuna",
-        "other": "%(count)s atkvæði greidd. Greiddu atkvæði til að sjá útkomuna"
-    },
-    "Results will be visible when the poll is ended": "Niðurstöður birtast einungis eftir að könnuninni hefur lokið",
-    "Final result based on %(count)s votes": {
-        "one": "Lokaniðurstöður byggðar á %(count)s atkvæði",
-        "other": "Lokaniðurstöður byggðar á %(count)s atkvæðum"
-    },
-    "Sorry, your vote was not registered. Please try again.": "Því miður, atkvæðið þitt var ekki skráð. Prófaðu aftur.",
-    "Vote not registered": "Atkvæði ekki skráð",
-    "Sorry, you can't edit a poll after votes have been cast.": "Því miður, þú getur ekki breytt könnun eftir að atkvæði hafa verið greidd.",
-    "Can't edit poll": "Get ekki breytt könnun",
-    "Error decrypting image": "Villa við afkóðun myndar",
-    "Invalid file%(extra)s": "Ógild skrá%(extra)s",
-    "Decrypt %(text)s": "Afkóða %(text)s",
-    "Click": "Smelltu",
-    "Expand quotes": "Fletta út tilvitnunum",
-    "Collapse quotes": "Fella saman tilvitnanir",
-    "Reply in thread": "Svara í spjallþræði",
-    "Error processing audio message": "Villa við meðhöndlun hljóðskilaboða",
-    "The encryption used by this room isn't supported.": "Dulritunin sem notuð er í þessari spjallrás er ekki studd.",
-    "The beginning of the room": "Upphaf spjallrásarinnar",
-    "The call is in an unknown state!": "Símtalið er í óþekktu ástandi!",
-    "Unknown failure: %(reason)s": "Óþekkt bilun: %(reason)s",
     "Remove %(count)s messages": {
         "one": "Fjarlægja 1 skilaboð",
         "other": "Fjarlægja %(count)s skilaboð"
@@ -665,9 +609,6 @@
     },
     "Open in OpenStreetMap": "Opna í OpenStreetMap",
     "I don't want my encrypted messages": "Ég vil ekki dulrituðu skilaboðin mín",
-    "Call declined": "Símtali hafnað",
-    "You cancelled": "Þú hættir við",
-    "You accepted": "Þú samþykktir",
     "<inviter/> invites you": "<inviter/> býður þér",
     "Enter Security Phrase": "Settu inn öryggisfrasa",
     "Click the button below to confirm setting up encryption.": "Smelltu á hnappinn hér að neðan til að staðfesta uppsetningu á dulritun.",
@@ -686,9 +627,6 @@
     "%(name)s cancelled": "%(name)s hætti við",
     "%(name)s declined": "%(name)s hafnaði",
     "%(name)s accepted": "%(name)s samþykkti",
-    "%(name)s cancelled verifying": "%(name)s hætti við sannvottun",
-    "%(displayName)s cancelled verification.": "%(displayName)s hætti við sannvottun.",
-    "Ask %(displayName)s to scan your code:": "Biddu %(displayName)s um að skanna kóðann þinn:",
     "%(count)s reply": {
         "one": "%(count)s svar",
         "other": "%(count)s svör"
@@ -717,12 +655,6 @@
     "Spaces you're in": "Svæði sem þú tilheyrir",
     "Unable to upload": "Ekki tókst að senda inn",
     "Submit logs": "Senda inn atvikaskrár",
-    "You sent a verification request": "Þú sendir beiðni um sannvottun",
-    "You declined": "Þú hafnaðir",
-    "You cancelled verifying %(name)s": "Þú hættir við sannvottun á %(name)s",
-    "You verified %(name)s": "Þú sannreyndir %(name)s",
-    "You cancelled verification.": "Þú hættir við sannvottun.",
-    "Verification timed out.": "Sannvottun rann út á tíma.",
     "Keys restored": "Dulritunarlyklar endurheimtir",
     "No backup found!": "Ekkert öryggisafrit fannst!",
     "Incorrect Security Phrase": "Rangur öryggisfrasi",
@@ -756,18 +688,6 @@
     "A connection error occurred while trying to contact the server.": "Villa kom upp þegar reynt var að tengjast þjóninum.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Öryggi dulritaðra skilaboða er tryggt með enda-í-enda dulritun. Einungis þú og viðtakendurnir hafa dulritunarlyklana til að lesa slík skilaboð.",
     "%(brand)s encountered an error during upload of:": "%(brand)s rakst á villu við innsendingu á:",
-    "You cancelled verification on your other device.": "Þú hættir við sannvottun á hinu tækinu þínu.",
-    "Start verification again from their profile.": "Hefja sannvottun aftur úr notandasniði viðkomandi.",
-    "Start verification again from the notification.": "Hefja sannvottun aftur úr tilkynningunni.",
-    "You've successfully verified %(displayName)s!": "Þér hefur tekist að sannreyna %(displayName)s!",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Þér hefur tekist að sannreyna %(deviceName)s (%(deviceId)s)!",
-    "You've successfully verified your device!": "Þér hefur tekist að sannreyna tækið þitt!",
-    "In encrypted rooms, verify all users to ensure it's secure.": "Í dulrituðum spjallrásum skaltu sannreyna alla notendur til að tryggja að hún sé örugg.",
-    "Verify all users in a room to ensure it's secure.": "Sannreyndu alla notendur á spjallrás til að tryggja að hún sé örugg.",
-    "Verify by emoji": "Sannprófa með táknmyndum",
-    "Verify by comparing unique emoji.": "Sannprófaðu með því að bera saman einstakar táknmyndir.",
-    "If you can't scan the code above, verify by comparing unique emoji.": "Ef þú getur ekki skannað kóðann hér fyrir ofan, skaltu sannprófa með því að bera saman einstakar táknmyndir.",
-    "Verify by scanning": "Sannprófa með skönnun",
     "Adding spaces has moved.": "Aðgerðin til að bæta við svæðum hefur verið flutt.",
     "You are not allowed to view this server's rooms list": "Þú hefur ekki heimild til að skoða spjallrásalistann á þessum netþjóni",
     "Unable to restore backup": "Tekst ekki að endurheimta öryggisafrit",
@@ -784,10 +704,6 @@
     "The server (%(serverName)s) took too long to respond.": "Þjónninn (%(serverName)s) var of lengi að svara.",
     "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Netþjónninn þinn er ekki að svara sumum beiðnum frá þér. Hér fyrir neðan eru sumar líklegustu ástæðurnar.",
     "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Þú munt uppfæra þessa spjallrás úr <oldVersion /> upp í <newVersion />.",
-    "Their device couldn't start the camera or microphone": "Hitt tækið gat ekki ræst myndavélina eða hljóðnemann",
-    "Could not connect media": "Gat ekki tengt gagnamiðil",
-    "Almost there! Is %(displayName)s showing the same shield?": "Næstum því búið! Sýnir %(displayName)s sama skjöldinn?",
-    "Almost there! Is your other device showing the same shield?": "Næstum því búið! Sýnir hitt tækið þitt sama skjöldinn?",
     "Your area is experiencing difficulties connecting to the internet.": "Landssvæðið þar sem þú ert á í vandræðum með að tengjast við internetið.",
     "Upgrade Room Version": "Uppfæra útgáfu spjallrásar",
     "Upgrade this room to version %(version)s": "Uppfæra þessa spjallrás í útgáfu %(version)s",
@@ -842,7 +758,6 @@
     "Friends and family": "Vinir og fjölskylda",
     "We'll help you get connected.": "Við munum hjálpa þér að tengjast.",
     "Choose a locale": "Veldu staðfærslu",
-    "Video call ended": "Mynddsímtali lauk",
     "Unread email icon": "Táknmynd fyrir ólesinn tölvupóst",
     "No live locations": "Engar staðsetningar í rauntíma",
     "Live location error": "Villa í rauntímastaðsetningu",
@@ -853,7 +768,6 @@
     "Show: %(instance)s rooms (%(server)s)": "Sýna: %(instance)s spjallrásir (%(server)s)",
     "Who will you chat to the most?": "Við hverja muntu helst spjalla?",
     "You're in": "Þú ert inni",
-    "View live location": "Skoða staðsetningu í rauntíma",
     "%(name)s started a video call": "%(name)s hóf myndsímtal",
     "Start a conversation with someone using their name or username (like <userId/>).": "Byrjaðu samtal með einhverjum með því að nota nafn viðkomandi eða notandanafn (eins og <userId/>).",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "Byrjaðu samtal með einhverjum með því að nota nafn viðkomandi, tölvupóstfang eða notandanafn (eins og <userId/>).",
@@ -863,7 +777,6 @@
     "You will no longer be able to log in": "Þú munt ekki lengur geta skráð þig inn",
     "You will not be able to reactivate your account": "Þú munt ekki geta endurvirkjað aðganginn þinn",
     "You don't have permission to share locations": "Þú hefur ekki heimildir til að deila staðsetningum",
-    "Messages in this chat will be end-to-end encrypted.": "Skilaboð í þessu spjalli verða enda-í-enda dulrituð.",
     "If you can't find the room you're looking for, ask for an invite or create a new room.": "Ef þú finnur ekki spjallrásina sem þú leitar að, skaltu biðja um boð eða útbúa nýja spjallrás.",
     "If you can't see who you're looking for, send them your invite link.": "Ef þú sérð ekki þann sem þú ert að leita að, ættirðu að senda viðkomandi boðstengil.",
     "Some results may be hidden for privacy": "Sumar niðurstöður gætu verið faldar þar sem þær eru einkamál",
@@ -872,9 +785,6 @@
     "You won't be able to rejoin unless you are re-invited.": "Þú munt ekki geta tekið þátt aftur nema þér verði boðið aftur.",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s eða %(recoveryFile)s",
     "<w>WARNING:</w> <description/>": "<w>AÐVÖRUN:</w> <description/>",
-    "Error downloading image": "Villa kom upp við að sækja mynd",
-    "Unable to show image due to error": "Get ekki birt mynd vegna villu",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     " in <strong>%(room)s</strong>": " í <strong>%(room)s</strong>",
     "common": {
         "about": "Um hugbúnaðinn",
@@ -1108,7 +1018,9 @@
         "new_room": "Ný spjallrás",
         "new_video_room": "Ný myndspjallrás",
         "add_existing_room": "Bæta við fyrirliggjandi spjallrás",
-        "explore_public_rooms": "Kanna almenningsspjallrásir"
+        "explore_public_rooms": "Kanna almenningsspjallrásir",
+        "reply_in_thread": "Svara í spjallþræði",
+        "click": "Smelltu"
     },
     "a11y": {
         "user_menu": "Valmynd notandans",
@@ -1929,13 +1841,24 @@
     "timeline": {
         "m.call": {
             "video_call_started": "Myndsamtal er byrjað í %(roomName)s.",
-            "video_call_started_unsupported": "Myndsamtal er byrjað í %(roomName)s. (Ekki stutt af þessum vafra)"
+            "video_call_started_unsupported": "Myndsamtal er byrjað í %(roomName)s. (Ekki stutt af þessum vafra)",
+            "video_call_ended": "Mynddsímtali lauk"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s hringdi raddsímtal.",
             "voice_call_unsupported": "%(senderName)s hringdi raddsímtal. (Ekki stutt af þessum vafra)",
             "video_call": "%(senderName)s hringdi myndsímtal.",
-            "video_call_unsupported": "%(senderName)s hringdi myndsímtal. (Ekki stutt af þessum vafra)"
+            "video_call_unsupported": "%(senderName)s hringdi myndsímtal. (Ekki stutt af þessum vafra)",
+            "declined": "Símtali hafnað",
+            "call_back_prompt": "Hringja til baka",
+            "missed_call": "Ósvarað símtal",
+            "no_answer": "Ekkert svar",
+            "failed_connect_media": "Gat ekki tengt gagnamiðil",
+            "failed_connection": "Tenging mistókst",
+            "failed_opponent_media": "Hitt tækið gat ekki ræst myndavélina eða hljóðnemann",
+            "unknown_error": "Óþekkt villa kom upp",
+            "unknown_failure": "Óþekkt bilun: %(reason)s",
+            "unknown_state": "Símtalið er í óþekktu ástandi!"
         },
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s samþykkti boð um að taka þátt í %(displayName)s",
@@ -1985,7 +1908,6 @@
             "forbidden": "%(senderDisplayName)s hefur bannað gestum að koma inn á spjallrásina.",
             "unknown": "%(senderDisplayName)s breytti gestaaðgangi í %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s sendi mynd.",
         "m.sticker": "%(senderDisplayName)s sendi límmerki.",
         "m.room.server_acl": {
             "set": "%(senderDisplayName)s stillti ACL á netþjóni fyrir þessa spjallrás.",
@@ -2029,7 +1951,12 @@
         "m.widget": {
             "modified": "%(widgetName)s viðmótshluta var breytt af %(senderName)s",
             "added": "%(widgetName)s viðmótshluta var bætt við af %(senderName)s",
-            "removed": "%(widgetName)s viðmótshluti var fjarlægður af %(senderName)s"
+            "removed": "%(widgetName)s viðmótshluti var fjarlægður af %(senderName)s",
+            "jitsi_join_top_prompt": "Taka þátt í fjarfundinum efst í þessari spjallrás",
+            "jitsi_join_right_prompt": "Taka þátt í fjarfundinum á upplýsingaspjaldi spjallrásaarinnar til hægri",
+            "jitsi_ended": "Myndfjarfundi lokið af %(senderName)s",
+            "jitsi_updated": "Myndfjarfundur uppfærður af %(senderName)s",
+            "jitsi_started": "Myndfjarfundur hafinn af %(senderName)s"
         },
         "io.element.widgets.layout": "%(senderName)s hefur uppfært framsetningu spjallrásarinnar",
         "m.location": {
@@ -2040,7 +1967,6 @@
         "self_redaction": "Skilaboðum eytt",
         "redaction": "Skilaboðum eytt af %(name)s",
         "m.poll.start": "%(senderName)s hefur sett í gang könnun - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s hefur lokið könnun",
         "typing_indicator": {
             "one_user": "%(displayName)s er að skrifa…",
             "two_users": "%(names)s og %(lastPerson)s eru að skrifa…… …",
@@ -2187,7 +2113,8 @@
             "changed_rule_users": "%(senderName)s breytti reglu sem bannar notendur sem samsvara %(oldGlob)s yfir í að samsvara %(glob)s, vegna %(reason)s",
             "changed_rule_rooms": "%(senderName)s breytti reglu sem bannar spjallrásir sem samsvara %(oldGlob)s yfir í að samsvara %(glob)s, vegna %(reason)s",
             "changed_rule_servers": "%(senderName)s breytti reglu sem bannar netþjóna sem samsvara %(oldGlob)s yfir í að samsvara %(glob)s, vegna %(reason)s",
-            "changed_rule_glob": "%(senderName)s uppfærði bannreglu sem samsvarar %(oldGlob)s yfir í að samsvara %(glob)s, vegna %(reason)s"
+            "changed_rule_glob": "%(senderName)s uppfærði bannreglu sem samsvarar %(oldGlob)s yfir í að samsvara %(glob)s, vegna %(reason)s",
+            "message_hidden": "Þú hefur hunsað þennan notanda, þannig að skilaboð frá honum eru falin. <a>Birta samts.</a>"
         },
         "no_permission_messages_before_invite": "Þú hefur ekki heimildir til að skoða skilaboð frá því áður en þér var boðið.",
         "no_permission_messages_before_join": "Þú hefur ekki heimildir til að skoða skilaboð frá því áður en þú fórst að taka þátt.",
@@ -2236,18 +2163,66 @@
         "mab": {
             "label": "Aðgerðir skilaboða",
             "view_in_room": "Skoða á spjallrás",
-            "copy_link_thread": "Afrita tengil á spjallþráð"
+            "copy_link_thread": "Afrita tengil á spjallþráð",
+            "collapse_reply_chain": "Fella saman tilvitnanir",
+            "expand_reply_chain": "Fletta út tilvitnunum"
         },
         "m.audio": {
             "unnamed_audio": "Nafnlaust hljóð",
-            "error_downloading_audio": "Villa við að sækja hljóð"
+            "error_downloading_audio": "Villa við að sækja hljóð",
+            "error_processing_audio": "Villa við meðhöndlun hljóðskilaboða",
+            "error_processing_voice_message": "Villa við meðhöndlun talskilaboða"
         },
         "load_error": {
             "no_permission": "Reyndi að hlaða inn tilteknum punkti úr tímalínu þessarar spjallrásar, en þú ert ekki með heimild til að skoða tilteknu skilaboðin.",
             "unable_to_find": "Reyndi að hlaða inn tilteknum punkti úr tímalínu þessarar spjallrásar, en tókst ekki að finna þetta.",
             "title": "Mistókst að hlaða inn staðsetningu á tímalínu"
         },
-        "error_no_renderer": "Ekki tókst að birta þennan atburð"
+        "error_no_renderer": "Ekki tókst að birta þennan atburð",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_downloading": "Sæki",
+        "download_action_decrypting": "Afkóðun",
+        "m.room.encryption": {
+            "enabled_local": "Skilaboð í þessu spjalli verða enda-í-enda dulrituð.",
+            "disable_attempt": "Hunsaði tilraun til að gera dulritun óvirka",
+            "disabled": "Dulritun ekki virk",
+            "unsupported": "Dulritunin sem notuð er í þessari spjallrás er ekki studd."
+        },
+        "pending_moderation_reason": "Efni sem bíður yfirferðar: %(reason)s",
+        "pending_moderation": "Efni sem bíður yfirferðar",
+        "m.beacon_info": {
+            "view_live_location": "Skoða staðsetningu í rauntíma"
+        },
+        "m.file": {
+            "download_label": "Niðurhala %(text)s",
+            "error_decrypting": "Villa við afkóðun viðhengis",
+            "decrypt_label": "Afkóða %(text)s",
+            "error_invalid": "Ógild skrá%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s sendi mynd.",
+            "error": "Get ekki birt mynd vegna villu",
+            "error_decrypting": "Villa við afkóðun myndar",
+            "error_downloading": "Villa kom upp við að sækja mynd",
+            "show_image": "Birta mynd"
+        },
+        "m.key.verification.done": "Þú sannreyndir %(name)s",
+        "m.key.verification.cancel": {
+            "you_cancelled": "Þú hættir við sannvottun á %(name)s",
+            "user_cancelled": "%(name)s hætti við sannvottun"
+        },
+        "m.key.verification.request": {
+            "you_accepted": "Þú samþykktir",
+            "you_declined": "Þú hafnaðir",
+            "you_cancelled": "Þú hættir við",
+            "you_started": "Þú sendir beiðni um sannvottun"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s hefur lokið könnun"
+        },
+        "m.video": {
+            "error_decrypting": "Villa við afkóðun myndskeiðs"
+        }
     },
     "slash_command": {
         "spoiler": "Sendir skilaboðin sem stríðni",
@@ -2674,7 +2649,25 @@
                 "reset_confirmation": "Viltu í alvörunni endurstilla sannvottunarlyklana?",
                 "skip_verification": "Sleppa sannvottun í bili"
             },
-            "accepting": "Samþykki…"
+            "accepting": "Samþykki…",
+            "scan_qr": "Sannprófa með skönnun",
+            "scan_qr_explainer": "Biddu %(displayName)s um að skanna kóðann þinn:",
+            "verify_emoji_prompt_qr": "Ef þú getur ekki skannað kóðann hér fyrir ofan, skaltu sannprófa með því að bera saman einstakar táknmyndir.",
+            "verify_emoji_prompt": "Sannprófaðu með því að bera saman einstakar táknmyndir.",
+            "verify_emoji": "Sannprófa með táknmyndum",
+            "qr_reciprocate_same_shield_device": "Næstum því búið! Sýnir hitt tækið þitt sama skjöldinn?",
+            "qr_reciprocate_same_shield_user": "Næstum því búið! Sýnir %(displayName)s sama skjöldinn?",
+            "prompt_encrypted": "Sannreyndu alla notendur á spjallrás til að tryggja að hún sé örugg.",
+            "prompt_unencrypted": "Í dulrituðum spjallrásum skaltu sannreyna alla notendur til að tryggja að hún sé örugg.",
+            "successful_own_device": "Þér hefur tekist að sannreyna tækið þitt!",
+            "successful_device": "Þér hefur tekist að sannreyna %(deviceName)s (%(deviceId)s)!",
+            "successful_user": "Þér hefur tekist að sannreyna %(displayName)s!",
+            "prompt_self": "Hefja sannvottun aftur úr tilkynningunni.",
+            "prompt_user": "Hefja sannvottun aftur úr notandasniði viðkomandi.",
+            "timed_out": "Sannvottun rann út á tíma.",
+            "cancelled_self": "Þú hættir við sannvottun á hinu tækinu þínu.",
+            "cancelled_user": "%(displayName)s hætti við sannvottun.",
+            "cancelled": "Þú hættir við sannvottun."
         },
         "old_version_detected_title": "Gömul dulritunargögn fundust",
         "verification_requested_toast_title": "Beðið um sannvottun",
@@ -2716,7 +2709,8 @@
         "cross_signing_user_normal": "Þér hefur ekki sannreynt þennan notanda.",
         "cross_signing_room_warning": "Einhver er að nota óþekkta setu",
         "cross_signing_room_verified": "Allir á þessari spjallrás eru staðfestir",
-        "cross_signing_room_normal": "Þessi spjallrás er enda-í-enda dulrituð"
+        "cross_signing_room_normal": "Þessi spjallrás er enda-í-enda dulrituð",
+        "unsupported": "Þetta forrit styður ekki enda-í-enda dulritun."
     },
     "emoji": {
         "category_frequently_used": "Oft notað",
@@ -3385,7 +3379,10 @@
         "jump_to_bottom_button": "Skruna að nýjustu skilaboðunum",
         "jump_read_marker": "Fara í fyrstu ólesnu skilaboðin.",
         "inviter_unknown": "Óþekkt",
-        "failed_reject_invite": "Mistókst að hafna boði"
+        "failed_reject_invite": "Mistókst að hafna boði",
+        "jump_to_date_beginning": "Upphaf spjallrásarinnar",
+        "jump_to_date": "Hoppa á dagsetningu",
+        "jump_to_date_prompt": "Veldu dagsetningu til að hoppa á"
     },
     "file_panel": {
         "guest_note": "Þú verður að <a>skrá þig</a> til að geta notað þennan eiginleika",
@@ -3427,7 +3424,21 @@
         "options_placeholder": "Skrifaðu valmöguleika",
         "options_add_button": "Bæta við valkosti",
         "disclosed_notes": "Kjósendur sjá niðurstöðurnar þegar þeir hafa kosið",
-        "notes": "Niðurstöður birtast einungis eftir að þú hefur lokað könnuninni"
+        "notes": "Niðurstöður birtast einungis eftir að þú hefur lokað könnuninni",
+        "unable_edit_title": "Get ekki breytt könnun",
+        "unable_edit_description": "Því miður, þú getur ekki breytt könnun eftir að atkvæði hafa verið greidd.",
+        "error_voting_title": "Atkvæði ekki skráð",
+        "error_voting_description": "Því miður, atkvæðið þitt var ekki skráð. Prófaðu aftur.",
+        "total_not_ended": "Niðurstöður birtast einungis eftir að könnuninni hefur lokið",
+        "total_no_votes": "Engin atkvæði greidd",
+        "total_n_votes": {
+            "one": "%(count)s atkvæði greitt. Greiddu atkvæði til að sjá útkomuna",
+            "other": "%(count)s atkvæði greidd. Greiddu atkvæði til að sjá útkomuna"
+        },
+        "total_n_votes_voted": {
+            "one": "Byggt á %(count)s atkvæði",
+            "other": "Byggt á %(count)s atkvæðum"
+        }
     },
     "failed_load_async_component": "Mistókst að hlaða inn. Athugaðu nettenginguna þína og reyndu aftur.",
     "upload_failed_generic": "Skrána '%(fileName)s' mistókst að senda inn.",
@@ -3637,7 +3648,8 @@
         "deactivate_confirm_title": "Gera notanda óvirkan?",
         "deactivate_confirm_action": "Gera notanda óvirkan",
         "error_deactivate": "Mistókst að gera þennan notanda óvirkan",
-        "role_label": "Hlutverk í <RoomName/>"
+        "role_label": "Hlutverk í <RoomName/>",
+        "edit_own_devices": "Breyta tækjum"
     },
     "stickers": {
         "empty": "Í augnablikinu ertu ekki með neina límmerkjapakka virkjaða",
@@ -3664,7 +3676,13 @@
         "pinned_messages_button": "Fest",
         "export_chat_button": "Flytja út spjall",
         "share_button": "Deila spjallrás",
-        "settings_button": "Stillingar spjallrásar"
+        "settings_button": "Stillingar spjallrásar",
+        "poll": {
+            "final_result": {
+                "one": "Lokaniðurstöður byggðar á %(count)s atkvæði",
+                "other": "Lokaniðurstöður byggðar á %(count)s atkvæðum"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Hafna boði",

@@ -128,7 +128,9 @@
         "category_calls": "Iɣuṛiten"
     },
     "timeline": {
-        "m.image": "yuzen %(senderDisplayName)s yat twelaft."
+        "m.image": {
+            "sent": "yuzen %(senderDisplayName)s yat twelaft."
+        }
     },
     "slash_command": {
         "usage": "Asemres",

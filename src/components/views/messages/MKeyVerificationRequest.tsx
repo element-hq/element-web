@@ -95,7 +95,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
         const client = MatrixClientPeg.safeGet();
         const myUserId = client.getUserId();
         if (userId === myUserId) {
-            return _t("You accepted");
+            return _t("timeline|m.key.verification.request|you_accepted");
         } else {
             return _t("%(name)s accepted", {
                 name: getNameForEventRoom(client, userId, this.props.mxEvent.getRoomId()!),
@@ -110,9 +110,9 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
         const declined = cancellationCode === "m.user";
         if (userId === myUserId) {
             if (declined) {
-                return _t("You declined");
+                return _t("timeline|m.key.verification.request|you_declined");
             } else {
-                return _t("You cancelled");
+                return _t("timeline|m.key.verification.request|you_cancelled");
             }
         } else {
             if (declined) {
@@ -157,7 +157,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             } else if (request.accepting) {
                 stateLabel = _t("encryption|verification|accepting");
             } else if (request.declining) {
-                stateLabel = _t("Declining…");
+                stateLabel = _t("timeline|m.key.verification.request|declining");
             }
             stateNode = <div className="mx_cryptoEvent_state">{stateLabel}</div>;
         }
@@ -180,7 +180,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             }
         } else {
             // request sent by us
-            title = _t("You sent a verification request");
+            title = _t("timeline|m.key.verification.request|you_started");
             subtitle = userLabelForEventRoom(client, request.otherUserId, mxEvent.getRoomId()!);
         }
 

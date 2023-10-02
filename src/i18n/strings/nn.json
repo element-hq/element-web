@@ -52,12 +52,6 @@
     "Saturday": "laurdag",
     "Today": "i dag",
     "Yesterday": "i går",
-    "Error decrypting attachment": "Noko gjekk gale med vedleggsdekrypteringa",
-    "Decrypt %(text)s": "Dekrypter %(text)s",
-    "Download %(text)s": "Last %(text)s ned",
-    "Invalid file%(extra)s": "Ugangbar fil%(extra)s",
-    "Error decrypting image": "Noko gjekk gale med biletedekrypteringa",
-    "Error decrypting video": "Noko gjekk gale med videodekrypteringa",
     "Email address": "Epostadresse",
     "Delete Widget": "Slett Widgeten",
     "Create new room": "Lag nytt rom",
@@ -121,15 +115,11 @@
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Krypterte meldingar er sikra med ende-til-ende kryptering. Berre du og mottakar(ane) har nøklane for å lese desse meldingane.",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "For å rapportere eit Matrix-relatert sikkerheitsproblem, les Matrix.org sin <a>Security Disclosure Policy</a>.",
     "Encrypted by a deleted session": "Kryptert av ein sletta sesjon",
-    "This client does not support end-to-end encryption.": "Denne klienten støttar ikkje ende-til-ende kryptering.",
     "Add a new server": "Legg til ein ny tenar",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Tømming av data frå denne sesjonen er permanent. Krypterte meldingar vil gå tapt med mindre krypteringsnøklane har blitt sikkerheitskopierte.",
     "I don't want my encrypted messages": "Eg treng ikkje mine krypterte meldingar",
     "You'll lose access to your encrypted messages": "Du vil miste tilgangen til dine krypterte meldingar",
     "Join millions for free on the largest public server": "Kom ihop med millionar av andre på den største offentlege tenaren",
-    "Video conference started by %(senderName)s": "Videokonferanse starta av %(senderName)s",
-    "Video conference updated by %(senderName)s": "Videokonferanse oppdatert av %(senderName)s",
-    "Video conference ended by %(senderName)s": "Videokonferanse avslutta av %(senderName)s",
     "Norway": "Noreg",
     "Bahamas": "Bahamas",
     "Azerbaijan": "Aserbajdsjan",
@@ -155,18 +145,9 @@
     "Failed to end poll": "Avslutning av røysting gjekk gale",
     "The poll has ended. Top answer: %(topAnswer)s": "Røystinga er ferdig. Flest stemmer: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Røystinga er ferdig. Ingen røyster vart mottekne.",
-    "Sorry, you can't edit a poll after votes have been cast.": "Beklagar, du kan ikkje endra ei røysting som er i gang.",
-    "Can't edit poll": "Røystinga kan ikkje endrast",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Er du sikker på at du vil avslutta denne røystinga ? Dette vil gjelde for alle, og dei endelege resultata vil bli presentert.",
-    "Results will be visible when the poll is ended": "Resultata vil bli synlege når røystinga er ferdig",
     "Close sidebar": "Lat att sidestolpen",
-    "Expand quotes": "Utvid sitat",
     "Deactivate account": "Avliv brukarkontoen",
-    "Join the conference from the room information card on the right": "Bli med i konferanse frå rominfo-kortet til høgre",
-    "Final result based on %(count)s votes": {
-        "one": "Endeleg resultat basert etter %(count)s stemme",
-        "other": "Endeleg resultat basert etter %(count)s stemmer"
-    },
     "common": {
         "analytics": "Statistikk",
         "error": "Noko gjekk gale",
@@ -578,7 +559,6 @@
             "forbidden": "%(senderDisplayName)s har hindra gjestetilgang i rommet.",
             "unknown": "%(senderDisplayName)s endra gjestetilgang til %(rule)s"
         },
-        "m.image": "%(senderDisplayName)s sende eit bilete.",
         "m.room.canonical_alias": {
             "set": "%(senderName)s satte standardadressa for dette rommet til %(address)s.",
             "removed": "%(senderName)s fjerna standardadressa for dette rommet.",
@@ -611,10 +591,13 @@
         "m.widget": {
             "modified": "%(widgetName)s-widget endra av %(senderName)s",
             "added": "%(widgetName)s-widget lagt til av %(senderName)s",
-            "removed": "%(widgetName)s widget fjerna av %(senderName)s"
+            "removed": "%(widgetName)s widget fjerna av %(senderName)s",
+            "jitsi_join_right_prompt": "Bli med i konferanse frå rominfo-kortet til høgre",
+            "jitsi_ended": "Videokonferanse avslutta av %(senderName)s",
+            "jitsi_updated": "Videokonferanse oppdatert av %(senderName)s",
+            "jitsi_started": "Videokonferanse starta av %(senderName)s"
         },
         "m.poll.start": "%(senderName)s har starta ei røysting - %(pollQuestion)s",
-        "m.poll.end": "%(senderName)s har avslutta ei røysting",
         "typing_indicator": {
             "one_user": "%(displayName)s skriv…",
             "two_users": "%(names)s og %(lastPerson)s skriv…",
@@ -727,7 +710,26 @@
             "unable_to_find": "Prøvde å lasta eit bestemt punkt i rommet sin historikk, men klarde ikkje å finna det.",
             "title": "Innlasting av punkt i historikken feila."
         },
-        "error_no_renderer": "Denne hendingen kunne ikkje visast"
+        "error_no_renderer": "Denne hendingen kunne ikkje visast",
+        "mab": {
+            "expand_reply_chain": "Utvid sitat"
+        },
+        "m.file": {
+            "download_label": "Last %(text)s ned",
+            "error_decrypting": "Noko gjekk gale med vedleggsdekrypteringa",
+            "decrypt_label": "Dekrypter %(text)s",
+            "error_invalid": "Ugangbar fil%(extra)s"
+        },
+        "m.image": {
+            "sent": "%(senderDisplayName)s sende eit bilete.",
+            "error_decrypting": "Noko gjekk gale med biletedekrypteringa"
+        },
+        "m.poll.end": {
+            "sender_ended": "%(senderName)s har avslutta ei røysting"
+        },
+        "m.video": {
+            "error_decrypting": "Noko gjekk gale med videodekrypteringa"
+        }
     },
     "slash_command": {
         "shrug": "Sett inn ¯\\_(ツ)_/¯ i ein rein-tekst melding",
@@ -1164,7 +1166,8 @@
             "title": "Sett opp"
         },
         "event_shield_reason_mismatched_sender_key": "Kryptert av ein ikkje-verifisert sesjon",
-        "cross_signing_room_normal": "Dette rommet er ende-til-ende kryptert"
+        "cross_signing_room_normal": "Dette rommet er ende-til-ende kryptert",
+        "unsupported": "Denne klienten støttar ikkje ende-til-ende kryptering."
     },
     "poll": {
         "create_poll_title": "Opprett røysting",
@@ -1173,7 +1176,10 @@
         "failed_send_poll_title": "Oppretting av røysting gjekk gale",
         "failed_send_poll_description": "Røystinga du prøvde å oppretta vart ikkje publisert.",
         "topic_heading": "Kva handlar røystinga om ?",
-        "notes": "Resultatet blir synleg når du avsluttar røystinga"
+        "notes": "Resultatet blir synleg når du avsluttar røystinga",
+        "unable_edit_title": "Røystinga kan ikkje endrast",
+        "unable_edit_description": "Beklagar, du kan ikkje endra ei røysting som er i gang.",
+        "total_not_ended": "Resultata vil bli synlege når røystinga er ferdig"
     },
     "failed_load_async_component": "Klarte ikkje lasta! Sjå på nettilkoplinga di og prøv igjen.",
     "upload_failed_generic": "Fila '%(fileName)s' vart ikkje lasta opp.",
@@ -1297,7 +1303,13 @@
     },
     "right_panel": {
         "share_button": "Del rom",
-        "settings_button": "Rominnstillingar"
+        "settings_button": "Rominnstillingar",
+        "poll": {
+            "final_result": {
+                "one": "Endeleg resultat basert etter %(count)s stemme",
+                "other": "Endeleg resultat basert etter %(count)s stemmer"
+            }
+        }
     },
     "reject_invitation_dialog": {
         "title": "Sei nei til innbyding",

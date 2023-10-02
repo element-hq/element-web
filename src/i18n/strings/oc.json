@@ -50,7 +50,6 @@
     "Saturday": "Dissabte",
     "Today": "Uèi",
     "Yesterday": "Ièr",
-    "Show image": "Afichar l'imatge",
     "Cancel search": "Anullar la recèrca",
     "Server name": "Títol del servidor",
     "Notes": "Nòtas",
@@ -421,6 +420,11 @@
     "error_dialog": {
         "search_failed": {
             "title": "La recèrca a fracassat"
+        }
+    },
+    "timeline": {
+        "m.image": {
+            "show_image": "Afichar l'imatge"
         }
     }
 }
