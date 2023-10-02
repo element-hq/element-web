@@ -15,12 +15,11 @@ limitations under the License.
 */
 
 import { defineConfig } from "cypress";
-import * as fs from "node:fs";
 
 import registerPlugins from "./cypress/plugins";
 
 export default defineConfig({
-    video: true,
+    videoUploadOnPasses: false,
     projectId: "ppvnzg",
     experimentalInteractiveRunEvents: true,
     experimentalMemoryManagement: true,
@@ -28,18 +27,6 @@ export default defineConfig({
     chromeWebSecurity: false,
     e2e: {
         setupNodeEvents(on, config) {
-            // Delete videos of passing tests
-            on("after:spec", (spec, results) => {
-                if (results && results.video) {
-                    const failures = results.tests.some((test) =>
-                        test.attempts.some((attempt) => attempt.state === "failed"),
-                    );
-                    if (!failures) {
-                        fs.unlinkSync(results.video);
-                    }
-                }
-            });
-
             return registerPlugins(on, config);
         },
         baseUrl: "http://localhost:8080",
