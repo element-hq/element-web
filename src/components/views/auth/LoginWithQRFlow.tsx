@@ -82,34 +82,34 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
             case Phase.Error:
                 switch (this.props.failureReason) {
                     case RendezvousFailureReason.Expired:
-                        cancellationMessage = _t("The linking wasn't completed in the required time.");
+                        cancellationMessage = _t("auth|qr_code_login|error_linking_incomplete");
                         break;
                     case RendezvousFailureReason.InvalidCode:
-                        cancellationMessage = _t("The scanned code is invalid.");
+                        cancellationMessage = _t("auth|qr_code_login|error_invalid_scanned_code");
                         break;
                     case RendezvousFailureReason.UnsupportedAlgorithm:
-                        cancellationMessage = _t("Linking with this device is not supported.");
+                        cancellationMessage = _t("auth|qr_code_login|error_device_unsupported");
                         break;
                     case RendezvousFailureReason.UserDeclined:
-                        cancellationMessage = _t("The request was declined on the other device.");
+                        cancellationMessage = _t("auth|qr_code_login|error_request_declined");
                         break;
                     case RendezvousFailureReason.OtherDeviceAlreadySignedIn:
-                        cancellationMessage = _t("The other device is already signed in.");
+                        cancellationMessage = _t("auth|qr_code_login|error_device_already_signed_in");
                         break;
                     case RendezvousFailureReason.OtherDeviceNotSignedIn:
-                        cancellationMessage = _t("The other device isn't signed in.");
+                        cancellationMessage = _t("auth|qr_code_login|error_device_not_signed_in");
                         break;
                     case RendezvousFailureReason.UserCancelled:
-                        cancellationMessage = _t("The request was cancelled.");
+                        cancellationMessage = _t("auth|qr_code_login|error_request_cancelled");
                         break;
                     case RendezvousFailureReason.Unknown:
-                        cancellationMessage = _t("An unexpected error occurred.");
+                        cancellationMessage = _t("auth|qr_code_login|error_unexpected");
                         break;
                     case RendezvousFailureReason.HomeserverLacksSupport:
-                        cancellationMessage = _t("The homeserver doesn't support signing in another device.");
+                        cancellationMessage = _t("auth|qr_code_login|error_homeserver_lacks_support");
                         break;
                     default:
-                        cancellationMessage = _t("The request was cancelled.");
+                        cancellationMessage = _t("auth|qr_code_login|error_request_cancelled");
                         break;
                 }
                 title = _t("Connection failed");
@@ -131,20 +131,18 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                 );
                 break;
             case Phase.Connected:
-                title = _t("Devices connected");
+                title = _t("auth|qr_code_login|devices_connected");
                 titleIcon = <DevicesIcon className="normal" />;
                 backButton = false;
                 main = (
                     <>
-                        <p>{_t("Check that the code below matches with your other device:")}</p>
+                        <p>{_t("auth|qr_code_login|confirm_code_match")}</p>
                         <div className="mx_LoginWithQR_confirmationDigits">{this.props.confirmationDigits}</div>
                         <div className="mx_LoginWithQR_confirmationAlert">
                             <div>
                                 <InfoIcon />
                             </div>
-                            <div>
-                                {_t("By approving access for this device, it will have full access to your account.")}
-                            </div>
+                            <div>{_t("auth|qr_code_login|approve_access_warning")}</div>
                         </div>
                     </>
                 );
@@ -181,15 +179,15 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                     );
                     main = (
                         <>
-                            <p>{_t("Scan the QR code below with your device that's signed out.")}</p>
+                            <p>{_t("auth|qr_code_login|scan_code_instruction")}</p>
                             <ol>
-                                <li>{_t("Start at the sign in screen")}</li>
+                                <li>{_t("auth|qr_code_login|start_at_sign_in_screen")}</li>
                                 <li>
-                                    {_t("Select '%(scanQRCode)s'", {
-                                        scanQRCode: _t("Scan QR code"),
+                                    {_t("auth|qr_code_login|select_qr_code", {
+                                        scanQRCode: _t("auth|qr_code_login|scan_qr_code"),
                                     })}
                                 </li>
-                                <li>{_t("Review and approve the sign in")}</li>
+                                <li>{_t("auth|qr_code_login|review_and_approve")}</li>
                             </ol>
                             {code}
                         </>
@@ -203,17 +201,17 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                 main = this.simpleSpinner();
                 break;
             case Phase.Connecting:
-                main = this.simpleSpinner(_t("Connecting…"));
+                main = this.simpleSpinner(_t("auth|qr_code_login|connecting"));
                 buttons = this.cancelButton();
                 break;
             case Phase.WaitingForDevice:
-                main = this.simpleSpinner(_t("Waiting for device to sign in"));
+                main = this.simpleSpinner(_t("auth|qr_code_login|waiting_for_device"));
                 buttons = this.cancelButton();
                 break;
             case Phase.Verifying:
                 title = _t("common|success");
                 centreTitle = true;
-                main = this.simpleSpinner(_t("Completing set up of your new device"));
+                main = this.simpleSpinner(_t("auth|qr_code_login|completing_setup"));
                 break;
         }
 

@@ -130,7 +130,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
 
         return (
             <div ref={this.recaptchaContainer}>
-                <p>{_t("This homeserver would like to make sure you are not a robot.")}</p>
+                <p>{_t("auth|captcha_description")}</p>
                 <div id={DIV_ID} />
                 {error}
             </div>

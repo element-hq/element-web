@@ -1,12 +1,7 @@
 {
-    "New passwords must match each other.": "Nye adgangskoder skal matche hinanden.",
-    "A new password must be entered.": "Der skal indtastes en ny adgangskode.",
     "Session ID": "Sessions ID",
     "Warning!": "Advarsel!",
-    "Are you sure you want to reject the invitation?": "Er du sikker på du vil afvise invitationen?",
-    "Failed to reject invitation": "Kunne ikke afvise invitationen",
     "unknown error code": "Ukendt fejlkode",
-    "Failed to forget room %(errCode)s": "Kunne ikke glemme rummet %(errCode)s",
     "Unnamed room": "Unavngivet rum",
     "Sun": "Søn",
     "Mon": "Man",
@@ -310,7 +305,6 @@
     "American Samoa": "Amerikansk Samoa",
     "Algeria": "Algeriet",
     "Åland Islands": "Ålandsøerne",
-    "Your password has been reset.": "Din adgangskode er blevet nulstillet.",
     "common": {
         "analytics": "Analyse data",
         "error": "Fejl",
@@ -706,7 +700,12 @@
         "failed_connect_identity_server_other": "Du kan logge på, men nogle funktioner vil ikke være tilgængelige inden identitetsserveren er online igen. Hvis du bliver ved med at se denne advarsel, tjek din konfiguration eller kontakt en serveradministrator.",
         "no_hs_url_provided": "Ingen homeserver URL oplyst",
         "autodiscovery_unexpected_error_hs": "Uventet fejl ved indlæsning af homeserver-konfigurationen",
-        "autodiscovery_unexpected_error_is": "Uventet fejl ved indlæsning af identitetsserver-konfigurationen"
+        "autodiscovery_unexpected_error_is": "Uventet fejl ved indlæsning af identitetsserver-konfigurationen",
+        "reset_password": {
+            "password_not_entered": "Der skal indtastes en ny adgangskode.",
+            "passwords_mismatch": "Nye adgangskoder skal matche hinanden.",
+            "reset_successful": "Din adgangskode er blevet nulstillet."
+        }
     },
     "export_chat": {
         "messages": "Beskeder"
@@ -873,5 +872,12 @@
     },
     "member_list": {
         "filter_placeholder": "Filter medlemmer"
+    },
+    "reject_invitation_dialog": {
+        "confirmation": "Er du sikker på du vil afvise invitationen?",
+        "failed": "Kunne ikke afvise invitationen"
+    },
+    "error_dialog": {
+        "forget_room_failed": "Kunne ikke glemme rummet %(errCode)s"
     }
 }

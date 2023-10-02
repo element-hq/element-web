@@ -67,23 +67,23 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
         } else if (phase === Phase.Intro) {
             if (lostKeys) {
                 icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
-                title = _t("Unable to verify this device");
+                title = _t("encryption|verification|after_new_login|unable_to_verify");
             } else {
                 icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
-                title = _t("Verify this device");
+                title = _t("encryption|verification|after_new_login|verify_this_device");
             }
         } else if (phase === Phase.Done) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_verified" />;
-            title = _t("Device verified");
+            title = _t("encryption|verification|after_new_login|device_verified");
         } else if (phase === Phase.ConfirmSkip) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
             title = _t("common|are_you_sure");
         } else if (phase === Phase.Busy) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
-            title = _t("Verify this device");
+            title = _t("encryption|verification|after_new_login|verify_this_device");
         } else if (phase === Phase.ConfirmReset) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
-            title = _t("Really reset verification keys?");
+            title = _t("encryption|verification|after_new_login|reset_confirmation");
         } else if (phase === Phase.Finished) {
             // SetupEncryptionBody will take care of calling onFinished, we don't need to do anything
         } else {
@@ -96,7 +96,7 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
                 <AccessibleButton
                     onClick={this.onSkipClick}
                     className="mx_CompleteSecurity_skip"
-                    aria-label={_t("Skip verification for now")}
+                    aria-label={_t("encryption|verification|after_new_login|skip_verification")}
                 />
             );
         }

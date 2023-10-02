@@ -1650,15 +1650,13 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
             let description: string;
             if (error.errcode == "M_FORBIDDEN") {
-                description = _t(
-                    "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.",
-                );
+                description = _t("timeline|load_error|no_permission");
             } else {
-                description = _t("Tried to load a specific point in this room's timeline, but was unable to find it.");
+                description = _t("timeline|load_error|unable_to_find");
             }
 
             Modal.createDialog(ErrorDialog, {
-                title: _t("Failed to load timeline position"),
+                title: _t("timeline|load_error|title"),
                 description,
                 onFinished,
             });

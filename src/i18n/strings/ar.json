@@ -805,10 +805,10 @@
         "url_preview": {
             "close": "إغلاق المعاينة"
         },
-        "error_no_renderer": "تعذر عرض هذا الحدث",
         "mab": {
             "label": "إجراءات الرسائل"
-        }
+        },
+        "error_no_renderer": "تعذر عرض هذا الحدث"
     },
     "slash_command": {
         "shrug": "ادخل احد الرموز ¯\\_(ツ)_/¯ قبل نص الرسالة",
@@ -887,7 +887,6 @@
         "unknown": "غير معروف",
         "offline": "منفصل"
     },
-    "Unknown": "غير معروف",
     "event_preview": {
         "m.call.answer": {
             "you": "لقد انضممت إلى المكالمة",
@@ -1006,26 +1005,26 @@
             "url_previews_section": "معاينة الروابط",
             "aliases_section": "عناوين الغرف",
             "other_section": "أخرى",
+            "topic_field_label": "موضوع الغرفة",
+            "published_aliases_section": "العناوين المنشورة",
+            "no_aliases_room": "هذه الغرفة ليس لها عناوين محلية",
+            "new_alias_placeholder": "عنوان منشور جديد (على سبيل المثال #alias:server)",
+            "name_field_label": "اسم الغرفة",
+            "local_aliases_section": "عناوين محلية",
+            "local_aliases_explainer_room": "قم بتعيين العناوين لهذه الغرفة حتى يتمكن المستخدمون من العثور على هذه الغرفة من خلال خادمك الوسيط (%(localDomain)s)",
+            "local_alias_field_label": "العنوان المحلي",
             "error_updating_canonical_alias_title": "تعذر تحديث العنوان الرئيسي",
             "error_updating_canonical_alias_description": "حدث خطأ أثناء تحديث العنوان الرئيسي للغرفة. قد لا يسمح به الخادم أو حدث فشل مؤقت.",
             "error_updating_alias_description": "حدث خطأ أثناء تحديث العناوين البديلة للغرفة. قد لا يسمح به الخادم أو حدث فشل مؤقت.",
-            "error_creating_alias_title": "تعذر إنشاء العنوان",
-            "error_creating_alias_description": "تعذر إنشاء ذاك العنوان. قد لا يسمح به الخادم أو حدث فشل مؤقت.",
+            "error_deleting_alias_title": "تعذرت إزالة العنوان",
             "error_deleting_alias_description_forbidden": "ليس لديك الصلاحية لحذف العنوان.",
             "error_deleting_alias_description": "تعذرت إزالة ذاك العنوان. ربما لم يعد موجودًا أو حدث خطأ مؤقت.",
-            "error_deleting_alias_title": "تعذرت إزالة العنوان",
+            "error_creating_alias_title": "تعذر إنشاء العنوان",
+            "error_creating_alias_description": "تعذر إنشاء ذاك العنوان. قد لا يسمح به الخادم أو حدث فشل مؤقت.",
             "canonical_alias_field_label": "العنوان الرئيسي",
-            "no_aliases_room": "هذه الغرفة ليس لها عناوين محلية",
-            "local_alias_field_label": "العنوان المحلي",
-            "published_aliases_section": "العناوين المنشورة",
-            "aliases_items_label": "عناوين منشورة أخرى:",
+            "avatar_field_label": "صورة الغرفة",
             "aliases_no_items_label": "لا توجد عناوين أخرى منشورة بعد ، أضف واحدًا أدناه",
-            "new_alias_placeholder": "عنوان منشور جديد (على سبيل المثال #alias:server)",
-            "local_aliases_section": "عناوين محلية",
-            "local_aliases_explainer_room": "قم بتعيين العناوين لهذه الغرفة حتى يتمكن المستخدمون من العثور على هذه الغرفة من خلال خادمك الوسيط (%(localDomain)s)",
-            "name_field_label": "اسم الغرفة",
-            "topic_field_label": "موضوع الغرفة",
-            "avatar_field_label": "صورة الغرفة"
+            "aliases_items_label": "عناوين منشورة أخرى:"
         },
         "advanced": {
             "unfederated": "لا يمكن الوصول إلى هذه الغرفة بواسطة خوادم Matrix البعيدة",
@@ -1068,8 +1067,8 @@
             "unverified_sessions_toast_reject": "لاحقاً",
             "unverified_session_toast_title": "تسجيل دخول جديد. هل كان ذاك أنت؟",
             "waiting_for_user_accept": "بانتظار %(displayName)s ليقبل …",
-            "accepting": "جارٍ القبول …",
-            "start_button": "ابدأ التحقق"
+            "start_button": "ابدأ التحقق",
+            "accepting": "جارٍ القبول …"
         },
         "cancel_entering_passphrase_title": "هل تريد إلغاء إدخال عبارة المرور؟",
         "cancel_entering_passphrase_description": "هل أنت متأكد من أنك تريد إلغاء إدخال عبارة المرور؟",
@@ -1088,19 +1087,19 @@
             "explainer": "أضف مفاتيحك للاحتياطي قبل تسجيل الخروج لتتجنب ضياعها.",
             "title": "تأسيس"
         },
-        "cross_signing_user_warning": "هذا المستخدم لم يتحقق من جميع اتصالاته.",
-        "cross_signing_user_normal": "أنت لم تتحقق من هذا المستخدم.",
-        "cross_signing_user_verified": "لقد تحققت من هذا المستخدم. لقد تحقق هذا المستخدم من جميع اتصالاته.",
-        "cross_signing_room_warning": "شخص ما يستخدم اتصالاً غير معروف",
-        "cross_signing_room_normal": "هذه الغرفة مشفرة من طرف إلى طرف",
-        "cross_signing_room_verified": "تم التحقق من جميع من في هذه الغرفة",
-        "event_shield_reason_authenticity_not_guaranteed": "لا يمكن ضمان موثوقية هذه الرسالة المشفرة على هذا الجهاز.",
-        "event_shield_reason_mismatched_sender_key": "مشفرة باتصال لم يتم التحقق منه",
         "messages_not_secure": {
             "title": "رسائلك ليست آمنة",
             "heading": "قد يتم اختراق أي مما يلي:",
             "cause_1": "خادمك الوسيط"
-        }
+        },
+        "event_shield_reason_mismatched_sender_key": "مشفرة باتصال لم يتم التحقق منه",
+        "event_shield_reason_authenticity_not_guaranteed": "لا يمكن ضمان موثوقية هذه الرسالة المشفرة على هذا الجهاز.",
+        "cross_signing_user_warning": "هذا المستخدم لم يتحقق من جميع اتصالاته.",
+        "cross_signing_user_verified": "لقد تحققت من هذا المستخدم. لقد تحقق هذا المستخدم من جميع اتصالاته.",
+        "cross_signing_user_normal": "أنت لم تتحقق من هذا المستخدم.",
+        "cross_signing_room_warning": "شخص ما يستخدم اتصالاً غير معروف",
+        "cross_signing_room_verified": "تم التحقق من جميع من في هذه الغرفة",
+        "cross_signing_room_normal": "هذه الغرفة مشفرة من طرف إلى طرف"
     },
     "emoji": {
         "category_frequently_used": "كثيرة الاستعمال",
@@ -1381,17 +1380,18 @@
         "no_peek_join_prompt": "لا يمكن معاينة %(roomName)s. هل تريد الانضمام إليها؟",
         "not_found_title_name": "الغرفة %(roomName)s ليست موجودة.",
         "inaccessible_name": "لا يمكن الوصول إلى %(roomName)s في الوقت الحالي.",
-        "jump_to_bottom_button": "انتقل إلى أحدث الرسائل",
-        "upgrade_warning_bar": "ستؤدي ترقية هذه الغرفة إلى إغلاق النسخة الحالية للغرفة وإنشاء غرفة تمت ترقيتها بنفس الاسم.",
         "upgrade_warning_bar_upgraded": "سبق وأن تمت ترقية هذه الغرفة.",
         "upgrade_warning_bar_unstable": "هذه الغرفة تشغل إصدار الغرفة <roomVersion /> ، والذي عده الخادم الوسيط هذا بأنه<i> غير مستقر </i>.",
         "upgrade_warning_bar_admins": "لن يرى هذا التحذير سوى مديرو الغرفة",
+        "upgrade_warning_bar": "ستؤدي ترقية هذه الغرفة إلى إغلاق النسخة الحالية للغرفة وإنشاء غرفة تمت ترقيتها بنفس الاسم.",
         "search": {
             "this_room": "هذه الغرفة",
             "all_rooms": "كل الغُرف",
             "field_placeholder": "بحث …"
         },
-        "jump_read_marker": "الانتقال إلى أول رسالة غير مقروءة."
+        "jump_to_bottom_button": "انتقل إلى أحدث الرسائل",
+        "jump_read_marker": "الانتقال إلى أول رسالة غير مقروءة.",
+        "inviter_unknown": "غير معروف"
     },
     "space": {
         "context_menu": {
@@ -1510,10 +1510,6 @@
         "filter_placeholder": "تصفية أعضاء الغرفة",
         "power_label": "%(userName)s (قوة %(powerLevelNumber)s)"
     },
-    "stickers": {
-        "empty": "ليس لديك حاليًا أي حزم ملصقات ممكّنة",
-        "empty_add_prompt": "أضف البعض الآن"
-    },
     "user_info": {
         "error_revoke_3pid_invite_title": "تعذر إبطال الدعوة",
         "error_revoke_3pid_invite_description": "تعذر إبطال الدعوة. قد يواجه الخادم مشكلة مؤقتة أو ليس لديك صلاحيات كافية لإلغاء الدعوة.",
@@ -1541,6 +1537,10 @@
         "deactivate_confirm_description": "سيؤدي إلغاء نشاط هذا المستخدم إلى تسجيل خروجهم ومنعهم من تسجيل الدخول مرة أخرى. بالإضافة إلى ذلك ، سيغادرون جميع الغرف التي يتواجدون فيها. لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد أنك تريد إلغاء نشاط هذا المستخدم؟",
         "deactivate_confirm_action": "إلغاء نشاط المستخدم",
         "error_deactivate": "تعذر إلغاء نشاط المستخدم"
+    },
+    "stickers": {
+        "empty": "ليس لديك حاليًا أي حزم ملصقات ممكّنة",
+        "empty_add_prompt": "أضف البعض الآن"
     },
     "right_panel": {
         "pinned_messages": {

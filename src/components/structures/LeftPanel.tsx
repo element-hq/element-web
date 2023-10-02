@@ -334,7 +334,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 <AccessibleTooltipButton
                     className={classNames("mx_LeftPanel_dialPadButton", {})}
                     onClick={this.onDialPad}
-                    title={_t("Open dial pad")}
+                    title={_t("left_panel|open_dial_pad")}
                 />
             );
         }

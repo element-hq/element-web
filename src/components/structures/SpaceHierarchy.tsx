@@ -150,7 +150,7 @@ const Tile: React.FC<ITileProps> = ({
                 kind="primary_outline"
                 onFocus={onFocus}
                 tabIndex={isActive ? 0 : -1}
-                title={_t("Joining")}
+                title={_t("space|joining_space")}
             >
                 <Spinner w={24} h={24} />
             </AccessibleTooltipButton>
@@ -181,7 +181,7 @@ const Tile: React.FC<ITileProps> = ({
         } else {
             checkbox = (
                 <TextWithTooltip
-                    tooltip={_t("You don't have permission")}
+                    tooltip={_t("space|user_lacks_permission")}
                     onClick={(ev) => {
                         ev.stopPropagation();
                     }}
@@ -858,7 +858,7 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
                         results = (
                             <div className="mx_SpaceHierarchy_noResults">
                                 <h3>{_t("No results found")}</h3>
-                                <div>{_t("You may want to try a different search or check for typos.")}</div>
+                                <div>{_t("space|no_search_result_hint")}</div>
                             </div>
                         );
                     }
@@ -876,7 +876,9 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
                         <>
                             <div className="mx_SpaceHierarchy_listHeader">
                                 <h4 className="mx_SpaceHierarchy_listHeader_header">
-                                    {query.trim() ? _t("Results") : _t("Rooms and spaces")}
+                                    {query.trim()
+                                        ? _t("space|title_when_query_available")
+                                        : _t("space|title_when_query_unavailable")}
                                 </h4>
                                 <div className="mx_SpaceHierarchy_listHeader_buttons">
                                     {additionalButtons}
@@ -908,7 +910,7 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
                     <>
                         <SearchBox
                             className="mx_SpaceHierarchy_search mx_textinput_icon mx_textinput_search"
-                            placeholder={_t("Search names and descriptions")}
+                            placeholder={_t("space|search_placeholder")}
                             onSearch={setQuery}
                             autoFocus={true}
                             initialValue={initialText}

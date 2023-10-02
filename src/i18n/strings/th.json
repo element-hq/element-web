@@ -2,36 +2,20 @@
     "Decrypt %(text)s": "ถอดรหัส %(text)s",
     "Download %(text)s": "ดาวน์โหลด %(text)s",
     "unknown error code": "รหัสข้อผิดพลาดที่ไม่รู้จัก",
-    "Failed to forget room %(errCode)s": "การลืมห้องล้มเหลว %(errCode)s",
     "%(items)s and %(lastItem)s": "%(items)s และ %(lastItem)s",
     "and %(count)s others...": {
         "one": "และอีกหนึ่งผู้ใช้...",
         "other": "และอีก %(count)s ผู้ใช้..."
     },
     "An error has occurred.": "เกิดข้อผิดพลาด",
-    "Are you sure you want to leave the room '%(roomName)s'?": "คุณแน่ใจหรือว่าต้องการจะออกจากห้อง '%(roomName)s'?",
-    "Are you sure you want to reject the invitation?": "คุณแน่ใจหรือว่าต้องการจะปฏิเสธคำเชิญ?",
     "Email address": "ที่อยู่อีเมล",
     "Error decrypting attachment": "การถอดรหัสไฟล์แนบผิดพลาด",
-    "Failed to reject invite": "การปฏิเสธคำเชิญล้มเหลว",
-    "Failed to reject invitation": "การปฏิเสธคำเชิญล้มเหลว",
     "Invalid file%(extra)s": "ไฟล์ %(extra)s ไม่ถูกต้อง",
     "Join Room": "เข้าร่วมห้อง",
     "Moderator": "ผู้ช่วยดูแล",
-    "New passwords must match each other.": "รหัสผ่านใหม่ทั้งสองช่องต้องตรงกัน",
     "not specified": "ไม่ได้ระบุ",
-    "No more results": "ไม่มีผลลัพธ์อื่น",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "กรุณาเช็คอีเมลและคลิกลิงก์ข้างใน หลังจากนั้น คลิกดำเนินการต่อ",
-    "Reject invitation": "ปฏิเสธคำเชิญ",
-    "Return to login screen": "กลับไปยังหน้าลงชื่อเข้าใช้",
-    "Search failed": "การค้นหาล้มเหลว",
-    "Server may be unavailable, overloaded, or search timed out :(": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือการค้นหาหมดเวลา :(",
     "Create new room": "สร้างห้องใหม่",
-    "Uploading %(filename)s": "กำลังอัปโหลด %(filename)s",
-    "Uploading %(filename)s and %(count)s others": {
-        "one": "กำลังอัปโหลด %(filename)s และอีก %(count)s ไฟล์",
-        "other": "กำลังอัปโหลด %(filename)s และอีก %(count)s ไฟล์"
-    },
     "Warning!": "คำเตือน!",
     "Sun": "อา.",
     "Mon": "จ.",
@@ -61,7 +45,6 @@
         "one": "(~%(count)s ผลลัพท์)",
         "other": "(~%(count)s ผลลัพท์)"
     },
-    "A new password must be entered.": "กรุณากรอกรหัสผ่านใหม่",
     "Custom level": "กำหนดระดับเอง",
     "Verification Pending": "รอการตรวจสอบ",
     "Error decrypting image": "เกิดข้อผิดพลาดในการถอดรหัสรูป",
@@ -115,7 +98,6 @@
         "other": "%(count)s ตอบกลับ"
     },
     "Failed to connect to integration manager": "ไม่สามารถเชื่อมต่อกับตัวจัดการการรวม",
-    "General failure": "ข้อผิดพลาดทั่วไป",
     "collapse": "ยุบ",
     "common": {
         "encryption_enabled": "เปิดใช้งานการเข้ารหัส",
@@ -221,7 +203,6 @@
             "link_field_label": "ลิงค์"
         }
     },
-    "Code": "โค้ด",
     "power_level": {
         "default": "ค่าเริ่มต้น",
         "moderator": "ผู้ช่วยดูแล",
@@ -448,14 +429,21 @@
         "identifier_label": "เข้าสู่ระบบด้วย",
         "uia": {
             "sso_title": "ใช้การลงชื่อเพียงครั้งเดียวเพื่อดำเนินการต่อ",
-            "sso_body": "ยืนยันการเพิ่มที่อยู่อีเมลนี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ."
+            "sso_body": "ยืนยันการเพิ่มที่อยู่อีเมลนี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ.",
+            "code": "โค้ด"
         },
         "sso_failed_missing_storage": "เราส่งคำขอให้เบราว์เซอร์จดจำโฮมเซิร์ฟเวอร์ที่คุณใช้เพื่ออนุญาตให้คุณลงชื่อเข้าใช้, แต่น่าเสียดายที่เบราว์เซอร์ของคุณไม่จดจำ. ไปที่หน้าลงชื่อเข้าใช้แล้วลองอีกครั้ง.",
         "oidc": {
             "error_title": "เราไม่สามารถเข้าสู่ระบบของคุณได้"
         },
         "reset_password_email_not_found_title": "ไม่พบที่อยู่อีเมล",
-        "reset_password_email_not_associated": "ที่อยู่อีเมลของคุณไม่ได้เชื่อมโยงกับ Matrix ID บนโฮมเซิร์ฟเวอร์นี้"
+        "reset_password_email_not_associated": "ที่อยู่อีเมลของคุณไม่ได้เชื่อมโยงกับ Matrix ID บนโฮมเซิร์ฟเวอร์นี้",
+        "reset_password": {
+            "password_not_entered": "กรุณากรอกรหัสผ่านใหม่",
+            "passwords_mismatch": "รหัสผ่านใหม่ทั้งสองช่องต้องตรงกัน",
+            "return_to_login": "กลับไปยังหน้าลงชื่อเข้าใช้"
+        },
+        "common_failures": {}
     },
     "setting": {
         "help_about": {
@@ -506,11 +494,11 @@
             "error_updating_canonical_alias_title": "เกิดข้อผิดพลาดในการอัปเดตที่อยู่หลัก",
             "error_updating_canonical_alias_description": "เกิดข้อผิดพลาดในการอัปเดตที่อยู่หลักของห้อง เซิร์ฟเวอร์อาจไม่ได้รับอนุญาตหรือเกิดความล้มเหลวชั่วคราว.",
             "error_updating_alias_description": "เกิดข้อผิดพลาดในการอัปเดตที่อยู่สำรองของห้อง เซิร์ฟเวอร์อาจไม่ได้รับอนุญาตหรือเกิดความล้มเหลวชั่วคราว.",
-            "error_creating_alias_title": "เกิดข้อผิดพลาดในการสร้างที่อยู่",
-            "error_creating_alias_description": "เกิดข้อผิดพลาดในการสร้างที่อยู่นั้น เซิร์ฟเวอร์อาจไม่ได้รับอนุญาตหรือเกิดความล้มเหลวชั่วคราว.",
+            "error_deleting_alias_title": "เกิดข้อผิดพลาดในการนำที่อยู่ออก",
             "error_deleting_alias_description_forbidden": "คุณไม่ได้รับอนุญาตให้ลบที่อยู่.",
             "error_deleting_alias_description": "เกิดข้อผิดพลาดในการลบที่อยู่นั้น อาจไม่มีอยู่อีกต่อไปหรือเกิดข้อผิดพลาดชั่วคราว.",
-            "error_deleting_alias_title": "เกิดข้อผิดพลาดในการนำที่อยู่ออก",
+            "error_creating_alias_title": "เกิดข้อผิดพลาดในการสร้างที่อยู่",
+            "error_creating_alias_description": "เกิดข้อผิดพลาดในการสร้างที่อยู่นั้น เซิร์ฟเวอร์อาจไม่ได้รับอนุญาตหรือเกิดความล้มเหลวชั่วคราว.",
             "canonical_alias_field_label": "ที่อยู่หลัก"
         }
     },
@@ -527,12 +515,20 @@
             "forget_room_button": "ลืมห้อง"
         },
         "not_found_title_name": "ไม่มีห้อง %(roomName)s อยู่จริง",
+        "upload": {
+            "uploading_multiple_file": {
+                "one": "กำลังอัปโหลด %(filename)s และอีก %(count)s ไฟล์",
+                "other": "กำลังอัปโหลด %(filename)s และอีก %(count)s ไฟล์"
+            },
+            "uploading_single_file": "กำลังอัปโหลด %(filename)s"
+        },
         "search": {
             "this_room": "ห้องนี้",
             "all_rooms": "ทุกห้อง",
             "field_placeholder": "ค้นหา…"
         },
-        "jump_read_marker": "ข้ามไปยังข้อความแรกที่ยังไม่ได้อ่าน"
+        "jump_read_marker": "ข้ามไปยังข้อความแรกที่ยังไม่ได้อ่าน",
+        "failed_reject_invite": "การปฏิเสธคำเชิญล้มเหลว"
     },
     "failed_load_async_component": "ไม่สามารถโหลดได้! ตรวจสอบการเชื่อมต่อเครือข่ายของคุณแล้วลองอีกครั้ง.",
     "upload_failed_generic": "ไฟล์ '%(fileName)s' อัปโหลดไม่สำเร็จ.",
@@ -590,10 +586,6 @@
         "filter_placeholder": "กรองสมาชิกห้อง",
         "power_label": "%(userName)s (ระดับอำนาจ %(powerLevelNumber)s)"
     },
-    "stickers": {
-        "empty": "ขณะนี้คุณไม่ได้เปิดใช้งานชุดสติกเกอร์ใดๆ",
-        "empty_add_prompt": "เพิ่มบางส่วนในขณะนี้"
-    },
     "user_info": {
         "error_revoke_3pid_invite_title": "ยกเลิกคำเชิญไม่สำเร็จ",
         "error_revoke_3pid_invite_description": "ไม่สามารถยกเลิกคำเชิญได้ เซิร์ฟเวอร์อาจประสบปัญหาชั่วคราวหรือคุณไม่มีสิทธิ์เพียงพอที่จะยกเลิกคำเชิญ",
@@ -614,5 +606,26 @@
     },
     "threads": {
         "open_thread": "เปิดกระทู้"
-    }
+    },
+    "stickers": {
+        "empty": "ขณะนี้คุณไม่ได้เปิดใช้งานชุดสติกเกอร์ใดๆ",
+        "empty_add_prompt": "เพิ่มบางส่วนในขณะนี้"
+    },
+    "reject_invitation_dialog": {
+        "title": "ปฏิเสธคำเชิญ",
+        "confirmation": "คุณแน่ใจหรือว่าต้องการจะปฏิเสธคำเชิญ?",
+        "failed": "การปฏิเสธคำเชิญล้มเหลว"
+    },
+    "no_more_results": "ไม่มีผลลัพธ์อื่น",
+    "leave_room_dialog": {
+        "leave_room_question": "คุณแน่ใจหรือว่าต้องการจะออกจากห้อง '%(roomName)s'?"
+    },
+    "error_dialog": {
+        "forget_room_failed": "การลืมห้องล้มเหลว %(errCode)s",
+        "search_failed": {
+            "title": "การค้นหาล้มเหลว",
+            "server_unavailable": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือการค้นหาหมดเวลา :("
+        }
+    },
+    "General failure": "ข้อผิดพลาดทั่วไป"
 }

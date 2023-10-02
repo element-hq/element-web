@@ -1,8 +1,5 @@
 {
-    "Are you sure you want to reject the invitation?": "An bhfuil tú cinnte gur mian leat an cuireadh a dhiúltú?",
-    "Are you sure you want to leave the room '%(roomName)s'?": "An bhfuil tú cinnte gur mian leat an seomra '%(roomName)s' a fhágáil?",
     "An error has occurred.": "D’imigh earráid éigin.",
-    "A new password must be entered.": "Caithfear focal faire nua a iontráil.",
     "%(items)s and %(lastItem)s": "%(items)s agus %(lastItem)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s ar a %(time)s",
     "Transfer": "Aistrigh",
@@ -304,16 +301,13 @@
     "Sign out and remove encryption keys?": "Sínigh amach agus scrios eochracha criptiúcháin?",
     "Clear Storage and Sign Out": "Scrios Stóras agus Sínigh Amach",
     "Are you sure you want to sign out?": "An bhfuil tú cinnte go dteastaíonn uait sínigh amach?",
-    "Results": "Torthaí",
     "Decrypting": "Ag Díchriptiú",
     "Sent": "Seolta",
     "Sending": "Ag Seoladh",
-    "Avatar": "Abhatár",
     "Unnamed room": "Seomra gan ainm",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
-    "Rooms and spaces": "Seomraí agus spásanna",
     "Join Room": "Téigh isteach an seomra",
     "(~%(count)s results)": {
         "one": "(~%(count)s toradh)",
@@ -321,10 +315,6 @@
     },
     "No answer": "Gan freagair",
     "Unknown failure: %(reason)s": "Teip anaithnid: %(reason)s",
-    "Failed to reject invitation": "Níorbh fhéidir an cuireadh a dhiúltú",
-    "Failed to reject invite": "Níorbh fhéidir an cuireadh a dhiúltú",
-    "Failed to load timeline position": "Níor lódáladh áit amlíne",
-    "Failed to forget room %(errCode)s": "Níor dhearnadh dearmad ar an seomra %(errCode)s",
     "Error decrypting attachment": "Earráid le ceangaltán a dhíchriptiú",
     "Email address": "Seoladh ríomhphoist",
     "Download %(text)s": "Íoslódáil %(text)s",
@@ -402,6 +392,7 @@
         "historical": "Stairiúil",
         "unencrypted": "Gan chriptiú",
         "show_more": "Taispeáin níos mó",
+        "avatar": "Abhatár",
         "are_you_sure": "An bhfuil tú cinnte?"
     },
     "action": {
@@ -518,7 +509,6 @@
         "format_italics": "Iodálach",
         "replying_title": "Ag freagairt"
     },
-    "Code": "Cód",
     "power_level": {
         "default": "Réamhshocrú",
         "restricted": "Teoranta",
@@ -623,6 +613,9 @@
         "context_menu": {
             "collapse_reply_thread": "Cuir na freagraí i bhfolach",
             "report": "Tuairiscigh"
+        },
+        "load_error": {
+            "title": "Níor lódáladh áit amlíne"
         }
     },
     "slash_command": {
@@ -650,7 +643,6 @@
         "offline": "As líne",
         "away": "Imithe"
     },
-    "Unknown": "Anaithnid",
     "event_preview": {
         "m.call.answer": {
             "dm": "Glaoch ar siúl"
@@ -788,9 +780,13 @@
         "identifier_label": "Sínigh isteach le",
         "uia": {
             "sso_title": "Lean ar aghaidh le SSO",
-            "sso_body": "Deimhnigh an seoladh ríomhphoist seo le SSO mar cruthúnas céannachta."
+            "sso_body": "Deimhnigh an seoladh ríomhphoist seo le SSO mar cruthúnas céannachta.",
+            "code": "Cód"
         },
-        "create_account_title": "Déan cuntas a chruthú"
+        "create_account_title": "Déan cuntas a chruthú",
+        "reset_password": {
+            "password_not_entered": "Caithfear focal faire nua a iontráil."
+        }
     },
     "export_chat": {
         "messages": "Teachtaireachtaí"
@@ -833,7 +829,9 @@
         "context_menu": {
             "explore": "Breathnaigh thart ar na seomraí"
         },
-        "share_public": "Roinn do spás poiblí"
+        "share_public": "Roinn do spás poiblí",
+        "title_when_query_unavailable": "Seomraí agus spásanna",
+        "title_when_query_available": "Torthaí"
     },
     "terms": {
         "column_service": "Seirbhís",
@@ -855,7 +853,9 @@
         "invite_reject_ignore": "Diúltaigh ⁊ Neamaird do úsáideoir",
         "search": {
             "field_placeholder": "Cuardaigh…"
-        }
+        },
+        "inviter_unknown": "Anaithnid",
+        "failed_reject_invite": "Níorbh fhéidir an cuireadh a dhiúltú"
     },
     "labs_mjolnir": {
         "ban_reason": "Neamhairde/Tachta",
@@ -915,5 +915,15 @@
     "right_panel": {
         "widgets_section": "Giuirléidí",
         "share_button": "Roinn seomra"
+    },
+    "reject_invitation_dialog": {
+        "confirmation": "An bhfuil tú cinnte gur mian leat an cuireadh a dhiúltú?",
+        "failed": "Níorbh fhéidir an cuireadh a dhiúltú"
+    },
+    "leave_room_dialog": {
+        "leave_room_question": "An bhfuil tú cinnte gur mian leat an seomra '%(roomName)s' a fhágáil?"
+    },
+    "error_dialog": {
+        "forget_room_failed": "Níor dhearnadh dearmad ar an seomra %(errCode)s"
     }
 }

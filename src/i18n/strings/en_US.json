@@ -6,38 +6,21 @@
         "other": "and %(count)s others...",
         "one": "and one other..."
     },
-    "A new password must be entered.": "A new password must be entered.",
     "An error has occurred.": "An error has occurred.",
-    "Are you sure you want to leave the room '%(roomName)s'?": "Are you sure you want to leave the room '%(roomName)s'?",
-    "Are you sure you want to reject the invitation?": "Are you sure you want to reject the invitation?",
     "Custom level": "Custom level",
     "Decrypt %(text)s": "Decrypt %(text)s",
     "Download %(text)s": "Download %(text)s",
     "Email address": "Email address",
     "Error decrypting attachment": "Error decrypting attachment",
-    "Failed to forget room %(errCode)s": "Failed to forget room %(errCode)s",
-    "Failed to load timeline position": "Failed to load timeline position",
-    "Failed to reject invite": "Failed to reject invite",
-    "Failed to reject invitation": "Failed to reject invitation",
     "Invalid file%(extra)s": "Invalid file%(extra)s",
     "Join Room": "Join Room",
     "Moderator": "Moderator",
-    "New passwords must match each other.": "New passwords must match each other.",
     "not specified": "not specified",
-    "No more results": "No more results",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Please check your email and click on the link it contains. Once this is done, click continue.",
-    "Reject invitation": "Reject invitation",
-    "Return to login screen": "Return to login screen",
-    "Search failed": "Search failed",
-    "Server may be unavailable, overloaded, or search timed out :(": "Server may be unavailable, overloaded, or search timed out :(",
     "Session ID": "Session ID",
-    "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.",
-    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Tried to load a specific point in this room's timeline, but was unable to find it.",
     "unknown error code": "unknown error code",
     "Verification Pending": "Verification Pending",
     "Warning!": "Warning!",
-    "You seem to be in a call, are you sure you want to quit?": "You seem to be in a call, are you sure you want to quit?",
-    "You seem to be uploading files, are you sure you want to quit?": "You seem to be uploading files, are you sure you want to quit?",
     "Sun": "Sun",
     "Mon": "Mon",
     "Tue": "Tue",
@@ -60,8 +43,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "Connectivity to the server has been lost.": "Connectivity to the server has been lost.",
-    "Sent messages will be stored until your connection has returned.": "Sent messages will be stored until your connection has returned.",
     "Confirm Removal": "Confirm Removal",
     "Unable to restore session": "Unable to restore session",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.",
@@ -71,11 +52,6 @@
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?",
     "Create new room": "Create new room",
     "Home": "Home",
-    "Uploading %(filename)s": "Uploading %(filename)s",
-    "Uploading %(filename)s and %(count)s others": {
-        "one": "Uploading %(filename)s and %(count)s other",
-        "other": "Uploading %(filename)s and %(count)s others"
-    },
     "(~%(count)s results)": {
         "one": "(~%(count)s result)",
         "other": "(~%(count)s results)"
@@ -326,6 +302,11 @@
         },
         "context_menu": {
             "external_url": "Source URL"
+        },
+        "load_error": {
+            "no_permission": "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.",
+            "unable_to_find": "Tried to load a specific point in this room's timeline, but was unable to find it.",
+            "title": "Failed to load timeline position"
         }
     },
     "slash_command": {
@@ -440,7 +421,12 @@
         "msisdn_field_label": "Phone",
         "identifier_label": "Sign in with",
         "reset_password_email_not_found_title": "This email address was not found",
-        "misconfigured_title": "Your %(brand)s is misconfigured"
+        "misconfigured_title": "Your %(brand)s is misconfigured",
+        "reset_password": {
+            "password_not_entered": "A new password must be entered.",
+            "passwords_mismatch": "New passwords must match each other.",
+            "return_to_login": "Return to login screen"
+        }
     },
     "export_chat": {
         "messages": "Messages"
@@ -488,12 +474,24 @@
         },
         "not_found_title_name": "%(roomName)s does not exist.",
         "inaccessible_name": "%(roomName)s is not accessible at this time.",
+        "upload": {
+            "uploading_multiple_file": {
+                "one": "Uploading %(filename)s and %(count)s other",
+                "other": "Uploading %(filename)s and %(count)s others"
+            },
+            "uploading_single_file": "Uploading %(filename)s"
+        },
+        "status_bar": {
+            "server_connectivity_lost_title": "Connectivity to the server has been lost.",
+            "server_connectivity_lost_description": "Sent messages will be stored until your connection has returned."
+        },
         "search": {
             "this_room": "This Room",
             "all_rooms": "All Rooms",
             "field_placeholder": "Search…"
         },
-        "jump_read_marker": "Jump to first unread message."
+        "jump_read_marker": "Jump to first unread message.",
+        "failed_reject_invite": "Failed to reject invite"
     },
     "file_panel": {
         "guest_note": "You must <a>register</a> to use this functionality",
@@ -604,5 +602,25 @@
         "error_ban_user": "Failed to ban user",
         "error_mute_user": "Failed to mute user",
         "promote_warning": "You will not be able to undo this change as you are promoting the user to have the same power level as yourself."
+    },
+    "reject_invitation_dialog": {
+        "title": "Reject invitation",
+        "confirmation": "Are you sure you want to reject the invitation?",
+        "failed": "Failed to reject invitation"
+    },
+    "quit_warning": {
+        "file_upload_in_progress": "You seem to be uploading files, are you sure you want to quit?",
+        "call_in_progress": "You seem to be in a call, are you sure you want to quit?"
+    },
+    "no_more_results": "No more results",
+    "leave_room_dialog": {
+        "leave_room_question": "Are you sure you want to leave the room '%(roomName)s'?"
+    },
+    "error_dialog": {
+        "forget_room_failed": "Failed to forget room %(errCode)s",
+        "search_failed": {
+            "title": "Search failed",
+            "server_unavailable": "Server may be unavailable, overloaded, or search timed out :("
+        }
     }
 }

@@ -530,7 +530,6 @@
         "unknown": "अज्ञात",
         "offline": "ऑफलाइन"
     },
-    "Unknown": "अज्ञात",
     "voip": {
         "hangup": "फोन रख देना",
         "voice_call": "आवाज कॉल",
@@ -665,7 +664,8 @@
         "error_join_incompatible_version_2": "कृपया अपने होमसर्वर व्यवस्थापक से संपर्क करें।",
         "search": {
             "all_rooms": "सारे कमरे"
-        }
+        },
+        "inviter_unknown": "अज्ञात"
     },
     "space": {
         "context_menu": {

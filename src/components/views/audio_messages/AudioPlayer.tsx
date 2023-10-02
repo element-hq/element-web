@@ -48,7 +48,9 @@ export default class AudioPlayer extends AudioPlayerBase {
                         ref={this.playPauseRef}
                     />
                     <div className="mx_AudioPlayer_mediaInfo">
-                        <span className="mx_AudioPlayer_mediaName">{this.props.mediaName || _t("Unnamed audio")}</span>
+                        <span className="mx_AudioPlayer_mediaName">
+                            {this.props.mediaName || _t("timeline|m.audio|unnamed_audio")}
+                        </span>
                         <div className="mx_AudioPlayer_byline">
                             <DurationClock playback={this.props.playback} />
                             &nbsp; {/* easiest way to introduce a gap between the components */}

@@ -135,10 +135,8 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
                             }
                             logger.error("Search failed", error);
                             Modal.createDialog(ErrorDialog, {
-                                title: _t("Search failed"),
-                                description:
-                                    error?.message ??
-                                    _t("Server may be unavailable, overloaded, or search timed out :("),
+                                title: _t("error_dialog|search_failed|title"),
+                                description: error?.message ?? _t("error_dialog|search_failed|server_unavailable"),
                             });
                             return false;
                         },
@@ -205,7 +203,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
             } else {
                 ret.push(
                     <li key="search-top-marker">
-                        <h2 className="mx_RoomView_topMarker">{_t("No more results")}</h2>
+                        <h2 className="mx_RoomView_topMarker">{_t("no_more_results")}</h2>
                     </li>,
                 );
             }

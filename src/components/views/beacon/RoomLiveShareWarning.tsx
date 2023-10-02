@@ -116,7 +116,7 @@ const RoomLiveShareWarningInner: React.FC<RoomLiveShareWarningInnerProps> = ({ l
             {hasLocationPublishError && (
                 <AccessibleButton
                     data-testid="room-live-share-wire-error-close-button"
-                    title={_t("Stop and close")}
+                    title={_t("location_sharing|stop_and_close")}
                     element="button"
                     className="mx_RoomLiveShareWarning_closeButton"
                     onClick={stopPropagationWrapper(onStopSharing)}

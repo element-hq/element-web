@@ -512,7 +512,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const largeFontSize = "50px";
         const normalFontSize = "15px";
 
-        const waitText = _t("Wait!");
+        const waitText = _t("console_wait");
         const scamText = _t("console_scam_warning");
         const devText = _t("console_dev_note");
 
@@ -698,8 +698,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case "reject_invite":
                 Modal.createDialog(QuestionDialog, {
-                    title: _t("Reject invitation"),
-                    description: _t("Are you sure you want to reject the invitation?"),
+                    title: _t("reject_invitation_dialog|title"),
+                    description: _t("reject_invitation_dialog|confirmation"),
                     onFinished: (confirm) => {
                         if (confirm) {
                             // FIXME: controller shouldn't be loading a view :(
@@ -717,7 +717,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                                     (err) => {
                                         modal.close();
                                         Modal.createDialog(ErrorDialog, {
-                                            title: _t("Failed to reject invitation"),
+                                            title: _t("reject_invitation_dialog|failed"),
                                             description: err.toString(),
                                         });
                                     },
@@ -1196,9 +1196,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             warnings.push(
                 <span className="warning" key="only_member_warning">
                     {" " /* Whitespace, otherwise the sentences get smashed together */}
-                    {_t(
-                        "You are the only person here. If you leave, no one will be able to join in the future, including you.",
-                    )}
+                    {_t("leave_room_dialog|last_person_warning")}
                 </span>,
             );
 
@@ -1213,8 +1211,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     <span className="warning" key="non_public_warning">
                         {" " /* Whitespace, otherwise the sentences get smashed together */}
                         {isSpace
-                            ? _t("This space is not public. You will not be able to rejoin without an invite.")
-                            : _t("This room is not public. You will not be able to rejoin without an invite.")}
+                            ? _t("leave_room_dialog|space_rejoin_warning")
+                            : _t("leave_room_dialog|room_rejoin_warning")}
                     </span>,
                 );
             }
@@ -1233,10 +1231,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             description: (
                 <span>
                     {isSpace
-                        ? _t("Are you sure you want to leave the space '%(spaceName)s'?", {
+                        ? _t("leave_room_dialog|leave_space_question", {
                               spaceName: roomToLeave?.name ?? _t("common|unnamed_space"),
                           })
-                        : _t("Are you sure you want to leave the room '%(roomName)s'?", {
+                        : _t("leave_room_dialog|leave_room_question", {
                               roomName: roomToLeave?.name ?? _t("common|unnamed_room"),
                           })}
                     {warnings}
@@ -1274,7 +1272,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             .catch((err) => {
                 const errCode = err.errcode || _td("unknown error code");
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Failed to forget room %(errCode)s", { errCode }),
+                    title: _t("error_dialog|forget_room_failed", { errCode }),
                     description: err && err.message ? err.message : _t("invite|failed_generic"),
                 });
             });
@@ -1285,8 +1283,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const success = await copyPlaintext(roomLink);
         if (!success) {
             Modal.createDialog(ErrorDialog, {
-                title: _t("Unable to copy room link"),
-                description: _t("Unable to copy a link to the room to the clipboard."),
+                title: _t("error_dialog|copy_room_link_failed|title"),
+                description: _t("error_dialog|copy_room_link_failed|description"),
             });
         }
     }

@@ -1,12 +1,6 @@
 {
-    "A new password must be entered.": "Deve ser introduzida uma nova palavra-passe.",
-    "Are you sure you want to reject the invitation?": "Você tem certeza que deseja rejeitar este convite?",
-    "Failed to reject invitation": "Falha ao tentar rejeitar convite",
     "Moderator": "Moderador/a",
-    "New passwords must match each other.": "Novas palavras-passe devem coincidir.",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Por favor verifique seu email e clique no link enviado. Quando finalizar este processo, clique para continuar.",
-    "Reject invitation": "Rejeitar convite",
-    "Return to login screen": "Retornar à tela de login",
     "Session ID": "Identificador de sessão",
     "unknown error code": "código de erro desconhecido",
     "Verification Pending": "Verificação pendente",
@@ -31,9 +25,6 @@
     "Dec": "Dez",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s às %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s às %(time)s",
-    "Connectivity to the server has been lost.": "A conexão com o servidor foi perdida. Verifique sua conexão de internet.",
-    "Sent messages will be stored until your connection has returned.": "Imagens enviadas ficarão armazenadas até que sua conexão seja reestabelecida.",
-    "Failed to forget room %(errCode)s": "Falha ao esquecer a sala %(errCode)s",
     "%(items)s and %(lastItem)s": "%(items)s e %(lastItem)s",
     "and %(count)s others...": {
         "other": "e %(count)s outros...",
@@ -42,17 +33,8 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s de %(fullYear)s às %(time)s",
     "Decrypt %(text)s": "Descriptografar %(text)s",
     "Download %(text)s": "Baixar %(text)s",
-    "Failed to load timeline position": "Não foi possível carregar a posição na linha do tempo",
-    "Failed to reject invite": "Não foi possível rejeitar o convite",
     "Join Room": "Ingressar na sala",
     "not specified": "não especificado",
-    "No more results": "Não há mais resultados",
-    "Search failed": "Busca falhou",
-    "Server may be unavailable, overloaded, or search timed out :(": "O servidor pode estar indisponível, sobrecarregado, ou a busca ultrapassou o tempo limite :(",
-    "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Tentei carregar um ponto específico na linha do tempo desta sala, mas parece que você não tem permissões para ver a mensagem em questão.",
-    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Tentei carregar um ponto específico na linha do tempo desta sala, mas não o encontrei.",
-    "You seem to be in a call, are you sure you want to quit?": "Parece que você está em uma chamada. Tem certeza que quer sair?",
-    "You seem to be uploading files, are you sure you want to quit?": "Parece que você está enviando arquivos. Tem certeza que quer sair?",
     "An error has occurred.": "Ocorreu um erro.",
     "Email address": "Endereço de email",
     "Error decrypting attachment": "Erro ao descriptografar o anexo",
@@ -65,14 +47,8 @@
     "Error decrypting video": "Erro ao descriptografar o vídeo",
     "Add an Integration": "Adicionar uma integração",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?",
-    "Are you sure you want to leave the room '%(roomName)s'?": "Você tem certeza que deseja sair da sala '%(roomName)s'?",
     "Custom level": "Nível personalizado",
     "Create new room": "Criar nova sala",
-    "Uploading %(filename)s and %(count)s others": {
-        "one": "Enviando o arquivo %(filename)s e %(count)s outros arquivos",
-        "other": "Enviando o arquivo %(filename)s e %(count)s outros arquivos"
-    },
-    "Uploading %(filename)s": "Enviando o arquivo %(filename)s",
     "(~%(count)s results)": {
         "other": "(~%(count)s resultados)",
         "one": "(~%(count)s resultado)"
@@ -581,6 +557,11 @@
         },
         "context_menu": {
             "external_url": "URL fonte"
+        },
+        "load_error": {
+            "no_permission": "Tentei carregar um ponto específico na linha do tempo desta sala, mas parece que você não tem permissões para ver a mensagem em questão.",
+            "unable_to_find": "Tentei carregar um ponto específico na linha do tempo desta sala, mas não o encontrei.",
+            "title": "Não foi possível carregar a posição na linha do tempo"
         }
     },
     "slash_command": {
@@ -621,7 +602,6 @@
         "unknown": "Desconhecido",
         "offline": "Offline"
     },
-    "Unknown": "Desconhecido",
     "voip": {
         "hangup": "Desligar",
         "voice_call": "Chamada de voz",
@@ -720,7 +700,12 @@
         },
         "reset_password_email_not_found_title": "Este endereço de email não foi encontrado",
         "reset_password_email_not_associated": "O seu endereço de email não parece estar associado a um Matrix ID neste homeserver.",
-        "create_account_title": "Criar conta"
+        "create_account_title": "Criar conta",
+        "reset_password": {
+            "password_not_entered": "Deve ser introduzida uma nova palavra-passe.",
+            "passwords_mismatch": "Novas palavras-passe devem coincidir.",
+            "return_to_login": "Retornar à tela de login"
+        }
     },
     "export_chat": {
         "messages": "Mensagens"
@@ -770,12 +755,25 @@
         "invite_subtitle": "<userName/> convidou-o",
         "not_found_title_name": "%(roomName)s não existe.",
         "inaccessible_name": "%(roomName)s não está acessível neste momento.",
+        "upload": {
+            "uploading_multiple_file": {
+                "one": "Enviando o arquivo %(filename)s e %(count)s outros arquivos",
+                "other": "Enviando o arquivo %(filename)s e %(count)s outros arquivos"
+            },
+            "uploading_single_file": "Enviando o arquivo %(filename)s"
+        },
+        "status_bar": {
+            "server_connectivity_lost_title": "A conexão com o servidor foi perdida. Verifique sua conexão de internet.",
+            "server_connectivity_lost_description": "Imagens enviadas ficarão armazenadas até que sua conexão seja reestabelecida."
+        },
         "search": {
             "this_room": "Esta sala",
             "all_rooms": "Todas as salas",
             "field_placeholder": "Pesquisar…"
         },
-        "jump_read_marker": "Ir diretamente para a primeira das mensagens não lidas."
+        "jump_read_marker": "Ir diretamente para a primeira das mensagens não lidas.",
+        "inviter_unknown": "Desconhecido",
+        "failed_reject_invite": "Não foi possível rejeitar o convite"
     },
     "file_panel": {
         "guest_note": "Você deve <a>se registrar</a> para poder usar esta funcionalidade",
@@ -918,5 +916,25 @@
         "error_ban_user": "Não foi possível banir o/a usuário/a",
         "error_mute_user": "Não foi possível remover notificações da/do usuária/o",
         "promote_warning": "Você não poderá desfazer esta mudança, pois estará dando a este(a) usuário(a) o mesmo nível de permissões que você."
+    },
+    "reject_invitation_dialog": {
+        "title": "Rejeitar convite",
+        "confirmation": "Você tem certeza que deseja rejeitar este convite?",
+        "failed": "Falha ao tentar rejeitar convite"
+    },
+    "quit_warning": {
+        "file_upload_in_progress": "Parece que você está enviando arquivos. Tem certeza que quer sair?",
+        "call_in_progress": "Parece que você está em uma chamada. Tem certeza que quer sair?"
+    },
+    "no_more_results": "Não há mais resultados",
+    "leave_room_dialog": {
+        "leave_room_question": "Você tem certeza que deseja sair da sala '%(roomName)s'?"
+    },
+    "error_dialog": {
+        "forget_room_failed": "Falha ao esquecer a sala %(errCode)s",
+        "search_failed": {
+            "title": "Busca falhou",
+            "server_unavailable": "O servidor pode estar indisponível, sobrecarregado, ou a busca ultrapassou o tempo limite :("
+        }
     }
 }

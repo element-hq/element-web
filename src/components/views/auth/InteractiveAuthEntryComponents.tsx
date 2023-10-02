@@ -679,7 +679,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
                                 className="mx_InteractiveAuthEntryComponents_msisdnEntry"
                                 value={this.state.token}
                                 onChange={this.onTokenChange}
-                                aria-label={_t("Code")}
+                                aria-label={_t("auth|uia|code")}
                             />
                             <br />
                             <input

@@ -26,7 +26,6 @@
     "not specified": "qeyd edilmədi",
     "Join Room": "Otağa girmək",
     "unknown error code": "naməlum səhv kodu",
-    "Failed to forget room %(errCode)s": "Otağı unutmağı bacarmadı: %(errCode)s",
     "Sunday": "Bazar",
     "Friday": "Cümə",
     "Today": "Bu gün",
@@ -38,17 +37,6 @@
     "An error has occurred.": "Səhv oldu.",
     "Verification Pending": "Gözləmə təsdiq etmələr",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Öz elektron poçtunu yoxlayın və olan istinadı basın. Bundan sonra düyməni Davam etməyə basın.",
-    "Reject invitation": "Dəvəti rədd etmək",
-    "Are you sure you want to reject the invitation?": "Siz əminsiniz ki, siz dəvəti rədd etmək istəyirsiniz?",
-    "Failed to reject invitation": "Dəvəti rədd etməyi bacarmadı",
-    "Connectivity to the server has been lost.": "Serverlə əlaqə itirilmişdir.",
-    "Sent messages will be stored until your connection has returned.": "Hələ ki serverlə əlaqə bərpa olmayacaq, göndərilmiş mesajlar saxlanacaq.",
-    "No more results": "Daha çox nəticə yoxdur",
-    "Failed to reject invite": "Dəvəti rədd etməyi bacarmadı",
-    "Failed to load timeline position": "Xronologiyadan nişanı yükləməyi bacarmadı",
-    "A new password must be entered.": "Yeni parolu daxil edin.",
-    "New passwords must match each other.": "Yeni şifrələr uyğun olmalıdır.",
-    "Return to login screen": "Girişin ekranına qayıtmaq",
     "Send": "Göndər",
     "PM": "24:00",
     "AM": "12:00",
@@ -176,6 +164,9 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s hüquqların səviyyələrini dəyişdirdi %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s üçün  %(fromPowerLevel)s-dan %(toPowerLevel)s-lə"
+        },
+        "load_error": {
+            "title": "Xronologiyadan nişanı yükləməyi bacarmadı"
         }
     },
     "slash_command": {
@@ -262,7 +253,12 @@
         "email_field_label": "E-poçt",
         "msisdn_field_label": "Telefon",
         "identifier_label": "Seçmək",
-        "reset_password_email_not_found_title": "Bu e-poçt ünvanı tapılmadı"
+        "reset_password_email_not_found_title": "Bu e-poçt ünvanı tapılmadı",
+        "reset_password": {
+            "password_not_entered": "Yeni parolu daxil edin.",
+            "passwords_mismatch": "Yeni şifrələr uyğun olmalıdır.",
+            "return_to_login": "Girişin ekranına qayıtmaq"
+        }
     },
     "update": {
         "release_notes_toast_title": "Nə dəyişdi"
@@ -339,7 +335,12 @@
         },
         "header": {
             "forget_room_button": "Otağı unutmaq"
-        }
+        },
+        "status_bar": {
+            "server_connectivity_lost_title": "Serverlə əlaqə itirilmişdir.",
+            "server_connectivity_lost_description": "Hələ ki serverlə əlaqə bərpa olmayacaq, göndərilmiş mesajlar saxlanacaq."
+        },
+        "failed_reject_invite": "Dəvəti rədd etməyi bacarmadı"
     },
     "notifications": {
         "enable_prompt_toast_title": "Xəbərdarlıqlar",
@@ -359,5 +360,14 @@
     "user_info": {
         "error_ban_user": "İstifadəçini bloklamağı bacarmadı",
         "error_mute_user": "İstifadəçini kəsməyi bacarmadı"
+    },
+    "reject_invitation_dialog": {
+        "title": "Dəvəti rədd etmək",
+        "confirmation": "Siz əminsiniz ki, siz dəvəti rədd etmək istəyirsiniz?",
+        "failed": "Dəvəti rədd etməyi bacarmadı"
+    },
+    "no_more_results": "Daha çox nəticə yoxdur",
+    "error_dialog": {
+        "forget_room_failed": "Otağı unutmağı bacarmadı: %(errCode)s"
     }
 }

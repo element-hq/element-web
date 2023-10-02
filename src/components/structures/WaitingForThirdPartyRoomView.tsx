@@ -73,11 +73,8 @@ export const WaitingForThirdPartyRoomView: React.FC<Props> = ({ roomView, resize
                         <ScrollPanel className="mx_RoomView_messagePanel" resizeNotifier={resizeNotifier}>
                             <EventTileBubble
                                 className="mx_cryptoEvent mx_cryptoEvent_icon"
-                                title={_t("Waiting for users to join %(brand)s", { brand })}
-                                subtitle={_t(
-                                    "Once invited users have joined %(brand)s, you will be able to chat and the room will be end-to-end encrypted",
-                                    { brand },
-                                )}
+                                title={_t("room|waiting_for_join_title", { brand })}
+                                subtitle={_t("room|waiting_for_join_subtitle", { brand })}
                             />
                             <NewRoomIntro />
                             <UnwrappedEventTile mxEvent={inviteEvent} />

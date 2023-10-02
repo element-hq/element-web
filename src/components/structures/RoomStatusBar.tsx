@@ -207,7 +207,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         }
         if (consentError) {
             title = _t(
-                "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.",
+                "room|status_bar|requires_consent_agreement",
                 {},
                 {
                     consentLink: (sub) => (
@@ -222,28 +222,22 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
                 resourceLimitError.data.limit_type,
                 resourceLimitError.data.admin_contact,
                 {
-                    "monthly_active_user": _td(
-                        "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.",
-                    ),
-                    "hs_disabled": _td(
-                        "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.",
-                    ),
-                    "": _td(
-                        "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.",
-                    ),
+                    "monthly_active_user": _td("room|status_bar|monthly_user_limit_reached"),
+                    "hs_disabled": _td("room|status_bar|homeserver_blocked"),
+                    "": _td("room|status_bar|exceeded_resource_limit"),
                 },
             );
         } else {
-            title = _t("Some of your messages have not been sent");
+            title = _t("room|status_bar|some_messages_not_sent");
         }
 
         let buttonRow = (
             <>
                 <AccessibleButton onClick={this.onCancelAllClick} className="mx_RoomStatusBar_unsentCancelAllBtn">
-                    {_t("Delete all")}
+                    {_t("room|status_bar|delete_all")}
                 </AccessibleButton>
                 <AccessibleButton onClick={this.onResendAllClick} className="mx_RoomStatusBar_unsentRetry">
-                    {_t("Retry all")}
+                    {_t("room|status_bar|retry_all")}
                 </AccessibleButton>
             </>
         );
@@ -260,7 +254,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         return (
             <RoomStatusBarUnsentMessages
                 title={title}
-                description={_t("You can select all or individual messages to retry or delete")}
+                description={_t("room|status_bar|select_messages_to_retry")}
                 notificationState={StaticNotificationState.RED_EXCLAMATION}
                 buttons={buttonRow}
             />
@@ -276,10 +270,10 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
                             <WarningIcon width="24" height="24" />
                             <div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_title">
-                                    {_t("Connectivity to the server has been lost.")}
+                                    {_t("room|status_bar|server_connectivity_lost_title")}
                                 </div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                                    {_t("Sent messages will be stored until your connection has returned.")}
+                                    {_t("room|status_bar|server_connectivity_lost_description")}
                                 </div>
                             </div>
                         </div>

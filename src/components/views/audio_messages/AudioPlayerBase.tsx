@@ -98,7 +98,9 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
         return (
             <>
                 {this.renderComponent()}
-                {this.state.error && <div className="text-warning">{_t("Error downloading audio")}</div>}
+                {this.state.error && (
+                    <div className="text-warning">{_t("timeline|m.audio|error_downloading_audio")}</div>
+                )}
             </>
         );
     }

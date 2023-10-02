@@ -1,7 +1,6 @@
 {
     "Create new room": "新しいルームを作成",
     "unknown error code": "不明なエラーコード",
-    "Failed to forget room %(errCode)s": "ルームの履歴を消去するのに失敗しました %(errCode)s",
     "Unnamed room": "名前のないルーム",
     "Thursday": "木曜日",
     "You cannot delete this message. (%(code)s)": "このメッセージを削除できません。(%(code)s）",
@@ -114,33 +113,6 @@
     "Share User": "ユーザーを共有",
     "Share Room Message": "ルームのメッセージを共有",
     "Link to selected message": "選択したメッセージにリンク",
-    "Reject invitation": "招待を辞退",
-    "Are you sure you want to reject the invitation?": "招待を辞退してよろしいですか？",
-    "Failed to reject invitation": "招待を辞退できませんでした",
-    "This room is not public. You will not be able to rejoin without an invite.": "このルームは公開されていません。再度参加するには、招待が必要です。",
-    "Are you sure you want to leave the room '%(roomName)s'?": "このルーム「%(roomName)s」から退出してよろしいですか？",
-    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "<consentLink>利用規約</consentLink> を確認して同意するまでは、いかなるメッセージも送信できません。",
-    "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "このホームサーバーが月間アクティブユーザー制限を超えたため、メッセージを送信できませんでした。サービスを引き続き使用するには、<a>サービスの管理者にお問い合わせ</a>ください。",
-    "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "このホームサーバーがリソース制限を超えたため、メッセージを送信できませんでした。サービスを引き続き使用するには、<a>サービスの管理者にお問い合わせ</a>ください。",
-    "Connectivity to the server has been lost.": "サーバーとの接続が失われました。",
-    "Sent messages will be stored until your connection has returned.": "送信されたメッセージは、接続が復旧するまで保存されます。",
-    "You seem to be uploading files, are you sure you want to quit?": "ファイルをアップロードしているようですが、中止しますか？",
-    "You seem to be in a call, are you sure you want to quit?": "通話中のようですが、中止しますか？",
-    "Search failed": "検索に失敗しました",
-    "Server may be unavailable, overloaded, or search timed out :(": "サーバーが使用できないか、オーバーロードしているか、または検索がタイムアウトした可能性があります :(",
-    "No more results": "結果がありません",
-    "Failed to reject invite": "招待を辞退できませんでした",
-    "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "このルームのタイムラインの特定の地点を読み込もうとしましたが、問題のメッセージを閲覧する権限がありません。",
-    "Tried to load a specific point in this room's timeline, but was unable to find it.": "このルームのタイムラインの特定の地点を読み込もうとしましたが、見つけられませんでした。",
-    "Failed to load timeline position": "タイムラインの位置を読み込めませんでした",
-    "Uploading %(filename)s and %(count)s others": {
-        "other": "%(filename)sと他%(count)s件をアップロードしています",
-        "one": "%(filename)sと他%(count)s件をアップロードしています"
-    },
-    "Uploading %(filename)s": "%(filename)sをアップロードしています",
-    "A new password must be entered.": "新しいパスワードを入力する必要があります。",
-    "New passwords must match each other.": "新しいパスワードは互いに一致する必要があります。",
-    "Return to login screen": "ログイン画面に戻る",
     "Session ID": "セッションID",
     "Room Settings - %(roomName)s": "ルームの設定 - %(roomName)s",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "暗号化されたメッセージは、エンドツーエンドの暗号化によって保護されています。これらの暗号化されたメッセージを読むための鍵を持っているのは、あなたと受信者だけです。",
@@ -324,7 +296,6 @@
     "South Sudan": "南スーダン",
     "South Korea": "韓国",
     "South Georgia & South Sandwich Islands": "南ジョージア&南サンドイッチ諸島",
-    "Open dial pad": "ダイヤルパッドを開く",
     "South Africa": "南アフリカ",
     "Somalia": "ソマリア",
     "Solomon Islands": "ソロモン諸島",
@@ -568,15 +539,11 @@
     "Create a space": "スペースを作成",
     "Edit devices": "端末を編集",
     "Invite to %(roomName)s": "%(roomName)sに招待",
-    "Are you sure you want to leave the space '%(spaceName)s'?": "このスペース「%(spaceName)s」から退出してよろしいですか？",
-    "This space is not public. You will not be able to rejoin without an invite.": "このスペースは公開されていません。再度参加するには、招待が必要です。",
-    "You are the only person here. If you leave, no one will be able to join in the future, including you.": "このルームの参加者はあなただけです。退出すると、今後あなたを含めて誰もこのルームに参加できなくなります。",
     "Adding rooms... (%(progress)s out of %(count)s)": {
         "one": "ルームを追加しています…",
         "other": "ルームを追加しています…（計%(count)s個のうち%(progress)s個）"
     },
     "Are you sure you want to sign out?": "サインアウトしてよろしいですか？",
-    "Rooms and spaces": "ルームとスペース",
     "Add a space to a space you manage.": "新しいスペースを、あなたが管理するスペースに追加。",
     "To join a space you'll need an invite.": "スペースに参加するには招待が必要です。",
     "Close dialog": "ダイアログを閉じる",
@@ -657,10 +624,7 @@
     "a key signature": "鍵の署名",
     "Sign in with SSO": "シングルサインオンでサインイン",
     "Join millions for free on the largest public server": "最大の公開サーバーで、数百万人に無料で参加",
-    "This homeserver would like to make sure you are not a robot.": "このホームサーバーは、あなたがロボットではないことの確認を求めています。",
-    "Verify this device": "この端末を認証",
     "Forgotten or lost all recovery methods? <a>Reset all</a>": "復元方法を全て失ってしまいましたか？<a>リセットできます</a>",
-    "Really reset verification keys?": "本当に認証鍵をリセットしますか？",
     "Enter the name of a new server you want to explore.": "探したい新しいサーバーの名前を入力してください。",
     "Upgrade public room": "公開ルームをアップグレード",
     "Upgrade private room": "非公開のルームをアップグレード",
@@ -702,18 +666,10 @@
     "Message preview": "メッセージのプレビュー",
     "Sent": "送信済",
     "You don't have permission to do this": "これを行う権限がありません",
-    "Joining": "参加しています",
     "Verification Request": "認証の要求",
-    "Unable to copy a link to the room to the clipboard.": "ルームのリンクをクリップボードにコピーできませんでした。",
-    "Unable to copy room link": "ルームのリンクをコピーできません",
     "The server is offline.": "サーバーはオフラインです。",
     "No answer": "応答がありません",
     "Almost there! Is your other device showing the same shield?": "あと少しです！ あなたの他の端末は同じ盾マークを表示していますか？",
-    "Delete all": "全て削除",
-    "You don't have permission": "権限がありません",
-    "Results": "結果",
-    "Could not load user profile": "ユーザーのプロフィールを読み込めませんでした",
-    "Device verified": "端末が認証されました",
     "%(count)s rooms": {
         "one": "%(count)s個のルーム",
         "other": "%(count)s個のルーム"
@@ -741,7 +697,6 @@
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "このユーザーを認証すると、信頼済として表示します。ユーザーを信頼すると、より一層安心してエンドツーエンド暗号化を使用することができます。",
     "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "この端末を認証すると、信頼済として表示します。相手の端末を信頼すると、より一層安心してエンドツーエンド暗号化を使用することができます。",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "以下のMatrix IDのプロフィールを発見できません。招待しますか？",
-    "General failure": "一般エラー",
     "Failed to decrypt %(failedCount)s sessions!": "%(failedCount)s個のセッションの復号化に失敗しました！",
     "No backup found!": "バックアップがありません！",
     "Unable to restore backup": "バックアップを復元できません",
@@ -750,9 +705,6 @@
     "Recently viewed": "最近表示したルーム",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "この変更は、ルームがサーバー上で処理される方法にのみ影響します。%(brand)sで問題が発生した場合は、<a>不具合を報告してください</a>。",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "この変更は、ルームがサーバー上で処理される方法にのみ影響します。%(brand)sで問題が発生した場合は、不具合を報告してください。",
-    "Retry all": "全て再試行",
-    "You can select all or individual messages to retry or delete": "全てのメッセージ、あるいは個別のメッセージを選択して、再送を試みるか削除することができます",
-    "Some of your messages have not been sent": "いくつかのメッセージが送信されませんでした",
     "Forget": "消去",
     "Not a valid Security Key": "セキュリティーキーが正しくありません",
     "This looks like a valid Security Key!": "正しいセキュリティーキーです！",
@@ -768,8 +720,6 @@
     "Upload Error": "アップロードエラー",
     "Thread options": "スレッドの設定",
     "Invited people will be able to read old messages.": "招待したユーザーは、以前のメッセージを閲覧できるようになります。",
-    "Your password has been reset.": "パスワードを再設定しました。",
-    "Couldn't load page": "ページを読み込めませんでした",
     "We couldn't create your DM.": "ダイレクトメッセージを作成できませんでした。",
     "Confirm to continue": "確認して続行",
     "Failed to find the following users": "次のユーザーの発見に失敗しました",
@@ -777,12 +727,9 @@
     "Are you sure you want to deactivate your account? This is irreversible.": "アカウントを無効化してよろしいですか？この操作は元に戻すことができません。",
     "Want to add an existing space instead?": "代わりに既存のスペースを追加しますか？",
     "Space visibility": "スペースの見え方",
-    "This room is public": "このルームは公開されています",
-    "Avatar": "アバター",
     "Incompatible Database": "互換性のないデータベース",
     "Hold": "保留",
     "Resume": "再開",
-    "Country Dropdown": "国一覧",
     "Moderation": "モデレート",
     "Space selection": "スペースの選択",
     "Looks good!": "問題ありません！",
@@ -797,7 +744,6 @@
     "A browser extension is preventing the request.": "ブラウザーの拡張機能がリクエストを妨げています。",
     "Only do this if you have no other device to complete verification with.": "認証を行える端末がない場合のみ行ってください。",
     "You may contact me if you have any follow up questions": "追加で確認が必要な事項がある場合は、連絡可",
-    "Identity server URL does not appear to be a valid identity server": "これは正しいIDサーバーのURLではありません",
     "My current location": "自分の現在の位置情報",
     "My live location": "自分の位置情報（ライブ）",
     "What location type do you want to share?": "どのような種類の位置情報を共有したいですか？",
@@ -830,7 +776,6 @@
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "シングルサインオンを使用して本人確認を行い、アカウントの無効化を承認してください。",
     "The poll has ended. Top answer: %(topAnswer)s": "アンケートが終了しました。最も多い投票数を獲得した選択肢：%(topAnswer)s",
     "The poll has ended. No votes were cast.": "アンケートが終了しました。投票はありませんでした。",
-    "Wait!": "お待ちください！",
     "Error processing audio message": "音声メッセージを処理する際にエラーが発生しました",
     "The beginning of the room": "ルームの先頭",
     "Jump to date": "日付に移動",
@@ -854,15 +799,9 @@
     "Signature upload failed": "署名のアップロードに失敗しました",
     "toggle event": "イベントを切り替える",
     "Search spaces": "スペースを検索",
-    "Unnamed audio": "名前のない音声",
     "Other searches": "その他の検索",
     "To search messages, look for this icon at the top of a room <icon/>": "メッセージを検索する場合は、ルームの上に表示されるアイコン<icon/>をクリックしてください。",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "アカウントにアクセスし、このセッションに保存されている暗号鍵を復元してください。暗号鍵がなければ、どのセッションの暗号化されたメッセージも読めなくなります。",
-    "Invalid base_url for m.identity_server": "m.identity_serverの不正なbase_url",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "これは正しいMatrixのホームサーバーのURLではありません",
-    "Invalid base_url for m.homeserver": "m.homeserverの不正なbase_url",
-    "Skip verification for now": "認証をスキップ",
-    "Unable to verify this device": "この端末を認証できません",
     "Other spaces or rooms you might not know": "知らないかもしれない他のスペースやルーム",
     "You're removing all spaces. Access will default to invite only": "全てのスペースを削除しようとしています。招待者しかアクセスできなくなります",
     "To continue, use Single Sign On to prove your identity.": "続行するには、シングルサインオンを使用して、本人確認を行ってください。",
@@ -870,8 +809,6 @@
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "アップロードしようとしているいくつかのファイルのサイズが<b>大きすぎます</b>。最大のサイズは%(limit)sです。",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "アップロードしようとしているファイルのサイズが<b>大きすぎます</b>。最大のサイズは%(limit)sです。",
     "a new master key signature": "新しいマスターキーの署名",
-    "Search names and descriptions": "名前と説明文を検索",
-    "Error downloading audio": "音声をダウンロードする際にエラーが発生しました",
     "Resend %(unsentCount)s reaction(s)": "%(unsentCount)s個のリアクションを再送信",
     "Your browser likely removed this data when running low on disk space.": "ディスクの空き容量が少なかったため、ブラウザーはこのデータを削除しました。",
     "You are about to leave <spaceName/>.": "<spaceName/>から退出しようとしています。",
@@ -961,22 +898,14 @@
     "Output devices": "出力装置",
     "Cameras": "カメラ",
     "Unread email icon": "未読メールアイコン",
-    "Sign in new device": "新しい端末でサインイン",
-    "The scanned code is invalid.": "スキャンされたコードは無効です。",
-    "The request was cancelled.": "リクエストはキャンセルされました。",
-    "An unexpected error occurred.": "予期しないエラーが発生しました。",
-    "Devices connected": "接続中の端末",
-    "Check that the code below matches with your other device:": "以下のコードが他の端末と一致していることを確認してください：",
     "Video call ended": "ビデオ通話が終了しました",
     "%(name)s started a video call": "%(name)sがビデオ通話を始めました",
     "Error downloading image": "画像をダウンロードする際にエラーが発生しました",
     "Unable to show image due to error": "エラーにより画像を表示できません",
     "Reset event store?": "イベントストアをリセットしますか？",
     "Your firewall or anti-virus is blocking the request.": "ファイアーウォールまたはアンチウイルスソフトがリクエストをブロックしています。",
-    "We're creating a room with %(names)s": "%(names)sという名前のルームを作成しています",
     "Close sidebar": "サイドバーを閉じる",
     "You are sharing your live location": "位置情報（ライブ）を共有しています",
-    "Stop and close": "停止して閉じる",
     "Saved Items": "保存済み項目",
     "%(members)s and %(last)s": "%(members)sと%(last)s",
     "Updated %(humanizedUpdateTime)s": "%(humanizedUpdateTime)sに更新",
@@ -1009,9 +938,6 @@
     "You will leave all rooms and DMs that you are in": "全てのルームとダイレクトメッセージから退出します",
     "Confirm that you would like to deactivate your account. If you proceed:": "アカウントを無効化したいことを確認してください。継続すると、",
     "You will not be able to reactivate your account": "アカウントを再開できなくなります",
-    "Completing set up of your new device": "新しい端末の設定を完了しています",
-    "Waiting for device to sign in": "端末のサインインを待機しています",
-    "The request was declined on the other device.": "リクエストはもう一方の端末で拒否されました。",
     "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "サインアウトすると、これらの鍵はこの端末から削除されます。使用できる鍵が他の端末にあったり、サーバーにバックアップされたりしているのでない限り、暗号化されたメッセージは読むことができなくなります。",
     "%(brand)s encountered an error during upload of:": "以下のアップロードの際に%(brand)sでエラーが発生しました：",
     "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "以下のユーザーは存在しないか不正であるため、招待できません：%(csvNames)s",
@@ -1021,22 +947,11 @@
     "Hide my messages from new joiners": "自分のメッセージを新しい参加者に表示しない",
     "Messages in this chat will be end-to-end encrypted.": "このチャットのメッセージはエンドツーエンドで暗号化されます。",
     "You don't have permission to share locations": "位置情報の共有に必要な権限がありません",
-    "The homeserver doesn't support signing in another device.": "ホームサーバーは他の端末でのサインインをサポートしていません。",
-    "Scan the QR code below with your device that's signed out.": "サインアウトした端末で以下のQRコードをスキャンしてください。",
     "Thread root ID: %(threadRootId)s": "スレッドのルートID：%(threadRootId)s",
-    "Sign out of all devices": "全ての端末からサインアウト",
-    "Confirm new password": "新しいパスワードを確認",
-    "Review and approve the sign in": "サインインを確認して承認",
-    "By approving access for this device, it will have full access to your account.": "この端末へのアクセスを許可すると、あなたのアカウントに完全にアクセスできるようになります。",
-    "The other device isn't signed in.": "もう一方の端末はサインインしていません。",
-    "The other device is already signed in.": "もう一方のデバイスは既にサインインしています。",
     "Your old messages will still be visible to people who received them, just like emails you sent in the past. Would you like to hide your sent messages from people who join rooms in the future?": "あなたの古いメッセージは、それを受信した人には表示され続けます。これは電子メールの場合と同様です。あなたが送信したメッセージを今後のルームの参加者に表示しないようにしますか？",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "このルームをアップグレードするには、現在のルームを閉鎖し、新しくルームを作成する必要があります。ルームの参加者のため、アップグレードの際に以下を行います。",
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "注意：ブラウザーはサポートされていません。期待通りに動作しない可能性があります。",
-    "Invalid identity server discovery response": "IDサーバーのディスカバリー（発見）に関する不正な応答です",
     "Show: %(instance)s rooms (%(server)s)": "表示：%(instance)s ルーム（%(server)s）",
-    "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "端末からサインアウトすると、暗号化の鍵が削除され、暗号化された会話の履歴を読むことができなくなります。",
-    "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "暗号化されたルームの会話を今後も読み込めるようにしたい場合は、続行する前に、鍵のバックアップを設定するか、他の端末からメッセージの鍵をエクスポートしてください。",
     "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "この端末を認証すると、信頼済として表示します。あなたを認証したユーザーはこの端末を信頼することができるようになります。",
     "Message pending moderation: %(reason)s": "メッセージはモデレートの保留中です：%(reason)s",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "このユーザーに関するシステムメッセージ（メンバーシップの変更、プロフィールの変更など）も削除したい場合は、チェックを外してください",
@@ -1044,20 +959,10 @@
         "one": "%(user)sによる%(count)s件のメッセージを削除しようとしています。これは会話に参加している全員からメッセージを永久に削除します。続行してよろしいですか？",
         "other": "%(user)sによる%(count)s件のメッセージを削除しようとしています。これは会話に参加している全員からメッセージを永久に削除します。続行してよろしいですか？"
     },
-    "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.": "このホームサーバーが管理者によりブロックされているため、メッセージを送信できませんでした。サービスを引き続き使用するには、<a>サービスの管理者にお問い合わせ</a>ください。",
-    "You may want to try a different search or check for typos.": "別のキーワードで検索するか、キーワードが正しいか確認してください。",
-    "Too many attempts in a short time. Wait some time before trying again.": "再試行の数が多すぎます。少し待ってから再度試してください。",
-    "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "すべての端末からログアウトしているため、プッシュ通知を受け取れません。通知を再び有効にするには、各端末でサインインしてください。",
-    "Invalid homeserver discovery response": "ホームサーバーのディスカバリー（発見）に関する不正な応答です",
-    "Failed to get autodiscovery configuration from server": "自動発見の設定をサーバーから取得できませんでした",
     "Consult first": "初めに相談",
     "We'll help you get connected.": "みんなと繋がる手助けをいたします。",
     "Who will you chat to the most?": "誰と最もよく会話しますか？",
     "unknown": "不明",
-    "Too many attempts in a short time. Retry after %(timeout)s.": "再試行の数が多すぎます。%(timeout)s後に再度試してください。",
-    "Start at the sign in screen": "サインインの画面で開始",
-    "Linking with this device is not supported.": "この端末とのリンクはサポートしていません。",
-    "The linking wasn't completed in the required time.": "時間内にリンクが完了しませんでした。",
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "メッセージは削除されませんが、インデックスを再構成している間、検索のパフォーマンスが低下します",
     "Recent changes that have not yet been received": "まだ受信していない最近の変更",
     "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "サーバーはいくつかのリクエストに応答していません。以下に考えられる理由を表示します。",
@@ -1084,10 +989,7 @@
     "Declining…": "拒否しています…",
     "There are no past polls in this room": "このルームに過去のアンケートはありません",
     "There are no active polls in this room": "このルームに実施中のアンケートはありません",
-    "Scan QR code": "QRコードをスキャン",
-    "Select '%(scanQRCode)s'": "「%(scanQRCode)s」を選択",
     "Enable '%(manageIntegrations)s' in Settings to do this.": "これを行うには設定から「%(manageIntegrations)s」を有効にしてください。",
-    "Connecting…": "接続しています…",
     "Loading live location…": "位置情報（ライブ）を読み込んでいます…",
     "Fetching keys from server…": "鍵をサーバーから取得しています…",
     "Checking…": "確認しています…",
@@ -1210,10 +1112,11 @@
         "historical": "履歴",
         "go_to_settings": "設定を開く",
         "setup_secure_messages": "セキュアメッセージを設定",
-        "unencrypted": "暗号化されていません",
         "view_message": "メッセージを表示",
-        "joined": "参加済",
+        "unencrypted": "暗号化されていません",
         "show_more": "さらに表示",
+        "joined": "参加済",
+        "avatar": "アバター",
         "are_you_sure": "よろしいですか？"
     },
     "action": {
@@ -1531,17 +1434,16 @@
         "format_italics": "斜字体",
         "format_insert_link": "リンクを挿入",
         "replying_title": "以下に返信",
-        "edit_composer_label": "メッセージを編集",
-        "send_voice_message": "音声メッセージを送信",
         "stop_voice_message": "録音を停止",
+        "send_voice_message": "音声メッセージを送信",
         "link_modal": {
             "title_edit": "リンクを編集",
             "title_create": "リンクを作成",
             "text_field_label": "テキスト",
             "link_field_label": "リンク"
-        }
+        },
+        "edit_composer_label": "メッセージを編集"
     },
-    "Code": "コード",
     "power_level": {
         "default": "既定値",
         "restricted": "制限",
@@ -2573,18 +2475,27 @@
             "other": "%(count)s人が閲覧済"
         },
         "read_receipts_label": "開封確認メッセージ",
-        "thread_info_basic": "スレッドから",
-        "error_no_renderer": "このイベントは表示できませんでした",
         "undecryptable_tooltip": "このメッセージを復号化できませんでした",
-        "send_state_sending": "メッセージを送信しています…",
-        "send_state_encrypting": "メッセージを暗号化しています…",
+        "thread_info_basic": "スレッドから",
         "send_state_sent": "メッセージが送信されました",
+        "send_state_sending": "メッセージを送信しています…",
         "send_state_failed": "送信に失敗しました",
+        "send_state_encrypting": "メッセージを暗号化しています…",
         "mab": {
             "label": "メッセージのアクション",
             "view_in_room": "ルーム内で表示",
             "copy_link_thread": "スレッドへのリンクをコピー"
-        }
+        },
+        "m.audio": {
+            "unnamed_audio": "名前のない音声",
+            "error_downloading_audio": "音声をダウンロードする際にエラーが発生しました"
+        },
+        "load_error": {
+            "no_permission": "このルームのタイムラインの特定の地点を読み込もうとしましたが、問題のメッセージを閲覧する権限がありません。",
+            "unable_to_find": "このルームのタイムラインの特定の地点を読み込もうとしましたが、見つけられませんでした。",
+            "title": "タイムラインの位置を読み込めませんでした"
+        },
+        "error_no_renderer": "このイベントは表示できませんでした"
     },
     "slash_command": {
         "spoiler": "選択したメッセージをネタバレとして送信",
@@ -2684,7 +2595,6 @@
         "offline": "オフライン",
         "away": "離席中"
     },
-    "Unknown": "不明",
     "event_preview": {
         "m.call.answer": {
             "you": "通話に参加しました",
@@ -2917,31 +2827,31 @@
             "leave_space": "スペースから退出",
             "aliases_section": "ルームのアドレス",
             "other_section": "その他",
-            "error_updating_canonical_alias_title": "メインアドレスを更新する際にエラーが発生しました",
-            "error_updating_canonical_alias_description": "ルームのメインアドレスを更新する際にエラーが発生しました。サーバーで許可されていないか、一時的な障害が発生した可能性があります。",
-            "error_updating_alias_description": "ルームの代替アドレスを更新する際にエラーが発生しました。サーバーで許可されていないか、一時的な障害が発生した可能性があります。",
-            "error_creating_alias_title": "アドレスを作成する際にエラーが発生しました",
-            "error_creating_alias_description": "アドレスを作成する際にエラーが発生しました。サーバーで許可されていないか、一時的な障害が発生した可能性があります。",
-            "error_deleting_alias_description_forbidden": "アドレスを削除する権限がありません。",
-            "error_deleting_alias_description": "アドレスを削除する際にエラーが発生しました。既にルームが存在しないか、一時的なエラーが発生しました。",
-            "error_deleting_alias_title": "アドレスを削除する際にエラーが発生しました",
-            "canonical_alias_field_label": "メインアドレス",
-            "no_aliases_space": "このスペースにはローカルアドレスがありません",
-            "no_aliases_room": "このルームにはローカルアドレスがありません",
-            "local_alias_field_label": "ローカルアドレス",
+            "topic_field_label": "ルームのトピック",
             "published_aliases_section": "公開アドレス",
             "published_aliases_explainer_space": "公開アドレスを設定すると、どのサーバーのユーザーでも、あなたのスペースに参加できるようになります。",
             "published_aliases_explainer_room": "公開アドレスを設定すると、どのサーバーのユーザーでも、あなたのルームに参加できるようになります。",
             "published_aliases_description": "アドレスを公開するには、まずローカルアドレスに設定する必要があります。",
-            "aliases_items_label": "他の公開アドレス：",
-            "aliases_no_items_label": "他の公開アドレスはまだありません。以下から追加できます",
+            "no_aliases_space": "このスペースにはローカルアドレスがありません",
+            "no_aliases_room": "このルームにはローカルアドレスがありません",
             "new_alias_placeholder": "新しい公開アドレス（例：#alias:server）",
+            "name_field_label": "ルーム名",
             "local_aliases_section": "ローカルアドレス",
             "local_aliases_explainer_space": "アドレスを設定すると、他のユーザーがあなたのホームサーバー（%(localDomain)s）を通じてこのスペースを見つけられるようになります。",
             "local_aliases_explainer_room": "アドレスを設定すると、他のユーザーがあなたのホームサーバー（%(localDomain)s）を通じてこのルームを見つけられるようになります。",
-            "name_field_label": "ルーム名",
-            "topic_field_label": "ルームのトピック",
-            "avatar_field_label": "ルームのアバター"
+            "local_alias_field_label": "ローカルアドレス",
+            "error_updating_canonical_alias_title": "メインアドレスを更新する際にエラーが発生しました",
+            "error_updating_canonical_alias_description": "ルームのメインアドレスを更新する際にエラーが発生しました。サーバーで許可されていないか、一時的な障害が発生した可能性があります。",
+            "error_updating_alias_description": "ルームの代替アドレスを更新する際にエラーが発生しました。サーバーで許可されていないか、一時的な障害が発生した可能性があります。",
+            "error_deleting_alias_title": "アドレスを削除する際にエラーが発生しました",
+            "error_deleting_alias_description_forbidden": "アドレスを削除する権限がありません。",
+            "error_deleting_alias_description": "アドレスを削除する際にエラーが発生しました。既にルームが存在しないか、一時的なエラーが発生しました。",
+            "error_creating_alias_title": "アドレスを作成する際にエラーが発生しました",
+            "error_creating_alias_description": "アドレスを作成する際にエラーが発生しました。サーバーで許可されていないか、一時的な障害が発生した可能性があります。",
+            "canonical_alias_field_label": "メインアドレス",
+            "avatar_field_label": "ルームのアバター",
+            "aliases_no_items_label": "他の公開アドレスはまだありません。以下から追加できます",
+            "aliases_items_label": "他の公開アドレス："
         },
         "advanced": {
             "unfederated": "このルームはリモートのMatrixサーバーからアクセスできません",
@@ -3037,12 +2947,19 @@
             "verify_later": "後で認証",
             "verify_reset_warning_1": "認証鍵のリセットは取り消せません。リセットすると、以前の暗号化されたメッセージにはアクセスできなくなります。また、あなたのアカウントを認証した連絡先には、再認証するまで、セキュリティーに関する警告が表示されます。",
             "verify_reset_warning_2": "全ての端末とセキュリティーキーを紛失してしまったことが確かである場合にのみ、続行してください。",
-            "self_verification_hint": "続行するには、他の端末で認証リクエストを承認してください。",
             "waiting_for_user_accept": "%(displayName)sによる承認を待機しています…",
-            "accepting": "承認しています…",
             "start_button": "認証を開始",
+            "self_verification_hint": "続行するには、他の端末で認証リクエストを承認してください。",
             "error_starting_title": "認証を開始する際にエラーが発生しました",
-            "error_starting_description": "他のユーザーをチャットを開始できませんでした。"
+            "error_starting_description": "他のユーザーをチャットを開始できませんでした。",
+            "after_new_login": {
+                "unable_to_verify": "この端末を認証できません",
+                "verify_this_device": "この端末を認証",
+                "device_verified": "端末が認証されました",
+                "reset_confirmation": "本当に認証鍵をリセットしますか？",
+                "skip_verification": "認証をスキップ"
+            },
+            "accepting": "承認しています…"
         },
         "old_version_detected_title": "古い暗号化データが検出されました",
         "old_version_detected_description": "%(brand)sの古いバージョンのデータを検出しました。これにより、古いバージョンではエンドツーエンドの暗号化が機能しなくなります。古いバージョンを使用している間に最近交換されたエンドツーエンドの暗号化されたメッセージは、このバージョンでは復号化できません。また、このバージョンで交換されたメッセージが失敗することもあります。問題が発生した場合は、ログアウトして再度ログインしてください。メッセージ履歴を保持するには、鍵をエクスポートして再インポートしてください。",
@@ -3080,14 +2997,6 @@
             "explainer": "鍵を失くさないよう、サインアウトする前にバックアップしてください。",
             "title": "設定"
         },
-        "cross_signing_user_warning": "このユーザーは全てのセッションを確認していません。",
-        "cross_signing_user_normal": "あなたはこのユーザーを認証していません。",
-        "cross_signing_user_verified": "このユーザーを認証しました。このユーザーは全てのセッションを認証しました。",
-        "cross_signing_room_warning": "誰かが不明なセッションを使用しています",
-        "cross_signing_room_normal": "このルームはエンドツーエンドで暗号化されています",
-        "cross_signing_room_verified": "このルーム内の全員を認証済",
-        "event_shield_reason_authenticity_not_guaranteed": "この暗号化されたメッセージの真正性はこの端末では保証できません。",
-        "event_shield_reason_mismatched_sender_key": "未認証のセッションによる暗号化",
         "messages_not_secure": {
             "title": "あなたのメッセージは保護されていません",
             "heading": "次のいずれかのセキュリティーが破られている可能性があります。",
@@ -3095,7 +3004,15 @@
             "cause_2": "認証しようとしているユーザーが接続しているホームサーバー",
             "cause_3": "あなた、もしくは他のユーザーのインターネット接続",
             "cause_4": "あなた、もしくは他のユーザーのセッション"
-        }
+        },
+        "event_shield_reason_mismatched_sender_key": "未認証のセッションによる暗号化",
+        "event_shield_reason_authenticity_not_guaranteed": "この暗号化されたメッセージの真正性はこの端末では保証できません。",
+        "cross_signing_user_warning": "このユーザーは全てのセッションを確認していません。",
+        "cross_signing_user_verified": "このユーザーを認証しました。このユーザーは全てのセッションを認証しました。",
+        "cross_signing_user_normal": "あなたはこのユーザーを認証していません。",
+        "cross_signing_room_warning": "誰かが不明なセッションを使用しています",
+        "cross_signing_room_verified": "このルーム内の全員を認証済",
+        "cross_signing_room_normal": "このルームはエンドツーエンドで暗号化されています"
     },
     "emoji": {
         "category_frequently_used": "使用頻度の高いリアクション",
@@ -3241,7 +3158,8 @@
             "sso_failed": "本人確認を行う際に問題が発生しました。キャンセルして、もう一度やり直してください。",
             "fallback_button": "認証を開始",
             "sso_title": "シングルサインオンを使用して続行",
-            "sso_body": "シングルサインオンを使用して本人確認を行い、メールアドレスの追加を承認してください。"
+            "sso_body": "シングルサインオンを使用して本人確認を行い、メールアドレスの追加を承認してください。",
+            "code": "コード"
         },
         "password_field_label": "パスワードを入力してください",
         "password_field_strong_label": "素晴らしい、強固なパスワードです！",
@@ -3276,7 +3194,46 @@
         "failed_soft_logout_homeserver": "ホームサーバーの問題のため再認証に失敗しました",
         "soft_logout_subheading": "個人データを消去",
         "soft_logout_warning": "警告：あなたの個人データ（暗号化の鍵を含む）が、このセッションに保存されています。このセッションの使用を終了するか、他のアカウントにログインしたい場合は、そのデータを消去してください。",
-        "forgot_password_send_email": "電子メールを送信"
+        "forgot_password_send_email": "電子メールを送信",
+        "reset_password": {
+            "rate_limit_error": "再試行の数が多すぎます。少し待ってから再度試してください。",
+            "rate_limit_error_with_time": "再試行の数が多すぎます。%(timeout)s後に再度試してください。",
+            "other_devices_logout_warning_1": "端末からサインアウトすると、暗号化の鍵が削除され、暗号化された会話の履歴を読むことができなくなります。",
+            "other_devices_logout_warning_2": "暗号化されたルームの会話を今後も読み込めるようにしたい場合は、続行する前に、鍵のバックアップを設定するか、他の端末からメッセージの鍵をエクスポートしてください。",
+            "confirm_new_password": "新しいパスワードを確認",
+            "password_not_entered": "新しいパスワードを入力する必要があります。",
+            "passwords_mismatch": "新しいパスワードは互いに一致する必要があります。",
+            "sign_out_other_devices": "全ての端末からサインアウト",
+            "reset_successful": "パスワードを再設定しました。",
+            "devices_logout_success": "すべての端末からログアウトしているため、プッシュ通知を受け取れません。通知を再び有効にするには、各端末でサインインしてください。",
+            "return_to_login": "ログイン画面に戻る"
+        },
+        "qr_code_login": {
+            "sign_in_new_device": "新しい端末でサインイン",
+            "error_linking_incomplete": "時間内にリンクが完了しませんでした。",
+            "error_invalid_scanned_code": "スキャンされたコードは無効です。",
+            "error_device_unsupported": "この端末とのリンクはサポートしていません。",
+            "error_request_declined": "リクエストはもう一方の端末で拒否されました。",
+            "error_device_already_signed_in": "もう一方のデバイスは既にサインインしています。",
+            "error_device_not_signed_in": "もう一方の端末はサインインしていません。",
+            "error_request_cancelled": "リクエストはキャンセルされました。",
+            "error_unexpected": "予期しないエラーが発生しました。",
+            "error_homeserver_lacks_support": "ホームサーバーは他の端末でのサインインをサポートしていません。",
+            "devices_connected": "接続中の端末",
+            "confirm_code_match": "以下のコードが他の端末と一致していることを確認してください：",
+            "approve_access_warning": "この端末へのアクセスを許可すると、あなたのアカウントに完全にアクセスできるようになります。",
+            "scan_code_instruction": "サインアウトした端末で以下のQRコードをスキャンしてください。",
+            "start_at_sign_in_screen": "サインインの画面で開始",
+            "select_qr_code": "「%(scanQRCode)s」を選択",
+            "scan_qr_code": "QRコードをスキャン",
+            "review_and_approve": "サインインを確認して承認",
+            "connecting": "接続しています…",
+            "waiting_for_device": "端末のサインインを待機しています",
+            "completing_setup": "新しい端末の設定を完了しています"
+        },
+        "country_dropdown": "国一覧",
+        "common_failures": {},
+        "captcha_description": "このホームサーバーは、あなたがロボットではないことの確認を求めています。"
     },
     "room_list": {
         "sort_unread_first": "未読メッセージのあるルームを最初に表示",
@@ -3439,8 +3396,8 @@
         "unmaximise": "最大化をやめる",
         "popout": "ウィジェットをポップアウト",
         "unpin_to_view_right_panel": "ウィジェットの固定を解除して、このパネルに表示",
-        "close_to_view_right_panel": "ウィジェットを閉じて、このパネルに表示",
-        "set_room_layout": "このルームのレイアウトを参加者全体に設定"
+        "set_room_layout": "このルームのレイアウトを参加者全体に設定",
+        "close_to_view_right_panel": "ウィジェットを閉じて、このパネルに表示"
     },
     "feedback": {
         "sent": "フィードバックを送信しました",
@@ -3535,8 +3492,8 @@
         "empty_explainer": "スレッド機能を使うと、会話のテーマを維持したり、会話を簡単に追跡したりすることができます。",
         "empty_tip": "<b>ヒント：</b>メッセージの「%(replyInThread)s」機能を使用すると新しいスレッドを開始できます。",
         "empty_heading": "スレッド機能を使って、会話をまとめましょう",
-        "open_thread": "スレッドを開く",
-        "unable_to_decrypt": "メッセージを復号化できません"
+        "unable_to_decrypt": "メッセージを復号化できません",
+        "open_thread": "スレッドを開く"
     },
     "theme": {
         "light_high_contrast": "ライト（高コントラスト）",
@@ -3564,7 +3521,13 @@
         "invite_link": "招待リンクを共有",
         "invite": "連絡先を招待",
         "invite_description": "メールアドレスまたはユーザー名で招待",
-        "invite_this_space": "このスペースに招待"
+        "invite_this_space": "このスペースに招待",
+        "user_lacks_permission": "権限がありません",
+        "title_when_query_unavailable": "ルームとスペース",
+        "title_when_query_available": "結果",
+        "search_placeholder": "名前と説明文を検索",
+        "no_search_result_hint": "別のキーワードで検索するか、キーワードが正しいか確認してください。",
+        "joining_space": "参加しています"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "このホームサーバーは地図を表示するように設定されていません。",
@@ -3587,7 +3550,8 @@
         "live_share_button": "%(duration)sの間共有",
         "click_move_pin": "クリックしてピンを移動",
         "click_drop_pin": "クリックして位置情報を共有",
-        "share_button": "位置情報を共有"
+        "share_button": "位置情報を共有",
+        "stop_and_close": "停止して閉じる"
     },
     "labs_mjolnir": {
         "room_name": "マイブロックリスト",
@@ -3729,7 +3693,8 @@
             "hide_widgets_button": "ウィジェットを非表示にする",
             "show_widgets_button": "ウィジェットを表示",
             "close_call_button": "通話を終了",
-            "video_room_view_chat_button": "チャットのタイムラインを表示"
+            "video_room_view_chat_button": "チャットのタイムラインを表示",
+            "room_is_public": "このルームは公開されています"
         },
         "joining_space": "スペースに参加しています…",
         "joining_room": "ルームに参加しています…",
@@ -3780,18 +3745,40 @@
         "join_failed_needs_invite": "%(roomName)sを見るには招待が必要です",
         "view_failed_enable_video_rooms": "表示するには、まずラボのビデオ通話ルームを有効にしてください",
         "join_failed_enable_video_rooms": "参加するには、まずラボのビデオ通話ルームを有効にしてください",
-        "jump_to_bottom_button": "最新のメッセージを表示",
-        "show_labs_settings": "ラボの設定を表示",
-        "upgrade_warning_bar": "このルームをアップグレードすると、現在のルームの使用を終了し、アップグレードしたルームを同じ名前で作成します。",
+        "upload": {
+            "uploading_multiple_file": {
+                "other": "%(filename)sと他%(count)s件をアップロードしています",
+                "one": "%(filename)sと他%(count)s件をアップロードしています"
+            },
+            "uploading_single_file": "%(filename)sをアップロードしています"
+        },
         "upgrade_warning_bar_upgraded": "このルームは既にアップグレードされています。",
         "upgrade_warning_bar_unstable": "このルームはホームサーバーが<i>不安定</i>と判断したルームバージョン<roomVersion />で動作しています。",
         "upgrade_warning_bar_admins": "この警告はルームの管理者にのみ表示されます",
+        "upgrade_warning_bar": "このルームをアップグレードすると、現在のルームの使用を終了し、アップグレードしたルームを同じ名前で作成します。",
+        "status_bar": {
+            "requires_consent_agreement": "<consentLink>利用規約</consentLink> を確認して同意するまでは、いかなるメッセージも送信できません。",
+            "monthly_user_limit_reached": "このホームサーバーが月間アクティブユーザー制限を超えたため、メッセージを送信できませんでした。サービスを引き続き使用するには、<a>サービスの管理者にお問い合わせ</a>ください。",
+            "homeserver_blocked": "このホームサーバーが管理者によりブロックされているため、メッセージを送信できませんでした。サービスを引き続き使用するには、<a>サービスの管理者にお問い合わせ</a>ください。",
+            "exceeded_resource_limit": "このホームサーバーがリソース制限を超えたため、メッセージを送信できませんでした。サービスを引き続き使用するには、<a>サービスの管理者にお問い合わせ</a>ください。",
+            "some_messages_not_sent": "いくつかのメッセージが送信されませんでした",
+            "delete_all": "全て削除",
+            "retry_all": "全て再試行",
+            "select_messages_to_retry": "全てのメッセージ、あるいは個別のメッセージを選択して、再送を試みるか削除することができます",
+            "server_connectivity_lost_title": "サーバーとの接続が失われました。",
+            "server_connectivity_lost_description": "送信されたメッセージは、接続が復旧するまで保存されます。"
+        },
+        "show_labs_settings": "ラボの設定を表示",
         "search": {
             "this_room": "このルーム",
             "all_rooms": "全てのルーム",
             "field_placeholder": "検索…"
         },
-        "jump_read_marker": "最初の未読メッセージに移動。"
+        "jump_to_bottom_button": "最新のメッセージを表示",
+        "jump_read_marker": "最初の未読メッセージに移動。",
+        "inviter_unknown": "不明",
+        "failed_reject_invite": "招待を辞退できませんでした",
+        "creating_room_text": "%(names)sという名前のルームを作成しています"
     },
     "file_panel": {
         "guest_note": "この機能を使用するには<a>登録</a>する必要があります",
@@ -4006,10 +3993,6 @@
         "filter_placeholder": "ルームのメンバーを絞り込む",
         "power_label": "%(userName)s（権限レベル：%(powerLevelNumber)s）"
     },
-    "stickers": {
-        "empty": "現在、ステッカーパックが有効になっていません",
-        "empty_add_prompt": "今すぐ追加"
-    },
     "user_info": {
         "error_revoke_3pid_invite_title": "招待を取り消せませんでした",
         "error_revoke_3pid_invite_description": "招待を取り消すことができませんでした。サーバーで一時的な問題が発生しているか、招待を取り消すための十分な権限がありません。",
@@ -4063,6 +4046,10 @@
         "error_deactivate": "ユーザーの無効化に失敗しました",
         "role_label": "<RoomName/>での役割"
     },
+    "stickers": {
+        "empty": "現在、ステッカーパックが有効になっていません",
+        "empty_add_prompt": "今すぐ追加"
+    },
     "right_panel": {
         "pinned_messages": {
             "title": "固定メッセージ",
@@ -4086,5 +4073,47 @@
         "export_chat_button": "チャットをエクスポート",
         "share_button": "ルームを共有",
         "settings_button": "ルームの設定"
-    }
+    },
+    "reject_invitation_dialog": {
+        "title": "招待を辞退",
+        "confirmation": "招待を辞退してよろしいですか？",
+        "failed": "招待を辞退できませんでした"
+    },
+    "quit_warning": {
+        "file_upload_in_progress": "ファイルをアップロードしているようですが、中止しますか？",
+        "call_in_progress": "通話中のようですが、中止しますか？"
+    },
+    "no_more_results": "結果がありません",
+    "left_panel": {
+        "open_dial_pad": "ダイヤルパッドを開く"
+    },
+    "leave_room_dialog": {
+        "last_person_warning": "このルームの参加者はあなただけです。退出すると、今後あなたを含めて誰もこのルームに参加できなくなります。",
+        "space_rejoin_warning": "このスペースは公開されていません。再度参加するには、招待が必要です。",
+        "room_rejoin_warning": "このルームは公開されていません。再度参加するには、招待が必要です。",
+        "leave_space_question": "このスペース「%(spaceName)s」から退出してよろしいですか？",
+        "leave_room_question": "このルーム「%(roomName)s」から退出してよろしいですか？"
+    },
+    "error_dialog": {
+        "forget_room_failed": "ルームの履歴を消去するのに失敗しました %(errCode)s",
+        "copy_room_link_failed": {
+            "title": "ルームのリンクをコピーできません",
+            "description": "ルームのリンクをクリップボードにコピーできませんでした。"
+        },
+        "search_failed": {
+            "title": "検索に失敗しました",
+            "server_unavailable": "サーバーが使用できないか、オーバーロードしているか、または検索がタイムアウトした可能性があります :("
+        },
+        "error_loading_user_profile": "ユーザーのプロフィールを読み込めませんでした"
+    },
+    "console_wait": "お待ちください！",
+    "cant_load_page": "ページを読み込めませんでした",
+    "Invalid homeserver discovery response": "ホームサーバーのディスカバリー（発見）に関する不正な応答です",
+    "Failed to get autodiscovery configuration from server": "自動発見の設定をサーバーから取得できませんでした",
+    "Invalid base_url for m.homeserver": "m.homeserverの不正なbase_url",
+    "Homeserver URL does not appear to be a valid Matrix homeserver": "これは正しいMatrixのホームサーバーのURLではありません",
+    "Invalid identity server discovery response": "IDサーバーのディスカバリー（発見）に関する不正な応答です",
+    "Invalid base_url for m.identity_server": "m.identity_serverの不正なbase_url",
+    "Identity server URL does not appear to be a valid identity server": "これは正しいIDサーバーのURLではありません",
+    "General failure": "一般エラー"
 }

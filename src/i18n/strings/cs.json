@@ -21,40 +21,23 @@
     "Dec": "Pro",
     "Create new room": "Vytvořit novou místnost",
     "unknown error code": "neznámý kód chyby",
-    "Failed to forget room %(errCode)s": "Nepodařilo se zapomenout místnost %(errCode)s",
-    "A new password must be entered.": "Musíte zadat nové heslo.",
     "An error has occurred.": "Nastala chyba.",
-    "Are you sure you want to leave the room '%(roomName)s'?": "Opravdu chcete opustit místnost '%(roomName)s'?",
-    "Are you sure you want to reject the invitation?": "Opravdu chcete odmítnout pozvání?",
     "Custom level": "Vlastní úroveň",
     "Decrypt %(text)s": "Dešifrovat %(text)s",
     "Download %(text)s": "Stáhnout %(text)s",
     "Email address": "E-mailová adresa",
     "Error decrypting attachment": "Chyba při dešifrování přílohy",
-    "Failed to reject invitation": "Nepodařilo se odmítnout pozvání",
-    "Failed to reject invite": "Nepodařilo se odmítnout pozvánku",
     "and %(count)s others...": {
         "other": "a %(count)s další...",
         "one": "a někdo další..."
     },
     "Join Room": "Vstoupit do místnosti",
     "Moderator": "Moderátor",
-    "New passwords must match each other.": "Nová hesla se musí shodovat.",
     "not specified": "neurčeno",
     "AM": "dop.",
     "PM": "odp.",
-    "No more results": "Žádné další výsledky",
-    "Return to login screen": "Vrátit k přihlašovací obrazovce",
-    "Server may be unavailable, overloaded, or search timed out :(": "Server může být nedostupný, přetížený nebo vyhledávání vypršelo :(",
     "Session ID": "ID sezení",
     "Warning!": "Upozornění!",
-    "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Pokusili jste se načíst bod v časové ose místnosti, ale pro zobrazení zpráv z daného časového úseku nemáte oprávnění.",
-    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Pokusili jste se načíst bod na časové ose místnosti, ale nepodařilo se ho najít.",
-    "Uploading %(filename)s and %(count)s others": {
-        "zero": "Nahrávání souboru %(filename)s",
-        "one": "Nahrávání souboru %(filename)s a %(count)s dalších",
-        "other": "Nahrávání souboru %(filename)s a %(count)s dalších"
-    },
     "Verification Pending": "Čeká na ověření",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
@@ -62,14 +45,11 @@
     "Delete Widget": "Smazat widget",
     "Error decrypting image": "Chyba při dešifrování obrázku",
     "Error decrypting video": "Chyba při dešifrování videa",
-    "You seem to be uploading files, are you sure you want to quit?": "Zřejmě právě nahráváte soubory. Chcete přesto odejít?",
-    "You seem to be in a call, are you sure you want to quit?": "Zřejmě máte probíhající hovor. Chcete přesto odejít?",
     "Unnamed room": "Nepojmenovaná místnost",
     "(~%(count)s results)": {
         "other": "(~%(count)s výsledků)",
         "one": "(~%(count)s výsledek)"
     },
-    "Search failed": "Vyhledávání selhalo",
     "Add an Integration": "Přidat začlenění",
     "Restricted": "Omezené",
     "%(duration)ss": "%(duration)ss",
@@ -87,10 +67,6 @@
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Pokud jste se v minulosti již přihlásili s novější verzi programu %(brand)s, vaše relace nemusí být kompatibilní s touto verzí. Zavřete prosím toto okno a přihlaste se znovu pomocí nové verze.",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Zkontrolujte svou e-mailovou schránku a klepněte na odkaz ve zprávě, kterou jsme vám poslali. V případě, že jste to už udělali, klepněte na tlačítko Pokračovat.",
     "This will allow you to reset your password and receive notifications.": "Toto vám umožní obnovit si heslo a přijímat oznámení e-mailem.",
-    "Reject invitation": "Odmítnout pozvání",
-    "Connectivity to the server has been lost.": "Spojení se serverem bylo přerušeno.",
-    "Sent messages will be stored until your connection has returned.": "Odeslané zprávy zůstanou uložené, dokud se spojení znovu neobnoví.",
-    "Failed to load timeline position": "Nepodařilo se načíst pozici na časové ose",
     "Send": "Odeslat",
     "collapse": "sbalit",
     "expand": "rozbalit",
@@ -128,10 +104,6 @@
     "Share User": "Sdílet uživatele",
     "Share Room Message": "Sdílet zprávu z místnosti",
     "Link to selected message": "Odkaz na vybranou zprávu",
-    "This room is not public. You will not be able to rejoin without an invite.": "Tato místnost není veřejná. Bez pozvánky nebudete moci znovu vstoupit.",
-    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Dokud si nepřečtete a neodsouhlasíte <consentLink>naše smluvní podmínky</consentLink>, nebudete moci posílat žádné zprávy.",
-    "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Vaše zpráva nebyla odeslána, protože tento domovský server dosáhl svého měsíčního limitu pro aktivní uživatele. Pro další využívání služby prosím kontaktujte jejího <a>správce</a>.",
-    "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Vaše zpráva nebyla odeslána, protože tento domovský server dosáhl limitu svých zdrojů. Pro další využívání služby prosím kontaktujte jejího <a>správce</a>.",
     "Manually export keys": "Export klíčů",
     "You'll lose access to your encrypted messages": "Přijdete o přístup k šifrovaným zprávám",
     "Are you sure you want to sign out?": "Opravdu se chcete odhlásit?",
@@ -139,7 +111,6 @@
     "Failed to upgrade room": "Nezdařilo se aktualizovat místnost",
     "The room upgrade could not be completed": "Nepodařilo se dokončit aktualizaci místnosti",
     "Upgrade this room to version %(version)s": "Aktualizace místnosti na verzi %(version)s",
-    "General failure": "Nějaká chyba",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Šifrované zprávy jsou zabezpečené koncovým šifrováním. Klíče pro jejich dešifrování máte jen vy a příjemci zpráv.",
     "Start using Key Backup": "Začít používat zálohu klíčů",
     "Dog": "Pes",
@@ -223,18 +194,12 @@
     "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Uporoznění</b>: záloha by měla být prováděna na důvěryhodném počítači.",
     "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Na adrese %(host)s už jste použili %(brand)s se zapnutou volbou načítání členů místností až při prvním zobrazení. V této verzi je načítání členů až při prvním zobrazení vypnuté. Protože je s tímto nastavením lokální vyrovnávací paměť nekompatibilní, %(brand)s potřebuje znovu synchronizovat údaje z vašeho účtu.",
     "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s teď používá 3-5× méně paměti, protože si informace o ostatních uživatelích načítá až když je potřebuje. Prosím počkejte na dokončení synchronizace se serverem!",
-    "This homeserver would like to make sure you are not a robot.": "Domovský server se potřebuje přesvědčit, že nejste robot.",
-    "Invalid homeserver discovery response": "Neplatná odpověd při hledání domovského serveru",
-    "Invalid identity server discovery response": "Neplatná odpověď při hledání serveru identity",
     "Email (optional)": "E-mail (nepovinné)",
     "Join millions for free on the largest public server": "Přidejte k miliónům registrovaným na největším veřejném serveru",
-    "Couldn't load page": "Nepovedlo se načíst stránku",
-    "Your password has been reset.": "Heslo bylo resetováno.",
     "Scissors": "Nůžky",
     "Power level": "Úroveň oprávnění",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Abyste po odhlášení nepřišli o přístup k historii šifrovaných konverzací, měli byste si před odhlášením exportovat šifrovací klíče místností. Prosím vraťte se k novější verzi %(brand)su a exportujte si klíče",
     "Room Settings - %(roomName)s": "Nastavení místnosti - %(roomName)s",
-    "Could not load user profile": "Nepovedlo se načíst profil uživatele",
     "edited": "upraveno",
     "Notes": "Poznámky",
     "Sign out and remove encryption keys?": "Odhlásit a odstranit šifrovací klíče?",
@@ -255,11 +220,6 @@
     "Upload Error": "Chyba při nahrávání",
     "Remember my selection for this widget": "Zapamatovat si volbu pro tento widget",
     "Some characters not allowed": "Nějaké znaky jsou zakázané",
-    "Failed to get autodiscovery configuration from server": "Nepovedlo se načíst nastavení automatického objevování ze serveru",
-    "Invalid base_url for m.homeserver": "Neplatná base_url pro m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "Na URL domovského serveru asi není funkční Matrix server",
-    "Invalid base_url for m.identity_server": "Neplatná base_url pro m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "Na URL serveru identit asi není funkční Matrix server",
     "Deactivate account": "Deaktivace účtu",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Odeslat pozvánku pomocí serveru identit. <default>Použít výchozí (%(defaultIdentityServerName)s)</default> nebo přenastavit <settings>Nastavení</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Odeslat pozvánku pomocí serveru identit. Přenastavit v <settings>Nastavení</settings>.",
@@ -312,7 +272,6 @@
         "one": "1 ověřená relace"
     },
     "Language Dropdown": "Menu jazyků",
-    "Country Dropdown": "Menu států",
     "Lock": "Zámek",
     "This backup is trusted because it has been restored on this session": "Záloze věříme, protože už byla v této relaci načtena",
     "Encrypted by a deleted session": "Šifrované smazanou relací",
@@ -381,7 +340,6 @@
     "Your homeserver has exceeded its user limit.": "Na vašem domovském serveru byl překročen limit počtu uživatelů.",
     "Your homeserver has exceeded one of its resource limits.": "Na vašem domovském serveru byl překročen limit systémových požadavků.",
     "Ok": "Ok",
-    "This room is public": "Tato místnost je veřejná",
     "Edited at %(date)s": "Upraveno %(date)s",
     "Click to view edits": "Klikněte pro zobrazení úprav",
     "Room address": "Adresa místnosti",
@@ -713,7 +671,6 @@
     "Join the conference at the top of this room": "Připojte se ke konferenci v horní části této místnosti",
     "Transfer": "Přepojit",
     "A call can only be transferred to a single user.": "Hovor lze přepojit pouze jednomu uživateli.",
-    "Open dial pad": "Otevřít číselník",
     "Dial pad": "Číselník",
     "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "Pokud jste zapomněli bezpečnostní klíč, můžete <button>nastavit nové možnosti obnovení</button>",
     "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>": "Pokud jste zapomněli bezpečnostní frázi, můžete <button1>použít bezpečnostní klíč</button1> nebo <button2>nastavit nové možnosti obnovení</button2>",
@@ -737,8 +694,6 @@
         "one": "%(count)s člen",
         "other": "%(count)s členů"
     },
-    "Are you sure you want to leave the space '%(spaceName)s'?": "Opravdu chcete opustit prostor '%(spaceName)s'?",
-    "This space is not public. You will not be able to rejoin without an invite.": "Tento prostor není veřejný. Bez pozvánky se nebudete moci znovu připojit.",
     "Failed to start livestream": "Nepodařilo spustit živý přenos",
     "Unable to start audio streaming.": "Nelze spustit streamování zvuku.",
     "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Pozvěte někoho pomocí jeho jména, uživatelského jména (například <userId/>) nebo <a>sdílejte tento prostor</a>.",
@@ -749,13 +704,11 @@
     "Create a space": "Vytvořit prostor",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Toto obvykle ovlivňuje pouze to, jak je místnost zpracována na serveru. Pokud máte problémy s %(brand)s, nahlaste prosím chybu.",
     "<inviter/> invites you": "<inviter/> vás zve",
-    "You may want to try a different search or check for typos.": "Možná budete chtít zkusit vyhledat něco jiného nebo zkontrolovat překlepy.",
     "No results found": "Nebyly nalezeny žádné výsledky",
     "%(count)s rooms": {
         "one": "%(count)s místnost",
         "other": "%(count)s místností"
     },
-    "You don't have permission": "Nemáte povolení",
     "Invite to %(roomName)s": "Pozvat do %(roomName)s",
     "Edit devices": "Upravit zařízení",
     "%(count)s people you know have already joined": {
@@ -769,18 +722,12 @@
     "You most likely do not want to reset your event index store": "Pravděpodobně nechcete resetovat úložiště indexů událostí",
     "Reset event store": "Resetovat úložiště událostí",
     "Reset event store?": "Resetovat úložiště událostí?",
-    "Avatar": "Avatar",
-    "You are the only person here. If you leave, no one will be able to join in the future, including you.": "Jste zde jediná osoba. Pokud odejdete, nikdo se v budoucnu nebude moci připojit, včetně vás.",
     "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Pokud vše resetujete, začnete bez důvěryhodných relací, bez důvěryhodných uživatelů a možná nebudete moci zobrazit minulé zprávy.",
     "Only do this if you have no other device to complete verification with.": "Udělejte to, pouze pokud nemáte žádné jiné zařízení, se kterým byste mohli dokončit ověření.",
     "Reset everything": "Resetovat vše",
     "Forgotten or lost all recovery methods? <a>Reset all</a>": "Zapomněli nebo ztratili jste všechny metody obnovy? <a>Resetovat vše</a>",
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Pokud tak učiníte, nezapomeňte, že žádná z vašich zpráv nebude smazána, ale vyhledávání může být na několik okamžiků zpomaleno během opětovného vytvoření indexu",
-    "You can select all or individual messages to retry or delete": "Můžete vybrat všechny nebo jednotlivé zprávy, které chcete zkusit poslat znovu nebo odstranit",
     "Sending": "Odesílání",
-    "Retry all": "Zkusit všechny znovu",
-    "Delete all": "Smazat všechny",
-    "Some of your messages have not been sent": "Některé z vašich zpráv nebyly odeslány",
     "Including %(commaSeparatedMembers)s": "Včetně %(commaSeparatedMembers)s",
     "View all %(count)s members": {
         "one": "Zobrazit jednoho člena",
@@ -794,7 +741,6 @@
     "Not all selected were added": "Ne všechny vybrané byly přidány",
     "You are not allowed to view this server's rooms list": "Namáte oprávnění zobrazit seznam místností tohoto serveru",
     "Error processing voice message": "Chyba při zpracování hlasové zprávy",
-    "Search names and descriptions": "Hledat názvy a popisy",
     "You may contact me if you have any follow up questions": "V případě dalších dotazů se na mě můžete obrátit",
     "To leave the beta, visit your settings.": "Chcete-li opustit beta verzi, jděte do nastavení.",
     "Add reaction": "Přidat reakci",
@@ -806,7 +752,6 @@
     "You don't have permission to do this": "K tomu nemáte povolení",
     "Please provide an address": "Uveďte prosím adresu",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Inicializace vyhledávání zpráv se nezdařila, zkontrolujte <a>svá nastavení</a>",
-    "Unnamed audio": "Nepojmenovaný audio soubor",
     "Error processing audio message": "Došlo k chybě při zpracovávání hlasové zprávy",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Váš %(brand)s neumožňuje použít správce integrací. Kontaktujte prosím správce.",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Upozorňujeme, že aktualizací vznikne nová verze místnosti</b>. Všechny aktuální zprávy zůstanou v této archivované místnosti.",
@@ -819,14 +764,11 @@
     "Select spaces": "Vybrané prostory",
     "You're removing all spaces. Access will default to invite only": "Odstraňujete všechny prostory. Přístup bude ve výchozím nastavení pouze na pozvánky",
     "User Directory": "Adresář uživatelů",
-    "Error downloading audio": "Chyba při stahování audia",
     "No answer": "Žádná odpověď",
     "An unknown error occurred": "Došlo k neznámé chybě",
     "Their device couldn't start the camera or microphone": "Jejich zařízení nemohlo spustit kameru nebo mikrofon",
     "Connection failed": "Spojení se nezdařilo",
     "Could not connect media": "Nepodařilo se připojit média",
-    "Unable to copy a link to the room to the clipboard.": "Nelze zkopírovat odkaz na místnost do schránky.",
-    "Unable to copy room link": "Nelze zkopírovat odkaz na místnost",
     "The call is in an unknown state!": "Hovor je v neznámém stavu!",
     "Call back": "Zavolat zpět",
     "Add existing space": "Přidat stávající prostor",
@@ -850,8 +792,6 @@
     "Missed call": "Zmeškaný hovor",
     "Call declined": "Hovor odmítnut",
     "Unknown failure: %(reason)s": "Neznámá chyba: %(reason)s",
-    "Rooms and spaces": "Místnosti a prostory",
-    "Results": "Výsledky",
     "Some encryption parameters have been changed.": "Byly změněny některé parametry šifrování.",
     "To join a space you'll need an invite.": "Pro připojení k prostoru potřebujete pozvánku.",
     "Would you like to leave the rooms in this space?": "Chcete odejít z místností v tomto prostoru?",
@@ -861,8 +801,6 @@
     "Leave all rooms": "Odejít ze všech místností",
     "MB": "MB",
     "In reply to <a>this message</a>": "V odpovědi na <a>tuto zprávu</a>",
-    "Really reset verification keys?": "Opravdu chcete resetovat ověřovací klíče?",
-    "Skip verification for now": "Prozatím přeskočit ověřování",
     "Downloading": "Stahování",
     "%(count)s reply": {
         "one": "%(count)s odpověď",
@@ -870,7 +808,6 @@
     },
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Zadejte bezpečnostní frázi nebo <button>použijte bezpečnostní klíč</button> pro pokračování.",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Obnovte přístup ke svému účtu a šifrovací klíče uložené v této relaci. Bez nich nebudete moci číst všechny své zabezpečené zprávy v žádné relaci.",
-    "Joining": "Připojování",
     "If you can't see who you're looking for, send them your invite link below.": "Pokud nevidíte, koho hledáte, pošlete mu odkaz na pozvánku níže.",
     "In encrypted rooms, verify all users to ensure it's secure.": "V šifrovaných místnostech ověřte všechny uživatele, abyste zajistili bezpečnost komunikace.",
     "Thread options": "Možnosti vláken",
@@ -928,9 +865,6 @@
     "This address had invalid server or is already in use": "Tato adresa měla neplatný server nebo je již používána",
     "Missing domain separator e.g. (:domain.org)": "Chybí oddělovač domény, např. (:domain.org)",
     "Missing room name or separator e.g. (my-room:domain.org)": "Chybí název místnosti nebo oddělovač, např. (my-room:domain.org)",
-    "Device verified": "Zařízení ověřeno",
-    "Verify this device": "Ověřit toto zařízení",
-    "Unable to verify this device": "Nelze ověřit toto zařízení",
     "Verify other device": "Ověřit jiné zařízení",
     "You cancelled verification on your other device.": "Ověřování na jiném zařízení jste zrušili.",
     "Almost there! Is your other device showing the same shield?": "Už to skoro je! Zobrazuje vaše druhé zařízení stejný štít?",
@@ -940,7 +874,6 @@
     "Pick a date to jump to": "Vyberte datum, na které chcete přejít",
     "Jump to date": "Přejít na datum",
     "The beginning of the room": "Začátek místnosti",
-    "Wait!": "Pozor!",
     "This address does not point at this room": "Tato adresa neukazuje na tuto místnost",
     "Location": "Poloha",
     "Use <arrows/> to scroll": "K pohybu použijte <arrows/>",
@@ -996,9 +929,6 @@
     "You will not be able to reactivate your account": "Účet nebude možné znovu aktivovat",
     "Confirm that you would like to deactivate your account. If you proceed:": "Potvrďte, že chcete deaktivovat svůj účet. Pokud budete pokračovat:",
     "To continue, please enter your account password:": "Pro pokračování zadejte heslo k účtu:",
-    "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Byli jste odhlášeni ze všech zařízení a již nebudete dostávat push oznámení. Chcete-li oznámení znovu povolit, znovu se přihlaste na každém zařízení.",
-    "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "Pokud si chcete zachovat přístup k historii chatu v zašifrovaných místnostech, nastavte si zálohování klíčů nebo exportujte klíče zpráv z některého z dalších zařízení, než budete pokračovat.",
-    "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "Odhlášením zařízení odstraníte šifrovací klíče zpráv, které jsou v nich uloženy, a historie zašifrovaných chatů tak nebude čitelná.",
     "An error occurred while stopping your live location": "Při ukončování sdílení polohy živě došlo k chybě",
     "%(members)s and %(last)s": "%(members)s a %(last)s",
     "%(members)s and more": "%(members)s a více",
@@ -1006,7 +936,6 @@
     "Cameras": "Kamery",
     "Output devices": "Výstupní zařízení",
     "Input devices": "Vstupní zařízení",
-    "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.": "Vaše zpráva nebyla odeslána, protože tento domovský server byl zablokován jeho správcem. Pokud chcete pokračovat v používání služby, <a>kontaktujte správce služby</a>.",
     "An error occurred whilst sharing your live location, please try again": "Při sdílení vaší polohy živě došlo k chybě, zkuste to prosím znovu",
     "An error occurred whilst sharing your live location": "Při sdílení vaší polohy živě došlo k chybě",
     "Unread email icon": "Ikona nepřečteného e-mailu",
@@ -1032,7 +961,6 @@
     "Show spaces": "Zobrazit prostory",
     "Show rooms": "Zobrazit místnosti",
     "Explore public spaces in the new search dialog": "Prozkoumejte veřejné prostory v novém dialogu vyhledávání",
-    "Stop and close": "Zastavit a zavřít",
     "You need to have the right permissions in order to share locations in this room.": "Ke sdílení polohy v této místnosti musíte mít správná oprávnění.",
     "You don't have permission to share locations": "Nemáte oprávnění ke sdílení polohy",
     "Who will you chat to the most?": "S kým si budete povídat nejčastěji?",
@@ -1044,36 +972,13 @@
     "Messages in this chat will be end-to-end encrypted.": "Zprávy v této místnosti budou koncově šifrovány.",
     "Saved Items": "Uložené položky",
     "Choose a locale": "Zvolte jazyk",
-    "We're creating a room with %(names)s": "Vytváříme místnost s %(names)s",
     "Interactively verify by emoji": "Interaktivní ověření pomocí emoji",
     "Manually verify by text": "Ruční ověření pomocí textu",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s nebo %(recoveryFile)s",
     "Video call ended": "Videohovor ukončen",
     "%(name)s started a video call": "%(name)s zahájil(a) videohovor",
-    "Completing set up of your new device": "Dokončování nastavení nového zařízení",
-    "Waiting for device to sign in": "Čekání na přihlášení zařízení",
-    "Review and approve the sign in": "Zkontrolovat a schválit přihlášení",
-    "Start at the sign in screen": "Začněte na přihlašovací obrazovce",
-    "Scan the QR code below with your device that's signed out.": "Níže uvedený QR kód naskenujte pomocí přihlašovaného zařízení.",
-    "By approving access for this device, it will have full access to your account.": "Schválením přístupu tohoto zařízení získá zařízení plný přístup k vašemu účtu.",
-    "Check that the code below matches with your other device:": "Zkontrolujte, zda se níže uvedený kód shoduje s vaším dalším zařízením:",
-    "Devices connected": "Zařízení byla propojena",
-    "The homeserver doesn't support signing in another device.": "Domovský server nepodporuje přihlášení pomocí jiného zařízení.",
-    "An unexpected error occurred.": "Došlo k neočekávané chybě.",
-    "The request was cancelled.": "Požadavek byl zrušen.",
-    "The other device isn't signed in.": "Druhé zařízení není přihlášeno.",
-    "The other device is already signed in.": "Druhé zařízení je již přihlášeno.",
-    "The request was declined on the other device.": "Požadavek byl na druhém zařízení odmítnut.",
-    "Linking with this device is not supported.": "Propojení s tímto zařízením není podporováno.",
-    "The scanned code is invalid.": "Naskenovaný kód je neplatný.",
-    "The linking wasn't completed in the required time.": "Propojení nebylo dokončeno v požadovaném čase.",
-    "Sign in new device": "Přihlásit nové zařízení",
     "Error downloading image": "Chyba při stahování obrázku",
     "Unable to show image due to error": "Obrázek nelze zobrazit kvůli chybě",
-    "Sign out of all devices": "Odhlásit se ze všech zařízení",
-    "Confirm new password": "Potvrďte nové heslo",
-    "Too many attempts in a short time. Retry after %(timeout)s.": "Příliš mnoho pokusů v krátkém čase. Zkuste to znovu po %(timeout)s.",
-    "Too many attempts in a short time. Wait some time before trying again.": "Příliš mnoho pokusů v krátkém čase. Před dalším pokusem nějakou dobu počkejte.",
     "Thread root ID: %(threadRootId)s": "ID kořenového vlákna: %(threadRootId)s",
     "<w>WARNING:</w> <description/>": "<w>UPOZORNĚNÍ:</w> <description/>",
     " in <strong>%(room)s</strong>": " v <strong>%(room)s</strong>",
@@ -1084,10 +989,7 @@
     "Declining…": "Odmítání…",
     "There are no past polls in this room": "V této místnosti nejsou žádná minulá hlasování",
     "There are no active polls in this room": "V této místnosti nejsou žádná aktivní hlasování",
-    "Scan QR code": "Skenovat QR kód",
-    "Select '%(scanQRCode)s'": "Vybrat '%(scanQRCode)s'",
     "Enable '%(manageIntegrations)s' in Settings to do this.": "Pro provedení povolte v Nastavení položku '%(manageIntegrations)s'.",
-    "Connecting…": "Připojování…",
     "Loading live location…": "Načítání polohy živě…",
     "Fetching keys from server…": "Načítání klíčů ze serveru…",
     "Checking…": "Kontrola…",
@@ -1130,8 +1032,6 @@
     "Start DM anyway": "Zahájit přímou zprávu i přesto",
     "Start DM anyway and never warn me again": "Zahájit přímou zprávu i přesto a nikdy už mě nevarovat",
     "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "Není možné najít uživatelské profily pro níže uvedené Matrix ID - chcete přesto založit DM?",
-    "Once invited users have joined %(brand)s, you will be able to chat and the room will be end-to-end encrypted": "Jakmile se pozvaní uživatelé připojí k %(brand)s, budete moci chatovat a místnost bude koncově šifrovaná",
-    "Waiting for users to join %(brand)s": "Čekání na připojení uživatelů k %(brand)s",
     "Note that removing room changes like this could undo the change.": "Upozorňujeme, že odstranění takových změn v místnosti by mohlo vést ke zrušení změny.",
     "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.": "Zprávy jsou zde koncově šifrovány. Ověřte %(displayName)s v jeho profilu - klepněte na jeho profilový obrázek.",
     "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "Zprávy v této místnosti jsou koncově šifrovány. Když lidé vstoupí, můžete je ověřit v jejich profilu, stačí klepnout na jejich profilový obrázek.",
@@ -1256,10 +1156,11 @@
         "historical": "Historické",
         "go_to_settings": "Přejít do nastavení",
         "setup_secure_messages": "Nastavit bezpečné obnovení zpráv",
-        "unencrypted": "Nezašifrované",
         "view_message": "Zobrazit zprávu",
-        "joined": "Připojeno",
+        "unencrypted": "Nezašifrované",
         "show_more": "Více",
+        "joined": "Připojeno",
+        "avatar": "Avatar",
         "are_you_sure": "Opravdu?"
     },
     "action": {
@@ -1598,17 +1499,16 @@
         "format_italics": "Kurzívou",
         "format_insert_link": "Vložit odkaz",
         "replying_title": "Odpovídá",
-        "edit_composer_label": "Upravit zprávu",
-        "send_voice_message": "Odeslat hlasovou zprávu",
         "stop_voice_message": "Zastavit nahrávání",
+        "send_voice_message": "Odeslat hlasovou zprávu",
         "link_modal": {
             "title_edit": "Upravit odkaz",
             "title_create": "Vytvořit odkaz",
             "text_field_label": "Text",
             "link_field_label": "Odkaz"
-        }
+        },
+        "edit_composer_label": "Upravit zprávu"
     },
-    "Code": "Kód",
     "power_level": {
         "default": "Výchozí",
         "restricted": "Omezené",
@@ -2708,18 +2608,27 @@
             "other": "Vidělo %(count)s lidí"
         },
         "read_receipts_label": "Potvrzení o přečtení",
-        "thread_info_basic": "Z vlákna",
-        "error_no_renderer": "Tato událost nemohla být zobrazena",
         "undecryptable_tooltip": "Tuto zprávu se nepodařilo dešifrovat",
-        "send_state_sending": "Odeslání zprávy…",
-        "send_state_encrypting": "Šifrování zprávy…",
+        "thread_info_basic": "Z vlákna",
         "send_state_sent": "Zpráva byla odeslána",
+        "send_state_sending": "Odeslání zprávy…",
         "send_state_failed": "Odeslání se nezdařilo",
+        "send_state_encrypting": "Šifrování zprávy…",
         "mab": {
             "label": "Akce zprávy",
             "view_in_room": "Zobrazit v místnosti",
             "copy_link_thread": "Kopírovat odkaz na vlákno"
-        }
+        },
+        "m.audio": {
+            "unnamed_audio": "Nepojmenovaný audio soubor",
+            "error_downloading_audio": "Chyba při stahování audia"
+        },
+        "load_error": {
+            "no_permission": "Pokusili jste se načíst bod v časové ose místnosti, ale pro zobrazení zpráv z daného časového úseku nemáte oprávnění.",
+            "unable_to_find": "Pokusili jste se načíst bod na časové ose místnosti, ale nepodařilo se ho najít.",
+            "title": "Nepodařilo se načíst pozici na časové ose"
+        },
+        "error_no_renderer": "Tato událost nemohla být zobrazena"
     },
     "slash_command": {
         "spoiler": "Odešle danou zprávu jako spoiler",
@@ -2825,7 +2734,6 @@
         "offline": "Offline",
         "away": "Pryč"
     },
-    "Unknown": "Neznámý",
     "event_preview": {
         "m.call.answer": {
             "you": "Připojili jste se k hovoru",
@@ -3071,31 +2979,31 @@
             "leave_space": "Opustit prostor",
             "aliases_section": "Adresy místnosti",
             "other_section": "Další možnosti",
-            "error_updating_canonical_alias_title": "Nepovedlo se změnit hlavní adresu",
-            "error_updating_canonical_alias_description": "Nastala chyba při pokusu o nastavení hlavní adresy místnosti. Mohl to zakázat server, nebo to může být dočasná chyba.",
-            "error_updating_alias_description": "Nepovedlo se změnit alternativní adresy místnosti. Možná to server neumožňuje a nebo je to dočasná chyba.",
-            "error_creating_alias_title": "Chyba při tvorbě adresy",
-            "error_creating_alias_description": "Při vytváření adresy došlo k chybě. Mohl to zakázat server, nebo mohlo dojít k dočasnému selhání.",
-            "error_deleting_alias_description_forbidden": "Nemáte oprávnění adresu smazat.",
-            "error_deleting_alias_description": "Při odstraňování adresy došlo k chybě. Adresa již nemusí ekzistovat, nebo mohlo dojít k dočasné chybě.",
-            "error_deleting_alias_title": "Chyba při odstraňování adresy",
-            "canonical_alias_field_label": "Hlavní adresa",
-            "no_aliases_space": "Tento prostor nemá žádné místní adresy",
-            "no_aliases_room": "Tato místnost nemá žádné místní adresy",
-            "local_alias_field_label": "Lokální adresa",
+            "topic_field_label": "Téma místnosti",
             "published_aliases_section": "Publikovaná adresa",
             "published_aliases_explainer_space": "Zveřejněné adresy může použít kdokoli na jakémkoli serveru, aby se připojil k vašemu prostoru.",
             "published_aliases_explainer_room": "Zveřejněné adresy může použít kdokoli na jakémkoli serveru, aby se připojil k vaší místnosti.",
             "published_aliases_description": "Chcete-li adresu zveřejnit, je třeba ji nejprve nastavit jako místní adresu.",
-            "aliases_items_label": "Další publikované adresy:",
-            "aliases_no_items_label": "Zatím žádné další publikované adresy, přidejte nějakou níže",
+            "no_aliases_space": "Tento prostor nemá žádné místní adresy",
+            "no_aliases_room": "Tato místnost nemá žádné místní adresy",
             "new_alias_placeholder": "Nové publikované adresy (například #alias:server)",
+            "name_field_label": "Název místnosti",
             "local_aliases_section": "Lokální Adresy",
             "local_aliases_explainer_space": "Nastavte adresy pro tento prostor, aby jej uživatelé mohli najít prostřednictvím domovského serveru (%(localDomain)s)",
             "local_aliases_explainer_room": "Nastavit adresy pro tuto místnost, aby uživatelé mohli místnost najít zkrze váš domovský server (%(localDomain)s)",
-            "name_field_label": "Název místnosti",
-            "topic_field_label": "Téma místnosti",
-            "avatar_field_label": "Avatar místnosti"
+            "local_alias_field_label": "Lokální adresa",
+            "error_updating_canonical_alias_title": "Nepovedlo se změnit hlavní adresu",
+            "error_updating_canonical_alias_description": "Nastala chyba při pokusu o nastavení hlavní adresy místnosti. Mohl to zakázat server, nebo to může být dočasná chyba.",
+            "error_updating_alias_description": "Nepovedlo se změnit alternativní adresy místnosti. Možná to server neumožňuje a nebo je to dočasná chyba.",
+            "error_deleting_alias_title": "Chyba při odstraňování adresy",
+            "error_deleting_alias_description_forbidden": "Nemáte oprávnění adresu smazat.",
+            "error_deleting_alias_description": "Při odstraňování adresy došlo k chybě. Adresa již nemusí ekzistovat, nebo mohlo dojít k dočasné chybě.",
+            "error_creating_alias_title": "Chyba při tvorbě adresy",
+            "error_creating_alias_description": "Při vytváření adresy došlo k chybě. Mohl to zakázat server, nebo mohlo dojít k dočasnému selhání.",
+            "canonical_alias_field_label": "Hlavní adresa",
+            "avatar_field_label": "Avatar místnosti",
+            "aliases_no_items_label": "Zatím žádné další publikované adresy, přidejte nějakou níže",
+            "aliases_items_label": "Další publikované adresy:"
         },
         "advanced": {
             "unfederated": "Tato místnost není přístupná vzdáleným Matrix serverům",
@@ -3201,12 +3109,19 @@
             "verify_later": "Ověřím se později",
             "verify_reset_warning_1": "Resetování ověřovacích klíčů nelze vrátit zpět. Po jejich resetování nebudete mít přístup ke starým zašifrovaným zprávám a všem přátelům, kteří vás dříve ověřili, se zobrazí bezpečnostní varování, dokud se u nich znovu neověříte.",
             "verify_reset_warning_2": "Pokračujte pouze v případě, že jste si jisti, že jste ztratili všechna ostatní zařízení a bezpečnostní klíč.",
-            "self_verification_hint": "Pro pokračování, přijměte žádost o ověření na svém dalším zařízení.",
             "waiting_for_user_accept": "Čekáme, než %(displayName)s výzvu přijme…",
-            "accepting": "Přijímání…",
             "start_button": "Zahájit ověření",
+            "self_verification_hint": "Pro pokračování, přijměte žádost o ověření na svém dalším zařízení.",
             "error_starting_title": "Chyba při zahájení ověření",
-            "error_starting_description": "Nepodařilo se zahájit chat s druhým uživatelem."
+            "error_starting_description": "Nepodařilo se zahájit chat s druhým uživatelem.",
+            "after_new_login": {
+                "unable_to_verify": "Nelze ověřit toto zařízení",
+                "verify_this_device": "Ověřit toto zařízení",
+                "device_verified": "Zařízení ověřeno",
+                "reset_confirmation": "Opravdu chcete resetovat ověřovací klíče?",
+                "skip_verification": "Prozatím přeskočit ověřování"
+            },
+            "accepting": "Přijímání…"
         },
         "old_version_detected_title": "Nalezeny starší šifrované datové zprávy",
         "old_version_detected_description": "Byla zjištěna data ze starší verze %(brand)s. To bude mít za následek nefunkčnost koncové kryptografie ve starší verzi. Koncově šifrované zprávy vyměněné nedávno při používání starší verze nemusí být v této verzi dešifrovatelné. To může také způsobit selhání zpráv vyměňovaných s touto verzí. Pokud narazíte na problémy, odhlaste se a znovu se přihlaste. Chcete-li zachovat historii zpráv, exportujte a znovu importujte klíče.",
@@ -3244,14 +3159,6 @@
             "explainer": "Před odhlášením si zazálohujte klíče abyste o ně nepřišli.",
             "title": "Nastavit"
         },
-        "cross_signing_user_warning": "Tento uživatel zatím neověřil všechny své relace.",
-        "cross_signing_user_normal": "Tohoto uživatele jste neověřili.",
-        "cross_signing_user_verified": "Tohoto uživatele jste ověřili a on ověřil všechny své relace.",
-        "cross_signing_room_warning": "Někdo používá neznámou relaci",
-        "cross_signing_room_normal": "Místnost je koncově šifrovaná",
-        "cross_signing_room_verified": "V této místnosti jsou všichni ověřeni",
-        "event_shield_reason_authenticity_not_guaranteed": "Pravost této šifrované zprávy nelze na tomto zařízení ověřit.",
-        "event_shield_reason_mismatched_sender_key": "Šifrované neověřenou relací",
         "messages_not_secure": {
             "title": "Vaše zprávy nejsou zabezpečené",
             "heading": "Něco z následujích věcí může být kompromitováno:",
@@ -3259,7 +3166,15 @@
             "cause_2": "Domovský server, ke kterému je ověřovaný uživatel připojen",
             "cause_3": "Vaše internetové připojení nebo připojení ostatních uživatelů",
             "cause_4": "Vaše relace nebo relace ostatních uživatelů"
-        }
+        },
+        "event_shield_reason_mismatched_sender_key": "Šifrované neověřenou relací",
+        "event_shield_reason_authenticity_not_guaranteed": "Pravost této šifrované zprávy nelze na tomto zařízení ověřit.",
+        "cross_signing_user_warning": "Tento uživatel zatím neověřil všechny své relace.",
+        "cross_signing_user_verified": "Tohoto uživatele jste ověřili a on ověřil všechny své relace.",
+        "cross_signing_user_normal": "Tohoto uživatele jste neověřili.",
+        "cross_signing_room_warning": "Někdo používá neznámou relaci",
+        "cross_signing_room_verified": "V této místnosti jsou všichni ověřeni",
+        "cross_signing_room_normal": "Místnost je koncově šifrovaná"
     },
     "emoji": {
         "category_frequently_used": "Často používané",
@@ -3408,7 +3323,8 @@
             "sso_failed": "Při ověřování vaší identity se něco pokazilo. Zrušte to a zkuste to znovu.",
             "fallback_button": "Zahájit autentizaci",
             "sso_title": "Pokračovat pomocí Jednotného přihlášení",
-            "sso_body": "Potvrďte přidání této adresy pomocí Jednotného přihlášení."
+            "sso_body": "Potvrďte přidání této adresy pomocí Jednotného přihlášení.",
+            "code": "Kód"
         },
         "password_field_label": "Zadejte heslo",
         "password_field_strong_label": "Super, to vypadá jako rozumné heslo!",
@@ -3445,7 +3361,46 @@
         "failed_soft_logout_homeserver": "Kvůli problémům s domovským server se nepovedlo autentifikovat znovu",
         "soft_logout_subheading": "Smazat osobní data",
         "soft_logout_warning": "Upozornění: vaše osobní údaje (včetně šifrovacích klíčů) jsou v této relaci stále uloženy. Pokud jste s touto relací skončili nebo se chcete přihlásit k jinému účtu, vymažte ji.",
-        "forgot_password_send_email": "Odeslat e-mail"
+        "forgot_password_send_email": "Odeslat e-mail",
+        "reset_password": {
+            "rate_limit_error": "Příliš mnoho pokusů v krátkém čase. Před dalším pokusem nějakou dobu počkejte.",
+            "rate_limit_error_with_time": "Příliš mnoho pokusů v krátkém čase. Zkuste to znovu po %(timeout)s.",
+            "other_devices_logout_warning_1": "Odhlášením zařízení odstraníte šifrovací klíče zpráv, které jsou v nich uloženy, a historie zašifrovaných chatů tak nebude čitelná.",
+            "other_devices_logout_warning_2": "Pokud si chcete zachovat přístup k historii chatu v zašifrovaných místnostech, nastavte si zálohování klíčů nebo exportujte klíče zpráv z některého z dalších zařízení, než budete pokračovat.",
+            "confirm_new_password": "Potvrďte nové heslo",
+            "password_not_entered": "Musíte zadat nové heslo.",
+            "passwords_mismatch": "Nová hesla se musí shodovat.",
+            "sign_out_other_devices": "Odhlásit se ze všech zařízení",
+            "reset_successful": "Heslo bylo resetováno.",
+            "devices_logout_success": "Byli jste odhlášeni ze všech zařízení a již nebudete dostávat push oznámení. Chcete-li oznámení znovu povolit, znovu se přihlaste na každém zařízení.",
+            "return_to_login": "Vrátit k přihlašovací obrazovce"
+        },
+        "qr_code_login": {
+            "sign_in_new_device": "Přihlásit nové zařízení",
+            "error_linking_incomplete": "Propojení nebylo dokončeno v požadovaném čase.",
+            "error_invalid_scanned_code": "Naskenovaný kód je neplatný.",
+            "error_device_unsupported": "Propojení s tímto zařízením není podporováno.",
+            "error_request_declined": "Požadavek byl na druhém zařízení odmítnut.",
+            "error_device_already_signed_in": "Druhé zařízení je již přihlášeno.",
+            "error_device_not_signed_in": "Druhé zařízení není přihlášeno.",
+            "error_request_cancelled": "Požadavek byl zrušen.",
+            "error_unexpected": "Došlo k neočekávané chybě.",
+            "error_homeserver_lacks_support": "Domovský server nepodporuje přihlášení pomocí jiného zařízení.",
+            "devices_connected": "Zařízení byla propojena",
+            "confirm_code_match": "Zkontrolujte, zda se níže uvedený kód shoduje s vaším dalším zařízením:",
+            "approve_access_warning": "Schválením přístupu tohoto zařízení získá zařízení plný přístup k vašemu účtu.",
+            "scan_code_instruction": "Níže uvedený QR kód naskenujte pomocí přihlašovaného zařízení.",
+            "start_at_sign_in_screen": "Začněte na přihlašovací obrazovce",
+            "select_qr_code": "Vybrat '%(scanQRCode)s'",
+            "scan_qr_code": "Skenovat QR kód",
+            "review_and_approve": "Zkontrolovat a schválit přihlášení",
+            "connecting": "Připojování…",
+            "waiting_for_device": "Čekání na přihlášení zařízení",
+            "completing_setup": "Dokončování nastavení nového zařízení"
+        },
+        "country_dropdown": "Menu států",
+        "common_failures": {},
+        "captcha_description": "Domovský server se potřebuje přesvědčit, že nejste robot."
     },
     "room_list": {
         "sort_unread_first": "Zobrazovat místnosti s nepřečtenými zprávami jako první",
@@ -3617,8 +3572,8 @@
         "unmaximise": "Zrušit maximalizaci",
         "popout": "Otevřít widget v novém okně",
         "unpin_to_view_right_panel": "Odepnout tento widget a zobrazit ho na tomto panelu",
-        "close_to_view_right_panel": "Zavřít tento widget a zobrazit ho na tomto panelu",
-        "set_room_layout": "Nastavit všem rozložení mé místnosti"
+        "set_room_layout": "Nastavit všem rozložení mé místnosti",
+        "close_to_view_right_panel": "Zavřít tento widget a zobrazit ho na tomto panelu"
     },
     "feedback": {
         "sent": "Zpětná vazba byla odeslána",
@@ -3713,8 +3668,8 @@
         "empty_explainer": "Vlákna pomáhají udržovat konverzace k tématu a snadno je sledovat.",
         "empty_tip": "<b>Tip:</b> Použijte \"%(replyInThread)s\" při najetí na zprávu.",
         "empty_heading": "Udržujte diskuse organizované pomocí vláken",
-        "open_thread": "Otevřít vlákno",
-        "unable_to_decrypt": "Nepodařilo se dešifrovat zprávu"
+        "unable_to_decrypt": "Nepodařilo se dešifrovat zprávu",
+        "open_thread": "Otevřít vlákno"
     },
     "theme": {
         "light_high_contrast": "Světlý vysoký kontrast",
@@ -3742,7 +3697,13 @@
         "invite_link": "Sdílet odkaz na pozvánku",
         "invite": "Pozvat lidi",
         "invite_description": "Pozvěte e-mailem nebo uživatelským jménem",
-        "invite_this_space": "Pozvat do tohoto prostoru"
+        "invite_this_space": "Pozvat do tohoto prostoru",
+        "user_lacks_permission": "Nemáte povolení",
+        "title_when_query_unavailable": "Místnosti a prostory",
+        "title_when_query_available": "Výsledky",
+        "search_placeholder": "Hledat názvy a popisy",
+        "no_search_result_hint": "Možná budete chtít zkusit vyhledat něco jiného nebo zkontrolovat překlepy.",
+        "joining_space": "Připojování"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Tento domovský server není nakonfigurován pro zobrazování map.",
@@ -3766,7 +3727,8 @@
         "live_share_button": "Sdílet na %(duration)s",
         "click_move_pin": "Kliknutím přesunete špendlík",
         "click_drop_pin": "Kliknutím umístíte špendlík",
-        "share_button": "Sdílet polohu"
+        "share_button": "Sdílet polohu",
+        "stop_and_close": "Zastavit a zavřít"
     },
     "labs_mjolnir": {
         "room_name": "Můj seznam zablokovaných",
@@ -3915,7 +3877,8 @@
             "hide_widgets_button": "Skrýt widgety",
             "show_widgets_button": "Zobrazit widgety",
             "close_call_button": "Zavřít hovor",
-            "video_room_view_chat_button": "Zobrazit časovou osu konverzace"
+            "video_room_view_chat_button": "Zobrazit časovou osu konverzace",
+            "room_is_public": "Tato místnost je veřejná"
         },
         "error_3pid_invite_email_lookup": "Nelze najít uživatele podle e-mailu",
         "joining_space": "Připojování k prostoru…",
@@ -3975,12 +3938,32 @@
         "join_failed_needs_invite": "Pro zobrazení %(roomName)s potřebujete pozvánku",
         "view_failed_enable_video_rooms": "Pro zobrazení, povolte prosím nejprve video místnosti v Experimentálních funkcích",
         "join_failed_enable_video_rooms": "Pro vstup, povolte prosím nejprve video místnosti v Experimentálních funkcích",
-        "jump_to_bottom_button": "Přejít na poslední zprávy",
-        "show_labs_settings": "Zobrazit nastavení Experimentálních funkcí",
-        "upgrade_warning_bar": "Aktualizace místnosti uzavře její aktuální verzi a vyrobí novou místnost se stejným názvem a novou verzí.",
+        "waiting_for_join_title": "Čekání na připojení uživatelů k %(brand)s",
+        "waiting_for_join_subtitle": "Jakmile se pozvaní uživatelé připojí k %(brand)s, budete moci chatovat a místnost bude koncově šifrovaná",
+        "upload": {
+            "uploading_multiple_file": {
+                "zero": "Nahrávání souboru %(filename)s",
+                "one": "Nahrávání souboru %(filename)s a %(count)s dalších",
+                "other": "Nahrávání souboru %(filename)s a %(count)s dalších"
+            }
+        },
         "upgrade_warning_bar_upgraded": "Tato místnost byla již aktualizována.",
         "upgrade_warning_bar_unstable": "Tato místnost běží na verzi <roomVersion />, což domovský server označuje za <i>nestabilní</i>.",
         "upgrade_warning_bar_admins": "Toto upozornění uvidí jen správci místnosti",
+        "upgrade_warning_bar": "Aktualizace místnosti uzavře její aktuální verzi a vyrobí novou místnost se stejným názvem a novou verzí.",
+        "status_bar": {
+            "requires_consent_agreement": "Dokud si nepřečtete a neodsouhlasíte <consentLink>naše smluvní podmínky</consentLink>, nebudete moci posílat žádné zprávy.",
+            "monthly_user_limit_reached": "Vaše zpráva nebyla odeslána, protože tento domovský server dosáhl svého měsíčního limitu pro aktivní uživatele. Pro další využívání služby prosím kontaktujte jejího <a>správce</a>.",
+            "homeserver_blocked": "Vaše zpráva nebyla odeslána, protože tento domovský server byl zablokován jeho správcem. Pokud chcete pokračovat v používání služby, <a>kontaktujte správce služby</a>.",
+            "exceeded_resource_limit": "Vaše zpráva nebyla odeslána, protože tento domovský server dosáhl limitu svých zdrojů. Pro další využívání služby prosím kontaktujte jejího <a>správce</a>.",
+            "some_messages_not_sent": "Některé z vašich zpráv nebyly odeslány",
+            "delete_all": "Smazat všechny",
+            "retry_all": "Zkusit všechny znovu",
+            "select_messages_to_retry": "Můžete vybrat všechny nebo jednotlivé zprávy, které chcete zkusit poslat znovu nebo odstranit",
+            "server_connectivity_lost_title": "Spojení se serverem bylo přerušeno.",
+            "server_connectivity_lost_description": "Odeslané zprávy zůstanou uložené, dokud se spojení znovu neobnoví."
+        },
+        "show_labs_settings": "Zobrazit nastavení Experimentálních funkcí",
         "search": {
             "this_room": "Tato místnost",
             "all_rooms": "Všechny místnosti",
@@ -3988,7 +3971,11 @@
             "this_room_button": "Vyhledávat v této místnosti",
             "all_rooms_button": "Vyhledávat ve všech místnostech"
         },
-        "jump_read_marker": "Přejít na první nepřečtenou zprávu."
+        "jump_to_bottom_button": "Přejít na poslední zprávy",
+        "jump_read_marker": "Přejít na první nepřečtenou zprávu.",
+        "inviter_unknown": "Neznámý",
+        "failed_reject_invite": "Nepodařilo se odmítnout pozvánku",
+        "creating_room_text": "Vytváříme místnost s %(names)s"
     },
     "file_panel": {
         "guest_note": "Pro využívání této funkce se <a>zaregistrujte</a>",
@@ -4214,10 +4201,6 @@
         "filter_placeholder": "Najít člena místnosti",
         "power_label": "%(userName)s (oprávnění %(powerLevelNumber)s)"
     },
-    "stickers": {
-        "empty": "Momentálně nemáte aktivní žádné balíčky s nálepkami",
-        "empty_add_prompt": "Přidat nějaké"
-    },
     "user_info": {
         "error_revoke_3pid_invite_title": "Pozvání se nepovedlo zrušit",
         "error_revoke_3pid_invite_description": "Pozvání se nepovedlo zrušit. Mohlo dojít k dočasnému problému nebo na to nemáte dostatečná práva.",
@@ -4271,6 +4254,10 @@
         "error_deactivate": "Deaktivace uživatele se nezdařila",
         "role_label": "Role v <RoomName/>"
     },
+    "stickers": {
+        "empty": "Momentálně nemáte aktivní žádné balíčky s nálepkami",
+        "empty_add_prompt": "Přidat nějaké"
+    },
     "right_panel": {
         "pinned_messages": {
             "title": "Připnuté zprávy",
@@ -4295,5 +4282,47 @@
         "export_chat_button": "Exportovat chat",
         "share_button": "Sdílet místnost",
         "settings_button": "Nastavení místnosti"
-    }
+    },
+    "reject_invitation_dialog": {
+        "title": "Odmítnout pozvání",
+        "confirmation": "Opravdu chcete odmítnout pozvání?",
+        "failed": "Nepodařilo se odmítnout pozvání"
+    },
+    "quit_warning": {
+        "file_upload_in_progress": "Zřejmě právě nahráváte soubory. Chcete přesto odejít?",
+        "call_in_progress": "Zřejmě máte probíhající hovor. Chcete přesto odejít?"
+    },
+    "no_more_results": "Žádné další výsledky",
+    "left_panel": {
+        "open_dial_pad": "Otevřít číselník"
+    },
+    "leave_room_dialog": {
+        "last_person_warning": "Jste zde jediná osoba. Pokud odejdete, nikdo se v budoucnu nebude moci připojit, včetně vás.",
+        "space_rejoin_warning": "Tento prostor není veřejný. Bez pozvánky se nebudete moci znovu připojit.",
+        "room_rejoin_warning": "Tato místnost není veřejná. Bez pozvánky nebudete moci znovu vstoupit.",
+        "leave_space_question": "Opravdu chcete opustit prostor '%(spaceName)s'?",
+        "leave_room_question": "Opravdu chcete opustit místnost '%(roomName)s'?"
+    },
+    "error_dialog": {
+        "forget_room_failed": "Nepodařilo se zapomenout místnost %(errCode)s",
+        "copy_room_link_failed": {
+            "title": "Nelze zkopírovat odkaz na místnost",
+            "description": "Nelze zkopírovat odkaz na místnost do schránky."
+        },
+        "search_failed": {
+            "title": "Vyhledávání selhalo",
+            "server_unavailable": "Server může být nedostupný, přetížený nebo vyhledávání vypršelo :("
+        },
+        "error_loading_user_profile": "Nepovedlo se načíst profil uživatele"
+    },
+    "console_wait": "Pozor!",
+    "cant_load_page": "Nepovedlo se načíst stránku",
+    "Invalid homeserver discovery response": "Neplatná odpověd při hledání domovského serveru",
+    "Failed to get autodiscovery configuration from server": "Nepovedlo se načíst nastavení automatického objevování ze serveru",
+    "Invalid base_url for m.homeserver": "Neplatná base_url pro m.homeserver",
+    "Homeserver URL does not appear to be a valid Matrix homeserver": "Na URL domovského serveru asi není funkční Matrix server",
+    "Invalid identity server discovery response": "Neplatná odpověď při hledání serveru identity",
+    "Invalid base_url for m.identity_server": "Neplatná base_url pro m.identity_server",
+    "Identity server URL does not appear to be a valid identity server": "Na URL serveru identit asi není funkční Matrix server",
+    "General failure": "Nějaká chyba"
 }

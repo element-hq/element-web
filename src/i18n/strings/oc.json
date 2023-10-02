@@ -63,7 +63,6 @@
     "Email address": "Adreça de corrièl",
     "Upload files": "Mandar de fichièrs",
     "Home": "Dorsièr personal",
-    "Search failed": "La recèrca a fracassat",
     "common": {
         "mute": "Copar lo son",
         "no_results": "Pas cap de resultat",
@@ -231,7 +230,6 @@
         "offline": "Fòra linha",
         "away": "Absent"
     },
-    "Unknown": "Desconegut",
     "slash_command": {
         "usage": "Usatge",
         "category_messages": "Messatges",
@@ -403,7 +401,8 @@
             "this_room": "Aquesta sala",
             "all_rooms": "Totas les salas",
             "field_placeholder": "Cercar…"
-        }
+        },
+        "inviter_unknown": "Desconegut"
     },
     "lightbox": {
         "rotate_left": "Pivotar cap a èrra",
@@ -418,5 +417,10 @@
     },
     "right_panel": {
         "share_button": "Partejar la sala"
+    },
+    "error_dialog": {
+        "search_failed": {
+            "title": "La recèrca a fracassat"
+        }
     }
 }

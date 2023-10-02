@@ -4,49 +4,27 @@
         "other": "y %(count)s más…",
         "one": "y otro más…"
     },
-    "A new password must be entered.": "Debes ingresar una contraseña nueva.",
     "An error has occurred.": "Un error ha ocurrido.",
-    "Are you sure you want to reject the invitation?": "¿Estás seguro que quieres rechazar la invitación?",
     "Decrypt %(text)s": "Descifrar %(text)s",
     "Download %(text)s": "Descargar %(text)s",
     "Email address": "Dirección de correo electrónico",
     "Error decrypting attachment": "Error al descifrar adjunto",
-    "Failed to forget room %(errCode)s": "No se pudo olvidar la sala %(errCode)s",
-    "Failed to load timeline position": "Fallo al cargar el historial",
-    "Failed to reject invite": "Falló al rechazar invitación",
-    "Failed to reject invitation": "Falló al rechazar la invitación",
     "Invalid file%(extra)s": "Archivo inválido %(extra)s",
     "Join Room": "Unirme a la sala",
     "Custom level": "Nivel personalizado",
     "Home": "Inicio",
     "Create new room": "Crear una nueva sala",
     "Unable to restore session": "No se puede recuperar la sesión",
-    "Search failed": "Falló la búsqueda",
-    "Server may be unavailable, overloaded, or search timed out :(": "El servidor podría estar saturado o desconectado, o la búsqueda caducó :(",
     "Session ID": "ID de Sesión",
-    "Are you sure you want to leave the room '%(roomName)s'?": "¿Salir de la sala «%(roomName)s»?",
     "Moderator": "Moderador",
-    "New passwords must match each other.": "Las contraseñas nuevas deben coincidir.",
     "not specified": "sin especificar",
-    "No more results": "No hay más resultados",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Por favor, consulta tu correo electrónico y haz clic en el enlace que contiene. Una vez hecho esto, haz clic en continuar.",
-    "Reject invitation": "Rechazar invitación",
-    "Return to login screen": "Regresar a la pantalla de inicio de sesión",
     "unknown error code": "Código de error desconocido",
     "This will allow you to reset your password and receive notifications.": "Esto te permitirá reiniciar tu contraseña y recibir notificaciones.",
-    "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Se ha intentado cargar cierto punto en la cronología de esta sala, pero no tiene permiso para ver el mensaje solicitado.",
-    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Se ha intentado cargar cierto punto en la cronología de esta sala, pero no se ha podido encontrarlo.",
-    "Uploading %(filename)s": "Subiendo %(filename)s",
-    "Uploading %(filename)s and %(count)s others": {
-        "one": "Subiendo %(filename)s y otros %(count)s",
-        "other": "Subiendo %(filename)s y otros %(count)s"
-    },
     "Verification Pending": "Verificación Pendiente",
     "Warning!": "¡Advertencia!",
     "AM": "AM",
     "PM": "PM",
-    "You seem to be in a call, are you sure you want to quit?": "Parece estar en medio de una llamada, ¿esta seguro que desea salir?",
-    "You seem to be uploading files, are you sure you want to quit?": "Pareces estar subiendo archivos, ¿seguro que quieres salir?",
     "Sun": "dom.",
     "Mon": "lun.",
     "Tue": "mar.",
@@ -121,17 +99,11 @@
     "Share User": "Compartir usuario",
     "Share Room Message": "Compartir un mensaje de esta sala",
     "Link to selected message": "Enlazar al mensaje seleccionado",
-    "This room is not public. You will not be able to rejoin without an invite.": "Esta sala no es pública. No podrás volver a unirte sin una invitación.",
-    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "No puedes enviar ningún mensaje hasta que revises y estés de acuerdo con <consentLink>nuestros términos y condiciones</consentLink>.",
-    "Connectivity to the server has been lost.": "Se ha perdido la conexión con el servidor.",
-    "Sent messages will be stored until your connection has returned.": "Los mensajes enviados se almacenarán hasta que vuelva la conexión.",
     "Upgrade Room Version": "Actualizar Versión de la Sala",
     "Create a new room with the same name, description and avatar": "Crear una sala nueva con el mismo nombre, descripción y avatar",
     "Update any local room aliases to point to the new room": "Actualizar los alias locales de la sala para que apunten a la nueva",
     "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Impedir a los usuarios que conversen en la versión antigua de la sala, y publicar un mensaje aconsejándoles que se muden a la nueva",
     "Put a link back to the old room at the start of the new room so people can see old messages": "Poner un enlace de retorno a la sala antigua al principio de la nueva de modo que se puedan ver los mensajes viejos",
-    "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Tu mensaje no se ha enviado porque este servidor base ha alcanzado su límite mensual de usuarios activos. Por favor, <a>contacta con el administrador de tu servicio</a> para continuar utilizándolo.",
-    "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Tu mensaje no se ha enviado porque este servidor base ha excedido un límite de recursos. Por favor <a>contacta con el administrador de tu servicio</a> para continuar utilizándolo.",
     "Failed to upgrade room": "No se pudo actualizar la sala",
     "The room upgrade could not be completed": "La actualización de la sala no pudo ser completada",
     "Upgrade this room to version %(version)s": "Actualiza esta sala a la versión %(version)s",
@@ -380,22 +352,9 @@
     "Successfully restored %(sessionCount)s keys": "%(sessionCount)s claves restauradas con éxito",
     "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Advertencia</b>: deberías configurar la copia de seguridad de claves solamente usando un ordenador de confianza.",
     "Resend %(unsentCount)s reaction(s)": "Reenviar %(unsentCount)s reacción(es)",
-    "This homeserver would like to make sure you are not a robot.": "A este servidor le gustaría asegurarse de que no eres un robot.",
-    "Country Dropdown": "Seleccione país",
     "Email (optional)": "Correo electrónico (opcional)",
     "Join millions for free on the largest public server": "Únete de forma gratuita a millones de personas en el servidor público más grande",
     "Sign in with SSO": "Ingrese con SSO",
-    "Couldn't load page": "No se ha podido cargar la página",
-    "Could not load user profile": "No se pudo cargar el perfil de usuario",
-    "Your password has been reset.": "Su contraseña ha sido restablecida.",
-    "Invalid homeserver discovery response": "Respuesta inválida de descubrimiento de servidor base",
-    "Failed to get autodiscovery configuration from server": "No se pudo obtener la configuración de autodescubrimiento del servidor",
-    "Invalid base_url for m.homeserver": "URL-base inválida para m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "La URL del servidor base no parece ser un servidor válido de Matrix",
-    "Invalid identity server discovery response": "Respuesta inválida de descubrimiento de servidor de identidad",
-    "Invalid base_url for m.identity_server": "URL_base no válida para m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "La URL del servidor de identidad no parece ser un servidor de identidad válido",
-    "General failure": "Error no especificado",
     "Ok": "Ok",
     "Your homeserver has exceeded its user limit.": "Tú servidor ha excedido su limite de usuarios.",
     "Your homeserver has exceeded one of its resource limits.": "Tú servidor ha excedido el limite de sus recursos.",
@@ -431,7 +390,6 @@
     "Security Phrase": "Frase de seguridad",
     "Security Key": "Clave de seguridad",
     "Use your Security Key to continue.": "Usa tu llave de seguridad para continuar.",
-    "This room is public": "Esta sala es pública",
     "Switch theme": "Cambiar tema",
     "Confirm encryption setup": "Confirmar la configuración de cifrado",
     "Click the button below to confirm setting up encryption.": "Haz clic en el botón de abajo para confirmar la configuración del cifrado.",
@@ -629,7 +587,6 @@
     "Video conference updated by %(senderName)s": "Videoconferencia actualizada por %(senderName)s",
     "Reason (optional)": "Motivo (opcional)",
     "Server Options": "Opciones del servidor",
-    "Open dial pad": "Abrir teclado numérico",
     "Dial pad": "Teclado numérico",
     "Sint Maarten": "San Martín",
     "Singapore": "Singapur",
@@ -737,8 +694,6 @@
         "one": "%(count)s miembro",
         "other": "%(count)s miembros"
     },
-    "Are you sure you want to leave the space '%(spaceName)s'?": "¿Salir del espacio «%(spaceName)s»?",
-    "This space is not public. You will not be able to rejoin without an invite.": "Este espacio es privado. No podrás volverte a unir sin una invitación.",
     "Failed to start livestream": "No se ha podido empezar la retransmisión",
     "Unable to start audio streaming.": "No se ha podido empezar la retransmisión del audio.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Invita a más gente usando su nombre, correo electrónico, nombre de usuario (ej.: <userId/>) o <a>compartiendo el enlace a este espacio</a>.",
@@ -749,16 +704,13 @@
     "Create a space": "Crear un espacio",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Esto solo afecta normalmente a cómo el servidor procesa la sala. Si estás teniendo problemas con %(brand)s, por favor, infórmanos del problema.",
     "<inviter/> invites you": "<inviter/> te ha invitado",
-    "You may want to try a different search or check for typos.": "Prueba con otro término de búsqueda o comprueba que no haya erratas.",
     "No results found": "Ningún resultado",
     "%(count)s rooms": {
         "one": "%(count)s sala",
         "other": "%(count)s salas"
     },
-    "You don't have permission": "No tienes permisos",
     "Invite to %(roomName)s": "Invitar a %(roomName)s",
     "Edit devices": "Gestionar dispositivos",
-    "Avatar": "Imagen de perfil",
     "Consult first": "Consultar primero",
     "Invited people will be able to read old messages.": "Las personas que invites podrán leer los mensajes antiguos.",
     "We couldn't create your DM.": "No hemos podido crear tu mensaje directo.",
@@ -770,12 +722,7 @@
     "Reset event store?": "¿Restablecer almacenamiento de eventos?",
     "You most likely do not want to reset your event index store": "Lo más probable es que no quieras restablecer tu almacenamiento de índice de ecentos",
     "Reset event store": "Restablecer el almacenamiento de eventos",
-    "You can select all or individual messages to retry or delete": "Puedes seleccionar uno o todos los mensajes para reintentar o eliminar",
     "Sending": "Enviando",
-    "Retry all": "Reintentar todo",
-    "Delete all": "Borrar todo",
-    "Some of your messages have not been sent": "Algunos de tus mensajes no se han enviado",
-    "You are the only person here. If you leave, no one will be able to join in the future, including you.": "Eres la única persona aquí. Si te vas, no podrá unirse nadie en el futuro, incluyéndote a ti.",
     "Forgotten or lost all recovery methods? <a>Reset all</a>": "¿Has olvidado o perdido todos los métodos de recuperación? <a>Restablecer todo</a>",
     "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Si restableces todo, volverás a empezar sin sesiones ni usuarios de confianza, y puede que no puedas ver mensajes anteriores.",
     "Only do this if you have no other device to complete verification with.": "Solo haz esto si no tienes ningún otro dispositivo con el que completar la verificación.",
@@ -794,7 +741,6 @@
     "Not all selected were added": "No se han añadido todas las seleccionadas",
     "You are not allowed to view this server's rooms list": "No tienes permiso para ver la lista de salas de este servidor",
     "Error processing voice message": "Ha ocurrido un error al procesar el mensaje de voz",
-    "Search names and descriptions": "Buscar por nombre y descripción",
     "You may contact me if you have any follow up questions": "Os podéis poner en contacto conmigo si tenéis alguna pregunta",
     "To leave the beta, visit your settings.": "Para salir de la beta, ve a tus ajustes.",
     "Add reaction": "Reaccionar",
@@ -807,14 +753,10 @@
     "Please provide an address": "Por favor, elige una dirección",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Ha fallado el sistema de búsqueda de mensajes. Comprueba <a>tus ajustes</a> para más información",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Tu aplicación %(brand)s no te permite usar un gestor de integración para hacer esto. Por favor, contacta con un administrador.",
-    "Unable to copy a link to the room to the clipboard.": "No se ha podido copiar el enlace a la sala.",
-    "Unable to copy room link": "No se ha podido copiar el enlace a la sala",
-    "Unnamed audio": "Audio sin título",
     "User Directory": "Lista de usuarios",
     "Error processing audio message": "Error al procesar el mensaje de audio",
     "Could not connect media": "No se ha podido conectar con los dispositivos multimedia",
     "Their device couldn't start the camera or microphone": "El dispositivo de la otra persona no ha podido iniciar la cámara o micrófono",
-    "Error downloading audio": "Error al descargar el audio",
     "The call is in an unknown state!": "¡La llamada está en un estado desconocido!",
     "Call back": "Devolver llamada",
     "No answer": "Sin respuesta",
@@ -850,8 +792,6 @@
     "Missed call": "Llamada perdida",
     "Call declined": "Llamada rechazada",
     "Unknown failure: %(reason)s": "Fallo desconocido: %(reason)s",
-    "Rooms and spaces": "Salas y espacios",
-    "Results": "Resultados",
     "Some encryption parameters have been changed.": "Algunos parámetros del cifrado han cambiado.",
     "To join a space you'll need an invite.": "Para unirte a un espacio, necesitas que te inviten a él.",
     "Don't leave any rooms": "No salir de ninguna sala",
@@ -861,15 +801,12 @@
     "You are about to leave <spaceName/>.": "Estás a punto de salirte de <spaceName/>.",
     "MB": "MB",
     "In reply to <a>this message</a>": "En respuesta a <a>este mensaje</a>",
-    "Skip verification for now": "Saltar la verificación por ahora",
-    "Really reset verification keys?": "¿De verdad quieres restablecer las claves de verificación?",
     "Downloading": "Descargando",
     "%(count)s reply": {
         "one": "%(count)s respuesta",
         "other": "%(count)s respuestas"
     },
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Escribe tu frase de seguridad o <button>usa tu clave de seguridad</button> para continuar.",
-    "Joining": "Uniéndote",
     "In encrypted rooms, verify all users to ensure it's secure.": "En salas cifradas, verifica a todos los usuarios para asegurarte de que es segura.",
     "If you can't see who you're looking for, send them your invite link below.": "Si no encuentras a quien buscas, envíale tu enlace de invitación que encontrarás abajo.",
     "Thread options": "Ajustes del hilo",
@@ -920,13 +857,10 @@
         "one": "%(count)s voto"
     },
     "Recently viewed": "Visto recientemente",
-    "Device verified": "Dispositivo verificado",
-    "Verify this device": "Verificar este dispositivo",
     "Open in OpenStreetMap": "Abrir en OpenStreetMap",
     "Verify other device": "Verificar otro dispositivo",
     "Missing domain separator e.g. (:domain.org)": "Falta el separador de dominio, ej.: (:dominio.org)",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Recupera acceso a tu cuenta y a las claves de cifrado almacenadas en esta sesión. Sin ellas, no podrás leer todos tus mensajes seguros en ninguna sesión.",
-    "Unable to verify this device": "No se ha podido verificar el dispositivo",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Aquí encontrarás tus conversaciones con los miembros del espacio. Si lo desactivas, estas no aparecerán mientras veas el espacio %(spaceName)s.",
     "This address had invalid server or is already in use": "Esta dirección tiene un servidor no válido o ya está siendo usada",
     "Sections to show": "Secciones que mostrar",
@@ -940,7 +874,6 @@
     "Jump to date": "Saltar a una fecha",
     "The beginning of the room": "Inicio de la sala",
     "Feedback sent! Thanks, we appreciate it!": "¡Opinión enviada! Gracias, te lo agradecemos.",
-    "Wait!": "¡Espera!",
     "Use <arrows/> to scroll": "Usa <arrows/> para desplazarte",
     "Location": "Ubicación",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s y %(space2Name)s",
@@ -996,13 +929,9 @@
     "You will not be able to reactivate your account": "No podrás reactivarla",
     "Confirm that you would like to deactivate your account. If you proceed:": "Confirma que quieres desactivar tu cuenta. Si continúas:",
     "To continue, please enter your account password:": "Para continuar, escribe la contraseña de tu cuenta:",
-    "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "Si deseas mantener acceso a tu historial de conversación en salas encriptadas, configura copia de llaves o exporta tus claves de mensaje desde uno de tus otros dispositivos antes de proceder.",
-    "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "Cerrar sesión en tus dispositivos causará que las claves de encriptado almacenadas en ellas se eliminen, haciendo que el historial de la conversación encriptada sea imposible de leer.",
-    "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Se ha cerrado sesión en todos tus dispositivos y no recibirás más notificaciones. Para volver a habilitar las notificaciones, inicia sesión de nuevo en cada dispositivo.",
     "You will be removed from the identity server: your friends will no longer be able to find you with your email or phone number": "Serás eliminado del servidor de identidad: tus amigos no podrán encontrarte con tu email o número de teléfono",
     "%(members)s and %(last)s": "%(members)s y %(last)s",
     "%(members)s and more": "%(members)s y más",
-    "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.": "Tu mensaje no se ha enviado porque este servidor base ha sido bloqueado por su administrador. Por favor, <a>contacta con el administrador</a> de tu servicio para seguir usándolo.",
     "Cameras": "Cámaras",
     "Open room": "Abrir sala",
     "Unread email icon": "Icono de email sin leer",
@@ -1033,7 +962,6 @@
     "Show spaces": "Ver espacios",
     "Show rooms": "Ver salas",
     "You need to have the right permissions in order to share locations in this room.": "Debes tener el permiso correspondiente para compartir ubicaciones en esta sala.",
-    "Stop and close": "Parar y cerrar",
     "Online community members": "Miembros de comunidades online",
     "Coworkers and teams": "Compañeros de trabajo y equipos",
     "Friends and family": "Familia y amigos",
@@ -1046,37 +974,14 @@
     "Choose a locale": "Elige un idioma",
     "Interactively verify by emoji": "Verificar interactivamente usando emojis",
     "Manually verify by text": "Verificar manualmente usando un texto",
-    "We're creating a room with %(names)s": "Estamos creando una sala con %(names)s",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s o %(recoveryFile)s",
     "Video call ended": "Videollamada terminada",
     "%(name)s started a video call": "%(name)s comenzó una videollamada",
-    "Completing set up of your new device": "Terminando de configurar tu nuevo dispositivo",
-    "Waiting for device to sign in": "Esperando a que el dispositivo inicie sesión",
-    "Review and approve the sign in": "Revisar y aprobar inicio de sesión",
     "Unable to show image due to error": "No es posible mostrar la imagen debido a un error",
-    "The linking wasn't completed in the required time.": "El proceso de enlace ha tardado demasiado tiempo, por lo que no se ha completado.",
-    "The request was declined on the other device.": "El otro dispositivo ha rechazado la solicitud.",
-    "The other device is already signed in.": "El otro dispositivo ya tiene una sesión iniciada.",
-    "The other device isn't signed in.": "El otro dispositivo no tiene una sesión iniciada.",
-    "The homeserver doesn't support signing in another device.": "Tu servidor base no es compatible con el inicio de sesión en otro dispositivo.",
-    "Check that the code below matches with your other device:": "Comprueba que el siguiente código también aparece en el otro dispositivo:",
-    "By approving access for this device, it will have full access to your account.": "Si apruebas acceso a este dispositivo, tendrá acceso completo a tu cuenta.",
-    "Scan the QR code below with your device that's signed out.": "Escanea el siguiente código QR con tu dispositivo.",
-    "Start at the sign in screen": "Ve a la pantalla de inicio de sesión",
-    "Devices connected": "Dispositivos conectados",
-    "An unexpected error occurred.": "Ha ocurrido un error inesperado.",
-    "The request was cancelled.": "La solicitud ha sido cancelada.",
-    "The scanned code is invalid.": "El código escaneado no es válido.",
-    "Sign in new device": "Conectar nuevo dispositivo",
     "Error downloading image": "Error al descargar la imagen",
-    "Sign out of all devices": "Cerrar sesión en todos los dispositivos",
-    "Too many attempts in a short time. Retry after %(timeout)s.": "Demasiados intentos en poco tiempo. Inténtalo de nuevo en %(timeout)s.",
-    "Too many attempts in a short time. Wait some time before trying again.": "Demasiados intentos en poco tiempo. Espera un poco antes de volverlo a intentar.",
     "Thread root ID: %(threadRootId)s": "ID del hilo raíz: %(threadRootId)s",
     "<w>WARNING:</w> <description/>": "<w>ADVERTENCIA :</w> <description/>",
     " in <strong>%(room)s</strong>": " en <strong>%(room)s</strong>",
-    "Connecting…": "Conectando…",
-    "Scan QR code": "Escanear código QR",
     "Loading live location…": "Cargando ubicación en tiempo real…",
     "Fetching keys from server…": "Obteniendo claves del servidor…",
     "Checking…": "Comprobando…",
@@ -1107,7 +1012,6 @@
     "Server returned %(statusCode)s with error code %(errorCode)s": "El servidor devolvió un %(statusCode)s con el código de error %(errorCode)s",
     "The sender has blocked you from receiving this message": "La persona que ha enviado este mensaje te ha bloqueado, no puedes recibir el mensaje",
     "Waiting for partner to confirm…": "Esperando a que la otra persona confirme…",
-    "Select '%(scanQRCode)s'": "Selecciona «%(scanQRCode)s»",
     "Message from %(user)s": "Mensaje de %(user)s",
     "Enable MSC3946 (to support late-arriving room archives)": "",
     "common": {
@@ -1226,10 +1130,11 @@
         "historical": "Historial",
         "go_to_settings": "Ir a la configuración",
         "setup_secure_messages": "Configurar mensajes seguros",
-        "unencrypted": "Sin cifrar",
         "view_message": "Ver mensaje",
-        "joined": "Te has unido",
+        "unencrypted": "Sin cifrar",
         "show_more": "Ver más",
+        "joined": "Te has unido",
+        "avatar": "Imagen de perfil",
         "are_you_sure": "¿Estás seguro?"
     },
     "action": {
@@ -1555,17 +1460,16 @@
         "format_italics": "Cursiva",
         "format_insert_link": "Insertar enlace",
         "replying_title": "Respondiendo",
-        "edit_composer_label": "Editar mensaje",
-        "send_voice_message": "Enviar un mensaje de voz",
         "stop_voice_message": "Dejar de grabar",
+        "send_voice_message": "Enviar un mensaje de voz",
         "link_modal": {
             "title_edit": "Editar enlace",
             "title_create": "Crear un enlace",
             "text_field_label": "Texto",
             "link_field_label": "Enlace"
-        }
+        },
+        "edit_composer_label": "Editar mensaje"
     },
-    "Code": "Código",
     "power_level": {
         "default": "Por defecto",
         "restricted": "Restringido",
@@ -2575,18 +2479,27 @@
             "other": "%(count)s personas lo han visto"
         },
         "read_receipts_label": "Acuses de recibo",
-        "thread_info_basic": "Desde un hilo",
-        "error_no_renderer": "No se ha podido mostrar este evento",
         "undecryptable_tooltip": "No se ha podido descifrar este mensaje",
-        "send_state_sending": "Enviando tu mensaje…",
-        "send_state_encrypting": "Cifrando tu mensaje…",
+        "thread_info_basic": "Desde un hilo",
         "send_state_sent": "Mensaje enviado",
+        "send_state_sending": "Enviando tu mensaje…",
         "send_state_failed": "No se ha podido mandar",
+        "send_state_encrypting": "Cifrando tu mensaje…",
         "mab": {
             "label": "Acciones de mensaje",
             "view_in_room": "Ver en la sala",
             "copy_link_thread": "Copiar enlace al hilo"
-        }
+        },
+        "m.audio": {
+            "unnamed_audio": "Audio sin título",
+            "error_downloading_audio": "Error al descargar el audio"
+        },
+        "load_error": {
+            "no_permission": "Se ha intentado cargar cierto punto en la cronología de esta sala, pero no tiene permiso para ver el mensaje solicitado.",
+            "unable_to_find": "Se ha intentado cargar cierto punto en la cronología de esta sala, pero no se ha podido encontrarlo.",
+            "title": "Fallo al cargar el historial"
+        },
+        "error_no_renderer": "No se ha podido mostrar este evento"
     },
     "slash_command": {
         "spoiler": "Envía el mensaje como un spoiler",
@@ -2688,7 +2601,6 @@
         "offline": "Desconectado",
         "away": "Lejos"
     },
-    "Unknown": "Desconocido",
     "event_preview": {
         "m.call.answer": {
             "you": "Te has unido a la llamada",
@@ -2926,31 +2838,31 @@
             "leave_space": "Salir del espacio",
             "aliases_section": "Direcciones de la sala",
             "other_section": "Otros",
-            "error_updating_canonical_alias_title": "Error al actualizar la dirección principal",
-            "error_updating_canonical_alias_description": "Hubo un error al actualizar la dirección principal de la sala. Posiblemente el servidor no lo permita o se produjo un error temporal.",
-            "error_updating_alias_description": "Hubo un error al actualizar la dirección alternativa de la sala. Posiblemente el servidor no lo permita o se produjo un error temporal.",
-            "error_creating_alias_title": "Error al crear la dirección",
-            "error_creating_alias_description": "Hubo un error al crear esa dirección. Es posible que el servidor no lo permita o que haya ocurrido una falla temporal.",
-            "error_deleting_alias_description_forbidden": "No tienes permiso para borrar la dirección.",
-            "error_deleting_alias_description": "Se produjo un error al eliminar esa dirección. Puede que ya no exista o se haya producido un error temporal.",
-            "error_deleting_alias_title": "Error al eliminar la dirección",
-            "canonical_alias_field_label": "Dirección principal",
-            "no_aliases_space": "Este espacio no tiene direcciones locales",
-            "no_aliases_room": "Esta sala no tiene direcciones locales",
-            "local_alias_field_label": "Dirección local",
+            "topic_field_label": "Asunto de la sala",
             "published_aliases_section": "Direcciones publicadas",
             "published_aliases_explainer_space": "Los espacios publicados pueden usarse por cualquiera, independientemente de su servidor base.",
             "published_aliases_explainer_room": "Las direcciones publicadas pueden usarse por cualquiera para unirse a tu sala, independientemente de su servidor base.",
             "published_aliases_description": "Para publicar una dirección, primero debe ser añadida como dirección local.",
-            "aliases_items_label": "Otras direcciones publicadas:",
-            "aliases_no_items_label": "Todavía no hay direcciones publicadas, puedes añadir una más abajo",
+            "no_aliases_space": "Este espacio no tiene direcciones locales",
+            "no_aliases_room": "Esta sala no tiene direcciones locales",
             "new_alias_placeholder": "Nueva dirección publicada (p.ej.. #alias:servidor)",
+            "name_field_label": "Nombre de sala",
             "local_aliases_section": "Direcciones locales",
             "local_aliases_explainer_space": "Elige una dirección para este espacio y los usuarios de tu servidor base (%(localDomain)s) podrán encontrarlo a través del buscador",
             "local_aliases_explainer_room": "Define las direcciones de esta sala para que los usuarios puedan encontrarla a través de tu servidor base (%(localDomain)s)",
-            "name_field_label": "Nombre de sala",
-            "topic_field_label": "Asunto de la sala",
-            "avatar_field_label": "Avatar de la sala"
+            "local_alias_field_label": "Dirección local",
+            "error_updating_canonical_alias_title": "Error al actualizar la dirección principal",
+            "error_updating_canonical_alias_description": "Hubo un error al actualizar la dirección principal de la sala. Posiblemente el servidor no lo permita o se produjo un error temporal.",
+            "error_updating_alias_description": "Hubo un error al actualizar la dirección alternativa de la sala. Posiblemente el servidor no lo permita o se produjo un error temporal.",
+            "error_deleting_alias_title": "Error al eliminar la dirección",
+            "error_deleting_alias_description_forbidden": "No tienes permiso para borrar la dirección.",
+            "error_deleting_alias_description": "Se produjo un error al eliminar esa dirección. Puede que ya no exista o se haya producido un error temporal.",
+            "error_creating_alias_title": "Error al crear la dirección",
+            "error_creating_alias_description": "Hubo un error al crear esa dirección. Es posible que el servidor no lo permita o que haya ocurrido una falla temporal.",
+            "canonical_alias_field_label": "Dirección principal",
+            "avatar_field_label": "Avatar de la sala",
+            "aliases_no_items_label": "Todavía no hay direcciones publicadas, puedes añadir una más abajo",
+            "aliases_items_label": "Otras direcciones publicadas:"
         },
         "advanced": {
             "unfederated": "Esta sala no es accesible desde otros servidores de Matrix",
@@ -3048,12 +2960,19 @@
             "verification_skip_warning": "Si decides no verificar, no tendrás acceso a todos tus mensajes y puede que le aparezcas a los demás como «no confiado».",
             "verify_later": "La verificaré en otro momento",
             "verify_reset_warning_1": "Una vez restableces las claves de verificación, no lo podrás deshacer. Después de restablecerlas, no podrás acceder a los mensajes cifrados antiguos, y cualquier persona que te haya verificado verá avisos de seguridad hasta que vuelvas a hacer la verificación con ella.",
-            "self_verification_hint": "Para continuar, acepta la solicitud de verificación en tu otro dispositivo.",
             "waiting_for_user_accept": "Esperando a que %(displayName)s acepte…",
-            "accepting": "Aceptando…",
             "start_button": "Iniciar verificación",
+            "self_verification_hint": "Para continuar, acepta la solicitud de verificación en tu otro dispositivo.",
             "error_starting_title": "Error al empezar la verificación",
-            "error_starting_description": "No se ha podido iniciar una conversación con el otro usuario."
+            "error_starting_description": "No se ha podido iniciar una conversación con el otro usuario.",
+            "after_new_login": {
+                "unable_to_verify": "No se ha podido verificar el dispositivo",
+                "verify_this_device": "Verificar este dispositivo",
+                "device_verified": "Dispositivo verificado",
+                "reset_confirmation": "¿De verdad quieres restablecer las claves de verificación?",
+                "skip_verification": "Saltar la verificación por ahora"
+            },
+            "accepting": "Aceptando…"
         },
         "old_version_detected_title": "Se detectó información de criptografía antigua",
         "old_version_detected_description": "Se detectó una versión más antigua de %(brand)s. Esto habrá provocado que la criptografía de extremo a extremo funcione incorrectamente en la versión más antigua. Los mensajes cifrados de extremo a extremo intercambiados recientemente mientras usaba la versión más antigua puede que no sean descifrables con esta versión. Esto también puede hacer que fallen con la más reciente. Si experimenta problemas, desconecte y vuelva a ingresar. Para conservar el historial de mensajes, exporte y vuelva a importar sus claves.",
@@ -3091,14 +3010,6 @@
             "explainer": "Haz copia de seguridad de tus claves antes de cerrar sesión para evitar perderlas.",
             "title": "Configurar"
         },
-        "cross_signing_user_warning": "Este usuario no ha verificado todas sus sesiones.",
-        "cross_signing_user_normal": "No has verificado a este usuario.",
-        "cross_signing_user_verified": "Usted ha verificado este usuario. Este usuario ha verificado todas sus sesiones.",
-        "cross_signing_room_warning": "Alguien está usando una sesión desconocida",
-        "cross_signing_room_normal": "Esta sala usa cifrado de extremo a extremo",
-        "cross_signing_room_verified": "Todos los participantes en esta sala están verificados",
-        "event_shield_reason_authenticity_not_guaranteed": "La autenticidad de este mensaje cifrado no puede ser garantizada en este dispositivo.",
-        "event_shield_reason_mismatched_sender_key": "Cifrado por una sesión no verificada",
         "messages_not_secure": {
             "title": "Los mensajes no son seguros",
             "heading": "Uno de los siguientes puede estar comprometido:",
@@ -3106,7 +3017,15 @@
             "cause_2": "El servidor base del usuario al que estás invitando",
             "cause_3": "Tu conexión a internet o la de la otra persona",
             "cause_4": "Tu sesión o la de la otra persona"
-        }
+        },
+        "event_shield_reason_mismatched_sender_key": "Cifrado por una sesión no verificada",
+        "event_shield_reason_authenticity_not_guaranteed": "La autenticidad de este mensaje cifrado no puede ser garantizada en este dispositivo.",
+        "cross_signing_user_warning": "Este usuario no ha verificado todas sus sesiones.",
+        "cross_signing_user_verified": "Usted ha verificado este usuario. Este usuario ha verificado todas sus sesiones.",
+        "cross_signing_user_normal": "No has verificado a este usuario.",
+        "cross_signing_room_warning": "Alguien está usando una sesión desconocida",
+        "cross_signing_room_verified": "Todos los participantes en esta sala están verificados",
+        "cross_signing_room_normal": "Esta sala usa cifrado de extremo a extremo"
     },
     "emoji": {
         "category_frequently_used": "Frecuente",
@@ -3245,7 +3164,8 @@
             "sso_failed": "Ha ocurrido un error al confirmar tu identidad. Cancela e inténtalo de nuevo.",
             "fallback_button": "Iniciar autenticación",
             "sso_title": "Continuar con registro único (SSO)",
-            "sso_body": "Confirma la nueva dirección de correo usando SSO para probar tu identidad."
+            "sso_body": "Confirma la nueva dirección de correo usando SSO para probar tu identidad.",
+            "code": "Código"
         },
         "password_field_label": "Escribe tu contraseña",
         "password_field_strong_label": "¡Fantástico, una contraseña fuerte!",
@@ -3278,7 +3198,44 @@
         "create_account_title": "Crear una cuenta",
         "failed_soft_logout_homeserver": "No ha sido posible volver a autenticarse debido a un problema con el servidor base",
         "soft_logout_subheading": "Borrar datos personales",
-        "forgot_password_send_email": "Enviar email"
+        "forgot_password_send_email": "Enviar email",
+        "reset_password": {
+            "rate_limit_error": "Demasiados intentos en poco tiempo. Espera un poco antes de volverlo a intentar.",
+            "rate_limit_error_with_time": "Demasiados intentos en poco tiempo. Inténtalo de nuevo en %(timeout)s.",
+            "other_devices_logout_warning_1": "Cerrar sesión en tus dispositivos causará que las claves de encriptado almacenadas en ellas se eliminen, haciendo que el historial de la conversación encriptada sea imposible de leer.",
+            "other_devices_logout_warning_2": "Si deseas mantener acceso a tu historial de conversación en salas encriptadas, configura copia de llaves o exporta tus claves de mensaje desde uno de tus otros dispositivos antes de proceder.",
+            "password_not_entered": "Debes ingresar una contraseña nueva.",
+            "passwords_mismatch": "Las contraseñas nuevas deben coincidir.",
+            "sign_out_other_devices": "Cerrar sesión en todos los dispositivos",
+            "reset_successful": "Su contraseña ha sido restablecida.",
+            "devices_logout_success": "Se ha cerrado sesión en todos tus dispositivos y no recibirás más notificaciones. Para volver a habilitar las notificaciones, inicia sesión de nuevo en cada dispositivo.",
+            "return_to_login": "Regresar a la pantalla de inicio de sesión"
+        },
+        "qr_code_login": {
+            "sign_in_new_device": "Conectar nuevo dispositivo",
+            "error_linking_incomplete": "El proceso de enlace ha tardado demasiado tiempo, por lo que no se ha completado.",
+            "error_invalid_scanned_code": "El código escaneado no es válido.",
+            "error_request_declined": "El otro dispositivo ha rechazado la solicitud.",
+            "error_device_already_signed_in": "El otro dispositivo ya tiene una sesión iniciada.",
+            "error_device_not_signed_in": "El otro dispositivo no tiene una sesión iniciada.",
+            "error_request_cancelled": "La solicitud ha sido cancelada.",
+            "error_unexpected": "Ha ocurrido un error inesperado.",
+            "error_homeserver_lacks_support": "Tu servidor base no es compatible con el inicio de sesión en otro dispositivo.",
+            "devices_connected": "Dispositivos conectados",
+            "confirm_code_match": "Comprueba que el siguiente código también aparece en el otro dispositivo:",
+            "approve_access_warning": "Si apruebas acceso a este dispositivo, tendrá acceso completo a tu cuenta.",
+            "scan_code_instruction": "Escanea el siguiente código QR con tu dispositivo.",
+            "start_at_sign_in_screen": "Ve a la pantalla de inicio de sesión",
+            "select_qr_code": "Selecciona «%(scanQRCode)s»",
+            "scan_qr_code": "Escanear código QR",
+            "review_and_approve": "Revisar y aprobar inicio de sesión",
+            "connecting": "Conectando…",
+            "waiting_for_device": "Esperando a que el dispositivo inicie sesión",
+            "completing_setup": "Terminando de configurar tu nuevo dispositivo"
+        },
+        "country_dropdown": "Seleccione país",
+        "common_failures": {},
+        "captcha_description": "A este servidor le gustaría asegurarse de que no eres un robot."
     },
     "room_list": {
         "sort_unread_first": "Colocar al principio las salas con mensajes sin leer",
@@ -3445,8 +3402,8 @@
         "unmaximise": "Dejar de maximizar",
         "popout": "Abrir accesorio en una ventana emergente",
         "unpin_to_view_right_panel": "Deja de fijar este accesorio para verlo en este panel",
-        "close_to_view_right_panel": "Cierra este accesorio para verlo en este panel",
-        "set_room_layout": "Hacer que todo el mundo use mi disposición de sala"
+        "set_room_layout": "Hacer que todo el mundo use mi disposición de sala",
+        "close_to_view_right_panel": "Cierra este accesorio para verlo en este panel"
     },
     "feedback": {
         "sent": "Comentarios enviados",
@@ -3533,8 +3490,8 @@
         "empty_explainer": "Los hilos ayudan a mantener tus conversaciones centradas y a que sean fáciles de seguir.",
         "empty_tip": "<b>Consejo:</b> Usa «%(replyInThread)s» mientras pasas el ratón sobre un mensaje.",
         "empty_heading": "Organiza los temas de conversación en hilos",
-        "open_thread": "Abrir hilo",
-        "unable_to_decrypt": "No se ha podido descifrar el mensaje"
+        "unable_to_decrypt": "No se ha podido descifrar el mensaje",
+        "open_thread": "Abrir hilo"
     },
     "theme": {
         "light_high_contrast": "Claro con contraste alto",
@@ -3562,7 +3519,13 @@
         "invite_link": "Compartir enlace de invitación",
         "invite": "Invitar gente",
         "invite_description": "Invitar correos electrónicos o nombres de usuario",
-        "invite_this_space": "Invitar al espacio"
+        "invite_this_space": "Invitar al espacio",
+        "user_lacks_permission": "No tienes permisos",
+        "title_when_query_unavailable": "Salas y espacios",
+        "title_when_query_available": "Resultados",
+        "search_placeholder": "Buscar por nombre y descripción",
+        "no_search_result_hint": "Prueba con otro término de búsqueda o comprueba que no haya erratas.",
+        "joining_space": "Uniéndote"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Este servidor base no está configurado para mostrar mapas.",
@@ -3586,7 +3549,8 @@
         "live_share_button": "Compartir durante %(duration)s",
         "click_move_pin": "Haz clic para mover el marcador",
         "click_drop_pin": "Haz clic para colocar un marcador",
-        "share_button": "Compartir ubicación"
+        "share_button": "Compartir ubicación",
+        "stop_and_close": "Parar y cerrar"
     },
     "labs_mjolnir": {
         "room_name": "Mi lista de baneos",
@@ -3730,7 +3694,8 @@
             "hide_widgets_button": "Ocultar accesorios",
             "show_widgets_button": "Mostrar accesorios",
             "close_call_button": "Terminar llamada",
-            "video_room_view_chat_button": "Ver historial del chat"
+            "video_room_view_chat_button": "Ver historial del chat",
+            "room_is_public": "Esta sala es pública"
         },
         "joining_space": "Uniéndose al espacio…",
         "joining_room": "Uniéndose a la sala…",
@@ -3781,12 +3746,30 @@
         "join_failed_needs_invite": "Para ver %(roomName)s necesitas una invitación",
         "view_failed_enable_video_rooms": "Para verla, activa las salas de vídeos en la sección de experimentos de los ajustes",
         "join_failed_enable_video_rooms": "Para unirse, por favor activa las salas de vídeo en Labs primero",
-        "jump_to_bottom_button": "Ir a los mensajes más recientes",
-        "show_labs_settings": "Ver ajustes de los experimentos",
-        "upgrade_warning_bar": "Actualizar esta sala cerrará la instancia actual de la sala y creará una sala actualizada con el mismo nombre.",
+        "upload": {
+            "uploading_multiple_file": {
+                "one": "Subiendo %(filename)s y otros %(count)s",
+                "other": "Subiendo %(filename)s y otros %(count)s"
+            },
+            "uploading_single_file": "Subiendo %(filename)s"
+        },
         "upgrade_warning_bar_upgraded": "Esta sala ya ha sido actualizada.",
         "upgrade_warning_bar_unstable": "Esta sala está ejecutando la versión de sala <roomVersion />, la cual ha sido marcado por este servidor base como <i>inestable</i>.",
         "upgrade_warning_bar_admins": "Sólo los administradores de la sala verán esta advertencia",
+        "upgrade_warning_bar": "Actualizar esta sala cerrará la instancia actual de la sala y creará una sala actualizada con el mismo nombre.",
+        "status_bar": {
+            "requires_consent_agreement": "No puedes enviar ningún mensaje hasta que revises y estés de acuerdo con <consentLink>nuestros términos y condiciones</consentLink>.",
+            "monthly_user_limit_reached": "Tu mensaje no se ha enviado porque este servidor base ha alcanzado su límite mensual de usuarios activos. Por favor, <a>contacta con el administrador de tu servicio</a> para continuar utilizándolo.",
+            "homeserver_blocked": "Tu mensaje no se ha enviado porque este servidor base ha sido bloqueado por su administrador. Por favor, <a>contacta con el administrador</a> de tu servicio para seguir usándolo.",
+            "exceeded_resource_limit": "Tu mensaje no se ha enviado porque este servidor base ha excedido un límite de recursos. Por favor <a>contacta con el administrador de tu servicio</a> para continuar utilizándolo.",
+            "some_messages_not_sent": "Algunos de tus mensajes no se han enviado",
+            "delete_all": "Borrar todo",
+            "retry_all": "Reintentar todo",
+            "select_messages_to_retry": "Puedes seleccionar uno o todos los mensajes para reintentar o eliminar",
+            "server_connectivity_lost_title": "Se ha perdido la conexión con el servidor.",
+            "server_connectivity_lost_description": "Los mensajes enviados se almacenarán hasta que vuelva la conexión."
+        },
+        "show_labs_settings": "Ver ajustes de los experimentos",
         "search": {
             "this_room": "Esta sala",
             "all_rooms": "Todas las salas",
@@ -3794,7 +3777,11 @@
             "this_room_button": "Buscar en esta sala",
             "all_rooms_button": "Buscar en todas las salas"
         },
-        "jump_read_marker": "Ir al primer mensaje no leído."
+        "jump_to_bottom_button": "Ir a los mensajes más recientes",
+        "jump_read_marker": "Ir al primer mensaje no leído.",
+        "inviter_unknown": "Desconocido",
+        "failed_reject_invite": "Falló al rechazar invitación",
+        "creating_room_text": "Estamos creando una sala con %(names)s"
     },
     "file_panel": {
         "guest_note": "<a>Regístrate</a> para usar esta funcionalidad",
@@ -4010,10 +3997,6 @@
         "filter_placeholder": "Filtrar miembros de la sala",
         "power_label": "%(userName)s (nivel de permisos %(powerLevelNumber)s)"
     },
-    "stickers": {
-        "empty": "Actualmente no tienes ningún paquete de pegatinas activado",
-        "empty_add_prompt": "Añadir alguno ahora"
-    },
     "user_info": {
         "error_revoke_3pid_invite_title": "Error al revocar la invitación",
         "error_revoke_3pid_invite_description": "No se logró revocar la invitación. El servidor puede sufrir un problema temporal o usted no tiene los permisos suficientes para revocar la invitación.",
@@ -4066,6 +4049,10 @@
         "error_deactivate": "Error en desactivar usuario",
         "role_label": "Rol en <RoomName/>"
     },
+    "stickers": {
+        "empty": "Actualmente no tienes ningún paquete de pegatinas activado",
+        "empty_add_prompt": "Añadir alguno ahora"
+    },
     "right_panel": {
         "pinned_messages": {
             "title": "Mensajes fijados",
@@ -4090,5 +4077,47 @@
         "export_chat_button": "Exportar conversación",
         "share_button": "Compartir la sala",
         "settings_button": "Configuración de la sala"
-    }
+    },
+    "reject_invitation_dialog": {
+        "title": "Rechazar invitación",
+        "confirmation": "¿Estás seguro que quieres rechazar la invitación?",
+        "failed": "Falló al rechazar la invitación"
+    },
+    "quit_warning": {
+        "file_upload_in_progress": "Pareces estar subiendo archivos, ¿seguro que quieres salir?",
+        "call_in_progress": "Parece estar en medio de una llamada, ¿esta seguro que desea salir?"
+    },
+    "no_more_results": "No hay más resultados",
+    "left_panel": {
+        "open_dial_pad": "Abrir teclado numérico"
+    },
+    "leave_room_dialog": {
+        "last_person_warning": "Eres la única persona aquí. Si te vas, no podrá unirse nadie en el futuro, incluyéndote a ti.",
+        "space_rejoin_warning": "Este espacio es privado. No podrás volverte a unir sin una invitación.",
+        "room_rejoin_warning": "Esta sala no es pública. No podrás volver a unirte sin una invitación.",
+        "leave_space_question": "¿Salir del espacio «%(spaceName)s»?",
+        "leave_room_question": "¿Salir de la sala «%(roomName)s»?"
+    },
+    "error_dialog": {
+        "forget_room_failed": "No se pudo olvidar la sala %(errCode)s",
+        "copy_room_link_failed": {
+            "title": "No se ha podido copiar el enlace a la sala",
+            "description": "No se ha podido copiar el enlace a la sala."
+        },
+        "search_failed": {
+            "title": "Falló la búsqueda",
+            "server_unavailable": "El servidor podría estar saturado o desconectado, o la búsqueda caducó :("
+        },
+        "error_loading_user_profile": "No se pudo cargar el perfil de usuario"
+    },
+    "console_wait": "¡Espera!",
+    "cant_load_page": "No se ha podido cargar la página",
+    "Invalid homeserver discovery response": "Respuesta inválida de descubrimiento de servidor base",
+    "Failed to get autodiscovery configuration from server": "No se pudo obtener la configuración de autodescubrimiento del servidor",
+    "Invalid base_url for m.homeserver": "URL-base inválida para m.homeserver",
+    "Homeserver URL does not appear to be a valid Matrix homeserver": "La URL del servidor base no parece ser un servidor válido de Matrix",
+    "Invalid identity server discovery response": "Respuesta inválida de descubrimiento de servidor de identidad",
+    "Invalid base_url for m.identity_server": "URL_base no válida para m.identity_server",
+    "Identity server URL does not appear to be a valid identity server": "La URL del servidor de identidad no parece ser un servidor de identidad válido",
+    "General failure": "Error no especificado"
 }

@@ -164,8 +164,8 @@ export default class ForgotPassword extends React.Component<Props, State> {
             const retryAfterMs = parseInt(err?.data?.retry_after_ms, 10);
 
             const errorText = isNaN(retryAfterMs)
-                ? _t("Too many attempts in a short time. Wait some time before trying again.")
-                : _t("Too many attempts in a short time. Retry after %(timeout)s.", {
+                ? _t("auth|reset_password|rate_limit_error")
+                : _t("auth|reset_password|rate_limit_error_with_time", {
                       timeout: formatSeconds(retryAfterMs / 1000),
                   });
 
@@ -349,16 +349,8 @@ export default class ForgotPassword extends React.Component<Props, State> {
             title: _t("common|warning"),
             description: (
                 <div>
-                    <p>
-                        {_t(
-                            "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.",
-                        )}
-                    </p>
-                    <p>
-                        {_t(
-                            "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.",
-                        )}
-                    </p>
+                    <p>{_t("auth|reset_password|other_devices_logout_warning_1")}</p>
+                    <p>{_t("auth|reset_password|other_devices_logout_warning_2")}</p>
                 </div>
             ),
             button: _t("action|continue"),
@@ -402,9 +394,9 @@ export default class ForgotPassword extends React.Component<Props, State> {
                             />
                             <PassphraseConfirmField
                                 name="reset_password_confirm"
-                                label={_td("Confirm new password")}
-                                labelRequired={_td("A new password must be entered.")}
-                                labelInvalid={_td("New passwords must match each other.")}
+                                label={_td("auth|reset_password|confirm_new_password")}
+                                labelRequired={_td("auth|reset_password|password_not_entered")}
+                                labelInvalid={_td("auth|reset_password|passwords_mismatch")}
                                 value={this.state.password2}
                                 password={this.state.password}
                                 fieldRef={(field) => (this.fieldPasswordConfirm = field)}
@@ -417,7 +409,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
                                 onChange={() => this.setState({ logoutDevices: !this.state.logoutDevices })}
                                 checked={this.state.logoutDevices}
                             >
-                                {_t("Sign out of all devices")}
+                                {_t("auth|reset_password|sign_out_other_devices")}
                             </StyledCheckbox>
                         </div>
                         {this.state.errorText && <ErrorMessage message={this.state.errorText} />}
@@ -434,19 +426,13 @@ export default class ForgotPassword extends React.Component<Props, State> {
         return (
             <>
                 <CheckboxIcon className="mx_Icon mx_Icon_32 mx_Icon_accent" />
-                <h1>{_t("Your password has been reset.")}</h1>
-                {this.state.logoutDevices ? (
-                    <p>
-                        {_t(
-                            "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.",
-                        )}
-                    </p>
-                ) : null}
+                <h1>{_t("auth|reset_password|reset_successful")}</h1>
+                {this.state.logoutDevices ? <p>{_t("auth|reset_password|devices_logout_success")}</p> : null}
                 <input
                     className="mx_Login_submit"
                     type="button"
                     onClick={this.props.onComplete}
-                    value={_t("Return to login screen")}
+                    value={_t("auth|reset_password|return_to_login")}
                 />
             </>
         );

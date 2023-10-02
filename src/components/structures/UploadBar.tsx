@@ -110,12 +110,12 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
         let uploadText: string;
         if (this.state.countFiles > 1) {
             // MUST use var name 'count' for pluralization to kick in
-            uploadText = _t("Uploading %(filename)s and %(count)s others", {
+            uploadText = _t("room|upload|uploading_multiple_file", {
                 filename: this.state.currentFile,
                 count: this.state.countFiles - 1,
             });
         } else {
-            uploadText = _t("Uploading %(filename)s", {
+            uploadText = _t("room|upload|uploading_single_file", {
                 filename: this.state.currentFile,
             });
         }

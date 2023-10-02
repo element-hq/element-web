@@ -1,8 +1,5 @@
 {
-    "A new password must be entered.": "కొత్త పాస్ వర్డ్ ను తప్పక నమోదు చేయాలి.",
     "An error has occurred.": "ఒక లోపము సంభవించినది.",
-    "Are you sure you want to leave the room '%(roomName)s'?": "మీరు ఖచ్చితంగా గది '%(roomName)s' వదిలివేయాలనుకుంటున్నారా?",
-    "Are you sure you want to reject the invitation?": "మీరు ఖచ్చితంగా ఆహ్వానాన్ని తిరస్కరించాలనుకుంటున్నారా?",
     "Custom level": "అనుకూల స్థాయి",
     "Sun": "ఆదివారం",
     "Mon": "సోమవారం",
@@ -15,7 +12,6 @@
     "Feb": "ఫిబ్రవరి",
     "Mar": "మార్చి",
     "Apr": "ఏప్రిల్",
-    "Server may be unavailable, overloaded, or search timed out :(": "సర్వర్ అందుబాటులో లేకపోవచ్చు, ఓవర్లోడ్ లేదా శోధన సమయం ముగిసి ఉండవచ్చు :(",
     "May": "మే",
     "Jun": "జూన్",
     "Jul": "జూలై",
@@ -27,9 +23,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s ,%(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "Connectivity to the server has been lost.": "సెర్వెర్ కనెక్టివిటీని కోల్పోయారు.",
-    "Sent messages will be stored until your connection has returned.": "మీ కనెక్షన్ తిరిగి వచ్చే వరకు పంపిన సందేశాలు నిల్వ చేయబడతాయి.",
-    "Failed to forget room %(errCode)s": "గది మర్చిపోవడం విఫలమైంది %(errCode)s",
     "unknown error code": "తెలియని కోడ్ లోపం",
     "Unable to restore session": "సెషన్ను పునరుద్ధరించడానికి సాధ్యపడలేదు",
     "Create new room": "క్రొత్త గది సృష్టించండి",
@@ -144,6 +137,9 @@
         "change_password_action": "పాస్వర్డ్ మార్చండి",
         "uia": {
             "msisdn_token_prompt": "దయచేసి దాన్ని కలిగి ఉన్న కోడ్ను నమోదు చేయండి:"
+        },
+        "reset_password": {
+            "password_not_entered": "కొత్త పాస్ వర్డ్ ను తప్పక నమోదు చేయాలి."
         }
     },
     "room_list": {
@@ -192,6 +188,10 @@
             "low_priority": "తక్కువ ప్రాధాన్యత"
         },
         "invite_this_room": "ఈ గదికి ఆహ్వానించండి",
+        "status_bar": {
+            "server_connectivity_lost_title": "సెర్వెర్ కనెక్టివిటీని కోల్పోయారు.",
+            "server_connectivity_lost_description": "మీ కనెక్షన్ తిరిగి వచ్చే వరకు పంపిన సందేశాలు నిల్వ చేయబడతాయి."
+        },
         "search": {
             "all_rooms": "అన్ని గదులు",
             "field_placeholder": "శోధన…"
@@ -199,5 +199,17 @@
     },
     "user_info": {
         "admin_tools_section": "నిర్వాహకుని ఉపకరణాలు"
+    },
+    "reject_invitation_dialog": {
+        "confirmation": "మీరు ఖచ్చితంగా ఆహ్వానాన్ని తిరస్కరించాలనుకుంటున్నారా?"
+    },
+    "leave_room_dialog": {
+        "leave_room_question": "మీరు ఖచ్చితంగా గది '%(roomName)s' వదిలివేయాలనుకుంటున్నారా?"
+    },
+    "error_dialog": {
+        "forget_room_failed": "గది మర్చిపోవడం విఫలమైంది %(errCode)s",
+        "search_failed": {
+            "server_unavailable": "సర్వర్ అందుబాటులో లేకపోవచ్చు, ఓవర్లోడ్ లేదా శోధన సమయం ముగిసి ఉండవచ్చు :("
+        }
     }
 }

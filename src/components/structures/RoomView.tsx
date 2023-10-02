@@ -292,7 +292,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
 
         statusBar = (
             <RoomStatusBarUnsentMessages
-                title={_t("Some of your messages have not been sent")}
+                title={_t("room|status_bar|some_messages_not_sent")}
                 notificationState={StaticNotificationState.RED_EXCLAMATION}
                 buttons={buttons}
             />
@@ -359,7 +359,7 @@ interface ILocalRoomCreateLoaderProps {
  * @return {ReactElement}
  */
 function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement {
-    const text = _t("We're creating a room with %(names)s", { names: props.names });
+    const text = _t("room|creating_room_text", { names: props.names });
     return (
         <div className="mx_RoomView mx_RoomView--local">
             <ErrorBoundary>
@@ -1081,9 +1081,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onPageUnload = (event: BeforeUnloadEvent): string | undefined => {
         if (ContentMessages.sharedInstance().getCurrentUploads().length > 0) {
-            return (event.returnValue = _t("You seem to be uploading files, are you sure you want to quit?"));
+            return (event.returnValue = _t("quit_warning|file_upload_in_progress"));
         } else if (this.getCallForRoom() && this.state.callState !== "ended") {
-            return (event.returnValue = _t("You seem to be in a call, are you sure you want to quit?"));
+            return (event.returnValue = _t("quit_warning|call_in_progress"));
         }
     };
 
@@ -1760,7 +1760,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
                 const msg = error.message ? error.message : JSON.stringify(error);
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Failed to reject invite"),
+                    title: _t("room|failed_reject_invite"),
                     description: msg,
                 });
 
@@ -1793,7 +1793,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
             const msg = error instanceof Error ? error.message : JSON.stringify(error);
             Modal.createDialog(ErrorDialog, {
-                title: _t("Failed to reject invite"),
+                title: _t("room|failed_reject_invite"),
                 description: msg,
             });
 
@@ -2190,7 +2190,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 const myUserId = this.context.client.getSafeUserId();
                 const myMember = this.state.room.getMember(myUserId);
                 const inviteEvent = myMember ? myMember.events.member : null;
-                let inviterName = _t("Unknown");
+                let inviterName = _t("room|inviter_unknown");
                 if (inviteEvent) {
                     inviterName = inviteEvent.sender?.name ?? inviteEvent.getSender()!;
                 }

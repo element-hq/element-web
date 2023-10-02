@@ -47,7 +47,7 @@ describe("<EmbeddedPage />", () => {
 
         const { asFragment } = render(<EmbeddedPage url="https://other.page" />);
         await screen.findByText("Couldn't load page");
-        expect(_t).toHaveBeenCalledWith("Couldn't load page");
+        expect(_t).toHaveBeenCalledWith("cant_load_page");
         expect(asFragment()).toMatchSnapshot();
     });
 

@@ -43,7 +43,6 @@
     },
     "Join Room": "Bli med i rom",
     "unknown error code": "ukjend feilkode",
-    "Failed to forget room %(errCode)s": "Fekk ikkje til å gløyma rommet %(errCode)s",
     "Sunday": "søndag",
     "Monday": "måndag",
     "Tuesday": "tysdag",
@@ -93,50 +92,13 @@
     "Share User": "Del Brukar",
     "Share Room Message": "Del Rommelding",
     "Link to selected message": "Lenk til den valde meldinga",
-    "Reject invitation": "Sei nei til innbyding",
-    "Are you sure you want to reject the invitation?": "Er du sikker på at du vil seia nei til innbydinga?",
     "You cannot delete this message. (%(code)s)": "Du kan ikkje sletta meldinga. (%(code)s)",
-    "Failed to reject invitation": "Fekk ikkje til å seia nei til innbyding",
-    "This room is not public. You will not be able to rejoin without an invite.": "Dette rommet er ikkje offentleg. Du kjem ikkje til å kunna koma inn att utan ei innbyding.",
-    "Are you sure you want to leave the room '%(roomName)s'?": "Er du sikker på at du vil forlate rommet '%(roomName)s'?",
-    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Du kan ikkje senda meldingar før du les over og godkjenner våre <consentLink>bruksvilkår</consentLink>.",
-    "Connectivity to the server has been lost.": "Tilkoplinga til tenaren vart tapt.",
-    "Sent messages will be stored until your connection has returned.": "Sende meldingar vil lagrast lokalt fram til nettverket er oppe att.",
-    "You seem to be uploading files, are you sure you want to quit?": "Det ser ut til at du lastar opp filer, er du sikker på at du vil avslutte?",
-    "You seem to be in a call, are you sure you want to quit?": "Det ser ut til at du er i ein samtale, er du sikker på at du vil avslutte?",
-    "Search failed": "Søket feila",
-    "No more results": "Ingen fleire resultat",
-    "Failed to reject invite": "Fekk ikkje til å avstå invitasjonen",
-    "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Prøvde å laste eit bestemt punkt i rommet sin historikk, men du har ikkje lov til å sjå den spesifike meldingen.",
-    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Prøvde å lasta eit bestemt punkt i rommet sin historikk, men klarde ikkje å finna det.",
-    "Failed to load timeline position": "Innlasting av punkt i historikken feila.",
-    "Uploading %(filename)s and %(count)s others": {
-        "other": "Lastar opp %(filename)s og %(count)s andre",
-        "one": "Lastar opp %(filename)s og %(count)s andre"
-    },
-    "Uploading %(filename)s": "Lastar opp %(filename)s",
-    "A new password must be entered.": "Du må skriva eit nytt passord inn.",
-    "New passwords must match each other.": "Dei nye passorda må vera like.",
-    "Return to login screen": "Gå attende til innlogging",
     "Session ID": "Økt-ID",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Du held på å verta teken til ei tredje-partisside so du kan godkjenna brukaren din til bruk med %(integrationsUrl)s. Vil du gå fram?",
     "Add an Integration": "Legg tillegg til",
     "Custom level": "Tilpassa nivå",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Klarte ikkje å lasta handlinga som vert svara til. Anten finst ho ikkje elles har du ikkje tilgang til å sjå ho.",
     "Filter results": "Filtrer resultat",
-    "Server may be unavailable, overloaded, or search timed out :(": "Tenaren er kanskje utilgjengeleg, overlasta, elles så vart søket tidsavbrote :(",
-    "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Meldinga di vart ikkje send, for denne heimetenaren har nådd grensa for maksimalt aktive brukarar pr. månad. Kontakt <a>systemadministratoren</a> for å vidare nytte denne tenesta.",
-    "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Denne meldingen vart ikkje send fordi heimetenaren har nådd grensa for tilgjengelege systemressursar. Kontakt <a>systemadministratoren</a> for å vidare nytta denne tenesta.",
-    "Could not load user profile": "Klarde ikkje å laste brukarprofilen",
-    "Your password has been reset.": "Passodet ditt vart nullstilt.",
-    "Invalid homeserver discovery response": "Feil svar frå heimetenaren (discovery response)",
-    "Failed to get autodiscovery configuration from server": "Klarde ikkje å hente automatisk oppsett frå tenaren",
-    "Invalid base_url for m.homeserver": "Feil base_url for m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "URL-adressa virkar ikkje til å vere ein gyldig Matrix-heimetenar",
-    "Invalid identity server discovery response": "Feil svar frå identitetstenaren (discovery response)",
-    "Invalid base_url for m.identity_server": "Feil base_url for m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "URL-adressa virkar ikkje til å vere ein gyldig identitetstenar",
-    "General failure": "Generell feil",
     "No recent messages by %(user)s found": "Fann ingen nyare meldingar frå %(user)s",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Prøv å rulle oppover i historikken for å sjå om det finst nokon eldre.",
     "Remove recent messages by %(user)s": "Fjern nyare meldingar frå %(user)s",
@@ -365,7 +327,6 @@
         "format_italics": "Kursiv",
         "replying_title": "Svarar"
     },
-    "Code": "Kode",
     "power_level": {
         "default": "Opphavleg innstilling",
         "restricted": "Avgrensa",
@@ -761,6 +722,11 @@
         "url_preview": {
             "close": "Lukk førehandsvisninga"
         },
+        "load_error": {
+            "no_permission": "Prøvde å laste eit bestemt punkt i rommet sin historikk, men du har ikkje lov til å sjå den spesifike meldingen.",
+            "unable_to_find": "Prøvde å lasta eit bestemt punkt i rommet sin historikk, men klarde ikkje å finna det.",
+            "title": "Innlasting av punkt i historikken feila."
+        },
         "error_no_renderer": "Denne hendingen kunne ikkje visast"
     },
     "slash_command": {
@@ -834,7 +800,6 @@
         "unknown": "Ukjend",
         "offline": "Fråkopla"
     },
-    "Unknown": "Ukjend",
     "voip": {
         "hangup": "Legg på",
         "voice_call": "Talesamtale",
@@ -931,21 +896,21 @@
             "url_previews_section": "URL-førehandsvisingar",
             "aliases_section": "Romadresser",
             "other_section": "Anna",
+            "topic_field_label": "Romemne",
+            "published_aliases_section": "Publisert adresse",
+            "no_aliases_room": "Dette rommet har ingen lokale adresser",
+            "new_alias_placeholder": "Ny publisert adresse  (t.d. #alias:tenar)",
+            "name_field_label": "Romnamn",
+            "local_aliases_section": "Lokale adresser",
+            "local_aliases_explainer_room": "Sett adresse for dette rommet, slik at brukarar kan finne rommet på din heimetenar (%(localDomain)s)",
+            "local_alias_field_label": "Lokal adresse",
             "error_updating_canonical_alias_title": "Feil under oppdatering av hovedadresse",
             "error_updating_canonical_alias_description": "Det skjedde ein feil under oppdatering av hovudadressa for rommet. Det kan hende at dette er ein mellombels feil, eller at det ikkje er tillate på tenaren.",
             "error_updating_alias_description": "Feil under oppdatering av alternativ adresse. Det kan hende at dette er mellombels, eller at det ikkje er tillate på tenaren.",
             "canonical_alias_field_label": "Hovudadresse",
-            "no_aliases_room": "Dette rommet har ingen lokale adresser",
-            "local_alias_field_label": "Lokal adresse",
-            "published_aliases_section": "Publisert adresse",
-            "aliases_items_label": "Andre publiserte adresser:",
+            "avatar_field_label": "Rom-avatar",
             "aliases_no_items_label": "Ingen publiserte adresser til no, legg til ei under",
-            "new_alias_placeholder": "Ny publisert adresse  (t.d. #alias:tenar)",
-            "local_aliases_section": "Lokale adresser",
-            "local_aliases_explainer_room": "Sett adresse for dette rommet, slik at brukarar kan finne rommet på din heimetenar (%(localDomain)s)",
-            "name_field_label": "Romnamn",
-            "topic_field_label": "Romemne",
-            "avatar_field_label": "Rom-avatar"
+            "aliases_items_label": "Andre publiserte adresser:"
         },
         "advanced": {
             "unfederated": "Rommet er ikkje tilgjengeleg for andre Matrix-heimtenarar",
@@ -1002,7 +967,8 @@
             "msisdn_token_prompt": "Ver venleg og skriv koden den inneheld inn:",
             "fallback_button": "Start authentisering",
             "sso_title": "Bruk Single-sign-on for å fortsette",
-            "sso_body": "Stadfest at du legger til denne e-postadressa, ved å bruka Single-sign-on for å stadfeste identiteten din."
+            "sso_body": "Stadfest at du legger til denne e-postadressa, ved å bruka Single-sign-on for å stadfeste identiteten din.",
+            "code": "Kode"
         },
         "msisdn_field_label": "Telefon",
         "identifier_label": "Logg inn med",
@@ -1014,7 +980,14 @@
         "incorrect_credentials_detail": "Merk deg at du loggar inn på %(hs)s-tenaren, ikkje matrix.org.",
         "create_account_title": "Lag konto",
         "failed_soft_logout_homeserver": "Fekk ikkje til å re-authentisere grunna ein feil på heimetenaren",
-        "soft_logout_subheading": "Fjern personlege data"
+        "soft_logout_subheading": "Fjern personlege data",
+        "reset_password": {
+            "password_not_entered": "Du må skriva eit nytt passord inn.",
+            "passwords_mismatch": "Dei nye passorda må vera like.",
+            "reset_successful": "Passodet ditt vart nullstilt.",
+            "return_to_login": "Gå attende til innlogging"
+        },
+        "common_failures": {}
     },
     "export_chat": {
         "messages": "Meldingar"
@@ -1119,14 +1092,30 @@
         "no_peek_join_prompt": "%(roomName)s kan ikkje førehandsvisast. Ynskjer du å bli med ?",
         "not_found_title_name": "%(roomName)s eksisterar ikkje.",
         "inaccessible_name": "%(roomName)s er ikkje tilgjengeleg no.",
-        "jump_to_bottom_button": "Gå til dei nyaste meldingane",
+        "upload": {
+            "uploading_multiple_file": {
+                "other": "Lastar opp %(filename)s og %(count)s andre",
+                "one": "Lastar opp %(filename)s og %(count)s andre"
+            },
+            "uploading_single_file": "Lastar opp %(filename)s"
+        },
         "upgrade_warning_bar_admins": "Berre rom-administratorar vil sjå denne åtvaringa",
+        "status_bar": {
+            "requires_consent_agreement": "Du kan ikkje senda meldingar før du les over og godkjenner våre <consentLink>bruksvilkår</consentLink>.",
+            "monthly_user_limit_reached": "Meldinga di vart ikkje send, for denne heimetenaren har nådd grensa for maksimalt aktive brukarar pr. månad. Kontakt <a>systemadministratoren</a> for å vidare nytte denne tenesta.",
+            "exceeded_resource_limit": "Denne meldingen vart ikkje send fordi heimetenaren har nådd grensa for tilgjengelege systemressursar. Kontakt <a>systemadministratoren</a> for å vidare nytta denne tenesta.",
+            "server_connectivity_lost_title": "Tilkoplinga til tenaren vart tapt.",
+            "server_connectivity_lost_description": "Sende meldingar vil lagrast lokalt fram til nettverket er oppe att."
+        },
         "search": {
             "this_room": "Dette rommet",
             "all_rooms": "Alle rom",
             "field_placeholder": "Søk…"
         },
-        "jump_read_marker": "Hopp til den fyrste uleste meldinga."
+        "jump_to_bottom_button": "Gå til dei nyaste meldingane",
+        "jump_read_marker": "Hopp til den fyrste uleste meldinga.",
+        "inviter_unknown": "Ukjend",
+        "failed_reject_invite": "Fekk ikkje til å avstå invitasjonen"
     },
     "file_panel": {
         "guest_note": "Du må <a>melda deg inn</a> for å bruka denne funksjonen",
@@ -1174,8 +1163,8 @@
         "setup_secure_backup": {
             "title": "Sett opp"
         },
-        "cross_signing_room_normal": "Dette rommet er ende-til-ende kryptert",
-        "event_shield_reason_mismatched_sender_key": "Kryptert av ein ikkje-verifisert sesjon"
+        "event_shield_reason_mismatched_sender_key": "Kryptert av ein ikkje-verifisert sesjon",
+        "cross_signing_room_normal": "Dette rommet er ende-til-ende kryptert"
     },
     "poll": {
         "create_poll_title": "Opprett røysting",
@@ -1281,9 +1270,6 @@
         "filter_placeholder": "Filtrer rommedlemmar",
         "power_label": "%(userName)s (tilgangsnivå %(powerLevelNumber)s)"
     },
-    "stickers": {
-        "empty": "Du har for tida ikkje skrudd nokre klistremerkepakkar på"
-    },
     "user_info": {
         "error_revoke_3pid_invite_title": "Fekk ikkje til å trekke invitasjonen",
         "error_revoke_3pid_invite_description": "Fekk ikkje til å ta attende invitasjonen. Det kan ha oppstått ein mellombels feil på tenaren, eller så har ikkje du tilstrekkelege rettar for å ta attende invitasjonen.",
@@ -1306,8 +1292,41 @@
         "deactivate_confirm_action": "Deaktiver brukar",
         "error_deactivate": "Fekk ikkje til å deaktivere brukaren"
     },
+    "stickers": {
+        "empty": "Du har for tida ikkje skrudd nokre klistremerkepakkar på"
+    },
     "right_panel": {
         "share_button": "Del rom",
         "settings_button": "Rominnstillingar"
-    }
+    },
+    "reject_invitation_dialog": {
+        "title": "Sei nei til innbyding",
+        "confirmation": "Er du sikker på at du vil seia nei til innbydinga?",
+        "failed": "Fekk ikkje til å seia nei til innbyding"
+    },
+    "quit_warning": {
+        "file_upload_in_progress": "Det ser ut til at du lastar opp filer, er du sikker på at du vil avslutte?",
+        "call_in_progress": "Det ser ut til at du er i ein samtale, er du sikker på at du vil avslutte?"
+    },
+    "no_more_results": "Ingen fleire resultat",
+    "leave_room_dialog": {
+        "room_rejoin_warning": "Dette rommet er ikkje offentleg. Du kjem ikkje til å kunna koma inn att utan ei innbyding.",
+        "leave_room_question": "Er du sikker på at du vil forlate rommet '%(roomName)s'?"
+    },
+    "error_dialog": {
+        "forget_room_failed": "Fekk ikkje til å gløyma rommet %(errCode)s",
+        "search_failed": {
+            "title": "Søket feila",
+            "server_unavailable": "Tenaren er kanskje utilgjengeleg, overlasta, elles så vart søket tidsavbrote :("
+        },
+        "error_loading_user_profile": "Klarde ikkje å laste brukarprofilen"
+    },
+    "Invalid homeserver discovery response": "Feil svar frå heimetenaren (discovery response)",
+    "Failed to get autodiscovery configuration from server": "Klarde ikkje å hente automatisk oppsett frå tenaren",
+    "Invalid base_url for m.homeserver": "Feil base_url for m.homeserver",
+    "Homeserver URL does not appear to be a valid Matrix homeserver": "URL-adressa virkar ikkje til å vere ein gyldig Matrix-heimetenar",
+    "Invalid identity server discovery response": "Feil svar frå identitetstenaren (discovery response)",
+    "Invalid base_url for m.identity_server": "Feil base_url for m.identity_server",
+    "Identity server URL does not appear to be a valid identity server": "URL-adressa virkar ikkje til å vere ein gyldig identitetstenar",
+    "General failure": "Generell feil"
 }

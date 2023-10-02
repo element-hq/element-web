@@ -291,7 +291,7 @@ describe("languageHandler JSX", function () {
         });
 
         // mocked lv has only `"Uploading %(filename)s and %(count)s others|one"`
-        const lvExistingPlural = "Uploading %(filename)s and %(count)s others";
+        const lvExistingPlural = "room|upload|uploading_multiple_file";
         const lvNonExistingPlural = "%(spaceName)s and %(count)s others";
 
         describe("pluralization", () => {

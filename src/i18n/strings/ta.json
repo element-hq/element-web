@@ -1,6 +1,5 @@
 {
     "Changelog": "மாற்றப்பதிவு",
-    "Failed to forget room %(errCode)s": "அறையை மறப்பதில் தோல்வி %(errCode)s",
     "Send": "அனுப்பு",
     "Unavailable": "இல்லை",
     "unknown error code": "தெரியாத பிழை குறி",
@@ -195,5 +194,8 @@
     },
     "composer": {
         "poll_button_no_perms_title": "அனுமதி தேவை"
+    },
+    "error_dialog": {
+        "forget_room_failed": "அறையை மறப்பதில் தோல்வி %(errCode)s"
     }
 }

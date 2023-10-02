@@ -1,5 +1,4 @@
 {
-    "Failed to forget room %(errCode)s": "Не атрымалася забыць пакой %(errCode)s",
     "common": {
         "error": "Памылка",
         "mute": "Без гуку",
@@ -46,5 +45,8 @@
             "low_priority": "Нізкі прыярытэт"
         },
         "invite_this_room": "Запрасіць у гэты пакой"
+    },
+    "error_dialog": {
+        "forget_room_failed": "Не атрымалася забыць пакой %(errCode)s"
     }
 }

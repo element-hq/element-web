@@ -61,7 +61,7 @@ enum Icon {
 function tooltipText(variant: Icon): string | undefined {
     switch (variant) {
         case Icon.Globe:
-            return _t("This room is public");
+            return _t("room|header|room_is_public");
         case Icon.PresenceOnline:
             return _t("presence|online");
         case Icon.PresenceAway:

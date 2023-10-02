@@ -96,7 +96,6 @@
     "Today": "cabdei",
     "Yesterday": "prulamdei",
     "Cancel search": "nu co'u sisku",
-    "Search failed": ".i da nabmi lo nu sisku",
     "Switch theme": "nu basti fi le ka jvinu",
     "Verify your other session using one of the options below.": ".i ko cuxna da le di'e cei'i le ka tadji lo nu do co'a lacri",
     "Ask this user to verify their session, or manually verify it below.": ".i ko cpedu le ka co'a lacri le se samtcise'u kei le pilno vau ja pilno le di'e cei'i le ka co'a lacri",
@@ -117,7 +116,6 @@
     "Upload %(count)s other files": {
         "one": "nu kibdu'a %(count)s vreji poi na du"
     },
-    "Are you sure you want to leave the room '%(roomName)s'?": ".i xu do birti le du'u do kaidji le ka co'u pagbu le se zilbe'i be fo la'o zoi. %(roomName)s .zoi",
     "<a>In reply to</a> <pill>": ".i nu <a>spuda</a> tu'a la'o zoi. <pill> .zoi",
     "Share Room": "nu jungau fi le du'u ve zilbe'i",
     "Share User": "nu jungau fi le du'u pilno",
@@ -428,8 +426,8 @@
         "import_invalid_passphrase": ".i pu fliba lo nu birti lo du'u curmi lo nu do jonse .i na'e drani xu japyvla",
         "verify_toast_title": "nu co'a lacri le se samtcise'u",
         "verify_toast_description": ".i la'a na pa na du be do cu lacri",
-        "cross_signing_room_normal": ".i ro zilbe'i be fo le cei'i cu mifra",
-        "cross_signing_room_verified": ".i do lacri ro pagbu be le se zilbe'i"
+        "cross_signing_room_verified": ".i do lacri ro pagbu be le se zilbe'i",
+        "cross_signing_room_normal": ".i ro zilbe'i be fo le cei'i cu mifra"
     },
     "export_chat": {
         "messages": "notci"
@@ -531,5 +529,13 @@
     },
     "right_panel": {
         "share_button": "nu jungau fi le du'u ve zilbe'i"
+    },
+    "leave_room_dialog": {
+        "leave_room_question": ".i xu do birti le du'u do kaidji le ka co'u pagbu le se zilbe'i be fo la'o zoi. %(roomName)s .zoi"
+    },
+    "error_dialog": {
+        "search_failed": {
+            "title": ".i da nabmi lo nu sisku"
+        }
     }
 }

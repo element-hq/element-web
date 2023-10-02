@@ -1,6 +1,5 @@
 {
     "Create new room": "Crea una sala nova",
-    "Failed to forget room %(errCode)s": "No s'ha pogut oblidar la sala %(errCode)s",
     "unknown error code": "codi d'error desconegut",
     "Warning!": "Avís!",
     "Sun": "dg.",
@@ -31,7 +30,6 @@
     "Restricted": "Restringit",
     "Moderator": "Moderador",
     "Send": "Envia",
-    "This room is not public. You will not be able to rejoin without an invite.": "Aquesta sala no és pública. No podreu tronar a entrar sense invitació.",
     "and %(count)s others...": {
         "other": "i %(count)s altres...",
         "one": "i un altre..."
@@ -73,25 +71,6 @@
     "This will allow you to reset your password and receive notifications.": "Això us permetrà restablir la vostra contrasenya i rebre notificacions.",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Si anteriorment heu utilitzat un versió de %(brand)s més recent, la vostra sessió podría ser incompatible amb aquesta versió. Tanqueu aquesta finestra i torneu a la versió més recent.",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Estàs a punt de ser redirigit a una web de tercers per autenticar el teu compte i poder ser utilitzat amb %(integrationsUrl)s. Vols continuar?",
-    "Reject invitation": "Rebutja la invitació",
-    "Are you sure you want to reject the invitation?": "Esteu segur que voleu rebutjar la invitació?",
-    "Failed to reject invitation": "No s'ha pogut rebutjar la invitació",
-    "Are you sure you want to leave the room '%(roomName)s'?": "Esteu segur que voleu sortir de la sala '%(roomName)s'?",
-    "Connectivity to the server has been lost.": "S'ha perdut la connectivitat amb el servidor.",
-    "Sent messages will be stored until your connection has returned.": "Els missatges enviats s'emmagatzemaran fins que la vostra connexió hagi tornat.",
-    "You seem to be uploading files, are you sure you want to quit?": "Sembla que s'està pujant fitxers, esteu segur que voleu sortir?",
-    "You seem to be in a call, are you sure you want to quit?": "Sembla que està en una trucada, estàs segur que vols sortir?",
-    "Search failed": "No s'ha pogut cercar",
-    "Server may be unavailable, overloaded, or search timed out :(": "Pot ser que el servidor no estigui disponible, que estigui sobrecarregat o que s'ha esgotat el temps de cerca :(",
-    "No more results": "No hi ha més resultats",
-    "Failed to reject invite": "No s'ha pogut rebutjar la invitació",
-    "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "S'ha intentat carregar un punt específic dins la línia de temps d'aquesta sala, però no teniu permís per veure el missatge en qüestió.",
-    "Tried to load a specific point in this room's timeline, but was unable to find it.": "S'ha intentat carregar un punt específic de la línia de temps d'aquesta sala, però no s'ha pogut trobar.",
-    "Failed to load timeline position": "No s'ha pogut carregar aquesta posició de la línia de temps",
-    "Uploading %(filename)s and %(count)s others": {
-        "other": "Pujant %(filename)s i %(count)s més"
-    },
-    "Uploading %(filename)s": "Pujant %(filename)s",
     "Session ID": "ID de la sessió",
     "Sunday": "Diumenge",
     "Today": "Avui",
@@ -472,6 +451,11 @@
         },
         "context_menu": {
             "external_url": "URL origen"
+        },
+        "load_error": {
+            "no_permission": "S'ha intentat carregar un punt específic dins la línia de temps d'aquesta sala, però no teniu permís per veure el missatge en qüestió.",
+            "unable_to_find": "S'ha intentat carregar un punt específic de la línia de temps d'aquesta sala, però no s'ha pogut trobar.",
+            "title": "No s'ha pogut carregar aquesta posició de la línia de temps"
         }
     },
     "slash_command": {
@@ -525,7 +509,6 @@
         "unknown": "Desconegut",
         "offline": "Fora de línia"
     },
-    "Unknown": "Desconegut",
     "voip": {
         "hangup": "Penja",
         "voice_call": "Trucada de veu",
@@ -581,15 +564,15 @@
             "default_url_previews_off": "Les previsualitzacions dels URL estan inhabilitades per defecte per als membres d'aquesta sala.",
             "url_previews_section": "Previsualitzacions dels URL",
             "other_section": "Altres",
+            "no_aliases_room": "Aquesta sala no té adreces locals",
+            "new_alias_placeholder": "Nova adreça publicada (p.e. #alias:server)",
             "error_updating_canonical_alias_title": "Error actualitzant adreça principal",
             "error_updating_canonical_alias_description": "S'ha produït un error en actualitzar l'adreça principal de la sala. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
             "error_updating_alias_description": "S'ha produït un error en actualitzar l'adreça alternativa de la sala. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
-            "error_creating_alias_title": "Error creant adreça",
-            "error_creating_alias_description": "S'ha produït un error en crear l'adreça. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
-            "error_deleting_alias_description": "S'ha produït un error en eliminar l'adreça. Pot ser que ja no existeixi o que s'hagi produït un error temporal.",
             "error_deleting_alias_title": "Error eliminant adreça",
-            "no_aliases_room": "Aquesta sala no té adreces locals",
-            "new_alias_placeholder": "Nova adreça publicada (p.e. #alias:server)"
+            "error_deleting_alias_description": "S'ha produït un error en eliminar l'adreça. Pot ser que ja no existeixi o que s'hagi produït un error temporal.",
+            "error_creating_alias_title": "Error creant adreça",
+            "error_creating_alias_description": "S'ha produït un error en crear l'adreça. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal."
         },
         "advanced": {
             "unfederated": "Aquesta sala no és accessible per a servidors de Matrix remots"
@@ -700,12 +683,24 @@
         "invite_email_mismatch_suggestion": "Per rebre invitacions directament a %(brand)s, comparteix aquest correu electrònic a Configuració.",
         "not_found_title_name": "La sala %(roomName)s no existeix.",
         "inaccessible_name": "La sala %(roomName)s no és accessible en aquest moment.",
+        "upload": {
+            "uploading_multiple_file": {
+                "other": "Pujant %(filename)s i %(count)s més"
+            },
+            "uploading_single_file": "Pujant %(filename)s"
+        },
+        "status_bar": {
+            "server_connectivity_lost_title": "S'ha perdut la connectivitat amb el servidor.",
+            "server_connectivity_lost_description": "Els missatges enviats s'emmagatzemaran fins que la vostra connexió hagi tornat."
+        },
         "search": {
             "this_room": "Aquesta sala",
             "all_rooms": "Totes les sales",
             "field_placeholder": "Cerca…"
         },
-        "jump_read_marker": "Salta al primer missatge no llegit."
+        "jump_read_marker": "Salta al primer missatge no llegit.",
+        "inviter_unknown": "Desconegut",
+        "failed_reject_invite": "No s'ha pogut rebutjar la invitació"
     },
     "file_panel": {
         "guest_note": "Per poder utilitzar aquesta funcionalitat has de <a>registrar-te</a>",
@@ -830,5 +825,26 @@
     },
     "right_panel": {
         "settings_button": "Configuració de sala"
+    },
+    "reject_invitation_dialog": {
+        "title": "Rebutja la invitació",
+        "confirmation": "Esteu segur que voleu rebutjar la invitació?",
+        "failed": "No s'ha pogut rebutjar la invitació"
+    },
+    "quit_warning": {
+        "file_upload_in_progress": "Sembla que s'està pujant fitxers, esteu segur que voleu sortir?",
+        "call_in_progress": "Sembla que està en una trucada, estàs segur que vols sortir?"
+    },
+    "no_more_results": "No hi ha més resultats",
+    "leave_room_dialog": {
+        "room_rejoin_warning": "Aquesta sala no és pública. No podreu tronar a entrar sense invitació.",
+        "leave_room_question": "Esteu segur que voleu sortir de la sala '%(roomName)s'?"
+    },
+    "error_dialog": {
+        "forget_room_failed": "No s'ha pogut oblidar la sala %(errCode)s",
+        "search_failed": {
+            "title": "No s'ha pogut cercar",
+            "server_unavailable": "Pot ser que el servidor no estigui disponible, que estigui sobrecarregat o que s'ha esgotat el temps de cerca :("
+        }
     }
 }

@@ -174,7 +174,7 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
                 value={value}
                 searchEnabled={true}
                 disabled={this.props.disabled}
-                label={_t("Country Dropdown")}
+                label={_t("auth|country_dropdown")}
                 autoComplete="tel-country-code"
             >
                 {options}

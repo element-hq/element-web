@@ -4,17 +4,11 @@
         "other": "en %(count)s anderen…",
         "one": "en één andere…"
     },
-    "A new password must be entered.": "Er moet een nieuw wachtwoord ingevoerd worden.",
     "An error has occurred.": "Er is een fout opgetreden.",
-    "Are you sure you want to reject the invitation?": "Weet je zeker dat je de uitnodiging wilt weigeren?",
-    "Are you sure you want to leave the room '%(roomName)s'?": "Weet je zeker dat je de kamer ‘%(roomName)s’ wil verlaten?",
     "Create new room": "Nieuwe kamer aanmaken",
-    "Failed to forget room %(errCode)s": "Vergeten van kamer is mislukt %(errCode)s",
     "unknown error code": "onbekende foutcode",
     "Moderator": "Moderator",
     "not specified": "niet opgegeven",
-    "No more results": "Geen resultaten meer",
-    "Reject invitation": "Uitnodiging weigeren",
     "Sun": "Zo",
     "Mon": "Ma",
     "Tue": "Di",
@@ -42,31 +36,13 @@
     "Email address": "E-mailadres",
     "Custom level": "Aangepast niveau",
     "Error decrypting attachment": "Fout bij het ontsleutelen van de bijlage",
-    "Failed to load timeline position": "Laden van tijdslijnpositie is mislukt",
-    "Failed to reject invite": "Weigeren van uitnodiging is mislukt",
-    "Failed to reject invitation": "Weigeren van uitnodiging is mislukt",
     "Home": "Home",
     "Invalid file%(extra)s": "Ongeldig bestand %(extra)s",
     "Join Room": "Kamer toetreden",
-    "New passwords must match each other.": "Nieuwe wachtwoorden moeten overeenkomen.",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Bekijk je e-mail en klik op de koppeling daarin. Klik vervolgens op ‘Verder gaan’.",
-    "Return to login screen": "Terug naar het loginscherm",
-    "Search failed": "Zoeken mislukt",
-    "Server may be unavailable, overloaded, or search timed out :(": "De server is misschien onbereikbaar of overbelast, of het zoeken duurde te lang :(",
     "Session ID": "Sessie-ID",
-    "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Je probeert een punt in de tijdlijn van deze kamer te laden, maar je hebt niet voldoende rechten om het bericht te lezen.",
-    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Geprobeerd een gegeven punt in de tijdslijn van deze kamer te laden, maar kon dit niet vinden.",
-    "Uploading %(filename)s": "%(filename)s wordt geüpload",
-    "Uploading %(filename)s and %(count)s others": {
-        "one": "%(filename)s en %(count)s ander worden geüpload",
-        "other": "%(filename)s en %(count)s andere worden geüpload"
-    },
     "Verification Pending": "Verificatie in afwachting",
     "Warning!": "Let op!",
-    "You seem to be in a call, are you sure you want to quit?": "Het ziet er naar uit dat je in gesprek bent, weet je zeker dat je wil afsluiten?",
-    "You seem to be uploading files, are you sure you want to quit?": "Het ziet er naar uit dat je bestanden aan het uploaden bent, weet je zeker dat je wil afsluiten?",
-    "Connectivity to the server has been lost.": "De verbinding met de server is verbroken.",
-    "Sent messages will be stored until your connection has returned.": "Verstuurde berichten zullen opgeslagen worden totdat je verbinding hersteld is.",
     "(~%(count)s results)": {
         "one": "(~%(count)s resultaat)",
         "other": "(~%(count)s resultaten)"
@@ -96,7 +72,6 @@
         "other": "En %(count)s meer…"
     },
     "<a>In reply to</a> <pill>": "<a>Als antwoord op</a> <pill>",
-    "This room is not public. You will not be able to rejoin without an invite.": "Dit is geen publieke kamer. Slechts op uitnodiging zal je opnieuw kunnen toetreden.",
     "Sunday": "Zondag",
     "Today": "Vandaag",
     "Friday": "Vrijdag",
@@ -124,7 +99,6 @@
     "Share User": "Persoon delen",
     "Share Room Message": "Bericht uit kamer delen",
     "Link to selected message": "Koppeling naar geselecteerd bericht",
-    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Je kan geen berichten sturen totdat je <consentLink>onze algemene voorwaarden</consentLink> hebt gelezen en aanvaard.",
     "Dog": "Hond",
     "Cat": "Kat",
     "Lion": "Leeuw",
@@ -225,17 +199,8 @@
     "No backup found!": "Geen back-up gevonden!",
     "Failed to decrypt %(failedCount)s sessions!": "Ontsleutelen van %(failedCount)s sessies is mislukt!",
     "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Let op</b>: stel sleutelback-up enkel in op een vertrouwde computer.",
-    "This homeserver would like to make sure you are not a robot.": "Deze homeserver wil graag weten of je geen robot bent.",
     "Email (optional)": "E-mailadres (optioneel)",
     "Join millions for free on the largest public server": "Neem deel aan de grootste publieke server samen met miljoenen anderen",
-    "Couldn't load page": "Kon pagina niet laden",
-    "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Je bericht is niet verstuurd omdat deze homeserver zijn limiet voor maandelijks actieve personen heeft bereikt. <a>Neem contact op met je beheerder</a> om de dienst te blijven gebruiken.",
-    "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Je bericht is niet verstuurd omdat deze homeserver een systeembronlimiet heeft overschreden. <a>Neem contact op met je dienstbeheerder</a> om de dienst te blijven gebruiken.",
-    "Could not load user profile": "Kon persoonsprofiel niet laden",
-    "Your password has been reset.": "Jouw wachtwoord is opnieuw ingesteld.",
-    "Invalid homeserver discovery response": "Ongeldig homeserver-vindbaarheids-antwoord",
-    "Invalid identity server discovery response": "Ongeldig identiteitsserver-vindbaarheidsantwoord",
-    "General failure": "Algemene fout",
     "Remember my selection for this widget": "Onthoud mijn keuze voor deze widget",
     "Notes": "Opmerkingen",
     "Sign out and remove encryption keys?": "Uitloggen en versleutelingssleutels verwijderen?",
@@ -256,11 +221,6 @@
     "Upload Error": "Fout bij versturen van bestand",
     "edited": "bewerkt",
     "Some characters not allowed": "Sommige tekens zijn niet toegestaan",
-    "Failed to get autodiscovery configuration from server": "Ophalen van auto-vindbaarheidsconfiguratie van server is mislukt",
-    "Invalid base_url for m.homeserver": "Ongeldige base_url voor m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "De homeserver-URL lijkt geen geldige Matrix-homeserver",
-    "Invalid base_url for m.identity_server": "Ongeldige base_url voor m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "De identiteitsserver-URL lijkt geen geldige identiteitsserver",
     "Upload all": "Alles versturen",
     "Edited at %(date)s. Click to view edits.": "Bewerkt op %(date)s. Klik om de bewerkingen te bekijken.",
     "Message edits": "Berichtbewerkingen",
@@ -350,7 +310,6 @@
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "Dit heeft meestal enkel een invloed op de manier waarop de kamer door de server verwerkt wordt. Als je problemen met je %(brand)s ondervindt, <a>dien dan een foutmelding in</a>.",
     "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Je upgrade deze kamer van <oldVersion /> naar <newVersion />.",
     "Verification Request": "Verificatieverzoek",
-    "Country Dropdown": "Landselectie",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Bekijk eerst het <a>openbaarmakingsbeleid</a> van Matrix.org als je een probleem met de beveiliging van Matrix wilt melden.",
     "You signed in to a new session without verifying it:": "Je hebt je bij een nog niet geverifieerde sessie aangemeld:",
     "Verify your other session using one of the options below.": "Verifieer je andere sessie op een van onderstaande wijzen.",
@@ -607,7 +566,6 @@
     "Bangladesh": "Bangladesh",
     "Vatican City": "Vaticaanstad",
     "Taiwan": "Taiwan",
-    "This room is public": "Deze kamer is publiek",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "Start een kamer met iemand door hun naam, e-mailadres of inlognaam (zoals <userId/>) te typen.",
     "Backup version:": "Versie reservekopie:",
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Je hebt eerder een nieuwere versie van %(brand)s in deze sessie gebruikt. Om deze versie opnieuw met eind-tot-eind-versleuteling te gebruiken, zal je moeten uitloggen en opnieuw inloggen.",
@@ -729,7 +687,6 @@
     "Enter the name of a new server you want to explore.": "Voer de naam in van een nieuwe server die je wilt ontdekken.",
     "Submit logs": "Logs versturen",
     "Verify all users in a room to ensure it's secure.": "Controleer alle personen in een kamer om er zeker van te zijn dat het veilig is.",
-    "Open dial pad": "Kiestoetsen openen",
     "Dial pad": "Kiestoetsen",
     "IRC display name width": "Breedte IRC-weergavenaam",
     "To continue, use Single Sign On to prove your identity.": "Om verder te gaan, gebruik je eenmalige aanmelding om je identiteit te bewijzen.",
@@ -737,8 +694,6 @@
         "other": "%(count)s personen",
         "one": "%(count)s persoon"
     },
-    "Are you sure you want to leave the space '%(spaceName)s'?": "Weet je zeker dat je de Space '%(spaceName)s' wilt verlaten?",
-    "This space is not public. You will not be able to rejoin without an invite.": "Deze Space is niet publiek. Zonder uitnodiging zal je niet opnieuw kunnen toetreden.",
     "Failed to start livestream": "Starten van livestream is mislukt",
     "Unable to start audio streaming.": "Kan audiostream niet starten.",
     "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Nodig iemand uit per naam, inlognaam (zoals <userId/>) of <a>deel deze Space</a>.",
@@ -748,17 +703,14 @@
     "Leave space": "Space verlaten",
     "Create a space": "Space maken",
     "<inviter/> invites you": "<inviter/> nodigt je uit",
-    "You may want to try a different search or check for typos.": "Je kan een andere zoekterm proberen of controleren op een typefout.",
     "No results found": "Geen resultaten gevonden",
     "%(count)s rooms": {
         "one": "%(count)s kamer",
         "other": "%(count)s kamers"
     },
-    "You don't have permission": "Je hebt geen toestemming",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Normaal gesproken heeft dit alleen invloed op het verwerken van de kamer op de server. Als je problemen ervaart met %(brand)s, stuur dan een bugmelding.",
     "Invite to %(roomName)s": "Uitnodiging voor %(roomName)s",
     "Edit devices": "Apparaten bewerken",
-    "Avatar": "Afbeelding",
     "You most likely do not want to reset your event index store": "Je wilt waarschijnlijk niet jouw gebeurtenisopslag-index resetten",
     "Reset event store?": "Gebeurtenisopslag resetten?",
     "Reset event store": "Gebeurtenisopslag resetten",
@@ -770,17 +722,12 @@
         "one": "%(count)s persoon die je kent is al geregistreerd",
         "other": "%(count)s personen die je kent hebben zich al geregistreerd"
     },
-    "You are the only person here. If you leave, no one will be able to join in the future, including you.": "Je bent de enige persoon hier. Als je weggaat, zal niemand in de toekomst kunnen toetreden, jij ook niet.",
     "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Als u alles reset zult u opnieuw opstarten zonder vertrouwde sessies, zonder vertrouwde personen, en zult u misschien geen oude berichten meer kunnen zien.",
     "Only do this if you have no other device to complete verification with.": "Doe dit alleen als u geen ander apparaat hebt om de verificatie mee uit te voeren.",
     "Reset everything": "Alles opnieuw instellen",
     "Forgotten or lost all recovery methods? <a>Reset all</a>": "Alles vergeten en alle herstelmethoden verloren? <a>Alles opnieuw instellen</a>",
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Als je dat doet, let wel op dat geen van jouw berichten wordt verwijderd, maar de zoekresultaten zullen gedurende enkele ogenblikken verslechteren terwijl de index opnieuw wordt aangemaakt",
-    "You can select all or individual messages to retry or delete": "Je kan alles selecteren of per individueel bericht opnieuw versturen of verwijderen",
     "Sending": "Wordt verstuurd",
-    "Retry all": "Alles opnieuw proberen",
-    "Delete all": "Verwijder alles",
-    "Some of your messages have not been sent": "Enkele van jouw berichten zijn niet verstuurd",
     "Including %(commaSeparatedMembers)s": "Inclusief %(commaSeparatedMembers)s",
     "View all %(count)s members": {
         "one": "1 lid bekijken",
@@ -794,7 +741,6 @@
     "Not all selected were added": "Niet alle geselecteerden zijn toegevoegd",
     "You are not allowed to view this server's rooms list": "Je hebt geen toegang tot deze server zijn kamergids",
     "Error processing voice message": "Fout bij verwerking spraakbericht",
-    "Search names and descriptions": "In namen en omschrijvingen zoeken",
     "You may contact me if you have any follow up questions": "Je mag contact met mij opnemen als je nog vervolg vragen heeft",
     "To leave the beta, visit your settings.": "Om de beta te verlaten, ga naar je instellingen.",
     "Add reaction": "Reactie toevoegen",
@@ -806,12 +752,9 @@
     "You don't have permission to do this": "Je hebt geen rechten om dit te doen",
     "Please provide an address": "Geef een adres op",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Bericht zoeken initialisatie mislukt, controleer <a>je instellingen</a> voor meer informatie",
-    "Unnamed audio": "Naamloze audio",
     "Error processing audio message": "Fout bij verwerking audiobericht",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Jouw %(brand)s laat je geen integratiebeheerder gebruiken om dit te doen. Neem contact op met een beheerder.",
     "User Directory": "Personengids",
-    "Unable to copy a link to the room to the clipboard.": "Kopiëren van kamerlink naar het klembord is mislukt.",
-    "Unable to copy room link": "Kopiëren van kamerlink is mislukt",
     "The call is in an unknown state!": "Deze oproep heeft een onbekende status!",
     "Call back": "Terugbellen",
     "No answer": "Geen antwoord",
@@ -819,7 +762,6 @@
     "Their device couldn't start the camera or microphone": "Het andere apparaat kon de camera of microfoon niet starten",
     "Connection failed": "Verbinding mislukt",
     "Could not connect media": "Mediaverbinding mislukt",
-    "Error downloading audio": "Fout bij downloaden van audio",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Let op bijwerken maakt een nieuwe versie van deze kamer</b>. Alle huidige berichten blijven in deze gearchiveerde kamer.",
     "Automatically invite members from this room to the new one": "Automatisch leden uitnodigen van deze kamer in de nieuwe",
     "These are likely ones other room admins are a part of.": "Dit zijn waarschijnlijk kamers waar andere kamerbeheerders deel van uitmaken.",
@@ -850,8 +792,6 @@
     "Missed call": "Oproep gemist",
     "Call declined": "Oproep geweigerd",
     "Unknown failure: %(reason)s": "Onbekende fout: %(reason)s",
-    "Rooms and spaces": "Kamers en Spaces",
-    "Results": "Resultaten",
     "Some encryption parameters have been changed.": "Enkele versleutingsparameters zijn gewijzigd.",
     "To join a space you'll need an invite.": "Om te kunnen deelnemen aan een space heb je een uitnodiging nodig.",
     "Would you like to leave the rooms in this space?": "Wil je de kamers verlaten in deze Space?",
@@ -867,9 +807,6 @@
         "one": "%(count)s reactie",
         "other": "%(count)s reacties"
     },
-    "Really reset verification keys?": "Echt je verificatiesleutels resetten?",
-    "Skip verification for now": "Verificatie voorlopig overslaan",
-    "Joining": "Toetreden",
     "Thread options": "Draad opties",
     "Forget": "Vergeet",
     "If you can't see who you're looking for, send them your invite link below.": "Als je niet kan vinden wie je zoekt, stuur ze dan je uitnodigingslink hieronder.",
@@ -924,9 +861,6 @@
     "Sections to show": "Te tonen secties",
     "Link to room": "Link naar kamer",
     "Including you, %(commaSeparatedMembers)s": "Inclusief jij, %(commaSeparatedMembers)s",
-    "Device verified": "Apparaat geverifieerd",
-    "Verify this device": "Verifieer dit apparaat",
-    "Unable to verify this device": "Kan dit apparaat niet verifiëren",
     "Verify other device": "Verifieer ander apparaat",
     "This address had invalid server or is already in use": "Dit adres heeft een ongeldige server of is al in gebruik",
     "Missing room name or separator e.g. (my-room:domain.org)": "Ontbrekende kamernaam of scheidingsteken, bijv. (mijn-kamer:voorbeeld.nl)",
@@ -937,7 +871,6 @@
     "Could not fetch location": "Kan locatie niet ophalen",
     "Message pending moderation": "Bericht in afwachting van moderatie",
     "Message pending moderation: %(reason)s": "Bericht in afwachting van moderatie: %(reason)s",
-    "Wait!": "Wacht!",
     "This address does not point at this room": "Dit adres verwijst niet naar deze kamer",
     "Pick a date to jump to": "Kies een datum om naar toe te springen",
     "Jump to date": "Spring naar datum",
@@ -982,9 +915,6 @@
     "Live location ended": "Live locatie beëindigd",
     "Live until %(expiryTime)s": "Live tot %(expiryTime)s",
     "View live location": "Bekijk live locatie",
-    "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Je bent afgemeld op al je apparaten en zal geen pushmeldingen meer ontvangen. Meld je op elk apparaat opnieuw aan om weer meldingen te ontvangen.",
-    "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "Als je toegang tot je berichten wilt behouden, stel dan sleutelback-up in of exporteer je sleutels vanaf een van je andere apparaten voordat je verder gaat.",
-    "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "Jouw apparaten uitloggen zal de ertoe behorende encryptiesleutels verwijderen, wat versleutelde berichten onleesbaar zal maken.",
     "Close sidebar": "Zijbalk sluiten",
     "View List": "Toon Lijst",
     "View list": "Toon lijst",
@@ -1000,7 +930,6 @@
     "Confirm that you would like to deactivate your account. If you proceed:": "Bevestig dat je jouw account wil deactiveren. Als je doorgaat:",
     "To continue, please enter your account password:": "Voer je wachtwoord in om verder te gaan:",
     "An error occurred while stopping your live location": "Er is een fout opgetreden bij het stoppen van je live locatie",
-    "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.": "Je bericht is niet verzonden omdat deze server is geblokkeerd door de beheerder. Neem <a>contact op met je servicebeheerder</a> om de service te blijven gebruiken.",
     "Cameras": "Camera's",
     "Output devices": "Uitvoerapparaten",
     "Input devices": "Invoer apparaten",
@@ -1032,7 +961,6 @@
     "Show spaces": "Toon spaces",
     "Show rooms": "Toon kamers",
     "Explore public spaces in the new search dialog": "Ontdek openbare ruimtes in het nieuwe zoekvenster",
-    "Stop and close": "Stop en sluit",
     "Online community members": "Leden van online gemeenschap",
     "Coworkers and teams": "Collega's en teams",
     "Friends and family": "Vrienden en familie",
@@ -1043,29 +971,10 @@
     "You don't have permission to share locations": "Je bent niet gemachtigd om locaties te delen",
     "Messages in this chat will be end-to-end encrypted.": "Berichten in deze chat worden eind-tot-eind versleuteld.",
     "Saved Items": "Opgeslagen items",
-    "We're creating a room with %(names)s": "We maken een kamer aan met %(names)s",
     "Choose a locale": "Kies een landinstelling",
     "Interactively verify by emoji": "Interactief verifiëren door emoji",
     "Manually verify by text": "Handmatig verifiëren via tekst",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s of %(recoveryFile)s",
-    "Completing set up of your new device": "De configuratie van je nieuwe apparaat voltooien",
-    "Waiting for device to sign in": "Wachten op apparaat om in te loggen",
-    "Review and approve the sign in": "Controleer en keur de aanmelding goed",
-    "Start at the sign in screen": "Begin bij het inlogscherm",
-    "Scan the QR code below with your device that's signed out.": "Scan de onderstaande QR-code met je apparaat dat is uitgelogd.",
-    "By approving access for this device, it will have full access to your account.": "Door de toegang voor dit apparaat goed te keuren, heeft het volledige toegang tot jouw account.",
-    "Check that the code below matches with your other device:": "Controleer of de onderstaande code overeenkomt met je andere apparaat:",
-    "Devices connected": "Verbonden apparaten",
-    "The homeserver doesn't support signing in another device.": "De server ondersteunt het inloggen op een ander apparaat niet.",
-    "An unexpected error occurred.": "Er is een onverwachte fout opgetreden.",
-    "The request was cancelled.": "Het verzoek is geannuleerd.",
-    "The other device isn't signed in.": "Het andere apparaat is niet ingelogd.",
-    "The other device is already signed in.": "Het andere apparaat is al aangemeld.",
-    "The request was declined on the other device.": "Het verzoek is afgewezen op het andere apparaat.",
-    "Linking with this device is not supported.": "Koppelen met dit apparaat wordt niet ondersteund.",
-    "The scanned code is invalid.": "De gescande code is ongeldig.",
-    "The linking wasn't completed in the required time.": "De koppeling is niet binnen de vereiste tijd voltooid.",
-    "Sign in new device": "Aanmelden nieuw apparaat",
     "Video call ended": "Video oproep beëindigd",
     "%(name)s started a video call": "%(name)s is een videogesprek gestart",
     "common": {
@@ -1182,10 +1091,11 @@
         "historical": "Historisch",
         "go_to_settings": "Ga naar instellingen",
         "setup_secure_messages": "Beveiligde berichten instellen",
-        "unencrypted": "Onversleuteld",
         "view_message": "Bericht bekijken",
-        "joined": "Toegetreden",
+        "unencrypted": "Onversleuteld",
         "show_more": "Meer tonen",
+        "joined": "Toegetreden",
+        "avatar": "Afbeelding",
         "are_you_sure": "Weet je het zeker?"
     },
     "action": {
@@ -1477,11 +1387,10 @@
         "format_italics": "Cursief",
         "format_insert_link": "Koppeling invoegen",
         "replying_title": "Aan het beantwoorden",
-        "edit_composer_label": "Bericht bewerken",
+        "stop_voice_message": "Opname stoppen",
         "send_voice_message": "Spraakbericht versturen",
-        "stop_voice_message": "Opname stoppen"
+        "edit_composer_label": "Bericht bewerken"
     },
-    "Code": "Code",
     "power_level": {
         "default": "Standaard",
         "restricted": "Beperkte toegang",
@@ -2443,14 +2352,23 @@
         },
         "read_receipts_label": "Leesbevestigingen",
         "thread_info_basic": "Uit een conversatie",
-        "error_no_renderer": "Deze gebeurtenis kon niet weergegeven worden",
         "send_state_sent": "Je bericht is verstuurd",
         "send_state_failed": "Versturen is mislukt",
         "mab": {
             "label": "Berichtacties",
             "view_in_room": "In kamer bekijken",
             "copy_link_thread": "Kopieer link naar draad"
-        }
+        },
+        "m.audio": {
+            "unnamed_audio": "Naamloze audio",
+            "error_downloading_audio": "Fout bij downloaden van audio"
+        },
+        "load_error": {
+            "no_permission": "Je probeert een punt in de tijdlijn van deze kamer te laden, maar je hebt niet voldoende rechten om het bericht te lezen.",
+            "unable_to_find": "Geprobeerd een gegeven punt in de tijdslijn van deze kamer te laden, maar kon dit niet vinden.",
+            "title": "Laden van tijdslijnpositie is mislukt"
+        },
+        "error_no_renderer": "Deze gebeurtenis kon niet weergegeven worden"
     },
     "slash_command": {
         "spoiler": "Verstuurt het bericht als een spoiler",
@@ -2549,7 +2467,6 @@
         "offline": "Offline",
         "away": "Afwezig"
     },
-    "Unknown": "Onbekend",
     "event_preview": {
         "m.call.answer": {
             "you": "Je hebt deelgenomen aan de oproep",
@@ -2776,31 +2693,31 @@
             "leave_space": "Space verlaten",
             "aliases_section": "Kameradressen",
             "other_section": "Overige",
-            "error_updating_canonical_alias_title": "Fout bij bijwerken van hoofdadres",
-            "error_updating_canonical_alias_description": "Er is een fout opgetreden bij het bijwerken van het hoofdadres van de kamer. Dit wordt mogelijk niet toegestaan door de server of er is een tijdelijk probleem opgetreden.",
-            "error_updating_alias_description": "Er is een fout opgetreden bij het bijwerken van de bijnaam van de kamer. Dit wordt mogelijk niet toegestaan door de server of er is een tijdelijk probleem opgetreden.",
-            "error_creating_alias_title": "Fout bij aanmaken van het adres",
-            "error_creating_alias_description": "Er is een fout opgetreden bij het aanmaken van dit adres. Dit wordt mogelijk niet toegestaan door de server, of er is een tijdelijk probleem opgetreden.",
-            "error_deleting_alias_description_forbidden": "Je hebt geen toestemming om het adres te verwijderen.",
-            "error_deleting_alias_description": "Er is een fout opgetreden bij het verwijderen van dit adres. Deze bestaat mogelijk niet meer, of er is een tijdelijke fout opgetreden.",
-            "error_deleting_alias_title": "Fout bij verwijderen van adres",
-            "canonical_alias_field_label": "Hoofdadres",
-            "no_aliases_space": "Deze Space heeft geen lokaaladres",
-            "no_aliases_room": "Deze kamer heeft geen lokale adressen",
-            "local_alias_field_label": "Lokaal adres",
+            "topic_field_label": "Kameronderwerp",
             "published_aliases_section": "Gepubliceerde adressen",
             "published_aliases_explainer_space": "Gepubliceerde adressen kunnen door iedereen op elke server gebruikt worden om jouw Space te betreden.",
             "published_aliases_explainer_room": "Gepubliceerde adressen kunnen door iedereen op elke server gebruikt worden om bij jouw kamer te komen.",
             "published_aliases_description": "Om een adres te publiceren, moet het eerst als een lokaaladres worden ingesteld.",
-            "aliases_items_label": "Andere gepubliceerde adressen:",
-            "aliases_no_items_label": "Nog geen andere gepubliceerde adressen, voeg er hieronder een toe",
+            "no_aliases_space": "Deze Space heeft geen lokaaladres",
+            "no_aliases_room": "Deze kamer heeft geen lokale adressen",
             "new_alias_placeholder": "Nieuw gepubliceerd adres (b.v. #bijnaam:server)",
+            "name_field_label": "Kamernaam",
             "local_aliases_section": "Lokale adressen",
             "local_aliases_explainer_space": "Stel adressen in voor deze Space zodat personen deze Space kunnen vinden via jouw homeserver (%(localDomain)s)",
             "local_aliases_explainer_room": "Stel een adres in zodat personen deze kamer via jouw homeserver (%(localDomain)s) kunnen vinden",
-            "name_field_label": "Kamernaam",
-            "topic_field_label": "Kameronderwerp",
-            "avatar_field_label": "Kamerafbeelding"
+            "local_alias_field_label": "Lokaal adres",
+            "error_updating_canonical_alias_title": "Fout bij bijwerken van hoofdadres",
+            "error_updating_canonical_alias_description": "Er is een fout opgetreden bij het bijwerken van het hoofdadres van de kamer. Dit wordt mogelijk niet toegestaan door de server of er is een tijdelijk probleem opgetreden.",
+            "error_updating_alias_description": "Er is een fout opgetreden bij het bijwerken van de bijnaam van de kamer. Dit wordt mogelijk niet toegestaan door de server of er is een tijdelijk probleem opgetreden.",
+            "error_deleting_alias_title": "Fout bij verwijderen van adres",
+            "error_deleting_alias_description_forbidden": "Je hebt geen toestemming om het adres te verwijderen.",
+            "error_deleting_alias_description": "Er is een fout opgetreden bij het verwijderen van dit adres. Deze bestaat mogelijk niet meer, of er is een tijdelijke fout opgetreden.",
+            "error_creating_alias_title": "Fout bij aanmaken van het adres",
+            "error_creating_alias_description": "Er is een fout opgetreden bij het aanmaken van dit adres. Dit wordt mogelijk niet toegestaan door de server, of er is een tijdelijk probleem opgetreden.",
+            "canonical_alias_field_label": "Hoofdadres",
+            "avatar_field_label": "Kamerafbeelding",
+            "aliases_no_items_label": "Nog geen andere gepubliceerde adressen, voeg er hieronder een toe",
+            "aliases_items_label": "Andere gepubliceerde adressen:"
         },
         "advanced": {
             "unfederated": "Deze kamer is niet toegankelijk vanaf externe Matrix-servers",
@@ -2893,10 +2810,17 @@
             "verification_skip_warning": "Zonder verifiëren heb je geen toegang tot al je berichten en kan je als onvertrouwd aangemerkt staan bij anderen.",
             "verify_later": "Ik verifieer het later",
             "verify_reset_warning_1": "Het resetten van je verificatiesleutels kan niet ongedaan worden gemaakt. Na het resetten heb je geen toegang meer tot oude versleutelde berichten, en vrienden die je eerder hebben geverifieerd zullen veiligheidswaarschuwingen zien totdat je opnieuw bij hen geverifieert bent.",
-            "self_verification_hint": "Om door te gaan, accepteer het verificatie verzoek op je andere apparaat.",
             "waiting_for_user_accept": "Wachten tot %(displayName)s aanvaardt…",
-            "accepting": "Toestaan…",
-            "start_button": "Verificatie beginnen"
+            "start_button": "Verificatie beginnen",
+            "self_verification_hint": "Om door te gaan, accepteer het verificatie verzoek op je andere apparaat.",
+            "after_new_login": {
+                "unable_to_verify": "Kan dit apparaat niet verifiëren",
+                "verify_this_device": "Verifieer dit apparaat",
+                "device_verified": "Apparaat geverifieerd",
+                "reset_confirmation": "Echt je verificatiesleutels resetten?",
+                "skip_verification": "Verificatie voorlopig overslaan"
+            },
+            "accepting": "Toestaan…"
         },
         "old_version_detected_title": "Oude cryptografiegegevens gedetecteerd",
         "old_version_detected_description": "Er zijn gegevens van een oudere versie van %(brand)s gevonden, die problemen veroorzaakt hebben met de eind-tot-eind-versleuteling in de oude versie. Onlangs vanuit de oude versie verzonden eind-tot-eind-versleutelde berichten zijn mogelijk onontsleutelbaar in deze versie. Ook kunnen berichten die met deze versie uitgewisseld zijn falen. Mocht je problemen ervaren, log dan opnieuw in. Exporteer je sleutels en importeer ze weer om je berichtgeschiedenis te behouden.",
@@ -2934,14 +2858,6 @@
             "explainer": "Maak een back-up van je sleutels voordat je jezelf afmeldt om ze niet te verliezen.",
             "title": "Instellen"
         },
-        "cross_signing_user_warning": "Deze persoon heeft niet al zijn sessies geverifieerd.",
-        "cross_signing_user_normal": "Je hebt deze persoon niet geverifieerd.",
-        "cross_signing_user_verified": "Je hebt deze persoon geverifieerd. Deze persoon heeft al zijn sessies geverifieerd.",
-        "cross_signing_room_warning": "Iemand gebruikt een onbekende sessie",
-        "cross_signing_room_normal": "Deze kamer is eind-tot-eind-versleuteld",
-        "cross_signing_room_verified": "Iedereen in deze kamer is geverifieerd",
-        "event_shield_reason_authenticity_not_guaranteed": "De echtheid van dit versleutelde bericht kan op dit apparaat niet worden gegarandeerd.",
-        "event_shield_reason_mismatched_sender_key": "Versleuteld door een niet-geverifieerde sessie",
         "messages_not_secure": {
             "title": "Jouw berichten zijn niet veilig",
             "heading": "Eén van volgende onderdelen kan gecompromitteerd zijn:",
@@ -2949,7 +2865,15 @@
             "cause_2": "De homeserver waarmee de persoon die jij verifieert verbonden is",
             "cause_3": "Jouw internetverbinding, of die van de andere personen",
             "cause_4": "Jouw sessie, of die van de andere personen"
-        }
+        },
+        "event_shield_reason_mismatched_sender_key": "Versleuteld door een niet-geverifieerde sessie",
+        "event_shield_reason_authenticity_not_guaranteed": "De echtheid van dit versleutelde bericht kan op dit apparaat niet worden gegarandeerd.",
+        "cross_signing_user_warning": "Deze persoon heeft niet al zijn sessies geverifieerd.",
+        "cross_signing_user_verified": "Je hebt deze persoon geverifieerd. Deze persoon heeft al zijn sessies geverifieerd.",
+        "cross_signing_user_normal": "Je hebt deze persoon niet geverifieerd.",
+        "cross_signing_room_warning": "Iemand gebruikt een onbekende sessie",
+        "cross_signing_room_verified": "Iedereen in deze kamer is geverifieerd",
+        "cross_signing_room_normal": "Deze kamer is eind-tot-eind-versleuteld"
     },
     "emoji": {
         "category_frequently_used": "Vaak gebruikt",
@@ -3078,7 +3002,8 @@
             "sso_failed": "Er is iets misgegaan bij het bevestigen van jouw identiteit. Annuleer en probeer het opnieuw.",
             "fallback_button": "Authenticatie starten",
             "sso_title": "Ga verder met eenmalige aanmelding",
-            "sso_body": "Bevestig je identiteit met je eenmalige aanmelding om dit e-mailadres toe te voegen."
+            "sso_body": "Bevestig je identiteit met je eenmalige aanmelding om dit e-mailadres toe te voegen.",
+            "code": "Code"
         },
         "password_field_label": "Voer wachtwoord in",
         "password_field_strong_label": "Dit is een sterk wachtwoord!",
@@ -3109,7 +3034,39 @@
         "incorrect_credentials_detail": "Let op dat je inlogt bij de %(hs)s-server, niet matrix.org.",
         "create_account_title": "Registeren",
         "failed_soft_logout_homeserver": "Opnieuw inloggen is mislukt wegens een probleem met de homeserver",
-        "soft_logout_subheading": "Persoonlijke gegevens wissen"
+        "soft_logout_subheading": "Persoonlijke gegevens wissen",
+        "reset_password": {
+            "other_devices_logout_warning_1": "Jouw apparaten uitloggen zal de ertoe behorende encryptiesleutels verwijderen, wat versleutelde berichten onleesbaar zal maken.",
+            "other_devices_logout_warning_2": "Als je toegang tot je berichten wilt behouden, stel dan sleutelback-up in of exporteer je sleutels vanaf een van je andere apparaten voordat je verder gaat.",
+            "password_not_entered": "Er moet een nieuw wachtwoord ingevoerd worden.",
+            "passwords_mismatch": "Nieuwe wachtwoorden moeten overeenkomen.",
+            "reset_successful": "Jouw wachtwoord is opnieuw ingesteld.",
+            "devices_logout_success": "Je bent afgemeld op al je apparaten en zal geen pushmeldingen meer ontvangen. Meld je op elk apparaat opnieuw aan om weer meldingen te ontvangen.",
+            "return_to_login": "Terug naar het loginscherm"
+        },
+        "qr_code_login": {
+            "sign_in_new_device": "Aanmelden nieuw apparaat",
+            "error_linking_incomplete": "De koppeling is niet binnen de vereiste tijd voltooid.",
+            "error_invalid_scanned_code": "De gescande code is ongeldig.",
+            "error_device_unsupported": "Koppelen met dit apparaat wordt niet ondersteund.",
+            "error_request_declined": "Het verzoek is afgewezen op het andere apparaat.",
+            "error_device_already_signed_in": "Het andere apparaat is al aangemeld.",
+            "error_device_not_signed_in": "Het andere apparaat is niet ingelogd.",
+            "error_request_cancelled": "Het verzoek is geannuleerd.",
+            "error_unexpected": "Er is een onverwachte fout opgetreden.",
+            "error_homeserver_lacks_support": "De server ondersteunt het inloggen op een ander apparaat niet.",
+            "devices_connected": "Verbonden apparaten",
+            "confirm_code_match": "Controleer of de onderstaande code overeenkomt met je andere apparaat:",
+            "approve_access_warning": "Door de toegang voor dit apparaat goed te keuren, heeft het volledige toegang tot jouw account.",
+            "scan_code_instruction": "Scan de onderstaande QR-code met je apparaat dat is uitgelogd.",
+            "start_at_sign_in_screen": "Begin bij het inlogscherm",
+            "review_and_approve": "Controleer en keur de aanmelding goed",
+            "waiting_for_device": "Wachten op apparaat om in te loggen",
+            "completing_setup": "De configuratie van je nieuwe apparaat voltooien"
+        },
+        "country_dropdown": "Landselectie",
+        "common_failures": {},
+        "captcha_description": "Deze homeserver wil graag weten of je geen robot bent."
     },
     "room_list": {
         "sort_unread_first": "Kamers met ongelezen berichten als eerste tonen",
@@ -3273,8 +3230,8 @@
         "unmaximise": "Maximaliseren ongedaan maken",
         "popout": "Widget in nieuw venster openen",
         "unpin_to_view_right_panel": "Maak deze widget los om het in dit paneel weer te geven",
-        "close_to_view_right_panel": "Sluit deze widget om het in dit paneel weer te geven",
-        "set_room_layout": "Stel mijn kamerindeling in voor iedereen"
+        "set_room_layout": "Stel mijn kamerindeling in voor iedereen",
+        "close_to_view_right_panel": "Sluit deze widget om het in dit paneel weer te geven"
     },
     "feedback": {
         "sent": "Feedback verstuurd",
@@ -3382,7 +3339,13 @@
         "invite_link": "Deel uitnodigingskoppeling",
         "invite": "Personen uitnodigen",
         "invite_description": "Uitnodigen per e-mail of inlognaam",
-        "invite_this_space": "Voor deze Space uitnodigen"
+        "invite_this_space": "Voor deze Space uitnodigen",
+        "user_lacks_permission": "Je hebt geen toestemming",
+        "title_when_query_unavailable": "Kamers en Spaces",
+        "title_when_query_available": "Resultaten",
+        "search_placeholder": "In namen en omschrijvingen zoeken",
+        "no_search_result_hint": "Je kan een andere zoekterm proberen of controleren op een typefout.",
+        "joining_space": "Toetreden"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Deze server is niet geconfigureerd om kaarten weer te geven.",
@@ -3405,7 +3368,8 @@
         "live_share_button": "Delen voor %(duration)s",
         "click_move_pin": "Klik om de pin te verplaatsen",
         "click_drop_pin": "Klik om een pin neer te zetten",
-        "share_button": "Locatie delen"
+        "share_button": "Locatie delen",
+        "stop_and_close": "Stop en sluit"
     },
     "labs_mjolnir": {
         "room_name": "Mijn banlijst",
@@ -3541,7 +3505,8 @@
             "hide_widgets_button": "Widgets verbergen",
             "show_widgets_button": "Widgets tonen",
             "close_call_button": "Sluit oproep",
-            "video_room_view_chat_button": "Gesprekstijdslijn bekijken"
+            "video_room_view_chat_button": "Gesprekstijdslijn bekijken",
+            "room_is_public": "Deze kamer is publiek"
         },
         "joining": "Deelnemen…",
         "join_title": "Doe mee met de kamer om deel te nemen",
@@ -3589,18 +3554,40 @@
         "join_failed_needs_invite": "Om %(roomName)s te bekijken, heb je een uitnodiging nodig",
         "view_failed_enable_video_rooms": "Schakel eerst videokamers in Labs in om te bekijken",
         "join_failed_enable_video_rooms": "Schakel eerst videokamers in Labs in om deel te nemen",
-        "jump_to_bottom_button": "Spring naar meest recente bericht",
-        "show_labs_settings": "Lab instellingen weergeven",
-        "upgrade_warning_bar": "Upgraden zal de huidige versie van deze kamer sluiten, en onder dezelfde naam een geüpgraded versie starten.",
+        "upload": {
+            "uploading_multiple_file": {
+                "one": "%(filename)s en %(count)s ander worden geüpload",
+                "other": "%(filename)s en %(count)s andere worden geüpload"
+            },
+            "uploading_single_file": "%(filename)s wordt geüpload"
+        },
         "upgrade_warning_bar_upgraded": "Deze kamer is reeds geüpgraded.",
         "upgrade_warning_bar_unstable": "Deze kamer draait op kamerversie <roomVersion />, die door deze homeserver als <i>onstabiel</i> is gemarkeerd.",
         "upgrade_warning_bar_admins": "Enkel kamerbeheerders zullen deze waarschuwing zien",
+        "upgrade_warning_bar": "Upgraden zal de huidige versie van deze kamer sluiten, en onder dezelfde naam een geüpgraded versie starten.",
+        "status_bar": {
+            "requires_consent_agreement": "Je kan geen berichten sturen totdat je <consentLink>onze algemene voorwaarden</consentLink> hebt gelezen en aanvaard.",
+            "monthly_user_limit_reached": "Je bericht is niet verstuurd omdat deze homeserver zijn limiet voor maandelijks actieve personen heeft bereikt. <a>Neem contact op met je beheerder</a> om de dienst te blijven gebruiken.",
+            "homeserver_blocked": "Je bericht is niet verzonden omdat deze server is geblokkeerd door de beheerder. Neem <a>contact op met je servicebeheerder</a> om de service te blijven gebruiken.",
+            "exceeded_resource_limit": "Je bericht is niet verstuurd omdat deze homeserver een systeembronlimiet heeft overschreden. <a>Neem contact op met je dienstbeheerder</a> om de dienst te blijven gebruiken.",
+            "some_messages_not_sent": "Enkele van jouw berichten zijn niet verstuurd",
+            "delete_all": "Verwijder alles",
+            "retry_all": "Alles opnieuw proberen",
+            "select_messages_to_retry": "Je kan alles selecteren of per individueel bericht opnieuw versturen of verwijderen",
+            "server_connectivity_lost_title": "De verbinding met de server is verbroken.",
+            "server_connectivity_lost_description": "Verstuurde berichten zullen opgeslagen worden totdat je verbinding hersteld is."
+        },
+        "show_labs_settings": "Lab instellingen weergeven",
         "search": {
             "this_room": "Deze kamer",
             "all_rooms": "Alle kamers",
             "field_placeholder": "Zoeken…"
         },
-        "jump_read_marker": "Spring naar het eerste ongelezen bericht."
+        "jump_to_bottom_button": "Spring naar meest recente bericht",
+        "jump_read_marker": "Spring naar het eerste ongelezen bericht.",
+        "inviter_unknown": "Onbekend",
+        "failed_reject_invite": "Weigeren van uitnodiging is mislukt",
+        "creating_room_text": "We maken een kamer aan met %(names)s"
     },
     "file_panel": {
         "guest_note": "Je dient je te <a>registreren</a> om deze functie te gebruiken",
@@ -3807,10 +3794,6 @@
         "filter_placeholder": "Kamerleden filteren",
         "power_label": "%(userName)s (macht %(powerLevelNumber)s)"
     },
-    "stickers": {
-        "empty": "Je hebt momenteel geen stickerpakketten ingeschakeld",
-        "empty_add_prompt": "Voeg er nu een paar toe"
-    },
     "user_info": {
         "error_revoke_3pid_invite_title": "Intrekken van uitnodiging is mislukt",
         "error_revoke_3pid_invite_description": "Kon de uitnodiging niet intrekken. De server ondervindt mogelijk een tijdelijk probleem, of je hebt niet het recht de uitnodiging in te trekken.",
@@ -3862,6 +3845,10 @@
         "error_deactivate": "Deactiveren van persoon is mislukt",
         "role_label": "Rol in <RoomName/>"
     },
+    "stickers": {
+        "empty": "Je hebt momenteel geen stickerpakketten ingeschakeld",
+        "empty_add_prompt": "Voeg er nu een paar toe"
+    },
     "right_panel": {
         "pinned_messages": {
             "title": "Vastgeprikte berichten",
@@ -3885,5 +3872,47 @@
         "export_chat_button": "Chat exporteren",
         "share_button": "Kamer delen",
         "settings_button": "Kamerinstellingen"
-    }
+    },
+    "reject_invitation_dialog": {
+        "title": "Uitnodiging weigeren",
+        "confirmation": "Weet je zeker dat je de uitnodiging wilt weigeren?",
+        "failed": "Weigeren van uitnodiging is mislukt"
+    },
+    "quit_warning": {
+        "file_upload_in_progress": "Het ziet er naar uit dat je bestanden aan het uploaden bent, weet je zeker dat je wil afsluiten?",
+        "call_in_progress": "Het ziet er naar uit dat je in gesprek bent, weet je zeker dat je wil afsluiten?"
+    },
+    "no_more_results": "Geen resultaten meer",
+    "left_panel": {
+        "open_dial_pad": "Kiestoetsen openen"
+    },
+    "leave_room_dialog": {
+        "last_person_warning": "Je bent de enige persoon hier. Als je weggaat, zal niemand in de toekomst kunnen toetreden, jij ook niet.",
+        "space_rejoin_warning": "Deze Space is niet publiek. Zonder uitnodiging zal je niet opnieuw kunnen toetreden.",
+        "room_rejoin_warning": "Dit is geen publieke kamer. Slechts op uitnodiging zal je opnieuw kunnen toetreden.",
+        "leave_space_question": "Weet je zeker dat je de Space '%(spaceName)s' wilt verlaten?",
+        "leave_room_question": "Weet je zeker dat je de kamer ‘%(roomName)s’ wil verlaten?"
+    },
+    "error_dialog": {
+        "forget_room_failed": "Vergeten van kamer is mislukt %(errCode)s",
+        "copy_room_link_failed": {
+            "title": "Kopiëren van kamerlink is mislukt",
+            "description": "Kopiëren van kamerlink naar het klembord is mislukt."
+        },
+        "search_failed": {
+            "title": "Zoeken mislukt",
+            "server_unavailable": "De server is misschien onbereikbaar of overbelast, of het zoeken duurde te lang :("
+        },
+        "error_loading_user_profile": "Kon persoonsprofiel niet laden"
+    },
+    "console_wait": "Wacht!",
+    "cant_load_page": "Kon pagina niet laden",
+    "Invalid homeserver discovery response": "Ongeldig homeserver-vindbaarheids-antwoord",
+    "Failed to get autodiscovery configuration from server": "Ophalen van auto-vindbaarheidsconfiguratie van server is mislukt",
+    "Invalid base_url for m.homeserver": "Ongeldige base_url voor m.homeserver",
+    "Homeserver URL does not appear to be a valid Matrix homeserver": "De homeserver-URL lijkt geen geldige Matrix-homeserver",
+    "Invalid identity server discovery response": "Ongeldig identiteitsserver-vindbaarheidsantwoord",
+    "Invalid base_url for m.identity_server": "Ongeldige base_url voor m.identity_server",
+    "Identity server URL does not appear to be a valid identity server": "De identiteitsserver-URL lijkt geen geldige identiteitsserver",
+    "General failure": "Algemene fout"
 }
