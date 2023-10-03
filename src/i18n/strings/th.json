@@ -1,17 +1,7 @@
 {
-    "unknown error code": "รหัสข้อผิดพลาดที่ไม่รู้จัก",
     "%(items)s and %(lastItem)s": "%(items)s และ %(lastItem)s",
-    "and %(count)s others...": {
-        "one": "และอีกหนึ่งผู้ใช้...",
-        "other": "และอีก %(count)s ผู้ใช้..."
-    },
-    "An error has occurred.": "เกิดข้อผิดพลาด",
-    "Email address": "ที่อยู่อีเมล",
     "Join Room": "เข้าร่วมห้อง",
     "Moderator": "ผู้ช่วยดูแล",
-    "not specified": "ไม่ได้ระบุ",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "กรุณาเช็คอีเมลและคลิกลิงก์ข้างใน หลังจากนั้น คลิกดำเนินการต่อ",
-    "Create new room": "สร้างห้องใหม่",
     "Warning!": "คำเตือน!",
     "Sun": "อา.",
     "Mon": "จ.",
@@ -35,35 +25,17 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "Confirm Removal": "ยืนยันการลบ",
     "Home": "เมนูหลัก",
-    "(~%(count)s results)": {
-        "one": "(~%(count)s ผลลัพท์)",
-        "other": "(~%(count)s ผลลัพท์)"
-    },
-    "Custom level": "กำหนดระดับเอง",
-    "Verification Pending": "รอการตรวจสอบ",
     "Sunday": "วันอาทิตย์",
     "Today": "วันนี้",
     "Friday": "วันศุกร์",
-    "Changelog": "บันทึกการเปลี่ยนแปลง",
-    "Unavailable": "ไม่มี",
-    "Send": "ส่ง",
     "Tuesday": "วันอังคาร",
     "Unnamed room": "ห้องที่ไม่มีชื่อ",
     "Saturday": "วันเสาร์",
     "Monday": "วันจันทร์",
     "Wednesday": "วันพุธ",
-    "You cannot delete this message. (%(code)s)": "คุณไม่สามารถลบข้อความนี้ได้ (%(code)s)",
     "Thursday": "วันพฤหัสบดี",
     "Yesterday": "เมื่อวานนี้",
-    "You most likely do not want to reset your event index store": "คุณมักไม่ต้องการรีเซ็ตที่เก็บดัชนีเหตุการณ์ของคุณ",
-    "Reset event store?": "รีเซ็ตที่เก็บกิจกรรม?",
-    "The server is not configured to indicate what the problem is (CORS).": "เซิร์ฟเวอร์ไม่ได้กำหนดค่าเพื่อระบุว่าปัญหาคืออะไร (CORS).",
-    "A connection error occurred while trying to contact the server.": "เกิดข้อผิดพลาดในการเชื่อมต่อขณะพยายามติดต่อกับเซิร์ฟเวอร์.",
-    "Your area is experiencing difficulties connecting to the internet.": "พื้นที่ของคุณประสบปัญหาในการเชื่อมต่ออินเทอร์เน็ต.",
-    "The server has denied your request.": "เซิร์ฟเวอร์ปฏิเสธคำขอของคุณ.",
-    "Session ID": "รหัสเซสชัน",
     "Barbados": "บาร์เบโดส",
     "Bangladesh": "บังคลาเทศ",
     "Bahrain": "บาห์เรน",
@@ -86,10 +58,6 @@
     "Afghanistan": "อัฟกานิสถาน",
     "United States": "สหรัฐอเมริกา",
     "United Kingdom": "สหราชอาณาจักร",
-    "%(count)s reply": {
-        "one": "%(count)s ตอบ",
-        "other": "%(count)s ตอบกลับ"
-    },
     "Failed to connect to integration manager": "ไม่สามารถเชื่อมต่อกับตัวจัดการการรวม",
     "collapse": "ยุบ",
     "common": {
@@ -130,7 +98,12 @@
         "rooms": "ห้องสนทนา",
         "low_priority": "ความสำคัญต่ำ",
         "historical": "ประวัติแชทเก่า",
-        "are_you_sure": "คุณแน่ใจหรือไม่?"
+        "are_you_sure": "คุณแน่ใจหรือไม่?",
+        "email_address": "ที่อยู่อีเมล",
+        "and_n_others": {
+            "one": "และอีกหนึ่งผู้ใช้...",
+            "other": "และอีก %(count)s ผู้ใช้..."
+        }
     },
     "action": {
         "continue": "ดำเนินการต่อ",
@@ -199,7 +172,8 @@
     "power_level": {
         "default": "ค่าเริ่มต้น",
         "moderator": "ผู้ช่วยดูแล",
-        "admin": "ผู้ดูแล"
+        "admin": "ผู้ดูแล",
+        "custom_level": "กำหนดระดับเอง"
     },
     "bug_reporting": {
         "send_logs": "ส่งล็อก",
@@ -451,7 +425,11 @@
             "passwords_mismatch": "รหัสผ่านใหม่ทั้งสองช่องต้องตรงกัน",
             "return_to_login": "กลับไปยังหน้าลงชื่อเข้าใช้"
         },
-        "common_failures": {}
+        "common_failures": {},
+        "set_email": {
+            "verification_pending_title": "รอการตรวจสอบ",
+            "verification_pending_description": "กรุณาเช็คอีเมลและคลิกลิงก์ข้างใน หลังจากนั้น คลิกดำเนินการต่อ"
+        }
     },
     "setting": {
         "help_about": {
@@ -472,7 +450,9 @@
         "see_changes_button": "มีอะไรใหม่?",
         "release_notes_toast_title": "มีอะไรใหม่",
         "error_encountered": "เกิดข้อผิดพลาด (%(errorDetail)s)",
-        "no_update": "ไม่มีอัปเดตที่ใหม่กว่า"
+        "no_update": "ไม่มีอัปเดตที่ใหม่กว่า",
+        "unavailable": "ไม่มี",
+        "changelog": "บันทึกการเปลี่ยนแปลง"
     },
     "file_panel": {
         "guest_note": "คุณต้อง<a>ลงทะเบียน</a>เพื่อใช้ฟังก์ชันนี้"
@@ -508,7 +488,8 @@
             "error_creating_alias_title": "เกิดข้อผิดพลาดในการสร้างที่อยู่",
             "error_creating_alias_description": "เกิดข้อผิดพลาดในการสร้างที่อยู่นั้น เซิร์ฟเวอร์อาจไม่ได้รับอนุญาตหรือเกิดความล้มเหลวชั่วคราว.",
             "canonical_alias_field_label": "ที่อยู่หลัก"
-        }
+        },
+        "alias_not_specified": "ไม่ได้ระบุ"
     },
     "room": {
         "intro": {
@@ -533,7 +514,11 @@
         "search": {
             "this_room": "ห้องนี้",
             "all_rooms": "ทุกห้อง",
-            "field_placeholder": "ค้นหา…"
+            "field_placeholder": "ค้นหา…",
+            "result_count": {
+                "one": "(~%(count)s ผลลัพท์)",
+                "other": "(~%(count)s ผลลัพท์)"
+            }
         },
         "jump_read_marker": "ข้ามไปยังข้อความแรกที่ยังไม่ได้อ่าน",
         "failed_reject_invite": "การปฏิเสธคำเชิญล้มเหลว"
@@ -578,7 +563,9 @@
         "mixed_content": "ไม่สามารถเชื่อมต่อไปยังเซิร์ฟเวอร์บ้านผ่านทาง HTTP ได้เนื่องจาก URL ที่อยู่บนเบราว์เซอร์เป็น HTTPS กรุณาใช้ HTTPS หรือ<a>เปิดใช้งานสคริปต์ที่ไม่ปลอดภัย</a>.",
         "tls": "ไม่สามารถเฃื่อมต่อไปหาเซิร์ฟเวอร์บ้านได้ - กรุณาตรวจสอบคุณภาพการเชื่อมต่อ, ตรวจสอบว่า<a>SSL certificate ของเซิร์ฟเวอร์บ้าน</a>ของคุณเชื่อถือได้, และวไม่มีส่วนขยายเบราว์เซอร์ใดบล๊อคการเชื่อมต่ออยู่",
         "update_power_level": "การเปลี่ยนระดับอำนาจล้มเหลว",
-        "unknown": "ข้อผิดพลาดที่ไม่รู้จัก"
+        "unknown": "ข้อผิดพลาดที่ไม่รู้จัก",
+        "dialog_description_default": "เกิดข้อผิดพลาด",
+        "unknown_error_code": "รหัสข้อผิดพลาดที่ไม่รู้จัก"
     },
     "notifications": {
         "enable_prompt_toast_title": "การแจ้งเตือน",
@@ -587,7 +574,10 @@
         "all_messages": "ทุกข้อความ"
     },
     "encryption": {
-        "not_supported": "<ไม่รองรับ>"
+        "not_supported": "<ไม่รองรับ>",
+        "verification": {
+            "manual_device_verification_device_id_label": "รหัสเซสชัน"
+        }
     },
     "member_list": {
         "invited_list_heading": "เชิญแล้ว",
@@ -613,7 +603,11 @@
         "deactivate_confirm_action": "ปิดใช้งานผู้ใช้"
     },
     "threads": {
-        "open_thread": "เปิดกระทู้"
+        "open_thread": "เปิดกระทู้",
+        "count_of_reply": {
+            "one": "%(count)s ตอบ",
+            "other": "%(count)s ตอบกลับ"
+        }
     },
     "stickers": {
         "empty": "ขณะนี้คุณไม่ได้เปิดใช้งานชุดสติกเกอร์ใดๆ",
@@ -635,5 +629,25 @@
             "server_unavailable": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือการค้นหาหมดเวลา :("
         }
     },
-    "General failure": "ข้อผิดพลาดทั่วไป"
+    "General failure": "ข้อผิดพลาดทั่วไป",
+    "redact": {
+        "error": "คุณไม่สามารถลบข้อความนี้ได้ (%(code)s)",
+        "confirm_button": "ยืนยันการลบ"
+    },
+    "forward": {
+        "send_label": "ส่ง"
+    },
+    "server_offline": {
+        "description_5": "เซิร์ฟเวอร์ปฏิเสธคำขอของคุณ.",
+        "description_6": "พื้นที่ของคุณประสบปัญหาในการเชื่อมต่ออินเทอร์เน็ต.",
+        "description_7": "เกิดข้อผิดพลาดในการเชื่อมต่อขณะพยายามติดต่อกับเซิร์ฟเวอร์.",
+        "description_8": "เซิร์ฟเวอร์ไม่ได้กำหนดค่าเพื่อระบุว่าปัญหาคืออะไร (CORS)."
+    },
+    "seshat": {
+        "reset_title": "รีเซ็ตที่เก็บกิจกรรม?",
+        "reset_description": "คุณมักไม่ต้องการรีเซ็ตที่เก็บดัชนีเหตุการณ์ของคุณ"
+    },
+    "spotlight_dialog": {
+        "create_new_room_button": "สร้างห้องใหม่"
+    }
 }

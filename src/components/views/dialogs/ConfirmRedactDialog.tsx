@@ -36,17 +36,17 @@ interface IProps {
  */
 export default class ConfirmRedactDialog extends React.Component<IProps> {
     public render(): React.ReactNode {
-        let description = _t("Are you sure you wish to remove (delete) this event?");
+        let description = _t("redact|confirm_description");
         if (this.props.event.isState()) {
-            description += " " + _t("Note that removing room changes like this could undo the change.");
+            description += " " + _t("redact|confirm_description_state");
         }
 
         return (
             <TextInputDialog
                 onFinished={this.props.onFinished}
-                title={_t("Confirm Removal")}
+                title={_t("redact|confirm_button")}
                 description={description}
-                placeholder={_t("Reason (optional)")}
+                placeholder={_t("redact|reason_label")}
                 focus
                 button={_t("action|remove")}
             />
@@ -105,7 +105,7 @@ export function createRedactEventDialog({
                         // display error message stating you couldn't delete this.
                         Modal.createDialog(ErrorDialog, {
                             title: _t("common|error"),
-                            description: _t("You cannot delete this message. (%(code)s)", { code }),
+                            description: _t("redact|error", { code }),
                         });
                     }
                 }

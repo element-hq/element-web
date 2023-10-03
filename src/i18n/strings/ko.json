@@ -1,21 +1,8 @@
 {
-    "Create new room": "새 방 만들기",
-    "unknown error code": "알 수 없는 오류 코드",
-    "An error has occurred.": "오류가 발생했습니다.",
-    "Email address": "이메일 주소",
     "%(items)s and %(lastItem)s": "%(items)s님과 %(lastItem)s님",
-    "and %(count)s others...": {
-        "one": "외 한 명...",
-        "other": "외 %(count)s명..."
-    },
-    "Custom level": "맞춤 등급",
     "Home": "홈",
     "Join Room": "방에 참가",
     "Moderator": "조정자",
-    "not specified": "지정되지 않음",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "이메일을 확인하고 안의 링크를 클릭합니다. 모두 마치고 나서, 계속하기를 누르세요.",
-    "Session ID": "세션 ID",
-    "Verification Pending": "인증을 기다리는 중",
     "Warning!": "주의!",
     "Sun": "일",
     "Mon": "월",
@@ -39,31 +26,16 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(monthName)s %(day)s일 %(weekDayName)s요일 %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(fullYear)s년 %(monthName)s %(day)s일 %(weekDayName)s요일 %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s요일, %(time)s",
-    "(~%(count)s results)": {
-        "one": "(~%(count)s개의 결과)",
-        "other": "(~%(count)s개의 결과)"
-    },
-    "Confirm Removal": "삭제 확인",
-    "Unable to restore session": "세션을 복구할 수 없음",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "이전에 최근 버전의 %(brand)s을 썼다면, 세션이 이 버전과 맞지 않을 것입니다. 창을 닫고 최근 버전으로 돌아가세요.",
-    "Add an Integration": "통합 추가",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "%(integrationsUrl)s에서 쓸 수 있도록 계정을 인증하려고 다른 사이트로 이동하고 있습니다. 계속하겠습니까?",
-    "This will allow you to reset your password and receive notifications.": "이렇게 하면 비밀번호를 다시 설정하고 알림을 받을 수 있습니다.",
     "Sunday": "일요일",
     "Today": "오늘",
     "Friday": "금요일",
-    "Changelog": "바뀐 점",
-    "Unavailable": "이용할 수 없음",
-    "Send": "보내기",
     "Tuesday": "화요일",
     "Unnamed room": "이름 없는 방",
     "Saturday": "토요일",
     "Monday": "월요일",
-    "You cannot delete this message. (%(code)s)": "이 메시지를 삭제할 수 없습니다. (%(code)s)",
     "Thursday": "목요일",
     "Yesterday": "어제",
     "Wednesday": "수요일",
-    "Thank you!": "감사합니다!",
     "PM": "오후",
     "AM": "오전",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(fullYear)s년 %(monthName)s %(day)s일 (%(weekDayName)s)",
@@ -72,33 +44,10 @@
     "%(duration)sm": "%(duration)s분",
     "%(duration)sh": "%(duration)s시간",
     "%(duration)sd": "%(duration)s일",
-    "Filter results": "필터 결과",
     "Delete Widget": "위젯 삭제",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "응답한 이벤트를 불러오지 못했습니다, 존재하지 않거나 볼 수 있는 권한이 없습니다.",
     "collapse": "접기",
     "expand": "펼치기",
-    "Preparing to send logs": "로그 보내려고 준비 중",
-    "Logs sent": "로그 보내짐",
-    "Failed to send logs: ": "로그 보내기에 실패함: ",
-    "Share Room": "방 공유",
-    "Share User": "사용자 공유",
-    "Share Room Message": "방 메시지 공유",
-    "Link to selected message": "선택한 메시지로 연결",
-    "And %(count)s more...": {
-        "other": "%(count)s개 더..."
-    },
-    "Clear Storage and Sign Out": "저장소를 지우고 로그아웃",
     "Send Logs": "로그 보내기",
-    "We encountered an error trying to restore your previous session.": "이전 활동을 복구하는 중 에러가 발생했습니다.",
-    "Link to most recent message": "가장 최근 메시지로 연결",
-    "<a>In reply to</a> <pill>": "<a>관련 대화</a> <pill>",
-    "Updating %(brand)s": "%(brand)s 업데이트 중",
-    "Upgrade this room to version %(version)s": "이 방을 %(version)s 버전으로 업그레이드",
-    "Upgrade Room Version": "방 버전 업그레이드",
-    "Create a new room with the same name, description and avatar": "이름, 설명, 아바타가 같은 새 방 만들기",
-    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "이전 버전의 방에서 대화하는 사용자들을 멈추고, 사용자들에게 새 방으로 이동하라고 알리는 메시지를 게시",
-    "Put a link back to the old room at the start of the new room so people can see old messages": "새 방을 시작할 때 이전 방을 연결해서 사람들이 이전 메시지를 볼 수 있게 하기",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "브라우저의 저장소를 청소한다면 문제가 해결될 수도 있지만, 암호화된 대화 기록을 읽을 수 없게 됩니다.",
     "Dog": "개",
     "Cat": "고양이",
     "Lion": "사자",
@@ -161,107 +110,8 @@
     "Anchor": "닻",
     "Headphones": "헤드폰",
     "Folder": "폴더",
-    "Power level": "권한 등급",
-    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "암호화된 메시지는 종단간 암호화로 보호됩니다. 오직 당신과 상대방만 이 메시지를 읽을 수 있는 키를 갖습니다.",
-    "Start using Key Backup": "키 백업 시작",
     "Deactivate account": "계정 비활성화",
-    "Edited at %(date)s. Click to view edits.": "%(date)s에 편집함. 클릭해서 편집 보기.",
-    "edited": "편집됨",
-    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "이메일로 초대하기 위해 ID 서버를 사용합니다. <default>기본 (%(defaultIdentityServerName)s)을(를) 사용하거나</default> <settings>설정</settings>에서 관리하세요.",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "이메일로 초대하기 위해 ID 서버를 사용합니다. <settings>설정</settings>에서 관리하세요.",
-    "The following users may not exist": "다음 사용자는 존재하지 않을 수 있습니다",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "아래에 나열된 Matrix ID에서 프로필을 찾을 수 없습니다 - 무시하고 그들을 초대할까요?",
-    "Invite anyway and never warn me again": "무시하고 초대, 그리고 다시 경고하지 않기",
-    "Invite anyway": "무시하고 초대",
-    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "무엇이 잘못되거나 더 나은 지 알려주세요, 문제를 설명하는 GitHub 이슈를 만들어주세요.",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "로그를 전송하기 전에, 문제를 설명하는 <a>GitHub 이슈를 만들어야 합니다</a>.",
-    "Notes": "참고",
-    "Unable to load commit detail: %(msg)s": "커밋 세부 정보를 불러올 수 없음: %(msg)s",
-    "Removing…": "제거 중…",
-    "Clear all data": "모든 데이터 지우기",
-    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "대화 기록을 잃지 않으려면, 로그아웃하기 전에 방 키를 내보내야 합니다. 이 작업을 수행하려면 최신 버전의 %(brand)s으로 가야 합니다",
-    "Incompatible Database": "호환하지 않는 데이터베이스",
-    "Continue With Encryption Disabled": "암호화를 끈 채 계속하기",
-    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "이 사용자를 신뢰할 수 있도록 인증합니다. 종단간 암호화 메시지를 사용할 때 사용자를 신뢰하면 안심이 듭니다.",
-    "Incoming Verification Request": "수신 확인 요청",
-    "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "이전에 구성원의 불러오기 지연이 켜진 %(host)s에서 %(brand)s을 사용했습니다. 이 버전에서 불러오기 지연은 꺼집니다. 로컬 캐시가 이 두 설정 간에 호환되지 않으므로, %(brand)s은 계정을 다시 동기화 해야 합니다.",
-    "Incompatible local cache": "호환하지 않는 로컬 캐시",
-    "Clear cache and resync": "캐시를 지우고 다시 동기화",
-    "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s은 이제 필요할 때만 다른 사용자에 대한 정보를 불러와 메모리를 3배에서 5배 덜 잡아먹습니다. 서버와 다시 동기화하는 동안 기다려주세요!",
-    "I don't want my encrypted messages": "저는 제 암호화된 메시지를 원하지 않아요",
-    "Manually export keys": "수동으로 키 내보내기",
-    "You'll lose access to your encrypted messages": "암호화된 메시지에 접근할 수 없게 됩니다",
-    "Are you sure you want to sign out?": "로그아웃하겠습니까?",
-    "Your homeserver doesn't seem to support this feature.": "홈서버가 이 기능을 지원하지 않는 모양입니다.",
-    "Message edits": "메시지 편집",
-    "Room Settings - %(roomName)s": "방 설정 - %(roomName)s",
-    "Failed to upgrade room": "방 업그레이드에 실패함",
-    "The room upgrade could not be completed": "방 업그레이드를 완료할 수 없습니다",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "이 방을 업그레이드하려면 현재 방의 인스턴스를 닫고 그 자리에 새 방을 만들어야 합니다. 방 구성원에게 최상의 경험을 제공하려면 다음 조치를 취해야 합니다:",
-    "Update any local room aliases to point to the new room": "모든 로컬 방 별칭을 새 방을 향하도록 업데이트",
-    "Sign out and remove encryption keys?": "로그아웃하고 암호화 키를 제거합니까?",
-    "Command Help": "명령어 도움",
-    "To help us prevent this in future, please <a>send us logs</a>.": "앞으로 이를 방지할 수 있도록, <a>로그를 보내주세요</a>.",
-    "Missing session data": "누락된 세션 데이터",
-    "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "암호화된 메시지 키를 포함한 일부 세션 데이터가 누락되었습니다. 백업에서 키를 복구하면서 로그아웃하고 로그인하면 이를 고칠 수 있습니다.",
-    "Your browser likely removed this data when running low on disk space.": "디스크 공간이 부족한 경우 브라우저에서 이 데이터를 제거했을 수 있습니다.",
-    "Find others by phone or email": "전화번호 혹은 이메일로 상대방 찾기",
-    "Be found by phone or email": "전화번호 혹은 이메일로 찾음",
-    "Upload files (%(current)s of %(total)s)": "파일 업로드 (총 %(total)s개 중 %(current)s개)",
-    "Upload files": "파일 업로드",
-    "Upload all": "전부 업로드",
-    "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "이 파일은 업로드하기에 <b>너무 큽니다</b>. 파일 크기 한도는 %(limit)s이지만 이 파일은 %(sizeOfThisFile)s입니다.",
-    "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "이 파일들은 업로드하기에 <b>너무 큽니다</b>. 파일 크기 한도는 %(limit)s입니다.",
-    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "일부 파일이 업로드하기에 <b>너무 큽니다</b>. 파일 크기 한도는 %(limit)s입니다.",
-    "Upload %(count)s other files": {
-        "other": "%(count)s개의 다른 파일 업로드",
-        "one": "%(count)s개의 다른 파일 업로드"
-    },
-    "Cancel All": "전부 취소",
-    "Upload Error": "업로드 오류",
-    "Remember my selection for this widget": "이 위젯에 대해 내 선택 기억하기",
-    "Unable to load backup status": "백업 상태 불러올 수 없음",
-    "Unable to restore backup": "백업을 복구할 수 없음",
-    "No backup found!": "백업을 찾을 수 없습니다!",
-    "Failed to decrypt %(failedCount)s sessions!": "%(failedCount)s개의 세션 복호화에 실패했습니다!",
-    "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>경고</b>: 신뢰할 수 있는 컴퓨터에서만 키 백업을 설정해야 합니다.",
-    "Resend %(unsentCount)s reaction(s)": "%(unsentCount)s개의 리액션 다시 보내기",
-    "Some characters not allowed": "일부 문자는 허용할 수 없습니다",
-    "Email (optional)": "이메일 (선택)",
-    "Join millions for free on the largest public server": "가장 넓은 공개 서버에 수 백 만명이 무료로 등록함",
-    "No recent messages by %(user)s found": "%(user)s님의 최근 메시지 없음",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "이전 타임라인이 있는지 위로 스크롤하세요.",
-    "Remove recent messages by %(user)s": "%(user)s님의 최근 메시지 삭제",
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "메시지의 양이 많아서 시간이 걸릴 수 있습니다. 처리하는 동안 클라이언트를 새로고침하지 말아주세요.",
-    "Remove %(count)s messages": {
-        "other": "%(count)s개의 메시지 삭제",
-        "one": "1개의 메시지 삭제"
-    },
-    "e.g. my-room": "예: my-room",
-    "Close dialog": "대화 상자 닫기",
-    "Cancel search": "검색 취소",
-    "%(name)s accepted": "%(name)s님이 수락했습니다",
-    "%(name)s cancelled": "%(name)s님이 취소했습니다",
-    "%(name)s wants to verify": "%(name)s님이 확인을 요청합니다",
-    "Search for": "검색 기준",
-    "Search for rooms or people": "방 또는 사람 검색",
-    "Search for rooms": "방 검색",
-    "Search for spaces": "스페이스 검색",
-    "Recently Direct Messaged": "최근 다이렉트 메세지",
-    "Recently viewed": "최근에 확인한",
-    "If you can't find the room you're looking for, ask for an invite or create a new room.": "만약 찾고 있는 방이 없다면, 초대를 요청하거나 새로운 방을 만드세요.",
-    "Private space (invite only)": "비공개 스페이스 (초대 필요)",
-    "Leave all rooms": "모든 방에서 떠나기",
-    "Create a new space": "새로운 스페이스 만들기",
-    "Create a space": "스페이스 만들기",
-    "Or send invite link": "또는 초대 링크 보내기",
-    "Recent Conversations": "최근 대화 목록",
-    "Start a conversation with someone using their name or username (like <userId/>).": "이름이나 사용자명(<userId/> 형식)을 사용하는 사람들과 대화를 시작하세요.",
-    "Direct Messages": "다이렉트 메세지",
-    "If you can't see who you're looking for, send them your invite link below.": "찾으려는 사람이 보이지 않으면, 아래의 초대링크를 보내세요.",
-    "Some suggestions may be hidden for privacy.": "일부 추천 목록은 개인 정보 보호를 위해 보이지 않을 수 있습니다.",
-    "Start a conversation with someone using their name, email address or username (like <userId/>).": "이름, 이메일, 사용자명(<userId/>) 으로 대화를 시작하세요.",
-    "Add existing rooms": "기존 방 추가",
     "Slovakia": "슬로바키아",
     "Argentina": "아르헨티나",
     "Laos": "라오스",
@@ -355,7 +205,14 @@
         "go_to_settings": "설정으로 가기",
         "setup_secure_messages": "보안 메시지 설정",
         "show_more": "더 보기",
-        "are_you_sure": "확신합니까?"
+        "are_you_sure": "확신합니까?",
+        "email_address": "이메일 주소",
+        "filter_results": "필터 결과",
+        "and_n_others": {
+            "one": "외 한 명...",
+            "other": "외 %(count)s명..."
+        },
+        "edited": "편집됨"
     },
     "action": {
         "continue": "계속하기",
@@ -481,7 +338,9 @@
         "restricted": "제한됨",
         "moderator": "조정자",
         "admin": "관리자",
-        "custom": "맞춤 (%(level)s)"
+        "custom": "맞춤 (%(level)s)",
+        "label": "권한 등급",
+        "custom_level": "맞춤 등급"
     },
     "bug_reporting": {
         "submit_debug_logs": "디버그 로그 전송하기",
@@ -493,7 +352,14 @@
         "collecting_information": "앱 버전 정보를 수집하는 중",
         "collecting_logs": "로그 수집 중",
         "create_new_issue": "이 버그를 조사할 수 있도록 GitHub에 <newIssueLink>새 이슈를 추가</newIssueLink>해주세요.",
-        "waiting_for_server": "서버에서 응답을 기다리는 중"
+        "waiting_for_server": "서버에서 응답을 기다리는 중",
+        "error_empty": "무엇이 잘못되거나 더 나은 지 알려주세요, 문제를 설명하는 GitHub 이슈를 만들어주세요.",
+        "preparing_logs": "로그 보내려고 준비 중",
+        "logs_sent": "로그 보내짐",
+        "thank_you": "감사합니다!",
+        "failed_send_logs": "로그 보내기에 실패함: ",
+        "textarea_label": "참고",
+        "log_request": "앞으로 이를 방지할 수 있도록, <a>로그를 보내주세요</a>."
     },
     "time": {
         "n_minutes_ago": "%(num)s분 전",
@@ -863,7 +729,8 @@
         "context_menu": {
             "view_source": "소스 보기",
             "external_url": "출처 URL",
-            "report": "보고"
+            "report": "보고",
+            "resent_unsent_reactions": "%(unsentCount)s개의 리액션 다시 보내기"
         },
         "mab": {
             "label": "메시지 동작"
@@ -896,10 +763,24 @@
         "m.key.verification.request": {
             "you_accepted": "당신이 수락했습니다",
             "you_cancelled": "당신이 취소했습니다",
-            "you_started": "확인 요청을 보냈습니다"
+            "you_started": "확인 요청을 보냈습니다",
+            "user_accepted": "%(name)s님이 수락했습니다",
+            "user_cancelled": "%(name)s님이 취소했습니다",
+            "user_wants_to_verify": "%(name)s님이 확인을 요청합니다"
         },
         "m.video": {
             "error_decrypting": "영상 복호화 중 오류"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "통합 추가",
+            "dialog_description": "%(integrationsUrl)s에서 쓸 수 있도록 계정을 인증하려고 다른 사이트로 이동하고 있습니다. 계속하겠습니까?"
+        },
+        "edits": {
+            "tooltip_label": "%(date)s에 편집함. 클릭해서 편집 보기."
+        },
+        "reply": {
+            "error_loading": "응답한 이벤트를 불러오지 못했습니다, 존재하지 않거나 볼 수 있는 권한이 없습니다.",
+            "in_reply_to": "<a>관련 대화</a> <pill>"
         }
     },
     "slash_command": {
@@ -955,7 +836,8 @@
         "verify_nop": "이미 검증된 세션입니다!",
         "verify_mismatch": "경고: 키 검증 실패! 제공된 키인 \"%(fingerprint)s\"가 사용자 %(userId)s와 %(deviceId)s 세션의 서명 키인 \"%(fprint)s\"와 일치하지 않습니다. 이는 통신이 탈취되고 있는 중일 수도 있다는 뜻입니다!",
         "verify_success_title": "인증한 열쇠",
-        "verify_success_description": "사용자 %(userId)s의 세션 %(deviceId)s에서 받은 서명 키와 당신이 제공한 서명 키가 일치합니다. 세션이 검증되었습니다."
+        "verify_success_description": "사용자 %(userId)s의 세션 %(deviceId)s에서 받은 서명 키와 당신이 제공한 서명 키가 일치합니다. 세션이 검증되었습니다.",
+        "help_dialog_title": "명령어 도움"
     },
     "presence": {
         "online_for": "%(duration)s 동안 온라인",
@@ -988,7 +870,6 @@
         "no_media_perms_title": "미디어 권한 없음",
         "no_media_perms_description": "수동으로 %(brand)s에 마이크와 카메라를 허용해야 함"
     },
-    "Other": "기타",
     "room_settings": {
         "permissions": {
             "m.room.avatar": "방 아바타 변경",
@@ -1061,7 +942,9 @@
             "error_updating_canonical_alias_title": "기본 주소 업데이트 중 오류",
             "error_updating_canonical_alias_description": "방의 기본 주소를 업데이트하는 중 오류가 발생했습니다. 서버가 허용하지 않거나 일시적인 오류 발생일 수 있습니다.",
             "canonical_alias_field_label": "기본 주소",
-            "avatar_field_label": "방 아바타"
+            "avatar_field_label": "방 아바타",
+            "alias_field_safe_localpart_invalid": "일부 문자는 허용할 수 없습니다",
+            "alias_field_placeholder_default": "예: my-room"
         },
         "advanced": {
             "unfederated": "이 방은 원격 Matrix 서버로 접근할 수 없음",
@@ -1069,7 +952,16 @@
             "room_predecessor": "%(roomName)s 방에서 오래된 메시지를 봅니다.",
             "room_version_section": "방 버전",
             "room_version": "방 버전:",
-            "information_section_room": "방 정보"
+            "information_section_room": "방 정보",
+            "error_upgrade_title": "방 업그레이드에 실패함",
+            "error_upgrade_description": "방 업그레이드를 완료할 수 없습니다",
+            "upgrade_button": "이 방을 %(version)s 버전으로 업그레이드",
+            "upgrade_dialog_title": "방 버전 업그레이드",
+            "upgrade_dialog_description": "이 방을 업그레이드하려면 현재 방의 인스턴스를 닫고 그 자리에 새 방을 만들어야 합니다. 방 구성원에게 최상의 경험을 제공하려면 다음 조치를 취해야 합니다:",
+            "upgrade_dialog_description_1": "이름, 설명, 아바타가 같은 새 방 만들기",
+            "upgrade_dialog_description_2": "모든 로컬 방 별칭을 새 방을 향하도록 업데이트",
+            "upgrade_dialog_description_3": "이전 버전의 방에서 대화하는 사용자들을 멈추고, 사용자들에게 새 방으로 이동하라고 알리는 메시지를 게시",
+            "upgrade_dialog_description_4": "새 방을 시작할 때 이전 방을 연결해서 사람들이 이전 메시지를 볼 수 있게 하기"
         },
         "delete_avatar_label": "아바타 삭제",
         "upload_avatar_label": "아바타 업로드",
@@ -1090,7 +982,9 @@
             "notification_sound": "알림 소리",
             "custom_sound_prompt": "새 맞춤 소리 설정",
             "browse_button": "찾기"
-        }
+        },
+        "title": "방 설정 - %(roomName)s",
+        "alias_not_specified": "지정되지 않음"
     },
     "encryption": {
         "verification": {
@@ -1101,7 +995,10 @@
             "complete_action": "알겠습니다",
             "sas_emoji_caption_user": "다음 이모지가 상대방의 화면에 나타나는 것을 확인하는 것으로 이 사용자를 인증합니다.",
             "sas_caption_user": "다음 숫자가 상대방의 화면에 나타나는 것을 확인하는 것으로 이 사용자를 인증합니다.",
-            "unsupported_method": "지원하는 인증 방식을 찾을 수 없습니다."
+            "unsupported_method": "지원하는 인증 방식을 찾을 수 없습니다.",
+            "incoming_sas_user_dialog_text_1": "이 사용자를 신뢰할 수 있도록 인증합니다. 종단간 암호화 메시지를 사용할 때 사용자를 신뢰하면 안심이 듭니다.",
+            "incoming_sas_dialog_title": "수신 확인 요청",
+            "manual_device_verification_device_id_label": "세션 ID"
         },
         "old_version_detected_title": "오래된 암호화 데이터 감지됨",
         "old_version_detected_description": "이전 버전 %(brand)s의 데이터가 감지됬습니다. 이 때문에 이전 버전에서 종단간 암호화가 작동하지 않을 수 있습니다. 이전 버전을 사용하면서 최근에 교환한 종단간 암호화 메시지를 이 버전에서는 복호화할 수 없습니다. 이 버전에서 메시지를 교환할 수 없을 수도 있습니다. 문제가 발생하면 로그아웃한 후 다시 로그인하세요. 메시지 기록을 유지하려면 키를 내보낸 후 다시 가져오세요.",
@@ -1125,7 +1022,10 @@
             "explainer": "잃어버리지 않도록 로그아웃하기 전에 키를 백업하세요.",
             "title": "설정"
         },
-        "unsupported": "이 클라이언트는 종단간 암호화를 지원하지 않습니다."
+        "unsupported": "이 클라이언트는 종단간 암호화를 지원하지 않습니다.",
+        "incompatible_database_sign_out_description": "대화 기록을 잃지 않으려면, 로그아웃하기 전에 방 키를 내보내야 합니다. 이 작업을 수행하려면 최신 버전의 %(brand)s으로 가야 합니다",
+        "incompatible_database_title": "호환하지 않는 데이터베이스",
+        "incompatible_database_disable": "암호화를 끈 채 계속하기"
     },
     "emoji": {
         "category_frequently_used": "자주 사용함",
@@ -1222,7 +1122,34 @@
             "return_to_login": "로그인 화면으로 돌아가기"
         },
         "common_failures": {},
-        "captcha_description": "이 홈서버는 당신이 로봇이 아닌지 확인하고 싶어합니다."
+        "captcha_description": "이 홈서버는 당신이 로봇이 아닌지 확인하고 싶어합니다.",
+        "autodiscovery_invalid": "잘못된 홈서버 검색 응답",
+        "autodiscovery_generic_failure": "서버에서 자동 검색 설정 얻기에 실패함",
+        "autodiscovery_invalid_hs_base_url": "잘못된 m.homeserver 용 base_url",
+        "autodiscovery_invalid_hs": "홈서버 URL이 올바른 Matrix 홈서버가 아님",
+        "autodiscovery_invalid_is_base_url": "잘못된 m.identity_server 용 base_url",
+        "autodiscovery_invalid_is": "ID 서버 URL이 올바른 ID 서버가 아님",
+        "autodiscovery_invalid_is_response": "잘못된 ID 서버 검색 응답",
+        "server_picker_description_matrix.org": "가장 넓은 공개 서버에 수 백 만명이 무료로 등록함",
+        "soft_logout": {
+            "clear_data_button": "모든 데이터 지우기"
+        },
+        "logout_dialog": {
+            "setup_secure_backup_description_1": "암호화된 메시지는 종단간 암호화로 보호됩니다. 오직 당신과 상대방만 이 메시지를 읽을 수 있는 키를 갖습니다.",
+            "use_key_backup": "키 백업 시작",
+            "skip_key_backup": "저는 제 암호화된 메시지를 원하지 않아요",
+            "megolm_export": "수동으로 키 내보내기",
+            "setup_key_backup_title": "암호화된 메시지에 접근할 수 없게 됩니다",
+            "description": "로그아웃하겠습니까?"
+        },
+        "registration": {
+            "continue_without_email_field_label": "이메일 (선택)"
+        },
+        "set_email": {
+            "verification_pending_title": "인증을 기다리는 중",
+            "verification_pending_description": "이메일을 확인하고 안의 링크를 클릭합니다. 모두 마치고 나서, 계속하기를 누르세요.",
+            "description": "이렇게 하면 비밀번호를 다시 설정하고 알림을 받을 수 있습니다."
+        }
     },
     "export_chat": {
         "title": "대화 내보내기",
@@ -1243,7 +1170,8 @@
     "report_content": {
         "missing_reason": "왜 신고하는 지 이유를 적어주세요.",
         "report_content_to_homeserver": "홈서버 관리자에게 내용 신고하기",
-        "description": "이 메시지를 신고하면 고유 '이벤트 ID'를 홈서버의 관리자에게 보내게 됩니다. 이 방의 메시지가 암호화되어 있다면, 홈서버 관리자는 메시지 문자를 읽거나 파일 혹은 사진을 볼 수 없습니다."
+        "description": "이 메시지를 신고하면 고유 '이벤트 ID'를 홈서버의 관리자에게 보내게 됩니다. 이 방의 메시지가 암호화되어 있다면, 홈서버 관리자는 메시지 문자를 읽거나 파일 혹은 사진을 볼 수 없습니다.",
+        "other_label": "기타"
     },
     "a11y": {
         "n_unread_messages_mentions": {
@@ -1319,7 +1247,10 @@
         "release_notes_toast_title": "새로운 점",
         "error_encountered": "오류가 일어났습니다 (%(errorDetail)s).",
         "no_update": "업데이트가 없습니다.",
-        "check_action": "업데이트 확인"
+        "check_action": "업데이트 확인",
+        "error_unable_load_commit": "커밋 세부 정보를 불러올 수 없음: %(msg)s",
+        "unavailable": "이용할 수 없음",
+        "changelog": "바뀐 점"
     },
     "labs_mjolnir": {
         "room_name": "차단 목록",
@@ -1354,7 +1285,9 @@
     "create_space": {
         "public_heading": "당신의 공개 스페이스",
         "private_heading": "당신의 비공개 스페이스",
-        "label": "스페이스 만들기"
+        "label": "스페이스 만들기",
+        "subspace_dropdown_title": "스페이스 만들기",
+        "subspace_join_rule_invite_only": "비공개 스페이스 (초대 필요)"
     },
     "room": {
         "drop_file_prompt": "업로드할 파일을 여기에 놓으세요",
@@ -1422,7 +1355,11 @@
         "search": {
             "this_room": "방",
             "all_rooms": "모든 방",
-            "field_placeholder": "찾기…"
+            "field_placeholder": "찾기…",
+            "result_count": {
+                "one": "(~%(count)s개의 결과)",
+                "other": "(~%(count)s개의 결과)"
+            }
         },
         "jump_to_bottom_button": "가장 최근 메세지로 스크롤",
         "jump_read_marker": "읽지 않은 첫 메시지로 건너뜁니다.",
@@ -1442,7 +1379,17 @@
         "share_public": "당신의 공개 스페이스 공유하기",
         "invite_this_space": "이 스페이스로 초대하기",
         "title_when_query_unavailable": "방 및 스페이스 목록",
-        "search_placeholder": "이름 및 설명 검색"
+        "search_placeholder": "이름 및 설명 검색",
+        "add_existing_subspace": {
+            "create_button": "새로운 스페이스 만들기",
+            "filter_placeholder": "스페이스 검색"
+        },
+        "add_existing_room_space": {
+            "dm_heading": "다이렉트 메세지",
+            "space_dropdown_title": "기존 방 추가"
+        },
+        "room_filter_placeholder": "방 검색",
+        "leave_dialog_option_all": "모든 방에서 떠나기"
     },
     "terms": {
         "integration_manager": "봇, 브릿지, 위젯 그리고 스티커 팩을 사용",
@@ -1457,7 +1404,9 @@
         "identity_server_no_terms_title": "ID 서버에 서비스 약관이 없음",
         "identity_server_no_terms_description_1": "이 작업에는 이메일 주소 또는 전화번호를 확인하기 위해 기본 ID 서버 <server />에 접근해야 합니다. 하지만 서버가 서비스 약관을 갖고 있지 않습니다.",
         "identity_server_no_terms_description_2": "서버의 관리자를 신뢰하는 경우에만 계속하세요.",
-        "inline_intro_text": "계속하려면 <policyLink />을(를) 수락하세요:"
+        "inline_intro_text": "계속하려면 <policyLink />을(를) 수락하세요:",
+        "summary_identity_server_1": "전화번호 혹은 이메일로 상대방 찾기",
+        "summary_identity_server_2": "전화번호 혹은 이메일로 찾음"
     },
     "failed_load_async_component": "불러올 수 없습니다! 네트워크 연결 상태를 확인한 후 다시 시도하세요.",
     "upload_failed_generic": "'%(fileName)s' 파일 업로드에 실패했습니다.",
@@ -1470,7 +1419,20 @@
         "error_permissions_room": "이 방에 사람을 초대할 권한이 없습니다.",
         "error_bad_state": "초대하려면 사용자가 출입 금지되지 않은 상태여야 합니다.",
         "error_version_unsupported_room": "사용자의 홈서버가 방의 버전을 호환하지 않습니다.",
-        "error_unknown": "알 수 없는 서버 오류"
+        "error_unknown": "알 수 없는 서버 오류",
+        "unable_find_profiles_description_default": "아래에 나열된 Matrix ID에서 프로필을 찾을 수 없습니다 - 무시하고 그들을 초대할까요?",
+        "unable_find_profiles_title": "다음 사용자는 존재하지 않을 수 있습니다",
+        "unable_find_profiles_invite_never_warn_label_default": "무시하고 초대, 그리고 다시 경고하지 않기",
+        "unable_find_profiles_invite_label_default": "무시하고 초대",
+        "recents_section": "최근 대화 목록",
+        "suggestions_section": "최근 다이렉트 메세지",
+        "email_use_default_is": "이메일로 초대하기 위해 ID 서버를 사용합니다. <default>기본 (%(defaultIdentityServerName)s)을(를) 사용하거나</default> <settings>설정</settings>에서 관리하세요.",
+        "email_use_is": "이메일로 초대하기 위해 ID 서버를 사용합니다. <settings>설정</settings>에서 관리하세요.",
+        "start_conversation_name_email_mxid_prompt": "이름, 이메일, 사용자명(<userId/>) 으로 대화를 시작하세요.",
+        "start_conversation_name_mxid_prompt": "이름이나 사용자명(<userId/> 형식)을 사용하는 사람들과 대화를 시작하세요.",
+        "suggestions_disclaimer": "일부 추천 목록은 개인 정보 보호를 위해 보이지 않을 수 있습니다.",
+        "suggestions_disclaimer_prompt": "찾으려는 사람이 보이지 않으면, 아래의 초대링크를 보내세요.",
+        "send_link_prompt": "또는 초대 링크 보내기"
     },
     "widget": {
         "error_need_to_be_logged_in": "로그인을 해야 합니다.",
@@ -1489,7 +1451,10 @@
         "shared_data_warning": "이 위젯을 사용하면 <helpIcon /> %(widgetDomain)s와(과) 데이터를 공유합니다.",
         "added_by": "위젯을 추가했습니다",
         "cookie_warning": "이 위젯은 쿠키를 사용합니다.",
-        "popout": "위젯 팝업"
+        "popout": "위젯 팝업",
+        "capabilities_dialog": {
+            "remember_Selection": "이 위젯에 대해 내 선택 기억하기"
+        }
     },
     "scalar": {
         "error_create": "위젯을 만들지 못합니다.",
@@ -1514,7 +1479,21 @@
         "failed_copy": "복사 실패함",
         "something_went_wrong": "문제가 생겼습니다!",
         "update_power_level": "권한 등급 변경에 실패함",
-        "unknown": "알 수 없는 오류"
+        "unknown": "알 수 없는 오류",
+        "dialog_description_default": "오류가 발생했습니다.",
+        "edit_history_unsupported": "홈서버가 이 기능을 지원하지 않는 모양입니다.",
+        "session_restore": {
+            "clear_storage_description": "로그아웃하고 암호화 키를 제거합니까?",
+            "clear_storage_button": "저장소를 지우고 로그아웃",
+            "title": "세션을 복구할 수 없음",
+            "description_1": "이전 활동을 복구하는 중 에러가 발생했습니다.",
+            "description_2": "이전에 최근 버전의 %(brand)s을 썼다면, 세션이 이 버전과 맞지 않을 것입니다. 창을 닫고 최근 버전으로 돌아가세요.",
+            "description_3": "브라우저의 저장소를 청소한다면 문제가 해결될 수도 있지만, 암호화된 대화 기록을 읽을 수 없게 됩니다."
+        },
+        "storage_evicted_title": "누락된 세션 데이터",
+        "storage_evicted_description_1": "암호화된 메시지 키를 포함한 일부 세션 데이터가 누락되었습니다. 백업에서 키를 복구하면서 로그아웃하고 로그인하면 이를 고칠 수 있습니다.",
+        "storage_evicted_description_2": "디스크 공간이 부족한 경우 브라우저에서 이 데이터를 제거했을 수 있습니다.",
+        "unknown_error_code": "알 수 없는 오류 코드"
     },
     "name_and_id": "%(name)s (%(userId)s)",
     "items_and_n_others": {
@@ -1613,7 +1592,17 @@
         "deactivate_confirm_title": "사용자를 비활성화합니까?",
         "deactivate_confirm_description": "사용자를 비활성화하면 사용자는 로그아웃되며 다시 로그인할 수 없게 됩니다. 또한 사용자는 모든 방에서 떠나게 됩니다. 이 작업은 돌이킬 수 없습니다. 이 사용자를 비활성화하겠습니까?",
         "deactivate_confirm_action": "사용자 비활성화",
-        "error_deactivate": "사용자 비활성화에 실패함"
+        "error_deactivate": "사용자 비활성화에 실패함",
+        "redact": {
+            "no_recent_messages_title": "%(user)s님의 최근 메시지 없음",
+            "no_recent_messages_description": "이전 타임라인이 있는지 위로 스크롤하세요.",
+            "confirm_title": "%(user)s님의 최근 메시지 삭제",
+            "confirm_description_2": "메시지의 양이 많아서 시간이 걸릴 수 있습니다. 처리하는 동안 클라이언트를 새로고침하지 말아주세요.",
+            "confirm_button": {
+                "other": "%(count)s개의 메시지 삭제",
+                "one": "1개의 메시지 삭제"
+            }
+        }
     },
     "stickers": {
         "empty": "현재 사용하고 있는 스티커 팩이 없음",
@@ -1661,12 +1650,63 @@
         "error_loading_user_profile": "사용자 프로필을 불러올 수 없음"
     },
     "cant_load_page": "페이지를 불러올 수 없음",
-    "Invalid homeserver discovery response": "잘못된 홈서버 검색 응답",
-    "Failed to get autodiscovery configuration from server": "서버에서 자동 검색 설정 얻기에 실패함",
-    "Invalid base_url for m.homeserver": "잘못된 m.homeserver 용 base_url",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "홈서버 URL이 올바른 Matrix 홈서버가 아님",
-    "Invalid identity server discovery response": "잘못된 ID 서버 검색 응답",
-    "Invalid base_url for m.identity_server": "잘못된 m.identity_server 용 base_url",
-    "Identity server URL does not appear to be a valid identity server": "ID 서버 URL이 올바른 ID 서버가 아님",
-    "General failure": "일반적인 실패"
+    "General failure": "일반적인 실패",
+    "emoji_picker": {
+        "cancel_search_label": "검색 취소"
+    },
+    "truncated_list_n_more": {
+        "other": "%(count)s개 더..."
+    },
+    "dialog_close_label": "대화 상자 닫기",
+    "redact": {
+        "error": "이 메시지를 삭제할 수 없습니다. (%(code)s)",
+        "ongoing": "제거 중…",
+        "confirm_button": "삭제 확인"
+    },
+    "forward": {
+        "send_label": "보내기",
+        "filter_placeholder": "방 또는 사람 검색"
+    },
+    "lazy_loading": {
+        "disabled_description1": "이전에 구성원의 불러오기 지연이 켜진 %(host)s에서 %(brand)s을 사용했습니다. 이 버전에서 불러오기 지연은 꺼집니다. 로컬 캐시가 이 두 설정 간에 호환되지 않으므로, %(brand)s은 계정을 다시 동기화 해야 합니다.",
+        "disabled_title": "호환하지 않는 로컬 캐시",
+        "disabled_action": "캐시를 지우고 다시 동기화",
+        "resync_description": "%(brand)s은 이제 필요할 때만 다른 사용자에 대한 정보를 불러와 메모리를 3배에서 5배 덜 잡아먹습니다. 서버와 다시 동기화하는 동안 기다려주세요!",
+        "resync_title": "%(brand)s 업데이트 중"
+    },
+    "message_edit_dialog_title": "메시지 편집",
+    "spotlight_dialog": {
+        "heading_without_query": "검색 기준",
+        "cant_find_room_helpful_hint": "만약 찾고 있는 방이 없다면, 초대를 요청하거나 새로운 방을 만드세요.",
+        "create_new_room_button": "새 방 만들기",
+        "recently_viewed_section_title": "최근에 확인한"
+    },
+    "share": {
+        "title_room": "방 공유",
+        "permalink_most_recent": "가장 최근 메시지로 연결",
+        "title_user": "사용자 공유",
+        "title_message": "방 메시지 공유",
+        "permalink_message": "선택한 메시지로 연결"
+    },
+    "upload_file": {
+        "title_progress": "파일 업로드 (총 %(total)s개 중 %(current)s개)",
+        "title": "파일 업로드",
+        "upload_all_button": "전부 업로드",
+        "error_file_too_large": "이 파일은 업로드하기에 <b>너무 큽니다</b>. 파일 크기 한도는 %(limit)s이지만 이 파일은 %(sizeOfThisFile)s입니다.",
+        "error_files_too_large": "이 파일들은 업로드하기에 <b>너무 큽니다</b>. 파일 크기 한도는 %(limit)s입니다.",
+        "error_some_files_too_large": "일부 파일이 업로드하기에 <b>너무 큽니다</b>. 파일 크기 한도는 %(limit)s입니다.",
+        "upload_n_others_button": {
+            "other": "%(count)s개의 다른 파일 업로드",
+            "one": "%(count)s개의 다른 파일 업로드"
+        },
+        "cancel_all_button": "전부 취소",
+        "error_title": "업로드 오류"
+    },
+    "restore_key_backup_dialog": {
+        "load_error_content": "백업 상태 불러올 수 없음",
+        "restore_failed_error": "백업을 복구할 수 없음",
+        "no_backup_error": "백업을 찾을 수 없습니다!",
+        "count_of_decryption_failures": "%(failedCount)s개의 세션 복호화에 실패했습니다!",
+        "key_backup_warning": "<b>경고</b>: 신뢰할 수 있는 컴퓨터에서만 키 백업을 설정해야 합니다."
+    }
 }

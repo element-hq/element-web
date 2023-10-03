@@ -65,7 +65,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
         // Don't trust local state and instead use the summary API
         members = (
             <span className="mx_RoomInfoLine_members">
-                {_t("%(count)s members", { count: summary.num_joined_members })}
+                {_t("common|n_members", { count: summary.num_joined_members })}
             </span>
         );
     } else if (memberCount && summary !== undefined) {
@@ -77,7 +77,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
 
         members = (
             <AccessibleButton kind="link" className="mx_RoomInfoLine_members" onClick={viewMembers}>
-                {_t("%(count)s members", { count: memberCount })}
+                {_t("common|n_members", { count: memberCount })}
             </AccessibleButton>
         );
     }

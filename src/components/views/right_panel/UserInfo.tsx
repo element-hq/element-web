@@ -282,12 +282,12 @@ function DevicesSection({
                 unverifiedDevices.push(device);
             }
         }
-        expandCountCaption = _t("%(count)s verified sessions", { count: expandSectionDevices.length });
+        expandCountCaption = _t("user_info|count_of_verified_sessions", { count: expandSectionDevices.length });
         expandHideCaption = _t("user_info|hide_verified_sessions");
         expandIconClasses += " mx_E2EIcon_verified";
     } else {
         expandSectionDevices = devices;
-        expandCountCaption = _t("%(count)s sessions", { count: devices.length });
+        expandCountCaption = _t("user_info|count_of_sessions", { count: devices.length });
         expandHideCaption = _t("user_info|hide_sessions");
         expandIconClasses += " mx_E2EIcon_normal";
     }

@@ -2,20 +2,8 @@
     "AM": "AM",
     "PM": "PM",
     "%(items)s and %(lastItem)s": "%(items)s and %(lastItem)s",
-    "and %(count)s others...": {
-        "other": "and %(count)s others...",
-        "one": "and one other..."
-    },
-    "An error has occurred.": "An error has occurred.",
-    "Custom level": "Custom level",
-    "Email address": "Email address",
     "Join Room": "Join Room",
     "Moderator": "Moderator",
-    "not specified": "not specified",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Please check your email and click on the link it contains. Once this is done, click continue.",
-    "Session ID": "Session ID",
-    "unknown error code": "unknown error code",
-    "Verification Pending": "Verification Pending",
     "Warning!": "Warning!",
     "Sun": "Sun",
     "Mon": "Mon",
@@ -39,30 +27,15 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "Confirm Removal": "Confirm Removal",
-    "Unable to restore session": "Unable to restore session",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.",
-    "Add an Integration": "Add an Integration",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?",
-    "Create new room": "Create new room",
     "Home": "Home",
-    "(~%(count)s results)": {
-        "one": "(~%(count)s result)",
-        "other": "(~%(count)s results)"
-    },
-    "This will allow you to reset your password and receive notifications.": "This will allow you to reset your password and receive notifications.",
     "Sunday": "Sunday",
     "Today": "Today",
     "Friday": "Friday",
-    "Changelog": "Changelog",
-    "Unavailable": "Unavailable",
     "Tuesday": "Tuesday",
     "Unnamed room": "Unnamed room",
     "Saturday": "Saturday",
     "Monday": "Monday",
     "Wednesday": "Wednesday",
-    "Send": "Send",
-    "You cannot delete this message. (%(code)s)": "You cannot delete this message. (%(code)s)",
     "Thursday": "Thursday",
     "Yesterday": "Yesterday",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
@@ -70,7 +43,6 @@
     "Spanner": "Wrench",
     "Aeroplane": "Airplane",
     "Cat": "Cat",
-    "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait while we resynchronize with the server!",
     "common": {
         "analytics": "Analytics",
         "error": "Error",
@@ -102,7 +74,12 @@
         "rooms": "Rooms",
         "low_priority": "Low priority",
         "historical": "Historical",
-        "are_you_sure": "Are you sure?"
+        "are_you_sure": "Are you sure?",
+        "email_address": "Email address",
+        "and_n_others": {
+            "other": "and %(count)s others...",
+            "one": "and one other..."
+        }
     },
     "action": {
         "continue": "Continue",
@@ -151,7 +128,8 @@
         "restricted": "Restricted",
         "moderator": "Moderator",
         "admin": "Admin",
-        "custom": "Custom (%(level)s)"
+        "custom": "Custom (%(level)s)",
+        "custom_level": "Custom level"
     },
     "bug_reporting": {
         "send_logs": "Send logs",
@@ -313,6 +291,10 @@
         },
         "m.video": {
             "error_decrypting": "Error decrypting video"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "Add an Integration",
+            "dialog_description": "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?"
         }
     },
     "slash_command": {
@@ -391,7 +373,6 @@
         "category_room": "Room",
         "category_other": "Other"
     },
-    "Other": "Other",
     "labs": {
         "group_profile": "Profile",
         "group_rooms": "Rooms"
@@ -432,6 +413,11 @@
             "password_not_entered": "A new password must be entered.",
             "passwords_mismatch": "New passwords must match each other.",
             "return_to_login": "Return to login screen"
+        },
+        "set_email": {
+            "verification_pending_title": "Verification Pending",
+            "verification_pending_description": "Please check your email and click on the link it contains. Once this is done, click continue.",
+            "description": "This will allow you to reset your password and receive notifications."
         }
     },
     "export_chat": {
@@ -455,7 +441,9 @@
         "release_notes_toast_title": "What's New",
         "error_encountered": "Error encountered (%(errorDetail)s).",
         "no_update": "No update available.",
-        "check_action": "Check for update"
+        "check_action": "Check for update",
+        "unavailable": "Unavailable",
+        "changelog": "Changelog"
     },
     "composer": {
         "autocomplete": {
@@ -494,7 +482,11 @@
         "search": {
             "this_room": "This Room",
             "all_rooms": "All Rooms",
-            "field_placeholder": "Search…"
+            "field_placeholder": "Search…",
+            "result_count": {
+                "one": "(~%(count)s result)",
+                "other": "(~%(count)s results)"
+            }
         },
         "jump_read_marker": "Jump to first unread message.",
         "failed_reject_invite": "Failed to reject invite"
@@ -533,7 +525,8 @@
         "advanced": {
             "unfederated": "This room is not accessible by remote Matrix servers"
         },
-        "upload_avatar_label": "Upload avatar"
+        "upload_avatar_label": "Upload avatar",
+        "alias_not_specified": "not specified"
     },
     "failed_load_async_component": "Unable to load! Check your network connectivity and try again.",
     "upload_failed_generic": "The file '%(fileName)s' failed to upload.",
@@ -583,14 +576,23 @@
         "export_unsupported": "Your browser does not support the required cryptography extensions",
         "import_invalid_keyfile": "Not a valid %(brand)s keyfile",
         "import_invalid_passphrase": "Authentication check failed: incorrect password?",
-        "not_supported": "<not supported>"
+        "not_supported": "<not supported>",
+        "verification": {
+            "manual_device_verification_device_id_label": "Session ID"
+        }
     },
     "error": {
         "mixed_content": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
         "tls": "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
         "something_went_wrong": "Something went wrong!",
         "update_power_level": "Failed to change power level",
-        "unknown": "Unknown error"
+        "unknown": "Unknown error",
+        "dialog_description_default": "An error has occurred.",
+        "session_restore": {
+            "title": "Unable to restore session",
+            "description_2": "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version."
+        },
+        "unknown_error_code": "unknown error code"
     },
     "notifications": {
         "enable_prompt_toast_title": "Notifications",
@@ -628,5 +630,21 @@
             "title": "Search failed",
             "server_unavailable": "Server may be unavailable, overloaded, or search timed out :("
         }
+    },
+    "redact": {
+        "error": "You cannot delete this message. (%(code)s)",
+        "confirm_button": "Confirm Removal"
+    },
+    "forward": {
+        "send_label": "Send"
+    },
+    "lazy_loading": {
+        "resync_description": "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait while we resynchronize with the server!"
+    },
+    "report_content": {
+        "other_label": "Other"
+    },
+    "spotlight_dialog": {
+        "create_new_room_button": "Create new room"
     }
 }

@@ -1,18 +1,12 @@
 {
-    "Create new room": "പുതിയ റൂം സൃഷ്ടിക്കുക",
-    "unknown error code": "അപരിചിത എറര്‍ കോഡ്",
     "Sunday": "ഞായര്‍",
     "Today": "ഇന്ന്",
     "Friday": "വെള്ളി",
-    "Changelog": "മാറ്റങ്ങളുടെ നാള്‍വഴി",
-    "Unavailable": "ലഭ്യമല്ല",
     "Tuesday": "ചൊവ്വ",
     "Unnamed room": "പേരില്ലാത്ത റൂം",
     "Saturday": "ശനി",
     "Monday": "തിങ്കള്‍",
     "Wednesday": "ബുധന്‍",
-    "You cannot delete this message. (%(code)s)": "നിങ്ങള്‍ക്ക് ഈ സന്ദേശം നീക്കം ചെയ്യാനാകില്ല. (%(code)s)",
-    "Send": "അയയ്ക്കുക",
     "Thursday": "വ്യാഴം",
     "Yesterday": "ഇന്നലെ",
     "common": {
@@ -79,7 +73,9 @@
         "see_changes_button": "എന്തൊക്കെ പുതിയ വിശേഷങ്ങള്‍ ?",
         "release_notes_toast_title": "പുതിയ വിശേഷങ്ങള്‍",
         "error_encountered": "എറര്‍ നേരിട്ടു (%(errorDetail)s).",
-        "no_update": "അപ്ഡേറ്റുകള്‍ ലഭ്യമല്ല."
+        "no_update": "അപ്ഡേറ്റുകള്‍ ലഭ്യമല്ല.",
+        "unavailable": "ലഭ്യമല്ല",
+        "changelog": "മാറ്റങ്ങളുടെ നാള്‍വഴി"
     },
     "space": {
         "context_menu": {
@@ -112,5 +108,17 @@
     },
     "error_dialog": {
         "forget_room_failed": "%(errCode)s റൂം ഫോര്‍ഗെറ്റ് ചെയ്യുവാന്‍ സാധിച്ചില്ല"
+    },
+    "redact": {
+        "error": "നിങ്ങള്‍ക്ക് ഈ സന്ദേശം നീക്കം ചെയ്യാനാകില്ല. (%(code)s)"
+    },
+    "forward": {
+        "send_label": "അയയ്ക്കുക"
+    },
+    "spotlight_dialog": {
+        "create_new_room_button": "പുതിയ റൂം സൃഷ്ടിക്കുക"
+    },
+    "error": {
+        "unknown_error_code": "അപരിചിത എറര്‍ കോഡ്"
     }
 }

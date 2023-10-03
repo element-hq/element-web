@@ -120,15 +120,15 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
             <BaseDialog
                 className="mx_WidgetCapabilitiesPromptDialog"
                 onFinished={this.props.onFinished}
-                title={_t("Approve widget permissions")}
+                title={_t("widget|capabilities_dialog|title")}
             >
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_Dialog_content">
-                        <div className="text-muted">{_t("This widget would like to:")}</div>
+                        <div className="text-muted">{_t("widget|capabilities_dialog|content_starting_text")}</div>
                         {checkboxRows}
                         <DialogButtons
                             primaryButton={_t("action|approve")}
-                            cancelButton={_t("Decline All")}
+                            cancelButton={_t("widget|capabilities_dialog|decline_all_permission")}
                             onPrimaryButtonClick={this.onSubmit}
                             onCancel={this.onReject}
                             additive={
@@ -136,7 +136,7 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
                                     value={this.state.rememberSelection}
                                     toggleInFront={true}
                                     onChange={this.onRememberSelectionChange}
-                                    label={_t("Remember my selection for this widget")}
+                                    label={_t("widget|capabilities_dialog|remember_Selection")}
                                 />
                             }
                         />

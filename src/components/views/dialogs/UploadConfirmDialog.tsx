@@ -69,12 +69,12 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
     public render(): React.ReactNode {
         let title: string;
         if (this.props.totalFiles > 1 && this.props.currentIndex !== undefined) {
-            title = _t("Upload files (%(current)s of %(total)s)", {
+            title = _t("upload_file|title_progress", {
                 current: this.props.currentIndex + 1,
                 total: this.props.totalFiles,
             });
         } else {
-            title = _t("Upload files");
+            title = _t("upload_file|title");
         }
 
         const fileId = `mx-uploadconfirmdialog-${this.props.file.name}`;
@@ -99,7 +99,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
 
         let uploadAllButton: JSX.Element | undefined;
         if (this.props.currentIndex + 1 < this.props.totalFiles) {
-            uploadAllButton = <button onClick={this.onUploadAllClick}>{_t("Upload all")}</button>;
+            uploadAllButton = <button onClick={this.onUploadAllClick}>{_t("upload_file|upload_all_button")}</button>;
         }
 
         return (

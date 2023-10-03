@@ -113,13 +113,13 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
             const dialogAesthetics = {
                 [SSOAuthEntry.PHASE_PREAUTH]: {
                     title: _t("auth|uia|sso_title"),
-                    body: _t("To continue, use Single Sign On to prove your identity."),
+                    body: _t("auth|uia|sso_preauth_body"),
                     continueText: _t("auth|sso"),
                     continueKind: "primary",
                 },
                 [SSOAuthEntry.PHASE_POSTAUTH]: {
-                    title: _t("Confirm encryption setup"),
-                    body: _t("Click the button below to confirm setting up encryption."),
+                    title: _t("encryption|confirm_encryption_setup_title"),
+                    body: _t("encryption|confirm_encryption_setup_body"),
                     continueText: _t("action|confirm"),
                     continueKind: "primary",
                 },
@@ -173,7 +173,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
         if (this.state.error) {
             content = (
                 <div>
-                    <p>{_t("Unable to set up keys")}</p>
+                    <p>{_t("encryption|unable_to_setup_keys_error")}</p>
                     <div className="mx_Dialog_buttons">
                         <DialogButtons
                             primaryButton={_t("action|retry")}

@@ -42,7 +42,7 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps> {
 
     public render(): React.ReactNode {
         const { tooltip, children, tooltipClassName, className, kind } = this.props;
-        const title = _t("Information");
+        const title = _t("info_tooltip_title");
         const iconClassName =
             kind !== InfoTooltipKind.Warning ? "mx_InfoTooltip_icon_info" : "mx_InfoTooltip_icon_warning";
 

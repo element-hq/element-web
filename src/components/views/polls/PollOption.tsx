@@ -29,7 +29,7 @@ type PollOptionContentProps = {
     isWinner?: boolean;
 };
 const PollOptionContent: React.FC<PollOptionContentProps> = ({ isWinner, answer, voteCount, displayVoteCount }) => {
-    const votesText = displayVoteCount ? _t("%(count)s votes", { count: voteCount }) : "";
+    const votesText = displayVoteCount ? _t("timeline|m.poll|count_of_votes", { count: voteCount }) : "";
     return (
         <div className="mx_PollOption_content">
             <div className="mx_PollOption_optionText">{answer.text}</div>

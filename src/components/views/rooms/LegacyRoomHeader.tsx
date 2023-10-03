@@ -805,7 +805,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
             searchStatus = (
                 <div className="mx_LegacyRoomHeader_searchStatus">
                     &nbsp;
-                    {_t("(~%(count)s results)", { count: this.props.searchInfo.count })}
+                    {_t("room|search|result_count", { count: this.props.searchInfo.count })}
                 </div>
             );
         }

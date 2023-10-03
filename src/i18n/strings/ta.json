@@ -1,10 +1,5 @@
 {
-    "Changelog": "மாற்றப்பதிவு",
-    "Send": "அனுப்பு",
-    "Unavailable": "இல்லை",
-    "unknown error code": "தெரியாத பிழை குறி",
     "Unnamed room": "பெயரிடப்படாத அறை",
-    "You cannot delete this message. (%(code)s)": "இந்த செய்தியை நீங்கள் அழிக்க முடியாது. (%(code)s)",
     "Sunday": "ஞாயிறு",
     "Monday": "திங்கள்",
     "Tuesday": "செவ்வாய்",
@@ -14,7 +9,6 @@
     "Saturday": "சனி",
     "Today": "இன்று",
     "Yesterday": "நேற்று",
-    "Thank you!": "உங்களுக்கு நன்றி",
     "Server may be unavailable, overloaded, or you hit a bug.": "",
     "Sun": "ஞாயிறு",
     "Mon": "திங்கள்",
@@ -75,7 +69,8 @@
         "send_logs": "பதிவுகளை அனுப்பு",
         "collecting_information": "செயலியின் பதிப்பு தகவல்கள் சேகரிக்கப்படுகிறது",
         "collecting_logs": "பதிவுகள் சேகரிக்கப்படுகிறது",
-        "waiting_for_server": "வழங்கியின் பதிலுக்காக காத்திருக்கிறது"
+        "waiting_for_server": "வழங்கியின் பதிலுக்காக காத்திருக்கிறது",
+        "thank_you": "உங்களுக்கு நன்றி"
     },
     "devtools": {
         "event_type": "நிகழ்வு வகை",
@@ -153,7 +148,9 @@
     "update": {
         "see_changes_button": "புதிதாக என்ன?",
         "release_notes_toast_title": "புதிதாக வந்தவை",
-        "no_update": "எந்த புதுப்பிப்பும் இல்லை."
+        "no_update": "எந்த புதுப்பிப்பும் இல்லை.",
+        "unavailable": "இல்லை",
+        "changelog": "மாற்றப்பதிவு"
     },
     "space": {
         "context_menu": {
@@ -197,5 +194,14 @@
     },
     "error_dialog": {
         "forget_room_failed": "அறையை மறப்பதில் தோல்வி %(errCode)s"
+    },
+    "redact": {
+        "error": "இந்த செய்தியை நீங்கள் அழிக்க முடியாது. (%(code)s)"
+    },
+    "forward": {
+        "send_label": "அனுப்பு"
+    },
+    "error": {
+        "unknown_error_code": "தெரியாத பிழை குறி"
     }
 }

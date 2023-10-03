@@ -318,18 +318,18 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         let content;
         let title;
         if (this.state.loading) {
-            title = _t("Restoring keys from backup");
+            title = _t("encryption|access_secret_storage_dialog|restoring");
             let details;
             if (this.state.progress.stage === ProgressState.Fetch) {
-                details = _t("Fetching keys from server…");
+                details = _t("restore_key_backup_dialog|key_fetch_in_progress");
             } else if (this.state.progress.stage === ProgressState.LoadKeys) {
                 const { total, successes, failures } = this.state.progress;
-                details = _t("%(completed)s of %(total)s keys restored", {
+                details = _t("restore_key_backup_dialog|load_keys_progress", {
                     total,
                     completed: (successes ?? 0) + (failures ?? 0),
                 });
             } else if (this.state.progress.stage === ProgressState.PreFetch) {
-                details = _t("Fetching keys from server…");
+                details = _t("restore_key_backup_dialog|key_fetch_in_progress");
             }
             content = (
                 <div>
@@ -339,49 +339,41 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             );
         } else if (this.state.loadError) {
             title = _t("common|error");
-            content = _t("Unable to load backup status");
+            content = _t("restore_key_backup_dialog|load_error_content");
         } else if (this.state.restoreError) {
             if (
                 this.state.restoreError instanceof MatrixError &&
                 this.state.restoreError.errcode === MatrixClient.RESTORE_BACKUP_ERROR_BAD_KEY
             ) {
                 if (this.state.restoreType === RestoreType.RecoveryKey) {
-                    title = _t("Security Key mismatch");
+                    title = _t("restore_key_backup_dialog|recovery_key_mismatch_title");
                     content = (
                         <div>
-                            <p>
-                                {_t(
-                                    "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.",
-                                )}
-                            </p>
+                            <p>{_t("restore_key_backup_dialog|recovery_key_mismatch_description")}</p>
                         </div>
                     );
                 } else {
-                    title = _t("Incorrect Security Phrase");
+                    title = _t("restore_key_backup_dialog|incorrect_security_phrase_title");
                     content = (
                         <div>
-                            <p>
-                                {_t(
-                                    "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.",
-                                )}
-                            </p>
+                            <p>{_t("restore_key_backup_dialog|incorrect_security_phrase_dialog")}</p>
                         </div>
                     );
                 }
             } else {
                 title = _t("common|error");
-                content = _t("Unable to restore backup");
+                content = _t("restore_key_backup_dialog|restore_failed_error");
             }
         } else if (this.state.backupInfo === null) {
             title = _t("common|error");
-            content = _t("No backup found!");
+            content = _t("restore_key_backup_dialog|no_backup_error");
         } else if (this.state.recoverInfo) {
-            title = _t("Keys restored");
+            title = _t("restore_key_backup_dialog|keys_restored_title");
             let failedToDecrypt;
             if (this.state.recoverInfo.total > this.state.recoverInfo.imported) {
                 failedToDecrypt = (
                     <p>
-                        {_t("Failed to decrypt %(failedCount)s sessions!", {
+                        {_t("restore_key_backup_dialog|count_of_decryption_failures", {
                             failedCount: this.state.recoverInfo.total - this.state.recoverInfo.imported,
                         })}
                     </p>
@@ -390,7 +382,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             content = (
                 <div>
                     <p>
-                        {_t("Successfully restored %(sessionCount)s keys", {
+                        {_t("restore_key_backup_dialog|count_of_successfully_restored_keys", {
                             sessionCount: this.state.recoverInfo.imported,
                         })}
                     </p>
@@ -404,21 +396,11 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 </div>
             );
         } else if (backupHasPassphrase && !this.state.forceRecoveryKey) {
-            title = _t("Enter Security Phrase");
+            title = _t("restore_key_backup_dialog|enter_phrase_title");
             content = (
                 <div>
-                    <p>
-                        {_t(
-                            "<b>Warning</b>: you should only set up key backup from a trusted computer.",
-                            {},
-                            { b: (sub) => <b>{sub}</b> },
-                        )}
-                    </p>
-                    <p>
-                        {_t(
-                            "Access your secure message history and set up secure messaging by entering your Security Phrase.",
-                        )}
-                    </p>
+                    <p>{_t("restore_key_backup_dialog|key_backup_warning", {}, { b: (sub) => <b>{sub}</b> })}</p>
+                    <p>{_t("restore_key_backup_dialog|enter_phrase_description")}</p>
 
                     <form className="mx_RestoreKeyBackupDialog_primaryContainer">
                         <input
@@ -438,7 +420,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                         />
                     </form>
                     {_t(
-                        "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>",
+                        "restore_key_backup_dialog|phrase_forgotten_text",
                         {},
                         {
                             button1: (s) => (
@@ -456,7 +438,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 </div>
             );
         } else {
-            title = _t("Enter Security Key");
+            title = _t("restore_key_backup_dialog|enter_key_title");
 
             let keyStatus;
             if (this.state.recoveryKey.length === 0) {
@@ -465,32 +447,22 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 keyStatus = (
                     <div className="mx_RestoreKeyBackupDialog_keyStatus">
                         {"\uD83D\uDC4D "}
-                        {_t("This looks like a valid Security Key!")}
+                        {_t("restore_key_backup_dialog|key_is_valid")}
                     </div>
                 );
             } else {
                 keyStatus = (
                     <div className="mx_RestoreKeyBackupDialog_keyStatus">
                         {"\uD83D\uDC4E "}
-                        {_t("Not a valid Security Key")}
+                        {_t("restore_key_backup_dialog|key_is_invalid")}
                     </div>
                 );
             }
 
             content = (
                 <div>
-                    <p>
-                        {_t(
-                            "<b>Warning</b>: you should only set up key backup from a trusted computer.",
-                            {},
-                            { b: (sub) => <b>{sub}</b> },
-                        )}
-                    </p>
-                    <p>
-                        {_t(
-                            "Access your secure message history and set up secure messaging by entering your Security Key.",
-                        )}
-                    </p>
+                    <p>{_t("restore_key_backup_dialog|key_backup_warning", {}, { b: (sub) => <b>{sub}</b> })}</p>
+                    <p>{_t("restore_key_backup_dialog|enter_key_description")}</p>
 
                     <div className="mx_RestoreKeyBackupDialog_primaryContainer">
                         <input
@@ -510,7 +482,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                         />
                     </div>
                     {_t(
-                        "If you've forgotten your Security Key you can <button>set up new recovery options</button>",
+                        "restore_key_backup_dialog|key_forgotten_text",
                         {},
                         {
                             button: (s) => (

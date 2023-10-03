@@ -22,9 +22,9 @@ import { IProps as IContextMenuProps } from "../../structures/ContextMenu";
 import { _t, _td, TranslationKey } from "../../../languageHandler";
 
 const SECTION_NAMES: Record<MediaDeviceKindEnum, TranslationKey> = {
-    [MediaDeviceKindEnum.AudioInput]: _td("Input devices"),
-    [MediaDeviceKindEnum.AudioOutput]: _td("Output devices"),
-    [MediaDeviceKindEnum.VideoInput]: _td("Cameras"),
+    [MediaDeviceKindEnum.AudioInput]: _td("voip|input_devices"),
+    [MediaDeviceKindEnum.AudioOutput]: _td("voip|output_devices"),
+    [MediaDeviceKindEnum.VideoInput]: _td("common|cameras"),
 };
 
 interface IDeviceContextMenuDeviceProps {

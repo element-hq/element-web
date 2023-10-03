@@ -35,7 +35,7 @@ interface Props {
 
 const BeaconExpiryTime: React.FC<{ beacon: Beacon }> = ({ beacon }) => {
     const expiryTime = formatTime(new Date(getBeaconExpiryTimestamp(beacon)));
-    return <span className="mx_BeaconStatus_expiryTime">{_t("Live until %(expiryTime)s", { expiryTime })}</span>;
+    return <span className="mx_BeaconStatus_expiryTime">{_t("location_sharing|live_until", { expiryTime })}</span>;
 };
 
 const BeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({
@@ -61,13 +61,19 @@ const BeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({
             )}
             <div className="mx_BeaconStatus_description">
                 {displayStatus === BeaconDisplayStatus.Loading && (
-                    <span className="mx_BeaconStatus_description_status">{_t("Loading live location…")}</span>
+                    <span className="mx_BeaconStatus_description_status">
+                        {_t("location_sharing|loading_live_location")}
+                    </span>
                 )}
                 {displayStatus === BeaconDisplayStatus.Stopped && (
-                    <span className="mx_BeaconStatus_description_status">{_t("Live location ended")}</span>
+                    <span className="mx_BeaconStatus_description_status">
+                        {_t("location_sharing|live_location_ended")}
+                    </span>
                 )}
                 {displayStatus === BeaconDisplayStatus.Error && (
-                    <span className="mx_BeaconStatus_description_status">{_t("Live location error")}</span>
+                    <span className="mx_BeaconStatus_description_status">
+                        {_t("location_sharing|live_location_error")}
+                    </span>
                 )}
                 {displayStatus === BeaconDisplayStatus.Active && beacon && (
                     <>

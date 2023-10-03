@@ -125,7 +125,7 @@ export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room
         case PillType.EventInOtherRoom:
             {
                 avatar = <PillRoomAvatar shouldShowPillAvatar={shouldShowPillAvatar} room={targetRoom} />;
-                pillText = _t("Message in %(room)s", {
+                pillText = _t("pill|permalink_other_room", {
                     room: text,
                 });
             }
@@ -134,7 +134,7 @@ export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room
             {
                 if (event) {
                     avatar = <PillMemberAvatar shouldShowPillAvatar={shouldShowPillAvatar} member={member} />;
-                    pillText = _t("Message from %(user)s", {
+                    pillText = _t("pill|permalink_this_room", {
                         user: text,
                     });
                 } else {

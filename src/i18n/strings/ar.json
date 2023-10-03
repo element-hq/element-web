@@ -1,9 +1,4 @@
 {
-    "Create new room": "إنشاء غرفة جديدة",
-    "Send": "إرسال",
-    "Unavailable": "غير متوفر",
-    "Changelog": "سِجل التغييرات",
-    "Thank you!": "شكرًا !",
     "Sun": "الأحد",
     "Mon": "الإثنين",
     "Tue": "الثلاثاء",
@@ -31,33 +26,9 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s، ‏%(day)s %(monthName)s %(fullYear)s ‏%(time)s",
     "Restricted": "مقيد",
     "Moderator": "مشرف",
-    "Logs sent": "تم ارسال سجل الاحداث",
-    "You signed in to a new session without verifying it:": "قمت بتسجيل الدخول لجلسة جديدة من غير التحقق منها:",
-    "Verify your other session using one of the options below.": "أكِّد جلستك الأخرى باستخدام أحد الخيارات أدناه.",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s%(userId)s تم تسجيل الدخول لجلسة جديدة من غير التحقق منها:",
-    "Ask this user to verify their session, or manually verify it below.": "اطلب من هذا المستخدم التحقُّق من جلسته أو تحقَّق منها يدويًّا أدناه.",
-    "Not Trusted": "غير موثوقة",
-    "Language Dropdown": "قائمة اللغة المنسدلة",
-    "Information": "المعلومات",
     "expand": "توسيع",
     "collapse": "تضييق",
-    "This version of %(brand)s does not support searching encrypted messages": "لا يدعم هذا الإصدار من %(brand)s البحث في الرسائل المشفرة",
-    "This version of %(brand)s does not support viewing some encrypted files": "لا يدعم هذا الإصدار من %(brand)s s عرض بعض الملفات المشفرة",
-    "Use the <a>Desktop app</a> to search encrypted messages": "استخدم <a> تطبيق سطح المكتب </a> للبحث في الرسائل المشفرة",
-    "Use the <a>Desktop app</a> to see all encrypted files": "استخدم <a> تطبيق سطح المكتب </a> لمشاهدة جميع الملفات المشفرة",
-    "Cancel search": "إلغاء البحث",
-    "Can't load this message": "تعذر تحميل هذه الرسالة",
     "Submit logs": "إرسال السجلات",
-    "edited": "عُدل",
-    "Edited at %(date)s. Click to view edits.": "عُدل في %(date)s. انقر لترى التعديلات.",
-    "Click to view edits": "انقر لترى التعديلات",
-    "Edited at %(date)s": "عدل في %(date)s",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "أنت على وشك الانتقال إلى موقع تابع لجهة خارجية حتى تتمكن من مصادقة حسابك لاستخدامه مع %(integrationsUrl)s. هل ترغب في الاستمرار؟",
-    "Add an Integration": "أضف تكاملاً",
-    "%(name)s wants to verify": "%(name)s يريد التحقق",
-    "%(name)s cancelled": "%(name)s رفض",
-    "%(name)s declined": "%(name)s رفض",
-    "%(name)s accepted": "%(name)s قبل",
     "Yesterday": "أمس",
     "Today": "اليوم",
     "Saturday": "السبت",
@@ -67,44 +38,18 @@
     "Tuesday": "الثلاثاء",
     "Monday": "الاثنين",
     "Sunday": "الأحد",
-    "not specified": "غير محدد",
     "Failed to connect to integration manager": "تعذر الاتصال بمدير التكامل",
-    "unknown error code": "رمز خطأٍ غير معروف",
     "Join Room": "انضم للغرفة",
-    "(~%(count)s results)": {
-        "one": "(~%(count)s نتيجة)",
-        "other": "(~%(count)s نتائج)"
-    },
     "Unnamed room": "غرفة بلا اسم",
     "%(duration)sd": "%(duration)sي",
     "%(duration)sh": "%(duration)sس",
     "%(duration)sm": "%(duration)sد",
     "%(duration)ss": "%(duration)sث",
-    "and %(count)s others...": {
-        "one": "وواحدة أخرى...",
-        "other": "و %(count)s أخر..."
-    },
     "Encrypted by a deleted session": "مشفرة باتصال محذوف",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "للإبلاغ عن مشكلة أمنية متعلقة بMatrix ، يرجى قراءة <a>سياسة الإفصاح الأمني</a> في Matrix.org.",
     "Deactivate account": "تعطيل الحساب",
     "Backup version:": "نسخة الاحتياطي:",
     "This backup is trusted because it has been restored on this session": "هذا الاحتياطي موثوق به لأنه تمت استعادته في هذا الاتصال",
-    "Remove %(count)s messages": {
-        "one": "احذف رسالة واحدة",
-        "other": "احذف %(count)s رسائل"
-    },
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "قد يستغرق هذا وقتًا بحسب عدد الرسائل. من فضلك لا تحدث عمليك أثناء ذلك.",
-    "Remove recent messages by %(user)s": "قم بإزالة رسائل %(user)s الأخيرة",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "حاول الصعود في المخطط الزمني لمعرفة ما إذا كانت هناك سابقات.",
-    "No recent messages by %(user)s found": "لم يتم العثور على رسائل حديثة من %(user)s",
-    "%(count)s sessions": {
-        "one": "%(count)s اتصال",
-        "other": "%(count)s اتصالات"
-    },
-    "%(count)s verified sessions": {
-        "one": "اتصال واحد محقق",
-        "other": "%(count)s اتصالات محققة"
-    },
     "Not encrypted": "غير مشفر",
     "Warning!": "إنذار!",
     "Dog": "كلب",
@@ -327,7 +272,12 @@
         "historical": "تاريخي",
         "unencrypted": "غير مشفر",
         "show_more": "أظهر أكثر",
-        "are_you_sure": "هل متأكد أنت؟"
+        "are_you_sure": "هل متأكد أنت؟",
+        "and_n_others": {
+            "one": "وواحدة أخرى...",
+            "other": "و %(count)s أخر..."
+        },
+        "edited": "عُدل"
     },
     "action": {
         "continue": "واصِل",
@@ -440,7 +390,9 @@
         "uploading_logs": "رفع السجلات",
         "downloading_logs": "تحميل السجلات",
         "create_new_issue": "الرجاء <newIssueLink> إنشاء إشكال جديد</newIssueLink> على GitHub حتى نتمكن من التحقيق في هذا الخطأ.",
-        "waiting_for_server": "في انتظار الرد مِن الخادوم"
+        "waiting_for_server": "في انتظار الرد مِن الخادوم",
+        "logs_sent": "تم ارسال سجل الاحداث",
+        "thank_you": "شكرًا !"
     },
     "time": {
         "date_at_time": "%(date)s في %(time)s"
@@ -800,11 +752,25 @@
             "you_accepted": "أنت قبلت",
             "you_declined": "أنت رفضت",
             "you_cancelled": "أنت رفضت",
-            "you_started": "أنت أرسلت طلب تحقق"
+            "you_started": "أنت أرسلت طلب تحقق",
+            "user_accepted": "%(name)s قبل",
+            "user_declined": "%(name)s رفض",
+            "user_cancelled": "%(name)s رفض",
+            "user_wants_to_verify": "%(name)s يريد التحقق"
         },
         "m.video": {
             "error_decrypting": "تعذر فك تشفير الفيديو"
-        }
+        },
+        "scalar_starter_link": {
+            "dialog_title": "أضف تكاملاً",
+            "dialog_description": "أنت على وشك الانتقال إلى موقع تابع لجهة خارجية حتى تتمكن من مصادقة حسابك لاستخدامه مع %(integrationsUrl)s. هل ترغب في الاستمرار؟"
+        },
+        "edits": {
+            "tooltip_title": "عدل في %(date)s",
+            "tooltip_sub": "انقر لترى التعديلات",
+            "tooltip_label": "عُدل في %(date)s. انقر لترى التعديلات."
+        },
+        "error_rendering_message": "تعذر تحميل هذه الرسالة"
     },
     "slash_command": {
         "shrug": "ادخل احد الرموز ¯\\_(ツ)_/¯ قبل نص الرسالة",
@@ -940,7 +906,6 @@
         "no_media_perms_title": "لا إذن للوسائط",
         "no_media_perms_description": "قد تحتاج إلى السماح يدويًا ل%(brand)s s بالوصول إلى الميكروفون / كاميرا الويب"
     },
-    "Other": "أخرى",
     "room_settings": {
         "permissions": {
             "m.room.avatar": "تغيير صورة الغرفة",
@@ -1040,7 +1005,8 @@
             "notification_sound": "صوت الإشعار",
             "custom_sound_prompt": "تعيين صوت مخصص جديد",
             "browse_button": "تصفح"
-        }
+        },
+        "alias_not_specified": "غير محدد"
     },
     "encryption": {
         "verification": {
@@ -1111,7 +1077,14 @@
         "cross_signing_room_warning": "شخص ما يستخدم اتصالاً غير معروف",
         "cross_signing_room_verified": "تم التحقق من جميع من في هذه الغرفة",
         "cross_signing_room_normal": "هذه الغرفة مشفرة من طرف إلى طرف",
-        "unsupported": "لا يدعم هذا العميل التشفير من طرف إلى طرف."
+        "unsupported": "لا يدعم هذا العميل التشفير من طرف إلى طرف.",
+        "udd": {
+            "own_new_session_text": "قمت بتسجيل الدخول لجلسة جديدة من غير التحقق منها:",
+            "own_ask_verify_text": "أكِّد جلستك الأخرى باستخدام أحد الخيارات أدناه.",
+            "other_new_session_text": "%(name)s%(userId)s تم تسجيل الدخول لجلسة جديدة من غير التحقق منها:",
+            "other_ask_verify_text": "اطلب من هذا المستخدم التحقُّق من جلسته أو تحقَّق منها يدويًّا أدناه.",
+            "title": "غير موثوقة"
+        }
     },
     "emoji": {
         "category_frequently_used": "كثيرة الاستعمال",
@@ -1304,7 +1277,9 @@
         "error_encountered": "صودِفَ خطأ: (%(errorDetail)s).",
         "no_update": "لا يوجد هناك أي تحديث.",
         "new_version_available": "ثمة إصدارٌ جديد. <a>حدّث الآن.</a>",
-        "check_action": "ابحث عن تحديث"
+        "check_action": "ابحث عن تحديث",
+        "unavailable": "غير متوفر",
+        "changelog": "سِجل التغييرات"
     },
     "labs_mjolnir": {
         "room_name": "قائمة الحظر",
@@ -1399,7 +1374,11 @@
         "search": {
             "this_room": "هذه الغرفة",
             "all_rooms": "كل الغُرف",
-            "field_placeholder": "بحث …"
+            "field_placeholder": "بحث …",
+            "result_count": {
+                "one": "(~%(count)s نتيجة)",
+                "other": "(~%(count)s نتائج)"
+            }
         },
         "jump_to_bottom_button": "انتقل إلى أحدث الرسائل",
         "jump_read_marker": "الانتقال إلى أول رسالة غير مقروءة.",
@@ -1470,7 +1449,8 @@
         "non_urgent_echo_failure_toast": "خادمك لا يتجاوب مع بعض <a>الطلبات</a>.",
         "failed_copy": "تعذر النسخ",
         "something_went_wrong": "هناك خطأ ما!",
-        "update_power_level": "تعذر تغيير مستوى القوة"
+        "update_power_level": "تعذر تغيير مستوى القوة",
+        "unknown_error_code": "رمز خطأٍ غير معروف"
     },
     "room_summary_card_back_action_label": "معلومات الغرفة",
     "analytics": {
@@ -1548,7 +1528,25 @@
         "deactivate_confirm_title": "إلغاء نشاط المستخدم؟",
         "deactivate_confirm_description": "سيؤدي إلغاء نشاط هذا المستخدم إلى تسجيل خروجهم ومنعهم من تسجيل الدخول مرة أخرى. بالإضافة إلى ذلك ، سيغادرون جميع الغرف التي يتواجدون فيها. لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد أنك تريد إلغاء نشاط هذا المستخدم؟",
         "deactivate_confirm_action": "إلغاء نشاط المستخدم",
-        "error_deactivate": "تعذر إلغاء نشاط المستخدم"
+        "error_deactivate": "تعذر إلغاء نشاط المستخدم",
+        "redact": {
+            "no_recent_messages_title": "لم يتم العثور على رسائل حديثة من %(user)s",
+            "no_recent_messages_description": "حاول الصعود في المخطط الزمني لمعرفة ما إذا كانت هناك سابقات.",
+            "confirm_title": "قم بإزالة رسائل %(user)s الأخيرة",
+            "confirm_description_2": "قد يستغرق هذا وقتًا بحسب عدد الرسائل. من فضلك لا تحدث عمليك أثناء ذلك.",
+            "confirm_button": {
+                "one": "احذف رسالة واحدة",
+                "other": "احذف %(count)s رسائل"
+            }
+        },
+        "count_of_verified_sessions": {
+            "one": "اتصال واحد محقق",
+            "other": "%(count)s اتصالات محققة"
+        },
+        "count_of_sessions": {
+            "one": "%(count)s اتصال",
+            "other": "%(count)s اتصالات"
+        }
     },
     "stickers": {
         "empty": "ليس لديك حاليًا أي حزم ملصقات ممكّنة",
@@ -1565,5 +1563,25 @@
         "add_integrations": "إضافة عناصر الواجهة والجسور والروبوتات",
         "share_button": "شارك الغرفة",
         "settings_button": "إعدادات الغرفة"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "إلغاء البحث"
+    },
+    "info_tooltip_title": "المعلومات",
+    "language_dropdown_label": "قائمة اللغة المنسدلة",
+    "seshat": {
+        "warning_kind_files_app": "استخدم <a> تطبيق سطح المكتب </a> لمشاهدة جميع الملفات المشفرة",
+        "warning_kind_search_app": "استخدم <a> تطبيق سطح المكتب </a> للبحث في الرسائل المشفرة",
+        "warning_kind_files": "لا يدعم هذا الإصدار من %(brand)s s عرض بعض الملفات المشفرة",
+        "warning_kind_search": "لا يدعم هذا الإصدار من %(brand)s البحث في الرسائل المشفرة"
+    },
+    "forward": {
+        "send_label": "إرسال"
+    },
+    "report_content": {
+        "other_label": "أخرى"
+    },
+    "spotlight_dialog": {
+        "create_new_room_button": "إنشاء غرفة جديدة"
     }
 }

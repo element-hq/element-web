@@ -60,7 +60,7 @@ export function PublicRoomResultDetails({ room, labelId, descriptionId, detailsI
             </div>
             <div id={detailsId} className="mx_SpotlightDialog_result_publicRoomDescription">
                 <span className="mx_SpotlightDialog_result_publicRoomMemberCount">
-                    {_t("%(count)s Members", {
+                    {_t("spotlight_dialog|count_of_members", {
                         count: room.num_joined_members,
                     })}
                 </span>

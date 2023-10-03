@@ -182,7 +182,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         if (isSharingOwnLocation(this.props.shareType)) {
             this.props.onFinished();
             Modal.createDialog(ErrorDialog, {
-                title: _t("Could not fetch location"),
+                title: _t("location_sharing|error_fetch_location"),
                 description: positionFailureMessage(e.code),
             });
         }

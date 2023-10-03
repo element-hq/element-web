@@ -82,7 +82,7 @@ describe("AutoDiscoveryUtils", () => {
                 },
             };
             expect(() => AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult)).toThrow(
-                "GenericFailure",
+                "Unexpected error resolving identity server configuration",
             );
             expect(logger.error).toHaveBeenCalled();
         });
@@ -96,7 +96,7 @@ describe("AutoDiscoveryUtils", () => {
                 },
             };
             expect(() => AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult)).toThrow(
-                "Unexpected error resolving homeserver configuration",
+                "Homeserver URL does not appear to be a valid Matrix homeserver",
             );
             expect(logger.error).toHaveBeenCalled();
         });
@@ -122,7 +122,7 @@ describe("AutoDiscoveryUtils", () => {
                 },
             };
             expect(() => AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult)).toThrow(
-                "Unexpected error resolving homeserver configuration",
+                "Homeserver URL does not appear to be a valid Matrix homeserver",
             );
         });
 

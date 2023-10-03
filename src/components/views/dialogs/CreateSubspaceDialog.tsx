@@ -100,7 +100,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
         joinRuleMicrocopy = (
             <p>
                 {_t(
-                    "Anyone in <SpaceName/> will be able to find and join.",
+                    "create_space|subspace_join_rule_restricted_description",
                     {},
                     {
                         SpaceName: () => <b>{parentSpace.name}</b>,
@@ -112,7 +112,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
         joinRuleMicrocopy = (
             <p>
                 {_t(
-                    "Anyone will be able to find and join this space, not just members of <SpaceName/>.",
+                    "create_space|subspace_join_rule_public_description",
                     {},
                     {
                         SpaceName: () => <b>{parentSpace.name}</b>,
@@ -121,14 +121,14 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
             </p>
         );
     } else if (joinRule === JoinRule.Invite) {
-        joinRuleMicrocopy = <p>{_t("Only people invited will be able to find and join this space.")}</p>;
+        joinRuleMicrocopy = <p>{_t("create_space|subspace_join_rule_invite_description")}</p>;
     }
 
     return (
         <BaseDialog
             title={
                 <SubspaceSelector
-                    title={_t("Create a space")}
+                    title={_t("create_space|subspace_dropdown_title")}
                     space={space}
                     value={parentSpace}
                     onChange={setParentSpace}
@@ -143,7 +143,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
                 <div className="mx_CreateSubspaceDialog_content">
                     <div className="mx_CreateSubspaceDialog_betaNotice">
                         <BetaPill />
-                        {_t("Add a space to a space you manage.")}
+                        {_t("create_space|subspace_beta_notice")}
                     </div>
 
                     <SpaceCreateForm
@@ -161,8 +161,8 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
                         aliasFieldRef={spaceAliasField}
                     >
                         <JoinRuleDropdown
-                            label={_t("Space visibility")}
-                            labelInvite={_t("Private space (invite only)")}
+                            label={_t("create_space|subspace_join_rule_label")}
+                            labelInvite={_t("create_space|subspace_join_rule_invite_only")}
                             labelPublic={_t("common|public_space")}
                             labelRestricted={_t("create_room|join_rule_restricted")}
                             width={478}
@@ -175,7 +175,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
 
                 <div className="mx_CreateSubspaceDialog_footer">
                     <div className="mx_CreateSubspaceDialog_footer_prompt">
-                        <div>{_t("Want to add an existing space instead?")}</div>
+                        <div>{_t("create_space|subspace_existing_space_prompt")}</div>
                         <AccessibleButton
                             kind="link"
                             onClick={() => {
@@ -183,7 +183,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
                                 onFinished();
                             }}
                         >
-                            {_t("Add existing space")}
+                            {_t("space|add_existing_subspace|space_dropdown_title")}
                         </AccessibleButton>
                     </div>
 
@@ -191,7 +191,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
                         {_t("action|cancel")}
                     </AccessibleButton>
                     <AccessibleButton kind="primary" disabled={busy} onClick={onCreateSubspaceClick}>
-                        {busy ? _t("Adding…") : _t("action|add")}
+                        {busy ? _t("create_space|subspace_adding") : _t("action|add")}
                     </AccessibleButton>
                 </div>
             </MatrixClientContext.Provider>

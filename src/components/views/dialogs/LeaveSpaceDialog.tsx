@@ -58,24 +58,22 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
 
     let rejoinWarning;
     if (space.getJoinRule() !== JoinRule.Public) {
-        rejoinWarning = _t("You won't be able to rejoin unless you are re-invited.");
+        rejoinWarning = _t("space|leave_dialog_public_rejoin_warning");
     }
 
     let onlyAdminWarning;
     if (isOnlyAdmin(space)) {
-        onlyAdminWarning = _t("You're the only admin of this space. Leaving it will mean no one has control over it.");
+        onlyAdminWarning = _t("space|leave_dialog_only_admin_warning");
     } else {
         const numChildrenOnlyAdminIn = roomsToLeave.filter(isOnlyAdmin).length;
         if (numChildrenOnlyAdminIn > 0) {
-            onlyAdminWarning = _t(
-                "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.",
-            );
+            onlyAdminWarning = _t("space|leave_dialog_only_admin_room_warning");
         }
     }
 
     return (
         <BaseDialog
-            title={_t("Leave %(spaceName)s", { spaceName: space.name })}
+            title={_t("space|leave_dialog_title", { spaceName: space.name })}
             className="mx_LeaveSpaceDialog"
             contentId="mx_LeaveSpaceDialog"
             onFinished={() => onFinished(false)}
@@ -84,7 +82,7 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
             <div className="mx_Dialog_content" id="mx_LeaveSpaceDialog">
                 <p>
                     {_t(
-                        "You are about to leave <spaceName/>.",
+                        "space|leave_dialog_description",
                         {},
                         {
                             spaceName: () => <b>{space.name}</b>,
@@ -93,7 +91,7 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
                     &nbsp;
                     {rejoinWarning}
                     {rejoinWarning && <>&nbsp;</>}
-                    {spaceChildren.length > 0 && _t("Would you like to leave the rooms in this space?")}
+                    {spaceChildren.length > 0 && _t("space|leave_dialog_option_intro")}
                 </p>
 
                 {spaceChildren.length > 0 && (
@@ -102,16 +100,16 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
                         spaceChildren={spaceChildren}
                         selected={selectedRooms}
                         onChange={setRoomsToLeave}
-                        noneLabel={_t("Don't leave any rooms")}
-                        allLabel={_t("Leave all rooms")}
-                        specificLabel={_t("Leave some rooms")}
+                        noneLabel={_t("space|leave_dialog_option_none")}
+                        allLabel={_t("space|leave_dialog_option_all")}
+                        specificLabel={_t("space|leave_dialog_option_specific")}
                     />
                 )}
 
                 {onlyAdminWarning && <div className="mx_LeaveSpaceDialog_section_warning">{onlyAdminWarning}</div>}
             </div>
             <DialogButtons
-                primaryButton={_t("Leave space")}
+                primaryButton={_t("space|leave_dialog_action")}
                 primaryButtonClass="danger"
                 onPrimaryButtonClick={() => onFinished(true, roomsToLeave)}
                 hasCancel={true}

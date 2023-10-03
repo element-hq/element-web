@@ -241,7 +241,9 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
                 />
 
                 <span className="mx_AddExistingToSpaceDialog_error">
-                    <div className="mx_AddExistingToSpaceDialog_errorHeading">{_t("Not all selected were added")}</div>
+                    <div className="mx_AddExistingToSpaceDialog_errorHeading">
+                        {_t("space|add_existing_room_space|error_heading")}
+                    </div>
                     <div className="mx_AddExistingToSpaceDialog_errorCaption">{_t("action|try_again")}</div>
                 </span>
 
@@ -255,7 +257,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
             <span>
                 <ProgressBar value={progress} max={selectedToAdd.size} />
                 <div className="mx_AddExistingToSpaceDialog_progressText">
-                    {_t("Adding rooms... (%(progress)s out of %(count)s)", {
+                    {_t("space|add_existing_room_space|progress_text", {
                         count: selectedToAdd.size,
                         progress,
                     })}
@@ -389,7 +391,7 @@ const defaultRendererFactory =
 
 export const defaultRoomsRenderer = defaultRendererFactory(_td("common|rooms"));
 export const defaultSpacesRenderer = defaultRendererFactory(_td("common|spaces"));
-export const defaultDmsRenderer = defaultRendererFactory(_td("Direct Messages"));
+export const defaultDmsRenderer = defaultRendererFactory(_td("space|add_existing_room_space|dm_heading"));
 
 interface ISubspaceSelectorProps {
     title: string;
@@ -418,7 +420,7 @@ export const SubspaceSelector: React.FC<ISubspaceSelectorProps> = ({ title, spac
                     onChange(options.find((space) => space.roomId === key) || space);
                 }}
                 value={value.roomId}
-                label={_t("Space selection")}
+                label={_t("space|add_existing_room_space|space_dropdown_label")}
             >
                 {
                     options.map((space) => {
@@ -461,7 +463,7 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ space, onCreateRoomClick, 
         <BaseDialog
             title={
                 <SubspaceSelector
-                    title={_t("Add existing rooms")}
+                    title={_t("space|add_existing_room_space|space_dropdown_title")}
                     space={space}
                     value={selectedSpace}
                     onChange={setSelectedSpace}
@@ -478,7 +480,7 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ space, onCreateRoomClick, 
                     onFinished={onFinished}
                     footerPrompt={
                         <>
-                            <div>{_t("Want to add a new room instead?")}</div>
+                            <div>{_t("space|add_existing_room_space|create")}</div>
                             <AccessibleButton
                                 kind="link"
                                 onClick={(ev: ButtonEvent) => {
@@ -486,11 +488,11 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ space, onCreateRoomClick, 
                                     onFinished();
                                 }}
                             >
-                                {_t("Create a new room")}
+                                {_t("space|add_existing_room_space|create_prompt")}
                             </AccessibleButton>
                         </>
                     }
-                    filterPlaceholder={_t("Search for rooms")}
+                    filterPlaceholder={_t("space|room_filter_placeholder")}
                     roomsRenderer={defaultRoomsRenderer}
                     spacesRenderer={() => (
                         <div className="mx_AddExistingToSpace_section">
@@ -502,7 +504,7 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ space, onCreateRoomClick, 
                                     onFinished();
                                 }}
                             >
-                                {_t("Adding spaces has moved.")}
+                                {_t("space|add_existing_room_space|subspace_moved_note")}
                             </AccessibleButton>
                         </div>
                     )}

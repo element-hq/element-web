@@ -387,7 +387,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 test: ({ value }, usernameAvailable) =>
                     (!value || SAFE_LOCALPART_REGEX.test(value)) &&
                     usernameAvailable !== UsernameAvailableStatus.Invalid,
-                invalid: () => _t("Some characters not allowed"),
+                invalid: () => _t("room_settings|general|alias_field_safe_localpart_invalid"),
             },
             {
                 key: "available",
@@ -453,7 +453,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         }
         const emailLabel = this.authStepIsRequired("m.login.email.identity")
             ? _td("auth|email_field_label")
-            : _td("Email (optional)");
+            : _td("auth|registration|continue_without_email_field_label");
         return (
             <EmailField
                 fieldRef={(field) => (this[RegistrationField.Email] = field)}

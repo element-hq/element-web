@@ -1,20 +1,8 @@
 {
     "%(items)s and %(lastItem)s": "%(items)s ve %(lastItem)s",
-    "and %(count)s others...": {
-        "one": "ve bir diğeri...",
-        "other": "ve %(count)s diğerleri..."
-    },
-    "An error has occurred.": "Bir hata oluştu.",
-    "Custom level": "Özel seviye",
-    "Email address": "E-posta Adresi",
     "Home": "Ev",
     "Join Room": "Odaya Katıl",
     "Moderator": "Moderatör",
-    "not specified": "Belirtilmemiş",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Lütfen e-postanızı kontrol edin ve içerdiği bağlantıya tıklayın . Bu işlem tamamlandıktan sonra , 'devam et' e tıklayın .",
-    "Session ID": "Oturum ID",
-    "unknown error code": "bilinmeyen hata kodu",
-    "Verification Pending": "Bekleyen doğrulama",
     "Warning!": "Uyarı!",
     "Sun": "Pzt",
     "Mon": "Pazartesi",
@@ -38,87 +26,20 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s , %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "Hafta - %(weekDayName)s , %(day)s -%(monthName)s -%(fullYear)s , %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "(~%(count)s results)": {
-        "one": "(~%(count)s sonuç)",
-        "other": "(~%(count)s sonuçlar)"
-    },
-    "Create new room": "Yeni Oda Oluştur",
-    "Confirm Removal": "Kaldırma İşlemini Onayla",
-    "Unable to restore session": "Oturum geri yüklenemiyor",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Eğer daha önce %(brand)s'un daha yeni bir versiyonunu kullandıysanız , oturumunuz bu sürümle uyumsuz olabilir . Bu pencereyi kapatın ve daha yeni sürüme geri dönün.",
-    "Add an Integration": "Entegrasyon ekleyin",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Hesabınızı %(integrationsUrl)s ile kullanmak üzere doğrulayabilmeniz için üçüncü taraf bir siteye götürülmek üzeresiniz. Devam etmek istiyor musunuz ?",
-    "This will allow you to reset your password and receive notifications.": "Bu şifrenizi sıfırlamanızı ve bildirimler almanızı sağlayacak.",
     "Sunday": "Pazar",
     "Today": "Bugün",
     "Friday": "Cuma",
-    "Changelog": "Değişiklikler",
-    "Unavailable": "Kullanım dışı",
     "Tuesday": "Salı",
     "Unnamed room": "İsimsiz oda",
     "Saturday": "Cumartesi",
     "Monday": "Pazartesi",
     "Wednesday": "Çarşamba",
-    "Send": "Gönder",
-    "You cannot delete this message. (%(code)s)": "Bu mesajı silemezsiniz (%(code)s)",
     "Thursday": "Perşembe",
     "Yesterday": "Dün",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s%(monthName)s%(day)s%(fullYear)s",
     "Restricted": "Sınırlı",
     "expand": "genişlet",
-    "Power level": "Güç düzeyi",
-    "e.g. my-room": "örn. odam",
-    "Some characters not allowed": "Bazı karakterlere izin verilmiyor",
-    "Invite anyway and never warn me again": "Yinede davet et ve asla beni uyarma",
-    "Invite anyway": "Yinede davet et",
-    "Close dialog": "Kutucuğu kapat",
-    "Preparing to send logs": "Loglar gönderilmek için hazırlanıyor",
-    "Logs sent": "Loglar gönderiliyor",
-    "Thank you!": "Teşekkürler!",
-    "Failed to send logs: ": "Logların gönderilmesi başarısız: ",
-    "Notes": "Notlar",
-    "Removing…": "Siliniyor…",
-    "Clear all data": "Bütün verileri sil",
-    "Incompatible Database": "Uyumsuz Veritabanı",
-    "Filter results": "Sonuçları filtrele",
-    "Integrations are disabled": "Bütünleştirmeler kapatılmış",
-    "Integrations not allowed": "Bütünleştirmelere izin verilmiyor",
-    "Incompatible local cache": "Yerel geçici bellek uyumsuz",
-    "Clear cache and resync": "Geçici belleği temizle ve yeniden eşle",
-    "Updating %(brand)s": "%(brand)s güncelleniyor",
-    "I don't want my encrypted messages": "Şifrelenmiş mesajlarımı istemiyorum",
-    "Manually export keys": "Elle dışa aktarılmış anahtarlar",
-    "You'll lose access to your encrypted messages": "Şifrelenmiş mesajlarınıza erişiminizi kaybedeceksiniz",
-    "Are you sure you want to sign out?": "Oturumdan çıkmak istediğinize emin misiniz?",
-    "Your homeserver doesn't seem to support this feature.": "Ana sunucunuz bu özelliği desteklemiyor gözüküyor.",
-    "Message edits": "Mesajları düzenle",
-    "Room Settings - %(roomName)s": "Oda Ayarları - %(roomName)s",
-    "Failed to upgrade room": "Oda güncelleme başarısız",
-    "The room upgrade could not be completed": "Oda güncelleme tamamlanamadı",
-    "Upgrade this room to version %(version)s": "Bu odayı %(version)s versiyonuna yükselt",
-    "Upgrade Room Version": "Oda Sürümünü Yükselt",
-    "Upgrade private room": "Özel oda güncelle",
-    "Sign out and remove encryption keys?": "Oturumu kapat ve şifreleme anahtarlarını sil?",
-    "Clear Storage and Sign Out": "Depolamayı temizle ve Oturumu Kapat",
     "Send Logs": "Logları Gönder",
-    "Share Room": "Oda Paylaş",
-    "Link to most recent message": "En son mesaja bağlantı",
-    "Share User": "Kullanıcı Paylaş",
-    "Share Room Message": "Oda Mesajı Paylaş",
-    "Link to selected message": "Seçili mesaja bağlantı",
-    "Command Help": "Komut Yardımı",
-    "Missing session data": "Kayıp oturum verisi",
-    "Find others by phone or email": "Kişileri telefon yada e-posta ile bul",
-    "Be found by phone or email": "Telefon veya e-posta ile bulunun",
-    "Upload files": "Dosyaları yükle",
-    "Upload all": "Hepsini yükle",
-    "Cancel All": "Hepsi İptal",
-    "Upload Error": "Yükleme Hatası",
-    "Unable to load backup status": "Yedek durumu yüklenemiyor",
-    "Unable to restore backup": "Yedek geri dönüşü yapılamıyor",
-    "No backup found!": "Yedek bulunamadı!",
-    "Email (optional)": "E-posta (opsiyonel)",
-    "Verification Request": "Doğrulama Talebi",
     "Robot": "Robot",
     "Hat": "Şapka",
     "Glasses": "Gözlük",
@@ -146,7 +67,6 @@
     "Anchor": "Çıpa",
     "Headphones": "Kulaklık",
     "Folder": "Klasör",
-    "Start using Key Backup": "Anahtar Yedekleme kullanmaya başla",
     "Dog": "Köpek",
     "Cat": "Kedi",
     "Lion": "Aslan",
@@ -177,85 +97,20 @@
     "Cake": "Kek",
     "Heart": "Kalp",
     "Trophy": "Ödül",
-    "Remove %(count)s messages": {
-        "other": "%(count)s mesajı sil",
-        "one": "1 mesajı sil"
-    },
     "Rooster": "Horoz",
     "%(duration)ss": "%(duration)ssn",
     "%(duration)sm": "%(duration)sdk",
     "%(duration)sh": "%(duration)ssa",
     "%(duration)sd": "%(duration)sgün",
     "Failed to connect to integration manager": "Entegrasyon yöneticisine bağlanma başarısız",
-    "%(count)s verified sessions": {
-        "other": "%(count)s doğrulanmış oturum",
-        "one": "1 doğrulanmış oturum"
-    },
-    "%(name)s accepted": "%(name)s kabul etti",
-    "%(name)s cancelled": "%(name)s iptal etti",
-    "%(name)s wants to verify": "%(name)s doğrulamak istiyor",
-    "edited": "düzenlendi",
     "Deactivate account": "Hesabı pasifleştir",
-    "And %(count)s more...": {
-        "other": "ve %(count)s kez daha..."
-    },
-    "Language Dropdown": "Dil Listesi",
-    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "E-posta ile davet etmek için bir kimlik sunucusu kullan. <default> Varsayılanı kullan (%(defaultIdentityServerName)s</default> ya da <settings>Ayarlar</settings> kullanarak yönetin.",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "E-posta ile davet için bir kimlik sunucu kullan. <settings>Ayarlar</settings> dan yönet.",
-    "The following users may not exist": "Belirtilen kullanıcılar mevcut olmayabilir",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Altta belirtilen Matrix ID li profiller bulunamıyor - Onları yinede davet etmek ister misiniz?",
-    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Lütfen neyin yanlış gittiğini bize bildirin ya da en güzeli problemi tanımlayan bir GitHub talebi oluşturun.",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Logları göndermeden önce, probleminizi betimleyen <a>bir GitHub talebi oluşturun</a>.",
-    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Sohbet tarihçesini kaybetmemek için, çıkmadan önce odanızın anahtarlarını dışarıya aktarın. Bunu yapabilmek için %(brand)sun daha yeni sürümü gerekli. Ulaşmak için geri gitmeye ihtiyacınız var",
-    "Continue With Encryption Disabled": "Şifreleme Kapalı Şekilde Devam Et",
     "This backup is trusted because it has been restored on this session": "Bu yedek güvenilir çünkü bu oturumda geri döndürüldü",
-    "Upload %(count)s other files": {
-        "other": "%(count)s diğer dosyaları yükle",
-        "one": "%(count)s dosyayı sağla"
-    },
-    "Remember my selection for this widget": "Bu görsel bileşen işin seçimimi hatırla",
-    "Direct Messages": "Doğrudan Mesajlar",
-    "Not Trusted": "Güvenilmiyor",
-    "%(count)s sessions": {
-        "other": "%(count)s oturum",
-        "one": "%(count)s oturum"
-    },
-    "Cancel search": "Aramayı iptal et",
     "Delete Widget": "Görsel Bileşen Sil",
-    "Destroy cross-signing keys?": "Çarpraz-imzalama anahtarlarını imha et?",
-    "Clear cross-signing keys": "Çapraz-imzalama anahtarlarını temizle",
-    "Clear all data in this session?": "Bu oturumdaki tüm verileri temizle?",
-    "Session name": "Oturum adı",
-    "Session key": "Oturum anahtarı",
-    "Recent Conversations": "Güncel Sohbetler",
-    "Recently Direct Messaged": "Güncel Doğrudan Mesajlar",
     "Lock": "Kilit",
     "Encrypted by a deleted session": "Silinen bir oturumla şifrelenmiş",
-    "Incoming Verification Request": "Gelen Doğrulama İsteği",
-    "Upgrade public room": "Açık odayı güncelle",
-    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Bu odayı <oldVersion /> versiyonundan <newVersion /> versiyonuna güncelleyeceksiniz.",
-    "We encountered an error trying to restore your previous session.": "Önceki oturumunuzu geri yüklerken bir hatayla karşılaştık.",
-    "To help us prevent this in future, please <a>send us logs</a>.": "Bunun gelecekte de olmasının önüne geçmek için lütfen <a>günceleri bize gönderin</a>.",
-    "Upload files (%(current)s of %(total)s)": "Dosyaları yükle (%(current)s / %(total)s)",
-    "Failed to decrypt %(failedCount)s sessions!": "%(failedCount)s adet oturum çözümlenemedi!",
-    "Join millions for free on the largest public server": "En büyük açık sunucu üzerindeki milyonlara ücretsiz ulaşmak için katılın",
-    "Something went wrong trying to invite the users.": "Kullanıcıların davet edilmesinde bir şeyler yanlış gitti.",
-    "a new master key signature": "yeni bir master anahtar imzası",
-    "a new cross-signing key signature": "yeni bir çapraz-imzalama anahtarı imzası",
-    "a key signature": "bir anahtar imzası",
-    "Upload completed": "Yükleme tamamlandı",
-    "Cancelled signature upload": "anahtar yükleme iptal edildi",
-    "Signature upload success": "Anahtar yükleme başarılı",
-    "Signature upload failed": "İmza yükleme başarısız",
-    "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Bu dosyalar yükleme için <b>çok büyük</b>. Dosya boyut limiti %(limit)s.",
-    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Bazı dosyalar yükleme için <b>çok büyük</b>. Dosya boyutu limiti %(limit)s.",
     "PM": "24:00",
     "AM": "12:00",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) yeni oturuma doğrulamadan giriş yaptı:",
-    "Ask this user to verify their session, or manually verify it below.": "Kullanıcıya oturumunu doğrulamasını söyle, ya da aşağıdan doğrula.",
-    "Edited at %(date)s. Click to view edits.": "%(date)s tarihinde düzenlendi. Düzenlemeleri görmek için tıkla.",
-    "You signed in to a new session without verifying it:": "Yeni bir oturuma, doğrulamadan oturum açtınız:",
-    "Verify your other session using one of the options below.": "Diğer oturumunuzu aşağıdaki seçeneklerden birini kullanarak doğrulayın.",
     "Your homeserver has exceeded its user limit.": "Homeserver'ınız kullanıcı limitini aştı.",
     "Your homeserver has exceeded one of its resource limits.": "Homeserver'ınız kaynaklarından birisinin sınırını aştı.",
     "Ok": "Tamam",
@@ -492,9 +347,6 @@
     "Bahamas": "Bahamalar",
     "Azerbaijan": "Azerbaycan",
     "Austria": "Avusturya",
-    "Click to view edits": "Düzenlemeleri görmek için tıkla",
-    "Edited at %(date)s": "%(date)s tarihinde düzenlendi",
-    "%(name)s declined": "%(name)s reddetti",
     "IRC display name width": "IRC görünen ad genişliği",
     "Australia": "Avustralya",
     "Aruba": "Aruba",
@@ -516,31 +368,10 @@
     "Santa": "Noel Baba",
     "Spanner": "Anahtar",
     "Smiley": "Gülen yüz",
-    "Dial pad": "Arama tuşları",
-    "No recent messages by %(user)s found": "%(user)s kullanıcısın hiç yeni ileti yok",
     "Not encrypted": "Şifrelenmemiş",
     "Backup version:": "Yedekleme sürümü:",
-    "Looks good!": "İyi görünüyor!",
-    "Security Key": "Güvenlik anahtarı",
     "Switch theme": "Temayı değiştir",
-    "Keys restored": "Anahtarlar geri yüklendi",
     "Submit logs": "Günlükleri kaydet",
-    "Server name": "Sunucu adı",
-    "Your server": "Senin sunucun",
-    "Looks good": "İyi görünüyor",
-    "Transfer": "Aktar",
-    "Hold": "Beklet",
-    "Resume": "Devam et",
-    "Information": "Bilgi",
-    "Enter a server name": "Sunucu adı girin",
-    "Can't find this server or its room list": "Sunucuda veya oda listesinde bulunamıyor",
-    "Add a new server": "Yeni sunucu ekle",
-    "Enter the name of a new server you want to explore.": "Keşfetmek istediğiniz sunucunun adını girin.",
-    "Preparing to download logs": "Loglar indirilmeye hazırlanıyor",
-    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Hatırlatma:Tarayıcınız desteklenmiyor, deneyiminiz öngörülemiyor.",
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Çok sayıda ileti için bu biraz sürebilir. Lütfen bu sürede kullandığınız istemciyi yenilemeyin.",
-    "Remove recent messages by %(user)s": "%(user)s kullanıcısından en son iletileri kaldır",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "Daha önceden kalma iletilerin var olup olmadığını kontrol etmek için zaman çizelgesinde yukarı doğru kaydırın.",
     "common": {
         "about": "Hakkında",
         "analytics": "Analitik",
@@ -622,7 +453,14 @@
         "view_message": "Mesajı görüntüle",
         "unencrypted": "Şifrelenmemiş",
         "show_more": "Daha fazla göster",
-        "are_you_sure": "Emin misiniz ?"
+        "are_you_sure": "Emin misiniz ?",
+        "email_address": "E-posta Adresi",
+        "filter_results": "Sonuçları filtrele",
+        "and_n_others": {
+            "one": "ve bir diğeri...",
+            "other": "ve %(count)s diğerleri..."
+        },
+        "edited": "düzenlendi"
     },
     "action": {
         "continue": "Devam Et",
@@ -708,7 +546,10 @@
         "show_advanced": "Gelişmiş göster",
         "unignore": "Yoksayma",
         "explore_rooms": "Odaları keşfet",
-        "explore_public_rooms": "Herkese açık odaları keşfet"
+        "explore_public_rooms": "Herkese açık odaları keşfet",
+        "transfer": "Aktar",
+        "resume": "Devam et",
+        "hold": "Beklet"
     },
     "a11y": {
         "user_menu": "Kullanıcı menüsü",
@@ -793,7 +634,9 @@
         "moderator": "Moderatör",
         "admin": "Admin",
         "custom": "Özel (%(level)s)",
-        "mod": "Mod"
+        "mod": "Mod",
+        "label": "Güç düzeyi",
+        "custom_level": "Özel seviye"
     },
     "bug_reporting": {
         "submit_debug_logs": "Hata ayıklama kayıtlarını gönder",
@@ -808,7 +651,16 @@
         "uploading_logs": "Günlükler yükleniyor",
         "downloading_logs": "Günlükler indiriliyor",
         "create_new_issue": "Lütfen GitHub’da <newIssueLink>Yeni bir talep</newIssueLink> oluşturun ki bu hatayı inceleyebilelim.",
-        "waiting_for_server": "Sunucudan yanıt bekleniyor"
+        "waiting_for_server": "Sunucudan yanıt bekleniyor",
+        "error_empty": "Lütfen neyin yanlış gittiğini bize bildirin ya da en güzeli problemi tanımlayan bir GitHub talebi oluşturun.",
+        "preparing_logs": "Loglar gönderilmek için hazırlanıyor",
+        "logs_sent": "Loglar gönderiliyor",
+        "thank_you": "Teşekkürler!",
+        "failed_send_logs": "Logların gönderilmesi başarısız: ",
+        "preparing_download": "Loglar indirilmeye hazırlanıyor",
+        "unsupported_browser": "Hatırlatma:Tarayıcınız desteklenmiyor, deneyiminiz öngörülemiyor.",
+        "textarea_label": "Notlar",
+        "log_request": "Bunun gelecekte de olmasının önüne geçmek için lütfen <a>günceleri bize gönderin</a>."
     },
     "time": {
         "seconds_left": "%(seconds)s saniye kaldı",
@@ -1380,10 +1232,23 @@
             "you_accepted": "Kabul ettiniz",
             "you_declined": "Reddettiniz",
             "you_cancelled": "İptal ettiniz",
-            "you_started": "Doğrulama isteği gönderdiniz"
+            "you_started": "Doğrulama isteği gönderdiniz",
+            "user_accepted": "%(name)s kabul etti",
+            "user_declined": "%(name)s reddetti",
+            "user_cancelled": "%(name)s iptal etti",
+            "user_wants_to_verify": "%(name)s doğrulamak istiyor"
         },
         "m.video": {
             "error_decrypting": "Video şifre çözme hatası"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "Entegrasyon ekleyin",
+            "dialog_description": "Hesabınızı %(integrationsUrl)s ile kullanmak üzere doğrulayabilmeniz için üçüncü taraf bir siteye götürülmek üzeresiniz. Devam etmek istiyor musunuz ?"
+        },
+        "edits": {
+            "tooltip_title": "%(date)s tarihinde düzenlendi",
+            "tooltip_sub": "Düzenlemeleri görmek için tıkla",
+            "tooltip_label": "%(date)s tarihinde düzenlendi. Düzenlemeleri görmek için tıkla."
         }
     },
     "slash_command": {
@@ -1455,7 +1320,8 @@
         "verify_nop": "Oturum zaten doğrulanmış!",
         "verify_mismatch": "UYARI: ANAHTAR DOĞRULAMASI BAŞARISIZ! %(userld)s'nin/nın %(deviceId)s oturumu için imza anahtarı \"%(fprint)s\" verilen anahtar ile uyuşmuyor \"%(fingerprint)s\". Bu iletişiminizin engellendiği anlamına gelebilir!",
         "verify_success_title": "Doğrulama anahtarı",
-        "verify_success_description": "Verilen imza anahtarı %(userld)s'nin/nın %(deviceld)s oturumundan gelen anahtar ile uyumlu. Oturum doğrulanmış olarak işaretlendi."
+        "verify_success_description": "Verilen imza anahtarı %(userld)s'nin/nın %(deviceld)s oturumundan gelen anahtar ile uyumlu. Oturum doğrulanmış olarak işaretlendi.",
+        "help_dialog_title": "Komut Yardımı"
     },
     "presence": {
         "online_for": "%(duration)s süresince çevrimiçi",
@@ -1531,7 +1397,6 @@
         "no_audio_input_title": "Mikrofon bulunamadı",
         "no_audio_input_description": "Cihazınızda bir mikrofon bulamadık. Lütfen ayarlarınızı kontrol edin ve tekrar deneyin."
     },
-    "Other": "Diğer",
     "room_settings": {
         "permissions": {
             "m.room.avatar": "Oda resmini değiştir",
@@ -1607,7 +1472,9 @@
             "canonical_alias_field_label": "Ana adres",
             "avatar_field_label": "Oda avatarı",
             "aliases_no_items_label": "Henüz yayınlanmış başka adres yok, aşağıdan bir tane ekle",
-            "aliases_items_label": "Diğer yayınlanmış adresler:"
+            "aliases_items_label": "Diğer yayınlanmış adresler:",
+            "alias_field_safe_localpart_invalid": "Bazı karakterlere izin verilmiyor",
+            "alias_field_placeholder_default": "örn. odam"
         },
         "advanced": {
             "unfederated": "Bu oda uzak Matrix Sunucuları tarafından erişilebilir değil",
@@ -1615,7 +1482,14 @@
             "room_predecessor": "%(roomName)s odasında daha eski mesajları göster.",
             "room_version_section": "Oda sürümü",
             "room_version": "Oda versiyonu:",
-            "information_section_room": "Oda bilgisi"
+            "information_section_room": "Oda bilgisi",
+            "error_upgrade_title": "Oda güncelleme başarısız",
+            "error_upgrade_description": "Oda güncelleme tamamlanamadı",
+            "upgrade_button": "Bu odayı %(version)s versiyonuna yükselt",
+            "upgrade_dialog_title": "Oda Sürümünü Yükselt",
+            "upgrade_warning_dialog_title_private": "Özel oda güncelle",
+            "upgrade_dwarning_ialog_title_public": "Açık odayı güncelle",
+            "upgrade_warning_dialog_footer": "Bu odayı <oldVersion /> versiyonundan <newVersion /> versiyonuna güncelleyeceksiniz."
         },
         "upload_avatar_label": "Avatar yükle",
         "visibility": {
@@ -1631,7 +1505,9 @@
             "notification_sound": "Bildirim sesi",
             "custom_sound_prompt": "Özel bir ses ayarla",
             "browse_button": "Gözat"
-        }
+        },
+        "title": "Oda Ayarları - %(roomName)s",
+        "alias_not_specified": "Belirtilmemiş"
     },
     "encryption": {
         "verification": {
@@ -1665,7 +1541,12 @@
             "successful_user": "%(displayName)s başarıyla doğruladınız!",
             "timed_out": "Doğrulama zaman aşımına uğradı.",
             "cancelled_user": "%(displayName)s doğrulamayı iptal etti.",
-            "cancelled": "Doğrulamayı iptal ettiniz."
+            "cancelled": "Doğrulamayı iptal ettiniz.",
+            "incoming_sas_dialog_title": "Gelen Doğrulama İsteği",
+            "manual_device_verification_device_name_label": "Oturum adı",
+            "manual_device_verification_device_id_label": "Oturum ID",
+            "manual_device_verification_device_key_label": "Oturum anahtarı",
+            "verification_dialog_title_user": "Doğrulama Talebi"
         },
         "old_version_detected_title": "Eski kriptolama verisi tespit edildi",
         "cancel_entering_passphrase_title": "Parola girişini iptal et?",
@@ -1706,7 +1587,34 @@
         "cross_signing_room_warning": "Birisi bilinmeyen bir oturum kullanıyor",
         "cross_signing_room_verified": "Bu odadaki herkes doğrulanmış",
         "cross_signing_room_normal": "Bu oda uçtan uça şifreli",
-        "unsupported": "Bu istemci uçtan uca şifrelemeyi desteklemiyor."
+        "unsupported": "Bu istemci uçtan uca şifrelemeyi desteklemiyor.",
+        "incompatible_database_sign_out_description": "Sohbet tarihçesini kaybetmemek için, çıkmadan önce odanızın anahtarlarını dışarıya aktarın. Bunu yapabilmek için %(brand)sun daha yeni sürümü gerekli. Ulaşmak için geri gitmeye ihtiyacınız var",
+        "incompatible_database_title": "Uyumsuz Veritabanı",
+        "incompatible_database_disable": "Şifreleme Kapalı Şekilde Devam Et",
+        "key_signature_upload_completed": "Yükleme tamamlandı",
+        "key_signature_upload_cancelled": "anahtar yükleme iptal edildi",
+        "key_signature_upload_success_title": "Anahtar yükleme başarılı",
+        "key_signature_upload_failed_title": "İmza yükleme başarısız",
+        "udd": {
+            "own_new_session_text": "Yeni bir oturuma, doğrulamadan oturum açtınız:",
+            "own_ask_verify_text": "Diğer oturumunuzu aşağıdaki seçeneklerden birini kullanarak doğrulayın.",
+            "other_new_session_text": "%(name)s (%(userId)s) yeni oturuma doğrulamadan giriş yaptı:",
+            "other_ask_verify_text": "Kullanıcıya oturumunu doğrulamasını söyle, ya da aşağıdan doğrula.",
+            "title": "Güvenilmiyor"
+        },
+        "access_secret_storage_dialog": {
+            "key_validation_text": {
+                "recovery_key_is_correct": "İyi görünüyor!"
+            },
+            "security_key_title": "Güvenlik anahtarı"
+        },
+        "destroy_cross_signing_dialog": {
+            "title": "Çarpraz-imzalama anahtarlarını imha et?",
+            "primary_button_text": "Çapraz-imzalama anahtarlarını temizle"
+        },
+        "key_signature_upload_failed_master_key_signature": "yeni bir master anahtar imzası",
+        "key_signature_upload_failed_cross_signing_key_signature": "yeni bir çapraz-imzalama anahtarı imzası",
+        "key_signature_upload_failed_key_signature": "bir anahtar imzası"
     },
     "emoji": {
         "category_frequently_used": "Sıklıkla Kullanılan",
@@ -1814,7 +1722,34 @@
         },
         "country_dropdown": "Ülke Listesi",
         "common_failures": {},
-        "captcha_description": "Bu ana sunucu sizin bir robot olup olmadığınızdan emin olmak istiyor."
+        "captcha_description": "Bu ana sunucu sizin bir robot olup olmadığınızdan emin olmak istiyor.",
+        "autodiscovery_invalid": "Geçersiz anasunucu keşif yanıtı",
+        "autodiscovery_generic_failure": "Sunucudan otokeşif yapılandırması alınması başarısız",
+        "autodiscovery_invalid_hs_base_url": "m.anasunucu için geçersiz base_url",
+        "autodiscovery_invalid_hs": "Anasunucu URL i geçerli bir Matrix anasunucusu olarak gözükmüyor",
+        "autodiscovery_invalid_is_base_url": "m.kimlik_sunucu için geçersiz base_url",
+        "autodiscovery_invalid_is": "Kimlik sunucu adresi geçerli bir kimlik sunucu adresi gibi gözükmüyor",
+        "autodiscovery_invalid_is_response": "Geçersiz kimlik sunucu keşfi yanıtı",
+        "server_picker_description_matrix.org": "En büyük açık sunucu üzerindeki milyonlara ücretsiz ulaşmak için katılın",
+        "soft_logout": {
+            "clear_data_title": "Bu oturumdaki tüm verileri temizle?",
+            "clear_data_button": "Bütün verileri sil"
+        },
+        "logout_dialog": {
+            "use_key_backup": "Anahtar Yedekleme kullanmaya başla",
+            "skip_key_backup": "Şifrelenmiş mesajlarımı istemiyorum",
+            "megolm_export": "Elle dışa aktarılmış anahtarlar",
+            "setup_key_backup_title": "Şifrelenmiş mesajlarınıza erişiminizi kaybedeceksiniz",
+            "description": "Oturumdan çıkmak istediğinize emin misiniz?"
+        },
+        "registration": {
+            "continue_without_email_field_label": "E-posta (opsiyonel)"
+        },
+        "set_email": {
+            "verification_pending_title": "Bekleyen doğrulama",
+            "verification_pending_description": "Lütfen e-postanızı kontrol edin ve içerdiği bağlantıya tıklayın . Bu işlem tamamlandıktan sonra , 'devam et' e tıklayın .",
+            "description": "Bu şifrenizi sıfırlamanızı ve bildirimler almanızı sağlayacak."
+        }
     },
     "room_list": {
         "sort_unread_first": "Önce okunmamış mesajları olan odaları göster",
@@ -1838,7 +1773,8 @@
     },
     "report_content": {
         "missing_reason": "Lütfen neden raporlama yaptığınızı belirtin.",
-        "report_content_to_homeserver": "Ana Sunucu Yöneticinize İçeriği Raporlayın"
+        "report_content_to_homeserver": "Ana Sunucu Yöneticinize İçeriği Raporlayın",
+        "other_label": "Diğer"
     },
     "onboarding": {
         "welcome_detail": "Şimdi, başlamanıza yardım edelim",
@@ -1935,7 +1871,10 @@
         "shared_data_room_id": "Oda ID",
         "shared_data_widget_id": "Görsel Bileşen ID si",
         "popout": "Görsel bileşeni göster",
-        "set_room_layout": "Oda düzenimi herkes için ayarla"
+        "set_room_layout": "Oda düzenimi herkes için ayarla",
+        "capabilities_dialog": {
+            "remember_Selection": "Bu görsel bileşen işin seçimimi hatırla"
+        }
     },
     "zxcvbn": {
         "suggestions": {
@@ -1978,7 +1917,9 @@
         "error_encountered": "Hata oluştu (%(errorDetail)s).",
         "no_update": "Güncelleme yok.",
         "new_version_available": "Yeni sürüm mevcut: <a> Şimdi güncelle.</a>",
-        "check_action": "Güncelleme kontrolü"
+        "check_action": "Güncelleme kontrolü",
+        "unavailable": "Kullanım dışı",
+        "changelog": "Değişiklikler"
     },
     "theme": {
         "light_high_contrast": "Yüksek ışık kontrastı"
@@ -2092,7 +2033,11 @@
         "search": {
             "this_room": "Bu Oda",
             "all_rooms": "Tüm Odalar",
-            "field_placeholder": "Arama…"
+            "field_placeholder": "Arama…",
+            "result_count": {
+                "one": "(~%(count)s sonuç)",
+                "other": "(~%(count)s sonuçlar)"
+            }
         },
         "jump_to_bottom_button": "En son mesajlara git",
         "jump_read_marker": "İlk okunmamış iletiye atla.",
@@ -2109,7 +2054,10 @@
         },
         "invite_link": "Davet bağlantısını paylaş",
         "invite": "İnsanları davet et",
-        "invite_description": "E-posta veya kullanıcı adı ile davet et"
+        "invite_description": "E-posta veya kullanıcı adı ile davet et",
+        "add_existing_room_space": {
+            "dm_heading": "Doğrudan Mesajlar"
+        }
     },
     "terms": {
         "integration_manager": "Botları, köprüleri, görsel bileşenleri ve çıkartma paketlerini kullan",
@@ -2124,7 +2072,9 @@
         "identity_server_no_terms_title": "Kimlik sunucusu hizmet kurallarına sahip değil",
         "identity_server_no_terms_description_1": "Bu eylem, bir e-posta adresini veya telefon numarasını doğrulamak için varsayılan kimlik sunucusuna <server /> erişilmesini gerektirir, ancak sunucunun herhangi bir hizmet şartı yoktur.",
         "identity_server_no_terms_description_2": "Sadece sunucunun sahibine güveniyorsanız devam edin.",
-        "inline_intro_text": "Devam etmek için <policyLink /> i kabul ediniz:"
+        "inline_intro_text": "Devam etmek için <policyLink /> i kabul ediniz:",
+        "summary_identity_server_1": "Kişileri telefon yada e-posta ile bul",
+        "summary_identity_server_2": "Telefon veya e-posta ile bulunun"
     },
     "failed_load_async_component": "Yüklenemiyor! Ağ bağlantınızı kontrol edin ve yeniden deneyin.",
     "upload_failed_generic": "%(fileName)s dosyası için yükleme başarısız.",
@@ -2143,7 +2093,17 @@
         "error_permissions_room": "Bu odaya kişi davet etme izniniz yok.",
         "error_bad_state": "Kullanıcının davet edilebilmesi için öncesinde yasağının kaldırılması gereklidir.",
         "error_version_unsupported_room": "Kullanıcının ana sunucusu odanın sürümünü desteklemiyor.",
-        "error_unknown": "Bilinmeyen sunucu hatası"
+        "error_unknown": "Bilinmeyen sunucu hatası",
+        "unable_find_profiles_description_default": "Altta belirtilen Matrix ID li profiller bulunamıyor - Onları yinede davet etmek ister misiniz?",
+        "unable_find_profiles_title": "Belirtilen kullanıcılar mevcut olmayabilir",
+        "unable_find_profiles_invite_never_warn_label_default": "Yinede davet et ve asla beni uyarma",
+        "unable_find_profiles_invite_label_default": "Yinede davet et",
+        "error_find_room": "Kullanıcıların davet edilmesinde bir şeyler yanlış gitti.",
+        "recents_section": "Güncel Sohbetler",
+        "suggestions_section": "Güncel Doğrudan Mesajlar",
+        "email_use_default_is": "E-posta ile davet etmek için bir kimlik sunucusu kullan. <default> Varsayılanı kullan (%(defaultIdentityServerName)s</default> ya da <settings>Ayarlar</settings> kullanarak yönetin.",
+        "email_use_is": "E-posta ile davet için bir kimlik sunucu kullan. <settings>Ayarlar</settings> dan yönet.",
+        "transfer_dial_pad_tab": "Arama tuşları"
     },
     "scalar": {
         "error_create": "Görsel bileşen oluşturulamıyor.",
@@ -2171,7 +2131,18 @@
         "failed_copy": "Kopyalama başarısız",
         "something_went_wrong": "Bir şeyler yanlış gitti!",
         "update_power_level": "Güç seviyesini değiştirme başarısız oldu",
-        "unknown": "Bilinmeyen Hata"
+        "unknown": "Bilinmeyen Hata",
+        "dialog_description_default": "Bir hata oluştu.",
+        "edit_history_unsupported": "Ana sunucunuz bu özelliği desteklemiyor gözüküyor.",
+        "session_restore": {
+            "clear_storage_description": "Oturumu kapat ve şifreleme anahtarlarını sil?",
+            "clear_storage_button": "Depolamayı temizle ve Oturumu Kapat",
+            "title": "Oturum geri yüklenemiyor",
+            "description_1": "Önceki oturumunuzu geri yüklerken bir hatayla karşılaştık.",
+            "description_2": "Eğer daha önce %(brand)s'un daha yeni bir versiyonunu kullandıysanız , oturumunuz bu sürümle uyumsuz olabilir . Bu pencereyi kapatın ve daha yeni sürüme geri dönün."
+        },
+        "storage_evicted_title": "Kayıp oturum verisi",
+        "unknown_error_code": "bilinmeyen hata kodu"
     },
     "name_and_id": "%(name)s (%(userId)s)",
     "items_and_n_others": {
@@ -2274,7 +2245,25 @@
         "deactivate_confirm_description": "Bu kullanıcı etkisizleştirmek onu bir daha oturum açmasını engeller.Ek olarak da bulundukları bütün odalardan atılırlar. Bu eylem geri dönüştürülebilir. Bu kullanıcıyı etkisizleştirmek istediğinize emin misiniz?",
         "deactivate_confirm_action": "Kullanıcıyı pasifleştir",
         "error_deactivate": "Kullanıcı pasifleştirme başarısız",
-        "edit_own_devices": "Cihazları düzenle"
+        "edit_own_devices": "Cihazları düzenle",
+        "redact": {
+            "no_recent_messages_title": "%(user)s kullanıcısın hiç yeni ileti yok",
+            "no_recent_messages_description": "Daha önceden kalma iletilerin var olup olmadığını kontrol etmek için zaman çizelgesinde yukarı doğru kaydırın.",
+            "confirm_title": "%(user)s kullanıcısından en son iletileri kaldır",
+            "confirm_description_2": "Çok sayıda ileti için bu biraz sürebilir. Lütfen bu sürede kullandığınız istemciyi yenilemeyin.",
+            "confirm_button": {
+                "other": "%(count)s mesajı sil",
+                "one": "1 mesajı sil"
+            }
+        },
+        "count_of_verified_sessions": {
+            "other": "%(count)s doğrulanmış oturum",
+            "one": "1 doğrulanmış oturum"
+        },
+        "count_of_sessions": {
+            "other": "%(count)s oturum",
+            "one": "%(count)s oturum"
+        }
     },
     "stickers": {
         "empty": "Açılmış herhangi bir çıkartma paketine sahip değilsiniz",
@@ -2311,12 +2300,73 @@
         "error_loading_user_profile": "Kullanıcı profili yüklenemedi"
     },
     "cant_load_page": "Sayfa yüklenemiyor",
-    "Invalid homeserver discovery response": "Geçersiz anasunucu keşif yanıtı",
-    "Failed to get autodiscovery configuration from server": "Sunucudan otokeşif yapılandırması alınması başarısız",
-    "Invalid base_url for m.homeserver": "m.anasunucu için geçersiz base_url",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "Anasunucu URL i geçerli bir Matrix anasunucusu olarak gözükmüyor",
-    "Invalid identity server discovery response": "Geçersiz kimlik sunucu keşfi yanıtı",
-    "Invalid base_url for m.identity_server": "m.kimlik_sunucu için geçersiz base_url",
-    "Identity server URL does not appear to be a valid identity server": "Kimlik sunucu adresi geçerli bir kimlik sunucu adresi gibi gözükmüyor",
-    "General failure": "Genel başarısızlık"
+    "General failure": "Genel başarısızlık",
+    "emoji_picker": {
+        "cancel_search_label": "Aramayı iptal et"
+    },
+    "info_tooltip_title": "Bilgi",
+    "language_dropdown_label": "Dil Listesi",
+    "truncated_list_n_more": {
+        "other": "ve %(count)s kez daha..."
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_required_invalid": "Sunucu adı girin",
+            "network_dropdown_available_valid": "İyi görünüyor",
+            "network_dropdown_available_invalid": "Sunucuda veya oda listesinde bulunamıyor",
+            "network_dropdown_your_server_description": "Senin sunucun",
+            "network_dropdown_add_dialog_title": "Yeni sunucu ekle",
+            "network_dropdown_add_dialog_description": "Keşfetmek istediğiniz sunucunun adını girin.",
+            "network_dropdown_add_dialog_placeholder": "Sunucu adı"
+        }
+    },
+    "dialog_close_label": "Kutucuğu kapat",
+    "redact": {
+        "error": "Bu mesajı silemezsiniz (%(code)s)",
+        "ongoing": "Siliniyor…",
+        "confirm_button": "Kaldırma İşlemini Onayla"
+    },
+    "forward": {
+        "send_label": "Gönder"
+    },
+    "integrations": {
+        "disabled_dialog_title": "Bütünleştirmeler kapatılmış",
+        "impossible_dialog_title": "Bütünleştirmelere izin verilmiyor"
+    },
+    "lazy_loading": {
+        "disabled_title": "Yerel geçici bellek uyumsuz",
+        "disabled_action": "Geçici belleği temizle ve yeniden eşle",
+        "resync_title": "%(brand)s güncelleniyor"
+    },
+    "message_edit_dialog_title": "Mesajları düzenle",
+    "spotlight_dialog": {
+        "create_new_room_button": "Yeni Oda Oluştur"
+    },
+    "share": {
+        "title_room": "Oda Paylaş",
+        "permalink_most_recent": "En son mesaja bağlantı",
+        "title_user": "Kullanıcı Paylaş",
+        "title_message": "Oda Mesajı Paylaş",
+        "permalink_message": "Seçili mesaja bağlantı"
+    },
+    "upload_file": {
+        "title_progress": "Dosyaları yükle (%(current)s / %(total)s)",
+        "title": "Dosyaları yükle",
+        "upload_all_button": "Hepsini yükle",
+        "error_files_too_large": "Bu dosyalar yükleme için <b>çok büyük</b>. Dosya boyut limiti %(limit)s.",
+        "error_some_files_too_large": "Bazı dosyalar yükleme için <b>çok büyük</b>. Dosya boyutu limiti %(limit)s.",
+        "upload_n_others_button": {
+            "other": "%(count)s diğer dosyaları yükle",
+            "one": "%(count)s dosyayı sağla"
+        },
+        "cancel_all_button": "Hepsi İptal",
+        "error_title": "Yükleme Hatası"
+    },
+    "restore_key_backup_dialog": {
+        "load_error_content": "Yedek durumu yüklenemiyor",
+        "restore_failed_error": "Yedek geri dönüşü yapılamıyor",
+        "no_backup_error": "Yedek bulunamadı!",
+        "keys_restored_title": "Anahtarlar geri yüklendi",
+        "count_of_decryption_failures": "%(failedCount)s adet oturum çözümlenemedi!"
+    }
 }

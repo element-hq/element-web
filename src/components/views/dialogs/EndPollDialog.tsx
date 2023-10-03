@@ -47,9 +47,7 @@ export default class EndPollDialog extends React.Component<IProps> {
                 const topAnswer = findTopAnswer(this.props.event, responses);
 
                 const message =
-                    topAnswer === ""
-                        ? _t("The poll has ended. No votes were cast.")
-                        : _t("The poll has ended. Top answer: %(topAnswer)s", { topAnswer });
+                    topAnswer === "" ? _t("poll|end_message_no_votes") : _t("poll|end_message", { topAnswer });
 
                 const endEvent = PollEndEvent.from(this.props.event.getId()!, message).serialize();
 
@@ -57,8 +55,8 @@ export default class EndPollDialog extends React.Component<IProps> {
             } catch (e) {
                 console.error("Failed to submit poll response event:", e);
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Failed to end poll"),
-                    description: _t("Sorry, the poll did not end. Please try again."),
+                    title: _t("poll|error_ending_title"),
+                    description: _t("poll|error_ending_description"),
                 });
             }
         }
@@ -68,11 +66,9 @@ export default class EndPollDialog extends React.Component<IProps> {
     public render(): React.ReactNode {
         return (
             <QuestionDialog
-                title={_t("End Poll")}
-                description={_t(
-                    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.",
-                )}
-                button={_t("End Poll")}
+                title={_t("poll|end_title")}
+                description={_t("poll|end_description")}
+                button={_t("poll|end_title")}
                 onFinished={(endPoll: boolean) => this.onFinished(endPoll)}
             />
         );

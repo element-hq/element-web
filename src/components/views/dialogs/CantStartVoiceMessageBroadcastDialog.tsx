@@ -22,14 +22,8 @@ import InfoDialog from "./InfoDialog";
 
 export const createCantStartVoiceMessageBroadcastDialog = (): void => {
     Modal.createDialog(InfoDialog, {
-        title: _t("Can't start voice message"),
-        description: (
-            <p>
-                {_t(
-                    "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.",
-                )}
-            </p>
-        ),
+        title: _t("voice_message|cant_start_broadcast_title"),
+        description: <p>{_t("voice_message|cant_start_broadcast_description")}</p>,
         hasCloseButton: true,
     });
 };

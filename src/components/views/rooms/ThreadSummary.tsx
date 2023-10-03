@@ -44,7 +44,7 @@ const ThreadSummary: React.FC<IProps> = ({ mxEvent, thread, ...props }) => {
 
     let countSection: string | number = count;
     if (!roomContext.narrow) {
-        countSection = _t("%(count)s reply", { count });
+        countSection = _t("threads|count_of_reply", { count });
     }
 
     return (

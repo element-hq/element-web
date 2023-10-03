@@ -345,7 +345,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                 label={_t("room_settings|general|canonical_alias_field_label")}
             >
                 <option value="" key="unset">
-                    {_t("not specified")}
+                    {_t("room_settings|alias_not_specified")}
                 </option>
                 {this.getAliases().map((alias, i) => {
                     if (alias === this.state.canonicalAlias) found = true;

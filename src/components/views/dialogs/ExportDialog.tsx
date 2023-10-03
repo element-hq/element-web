@@ -278,7 +278,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         );
     }
 
-    const sizePostFix = <span>{_t("MB")}</span>;
+    const sizePostFix = <span>{_t("export_chat|size_limit_postfix")}</span>;
 
     if (exportCancelled) {
         // Display successful cancellation message

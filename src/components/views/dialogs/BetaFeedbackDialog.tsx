@@ -37,7 +37,7 @@ const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
 
     return (
         <GenericFeatureFeedbackDialog
-            title={_t("%(featureName)s Beta feedback", { featureName: info.title })}
+            title={_t("labs|beta_feedback_title", { featureName: info.title })}
             subheading={info.feedbackSubheading ? _t(info.feedbackSubheading) : undefined}
             onFinished={onFinished}
             rageshakeLabel={info.feedbackLabel}
@@ -57,7 +57,7 @@ const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
                     });
                 }}
             >
-                {_t("To leave the beta, visit your settings.")}
+                {_t("labs|beta_feedback_leave_button")}
             </AccessibleButton>
         </GenericFeatureFeedbackDialog>
     );

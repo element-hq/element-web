@@ -1,6 +1,4 @@
 {
-    "An error has occurred.": "ఒక లోపము సంభవించినది.",
-    "Custom level": "అనుకూల స్థాయి",
     "Sun": "ఆదివారం",
     "Mon": "సోమవారం",
     "Tue": "మంగళవారం",
@@ -23,17 +21,12 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s ,%(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "unknown error code": "తెలియని కోడ్ లోపం",
-    "Unable to restore session": "సెషన్ను పునరుద్ధరించడానికి సాధ్యపడలేదు",
-    "Create new room": "క్రొత్త గది సృష్టించండి",
     "Sunday": "ఆదివారం",
     "Today": "ఈ రోజు",
     "Friday": "శుక్రువారం",
-    "Changelog": "మార్పు వివరణ",
     "Tuesday": "మంగళవారం",
     "Monday": "సోమవారం",
     "Wednesday": "బుధవారం",
-    "Send": "పంపండి",
     "Thursday": "గురువారం",
     "Yesterday": "నిన్న",
     "Saturday": "శనివారం",
@@ -67,7 +60,8 @@
     },
     "power_level": {
         "default": "డిఫాల్ట్",
-        "admin": "అడ్మిన్"
+        "admin": "అడ్మిన్",
+        "custom_level": "అనుకూల స్థాయి"
     },
     "bug_reporting": {
         "send_logs": "నమోదును పంపు",
@@ -163,7 +157,8 @@
     },
     "update": {
         "error_encountered": "లోపం సంభవించింది (%(errorDetail)s).",
-        "no_update": "ఏ నవీకరణ అందుబాటులో లేదు."
+        "no_update": "ఏ నవీకరణ అందుబాటులో లేదు.",
+        "changelog": "మార్పు వివరణ"
     },
     "create_room": {
         "generic_error": "సర్వర్ అందుబాటులో ఉండకపోవచ్చు, ఓవర్లోడ్ చేయబడి ఉండవచ్చు లేదా మీరు ఒక దోషాన్ని కొట్టాడు."
@@ -175,7 +170,12 @@
         "error_need_invite_permission": "మీరు దీన్ని చేయడానికి వినియోగదారులను ఆహ్వానించగలరు."
     },
     "error": {
-        "tls": "గృహనిర్వాహకులకు కనెక్ట్ చేయలేరు - దయచేసి మీ కనెక్టివిటీని తనిఖీ చేయండి, మీ <a> 1 హోమరుసు యొక్క ఎస్ఎస్ఎల్ సర్టిఫికేట్ </a> 2 ని విశ్వసనీయపరుచుకొని, బ్రౌజర్ పొడిగింపు అభ్యర్థనలను నిరోధించబడదని నిర్ధారించుకోండి."
+        "tls": "గృహనిర్వాహకులకు కనెక్ట్ చేయలేరు - దయచేసి మీ కనెక్టివిటీని తనిఖీ చేయండి, మీ <a> 1 హోమరుసు యొక్క ఎస్ఎస్ఎల్ సర్టిఫికేట్ </a> 2 ని విశ్వసనీయపరుచుకొని, బ్రౌజర్ పొడిగింపు అభ్యర్థనలను నిరోధించబడదని నిర్ధారించుకోండి.",
+        "dialog_description_default": "ఒక లోపము సంభవించినది.",
+        "session_restore": {
+            "title": "సెషన్ను పునరుద్ధరించడానికి సాధ్యపడలేదు"
+        },
+        "unknown_error_code": "తెలియని కోడ్ లోపం"
     },
     "notifications": {
         "enable_prompt_toast_title": "ప్రకటనలు",
@@ -211,5 +211,11 @@
         "search_failed": {
             "server_unavailable": "సర్వర్ అందుబాటులో లేకపోవచ్చు, ఓవర్లోడ్ లేదా శోధన సమయం ముగిసి ఉండవచ్చు :("
         }
+    },
+    "forward": {
+        "send_label": "పంపండి"
+    },
+    "spotlight_dialog": {
+        "create_new_room_button": "క్రొత్త గది సృష్టించండి"
     }
 }

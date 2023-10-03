@@ -1,29 +1,11 @@
 {
-    "Email address": "邮箱地址",
-    "Session ID": "会话 ID",
-    "An error has occurred.": "发生了一个错误。",
     "Join Room": "加入房间",
     "%(items)s and %(lastItem)s": "%(items)s 和 %(lastItem)s",
-    "and %(count)s others...": {
-        "other": "和其他%(count)s个人……",
-        "one": "和其它一个..."
-    },
-    "Custom level": "自定义级别",
     "Home": "主页",
     "Moderator": "协管员",
-    "not specified": "未指定",
-    "Create new room": "创建新房间",
-    "unknown error code": "未知错误代码",
     "Warning!": "警告！",
-    "Unable to restore session": "无法恢复会话",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "请检查你的电子邮箱并点击里面包含的链接。完成时请点击继续。",
     "AM": "上午",
     "PM": "下午",
-    "Verification Pending": "验证等待中",
-    "(~%(count)s results)": {
-        "one": "（~%(count)s 个结果）",
-        "other": "（~%(count)s 个结果）"
-    },
     "Sun": "周日",
     "Mon": "周一",
     "Tue": "周二",
@@ -43,10 +25,6 @@
     "Oct": "十月",
     "Nov": "十一月",
     "Dec": "十二月",
-    "Confirm Removal": "确认移除",
-    "Add an Integration": "添加集成",
-    "This will allow you to reset your password and receive notifications.": "这将允许你重置你的密码和接收通知。",
-    "Send": "发送",
     "Unnamed room": "未命名的房间",
     "Delete Widget": "删除挂件",
     "collapse": "折叠",
@@ -60,55 +38,16 @@
     "%(duration)sm": "%(duration)s 分钟",
     "%(duration)sh": "%(duration)s 小时",
     "%(duration)sd": "%(duration)s 天",
-    "<a>In reply to</a> <pill>": "<a>答复</a> <pill>",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "如果你之前使用过较新版本的 %(brand)s，则你的会话可能与当前版本不兼容。请关闭此窗口并使用最新版本。",
     "Sunday": "星期日",
     "Today": "今天",
     "Friday": "星期五",
-    "Changelog": "更改日志",
-    "Failed to send logs: ": "无法发送日志： ",
-    "Unavailable": "无法获得",
-    "Filter results": "过滤结果",
     "Tuesday": "星期二",
-    "Preparing to send logs": "正在准备发送日志",
     "Saturday": "星期六",
     "Monday": "星期一",
     "Wednesday": "星期三",
-    "You cannot delete this message. (%(code)s)": "你无法删除这条消息。(%(code)s)",
     "Thursday": "星期四",
-    "Logs sent": "日志已发送",
     "Yesterday": "昨天",
-    "Thank you!": "谢谢！",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "你将被带到一个第三方网站以便验证你的账户来使用 %(integrationsUrl)s 提供的集成。你希望继续吗？",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "无法加载被回复的事件，它可能不存在，也可能是你没有权限查看它。",
-    "And %(count)s more...": {
-        "other": "和 %(count)s 个其他…"
-    },
-    "Clear Storage and Sign Out": "清除存储并登出",
     "Send Logs": "发送日志",
-    "Share Room Message": "分享房间消息",
-    "Share User": "分享用户",
-    "Share Room": "分享房间",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "清除本页储存在你浏览器上的数据或许能修复此问题，但也会导致你退出登录并无法读取任何已加密的聊天记录。",
-    "We encountered an error trying to restore your previous session.": "我们在尝试恢复你先前的会话时遇到了错误。",
-    "Link to most recent message": "最新消息的链接",
-    "Link to selected message": "选中消息的链接",
-    "Failed to upgrade room": "房间升级失败",
-    "The room upgrade could not be completed": "房间可能没有完整地升级",
-    "Upgrade this room to version %(version)s": "升级此房间至版本 %(version)s",
-    "Upgrade Room Version": "更新房间版本",
-    "Create a new room with the same name, description and avatar": "创建一个拥有相同的名称、描述与头像的新房间",
-    "Update any local room aliases to point to the new room": "更新所有本地房间别名以使其指向新房间",
-    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "阻止用户在旧房间中发言，并发送消息建议用户迁移至新房间",
-    "Put a link back to the old room at the start of the new room so people can see old messages": "在新房间的开始处发送一条指回旧房间的链接，这样用户可以查看旧消息",
-    "Incompatible local cache": "本地缓存不兼容",
-    "Clear cache and resync": "清除缓存并重新同步",
-    "Incompatible Database": "数据库不兼容",
-    "Continue With Encryption Disabled": "在停用加密的情况下继续",
-    "Updating %(brand)s": "正在更新 %(brand)s",
-    "No backup found!": "找不到备份！",
-    "Unable to restore backup": "无法还原备份",
-    "Unable to load backup status": "无法获取备份状态",
     "Dog": "狗",
     "Cat": "猫",
     "Lion": "狮子",
@@ -171,35 +110,7 @@
     "Anchor": "锚",
     "Headphones": "耳机",
     "Folder": "文件夹",
-    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "加密消息已使用端到端加密保护。只有你和拥有密钥的收件人可以阅读这些消息。",
-    "Start using Key Backup": "开始使用密钥备份",
-    "The following users may not exist": "以下用户可能不存在",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "找不到下列 Matrix ID 的用户资料，你还是要邀请吗？",
-    "Invite anyway and never warn me again": "还是邀请，不用再提醒我",
-    "Invite anyway": "还是邀请",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "在提交日志之前，你必须<a>创建一个GitHub issue</a> 来描述你的问题。",
-    "Unable to load commit detail: %(msg)s": "无法加载提交详情：%(msg)s",
-    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "为避免丢失聊天记录，你必须在登出前导出房间密钥。你需要切换至新版 %(brand)s 方可继续执行此操作",
-    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "验证此用户并将其标记为已信任。在收发端到端加密消息时，信任用户可让你更加放心。",
-    "Incoming Verification Request": "收到验证请求",
-    "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "你之前在 %(host)s 上开启了 %(brand)s 的成员列表延迟加载设置。目前版本中延迟加载功能已被停用。因为本地缓存在这两个设置项上不相容，%(brand)s 需要重新同步你的账户。",
-    "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "通过仅在需要时加载其他用户的信息，%(brand)s 现在使用的内存减少到了原来的三分之一至五分之一。 请等待与服务器重新同步！",
-    "I don't want my encrypted messages": "我不想要我的加密消息",
-    "Manually export keys": "手动导出密钥",
-    "You'll lose access to your encrypted messages": "你将失去你的加密消息的访问权",
-    "Are you sure you want to sign out?": "你确定要登出吗？",
-    "Room Settings - %(roomName)s": "房间设置 - %(roomName)s",
-    "Failed to decrypt %(failedCount)s sessions!": "%(failedCount)s 个会话解密失败！",
-    "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>警告</b>：你应此只在受信任的电脑上设置密钥备份。",
-    "Email (optional)": "电子邮箱（可选）",
-    "Join millions for free on the largest public server": "免费加入最大的公共服务器，成为数百万用户中的一员",
-    "Power level": "权力级别",
-    "Remember my selection for this widget": "记住我对此挂件的选择",
-    "You signed in to a new session without verifying it:": "你登录了未经过验证的新会话：",
-    "Verify your other session using one of the options below.": "使用以下选项之一验证你的其他会话。",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s(%(userId)s)登录到未验证的新会话：",
-    "Ask this user to verify their session, or manually verify it below.": "要求此用户验证其会话，或在下面手动进行验证。",
-    "Not Trusted": "不可信任",
     "Your homeserver has exceeded its user limit.": "你的家服务器已超过用户限制。",
     "Your homeserver has exceeded one of its resource limits.": "你的家服务器已超过某项资源限制。",
     "Ok": "确定",
@@ -209,154 +120,10 @@
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "要报告 Matrix 相关的安全问题，请阅读 Matrix.org 的<a>安全公开策略</a>。",
     "Encrypted by a deleted session": "由已删除的会话加密",
     "Failed to connect to integration manager": "连接至集成管理器失败",
-    "%(count)s verified sessions": {
-        "other": "%(count)s 个已验证的会话",
-        "one": "1 个已验证的会话"
-    },
-    "%(count)s sessions": {
-        "other": "%(count)s 个会话",
-        "one": "%(count)s 个会话"
-    },
-    "No recent messages by %(user)s found": "没有找到 %(user)s 最近发送的消息",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "请尝试在时间线中向上滚动以查看是否有更早的。",
-    "Remove recent messages by %(user)s": "删除 %(user)s 最近发送的消息",
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "对于大量消息，可能会消耗一段时间。在此期间请不要刷新你的客户端。",
-    "Remove %(count)s messages": {
-        "other": "删除 %(count)s 条消息",
-        "one": "删除 1 条消息"
-    },
-    "%(name)s accepted": "%(name)s 接受了",
-    "%(name)s declined": "%(name)s 拒绝了",
-    "%(name)s cancelled": "%(name)s 取消了",
-    "%(name)s wants to verify": "%(name)s 想要验证",
-    "Edited at %(date)s": "编辑于 %(date)s",
-    "Click to view edits": "点击查看编辑历史",
-    "Edited at %(date)s. Click to view edits.": "编辑于 %(date)s。点击以查看编辑历史。",
-    "edited": "已编辑",
-    "Can't load this message": "无法加载此消息",
     "Submit logs": "提交日志",
-    "Cancel search": "取消搜索",
-    "Room address": "房间地址",
-    "e.g. my-room": "例如 my-room",
-    "Some characters not allowed": "不允许使用某些字符",
-    "This address is available to use": "此地址可用",
-    "This address is already in use": "此地址已被使用",
-    "Enter a server name": "请输入服务器名",
-    "Looks good": "看着不错",
-    "Can't find this server or its room list": "找不到此服务器或其房间列表",
-    "Your server": "你的服务器",
-    "Add a new server": "添加新服务器",
-    "Enter the name of a new server you want to explore.": "输入你想探索的新服务器的服务器名。",
-    "Server name": "服务器名",
-    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "使用一个身份服务器以通过邮箱邀请。<default>使用默认（%(defaultIdentityServerName)s）</default>或在<settings>设置</settings>中管理。",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "使用一个身份服务器以通过邮箱邀请。在<settings>设置</settings>中管理。",
-    "Close dialog": "关闭对话框",
-    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "请告诉我们哪里出错了，或最好创建一个 GitHub issue 来描述此问题。",
-    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "提醒：你的浏览器不被支持，所以你的体验可能不可预料。",
-    "Notes": "提示",
-    "Removing…": "正在移除…",
-    "Destroy cross-signing keys?": "销毁交叉签名密钥？",
-    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "删除交叉签名密钥是永久的。所有你验证过的人都会看到安全警报。除非你丢失了所有可以交叉签名的设备，否则几乎可以确定你不想这么做。",
-    "Clear cross-signing keys": "清楚交叉签名密钥",
-    "Clear all data in this session?": "是否清除此会话中的所有数据？",
-    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "清除此会话中的所有数据是永久的。加密消息会丢失，除非其密钥已被备份。",
-    "Clear all data": "清除所有数据",
-    "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "你曾在此会话中使用了一个更新版本的 %(brand)s。要再使用此版本并使用端到端加密，你需要登出再重新登录。",
-    "Confirm your account deactivation by using Single Sign On to prove your identity.": "通过单点登录证明你的身份并确认停用你的账户。",
-    "Are you sure you want to deactivate your account? This is irreversible.": "你确定要停用你的账户吗？此操作不可逆。",
-    "Confirm account deactivation": "确认账户停用",
-    "There was a problem communicating with the server. Please try again.": "联系服务器时出现问题。请重试。",
-    "Server did not require any authentication": "服务器不要求任何认证",
-    "Server did not return valid authentication information.": "服务器未返回有效认证信息。",
-    "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "验证此用户会将其会话标记为已信任，与此同时，你的会话也会被此用户标记为已信任。",
-    "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "验证此设备以将其标记为已信任。在收发端到端加密消息时，信任设备可让你与其他用户更加放心。",
-    "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "验证此设备会将其标记为已信任，与此同时，其他验证了你的用户也会信任此设备。",
-    "Integrations are disabled": "集成已禁用",
-    "Integrations not allowed": "集成未被允许",
-    "To continue, use Single Sign On to prove your identity.": "要继续，请使用单点登录证明你的身份。",
-    "Confirm to continue": "确认以继续",
-    "Click the button below to confirm your identity.": "点击下方按钮确认你的身份。",
-    "Something went wrong trying to invite the users.": "尝试邀请用户时出错。",
-    "We couldn't invite those users. Please check the users you want to invite and try again.": "我们不能邀请这些用户。请检查你想邀请的用户并重试。",
-    "Failed to find the following users": "寻找以下用户失败",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "下列用户可能不存在或无效，因此不能被邀请：%(csvNames)s",
-    "Recent Conversations": "最近对话",
-    "Recently Direct Messaged": "最近私聊",
-    "Direct Messages": "私聊",
-    "a new master key signature": "一个新的主密钥签名",
-    "a new cross-signing key signature": "一个新的交叉签名密钥的签名",
-    "a device cross-signing signature": "一个设备的交叉签名的签名",
-    "a key signature": "一个密钥签名",
-    "Upload completed": "上传完成",
-    "Cancelled signature upload": "已取消签名上传",
-    "Unable to upload": "无法上传",
-    "Signature upload success": "签名上传成功",
-    "Signature upload failed": "签名上传失败",
-    "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "如果别的 %(brand)s 版本在别的标签页中仍然开启，请关闭它，因为在同一宿主上同时使用开启了延迟加载和关闭了延迟加载的 %(brand)s 会导致问题。",
-    "Confirm by comparing the following with the User Settings in your other session:": "通过比较下方内容和你别的会话中的用户设置来确认：",
-    "Confirm this user's session by comparing the following with their User Settings:": "通过比较下方内容和对方用户设置来确认此用户会话：",
-    "Session name": "会话名称",
-    "Session key": "会话密钥",
-    "If they don't match, the security of your communication may be compromised.": "如果它们不匹配，你通讯的安全性可能已受损。",
-    "Your homeserver doesn't seem to support this feature.": "你的家服务器似乎不支持此功能。",
-    "Message edits": "消息编辑历史",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "升级此房间需要关闭此房间的当前实例并创建一个新的房间代替它。为了给房间成员最好的体验，我们会：",
-    "Upgrade private room": "更新私人房间",
-    "Upgrade public room": "更新公共房间",
-    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "更新房间是高级操作，通常建议在房间由于错误、缺失功能或安全漏洞而不稳定时使用。",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "通常这只影响房间在服务器上的处理方式。如果你对你的 %(brand)s 有问题，请<a>报告一个错误</a>。",
-    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "你将把此房间从 <oldVersion /> 升级至 <newVersion />。",
-    "You're all caught up.": "全数阅毕。",
-    "Server isn't responding": "服务器未响应",
-    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "你的服务器未响应你的一些请求。下方是一些最可能的原因。",
-    "The server (%(serverName)s) took too long to respond.": "服务器（%(serverName)s）花了太长时间响应。",
-    "Your firewall or anti-virus is blocking the request.": "你的防火墙或防病毒软件阻止了此请求。",
-    "A browser extension is preventing the request.": "一个浏览器扩展阻止了此请求。",
-    "The server is offline.": "此服务器为离线状态。",
-    "The server has denied your request.": "此服务器拒绝了你的请求。",
-    "Your area is experiencing difficulties connecting to the internet.": "你的区域难以连接上互联网。",
-    "A connection error occurred while trying to contact the server.": "尝试联系服务器时出现连接错误。",
-    "Recent changes that have not yet been received": "尚未被接受的最近更改",
-    "Sign out and remove encryption keys?": "登出并删除加密密钥？",
-    "Command Help": "命令帮助",
-    "To help us prevent this in future, please <a>send us logs</a>.": "要帮助我们防止其以后发生，请<a>给我们发送日志</a>。",
-    "Missing session data": "缺失会话数据",
-    "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "一些会话数据，包括加密消息密钥，已缺失。要修复此问题，登出并重新登录，然后从备份恢复密钥。",
-    "Your browser likely removed this data when running low on disk space.": "你的浏览器可能在磁盘空间不足时删除了此数据。",
-    "Find others by phone or email": "通过电话或邮箱寻找别人",
-    "Be found by phone or email": "通过电话或邮箱被寻找",
-    "Upload files (%(current)s of %(total)s)": "上传文件（%(total)s 中之 %(current)s）",
-    "Upload files": "上传文件",
-    "Upload all": "全部上传",
-    "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "此文件<b>过大</b>而不能上传。文件大小限制是 %(limit)s 但此文件为 %(sizeOfThisFile)s。",
-    "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "这些文件<b>过大</b>而不能上传。文件大小限制为 %(limit)s。",
-    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "一些文件<b>过大</b>而不能上传。文件大小限制为 %(limit)s。",
-    "Upload %(count)s other files": {
-        "other": "上传 %(count)s 个别的文件",
-        "one": "上传 %(count)s 个别的文件"
-    },
-    "Cancel All": "全部取消",
-    "Upload Error": "上传错误",
-    "Verification Request": "验证请求",
-    "Wrong file type": "错误文件类型",
-    "Looks good!": "看着不错！",
-    "Security Phrase": "安全短语",
-    "Security Key": "安全密钥",
-    "Use your Security Key to continue.": "使用你的安全密钥以继续。",
-    "Restoring keys from backup": "从备份恢复密钥",
-    "%(completed)s of %(total)s keys restored": "%(total)s 个密钥中之 %(completed)s 个已恢复",
-    "Keys restored": "已恢复密钥",
-    "Successfully restored %(sessionCount)s keys": "成功恢复了 %(sessionCount)s 个密钥",
-    "Resend %(unsentCount)s reaction(s)": "重新发送%(unsentCount)s个反应",
     "Sign in with SSO": "使用单点登录",
     "Switch theme": "切换主题",
-    "Confirm encryption setup": "确认加密设置",
-    "Click the button below to confirm setting up encryption.": "点击下方按钮以确认设置加密。",
     "IRC display name width": "IRC 显示名称宽度",
-    "Language Dropdown": "语言下拉菜单",
-    "Preparing to download logs": "正在准备下载日志",
-    "%(brand)s encountered an error during upload of:": "%(brand)s 在上传此文件时出错：",
-    "The server is not configured to indicate what the problem is (CORS).": "服务器没有配置为提示错误是什么（CORS）。",
     "Backup version:": "备份版本：",
     "Hong Kong": "香港",
     "Cook Islands": "库克群岛",
@@ -415,24 +182,7 @@
     "Afghanistan": "阿富汗",
     "United States": "美国",
     "United Kingdom": "英国",
-    "Dial pad": "拨号盘",
-    "%(count)s members": {
-        "one": "%(count)s 位成员",
-        "other": "%(count)s 位成员"
-    },
-    "Enter Security Key": "输入安全密钥",
-    "Invalid Security Key": "安全密钥无效",
-    "Wrong Security Key": "安全密钥错误",
-    "Transfer": "传输",
-    "Reason (optional)": "理由（可选）",
-    "Create a new room": "创建新房间",
-    "Server Options": "服务器选项",
-    "Information": "信息",
     "Not encrypted": "未加密",
-    "Leave space": "离开空间",
-    "Create a space": "创建空间",
-    "This version of %(brand)s does not support searching encrypted messages": "当前版本的 %(brand)s 不支持搜索加密消息",
-    "This version of %(brand)s does not support viewing some encrypted files": "当前版本的 %(brand)s 不支持查看某些加密文件",
     "Pakistan": "巴基斯坦",
     "United Arab Emirates": "阿拉伯联合酋长国",
     "Yemen": "也门",
@@ -512,21 +262,6 @@
     "Cuba": "古巴",
     "Croatia": "克罗地亚",
     "Costa Rica": "哥斯达黎加",
-    "<inviter/> invites you": "<inviter/> 邀请了你",
-    "No results found": "找不到结果",
-    "%(count)s rooms": {
-        "one": "%(count)s 个房间",
-        "other": "%(count)s 个房间"
-    },
-    "Enter Security Phrase": "输入安全短语",
-    "Allow this widget to verify your identity": "允许此挂件验证你的身份",
-    "Decline All": "全部拒绝",
-    "This widget would like to:": "此挂件想要：",
-    "Approve widget permissions": "批准挂件权限",
-    "Modal Widget": "模态框挂件（Modal Widget）",
-    "Space selection": "空间选择",
-    "Invite to %(roomName)s": "邀请至 %(roomName)s",
-    "Invite by email": "通过邮箱邀请",
     "Zimbabwe": "津巴布韦",
     "Zambia": "赞比亚",
     "Western Sahara": "西撒哈拉",
@@ -640,241 +375,31 @@
     "Guinea-Bissau": "几内亚比绍",
     "Guinea": "几内亚",
     "Guernsey": "根西岛",
-    "Unable to access secret storage. Please verify that you entered the correct Security Phrase.": "无法访问秘密存储。请确认你输入了正确的安全短语。",
-    "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.": "无法使用此安全密钥解密备份：请检查你输入的安全密钥是否正确。",
-    "Sending": "正在发送",
-    "Security Key mismatch": "安全密钥不符",
-    "Unable to set up keys": "无法设置密钥",
-    "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "如果你全部重置，你将会在没有受信任的会话重新开始、没有受信任的用户，且可能会看不到过去的消息。",
-    "Only do this if you have no other device to complete verification with.": "当你没有其他设备可以用于完成验证时，方可执行此操作。",
-    "Reset everything": "全部重置",
-    "Forgotten or lost all recovery methods? <a>Reset all</a>": "忘记或丢失了所有恢复方式？<a>全部重置</a>",
-    "Remember this": "记住",
-    "The widget will verify your user ID, but won't be able to perform actions for you:": "挂件将会验证你的用户 ID，但将无法为你执行动作：",
-    "Reset event store": "重置活动存储",
-    "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "如果这样做，请注意你的消息并不会被删除，但在重新建立索引时，搜索体验可能会降低片刻",
-    "You most likely do not want to reset your event index store": "你大概率不想重置你的活动缩影存储",
-    "Reset event store?": "重置活动存储？",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "这通常仅影响服务器如何处理房间。如果你的 %(brand)s 遇到问题，请回报错误。",
-    "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "请注意，如果你不添加电子邮箱并且忘记密码，你将<b>永远失去对你账户的访问权</b>。",
-    "Continuing without email": "不使用电子邮箱并继续",
-    "Data on this screen is shared with %(widgetDomain)s": "此屏幕上的数据与%(widgetDomain)s分享",
-    "Consult first": "先询问",
-    "Invited people will be able to read old messages.": "被邀请的人将能够阅读过去的消息。",
-    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "使用某人的名字、用户名（如 <userId/>）或<a>分享此房间</a>来邀请他们。",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "使用名字、电子邮件地址、用户名（如<userId/>）邀请某人或<a>分享此房间</a>。",
-    "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "使用某人的名字、用户名（如 <userId/>）邀请他们，或<a>分享此空间</a>。",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "使用某人的名字、电子邮箱地址或用户名（如 <userId/>）邀请他们，或<a>分享此空间</a>。",
-    "Start a conversation with someone using their name or username (like <userId/>).": "使用某人的名字或用户名（如 <userId/>）开始与其进行对话。",
-    "Start a conversation with someone using their name, email address or username (like <userId/>).": "使用某人的名称、电子邮箱地址或用户名来与其开始对话（如 <userId/>）。",
-    "A call can only be transferred to a single user.": "通话只能转移到单个用户。",
-    "We couldn't create your DM.": "我们无法创建你的私聊。",
-    "You may contact me if you have any follow up questions": "如果你有任何后续问题，可以联系我",
-    "To leave the beta, visit your settings.": "要离开beta，请访问你的设置。",
-    "Want to add a new room instead?": "想要添加一个新的房间吗？",
-    "Add existing rooms": "添加现有房间",
-    "Adding rooms... (%(progress)s out of %(count)s)": {
-        "one": "正在新增房间……",
-        "other": "正在新增房间……（%(count)s 中的第 %(progress)s 个）"
-    },
-    "Not all selected were added": "并非所有选中的都被添加",
-    "You are not allowed to view this server's rooms list": "你不被允许查看此服务器的房间列表",
-    "%(count)s people you know have already joined": {
-        "one": "已有你所认识的 %(count)s 个人加入",
-        "other": "已有你所认识的 %(count)s 个人加入"
-    },
-    "Including %(commaSeparatedMembers)s": "包括 %(commaSeparatedMembers)s",
-    "View all %(count)s members": {
-        "one": "查看 1 位成员",
-        "other": "查看全部 %(count)s 位成员"
-    },
-    "Use the <a>Desktop app</a> to search encrypted messages": "使用<a>桌面端英语</a>来搜索加密消息",
-    "Use the <a>Desktop app</a> to see all encrypted files": "使用<a>桌面端应用</a>来查看所有加密文件",
-    "Add reaction": "添加反应",
-    "Failed to start livestream": "开始流直播失败",
-    "Unable to start audio streaming.": "无法开始音频流媒体。",
-    "Hold": "挂起",
-    "Resume": "恢复",
-    "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "如果你忘记了你的安全密钥，你可以<button>设置新的恢复选项</button>",
-    "Access your secure message history and set up secure messaging by entering your Security Key.": "通过输入你的安全密钥来访问你的安全消息历史记录并设置安全通信。",
-    "Not a valid Security Key": "安全密钥无效",
-    "This looks like a valid Security Key!": "看起来是有效的安全密钥！",
-    "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>": "如果你忘记了你的安全短语，你可以<button1>使用你的安全密钥</button1>或<button2>设置新的恢复选项</button2>",
-    "Access your secure message history and set up secure messaging by entering your Security Phrase.": "无法通过你的安全短语访问你的安全消息历史记录并设置安全通信。",
-    "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.": "无法使用此安全短语解密备份：请确认你是否输入了正确的安全短语。",
-    "Incorrect Security Phrase": "安全短语错误",
-    "Or send invite link": "或发送邀请链接",
-    "Some suggestions may be hidden for privacy.": "出于隐私考虑，部分建议可能会被隐藏。",
-    "Search for rooms or people": "搜索房间或用户",
-    "Message preview": "消息预览",
-    "Sent": "已发送",
-    "You don't have permission to do this": "你无权执行此操作",
-    "Please provide an address": "请提供地址",
-    "Message search initialisation failed, check <a>your settings</a> for more information": "消息搜索初始化失败，请检查<a>你的设置</a>以获取更多信息",
-    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "你的 %(brand)s 不允许你使用集成管理器来完成此操作，请联系管理员。",
-    "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>请注意升级将使这个房间有一个新版本</b>。所有当前的消息都将保留在此存档房间中。",
-    "Automatically invite members from this room to the new one": "自动邀请该房间的成员加入新房间",
-    "These are likely ones other room admins are a part of.": "这些可能是其他房间管理员的一部分。",
-    "Other spaces or rooms you might not know": "你可能不知道的其他空间或房间",
-    "Spaces you know that contain this room": "你知道的包含此房间的空间",
-    "Search spaces": "搜索空间",
-    "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "决定哪些空间可以访问这个房间。如果一个空间被选中，它的成员可以找到并加入<RoomName/>。",
-    "Select spaces": "选择空间",
-    "You're removing all spaces. Access will default to invite only": "你正在移除所有空间。访问权限将预设为仅邀请",
-    "Leave %(spaceName)s": "离开 %(spaceName)s",
-    "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "你是某些要离开的房间或空间的唯一管理员。离开将使它们没有任何管理员。",
-    "You're the only admin of this space. Leaving it will mean no one has control over it.": "你是此空间的唯一管理员。离开它将意味着没有人可以控制它。",
-    "You won't be able to rejoin unless you are re-invited.": "除非你被重新邀请，否则你将无法重新加入。",
-    "User Directory": "用户目录",
-    "Want to add an existing space instead?": "想要添加现有空间？",
-    "Add a space to a space you manage.": "向你管理的空间添加空间。",
-    "Only people invited will be able to find and join this space.": "只有受邀者才能找到并加入此空间。",
-    "Anyone will be able to find and join this space, not just members of <SpaceName/>.": "任何人都可以找到并加入这个空间，而不仅仅是 <SpaceName/> 的成员。",
-    "Anyone in <SpaceName/> will be able to find and join.": "<SpaceName/> 中的任何人都可以找到并加入。",
-    "Private space (invite only)": "私有空间（仅邀请）",
-    "Space visibility": "空间可见度",
-    "Adding spaces has moved.": "新增空间已移动。",
-    "Search for rooms": "搜索房间",
-    "Search for spaces": "搜索空间",
-    "Create a new space": "创建新空间",
-    "Want to add a new space instead?": "想要添加一个新空间？",
-    "Add existing space": "增加现有的空间",
     "To join a space you'll need an invite.": "要加入一个空间，你需要一个邀请。",
-    "Would you like to leave the rooms in this space?": "你想俩开此空间内的房间吗？",
-    "You are about to leave <spaceName/>.": "你即将离开 <spaceName/>。",
-    "Leave some rooms": "离开一些房间",
-    "Leave all rooms": "离开所有房间",
-    "Don't leave any rooms": "不离开任何房间",
-    "MB": "MB",
-    "In reply to <a>this message</a>": "答复<a>此消息</a>",
-    "%(count)s reply": {
-        "one": "%(count)s 条回复",
-        "other": "%(count)s 条回复"
-    },
-    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "输入安全短语或<button>使用安全密钥</button>以继续。",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "重新获取账户访问权限并恢复存储在此会话中的加密密钥。 没有它们，您将无法在任何会话中阅读所有安全消息。",
-    "If you can't see who you're looking for, send them your invite link below.": "如果您看不到您要找的人，请将您的邀请链接发送给他们。",
-    "Thread options": "消息列选项",
     "Forget": "忘记",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s 和其他 %(count)s 个空间",
         "other": "%(spaceName)s 和其他 %(count)s 个空间"
-    },
-    "%(count)s votes": {
-        "one": "%(count)s 票",
-        "other": "%(count)s 票"
     },
     "Developer": "开发者",
     "Experimental": "实验性",
     "Themes": "主题",
     "Moderation": "审核",
     "Messaging": "消息传递",
-    "Spaces you know that contain this space": "你知道的包含这个空间的空间",
-    "Recently viewed": "最近查看",
-    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "您确定要结束此投票吗？ 这将显示投票的最终结果并阻止人们投票。",
-    "End Poll": "结束投票",
-    "Sorry, the poll did not end. Please try again.": "抱歉，投票没有结束。 请再试一次。",
-    "Failed to end poll": "结束投票失败",
-    "The poll has ended. Top answer: %(topAnswer)s": "投票已经结束。 得票最多答案：%(topAnswer)s",
-    "The poll has ended. No votes were cast.": "投票已经结束。 没有投票。",
-    "Link to room": "房间链接",
-    "Recent searches": "最近的搜索",
-    "To search messages, look for this icon at the top of a room <icon/>": "要搜索消息，请在房间顶部查找此图标<icon/>",
-    "Other searches": "其他搜索",
-    "Public rooms": "公共房间",
-    "Use \"%(query)s\" to search": "使用 \"%(query)s\" 来搜索",
-    "Other rooms in %(spaceName)s": "%(spaceName)s 中的其他房间",
-    "Spaces you're in": "你所在的空间",
-    "Including you, %(commaSeparatedMembers)s": "包括你，%(commaSeparatedMembers)s",
-    "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "将您与该空间的成员的聊天进行分组。关闭这个后你将无法在 %(spaceName)s 内看到这些聊天。",
-    "Sections to show": "要显示的部分",
-    "Open in OpenStreetMap": "在 OpenStreetMap 中打开",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s 与 %(space2Name)s",
-    "%(count)s participants": {
-        "other": "%(count)s 名参与者",
-        "one": "一名参与者"
-    },
-    "Add new server…": "添加新的服务器…",
-    "Verify other device": "验证其他设备",
     "Saved Items": "已保存的项目",
     "%(members)s and %(last)s": "%(members)s和%(last)s",
     "%(members)s and more": "%(members)s和更多",
-    "If you can't find the room you're looking for, ask for an invite or create a new room.": "若你找不到要找的房间，请请求邀请或创建新房间。",
     "Explore public spaces in the new search dialog": "在新的搜索对话框中探索公开空间",
-    "%(featureName)s Beta feedback": "%(featureName)sBeta反馈",
-    "Use <arrows/> to scroll": "用<arrows/>来滚动",
     "Feedback sent! Thanks, we appreciate it!": "反馈已发送！谢谢，我们很感激！",
-    "Location": "位置",
-    "This address does not point at this room": "此地址不指向此房间",
-    "Could not fetch location": "无法获取位置",
-    "This address had invalid server or is already in use": "此地址的服务器无效或已被使用",
-    "Missing room name or separator e.g. (my-room:domain.org)": "缺少房间名称或分隔符，例子（my-room:domain.org）",
-    "Missing domain separator e.g. (:domain.org)": "缺少域分隔符，例子（:domain.org）",
-    "toggle event": "切换事件",
-    "What location type do you want to share?": "你想分享什么位置类型？",
-    "Drop a Pin": "放置图钉",
-    "My live location": "我的实时位置",
-    "My current location": "我当前的位置",
-    "%(displayName)s's live location": "%(displayName)s的实时位置",
-    "%(brand)s could not send your location. Please try again later.": "%(brand)s无法发送你的位置。请稍后再试。",
-    "We couldn't send your location": "我们无法发送你的位置",
-    "%(count)s Members": {
-        "one": "%(count)s个成员",
-        "other": "%(count)s个成员"
-    },
-    "Search for": "搜索",
-    "Some results may be hidden for privacy": "为保护隐私，一些结果可能被隐藏",
-    "If you can't see who you're looking for, send them your invite link.": "若你无法看到你正在查找的人，给他们发送你的邀请链接。",
-    "Copy invite link": "复制邀请链接",
-    "Some results may be hidden": "一些结果可能被隐藏",
-    "Other options": "其他选项",
-    "Start a group chat": "发起群聊天",
-    "Remove search filter for %(filter)s": "移除%(filter)s搜索过滤条件",
     "Show rooms": "显示房间",
     "Show spaces": "显示空间",
     "You cannot search for rooms that are neither a room nor a space": "你无法搜索既不是房间也不是空间的房间",
-    "You don't have permission to share locations": "你没有权限分享位置",
-    "You need to have the right permissions in order to share locations in this room.": "你需要拥有正确的权限才能在此房间中共享位置。",
-    "Who will you chat to the most?": "你会和谁聊得最多？",
     "We'll help you get connected.": "",
-    "Friends and family": "朋友和家人",
-    "Coworkers and teams": "同事和团队",
-    "Online community members": "在线社群成员",
-    "You will not be able to reactivate your account": "你将无法重新激活你的账户",
-    "Preserve system messages": "保留系统消息",
     "Remove them from everything I'm able to": "",
-    "Remove server “%(roomServer)s”": "移除服务器“%(roomServer)s”",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "你可以使用自定义服务器选项来指定不同的家服务器URL以登录其他Matrix服务器。这让你能把%(brand)s和不同家服务器上的已有Matrix账户搭配使用。",
-    "Unsent": "未发送",
-    "Search Dialog": "搜索对话",
-    "Join %(roomAddress)s": "加入%(roomAddress)s",
-    "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "当你登出时，这些密钥会从此设备删除。这意味着你将无法查阅已加密消息，除非你在其他设备上有那些消息的密钥，或者已将其备份到服务器。",
-    "Open room": "打开房间",
-    "Output devices": "输出设备",
-    "Input devices": "输入设备",
     "View List": "查看列表",
-    "View list": "查看列表",
-    "No live locations": "无实时位置",
-    "Live location error": "实时位置错误",
-    "Live location ended": "实时位置已结束",
-    "Live until %(expiryTime)s": "实时分享直至%(expiryTime)s",
-    "Cameras": "相机",
     "Unread email icon": "未读电子邮件图标",
-    "An error occurred while stopping your live location, please try again": "停止你的实时位置时出错，请重试",
-    "An error occurred whilst sharing your live location, please try again": "分享你的实时位置时出错，请重试",
-    "Live location enabled": "实时位置已启用",
-    "You are sharing your live location": "你正在分享你的实时位置",
-    "An error occurred whilst sharing your live location": "分享实时位置时出错",
-    "An error occurred while stopping your live location": "停止实时位置时出错",
-    "Close sidebar": "关闭侧边栏",
-    "Manually verify by text": "用文本手动验证",
-    "Interactively verify by emoji": "用表情符号交互式验证",
-    "Show: %(instance)s rooms (%(server)s)": "显示：%(instance)s房间（%(server)s）",
-    "Show: Matrix rooms": "显示：Matrix房间",
-    "Choose a locale": "选择区域设置",
-    "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s或%(recoveryFile)s",
-    "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "若你也想移除关于此用户的系统消息（例如，成员更改、用户资料更改……），则取消勾选",
-    "<w>WARNING:</w> <description/>": "<w>警告：</w><description/>",
     "common": {
         "about": "关于",
         "analytics": "统计分析服务",
@@ -989,7 +514,30 @@
         "show_more": "显示更多",
         "joined": "已加入",
         "avatar": "头像",
-        "are_you_sure": "你确定吗？"
+        "are_you_sure": "你确定吗？",
+        "location": "位置",
+        "email_address": "邮箱地址",
+        "filter_results": "过滤结果",
+        "no_results_found": "找不到结果",
+        "unsent": "未发送",
+        "cameras": "相机",
+        "n_participants": {
+            "other": "%(count)s 名参与者",
+            "one": "一名参与者"
+        },
+        "and_n_others": {
+            "other": "和其他%(count)s个人……",
+            "one": "和其它一个..."
+        },
+        "n_members": {
+            "one": "%(count)s 位成员",
+            "other": "%(count)s 位成员"
+        },
+        "edited": "已编辑",
+        "n_rooms": {
+            "one": "%(count)s 个房间",
+            "other": "%(count)s 个房间"
+        }
     },
     "action": {
         "continue": "继续",
@@ -1105,7 +653,11 @@
         "add_existing_room": "添加现有的房间",
         "explore_public_rooms": "探索公共房间",
         "reply_in_thread": "在消息列中回复",
-        "click": "点击"
+        "click": "点击",
+        "transfer": "传输",
+        "resume": "恢复",
+        "hold": "挂起",
+        "view_list": "查看列表"
     },
     "a11y": {
         "user_menu": "用户菜单",
@@ -1187,7 +739,9 @@
         "beta_section": "即将到来的功能",
         "beta_description": "%(brand)s的下一步是什么？实验室是早期获得东西、测试新功能和在它们发布前帮助塑造的最好方式。",
         "experimental_section": "早期预览",
-        "experimental_description": "想要做点实验？试试我们开发中的最新点子。这些功能尚未确定；它们可能不稳定，可能会变动，也可能被完全丢弃。<a>了解更多</a>。"
+        "experimental_description": "想要做点实验？试试我们开发中的最新点子。这些功能尚未确定；它们可能不稳定，可能会变动，也可能被完全丢弃。<a>了解更多</a>。",
+        "beta_feedback_title": "%(featureName)sBeta反馈",
+        "beta_feedback_leave_button": "要离开beta，请访问你的设置。"
     },
     "keyboard": {
         "home": "主页",
@@ -1305,7 +859,9 @@
         "moderator": "协管员",
         "admin": "管理员",
         "mod": "管理员",
-        "custom": "自定义（%(level)s）"
+        "custom": "自定义（%(level)s）",
+        "label": "权力级别",
+        "custom_level": "自定义级别"
     },
     "bug_reporting": {
         "introduction": "若你通过GitHub提交bug，则调试日志能帮助我们追踪问题。 ",
@@ -1323,7 +879,16 @@
         "uploading_logs": "正在上传日志",
         "downloading_logs": "正在下载日志",
         "create_new_issue": "请在 GitHub 上<newIssueLink>创建一个新 issue</newIssueLink> 以便我们调查此错误。",
-        "waiting_for_server": "正在等待服务器响应"
+        "waiting_for_server": "正在等待服务器响应",
+        "error_empty": "请告诉我们哪里出错了，或最好创建一个 GitHub issue 来描述此问题。",
+        "preparing_logs": "正在准备发送日志",
+        "logs_sent": "日志已发送",
+        "thank_you": "谢谢！",
+        "failed_send_logs": "无法发送日志： ",
+        "preparing_download": "正在准备下载日志",
+        "unsupported_browser": "提醒：你的浏览器不被支持，所以你的体验可能不可预料。",
+        "textarea_label": "提示",
+        "log_request": "要帮助我们防止其以后发生，请<a>给我们发送日志</a>。"
     },
     "time": {
         "hours_minutes_seconds_left": "剩余%(hours)s小时%(minutes)s分钟%(seconds)s秒",
@@ -1403,7 +968,11 @@
         "send_dm": "发送私聊",
         "explore_rooms": "探索公共房间",
         "create_room": "创建一个群聊",
-        "create_account": "创建账户"
+        "create_account": "创建账户",
+        "use_case_heading2": "你会和谁聊得最多？",
+        "use_case_personal_messaging": "朋友和家人",
+        "use_case_work_messaging": "同事和团队",
+        "use_case_community_messaging": "在线社群成员"
     },
     "settings": {
         "show_breadcrumbs": "在房间列表上方显示最近浏览过的房间的快捷方式",
@@ -1724,7 +1293,15 @@
             "email_address_label": "电子邮箱地址",
             "remove_msisdn_prompt": "删除 %(phone)s 吗？",
             "add_msisdn_instructions": "一封短信已发送至 +%(msisdn)s。请输入其中包含的验证码。",
-            "msisdn_label": "电话号码"
+            "msisdn_label": "电话号码",
+            "spell_check_locale_placeholder": "选择区域设置",
+            "deactivate_confirm_body_sso": "通过单点登录证明你的身份并确认停用你的账户。",
+            "deactivate_confirm_body": "你确定要停用你的账户吗？此操作不可逆。",
+            "deactivate_confirm_continue": "确认账户停用",
+            "error_deactivate_communication": "联系服务器时出现问题。请重试。",
+            "error_deactivate_no_auth": "服务器不要求任何认证",
+            "error_deactivate_invalid_auth": "服务器未返回有效认证信息。",
+            "deactivate_confirm_content_1": "你将无法重新激活你的账户"
         },
         "sidebar": {
             "title": "侧边栏",
@@ -1783,7 +1360,8 @@
             "import_description_1": "此操作允许你导入之前从另一个 Matrix 客户端中导出的加密密钥文件。导入完成后，你将能够解密那个客户端可以解密的加密消息。",
             "import_description_2": "导出文件受口令词组保护。你应该在此输入口令词组以解密此文件。",
             "file_to_import": "要导入的文件"
-        }
+        },
+        "warning": "<w>警告：</w><description/>"
     },
     "devtools": {
         "send_custom_account_data_event": "发送自定义账户数据事件",
@@ -1852,7 +1430,8 @@
         "low_bandwidth_mode": "低带宽模式",
         "developer_mode": "开发者模式",
         "view_source_decrypted_event_source": "解密的事件源码",
-        "original_event_source": "原始事件源码"
+        "original_event_source": "原始事件源码",
+        "toggle_event": "切换事件"
     },
     "export_chat": {
         "html": "HTML",
@@ -1903,7 +1482,8 @@
         "format": "格式",
         "messages": "消息",
         "size_limit": "大小限制",
-        "include_attachments": "包括附件"
+        "include_attachments": "包括附件",
+        "size_limit_postfix": "MB"
     },
     "create_room": {
         "title_video_room": "创建视频房间",
@@ -2236,7 +1816,8 @@
         },
         "reactions": {
             "label": "%(reactors)s做出了%(content)s的反应",
-            "tooltip": "<reactors/><reactedWith>回应了 %(shortName)s</reactedWith>"
+            "tooltip": "<reactors/><reactedWith>回应了 %(shortName)s</reactedWith>",
+            "add_reaction_prompt": "添加反应"
         },
         "m.room.create": {
             "continuation": "此房间是另一个对话的延续之处。",
@@ -2250,7 +1831,9 @@
             "external_url": "源网址",
             "collapse_reply_thread": "折叠回复消息列",
             "view_related_event": "查看相关事件",
-            "report": "举报"
+            "report": "举报",
+            "resent_unsent_reactions": "重新发送%(unsentCount)s个反应",
+            "open_in_osm": "在 OpenStreetMap 中打开"
         },
         "url_preview": {
             "show_n_more": {
@@ -2320,13 +1903,38 @@
             "you_accepted": "你接受了",
             "you_declined": "你拒绝了",
             "you_cancelled": "你取消了",
-            "you_started": "你发送了一个验证请求"
+            "you_started": "你发送了一个验证请求",
+            "user_accepted": "%(name)s 接受了",
+            "user_declined": "%(name)s 拒绝了",
+            "user_cancelled": "%(name)s 取消了",
+            "user_wants_to_verify": "%(name)s 想要验证"
         },
         "m.poll.end": {
             "sender_ended": "%(senderName)s 结束了投票"
         },
         "m.video": {
             "error_decrypting": "解密视频时出错"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "添加集成",
+            "dialog_description": "你将被带到一个第三方网站以便验证你的账户来使用 %(integrationsUrl)s 提供的集成。你希望继续吗？"
+        },
+        "edits": {
+            "tooltip_title": "编辑于 %(date)s",
+            "tooltip_sub": "点击查看编辑历史",
+            "tooltip_label": "编辑于 %(date)s。点击以查看编辑历史。"
+        },
+        "error_rendering_message": "无法加载此消息",
+        "reply": {
+            "error_loading": "无法加载被回复的事件，它可能不存在，也可能是你没有权限查看它。",
+            "in_reply_to": "<a>答复</a> <pill>",
+            "in_reply_to_for_export": "答复<a>此消息</a>"
+        },
+        "m.poll": {
+            "count_of_votes": {
+                "one": "%(count)s 票",
+                "other": "%(count)s 票"
+            }
         }
     },
     "slash_command": {
@@ -2416,7 +2024,8 @@
         "verify_nop_warning_mismatch": "警告：会话已验证，然而密钥不匹配！",
         "verify_mismatch": "警告：密钥验证失败！%(userId)s 的会话 %(deviceId)s 的签名密钥为 %(fprint)s，与提供的密钥 %(fingerprint)s 不符。这可能表示你的通讯已被截获！",
         "verify_success_title": "已验证的密钥",
-        "verify_success_description": "你提供的签名密钥与你从 %(userId)s 的会话 %(deviceId)s 获取的一致。此会话被标为已验证。"
+        "verify_success_description": "你提供的签名密钥与你从 %(userId)s 的会话 %(deviceId)s 获取的一致。此会话被标为已验证。",
+        "help_dialog_title": "命令帮助"
     },
     "presence": {
         "busy": "忙",
@@ -2538,9 +2147,11 @@
         "unable_to_access_audio_input_title": "无法访问你的麦克风",
         "unable_to_access_audio_input_description": "我们无法访问你的麦克风。 请检查浏览器设置并重试。",
         "no_audio_input_title": "未找到麦克风",
-        "no_audio_input_description": "我们没能在你的设备上找到麦克风。请检查设置并重试。"
+        "no_audio_input_description": "我们没能在你的设备上找到麦克风。请检查设置并重试。",
+        "transfer_consult_first_label": "先询问",
+        "input_devices": "输入设备",
+        "output_devices": "输出设备"
     },
-    "Other": "其他",
     "room_settings": {
         "permissions": {
             "m.room.avatar_space": "更改空间头像",
@@ -2644,7 +2255,15 @@
                 "one": "正在更新空间…"
             },
             "error_join_rule_change_title": "未能更新加入列表",
-            "error_join_rule_change_unknown": "未知失败"
+            "error_join_rule_change_unknown": "未知失败",
+            "join_rule_restricted_dialog_empty_warning": "你正在移除所有空间。访问权限将预设为仅邀请",
+            "join_rule_restricted_dialog_title": "选择空间",
+            "join_rule_restricted_dialog_description": "决定哪些空间可以访问这个房间。如果一个空间被选中，它的成员可以找到并加入<RoomName/>。",
+            "join_rule_restricted_dialog_filter_placeholder": "搜索空间",
+            "join_rule_restricted_dialog_heading_space": "你知道的包含这个空间的空间",
+            "join_rule_restricted_dialog_heading_room": "你知道的包含此房间的空间",
+            "join_rule_restricted_dialog_heading_other": "你可能不知道的其他空间或房间",
+            "join_rule_restricted_dialog_heading_unknown": "这些可能是其他房间管理员的一部分。"
         },
         "general": {
             "publish_toggle": "是否将此房间发布至 %(domain)s 的房间目录中？",
@@ -2685,7 +2304,17 @@
             "canonical_alias_field_label": "主要地址",
             "avatar_field_label": "房间头像",
             "aliases_no_items_label": "还没有其他公布的地址，在下方添加一个",
-            "aliases_items_label": "其他公布的地址："
+            "aliases_items_label": "其他公布的地址：",
+            "alias_heading": "房间地址",
+            "alias_field_has_domain_invalid": "缺少域分隔符，例子（:domain.org）",
+            "alias_field_has_localpart_invalid": "缺少房间名称或分隔符，例子（my-room:domain.org）",
+            "alias_field_safe_localpart_invalid": "不允许使用某些字符",
+            "alias_field_required_invalid": "请提供地址",
+            "alias_field_matches_invalid": "此地址不指向此房间",
+            "alias_field_taken_valid": "此地址可用",
+            "alias_field_taken_invalid_domain": "此地址已被使用",
+            "alias_field_taken_invalid": "此地址的服务器无效或已被使用",
+            "alias_field_placeholder_default": "例如 my-room"
         },
         "advanced": {
             "unfederated": "此房间无法被远程 Matrix 服务器访问",
@@ -2697,7 +2326,24 @@
             "room_version_section": "房间版本",
             "room_version": "房间版本：",
             "information_section_space": "空间信息",
-            "information_section_room": "房间信息"
+            "information_section_room": "房间信息",
+            "error_upgrade_title": "房间升级失败",
+            "error_upgrade_description": "房间可能没有完整地升级",
+            "upgrade_button": "升级此房间至版本 %(version)s",
+            "upgrade_dialog_title": "更新房间版本",
+            "upgrade_dialog_description": "升级此房间需要关闭此房间的当前实例并创建一个新的房间代替它。为了给房间成员最好的体验，我们会：",
+            "upgrade_dialog_description_1": "创建一个拥有相同的名称、描述与头像的新房间",
+            "upgrade_dialog_description_2": "更新所有本地房间别名以使其指向新房间",
+            "upgrade_dialog_description_3": "阻止用户在旧房间中发言，并发送消息建议用户迁移至新房间",
+            "upgrade_dialog_description_4": "在新房间的开始处发送一条指回旧房间的链接，这样用户可以查看旧消息",
+            "upgrade_warning_dialog_invite_label": "自动邀请该房间的成员加入新房间",
+            "upgrade_warning_dialog_title_private": "更新私人房间",
+            "upgrade_dwarning_ialog_title_public": "更新公共房间",
+            "upgrade_warning_dialog_report_bug_prompt": "这通常仅影响服务器如何处理房间。如果你的 %(brand)s 遇到问题，请回报错误。",
+            "upgrade_warning_dialog_report_bug_prompt_link": "通常这只影响房间在服务器上的处理方式。如果你对你的 %(brand)s 有问题，请<a>报告一个错误</a>。",
+            "upgrade_warning_dialog_description": "更新房间是高级操作，通常建议在房间由于错误、缺失功能或安全漏洞而不稳定时使用。",
+            "upgrade_warning_dialog_explainer": "<b>请注意升级将使这个房间有一个新版本</b>。所有当前的消息都将保留在此存档房间中。",
+            "upgrade_warning_dialog_footer": "你将把此房间从 <oldVersion /> 升级至 <newVersion />。"
         },
         "delete_avatar_label": "删除头像",
         "upload_avatar_label": "上传头像",
@@ -2736,7 +2382,9 @@
             "enable_element_call_caption": "%(brand)s是端到端加密的，但是目前仅限于少数用户。",
             "enable_element_call_no_permissions_tooltip": "你没有足够的权限更改这个。",
             "call_type_section": "通话类型"
-        }
+        },
+        "title": "房间设置 - %(roomName)s",
+        "alias_not_specified": "未指定"
     },
     "encryption": {
         "verification": {
@@ -2807,7 +2455,20 @@
             "timed_out": "验证超时。",
             "cancelled_self": "你在其他设备上取消了验证。",
             "cancelled_user": "%(displayName)s 取消了验证。",
-            "cancelled": "你取消了验证。"
+            "cancelled": "你取消了验证。",
+            "incoming_sas_user_dialog_text_1": "验证此用户并将其标记为已信任。在收发端到端加密消息时，信任用户可让你更加放心。",
+            "incoming_sas_user_dialog_text_2": "验证此用户会将其会话标记为已信任，与此同时，你的会话也会被此用户标记为已信任。",
+            "incoming_sas_device_dialog_text_1": "验证此设备以将其标记为已信任。在收发端到端加密消息时，信任设备可让你与其他用户更加放心。",
+            "incoming_sas_device_dialog_text_2": "验证此设备会将其标记为已信任，与此同时，其他验证了你的用户也会信任此设备。",
+            "incoming_sas_dialog_title": "收到验证请求",
+            "manual_device_verification_self_text": "通过比较下方内容和你别的会话中的用户设置来确认：",
+            "manual_device_verification_user_text": "通过比较下方内容和对方用户设置来确认此用户会话：",
+            "manual_device_verification_device_name_label": "会话名称",
+            "manual_device_verification_device_id_label": "会话 ID",
+            "manual_device_verification_device_key_label": "会话密钥",
+            "manual_device_verification_footer": "如果它们不匹配，你通讯的安全性可能已受损。",
+            "verification_dialog_title_device": "验证其他设备",
+            "verification_dialog_title_user": "验证请求"
         },
         "old_version_detected_title": "检测到旧的加密数据",
         "old_version_detected_description": "已检测到旧版%(brand)s的数据，这将导致端到端加密在旧版本中发生故障。在此版本中，使用旧版本交换的端到端加密消息可能无法解密。这也可能导致与此版本交换的消息失败。如果你遇到问题，请登出并重新登录。要保留历史消息，请先导出并在重新登录后导入你的密钥。",
@@ -2861,7 +2522,57 @@
         "cross_signing_room_warning": "有人在使用未知会话",
         "cross_signing_room_verified": "房间中所有人都已被验证",
         "cross_signing_room_normal": "此房间是端到端加密的",
-        "unsupported": "此客户端不支持端到端加密。"
+        "unsupported": "此客户端不支持端到端加密。",
+        "incompatible_database_sign_out_description": "为避免丢失聊天记录，你必须在登出前导出房间密钥。你需要切换至新版 %(brand)s 方可继续执行此操作",
+        "incompatible_database_description": "你曾在此会话中使用了一个更新版本的 %(brand)s。要再使用此版本并使用端到端加密，你需要登出再重新登录。",
+        "incompatible_database_title": "数据库不兼容",
+        "incompatible_database_disable": "在停用加密的情况下继续",
+        "key_signature_upload_completed": "上传完成",
+        "key_signature_upload_cancelled": "已取消签名上传",
+        "key_signature_upload_failed": "无法上传",
+        "key_signature_upload_success_title": "签名上传成功",
+        "key_signature_upload_failed_title": "签名上传失败",
+        "udd": {
+            "own_new_session_text": "你登录了未经过验证的新会话：",
+            "own_ask_verify_text": "使用以下选项之一验证你的其他会话。",
+            "other_new_session_text": "%(name)s(%(userId)s)登录到未验证的新会话：",
+            "other_ask_verify_text": "要求此用户验证其会话，或在下面手动进行验证。",
+            "title": "不可信任",
+            "manual_verification_button": "用文本手动验证",
+            "interactive_verification_button": "用表情符号交互式验证"
+        },
+        "access_secret_storage_dialog": {
+            "key_validation_text": {
+                "wrong_file_type": "错误文件类型",
+                "recovery_key_is_correct": "看着不错！",
+                "wrong_security_key": "安全密钥错误",
+                "invalid_security_key": "安全密钥无效"
+            },
+            "reset_title": "全部重置",
+            "reset_warning_1": "当你没有其他设备可以用于完成验证时，方可执行此操作。",
+            "reset_warning_2": "如果你全部重置，你将会在没有受信任的会话重新开始、没有受信任的用户，且可能会看不到过去的消息。",
+            "security_phrase_title": "安全短语",
+            "security_phrase_incorrect_error": "无法访问秘密存储。请确认你输入了正确的安全短语。",
+            "enter_phrase_or_key_prompt": "输入安全短语或<button>使用安全密钥</button>以继续。",
+            "security_key_title": "安全密钥",
+            "use_security_key_prompt": "使用你的安全密钥以继续。",
+            "separator": "%(securityKey)s或%(recoveryFile)s",
+            "restoring": "从备份恢复密钥"
+        },
+        "reset_all_button": "忘记或丢失了所有恢复方式？<a>全部重置</a>",
+        "destroy_cross_signing_dialog": {
+            "title": "销毁交叉签名密钥？",
+            "warning": "删除交叉签名密钥是永久的。所有你验证过的人都会看到安全警报。除非你丢失了所有可以交叉签名的设备，否则几乎可以确定你不想这么做。",
+            "primary_button_text": "清楚交叉签名密钥"
+        },
+        "confirm_encryption_setup_title": "确认加密设置",
+        "confirm_encryption_setup_body": "点击下方按钮以确认设置加密。",
+        "unable_to_setup_keys_error": "无法设置密钥",
+        "key_signature_upload_failed_master_key_signature": "一个新的主密钥签名",
+        "key_signature_upload_failed_cross_signing_key_signature": "一个新的交叉签名密钥的签名",
+        "key_signature_upload_failed_device_cross_signing_key_signature": "一个设备的交叉签名的签名",
+        "key_signature_upload_failed_key_signature": "一个密钥签名",
+        "key_signature_upload_failed_body": "%(brand)s 在上传此文件时出错："
     },
     "emoji": {
         "category_frequently_used": "经常使用",
@@ -2991,7 +2702,10 @@
             "fallback_button": "开始认证",
             "sso_title": "使用单点登录继续",
             "sso_body": "使用单一登入证明你的身份，以确认添加此电子邮件地址。",
-            "code": "代码"
+            "code": "代码",
+            "sso_preauth_body": "要继续，请使用单点登录证明你的身份。",
+            "sso_postauth_title": "确认以继续",
+            "sso_postauth_body": "点击下方按钮确认你的身份。"
         },
         "password_field_label": "输入密码",
         "password_field_strong_label": "不错，是个强密码！",
@@ -3035,7 +2749,41 @@
         },
         "country_dropdown": "国家下拉菜单",
         "common_failures": {},
-        "captcha_description": "此家服务器想要确认你不是机器人。"
+        "captcha_description": "此家服务器想要确认你不是机器人。",
+        "autodiscovery_invalid": "无效的家服务器搜索响应",
+        "autodiscovery_generic_failure": "从服务器获取自动发现配置时失败",
+        "autodiscovery_invalid_hs_base_url": "m.homeserver 的 base_url 无效",
+        "autodiscovery_invalid_hs": "家服务器链接不像是有效的 Matrix 家服务器",
+        "autodiscovery_invalid_is_base_url": "m.identity_server 的 base_url 无效",
+        "autodiscovery_invalid_is": "身份服务器链接不像是有效的身份服务器",
+        "autodiscovery_invalid_is_response": "无效的身份服务器搜索响应",
+        "server_picker_description": "你可以使用自定义服务器选项来指定不同的家服务器URL以登录其他Matrix服务器。这让你能把%(brand)s和不同家服务器上的已有Matrix账户搭配使用。",
+        "server_picker_description_matrix.org": "免费加入最大的公共服务器，成为数百万用户中的一员",
+        "server_picker_title_default": "服务器选项",
+        "soft_logout": {
+            "clear_data_title": "是否清除此会话中的所有数据？",
+            "clear_data_description": "清除此会话中的所有数据是永久的。加密消息会丢失，除非其密钥已被备份。",
+            "clear_data_button": "清除所有数据"
+        },
+        "logout_dialog": {
+            "setup_secure_backup_description_1": "加密消息已使用端到端加密保护。只有你和拥有密钥的收件人可以阅读这些消息。",
+            "setup_secure_backup_description_2": "当你登出时，这些密钥会从此设备删除。这意味着你将无法查阅已加密消息，除非你在其他设备上有那些消息的密钥，或者已将其备份到服务器。",
+            "use_key_backup": "开始使用密钥备份",
+            "skip_key_backup": "我不想要我的加密消息",
+            "megolm_export": "手动导出密钥",
+            "setup_key_backup_title": "你将失去你的加密消息的访问权",
+            "description": "你确定要登出吗？"
+        },
+        "registration": {
+            "continue_without_email_title": "不使用电子邮箱并继续",
+            "continue_without_email_description": "请注意，如果你不添加电子邮箱并且忘记密码，你将<b>永远失去对你账户的访问权</b>。",
+            "continue_without_email_field_label": "电子邮箱（可选）"
+        },
+        "set_email": {
+            "verification_pending_title": "验证等待中",
+            "verification_pending_description": "请检查你的电子邮箱并点击里面包含的链接。完成时请点击继续。",
+            "description": "这将允许你重置你的密码和接收通知。"
+        }
     },
     "room_list": {
         "sort_unread_first": "优先显示有未读消息的房间",
@@ -3086,7 +2834,8 @@
         "spam_or_propaganda": "垃圾信息或宣传",
         "report_entire_room": "报告整个房间",
         "report_content_to_homeserver": "向你的家服务器管理员举报内容",
-        "description": "举报此消息会将其唯一的“事件ID”发送给你的家服务器的管理员。如果此房间中的消息是加密的，则你的家服务器管理员将无法阅读消息文本，也无法查看任何文件或图片。"
+        "description": "举报此消息会将其唯一的“事件ID”发送给你的家服务器的管理员。如果此房间中的消息是加密的，则你的家服务器管理员将无法阅读消息文本，也无法查看任何文件或图片。",
+        "other_label": "其他"
     },
     "setting": {
         "help_about": {
@@ -3200,7 +2949,22 @@
         "popout": "在弹出式窗口中打开挂件",
         "unpin_to_view_right_panel": "取消固定此小部件以在此面板中查看",
         "set_room_layout": "将我的房间布局设置给所有人",
-        "close_to_view_right_panel": "关闭此小部件以在此面板中查看"
+        "close_to_view_right_panel": "关闭此小部件以在此面板中查看",
+        "modal_title_default": "模态框挂件（Modal Widget）",
+        "modal_data_warning": "此屏幕上的数据与%(widgetDomain)s分享",
+        "capabilities_dialog": {
+            "title": "批准挂件权限",
+            "content_starting_text": "此挂件想要：",
+            "decline_all_permission": "全部拒绝",
+            "remember_Selection": "记住我对此挂件的选择"
+        },
+        "open_id_permissions_dialog": {
+            "title": "允许此挂件验证你的身份",
+            "starting_text": "挂件将会验证你的用户 ID，但将无法为你执行动作：",
+            "remember_selection": "记住"
+        },
+        "error_unable_start_audio_stream_description": "无法开始音频流媒体。",
+        "error_unable_start_audio_stream_title": "开始流直播失败"
     },
     "feedback": {
         "sent": "反馈已发送",
@@ -3209,7 +2973,8 @@
         "may_contact_label": "如果您想跟进或让我测试即将到来的想法，您可以与我联系",
         "pro_type": "专业建议：如果你要发起新问题，请一并提交<debugLogsLink>调试日志</debugLogsLink>，以便我们找出问题根源。",
         "existing_issue_link": "请先查找一下 <existingIssuesLink>Github 上已有的问题</existingIssuesLink>，以免重复。找不到重复问题？<newIssueLink>发起一个吧</newIssueLink>。",
-        "send_feedback_action": "发送反馈"
+        "send_feedback_action": "发送反馈",
+        "can_contact_label": "如果你有任何后续问题，可以联系我"
     },
     "zxcvbn": {
         "suggestions": {
@@ -3273,7 +3038,10 @@
         "error_encountered": "遇到错误 (%(errorDetail)s)。",
         "no_update": "没有可用更新。",
         "new_version_available": "新版本可用。<a>现在更新。</a>",
-        "check_action": "检查更新"
+        "check_action": "检查更新",
+        "error_unable_load_commit": "无法加载提交详情：%(msg)s",
+        "unavailable": "无法获得",
+        "changelog": "更改日志"
     },
     "threads": {
         "all_threads": "所有消息列",
@@ -3287,7 +3055,11 @@
         "empty_tip": "<b>实用提示：</b>悬停在消息上时使用“%(replyInThread)s”。",
         "empty_heading": "用消息列使讨论井然有序",
         "open_thread": "打开消息列",
-        "error_start_thread_existing_relation": "无法从既有关系的事件创建消息列"
+        "error_start_thread_existing_relation": "无法从既有关系的事件创建消息列",
+        "count_of_reply": {
+            "one": "%(count)s 条回复",
+            "other": "%(count)s 条回复"
+        }
     },
     "theme": {
         "light_high_contrast": "浅色高对比",
@@ -3321,7 +3093,41 @@
         "title_when_query_available": "结果",
         "search_placeholder": "搜索名称和描述",
         "no_search_result_hint": "你可能要尝试其他搜索或检查是否有错别字。",
-        "joining_space": "加入中"
+        "joining_space": "加入中",
+        "add_existing_subspace": {
+            "space_dropdown_title": "增加现有的空间",
+            "create_prompt": "想要添加一个新空间？",
+            "create_button": "创建新空间",
+            "filter_placeholder": "搜索空间"
+        },
+        "add_existing_room_space": {
+            "error_heading": "并非所有选中的都被添加",
+            "progress_text": {
+                "one": "正在新增房间……",
+                "other": "正在新增房间……（%(count)s 中的第 %(progress)s 个）"
+            },
+            "dm_heading": "私聊",
+            "space_dropdown_label": "空间选择",
+            "space_dropdown_title": "添加现有房间",
+            "create": "想要添加一个新的房间吗？",
+            "create_prompt": "创建新房间",
+            "subspace_moved_note": "新增空间已移动。"
+        },
+        "room_filter_placeholder": "搜索房间",
+        "leave_dialog_public_rejoin_warning": "除非你被重新邀请，否则你将无法重新加入。",
+        "leave_dialog_only_admin_warning": "你是此空间的唯一管理员。离开它将意味着没有人可以控制它。",
+        "leave_dialog_only_admin_room_warning": "你是某些要离开的房间或空间的唯一管理员。离开将使它们没有任何管理员。",
+        "leave_dialog_title": "离开 %(spaceName)s",
+        "leave_dialog_description": "你即将离开 <spaceName/>。",
+        "leave_dialog_option_intro": "你想俩开此空间内的房间吗？",
+        "leave_dialog_option_none": "不离开任何房间",
+        "leave_dialog_option_all": "离开所有房间",
+        "leave_dialog_option_specific": "离开一些房间",
+        "leave_dialog_action": "离开空间",
+        "preferences": {
+            "sections_section": "要显示的部分",
+            "show_people_in_space": "将您与该空间的成员的聊天进行分组。关闭这个后你将无法在 %(spaceName)s 内看到这些聊天。"
+        }
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "此家服务器未配置显示地图。",
@@ -3345,7 +3151,28 @@
         "click_move_pin": "点击以移动图钉",
         "click_drop_pin": "点击以放置图钉",
         "share_button": "共享位置",
-        "stop_and_close": "停止并关闭"
+        "stop_and_close": "停止并关闭",
+        "error_fetch_location": "无法获取位置",
+        "error_no_perms_title": "你没有权限分享位置",
+        "error_no_perms_description": "你需要拥有正确的权限才能在此房间中共享位置。",
+        "error_send_title": "我们无法发送你的位置",
+        "error_send_description": "%(brand)s无法发送你的位置。请稍后再试。",
+        "live_description": "%(displayName)s的实时位置",
+        "share_type_own": "我当前的位置",
+        "share_type_live": "我的实时位置",
+        "share_type_pin": "放置图钉",
+        "share_type_prompt": "你想分享什么位置类型？",
+        "live_until": "实时分享直至%(expiryTime)s",
+        "live_location_ended": "实时位置已结束",
+        "live_location_error": "实时位置错误",
+        "live_locations_empty": "无实时位置",
+        "close_sidebar": "关闭侧边栏",
+        "error_stopping_live_location": "停止实时位置时出错",
+        "error_sharing_live_location": "分享实时位置时出错",
+        "live_location_active": "你正在分享你的实时位置",
+        "live_location_enabled": "实时位置已启用",
+        "error_sharing_live_location_try_again": "分享你的实时位置时出错，请重试",
+        "error_stopping_live_location_try_again": "停止你的实时位置时出错，请重试"
     },
     "labs_mjolnir": {
         "room_name": "我的封禁列表",
@@ -3412,7 +3239,15 @@
         "address_placeholder": "例如：my-space",
         "address_label": "地址",
         "label": "创建空间",
-        "add_details_prompt_2": "你随时可以更改它们。"
+        "add_details_prompt_2": "你随时可以更改它们。",
+        "subspace_join_rule_restricted_description": "<SpaceName/> 中的任何人都可以找到并加入。",
+        "subspace_join_rule_public_description": "任何人都可以找到并加入这个空间，而不仅仅是 <SpaceName/> 的成员。",
+        "subspace_join_rule_invite_description": "只有受邀者才能找到并加入此空间。",
+        "subspace_dropdown_title": "创建空间",
+        "subspace_beta_notice": "向你管理的空间添加空间。",
+        "subspace_join_rule_label": "空间可见度",
+        "subspace_join_rule_invite_only": "私有空间（仅邀请）",
+        "subspace_existing_space_prompt": "想要添加现有空间？"
     },
     "user_menu": {
         "switch_theme_light": "切换到浅色模式",
@@ -3552,7 +3387,11 @@
         "search": {
             "this_room": "此房间",
             "all_rooms": "全部房间",
-            "field_placeholder": "搜索…"
+            "field_placeholder": "搜索…",
+            "result_count": {
+                "one": "（~%(count)s 个结果）",
+                "other": "（~%(count)s 个结果）"
+            }
         },
         "jump_to_bottom_button": "滚动到最近的消息",
         "jump_read_marker": "跳到第一条未读消息。",
@@ -3561,7 +3400,18 @@
         "creating_room_text": "正在创建房间%(names)s",
         "jump_to_date_beginning": "房间的开头",
         "jump_to_date": "跳至日期",
-        "jump_to_date_prompt": "选个日期以跳转"
+        "jump_to_date_prompt": "选个日期以跳转",
+        "face_pile_tooltip_label": {
+            "one": "查看 1 位成员",
+            "other": "查看全部 %(count)s 位成员"
+        },
+        "face_pile_tooltip_shortcut_joined": "包括你，%(commaSeparatedMembers)s",
+        "face_pile_tooltip_shortcut": "包括 %(commaSeparatedMembers)s",
+        "invites_you_text": "<inviter/> 邀请了你",
+        "face_pile_summary": {
+            "one": "已有你所认识的 %(count)s 个人加入",
+            "other": "已有你所认识的 %(count)s 个人加入"
+        }
     },
     "file_panel": {
         "guest_note": "你必须 <a>注册</a> 以使用此功能",
@@ -3582,7 +3432,9 @@
         "identity_server_no_terms_title": "身份服务器无服务条款",
         "identity_server_no_terms_description_1": "此操作需要访问默认的身份服务器 <server /> 以验证邮箱或电话号码，但此服务器无任何服务条款。",
         "identity_server_no_terms_description_2": "只有在你信任服务器所有者后才能继续。",
-        "inline_intro_text": "接受 <policyLink /> 以继续："
+        "inline_intro_text": "接受 <policyLink /> 以继续：",
+        "summary_identity_server_1": "通过电话或邮箱寻找别人",
+        "summary_identity_server_2": "通过电话或邮箱被寻找"
     },
     "space_settings": {
         "title": "设置 - %(spaceName)s"
@@ -3617,7 +3469,13 @@
         "total_n_votes_voted": {
             "one": "基于 %(count)s 票",
             "other": "基于 %(count)s 票"
-        }
+        },
+        "end_message_no_votes": "投票已经结束。 没有投票。",
+        "end_message": "投票已经结束。 得票最多答案：%(topAnswer)s",
+        "error_ending_title": "结束投票失败",
+        "error_ending_description": "抱歉，投票没有结束。 请再试一次。",
+        "end_title": "结束投票",
+        "end_description": "您确定要结束此投票吗？ 这将显示投票的最终结果并阻止人们投票。"
     },
     "failed_load_async_component": "无法加载！请检查你的网络连接并重试。",
     "upload_failed_generic": "文件《%(fileName)s》上传失败。",
@@ -3662,7 +3520,35 @@
         "error_version_unsupported_space": "用户的家服务器版本不支持空间。",
         "error_version_unsupported_room": "用户的家服务器不支持此房间版本。",
         "error_unknown": "未知服务器错误",
-        "to_space": "邀请至 %(spaceName)s"
+        "to_space": "邀请至 %(spaceName)s",
+        "unable_find_profiles_description_default": "找不到下列 Matrix ID 的用户资料，你还是要邀请吗？",
+        "unable_find_profiles_title": "以下用户可能不存在",
+        "unable_find_profiles_invite_never_warn_label_default": "还是邀请，不用再提醒我",
+        "unable_find_profiles_invite_label_default": "还是邀请",
+        "email_caption": "通过邮箱邀请",
+        "error_dm": "我们无法创建你的私聊。",
+        "error_find_room": "尝试邀请用户时出错。",
+        "error_invite": "我们不能邀请这些用户。请检查你想邀请的用户并重试。",
+        "error_transfer_multiple_target": "通话只能转移到单个用户。",
+        "error_find_user_title": "寻找以下用户失败",
+        "error_find_user_description": "下列用户可能不存在或无效，因此不能被邀请：%(csvNames)s",
+        "recents_section": "最近对话",
+        "suggestions_section": "最近私聊",
+        "email_use_default_is": "使用一个身份服务器以通过邮箱邀请。<default>使用默认（%(defaultIdentityServerName)s）</default>或在<settings>设置</settings>中管理。",
+        "email_use_is": "使用一个身份服务器以通过邮箱邀请。在<settings>设置</settings>中管理。",
+        "start_conversation_name_email_mxid_prompt": "使用某人的名称、电子邮箱地址或用户名来与其开始对话（如 <userId/>）。",
+        "start_conversation_name_mxid_prompt": "使用某人的名字或用户名（如 <userId/>）开始与其进行对话。",
+        "suggestions_disclaimer": "出于隐私考虑，部分建议可能会被隐藏。",
+        "suggestions_disclaimer_prompt": "如果您看不到您要找的人，请将您的邀请链接发送给他们。",
+        "send_link_prompt": "或发送邀请链接",
+        "to_room": "邀请至 %(roomName)s",
+        "name_email_mxid_share_space": "使用某人的名字、电子邮箱地址或用户名（如 <userId/>）邀请他们，或<a>分享此空间</a>。",
+        "name_mxid_share_space": "使用某人的名字、用户名（如 <userId/>）邀请他们，或<a>分享此空间</a>。",
+        "name_email_mxid_share_room": "使用名字、电子邮件地址、用户名（如<userId/>）邀请某人或<a>分享此房间</a>。",
+        "name_mxid_share_room": "使用某人的名字、用户名（如 <userId/>）或<a>分享此房间</a>来邀请他们。",
+        "key_share_warning": "被邀请的人将能够阅读过去的消息。",
+        "transfer_user_directory_tab": "用户目录",
+        "transfer_dial_pad_tab": "拨号盘"
     },
     "scalar": {
         "error_create": "无法创建挂件。",
@@ -3693,7 +3579,21 @@
         "failed_copy": "复制失败",
         "something_went_wrong": "出了点问题！",
         "update_power_level": "权力级别修改失败",
-        "unknown": "未知错误"
+        "unknown": "未知错误",
+        "dialog_description_default": "发生了一个错误。",
+        "edit_history_unsupported": "你的家服务器似乎不支持此功能。",
+        "session_restore": {
+            "clear_storage_description": "登出并删除加密密钥？",
+            "clear_storage_button": "清除存储并登出",
+            "title": "无法恢复会话",
+            "description_1": "我们在尝试恢复你先前的会话时遇到了错误。",
+            "description_2": "如果你之前使用过较新版本的 %(brand)s，则你的会话可能与当前版本不兼容。请关闭此窗口并使用最新版本。",
+            "description_3": "清除本页储存在你浏览器上的数据或许能修复此问题，但也会导致你退出登录并无法读取任何已加密的聊天记录。"
+        },
+        "storage_evicted_title": "缺失会话数据",
+        "storage_evicted_description_1": "一些会话数据，包括加密消息密钥，已缺失。要修复此问题，登出并重新登录，然后从备份恢复密钥。",
+        "storage_evicted_description_2": "你的浏览器可能在磁盘空间不足时删除了此数据。",
+        "unknown_error_code": "未知错误代码"
     },
     "in_space1_and_space2": "在 %(space1Name)s 和 %(space2Name)s 空间。",
     "in_space_and_n_other_spaces": {
@@ -3837,7 +3737,27 @@
         "deactivate_confirm_action": "停用用户",
         "error_deactivate": "停用用户失败",
         "role_label": "<RoomName/> 中的角色",
-        "edit_own_devices": "编辑设备"
+        "edit_own_devices": "编辑设备",
+        "redact": {
+            "no_recent_messages_title": "没有找到 %(user)s 最近发送的消息",
+            "no_recent_messages_description": "请尝试在时间线中向上滚动以查看是否有更早的。",
+            "confirm_title": "删除 %(user)s 最近发送的消息",
+            "confirm_description_2": "对于大量消息，可能会消耗一段时间。在此期间请不要刷新你的客户端。",
+            "confirm_keep_state_label": "保留系统消息",
+            "confirm_keep_state_explainer": "若你也想移除关于此用户的系统消息（例如，成员更改、用户资料更改……），则取消勾选",
+            "confirm_button": {
+                "other": "删除 %(count)s 条消息",
+                "one": "删除 1 条消息"
+            }
+        },
+        "count_of_verified_sessions": {
+            "other": "%(count)s 个已验证的会话",
+            "one": "1 个已验证的会话"
+        },
+        "count_of_sessions": {
+            "other": "%(count)s 个会话",
+            "one": "%(count)s 个会话"
+        }
     },
     "stickers": {
         "empty": "你目前未启用任何贴纸包",
@@ -3871,6 +3791,9 @@
                 "one": "基于 %(count)s 票数的最终结果",
                 "other": "基于 %(count)s 票数的最终结果"
             }
+        },
+        "thread_list": {
+            "context_menu_label": "消息列选项"
         }
     },
     "reject_invitation_dialog": {
@@ -3907,12 +3830,155 @@
     },
     "console_wait": "等等！",
     "cant_load_page": "无法加载页面",
-    "Invalid homeserver discovery response": "无效的家服务器搜索响应",
-    "Failed to get autodiscovery configuration from server": "从服务器获取自动发现配置时失败",
-    "Invalid base_url for m.homeserver": "m.homeserver 的 base_url 无效",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "家服务器链接不像是有效的 Matrix 家服务器",
-    "Invalid identity server discovery response": "无效的身份服务器搜索响应",
-    "Invalid base_url for m.identity_server": "m.identity_server 的 base_url 无效",
-    "Identity server URL does not appear to be a valid identity server": "身份服务器链接不像是有效的身份服务器",
-    "General failure": "一般错误"
+    "General failure": "一般错误",
+    "emoji_picker": {
+        "cancel_search_label": "取消搜索"
+    },
+    "info_tooltip_title": "信息",
+    "language_dropdown_label": "语言下拉菜单",
+    "seshat": {
+        "error_initialising": "消息搜索初始化失败，请检查<a>你的设置</a>以获取更多信息",
+        "warning_kind_files_app": "使用<a>桌面端应用</a>来查看所有加密文件",
+        "warning_kind_search_app": "使用<a>桌面端英语</a>来搜索加密消息",
+        "warning_kind_files": "当前版本的 %(brand)s 不支持查看某些加密文件",
+        "warning_kind_search": "当前版本的 %(brand)s 不支持搜索加密消息",
+        "reset_title": "重置活动存储？",
+        "reset_description": "你大概率不想重置你的活动缩影存储",
+        "reset_explainer": "如果这样做，请注意你的消息并不会被删除，但在重新建立索引时，搜索体验可能会降低片刻",
+        "reset_button": "重置活动存储"
+    },
+    "truncated_list_n_more": {
+        "other": "和 %(count)s 个其他…"
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_required_invalid": "请输入服务器名",
+            "network_dropdown_available_valid": "看着不错",
+            "network_dropdown_available_invalid_forbidden": "你不被允许查看此服务器的房间列表",
+            "network_dropdown_available_invalid": "找不到此服务器或其房间列表",
+            "network_dropdown_your_server_description": "你的服务器",
+            "network_dropdown_remove_server_adornment": "移除服务器“%(roomServer)s”",
+            "network_dropdown_add_dialog_title": "添加新服务器",
+            "network_dropdown_add_dialog_description": "输入你想探索的新服务器的服务器名。",
+            "network_dropdown_add_dialog_placeholder": "服务器名",
+            "network_dropdown_add_server_option": "添加新的服务器…",
+            "network_dropdown_selected_label_instance": "显示：%(instance)s房间（%(server)s）",
+            "network_dropdown_selected_label": "显示：Matrix房间"
+        }
+    },
+    "dialog_close_label": "关闭对话框",
+    "redact": {
+        "error": "你无法删除这条消息。(%(code)s)",
+        "ongoing": "正在移除…",
+        "confirm_button": "确认移除",
+        "reason_label": "理由（可选）"
+    },
+    "forward": {
+        "no_perms_title": "你无权执行此操作",
+        "sending": "正在发送",
+        "sent": "已发送",
+        "open_room": "打开房间",
+        "send_label": "发送",
+        "message_preview_heading": "消息预览",
+        "filter_placeholder": "搜索房间或用户"
+    },
+    "integrations": {
+        "disabled_dialog_title": "集成已禁用",
+        "impossible_dialog_title": "集成未被允许",
+        "impossible_dialog_description": "你的 %(brand)s 不允许你使用集成管理器来完成此操作，请联系管理员。"
+    },
+    "lazy_loading": {
+        "disabled_description1": "你之前在 %(host)s 上开启了 %(brand)s 的成员列表延迟加载设置。目前版本中延迟加载功能已被停用。因为本地缓存在这两个设置项上不相容，%(brand)s 需要重新同步你的账户。",
+        "disabled_description2": "如果别的 %(brand)s 版本在别的标签页中仍然开启，请关闭它，因为在同一宿主上同时使用开启了延迟加载和关闭了延迟加载的 %(brand)s 会导致问题。",
+        "disabled_title": "本地缓存不兼容",
+        "disabled_action": "清除缓存并重新同步",
+        "resync_description": "通过仅在需要时加载其他用户的信息，%(brand)s 现在使用的内存减少到了原来的三分之一至五分之一。 请等待与服务器重新同步！",
+        "resync_title": "正在更新 %(brand)s"
+    },
+    "message_edit_dialog_title": "消息编辑历史",
+    "server_offline": {
+        "empty_timeline": "全数阅毕。",
+        "title": "服务器未响应",
+        "description": "你的服务器未响应你的一些请求。下方是一些最可能的原因。",
+        "description_1": "服务器（%(serverName)s）花了太长时间响应。",
+        "description_2": "你的防火墙或防病毒软件阻止了此请求。",
+        "description_3": "一个浏览器扩展阻止了此请求。",
+        "description_4": "此服务器为离线状态。",
+        "description_5": "此服务器拒绝了你的请求。",
+        "description_6": "你的区域难以连接上互联网。",
+        "description_7": "尝试联系服务器时出现连接错误。",
+        "description_8": "服务器没有配置为提示错误是什么（CORS）。",
+        "recent_changes_heading": "尚未被接受的最近更改"
+    },
+    "spotlight_dialog": {
+        "count_of_members": {
+            "one": "%(count)s个成员",
+            "other": "%(count)s个成员"
+        },
+        "public_rooms_label": "公共房间",
+        "heading_with_query": "使用 \"%(query)s\" 来搜索",
+        "heading_without_query": "搜索",
+        "spaces_title": "你所在的空间",
+        "other_rooms_in_space": "%(spaceName)s 中的其他房间",
+        "join_button_text": "加入%(roomAddress)s",
+        "result_may_be_hidden_privacy_warning": "为保护隐私，一些结果可能被隐藏",
+        "cant_find_person_helpful_hint": "若你无法看到你正在查找的人，给他们发送你的邀请链接。",
+        "copy_link_text": "复制邀请链接",
+        "result_may_be_hidden_warning": "一些结果可能被隐藏",
+        "cant_find_room_helpful_hint": "若你找不到要找的房间，请请求邀请或创建新房间。",
+        "create_new_room_button": "创建新房间",
+        "group_chat_section_title": "其他选项",
+        "start_group_chat_button": "发起群聊天",
+        "message_search_section_title": "其他搜索",
+        "recent_searches_section_title": "最近的搜索",
+        "recently_viewed_section_title": "最近查看",
+        "search_dialog": "搜索对话",
+        "remove_filter": "移除%(filter)s搜索过滤条件",
+        "search_messages_hint": "要搜索消息，请在房间顶部查找此图标<icon/>",
+        "keyboard_scroll_hint": "用<arrows/>来滚动"
+    },
+    "share": {
+        "title_room": "分享房间",
+        "permalink_most_recent": "最新消息的链接",
+        "title_user": "分享用户",
+        "title_message": "分享房间消息",
+        "permalink_message": "选中消息的链接",
+        "link_title": "房间链接"
+    },
+    "upload_file": {
+        "title_progress": "上传文件（%(total)s 中之 %(current)s）",
+        "title": "上传文件",
+        "upload_all_button": "全部上传",
+        "error_file_too_large": "此文件<b>过大</b>而不能上传。文件大小限制是 %(limit)s 但此文件为 %(sizeOfThisFile)s。",
+        "error_files_too_large": "这些文件<b>过大</b>而不能上传。文件大小限制为 %(limit)s。",
+        "error_some_files_too_large": "一些文件<b>过大</b>而不能上传。文件大小限制为 %(limit)s。",
+        "upload_n_others_button": {
+            "other": "上传 %(count)s 个别的文件",
+            "one": "上传 %(count)s 个别的文件"
+        },
+        "cancel_all_button": "全部取消",
+        "error_title": "上传错误"
+    },
+    "restore_key_backup_dialog": {
+        "load_error_content": "无法获取备份状态",
+        "recovery_key_mismatch_title": "安全密钥不符",
+        "recovery_key_mismatch_description": "无法使用此安全密钥解密备份：请检查你输入的安全密钥是否正确。",
+        "incorrect_security_phrase_title": "安全短语错误",
+        "incorrect_security_phrase_dialog": "无法使用此安全短语解密备份：请确认你是否输入了正确的安全短语。",
+        "restore_failed_error": "无法还原备份",
+        "no_backup_error": "找不到备份！",
+        "keys_restored_title": "已恢复密钥",
+        "count_of_decryption_failures": "%(failedCount)s 个会话解密失败！",
+        "count_of_successfully_restored_keys": "成功恢复了 %(sessionCount)s 个密钥",
+        "enter_phrase_title": "输入安全短语",
+        "key_backup_warning": "<b>警告</b>：你应此只在受信任的电脑上设置密钥备份。",
+        "enter_phrase_description": "无法通过你的安全短语访问你的安全消息历史记录并设置安全通信。",
+        "phrase_forgotten_text": "如果你忘记了你的安全短语，你可以<button1>使用你的安全密钥</button1>或<button2>设置新的恢复选项</button2>",
+        "enter_key_title": "输入安全密钥",
+        "key_is_valid": "看起来是有效的安全密钥！",
+        "key_is_invalid": "安全密钥无效",
+        "enter_key_description": "通过输入你的安全密钥来访问你的安全消息历史记录并设置安全通信。",
+        "key_forgotten_text": "如果你忘记了你的安全密钥，你可以<button>设置新的恢复选项</button>",
+        "load_keys_progress": "%(total)s 个密钥中之 %(completed)s 个已恢复"
+    }
 }

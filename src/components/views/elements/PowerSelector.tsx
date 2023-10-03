@@ -151,7 +151,7 @@ export default class PowerSelector<K extends undefined | string> extends React.C
 
     public render(): React.ReactNode {
         let picker;
-        const label = typeof this.props.label === "undefined" ? _t("Power level") : this.props.label;
+        const label = typeof this.props.label === "undefined" ? _t("power_level|label") : this.props.label;
         if (this.state.custom) {
             picker = (
                 <Field
@@ -173,7 +173,7 @@ export default class PowerSelector<K extends undefined | string> extends React.C
                     text: Roles.textualPowerLevel(level, this.props.usersDefault),
                 };
             });
-            options.push({ value: CUSTOM_VALUE, text: _t("Custom level") });
+            options.push({ value: CUSTOM_VALUE, text: _t("power_level|custom_level") });
             const optionsElements = options.map((op) => {
                 return (
                     <option value={op.value} key={op.value} data-testid={`power-level-option-${op.value}`}>

@@ -166,16 +166,8 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
     private renderSetupBackupDialog(): React.ReactNode {
         const description = (
             <div>
-                <p>
-                    {_t(
-                        "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.",
-                    )}
-                </p>
-                <p>
-                    {_t(
-                        "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.",
-                    )}
-                </p>
+                <p>{_t("auth|logout_dialog|setup_secure_backup_description_1")}</p>
+                <p>{_t("auth|logout_dialog|setup_secure_backup_description_2")}</p>
                 <p>{_t("encryption|setup_secure_backup|explainer")}</p>
             </div>
         );
@@ -186,7 +178,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
         } else {
             // if there's an error fetching the backup info, we'll just assume there's
             // no backup for the purpose of the button caption
-            setupButtonCaption = _t("Start using Key Backup");
+            setupButtonCaption = _t("auth|logout_dialog|use_key_backup");
         }
 
         const dialogContent = (
@@ -200,12 +192,12 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
                     onPrimaryButtonClick={this.onSetRecoveryMethodClick}
                     focus={true}
                 >
-                    <button onClick={this.onLogoutConfirm}>{_t("I don't want my encrypted messages")}</button>
+                    <button onClick={this.onLogoutConfirm}>{_t("auth|logout_dialog|skip_key_backup")}</button>
                 </DialogButtons>
                 <details>
                     <summary>{_t("common|advanced")}</summary>
                     <p>
-                        <button onClick={this.onExportE2eKeysClicked}>{_t("Manually export keys")}</button>
+                        <button onClick={this.onExportE2eKeysClicked}>{_t("auth|logout_dialog|megolm_export")}</button>
                     </p>
                 </details>
             </div>
@@ -215,7 +207,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
         // confirms the action.
         return (
             <BaseDialog
-                title={_t("You'll lose access to your encrypted messages")}
+                title={_t("auth|logout_dialog|setup_key_backup_title")}
                 contentId="mx_Dialog_content"
                 hasCancel={true}
                 onFinished={this.onFinished}
@@ -246,7 +238,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
                     <QuestionDialog
                         hasCancelButton={true}
                         title={_t("action|sign_out")}
-                        description={_t("Are you sure you want to sign out?")}
+                        description={_t("auth|logout_dialog|description")}
                         button={_t("action|sign_out")}
                         onFinished={this.onFinished}
                     />

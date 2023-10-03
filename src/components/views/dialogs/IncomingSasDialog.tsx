@@ -176,31 +176,19 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         }
 
         const userDetailText = [
-            <p key="p1">
-                {_t(
-                    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.",
-                )}
-            </p>,
+            <p key="p1">{_t("encryption|verification|incoming_sas_user_dialog_text_1")}</p>,
             <p key="p2">
                 {_t(
                     // NB. Below wording adjusted to singular 'session' until we have
                     // cross-signing
-                    "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.",
+                    "encryption|verification|incoming_sas_user_dialog_text_2",
                 )}
             </p>,
         ];
 
         const selfDetailText = [
-            <p key="p1">
-                {_t(
-                    "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.",
-                )}
-            </p>,
-            <p key="p2">
-                {_t(
-                    "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.",
-                )}
-            </p>,
+            <p key="p1">{_t("encryption|verification|incoming_sas_device_dialog_text_1")}</p>,
+            <p key="p2">{_t("encryption|verification|incoming_sas_device_dialog_text_2")}</p>,
         ];
 
         return (
@@ -234,7 +222,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         return (
             <div>
                 <Spinner />
-                <p>{_t("Waiting for partner to confirm…")}</p>
+                <p>{_t("encryption|verification|incoming_sas_dialog_waiting")}</p>
             </div>
         );
     }
@@ -268,7 +256,11 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         }
 
         return (
-            <BaseDialog title={_t("Incoming Verification Request")} onFinished={this.onFinished} fixedWidth={false}>
+            <BaseDialog
+                title={_t("encryption|verification|incoming_sas_dialog_title")}
+                onFinished={this.onFinished}
+                fixedWidth={false}
+            >
                 {body}
             </BaseDialog>
         );

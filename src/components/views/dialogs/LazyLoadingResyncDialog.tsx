@@ -27,15 +27,12 @@ interface IProps {
 
 const LazyLoadingResyncDialog: React.FC<IProps> = (props) => {
     const brand = SdkConfig.get().brand;
-    const description = _t(
-        "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!",
-        { brand },
-    );
+    const description = _t("lazy_loading|resync_description", { brand });
 
     return (
         <QuestionDialog
             hasCancelButton={false}
-            title={_t("Updating %(brand)s", { brand })}
+            title={_t("lazy_loading|resync_title", { brand })}
             description={<div>{description}</div>}
             button={_t("action|ok")}
             onFinished={props.onFinished}

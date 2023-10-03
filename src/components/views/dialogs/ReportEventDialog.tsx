@@ -246,7 +246,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                 // as configured in the room's state events.
                 const dmRoomId = await ensureDMExists(client, this.moderation.moderationBotUserId);
                 if (!dmRoomId) {
-                    throw new UserFriendlyError("Unable to create room with moderation bot");
+                    throw new UserFriendlyError("report_content|error_create_room_moderation_bot");
                 }
 
                 await client.sendEvent(dmRoomId, ABUSE_EVENT_TYPE, {
@@ -320,37 +320,25 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                     subtitle = _t("report_content|nature_disagreement");
                     break;
                 case Nature.Toxic:
-                    subtitle = _t(
-                        "This user is displaying toxic behaviour, for instance by insulting other users or sharing adult-only content in a family-friendly room or otherwise violating the rules of this room.\nThis will be reported to the room moderators.",
-                    );
+                    subtitle = _t("report_content|nature_toxic");
                     break;
                 case Nature.Illegal:
-                    subtitle = _t(
-                        "This user is displaying illegal behaviour, for instance by doxing people or threatening violence.\nThis will be reported to the room moderators who may escalate this to legal authorities.",
-                    );
+                    subtitle = _t("report_content|nature_illegal");
                     break;
                 case Nature.Spam:
-                    subtitle = _t(
-                        "This user is spamming the room with ads, links to ads or to propaganda.\nThis will be reported to the room moderators.",
-                    );
+                    subtitle = _t("report_content|nature_spam");
                     break;
                 case NonStandardValue.Admin:
                     if (client.isRoomEncrypted(this.props.mxEvent.getRoomId()!)) {
-                        subtitle = _t(
-                            "This room is dedicated to illegal or toxic content or the moderators fail to moderate illegal or toxic content.\nThis will be reported to the administrators of %(homeserver)s. The administrators will NOT be able to read the encrypted content of this room.",
-                            { homeserver: homeServerName },
-                        );
+                        subtitle = _t("report_content|nature_nonstandard_admin_encrypted", {
+                            homeserver: homeServerName,
+                        });
                     } else {
-                        subtitle = _t(
-                            "This room is dedicated to illegal or toxic content or the moderators fail to moderate illegal or toxic content.\nThis will be reported to the administrators of %(homeserver)s.",
-                            { homeserver: homeServerName },
-                        );
+                        subtitle = _t("report_content|nature_nonstandard_admin", { homeserver: homeServerName });
                     }
                     break;
                 case Nature.Other:
-                    subtitle = _t(
-                        "Any other reason. Please describe the problem.\nThis will be reported to the room moderators.",
-                    );
+                    subtitle = _t("report_content|nature_other");
                     break;
                 default:
                     subtitle = _t("report_content|nature");
@@ -411,7 +399,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             checked={this.state.nature == Nature.Other}
                             onChange={this.onNatureChosen}
                         >
-                            {_t("Other")}
+                            {_t("report_content|other_label")}
                         </StyledRadioButton>
                         <p>{subtitle}</p>
                         <Field
@@ -447,11 +435,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                 contentId="mx_ReportEventDialog"
             >
                 <div className="mx_ReportEventDialog" id="mx_ReportEventDialog">
-                    <p>
-                        {_t(
-                            "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.",
-                        )}
-                    </p>
+                    <p>{_t("report_content|description")}</p>
                     {adminMessage}
                     <Field
                         className="mx_ReportEventDialog_reason"

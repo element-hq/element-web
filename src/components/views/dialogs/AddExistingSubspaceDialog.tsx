@@ -36,7 +36,7 @@ const AddExistingSubspaceDialog: React.FC<IProps> = ({ space, onCreateSubspaceCl
         <BaseDialog
             title={
                 <SubspaceSelector
-                    title={_t("Add existing space")}
+                    title={_t("space|add_existing_subspace|space_dropdown_title")}
                     space={space}
                     value={selectedSpace}
                     onChange={setSelectedSpace}
@@ -53,13 +53,13 @@ const AddExistingSubspaceDialog: React.FC<IProps> = ({ space, onCreateSubspaceCl
                     onFinished={onFinished}
                     footerPrompt={
                         <>
-                            <div>{_t("Want to add a new space instead?")}</div>
+                            <div>{_t("space|add_existing_subspace|create_prompt")}</div>
                             <AccessibleButton onClick={onCreateSubspaceClick} kind="link">
-                                {_t("Create a new space")}
+                                {_t("space|add_existing_subspace|create_button")}
                             </AccessibleButton>
                         </>
                     }
-                    filterPlaceholder={_t("Search for spaces")}
+                    filterPlaceholder={_t("space|add_existing_subspace|filter_placeholder")}
                     spacesRenderer={defaultSpacesRenderer}
                 />
             </MatrixClientContext.Provider>

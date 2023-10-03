@@ -97,7 +97,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
         if (userId === myUserId) {
             return _t("timeline|m.key.verification.request|you_accepted");
         } else {
-            return _t("%(name)s accepted", {
+            return _t("timeline|m.key.verification.request|user_accepted", {
                 name: getNameForEventRoom(client, userId, this.props.mxEvent.getRoomId()!),
             });
         }
@@ -116,11 +116,11 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             }
         } else {
             if (declined) {
-                return _t("%(name)s declined", {
+                return _t("timeline|m.key.verification.request|user_declined", {
                     name: getNameForEventRoom(client, userId, this.props.mxEvent.getRoomId()!),
                 });
             } else {
-                return _t("%(name)s cancelled", {
+                return _t("timeline|m.key.verification.request|user_cancelled", {
                     name: getNameForEventRoom(client, userId, this.props.mxEvent.getRoomId()!),
                 });
             }
@@ -164,7 +164,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
 
         if (!request.initiatedByMe) {
             const name = getNameForEventRoom(client, request.otherUserId, mxEvent.getRoomId()!);
-            title = _t("%(name)s wants to verify", { name });
+            title = _t("timeline|m.key.verification.request|user_wants_to_verify", { name });
             subtitle = userLabelForEventRoom(client, request.otherUserId, mxEvent.getRoomId()!);
             if (canAcceptVerificationRequest(request)) {
                 stateNode = (

@@ -47,11 +47,11 @@ const KeySignatureUploadFailedDialog: React.FC<IProps> = ({ failures, source, co
     const onCancel = useRef(onFinished);
 
     const causes = new Map([
-        ["_afterCrossSigningLocalKeyChange", _t("a new master key signature")],
-        ["checkOwnCrossSigningTrust", _t("a new cross-signing key signature")],
-        ["setDeviceVerification", _t("a device cross-signing signature")],
+        ["_afterCrossSigningLocalKeyChange", _t("encryption|key_signature_upload_failed_master_key_signature")],
+        ["checkOwnCrossSigningTrust", _t("encryption|key_signature_upload_failed_cross_signing_key_signature")],
+        ["setDeviceVerification", _t("encryption|key_signature_upload_failed_device_cross_signing_key_signature")],
     ]);
-    const defaultCause = _t("a key signature");
+    const defaultCause = _t("encryption|key_signature_upload_failed_key_signature");
 
     const onRetry = useCallback(async (): Promise<void> => {
         try {
@@ -78,7 +78,7 @@ const KeySignatureUploadFailedDialog: React.FC<IProps> = ({ failures, source, co
 
         body = (
             <div>
-                <p>{_t("%(brand)s encountered an error during upload of:", { brand })}</p>
+                <p>{_t("encryption|key_signature_upload_failed_body", { brand })}</p>
                 <p>{reason}</p>
                 {retrying && <Spinner />}
                 <pre>{JSON.stringify(failures, null, 2)}</pre>
@@ -92,9 +92,11 @@ const KeySignatureUploadFailedDialog: React.FC<IProps> = ({ failures, source, co
             </div>
         );
     } else {
-        let text = _t("Upload completed");
+        let text = _t("encryption|key_signature_upload_completed");
         if (!success) {
-            text = cancelled ? _t("Cancelled signature upload") : _t("Unable to upload");
+            text = cancelled
+                ? _t("encryption|key_signature_upload_cancelled")
+                : _t("encryption|key_signature_upload_failed");
         }
 
         body = (
@@ -107,7 +109,11 @@ const KeySignatureUploadFailedDialog: React.FC<IProps> = ({ failures, source, co
 
     return (
         <BaseDialog
-            title={success ? _t("Signature upload success") : _t("Signature upload failed")}
+            title={
+                success
+                    ? _t("encryption|key_signature_upload_success_title")
+                    : _t("encryption|key_signature_upload_failed_title")
+            }
             fixedWidth={false}
             onFinished={() => {}}
         >

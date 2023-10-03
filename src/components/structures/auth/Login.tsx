@@ -19,7 +19,7 @@ import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 import { SSOFlow, SSOAction } from "matrix-js-sdk/src/matrix";
 
-import { _t, _td, UserFriendlyError } from "../../../languageHandler";
+import { _t, UserFriendlyError } from "../../../languageHandler";
 import Login, { ClientLoginFlow, OidcNativeFlow } from "../../../Login";
 import { messageForConnectionError, messageForLoginError } from "../../../utils/ErrorUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
@@ -41,16 +41,6 @@ import { filterBoolean } from "../../../utils/arrays";
 import { Features } from "../../../settings/Settings";
 import { startOidcLogin } from "../../../utils/oidc/authorize";
 
-// These are used in several places, and come from the js-sdk's autodiscovery
-// stuff. We define them here so that they'll be picked up by i18n.
-_td("Invalid homeserver discovery response");
-_td("Failed to get autodiscovery configuration from server");
-_td("Invalid base_url for m.homeserver");
-_td("Homeserver URL does not appear to be a valid Matrix homeserver");
-_td("Invalid identity server discovery response");
-_td("Invalid base_url for m.identity_server");
-_td("Identity server URL does not appear to be a valid identity server");
-_td("General failure");
 interface IProps {
     serverConfig: ValidatedServerConfig;
     // If true, the component will consider itself busy.

@@ -271,7 +271,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         });
 
         const caption = (this.props.member as ThreepidMember).isEmail
-            ? _t("Invite by email")
+            ? _t("invite|email_caption")
             : this.highlightName(userIdentifier || this.props.member.userId);
 
         return (
@@ -566,7 +566,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             logger.error(err);
             this.setState({
                 busy: false,
-                errorText: _t("We couldn't create your DM."),
+                errorText: _t("invite|error_dm"),
             });
         }
     };
@@ -584,11 +584,9 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             onGiveUp: () => {
                 this.setBusy(false);
             },
-            description: _t(
-                "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?",
-            ),
-            inviteNeverWarnLabel: _t("Start DM anyway and never warn me again"),
-            inviteLabel: _t("Start DM anyway"),
+            description: _t("invite|ask_anyway_description"),
+            inviteNeverWarnLabel: _t("invite|ask_anyway_never_warn_label"),
+            inviteLabel: _t("invite|ask_anyway_label"),
         });
     }
 
@@ -605,7 +603,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             logger.error("Failed to find the room to invite users to");
             this.setState({
                 busy: false,
-                errorText: _t("Something went wrong trying to invite the users."),
+                errorText: _t("invite|error_find_room"),
             });
             return;
         }
@@ -620,9 +618,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             logger.error(err);
             this.setState({
                 busy: false,
-                errorText: _t(
-                    "We couldn't invite those users. Please check the users you want to invite and try again.",
-                ),
+                errorText: _t("invite|error_invite"),
             });
         }
     };
@@ -635,7 +631,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             const targetIds = targets.map((t) => t.userId);
             if (targetIds.length > 1) {
                 this.setState({
-                    errorText: _t("A call can only be transferred to a single user."),
+                    errorText: _t("invite|error_transfer_multiple_target"),
                 });
                 return;
             }
@@ -940,11 +936,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         if (failed.length > 0) {
             Modal.createDialog(QuestionDialog, {
-                title: _t("Failed to find the following users"),
-                description: _t(
-                    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s",
-                    { csvNames: failed.join(", ") },
-                ),
+                title: _t("invite|error_find_user_title"),
+                description: _t("invite|error_find_user_description", { csvNames: failed.join(", ") }),
                 button: _t("action|ok"),
             });
         }
@@ -991,10 +984,10 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         let showNum = kind === "recents" ? this.state.numRecentsShown : this.state.numSuggestionsShown;
         const showMoreFn = kind === "recents" ? this.showMoreRecents.bind(this) : this.showMoreSuggestions.bind(this);
         const lastActive = (m: Result): number | undefined => (kind === "recents" ? m.lastActive : undefined);
-        let sectionName = kind === "recents" ? _t("Recent Conversations") : _t("common|suggestions");
+        let sectionName = kind === "recents" ? _t("invite|recents_section") : _t("common|suggestions");
 
         if (this.props.kind === InviteKind.Invite) {
-            sectionName = kind === "recents" ? _t("Recently Direct Messaged") : _t("common|suggestions");
+            sectionName = kind === "recents" ? _t("invite|suggestions_section") : _t("common|suggestions");
         }
 
         // Mix in the server results if we have any, but only if we're searching. We track the additional
@@ -1134,7 +1127,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             return (
                 <div className="mx_InviteDialog_identityServer">
                     {_t(
-                        "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.",
+                        "invite|email_use_default_is",
                         {
                             defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
                         },
@@ -1157,7 +1150,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             return (
                 <div className="mx_InviteDialog_identityServer">
                     {_t(
-                        "Use an identity server to invite by email. Manage in <settings>Settings</settings>.",
+                        "invite|email_use_is",
                         {},
                         {
                             settings: (sub) => (
@@ -1281,11 +1274,11 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         const cli = MatrixClientPeg.safeGet();
         const userId = cli.getUserId()!;
         if (this.props.kind === InviteKind.Dm) {
-            title = _t("Direct Messages");
+            title = _t("space|add_existing_room_space|dm_heading");
 
             if (identityServersEnabled) {
                 helpText = _t(
-                    "Start a conversation with someone using their name, email address or username (like <userId/>).",
+                    "invite|start_conversation_name_email_mxid_prompt",
                     {},
                     {
                         userId: () => {
@@ -1299,7 +1292,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 );
             } else {
                 helpText = _t(
-                    "Start a conversation with someone using their name or username (like <userId/>).",
+                    "invite|start_conversation_name_mxid_prompt",
                     {},
                     {
                         userId: () => {
@@ -1317,14 +1310,14 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             goButtonFn = this.checkProfileAndStartDm;
             extraSection = (
                 <div className="mx_InviteDialog_section_hidden_suggestions_disclaimer">
-                    <span>{_t("Some suggestions may be hidden for privacy.")}</span>
-                    <p>{_t("If you can't see who you're looking for, send them your invite link below.")}</p>
+                    <span>{_t("invite|suggestions_disclaimer")}</span>
+                    <p>{_t("invite|suggestions_disclaimer_prompt")}</p>
                 </div>
             );
             const link = makeUserPermalink(MatrixClientPeg.safeGet().getSafeUserId());
             footer = (
                 <div className="mx_InviteDialog_footer">
-                    <h3>{_t("Or send invite link")}</h3>
+                    <h3>{_t("invite|send_link_prompt")}</h3>
                     <CopyableText getTextToCopy={() => makeUserPermalink(MatrixClientPeg.safeGet().getSafeUserId())}>
                         <a className="mx_InviteDialog_footer_link" href={link} onClick={this.onLinkClick}>
                             {link}
@@ -1340,30 +1333,22 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 ? _t("invite|to_space", {
                       spaceName: room?.name || _t("common|unnamed_space"),
                   })
-                : _t("Invite to %(roomName)s", {
+                : _t("invite|to_room", {
                       roomName: room?.name || _t("common|unnamed_room"),
                   });
 
             let helpTextUntranslated;
             if (isSpace) {
                 if (identityServersEnabled) {
-                    helpTextUntranslated = _td(
-                        "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.",
-                    );
+                    helpTextUntranslated = _td("invite|name_email_mxid_share_space");
                 } else {
-                    helpTextUntranslated = _td(
-                        "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.",
-                    );
+                    helpTextUntranslated = _td("invite|name_mxid_share_space");
                 }
             } else {
                 if (identityServersEnabled) {
-                    helpTextUntranslated = _td(
-                        "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.",
-                    );
+                    helpTextUntranslated = _td("invite|name_email_mxid_share_room");
                 } else {
-                    helpTextUntranslated = _td(
-                        "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.",
-                    );
+                    helpTextUntranslated = _td("invite|name_mxid_share_room");
                 }
             }
 
@@ -1401,19 +1386,19 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     keySharingWarning = (
                         <p className="mx_InviteDialog_helpText">
                             <InfoIcon height={14} width={14} />
-                            {" " + _t("Invited people will be able to read old messages.")}
+                            {" " + _t("invite|key_share_warning")}
                         </p>
                     );
                 }
             }
         } else if (this.props.kind === InviteKind.CallTransfer) {
-            title = _t("Transfer");
+            title = _t("action|transfer");
 
             consultConnectSection = (
                 <div className="mx_InviteDialog_transferConsultConnect">
                     <label>
                         <input type="checkbox" checked={this.state.consultFirst} onChange={this.onConsultFirstChange} />
-                        {_t("Consult first")}
+                        {_t("voip|transfer_consult_first_label")}
                     </label>
                     <AccessibleButton
                         kind="secondary"
@@ -1427,7 +1412,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                         onClick={this.transferCall}
                         disabled={!hasSelection && this.state.dialPadValue === ""}
                     >
-                        {_t("Transfer")}
+                        {_t("action|transfer")}
                     </AccessibleButton>
                 </div>
             );
@@ -1450,11 +1435,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         if (!this.canInviteMore() || (this.hasFilterAtLeastOneEmail() && !this.canInviteThirdParty())) {
             // We are in DM case here, because of the checks in canInviteMore() / canInviteThirdParty().
-            onlyOneThreepidNote = (
-                <div className="mx_InviteDialog_oneThreepid">
-                    {_t("Invites by email can only be sent one at a time")}
-                </div>
-            );
+            onlyOneThreepidNote = <div className="mx_InviteDialog_oneThreepid">{_t("invite|email_limit_one")}</div>;
         } else {
             results = (
                 <div className="mx_InviteDialog_userSections">
@@ -1487,7 +1468,12 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         let dialogContent;
         if (this.props.kind === InviteKind.CallTransfer) {
             const tabs: NonEmptyArray<Tab<TabId>> = [
-                new Tab(TabId.UserDirectory, _td("User Directory"), "mx_InviteDialog_userDirectoryIcon", usersSection),
+                new Tab(
+                    TabId.UserDirectory,
+                    _td("invite|transfer_user_directory_tab"),
+                    "mx_InviteDialog_userDirectoryIcon",
+                    usersSection,
+                ),
             ];
 
             const backspaceButton = <DialPadBackspaceButton onBackspacePress={this.onDeletePress} />;
@@ -1525,7 +1511,14 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     <Dialpad hasDial={false} onDigitPress={this.onDigitPress} onDeletePress={this.onDeletePress} />
                 </div>
             );
-            tabs.push(new Tab(TabId.DialPad, _td("Dial pad"), "mx_InviteDialog_dialPadIcon", dialPadSection));
+            tabs.push(
+                new Tab(
+                    TabId.DialPad,
+                    _td("invite|transfer_dial_pad_tab"),
+                    "mx_InviteDialog_dialPadIcon",
+                    dialPadSection,
+                ),
+            );
             dialogContent = (
                 <React.Fragment>
                     <TabbedView

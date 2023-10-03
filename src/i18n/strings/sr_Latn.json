@@ -1,5 +1,4 @@
 {
-    "Send": "Pošalji",
     "Sun": "Ned",
     "Mon": "Pon",
     "Tue": "Uto",
@@ -27,7 +26,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s%(day)s%(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s%(day)s%(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "Start a group chat": "Pokreni grupni razgovor",
     "common": {
         "error": "Greška",
         "attachment": "Prilog",
@@ -149,5 +147,11 @@
     },
     "notifications": {
         "default": "Podrazumevano"
+    },
+    "forward": {
+        "send_label": "Pošalji"
+    },
+    "spotlight_dialog": {
+        "start_group_chat_button": "Pokreni grupni razgovor"
     }
 }

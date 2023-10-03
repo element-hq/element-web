@@ -49,7 +49,7 @@ export default class UploadFailureDialog extends React.Component<IProps> {
         let buttons;
         if (this.props.totalFiles === 1 && this.props.badFiles.length === 1) {
             message = _t(
-                "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.",
+                "upload_file|error_file_too_large",
                 {
                     limit: fileSize(this.props.contentMessages.getUploadLimit()!),
                     sizeOfThisFile: fileSize(this.props.badFiles[0].size),
@@ -68,7 +68,7 @@ export default class UploadFailureDialog extends React.Component<IProps> {
             );
         } else if (this.props.totalFiles === this.props.badFiles.length) {
             message = _t(
-                "These files are <b>too large</b> to upload. The file size limit is %(limit)s.",
+                "upload_file|error_files_too_large",
                 {
                     limit: fileSize(this.props.contentMessages.getUploadLimit()!),
                 },
@@ -86,7 +86,7 @@ export default class UploadFailureDialog extends React.Component<IProps> {
             );
         } else {
             message = _t(
-                "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.",
+                "upload_file|error_some_files_too_large",
                 {
                     limit: fileSize(this.props.contentMessages.getUploadLimit()!),
                 },
@@ -97,10 +97,10 @@ export default class UploadFailureDialog extends React.Component<IProps> {
             const howManyOthers = this.props.totalFiles - this.props.badFiles.length;
             buttons = (
                 <DialogButtons
-                    primaryButton={_t("Upload %(count)s other files", { count: howManyOthers })}
+                    primaryButton={_t("upload_file|upload_n_others_button", { count: howManyOthers })}
                     onPrimaryButtonClick={this.onUploadClick}
                     hasCancel={true}
-                    cancelButton={_t("Cancel All")}
+                    cancelButton={_t("upload_file|cancel_all_button")}
                     onCancel={this.onCancelClick}
                     focus={true}
                 />
@@ -111,7 +111,7 @@ export default class UploadFailureDialog extends React.Component<IProps> {
             <BaseDialog
                 className="mx_UploadFailureDialog"
                 onFinished={this.onCancelClick}
-                title={_t("Upload Error")}
+                title={_t("upload_file|error_title")}
                 contentId="mx_Dialog_content"
             >
                 <div id="mx_Dialog_content">

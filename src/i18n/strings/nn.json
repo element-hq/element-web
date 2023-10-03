@@ -26,23 +26,13 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "Restricted": "Avgrensa",
     "Moderator": "Moderator",
-    "Send": "Send",
     "Warning!": "Åtvaring!",
-    "and %(count)s others...": {
-        "other": "og %(count)s andre...",
-        "one": "og ein annan..."
-    },
     "%(duration)ss": "%(duration)ss",
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)st",
     "%(duration)sd": "%(duration)sd",
     "Unnamed room": "Rom utan namn",
-    "(~%(count)s results)": {
-        "other": "(~%(count)s resultat)",
-        "one": "(~%(count)s resultat)"
-    },
     "Join Room": "Bli med i rom",
-    "unknown error code": "ukjend feilkode",
     "Sunday": "søndag",
     "Monday": "måndag",
     "Tuesday": "tysdag",
@@ -52,74 +42,15 @@
     "Saturday": "laurdag",
     "Today": "i dag",
     "Yesterday": "i går",
-    "Email address": "Epostadresse",
     "Delete Widget": "Slett Widgeten",
-    "Create new room": "Lag nytt rom",
     "Home": "Heim",
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "collapse": "Slå saman",
     "expand": "Utvid",
-    "<a>In reply to</a> <pill>": "<a>Som svar til</a> <pill>",
-    "And %(count)s more...": {
-        "other": "Og %(count)s til..."
-    },
-    "Preparing to send logs": "Førebur loggsending",
-    "Logs sent": "Loggar sende",
-    "Thank you!": "Takk skal du ha!",
-    "Failed to send logs: ": "Fekk ikkje til å senda loggar: ",
-    "Unavailable": "Utilgjengeleg",
-    "Changelog": "Endringslogg",
-    "not specified": "Ikkje spesifisert",
-    "Confirm Removal": "Godkjenn Fjerning",
-    "An error has occurred.": "Noko gjekk gale.",
-    "Clear Storage and Sign Out": "Tøm Lager og Logg Ut",
     "Send Logs": "Send Loggar",
-    "Unable to restore session": "Kunne ikkje henta øykta fram att",
-    "We encountered an error trying to restore your previous session.": "Noko gjekk gale med framhentinga av den førre øykta di.",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Viss du har tidligare brukt ein nyare versjon av %(brand)s, kan økts-data vere inkompatibel med denne versjonen. Lukk dette vindauget og bytt til ein nyare versjon.",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Det kan henda at å tømma nettlesarlageret rettar opp i det, men det loggar deg ut og kan gjera den krypterte pratehistoria uleseleg.",
-    "Verification Pending": "Ventar på verifikasjon",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Ver venleg og sjekk eposten din og klikk på lenkja du har fått. Når det er gjort, klikk gå fram.",
-    "This will allow you to reset your password and receive notifications.": "Dette tillèt deg å attendestilla passordet ditt og å få varsel.",
-    "Share Room": "Del Rom",
-    "Link to most recent message": "Lenk til den nyaste meldinga",
-    "Share User": "Del Brukar",
-    "Share Room Message": "Del Rommelding",
-    "Link to selected message": "Lenk til den valde meldinga",
-    "You cannot delete this message. (%(code)s)": "Du kan ikkje sletta meldinga. (%(code)s)",
-    "Session ID": "Økt-ID",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Du held på å verta teken til ei tredje-partisside so du kan godkjenna brukaren din til bruk med %(integrationsUrl)s. Vil du gå fram?",
-    "Add an Integration": "Legg tillegg til",
-    "Custom level": "Tilpassa nivå",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Klarte ikkje å lasta handlinga som vert svara til. Anten finst ho ikkje elles har du ikkje tilgang til å sjå ho.",
-    "Filter results": "Filtrer resultat",
-    "No recent messages by %(user)s found": "Fann ingen nyare meldingar frå %(user)s",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "Prøv å rulle oppover i historikken for å sjå om det finst nokon eldre.",
-    "Remove recent messages by %(user)s": "Fjern nyare meldingar frå %(user)s",
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Ved store mengder meldingar kan dette ta tid. Ver venleg å ikkje last om klienten din mens dette pågår.",
-    "Remove %(count)s messages": {
-        "other": "Fjern %(count)s meldingar",
-        "one": "Fjern 1 melding"
-    },
-    "Direct Messages": "Folk",
-    "Power level": "Tilgangsnivå",
     "Invalid theme schema.": "",
-    "Can't find this server or its room list": "Klarde ikkje å finna tenaren eller romkatalogen til den",
-    "Upload completed": "Opplasting fullført",
-    "Cancelled signature upload": "Kansellerte opplasting av signatur",
-    "Room Settings - %(roomName)s": "Rominnstillingar - %(roomName)s",
-    "Failed to upgrade room": "Fekk ikkje til å oppgradere rom",
-    "Enter the name of a new server you want to explore.": "Skriv inn namn på ny tenar du ynskjer å utforske.",
-    "Command Help": "Kommandohjelp",
-    "To help us prevent this in future, please <a>send us logs</a>.": "For å bistå med å forhindre dette i framtida, gjerne <a>send oss loggar</a>.",
-    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Krypterte meldingar er sikra med ende-til-ende kryptering. Berre du og mottakar(ane) har nøklane for å lese desse meldingane.",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "For å rapportere eit Matrix-relatert sikkerheitsproblem, les Matrix.org sin <a>Security Disclosure Policy</a>.",
     "Encrypted by a deleted session": "Kryptert av ein sletta sesjon",
-    "Add a new server": "Legg til ein ny tenar",
-    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Tømming av data frå denne sesjonen er permanent. Krypterte meldingar vil gå tapt med mindre krypteringsnøklane har blitt sikkerheitskopierte.",
-    "I don't want my encrypted messages": "Eg treng ikkje mine krypterte meldingar",
-    "You'll lose access to your encrypted messages": "Du vil miste tilgangen til dine krypterte meldingar",
-    "Join millions for free on the largest public server": "Kom ihop med millionar av andre på den største offentlege tenaren",
     "Norway": "Noreg",
     "Bahamas": "Bahamas",
     "Azerbaijan": "Aserbajdsjan",
@@ -140,13 +71,6 @@
     "Afghanistan": "Afghanistan",
     "United States": "Sambandsstatane (USA)",
     "United Kingdom": "Storbritannia",
-    "End Poll": "Avslutt røysting",
-    "Sorry, the poll did not end. Please try again.": "Røystinga vart ikkje avslutta. Prøv på nytt.",
-    "Failed to end poll": "Avslutning av røysting gjekk gale",
-    "The poll has ended. Top answer: %(topAnswer)s": "Røystinga er ferdig. Flest stemmer: %(topAnswer)s",
-    "The poll has ended. No votes were cast.": "Røystinga er ferdig. Ingen røyster vart mottekne.",
-    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Er du sikker på at du vil avslutta denne røystinga ? Dette vil gjelde for alle, og dei endelege resultata vil bli presentert.",
-    "Close sidebar": "Lat att sidestolpen",
     "Deactivate account": "Avliv brukarkontoen",
     "common": {
         "analytics": "Statistikk",
@@ -206,7 +130,13 @@
         "go_to_settings": "Gå til innstillingar",
         "setup_secure_messages": "Sett opp sikre meldingar (Secure Messages)",
         "show_more": "Vis meir",
-        "are_you_sure": "Er du sikker?"
+        "are_you_sure": "Er du sikker?",
+        "email_address": "Epostadresse",
+        "filter_results": "Filtrer resultat",
+        "and_n_others": {
+            "other": "og %(count)s andre...",
+            "one": "og ein annan..."
+        }
     },
     "action": {
         "continue": "Fortset",
@@ -313,7 +243,9 @@
         "restricted": "Avgrensa",
         "moderator": "Moderator",
         "admin": "Administrator",
-        "custom": "Tilpassa (%(level)s)"
+        "custom": "Tilpassa (%(level)s)",
+        "label": "Tilgangsnivå",
+        "custom_level": "Tilpassa nivå"
     },
     "bug_reporting": {
         "matrix_security_issue": "For å rapportere eit Matrix-relatert sikkerheitsproblem, les Matrix.org sin <a>Security Disclosure Policy</a>.",
@@ -323,7 +255,12 @@
         "send_logs": "Send loggar inn",
         "collecting_information": "Samlar versjonsinfo for programmet",
         "collecting_logs": "Samlar loggar",
-        "waiting_for_server": "Ventar på svar frå tenaren"
+        "waiting_for_server": "Ventar på svar frå tenaren",
+        "preparing_logs": "Førebur loggsending",
+        "logs_sent": "Loggar sende",
+        "thank_you": "Takk skal du ha!",
+        "failed_send_logs": "Fekk ikkje til å senda loggar: ",
+        "log_request": "For å bistå med å forhindre dette i framtida, gjerne <a>send oss loggar</a>."
     },
     "time": {
         "hours_minutes_seconds_left": "%(hours)st %(minutes)sm %(seconds)ss att",
@@ -729,6 +666,14 @@
         },
         "m.video": {
             "error_decrypting": "Noko gjekk gale med videodekrypteringa"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "Legg tillegg til",
+            "dialog_description": "Du held på å verta teken til ei tredje-partisside so du kan godkjenna brukaren din til bruk med %(integrationsUrl)s. Vil du gå fram?"
+        },
+        "reply": {
+            "error_loading": "Klarte ikkje å lasta handlinga som vert svara til. Anten finst ho ikkje elles har du ikkje tilgang til å sjå ho.",
+            "in_reply_to": "<a>Som svar til</a> <pill>"
         }
     },
     "slash_command": {
@@ -790,7 +735,8 @@
         "verify_nop": "Sesjon er tidligare verifisert!",
         "verify_mismatch": "ÅTVARING: NØKKELVERIFIKASJON FEILA! Signeringsnøkkel for %(userId)s og økt %(deviceId)s er \"%(fprint)s\" stemmer ikkje med innsendt nøkkel \"%(fingerprint)s\". Dette kan vere teikn på at kommunikasjonen er avlytta!",
         "verify_success_title": "Godkjend nøkkel",
-        "verify_success_description": "Innsendt signeringsnøkkel er lik nøkkelen du mottok frå %(userId)s med økt %(deviceId)s. Sesjonen no er verifisert."
+        "verify_success_description": "Innsendt signeringsnøkkel er lik nøkkelen du mottok frå %(userId)s med økt %(deviceId)s. Sesjonen no er verifisert.",
+        "help_dialog_title": "Kommandohjelp"
     },
     "presence": {
         "online_for": "tilkopla i %(duration)s",
@@ -842,7 +788,6 @@
         "hide_sidebar_button": "Gøym sidestolpen",
         "show_sidebar_button": "Vis sidestolpen"
     },
-    "Other": "Anna",
     "room_settings": {
         "permissions": {
             "m.room.avatar": "Endre rom-avatar",
@@ -917,14 +862,17 @@
         "advanced": {
             "unfederated": "Rommet er ikkje tilgjengeleg for andre Matrix-heimtenarar",
             "room_upgrade_button": "Oppgrader dette rommet til anbefalt romversjon",
-            "information_section_room": "Rominformasjon"
+            "information_section_room": "Rominformasjon",
+            "error_upgrade_title": "Fekk ikkje til å oppgradere rom"
         },
         "upload_avatar_label": "Last avatar opp",
         "notifications": {
             "sounds_section": "Lydar",
             "custom_sound_prompt": "Set ein ny tilpassa lyd",
             "browse_button": "Bla gjennom"
-        }
+        },
+        "title": "Rominnstillingar - %(roomName)s",
+        "alias_not_specified": "Ikkje spesifisert"
     },
     "auth": {
         "sign_in_with_sso": "Logg på med Single-Sign-On",
@@ -989,7 +937,28 @@
             "reset_successful": "Passodet ditt vart nullstilt.",
             "return_to_login": "Gå attende til innlogging"
         },
-        "common_failures": {}
+        "common_failures": {},
+        "autodiscovery_invalid": "Feil svar frå heimetenaren (discovery response)",
+        "autodiscovery_generic_failure": "Klarde ikkje å hente automatisk oppsett frå tenaren",
+        "autodiscovery_invalid_hs_base_url": "Feil base_url for m.homeserver",
+        "autodiscovery_invalid_hs": "URL-adressa virkar ikkje til å vere ein gyldig Matrix-heimetenar",
+        "autodiscovery_invalid_is_base_url": "Feil base_url for m.identity_server",
+        "autodiscovery_invalid_is": "URL-adressa virkar ikkje til å vere ein gyldig identitetstenar",
+        "autodiscovery_invalid_is_response": "Feil svar frå identitetstenaren (discovery response)",
+        "server_picker_description_matrix.org": "Kom ihop med millionar av andre på den største offentlege tenaren",
+        "soft_logout": {
+            "clear_data_description": "Tømming av data frå denne sesjonen er permanent. Krypterte meldingar vil gå tapt med mindre krypteringsnøklane har blitt sikkerheitskopierte."
+        },
+        "logout_dialog": {
+            "setup_secure_backup_description_1": "Krypterte meldingar er sikra med ende-til-ende kryptering. Berre du og mottakar(ane) har nøklane for å lese desse meldingane.",
+            "skip_key_backup": "Eg treng ikkje mine krypterte meldingar",
+            "setup_key_backup_title": "Du vil miste tilgangen til dine krypterte meldingar"
+        },
+        "set_email": {
+            "verification_pending_title": "Ventar på verifikasjon",
+            "verification_pending_description": "Ver venleg og sjekk eposten din og klikk på lenkja du har fått. Når det er gjort, klikk gå fram.",
+            "description": "Dette tillèt deg å attendestilla passordet ditt og å få varsel."
+        }
     },
     "export_chat": {
         "messages": "Meldingar"
@@ -1039,10 +1008,13 @@
         "release_notes_toast_title": "Kva er nytt",
         "error_encountered": "Noko gjekk gale (%(errorDetail)s).",
         "no_update": "Inga oppdatering er tilgjengeleg.",
-        "check_action": "Sjå etter oppdateringar"
+        "check_action": "Sjå etter oppdateringar",
+        "unavailable": "Utilgjengeleg",
+        "changelog": "Endringslogg"
     },
     "location_sharing": {
-        "expand_map": "Utvid kart"
+        "expand_map": "Utvid kart",
+        "close_sidebar": "Lat att sidestolpen"
     },
     "labs_mjolnir": {
         "room_name": "Mi blokkeringsliste",
@@ -1112,7 +1084,11 @@
         "search": {
             "this_room": "Dette rommet",
             "all_rooms": "Alle rom",
-            "field_placeholder": "Søk…"
+            "field_placeholder": "Søk…",
+            "result_count": {
+                "other": "(~%(count)s resultat)",
+                "one": "(~%(count)s resultat)"
+            }
         },
         "jump_to_bottom_button": "Gå til dei nyaste meldingane",
         "jump_read_marker": "Hopp til den fyrste uleste meldinga.",
@@ -1126,6 +1102,9 @@
     "space": {
         "context_menu": {
             "explore": "Utforsk romma"
+        },
+        "add_existing_room_space": {
+            "dm_heading": "Folk"
         }
     },
     "terms": {
@@ -1143,7 +1122,8 @@
             "explainer": "Sikre meldingar med denne brukaren er ende-til-ende krypterte og kan ikkje lesast av tredjepart.",
             "sas_caption_self": "Verifiser denne eininga ved å stadfeste det følgjande talet når det kjem til syne på skjermen.",
             "unverified_sessions_toast_description": "Undersøk dette for å gjere kontoen trygg",
-            "unverified_sessions_toast_reject": "Seinare"
+            "unverified_sessions_toast_reject": "Seinare",
+            "manual_device_verification_device_id_label": "Økt-ID"
         },
         "cancel_entering_passphrase_title": "Avbryte inntasting av passfrase ?",
         "bootstrap_title": "Setter opp nøklar",
@@ -1167,7 +1147,9 @@
         },
         "event_shield_reason_mismatched_sender_key": "Kryptert av ein ikkje-verifisert sesjon",
         "cross_signing_room_normal": "Dette rommet er ende-til-ende kryptert",
-        "unsupported": "Denne klienten støttar ikkje ende-til-ende kryptering."
+        "unsupported": "Denne klienten støttar ikkje ende-til-ende kryptering.",
+        "key_signature_upload_completed": "Opplasting fullført",
+        "key_signature_upload_cancelled": "Kansellerte opplasting av signatur"
     },
     "poll": {
         "create_poll_title": "Opprett røysting",
@@ -1179,7 +1161,13 @@
         "notes": "Resultatet blir synleg når du avsluttar røystinga",
         "unable_edit_title": "Røystinga kan ikkje endrast",
         "unable_edit_description": "Beklagar, du kan ikkje endra ei røysting som er i gang.",
-        "total_not_ended": "Resultata vil bli synlege når røystinga er ferdig"
+        "total_not_ended": "Resultata vil bli synlege når røystinga er ferdig",
+        "end_message_no_votes": "Røystinga er ferdig. Ingen røyster vart mottekne.",
+        "end_message": "Røystinga er ferdig. Flest stemmer: %(topAnswer)s",
+        "error_ending_title": "Avslutning av røysting gjekk gale",
+        "error_ending_description": "Røystinga vart ikkje avslutta. Prøv på nytt.",
+        "end_title": "Avslutt røysting",
+        "end_description": "Er du sikker på at du vil avslutta denne røystinga ? Dette vil gjelde for alle, og dei endelege resultata vil bli presentert."
     },
     "failed_load_async_component": "Klarte ikkje lasta! Sjå på nettilkoplinga di og prøv igjen.",
     "upload_failed_generic": "Fila '%(fileName)s' vart ikkje lasta opp.",
@@ -1226,7 +1214,16 @@
         "failed_copy": "Noko gjekk gale med kopieringa",
         "something_went_wrong": "Noko gjekk gale!",
         "update_power_level": "Fekk ikkje til å endra tilgangsnivået",
-        "unknown": "Noko ukjend gjekk galt"
+        "unknown": "Noko ukjend gjekk galt",
+        "dialog_description_default": "Noko gjekk gale.",
+        "session_restore": {
+            "clear_storage_button": "Tøm Lager og Logg Ut",
+            "title": "Kunne ikkje henta øykta fram att",
+            "description_1": "Noko gjekk gale med framhentinga av den førre øykta di.",
+            "description_2": "Viss du har tidligare brukt ein nyare versjon av %(brand)s, kan økts-data vere inkompatibel med denne versjonen. Lukk dette vindauget og bytt til ein nyare versjon.",
+            "description_3": "Det kan henda at å tømma nettlesarlageret rettar opp i det, men det loggar deg ut og kan gjera den krypterte pratehistoria uleseleg."
+        },
+        "unknown_error_code": "ukjend feilkode"
     },
     "items_and_n_others": {
         "other": "<Items/> og %(count)s til",
@@ -1296,7 +1293,17 @@
         "promote_warning": "Du kan ikkje angre denne endringa, fordi brukaren du forfremmar vil få same tilgangsnivå som du har no.",
         "deactivate_confirm_title": "Deaktivere brukar?",
         "deactivate_confirm_action": "Deaktiver brukar",
-        "error_deactivate": "Fekk ikkje til å deaktivere brukaren"
+        "error_deactivate": "Fekk ikkje til å deaktivere brukaren",
+        "redact": {
+            "no_recent_messages_title": "Fann ingen nyare meldingar frå %(user)s",
+            "no_recent_messages_description": "Prøv å rulle oppover i historikken for å sjå om det finst nokon eldre.",
+            "confirm_title": "Fjern nyare meldingar frå %(user)s",
+            "confirm_description_2": "Ved store mengder meldingar kan dette ta tid. Ver venleg å ikkje last om klienten din mens dette pågår.",
+            "confirm_button": {
+                "other": "Fjern %(count)s meldingar",
+                "one": "Fjern 1 melding"
+            }
+        }
     },
     "stickers": {
         "empty": "Du har for tida ikkje skrudd nokre klistremerkepakkar på"
@@ -1333,12 +1340,35 @@
         },
         "error_loading_user_profile": "Klarde ikkje å laste brukarprofilen"
     },
-    "Invalid homeserver discovery response": "Feil svar frå heimetenaren (discovery response)",
-    "Failed to get autodiscovery configuration from server": "Klarde ikkje å hente automatisk oppsett frå tenaren",
-    "Invalid base_url for m.homeserver": "Feil base_url for m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "URL-adressa virkar ikkje til å vere ein gyldig Matrix-heimetenar",
-    "Invalid identity server discovery response": "Feil svar frå identitetstenaren (discovery response)",
-    "Invalid base_url for m.identity_server": "Feil base_url for m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "URL-adressa virkar ikkje til å vere ein gyldig identitetstenar",
-    "General failure": "Generell feil"
+    "General failure": "Generell feil",
+    "truncated_list_n_more": {
+        "other": "Og %(count)s til..."
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_available_invalid": "Klarde ikkje å finna tenaren eller romkatalogen til den",
+            "network_dropdown_add_dialog_title": "Legg til ein ny tenar",
+            "network_dropdown_add_dialog_description": "Skriv inn namn på ny tenar du ynskjer å utforske."
+        }
+    },
+    "redact": {
+        "error": "Du kan ikkje sletta meldinga. (%(code)s)",
+        "confirm_button": "Godkjenn Fjerning"
+    },
+    "forward": {
+        "send_label": "Send"
+    },
+    "report_content": {
+        "other_label": "Anna"
+    },
+    "spotlight_dialog": {
+        "create_new_room_button": "Lag nytt rom"
+    },
+    "share": {
+        "title_room": "Del Rom",
+        "permalink_most_recent": "Lenk til den nyaste meldinga",
+        "title_user": "Del Brukar",
+        "title_message": "Del Rommelding",
+        "permalink_message": "Lenk til den valde meldinga"
+    }
 }

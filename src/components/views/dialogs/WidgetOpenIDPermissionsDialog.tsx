@@ -79,10 +79,10 @@ export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<I
                 className="mx_WidgetOpenIDPermissionsDialog"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Allow this widget to verify your identity")}
+                title={_t("widget|open_id_permissions_dialog|title")}
             >
                 <div className="mx_WidgetOpenIDPermissionsDialog_content">
-                    <p>{_t("The widget will verify your user ID, but won't be able to perform actions for you:")}</p>
+                    <p>{_t("widget|open_id_permissions_dialog|starting_text")}</p>
                     <p className="text-muted">
                         {/* cheap trim to just get the path */}
                         {this.props.widget.templateUrl.split("?")[0].split("#")[0]}
@@ -97,7 +97,7 @@ export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<I
                             value={this.state.rememberSelection}
                             toggleInFront={true}
                             onChange={this.onRememberSelectionChange}
-                            label={_t("Remember this")}
+                            label={_t("widget|open_id_permissions_dialog|remember_selection")}
                         />
                     }
                 />

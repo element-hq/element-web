@@ -1,5 +1,4 @@
 {
-    "Send": "Gửi",
     "Sun": "Chủ Nhật",
     "Mon": "Thứ Hai",
     "Tue": "Thứ Ba",
@@ -29,354 +28,14 @@
     "Moderator": "Điều phối viên",
     "%(items)s and %(lastItem)s": "%(items)s và %(lastItem)s",
     "Vietnam": "Việt Nam",
-    "Confirm Removal": "Xác nhận Loại bỏ",
-    "Removing…": "Đang xóa…",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "Thử cuộn lên trong dòng thời gian để xem có cái nào trước đó không.",
-    "No recent messages by %(user)s found": "Không tìm thấy tin nhắn gần đây của %(user)s",
     "Switch theme": "Chuyển đổi chủ đề",
     "Sign in with SSO": "Đăng nhập bằng SSO",
     "Delete Widget": "Xóa Widget",
-    "Failed to start livestream": "Không thể bắt đầu phát trực tiếp",
-    "Unable to start audio streaming.": "Không thể bắt đầu phát trực tuyến âm thanh.",
-    "Resend %(unsentCount)s reaction(s)": "Gửi lại (các) phản ứng %(unsentCount)s",
-    "Hold": "Giữ máy",
-    "Resume": "Tiếp tục",
-    "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "Nếu bạn quên Khóa bảo mật của mình, bạn có thể thiết lập các tùy chọn khôi phục mới <button>set up new recovery options</button>",
-    "Access your secure message history and set up secure messaging by entering your Security Key.": "Truy cập lịch sử tin nhắn an toàn của bạn và thiết lập nhắn tin an toàn bằng cách nhập Khóa bảo mật của bạn.",
-    "Not a valid Security Key": "Không phải là khóa bảo mật hợp lệ",
-    "This looks like a valid Security Key!": "Đây có vẻ như là một Khóa bảo mật hợp lệ!",
-    "Enter Security Key": "Nhập khóa bảo mật",
-    "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>": "Nếu bạn quên Cụm từ bảo mật, bạn có thể sử dụng Khóa bảo mật của mình <button1>use your Security Key</button1> hoặc thiết lập các tùy chọn khôi phục mới <button2>set up new recovery options</button2>",
-    "Access your secure message history and set up secure messaging by entering your Security Phrase.": "Truy cập lịch sử tin nhắn an toàn của bạn và thiết lập nhắn tin an toàn bằng cách nhập Cụm từ bảo mật của bạn.",
-    "<b>Warning</b>: you should only set up key backup from a trusted computer.": "Cảnh báo <b>Warning</b>: bạn chỉ nên thiết lập sao lưu khóa từ một máy tính đáng tin cậy.",
-    "Enter Security Phrase": "Nhập cụm từ bảo mật",
-    "Successfully restored %(sessionCount)s keys": "Đã khôi phục thành công các khóa %(sessionCount)s",
-    "Failed to decrypt %(failedCount)s sessions!": "Không giải mã được phiên %(failedCount)s !",
-    "Keys restored": "Các phím đã được khôi phục",
-    "No backup found!": "Không tìm thấy bản sao lưu!",
-    "Unable to restore backup": "Không thể khôi phục bản sao lưu",
-    "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.": "Không thể giải mã bản sao lưu bằng Cụm từ bảo mật này: vui lòng xác minh rằng bạn đã nhập đúng Cụm từ bảo mật.",
-    "Incorrect Security Phrase": "Cụm từ bảo mật không chính xác",
-    "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.": "Không thể giải mã bản sao lưu bằng Khóa bảo mật này: vui lòng xác minh rằng bạn đã nhập đúng Khóa bảo mật.",
-    "Security Key mismatch": "Khóa bảo mật không khớp",
-    "Unable to load backup status": "Không thể tải trạng thái sao lưu",
-    "%(completed)s of %(total)s keys restored": "Đã khôi phục%(completed)s trong số %(total)s khóa",
-    "Restoring keys from backup": "Khôi phục khóa từ sao lưu",
-    "Unable to set up keys": "Không thể thiết lập khóa",
-    "Click the button below to confirm setting up encryption.": "Nhấp vào nút bên dưới để xác nhận thiết lập mã hóa.",
-    "Confirm encryption setup": "Xác nhận thiết lập mã hóa",
-    "Clear cross-signing keys": "Xóa các khóa ký chéo",
-    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Xóa khóa ký chéo là vĩnh viễn. Bất kỳ ai mà bạn đã xác thực đều sẽ thấy cảnh báo bảo mật. Bạn gần như chắc chắn không muốn làm điều này, trừ khi bạn bị mất mọi thiết bị mà bạn có thể đăng nhập chéo.",
-    "Destroy cross-signing keys?": "Hủy khóa xác thực chéo?",
-    "Recent changes that have not yet been received": "Những thay đổi gần đây chưa được nhận",
-    "The server is not configured to indicate what the problem is (CORS).": "Máy chủ không được định cấu hình để cho biết sự cố là gì (CORS).",
-    "A connection error occurred while trying to contact the server.": "Đã xảy ra lỗi kết nối khi cố gắng kết nối với máy chủ.",
-    "Your area is experiencing difficulties connecting to the internet.": "Khu vực của bạn đang gặp khó khăn khi kết nối Internet.",
-    "The server has denied your request.": "Máy chủ đã từ chối yêu cầu của bạn.",
-    "The server is offline.": "Máy chủ đang ngoại tuyến.",
-    "A browser extension is preventing the request.": "Một tiện ích mở rộng của trình duyệt đang ngăn chặn yêu cầu.",
-    "Your firewall or anti-virus is blocking the request.": "Tường lửa hoặc chương trình chống vi-rút của bạn đang chặn yêu cầu.",
-    "The server (%(serverName)s) took too long to respond.": "Máy chủ (%(serverName)s) mất quá nhiều thời gian để phản hồi.",
-    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Máy chủ của bạn không phản hồi một số yêu cầu của bạn. Dưới đây là một số lý do có thể xảy ra nhất.",
-    "Server isn't responding": "Máy chủ không phản hồi",
-    "You're all caught up.": "Bạn đã bắt kịp tất cả.",
-    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Bạn sẽ nâng cấp phòng này từ <oldVersion /> thành <newVersion />.",
-    "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b> Xin lưu ý rằng việc nâng cấp sẽ tạo ra một phiên bản mới của phòng </b>. Tất cả các tin nhắn hiện tại sẽ ở trong phòng lưu trữ này.",
-    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Nâng cấp phòng là một hành động nâng cao và thường được khuyến nghị khi phòng không ổn định do lỗi, thiếu tính năng hoặc lỗ hổng bảo mật.",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "Điều này thường chỉ ảnh hưởng đến cách xử lý phòng trên máy chủ. Nếu bạn đang gặp sự cố với %(brand)s của mình, vui lòng báo cáo lỗi <a>report a bug</a>.",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Điều này thường chỉ ảnh hưởng đến cách xử lý phòng trên máy chủ. Nếu bạn đang gặp sự cố với %(brand)s của mình, vui lòng báo cáo lỗi.",
-    "Upgrade public room": "Nâng cấp phòng công cộng",
-    "Upgrade private room": "Nâng cấp phòng riêng tư",
-    "Automatically invite members from this room to the new one": "Tự động mời các thành viên từ phòng này đến phòng mới",
-    "Put a link back to the old room at the start of the new room so people can see old messages": "Đặt một liên kết trở lại phòng cũ ở đầu phòng mới để mọi người có thể xem các tin nhắn cũ",
-    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Ngăn người dùng nói trong phiên bản cũ của phòng và đăng thông báo khuyên người dùng chuyển sang phòng mới",
-    "Update any local room aliases to point to the new room": "Cập nhật bất kỳ bí danh phòng cục bộ nào để trỏ đến phòng mới",
-    "Create a new room with the same name, description and avatar": "Tạo một phòng mới có cùng tên, mô tả và hình đại diện",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Nâng cấp phòng này yêu cầu đóng cửa phiên bản hiện tại của phòng và tạo một phòng mới ở vị trí của nó. Để mang đến cho các thành viên trong phòng trải nghiệm tốt nhất có thể, chúng tôi sẽ:",
-    "Upgrade Room Version": "Nâng cấp phiên bản phòng",
-    "Upgrade this room to version %(version)s": "Nâng cấp phòng này lên phiên bản %(version)s",
-    "The room upgrade could not be completed": "Không thể hoàn thành việc nâng cấp phòng",
-    "Failed to upgrade room": "Không nâng cấp được phòng",
-    "Room Settings - %(roomName)s": "Cài đặt Phòng - %(roomName)s",
-    "Email (optional)": "Địa chỉ thư điện tử (tùy chọn)",
-    "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Lưu ý là nếu bạn không thêm địa chỉ thư điện tử và quên mật khẩu, bạn có thể <b>vĩnh viễn mất quyền truy cập vào tài khoản của mình</b>.",
-    "Continuing without email": "Tiếp tục mà không cần địa chỉ thư điện tử",
-    "Data on this screen is shared with %(widgetDomain)s": "Dữ liệu trên màn hình này được chia sẻ với %(widgetDomain)s",
-    "Modal Widget": "widget phương thức",
-    "Message edits": "Chỉnh sửa tin nhắn",
-    "Your homeserver doesn't seem to support this feature.": "Máy chủ nhà của bạn dường như không hỗ trợ tính năng này.",
-    "If they don't match, the security of your communication may be compromised.": "Nếu chúng không khớp, sự bảo mật của việc giao tiếp của bạn có thể bị can thiệp.",
-    "Session key": "Khóa phiên",
-    "Session ID": "Định danh (ID) phiên",
-    "Session name": "Tên phiên",
-    "Confirm this user's session by comparing the following with their User Settings:": "Xác nhận phiên của người dùng này bằng cách so sánh phần sau với Cài đặt người dùng của họ:",
-    "Confirm by comparing the following with the User Settings in your other session:": "Xác nhận bằng cách so sánh những điều sau đây với Cài đặt người dùng trong phiên làm việc kia của bạn:",
-    "These are likely ones other room admins are a part of.": "Đây có thể là những người mà các quản trị viên phòng khác cũng tham gia.",
-    "Other spaces or rooms you might not know": "Không gian hoặc phòng khác bạn có thể không biết",
-    "Spaces you know that contain this room": "Những space mà bạn biết có chứa căn phòng này",
-    "Search spaces": "Tìm kiếm các Space",
-    "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "Quyết định space nào có thể vào phòng này. Nếu một space được chọn, các thành viên của nó có thể tìm và tham gia <RoomName/>.",
-    "Select spaces": "Chọn Không gian",
-    "You're removing all spaces. Access will default to invite only": "Bạn đang xóa tất cả space. Quyền truy cập sẽ mặc định chỉ để mời",
-    "%(count)s rooms": {
-        "one": "%(count)s phòng",
-        "other": "%(count)s phòng"
-    },
-    "%(count)s members": {
-        "one": "%(count)s thành viên",
-        "other": "%(count)s thành viên"
-    },
-    "Are you sure you want to sign out?": "Bạn có chắc mình muốn đăng xuất không?",
-    "You'll lose access to your encrypted messages": "Bạn sẽ mất quyền truy cập vào các tin nhắn được mã hóa của mình",
-    "Manually export keys": "Xuất các khóa thủ công",
-    "I don't want my encrypted messages": "Tôi không muốn tin nhắn được mã hóa của mình",
-    "Start using Key Backup": "Bắt đầu sao lưu các khóa",
-    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Các tin nhắn được mã hóa được bảo mật bằng mã hóa đầu cuối. Chỉ bạn và (những) người nhận mới có chìa khóa để đọc những tin nhắn này.",
-    "Leave space": "Rời space",
-    "Leave some rooms": "Rời một vài phòng",
-    "Leave all rooms": "Rời tất cả phòng",
-    "Don't leave any rooms": "Không rời bất kỳ phòng nào",
-    "Would you like to leave the rooms in this space?": "Bạn có muốn rời khỏi các phòng trong space này?",
-    "You are about to leave <spaceName/>.": "Bạn sắp rời khỏi <spaceName/>.",
-    "Leave %(spaceName)s": "Rời khỏi %(spaceName)s",
-    "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Bạn là quản trị viên duy nhất của một số phòng hoặc space mà bạn muốn rời khỏi. Rời khỏi họ sẽ Rời khỏi họ mà không có bất kỳ quản trị viên nào.",
-    "You're the only admin of this space. Leaving it will mean no one has control over it.": "Bạn là quản trị viên duy nhất của không gian này. Rời khỏi nó sẽ có nghĩa là không ai có quyền kiểm soát nó.",
-    "You won't be able to rejoin unless you are re-invited.": "Bạn sẽ không thể tham gia lại trừ khi bạn được mời lại.",
-    "Updating %(brand)s": "Đang cập nhật %(brand)s",
-    "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s hiện sử dụng bộ nhớ ít hơn 3-5 lần, bằng cách chỉ tải thông tin về những người dùng khác khi cần thiết. Vui lòng đợi trong khi chúng tôi đồng bộ hóa lại với máy chủ!",
-    "Clear cache and resync": "Xóa bộ nhớ cache và đồng bộ hóa lại",
-    "Incompatible local cache": "Bộ nhớ cache cục bộ không tương thích",
-    "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Nếu phiên bản khác của %(brand)s vẫn đang mở trong một tab khác, vui lòng đóng nó lại vì việc sử dụng %(brand)s trên cùng một máy chủ với cả hai chế độ tải chậm được bật và tắt đồng thời sẽ gây ra sự cố.",
-    "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Trước đây, bạn đã sử dụng %(brand)s trên %(host)s khi đã bật tính năng tải chậm các thành viên. Trong phiên bản này, tính năng tải lười biếng bị vô hiệu hóa. Vì bộ nhớ cache cục bộ không tương thích giữa hai cài đặt này, %(brand)s cần phải đồng bộ hóa lại tài khoản của bạn.",
-    "Signature upload failed": "Tải lên chữ ký không thành công",
-    "Signature upload success": "Tải lên chữ ký thành công",
-    "Unable to upload": "Không thể tải lên",
-    "Cancelled signature upload": "Đã hủy tải lên chữ ký",
-    "Upload completed": "Hoàn tất tải lên",
-    "%(brand)s encountered an error during upload of:": "%(brand)s đã gặp lỗi khi tải lên:",
-    "a key signature": "một chữ ký chính",
-    "a device cross-signing signature": "một chữ ký được xác thực chéo trên thiết bị",
-    "a new cross-signing key signature": "một chữ ký khóa xác thực chéo mới",
-    "a new master key signature": "một chữ ký khóa chính mới",
-    "Dial pad": "Bàn phím số",
-    "User Directory": "Thư mục người dùng",
-    "Consult first": "Tư vấn trước",
-    "Transfer": "Chuyển",
-    "Invited people will be able to read old messages.": "Những người được mời sẽ có thể đọc tin nhắn cũ.",
-    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Mời ai đó thông qua tên hiển thị, tên người dùng của họ (ví dụ <userId/>) hoặc <a>chia sẻ phòng này</a>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Mời ai đó bằng tên, địa chỉ thư điện tử, tên người dùng của họ (như <userId/>) hoặc chia sẻ phòng này <a>share this room</a>.",
-    "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Mời ai đó sử dụng tên hiển thị, tên đăng nhập của họ (như <userId/>) hoặc <a>chia sẻ space này</a>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Mời ai đó bằng tên, địa chỉ thư điện tử, tên người dùng của họ (như <userId/>) hoặc <a>chia sẻ space này</a>.",
-    "Invite to %(roomName)s": "Mời tham gia %(roomName)s",
-    "Or send invite link": "Hoặc gửi liên kết mời",
-    "Some suggestions may be hidden for privacy.": "Một số đề xuất có thể được ẩn để bảo mật.",
-    "Start a conversation with someone using their name or username (like <userId/>).": "Bắt đầu cuộc trò chuyện với ai đó bằng tên hoặc tên người dùng của họ (như <userId/>).",
-    "Start a conversation with someone using their name, email address or username (like <userId/>).": "Bắt đầu cuộc trò chuyện với ai đó bằng tên, địa chỉ thư điện tử hoặc tên người dùng của họ (như <userId/>).",
-    "Recently Direct Messaged": "Tin nhắn trực tiếp gần đây",
-    "Recent Conversations": "Các cuộc trò chuyện gần đây",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Những người dùng sau có thể không tồn tại hoặc không hợp lệ và không thể được mời: %(csvNames)s",
-    "Failed to find the following users": "Không tìm thấy những người dùng sau",
-    "A call can only be transferred to a single user.": "Một cuộc gọi chỉ có thể được chuyển đến một người dùng duy nhất.",
-    "We couldn't invite those users. Please check the users you want to invite and try again.": "Chúng tôi không thể mời những người dùng đó. Vui lòng kiểm tra những người dùng bạn muốn mời và thử lại.",
-    "Something went wrong trying to invite the users.": "Đã xảy ra sự cố khi cố mời người dùng.",
-    "We couldn't create your DM.": "Chúng tôi không thể tạo DM của bạn.",
-    "Invite by email": "Mời qua thư điện tử",
-    "Click the button below to confirm your identity.": "Nhấp vào nút bên dưới để xác nhận danh tính của bạn.",
-    "Confirm to continue": "Xác nhận để tiếp tục",
-    "To continue, use Single Sign On to prove your identity.": "Để tiếp tục, hãy sử dụng Single Sign On để chứng minh danh tính của bạn.",
-    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s của bạn không cho phép bạn sử dụng trình quản lý tích hợp để thực hiện việc này. Vui lòng liên hệ với quản trị viên.",
-    "Integrations not allowed": "Tích hợp không được phép",
-    "Integrations are disabled": "Tích hợp đang bị tắt",
-    "Incoming Verification Request": "Yêu cầu xác thực đến",
-    "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Việc xác thực thiết bị này sẽ đánh dấu thiết bị là đáng tin cậy và những người dùng đã xác minh với bạn sẽ tin tưởng thiết bị này.",
-    "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Xác thực thiết bị này để đánh dấu thiết bị là đáng tin cậy. Tin tưởng vào thiết bị này giúp bạn và những người dùng khác yên tâm hơn khi sử dụng các tin nhắn được mã hóa đầu cuối.",
-    "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Việc xác thực người dùng này sẽ đánh dấu phiên của họ là đáng tin cậy và cũng đánh dấu phiên của bạn là đáng tin cậy đối với họ.",
-    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Xác thực người dùng này để đánh dấu họ là đáng tin cậy. Người dùng đáng tin cậy giúp bạn yên tâm hơn khi sử dụng các tin nhắn được mã hóa end-to-end.",
-    "You may contact me if you have any follow up questions": "Bạn có thể liên hệ với tôi nếu bạn có bất kỳ câu hỏi tiếp theo nào",
-    "Search for rooms or people": "Tìm kiếm phòng hoặc người",
-    "Message preview": "Xem trước tin nhắn",
-    "Sent": "Đã gửi",
-    "Sending": "Đang gửi",
-    "You don't have permission to do this": "Bạn không có quyền làm điều này",
-    "<inviter/> invites you": "<inviter /> mời bạn",
-    "No results found": "không tim được kêt quả",
-    "MB": "MB",
-    "An error has occurred.": "Một lỗi đã xảy ra.",
-    "Server did not return valid authentication information.": "Máy chủ không trả về thông tin xác thực hợp lệ.",
-    "Server did not require any authentication": "Máy chủ không yêu cầu bất kỳ xác thực nào",
-    "There was a problem communicating with the server. Please try again.": "Đã xảy ra sự cố khi giao tiếp với máy chủ. Vui lòng thử lại.",
-    "Confirm account deactivation": "Xác nhận việc hủy kích hoạt tài khoản",
-    "Are you sure you want to deactivate your account? This is irreversible.": "Bạn có chắc chắn muốn hủy kích hoạt tài khoản của mình không? Điều này là không thể thay đổi.",
-    "Confirm your account deactivation by using Single Sign On to prove your identity.": "Xác nhận việc hủy kích hoạt tài khoản của bạn bằng cách sử dụng Single Sign On để chứng minh danh tính của bạn.",
-    "Continue With Encryption Disabled": "Tiếp tục với mã hóa bị tắt",
-    "Incompatible Database": "Cơ sở dữ liệu không tương thích",
-    "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Trước đây, bạn đã sử dụng phiên bản %(brand)s mới hơn với phiên này. Để sử dụng lại phiên bản này với mã hóa đầu cuối, bạn cần đăng xuất và đăng nhập lại.",
-    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Để tránh mất lịch sử trò chuyện, bạn phải xuất chìa khóa phòng trước khi đăng xuất. Bạn sẽ cần quay lại phiên bản %(brand)s mới hơn để thực hiện việc này",
-    "Want to add an existing space instead?": "Thay vào đó, bạn muốn thêm một space hiện có?",
-    "Add a space to a space you manage.": "Thêm một space vào một space mà bạn quản lý.",
-    "Only people invited will be able to find and join this space.": "Chỉ những người được mời mới có thể tìm và tham gia space này.",
-    "Anyone will be able to find and join this space, not just members of <SpaceName/>.": "Bất kỳ ai cũng có thể tìm và tham gia space này, không chỉ là thành viên của <SpaceName/>.",
-    "Anyone in <SpaceName/> will be able to find and join.": "Bất kỳ ai trong <SpaceName/> đều có thể tìm và tham gia.",
-    "Private space (invite only)": "space riêng tư (chỉ mời)",
-    "Space visibility": "Khả năng hiển thị space",
-    "Clear all data": "Xóa tất cả dữ liệu",
-    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Xóa tất cả dữ liệu khỏi phiên này là vĩnh viễn. Các tin nhắn được mã hóa sẽ bị mất trừ khi các khóa của chúng đã được sao lưu.",
-    "Clear all data in this session?": "Xóa tất cả dữ liệu trong phiên này?",
-    "Reason (optional)": "Lý do (không bắt buộc)",
-    "You cannot delete this message. (%(code)s)": "Bạn không thể xóa tin nhắn này.  (%(code)s)",
-    "Email address": "Địa chỉ thư điện tử",
-    "Changelog": "Lịch sử thay đổi",
-    "Unavailable": "Không có sẵn",
-    "Unable to load commit detail: %(msg)s": "Không thể tải chi tiết cam kết: %(msg)s",
-    "Notes": "Ghi chú",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Trước khi gửi log, bạn phải <a>tạo một sự cố trên Github</a> để mô tả vấn đề của mình.",
-    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Nhắc nhở: Trình duyệt của bạn không được hỗ trợ, vì vậy trải nghiệm của bạn có thể không thể đoán trước được.",
-    "Preparing to download logs": "Chuẩn bị tải nhật ký xuống",
-    "Failed to send logs: ": "Không gửi được nhật ký: ",
-    "Thank you!": "Cảm ơn bạn!",
-    "Logs sent": "Nhật ký đã được gửi",
-    "Preparing to send logs": "Chuẩn bị gửi nhật ký",
-    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Vui lòng cho chúng tôi biết điều gì đã xảy ra hoặc tốt hơn là tạo sự cố trên GitHub để mô tả vấn đề.",
-    "To leave the beta, visit your settings.": "Để rời khỏi bản beta, hãy truy cập mục cài đặt của bạn.",
-    "Close dialog": "Đóng hộp thoại",
-    "Invite anyway": "Vẫn mời",
-    "Invite anyway and never warn me again": "Vẫn mời và không bao giờ cảnh báo tôi nữa",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Không thể tìm thấy hồ sơ cho ID Matrix được liệt kê bên dưới - bạn có muốn mời họ không?",
-    "The following users may not exist": "Những người dùng sau có thể không tồn tại",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Sử dụng máy chủ định danh để mời qua địa chỉ thư điện tử. Quản lý trong mục Cài đặt <settings>Settings</settings>.",
-    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Sử dụng máy chủ nhận dạng để mời qua thư điện tử. <default>Sử dụng mặc định (%(defaultIdentityServerName)s)</default> hoặc quản lý trong mục Cài đặt <settings>Settings</settings>.",
-    "Adding spaces has moved.": "Thêm dấu cách đã di chuyển.",
-    "Search for rooms": "Tìm kiếm phòng",
-    "Create a new room": "Tạo phòng chat mới",
-    "Want to add a new room instead?": "Hay là thêm một phòng mới?",
-    "Add existing rooms": "Thêm các phòng hiện có",
-    "Space selection": "Lựa chọn space",
-    "Direct Messages": "Tin nhắn trực tiếp",
-    "Adding rooms... (%(progress)s out of %(count)s)": {
-        "one": "Đang thêm phòng…",
-        "other": "Đang thêm các phòng... (%(progress)s trong %(count)s)"
-    },
-    "Not all selected were added": "Không phải tất cả các mục đã chọn đều được thêm vào",
-    "Search for spaces": "Tìm kiếm space",
-    "Create a new space": "Tạo space mới",
-    "Want to add a new space instead?": "Bạn muốn thêm một space mới thay thế?",
-    "Add existing space": "Thêm space hiện có",
-    "Server name": "Tên máy chủ",
-    "Enter the name of a new server you want to explore.": "Nhập tên của một máy chủ mới mà bạn muốn khám phá.",
-    "Add a new server": "Thêm máy chủ mới",
-    "Your server": "Máy chủ của bạn",
-    "Can't find this server or its room list": "Không thể tìm thấy máy chủ này hoặc danh sách phòng của nó",
-    "You are not allowed to view this server's rooms list": "Bạn không được phép xem danh sách phòng của máy chủ này",
-    "Looks good": "Có vẻ ổn",
-    "Enter a server name": "Nhập tên máy chủ",
-    "And %(count)s more...": {
-        "other": "Và %(count)s thêm…"
-    },
-    "Join millions for free on the largest public server": "Tham gia hàng triệu máy chủ công cộng miễn phí lớn nhất",
-    "Server Options": "Tùy chọn máy chủ",
-    "This address is already in use": "Địa chỉ này đã được sử dụng",
-    "This address is available to use": "Địa chỉ này có sẵn để sử dụng",
-    "Please provide an address": "Vui lòng cung cấp địa chỉ",
-    "Some characters not allowed": "Một số ký tự không được phép",
-    "e.g. my-room": "ví dụ: phòng của tôi my-room",
-    "Room address": "Địa chỉ phòng",
-    "In reply to <a>this message</a>": "Để trả lời <a>tin nhắn này</a>",
-    "<a>In reply to</a> <pill>": "Trả lời <a>In reply to</a> <pill>",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Không thể tải sự kiện đã được trả lời, sự kiện đó không tồn tại hoặc bạn không có quyền xem sự kiện đó.",
-    "Custom level": "Cấp độ tùy chọn",
-    "Power level": "Cấp độ sức mạnh",
-    "Use your Security Key to continue.": "Sử dụng Khóa bảo mật của bạn để tiếp tục.",
-    "Security Key": "Chìa khóa bảo mật",
-    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Nhập Chuỗi bảo mật hoặc <button>sử dụng Khóa bảo mật</button> của bạn để tiếp tục.",
-    "Unable to access secret storage. Please verify that you entered the correct Security Phrase.": "Không thể truy cập bộ nhớ bí mật. Vui lòng xác minh rằng bạn đã nhập đúng Cụm từ bảo mật.",
-    "Security Phrase": "Cụm từ Bảo mật",
-    "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Nếu bạn đặt lại mọi thứ, bạn sẽ khởi động lại mà không có phiên nào đáng tin cậy, không có người dùng đáng tin cậy và có thể không xem được các tin nhắn trước đây.",
-    "Only do this if you have no other device to complete verification with.": "Chỉ thực hiện việc này nếu bạn không có thiết bị nào khác để hoàn tất quá trình xác thực.",
-    "Reset everything": "Đặt lại mọi thứ",
-    "Forgotten or lost all recovery methods? <a>Reset all</a>": "Quên hoặc mất tất cả các phương pháp khôi phục? Đặt lại tất cả <a>Reset all</a>",
-    "Invalid Security Key": "Khóa bảo mật không hợp lệ",
-    "Wrong Security Key": "Khóa bảo mật sai",
-    "Looks good!": "Có vẻ tốt!",
-    "Wrong file type": "Loại tệp sai",
-    "Remember this": "Nhớ điều này",
-    "The widget will verify your user ID, but won't be able to perform actions for you:": "Tiện ích widget sẽ xác minh ID người dùng của bạn, nhưng không thể thay bạn thực hiện các hành động:",
-    "Allow this widget to verify your identity": "Cho phép tiện ích widget này xác thực danh tính của bạn",
-    "Remember my selection for this widget": "Hãy nhớ lựa chọn của tôi cho tiện ích này",
-    "Decline All": "Từ chối tất cả",
-    "This widget would like to:": "Tiện ích widget này muốn:",
-    "Approve widget permissions": "Phê duyệt quyền của tiện ích widget",
-    "Verification Request": "Yêu cầu xác thực",
-    "Upload Error": "Lỗi tải lên",
-    "Cancel All": "Hủy bỏ tất cả",
-    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Một số tệp <b> quá lớn </b> không thể tải lên được. Giới hạn kích thước tệp là %(limit)s.",
-    "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Các tệp này <b>too large</b> quá lớn để tải lên. Giới hạn kích thước tệp là %(limit)s.",
-    "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Tệp này <b>too large</b> để tải lên. Giới hạn kích thước tệp là %(limit)s nhưng tệp này là %(sizeOfThisFile)s.",
-    "Upload all": "Tải lên tất cả",
-    "Upload files": "Tải tệp lên",
-    "Upload files (%(current)s of %(total)s)": "Tải lên tệp (%(current)s of %(total)s)",
-    "Not Trusted": "Không tin cậy",
-    "Ask this user to verify their session, or manually verify it below.": "Yêu cầu người dùng này xác thực phiên của họ hoặc xác minh theo cách thủ công bên dưới.",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) đã đăng nhập vào một phiên mới mà không xác thực:",
-    "Verify your other session using one of the options below.": "Xác minh phiên khác của bạn bằng một trong các tùy chọn bên dưới.",
-    "You signed in to a new session without verifying it:": "Bạn đã đăng nhập vào một phiên mới mà không xác thực nó:",
-    "Be found by phone or email": "Được tìm thấy qua điện thoại hoặc địa chỉ thư điện tử",
-    "Find others by phone or email": "Tìm người khác qua điện thoại hoặc địa chỉ thư điện tử",
-    "Your browser likely removed this data when running low on disk space.": "Trình duyệt của bạn có thể đã xóa dữ liệu này khi sắp hết dung lượng đĩa.",
-    "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Một số dữ liệu phiên, bao gồm cả khóa tin nhắn được mã hóa, bị thiếu. Đăng xuất và đăng nhập để khắc phục sự cố này, khôi phục khóa từ bản sao lưu.",
-    "Missing session data": "Thiếu dữ liệu phiên",
-    "To help us prevent this in future, please <a>send us logs</a>.": "Để giúp chúng tôi ngăn chặn điều này trong tương lai, vui lòng gửi nhật ký cho chúng tôi <a>send us logs</a>.",
-    "Command Help": "Lệnh Trợ giúp",
-    "Link to selected message": "Liên kết đến tin nhắn đã chọn",
-    "Share Room Message": "Chia sẻ tin nhắn trong phòng",
-    "Share User": "Chia sẻ người dùng",
-    "Link to most recent message": "Liên kết đến tin nhắn gần đây nhất",
-    "Share Room": "Phòng chia sẻ",
-    "This will allow you to reset your password and receive notifications.": "Điều này sẽ cho phép bạn đặt lại mật khẩu của mình và nhận thông báo.",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Vui lòng kiểm tra hòm thư và bấm vào liên kết trong đó. Khi nào xong, hãy bấm tiếp tục.",
-    "Verification Pending": "Chờ xác thực",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Xóa bộ nhớ của trình duyệt có thể khắc phục được sự cố nhưng sẽ khiến bạn đăng xuất và khiến mọi lịch sử trò chuyện được mã hóa trở nên không thể đọc được.",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Nếu trước đây bạn đã sử dụng phiên bản %(brand)s mới hơn, thì phiên của bạn có thể không tương thích với phiên bản này. Đóng cửa sổ này và quay lại phiên bản mới hơn.",
-    "We encountered an error trying to restore your previous session.": "Chúng tôi đã gặp lỗi khi cố gắng khôi phục phiên trước đó của bạn.",
-    "Unable to restore session": "Không thể khôi phục phiên",
     "Send Logs": "Gửi những bản ghi",
-    "Clear Storage and Sign Out": "Xóa bộ nhớ và Đăng xuất",
-    "Sign out and remove encryption keys?": "Đăng xuất và xóa khóa mã hóa?",
-    "Reset event store": "Đặt lại cửa hàng sự kiện",
-    "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Nếu bạn làm vậy, xin lưu ý rằng không có thư nào của bạn sẽ bị xóa, nhưng trải nghiệm tìm kiếm có thể bị giảm sút trong một vài phút trong khi chỉ mục được tạo lại",
-    "You most likely do not want to reset your event index store": "Rất có thể bạn không muốn đặt lại kho chỉ mục sự kiện của mình",
-    "Reset event store?": "Đặt lại kho sự kiện?",
-    "Language Dropdown": "Danh sách ngôn ngữ",
-    "Information": "Thông tin",
-    "%(count)s people you know have already joined": {
-        "one": "%(count)s người bạn đã biết vừa tham gia",
-        "other": "%(count)s người bạn đã biết vừa tham gia"
-    },
-    "Including %(commaSeparatedMembers)s": "Bao gồm %(commaSeparatedMembers)s",
-    "View all %(count)s members": {
-        "one": "Xem một thành viên",
-        "other": "Xem tất cả %(count)s thành viên"
-    },
     "expand": "mở rộng",
     "collapse": "thu hẹp",
-    "This version of %(brand)s does not support searching encrypted messages": "Phiên bản %(brand)s này không hỗ trợ tìm kiếm tin nhắn được mã hóa",
-    "This version of %(brand)s does not support viewing some encrypted files": "Phiên bản %(brand)s này không hỗ trợ xem một số tệp được mã hóa",
-    "Use the <a>Desktop app</a> to search encrypted messages": "Sử dụng ứng dụng Máy tính để bàn <a>Desktop app</a> để tìm kiếm tin nhắn được mã hóa",
-    "Use the <a>Desktop app</a> to see all encrypted files": "Sử dụng ứng dụng Máy tính để bàn <a>Desktop app</a> để xem tất cả các tệp được mã hóa",
-    "Message search initialisation failed, check <a>your settings</a> for more information": "Không thể khởi chạy tìm kiếm tin nhắn, hãy kiểm tra cài đặt của bạn <a>your settings</a> để biết thêm thông tin",
-    "Cancel search": "Hủy tìm kiếm",
-    "Can't load this message": "Không thể tải tin nhắn này",
     "Submit logs": "Gửi nhật ký",
-    "edited": "đã chỉnh sửa",
-    "Edited at %(date)s. Click to view edits.": "Đã chỉnh sửa vào %(date)s. Bấm để xem các chỉnh sửa.",
-    "Click to view edits": "Nhấp để xem các chỉnh sửa",
-    "Edited at %(date)s": "Đã chỉnh sửa lúc %(date)s",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Bạn sắp được đưa đến trang web của bên thứ ba để bạn có thể xác thực tài khoản của mình để sử dụng với %(integrationsUrl)s. Bạn có muốn tiếp tục không?",
-    "Add an Integration": "Thêm tích hợp",
-    "Add reaction": "Thêm phản ứng",
-    "%(name)s wants to verify": "%(name)s muốn xác thực",
-    "%(name)s cancelled": "%(name)s đã bị hủy",
-    "%(name)s declined": "%(name)s đã từ chối",
-    "%(name)s accepted": "%(name)s được chấp nhận",
     "Yesterday": "Hôm qua",
     "Today": "Hôm nay",
     "Saturday": "Thứ bảy",
@@ -386,22 +45,8 @@
     "Tuesday": "Thứ ba",
     "Monday": "Thứ hai",
     "Sunday": "Chủ nhật",
-    "Filter results": "Lọc kết quả",
-    "Remove %(count)s messages": {
-        "one": "Bỏ một tin nhắn",
-        "other": "Bỏ %(count)s tin nhắn"
-    },
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Đối với một lượng lớn thư, quá trình này có thể mất một chút thời gian. Vui lòng không làm mới khách hàng của bạn trong thời gian chờ đợi.",
-    "Remove recent messages by %(user)s": "Bỏ các tin nhắn gần đây bởi %(user)s",
-    "not specified": "không được chỉ định",
     "Failed to connect to integration manager": "Không kết nối được với trình quản lý tích hợp",
-    "unknown error code": "mã lỗi không xác định",
-    "Create new room": "Tạo phòng mới",
     "Join Room": "Vào phòng",
-    "(~%(count)s results)": {
-        "one": "(~%(count)s kết quả)",
-        "other": "(~%(count)s kết quả)"
-    },
     "Unnamed room": "Phòng không tên",
     "%(duration)sd": "%(duration)sd",
     "%(duration)sh": "%(duration)sh",
@@ -409,20 +54,11 @@
     "%(duration)ss": "%(duration)ss",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Để báo cáo sự cố bảo mật liên quan đến Matrix, vui lòng đọc Chính sách tiết lộ bảo mật của Matrix.org <a>Security Disclosure Policy</a>.",
     "Deactivate account": "Vô hiệu hoá tài khoản",
-    "%(count)s sessions": {
-        "one": "%(count)s phiên",
-        "other": "%(count)s phiên"
-    },
-    "%(count)s verified sessions": {
-        "one": "1 phiên đã xác thực",
-        "other": "%(count)s phiên đã xác thực"
-    },
     "Not encrypted": "Không được mã hóa",
     "Backup version:": "Phiên bản dự phòng:",
     "This backup is trusted because it has been restored on this session": "Bản sao lưu này đáng tin cậy vì nó đã được khôi phục trong phiên này",
     "Home": "Nhà",
     "To join a space you'll need an invite.": "Để tham gia vào một space, bạn sẽ cần một lời mời.",
-    "Create a space": "Tạo một Space",
     "Folder": "Thư mục",
     "Headphones": "Tai nghe",
     "Anchor": "Mỏ neo",
@@ -486,15 +122,7 @@
     "Lion": "Sư tử",
     "Cat": "Con mèo",
     "Dog": "Chó",
-    "and %(count)s others...": {
-        "one": "và một cái khác…",
-        "other": "và %(count)s khác…"
-    },
     "Encrypted by a deleted session": "Được mã hóa bởi một phiên đã xóa",
-    "%(count)s reply": {
-        "one": "%(count)s trả lời",
-        "other": "%(count)s trả lời"
-    },
     "IRC display name width": "Chiều rộng tên hiển thị IRC",
     "Ok": "OK",
     "Your homeserver has exceeded one of its resource limits.": "Máy chủ của bạn đã vượt quá một trong các giới hạn tài nguyên của nó.",
@@ -749,19 +377,7 @@
     "United States": "Hoa Kỳ",
     "United Kingdom": "Vương quốc Anh",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Lấy lại quyền truy cập vào tài khoản của bạn và khôi phục các khóa mã hóa được lưu trữ trong phiên này. Nếu không có chúng, bạn sẽ không thể đọc tất cả các tin nhắn an toàn của mình trong bất kỳ phiên nào.",
-    "Thread options": "Tùy chọn theo chủ đề",
     "Forget": "Quên",
-    "Upload %(count)s other files": {
-        "one": "Tải lên %(count)s tệp khác",
-        "other": "Tải lên %(count)s tệp khác"
-    },
-    "Spaces you know that contain this space": "Các space bạn biết có chứa space này",
-    "If you can't see who you're looking for, send them your invite link below.": "Nếu bạn không thể thấy người bạn đang tìm, hãy gửi cho họ liên kết mời của bạn bên dưới.",
-    "%(count)s votes": {
-        "one": "%(count)s phiếu bầu",
-        "other": "%(count)s phiếu bầu"
-    },
-    "Recently viewed": "Được xem gần đây",
     "Developer": "Nhà phát triển",
     "Experimental": "Thử nghiệm",
     "Themes": "Chủ đề",
@@ -771,94 +387,18 @@
         "one": "%(spaceName)s và %(count)s khác",
         "other": "%(spaceName)s và %(count)s khác"
     },
-    "Open in OpenStreetMap": "Mở trong OpenStreetMap",
-    "Verify other device": "Xác thực thiết bị khác",
-    "Recent searches": "Các tìm kiếm gần đây",
-    "To search messages, look for this icon at the top of a room <icon/>": "Để tìm các tin nhắn, hãy tìm biểu tượng này ở đầu phòng <icon/>",
-    "Other searches": "Các tìm kiếm khác",
-    "Public rooms": "Các phòng công cộng",
-    "Use \"%(query)s\" to search": "Sử dụng \"%(query)s\" để tìm kiếm",
-    "Other rooms in %(spaceName)s": "Các phòng khác trong %(spaceName)s",
-    "Spaces you're in": "Các Space bạn đang trong đó",
-    "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Điều này nhóm các cuộc trò chuyện của bạn với các thành viên trong Space này. Tắt tính năng này sẽ ẩn các cuộc trò chuyện đó khỏi %(spaceName)s.",
-    "Sections to show": "Các phần để hiển thị",
-    "Link to room": "Liên kết đến phòng",
-    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Bạn có chắc muốn kết thúc cuộc thăm dò ý kiến? Điều này sẽ hiển thị kết quả cuối cùng của cuộc thăm dò ý kiến và ngăn mọi người bỏ phiếu.",
-    "End Poll": "Kết thúc cuộc thăm dò ý kiến",
-    "Sorry, the poll did not end. Please try again.": "Xin lỗi, cuộc thăm dò ý kiến chưa kết thúc. Vui lòng thử lại.",
-    "Failed to end poll": "Kết thúc cuộc thăm dò ý kiến thất bại",
-    "The poll has ended. Top answer: %(topAnswer)s": "Cuộc thăm dò ý kiến đã kết thúc. Câu trả lời đứng đầu: %(topAnswer)s",
-    "The poll has ended. No votes were cast.": "Cuộc thăm dò ý kiến đã kết thúc. Không có phiếu bầu được bỏ.",
-    "This address had invalid server or is already in use": "Địa chỉ này có máy chủ không hợp lệ hoặc đã được sử dụng",
-    "Missing room name or separator e.g. (my-room:domain.org)": "Thiếu tên phòng hoặc dấu cách. Ví dụ: (my-room:domain.org)",
-    "Missing domain separator e.g. (:domain.org)": "Thiếu dấu tách tên miền. Ví dụ: (:domain.org)",
-    "Including you, %(commaSeparatedMembers)s": "Bao gồm bạn, %(commaSeparatedMembers)s",
-    "toggle event": "chuyển đổi sự kiện",
     "Explore public spaces in the new search dialog": "Khám phá các space công cộng trong hộp thoại tìm kiếm mới",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s và %(space2Name)s",
     "unknown": "không rõ",
     "Starting export process…": "Bắt đầu trích xuất…",
-    "Unsent": "Chưa gửi",
     "Requires your server to support the stable version of MSC3827": "Cần máy chủ nhà của bạn hỗ trợ phiên bản ổn định của MSC3827",
-    "Some results may be hidden for privacy": "Một số kết quả có thể bị ẩn để đảm bảo quyền riêng tư",
-    "If you can't find the room you're looking for, ask for an invite or create a new room.": "Nếu bạn không tìm được phòng bạn muốn, yêu cầu lời mời hay tạo phòng mới.",
-    "Fetching keys from server…": "Đang lấy các khóa từ máy chủ…",
     "Feedback sent! Thanks, we appreciate it!": "Đã gửi phản hồi! Cảm ơn bạn, chúng tôi đánh giá cao các phản hồi này!",
     "%(members)s and more": "%(members)s và nhiều người khác",
-    "%(count)s participants": {
-        "one": "1 người tham gia",
-        "other": "%(count)s người tham gia"
-    },
-    "Invites by email can only be sent one at a time": "Chỉ có thể gửi một thư điện tử mời mỗi lần",
-    "Open room": "Mở phòng",
     "%(members)s and %(last)s": "%(members)s và %(last)s",
-    "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "Khi bạn đăng xuất, các khóa sẽ được xóa khỏi thiết bị này, tức là bạn không thể đọc các tin nhắn được mã hóa trừ khi bạn có khóa cho chúng trong thiết bị khác, hoặc sao lưu chúng lên máy chủ.",
-    "Join %(roomAddress)s": "Tham gia %(roomAddress)s",
-    "Start DM anyway": "Cứ tạo phòng nhắn tin riêng",
-    " in <strong>%(room)s</strong>": " ở <strong>%(room)s</strong>",
-    "Search for": "Tìm",
-    "Use <arrows/> to scroll": "Dùng <arrows/> để cuộn",
-    "Start DM anyway and never warn me again": "Cứ tạo phòng nhắn tin riêng và đừng cảnh báo tôi nữa",
-    "Some results may be hidden": "Một số kết quả có thể bị ẩn",
-    "Waiting for partner to confirm…": "Đang đợi bên kia xác nhận…",
-    "Enable '%(manageIntegrations)s' in Settings to do this.": "Bật '%(manageIntegrations)s' trong cài đặt để thực hiện.",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "Không thể tìm hồ sơ cho định danh Matrix được liệt kê - bạn có muốn tiếp tục tạo phòng nhắn tin riêng?",
-    "Other options": "Lựa chọn khác",
-    "Input devices": "Thiết bị đầu vào",
-    "Output devices": "Thiết bị đầu ra",
-    "%(count)s Members": {
-        "one": "%(count)s thành viên",
-        "other": "%(count)s thành viên"
-    },
-    "Manually verify by text": "Xác thực thủ công bằng văn bản",
     "Show rooms": "Hiện phòng",
-    "Start a group chat": "Bắt đầu cuộc trò chuyện nhóm",
-    "Copy invite link": "Sao chép liên kết mời",
-    "Interactively verify by emoji": "Xác thực có tương tác bằng biểu tượng cảm xúc",
     "Show spaces": "Hiện spaces",
-    "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s hay %(recoveryFile)s",
-    "Cameras": "Máy quay",
-    "unavailable": "không có sẵn",
-    "%(name)s started a video call": "%(name)s đã bắt đầu một cuộc gọi truyền hình",
-    "You will not be able to reactivate your account": "Bạn sẽ không thể kích hoạt lại tài khoản của bạn",
-    "You will no longer be able to log in": "Bạn sẽ không thể đăng nhập lại",
-    "Location": "Vị trí",
-    "This address does not point at this room": "Địa chỉ này không trỏ đến phòng này",
-    "Choose a locale": "Chọn vùng miền",
-    "Coworkers and teams": "Đồng nghiệp và nhóm",
-    "Online community members": "Thành viên cộng đồng trực tuyến",
-    "Confirm that you would like to deactivate your account. If you proceed:": "Xác nhận bạn muốn vô hiệu hóa tài khoản. Nếu bạn tiếp tục:",
-    "You will leave all rooms and DMs that you are in": "Bạn sẽ rời tất cả phòng và tin nhắn trực tiếp mà bạn đã tham gia",
-    "You will be removed from the identity server: your friends will no longer be able to find you with your email or phone number": "Bạn sẽ bị xóa khỏi máy chủ định danh: bạn bè của bạn sẽ không tìm thấy bạn bằng địa chỉ thư điện tử hay số điện thoại",
-    "Message in %(room)s": "Tin nhắn trong %(room)s",
-    "Message from %(user)s": "Tin nhắn từ %(user)s",
-    "Show: Matrix rooms": "Hiện: Phòng Matrix",
-    "Friends and family": "Bạn bè và gia đình",
-    "Adding…": "Đang thêm…",
-    "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "Không ai có thể dùng lại tên người dùng của bạn (MXID), kể cả bạn: tên người dùng này sẽ trở thành không có sẵn",
     "<w>WARNING:</w> <description/>": "",
     "Shared their location: ": "",
-    "To continue, please enter your account password:": "Để tiếp tục, vui lòng nhập mật khẩu tài khoản của bạn:",
     "common": {
         "about": "Giới thiệu",
         "analytics": "Về dữ liệu phân tích",
@@ -978,7 +518,31 @@
         "show_more": "Cho xem nhiều hơn",
         "joined": "Đã tham gia",
         "avatar": "Avatar",
-        "are_you_sure": "Bạn có chắc không?"
+        "are_you_sure": "Bạn có chắc không?",
+        "location": "Vị trí",
+        "email_address": "Địa chỉ thư điện tử",
+        "filter_results": "Lọc kết quả",
+        "no_results_found": "không tim được kêt quả",
+        "unsent": "Chưa gửi",
+        "cameras": "Máy quay",
+        "n_participants": {
+            "one": "1 người tham gia",
+            "other": "%(count)s người tham gia"
+        },
+        "and_n_others": {
+            "one": "và một cái khác…",
+            "other": "và %(count)s khác…"
+        },
+        "n_members": {
+            "one": "%(count)s thành viên",
+            "other": "%(count)s thành viên"
+        },
+        "unavailable": "không có sẵn",
+        "edited": "đã chỉnh sửa",
+        "n_rooms": {
+            "one": "%(count)s phòng",
+            "other": "%(count)s phòng"
+        }
     },
     "action": {
         "continue": "Tiếp tục",
@@ -1095,7 +659,10 @@
         "add_existing_room": "Thêm phòng hiện có",
         "explore_public_rooms": "Khám phá các phòng chung",
         "reply_in_thread": "Trả lời theo chủ đề",
-        "click": "Nhấn"
+        "click": "Nhấn",
+        "transfer": "Chuyển",
+        "resume": "Tiếp tục",
+        "hold": "Giữ máy"
     },
     "a11y": {
         "user_menu": "Menu người dùng",
@@ -1187,7 +754,8 @@
         "beta_section": "Tính năng sắp tới",
         "beta_description": "Những gì sắp đến với %(brand)s? Phòng thí điểm là nơi tốt nhất để có mọi thứ sớm, thử nghiệm tính năng mới và giúp hoàn thiện trước khi chúng thực sự ra mắt.",
         "experimental_section": "Thử trước tính năng mới",
-        "experimental_description": "Muốn trải nghiệm? Thử các ý tưởng mới nhất còn đang được phát triển của chúng tôi. Các tính năng này chưa được hoàn thiện, chúng có thể không ổn định, có thể thay đổi, hay bị loại bỏ hoàn toàn. <a>Tìm hiểu thêm</a>."
+        "experimental_description": "Muốn trải nghiệm? Thử các ý tưởng mới nhất còn đang được phát triển của chúng tôi. Các tính năng này chưa được hoàn thiện, chúng có thể không ổn định, có thể thay đổi, hay bị loại bỏ hoàn toàn. <a>Tìm hiểu thêm</a>.",
+        "beta_feedback_leave_button": "Để rời khỏi bản beta, hãy truy cập mục cài đặt của bạn."
     },
     "keyboard": {
         "home": "Nhà",
@@ -1306,7 +874,9 @@
         "moderator": "Điều phối viên",
         "admin": "Quản trị viên",
         "mod": "Người quản trị",
-        "custom": "Tùy chỉnh (%(level)s)"
+        "custom": "Tùy chỉnh (%(level)s)",
+        "label": "Cấp độ sức mạnh",
+        "custom_level": "Cấp độ tùy chọn"
     },
     "bug_reporting": {
         "introduction": "Nếu bạn đã báo cáo lỗi qua GitHub, nhật ký gỡ lỗi có thể giúp chúng tôi theo dõi vấn đề. ",
@@ -1324,7 +894,16 @@
         "uploading_logs": "Tải lên nhật ký",
         "downloading_logs": "Đang tải nhật ký xuống",
         "create_new_issue": "Vui lòng <newIssueLink> tạo một vấn đề mới </newIssueLink> trên GitHub để chúng tôi có thể điều tra lỗi này.",
-        "waiting_for_server": "Đang chờ phản hồi từ máy chủ"
+        "waiting_for_server": "Đang chờ phản hồi từ máy chủ",
+        "error_empty": "Vui lòng cho chúng tôi biết điều gì đã xảy ra hoặc tốt hơn là tạo sự cố trên GitHub để mô tả vấn đề.",
+        "preparing_logs": "Chuẩn bị gửi nhật ký",
+        "logs_sent": "Nhật ký đã được gửi",
+        "thank_you": "Cảm ơn bạn!",
+        "failed_send_logs": "Không gửi được nhật ký: ",
+        "preparing_download": "Chuẩn bị tải nhật ký xuống",
+        "unsupported_browser": "Nhắc nhở: Trình duyệt của bạn không được hỗ trợ, vì vậy trải nghiệm của bạn có thể không thể đoán trước được.",
+        "textarea_label": "Ghi chú",
+        "log_request": "Để giúp chúng tôi ngăn chặn điều này trong tương lai, vui lòng gửi nhật ký cho chúng tôi <a>send us logs</a>."
     },
     "time": {
         "hours_minutes_seconds_left": "Còn lại %(hours)s giờ %(minutes)s phút %(seconds)s giây",
@@ -1400,7 +979,10 @@
         "send_dm": "Gửi tin nhắn trực tiếp",
         "explore_rooms": "Khám phá các phòng chung",
         "create_room": "Tạo một cuộc trò chuyện nhóm",
-        "create_account": "Tạo tài khoản"
+        "create_account": "Tạo tài khoản",
+        "use_case_personal_messaging": "Bạn bè và gia đình",
+        "use_case_work_messaging": "Đồng nghiệp và nhóm",
+        "use_case_community_messaging": "Thành viên cộng đồng trực tuyến"
     },
     "settings": {
         "show_breadcrumbs": "Hiển thị shortcuts cho các phòng đã xem gần đây phía trên danh sách phòng",
@@ -1785,7 +1367,21 @@
             "email_address_label": "Địa chỉ thư điện tử",
             "remove_msisdn_prompt": "Xóa %(phone)s?",
             "add_msisdn_instructions": "Một tin nhắn văn bản đã được gửi tới +%(msisdn)s. Vui lòng nhập mã xác minh trong đó.",
-            "msisdn_label": "Số điện thoại"
+            "msisdn_label": "Số điện thoại",
+            "spell_check_locale_placeholder": "Chọn vùng miền",
+            "deactivate_confirm_body_sso": "Xác nhận việc hủy kích hoạt tài khoản của bạn bằng cách sử dụng Single Sign On để chứng minh danh tính của bạn.",
+            "deactivate_confirm_body": "Bạn có chắc chắn muốn hủy kích hoạt tài khoản của mình không? Điều này là không thể thay đổi.",
+            "deactivate_confirm_continue": "Xác nhận việc hủy kích hoạt tài khoản",
+            "deactivate_confirm_body_password": "Để tiếp tục, vui lòng nhập mật khẩu tài khoản của bạn:",
+            "error_deactivate_communication": "Đã xảy ra sự cố khi giao tiếp với máy chủ. Vui lòng thử lại.",
+            "error_deactivate_no_auth": "Máy chủ không yêu cầu bất kỳ xác thực nào",
+            "error_deactivate_invalid_auth": "Máy chủ không trả về thông tin xác thực hợp lệ.",
+            "deactivate_confirm_content": "Xác nhận bạn muốn vô hiệu hóa tài khoản. Nếu bạn tiếp tục:",
+            "deactivate_confirm_content_1": "Bạn sẽ không thể kích hoạt lại tài khoản của bạn",
+            "deactivate_confirm_content_2": "Bạn sẽ không thể đăng nhập lại",
+            "deactivate_confirm_content_3": "Không ai có thể dùng lại tên người dùng của bạn (MXID), kể cả bạn: tên người dùng này sẽ trở thành không có sẵn",
+            "deactivate_confirm_content_4": "Bạn sẽ rời tất cả phòng và tin nhắn trực tiếp mà bạn đã tham gia",
+            "deactivate_confirm_content_5": "Bạn sẽ bị xóa khỏi máy chủ định danh: bạn bè của bạn sẽ không tìm thấy bạn bằng địa chỉ thư điện tử hay số điện thoại"
         },
         "sidebar": {
             "title": "Thanh bên",
@@ -1906,7 +1502,8 @@
         "developer_mode": "Chế độ nhà phát triển",
         "view_source_decrypted_event_source": "Nguồn sự kiện được giải mã",
         "view_source_decrypted_event_source_unavailable": "Nguồn được giải mã không khả dụng",
-        "original_event_source": "Nguồn sự kiện ban đầu"
+        "original_event_source": "Nguồn sự kiện ban đầu",
+        "toggle_event": "chuyển đổi sự kiện"
     },
     "export_chat": {
         "html": "HTML",
@@ -1965,7 +1562,8 @@
         "format": "Định dạng",
         "messages": "Tin nhắn",
         "size_limit": "Giới hạn kích thước",
-        "include_attachments": "Bao gồm các đính kèm"
+        "include_attachments": "Bao gồm các đính kèm",
+        "size_limit_postfix": "MB"
     },
     "create_room": {
         "title_video_room": "Tạo một phòng truyền hình",
@@ -1997,7 +1595,8 @@
         "m.call": {
             "video_call_started": "Cuộc gọi truyền hình đã bắt đầu trong %(roomName)s.",
             "video_call_started_unsupported": "Cuộc gọi truyền hình đã được bắt đầu ở %(roomName)s. (không được trình duyệt này hỗ trợ)",
-            "video_call_ended": "Cuộc gọi truyền hình đã kết thúc"
+            "video_call_ended": "Cuộc gọi truyền hình đã kết thúc",
+            "video_call_started_text": "%(name)s đã bắt đầu một cuộc gọi truyền hình"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s đã thực hiện một cuộc gọi thoại.",
@@ -2294,7 +1893,8 @@
         },
         "reactions": {
             "label": "%(reactors)s đã phản hồi với %(content)s",
-            "tooltip": "<reactors/><reactedWith>đã phản hồi với %(shortName)s</reactedWith>"
+            "tooltip": "<reactors/><reactedWith>đã phản hồi với %(shortName)s</reactedWith>",
+            "add_reaction_prompt": "Thêm phản ứng"
         },
         "m.room.create": {
             "continuation": "Căn phòng này là sự tiếp nối của một cuộc trò chuyện khác.",
@@ -2312,7 +1912,9 @@
             "external_url": "URL nguồn",
             "collapse_reply_thread": "Thu gọn chuỗi trả lời",
             "view_related_event": "Xem sự kiện liên quan",
-            "report": "Bản báo cáo"
+            "report": "Bản báo cáo",
+            "resent_unsent_reactions": "Gửi lại (các) phản ứng %(unsentCount)s",
+            "open_in_osm": "Mở trong OpenStreetMap"
         },
         "url_preview": {
             "show_n_more": {
@@ -2384,13 +1986,39 @@
             "you_declined": "Bạn đã từ chối",
             "you_cancelled": "Bạn đã hủy bỏ",
             "declining": "Đang từ chối…",
-            "you_started": "Bạn đã gửi một yêu cầu xác thực"
+            "you_started": "Bạn đã gửi một yêu cầu xác thực",
+            "user_accepted": "%(name)s được chấp nhận",
+            "user_declined": "%(name)s đã từ chối",
+            "user_cancelled": "%(name)s đã bị hủy",
+            "user_wants_to_verify": "%(name)s muốn xác thực"
         },
         "m.poll.end": {
             "sender_ended": "%(senderName)s vừa kết thúc một cuộc bình chọn"
         },
         "m.video": {
             "error_decrypting": "Lỗi khi giải mã video"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "Thêm tích hợp",
+            "dialog_description": "Bạn sắp được đưa đến trang web của bên thứ ba để bạn có thể xác thực tài khoản của mình để sử dụng với %(integrationsUrl)s. Bạn có muốn tiếp tục không?"
+        },
+        "edits": {
+            "tooltip_title": "Đã chỉnh sửa lúc %(date)s",
+            "tooltip_sub": "Nhấp để xem các chỉnh sửa",
+            "tooltip_label": "Đã chỉnh sửa vào %(date)s. Bấm để xem các chỉnh sửa."
+        },
+        "error_rendering_message": "Không thể tải tin nhắn này",
+        "reply": {
+            "error_loading": "Không thể tải sự kiện đã được trả lời, sự kiện đó không tồn tại hoặc bạn không có quyền xem sự kiện đó.",
+            "in_reply_to": "Trả lời <a>In reply to</a> <pill>",
+            "in_reply_to_for_export": "Để trả lời <a>tin nhắn này</a>"
+        },
+        "in_room_name": " ở <strong>%(room)s</strong>",
+        "m.poll": {
+            "count_of_votes": {
+                "one": "%(count)s phiếu bầu",
+                "other": "%(count)s phiếu bầu"
+            }
         }
     },
     "slash_command": {
@@ -2483,7 +2111,8 @@
         "verify_nop_warning_mismatch": "CẢNH BÁO: phiên đã được xác thực, nhưng các khóa KHÔNG KHỚP!",
         "verify_mismatch": "CẢNH BÁO: XÁC THỰC KHÓA THẤT BẠI! Khóa đăng nhập cho %(userId)s và thiết bị %(deviceId)s là \"%(fprint)s\" không khớp với khóa được cung cấp \"%(fingerprint)s\". Điều này có nghĩa là các thông tin liên lạc của bạn đang bị chặn!",
         "verify_success_title": "Khóa được xác thực",
-        "verify_success_description": "Khóa đăng nhập bạn cung cấp khớp với khóa đăng nhập bạn nhận từ thiết bị %(deviceId)s của %(userId)s. Thiết bị được đánh dấu là đã được xác minh."
+        "verify_success_description": "Khóa đăng nhập bạn cung cấp khớp với khóa đăng nhập bạn nhận từ thiết bị %(deviceId)s của %(userId)s. Thiết bị được đánh dấu là đã được xác minh.",
+        "help_dialog_title": "Lệnh Trợ giúp"
     },
     "presence": {
         "busy": "Bận",
@@ -2616,9 +2245,11 @@
         "unable_to_access_audio_input_title": "Không thể truy cập micrô của bạn",
         "unable_to_access_audio_input_description": "Chúng tôi không thể truy cập micrô của bạn. Xin hãy kiểm tra trình duyệt của bạn và thử lại.",
         "no_audio_input_title": "Không tìm thấy micrô",
-        "no_audio_input_description": "Chúng tôi không tìm thấy micrô trên thiết bị của bạn. Vui lòng kiểm tra các thiết lập của bạn và thử lại."
+        "no_audio_input_description": "Chúng tôi không tìm thấy micrô trên thiết bị của bạn. Vui lòng kiểm tra các thiết lập của bạn và thử lại.",
+        "transfer_consult_first_label": "Tư vấn trước",
+        "input_devices": "Thiết bị đầu vào",
+        "output_devices": "Thiết bị đầu ra"
     },
-    "Other": "Khác",
     "room_settings": {
         "permissions": {
             "m.room.avatar_space": "Đổi ảnh đại diện của không gian",
@@ -2725,7 +2356,15 @@
                 "other": "Đang cập nhật space… (%(progress)s trên %(count)s)"
             },
             "error_join_rule_change_title": "Cập nhật quy tắc tham gia thất bại",
-            "error_join_rule_change_unknown": "Thất bại không xác định"
+            "error_join_rule_change_unknown": "Thất bại không xác định",
+            "join_rule_restricted_dialog_empty_warning": "Bạn đang xóa tất cả space. Quyền truy cập sẽ mặc định chỉ để mời",
+            "join_rule_restricted_dialog_title": "Chọn Không gian",
+            "join_rule_restricted_dialog_description": "Quyết định space nào có thể vào phòng này. Nếu một space được chọn, các thành viên của nó có thể tìm và tham gia <RoomName/>.",
+            "join_rule_restricted_dialog_filter_placeholder": "Tìm kiếm các Space",
+            "join_rule_restricted_dialog_heading_space": "Các space bạn biết có chứa space này",
+            "join_rule_restricted_dialog_heading_room": "Những space mà bạn biết có chứa căn phòng này",
+            "join_rule_restricted_dialog_heading_other": "Không gian hoặc phòng khác bạn có thể không biết",
+            "join_rule_restricted_dialog_heading_unknown": "Đây có thể là những người mà các quản trị viên phòng khác cũng tham gia."
         },
         "general": {
             "publish_toggle": "Xuất bản phòng này cho công chúng trong thư mục phòng của %(domain)s?",
@@ -2766,7 +2405,17 @@
             "canonical_alias_field_label": "Địa chỉ chính",
             "avatar_field_label": "Hình đại diện phòng",
             "aliases_no_items_label": "Chưa có địa chỉ đã xuất bản nào khác, hãy thêm một địa chỉ bên dưới",
-            "aliases_items_label": "Các địa chỉ công khai khác:"
+            "aliases_items_label": "Các địa chỉ công khai khác:",
+            "alias_heading": "Địa chỉ phòng",
+            "alias_field_has_domain_invalid": "Thiếu dấu tách tên miền. Ví dụ: (:domain.org)",
+            "alias_field_has_localpart_invalid": "Thiếu tên phòng hoặc dấu cách. Ví dụ: (my-room:domain.org)",
+            "alias_field_safe_localpart_invalid": "Một số ký tự không được phép",
+            "alias_field_required_invalid": "Vui lòng cung cấp địa chỉ",
+            "alias_field_matches_invalid": "Địa chỉ này không trỏ đến phòng này",
+            "alias_field_taken_valid": "Địa chỉ này có sẵn để sử dụng",
+            "alias_field_taken_invalid_domain": "Địa chỉ này đã được sử dụng",
+            "alias_field_taken_invalid": "Địa chỉ này có máy chủ không hợp lệ hoặc đã được sử dụng",
+            "alias_field_placeholder_default": "ví dụ: phòng của tôi my-room"
         },
         "advanced": {
             "unfederated": "Phòng này không thể truy cập từ xa bằng máy chủ Matrix",
@@ -2779,7 +2428,24 @@
             "room_version_section": "Phiên bản phòng",
             "room_version": "Phiên bản phòng:",
             "information_section_space": "Thông tin Space",
-            "information_section_room": "Thông tin phòng"
+            "information_section_room": "Thông tin phòng",
+            "error_upgrade_title": "Không nâng cấp được phòng",
+            "error_upgrade_description": "Không thể hoàn thành việc nâng cấp phòng",
+            "upgrade_button": "Nâng cấp phòng này lên phiên bản %(version)s",
+            "upgrade_dialog_title": "Nâng cấp phiên bản phòng",
+            "upgrade_dialog_description": "Nâng cấp phòng này yêu cầu đóng cửa phiên bản hiện tại của phòng và tạo một phòng mới ở vị trí của nó. Để mang đến cho các thành viên trong phòng trải nghiệm tốt nhất có thể, chúng tôi sẽ:",
+            "upgrade_dialog_description_1": "Tạo một phòng mới có cùng tên, mô tả và hình đại diện",
+            "upgrade_dialog_description_2": "Cập nhật bất kỳ bí danh phòng cục bộ nào để trỏ đến phòng mới",
+            "upgrade_dialog_description_3": "Ngăn người dùng nói trong phiên bản cũ của phòng và đăng thông báo khuyên người dùng chuyển sang phòng mới",
+            "upgrade_dialog_description_4": "Đặt một liên kết trở lại phòng cũ ở đầu phòng mới để mọi người có thể xem các tin nhắn cũ",
+            "upgrade_warning_dialog_invite_label": "Tự động mời các thành viên từ phòng này đến phòng mới",
+            "upgrade_warning_dialog_title_private": "Nâng cấp phòng riêng tư",
+            "upgrade_dwarning_ialog_title_public": "Nâng cấp phòng công cộng",
+            "upgrade_warning_dialog_report_bug_prompt": "Điều này thường chỉ ảnh hưởng đến cách xử lý phòng trên máy chủ. Nếu bạn đang gặp sự cố với %(brand)s của mình, vui lòng báo cáo lỗi.",
+            "upgrade_warning_dialog_report_bug_prompt_link": "Điều này thường chỉ ảnh hưởng đến cách xử lý phòng trên máy chủ. Nếu bạn đang gặp sự cố với %(brand)s của mình, vui lòng báo cáo lỗi <a>report a bug</a>.",
+            "upgrade_warning_dialog_description": "Nâng cấp phòng là một hành động nâng cao và thường được khuyến nghị khi phòng không ổn định do lỗi, thiếu tính năng hoặc lỗ hổng bảo mật.",
+            "upgrade_warning_dialog_explainer": "<b> Xin lưu ý rằng việc nâng cấp sẽ tạo ra một phiên bản mới của phòng </b>. Tất cả các tin nhắn hiện tại sẽ ở trong phòng lưu trữ này.",
+            "upgrade_warning_dialog_footer": "Bạn sẽ nâng cấp phòng này từ <oldVersion /> thành <newVersion />."
         },
         "delete_avatar_label": "Xoá ảnh đại diện",
         "upload_avatar_label": "Tải lên hình đại diện",
@@ -2819,7 +2485,9 @@
             "enable_element_call_caption": "%(brand)s được mã hóa đầu cuối, nhưng hiện giới hạn cho một lượng người dùng nhỏ.",
             "enable_element_call_no_permissions_tooltip": "Bạn không có đủ quyền để thay đổi cái này.",
             "call_type_section": "Loại cuộc gọi"
-        }
+        },
+        "title": "Cài đặt Phòng - %(roomName)s",
+        "alias_not_specified": "không được chỉ định"
     },
     "encryption": {
         "verification": {
@@ -2896,7 +2564,21 @@
             "timed_out": "Đã hết thời gian xác thực.",
             "cancelled_self": "Bạn đã hủy xác thực trên thiết bị khác của bạn.",
             "cancelled_user": "%(displayName)s đã hủy xác thực.",
-            "cancelled": "Bạn đã hủy xác thực."
+            "cancelled": "Bạn đã hủy xác thực.",
+            "incoming_sas_user_dialog_text_1": "Xác thực người dùng này để đánh dấu họ là đáng tin cậy. Người dùng đáng tin cậy giúp bạn yên tâm hơn khi sử dụng các tin nhắn được mã hóa end-to-end.",
+            "incoming_sas_user_dialog_text_2": "Việc xác thực người dùng này sẽ đánh dấu phiên của họ là đáng tin cậy và cũng đánh dấu phiên của bạn là đáng tin cậy đối với họ.",
+            "incoming_sas_device_dialog_text_1": "Xác thực thiết bị này để đánh dấu thiết bị là đáng tin cậy. Tin tưởng vào thiết bị này giúp bạn và những người dùng khác yên tâm hơn khi sử dụng các tin nhắn được mã hóa đầu cuối.",
+            "incoming_sas_device_dialog_text_2": "Việc xác thực thiết bị này sẽ đánh dấu thiết bị là đáng tin cậy và những người dùng đã xác minh với bạn sẽ tin tưởng thiết bị này.",
+            "incoming_sas_dialog_waiting": "Đang đợi bên kia xác nhận…",
+            "incoming_sas_dialog_title": "Yêu cầu xác thực đến",
+            "manual_device_verification_self_text": "Xác nhận bằng cách so sánh những điều sau đây với Cài đặt người dùng trong phiên làm việc kia của bạn:",
+            "manual_device_verification_user_text": "Xác nhận phiên của người dùng này bằng cách so sánh phần sau với Cài đặt người dùng của họ:",
+            "manual_device_verification_device_name_label": "Tên phiên",
+            "manual_device_verification_device_id_label": "Định danh (ID) phiên",
+            "manual_device_verification_device_key_label": "Khóa phiên",
+            "manual_device_verification_footer": "Nếu chúng không khớp, sự bảo mật của việc giao tiếp của bạn có thể bị can thiệp.",
+            "verification_dialog_title_device": "Xác thực thiết bị khác",
+            "verification_dialog_title_user": "Yêu cầu xác thực"
         },
         "old_version_detected_title": "Đã phát hiện dữ liệu mật mã cũ",
         "old_version_detected_description": "Dữ liệu từ phiên bản cũ hơn của %(brand)s đã được phát hiện. Điều này sẽ khiến mật mã end-to-end bị trục trặc trong phiên bản cũ hơn. Các tin nhắn được mã hóa end-to-end được trao đổi gần đây trong khi sử dụng phiên bản cũ hơn có thể không giải mã được trong phiên bản này. Điều này cũng có thể khiến các tin nhắn được trao đổi với phiên bản này bị lỗi. Nếu bạn gặp sự cố, hãy đăng xuất và đăng nhập lại. Để lưu lại lịch sử tin nhắn, hãy export và re-import các khóa của bạn.",
@@ -2950,7 +2632,57 @@
         "cross_signing_room_warning": "Ai đó đang sử dụng một phiên không xác định",
         "cross_signing_room_verified": "Mọi người trong phòng này đã được xác thực",
         "cross_signing_room_normal": "Phòng này được mã hóa end-to-end",
-        "unsupported": "Ứng dụng khách này không hỗ trợ mã hóa đầu cuối."
+        "unsupported": "Ứng dụng khách này không hỗ trợ mã hóa đầu cuối.",
+        "incompatible_database_sign_out_description": "Để tránh mất lịch sử trò chuyện, bạn phải xuất chìa khóa phòng trước khi đăng xuất. Bạn sẽ cần quay lại phiên bản %(brand)s mới hơn để thực hiện việc này",
+        "incompatible_database_description": "Trước đây, bạn đã sử dụng phiên bản %(brand)s mới hơn với phiên này. Để sử dụng lại phiên bản này với mã hóa đầu cuối, bạn cần đăng xuất và đăng nhập lại.",
+        "incompatible_database_title": "Cơ sở dữ liệu không tương thích",
+        "incompatible_database_disable": "Tiếp tục với mã hóa bị tắt",
+        "key_signature_upload_completed": "Hoàn tất tải lên",
+        "key_signature_upload_cancelled": "Đã hủy tải lên chữ ký",
+        "key_signature_upload_failed": "Không thể tải lên",
+        "key_signature_upload_success_title": "Tải lên chữ ký thành công",
+        "key_signature_upload_failed_title": "Tải lên chữ ký không thành công",
+        "udd": {
+            "own_new_session_text": "Bạn đã đăng nhập vào một phiên mới mà không xác thực nó:",
+            "own_ask_verify_text": "Xác minh phiên khác của bạn bằng một trong các tùy chọn bên dưới.",
+            "other_new_session_text": "%(name)s (%(userId)s) đã đăng nhập vào một phiên mới mà không xác thực:",
+            "other_ask_verify_text": "Yêu cầu người dùng này xác thực phiên của họ hoặc xác minh theo cách thủ công bên dưới.",
+            "title": "Không tin cậy",
+            "manual_verification_button": "Xác thực thủ công bằng văn bản",
+            "interactive_verification_button": "Xác thực có tương tác bằng biểu tượng cảm xúc"
+        },
+        "access_secret_storage_dialog": {
+            "key_validation_text": {
+                "wrong_file_type": "Loại tệp sai",
+                "recovery_key_is_correct": "Có vẻ tốt!",
+                "wrong_security_key": "Khóa bảo mật sai",
+                "invalid_security_key": "Khóa bảo mật không hợp lệ"
+            },
+            "reset_title": "Đặt lại mọi thứ",
+            "reset_warning_1": "Chỉ thực hiện việc này nếu bạn không có thiết bị nào khác để hoàn tất quá trình xác thực.",
+            "reset_warning_2": "Nếu bạn đặt lại mọi thứ, bạn sẽ khởi động lại mà không có phiên nào đáng tin cậy, không có người dùng đáng tin cậy và có thể không xem được các tin nhắn trước đây.",
+            "security_phrase_title": "Cụm từ Bảo mật",
+            "security_phrase_incorrect_error": "Không thể truy cập bộ nhớ bí mật. Vui lòng xác minh rằng bạn đã nhập đúng Cụm từ bảo mật.",
+            "enter_phrase_or_key_prompt": "Nhập Chuỗi bảo mật hoặc <button>sử dụng Khóa bảo mật</button> của bạn để tiếp tục.",
+            "security_key_title": "Chìa khóa bảo mật",
+            "use_security_key_prompt": "Sử dụng Khóa bảo mật của bạn để tiếp tục.",
+            "separator": "%(securityKey)s hay %(recoveryFile)s",
+            "restoring": "Khôi phục khóa từ sao lưu"
+        },
+        "reset_all_button": "Quên hoặc mất tất cả các phương pháp khôi phục? Đặt lại tất cả <a>Reset all</a>",
+        "destroy_cross_signing_dialog": {
+            "title": "Hủy khóa xác thực chéo?",
+            "warning": "Xóa khóa ký chéo là vĩnh viễn. Bất kỳ ai mà bạn đã xác thực đều sẽ thấy cảnh báo bảo mật. Bạn gần như chắc chắn không muốn làm điều này, trừ khi bạn bị mất mọi thiết bị mà bạn có thể đăng nhập chéo.",
+            "primary_button_text": "Xóa các khóa ký chéo"
+        },
+        "confirm_encryption_setup_title": "Xác nhận thiết lập mã hóa",
+        "confirm_encryption_setup_body": "Nhấp vào nút bên dưới để xác nhận thiết lập mã hóa.",
+        "unable_to_setup_keys_error": "Không thể thiết lập khóa",
+        "key_signature_upload_failed_master_key_signature": "một chữ ký khóa chính mới",
+        "key_signature_upload_failed_cross_signing_key_signature": "một chữ ký khóa xác thực chéo mới",
+        "key_signature_upload_failed_device_cross_signing_key_signature": "một chữ ký được xác thực chéo trên thiết bị",
+        "key_signature_upload_failed_key_signature": "một chữ ký chính",
+        "key_signature_upload_failed_body": "%(brand)s đã gặp lỗi khi tải lên:"
     },
     "emoji": {
         "category_frequently_used": "Thường xuyên sử dụng",
@@ -3088,7 +2820,10 @@
             "fallback_button": "Bắt đầu xác thực",
             "sso_title": "Sử dụng Đăng Nhập Một Lần để tiếp tục",
             "sso_body": "Xác nhận việc thêm địa chỉ thư điện tử này bằng cách sử dụng Đăng Nhập Một Lần để chứng minh danh tính của bạn.",
-            "code": "Mã"
+            "code": "Mã",
+            "sso_preauth_body": "Để tiếp tục, hãy sử dụng Single Sign On để chứng minh danh tính của bạn.",
+            "sso_postauth_title": "Xác nhận để tiếp tục",
+            "sso_postauth_body": "Nhấp vào nút bên dưới để xác nhận danh tính của bạn."
         },
         "password_field_label": "Nhập mật khẩu",
         "password_field_strong_label": "Mật khẩu mạnh, tốt đó!",
@@ -3136,7 +2871,40 @@
         },
         "country_dropdown": "Quốc gia thả xuống",
         "common_failures": {},
-        "captcha_description": "Người bảo vệ gia đình này muốn đảm bảo rằng bạn không phải là người máy."
+        "captcha_description": "Người bảo vệ gia đình này muốn đảm bảo rằng bạn không phải là người máy.",
+        "autodiscovery_invalid": "Phản hồi khám phá homeserver không hợp lệ",
+        "autodiscovery_generic_failure": "Không lấy được cấu hình tự động phát hiện từ máy chủ",
+        "autodiscovery_invalid_hs_base_url": "Base_url không hợp lệ cho m.homeserver",
+        "autodiscovery_invalid_hs": "URL máy chủ dường như không phải là máy chủ Matrix hợp lệ",
+        "autodiscovery_invalid_is_base_url": "Base_url không hợp lệ cho m.identity_server",
+        "autodiscovery_invalid_is": "URL máy chủ nhận dạng dường như không phải là máy chủ nhận dạng hợp lệ",
+        "autodiscovery_invalid_is_response": "Phản hồi phát hiện máy chủ nhận dạng không hợp lệ",
+        "server_picker_description_matrix.org": "Tham gia hàng triệu máy chủ công cộng miễn phí lớn nhất",
+        "server_picker_title_default": "Tùy chọn máy chủ",
+        "soft_logout": {
+            "clear_data_title": "Xóa tất cả dữ liệu trong phiên này?",
+            "clear_data_description": "Xóa tất cả dữ liệu khỏi phiên này là vĩnh viễn. Các tin nhắn được mã hóa sẽ bị mất trừ khi các khóa của chúng đã được sao lưu.",
+            "clear_data_button": "Xóa tất cả dữ liệu"
+        },
+        "logout_dialog": {
+            "setup_secure_backup_description_1": "Các tin nhắn được mã hóa được bảo mật bằng mã hóa đầu cuối. Chỉ bạn và (những) người nhận mới có chìa khóa để đọc những tin nhắn này.",
+            "setup_secure_backup_description_2": "Khi bạn đăng xuất, các khóa sẽ được xóa khỏi thiết bị này, tức là bạn không thể đọc các tin nhắn được mã hóa trừ khi bạn có khóa cho chúng trong thiết bị khác, hoặc sao lưu chúng lên máy chủ.",
+            "use_key_backup": "Bắt đầu sao lưu các khóa",
+            "skip_key_backup": "Tôi không muốn tin nhắn được mã hóa của mình",
+            "megolm_export": "Xuất các khóa thủ công",
+            "setup_key_backup_title": "Bạn sẽ mất quyền truy cập vào các tin nhắn được mã hóa của mình",
+            "description": "Bạn có chắc mình muốn đăng xuất không?"
+        },
+        "registration": {
+            "continue_without_email_title": "Tiếp tục mà không cần địa chỉ thư điện tử",
+            "continue_without_email_description": "Lưu ý là nếu bạn không thêm địa chỉ thư điện tử và quên mật khẩu, bạn có thể <b>vĩnh viễn mất quyền truy cập vào tài khoản của mình</b>.",
+            "continue_without_email_field_label": "Địa chỉ thư điện tử (tùy chọn)"
+        },
+        "set_email": {
+            "verification_pending_title": "Chờ xác thực",
+            "verification_pending_description": "Vui lòng kiểm tra hòm thư và bấm vào liên kết trong đó. Khi nào xong, hãy bấm tiếp tục.",
+            "description": "Điều này sẽ cho phép bạn đặt lại mật khẩu của mình và nhận thông báo."
+        }
     },
     "room_list": {
         "sort_unread_first": "Hiển thị các phòng có tin nhắn chưa đọc trước",
@@ -3186,7 +2954,8 @@
         "spam_or_propaganda": "Thư rác hoặc tuyên truyền",
         "report_entire_room": "Báo cáo toàn bộ phòng",
         "report_content_to_homeserver": "Báo cáo Nội dung cho Quản trị viên Máy chủ Trang chủ của Bạn",
-        "description": "Báo cáo thông báo này sẽ gửi 'ID sự kiện' duy nhất của nó đến quản trị viên của máy chủ của bạn. Nếu tin nhắn trong phòng này được mã hóa, quản trị viên máy chủ của bạn sẽ không thể đọc nội dung tin nhắn hoặc xem bất kỳ tệp hoặc hình ảnh nào."
+        "description": "Báo cáo thông báo này sẽ gửi 'ID sự kiện' duy nhất của nó đến quản trị viên của máy chủ của bạn. Nếu tin nhắn trong phòng này được mã hóa, quản trị viên máy chủ của bạn sẽ không thể đọc nội dung tin nhắn hoặc xem bất kỳ tệp hoặc hình ảnh nào.",
+        "other_label": "Khác"
     },
     "setting": {
         "help_about": {
@@ -3304,7 +3073,22 @@
         "popout": "Tiện ích bật ra",
         "unpin_to_view_right_panel": "Bỏ ghim widget này để xem nó trong bảng điều khiển này",
         "set_room_layout": "Đặt bố cục phòng của tôi cho mọi người",
-        "close_to_view_right_panel": "Đóng widget này để xem nó trong bảng điều khiển này"
+        "close_to_view_right_panel": "Đóng widget này để xem nó trong bảng điều khiển này",
+        "modal_title_default": "widget phương thức",
+        "modal_data_warning": "Dữ liệu trên màn hình này được chia sẻ với %(widgetDomain)s",
+        "capabilities_dialog": {
+            "title": "Phê duyệt quyền của tiện ích widget",
+            "content_starting_text": "Tiện ích widget này muốn:",
+            "decline_all_permission": "Từ chối tất cả",
+            "remember_Selection": "Hãy nhớ lựa chọn của tôi cho tiện ích này"
+        },
+        "open_id_permissions_dialog": {
+            "title": "Cho phép tiện ích widget này xác thực danh tính của bạn",
+            "starting_text": "Tiện ích widget sẽ xác minh ID người dùng của bạn, nhưng không thể thay bạn thực hiện các hành động:",
+            "remember_selection": "Nhớ điều này"
+        },
+        "error_unable_start_audio_stream_description": "Không thể bắt đầu phát trực tuyến âm thanh.",
+        "error_unable_start_audio_stream_title": "Không thể bắt đầu phát trực tiếp"
     },
     "feedback": {
         "sent": "Đã gửi phản hồi",
@@ -3313,7 +3097,8 @@
         "may_contact_label": "Chúng tôi có thể liên hệ với bạn để cho phép bạn theo dõi hoặc thử nghiệm những tính năng sắp tới",
         "pro_type": "MẸO NHỎ: Nếu bạn là người đầu tiên gặp lỗi, vui lòng gửi <debugLogsLink>nhật ký gỡ lỗi</debugLogsLink> để giúp chúng tôi xử lý vấn đề.",
         "existing_issue_link": "Hãy xem các <existingIssuesLink>lỗi đã được phát hiện trên GitHub</existingIssuesLink> trước. Chưa ai từng gặp lỗi này? <newIssueLink>Báo lỗi mới</newIssueLink>.",
-        "send_feedback_action": "Gửi phản hồi"
+        "send_feedback_action": "Gửi phản hồi",
+        "can_contact_label": "Bạn có thể liên hệ với tôi nếu bạn có bất kỳ câu hỏi tiếp theo nào"
     },
     "zxcvbn": {
         "suggestions": {
@@ -3386,7 +3171,10 @@
         "no_update": "Không có bản cập nhật nào.",
         "downloading": "Đang tải xuống cập nhật…",
         "new_version_available": "Có phiên bản mới. Cập nhật ngay bây giờ <a>Update now.</a>",
-        "check_action": "Kiểm tra cập nhật"
+        "check_action": "Kiểm tra cập nhật",
+        "error_unable_load_commit": "Không thể tải chi tiết cam kết: %(msg)s",
+        "unavailable": "Không có sẵn",
+        "changelog": "Lịch sử thay đổi"
     },
     "threads": {
         "all_threads": "Tất cả chủ đề",
@@ -3396,7 +3184,11 @@
         "show_thread_filter": "Hiển thị:",
         "show_all_threads": "Hiển thị tất cả chủ đề",
         "empty_heading": "Giữ các cuộc thảo luận được tổ chức với các chủ đề này",
-        "unable_to_decrypt": "Không thể giải mã tin nhắn"
+        "unable_to_decrypt": "Không thể giải mã tin nhắn",
+        "count_of_reply": {
+            "one": "%(count)s trả lời",
+            "other": "%(count)s trả lời"
+        }
     },
     "theme": {
         "light_high_contrast": "Độ tương phản ánh sáng cao",
@@ -3429,7 +3221,41 @@
         "title_when_query_available": "Kết quả",
         "search_placeholder": "Tìm kiếm tên và mô tả",
         "no_search_result_hint": "Bạn có thể muốn thử một tìm kiếm khác hoặc kiểm tra lỗi chính tả.",
-        "joining_space": "Đang tham gia"
+        "joining_space": "Đang tham gia",
+        "add_existing_subspace": {
+            "space_dropdown_title": "Thêm space hiện có",
+            "create_prompt": "Bạn muốn thêm một space mới thay thế?",
+            "create_button": "Tạo space mới",
+            "filter_placeholder": "Tìm kiếm space"
+        },
+        "add_existing_room_space": {
+            "error_heading": "Không phải tất cả các mục đã chọn đều được thêm vào",
+            "progress_text": {
+                "one": "Đang thêm phòng…",
+                "other": "Đang thêm các phòng... (%(progress)s trong %(count)s)"
+            },
+            "dm_heading": "Tin nhắn trực tiếp",
+            "space_dropdown_label": "Lựa chọn space",
+            "space_dropdown_title": "Thêm các phòng hiện có",
+            "create": "Hay là thêm một phòng mới?",
+            "create_prompt": "Tạo phòng chat mới",
+            "subspace_moved_note": "Thêm dấu cách đã di chuyển."
+        },
+        "room_filter_placeholder": "Tìm kiếm phòng",
+        "leave_dialog_public_rejoin_warning": "Bạn sẽ không thể tham gia lại trừ khi bạn được mời lại.",
+        "leave_dialog_only_admin_warning": "Bạn là quản trị viên duy nhất của không gian này. Rời khỏi nó sẽ có nghĩa là không ai có quyền kiểm soát nó.",
+        "leave_dialog_only_admin_room_warning": "Bạn là quản trị viên duy nhất của một số phòng hoặc space mà bạn muốn rời khỏi. Rời khỏi họ sẽ Rời khỏi họ mà không có bất kỳ quản trị viên nào.",
+        "leave_dialog_title": "Rời khỏi %(spaceName)s",
+        "leave_dialog_description": "Bạn sắp rời khỏi <spaceName/>.",
+        "leave_dialog_option_intro": "Bạn có muốn rời khỏi các phòng trong space này?",
+        "leave_dialog_option_none": "Không rời bất kỳ phòng nào",
+        "leave_dialog_option_all": "Rời tất cả phòng",
+        "leave_dialog_option_specific": "Rời một vài phòng",
+        "leave_dialog_action": "Rời space",
+        "preferences": {
+            "sections_section": "Các phần để hiển thị",
+            "show_people_in_space": "Điều này nhóm các cuộc trò chuyện của bạn với các thành viên trong Space này. Tắt tính năng này sẽ ẩn các cuộc trò chuyện đó khỏi %(spaceName)s."
+        }
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Homeserver này không được cấu hình để hiển thị bản đồ.",
@@ -3516,7 +3342,16 @@
         "address_label": "Địa chỉ",
         "label": "Tạo một Space",
         "add_details_prompt_2": "Bạn có thể thay đổi những điều này bất cứ lúc nào.",
-        "creating": "Đang tạo…"
+        "creating": "Đang tạo…",
+        "subspace_join_rule_restricted_description": "Bất kỳ ai trong <SpaceName/> đều có thể tìm và tham gia.",
+        "subspace_join_rule_public_description": "Bất kỳ ai cũng có thể tìm và tham gia space này, không chỉ là thành viên của <SpaceName/>.",
+        "subspace_join_rule_invite_description": "Chỉ những người được mời mới có thể tìm và tham gia space này.",
+        "subspace_dropdown_title": "Tạo một Space",
+        "subspace_beta_notice": "Thêm một space vào một space mà bạn quản lý.",
+        "subspace_join_rule_label": "Khả năng hiển thị space",
+        "subspace_join_rule_invite_only": "space riêng tư (chỉ mời)",
+        "subspace_existing_space_prompt": "Thay vào đó, bạn muốn thêm một space hiện có?",
+        "subspace_adding": "Đang thêm…"
     },
     "user_menu": {
         "switch_theme_light": "Chuyển sang chế độ ánh sáng",
@@ -3664,7 +3499,11 @@
             "all_rooms": "Tất cả các phòng",
             "field_placeholder": "Tìm kiếm…",
             "this_room_button": "Tìm trong phòng này",
-            "all_rooms_button": "Tìm tất cả phòng"
+            "all_rooms_button": "Tìm tất cả phòng",
+            "result_count": {
+                "one": "(~%(count)s kết quả)",
+                "other": "(~%(count)s kết quả)"
+            }
         },
         "jump_to_bottom_button": "Di chuyển đến các tin nhắn gần đây nhất",
         "jump_read_marker": "Chuyển đến tin nhắn chưa đọc đầu tiên.",
@@ -3672,7 +3511,18 @@
         "failed_reject_invite": "Không thể từ chối lời mời",
         "error_jump_to_date_details": "Chi tiết lỗi",
         "jump_to_date_beginning": "Bắt đầu phòng",
-        "jump_to_date": "Nhảy đến ngày"
+        "jump_to_date": "Nhảy đến ngày",
+        "face_pile_tooltip_label": {
+            "one": "Xem một thành viên",
+            "other": "Xem tất cả %(count)s thành viên"
+        },
+        "face_pile_tooltip_shortcut_joined": "Bao gồm bạn, %(commaSeparatedMembers)s",
+        "face_pile_tooltip_shortcut": "Bao gồm %(commaSeparatedMembers)s",
+        "invites_you_text": "<inviter /> mời bạn",
+        "face_pile_summary": {
+            "one": "%(count)s người bạn đã biết vừa tham gia",
+            "other": "%(count)s người bạn đã biết vừa tham gia"
+        }
     },
     "file_panel": {
         "guest_note": "Bạn phải đăng ký <a>register</a> để sử dụng chức năng này",
@@ -3693,7 +3543,9 @@
         "identity_server_no_terms_title": "Máy chủ định danh này không có điều khoản dịch vụ",
         "identity_server_no_terms_description_1": "Hành động này yêu cầu truy cập máy chủ định danh mặc định <server /> để xác thực địa chỉ thư điện tử hoặc số điện thoại, nhưng máy chủ không có bất kỳ điều khoản dịch vụ nào.",
         "identity_server_no_terms_description_2": "Chỉ tiếp tục nếu bạn tin tưởng chủ sở hữu máy chủ.",
-        "inline_intro_text": "Chấp nhận <policyLink /> để tiếp tục:"
+        "inline_intro_text": "Chấp nhận <policyLink /> để tiếp tục:",
+        "summary_identity_server_1": "Tìm người khác qua điện thoại hoặc địa chỉ thư điện tử",
+        "summary_identity_server_2": "Được tìm thấy qua điện thoại hoặc địa chỉ thư điện tử"
     },
     "space_settings": {
         "title": "Cài đặt - %(spaceName)s"
@@ -3723,7 +3575,13 @@
         "total_n_votes_voted": {
             "one": "Dựa theo %(count)s phiếu bầu",
             "other": "Dựa theo %(count)s phiếu bầu"
-        }
+        },
+        "end_message_no_votes": "Cuộc thăm dò ý kiến đã kết thúc. Không có phiếu bầu được bỏ.",
+        "end_message": "Cuộc thăm dò ý kiến đã kết thúc. Câu trả lời đứng đầu: %(topAnswer)s",
+        "error_ending_title": "Kết thúc cuộc thăm dò ý kiến thất bại",
+        "error_ending_description": "Xin lỗi, cuộc thăm dò ý kiến chưa kết thúc. Vui lòng thử lại.",
+        "end_title": "Kết thúc cuộc thăm dò ý kiến",
+        "end_description": "Bạn có chắc muốn kết thúc cuộc thăm dò ý kiến? Điều này sẽ hiển thị kết quả cuối cùng của cuộc thăm dò ý kiến và ngăn mọi người bỏ phiếu."
     },
     "failed_load_async_component": "Không thể tải dữ liệu! Kiểm tra kết nối mạng và thử lại.",
     "upload_failed_generic": "Không tải lên được tập tin '%(fileName)s' .",
@@ -3769,7 +3627,39 @@
         "error_version_unsupported_space": "Máy chủ nhà của người dùng không hỗ trợ phiên bản của space.",
         "error_version_unsupported_room": "Phiên bản máy chủ nhà của người dùng không hỗ trợ phiên bản phòng này.",
         "error_unknown": "Lỗi máy chủ không xác định",
-        "to_space": "Mời tham gia %(spaceName)s"
+        "to_space": "Mời tham gia %(spaceName)s",
+        "unable_find_profiles_description_default": "Không thể tìm thấy hồ sơ cho ID Matrix được liệt kê bên dưới - bạn có muốn mời họ không?",
+        "unable_find_profiles_title": "Những người dùng sau có thể không tồn tại",
+        "unable_find_profiles_invite_never_warn_label_default": "Vẫn mời và không bao giờ cảnh báo tôi nữa",
+        "unable_find_profiles_invite_label_default": "Vẫn mời",
+        "email_caption": "Mời qua thư điện tử",
+        "error_dm": "Chúng tôi không thể tạo DM của bạn.",
+        "ask_anyway_description": "Không thể tìm hồ sơ cho định danh Matrix được liệt kê - bạn có muốn tiếp tục tạo phòng nhắn tin riêng?",
+        "ask_anyway_never_warn_label": "Cứ tạo phòng nhắn tin riêng và đừng cảnh báo tôi nữa",
+        "ask_anyway_label": "Cứ tạo phòng nhắn tin riêng",
+        "error_find_room": "Đã xảy ra sự cố khi cố mời người dùng.",
+        "error_invite": "Chúng tôi không thể mời những người dùng đó. Vui lòng kiểm tra những người dùng bạn muốn mời và thử lại.",
+        "error_transfer_multiple_target": "Một cuộc gọi chỉ có thể được chuyển đến một người dùng duy nhất.",
+        "error_find_user_title": "Không tìm thấy những người dùng sau",
+        "error_find_user_description": "Những người dùng sau có thể không tồn tại hoặc không hợp lệ và không thể được mời: %(csvNames)s",
+        "recents_section": "Các cuộc trò chuyện gần đây",
+        "suggestions_section": "Tin nhắn trực tiếp gần đây",
+        "email_use_default_is": "Sử dụng máy chủ nhận dạng để mời qua thư điện tử. <default>Sử dụng mặc định (%(defaultIdentityServerName)s)</default> hoặc quản lý trong mục Cài đặt <settings>Settings</settings>.",
+        "email_use_is": "Sử dụng máy chủ định danh để mời qua địa chỉ thư điện tử. Quản lý trong mục Cài đặt <settings>Settings</settings>.",
+        "start_conversation_name_email_mxid_prompt": "Bắt đầu cuộc trò chuyện với ai đó bằng tên, địa chỉ thư điện tử hoặc tên người dùng của họ (như <userId/>).",
+        "start_conversation_name_mxid_prompt": "Bắt đầu cuộc trò chuyện với ai đó bằng tên hoặc tên người dùng của họ (như <userId/>).",
+        "suggestions_disclaimer": "Một số đề xuất có thể được ẩn để bảo mật.",
+        "suggestions_disclaimer_prompt": "Nếu bạn không thể thấy người bạn đang tìm, hãy gửi cho họ liên kết mời của bạn bên dưới.",
+        "send_link_prompt": "Hoặc gửi liên kết mời",
+        "to_room": "Mời tham gia %(roomName)s",
+        "name_email_mxid_share_space": "Mời ai đó bằng tên, địa chỉ thư điện tử, tên người dùng của họ (như <userId/>) hoặc <a>chia sẻ space này</a>.",
+        "name_mxid_share_space": "Mời ai đó sử dụng tên hiển thị, tên đăng nhập của họ (như <userId/>) hoặc <a>chia sẻ space này</a>.",
+        "name_email_mxid_share_room": "Mời ai đó bằng tên, địa chỉ thư điện tử, tên người dùng của họ (như <userId/>) hoặc chia sẻ phòng này <a>share this room</a>.",
+        "name_mxid_share_room": "Mời ai đó thông qua tên hiển thị, tên người dùng của họ (ví dụ <userId/>) hoặc <a>chia sẻ phòng này</a>.",
+        "key_share_warning": "Những người được mời sẽ có thể đọc tin nhắn cũ.",
+        "email_limit_one": "Chỉ có thể gửi một thư điện tử mời mỗi lần",
+        "transfer_user_directory_tab": "Thư mục người dùng",
+        "transfer_dial_pad_tab": "Bàn phím số"
     },
     "scalar": {
         "error_create": "Không thể tạo widget.",
@@ -3802,7 +3692,21 @@
         "something_went_wrong": "Đã xảy ra lỗi!",
         "download_media": "Tải xuống phương tiện nguồn thất bại, không tìm thấy nguồn url",
         "update_power_level": "Không thay đổi được mức công suất",
-        "unknown": "Lỗi không thể nhận biết"
+        "unknown": "Lỗi không thể nhận biết",
+        "dialog_description_default": "Một lỗi đã xảy ra.",
+        "edit_history_unsupported": "Máy chủ nhà của bạn dường như không hỗ trợ tính năng này.",
+        "session_restore": {
+            "clear_storage_description": "Đăng xuất và xóa khóa mã hóa?",
+            "clear_storage_button": "Xóa bộ nhớ và Đăng xuất",
+            "title": "Không thể khôi phục phiên",
+            "description_1": "Chúng tôi đã gặp lỗi khi cố gắng khôi phục phiên trước đó của bạn.",
+            "description_2": "Nếu trước đây bạn đã sử dụng phiên bản %(brand)s mới hơn, thì phiên của bạn có thể không tương thích với phiên bản này. Đóng cửa sổ này và quay lại phiên bản mới hơn.",
+            "description_3": "Xóa bộ nhớ của trình duyệt có thể khắc phục được sự cố nhưng sẽ khiến bạn đăng xuất và khiến mọi lịch sử trò chuyện được mã hóa trở nên không thể đọc được."
+        },
+        "storage_evicted_title": "Thiếu dữ liệu phiên",
+        "storage_evicted_description_1": "Một số dữ liệu phiên, bao gồm cả khóa tin nhắn được mã hóa, bị thiếu. Đăng xuất và đăng nhập để khắc phục sự cố này, khôi phục khóa từ bản sao lưu.",
+        "storage_evicted_description_2": "Trình duyệt của bạn có thể đã xóa dữ liệu này khi sắp hết dung lượng đĩa.",
+        "unknown_error_code": "mã lỗi không xác định"
     },
     "in_space1_and_space2": "Trong các space %(space1Name)s và %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -3956,7 +3860,25 @@
         "deactivate_confirm_action": "Hủy kích hoạt người dùng",
         "error_deactivate": "Không thể hủy kích hoạt người dùng",
         "role_label": "Vai trò trong <RoomName/>",
-        "edit_own_devices": "Chỉnh sửa thiết bị"
+        "edit_own_devices": "Chỉnh sửa thiết bị",
+        "redact": {
+            "no_recent_messages_title": "Không tìm thấy tin nhắn gần đây của %(user)s",
+            "no_recent_messages_description": "Thử cuộn lên trong dòng thời gian để xem có cái nào trước đó không.",
+            "confirm_title": "Bỏ các tin nhắn gần đây bởi %(user)s",
+            "confirm_description_2": "Đối với một lượng lớn thư, quá trình này có thể mất một chút thời gian. Vui lòng không làm mới khách hàng của bạn trong thời gian chờ đợi.",
+            "confirm_button": {
+                "one": "Bỏ một tin nhắn",
+                "other": "Bỏ %(count)s tin nhắn"
+            }
+        },
+        "count_of_verified_sessions": {
+            "one": "1 phiên đã xác thực",
+            "other": "%(count)s phiên đã xác thực"
+        },
+        "count_of_sessions": {
+            "one": "%(count)s phiên",
+            "other": "%(count)s phiên"
+        }
     },
     "stickers": {
         "empty": "Bạn hiện chưa bật bất kỳ gói nhãn dán nào",
@@ -3994,6 +3916,9 @@
                 "one": "Kết quả cuối cùng dựa trên %(count)s phiếu bầu",
                 "other": "Kết quả cuối cùng dựa trên %(count)s phiếu bầu"
             }
+        },
+        "thread_list": {
+            "context_menu_label": "Tùy chọn theo chủ đề"
         }
     },
     "reject_invitation_dialog": {
@@ -4029,12 +3954,155 @@
         "error_loading_user_profile": "Không thể tải hồ sơ người dùng"
     },
     "cant_load_page": "Không thể tải trang",
-    "Invalid homeserver discovery response": "Phản hồi khám phá homeserver không hợp lệ",
-    "Failed to get autodiscovery configuration from server": "Không lấy được cấu hình tự động phát hiện từ máy chủ",
-    "Invalid base_url for m.homeserver": "Base_url không hợp lệ cho m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "URL máy chủ dường như không phải là máy chủ Matrix hợp lệ",
-    "Invalid identity server discovery response": "Phản hồi phát hiện máy chủ nhận dạng không hợp lệ",
-    "Invalid base_url for m.identity_server": "Base_url không hợp lệ cho m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "URL máy chủ nhận dạng dường như không phải là máy chủ nhận dạng hợp lệ",
-    "General failure": "Thất bại chung"
+    "General failure": "Thất bại chung",
+    "emoji_picker": {
+        "cancel_search_label": "Hủy tìm kiếm"
+    },
+    "info_tooltip_title": "Thông tin",
+    "language_dropdown_label": "Danh sách ngôn ngữ",
+    "pill": {
+        "permalink_other_room": "Tin nhắn trong %(room)s",
+        "permalink_this_room": "Tin nhắn từ %(user)s"
+    },
+    "seshat": {
+        "error_initialising": "Không thể khởi chạy tìm kiếm tin nhắn, hãy kiểm tra cài đặt của bạn <a>your settings</a> để biết thêm thông tin",
+        "warning_kind_files_app": "Sử dụng ứng dụng Máy tính để bàn <a>Desktop app</a> để xem tất cả các tệp được mã hóa",
+        "warning_kind_search_app": "Sử dụng ứng dụng Máy tính để bàn <a>Desktop app</a> để tìm kiếm tin nhắn được mã hóa",
+        "warning_kind_files": "Phiên bản %(brand)s này không hỗ trợ xem một số tệp được mã hóa",
+        "warning_kind_search": "Phiên bản %(brand)s này không hỗ trợ tìm kiếm tin nhắn được mã hóa",
+        "reset_title": "Đặt lại kho sự kiện?",
+        "reset_description": "Rất có thể bạn không muốn đặt lại kho chỉ mục sự kiện của mình",
+        "reset_explainer": "Nếu bạn làm vậy, xin lưu ý rằng không có thư nào của bạn sẽ bị xóa, nhưng trải nghiệm tìm kiếm có thể bị giảm sút trong một vài phút trong khi chỉ mục được tạo lại",
+        "reset_button": "Đặt lại cửa hàng sự kiện"
+    },
+    "truncated_list_n_more": {
+        "other": "Và %(count)s thêm…"
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_required_invalid": "Nhập tên máy chủ",
+            "network_dropdown_available_valid": "Có vẻ ổn",
+            "network_dropdown_available_invalid_forbidden": "Bạn không được phép xem danh sách phòng của máy chủ này",
+            "network_dropdown_available_invalid": "Không thể tìm thấy máy chủ này hoặc danh sách phòng của nó",
+            "network_dropdown_your_server_description": "Máy chủ của bạn",
+            "network_dropdown_add_dialog_title": "Thêm máy chủ mới",
+            "network_dropdown_add_dialog_description": "Nhập tên của một máy chủ mới mà bạn muốn khám phá.",
+            "network_dropdown_add_dialog_placeholder": "Tên máy chủ",
+            "network_dropdown_selected_label": "Hiện: Phòng Matrix"
+        }
+    },
+    "dialog_close_label": "Đóng hộp thoại",
+    "redact": {
+        "error": "Bạn không thể xóa tin nhắn này.  (%(code)s)",
+        "ongoing": "Đang xóa…",
+        "confirm_button": "Xác nhận Loại bỏ",
+        "reason_label": "Lý do (không bắt buộc)"
+    },
+    "forward": {
+        "no_perms_title": "Bạn không có quyền làm điều này",
+        "sending": "Đang gửi",
+        "sent": "Đã gửi",
+        "open_room": "Mở phòng",
+        "send_label": "Gửi",
+        "message_preview_heading": "Xem trước tin nhắn",
+        "filter_placeholder": "Tìm kiếm phòng hoặc người"
+    },
+    "integrations": {
+        "disabled_dialog_title": "Tích hợp đang bị tắt",
+        "disabled_dialog_description": "Bật '%(manageIntegrations)s' trong cài đặt để thực hiện.",
+        "impossible_dialog_title": "Tích hợp không được phép",
+        "impossible_dialog_description": "%(brand)s của bạn không cho phép bạn sử dụng trình quản lý tích hợp để thực hiện việc này. Vui lòng liên hệ với quản trị viên."
+    },
+    "lazy_loading": {
+        "disabled_description1": "Trước đây, bạn đã sử dụng %(brand)s trên %(host)s khi đã bật tính năng tải chậm các thành viên. Trong phiên bản này, tính năng tải lười biếng bị vô hiệu hóa. Vì bộ nhớ cache cục bộ không tương thích giữa hai cài đặt này, %(brand)s cần phải đồng bộ hóa lại tài khoản của bạn.",
+        "disabled_description2": "Nếu phiên bản khác của %(brand)s vẫn đang mở trong một tab khác, vui lòng đóng nó lại vì việc sử dụng %(brand)s trên cùng một máy chủ với cả hai chế độ tải chậm được bật và tắt đồng thời sẽ gây ra sự cố.",
+        "disabled_title": "Bộ nhớ cache cục bộ không tương thích",
+        "disabled_action": "Xóa bộ nhớ cache và đồng bộ hóa lại",
+        "resync_description": "%(brand)s hiện sử dụng bộ nhớ ít hơn 3-5 lần, bằng cách chỉ tải thông tin về những người dùng khác khi cần thiết. Vui lòng đợi trong khi chúng tôi đồng bộ hóa lại với máy chủ!",
+        "resync_title": "Đang cập nhật %(brand)s"
+    },
+    "message_edit_dialog_title": "Chỉnh sửa tin nhắn",
+    "server_offline": {
+        "empty_timeline": "Bạn đã bắt kịp tất cả.",
+        "title": "Máy chủ không phản hồi",
+        "description": "Máy chủ của bạn không phản hồi một số yêu cầu của bạn. Dưới đây là một số lý do có thể xảy ra nhất.",
+        "description_1": "Máy chủ (%(serverName)s) mất quá nhiều thời gian để phản hồi.",
+        "description_2": "Tường lửa hoặc chương trình chống vi-rút của bạn đang chặn yêu cầu.",
+        "description_3": "Một tiện ích mở rộng của trình duyệt đang ngăn chặn yêu cầu.",
+        "description_4": "Máy chủ đang ngoại tuyến.",
+        "description_5": "Máy chủ đã từ chối yêu cầu của bạn.",
+        "description_6": "Khu vực của bạn đang gặp khó khăn khi kết nối Internet.",
+        "description_7": "Đã xảy ra lỗi kết nối khi cố gắng kết nối với máy chủ.",
+        "description_8": "Máy chủ không được định cấu hình để cho biết sự cố là gì (CORS).",
+        "recent_changes_heading": "Những thay đổi gần đây chưa được nhận"
+    },
+    "spotlight_dialog": {
+        "count_of_members": {
+            "one": "%(count)s thành viên",
+            "other": "%(count)s thành viên"
+        },
+        "public_rooms_label": "Các phòng công cộng",
+        "heading_with_query": "Sử dụng \"%(query)s\" để tìm kiếm",
+        "heading_without_query": "Tìm",
+        "spaces_title": "Các Space bạn đang trong đó",
+        "other_rooms_in_space": "Các phòng khác trong %(spaceName)s",
+        "join_button_text": "Tham gia %(roomAddress)s",
+        "result_may_be_hidden_privacy_warning": "Một số kết quả có thể bị ẩn để đảm bảo quyền riêng tư",
+        "copy_link_text": "Sao chép liên kết mời",
+        "result_may_be_hidden_warning": "Một số kết quả có thể bị ẩn",
+        "cant_find_room_helpful_hint": "Nếu bạn không tìm được phòng bạn muốn, yêu cầu lời mời hay tạo phòng mới.",
+        "create_new_room_button": "Tạo phòng mới",
+        "group_chat_section_title": "Lựa chọn khác",
+        "start_group_chat_button": "Bắt đầu cuộc trò chuyện nhóm",
+        "message_search_section_title": "Các tìm kiếm khác",
+        "recent_searches_section_title": "Các tìm kiếm gần đây",
+        "recently_viewed_section_title": "Được xem gần đây",
+        "search_messages_hint": "Để tìm các tin nhắn, hãy tìm biểu tượng này ở đầu phòng <icon/>",
+        "keyboard_scroll_hint": "Dùng <arrows/> để cuộn"
+    },
+    "share": {
+        "title_room": "Phòng chia sẻ",
+        "permalink_most_recent": "Liên kết đến tin nhắn gần đây nhất",
+        "title_user": "Chia sẻ người dùng",
+        "title_message": "Chia sẻ tin nhắn trong phòng",
+        "permalink_message": "Liên kết đến tin nhắn đã chọn",
+        "link_title": "Liên kết đến phòng"
+    },
+    "upload_file": {
+        "title_progress": "Tải lên tệp (%(current)s of %(total)s)",
+        "title": "Tải tệp lên",
+        "upload_all_button": "Tải lên tất cả",
+        "error_file_too_large": "Tệp này <b>too large</b> để tải lên. Giới hạn kích thước tệp là %(limit)s nhưng tệp này là %(sizeOfThisFile)s.",
+        "error_files_too_large": "Các tệp này <b>too large</b> quá lớn để tải lên. Giới hạn kích thước tệp là %(limit)s.",
+        "error_some_files_too_large": "Một số tệp <b> quá lớn </b> không thể tải lên được. Giới hạn kích thước tệp là %(limit)s.",
+        "upload_n_others_button": {
+            "one": "Tải lên %(count)s tệp khác",
+            "other": "Tải lên %(count)s tệp khác"
+        },
+        "cancel_all_button": "Hủy bỏ tất cả",
+        "error_title": "Lỗi tải lên"
+    },
+    "restore_key_backup_dialog": {
+        "key_fetch_in_progress": "Đang lấy các khóa từ máy chủ…",
+        "load_error_content": "Không thể tải trạng thái sao lưu",
+        "recovery_key_mismatch_title": "Khóa bảo mật không khớp",
+        "recovery_key_mismatch_description": "Không thể giải mã bản sao lưu bằng Khóa bảo mật này: vui lòng xác minh rằng bạn đã nhập đúng Khóa bảo mật.",
+        "incorrect_security_phrase_title": "Cụm từ bảo mật không chính xác",
+        "incorrect_security_phrase_dialog": "Không thể giải mã bản sao lưu bằng Cụm từ bảo mật này: vui lòng xác minh rằng bạn đã nhập đúng Cụm từ bảo mật.",
+        "restore_failed_error": "Không thể khôi phục bản sao lưu",
+        "no_backup_error": "Không tìm thấy bản sao lưu!",
+        "keys_restored_title": "Các phím đã được khôi phục",
+        "count_of_decryption_failures": "Không giải mã được phiên %(failedCount)s !",
+        "count_of_successfully_restored_keys": "Đã khôi phục thành công các khóa %(sessionCount)s",
+        "enter_phrase_title": "Nhập cụm từ bảo mật",
+        "key_backup_warning": "Cảnh báo <b>Warning</b>: bạn chỉ nên thiết lập sao lưu khóa từ một máy tính đáng tin cậy.",
+        "enter_phrase_description": "Truy cập lịch sử tin nhắn an toàn của bạn và thiết lập nhắn tin an toàn bằng cách nhập Cụm từ bảo mật của bạn.",
+        "phrase_forgotten_text": "Nếu bạn quên Cụm từ bảo mật, bạn có thể sử dụng Khóa bảo mật của mình <button1>use your Security Key</button1> hoặc thiết lập các tùy chọn khôi phục mới <button2>set up new recovery options</button2>",
+        "enter_key_title": "Nhập khóa bảo mật",
+        "key_is_valid": "Đây có vẻ như là một Khóa bảo mật hợp lệ!",
+        "key_is_invalid": "Không phải là khóa bảo mật hợp lệ",
+        "enter_key_description": "Truy cập lịch sử tin nhắn an toàn của bạn và thiết lập nhắn tin an toàn bằng cách nhập Khóa bảo mật của bạn.",
+        "key_forgotten_text": "Nếu bạn quên Khóa bảo mật của mình, bạn có thể thiết lập các tùy chọn khôi phục mới <button>set up new recovery options</button>",
+        "load_keys_progress": "Đã khôi phục%(completed)s trong số %(total)s khóa"
+    }
 }

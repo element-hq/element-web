@@ -136,7 +136,7 @@ export const RoomKnocksBar: VFC<{ room: Room }> = ({ room }) => {
                 />
             ))}
             <div className="mx_RoomKnocksBar_content">
-                <Heading size="4">{_t("%(count)s people asking to join", { count: knockMembersCount })}</Heading>
+                <Heading size="4">{_t("room|header|n_people_asking_to_join", { count: knockMembersCount })}</Heading>
                 <p className="mx_RoomKnocksBar_paragraph">
                     {names}
                     {link}

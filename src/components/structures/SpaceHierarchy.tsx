@@ -206,9 +206,9 @@ const Tile: React.FC<ITileProps> = ({
         );
     }
 
-    let description = _t("%(count)s members", { count: room.num_joined_members ?? 0 });
+    let description = _t("common|n_members", { count: room.num_joined_members ?? 0 });
     if (numChildRooms !== undefined) {
-        description += " · " + _t("%(count)s rooms", { count: numChildRooms });
+        description += " · " + _t("common|n_rooms", { count: numChildRooms });
     }
 
     let topic: ReactNode | string | null;
@@ -713,7 +713,7 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
                 kind="danger_outline"
                 disabled={disabled}
             >
-                {removing ? _t("Removing…") : _t("action|remove")}
+                {removing ? _t("redact|ongoing") : _t("action|remove")}
             </Button>
             <Button
                 {...props}
@@ -857,7 +857,7 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
                     } else if (!hierarchy.canLoadMore) {
                         results = (
                             <div className="mx_SpaceHierarchy_noResults">
-                                <h3>{_t("No results found")}</h3>
+                                <h3>{_t("common|no_results_found")}</h3>
                                 <div>{_t("space|no_search_result_hint")}</div>
                             </div>
                         );

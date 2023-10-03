@@ -145,7 +145,7 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
                 reactionContent = (
                     <img
                         className="mx_ReactionsRowButton_content"
-                        alt={customReactionName || _t("Custom reaction")}
+                        alt={customReactionName || _t("timeline|reactions|custom_reaction_fallback_label")}
                         src={imageSrc}
                         width="16"
                         height="16"

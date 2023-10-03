@@ -26,63 +26,27 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s %(time)s",
     "Restricted": "Limigita",
     "Moderator": "Ĉambrestro",
-    "Send": "Sendi",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Vi estas direktota al ekstera retejo por aŭtentikigi vian konton por uzo kun %(integrationsUrl)s. Ĉu vi volas daŭrigi tion?",
-    "and %(count)s others...": {
-        "other": "kaj %(count)s aliaj…",
-        "one": "kaj unu alia…"
-    },
     "%(duration)ss": "%(duration)ss",
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)sh",
     "%(duration)sd": "%(duration)st",
     "Unnamed room": "Sennoma ĉambro",
-    "(~%(count)s results)": {
-        "other": "(~%(count)s rezultoj)",
-        "one": "(~%(count)s rezulto)"
-    },
     "Join Room": "Aliĝi al ĉambro",
-    "unknown error code": "nekonata kodo de eraro",
-    "not specified": "nespecifita",
-    "Add an Integration": "Aldoni kunigon",
-    "Email address": "Retpoŝtadreso",
     "Delete Widget": "Forigi fenestraĵon",
-    "Create new room": "Krei novan ĉambron",
     "Home": "Hejmo",
     "%(items)s and %(lastItem)s": "%(items)s kaj %(lastItem)s",
     "collapse": "maletendi",
     "expand": "etendi",
-    "Custom level": "Propra nivelo",
-    "And %(count)s more...": {
-        "other": "Kaj %(count)s pliaj…"
-    },
-    "Confirm Removal": "Konfirmi forigon",
-    "An error has occurred.": "Okazis eraro.",
-    "Unable to restore session": "Salutaĵo ne rehaveblas",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Se vi antaŭe uzis pli novan version de %(brand)s, via salutaĵo eble ne akordos kun ĉi tiu versio. Fermu ĉi tiun fenestron kaj revenu al la pli nova versio.",
-    "Verification Pending": "Atendante kontrolon",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Bonvolu kontroli vian retpoŝton, kaj klaki la ligilon enhavatan en la sendita mesaĝo. Farinte tion, klaku je «daŭrigi».",
-    "This will allow you to reset your password and receive notifications.": "Tio ĉi permesos al vi restarigi vian pasvorton kaj ricevi sciigojn.",
-    "Session ID": "Identigilo de salutaĵo",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
     "Sunday": "Dimanĉo",
     "Today": "Hodiaŭ",
     "Friday": "Vendredo",
-    "Changelog": "Protokolo de ŝanĝoj",
-    "Unavailable": "Nedisponebla",
-    "Filter results": "Filtri rezultojn",
     "Tuesday": "Mardo",
     "Saturday": "Sabato",
     "Monday": "Lundo",
     "Wednesday": "Merkredo",
-    "You cannot delete this message. (%(code)s)": "Vi ne povas forigi tiun ĉi mesaĝon. (%(code)s)",
     "Thursday": "Ĵaŭdo",
     "Yesterday": "Hieraŭ",
-    "Thank you!": "Dankon!",
-    "Logs sent": "Protokolo sendiĝis",
-    "Failed to send logs: ": "Malsukcesis sendi protokolon: ",
-    "Preparing to send logs": "Pretigante sendon de protokolo",
-    "<a>In reply to</a> <pill>": "<a>Responde al</a> <pill>",
     "Dog": "Hundo",
     "Cat": "Kato",
     "Lion": "Leono",
@@ -142,233 +106,26 @@
     "Anchor": "Ankro",
     "Headphones": "Kapaŭdilo",
     "Folder": "Dosierujo",
-    "Invite anyway": "Tamen inviti",
-    "Updating %(brand)s": "Ĝisdatigante %(brand)s",
-    "Room Settings - %(roomName)s": "Agordoj de ĉambro – %(roomName)s",
-    "Failed to upgrade room": "Malsukcesis gradaltigi ĉambron",
-    "Share Room": "Kunhavigi ĉambron",
-    "Share User": "Kunhavigi uzanton",
-    "Share Room Message": "Kunhavigi ĉambran mesaĝon",
-    "Email (optional)": "Retpoŝto (malnepra)",
     "Santa": "Kristnaska viro",
     "Thumbs up": "Dikfingro supren",
     "Paperclip": "Paperkuntenilo",
-    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Ĉifritaj mesaĝoj estas sekurigitaj per tutvoja ĉifrado. Nur vi kaj la ricevonto(j) havas la ŝlosilojn necesajn por legado.",
-    "edited": "redaktita",
-    "Continue With Encryption Disabled": "Pluigi sen ĉifrado",
-    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Kontrolu ĉi tiun uzanton por marki ĝin fidata. Fidado devas vin trankviligi dum uzado de tutvoja ĉifrado.",
-    "Incoming Verification Request": "Venas kontrolpeto",
-    "Manually export keys": "Mane elporti ŝlosilojn",
-    "The room upgrade could not be completed": "Gradaltigo de la ĉambro ne povis finiĝi",
-    "Upgrade this room to version %(version)s": "Gradaltigi ĉi tiun ĉambron al versio %(version)s",
-    "Upgrade Room Version": "Gradaltigi version de la ĉambro",
-    "Create a new room with the same name, description and avatar": "Kreos novan ĉàmbron kun la sama nomo, priskribo, kaj profilbildo",
-    "Update any local room aliases to point to the new room": "Religos ĉiujn lokajn kromnomojn al la nova ĉambro",
-    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Haltigos parolojn al la malnova versio de al ĉambro, kaj konsilos uzantojn pri la nova per mesaĝo",
-    "Put a link back to the old room at the start of the new room so people can see old messages": "Metos en la novan ĉambron ligilon al la malnova, por ke oni povu rigardi la malnovajn mesaĝojn",
-    "Sign out and remove encryption keys?": "Ĉu adiaŭi kaj forigi ĉifrajn ŝlosilojn?",
     "Send Logs": "Sendi protokolon",
-    "Link to most recent message": "Ligi al plej freŝa mesaĝo",
-    "Link to selected message": "Ligi al elektita mesaĝo",
-    "To help us prevent this in future, please <a>send us logs</a>.": "Por malhelpi tion ose, bonvolu <a>sendi al ni protokolon</a>.",
-    "Upload files (%(current)s of %(total)s)": "Alŝuti dosierojn (%(current)s el %(total)s)",
-    "Upload files": "Alŝuti dosierojn",
-    "Upload all": "Alŝuti ĉiujn",
-    "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Ĉi tiu dosiero <b>tro grandas</b> por alŝuto. La grandolimo estas %(limit)s sed la dosiero grandas %(sizeOfThisFile)s.",
-    "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Ĉi tiuj dosieroj <b>tro grandas</b> por alŝuto. La grandolimo estas %(limit)s.",
-    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Iuj dosieroj <b>tro grandas</b> por alŝuto. La grandolimo estas %(limit)s.",
-    "Upload %(count)s other files": {
-        "other": "Alŝuti %(count)s aliajn dosierojn",
-        "one": "Alŝuti %(count)s alian dosieron"
-    },
-    "Cancel All": "Nuligi ĉion",
-    "Upload Error": "Alŝuto eraris",
-    "Remember my selection for this widget": "Memoru mian elekton por tiu ĉi fenestraĵo",
-    "Unable to load backup status": "Ne povas legi staton de savkopio",
-    "Join millions for free on the largest public server": "Senpage aliĝu al milionoj sur la plej granda publika servilo",
-    "Start using Key Backup": "Ekuzi Savkopiadon de ŝlosiloj",
-    "Edited at %(date)s. Click to view edits.": "Redaktita je %(date)s. Klaku por vidi redaktojn.",
-    "The following users may not exist": "La jenaj uzantoj eble ne ekzistas",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Ne povas trovi profilojn de la ĉi-subaj Matrix-identigilojn – ĉu vi tamen volas inviti ilin?",
-    "Invite anyway and never warn me again": "Tamen inviti kaj neniam min averti ree",
-    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Bonvolu diri al ni kio misokazis, aŭ pli bone raporti problemon per GitHub.",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Antaŭ ol sendi protokolon, vi devas <a>raporti problemon per GitHub</a> por priskribi la problemon.",
-    "Notes": "Notoj",
-    "Unable to load commit detail: %(msg)s": "Ne povas enlegi detalojn de enmeto: %(msg)s",
-    "Removing…": "Forigante…",
-    "I don't want my encrypted messages": "Mi ne volas miajn ĉifritajn mesaĝojn",
-    "No backup found!": "Neniu savkopio troviĝis!",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Ne povas enlegi la responditan okazon; aŭ ĝi ne ekzistas, aŭ vi ne rajtas vidi ĝin.",
-    "Clear all data": "Vakigi ĉiujn datumojn",
-    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Por eviti perdon de via babila historio, vi devas elporti la ŝlosilojn de viaj ĉambroj antaŭ adiaŭo. Por tio vi bezonos reveni al la pli nova versio de %(brand)s",
-    "Incompatible Database": "Neakorda datumbazo",
-    "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Vi antaŭe uzis %(brand)s-on je %(host)s kun ŝaltita malfrua enlegado de anoj. En ĉi tiu versio, malfrua enlegado estas malŝaltita. Ĉar la loka kaŝmemoro de ambaŭ versioj ne akordas, %(brand)s bezonas respeguli vian konton.",
-    "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Se la alia versio de %(brand)s ankoraŭ estas malfermita en alia langeto, bonvolu tiun fermi, ĉar uzado de %(brand)s je la sama gastiganto, kun malfrua enlegado samtempe ŝaltita kaj malŝaltita, kaŭzos problemojn.",
-    "Incompatible local cache": "Neakorda loka kaŝmemoro",
-    "Clear cache and resync": "Vakigi kaŝmemoron kaj respeguli",
-    "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s nun uzas 3–5-oble malpli da memoro, ĉar ĝi enlegas informojn pri aliaj uzantoj nur tiam, kiam ĝi bezonas. Bonvolu atendi ĝis ni respegulos la servilon!",
-    "You'll lose access to your encrypted messages": "Vi perdos aliron al viaj ĉifritaj mesaĝoj",
-    "Are you sure you want to sign out?": "Ĉu vi certe volas adiaŭi?",
-    "Your homeserver doesn't seem to support this feature.": "Via hejmservilo ŝajne ne subtenas ĉi tiun funkcion.",
-    "Message edits": "Redaktoj de mesaĝoj",
-    "Clear Storage and Sign Out": "Vakigi memoron kaj adiaŭi",
-    "We encountered an error trying to restore your previous session.": "Ni renkontis eraron provante rehavi vian antaŭan salutaĵon.",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Vakigo de la memoro de via foliumilo eble korektos la problemon, sed adiaŭigos vin, kaj malebligos legadon de historio de ĉifritaj babiloj.",
-    "Missing session data": "Mankas datumoj de salutaĵo",
-    "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Iuj datumoj de salutaĵo, inkluzive viajn ĉifrajn ŝlosilojn, mankas. Por tion korekti, resalutu, kaj rehavu la ŝlosilojn el savkopio.",
-    "Your browser likely removed this data when running low on disk space.": "Via foliumilo verŝajne forigos ĉi tiujn datumojn kiam al ĝi mankos spaco sur disko.",
-    "Unable to restore backup": "Ne povas rehavi savkopion",
-    "Failed to decrypt %(failedCount)s sessions!": "Malsukcesis malĉifri%(failedCount)s salutaĵojn!",
-    "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Averto</b>: vi agordu ŝlosilan savkopion nur per fidata komputilo.",
-    "Resend %(unsentCount)s reaction(s)": "Resendi %(unsentCount)s reago(j)n",
-    "Some characters not allowed": "Iuj signoj ne estas permesitaj",
-    "Power level": "Povnivelo",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Gradaltigo de ĉi tiu ĉambro bezonas fermi ĝin, kaj krei novan por anstataŭi ĝin. Por plejbonigi sperton de la ĉambranoj, ni:",
-    "Find others by phone or email": "Trovu aliajn per telefonnumero aŭ retpoŝtadreso",
-    "Be found by phone or email": "Troviĝu per telefonnumero aŭ retpoŝtadreso",
     "Deactivate account": "Malaktivigi konton",
-    "No recent messages by %(user)s found": "Neniuj freŝaj mesaĝoj de %(user)s troviĝis",
-    "Remove recent messages by %(user)s": "Forigi freŝajn mesaĝojn de %(user)s",
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Je granda nombro da mesaĝoj, tio povas daŭri iomon da tempo. Bonvolu ne aktualigi vian klienton dume.",
-    "Remove %(count)s messages": {
-        "other": "Forigi %(count)s mesaĝojn",
-        "one": "Forigi 1 mesaĝon"
-    },
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "Provu rulumi supren tra la historio por kontroli, ĉu ne estas iuj pli fruaj.",
-    "%(name)s accepted": "%(name)s akceptis",
-    "%(name)s cancelled": "%(name)s nuligis",
-    "%(name)s wants to verify": "%(name)s volas kontroli",
-    "Cancel search": "Nuligi serĉon",
-    "e.g. my-room": "ekzemple mia-chambro",
-    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Uzu identigan servilon por inviti per retpoŝto. <default>Uzu la norman (%(defaultIdentityServerName)s)</default> aŭ administru per <settings>Agordoj</settings>.",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Uzu identigan servilon por inviti per retpoŝto. Administru per <settings>Agordoj</settings>.",
-    "Close dialog": "Fermi interagujon",
-    "Command Help": "Helpo pri komando",
     "Lock": "Seruro",
-    "Direct Messages": "Individuaj ĉambroj",
     "Failed to connect to integration manager": "Malsukcesis konekton al kunigilo",
-    "Integrations are disabled": "Kunigoj estas malŝaltitaj",
-    "Integrations not allowed": "Kunigoj ne estas permesitaj",
-    "Upgrade private room": "Gradaltigi privatan ĉambron",
-    "Upgrade public room": "Gradaltigi publikan ĉambron",
-    "Not Trusted": "Nefidata",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) salutis novan salutaĵon ne kontrolante ĝin:",
-    "Ask this user to verify their session, or manually verify it below.": "Petu, ke ĉi tiu la uzanto kontrolu sian salutaĵon, aŭ kontrolu ĝin permane sube.",
     "This backup is trusted because it has been restored on this session": "Ĉi tiu savkopio estas fidata, ĉar ĝi estis rehavita en ĉi tiu salutaĵo",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Por raparto de sekureca problemo rilata al Matrix, bonvolu legi la <a>Eldiran Politikon pri Sekureco</a> de Matrix.org.",
     "Encrypted by a deleted session": "Ĉifrita de forigita salutaĵo",
-    "%(count)s verified sessions": {
-        "other": "%(count)s kontrolitaj salutaĵoj",
-        "one": "1 kontrolita salutaĵo"
-    },
-    "%(count)s sessions": {
-        "other": "%(count)s salutaĵoj",
-        "one": "%(count)s salutaĵo"
-    },
-    "%(name)s declined": "%(name)s rifuzis",
-    "Language Dropdown": "Lingva falmenuo",
-    "Destroy cross-signing keys?": "Ĉu detrui delege ĉifrajn ŝlosilojn?",
-    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Forigo de delege ĉifraj ŝlosiloj estas porĉiama. Ĉiu, kun kiu vi interkontrolis, vidos avertojn pri sekureco. Vi preskaŭ certe ne volas ĉi tion fari, malse vi perdis ĉiun aparaton, el kiu vi povus delege subskribadi.",
-    "Clear cross-signing keys": "Vakigi delege ĉifrajn ŝlosilojn",
-    "Clear all data in this session?": "Ĉu vakigi ĉiujn datumojn en ĉi tiu salutaĵo?",
-    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Vakigo de ĉiuj datumoj el ĉi tiu salutaĵo estas porĉiama. Ĉifritaj mesaĝoj perdiĝos, malse iliaj ŝlosiloj savkopiiĝis.",
-    "Session name": "Nomo de salutaĵo",
-    "Session key": "Ŝlosilo de salutaĵo",
-    "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Kontrolo de tiu ĉi uzanto markos ĝian salutaĵon fidata, kaj ankaŭ markos vian salutaĵon fidata por ĝi.",
-    "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Kontrolu ĉi tiun aparaton por marki ĝin fidata. Fidado povas pacigi la menson de vi kaj aliaj uzantoj dum uzado de tutvoje ĉifrataj mesaĝoj.",
-    "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Kontrolo de ĉi tiu aparato markos ĝin fidata, kaj ankaŭ la uzantoj, kiuj interkontrolis kun vi, fidos ĉi tiun aparaton.",
-    "Something went wrong trying to invite the users.": "Io eraris dum invito de la uzantoj.",
-    "We couldn't invite those users. Please check the users you want to invite and try again.": "Ni ne povis inviti tiujn uzantojn. Bonvolu kontroli, kiujn uzantojn vi invitas, kaj reprovu.",
-    "Failed to find the following users": "Malsukcesis trovi la jenajn uzantojn",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "La jenaj uzantoj eble ne ekzistas aŭ ne validas, kaj ne povas invitiĝi: %(csvNames)s",
-    "Recent Conversations": "Freŝaj interparoloj",
-    "Recently Direct Messaged": "Freŝe uzitaj individuaj ĉambroj",
-    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Gradaltigo de ĉambro estas altnivela ago kaj estas kutime rekomendata kiam ĉambro estas malstabila pro eraroj, mankantaj funkcioj, aŭ malsekuraĵoj.",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "Ĉi tio kutime influas nur traktadon de la ĉambro de la servilo. Se vi spertas problemojn pri %(brand)s, bonvolu <a>raporti problemon</a>.",
-    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Vi gradaltigos ĉi tiun ĉambron de <oldVersion /> al <newVersion />.",
-    "Verification Request": "Kontrolpeto",
-    "Enter a server name": "Enigu nomon de servilo",
-    "Looks good": "Ŝajnas en ordo",
-    "Can't find this server or its room list": "Ne povas trovi ĉi tiun servilon aŭ ĝian liston de ĉambroj",
-    "Your server": "Via servilo",
-    "Add a new server": "Aldoni novan servilon",
-    "Enter the name of a new server you want to explore.": "Enigu la nomon de nova servilo, kiun vi volas esplori.",
-    "Server name": "Nomo de servilo",
-    "a new master key signature": "nova ĉefŝlosila subskribo",
-    "a new cross-signing key signature": "nova subskribo de delega ŝlosilo",
-    "a device cross-signing signature": "delega subskribo de aparato",
-    "a key signature": "ŝlosila subskribo",
-    "%(brand)s encountered an error during upload of:": "%(brand)s eraris dum alŝuto de:",
-    "Upload completed": "Alŝuto finiĝis",
-    "Cancelled signature upload": "Alŝuto de subskribo nuliĝis",
-    "Signature upload success": "Alŝuto de subskribo sukcesis",
-    "Signature upload failed": "Alŝuto de subskribo malsukcesis",
-    "Confirm by comparing the following with the User Settings in your other session:": "Konfirmu per komparo de la sekva kun la agardoj de uzanto en via alia salutaĵo:",
-    "Confirm this user's session by comparing the following with their User Settings:": "Konfirmu la salutaĵon de ĉi tiu uzanto per komparo de la sekva kun ĝiaj agordoj de uzanto:",
-    "If they don't match, the security of your communication may be compromised.": "Se ili ne akordas, la sekureco de via komunikado eble estas rompita.",
-    "You signed in to a new session without verifying it:": "Vi salutis novan salutaĵon sen kontrolo:",
-    "Verify your other session using one of the options below.": "Kontrolu vian alian salutaĵon per unu el la ĉi-subaj elektebloj.",
-    "Can't load this message": "Ne povas enlegi ĉi tiun mesaĝon",
     "Submit logs": "Alŝuti protokolon",
-    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Rememorigo: via foliumilo ne estas subtenata, kaj via sperto do povas esti stranga.",
-    "Server did not require any authentication": "Servilo bezonis nenian kontrolon de aŭtentiko",
-    "Server did not return valid authentication information.": "Servilo ne redonis validajn informojn pri kontrolo de aŭtentiko.",
-    "Confirm your account deactivation by using Single Sign On to prove your identity.": "Knfirmu malaktivigon de via konto per identiĝo per ununura saluto.",
-    "Are you sure you want to deactivate your account? This is irreversible.": "Ĉu vi certe volas malaktivigi vian konton? Tio ne malfareblas.",
-    "Confirm account deactivation": "Konfirmi malaktivigon de konto",
-    "There was a problem communicating with the server. Please try again.": "Eraris komunikado kun la servilo. Bonvolu reprovi.",
-    "Unable to upload": "Ne povas alŝuti",
-    "Restoring keys from backup": "Rehavo de ŝlosiloj el savkopio",
-    "%(completed)s of %(total)s keys restored": "%(completed)s el %(total)s ŝlosiloj rehaviĝis",
-    "Keys restored": "Ŝlosiloj rehaviĝis",
-    "Successfully restored %(sessionCount)s keys": "Sukcese rehavis %(sessionCount)s ŝlosilojn",
     "Sign in with SSO": "Saluti per ununura saluto",
-    "To continue, use Single Sign On to prove your identity.": "Por daŭrigi, pruvu vian identecon per ununura saluto.",
-    "Confirm to continue": "Konfirmu por daŭrigi",
-    "Click the button below to confirm your identity.": "Klaku sube la butonon por konfirmi vian identecon.",
-    "Confirm encryption setup": "Konfirmi agordon de ĉifrado",
-    "Click the button below to confirm setting up encryption.": "Klaku sube la butonon por konfirmi agordon de ĉifrado.",
     "IRC display name width": "Larĝo de vidiga nomo de IRC",
-    "Room address": "Adreso de ĉambro",
-    "This address is available to use": "Ĉi tiu adreso estas uzebla",
-    "This address is already in use": "Ĉi tiu adreso jam estas uzata",
-    "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Vi antaŭe uzis pli novan version de %(brand)s kun tiu ĉi salutaĵo. Por ree uzi ĉi tiun version kun tutvoja ĉifrado, vi devos adiaŭi kaj resaluti.",
     "Your homeserver has exceeded its user limit.": "Via hejmservilo atingis sian limon de uzantoj.",
     "Your homeserver has exceeded one of its resource limits.": "Via hejmservilo atingis iun limon de rimedoj.",
     "Ok": "Bone",
-    "Message preview": "Antaŭrigardo al mesaĝo",
-    "Wrong file type": "Neĝusta dosiertipo",
-    "Looks good!": "Ŝajnas bona!",
-    "Security Phrase": "Sekureca frazo",
-    "Security Key": "Sekureca ŝlosilo",
-    "Use your Security Key to continue.": "Uzu vian sekurecan ŝlosilon por daŭrigi.",
     "Switch theme": "Ŝalti haŭton",
-    "Edited at %(date)s": "Redaktita je %(date)s",
-    "Click to view edits": "Klaku por vidi redaktojn",
-    "Server isn't responding": "Servilo ne respondas",
-    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Via servilo ne respondas al iuj el viaj petoj. Vidu sube kelkon de la plej verŝajnaj kialoj.",
-    "The server (%(serverName)s) took too long to respond.": "La servilo (%(serverName)s) tro longe ne respondis.",
-    "Your firewall or anti-virus is blocking the request.": "Via fajroŝirmilo aŭ kontraŭvirusilo blokas la peton.",
-    "A browser extension is preventing the request.": "Kromprogramo de la foliumilo malhelpas la peton.",
-    "The server is offline.": "La servilo estas eksterreta.",
-    "The server has denied your request.": "La servilo rifuzis vian peton.",
-    "Your area is experiencing difficulties connecting to the internet.": "Via loko nun havas problemojn pri interreta konekto.",
-    "A connection error occurred while trying to contact the server.": "Eraris konekto dum provo kontakti la servilon.",
-    "The server is not configured to indicate what the problem is (CORS).": "La servilo ne estas agordita por indiki la problemon (CORS).",
-    "Recent changes that have not yet been received": "Freŝaj ŝanĝoj ankoraŭ ne ricevitaj",
-    "Unable to set up keys": "Ne povas agordi ŝlosilojn",
-    "You're all caught up.": "Sen sciigoj.",
-    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Invitu iun per ĝia nomo, uzantonomo (kiel <userId/>), aŭ <a>diskonigu la ĉambron</a>.",
-    "Start a conversation with someone using their name or username (like <userId/>).": "Komencu interparolon kun iu per ĝia nomo aŭ uzantonomo (kiel <userId/>).",
-    "Preparing to download logs": "Preparante elŝuton de protokolo",
-    "Information": "Informoj",
-    "This version of %(brand)s does not support searching encrypted messages": "Ĉi tiu versio de %(brand)s ne subtenas serĉadon de ĉifritaj mesaĝoj",
-    "This version of %(brand)s does not support viewing some encrypted files": "Ĉi tiu versio de %(brand)s ne subtenas montradon de iuj ĉifritaj dosieroj",
-    "Use the <a>Desktop app</a> to search encrypted messages": "Uzu la <a>labortablan aplikaĵon</a> por serĉi ĉifritajn mesaĝojn",
-    "Use the <a>Desktop app</a> to see all encrypted files": "Uzu la <a>labortablan aplikaĵon</a> por vidi ĉiujn ĉifritajn dosierojn",
     "Not encrypted": "Neĉifrita",
     "Backup version:": "Repaŝa versio:",
-    "Data on this screen is shared with %(widgetDomain)s": "Datumoj sur tiu ĉi ekrano estas havigataj al %(widgetDomain)s",
     "Uzbekistan": "Uzbekujo",
     "United Arab Emirates": "Unuiĝinaj Arabaj Emirlandoj",
     "Ukraine": "Ukrainujo",
@@ -618,152 +375,12 @@
     "Curaçao": "Kuracao",
     "Cocos (Keeling) Islands": "Kokosinsuloj",
     "Cayman Islands": "Kajmaninsuloj",
-    "Invite by email": "Inviti per retpoŝto",
-    "Reason (optional)": "Kialo (malnepra)",
-    "Server Options": "Elektebloj de servilo",
-    "Hold": "Paŭzigi",
-    "Resume": "Daŭrigi",
-    "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "Se vi forgesis vian Sekurecan ŝlosilon, vi povas <button>agordi novajn elekteblojn de rehavo</button>",
-    "Access your secure message history and set up secure messaging by entering your Security Key.": "Aliru vian historion de sekuraj mesaĝoj kaj agordu sekurajn mesaĝojn per enigo de via Sekureca ŝlosio.",
-    "Not a valid Security Key": "Tio ne estas valida Sekureca ŝlosilo",
-    "This looks like a valid Security Key!": "Tio ĉi ŝajnas esti valida Sekureca ŝlosilo!",
-    "Enter Security Key": "Enigu Sekurecan ŝlosilon",
-    "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>": "Se vi forgesis vian Sekurecan frazon, vi povas <button1>uzi vian Sekurecan ŝlosilon</button1> aŭ <button2>agordi novajn elekteblojn de rehavo</button2>",
-    "Access your secure message history and set up secure messaging by entering your Security Phrase.": "Aliru vian historion de sekuraj mesaĝoj kaj agordu sekurigitajn mesaĝojn per enigo de via Sekureca frazo.",
-    "Enter Security Phrase": "Enigu Sekurecan frazon",
-    "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.": "Ne povis malĉifri savkopion per ĉi tiu Sekureca frazo: bonvolu kontroli, ĉu vi enigis la ĝustan Sekurecan frazon.",
-    "Incorrect Security Phrase": "Malĝusta Sekureca frazo",
-    "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.": "Ne povis malĉifri savkopion per ĉi tiu Sekureca ŝlosilo: bonvolu kontroli, ĉu vi enigis la ĝustan Sekurecan ŝlosilon.",
-    "Security Key mismatch": "Malakordo de Sekureca ŝlosilo",
-    "Unable to access secret storage. Please verify that you entered the correct Security Phrase.": "Ne povas akiri sekretandeponejon. Bonvolu kontroli, ĉu vi enigis la ĝustan Sekurecan frazon.",
-    "Invalid Security Key": "Nevalida Sekureca ŝlosilo",
-    "Wrong Security Key": "Malĝusta Sekureca ŝlosilo",
-    "Remember this": "Memoru ĉi tion",
-    "The widget will verify your user ID, but won't be able to perform actions for you:": "Ĉi tiu fenestraĵo kontrolos vian identigilon de uzanto, sed ne povos fari agojn por vi:",
-    "Allow this widget to verify your identity": "Permesu al ĉi tiu fenestraĵo kontroli vian identecon",
-    "Decline All": "Rifuzi ĉion",
-    "This widget would like to:": "Ĉi tiu fenestraĵo volas:",
-    "Approve widget permissions": "Aprobi rajtojn de fenestraĵo",
-    "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Averte, se vi ne aldonos retpoŝtadreson kaj poste forgesos vian pasvorton, vi eble <b>por ĉiam perdos aliron al via konto</b>.",
-    "Continuing without email": "Daŭrigante sen retpoŝtadreso",
-    "Transfer": "Transdoni",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Invitu iun per ĝia nomo, retpoŝtadreso, uzantonomo (ekz. <userId/>), aŭ <a>konigu ĉi tiun ĉambron</a>.",
-    "Start a conversation with someone using their name, email address or username (like <userId/>).": "Komencu interparolon kun iu per ĝia nomo, retpoŝtadreso, aŭ uzantonomo (ekz. <userId/>).",
-    "A call can only be transferred to a single user.": "Voko povas transdoniĝi nur al unu uzanto.",
-    "Dial pad": "Ciferplato",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Ĉi tiu kutime influas nur traktadon de la ĉambro servil-flanke. Se vi spertas problemojn pri via %(brand)s, bonvolu raporti eraron.",
-    "<inviter/> invites you": "<inviter/> invitas vin",
-    "No results found": "Neniuj rezultoj troviĝis",
-    "%(count)s rooms": {
-        "one": "%(count)s ĉambro",
-        "other": "%(count)s ĉambroj"
-    },
-    "%(count)s members": {
-        "one": "%(count)s ano",
-        "other": "%(count)s anoj"
-    },
-    "Failed to start livestream": "Malsukcesis komenci tujelsendon",
-    "Unable to start audio streaming.": "Ne povas komenci sonelsendon.",
-    "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Invitu iun per ĝia nomo, uzantonomo (kiel <userId/>), aŭ <a>diskonigu ĉi tiun aron</a>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Invitu iun per ĝia nomo, retpoŝtadreso, uzantonomo (kiel <userId/>), aŭ <a>diskonigu ĉi tiun aron</a>.",
-    "Invite to %(roomName)s": "Inviti al %(roomName)s",
-    "Create a new room": "Krei novan ĉambron",
-    "Space selection": "Elekto de aro",
-    "Leave space": "Forlasi aron",
-    "Create a space": "Krei aron",
-    "Invited people will be able to read old messages.": "Invititoj povos legi malnovajn mesaĝojn.",
-    "Add existing rooms": "Aldoni jamajn ĉambrojn",
-    "%(count)s people you know have already joined": {
-        "one": "%(count)s persono, kiun vi konas, jam aliĝis",
-        "other": "%(count)s personoj, kiujn vi konas, jam aliĝis"
-    },
-    "Including %(commaSeparatedMembers)s": "Inkluzive je %(commaSeparatedMembers)s",
-    "View all %(count)s members": {
-        "one": "Montri 1 anon",
-        "other": "Montri ĉiujn %(count)s anojn"
-    },
-    "We couldn't create your DM.": "Ni ne povis krei vian individuan ĉambron.",
-    "You may contact me if you have any follow up questions": "Vi povas min kontakti okaze de pliaj demandoj",
-    "To leave the beta, visit your settings.": "Por foriri de la prova versio, iru al viaj agordoj.",
-    "Want to add a new room instead?": "Ĉu vi volas anstataŭe aldoni novan ĉambron?",
-    "Adding rooms... (%(progress)s out of %(count)s)": {
-        "one": "Aldonante ĉambron…",
-        "other": "Aldonante ĉambrojn… (%(progress)s el %(count)s)"
-    },
-    "Not all selected were added": "Ne ĉiuj elektitoj aldoniĝis",
-    "You are not allowed to view this server's rooms list": "Vi ne rajtas vidi liston de ĉambroj de tu ĉi servilo",
-    "Add reaction": "Aldoni reagon",
-    "Modal Widget": "Reĝima fenestraĵo",
-    "Consult first": "Unue konsulti",
-    "Sending": "Sendante",
-    "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Se vi restarigos ĉion, vi rekomencos sen fidataj salutaĵoj, uzantoj, kaj eble ne povos vidi antaŭajn mesaĝojn.",
-    "Only do this if you have no other device to complete verification with.": "Faru tion ĉi nur se vi ne havas alian aparaton, per kiu vi kontrolus ceterajn.",
-    "Forgotten or lost all recovery methods? <a>Reset all</a>": "Ĉu vi forgesis aŭ perdis ĉiujn manierojn de rehavo? <a>Restarigu ĉion</a>",
-    "Reset everything": "Restarigi ĉion",
-    "Reset event store": "Restarigi deponejon de okazoj",
-    "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Se vi tamen tion faras, sciu ke neniu el viaj mesaĝoj foriĝos, sed via sperto pri serĉado povas malboniĝi momente, dum la indekso estas refarata",
-    "You most likely do not want to reset your event index store": "Plej verŝajne, vi ne volas restarigi vian deponejon de indeksoj de okazoj",
-    "Reset event store?": "Ĉu restarigi deponejon de okazoj?",
-    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Via %(brand)so ne permesas al vi uzi kunigilon por tio. Bonvolu kontakti administranton.",
-    "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Sciu, ke gradaltigo kreos novan version de la ĉambro</b>. Ĉiuj nunaj mesaĝoj restos en ĉi tiu arĥivita ĉambro.",
-    "Automatically invite members from this room to the new one": "Memage inviti anojn de ĉi tiu ĉambro al la nova",
-    "Other spaces or rooms you might not know": "Aliaj aroj aŭ ĉambroj, kiujn vi eble ne konas",
-    "Spaces you know that contain this room": "Konataj aroj, kiuj enhavas ĉi tiun ĉambron",
-    "Search spaces": "Serĉi arojn",
-    "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "Decidu, kiuj aroj rajtos aliri ĉi tiun ĉambron. Se aro estas elektita, ĝiaj anoj povas trovi kaj aliĝi al <RoomName/>.",
-    "Select spaces": "Elekti arojn",
-    "You're removing all spaces. Access will default to invite only": "Vi forigas ĉiujn arojn. Implicite povos aliri nur invititoj",
-    "Leave %(spaceName)s": "Foriri de %(spaceName)s",
-    "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Vi estas la sola administranto de iuj ĉambroj aŭ aroj, de kie vi volas foriri. Se vi faros tion, neniu povos ilin plu administri.",
-    "You're the only admin of this space. Leaving it will mean no one has control over it.": "Vi estas la sola administranto de ĉi tiu aro. Se vi foriros, neniu povos ĝin administri.",
-    "You won't be able to rejoin unless you are re-invited.": "Vi ne povos ree aliĝi, krom se oni ree invitos vin.",
-    "User Directory": "Katologo de uzantoj",
-    "Or send invite link": "Aŭ sendu invitan ligilon",
-    "Some suggestions may be hidden for privacy.": "Iuj proponoj povas esti kaŝitaj pro privateco.",
-    "Search for rooms or people": "Serĉi ĉambrojn aŭ personojn",
-    "Sent": "Sendite",
-    "You don't have permission to do this": "Vi ne rajtas fari tion",
-    "Want to add an existing space instead?": "Ĉu vi volas aldoni jaman aron anstataŭe?",
-    "Add a space to a space you manage.": "Aldoni aron al administrata aro.",
-    "Only people invited will be able to find and join this space.": "Nur invititoj povos trovi kaj aliĝi ĉi tiun aron.",
-    "Anyone will be able to find and join this space, not just members of <SpaceName/>.": "Ĉiu povos trovi kaj aliĝi ĉi tiun aron, ne nur anoj de <SpaceName/>.",
-    "Anyone in <SpaceName/> will be able to find and join.": "Ĉiu en <SpaceName/> povos ĝin trovi kaj aliĝi.",
-    "Private space (invite only)": "Privata aro (nur por invititoj)",
-    "Space visibility": "Videbleco de aro",
-    "Adding spaces has moved.": "Aldonejo de aroj moviĝis.",
-    "Search for rooms": "Serĉi ĉambrojn",
-    "Search for spaces": "Serĉi arojn",
-    "Create a new space": "Krei novan aron",
-    "Want to add a new space instead?": "Ĉu vi volas aldoni novan aron anstataŭe?",
-    "Add existing space": "Aldoni jaman aron",
-    "Please provide an address": "Bonvolu doni adreson",
-    "Message search initialisation failed, check <a>your settings</a> for more information": "Malsukcesis komencigo de serĉado de mesaĝoj, kontrolu <a>viajn agordojn</a> por pliaj informoj",
     "To join a space you'll need an invite.": "Por aliĝi al aro, vi bezonas inviton.",
-    "Would you like to leave the rooms in this space?": "Ĉu vi volus foriri de la ĉambroj en ĉi tiu aro?",
-    "You are about to leave <spaceName/>.": "Vi foriros de <spaceName/>.",
-    "Leave some rooms": "Foriri de iuj ĉambroj",
-    "Leave all rooms": "Foriri de ĉiuj ĉambroj",
-    "Don't leave any rooms": "Foriru de neniuj ĉambroj",
-    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Ĉu vi certas, ke vi volas fini ĉi tiun balotenketon? Ĉi tio montros la finajn rezultojn de la balotenketo kaj malhelpos personojn povi voĉdoni.",
-    "End Poll": "Finu Balotenketon",
-    "Sorry, the poll did not end. Please try again.": "Pardonu, la balotenketo ne finiĝis. Bonvolu reprovi.",
-    "Failed to end poll": "Malsukcesis fini balotenketon",
-    "The poll has ended. Top answer: %(topAnswer)s": "La balotado finiĝis. Plej alta respondo: %(topAnswer)s",
-    "The poll has ended. No votes were cast.": "La balotenketo finiĝis. Neniuj voĉoj estis ĵetitaj.",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s kaj %(count)s alia",
         "other": "%(spaceName)s kaj %(count)s aliaj"
     },
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s kaj %(space2Name)s",
-    "What location type do you want to share?": "Kiel vi volas kunhavigi vian lokon?",
-    "My live location": "Mia realtempa loko",
-    "My current location": "Mia nuna loko",
-    "%(brand)s could not send your location. Please try again later.": "%(brand)s ne povis sendi vian lokon. Bonvolu reprovi poste.",
-    "We couldn't send your location": "Ni ne povis sendi vian lokon",
-    "Could not fetch location": "Loko ne eblis akiri",
-    "Location": "Loko",
-    "Close sidebar": "Fermu la flanka kolumno",
-    "Public rooms": "Publikajn ĉambrojn",
     "Developer": "Programisto",
     "unknown": "nekonata",
     "common": {
@@ -867,7 +484,24 @@
         "unencrypted": "Neĉifrita",
         "show_more": "Montri pli",
         "avatar": "Profilbildo",
-        "are_you_sure": "Ĉu vi certas?"
+        "are_you_sure": "Ĉu vi certas?",
+        "location": "Loko",
+        "email_address": "Retpoŝtadreso",
+        "filter_results": "Filtri rezultojn",
+        "no_results_found": "Neniuj rezultoj troviĝis",
+        "and_n_others": {
+            "other": "kaj %(count)s aliaj…",
+            "one": "kaj unu alia…"
+        },
+        "n_members": {
+            "one": "%(count)s ano",
+            "other": "%(count)s anoj"
+        },
+        "edited": "redaktita",
+        "n_rooms": {
+            "one": "%(count)s ĉambro",
+            "other": "%(count)s ĉambroj"
+        }
     },
     "action": {
         "continue": "Daŭrigi",
@@ -966,7 +600,10 @@
         "unignore": "Reatenti",
         "explore_rooms": "Esplori ĉambrojn",
         "add_existing_room": "Aldoni jaman ĉambron",
-        "explore_public_rooms": "Esplori publikajn ĉambrojn"
+        "explore_public_rooms": "Esplori publikajn ĉambrojn",
+        "transfer": "Transdoni",
+        "resume": "Daŭrigi",
+        "hold": "Paŭzigi"
     },
     "a11y": {
         "user_menu": "Menuo de uzanto",
@@ -1016,7 +653,8 @@
         "bridge_state_creator": "Ĉi tiu ponto estas provizita de <user />.",
         "bridge_state_manager": "Ĉi tiu ponto estas administrata de <user />.",
         "bridge_state_workspace": "Laborspaco: <networkLink/>",
-        "bridge_state_channel": "Kanalo: <channelLink/>"
+        "bridge_state_channel": "Kanalo: <channelLink/>",
+        "beta_feedback_leave_button": "Por foriri de la prova versio, iru al viaj agordoj."
     },
     "keyboard": {
         "home": "Hejmo",
@@ -1116,7 +754,9 @@
         "moderator": "Ĉambrestro",
         "admin": "Administranto",
         "custom": "Propra (%(level)s)",
-        "mod": "Reguligisto"
+        "mod": "Reguligisto",
+        "label": "Povnivelo",
+        "custom_level": "Propra nivelo"
     },
     "bug_reporting": {
         "matrix_security_issue": "Por raparto de sekureca problemo rilata al Matrix, bonvolu legi la <a>Eldiran Politikon pri Sekureco</a> de Matrix.org.",
@@ -1132,7 +772,16 @@
         "uploading_logs": "Alŝutante protokolon",
         "downloading_logs": "Elŝutante protokolon",
         "create_new_issue": "Bonvolu <newIssueLink>raporti novan problemon</newIssueLink> je GitHub, por ke ni povu ĝin esplori.",
-        "waiting_for_server": "Atendante respondon el la servilo"
+        "waiting_for_server": "Atendante respondon el la servilo",
+        "error_empty": "Bonvolu diri al ni kio misokazis, aŭ pli bone raporti problemon per GitHub.",
+        "preparing_logs": "Pretigante sendon de protokolo",
+        "logs_sent": "Protokolo sendiĝis",
+        "thank_you": "Dankon!",
+        "failed_send_logs": "Malsukcesis sendi protokolon: ",
+        "preparing_download": "Preparante elŝuton de protokolo",
+        "unsupported_browser": "Rememorigo: via foliumilo ne estas subtenata, kaj via sperto do povas esti stranga.",
+        "textarea_label": "Notoj",
+        "log_request": "Por malhelpi tion ose, bonvolu <a>sendi al ni protokolon</a>."
     },
     "time": {
         "hours_minutes_seconds_left": "%(hours)sh. %(minutes)sm. %(seconds)ss. restas",
@@ -1419,7 +1068,13 @@
             "email_address_label": "Retpoŝtadreso",
             "remove_msisdn_prompt": "Ĉu forigi %(phone)s?",
             "add_msisdn_instructions": "Tekstmesaĝo sendiĝis al +%(msisdn)s. Bonvolu enigi la kontrolan kodon enhavitan.",
-            "msisdn_label": "Telefonnumero"
+            "msisdn_label": "Telefonnumero",
+            "deactivate_confirm_body_sso": "Knfirmu malaktivigon de via konto per identiĝo per ununura saluto.",
+            "deactivate_confirm_body": "Ĉu vi certe volas malaktivigi vian konton? Tio ne malfareblas.",
+            "deactivate_confirm_continue": "Konfirmi malaktivigon de konto",
+            "error_deactivate_communication": "Eraris komunikado kun la servilo. Bonvolu reprovi.",
+            "error_deactivate_no_auth": "Servilo bezonis nenian kontrolon de aŭtentiko",
+            "error_deactivate_invalid_auth": "Servilo ne redonis validajn informojn pri kontrolo de aŭtentiko."
         },
         "sidebar": {
             "title": "Flanka kolumno",
@@ -1828,7 +1483,8 @@
         },
         "reactions": {
             "label": "%(reactors)s reagis per %(content)s",
-            "tooltip": "<reactors/><reactedWith>reagis per %(shortName)s</reactedWith>"
+            "tooltip": "<reactors/><reactedWith>reagis per %(shortName)s</reactedWith>",
+            "add_reaction_prompt": "Aldoni reagon"
         },
         "m.room.create": {
             "continuation": "Ĉi tiu ĉambro estas daŭrigo de alia interparolo.",
@@ -1845,7 +1501,8 @@
             "show_url_preview": "Antaŭrigardi",
             "external_url": "Fonta URL",
             "collapse_reply_thread": "Maletendi respondan fadenon",
-            "report": "Raporti"
+            "report": "Raporti",
+            "resent_unsent_reactions": "Resendi %(unsentCount)s reago(j)n"
         },
         "url_preview": {
             "show_n_more": {
@@ -1898,13 +1555,31 @@
             "you_accepted": "Vi akceptis",
             "you_declined": "Vi rifuzis",
             "you_cancelled": "Vi nuligis",
-            "you_started": "Vi sendis peton de kontrolo"
+            "you_started": "Vi sendis peton de kontrolo",
+            "user_accepted": "%(name)s akceptis",
+            "user_declined": "%(name)s rifuzis",
+            "user_cancelled": "%(name)s nuligis",
+            "user_wants_to_verify": "%(name)s volas kontroli"
         },
         "m.poll.end": {
             "sender_ended": "%(senderName)s finis balotenketon"
         },
         "m.video": {
             "error_decrypting": "Malĉifro de filmo eraris"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "Aldoni kunigon",
+            "dialog_description": "Vi estas direktota al ekstera retejo por aŭtentikigi vian konton por uzo kun %(integrationsUrl)s. Ĉu vi volas daŭrigi tion?"
+        },
+        "edits": {
+            "tooltip_title": "Redaktita je %(date)s",
+            "tooltip_sub": "Klaku por vidi redaktojn",
+            "tooltip_label": "Redaktita je %(date)s. Klaku por vidi redaktojn."
+        },
+        "error_rendering_message": "Ne povas enlegi ĉi tiun mesaĝon",
+        "reply": {
+            "error_loading": "Ne povas enlegi la responditan okazon; aŭ ĝi ne ekzistas, aŭ vi ne rajtas vidi ĝin.",
+            "in_reply_to": "<a>Responde al</a> <pill>"
         }
     },
     "slash_command": {
@@ -1991,7 +1666,8 @@
         "verify_nop_warning_mismatch": "AVERTO: Salutaĵo jam estas kontrolita, sed la ŝlosiloj NE AKORDAS!",
         "verify_mismatch": "AVERTO: MALSUKCESIS KONTROLO DE ŜLOSILOJ! La subskriba ŝlosilo de %(userId)s kaj session %(deviceId)s estas «%(fprint)s», kiu ne akordas la donitan ŝlosilon «%(fingerprint)s». Tio povus signifi, ke via komunikado estas spionata!",
         "verify_success_title": "Kontrolita ŝlosilo",
-        "verify_success_description": "La subskriba ŝlosilo, kiun vi donis, akordas la subskribas ŝlosilon, kinu vi ricevis de la salutaĵo %(deviceId)s de la uzanto %(userId)s. Salutaĵo estis markita kontrolita."
+        "verify_success_description": "La subskriba ŝlosilo, kiun vi donis, akordas la subskribas ŝlosilon, kinu vi ricevis de la salutaĵo %(deviceId)s de la uzanto %(userId)s. Salutaĵo estis markita kontrolita.",
+        "help_dialog_title": "Helpo pri komando"
     },
     "presence": {
         "online_for": "Enreta jam je %(duration)s",
@@ -2104,9 +1780,9 @@
         "unable_to_access_audio_input_title": "Ne povas aliri vian mikrofonon",
         "unable_to_access_audio_input_description": "Ni ne povis aliri vian mikrofonon. Bonvolu kontroli la agordojn de via foliumilo kaj reprovi.",
         "no_audio_input_title": "Neniu mikrofono troviĝis",
-        "no_audio_input_description": "Ni ne trovis mikrofonon en via aparato. Bonvolu kontroli viajn agordojn kaj reprovi."
+        "no_audio_input_description": "Ni ne trovis mikrofonon en via aparato. Bonvolu kontroli viajn agordojn kaj reprovi.",
+        "transfer_consult_first_label": "Unue konsulti"
     },
-    "Other": "Alia",
     "room_settings": {
         "permissions": {
             "m.room.avatar_space": "Ŝanĝi bildon de aro",
@@ -2198,7 +1874,13 @@
                 "other": "Ĝisdatigante arojn... (%(progress)s el %(count)s)"
             },
             "error_join_rule_change_title": "Malsukcesis ĝisdatigi regulojn pri aliĝo",
-            "error_join_rule_change_unknown": "Nekonata malsukceso"
+            "error_join_rule_change_unknown": "Nekonata malsukceso",
+            "join_rule_restricted_dialog_empty_warning": "Vi forigas ĉiujn arojn. Implicite povos aliri nur invititoj",
+            "join_rule_restricted_dialog_title": "Elekti arojn",
+            "join_rule_restricted_dialog_description": "Decidu, kiuj aroj rajtos aliri ĉi tiun ĉambron. Se aro estas elektita, ĝiaj anoj povas trovi kaj aliĝi al <RoomName/>.",
+            "join_rule_restricted_dialog_filter_placeholder": "Serĉi arojn",
+            "join_rule_restricted_dialog_heading_room": "Konataj aroj, kiuj enhavas ĉi tiun ĉambron",
+            "join_rule_restricted_dialog_heading_other": "Aliaj aroj aŭ ĉambroj, kiujn vi eble ne konas"
         },
         "general": {
             "publish_toggle": "Ĉu publikigi ĉi tiun ĉambron per la katalogo de ĉambroj de %(domain)s?",
@@ -2239,7 +1921,13 @@
             "canonical_alias_field_label": "Ĉefa adreso",
             "avatar_field_label": "Profilbildo de ĉambro",
             "aliases_no_items_label": "Ankoraŭ neniuj aliaj publikigitaj adresoj; aldonu iun sube",
-            "aliases_items_label": "Aliaj publikigitaj adresoj:"
+            "aliases_items_label": "Aliaj publikigitaj adresoj:",
+            "alias_heading": "Adreso de ĉambro",
+            "alias_field_safe_localpart_invalid": "Iuj signoj ne estas permesitaj",
+            "alias_field_required_invalid": "Bonvolu doni adreson",
+            "alias_field_taken_valid": "Ĉi tiu adreso estas uzebla",
+            "alias_field_taken_invalid_domain": "Ĉi tiu adreso jam estas uzata",
+            "alias_field_placeholder_default": "ekzemple mia-chambro"
         },
         "advanced": {
             "unfederated": "Ĉi tiu ĉambro ne atingeblas por foraj serviloj de Matrix",
@@ -2248,7 +1936,24 @@
             "room_version_section": "Ĉambra versio",
             "room_version": "Ĉambra versio:",
             "information_section_space": "Informoj pri aro",
-            "information_section_room": "Informoj pri ĉambro"
+            "information_section_room": "Informoj pri ĉambro",
+            "error_upgrade_title": "Malsukcesis gradaltigi ĉambron",
+            "error_upgrade_description": "Gradaltigo de la ĉambro ne povis finiĝi",
+            "upgrade_button": "Gradaltigi ĉi tiun ĉambron al versio %(version)s",
+            "upgrade_dialog_title": "Gradaltigi version de la ĉambro",
+            "upgrade_dialog_description": "Gradaltigo de ĉi tiu ĉambro bezonas fermi ĝin, kaj krei novan por anstataŭi ĝin. Por plejbonigi sperton de la ĉambranoj, ni:",
+            "upgrade_dialog_description_1": "Kreos novan ĉàmbron kun la sama nomo, priskribo, kaj profilbildo",
+            "upgrade_dialog_description_2": "Religos ĉiujn lokajn kromnomojn al la nova ĉambro",
+            "upgrade_dialog_description_3": "Haltigos parolojn al la malnova versio de al ĉambro, kaj konsilos uzantojn pri la nova per mesaĝo",
+            "upgrade_dialog_description_4": "Metos en la novan ĉambron ligilon al la malnova, por ke oni povu rigardi la malnovajn mesaĝojn",
+            "upgrade_warning_dialog_invite_label": "Memage inviti anojn de ĉi tiu ĉambro al la nova",
+            "upgrade_warning_dialog_title_private": "Gradaltigi privatan ĉambron",
+            "upgrade_dwarning_ialog_title_public": "Gradaltigi publikan ĉambron",
+            "upgrade_warning_dialog_report_bug_prompt": "Ĉi tiu kutime influas nur traktadon de la ĉambro servil-flanke. Se vi spertas problemojn pri via %(brand)s, bonvolu raporti eraron.",
+            "upgrade_warning_dialog_report_bug_prompt_link": "Ĉi tio kutime influas nur traktadon de la ĉambro de la servilo. Se vi spertas problemojn pri %(brand)s, bonvolu <a>raporti problemon</a>.",
+            "upgrade_warning_dialog_description": "Gradaltigo de ĉambro estas altnivela ago kaj estas kutime rekomendata kiam ĉambro estas malstabila pro eraroj, mankantaj funkcioj, aŭ malsekuraĵoj.",
+            "upgrade_warning_dialog_explainer": "<b>Sciu, ke gradaltigo kreos novan version de la ĉambro</b>. Ĉiuj nunaj mesaĝoj restos en ĉi tiu arĥivita ĉambro.",
+            "upgrade_warning_dialog_footer": "Vi gradaltigos ĉi tiun ĉambron de <oldVersion /> al <newVersion />."
         },
         "delete_avatar_label": "Forigi profilbildon",
         "upload_avatar_label": "Alŝuti profilbildon",
@@ -2279,7 +1984,9 @@
             "notification_sound": "Sono de sciigo",
             "custom_sound_prompt": "Agordi novan propran sonon",
             "browse_button": "Foliumi"
-        }
+        },
+        "title": "Agordoj de ĉambro – %(roomName)s",
+        "alias_not_specified": "nespecifita"
     },
     "encryption": {
         "verification": {
@@ -2331,7 +2038,19 @@
             "prompt_user": "Rekomencu kontroladon el ĝia profilo.",
             "timed_out": "Kontrolo atingis tempolimon.",
             "cancelled_user": "%(displayName)s nuligis kontrolon.",
-            "cancelled": "Vi nuligis kontrolon."
+            "cancelled": "Vi nuligis kontrolon.",
+            "incoming_sas_user_dialog_text_1": "Kontrolu ĉi tiun uzanton por marki ĝin fidata. Fidado devas vin trankviligi dum uzado de tutvoja ĉifrado.",
+            "incoming_sas_user_dialog_text_2": "Kontrolo de tiu ĉi uzanto markos ĝian salutaĵon fidata, kaj ankaŭ markos vian salutaĵon fidata por ĝi.",
+            "incoming_sas_device_dialog_text_1": "Kontrolu ĉi tiun aparaton por marki ĝin fidata. Fidado povas pacigi la menson de vi kaj aliaj uzantoj dum uzado de tutvoje ĉifrataj mesaĝoj.",
+            "incoming_sas_device_dialog_text_2": "Kontrolo de ĉi tiu aparato markos ĝin fidata, kaj ankaŭ la uzantoj, kiuj interkontrolis kun vi, fidos ĉi tiun aparaton.",
+            "incoming_sas_dialog_title": "Venas kontrolpeto",
+            "manual_device_verification_self_text": "Konfirmu per komparo de la sekva kun la agardoj de uzanto en via alia salutaĵo:",
+            "manual_device_verification_user_text": "Konfirmu la salutaĵon de ĉi tiu uzanto per komparo de la sekva kun ĝiaj agordoj de uzanto:",
+            "manual_device_verification_device_name_label": "Nomo de salutaĵo",
+            "manual_device_verification_device_id_label": "Identigilo de salutaĵo",
+            "manual_device_verification_device_key_label": "Ŝlosilo de salutaĵo",
+            "manual_device_verification_footer": "Se ili ne akordas, la sekureco de via komunikado eble estas rompita.",
+            "verification_dialog_title_user": "Kontrolpeto"
         },
         "old_version_detected_title": "Malnovaj datumoj de ĉifroteĥnikaro troviĝis",
         "old_version_detected_description": "Datumoj el malnova versio de %(brand)s troviĝis. Ĉi tio malfunkciigos tutvojan ĉifradon en la malnova versio. Tutvoje ĉifritaj mesaĝoj interŝanĝitaj freŝtempe per la malnova versio eble ne malĉifreblos. Tio povas kaŭzi malsukceson ankaŭ al mesaĝoj interŝanĝitaj kun tiu ĉi versio. Se vin trafos problemoj, adiaŭu kaj resalutu. Por reteni mesaĝan historion, elportu kaj reenportu viajn ŝlosilojn.",
@@ -2382,7 +2101,53 @@
         "cross_signing_room_warning": "Iu uzas nekonatan salutaĵon",
         "cross_signing_room_verified": "Ĉiu en la ĉambro estas kontrolita",
         "cross_signing_room_normal": "Ĉi tiu ĉambro uzas tutvojan ĉifradon",
-        "unsupported": "Ĉi tiu kliento ne subtenas tutvojan ĉifradon."
+        "unsupported": "Ĉi tiu kliento ne subtenas tutvojan ĉifradon.",
+        "incompatible_database_sign_out_description": "Por eviti perdon de via babila historio, vi devas elporti la ŝlosilojn de viaj ĉambroj antaŭ adiaŭo. Por tio vi bezonos reveni al la pli nova versio de %(brand)s",
+        "incompatible_database_description": "Vi antaŭe uzis pli novan version de %(brand)s kun tiu ĉi salutaĵo. Por ree uzi ĉi tiun version kun tutvoja ĉifrado, vi devos adiaŭi kaj resaluti.",
+        "incompatible_database_title": "Neakorda datumbazo",
+        "incompatible_database_disable": "Pluigi sen ĉifrado",
+        "key_signature_upload_completed": "Alŝuto finiĝis",
+        "key_signature_upload_cancelled": "Alŝuto de subskribo nuliĝis",
+        "key_signature_upload_failed": "Ne povas alŝuti",
+        "key_signature_upload_success_title": "Alŝuto de subskribo sukcesis",
+        "key_signature_upload_failed_title": "Alŝuto de subskribo malsukcesis",
+        "udd": {
+            "own_new_session_text": "Vi salutis novan salutaĵon sen kontrolo:",
+            "own_ask_verify_text": "Kontrolu vian alian salutaĵon per unu el la ĉi-subaj elektebloj.",
+            "other_new_session_text": "%(name)s (%(userId)s) salutis novan salutaĵon ne kontrolante ĝin:",
+            "other_ask_verify_text": "Petu, ke ĉi tiu la uzanto kontrolu sian salutaĵon, aŭ kontrolu ĝin permane sube.",
+            "title": "Nefidata"
+        },
+        "access_secret_storage_dialog": {
+            "key_validation_text": {
+                "wrong_file_type": "Neĝusta dosiertipo",
+                "recovery_key_is_correct": "Ŝajnas bona!",
+                "wrong_security_key": "Malĝusta Sekureca ŝlosilo",
+                "invalid_security_key": "Nevalida Sekureca ŝlosilo"
+            },
+            "reset_title": "Restarigi ĉion",
+            "reset_warning_1": "Faru tion ĉi nur se vi ne havas alian aparaton, per kiu vi kontrolus ceterajn.",
+            "reset_warning_2": "Se vi restarigos ĉion, vi rekomencos sen fidataj salutaĵoj, uzantoj, kaj eble ne povos vidi antaŭajn mesaĝojn.",
+            "security_phrase_title": "Sekureca frazo",
+            "security_phrase_incorrect_error": "Ne povas akiri sekretandeponejon. Bonvolu kontroli, ĉu vi enigis la ĝustan Sekurecan frazon.",
+            "security_key_title": "Sekureca ŝlosilo",
+            "use_security_key_prompt": "Uzu vian sekurecan ŝlosilon por daŭrigi.",
+            "restoring": "Rehavo de ŝlosiloj el savkopio"
+        },
+        "reset_all_button": "Ĉu vi forgesis aŭ perdis ĉiujn manierojn de rehavo? <a>Restarigu ĉion</a>",
+        "destroy_cross_signing_dialog": {
+            "title": "Ĉu detrui delege ĉifrajn ŝlosilojn?",
+            "warning": "Forigo de delege ĉifraj ŝlosiloj estas porĉiama. Ĉiu, kun kiu vi interkontrolis, vidos avertojn pri sekureco. Vi preskaŭ certe ne volas ĉi tion fari, malse vi perdis ĉiun aparaton, el kiu vi povus delege subskribadi.",
+            "primary_button_text": "Vakigi delege ĉifrajn ŝlosilojn"
+        },
+        "confirm_encryption_setup_title": "Konfirmi agordon de ĉifrado",
+        "confirm_encryption_setup_body": "Klaku sube la butonon por konfirmi agordon de ĉifrado.",
+        "unable_to_setup_keys_error": "Ne povas agordi ŝlosilojn",
+        "key_signature_upload_failed_master_key_signature": "nova ĉefŝlosila subskribo",
+        "key_signature_upload_failed_cross_signing_key_signature": "nova subskribo de delega ŝlosilo",
+        "key_signature_upload_failed_device_cross_signing_key_signature": "delega subskribo de aparato",
+        "key_signature_upload_failed_key_signature": "ŝlosila subskribo",
+        "key_signature_upload_failed_body": "%(brand)s eraris dum alŝuto de:"
     },
     "emoji": {
         "category_frequently_used": "Ofte uzataj",
@@ -2503,7 +2268,10 @@
             "fallback_button": "Komenci aŭtentikigon",
             "sso_title": "Daŭrigi per ununura saluto",
             "sso_body": "Konfirmi aldonon de ĉi tiu retpoŝtadreso, uzante ununuran saluton por pruvi vian identecon.",
-            "code": "Kodo"
+            "code": "Kodo",
+            "sso_preauth_body": "Por daŭrigi, pruvu vian identecon per ununura saluto.",
+            "sso_postauth_title": "Konfirmu por daŭrigi",
+            "sso_postauth_body": "Klaku sube la butonon por konfirmi vian identecon."
         },
         "password_field_label": "Enigu pasvorton",
         "password_field_strong_label": "Bona, forta pasvorto!",
@@ -2548,7 +2316,39 @@
         },
         "country_dropdown": "Landa falmenuo",
         "common_failures": {},
-        "captcha_description": "Ĉi tiu hejmservilo volas certigi, ke vi ne estas roboto."
+        "captcha_description": "Ĉi tiu hejmservilo volas certigi, ke vi ne estas roboto.",
+        "autodiscovery_invalid": "Nevalida eltrova respondo de hejmservilo",
+        "autodiscovery_generic_failure": "Malsukcesis akiri agordojn de memaga eltrovado de la servilo",
+        "autodiscovery_invalid_hs_base_url": "Nevalida base_url por m.homeserver",
+        "autodiscovery_invalid_hs": "URL por hejmservilo ŝajne ne ligas al valida hejmservilo de Matrix",
+        "autodiscovery_invalid_is_base_url": "Nevalida base_url por m.identity_server",
+        "autodiscovery_invalid_is": "URL por identiga servilo ŝajne ne ligas al valida identiga servilo",
+        "autodiscovery_invalid_is_response": "Nevalida eltrova respondo de identiga servilo",
+        "server_picker_description_matrix.org": "Senpage aliĝu al milionoj sur la plej granda publika servilo",
+        "server_picker_title_default": "Elektebloj de servilo",
+        "soft_logout": {
+            "clear_data_title": "Ĉu vakigi ĉiujn datumojn en ĉi tiu salutaĵo?",
+            "clear_data_description": "Vakigo de ĉiuj datumoj el ĉi tiu salutaĵo estas porĉiama. Ĉifritaj mesaĝoj perdiĝos, malse iliaj ŝlosiloj savkopiiĝis.",
+            "clear_data_button": "Vakigi ĉiujn datumojn"
+        },
+        "logout_dialog": {
+            "setup_secure_backup_description_1": "Ĉifritaj mesaĝoj estas sekurigitaj per tutvoja ĉifrado. Nur vi kaj la ricevonto(j) havas la ŝlosilojn necesajn por legado.",
+            "use_key_backup": "Ekuzi Savkopiadon de ŝlosiloj",
+            "skip_key_backup": "Mi ne volas miajn ĉifritajn mesaĝojn",
+            "megolm_export": "Mane elporti ŝlosilojn",
+            "setup_key_backup_title": "Vi perdos aliron al viaj ĉifritaj mesaĝoj",
+            "description": "Ĉu vi certe volas adiaŭi?"
+        },
+        "registration": {
+            "continue_without_email_title": "Daŭrigante sen retpoŝtadreso",
+            "continue_without_email_description": "Averte, se vi ne aldonos retpoŝtadreson kaj poste forgesos vian pasvorton, vi eble <b>por ĉiam perdos aliron al via konto</b>.",
+            "continue_without_email_field_label": "Retpoŝto (malnepra)"
+        },
+        "set_email": {
+            "verification_pending_title": "Atendante kontrolon",
+            "verification_pending_description": "Bonvolu kontroli vian retpoŝton, kaj klaki la ligilon enhavatan en la sendita mesaĝo. Farinte tion, klaku je «daŭrigi».",
+            "description": "Tio ĉi permesos al vi restarigi vian pasvorton kaj ricevi sciigojn."
+        }
     },
     "room_list": {
         "sort_unread_first": "Montri ĉambrojn kun nelegitaj mesaĝoj kiel unuajn",
@@ -2589,7 +2389,8 @@
         "spam_or_propaganda": "Rubmesaĝo aŭ propagando",
         "report_entire_room": "Raporti la tutan ĉambron",
         "report_content_to_homeserver": "Raporti enhavon al la administrantode via hejmservilo",
-        "description": "Per raporto de ĉi tiu mesaĝo vi sendos ĝian unikan «identigilon de okazo» al la administranto de via hejmservilo. Se mesaĝoj en ĉi tiu ĉambro estas ĉifrataj, la administranto de via hejmservilo ne povos legi la tekston de la mesaĝo, nek rigardi dosierojn aŭ bildojn."
+        "description": "Per raporto de ĉi tiu mesaĝo vi sendos ĝian unikan «identigilon de okazo» al la administranto de via hejmservilo. Se mesaĝoj en ĉi tiu ĉambro estas ĉifrataj, la administranto de via hejmservilo ne povos legi la tekston de la mesaĝo, nek rigardi dosierojn aŭ bildojn.",
+        "other_label": "Alia"
     },
     "onboarding": {
         "has_avatar_label": "Bonege, tio helpos al aliuloj scii, ke temas pri vi",
@@ -2709,7 +2510,22 @@
         "error_loading": "Eraris enlegado de fenestraĵo",
         "error_mixed_content": "Eraris – Miksita enhavo",
         "popout": "Fenestrigi fenestraĵon",
-        "set_room_layout": "Agordi al ĉiuj mian aranĝon de ĉambro"
+        "set_room_layout": "Agordi al ĉiuj mian aranĝon de ĉambro",
+        "modal_title_default": "Reĝima fenestraĵo",
+        "modal_data_warning": "Datumoj sur tiu ĉi ekrano estas havigataj al %(widgetDomain)s",
+        "capabilities_dialog": {
+            "title": "Aprobi rajtojn de fenestraĵo",
+            "content_starting_text": "Ĉi tiu fenestraĵo volas:",
+            "decline_all_permission": "Rifuzi ĉion",
+            "remember_Selection": "Memoru mian elekton por tiu ĉi fenestraĵo"
+        },
+        "open_id_permissions_dialog": {
+            "title": "Permesu al ĉi tiu fenestraĵo kontroli vian identecon",
+            "starting_text": "Ĉi tiu fenestraĵo kontrolos vian identigilon de uzanto, sed ne povos fari agojn por vi:",
+            "remember_selection": "Memoru ĉi tion"
+        },
+        "error_unable_start_audio_stream_description": "Ne povas komenci sonelsendon.",
+        "error_unable_start_audio_stream_title": "Malsukcesis komenci tujelsendon"
     },
     "feedback": {
         "sent": "Prikomentoj sendiĝis",
@@ -2717,7 +2533,8 @@
         "platform_username": "Via platformo kaj uzantonomo helpos al ni pli bone uzi viajn prikomentojn.",
         "pro_type": "KONSILO: Kiam vi raportas eraron, bonvolu kunsendi <debugLogsLink>erarserĉan protokolon</debugLogsLink>, por ke ni povu pli facile trovi la problemon.",
         "existing_issue_link": "Bonvolu unue vidi <existingIssuesLink>jamajn erarojn en GitHub</existingIssuesLink>. Ĉu neniu akordas la vian? <newIssueLink>Raportu novan</newIssueLink>.",
-        "send_feedback_action": "Prikomenti"
+        "send_feedback_action": "Prikomenti",
+        "can_contact_label": "Vi povas min kontakti okaze de pliaj demandoj"
     },
     "zxcvbn": {
         "suggestions": {
@@ -2786,7 +2603,10 @@
         "error_encountered": "Eraron renkonti (%(errorDetail)s).",
         "no_update": "Neniuj ĝisdatigoj haveblas.",
         "new_version_available": "Nova versio estas disponebla. <a>Ĝisdatigu nun.</a>",
-        "check_action": "Kontroli ĝisdatigojn"
+        "check_action": "Kontroli ĝisdatigojn",
+        "error_unable_load_commit": "Ne povas enlegi detalojn de enmeto: %(msg)s",
+        "unavailable": "Nedisponebla",
+        "changelog": "Protokolo de ŝanĝoj"
     },
     "theme": {
         "light_high_contrast": "Malpeza alta kontrasto"
@@ -2815,7 +2635,37 @@
         "title_when_query_unavailable": "Ĉambroj kaj aroj",
         "title_when_query_available": "Rezultoj",
         "search_placeholder": "Serĉi nomojn kaj priskribojn",
-        "no_search_result_hint": "Eble vi provu serĉi alion, aŭ kontroli je mistajpoj."
+        "no_search_result_hint": "Eble vi provu serĉi alion, aŭ kontroli je mistajpoj.",
+        "add_existing_subspace": {
+            "space_dropdown_title": "Aldoni jaman aron",
+            "create_prompt": "Ĉu vi volas aldoni novan aron anstataŭe?",
+            "create_button": "Krei novan aron",
+            "filter_placeholder": "Serĉi arojn"
+        },
+        "add_existing_room_space": {
+            "error_heading": "Ne ĉiuj elektitoj aldoniĝis",
+            "progress_text": {
+                "one": "Aldonante ĉambron…",
+                "other": "Aldonante ĉambrojn… (%(progress)s el %(count)s)"
+            },
+            "dm_heading": "Individuaj ĉambroj",
+            "space_dropdown_label": "Elekto de aro",
+            "space_dropdown_title": "Aldoni jamajn ĉambrojn",
+            "create": "Ĉu vi volas anstataŭe aldoni novan ĉambron?",
+            "create_prompt": "Krei novan ĉambron",
+            "subspace_moved_note": "Aldonejo de aroj moviĝis."
+        },
+        "room_filter_placeholder": "Serĉi ĉambrojn",
+        "leave_dialog_public_rejoin_warning": "Vi ne povos ree aliĝi, krom se oni ree invitos vin.",
+        "leave_dialog_only_admin_warning": "Vi estas la sola administranto de ĉi tiu aro. Se vi foriros, neniu povos ĝin administri.",
+        "leave_dialog_only_admin_room_warning": "Vi estas la sola administranto de iuj ĉambroj aŭ aroj, de kie vi volas foriri. Se vi faros tion, neniu povos ilin plu administri.",
+        "leave_dialog_title": "Foriri de %(spaceName)s",
+        "leave_dialog_description": "Vi foriros de <spaceName/>.",
+        "leave_dialog_option_intro": "Ĉu vi volus foriri de la ĉambroj en ĉi tiu aro?",
+        "leave_dialog_option_none": "Foriru de neniuj ĉambroj",
+        "leave_dialog_option_all": "Foriri de ĉiuj ĉambroj",
+        "leave_dialog_option_specific": "Foriri de iuj ĉambroj",
+        "leave_dialog_action": "Forlasi aron"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Ĉi tiu hejmservilo ne estas agordita por montri mapojn.",
@@ -2827,7 +2677,14 @@
         "reset_bearing": "Restarigu la lagron norden",
         "failed_generic": "Via loko ne eblis akiri. Bonvolu reprovi poste.",
         "failed_timeout": "Tempo elĉerpita akiri vian lokon. Bonvolu reprovi poste.",
-        "share_button": "Kunhavigi lokon"
+        "share_button": "Kunhavigi lokon",
+        "error_fetch_location": "Loko ne eblis akiri",
+        "error_send_title": "Ni ne povis sendi vian lokon",
+        "error_send_description": "%(brand)s ne povis sendi vian lokon. Bonvolu reprovi poste.",
+        "share_type_own": "Mia nuna loko",
+        "share_type_live": "Mia realtempa loko",
+        "share_type_prompt": "Kiel vi volas kunhavigi vian lokon?",
+        "close_sidebar": "Fermu la flanka kolumno"
     },
     "labs_mjolnir": {
         "room_name": "Mia listo de forbaroj",
@@ -2892,7 +2749,15 @@
         "address_placeholder": "ekz. mia-aro",
         "address_label": "Adreso",
         "label": "Krei aron",
-        "add_details_prompt_2": "Vi povas ŝanĝi ĉi tiujn kiam ajn vi volas."
+        "add_details_prompt_2": "Vi povas ŝanĝi ĉi tiujn kiam ajn vi volas.",
+        "subspace_join_rule_restricted_description": "Ĉiu en <SpaceName/> povos ĝin trovi kaj aliĝi.",
+        "subspace_join_rule_public_description": "Ĉiu povos trovi kaj aliĝi ĉi tiun aron, ne nur anoj de <SpaceName/>.",
+        "subspace_join_rule_invite_description": "Nur invititoj povos trovi kaj aliĝi ĉi tiun aron.",
+        "subspace_dropdown_title": "Krei aron",
+        "subspace_beta_notice": "Aldoni aron al administrata aro.",
+        "subspace_join_rule_label": "Videbleco de aro",
+        "subspace_join_rule_invite_only": "Privata aro (nur por invititoj)",
+        "subspace_existing_space_prompt": "Ĉu vi volas aldoni jaman aron anstataŭe?"
     },
     "user_menu": {
         "switch_theme_light": "Ŝalti helan reĝimon",
@@ -2997,12 +2862,26 @@
         "search": {
             "this_room": "Ĉi tiu ĉambro",
             "all_rooms": "Ĉiuj ĉambroj",
-            "field_placeholder": "Serĉi…"
+            "field_placeholder": "Serĉi…",
+            "result_count": {
+                "other": "(~%(count)s rezultoj)",
+                "one": "(~%(count)s rezulto)"
+            }
         },
         "jump_to_bottom_button": "Rulumi al plej freŝaj mesaĝoj",
         "jump_read_marker": "Salti al unua nelegita mesaĝo.",
         "inviter_unknown": "Nekonata",
-        "failed_reject_invite": "Malsukcesis rifuzi inviton"
+        "failed_reject_invite": "Malsukcesis rifuzi inviton",
+        "face_pile_tooltip_label": {
+            "one": "Montri 1 anon",
+            "other": "Montri ĉiujn %(count)s anojn"
+        },
+        "face_pile_tooltip_shortcut": "Inkluzive je %(commaSeparatedMembers)s",
+        "invites_you_text": "<inviter/> invitas vin",
+        "face_pile_summary": {
+            "one": "%(count)s persono, kiun vi konas, jam aliĝis",
+            "other": "%(count)s personoj, kiujn vi konas, jam aliĝis"
+        }
     },
     "file_panel": {
         "guest_note": "Vi devas <a>registriĝî</a> por uzi tiun ĉi funkcion",
@@ -3023,7 +2902,9 @@
         "identity_server_no_terms_title": "Identiga servilo havas neniujn uzkondiĉojn",
         "identity_server_no_terms_description_1": "Ĉi tiu ago bezonas atingi la norman identigan servilon <server /> por kontroli retpoŝtadreson aŭ telefonnumeron, sed la servilo ne havas uzokondiĉojn.",
         "identity_server_no_terms_description_2": "Nur daŭrigu se vi fidas al la posedanto de la servilo.",
-        "inline_intro_text": "Akceptu <policyLink /> por daŭrigi:"
+        "inline_intro_text": "Akceptu <policyLink /> por daŭrigi:",
+        "summary_identity_server_1": "Trovu aliajn per telefonnumero aŭ retpoŝtadreso",
+        "summary_identity_server_2": "Troviĝu per telefonnumero aŭ retpoŝtadreso"
     },
     "space_settings": {
         "title": "Agordoj – %(spaceName)s"
@@ -3039,7 +2920,13 @@
         "notes": "Rezultoj estas malkaŝitaj nur kiam vi finas la balotenketo",
         "unable_edit_title": "Ne povas redakti balotenketon",
         "unable_edit_description": "Pardonu, vi ne povas redakti balotenketon post voĉdonado.",
-        "total_not_ended": "Rezultoj estos videblaj kiam la balotenketo finiĝos"
+        "total_not_ended": "Rezultoj estos videblaj kiam la balotenketo finiĝos",
+        "end_message_no_votes": "La balotenketo finiĝis. Neniuj voĉoj estis ĵetitaj.",
+        "end_message": "La balotado finiĝis. Plej alta respondo: %(topAnswer)s",
+        "error_ending_title": "Malsukcesis fini balotenketon",
+        "error_ending_description": "Pardonu, la balotenketo ne finiĝis. Bonvolu reprovi.",
+        "end_title": "Finu Balotenketon",
+        "end_description": "Ĉu vi certas, ke vi volas fini ĉi tiun balotenketon? Ĉi tio montros la finajn rezultojn de la balotenketo kaj malhelpos personojn povi voĉdoni."
     },
     "failed_load_async_component": "Ne eblas enlegi! Kontrolu vian retan konekton kaj reprovu.",
     "upload_failed_generic": "Malsukcesis alŝuti dosieron « %(fileName)s ».",
@@ -3080,7 +2967,34 @@
         "error_version_unsupported_space": "La hejmservilo de la uzanto ne subtenas la version de la aro.",
         "error_version_unsupported_room": "Hejmservilo de ĉi tiu uzanto ne subtenas la version de la ĉambro.",
         "error_unknown": "Nekonata servila eraro",
-        "to_space": "Inviti al %(spaceName)s"
+        "to_space": "Inviti al %(spaceName)s",
+        "unable_find_profiles_description_default": "Ne povas trovi profilojn de la ĉi-subaj Matrix-identigilojn – ĉu vi tamen volas inviti ilin?",
+        "unable_find_profiles_title": "La jenaj uzantoj eble ne ekzistas",
+        "unable_find_profiles_invite_never_warn_label_default": "Tamen inviti kaj neniam min averti ree",
+        "unable_find_profiles_invite_label_default": "Tamen inviti",
+        "email_caption": "Inviti per retpoŝto",
+        "error_dm": "Ni ne povis krei vian individuan ĉambron.",
+        "error_find_room": "Io eraris dum invito de la uzantoj.",
+        "error_invite": "Ni ne povis inviti tiujn uzantojn. Bonvolu kontroli, kiujn uzantojn vi invitas, kaj reprovu.",
+        "error_transfer_multiple_target": "Voko povas transdoniĝi nur al unu uzanto.",
+        "error_find_user_title": "Malsukcesis trovi la jenajn uzantojn",
+        "error_find_user_description": "La jenaj uzantoj eble ne ekzistas aŭ ne validas, kaj ne povas invitiĝi: %(csvNames)s",
+        "recents_section": "Freŝaj interparoloj",
+        "suggestions_section": "Freŝe uzitaj individuaj ĉambroj",
+        "email_use_default_is": "Uzu identigan servilon por inviti per retpoŝto. <default>Uzu la norman (%(defaultIdentityServerName)s)</default> aŭ administru per <settings>Agordoj</settings>.",
+        "email_use_is": "Uzu identigan servilon por inviti per retpoŝto. Administru per <settings>Agordoj</settings>.",
+        "start_conversation_name_email_mxid_prompt": "Komencu interparolon kun iu per ĝia nomo, retpoŝtadreso, aŭ uzantonomo (ekz. <userId/>).",
+        "start_conversation_name_mxid_prompt": "Komencu interparolon kun iu per ĝia nomo aŭ uzantonomo (kiel <userId/>).",
+        "suggestions_disclaimer": "Iuj proponoj povas esti kaŝitaj pro privateco.",
+        "send_link_prompt": "Aŭ sendu invitan ligilon",
+        "to_room": "Inviti al %(roomName)s",
+        "name_email_mxid_share_space": "Invitu iun per ĝia nomo, retpoŝtadreso, uzantonomo (kiel <userId/>), aŭ <a>diskonigu ĉi tiun aron</a>.",
+        "name_mxid_share_space": "Invitu iun per ĝia nomo, uzantonomo (kiel <userId/>), aŭ <a>diskonigu ĉi tiun aron</a>.",
+        "name_email_mxid_share_room": "Invitu iun per ĝia nomo, retpoŝtadreso, uzantonomo (ekz. <userId/>), aŭ <a>konigu ĉi tiun ĉambron</a>.",
+        "name_mxid_share_room": "Invitu iun per ĝia nomo, uzantonomo (kiel <userId/>), aŭ <a>diskonigu la ĉambron</a>.",
+        "key_share_warning": "Invititoj povos legi malnovajn mesaĝojn.",
+        "transfer_user_directory_tab": "Katologo de uzantoj",
+        "transfer_dial_pad_tab": "Ciferplato"
     },
     "scalar": {
         "error_create": "Ne povas krei fenestraĵon.",
@@ -3112,7 +3026,21 @@
         "failed_copy": "Malsukcesis kopii",
         "something_went_wrong": "Io misokazis!",
         "update_power_level": "Malsukcesis ŝanĝi povnivelon",
-        "unknown": "Nekonata eraro"
+        "unknown": "Nekonata eraro",
+        "dialog_description_default": "Okazis eraro.",
+        "edit_history_unsupported": "Via hejmservilo ŝajne ne subtenas ĉi tiun funkcion.",
+        "session_restore": {
+            "clear_storage_description": "Ĉu adiaŭi kaj forigi ĉifrajn ŝlosilojn?",
+            "clear_storage_button": "Vakigi memoron kaj adiaŭi",
+            "title": "Salutaĵo ne rehaveblas",
+            "description_1": "Ni renkontis eraron provante rehavi vian antaŭan salutaĵon.",
+            "description_2": "Se vi antaŭe uzis pli novan version de %(brand)s, via salutaĵo eble ne akordos kun ĉi tiu versio. Fermu ĉi tiun fenestron kaj revenu al la pli nova versio.",
+            "description_3": "Vakigo de la memoro de via foliumilo eble korektos la problemon, sed adiaŭigos vin, kaj malebligos legadon de historio de ĉifritaj babiloj."
+        },
+        "storage_evicted_title": "Mankas datumoj de salutaĵo",
+        "storage_evicted_description_1": "Iuj datumoj de salutaĵo, inkluzive viajn ĉifrajn ŝlosilojn, mankas. Por tion korekti, resalutu, kaj rehavu la ŝlosilojn el savkopio.",
+        "storage_evicted_description_2": "Via foliumilo verŝajne forigos ĉi tiujn datumojn kiam al ĝi mankos spaco sur disko.",
+        "unknown_error_code": "nekonata kodo de eraro"
     },
     "in_space1_and_space2": "En aroj %(space1Name)s kaj %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -3229,7 +3157,25 @@
         "deactivate_confirm_action": "Malaktivigi uzanton",
         "error_deactivate": "Malsukcesis malaktivigi uzanton",
         "role_label": "Rolo en <RoomName/>",
-        "edit_own_devices": "Redakti aparatojn"
+        "edit_own_devices": "Redakti aparatojn",
+        "redact": {
+            "no_recent_messages_title": "Neniuj freŝaj mesaĝoj de %(user)s troviĝis",
+            "no_recent_messages_description": "Provu rulumi supren tra la historio por kontroli, ĉu ne estas iuj pli fruaj.",
+            "confirm_title": "Forigi freŝajn mesaĝojn de %(user)s",
+            "confirm_description_2": "Je granda nombro da mesaĝoj, tio povas daŭri iomon da tempo. Bonvolu ne aktualigi vian klienton dume.",
+            "confirm_button": {
+                "other": "Forigi %(count)s mesaĝojn",
+                "one": "Forigi 1 mesaĝon"
+            }
+        },
+        "count_of_verified_sessions": {
+            "other": "%(count)s kontrolitaj salutaĵoj",
+            "one": "1 kontrolita salutaĵo"
+        },
+        "count_of_sessions": {
+            "other": "%(count)s salutaĵoj",
+            "one": "%(count)s salutaĵo"
+        }
     },
     "stickers": {
         "empty": "Vi havas neniujn ŝaltitajn glumarkarojn",
@@ -3285,12 +3231,126 @@
         "error_loading_user_profile": "Ne povis enlegi profilon de uzanto"
     },
     "cant_load_page": "Ne povis enlegi paĝon",
-    "Invalid homeserver discovery response": "Nevalida eltrova respondo de hejmservilo",
-    "Failed to get autodiscovery configuration from server": "Malsukcesis akiri agordojn de memaga eltrovado de la servilo",
-    "Invalid base_url for m.homeserver": "Nevalida base_url por m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "URL por hejmservilo ŝajne ne ligas al valida hejmservilo de Matrix",
-    "Invalid identity server discovery response": "Nevalida eltrova respondo de identiga servilo",
-    "Invalid base_url for m.identity_server": "Nevalida base_url por m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "URL por identiga servilo ŝajne ne ligas al valida identiga servilo",
-    "General failure": "Ĝenerala fiasko"
+    "General failure": "Ĝenerala fiasko",
+    "emoji_picker": {
+        "cancel_search_label": "Nuligi serĉon"
+    },
+    "info_tooltip_title": "Informoj",
+    "language_dropdown_label": "Lingva falmenuo",
+    "seshat": {
+        "error_initialising": "Malsukcesis komencigo de serĉado de mesaĝoj, kontrolu <a>viajn agordojn</a> por pliaj informoj",
+        "warning_kind_files_app": "Uzu la <a>labortablan aplikaĵon</a> por vidi ĉiujn ĉifritajn dosierojn",
+        "warning_kind_search_app": "Uzu la <a>labortablan aplikaĵon</a> por serĉi ĉifritajn mesaĝojn",
+        "warning_kind_files": "Ĉi tiu versio de %(brand)s ne subtenas montradon de iuj ĉifritaj dosieroj",
+        "warning_kind_search": "Ĉi tiu versio de %(brand)s ne subtenas serĉadon de ĉifritaj mesaĝoj",
+        "reset_title": "Ĉu restarigi deponejon de okazoj?",
+        "reset_description": "Plej verŝajne, vi ne volas restarigi vian deponejon de indeksoj de okazoj",
+        "reset_explainer": "Se vi tamen tion faras, sciu ke neniu el viaj mesaĝoj foriĝos, sed via sperto pri serĉado povas malboniĝi momente, dum la indekso estas refarata",
+        "reset_button": "Restarigi deponejon de okazoj"
+    },
+    "truncated_list_n_more": {
+        "other": "Kaj %(count)s pliaj…"
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_required_invalid": "Enigu nomon de servilo",
+            "network_dropdown_available_valid": "Ŝajnas en ordo",
+            "network_dropdown_available_invalid_forbidden": "Vi ne rajtas vidi liston de ĉambroj de tu ĉi servilo",
+            "network_dropdown_available_invalid": "Ne povas trovi ĉi tiun servilon aŭ ĝian liston de ĉambroj",
+            "network_dropdown_your_server_description": "Via servilo",
+            "network_dropdown_add_dialog_title": "Aldoni novan servilon",
+            "network_dropdown_add_dialog_description": "Enigu la nomon de nova servilo, kiun vi volas esplori.",
+            "network_dropdown_add_dialog_placeholder": "Nomo de servilo"
+        }
+    },
+    "dialog_close_label": "Fermi interagujon",
+    "redact": {
+        "error": "Vi ne povas forigi tiun ĉi mesaĝon. (%(code)s)",
+        "ongoing": "Forigante…",
+        "confirm_button": "Konfirmi forigon",
+        "reason_label": "Kialo (malnepra)"
+    },
+    "forward": {
+        "no_perms_title": "Vi ne rajtas fari tion",
+        "sending": "Sendante",
+        "sent": "Sendite",
+        "send_label": "Sendi",
+        "message_preview_heading": "Antaŭrigardo al mesaĝo",
+        "filter_placeholder": "Serĉi ĉambrojn aŭ personojn"
+    },
+    "integrations": {
+        "disabled_dialog_title": "Kunigoj estas malŝaltitaj",
+        "impossible_dialog_title": "Kunigoj ne estas permesitaj",
+        "impossible_dialog_description": "Via %(brand)so ne permesas al vi uzi kunigilon por tio. Bonvolu kontakti administranton."
+    },
+    "lazy_loading": {
+        "disabled_description1": "Vi antaŭe uzis %(brand)s-on je %(host)s kun ŝaltita malfrua enlegado de anoj. En ĉi tiu versio, malfrua enlegado estas malŝaltita. Ĉar la loka kaŝmemoro de ambaŭ versioj ne akordas, %(brand)s bezonas respeguli vian konton.",
+        "disabled_description2": "Se la alia versio de %(brand)s ankoraŭ estas malfermita en alia langeto, bonvolu tiun fermi, ĉar uzado de %(brand)s je la sama gastiganto, kun malfrua enlegado samtempe ŝaltita kaj malŝaltita, kaŭzos problemojn.",
+        "disabled_title": "Neakorda loka kaŝmemoro",
+        "disabled_action": "Vakigi kaŝmemoron kaj respeguli",
+        "resync_description": "%(brand)s nun uzas 3–5-oble malpli da memoro, ĉar ĝi enlegas informojn pri aliaj uzantoj nur tiam, kiam ĝi bezonas. Bonvolu atendi ĝis ni respegulos la servilon!",
+        "resync_title": "Ĝisdatigante %(brand)s"
+    },
+    "message_edit_dialog_title": "Redaktoj de mesaĝoj",
+    "server_offline": {
+        "empty_timeline": "Sen sciigoj.",
+        "title": "Servilo ne respondas",
+        "description": "Via servilo ne respondas al iuj el viaj petoj. Vidu sube kelkon de la plej verŝajnaj kialoj.",
+        "description_1": "La servilo (%(serverName)s) tro longe ne respondis.",
+        "description_2": "Via fajroŝirmilo aŭ kontraŭvirusilo blokas la peton.",
+        "description_3": "Kromprogramo de la foliumilo malhelpas la peton.",
+        "description_4": "La servilo estas eksterreta.",
+        "description_5": "La servilo rifuzis vian peton.",
+        "description_6": "Via loko nun havas problemojn pri interreta konekto.",
+        "description_7": "Eraris konekto dum provo kontakti la servilon.",
+        "description_8": "La servilo ne estas agordita por indiki la problemon (CORS).",
+        "recent_changes_heading": "Freŝaj ŝanĝoj ankoraŭ ne ricevitaj"
+    },
+    "spotlight_dialog": {
+        "public_rooms_label": "Publikajn ĉambrojn",
+        "create_new_room_button": "Krei novan ĉambron"
+    },
+    "share": {
+        "title_room": "Kunhavigi ĉambron",
+        "permalink_most_recent": "Ligi al plej freŝa mesaĝo",
+        "title_user": "Kunhavigi uzanton",
+        "title_message": "Kunhavigi ĉambran mesaĝon",
+        "permalink_message": "Ligi al elektita mesaĝo"
+    },
+    "upload_file": {
+        "title_progress": "Alŝuti dosierojn (%(current)s el %(total)s)",
+        "title": "Alŝuti dosierojn",
+        "upload_all_button": "Alŝuti ĉiujn",
+        "error_file_too_large": "Ĉi tiu dosiero <b>tro grandas</b> por alŝuto. La grandolimo estas %(limit)s sed la dosiero grandas %(sizeOfThisFile)s.",
+        "error_files_too_large": "Ĉi tiuj dosieroj <b>tro grandas</b> por alŝuto. La grandolimo estas %(limit)s.",
+        "error_some_files_too_large": "Iuj dosieroj <b>tro grandas</b> por alŝuto. La grandolimo estas %(limit)s.",
+        "upload_n_others_button": {
+            "other": "Alŝuti %(count)s aliajn dosierojn",
+            "one": "Alŝuti %(count)s alian dosieron"
+        },
+        "cancel_all_button": "Nuligi ĉion",
+        "error_title": "Alŝuto eraris"
+    },
+    "restore_key_backup_dialog": {
+        "load_error_content": "Ne povas legi staton de savkopio",
+        "recovery_key_mismatch_title": "Malakordo de Sekureca ŝlosilo",
+        "recovery_key_mismatch_description": "Ne povis malĉifri savkopion per ĉi tiu Sekureca ŝlosilo: bonvolu kontroli, ĉu vi enigis la ĝustan Sekurecan ŝlosilon.",
+        "incorrect_security_phrase_title": "Malĝusta Sekureca frazo",
+        "incorrect_security_phrase_dialog": "Ne povis malĉifri savkopion per ĉi tiu Sekureca frazo: bonvolu kontroli, ĉu vi enigis la ĝustan Sekurecan frazon.",
+        "restore_failed_error": "Ne povas rehavi savkopion",
+        "no_backup_error": "Neniu savkopio troviĝis!",
+        "keys_restored_title": "Ŝlosiloj rehaviĝis",
+        "count_of_decryption_failures": "Malsukcesis malĉifri%(failedCount)s salutaĵojn!",
+        "count_of_successfully_restored_keys": "Sukcese rehavis %(sessionCount)s ŝlosilojn",
+        "enter_phrase_title": "Enigu Sekurecan frazon",
+        "key_backup_warning": "<b>Averto</b>: vi agordu ŝlosilan savkopion nur per fidata komputilo.",
+        "enter_phrase_description": "Aliru vian historion de sekuraj mesaĝoj kaj agordu sekurigitajn mesaĝojn per enigo de via Sekureca frazo.",
+        "phrase_forgotten_text": "Se vi forgesis vian Sekurecan frazon, vi povas <button1>uzi vian Sekurecan ŝlosilon</button1> aŭ <button2>agordi novajn elekteblojn de rehavo</button2>",
+        "enter_key_title": "Enigu Sekurecan ŝlosilon",
+        "key_is_valid": "Tio ĉi ŝajnas esti valida Sekureca ŝlosilo!",
+        "key_is_invalid": "Tio ne estas valida Sekureca ŝlosilo",
+        "enter_key_description": "Aliru vian historion de sekuraj mesaĝoj kaj agordu sekurajn mesaĝojn per enigo de via Sekureca ŝlosio.",
+        "key_forgotten_text": "Se vi forgesis vian Sekurecan ŝlosilon, vi povas <button>agordi novajn elekteblojn de rehavo</button>",
+        "load_keys_progress": "%(completed)s el %(total)s ŝlosiloj rehaviĝis"
+    }
 }

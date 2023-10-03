@@ -115,17 +115,17 @@ const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, 
         className = "mx_ForwardList_canSend";
         if (!room.maySendMessage()) {
             disabled = true;
-            title = _t("You don't have permission to do this");
+            title = _t("forward|no_perms_title");
         }
     } else if (sendState === SendState.Sending) {
         className = "mx_ForwardList_sending";
         disabled = true;
-        title = _t("Sending");
+        title = _t("forward|sending");
         icon = <div className="mx_ForwardList_sendIcon" aria-label={title} />;
     } else if (sendState === SendState.Sent) {
         className = "mx_ForwardList_sent";
         disabled = true;
-        title = _t("Sent");
+        title = _t("forward|sent");
         icon = <div className="mx_ForwardList_sendIcon" aria-label={title} />;
     } else {
         className = "mx_ForwardList_sendFailed";
@@ -139,7 +139,7 @@ const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, 
             <AccessibleTooltipButton
                 className="mx_ForwardList_roomButton"
                 onClick={jumpToRoom}
-                title={_t("Open room")}
+                title={_t("forward|open_room")}
                 alignment={Alignment.Top}
             >
                 <DecoratedRoomAvatar room={room} size="32px" />
@@ -154,7 +154,7 @@ const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, 
                 title={title}
                 alignment={Alignment.Top}
             >
-                <div className="mx_ForwardList_sendLabel">{_t("Send")}</div>
+                <div className="mx_ForwardList_sendLabel">{_t("forward|send_label")}</div>
                 {icon}
             </AccessibleTooltipButton>
         </div>
@@ -256,7 +256,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
 
     const [truncateAt, setTruncateAt] = useState(20);
     function overflowTile(overflowCount: number, totalCount: number): JSX.Element {
-        const text = _t("and %(count)s others...", { count: overflowCount });
+        const text = _t("common|and_n_others", { count: overflowCount });
         return (
             <EntityTile
                 className="mx_EntityTile_ellipsis"
@@ -279,7 +279,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             onFinished={onFinished}
             fixedWidth={false}
         >
-            <h3>{_t("Message preview")}</h3>
+            <h3>{_t("forward|message_preview_heading")}</h3>
             <div
                 className={classnames("mx_ForwardDialog_preview", {
                     mx_IRCLayout: previewLayout == Layout.IRC,
@@ -297,7 +297,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             <div className="mx_ForwardList" id="mx_ForwardList">
                 <SearchBox
                     className="mx_textinput_icon mx_textinput_search"
-                    placeholder={_t("Search for rooms or people")}
+                    placeholder={_t("forward|filter_placeholder")}
                     onSearch={setQuery}
                     autoFocus={true}
                 />

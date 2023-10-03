@@ -154,11 +154,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         if (this.state.error) {
             const { error } = this.state;
             if (error.errcode === "M_UNRECOGNIZED") {
-                content = (
-                    <p className="mx_MessageEditHistoryDialog_error">
-                        {_t("Your homeserver doesn't seem to support this feature.")}
-                    </p>
-                );
+                content = <p className="mx_MessageEditHistoryDialog_error">{_t("error|edit_history_unsupported")}</p>;
             } else if (error.errcode) {
                 // some kind of error from the homeserver
                 content = <p className="mx_MessageEditHistoryDialog_error">{_t("error|something_went_wrong")}</p>;
@@ -190,7 +186,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
                 className="mx_MessageEditHistoryDialog"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Message edits")}
+                title={_t("message_edit_dialog_title")}
             >
                 {content}
             </BaseDialog>

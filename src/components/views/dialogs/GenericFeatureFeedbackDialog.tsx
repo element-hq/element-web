@@ -52,7 +52,7 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
 
         Modal.createDialog(InfoDialog, {
             title,
-            description: _t("Feedback sent! Thanks, we appreciate it!"),
+            description: _t("feedback|sent"),
             button: _t("action|close"),
             hasCloseButton: false,
             fixedWidth: false,
@@ -91,7 +91,7 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
                         checked={canContact}
                         onChange={(e) => setCanContact((e.target as HTMLInputElement).checked)}
                     >
-                        {_t("You may contact me if you have any follow up questions")}
+                        {_t("feedback|can_contact_label")}
                     </StyledCheckbox>
                 </React.Fragment>
             }

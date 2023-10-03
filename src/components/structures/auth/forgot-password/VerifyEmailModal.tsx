@@ -94,7 +94,7 @@ export const VerifyEmailModal: React.FC<Props> = ({
             <AccessibleButton
                 onClick={onCloseClick}
                 className="mx_Dialog_cancelButton"
-                aria-label={_t("Close dialog")}
+                aria-label={_t("dialog_close_label")}
             />
         </>
     );

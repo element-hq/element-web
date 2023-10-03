@@ -76,10 +76,8 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
         this.addThreepid.addEmailAddress(emailAddress).then(
             () => {
                 Modal.createDialog(QuestionDialog, {
-                    title: _t("Verification Pending"),
-                    description: _t(
-                        "Please check your email and click on the link it contains. Once this is done, click continue.",
-                    ),
+                    title: _t("auth|set_email|verification_pending_title"),
+                    description: _t("auth|set_email|verification_pending_description"),
                     button: _t("action|continue"),
                     onFinished: this.onEmailDialogFinished,
                 });
@@ -125,11 +123,9 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                     const message =
                         _t("settings|general|error_email_verification") +
                         " " +
-                        _t(
-                            "Please check your email and click on the link it contains. Once this is done, click continue.",
-                        );
+                        _t("auth|set_email|verification_pending_description");
                     Modal.createDialog(QuestionDialog, {
-                        title: _t("Verification Pending"),
+                        title: _t("auth|set_email|verification_pending_title"),
                         description: message,
                         button: _t("action|continue"),
                         onFinished: this.onEmailDialogFinished,
@@ -152,7 +148,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
             <EditableText
                 initialValue={this.state.emailAddress}
                 className="mx_SetEmailDialog_email_input"
-                placeholder={_t("Email address")}
+                placeholder={_t("common|email_address")}
                 placeholderClassName="mx_SetEmailDialog_email_input_placeholder"
                 blurToCancel={false}
                 onValueChanged={this.onEmailAddressChanged}
@@ -167,9 +163,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                 contentId="mx_Dialog_content"
             >
                 <div className="mx_Dialog_content">
-                    <p id="mx_Dialog_content">
-                        {_t("This will allow you to reset your password and receive notifications.")}
-                    </p>
+                    <p id="mx_Dialog_content">{_t("auth|set_email|description")}</p>
                     {emailInput}
                 </div>
                 <div className="mx_Dialog_buttons">

@@ -39,17 +39,13 @@ export default class ConfirmDestroyCrossSigningDialog extends React.Component<IP
                 className="mx_ConfirmDestroyCrossSigningDialog"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Destroy cross-signing keys?")}
+                title={_t("encryption|destroy_cross_signing_dialog|title")}
             >
                 <div className="mx_ConfirmDestroyCrossSigningDialog_content">
-                    <p>
-                        {_t(
-                            "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.",
-                        )}
-                    </p>
+                    <p>{_t("encryption|destroy_cross_signing_dialog|warning")}</p>
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Clear cross-signing keys")}
+                    primaryButton={_t("encryption|destroy_cross_signing_dialog|primary_button_text")}
                     onPrimaryButtonClick={this.onConfirm}
                     primaryButtonClass="danger"
                     cancelButton={_t("action|cancel")}

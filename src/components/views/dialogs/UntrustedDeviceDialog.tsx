@@ -35,14 +35,14 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
     let newSessionText: string;
 
     if (MatrixClientPeg.safeGet().getUserId() === user.userId) {
-        newSessionText = _t("You signed in to a new session without verifying it:");
-        askToVerifyText = _t("Verify your other session using one of the options below.");
+        newSessionText = _t("encryption|udd|own_new_session_text");
+        askToVerifyText = _t("encryption|udd|own_ask_verify_text");
     } else {
-        newSessionText = _t("%(name)s (%(userId)s) signed in to a new session without verifying it:", {
+        newSessionText = _t("encryption|udd|other_new_session_text", {
             name: user.displayName,
             userId: user.userId,
         });
-        askToVerifyText = _t("Ask this user to verify their session, or manually verify it below.");
+        askToVerifyText = _t("encryption|udd|other_ask_verify_text");
     }
 
     return (
@@ -52,7 +52,7 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
             title={
                 <>
                     <E2EIcon status={E2EState.Warning} isUser size={24} hideTooltip={true} />
-                    {_t("Not Trusted")}
+                    {_t("encryption|udd|title")}
                 </>
             }
         >
@@ -65,10 +65,10 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
             </div>
             <div className="mx_Dialog_buttons">
                 <AccessibleButton kind="primary_outline" onClick={() => onFinished("legacy")}>
-                    {_t("Manually verify by text")}
+                    {_t("encryption|udd|manual_verification_button")}
                 </AccessibleButton>
                 <AccessibleButton kind="primary_outline" onClick={() => onFinished("sas")}>
-                    {_t("Interactively verify by emoji")}
+                    {_t("encryption|udd|interactive_verification_button")}
                 </AccessibleButton>
                 <AccessibleButton kind="primary" onClick={() => onFinished(false)}>
                     {_t("action|done")}

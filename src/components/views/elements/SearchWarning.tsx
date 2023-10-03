@@ -43,7 +43,7 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.El
         return (
             <div className="mx_SearchWarning">
                 {_t(
-                    "Message search initialisation failed, check <a>your settings</a> for more information",
+                    "seshat|error_initialising",
                     {},
                     {
                         a: (sub) => (
@@ -72,12 +72,12 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.El
     let text: ReactNode | undefined;
     let logo: JSX.Element | undefined;
     if (desktopBuilds?.get("available")) {
-        logo = <img alt={_t("Desktop app logo")} src={desktopBuilds.get("logo")} />;
+        logo = <img alt="" src={desktopBuilds.get("logo")} />;
         const buildUrl = desktopBuilds.get("url");
         switch (kind) {
             case WarningKind.Files:
                 text = _t(
-                    "Use the <a>Desktop app</a> to see all encrypted files",
+                    "seshat|warning_kind_files_app",
                     {},
                     {
                         a: (sub) => (
@@ -90,7 +90,7 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.El
                 break;
             case WarningKind.Search:
                 text = _t(
-                    "Use the <a>Desktop app</a> to search encrypted messages",
+                    "seshat|warning_kind_search_app",
                     {},
                     {
                         a: (sub) => (
@@ -105,10 +105,10 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.El
     } else {
         switch (kind) {
             case WarningKind.Files:
-                text = _t("This version of %(brand)s does not support viewing some encrypted files", { brand });
+                text = _t("seshat|warning_kind_files", { brand });
                 break;
             case WarningKind.Search:
-                text = _t("This version of %(brand)s does not support searching encrypted messages", { brand });
+                text = _t("seshat|warning_kind_search", { brand });
                 break;
         }
     }

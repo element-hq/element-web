@@ -246,7 +246,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
                 <>
                     <InlineSpinner w={20} h={20} />
                     {/* span for css */}
-                    <span>{_t("Sending")}</span>
+                    <span>{_t("forward|sending")}</span>
                 </>
             );
         }

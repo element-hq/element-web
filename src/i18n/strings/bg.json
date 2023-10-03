@@ -1,5 +1,4 @@
 {
-    "Send": "Изпрати",
     "Sun": "нд.",
     "Mon": "пн.",
     "Tue": "вт.",
@@ -23,107 +22,33 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(day)s %(monthName)s %(fullYear)s, %(weekDayName)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s %(time)s",
-    "unknown error code": "неизвестен код за грешка",
     "Unnamed room": "Стая без име",
     "Warning!": "Внимание!",
     "PM": "PM",
     "AM": "AM",
     "Restricted": "Ограничен",
     "Moderator": "Модератор",
-    "and %(count)s others...": {
-        "other": "и %(count)s други...",
-        "one": "и още един..."
-    },
     "%(duration)ss": "%(duration)sсек",
     "%(duration)sm": "%(duration)sмин",
     "%(duration)sh": "%(duration)sч",
     "%(duration)sd": "%(duration)sд",
-    "(~%(count)s results)": {
-        "other": "(~%(count)s резултати)",
-        "one": "(~%(count)s резултат)"
-    },
     "Join Room": "Присъединяване към стаята",
-    "not specified": "неопределен",
-    "Add an Integration": "Добавяне на интеграция",
-    "Email address": "Имейл адрес",
     "Delete Widget": "Изтриване на приспособление",
-    "Create new room": "Създай нова стая",
     "Home": "Начална страница",
     "%(items)s and %(lastItem)s": "%(items)s и %(lastItem)s",
     "collapse": "свий",
     "expand": "разшири",
-    "Custom level": "Персонализирано ниво",
-    "<a>In reply to</a> <pill>": "<a>В отговор на</a> <pill>",
-    "And %(count)s more...": {
-        "other": "И %(count)s други..."
-    },
-    "Confirm Removal": "Потвърдете премахването",
-    "Verification Pending": "Очакване на потвърждение",
-    "An error has occurred.": "Възникна грешка.",
-    "Unable to restore session": "Неуспешно възстановяване на сесията",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Моля, проверете своя имейл адрес и натиснете връзката, която той съдържа. След като направите това, натиснете продължи.",
-    "This will allow you to reset your password and receive notifications.": "Това ще Ви позволи да възстановите Вашата парола и да получавате известия.",
-    "Session ID": "Идентификатор на сесията",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "На път сте да бъдете отведени до друг сайт, където можете да удостоверите профила си за използване с %(integrationsUrl)s. Искате ли да продължите?",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Ако преди сте използвали по-нова версия на %(brand)s, Вашата сесия може да не бъде съвместима с текущата версия. Затворете този прозорец и се върнете в по-новата версия.",
     "Sunday": "Неделя",
     "Today": "Днес",
     "Friday": "Петък",
-    "Changelog": "Списък на промените",
-    "Failed to send logs: ": "Неуспешно изпращане на логове: ",
-    "Unavailable": "Не е наличен",
-    "Filter results": "Филтриране на резултати",
     "Tuesday": "Вторник",
-    "Preparing to send logs": "Подготовка за изпращане на логове",
     "Saturday": "Събота",
     "Monday": "Понеделник",
     "Wednesday": "Сряда",
-    "You cannot delete this message. (%(code)s)": "Това съобщение не може да бъде изтрито. (%(code)s)",
     "Thursday": "Четвъртък",
-    "Logs sent": "Логовете са изпратени",
     "Yesterday": "Вчера",
-    "Thank you!": "Благодарим!",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Не може да се зареди събитието, на което е отговорено. Или не съществува или нямате достъп да го видите.",
-    "Clear Storage and Sign Out": "Изчисти запазените данни и излез",
     "Send Logs": "Изпрати логове",
-    "We encountered an error trying to restore your previous session.": "Възникна грешка при възстановяване на предишната Ви сесия.",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Изчистване на запазените данни в браузъра може да поправи проблема, но ще Ви изкара от профила и ще направи шифрованите съобщения нечетими.",
-    "Share Room": "Споделяне на стая",
-    "Link to most recent message": "Създай връзка към най-новото съобщение",
-    "Share User": "Споделяне на потребител",
-    "Share Room Message": "Споделяне на съобщение от стая",
-    "Link to selected message": "Създай връзка към избраното съобщение",
-    "Upgrade Room Version": "Обнови версията на стаята",
-    "Create a new room with the same name, description and avatar": "Създадем нова стая със същото име, описание и снимка",
-    "Update any local room aliases to point to the new room": "Обновим всички локални адреси на стаята да сочат към новата",
-    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Забраним комуникацията на потребителите в старата стая и публикуваме съобщение насочващо ги към новата",
-    "Put a link back to the old room at the start of the new room so people can see old messages": "Поставим връзка в новата стая, водещо обратно към старата, за да може хората да виждат старите съобщения",
-    "Failed to upgrade room": "Неуспешно обновяване на стаята",
-    "The room upgrade could not be completed": "Обновяването на тази стая не можа да бъде завършено",
-    "Upgrade this room to version %(version)s": "Обновете тази стая до версия %(version)s",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Преди да изпратите логове, трябва да <a>отворите доклад за проблем в Github</a>.",
-    "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s вече използва 3-5 пъти по-малко памет, като зарежда информация за потребители само когато е нужна. Моля, изчакайте докато ресинхронизираме със сървъра!",
-    "Updating %(brand)s": "Обновяване на %(brand)s",
-    "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Преди сте използвали %(brand)s на %(host)s с включено постепенно зареждане на членове. В тази версия, тази настройка е изключена. Понеже локалният кеш не е съвместим при тези две настройки, %(brand)s трябва да синхронизира акаунта Ви наново.",
-    "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Ако другата версия на %(brand)s все още е отворена в друг таб, моля затворете я. Използването на %(brand)s на един адрес във версии с постепенно и без постепенно зареждане ще причини проблеми.",
-    "Incompatible local cache": "Несъвместим локален кеш",
-    "Clear cache and resync": "Изчисти кеша и ресинхронизирай",
-    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "За да избегнете загубата на чат история, трябва да експортирате ключовете на стаята преди да излезете от профила си. Ще трябва да се върнете към по-новата версия на %(brand)s за да направите това",
-    "Incompatible Database": "Несъвместима база данни",
-    "Continue With Encryption Disabled": "Продължи с изключено шифроване",
-    "Unable to load backup status": "Неуспешно зареждане на състоянието на резервното копие",
-    "Unable to restore backup": "Неуспешно възстановяване на резервно копие",
-    "No backup found!": "Не е открито резервно копие!",
-    "Failed to decrypt %(failedCount)s sessions!": "Неуспешно разшифроване на %(failedCount)s сесии!",
-    "Unable to load commit detail: %(msg)s": "Неуспешно зареждане на информация за commit: %(msg)s",
-    "The following users may not exist": "Следните потребители може да не съществуват",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Не бяга открити профили за изброените по-долу Matrix идентификатори. Желаете ли да ги поканите въпреки това?",
-    "Invite anyway and never warn me again": "Покани въпреки това и не питай отново",
-    "Invite anyway": "Покани въпреки това",
-    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Потвърди потребителя и го маркирай като доверен. Доверяването на потребители Ви дава допълнително спокойствие при използване на съобщения шифровани от край-до-край.",
-    "Incoming Verification Request": "Входяща заявка за потвърждение",
-    "Email (optional)": "Имейл (незадължително)",
-    "Join millions for free on the largest public server": "Присъединете се безплатно към милиони други на най-големия публичен сървър",
     "Dog": "Куче",
     "Cat": "Котка",
     "Lion": "Лъв",
@@ -185,192 +110,20 @@
     "Anchor": "Котва",
     "Headphones": "Слушалки",
     "Folder": "Папка",
-    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Шифрованите съобщения са защитени с шифроване от край до край. Само Вие и получателят (получателите) имате ключове за четенето им.",
-    "Start using Key Backup": "Включи резервни копия за ключовете",
-    "I don't want my encrypted messages": "Не искам шифрованите съобщения",
-    "Manually export keys": "Експортирай ключове ръчно",
-    "You'll lose access to your encrypted messages": "Ще загубите достъп до шифрованите си съобщения",
-    "Are you sure you want to sign out?": "Сигурни ли сте, че искате да излезете от профила?",
-    "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Внимание</b>: настройването на резервно копие на ключовете трябва да се прави само от доверен компютър.",
     "Scissors": "Ножици",
-    "Room Settings - %(roomName)s": "Настройки на стая - %(roomName)s",
-    "Power level": "Ниво на достъп",
-    "Notes": "Бележки",
-    "Sign out and remove encryption keys?": "Излизане и премахване на ключовете за шифроване?",
-    "To help us prevent this in future, please <a>send us logs</a>.": "За да ни помогнете да предотвратим това в бъдеще, моля <a>изпратете логове</a>.",
-    "Missing session data": "Липсват данни за сесията",
-    "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Липсват данни за сесията, като например ключове за шифровани съобщения. За да поправите това, излезте и влезте отново, възстановявайки ключовете от резервно копие.",
-    "Your browser likely removed this data when running low on disk space.": "Най-вероятно браузърът Ви е премахнал тези данни поради липса на дисково пространство.",
-    "Upload files (%(current)s of %(total)s)": "Качване на файлове (%(current)s от %(total)s)",
-    "Upload files": "Качи файлове",
-    "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Файлът е <b>прекалено голям</b> за да се качи. Максималният допустим размер е %(limit)s, докато този файл е %(sizeOfThisFile)s.",
-    "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Тези файлове са <b>прекалено големи</b> за да се качат. Максималният допустим размер е %(limit)s.",
-    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Някои файлове са <b>прекалено големи</b> за да се качат. Максималният допустим размер е %(limit)s.",
-    "Upload %(count)s other files": {
-        "other": "Качи %(count)s други файла",
-        "one": "Качи %(count)s друг файл"
-    },
-    "Cancel All": "Откажи всички",
-    "Upload Error": "Грешка при качване",
-    "Remember my selection for this widget": "Запомни избора ми за това приспособление",
-    "edited": "редактирано",
-    "Some characters not allowed": "Някои символи не са позволени",
-    "Upload all": "Качи всички",
-    "Edited at %(date)s. Click to view edits.": "Редактирано на %(date)s. Кликнете за да видите редакциите.",
-    "Message edits": "Редакции на съобщение",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Обновяването на тази стая изисква затварянето на текущата и създаване на нова на нейно място. За да е най-удобно за членовете на стаята, ще:",
-    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Моля, кажете ни какво се обърка, или още по-добре - създайте проблем в GitHub обясняващ ситуацията.",
-    "Removing…": "Премахване…",
-    "Clear all data": "Изчисти всички данни",
-    "Your homeserver doesn't seem to support this feature.": "Не изглежда сървърът ви да поддържа тази функция.",
-    "Resend %(unsentCount)s reaction(s)": "Изпрати наново %(unsentCount)s реакция(и)",
-    "Find others by phone or email": "Открийте други по телефон или имейл",
-    "Be found by phone or email": "Бъдете открит по телефон или имейл",
     "Deactivate account": "Деактивиране на акаунт",
-    "Command Help": "Помощ за команди",
-    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Използвайте сървър за самоличност за да каните по имейл. <default>Използвайте сървъра за самоличност по подразбиране (%(defaultIdentityServerName)s)</default> или настройте друг в <settings>Настройки</settings>.",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Използвайте сървър за самоличност за да каните по имейл. Управлявайте в <settings>Настройки</settings>.",
-    "No recent messages by %(user)s found": "Не са намерени скорошни съобщения от %(user)s",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "Опитайте се да проверите по-нагоре в историята за по-ранни.",
-    "Remove recent messages by %(user)s": "Премахване на скорошни съобщения от %(user)s",
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Може да отнеме известно време за голям брой съобщения. Моля, не презареждайте страницата междувременно.",
-    "Remove %(count)s messages": {
-        "other": "Премахни %(count)s съобщения",
-        "one": "Премахни 1 съобщение"
-    },
-    "e.g. my-room": "например my-room",
-    "Close dialog": "Затвори прозореца",
-    "Cancel search": "Отмени търсенето",
-    "%(name)s accepted": "%(name)s прие",
-    "%(name)s cancelled": "%(name)s отказа",
-    "%(name)s wants to verify": "%(name)s иска да извърши потвърждение",
     "Failed to connect to integration manager": "Неуспешна връзка с мениджъра на интеграции",
-    "%(count)s verified sessions": {
-        "other": "%(count)s потвърдени сесии",
-        "one": "1 потвърдена сесия"
-    },
-    "Language Dropdown": "Падащо меню за избор на език",
-    "Integrations are disabled": "Интеграциите са изключени",
-    "Integrations not allowed": "Интеграциите не са разрешени",
-    "Upgrade private room": "Обнови лична стая",
-    "Upgrade public room": "Обнови публична стая",
-    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Обновяването на стая е действие за напреднали и обикновено се препоръчва когато стаята е нестабилна поради бъгове, липсващи функции или проблеми със сигурността.",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "Това обикновено влия само на това как стаята се обработва на сървъра. Ако имате проблеми с %(brand)s, <a>съобщете за проблем</a>.",
-    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Ще обновите стаята от <oldVersion /> до <newVersion />.",
-    "Verification Request": "Заявка за потвърждение",
-    "Recent Conversations": "Скорошни разговори",
-    "Direct Messages": "Директни съобщения",
-    "Failed to find the following users": "Неуспешно откриване на следните потребители",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Следните потребители не съществуват или са невалидни и не могат да бъдат поканени: %(csvNames)s",
-    "Not Trusted": "Недоверено",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) влезе в нова сесия без да я потвърди:",
-    "Ask this user to verify their session, or manually verify it below.": "Поискайте от този потребител да потвърди сесията си, или я потвърдете ръчно по-долу.",
     "Lock": "Заключи",
     "This backup is trusted because it has been restored on this session": "Това резервно копие е доверено, защото е било възстановено в текущата сесия",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "За да съобщените за проблем със сигурността свързан с Matrix, прочетете <a>Политиката за споделяне на проблеми със сигурността</a> на Matrix.org.",
     "Encrypted by a deleted session": "Шифровано от изтрита сесия",
-    "%(count)s sessions": {
-        "other": "%(count)s сесии",
-        "one": "%(count)s сесия"
-    },
-    "%(name)s declined": "%(name)s отказа",
-    "Can't load this message": "Съобщението не може да се зареди",
     "Submit logs": "Изпрати логове",
-    "Enter a server name": "Въведете име на сървър",
-    "Looks good": "Изглежда добре",
-    "Can't find this server or its room list": "Сървърът или списъка със стаи не може да бъде намерен",
-    "Your server": "Вашият сървър",
-    "Add a new server": "Добави нов сървър",
-    "Enter the name of a new server you want to explore.": "Въведете името на новия сървър, който искате да прегледате.",
-    "Server name": "Име на сървър",
-    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Напомняне: браузърът ви не се поддържа, така че не всичко може да работи правилно.",
-    "Destroy cross-signing keys?": "Унищожаване на ключовете за кръстосано-подписване?",
-    "You signed in to a new session without verifying it:": "Влязохте в нова сесия без да я верифицирате:",
-    "Verify your other session using one of the options below.": "Верифицирайте другите си сесии използвайки една от опциите по-долу.",
-    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Изтриването на ключовете за кръстосано-подписване е необратимо. Всички, с които сте се верифицирали ще видят предупреждения за сигурността. Почти със сигурност не искате да направите това, освен ако не сте загубили всички устройства, от които можете да подписвате кръстосано.",
-    "Clear cross-signing keys": "Изчисти ключовете за кръстосано-подписване",
-    "Clear all data in this session?": "Изчисти всички данни в тази сесия?",
-    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Изчистването на всички данни от сесията е необратимо. Шифрованите съобщения ще бъдат загубени, освен ако няма резервно копие на ключовете им.",
-    "Server did not require any authentication": "Сървърът не изисква никаква автентикация",
-    "Server did not return valid authentication information.": "Сървърът не върна валидна информация относно автентикация.",
-    "Confirm your account deactivation by using Single Sign On to prove your identity.": "Потвърдете деактивацията на профила си използвайки Single Sign On за потвърждаване на самоличността.",
-    "Are you sure you want to deactivate your account? This is irreversible.": "Сигурни ли сте, че искате да деактивирате профила си? Това е необратимо.",
-    "Confirm account deactivation": "Потвърдете деактивирането на профила",
-    "There was a problem communicating with the server. Please try again.": "Имаше проблем при комуникацията със сървъра. Опитайте пак.",
-    "Session name": "Име на сесията",
-    "Session key": "Ключ за сесията",
-    "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Верифицирането на този потребител ще маркира сесията им като доверена при вас, както и вашата като доверена при тях.",
-    "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Верифицирайте това устройство за да го маркирате като доверено. Доверявайки се на това устройство дава на вас и на другите потребители допълнително спокойствие при използването на от-край-до-край-шифровани съобщения.",
-    "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Верифицирането на това устройство ще го маркира като доверено, а потребителите, които са потвърдили вас също ще се доверяват на него.",
-    "Something went wrong trying to invite the users.": "Нещо се обърка при опита да бъдат поканени потребителите.",
-    "We couldn't invite those users. Please check the users you want to invite and try again.": "Не можахме да поканим тези потребители. Проверете потребителите, които искате да поканите и опитайте пак.",
-    "Recently Direct Messaged": "Скорошни директни чатове",
     "IRC display name width": "Ширина на IRC името",
-    "To continue, use Single Sign On to prove your identity.": "За да продължите, използвайте Single Sign On за да потвърдите самоличността си.",
-    "Confirm to continue": "Потвърдете за да продължите",
-    "Click the button below to confirm your identity.": "Кликнете бутона по-долу за да потвърдите самоличността си.",
-    "a new master key signature": "нов подпис на основния ключ",
-    "a new cross-signing key signature": "нов подпис на ключа за кръстосано-подписване",
-    "a device cross-signing signature": "подпис за кръстосано-подписване на устройства",
-    "a key signature": "подпис на ключ",
-    "%(brand)s encountered an error during upload of:": "%(brand)s срещна проблем при качването на:",
-    "Upload completed": "Качването завърши",
-    "Cancelled signature upload": "Отказано качване на подпис",
-    "Unable to upload": "Неуспешно качване",
-    "Signature upload success": "Успешно качване на подпис",
-    "Signature upload failed": "Неуспешно качване на подпис",
-    "Confirm by comparing the following with the User Settings in your other session:": "Потвърдете чрез сравняване на следното с Потребителски Настройки в другата ви сесия:",
-    "Confirm this user's session by comparing the following with their User Settings:": "Потвърдете сесията на този потребител чрез сравняване на следното с техните Потребителски Настройки:",
-    "If they don't match, the security of your communication may be compromised.": "Ако няма съвпадение, сигурността на комуникацията ви може би е компрометирана.",
     "Your homeserver has exceeded its user limit.": "Надвишен е лимитът за потребители на сървъра ви.",
     "Your homeserver has exceeded one of its resource limits.": "Беше надвишен някой от лимитите на сървъра.",
     "Ok": "Добре",
-    "Room address": "Адрес на стаята",
-    "This address is available to use": "Адресът е наличен за ползване",
-    "This address is already in use": "Адресът вече се използва",
-    "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Използвали сте и по-нова версия на %(brand)s от сегашната за тази сесия. За да използвате сегашната версия отново с шифроване от-край-до-край, ще е необходимо да излезете и да влезете отново.",
-    "Restoring keys from backup": "Възстановяване на ключове от резервно копие",
-    "%(completed)s of %(total)s keys restored": "%(completed)s от %(total)s ключа са възстановени",
-    "Keys restored": "Ключовете бяха възстановени",
-    "Successfully restored %(sessionCount)s keys": "Успешно бяха възстановени %(sessionCount)s ключа",
     "Sign in with SSO": "Влезте със SSO",
     "Switch theme": "Смени темата",
-    "Confirm encryption setup": "Потвърждение на настройки за шифроване",
-    "Click the button below to confirm setting up encryption.": "Кликнете бутона по-долу за да потвърдите настройването на шифроване.",
-    "Message preview": "Преглед на съобщението",
-    "Unable to set up keys": "Неуспешна настройка на ключовете",
-    "Use your Security Key to continue.": "Използвайте ключа си за сигурност за да продължите.",
-    "Security Key": "Ключ за сигурност",
-    "Security Phrase": "Защитна фраза",
-    "Looks good!": "Изглежда добре!",
-    "Wrong file type": "Грешен тип файл",
-    "Recent changes that have not yet been received": "Скорошни промени, които още не са били получени",
-    "The server is not configured to indicate what the problem is (CORS).": "Сървърът не е конфигуриран да укаже какъв е проблемът (CORS).",
-    "A connection error occurred while trying to contact the server.": "Възникнал е проблем с връзката при свързване към сървъра.",
-    "Your area is experiencing difficulties connecting to the internet.": "В районът ви има проблеми с връзката с интернет.",
-    "The server has denied your request.": "Сървърът е забранил заявката ви.",
-    "The server is offline.": "Сървърът е офлайн.",
-    "A browser extension is preventing the request.": "Разширение на браузъра блокира заявката.",
-    "Your firewall or anti-virus is blocking the request.": "Защитната ви стена (firewall) или антивирусен софтуер блокират заявката.",
-    "The server (%(serverName)s) took too long to respond.": "Сървърът %(serverName)s отне твърде дълго да отговори.",
-    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Сървърът ви не отговаря на някой от заявките ви. По-долу са някои от най-вероятните причини.",
-    "Server isn't responding": "Сървърът не отговаря",
-    "You're all caught up.": "Наваксали сте с всичко.",
-    "Data on this screen is shared with %(widgetDomain)s": "Данните на този екран са споделени с %(widgetDomain)s",
-    "Modal Widget": "Модално приспособление",
-    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Поканете някой по име, потребителско име (като <userId/>) или <a>споделете тази стая</a>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Поканете някой по име, имейл адрес, потребителско име (като <userId/>) или <a>споделете тази стая</a>.",
-    "Start a conversation with someone using their name or username (like <userId/>).": "Започнете разговор с някой използвайки тяхното име или потребителско име (като <userId/>).",
-    "Start a conversation with someone using their name, email address or username (like <userId/>).": "Започнете разговор с някой използвайки тяхното име, имейл адрес или потребителско име (като <userId/>).",
-    "Invite by email": "Покани по имейл",
-    "Preparing to download logs": "Подготвяне за изтегляне на логове",
-    "Information": "Информация",
-    "This version of %(brand)s does not support searching encrypted messages": "Тази версия на %(brand)s не поддържа търсенето в шифровани съобщения",
-    "This version of %(brand)s does not support viewing some encrypted files": "Тази версия на %(brand)s не поддържа преглеждането на някои шифровани файлове",
-    "Use the <a>Desktop app</a> to search encrypted messages": "Използвайте <a>Desktop приложението</a> за да търсите в шифровани съобщения",
-    "Use the <a>Desktop app</a> to see all encrypted files": "Използвайте <a>Desktop приложението</a> за да видите всички шифровани файлове",
-    "Click to view edits": "Кликнете за да видите редакциите",
-    "Edited at %(date)s": "Редактирано на %(date)s",
     "Not encrypted": "Не е шифровано",
     "Backup version:": "Версия на резервното копие:",
     "Anguilla": "Ангила",
@@ -622,10 +375,7 @@
     "Afghanistan": "Афганистан",
     "United States": "Съединените щати",
     "United Kingdom": "Обединеното кралство",
-    "Leave space": "Напусни пространство",
-    "Create a space": "Създаване на пространство",
     "unknown person": "",
-    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Вашият %(brand)s не позволява да използвате мениджъра на интеграции за да направите това. Свържете се с администратор.",
     "common": {
         "about": "Относно",
         "analytics": "Статистика",
@@ -706,7 +456,14 @@
         "setup_secure_messages": "Настрой Защитени Съобщения",
         "unencrypted": "Нешифровано",
         "show_more": "Покажи повече",
-        "are_you_sure": "Сигурни ли сте?"
+        "are_you_sure": "Сигурни ли сте?",
+        "email_address": "Имейл адрес",
+        "filter_results": "Филтриране на резултати",
+        "and_n_others": {
+            "other": "и %(count)s други...",
+            "one": "и още един..."
+        },
+        "edited": "редактирано"
     },
     "action": {
         "continue": "Продължи",
@@ -895,7 +652,9 @@
         "moderator": "Модератор",
         "admin": "Администратор",
         "custom": "Собствен (%(level)s)",
-        "mod": "Модератор"
+        "mod": "Модератор",
+        "label": "Ниво на достъп",
+        "custom_level": "Персонализирано ниво"
     },
     "bug_reporting": {
         "matrix_security_issue": "За да съобщените за проблем със сигурността свързан с Matrix, прочетете <a>Политиката за споделяне на проблеми със сигурността</a> на Matrix.org.",
@@ -911,7 +670,16 @@
         "uploading_logs": "Качване на логове",
         "downloading_logs": "Изтегляне на логове",
         "create_new_issue": "Моля, <newIssueLink>отворете нов проблем</newIssueLink> в GitHub за да проучим проблема.",
-        "waiting_for_server": "Изчакване на отговор от сървъра"
+        "waiting_for_server": "Изчакване на отговор от сървъра",
+        "error_empty": "Моля, кажете ни какво се обърка, или още по-добре - създайте проблем в GitHub обясняващ ситуацията.",
+        "preparing_logs": "Подготовка за изпращане на логове",
+        "logs_sent": "Логовете са изпратени",
+        "thank_you": "Благодарим!",
+        "failed_send_logs": "Неуспешно изпращане на логове: ",
+        "preparing_download": "Подготвяне за изтегляне на логове",
+        "unsupported_browser": "Напомняне: браузърът ви не се поддържа, така че не всичко може да работи правилно.",
+        "textarea_label": "Бележки",
+        "log_request": "За да ни помогнете да предотвратим това в бъдеще, моля <a>изпратете логове</a>."
     },
     "time": {
         "date_at_time": "%(date)s в %(time)s",
@@ -1131,7 +899,13 @@
             "email_address_label": "Имейл адрес",
             "remove_msisdn_prompt": "Премахни %(phone)s?",
             "add_msisdn_instructions": "Беше изпратено SMS съобщение към +%(msisdn)s. Въведете съдържащият се код за потвърждение.",
-            "msisdn_label": "Телефонен номер"
+            "msisdn_label": "Телефонен номер",
+            "deactivate_confirm_body_sso": "Потвърдете деактивацията на профила си използвайки Single Sign On за потвърждаване на самоличността.",
+            "deactivate_confirm_body": "Сигурни ли сте, че искате да деактивирате профила си? Това е необратимо.",
+            "deactivate_confirm_continue": "Потвърдете деактивирането на профила",
+            "error_deactivate_communication": "Имаше проблем при комуникацията със сървъра. Опитайте пак.",
+            "error_deactivate_no_auth": "Сървърът не изисква никаква автентикация",
+            "error_deactivate_invalid_auth": "Сървърът не върна валидна информация относно автентикация."
         },
         "key_backup": {
             "backup_in_progress": "Прави се резервно копие на ключовете Ви (първото копие може да отнеме няколко минути).",
@@ -1416,7 +1190,8 @@
         "creation_summary_dm": "%(creator)s създаде този директен чат.",
         "creation_summary_room": "%(creator)s създаде и настрой стаята.",
         "context_menu": {
-            "external_url": "URL на източника"
+            "external_url": "URL на източника",
+            "resent_unsent_reactions": "Изпрати наново %(unsentCount)s реакция(и)"
         },
         "url_preview": {
             "close": "Затвори прегледа"
@@ -1455,10 +1230,28 @@
             "you_accepted": "Приехте",
             "you_declined": "Отказахте",
             "you_cancelled": "Отказахте потвърждаването",
-            "you_started": "Изпратихте заявка за потвърждение"
+            "you_started": "Изпратихте заявка за потвърждение",
+            "user_accepted": "%(name)s прие",
+            "user_declined": "%(name)s отказа",
+            "user_cancelled": "%(name)s отказа",
+            "user_wants_to_verify": "%(name)s иска да извърши потвърждение"
         },
         "m.video": {
             "error_decrypting": "Грешка при разшифроване на видео"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "Добавяне на интеграция",
+            "dialog_description": "На път сте да бъдете отведени до друг сайт, където можете да удостоверите профила си за използване с %(integrationsUrl)s. Искате ли да продължите?"
+        },
+        "edits": {
+            "tooltip_title": "Редактирано на %(date)s",
+            "tooltip_sub": "Кликнете за да видите редакциите",
+            "tooltip_label": "Редактирано на %(date)s. Кликнете за да видите редакциите."
+        },
+        "error_rendering_message": "Съобщението не може да се зареди",
+        "reply": {
+            "error_loading": "Не може да се зареди събитието, на което е отговорено. Или не съществува или нямате достъп да го видите.",
+            "in_reply_to": "<a>В отговор на</a> <pill>"
         }
     },
     "slash_command": {
@@ -1530,7 +1323,8 @@
         "verify_nop": "Сесията вече е потвърдена!",
         "verify_mismatch": "ВНИМАНИЕ: ПОТВЪРЖДАВАНЕТО НА КЛЮЧОВЕТЕ Е НЕУСПЕШНО! Подписващия ключ за %(userId)s и сесия %(deviceId)s е \"%(fprint)s\", което не съвпада с предоставения ключ \"%(fingerprint)s\". Това може би означава, че комуникацията ви бива прихваната!",
         "verify_success_title": "Потвърден ключ",
-        "verify_success_description": "Предоставения от вас ключ за подписване съвпада с ключа за подписване получен от сесия %(deviceId)s на %(userId)s. Сесията е маркирана като потвърдена."
+        "verify_success_description": "Предоставения от вас ключ за подписване съвпада с ключа за подписване получен от сесия %(deviceId)s на %(userId)s. Сесията е маркирана като потвърдена.",
+        "help_dialog_title": "Помощ за команди"
     },
     "presence": {
         "online_for": "Онлайн от %(duration)s",
@@ -1603,7 +1397,6 @@
         "no_media_perms_title": "Няма разрешения за медийните устройства",
         "no_media_perms_description": "Може да се наложи ръчно да разрешите на %(brand)s да получи достъп до Вашия микрофон/уеб камера"
     },
-    "Other": "Други",
     "room_settings": {
         "permissions": {
             "m.room.avatar": "Промяна на снимката на стаята",
@@ -1683,7 +1476,12 @@
             "canonical_alias_field_label": "Основен адрес",
             "avatar_field_label": "Снимка на стаята",
             "aliases_no_items_label": "Все още няма други публикувани адреси, добавете такъв по-долу",
-            "aliases_items_label": "Други публикувани адреси:"
+            "aliases_items_label": "Други публикувани адреси:",
+            "alias_heading": "Адрес на стаята",
+            "alias_field_safe_localpart_invalid": "Някои символи не са позволени",
+            "alias_field_taken_valid": "Адресът е наличен за ползване",
+            "alias_field_taken_invalid_domain": "Адресът вече се използва",
+            "alias_field_placeholder_default": "например my-room"
         },
         "advanced": {
             "unfederated": "Тази стая не е достъпна за отдалечени Matrix сървъри",
@@ -1691,7 +1489,21 @@
             "room_predecessor": "Виж по-стари съобщения в %(roomName)s.",
             "room_version_section": "Версия на стаята",
             "room_version": "Версия на стаята:",
-            "information_section_room": "Информация за стаята"
+            "information_section_room": "Информация за стаята",
+            "error_upgrade_title": "Неуспешно обновяване на стаята",
+            "error_upgrade_description": "Обновяването на тази стая не можа да бъде завършено",
+            "upgrade_button": "Обновете тази стая до версия %(version)s",
+            "upgrade_dialog_title": "Обнови версията на стаята",
+            "upgrade_dialog_description": "Обновяването на тази стая изисква затварянето на текущата и създаване на нова на нейно място. За да е най-удобно за членовете на стаята, ще:",
+            "upgrade_dialog_description_1": "Създадем нова стая със същото име, описание и снимка",
+            "upgrade_dialog_description_2": "Обновим всички локални адреси на стаята да сочат към новата",
+            "upgrade_dialog_description_3": "Забраним комуникацията на потребителите в старата стая и публикуваме съобщение насочващо ги към новата",
+            "upgrade_dialog_description_4": "Поставим връзка в новата стая, водещо обратно към старата, за да може хората да виждат старите съобщения",
+            "upgrade_warning_dialog_title_private": "Обнови лична стая",
+            "upgrade_dwarning_ialog_title_public": "Обнови публична стая",
+            "upgrade_warning_dialog_report_bug_prompt_link": "Това обикновено влия само на това как стаята се обработва на сървъра. Ако имате проблеми с %(brand)s, <a>съобщете за проблем</a>.",
+            "upgrade_warning_dialog_description": "Обновяването на стая е действие за напреднали и обикновено се препоръчва когато стаята е нестабилна поради бъгове, липсващи функции или проблеми със сигурността.",
+            "upgrade_warning_dialog_footer": "Ще обновите стаята от <oldVersion /> до <newVersion />."
         },
         "upload_avatar_label": "Качи профилна снимка",
         "bridges": {
@@ -1704,7 +1516,9 @@
             "notification_sound": "Звук за уведомление",
             "custom_sound_prompt": "Настрой нов собствен звук",
             "browse_button": "Избор"
-        }
+        },
+        "title": "Настройки на стая - %(roomName)s",
+        "alias_not_specified": "неопределен"
     },
     "encryption": {
         "verification": {
@@ -1745,7 +1559,19 @@
             "prompt_user": "Започнете верифициране отново от профила им.",
             "timed_out": "Изтече времето за верификация.",
             "cancelled_user": "%(displayName)s отказа верификацията.",
-            "cancelled": "Отказахте верификацията."
+            "cancelled": "Отказахте верификацията.",
+            "incoming_sas_user_dialog_text_1": "Потвърди потребителя и го маркирай като доверен. Доверяването на потребители Ви дава допълнително спокойствие при използване на съобщения шифровани от край-до-край.",
+            "incoming_sas_user_dialog_text_2": "Верифицирането на този потребител ще маркира сесията им като доверена при вас, както и вашата като доверена при тях.",
+            "incoming_sas_device_dialog_text_1": "Верифицирайте това устройство за да го маркирате като доверено. Доверявайки се на това устройство дава на вас и на другите потребители допълнително спокойствие при използването на от-край-до-край-шифровани съобщения.",
+            "incoming_sas_device_dialog_text_2": "Верифицирането на това устройство ще го маркира като доверено, а потребителите, които са потвърдили вас също ще се доверяват на него.",
+            "incoming_sas_dialog_title": "Входяща заявка за потвърждение",
+            "manual_device_verification_self_text": "Потвърдете чрез сравняване на следното с Потребителски Настройки в другата ви сесия:",
+            "manual_device_verification_user_text": "Потвърдете сесията на този потребител чрез сравняване на следното с техните Потребителски Настройки:",
+            "manual_device_verification_device_name_label": "Име на сесията",
+            "manual_device_verification_device_id_label": "Идентификатор на сесията",
+            "manual_device_verification_device_key_label": "Ключ за сесията",
+            "manual_device_verification_footer": "Ако няма съвпадение, сигурността на комуникацията ви може би е компрометирана.",
+            "verification_dialog_title_user": "Заявка за потвърждение"
         },
         "old_version_detected_title": "Бяха открити стари криптографски данни",
         "old_version_detected_description": "Засечени са данни от по-стара версия на %(brand)s. Това ще доведе до неправилна работа на криптографията от край до край в по-старата версия. Шифрованите от край до край съобщения, които са били обменени наскоро (при използването на по-стара версия), може да не успеят да бъдат разшифровани в тази версия. Това също може да доведе до неуспех в обмяната на съобщения в тази версия. Ако имате проблеми, излезте и влезте отново в профила си. За да запазите историята на съобщенията, експортирайте и импортирайте отново Вашите ключове.",
@@ -1794,7 +1620,46 @@
         "cross_signing_room_warning": "Някой използва непозната сесия",
         "cross_signing_room_verified": "Всички в тази стая са верифицирани",
         "cross_signing_room_normal": "Тази стая е шифрована от-край-до-край",
-        "unsupported": "Този клиент не поддържа шифроване от край до край."
+        "unsupported": "Този клиент не поддържа шифроване от край до край.",
+        "incompatible_database_sign_out_description": "За да избегнете загубата на чат история, трябва да експортирате ключовете на стаята преди да излезете от профила си. Ще трябва да се върнете към по-новата версия на %(brand)s за да направите това",
+        "incompatible_database_description": "Използвали сте и по-нова версия на %(brand)s от сегашната за тази сесия. За да използвате сегашната версия отново с шифроване от-край-до-край, ще е необходимо да излезете и да влезете отново.",
+        "incompatible_database_title": "Несъвместима база данни",
+        "incompatible_database_disable": "Продължи с изключено шифроване",
+        "key_signature_upload_completed": "Качването завърши",
+        "key_signature_upload_cancelled": "Отказано качване на подпис",
+        "key_signature_upload_failed": "Неуспешно качване",
+        "key_signature_upload_success_title": "Успешно качване на подпис",
+        "key_signature_upload_failed_title": "Неуспешно качване на подпис",
+        "udd": {
+            "own_new_session_text": "Влязохте в нова сесия без да я верифицирате:",
+            "own_ask_verify_text": "Верифицирайте другите си сесии използвайки една от опциите по-долу.",
+            "other_new_session_text": "%(name)s (%(userId)s) влезе в нова сесия без да я потвърди:",
+            "other_ask_verify_text": "Поискайте от този потребител да потвърди сесията си, или я потвърдете ръчно по-долу.",
+            "title": "Недоверено"
+        },
+        "access_secret_storage_dialog": {
+            "key_validation_text": {
+                "wrong_file_type": "Грешен тип файл",
+                "recovery_key_is_correct": "Изглежда добре!"
+            },
+            "security_phrase_title": "Защитна фраза",
+            "security_key_title": "Ключ за сигурност",
+            "use_security_key_prompt": "Използвайте ключа си за сигурност за да продължите.",
+            "restoring": "Възстановяване на ключове от резервно копие"
+        },
+        "destroy_cross_signing_dialog": {
+            "title": "Унищожаване на ключовете за кръстосано-подписване?",
+            "warning": "Изтриването на ключовете за кръстосано-подписване е необратимо. Всички, с които сте се верифицирали ще видят предупреждения за сигурността. Почти със сигурност не искате да направите това, освен ако не сте загубили всички устройства, от които можете да подписвате кръстосано.",
+            "primary_button_text": "Изчисти ключовете за кръстосано-подписване"
+        },
+        "confirm_encryption_setup_title": "Потвърждение на настройки за шифроване",
+        "confirm_encryption_setup_body": "Кликнете бутона по-долу за да потвърдите настройването на шифроване.",
+        "unable_to_setup_keys_error": "Неуспешна настройка на ключовете",
+        "key_signature_upload_failed_master_key_signature": "нов подпис на основния ключ",
+        "key_signature_upload_failed_cross_signing_key_signature": "нов подпис на ключа за кръстосано-подписване",
+        "key_signature_upload_failed_device_cross_signing_key_signature": "подпис за кръстосано-подписване на устройства",
+        "key_signature_upload_failed_key_signature": "подпис на ключ",
+        "key_signature_upload_failed_body": "%(brand)s срещна проблем при качването на:"
     },
     "emoji": {
         "category_frequently_used": "Често използвани",
@@ -1875,7 +1740,10 @@
             "fallback_button": "Започни автентикация",
             "sso_title": "Използвайте Single Sign On за да продължите",
             "sso_body": "Потвърдете добавянето на този имейл адрес като потвърдите идентичността си чрез Single Sign On.",
-            "code": "Код"
+            "code": "Код",
+            "sso_preauth_body": "За да продължите, използвайте Single Sign On за да потвърдите самоличността си.",
+            "sso_postauth_title": "Потвърдете за да продължите",
+            "sso_postauth_body": "Кликнете бутона по-долу за да потвърдите самоличността си."
         },
         "password_field_label": "Въведете парола",
         "password_field_strong_label": "Хубава, силна парола!",
@@ -1913,7 +1781,36 @@
         },
         "country_dropdown": "Падащо меню за избор на държава",
         "common_failures": {},
-        "captcha_description": "Сървърът иска да потвърди, че не сте робот."
+        "captcha_description": "Сървърът иска да потвърди, че не сте робот.",
+        "autodiscovery_invalid": "Невалиден отговор по време на откриването на конфигурацията за сървъра",
+        "autodiscovery_generic_failure": "Неуспешно автоматично откриване на конфигурацията за сървъра",
+        "autodiscovery_invalid_hs_base_url": "Невалиден base_url в m.homeserver",
+        "autodiscovery_invalid_hs": "Homeserver адресът не изглежда да е валиден Matrix сървър",
+        "autodiscovery_invalid_is_base_url": "Невалиден base_url в m.identity_server",
+        "autodiscovery_invalid_is": "Адресът на сървърът за самоличност не изглежда да е валиден сървър за самоличност",
+        "autodiscovery_invalid_is_response": "Невалиден отговор по време на откриването на конфигурацията за сървъра за самоличност",
+        "server_picker_description_matrix.org": "Присъединете се безплатно към милиони други на най-големия публичен сървър",
+        "soft_logout": {
+            "clear_data_title": "Изчисти всички данни в тази сесия?",
+            "clear_data_description": "Изчистването на всички данни от сесията е необратимо. Шифрованите съобщения ще бъдат загубени, освен ако няма резервно копие на ключовете им.",
+            "clear_data_button": "Изчисти всички данни"
+        },
+        "logout_dialog": {
+            "setup_secure_backup_description_1": "Шифрованите съобщения са защитени с шифроване от край до край. Само Вие и получателят (получателите) имате ключове за четенето им.",
+            "use_key_backup": "Включи резервни копия за ключовете",
+            "skip_key_backup": "Не искам шифрованите съобщения",
+            "megolm_export": "Експортирай ключове ръчно",
+            "setup_key_backup_title": "Ще загубите достъп до шифрованите си съобщения",
+            "description": "Сигурни ли сте, че искате да излезете от профила?"
+        },
+        "registration": {
+            "continue_without_email_field_label": "Имейл (незадължително)"
+        },
+        "set_email": {
+            "verification_pending_title": "Очакване на потвърждение",
+            "verification_pending_description": "Моля, проверете своя имейл адрес и натиснете връзката, която той съдържа. След като направите това, натиснете продължи.",
+            "description": "Това ще Ви позволи да възстановите Вашата парола и да получавате известия."
+        }
     },
     "export_chat": {
         "messages": "Съобщения"
@@ -1939,7 +1836,8 @@
     "report_content": {
         "missing_reason": "Въведете защо докладвате.",
         "report_content_to_homeserver": "Докладвай съдържание до администратора на сървъра",
-        "description": "Докладването на съобщението ще изпрати уникалният номер на събитието (event ID) до администратора на сървъра. Ако съобщенията в стаята са шифровани, администратора няма да може да прочете текста им или да види снимките или файловете."
+        "description": "Докладването на съобщението ще изпрати уникалният номер на събитието (event ID) до администратора на сървъра. Ако съобщенията в стаята са шифровани, администратора няма да може да прочете текста им или да види снимките или файловете.",
+        "other_label": "Други"
     },
     "onboarding": {
         "has_avatar_label": "Чудесно, това ще позволи на хората да знаят, че сте вие",
@@ -2011,7 +1909,10 @@
         "error_encountered": "Възникна грешка (%(errorDetail)s).",
         "no_update": "Няма нова версия.",
         "new_version_available": "Налична е нова версия. <a>Обновете сега.</a>",
-        "check_action": "Провери за нова версия"
+        "check_action": "Провери за нова версия",
+        "error_unable_load_commit": "Неуспешно зареждане на информация за commit: %(msg)s",
+        "unavailable": "Не е наличен",
+        "changelog": "Списък на промените"
     },
     "labs_mjolnir": {
         "room_name": "Моя списък с блокирания",
@@ -2053,7 +1954,8 @@
         "private_heading": "Вашето лично пространство",
         "add_details_prompt": "Добавете някои подробности, за да помогнете на хората да го разпознаят.",
         "label": "Създаване на пространство",
-        "add_details_prompt_2": "Можете да ги промените по всяко време."
+        "add_details_prompt_2": "Можете да ги промените по всяко време.",
+        "subspace_dropdown_title": "Създаване на пространство"
     },
     "user_menu": {
         "switch_theme_light": "Смени на светъл режим",
@@ -2136,7 +2038,11 @@
         "search": {
             "this_room": "В тази стая",
             "all_rooms": "Във всички стаи",
-            "field_placeholder": "Търсене…"
+            "field_placeholder": "Търсене…",
+            "result_count": {
+                "other": "(~%(count)s резултати)",
+                "one": "(~%(count)s резултат)"
+            }
         },
         "jump_to_bottom_button": "Отиди до най-скорошните съобщения",
         "jump_read_marker": "Отиди до първото непрочетено съобщение.",
@@ -2158,7 +2064,11 @@
         "share_public": "Споделете публичното си място",
         "invite_link": "Сподели връзка с покана",
         "invite": "Покани хора",
-        "invite_description": "Покани чрез имейл или потребителско име"
+        "invite_description": "Покани чрез имейл или потребителско име",
+        "add_existing_room_space": {
+            "dm_heading": "Директни съобщения"
+        },
+        "leave_dialog_action": "Напусни пространство"
     },
     "terms": {
         "integration_manager": "Използвайте ботове, връзки с други мрежи, приспособления и стикери",
@@ -2173,7 +2083,9 @@
         "identity_server_no_terms_title": "Сървъра за самоличност няма условия за ползване",
         "identity_server_no_terms_description_1": "Това действие изисква връзка със сървъра за самоличност <server /> за валидиране на имейл адреса или телефонния номер, но сървърът не предоставя условия за ползване.",
         "identity_server_no_terms_description_2": "Продължете, само ако вярвате на собственика на сървъра.",
-        "inline_intro_text": "Приемете <policyLink /> за да продължите:"
+        "inline_intro_text": "Приемете <policyLink /> за да продължите:",
+        "summary_identity_server_1": "Открийте други по телефон или имейл",
+        "summary_identity_server_2": "Бъдете открит по телефон или имейл"
     },
     "failed_load_async_component": "Неуспешно зареждане! Проверете мрежовите настройки и опитайте пак.",
     "upload_failed_generic": "Файлът '%(fileName)s' не можа да бъде качен.",
@@ -2205,7 +2117,24 @@
         "error_bad_state": "Трябва да се махне блокирането на потребителя преди да може да бъде поканен пак.",
         "error_version_unsupported_room": "Сървърът на потребителя не поддържа версията на стаята.",
         "error_unknown": "Непозната сървърна грешка",
-        "to_space": "Покани в %(spaceName)s"
+        "to_space": "Покани в %(spaceName)s",
+        "unable_find_profiles_description_default": "Не бяга открити профили за изброените по-долу Matrix идентификатори. Желаете ли да ги поканите въпреки това?",
+        "unable_find_profiles_title": "Следните потребители може да не съществуват",
+        "unable_find_profiles_invite_never_warn_label_default": "Покани въпреки това и не питай отново",
+        "unable_find_profiles_invite_label_default": "Покани въпреки това",
+        "email_caption": "Покани по имейл",
+        "error_find_room": "Нещо се обърка при опита да бъдат поканени потребителите.",
+        "error_invite": "Не можахме да поканим тези потребители. Проверете потребителите, които искате да поканите и опитайте пак.",
+        "error_find_user_title": "Неуспешно откриване на следните потребители",
+        "error_find_user_description": "Следните потребители не съществуват или са невалидни и не могат да бъдат поканени: %(csvNames)s",
+        "recents_section": "Скорошни разговори",
+        "suggestions_section": "Скорошни директни чатове",
+        "email_use_default_is": "Използвайте сървър за самоличност за да каните по имейл. <default>Използвайте сървъра за самоличност по подразбиране (%(defaultIdentityServerName)s)</default> или настройте друг в <settings>Настройки</settings>.",
+        "email_use_is": "Използвайте сървър за самоличност за да каните по имейл. Управлявайте в <settings>Настройки</settings>.",
+        "start_conversation_name_email_mxid_prompt": "Започнете разговор с някой използвайки тяхното име, имейл адрес или потребителско име (като <userId/>).",
+        "start_conversation_name_mxid_prompt": "Започнете разговор с някой използвайки тяхното име или потребителско име (като <userId/>).",
+        "name_email_mxid_share_room": "Поканете някой по име, имейл адрес, потребителско име (като <userId/>) или <a>споделете тази стая</a>.",
+        "name_mxid_share_room": "Поканете някой по име, потребителско име (като <userId/>) или <a>споделете тази стая</a>."
     },
     "widget": {
         "error_need_to_be_logged_in": "Трябва да влезете в профила си.",
@@ -2231,7 +2160,12 @@
         "unencrypted_warning": "Приспособленията не използваш шифроване на съобщенията.",
         "added_by": "Приспособлението е добавено от",
         "cookie_warning": "Това приспособление може да използва бисквитки.",
-        "popout": "Изкарай в нов прозорец"
+        "popout": "Изкарай в нов прозорец",
+        "modal_title_default": "Модално приспособление",
+        "modal_data_warning": "Данните на този екран са споделени с %(widgetDomain)s",
+        "capabilities_dialog": {
+            "remember_Selection": "Запомни избора ми за това приспособление"
+        }
     },
     "scalar": {
         "error_create": "Неуспешно създаване на приспособление.",
@@ -2259,7 +2193,21 @@
         "failed_copy": "Неуспешно копиране",
         "something_went_wrong": "Нещо се обърка!",
         "update_power_level": "Неуспешна промяна на нивото на достъп",
-        "unknown": "Неизвестна грешка"
+        "unknown": "Неизвестна грешка",
+        "dialog_description_default": "Възникна грешка.",
+        "edit_history_unsupported": "Не изглежда сървърът ви да поддържа тази функция.",
+        "session_restore": {
+            "clear_storage_description": "Излизане и премахване на ключовете за шифроване?",
+            "clear_storage_button": "Изчисти запазените данни и излез",
+            "title": "Неуспешно възстановяване на сесията",
+            "description_1": "Възникна грешка при възстановяване на предишната Ви сесия.",
+            "description_2": "Ако преди сте използвали по-нова версия на %(brand)s, Вашата сесия може да не бъде съвместима с текущата версия. Затворете този прозорец и се върнете в по-новата версия.",
+            "description_3": "Изчистване на запазените данни в браузъра може да поправи проблема, но ще Ви изкара от профила и ще направи шифрованите съобщения нечетими."
+        },
+        "storage_evicted_title": "Липсват данни за сесията",
+        "storage_evicted_description_1": "Липсват данни за сесията, като например ключове за шифровани съобщения. За да поправите това, излезте и влезте отново, възстановявайки ключовете от резервно копие.",
+        "storage_evicted_description_2": "Най-вероятно браузърът Ви е премахнал тези данни поради липса на дисково пространство.",
+        "unknown_error_code": "неизвестен код за грешка"
     },
     "name_and_id": "%(name)s (%(userId)s)",
     "items_and_n_others": {
@@ -2362,7 +2310,25 @@
         "deactivate_confirm_title": "Деактивиране на потребителя?",
         "deactivate_confirm_description": "Деактивирането на потребителя ще ги изхвърли от профила и няма да им позволи да влязат пак. Също така, ще напуснат всички стаи, в които са. Действието е необратимо. Сигурните ли сте, че искате да деактивирате този потребител?",
         "deactivate_confirm_action": "Деактивирай потребителя",
-        "error_deactivate": "Неуспешно деактивиране на потребител"
+        "error_deactivate": "Неуспешно деактивиране на потребител",
+        "redact": {
+            "no_recent_messages_title": "Не са намерени скорошни съобщения от %(user)s",
+            "no_recent_messages_description": "Опитайте се да проверите по-нагоре в историята за по-ранни.",
+            "confirm_title": "Премахване на скорошни съобщения от %(user)s",
+            "confirm_description_2": "Може да отнеме известно време за голям брой съобщения. Моля, не презареждайте страницата междувременно.",
+            "confirm_button": {
+                "other": "Премахни %(count)s съобщения",
+                "one": "Премахни 1 съобщение"
+            }
+        },
+        "count_of_verified_sessions": {
+            "other": "%(count)s потвърдени сесии",
+            "one": "1 потвърдена сесия"
+        },
+        "count_of_sessions": {
+            "other": "%(count)s сесии",
+            "one": "%(count)s сесия"
+        }
     },
     "stickers": {
         "empty": "В момента нямате включени пакети със стикери",
@@ -2403,12 +2369,102 @@
         "error_loading_user_profile": "Неуспешно зареждане на потребителския профил"
     },
     "cant_load_page": "Страницата не можа да бъде заредена",
-    "Invalid homeserver discovery response": "Невалиден отговор по време на откриването на конфигурацията за сървъра",
-    "Failed to get autodiscovery configuration from server": "Неуспешно автоматично откриване на конфигурацията за сървъра",
-    "Invalid base_url for m.homeserver": "Невалиден base_url в m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "Homeserver адресът не изглежда да е валиден Matrix сървър",
-    "Invalid identity server discovery response": "Невалиден отговор по време на откриването на конфигурацията за сървъра за самоличност",
-    "Invalid base_url for m.identity_server": "Невалиден base_url в m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "Адресът на сървърът за самоличност не изглежда да е валиден сървър за самоличност",
-    "General failure": "Обща грешка"
+    "General failure": "Обща грешка",
+    "emoji_picker": {
+        "cancel_search_label": "Отмени търсенето"
+    },
+    "info_tooltip_title": "Информация",
+    "language_dropdown_label": "Падащо меню за избор на език",
+    "seshat": {
+        "warning_kind_files_app": "Използвайте <a>Desktop приложението</a> за да видите всички шифровани файлове",
+        "warning_kind_search_app": "Използвайте <a>Desktop приложението</a> за да търсите в шифровани съобщения",
+        "warning_kind_files": "Тази версия на %(brand)s не поддържа преглеждането на някои шифровани файлове",
+        "warning_kind_search": "Тази версия на %(brand)s не поддържа търсенето в шифровани съобщения"
+    },
+    "truncated_list_n_more": {
+        "other": "И %(count)s други..."
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_required_invalid": "Въведете име на сървър",
+            "network_dropdown_available_valid": "Изглежда добре",
+            "network_dropdown_available_invalid": "Сървърът или списъка със стаи не може да бъде намерен",
+            "network_dropdown_your_server_description": "Вашият сървър",
+            "network_dropdown_add_dialog_title": "Добави нов сървър",
+            "network_dropdown_add_dialog_description": "Въведете името на новия сървър, който искате да прегледате.",
+            "network_dropdown_add_dialog_placeholder": "Име на сървър"
+        }
+    },
+    "dialog_close_label": "Затвори прозореца",
+    "redact": {
+        "error": "Това съобщение не може да бъде изтрито. (%(code)s)",
+        "ongoing": "Премахване…",
+        "confirm_button": "Потвърдете премахването"
+    },
+    "forward": {
+        "send_label": "Изпрати",
+        "message_preview_heading": "Преглед на съобщението"
+    },
+    "integrations": {
+        "disabled_dialog_title": "Интеграциите са изключени",
+        "impossible_dialog_title": "Интеграциите не са разрешени",
+        "impossible_dialog_description": "Вашият %(brand)s не позволява да използвате мениджъра на интеграции за да направите това. Свържете се с администратор."
+    },
+    "lazy_loading": {
+        "disabled_description1": "Преди сте използвали %(brand)s на %(host)s с включено постепенно зареждане на членове. В тази версия, тази настройка е изключена. Понеже локалният кеш не е съвместим при тези две настройки, %(brand)s трябва да синхронизира акаунта Ви наново.",
+        "disabled_description2": "Ако другата версия на %(brand)s все още е отворена в друг таб, моля затворете я. Използването на %(brand)s на един адрес във версии с постепенно и без постепенно зареждане ще причини проблеми.",
+        "disabled_title": "Несъвместим локален кеш",
+        "disabled_action": "Изчисти кеша и ресинхронизирай",
+        "resync_description": "%(brand)s вече използва 3-5 пъти по-малко памет, като зарежда информация за потребители само когато е нужна. Моля, изчакайте докато ресинхронизираме със сървъра!",
+        "resync_title": "Обновяване на %(brand)s"
+    },
+    "message_edit_dialog_title": "Редакции на съобщение",
+    "server_offline": {
+        "empty_timeline": "Наваксали сте с всичко.",
+        "title": "Сървърът не отговаря",
+        "description": "Сървърът ви не отговаря на някой от заявките ви. По-долу са някои от най-вероятните причини.",
+        "description_1": "Сървърът %(serverName)s отне твърде дълго да отговори.",
+        "description_2": "Защитната ви стена (firewall) или антивирусен софтуер блокират заявката.",
+        "description_3": "Разширение на браузъра блокира заявката.",
+        "description_4": "Сървърът е офлайн.",
+        "description_5": "Сървърът е забранил заявката ви.",
+        "description_6": "В районът ви има проблеми с връзката с интернет.",
+        "description_7": "Възникнал е проблем с връзката при свързване към сървъра.",
+        "description_8": "Сървърът не е конфигуриран да укаже какъв е проблемът (CORS).",
+        "recent_changes_heading": "Скорошни промени, които още не са били получени"
+    },
+    "spotlight_dialog": {
+        "create_new_room_button": "Създай нова стая"
+    },
+    "share": {
+        "title_room": "Споделяне на стая",
+        "permalink_most_recent": "Създай връзка към най-новото съобщение",
+        "title_user": "Споделяне на потребител",
+        "title_message": "Споделяне на съобщение от стая",
+        "permalink_message": "Създай връзка към избраното съобщение"
+    },
+    "upload_file": {
+        "title_progress": "Качване на файлове (%(current)s от %(total)s)",
+        "title": "Качи файлове",
+        "upload_all_button": "Качи всички",
+        "error_file_too_large": "Файлът е <b>прекалено голям</b> за да се качи. Максималният допустим размер е %(limit)s, докато този файл е %(sizeOfThisFile)s.",
+        "error_files_too_large": "Тези файлове са <b>прекалено големи</b> за да се качат. Максималният допустим размер е %(limit)s.",
+        "error_some_files_too_large": "Някои файлове са <b>прекалено големи</b> за да се качат. Максималният допустим размер е %(limit)s.",
+        "upload_n_others_button": {
+            "other": "Качи %(count)s други файла",
+            "one": "Качи %(count)s друг файл"
+        },
+        "cancel_all_button": "Откажи всички",
+        "error_title": "Грешка при качване"
+    },
+    "restore_key_backup_dialog": {
+        "load_error_content": "Неуспешно зареждане на състоянието на резервното копие",
+        "restore_failed_error": "Неуспешно възстановяване на резервно копие",
+        "no_backup_error": "Не е открито резервно копие!",
+        "keys_restored_title": "Ключовете бяха възстановени",
+        "count_of_decryption_failures": "Неуспешно разшифроване на %(failedCount)s сесии!",
+        "count_of_successfully_restored_keys": "Успешно бяха възстановени %(sessionCount)s ключа",
+        "key_backup_warning": "<b>Внимание</b>: настройването на резервно копие на ключовете трябва да се прави само от доверен компютър.",
+        "load_keys_progress": "%(completed)s от %(total)s ключа са възстановени"
+    }
 }

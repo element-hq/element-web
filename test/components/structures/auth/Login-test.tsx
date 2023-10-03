@@ -339,13 +339,13 @@ describe("Login", function () {
     it("should display an error when homeserver fails liveliness check", async () => {
         fetchMock.resetBehavior();
         fetchMock.get("https://matrix.org/_matrix/client/versions", {
-            status: 400,
+            status: 0,
         });
         getComponent();
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         // error displayed
-        expect(screen.getByText("Your test-brand is misconfigured")).toBeInTheDocument();
+        expect(screen.getByText("Cannot reach homeserver")).toBeInTheDocument();
     });
 
     it("should reset liveliness error when server config changes", async () => {
@@ -363,14 +363,14 @@ describe("Login", function () {
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         // error displayed
-        expect(screen.getByText("Your test-brand is misconfigured")).toBeInTheDocument();
+        expect(screen.getByText("Cannot reach homeserver")).toBeInTheDocument();
 
         rerender(getRawComponent("https://server2"));
 
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         // error cleared
-        expect(screen.queryByText("Your test-brand is misconfigured")).not.toBeInTheDocument();
+        expect(screen.queryByText("Cannot reach homeserver")).not.toBeInTheDocument();
     });
 
     describe("OIDC native flow", () => {

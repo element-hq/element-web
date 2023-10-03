@@ -407,7 +407,7 @@ const SpaceAddExistingRooms: React.FC<{
                         {_t("create_space|skip_action")}
                     </AccessibleButton>
                 }
-                filterPlaceholder={_t("Search for rooms")}
+                filterPlaceholder={_t("space|room_filter_placeholder")}
                 onFinished={onFinished}
                 roomsRenderer={defaultRoomsRenderer}
                 dmsRenderer={defaultDmsRenderer}
@@ -508,7 +508,7 @@ const SpaceSetupPrivateInvite: React.FC<{
                 key={name}
                 name={name}
                 type="text"
-                label={_t("Email address")}
+                label={_t("common|email_address")}
                 placeholder={_t("auth|email_field_label")}
                 value={emailAddresses[i]}
                 onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setEmailAddress(i, ev.target.value)}
@@ -553,7 +553,7 @@ const SpaceSetupPrivateInvite: React.FC<{
             }
         } catch (err) {
             logger.error("Failed to invite users to space: ", err);
-            setError(_t("We couldn't invite those users. Please check the users you want to invite and try again."));
+            setError(_t("invite|error_invite"));
         }
         setBusy(false);
     };

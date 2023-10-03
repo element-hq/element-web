@@ -59,7 +59,7 @@ const FilteredList: React.FC<IProps> = ({ children, query, onChange }) => {
 
         return (
             <button className="mx_DevTools_button" onClick={showMore}>
-                {_t("and %(count)s others...", { count: overflowCount })}
+                {_t("common|and_n_others", { count: overflowCount })}
             </button>
         );
     };
@@ -67,7 +67,7 @@ const FilteredList: React.FC<IProps> = ({ children, query, onChange }) => {
     return (
         <>
             <Field
-                label={_t("Filter results")}
+                label={_t("common|filter_results")}
                 autoFocus={true}
                 size={64}
                 type="text"
@@ -80,7 +80,7 @@ const FilteredList: React.FC<IProps> = ({ children, query, onChange }) => {
             />
 
             {filteredChildren.length < 1 ? (
-                _t("No results found")
+                _t("common|no_results_found")
             ) : (
                 <TruncatedList
                     getChildren={getChildren}

@@ -277,7 +277,7 @@ const SettingsList: React.FC<ISettingsListProps> = ({ onBack, onView, onEdit }) 
     return (
         <BaseTool onBack={onBack} className="mx_DevTools_SettingsExplorer">
             <Field
-                label={_t("Filter results")}
+                label={_t("common|filter_results")}
                 autoFocus={true}
                 size={64}
                 type="text"

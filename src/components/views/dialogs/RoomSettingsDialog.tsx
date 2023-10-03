@@ -241,7 +241,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 className="mx_RoomSettingsDialog"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Room Settings - %(roomName)s", { roomName })}
+                title={_t("room_settings|title", { roomName })}
             >
                 <div className="mx_SettingsDialog_content">
                     <TabbedView

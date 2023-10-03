@@ -1,7 +1,5 @@
 {
-    "Session ID": "Sessions ID",
     "Warning!": "Advarsel!",
-    "unknown error code": "Ukendt fejlkode",
     "Unnamed room": "Unavngivet rum",
     "Sun": "Søn",
     "Mon": "Man",
@@ -32,25 +30,15 @@
     "Sunday": "Søndag",
     "Today": "I dag",
     "Friday": "Fredag",
-    "Changelog": "Ændringslog",
-    "Unavailable": "Utilgængelig",
-    "Filter results": "Filtrér resultater",
     "Tuesday": "Tirsdag",
     "Saturday": "Lørdag",
     "Monday": "Mandag",
-    "Send": "Send",
-    "You cannot delete this message. (%(code)s)": "Du kan ikke slette denne besked. (%(code)s)",
     "Thursday": "Torsdag",
     "Yesterday": "I går",
     "Wednesday": "Onsdag",
-    "Thank you!": "Tak!",
-    "Logs sent": "Logfiler sendt",
-    "Failed to send logs: ": "Kunne ikke sende logfiler: ",
-    "Preparing to send logs": "Forbereder afsendelse af logfiler",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s. %(monthName)s %(fullYear)s",
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "Headphones": "Hovedtelefoner",
-    "Add a new server": "Tilføj en ny server",
     "France": "Frankrig",
     "Finland": "Finland",
     "Egypt": "Egypten",
@@ -331,7 +319,8 @@
         "rooms": "Rum",
         "low_priority": "Lav prioritet",
         "historical": "Historisk",
-        "show_more": "Vis mere"
+        "show_more": "Vis mere",
+        "filter_results": "Filtrér resultater"
     },
     "action": {
         "continue": "Fortsæt",
@@ -385,7 +374,11 @@
         "send_logs": "Send logs",
         "collecting_information": "Indsamler app versionsoplysninger",
         "collecting_logs": "Indsamler logfiler",
-        "waiting_for_server": "Venter på svar fra server"
+        "waiting_for_server": "Venter på svar fra server",
+        "preparing_logs": "Forbereder afsendelse af logfiler",
+        "logs_sent": "Logfiler sendt",
+        "thank_you": "Tak!",
+        "failed_send_logs": "Kunne ikke sende logfiler: "
     },
     "time": {
         "date_at_time": "%(date)s om %(time)s"
@@ -609,7 +602,6 @@
         "m.text": "%(senderName)s: %(message)s",
         "m.sticker": "%(senderName)s: %(stickerName)s"
     },
-    "Other": "Andre",
     "composer": {
         "placeholder_reply": "Besvar…",
         "placeholder_encrypted": "Send en krypteret besked…",
@@ -655,7 +647,8 @@
     },
     "encryption": {
         "verification": {
-            "complete_title": "Bekræftet!"
+            "complete_title": "Bekræftet!",
+            "manual_device_verification_device_id_label": "Sessions ID"
         },
         "cancel_entering_passphrase_title": "Annuller indtastning af kodeord?",
         "cancel_entering_passphrase_description": "Er du sikker på, at du vil annullere indtastning af adgangssætning?",
@@ -768,7 +761,9 @@
         "see_changes_button": "Hvad er nyt?",
         "release_notes_toast_title": "Hvad er nyt",
         "error_encountered": "En fejl er opstået (%(errorDetail)s).",
-        "no_update": "Ingen opdatering tilgængelig."
+        "no_update": "Ingen opdatering tilgængelig.",
+        "unavailable": "Utilgængelig",
+        "changelog": "Ændringslog"
     },
     "space": {
         "context_menu": {
@@ -841,7 +836,8 @@
     "cannot_reach_homeserver_detail": "Vær sikker at du har en stabil internetforbindelse, eller kontakt serveradministratoren",
     "error": {
         "mau": "Denne homeserver har nået sin begrænsning for antallet af aktive brugere per måned.",
-        "resource_limits": "Denne homeserver har overskredet en af dens ressourcegrænser."
+        "resource_limits": "Denne homeserver har overskredet en af dens ressourcegrænser.",
+        "unknown_error_code": "Ukendt fejlkode"
     },
     "room": {
         "upgrade_error_title": "Fejl under opgradering af rum",
@@ -881,5 +877,19 @@
     },
     "error_dialog": {
         "forget_room_failed": "Kunne ikke glemme rummet %(errCode)s"
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_add_dialog_title": "Tilføj en ny server"
+        }
+    },
+    "redact": {
+        "error": "Du kan ikke slette denne besked. (%(code)s)"
+    },
+    "forward": {
+        "send_label": "Send"
+    },
+    "report_content": {
+        "other_label": "Andre"
     }
 }

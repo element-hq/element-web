@@ -315,7 +315,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                     <p>{_t("auth|soft_logout_warning")}</p>
                     <div>
                         <AccessibleButton onClick={this.onClearAll} kind="danger">
-                            {_t("Clear all data")}
+                            {_t("auth|soft_logout|clear_data_button")}
                         </AccessibleButton>
                     </div>
                 </AuthBody>

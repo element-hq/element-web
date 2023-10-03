@@ -40,8 +40,6 @@
     "Algeria": "Dzayer",
     "Albania": "Albanya",
     "Afghanistan": "Afɣanistan",
-    "Send": "Azen",
-    "edited": "infel",
     "Home": "Asnubeg",
     "%(duration)sd": "%(duration)sas",
     "Folder": "Asdaw",
@@ -88,7 +86,8 @@
         "emoji": "Imuji",
         "space": "Space",
         "copied": "inɣel!",
-        "profile": "Ifres"
+        "profile": "Ifres",
+        "edited": "infel"
     },
     "action": {
         "continue": "Kemmel",
@@ -141,7 +140,6 @@
     "devtools": {
         "category_other": "Yaḍn"
     },
-    "Other": "Yaḍn",
     "emoji": {
         "category_flags": "Icenyalen"
     },
@@ -193,5 +191,11 @@
         "search": {
             "field_placeholder": "Arezzu…"
         }
+    },
+    "forward": {
+        "send_label": "Azen"
+    },
+    "report_content": {
+        "other_label": "Yaḍn"
     }
 }

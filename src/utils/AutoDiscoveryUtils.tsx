@@ -25,11 +25,11 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, TranslationKey, UserFriendlyError } from "../languageHandler";
+import { _t, _td, TranslationKey, UserFriendlyError } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
 import { ValidatedServerConfig } from "./ValidatedServerConfig";
 
-const LIVELINESS_DISCOVERY_ERRORS: string[] = [
+const LIVELINESS_DISCOVERY_ERRORS: AutoDiscoveryError[] = [
     AutoDiscovery.ERROR_INVALID_HOMESERVER,
     AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER,
 ];
@@ -39,6 +39,37 @@ export interface IAuthComponentState {
     serverErrorIsFatal: boolean;
     serverDeadError?: ReactNode;
 }
+
+const AutoDiscoveryErrors = Object.values(AutoDiscoveryError);
+
+const isAutoDiscoveryError = (err: unknown): err is AutoDiscoveryError => {
+    return AutoDiscoveryErrors.includes(err as AutoDiscoveryError);
+};
+
+const mapAutoDiscoveryErrorTranslation = (err: AutoDiscoveryError): TranslationKey => {
+    switch (err) {
+        case AutoDiscoveryError.GenericFailure:
+            return _td("auth|autodiscovery_invalid");
+        case AutoDiscoveryError.Invalid:
+            return _td("auth|autodiscovery_generic_failure");
+        case AutoDiscoveryError.InvalidHsBaseUrl:
+            return _td("auth|autodiscovery_invalid_hs_base_url");
+        case AutoDiscoveryError.InvalidHomeserver:
+            return _td("auth|autodiscovery_invalid_hs");
+        case AutoDiscoveryError.InvalidIsBaseUrl:
+            return _td("auth|autodiscovery_invalid_is_base_url");
+        case AutoDiscoveryError.InvalidIdentityServer:
+            return _td("auth|autodiscovery_invalid_is");
+        case AutoDiscoveryError.InvalidIs:
+            return _td("auth|autodiscovery_invalid_is_response");
+        case AutoDiscoveryError.MissingWellknown:
+            return _td("auth|autodiscovery_no_well_known");
+        case AutoDiscoveryError.InvalidJson:
+            return _td("auth|autodiscovery_invalid_json");
+        case AutoDiscoveryError.HomeserverTooOld:
+            return _td("auth|autodiscovery_hs_incompatible");
+    }
+};
 
 export default class AutoDiscoveryUtils {
     /**
@@ -50,7 +81,13 @@ export default class AutoDiscoveryUtils {
      */
     public static isLivelinessError(error: unknown): boolean {
         if (!error) return false;
-        return !!LIVELINESS_DISCOVERY_ERRORS.find((e) => (error instanceof Error ? e === error.message : e === error));
+        let msg: unknown = error;
+        if (error instanceof UserFriendlyError) {
+            msg = error.cause;
+        } else if (error instanceof Error) {
+            msg = error.message;
+        }
+        return LIVELINESS_DISCOVERY_ERRORS.includes(msg as AutoDiscoveryError);
     }
 
     /**
@@ -211,9 +248,10 @@ export default class AutoDiscoveryUtils {
         } else if (isResult && isResult.state !== AutoDiscovery.PROMPT) {
             logger.error("Error determining preferred identity server URL:", isResult);
             if (isResult.state === AutoDiscovery.FAIL_ERROR) {
-                if (AutoDiscovery.ALL_ERRORS.indexOf(isResult.error as AutoDiscoveryError) !== -1) {
-                    // XXX: We mark these with _td at the top of Login.tsx - we should come up with a better solution
-                    throw new UserFriendlyError(String(isResult.error) as TranslationKey);
+                if (isAutoDiscoveryError(isResult.error)) {
+                    throw new UserFriendlyError(mapAutoDiscoveryErrorTranslation(isResult.error), {
+                        cause: hsResult.error,
+                    });
                 }
                 throw new UserFriendlyError("auth|autodiscovery_unexpected_error_is");
             } // else the error is not related to syntax - continue anyways.
@@ -228,12 +266,10 @@ export default class AutoDiscoveryUtils {
         if (hsResult.state !== AutoDiscovery.SUCCESS) {
             logger.error("Error processing homeserver config:", hsResult);
             if (!syntaxOnly || !AutoDiscoveryUtils.isLivelinessError(hsResult.error)) {
-                if (AutoDiscovery.ALL_ERRORS.indexOf(hsResult.error as AutoDiscoveryError) !== -1) {
-                    // XXX: We mark these with _td at the top of Login.tsx - we should come up with a better solution
-                    throw new UserFriendlyError(String(hsResult.error) as TranslationKey);
-                }
-                if (hsResult.error === AutoDiscovery.ERROR_HOMESERVER_TOO_OLD) {
-                    throw new UserFriendlyError("auth|autodiscovery_hs_incompatible");
+                if (isAutoDiscoveryError(hsResult.error)) {
+                    throw new UserFriendlyError(mapAutoDiscoveryErrorTranslation(hsResult.error), {
+                        cause: hsResult.error,
+                    });
                 }
                 throw new UserFriendlyError("auth|autodiscovery_unexpected_error_hs");
             } // else the error is not related to syntax - continue anyways.

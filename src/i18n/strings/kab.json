@@ -21,7 +21,6 @@
     "PM": "MD",
     "AM": "FT",
     "Moderator": "Aseɣyad",
-    "Thank you!": "Tanemmirt!",
     "Ok": "Ih",
     "Cat": "Amcic",
     "Lion": "Izem",
@@ -49,42 +48,15 @@
     "Saturday": "Sed",
     "Today": "Ass-a",
     "Yesterday": "Iḍelli",
-    "edited": "yettwaẓreg",
     "collapse": "fneẓ",
-    "Server name": "Isem n uqeddac",
-    "Close dialog": "Mdel adiwenni",
-    "Notes": "Tamawin",
-    "Unavailable": "Ulac",
-    "Changelog": "Aɣmis n yisnifal",
-    "Removing…": "Tukksa…",
-    "Confirm Removal": "Sentem tukksa",
-    "Send": "Azen",
-    "Session name": "Isem n tɣimit",
-    "Email address": "Tansa n yimayl",
-    "Upload files": "Sali-d ifuyla",
     "Home": "Agejdan",
-    "Email (optional)": "Imayl (Afrayan)",
-    "Updating %(brand)s": "Leqqem %(brand)s",
-    "I don't want my encrypted messages": "Ur bɣiɣ ara izan-inu iwgelhanen",
-    "Manually export keys": "Sifeḍ s ufus tisura",
-    "Session ID": "Asulay n tqimit",
-    "Session key": "Tasarut n tɣimit",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Ma ulac aɣilif, senqed imayl-ik/im syen sit ɣef useɣwen i yellan. Akken ara yemmed waya, sit ad tkemmleḍ.",
-    "This will allow you to reset your password and receive notifications.": "Ayagi ad ak(akem)-yeǧǧ ad twennzeḍ awal-ik/im uffir yerna ad d-tremseḍ ilɣa.",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "Restricted": "Yesεa tilas",
     "Pencil": "Akeryun",
-    "Message edits": "Tiẓrigin n yizen",
-    "Security Key": "Tasarut n tɣellist",
-    "Logs sent": "Iɣmisen ttewaznen",
-    "Not Trusted": "Ur yettwattkal ara",
     "%(items)s and %(lastItem)s": "%(items)s d %(lastItem)s",
-    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Iznan yettwawgelhen ttuḥerzen s uwgelhen n yixef ɣer yixef. Ala kečč d uɣerwaḍ (yiɣerwaḍen) i yesεan tisura akken ad ɣren iznan-a.",
-    "Confirm encryption setup": "Sentem asebded n uwgelhen",
-    "Click the button below to confirm setting up encryption.": "Sit ɣef tqeffalt ddaw akken ad tesnetmeḍ asebded n uwgelhen.",
     "Dog": "Aqjun",
     "Horse": "Aεewdiw",
     "Pig": "Ilef",
@@ -113,77 +85,9 @@
     "Light bulb": "Taftilt",
     "Deactivate account": "Sens amiḍan",
     "Encrypted by a deleted session": "Yettuwgelhen s texxamt yettwakksen",
-    "and %(count)s others...": {
-        "other": "d %(count)s wiyaḍ...",
-        "one": "d wayeḍ-nniḍen..."
-    },
-    "(~%(count)s results)": {
-        "one": "(~%(count)s igmaḍ)",
-        "other": "(~%(count)s igmaḍ)"
-    },
     "Join Room": "Rnu ɣer texxamt",
-    "not specified": "ur iban ara",
-    "%(count)s sessions": {
-        "other": "Tiɣimiyin n %(count)s",
-        "one": "Tiɣimit n %(count)s"
-    },
-    "Remove %(count)s messages": {
-        "one": "Kkes 1 izen",
-        "other": "Kkes iznan n %(count)s"
-    },
-    "%(name)s accepted": "%(name)s yettwaqbel",
-    "%(name)s declined": "%(name)s yettwagi",
-    "%(name)s cancelled": "%(name)s yettwasefsex",
-    "%(name)s wants to verify": "%(name)s yebɣa ad isenqed",
-    "Add an Integration": "Rnu asidef",
-    "Can't load this message": "Yegguma ad d-yali yizen-a",
     "Submit logs": "Azen iɣmisen",
-    "Cancel search": "Sefsex anadi",
-    "Power level": "Sagen aswir",
-    "Custom level": "Sagen aswir",
-    "<a>In reply to</a> <pill>": "<a>Deg tririt i</a> <pill>",
-    "e.g. my-room": "e.g. taxxamt-inu",
-    "And %(count)s more...": {
-        "other": "D %(count)s ugar..."
-    },
-    "Enter a server name": "Sekcem isem n uqeddac",
-    "The following users may not exist": "Iseqdacen i d-iteddun yezmer ad ilin ulac-iten",
-    "Invite anyway": "Ɣas akken nced-d",
-    "Preparing to send logs": "Aheyyi n tuzna n yiɣmisen",
-    "Failed to send logs: ": "Tuzna n yiɣmisen ur teddi ara: ",
-    "Clear all data": "Sfeḍ meṛṛa isefka",
-    "Continue With Encryption Disabled": "Kemmel s uwgelhen yensan",
-    "Confirm your account deactivation by using Single Sign On to prove your identity.": "Sentem asensi n umiḍan s useqdec n unekcum asuf i ubeggen n timagit-ik·im.",
-    "Confirm account deactivation": "Sentem asensi n umiḍan",
-    "Filter results": "Igmaḍ n usizdeg",
-    "Incoming Verification Request": "Tuttra n usenqed i d-ikecmen",
-    "Confirm to continue": "Sentem i wakken ad tkemmleḍ",
-    "Failed to find the following users": "Ur nessaweḍ ara ad naf iseqdacen",
-    "Recent Conversations": "Idiwenniyen n melmi kan",
-    "Direct Messages": "Iznan usligen",
-    "Upload completed": "Asali yemmed",
-    "Signature upload success": "Asali n uzmul yedda akken iwata",
-    "Clear cache and resync": "Sfeḍ takatut tuffirt syen ales amtawi",
-    "Failed to upgrade room": "Aleqqem n texxamt ur yeddi ara",
-    "Upgrade this room to version %(version)s": "Leqqem taxxamt-a ɣer lqem amaynut %(version)s",
-    "Upgrade Room Version": "Lqem n uleqqem n texxamt",
-    "Upgrade private room": "Leqqem taxxamt tusligt",
-    "Upgrade public room": "Leqqem taxxamt tazayezt",
-    "Server isn't responding": "Ulac tiririt sɣur aqeddac",
-    "The server is offline.": "Aqeddac ha-t-an beṛṛa n tuqqna.",
-    "Clear Storage and Sign Out": "Sfeḍ aklas syen ffeɣ seg tuqqna",
     "Send Logs": "Azen iɣmisen",
-    "Unable to restore session": "D awezɣi ad d-tuɣal texxamt",
-    "Verification Pending": "Asenqed yettṛaǧu",
-    "Share User": "Bḍu aseqdac",
-    "Link to selected message": "Aseɣwen n yizen i yettwafernen",
-    "Missing session data": "Isefka n tɣimit xuṣṣen",
-    "Upload all": "Sali-d kullec",
-    "Cancel All": "Sefsex kullec",
-    "Verification Request": "Asuter n usenqed",
-    "Use your Security Key to continue.": "Seqdec tasarut-ik·im n tɣellist akken ad tkemmleḍ.",
-    "Unable to restore backup": "Tiririt n uḥraz tugi ad teddu",
-    "Keys restored": "Tisura ttwaskelsent",
     "Sign in with SSO": "Anekcum s SSO",
     "Switch theme": "Abeddel n usentel",
     "Unicorn": "Azara",
@@ -204,32 +108,6 @@
     "Bell": "Anayna",
     "Delete Widget": "Kkes awiǧit",
     "expand": "snefli",
-    "Language Dropdown": "Tabdart n udrurem n tutlayin",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "YEgguma ad d-tali tedyant iɣef d-ttunefk tririt, ahat d tilin ur telli ara neɣ ur tesɛiḍ ara tisirag ad tt-twaliḍ.",
-    "Room address": "Tansa n texxamt",
-    "Some characters not allowed": "Kra n yisekkilen ur ttusirgen ara",
-    "This address is available to use": "Tansa-a tella i useqdec",
-    "This address is already in use": "Tansa-a ha-tt-an yakan deg useqdec",
-    "Looks good": "Ayagi yettban yelha",
-    "Can't find this server or its room list": "D awezɣi ad d-naf aqeddac-a neɣ tabdart-is n texxamt",
-    "Your server": "Aqeddac-ik·im",
-    "Add a new server": "Rnu aqeddac amaynut",
-    "Enter the name of a new server you want to explore.": "Sekcem isem n uqeddac amaynut i tebɣiḍ ad tesnirmeḍ.",
-    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Seqdec aqeddac n timagit i uncad s yimayl. <default>Seqdec (%(defaultIdentityServerName)s) amezwer</default> neɣ sefrek deg <settings>yiɣewwaren</settings>.",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Seqdec aqeddac n timagit i uncad s yimayl. Sefrek deg <settings>yiɣewwaren</settings>.",
-    "You signed in to a new session without verifying it:": "Teqqneḍ ɣer tɣimit war ma tesneqdeḍ-tt:",
-    "Verify your other session using one of the options below.": "Senqed tiɣimiyin-ik·im tiyaḍ s useqdec yiwet seg textiṛiyin ddaw.",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) yeqqen ɣer tɣimit tamaynut war ma isenqed-itt:",
-    "Ask this user to verify their session, or manually verify it below.": "Suter deg useqdac-a ad isenqed tiɣimit-is, neɣ senqed-itt ddaw s ufus.",
-    "Start using Key Backup": "Bdu aseqdec n uḥraz n tsarut",
-    "%(count)s verified sessions": {
-        "other": "%(count)s isenqed tiɣimiyin",
-        "one": "1 n tɣimit i yettwasneqden"
-    },
-    "No recent messages by %(user)s found": "Ulac iznan i yettwafen sɣur %(user)s",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "Ɛreḍ adrurem deg wazemzakud i wakken ad twaliḍ ma yella llan wid yellan uqbel.",
-    "Remove recent messages by %(user)s": "Kkes iznan n melmi kan sɣur %(user)s",
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "I tugget meqqren n yiznan, ayagi yezmer ad yeṭṭef kra n wakud. Ṛǧu ur sirin ara amsaɣ-ik·im deg leɛḍil.",
     "Your homeserver has exceeded its user limit.": "Aqeddac-inek·inem agejdan yewweḍ ɣer talast n useqdac.",
     "Your homeserver has exceeded one of its resource limits.": "Aqeddac-inek·inem agejdan iɛedda yiwet seg tlisa-ines tiɣbula.",
     "%(duration)ss": "%(duration)ss",
@@ -237,126 +115,14 @@
     "%(duration)sh": "%(duration)sh",
     "%(duration)sd": "%(duration)sd",
     "Unnamed room": "Taxxamt war isem",
-    "Create new room": "Rnu taxxamt tamaynut",
-    "unknown error code": "tangalt n tuccḍa tarussint",
-    "You're all caught up.": "Tessawḍeḍ ad tqeḍɛeḍ kullec.",
-    "The server has denied your request.": "Aqeddac yugi asuter-ik·im.",
-    "Your area is experiencing difficulties connecting to the internet.": "Tamnaḍt-ik·im temlal-d uguren n tuqqna ɣer internet.",
-    "A connection error occurred while trying to contact the server.": "Tuccḍa deg tuqqna lawan n uneɛruḍ ad nnermes aqeddac.",
-    "The server is not configured to indicate what the problem is (CORS).": "Aqeddac ur yettusesteb ara i wakken ad d-imel anida-t wugur (CORPS).",
-    "Recent changes that have not yet been received": "Isnifal imaynuten ur d-newwiḍ ara akka ar tura",
-    "Sign out and remove encryption keys?": "Ffeɣ syen kkes tisura tiwgelhanin?",
-    "Share Room": "Bḍu taxxamt",
-    "Link to most recent message": "Aseɣwen n yizen akk aneggaru",
-    "Share Room Message": "Bḍu izen n texxamt",
-    "Command Help": "Tallalt n tiludna",
-    "Find others by phone or email": "Af-d wiyaḍ s tiliɣri neɣ s yimayl",
-    "Be found by phone or email": "Ad d-yettwaf s tiliɣri neɣ s yimayl",
-    "Upload files (%(current)s of %(total)s)": "Sali-d ifuyla (%(current)s ɣef %(total)s)",
-    "An error has occurred.": "Tella-d tuccḍa.",
-    "Integrations are disabled": "Imsidaf ttwasensen",
-    "Integrations not allowed": "Imsidaf ur ttusirgen ara",
-    "a new master key signature": "tasarut tusligt tagejdant tamaynut",
-    "a new cross-signing key signature": "azmul amaynut n tsarut n uzmul amdigan",
-    "a device cross-signing signature": "azmul n uzmul amdigan n yibenk",
-    "a key signature": "azmul n tsarut",
-    "%(brand)s encountered an error during upload of:": "%(brand)s yemlal-d d tuccḍa mi ara d-yessalay:",
-    "Cancelled signature upload": "Asali n uzmul yettwasefsex",
-    "Unable to upload": "Yegguma ad d-yali",
-    "Signature upload failed": "Asali n uzmul ur yeddi ara",
-    "Incompatible local cache": "Tuffra tadigant ur temṣada ara",
-    "Room Settings - %(roomName)s": "Iɣewwaren n texxamt - %(roomName)s",
-    "The room upgrade could not be completed": "Aleqqem n texxamt yegguma ad yemmed",
     "IRC display name width": "Tehri n yisem i d-yettwaseknen IRC",
     "Thumbs up": "Adebbuz d asawen",
     "This backup is trusted because it has been restored on this session": "Aḥraz yettwaḍman acku yuɣal-d seg tɣimit-a",
-    "Security Phrase": "Tafyirt n tɣellist",
-    "Restoring keys from backup": "Tiririt n tsura seg uḥraz",
-    "%(completed)s of %(total)s keys restored": "%(completed)s n %(total)s tsura i yettwarran",
-    "Unable to load backup status": "Yegguma ad d-yali waddad n uḥraz",
-    "No backup found!": "Ulac aḥraz yettwafen!",
-    "Failed to decrypt %(failedCount)s sessions!": "Tukksa n uwgelhen n tɣimiyin %(failedCount)s ur yeddi ara!",
-    "Successfully restored %(sessionCount)s keys": "Tiririt n tsura n %(sessionCount)s yedda akken iwata",
-    "Resend %(unsentCount)s reaction(s)": "Ales tuzna n tsedmirt (tsedmirin) %(unsentCount)s",
     "Paperclip": "Tamessakt n lkaɣeḍ",
     "Cactus": "Akermus",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "I wakken ad d-tazneḍ ugur n tɣellist i icudden ɣer Matrix, ttxil-k·m ɣer <a>tasertit n ukcaf n tɣellist</a> deg Matrix.org.",
-    "Edited at %(date)s": "Yettwaẓreg deg %(date)s",
-    "Click to view edits": "Sit i wakken ad twaliḍ aseẓreg",
-    "Edited at %(date)s. Click to view edits.": "Yettwaẓreg deg %(date)s. Sit i wakken ad twaliḍ iseẓrag.",
-    "Invite anyway and never warn me again": "Ɣas akken nced-d yerna ur iyi-id-ttɛeggin ara akk",
-    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Ttxil-k·m ini-aɣ-d acu ur nteddu ara akken ilaq neɣ, akken i igerrez, rnu ugur deg Github ara ad d-igelmen ugur.",
-    "Preparing to download logs": "Aheyyi i usali n yiɣmisen",
     "Failed to connect to integration manager": "Tuqqna ɣer umsefrak n umsidef ur yeddi ara",
-    "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Afaylu-a <b>ɣezzif aṭas</b> i wakken ad d-yali. Talast n teɣzi n ufaylu d %(limit)s maca afaylu-a d %(sizeOfThisFile)s.",
-    "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Ifuyla-a <b>ɣezzifit aṭas</b> i wakken ad d-alin. Talast n teɣzi n ufaylu d %(limit)s.",
-    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Kra n yifuyla <b>ɣezzifit aṭas</b> i wakken ad d-alin. Talast n teɣzi n ufaylu d %(limit)s.",
-    "Upload %(count)s other files": {
-        "other": "Sali-d %(count)s ifuyla-nniḍen",
-        "one": "Sali-d %(count)s afaylu-nniḍen"
-    },
-    "Upload Error": "Tuccḍa deg usali",
-    "Remember my selection for this widget": "Cfu ɣef tefrant-inu i uwiǧit-a",
-    "Wrong file type": "Anaw n yifuyla d arameɣtu",
-    "Looks good!": "Yettban igerrez!",
-    "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Ɣur-k·m</b>: ilaq ad tesbaduḍ aḥraz n tsarut seg uselkim kan iɣef tettekleḍ.",
-    "Join millions for free on the largest public server": "Rnu ɣer yimelyan n yimdanen baṭel ɣef uqeddac azayez ameqqran akk",
-    "Information": "Talɣut",
-    "Unable to load commit detail: %(msg)s": "D awezɣi ad d-tali telqayt n usentem: %(msg)s",
-    "You cannot delete this message. (%(code)s)": "Ur tezmireḍ ara ad tekkseḍ izen-a. (%(code)s)",
-    "Destroy cross-signing keys?": "Erẓ tisura n uzmul anmidag?",
-    "Clear cross-signing keys": "Sfeḍ tisura n uzmul anmidag",
-    "Clear all data in this session?": "Sfeḍ akk isefka seg tɣimit-a?",
-    "Incompatible Database": "Taffa n yisefka ur temada ara",
-    "Recently Direct Messaged": "Izen usrid n melmi kan",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Aql-ak·akem ad tettuwellheḍ ɣer usmel n wis tlata i wakken ad tizmireḍ ad tsestbeḍ amiḍan-ik·im i useqdec d %(integrationsUrl)s. Tebɣiḍ ad tkemmleḍ?",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "D awezɣi ad d-naf imuɣna n yisulay Matrix i d-yettwabdaren ddaw - tebɣiḍ ad ten-id-tnecdeḍ ɣas akken?",
-    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Asmekti: Iming-ik·im ur yettusefrak ara, ihi tarmit-ik·im yezmer ur d-tettili ara.",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Send ad tazneḍ iɣmisen-ik·im, ilaq <a>ad ternuḍ ugur deg Github</a> i wakken ad d-tgelmeḍ ugur-inek·inem.",
-    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Asfaḍ akk n yisefka seg tɣimit-a ad yili i lebda. Ad ak-ruḥen yiznan yettwawgelhen ala ma yella tisura ttwaḥerzent.",
-    "Are you sure you want to deactivate your account? This is irreversible.": "S tidet tebɣiḍ ad tsenseḍ amiḍăn-ik·im? Ulac tuɣalin ɣer deffir.",
-    "There was a problem communicating with the server. Please try again.": "Tella-d tuccḍa mi ara nettaɛraḍ ad nemmeslay d uqeddac. Ɛreḍ tikkelt-nniḍen.",
-    "Server did not require any authentication": "Aqeddac ur isuter ara akk asesteb",
-    "Server did not return valid authentication information.": "Aqeddac ur d-yerri ara talɣut n usesteb tameɣtut.",
-    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Senqed aseqdac-a i wakken ad tcerḍeḍ fell-as d uttkil. Iseqdac uttkilen ad ak·am-d-awin lehna meqqren meqqren i uqerru mi ara tesseqdaceḍ iznan yettwawgelhen seg yixef ɣer yixef.",
-    "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Asenqed n useqdac-a ad yecreḍ ɣef tɣimit-is tettwattkal, yerna ad yecreḍ ula ɣef tɣimit-ik·im tettwattkal i netta·nettat.",
-    "To continue, use Single Sign On to prove your identity.": "I ukemmel, seqdec n unekcum asuf i ubeggen n timagit-ik·im.",
-    "Click the button below to confirm your identity.": "Sit ɣef tqeffalt ddaw i wakken ad tesnetmeḍ timagit-ik·im.",
-    "Something went wrong trying to invite the users.": "Yella wayen ur nteddu ara akken ilaq i wakken ad d-tesnubegteḍ iseqdacen.",
-    "We couldn't invite those users. Please check the users you want to invite and try again.": "Ur nezmir ara ad d-nesnubget iseqdacen-a. Ttxil-k·m wali iseqdac i tebɣiḍ ad d-tesnubegteḍ syen ɛreḍ tikkelt-nniḍen.",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Iseqdac i d-iteddun ahat ulac-iten neɣ d arimeɣta, ur zmiren ad d-ttusnubegten: %(csvNames)s",
-    "You'll lose access to your encrypted messages": "Tesruḥeḍ anekcum ɣer yiznan-ik·im yettwawgelhen",
-    "Are you sure you want to sign out?": "D tidet tebɣiḍ ad teffɣeḍ?",
-    "Confirm by comparing the following with the User Settings in your other session:": "Sentem s userwes gar wayen i d-iteddun d yiɣewwaren n useqdac deg tɣimit-ik·im tayeḍ:",
-    "Confirm this user's session by comparing the following with their User Settings:": "Sentem tiɣimit n useqdac-a s userwes gar wayen i d-iteddun d yiɣewwaren-is n useqdac:",
-    "If they don't match, the security of your communication may be compromised.": "Ma yella ur mṣadan ara, taɣellist n teywalt-ik·im tezmer ad tettwaker.",
-    "Your homeserver doesn't seem to support this feature.": "Aqeddac-ik·im agejdan ur yettban ara yessefrak tamahilt-a.",
-    "Create a new room with the same name, description and avatar": "Rnu taxxamt tamaynut s yisem-nni, aglam-nni d uvaṭar-nni",
-    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Tukksa n tsura n uzmul anmidag ad yili i lebda. Yal amdan i tesneqdeḍ ad iwali ilɣa n tɣellist. Maca ur tebɣiḍ ara ad txedmeḍ aya, ala ma yella tesruḥeḍ ibenkan akk ara ak·akem-yeǧǧen ad tkecmeḍ seg-s.",
-    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "I wakken ur tesruḥuyeḍ ara amazray n udiwenni, ilaq ad tsifḍeḍ tisura seg texxam-ik·im send ad teffɣeḍ seg tuqqna. Tesriḍ ad tuɣaleḍ ɣer lqem amaynut n %(brand)s i wakken ad tgeḍ aya",
-    "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Tesxedmeḍ yakan lqem akk aneggaru n %(brand)s s tɣimit-a. I useqdec n lqem-a i tikkelt-nniḍen s uwgelhen seg yixef ɣer yixef, tesriḍ ad teffɣeḍ syen ad talseḍ anekcum i tikkelt-nniḍen.",
-    "Update any local room aliases to point to the new room": "Leqqem ismawen yettunefken i yal taxxamt tadigant akken ad tsekneḍ ɣer texxamt tamaynut",
-    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Seḥbes iseqdacen ɣef umeslay deg lqem aqbur n texxamt, syen aru izen anida ara twellheḍ iseqdacen ad d-uɣalen ɣer texxamt tamaynut",
-    "Put a link back to the old room at the start of the new room so people can see old messages": "Sers aseɣwen deg texxamt taqburt mi ara tebdu kan texxamt tamaynut i wakken imdanen ad izmiren ad walin iznan iqburen",
-    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Aleqqem n texxamt d tigawt leqqayen rnu yezga yettuwelleh-d mi ara tili texxamt ur terkid ara ssebba n wabugen, tukksa n tmahilin neɣ iɣisan deg tɣellist.",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "Aya yettḥaz kan s umata amek tetteg texxamt tasleḍt ɣef uqeddac. Ma yella temlaleḍ-d uguren d %(brand)s-inek·inem, ttxil-k·m <a>azen-d abug</a>.",
-    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Tleqqmeḍ taxxamt-a seg <oldVersion /> ɣer <newVersion />.",
-    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Aqeddac-inek·inem ur d-yettarra ara ɣef kra n yisutar-ik·im. Ha-tent-a kra n ssebbat i izemren ad ilint.",
-    "The server (%(serverName)s) took too long to respond.": "Aqeddac (%(serverName)s) yeṭṭef aṭas n wakud i wakken ad d-yerr.",
-    "Your firewall or anti-virus is blocking the request.": "Aɣrab n tmes neɣ amgelavirus inek·inem yessewḥal isutar.",
-    "A browser extension is preventing the request.": "Asiɣzef n yiminig tessewḥel asuter.",
-    "We encountered an error trying to restore your previous session.": "Nemlal-d tuccḍa mi ara d-nettarra tiɣimit-ik·im yezrin.",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Ma yella tesqedceḍ yakan lqem n melmi kan n %(brand)s, tiɣimit-ik·im tezmer ur tettemṣada ara d lqem-a. Mdel afaylu-a syen uɣal ɣer lqem n melmi kan.",
-    "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Senqed ibenk-a i wakken ad tcerḍeḍ fell-as yettwattkal. Attkal n yibenk-a ad imudd i kečč·kemm d yiseqdacen-nniḍen lehna n uqerru mi ara tesqedcem awgelhen seg yixef ɣer yixef.",
-    "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Asenqed n yibenk-a ad yettucreḍ fall-as yettuklal, syen iseqdacen yettusneqden yid-k·m ad tteklen ɣef yibenk-a.",
-    "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Tesqedceḍ yakan %(brand)s ɣef %(host)s s usali ẓẓayen d yiɛeggalen i iremden. Deg lqem-a asali ẓẓayen yensa. Am tkatut tuffirt tadigant ur temṣada ara gar sin-a n yiɣewwaren, %(brand)s yesra  allus n umtawi amiḍan-ik·im.",
-    "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Ma yella ileqman-nniḍen n %(brand)s mazal-iten ldin deg yiccer-nniḍen, ttxil-k·m mdel-it acku aseqec n %(brand)s deg yiwet n tnezduɣt s usali ẓẓayenurmid, asensi-nsen ɣef tikkelt ad d-yeglu s wuguren.",
-    "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s tura isseqdac drus n tkatut seg 3 ɣer 5 n tikkal, s usali n talɣut n yiseqdac-nniḍen ma yili tettusra. Ttxil-k·m rǧu s leɛqel alamma nules amtawi d useqdac!",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Aleqqem n texxamt-a yesra amdal n tummant tamirant n texxamt d tmerna n texxamt tamaynut deg wadeg-is. I tikci n tarmit i igerrzen iwumi nezmer i yiɛeggalen n texxamt, ad neg:",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Asfaḍ n uklas n yiminig-ik·im yezmer ad iṣeggem ugur, maca aya ad ak·akem-isuffeɣ seg tuqqna rnu akk imazrayen n udiwenni yettwawgelhen ur d-ttbanen.",
-    "To help us prevent this in future, please <a>send us logs</a>.": "I wakken ad aɣ-tɛiwneḍ ur d-iḍerru ara waya ɣer sdat, ttxil-k·m <a>azen-aɣ-d iɣmisen</a>.",
-    "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Kra n yisefka n tɣimit, daɣen tisura n yiznan yettwawgelhen, ttwakksen. Ffeɣ syen ales anekcum i wakken ad tṣeggmeḍ aya, err-d tisura seg uḥraz.",
-    "Your browser likely removed this data when running low on disk space.": "Yezmer iminig-ik·im yekkes isefka-a mi t-txuṣṣ tallunt ɣef uḍebsi.",
     "Trophy": "Arraz",
     "Backup version:": "Lqem n uklas:",
     "Not encrypted": "Ur yettwawgelhen ara",
@@ -565,7 +331,6 @@
     "Ghana": "Gana",
     "Argentina": "Argentine",
     "Spain": "Spenyul",
-    "Resume": "kemmel",
     "Jersey": "Jersey",
     "France": "Fransa",
     "Kyrgyzstan": "Kirgizistan",
@@ -610,7 +375,6 @@
     "Grenada": "Grenade",
     "United States": "Iwanaken-Yeddukklen-N-Temrikt",
     "New Caledonia": "Kaliduni amaynut",
-    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s-ik·im ur ak·am yefki ara tisirag i useqdec n umsefrak n umsidef i wakken ad tgeḍ aya. Ttxil-k·m nermes anedbal.",
     "common": {
         "about": "Ɣef",
         "analytics": "Tiselḍin",
@@ -687,7 +451,14 @@
         "setup_secure_messages": "Sbadu iznan iɣelsanen",
         "unencrypted": "Ur yettwawgelhen ara",
         "show_more": "Sken-d ugar",
-        "are_you_sure": "Tebɣiḍ s tidet?"
+        "are_you_sure": "Tebɣiḍ s tidet?",
+        "email_address": "Tansa n yimayl",
+        "filter_results": "Igmaḍ n usizdeg",
+        "and_n_others": {
+            "other": "d %(count)s wiyaḍ...",
+            "one": "d wayeḍ-nniḍen..."
+        },
+        "edited": "yettwaẓreg"
     },
     "action": {
         "continue": "Kemmel",
@@ -772,7 +543,8 @@
         "show_advanced": "Sken talqayt",
         "unignore": "Ur yettwazgel ara",
         "explore_rooms": "Snirem tixxamin",
-        "explore_public_rooms": "Snirem tixxamin tizuyaz"
+        "explore_public_rooms": "Snirem tixxamin tizuyaz",
+        "resume": "kemmel"
     },
     "a11y": {
         "user_menu": "Umuɣ n useqdac",
@@ -870,7 +642,9 @@
         "moderator": "Aseɣyad",
         "admin": "Anedbal",
         "custom": "Sagen (%(level)s)",
-        "mod": "Atrar"
+        "mod": "Atrar",
+        "label": "Sagen aswir",
+        "custom_level": "Sagen aswir"
     },
     "bug_reporting": {
         "matrix_security_issue": "I wakken ad d-tazneḍ ugur n tɣellist i icudden ɣer Matrix, ttxil-k·m ɣer <a>tasertit n ukcaf n tɣellist</a> deg Matrix.org.",
@@ -886,7 +660,16 @@
         "uploading_logs": "Asali n yiɣmisen",
         "downloading_logs": "Asader n yiɣmisen",
         "create_new_issue": "Ttxil-k·m <newIssueLink>rnu ugur amaynut</newIssueLink> deg GitHub akken ad nessiweḍ ad nezrew abug-a.",
-        "waiting_for_server": "Aṛaǧu n tririt sɣur aqeddac"
+        "waiting_for_server": "Aṛaǧu n tririt sɣur aqeddac",
+        "error_empty": "Ttxil-k·m ini-aɣ-d acu ur nteddu ara akken ilaq neɣ, akken i igerrez, rnu ugur deg Github ara ad d-igelmen ugur.",
+        "preparing_logs": "Aheyyi n tuzna n yiɣmisen",
+        "logs_sent": "Iɣmisen ttewaznen",
+        "thank_you": "Tanemmirt!",
+        "failed_send_logs": "Tuzna n yiɣmisen ur teddi ara: ",
+        "preparing_download": "Aheyyi i usali n yiɣmisen",
+        "unsupported_browser": "Asmekti: Iming-ik·im ur yettusefrak ara, ihi tarmit-ik·im yezmer ur d-tettili ara.",
+        "textarea_label": "Tamawin",
+        "log_request": "I wakken ad aɣ-tɛiwneḍ ur d-iḍerru ara waya ɣer sdat, ttxil-k·m <a>azen-aɣ-d iɣmisen</a>."
     },
     "time": {
         "few_seconds_ago": "kra n tesinin seg yimir-nni",
@@ -1098,7 +881,13 @@
             "email_address_label": "Tansa n yimayl",
             "remove_msisdn_prompt": "Kkes %(phone)s?",
             "add_msisdn_instructions": "Izen n uḍris yettwazen ɣer +%(msisdn)s. Ttxil-k·m sekcem tangalt n usenqed yellan deg-s.",
-            "msisdn_label": "Uṭṭun n tiliɣri"
+            "msisdn_label": "Uṭṭun n tiliɣri",
+            "deactivate_confirm_body_sso": "Sentem asensi n umiḍan s useqdec n unekcum asuf i ubeggen n timagit-ik·im.",
+            "deactivate_confirm_body": "S tidet tebɣiḍ ad tsenseḍ amiḍăn-ik·im? Ulac tuɣalin ɣer deffir.",
+            "deactivate_confirm_continue": "Sentem asensi n umiḍan",
+            "error_deactivate_communication": "Tella-d tuccḍa mi ara nettaɛraḍ ad nemmeslay d uqeddac. Ɛreḍ tikkelt-nniḍen.",
+            "error_deactivate_no_auth": "Aqeddac ur isuter ara akk asesteb",
+            "error_deactivate_invalid_auth": "Aqeddac ur d-yerri ara talɣut n usesteb tameɣtut."
         },
         "key_backup": {
             "backup_in_progress": "Tisura-ik·im la ttwaḥrazent (aḥraz amezwaru yezmer ad yeṭṭef kra n tesdidin).",
@@ -1377,7 +1166,8 @@
         },
         "creation_summary_room": "%(creator)s yerna-d taxxamt syen yeswel taxxamt.",
         "context_menu": {
-            "external_url": "URL aɣbalu"
+            "external_url": "URL aɣbalu",
+            "resent_unsent_reactions": "Ales tuzna n tsedmirt (tsedmirin) %(unsentCount)s"
         },
         "url_preview": {
             "close": "Mdel taskant"
@@ -1415,10 +1205,28 @@
             "you_accepted": "Tqebleḍ",
             "you_declined": "Tugiḍ",
             "you_cancelled": "Tesfesxeḍ",
-            "you_started": "Tuzneḍ asuter n usenqed"
+            "you_started": "Tuzneḍ asuter n usenqed",
+            "user_accepted": "%(name)s yettwaqbel",
+            "user_declined": "%(name)s yettwagi",
+            "user_cancelled": "%(name)s yettwasefsex",
+            "user_wants_to_verify": "%(name)s yebɣa ad isenqed"
         },
         "m.video": {
             "error_decrypting": "Tuccḍa deg uwgelhen n tvidyut"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "Rnu asidef",
+            "dialog_description": "Aql-ak·akem ad tettuwellheḍ ɣer usmel n wis tlata i wakken ad tizmireḍ ad tsestbeḍ amiḍan-ik·im i useqdec d %(integrationsUrl)s. Tebɣiḍ ad tkemmleḍ?"
+        },
+        "edits": {
+            "tooltip_title": "Yettwaẓreg deg %(date)s",
+            "tooltip_sub": "Sit i wakken ad twaliḍ aseẓreg",
+            "tooltip_label": "Yettwaẓreg deg %(date)s. Sit i wakken ad twaliḍ iseẓrag."
+        },
+        "error_rendering_message": "Yegguma ad d-yali yizen-a",
+        "reply": {
+            "error_loading": "YEgguma ad d-tali tedyant iɣef d-ttunefk tririt, ahat d tilin ur telli ara neɣ ur tesɛiḍ ara tisirag ad tt-twaliḍ.",
+            "in_reply_to": "<a>Deg tririt i</a> <pill>"
         }
     },
     "slash_command": {
@@ -1487,7 +1295,8 @@
         "verify_nop": "Tiɣimit tettwasenqed yakan!",
         "verify_mismatch": "ƔUR-K·M: tASARUT N USENQED UR TEDDI ARA! Tasarut n uzmul n %(userId)s akked tɣimit %(deviceId)s d \"%(fprint)s\" ur imṣada ara d tsarut i d-yettunefken \"%(fingerprint)s\". Ayagi yezmer ad d-yini tiywalin-ik·im ttusweḥlent!",
         "verify_success_title": "Tasarut tettwasenqed",
-        "verify_success_description": "Tasarut n uzmul i d-tefkiḍ temṣada d tsarut n uzmul i d-tremseḍ seg tɣimit %(userId)s's %(deviceId)s. Tiɣimit tettucreḍ tettwasenqed."
+        "verify_success_description": "Tasarut n uzmul i d-tefkiḍ temṣada d tsarut n uzmul i d-tremseḍ seg tɣimit %(userId)s's %(deviceId)s. Tiɣimit tettucreḍ tettwasenqed.",
+        "help_dialog_title": "Tallalt n tiludna"
     },
     "presence": {
         "online_for": "Srid azal n %(duration)s",
@@ -1545,7 +1354,6 @@
         "no_media_perms_title": "Ulac tisirag n umidyat",
         "no_media_perms_description": "Ilaq-ak·am ahat ad tesirgeḍ s ufus %(brand)s i unekcum ɣer usawaḍ/webcam"
     },
-    "Other": "Nniḍen",
     "room_settings": {
         "permissions": {
             "m.room.avatar": "Beddel avaṭar n texxamt",
@@ -1625,7 +1433,12 @@
             "canonical_alias_field_label": "Tansa tagejdant",
             "avatar_field_label": "Avaṭar n texxamt",
             "aliases_no_items_label": "Ulac tansiwin i d-yeffɣen akka tura, rnu yiwet ddaw",
-            "aliases_items_label": "Tansiwin-nniḍen i d-yeffɣen:"
+            "aliases_items_label": "Tansiwin-nniḍen i d-yeffɣen:",
+            "alias_heading": "Tansa n texxamt",
+            "alias_field_safe_localpart_invalid": "Kra n yisekkilen ur ttusirgen ara",
+            "alias_field_taken_valid": "Tansa-a tella i useqdec",
+            "alias_field_taken_invalid_domain": "Tansa-a ha-tt-an yakan deg useqdec",
+            "alias_field_placeholder_default": "e.g. taxxamt-inu"
         },
         "advanced": {
             "unfederated": "Anekcum er texxamt-a ulamek s yiqeddacen n Matrix inmeggagen",
@@ -1633,7 +1446,21 @@
             "room_predecessor": "Senqed iznan iqburen deg %(roomName)s.",
             "room_version_section": "Lqem n texxamt",
             "room_version": "Lqem n texxamt:",
-            "information_section_room": "Talɣut n texxamt"
+            "information_section_room": "Talɣut n texxamt",
+            "error_upgrade_title": "Aleqqem n texxamt ur yeddi ara",
+            "error_upgrade_description": "Aleqqem n texxamt yegguma ad yemmed",
+            "upgrade_button": "Leqqem taxxamt-a ɣer lqem amaynut %(version)s",
+            "upgrade_dialog_title": "Lqem n uleqqem n texxamt",
+            "upgrade_dialog_description": "Aleqqem n texxamt-a yesra amdal n tummant tamirant n texxamt d tmerna n texxamt tamaynut deg wadeg-is. I tikci n tarmit i igerrzen iwumi nezmer i yiɛeggalen n texxamt, ad neg:",
+            "upgrade_dialog_description_1": "Rnu taxxamt tamaynut s yisem-nni, aglam-nni d uvaṭar-nni",
+            "upgrade_dialog_description_2": "Leqqem ismawen yettunefken i yal taxxamt tadigant akken ad tsekneḍ ɣer texxamt tamaynut",
+            "upgrade_dialog_description_3": "Seḥbes iseqdacen ɣef umeslay deg lqem aqbur n texxamt, syen aru izen anida ara twellheḍ iseqdacen ad d-uɣalen ɣer texxamt tamaynut",
+            "upgrade_dialog_description_4": "Sers aseɣwen deg texxamt taqburt mi ara tebdu kan texxamt tamaynut i wakken imdanen ad izmiren ad walin iznan iqburen",
+            "upgrade_warning_dialog_title_private": "Leqqem taxxamt tusligt",
+            "upgrade_dwarning_ialog_title_public": "Leqqem taxxamt tazayezt",
+            "upgrade_warning_dialog_report_bug_prompt_link": "Aya yettḥaz kan s umata amek tetteg texxamt tasleḍt ɣef uqeddac. Ma yella temlaleḍ-d uguren d %(brand)s-inek·inem, ttxil-k·m <a>azen-d abug</a>.",
+            "upgrade_warning_dialog_description": "Aleqqem n texxamt d tigawt leqqayen rnu yezga yettuwelleh-d mi ara tili texxamt ur terkid ara ssebba n wabugen, tukksa n tmahilin neɣ iɣisan deg tɣellist.",
+            "upgrade_warning_dialog_footer": "Tleqqmeḍ taxxamt-a seg <oldVersion /> ɣer <newVersion />."
         },
         "upload_avatar_label": "Sali-d avaṭar",
         "bridges": {
@@ -1646,7 +1473,9 @@
             "notification_sound": "Imesli i yilɣa",
             "custom_sound_prompt": "Sbadu ameslaw udmawan amaynut",
             "browse_button": "Inig"
-        }
+        },
+        "title": "Iɣewwaren n texxamt - %(roomName)s",
+        "alias_not_specified": "ur iban ara"
     },
     "encryption": {
         "verification": {
@@ -1685,7 +1514,19 @@
             "prompt_user": "Bdu asenqed daɣen seg umaɣnu-nsen.",
             "timed_out": "Yemmed wakud n usenqed.",
             "cancelled_user": "%(displayName)s isefsex asenqed.",
-            "cancelled": "Tesfesxeḍ asenqed."
+            "cancelled": "Tesfesxeḍ asenqed.",
+            "incoming_sas_user_dialog_text_1": "Senqed aseqdac-a i wakken ad tcerḍeḍ fell-as d uttkil. Iseqdac uttkilen ad ak·am-d-awin lehna meqqren meqqren i uqerru mi ara tesseqdaceḍ iznan yettwawgelhen seg yixef ɣer yixef.",
+            "incoming_sas_user_dialog_text_2": "Asenqed n useqdac-a ad yecreḍ ɣef tɣimit-is tettwattkal, yerna ad yecreḍ ula ɣef tɣimit-ik·im tettwattkal i netta·nettat.",
+            "incoming_sas_device_dialog_text_1": "Senqed ibenk-a i wakken ad tcerḍeḍ fell-as yettwattkal. Attkal n yibenk-a ad imudd i kečč·kemm d yiseqdacen-nniḍen lehna n uqerru mi ara tesqedcem awgelhen seg yixef ɣer yixef.",
+            "incoming_sas_device_dialog_text_2": "Asenqed n yibenk-a ad yettucreḍ fall-as yettuklal, syen iseqdacen yettusneqden yid-k·m ad tteklen ɣef yibenk-a.",
+            "incoming_sas_dialog_title": "Tuttra n usenqed i d-ikecmen",
+            "manual_device_verification_self_text": "Sentem s userwes gar wayen i d-iteddun d yiɣewwaren n useqdac deg tɣimit-ik·im tayeḍ:",
+            "manual_device_verification_user_text": "Sentem tiɣimit n useqdac-a s userwes gar wayen i d-iteddun d yiɣewwaren-is n useqdac:",
+            "manual_device_verification_device_name_label": "Isem n tɣimit",
+            "manual_device_verification_device_id_label": "Asulay n tqimit",
+            "manual_device_verification_device_key_label": "Tasarut n tɣimit",
+            "manual_device_verification_footer": "Ma yella ur mṣadan ara, taɣellist n teywalt-ik·im tezmer ad tettwaker.",
+            "verification_dialog_title_user": "Asuter n usenqed"
         },
         "old_version_detected_title": "Ala isefka iweglehnen i d-iteffɣen",
         "old_version_detected_description": "Isefka n lqem aqbur n %(brand)s ttwafen. Ayagi ad d-yeglu s yir tamahalt n uwgelhen seg yixef ɣer yixef deg lqem aqbur. Iznan yettwawgelhen seg yixef ɣer yixef yettumbeddalen yakan mi akken yettuseqdac lqem aqbur yezmer ur asen-ittekkes ara uwgelhen deg lqem-a. Aya yezmer daɣen ad d-yeglu asefsex n yiznan yettumbeddalen s lqem-a. Ma yella temlaleḍ-d uguren, ffeɣ syen tuɣaleḍ-d tikkelt-nniḍen. I wakken ad tḥerzeḍ amazray n yiznan, sifeḍ rnu ales kter tisura-ik·im.",
@@ -1732,7 +1573,45 @@
         "cross_signing_room_warning": "Yella win yesseqdacen tiɣimit tarussint",
         "cross_signing_room_verified": "Yal yiwen deg taxxamt-a yettwasenqed",
         "cross_signing_room_normal": "Taxxamt-a tettwawgelhen seg yixef ɣer yixef",
-        "unsupported": "Amsaɣ-a ur yessefrak ara awgelhen seg yixef ɣer yixef."
+        "unsupported": "Amsaɣ-a ur yessefrak ara awgelhen seg yixef ɣer yixef.",
+        "incompatible_database_sign_out_description": "I wakken ur tesruḥuyeḍ ara amazray n udiwenni, ilaq ad tsifḍeḍ tisura seg texxam-ik·im send ad teffɣeḍ seg tuqqna. Tesriḍ ad tuɣaleḍ ɣer lqem amaynut n %(brand)s i wakken ad tgeḍ aya",
+        "incompatible_database_description": "Tesxedmeḍ yakan lqem akk aneggaru n %(brand)s s tɣimit-a. I useqdec n lqem-a i tikkelt-nniḍen s uwgelhen seg yixef ɣer yixef, tesriḍ ad teffɣeḍ syen ad talseḍ anekcum i tikkelt-nniḍen.",
+        "incompatible_database_title": "Taffa n yisefka ur temada ara",
+        "incompatible_database_disable": "Kemmel s uwgelhen yensan",
+        "key_signature_upload_completed": "Asali yemmed",
+        "key_signature_upload_cancelled": "Asali n uzmul yettwasefsex",
+        "key_signature_upload_failed": "Yegguma ad d-yali",
+        "key_signature_upload_success_title": "Asali n uzmul yedda akken iwata",
+        "key_signature_upload_failed_title": "Asali n uzmul ur yeddi ara",
+        "udd": {
+            "own_new_session_text": "Teqqneḍ ɣer tɣimit war ma tesneqdeḍ-tt:",
+            "own_ask_verify_text": "Senqed tiɣimiyin-ik·im tiyaḍ s useqdec yiwet seg textiṛiyin ddaw.",
+            "other_new_session_text": "%(name)s (%(userId)s) yeqqen ɣer tɣimit tamaynut war ma isenqed-itt:",
+            "other_ask_verify_text": "Suter deg useqdac-a ad isenqed tiɣimit-is, neɣ senqed-itt ddaw s ufus.",
+            "title": "Ur yettwattkal ara"
+        },
+        "access_secret_storage_dialog": {
+            "key_validation_text": {
+                "wrong_file_type": "Anaw n yifuyla d arameɣtu",
+                "recovery_key_is_correct": "Yettban igerrez!"
+            },
+            "security_phrase_title": "Tafyirt n tɣellist",
+            "security_key_title": "Tasarut n tɣellist",
+            "use_security_key_prompt": "Seqdec tasarut-ik·im n tɣellist akken ad tkemmleḍ.",
+            "restoring": "Tiririt n tsura seg uḥraz"
+        },
+        "destroy_cross_signing_dialog": {
+            "title": "Erẓ tisura n uzmul anmidag?",
+            "warning": "Tukksa n tsura n uzmul anmidag ad yili i lebda. Yal amdan i tesneqdeḍ ad iwali ilɣa n tɣellist. Maca ur tebɣiḍ ara ad txedmeḍ aya, ala ma yella tesruḥeḍ ibenkan akk ara ak·akem-yeǧǧen ad tkecmeḍ seg-s.",
+            "primary_button_text": "Sfeḍ tisura n uzmul anmidag"
+        },
+        "confirm_encryption_setup_title": "Sentem asebded n uwgelhen",
+        "confirm_encryption_setup_body": "Sit ɣef tqeffalt ddaw akken ad tesnetmeḍ asebded n uwgelhen.",
+        "key_signature_upload_failed_master_key_signature": "tasarut tusligt tagejdant tamaynut",
+        "key_signature_upload_failed_cross_signing_key_signature": "azmul amaynut n tsarut n uzmul amdigan",
+        "key_signature_upload_failed_device_cross_signing_key_signature": "azmul n uzmul amdigan n yibenk",
+        "key_signature_upload_failed_key_signature": "azmul n tsarut",
+        "key_signature_upload_failed_body": "%(brand)s yemlal-d d tuccḍa mi ara d-yessalay:"
     },
     "emoji": {
         "category_frequently_used": "Yettuseqdac s waṭas",
@@ -1807,7 +1686,10 @@
             "fallback_button": "Bdu alɣu",
             "sso_title": "Seqdec anekcum asuf akken ad tkemmleḍ",
             "sso_body": "Sentem timerna n tansa-a n yimayl s useqdec n unekcum asuf i ubeggen n timagit-in(im).",
-            "code": "Tangalt"
+            "code": "Tangalt",
+            "sso_preauth_body": "I ukemmel, seqdec n unekcum asuf i ubeggen n timagit-ik·im.",
+            "sso_postauth_title": "Sentem i wakken ad tkemmleḍ",
+            "sso_postauth_body": "Sit ɣef tqeffalt ddaw i wakken ad tesnetmeḍ timagit-ik·im."
         },
         "password_field_label": "Sekcem awal n uffir",
         "password_field_strong_label": "Igerrez, d awal uffir iǧhed aṭas!",
@@ -1842,7 +1724,36 @@
         },
         "country_dropdown": "Tabdart n udrurem n tmura",
         "common_failures": {},
-        "captcha_description": "Aqeddac-a aqejdan yesra ad iẓer ma mačči d aṛubut i telliḍ."
+        "captcha_description": "Aqeddac-a aqejdan yesra ad iẓer ma mačči d aṛubut i telliḍ.",
+        "autodiscovery_invalid": "Tiririt n usnirem n uqeddac agejdan d tarameɣtut",
+        "autodiscovery_generic_failure": "Awway n uswel n usnirem awurman seg uqeddac ur yeddi ara",
+        "autodiscovery_invalid_hs_base_url": "D arameɣtu base_url i m.homeserver",
+        "autodiscovery_invalid_hs": "URL n uqeddac agejdan ur yettban ara d aqeddac agejdan n Matrix ameɣtu",
+        "autodiscovery_invalid_is_base_url": "D arameɣtu base_url i m.identity_server",
+        "autodiscovery_invalid_is": "URL n uqeddac n timagit ur yettban ara d aqeddac n timagit ameɣtu",
+        "autodiscovery_invalid_is_response": "Tiririt n usnirem n uqeddac n timagitn d tarameɣtut",
+        "server_picker_description_matrix.org": "Rnu ɣer yimelyan n yimdanen baṭel ɣef uqeddac azayez ameqqran akk",
+        "soft_logout": {
+            "clear_data_title": "Sfeḍ akk isefka seg tɣimit-a?",
+            "clear_data_description": "Asfaḍ akk n yisefka seg tɣimit-a ad yili i lebda. Ad ak-ruḥen yiznan yettwawgelhen ala ma yella tisura ttwaḥerzent.",
+            "clear_data_button": "Sfeḍ meṛṛa isefka"
+        },
+        "logout_dialog": {
+            "setup_secure_backup_description_1": "Iznan yettwawgelhen ttuḥerzen s uwgelhen n yixef ɣer yixef. Ala kečč d uɣerwaḍ (yiɣerwaḍen) i yesεan tisura akken ad ɣren iznan-a.",
+            "use_key_backup": "Bdu aseqdec n uḥraz n tsarut",
+            "skip_key_backup": "Ur bɣiɣ ara izan-inu iwgelhanen",
+            "megolm_export": "Sifeḍ s ufus tisura",
+            "setup_key_backup_title": "Tesruḥeḍ anekcum ɣer yiznan-ik·im yettwawgelhen",
+            "description": "D tidet tebɣiḍ ad teffɣeḍ?"
+        },
+        "registration": {
+            "continue_without_email_field_label": "Imayl (Afrayan)"
+        },
+        "set_email": {
+            "verification_pending_title": "Asenqed yettṛaǧu",
+            "verification_pending_description": "Ma ulac aɣilif, senqed imayl-ik/im syen sit ɣef useɣwen i yellan. Akken ara yemmed waya, sit ad tkemmleḍ.",
+            "description": "Ayagi ad ak(akem)-yeǧǧ ad twennzeḍ awal-ik/im uffir yerna ad d-tremseḍ ilɣa."
+        }
     },
     "export_chat": {
         "messages": "Iznan"
@@ -1868,7 +1779,8 @@
     "report_content": {
         "missing_reason": "Ttxil-k·m ini-aɣ-d ayɣer i d-tettazneḍ alɣu.",
         "report_content_to_homeserver": "Ttxil-k·m azen aneqqis i unedbal-ik·im n usebter agejdan",
-        "description": "Timenna ɣef yizen-a ad yazen \"asulay n uneḍru\" asuf i unedbal n uqeddac agejdan. Ma yella iznan n texxamt-a ttwawgelhen, anedbal-ik·im n uqeddac agejdan ur yettizmir ara ad d-iɣer aḍris n yizen neɣ senqed ifuyla neɣ tugniwin."
+        "description": "Timenna ɣef yizen-a ad yazen \"asulay n uneḍru\" asuf i unedbal n uqeddac agejdan. Ma yella iznan n texxamt-a ttwawgelhen, anedbal-ik·im n uqeddac agejdan ur yettizmir ara ad d-iɣer aḍris n yizen neɣ senqed ifuyla neɣ tugniwin.",
+        "other_label": "Nniḍen"
     },
     "onboarding": {
         "intro_welcome": "Ansuf ɣer %(appName)s",
@@ -1915,7 +1827,10 @@
         "unencrypted_warning": "Iwiǧiten ur seqdacen ara awgelhen n yiznan.",
         "added_by": "Awiǧit yettwarna sɣur",
         "cookie_warning": "Awiǧit-a yezmer ad iseqdec inagan n tuqqna.",
-        "popout": "Awiǧit attalan"
+        "popout": "Awiǧit attalan",
+        "capabilities_dialog": {
+            "remember_Selection": "Cfu ɣef tefrant-inu i uwiǧit-a"
+        }
     },
     "feedback": {
         "comment_label": "Awennit",
@@ -1960,7 +1875,10 @@
         "error_encountered": "Tuccaḍ i d-yettwamuggren (%(errorDetail)s).",
         "no_update": "Ulac lqem i yellan.",
         "new_version_available": "Lqem amaynut yella. <a>Leqqem tura.</a>",
-        "check_action": "Nadi lqem"
+        "check_action": "Nadi lqem",
+        "error_unable_load_commit": "D awezɣi ad d-tali telqayt n usentem: %(msg)s",
+        "unavailable": "Ulac",
+        "changelog": "Aɣmis n yisnifal"
     },
     "labs_mjolnir": {
         "room_name": "Tabdart-inu n tigtin",
@@ -2070,7 +1988,11 @@
         "search": {
             "this_room": "Taxxamt-a",
             "all_rooms": "Akk tixxamin",
-            "field_placeholder": "Nadi…"
+            "field_placeholder": "Nadi…",
+            "result_count": {
+                "one": "(~%(count)s igmaḍ)",
+                "other": "(~%(count)s igmaḍ)"
+            }
         },
         "jump_to_bottom_button": "Drurem ɣer yiznan akk n melmi kan",
         "jump_read_marker": "Ɛeddi ɣer yizen amezwaru ur nettwaɣra ara.",
@@ -2086,6 +2008,9 @@
     "space": {
         "context_menu": {
             "explore": "Snirem tixxamin"
+        },
+        "add_existing_room_space": {
+            "dm_heading": "Iznan usligen"
         }
     },
     "terms": {
@@ -2101,7 +2026,9 @@
         "identity_server_no_terms_title": "Timagit n uqeddac ulac ɣer-sen iferdisen n umeẓlu",
         "identity_server_no_terms_description_1": "Tigawt-a tesra anekcum ɣer uqeddac n tmagit tamezwert <server /> i usentem n tansa n yimayl neɣ uṭṭun n tiliɣri, maca aqeddac ur yesεi ula d yiwet n twali n umeẓlu.",
         "identity_server_no_terms_description_2": "Ala ma tettekleḍ ɣef bab n uqeddac ara tkemmleḍ.",
-        "inline_intro_text": "Qbel <policyLink /> i wakken ad tkemmleḍ:"
+        "inline_intro_text": "Qbel <policyLink /> i wakken ad tkemmleḍ:",
+        "summary_identity_server_1": "Af-d wiyaḍ s tiliɣri neɣ s yimayl",
+        "summary_identity_server_2": "Ad d-yettwaf s tiliɣri neɣ s yimayl"
     },
     "failed_load_async_component": "Yegguma ad d-yali! Senqed tuqqna-inek.inem ɣer uzeṭṭa syen tεerḍeḍ tikkelt-nniḍen.",
     "upload_failed_generic": "Yegguma ad d-yali '%(fileName)s' ufaylu.",
@@ -2117,7 +2044,19 @@
         "error_permissions_room": "Ur tesεiḍ ara tasiregt ad d-necdeḍ imdanen ɣer texxamt-a.",
         "error_bad_state": "Aseqdac ilaq ad yettwakkes uqbel ad izmiren ad t-id-snubegten.",
         "error_version_unsupported_room": "Aqeddac agejdan n useqdac ur issefrek ara lqem n texxamt yettwafernen.",
-        "error_unknown": "Tuccḍa n uqeddac d tarussint"
+        "error_unknown": "Tuccḍa n uqeddac d tarussint",
+        "unable_find_profiles_description_default": "D awezɣi ad d-naf imuɣna n yisulay Matrix i d-yettwabdaren ddaw - tebɣiḍ ad ten-id-tnecdeḍ ɣas akken?",
+        "unable_find_profiles_title": "Iseqdacen i d-iteddun yezmer ad ilin ulac-iten",
+        "unable_find_profiles_invite_never_warn_label_default": "Ɣas akken nced-d yerna ur iyi-id-ttɛeggin ara akk",
+        "unable_find_profiles_invite_label_default": "Ɣas akken nced-d",
+        "error_find_room": "Yella wayen ur nteddu ara akken ilaq i wakken ad d-tesnubegteḍ iseqdacen.",
+        "error_invite": "Ur nezmir ara ad d-nesnubget iseqdacen-a. Ttxil-k·m wali iseqdac i tebɣiḍ ad d-tesnubegteḍ syen ɛreḍ tikkelt-nniḍen.",
+        "error_find_user_title": "Ur nessaweḍ ara ad naf iseqdacen",
+        "error_find_user_description": "Iseqdac i d-iteddun ahat ulac-iten neɣ d arimeɣta, ur zmiren ad d-ttusnubegten: %(csvNames)s",
+        "recents_section": "Idiwenniyen n melmi kan",
+        "suggestions_section": "Izen usrid n melmi kan",
+        "email_use_default_is": "Seqdec aqeddac n timagit i uncad s yimayl. <default>Seqdec (%(defaultIdentityServerName)s) amezwer</default> neɣ sefrek deg <settings>yiɣewwaren</settings>.",
+        "email_use_is": "Seqdec aqeddac n timagit i uncad s yimayl. Sefrek deg <settings>yiɣewwaren</settings>."
     },
     "scalar": {
         "error_create": "Timerna n uwiǧit ulamek.",
@@ -2144,7 +2083,21 @@
         "failed_copy": "Anɣal ur yeddi ara",
         "something_went_wrong": "Yella wayen ur nteddu ara akken iwata!",
         "update_power_level": "Asnifel n uswir afellay ur yeddi ara",
-        "unknown": "Tuccḍa tarussint"
+        "unknown": "Tuccḍa tarussint",
+        "dialog_description_default": "Tella-d tuccḍa.",
+        "edit_history_unsupported": "Aqeddac-ik·im agejdan ur yettban ara yessefrak tamahilt-a.",
+        "session_restore": {
+            "clear_storage_description": "Ffeɣ syen kkes tisura tiwgelhanin?",
+            "clear_storage_button": "Sfeḍ aklas syen ffeɣ seg tuqqna",
+            "title": "D awezɣi ad d-tuɣal texxamt",
+            "description_1": "Nemlal-d tuccḍa mi ara d-nettarra tiɣimit-ik·im yezrin.",
+            "description_2": "Ma yella tesqedceḍ yakan lqem n melmi kan n %(brand)s, tiɣimit-ik·im tezmer ur tettemṣada ara d lqem-a. Mdel afaylu-a syen uɣal ɣer lqem n melmi kan.",
+            "description_3": "Asfaḍ n uklas n yiminig-ik·im yezmer ad iṣeggem ugur, maca aya ad ak·akem-isuffeɣ seg tuqqna rnu akk imazrayen n udiwenni yettwawgelhen ur d-ttbanen."
+        },
+        "storage_evicted_title": "Isefka n tɣimit xuṣṣen",
+        "storage_evicted_description_1": "Kra n yisefka n tɣimit, daɣen tisura n yiznan yettwawgelhen, ttwakksen. Ffeɣ syen ales anekcum i wakken ad tṣeggmeḍ aya, err-d tisura seg uḥraz.",
+        "storage_evicted_description_2": "Yezmer iminig-ik·im yekkes isefka-a mi t-txuṣṣ tallunt ɣef uḍebsi.",
+        "unknown_error_code": "tangalt n tuccḍa tarussint"
     },
     "name_and_id": "%(name)s (%(userId)s)",
     "items_and_n_others": {
@@ -2241,7 +2194,25 @@
         "deactivate_confirm_title": "Kkes aseqdac-a?",
         "deactivate_confirm_description": "Asemmet n useqdac-a ad t-isuffeɣ yerna ur as-yettaǧǧa ara ad yales ad yeqqen. Daɣen, ad ffɣen akk seg texxamin ideg llan. Tigawt-a dayen ur tettwasefsax ara. S tidet tebɣiḍ ad tsemmteḍ aseqdac-a?",
         "deactivate_confirm_action": "Kkes aseqdac",
-        "error_deactivate": "Asensi n useqdac ur yeddi ara"
+        "error_deactivate": "Asensi n useqdac ur yeddi ara",
+        "redact": {
+            "no_recent_messages_title": "Ulac iznan i yettwafen sɣur %(user)s",
+            "no_recent_messages_description": "Ɛreḍ adrurem deg wazemzakud i wakken ad twaliḍ ma yella llan wid yellan uqbel.",
+            "confirm_title": "Kkes iznan n melmi kan sɣur %(user)s",
+            "confirm_description_2": "I tugget meqqren n yiznan, ayagi yezmer ad yeṭṭef kra n wakud. Ṛǧu ur sirin ara amsaɣ-ik·im deg leɛḍil.",
+            "confirm_button": {
+                "one": "Kkes 1 izen",
+                "other": "Kkes iznan n %(count)s"
+            }
+        },
+        "count_of_verified_sessions": {
+            "other": "%(count)s isenqed tiɣimiyin",
+            "one": "1 n tɣimit i yettwasneqden"
+        },
+        "count_of_sessions": {
+            "other": "Tiɣimiyin n %(count)s",
+            "one": "Tiɣimit n %(count)s"
+        }
     },
     "stickers": {
         "empty": "Ulac ɣer-k·m akka tura ikemmusen n yimyintaḍ yettwaremden",
@@ -2275,12 +2246,95 @@
         "error_loading_user_profile": "Yegguma ad d-yali umaɣnu n useqdac"
     },
     "cant_load_page": "Asali n usebter ur yeddi ara",
-    "Invalid homeserver discovery response": "Tiririt n usnirem n uqeddac agejdan d tarameɣtut",
-    "Failed to get autodiscovery configuration from server": "Awway n uswel n usnirem awurman seg uqeddac ur yeddi ara",
-    "Invalid base_url for m.homeserver": "D arameɣtu base_url i m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "URL n uqeddac agejdan ur yettban ara d aqeddac agejdan n Matrix ameɣtu",
-    "Invalid identity server discovery response": "Tiririt n usnirem n uqeddac n timagitn d tarameɣtut",
-    "Invalid base_url for m.identity_server": "D arameɣtu base_url i m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "URL n uqeddac n timagit ur yettban ara d aqeddac n timagit ameɣtu",
-    "General failure": "Tuccḍa tamatut"
+    "General failure": "Tuccḍa tamatut",
+    "emoji_picker": {
+        "cancel_search_label": "Sefsex anadi"
+    },
+    "info_tooltip_title": "Talɣut",
+    "language_dropdown_label": "Tabdart n udrurem n tutlayin",
+    "truncated_list_n_more": {
+        "other": "D %(count)s ugar..."
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_required_invalid": "Sekcem isem n uqeddac",
+            "network_dropdown_available_valid": "Ayagi yettban yelha",
+            "network_dropdown_available_invalid": "D awezɣi ad d-naf aqeddac-a neɣ tabdart-is n texxamt",
+            "network_dropdown_your_server_description": "Aqeddac-ik·im",
+            "network_dropdown_add_dialog_title": "Rnu aqeddac amaynut",
+            "network_dropdown_add_dialog_description": "Sekcem isem n uqeddac amaynut i tebɣiḍ ad tesnirmeḍ.",
+            "network_dropdown_add_dialog_placeholder": "Isem n uqeddac"
+        }
+    },
+    "dialog_close_label": "Mdel adiwenni",
+    "redact": {
+        "error": "Ur tezmireḍ ara ad tekkseḍ izen-a. (%(code)s)",
+        "ongoing": "Tukksa…",
+        "confirm_button": "Sentem tukksa"
+    },
+    "forward": {
+        "send_label": "Azen"
+    },
+    "integrations": {
+        "disabled_dialog_title": "Imsidaf ttwasensen",
+        "impossible_dialog_title": "Imsidaf ur ttusirgen ara",
+        "impossible_dialog_description": "%(brand)s-ik·im ur ak·am yefki ara tisirag i useqdec n umsefrak n umsidef i wakken ad tgeḍ aya. Ttxil-k·m nermes anedbal."
+    },
+    "lazy_loading": {
+        "disabled_description1": "Tesqedceḍ yakan %(brand)s ɣef %(host)s s usali ẓẓayen d yiɛeggalen i iremden. Deg lqem-a asali ẓẓayen yensa. Am tkatut tuffirt tadigant ur temṣada ara gar sin-a n yiɣewwaren, %(brand)s yesra  allus n umtawi amiḍan-ik·im.",
+        "disabled_description2": "Ma yella ileqman-nniḍen n %(brand)s mazal-iten ldin deg yiccer-nniḍen, ttxil-k·m mdel-it acku aseqec n %(brand)s deg yiwet n tnezduɣt s usali ẓẓayenurmid, asensi-nsen ɣef tikkelt ad d-yeglu s wuguren.",
+        "disabled_title": "Tuffra tadigant ur temṣada ara",
+        "disabled_action": "Sfeḍ takatut tuffirt syen ales amtawi",
+        "resync_description": "%(brand)s tura isseqdac drus n tkatut seg 3 ɣer 5 n tikkal, s usali n talɣut n yiseqdac-nniḍen ma yili tettusra. Ttxil-k·m rǧu s leɛqel alamma nules amtawi d useqdac!",
+        "resync_title": "Leqqem %(brand)s"
+    },
+    "message_edit_dialog_title": "Tiẓrigin n yizen",
+    "server_offline": {
+        "empty_timeline": "Tessawḍeḍ ad tqeḍɛeḍ kullec.",
+        "title": "Ulac tiririt sɣur aqeddac",
+        "description": "Aqeddac-inek·inem ur d-yettarra ara ɣef kra n yisutar-ik·im. Ha-tent-a kra n ssebbat i izemren ad ilint.",
+        "description_1": "Aqeddac (%(serverName)s) yeṭṭef aṭas n wakud i wakken ad d-yerr.",
+        "description_2": "Aɣrab n tmes neɣ amgelavirus inek·inem yessewḥal isutar.",
+        "description_3": "Asiɣzef n yiminig tessewḥel asuter.",
+        "description_4": "Aqeddac ha-t-an beṛṛa n tuqqna.",
+        "description_5": "Aqeddac yugi asuter-ik·im.",
+        "description_6": "Tamnaḍt-ik·im temlal-d uguren n tuqqna ɣer internet.",
+        "description_7": "Tuccḍa deg tuqqna lawan n uneɛruḍ ad nnermes aqeddac.",
+        "description_8": "Aqeddac ur yettusesteb ara i wakken ad d-imel anida-t wugur (CORPS).",
+        "recent_changes_heading": "Isnifal imaynuten ur d-newwiḍ ara akka ar tura"
+    },
+    "spotlight_dialog": {
+        "create_new_room_button": "Rnu taxxamt tamaynut"
+    },
+    "share": {
+        "title_room": "Bḍu taxxamt",
+        "permalink_most_recent": "Aseɣwen n yizen akk aneggaru",
+        "title_user": "Bḍu aseqdac",
+        "title_message": "Bḍu izen n texxamt",
+        "permalink_message": "Aseɣwen n yizen i yettwafernen"
+    },
+    "upload_file": {
+        "title_progress": "Sali-d ifuyla (%(current)s ɣef %(total)s)",
+        "title": "Sali-d ifuyla",
+        "upload_all_button": "Sali-d kullec",
+        "error_file_too_large": "Afaylu-a <b>ɣezzif aṭas</b> i wakken ad d-yali. Talast n teɣzi n ufaylu d %(limit)s maca afaylu-a d %(sizeOfThisFile)s.",
+        "error_files_too_large": "Ifuyla-a <b>ɣezzifit aṭas</b> i wakken ad d-alin. Talast n teɣzi n ufaylu d %(limit)s.",
+        "error_some_files_too_large": "Kra n yifuyla <b>ɣezzifit aṭas</b> i wakken ad d-alin. Talast n teɣzi n ufaylu d %(limit)s.",
+        "upload_n_others_button": {
+            "other": "Sali-d %(count)s ifuyla-nniḍen",
+            "one": "Sali-d %(count)s afaylu-nniḍen"
+        },
+        "cancel_all_button": "Sefsex kullec",
+        "error_title": "Tuccḍa deg usali"
+    },
+    "restore_key_backup_dialog": {
+        "load_error_content": "Yegguma ad d-yali waddad n uḥraz",
+        "restore_failed_error": "Tiririt n uḥraz tugi ad teddu",
+        "no_backup_error": "Ulac aḥraz yettwafen!",
+        "keys_restored_title": "Tisura ttwaskelsent",
+        "count_of_decryption_failures": "Tukksa n uwgelhen n tɣimiyin %(failedCount)s ur yeddi ara!",
+        "count_of_successfully_restored_keys": "Tiririt n tsura n %(sessionCount)s yedda akken iwata",
+        "key_backup_warning": "<b>Ɣur-k·m</b>: ilaq ad tesbaduḍ aḥraz n tsarut seg uselkim kan iɣef tettekleḍ.",
+        "load_keys_progress": "%(completed)s n %(total)s tsura i yettwarran"
+    }
 }

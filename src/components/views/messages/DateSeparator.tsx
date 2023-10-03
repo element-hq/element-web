@@ -178,8 +178,8 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                         });
                     } else {
                         friendlyErrorMessage = _t("room|error_jump_to_date", {
-                            statusCode: err?.httpStatus || _t("unknown status code"),
-                            errorCode: err?.errcode || _t("unavailable"),
+                            statusCode: err?.httpStatus || _t("room|unknown_status_code_for_timeline_jump"),
+                            errorCode: err?.errcode || _t("common|unavailable"),
                         });
                     }
                 } else if (err instanceof HTTPError) {

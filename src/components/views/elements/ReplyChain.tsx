@@ -204,9 +204,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         if (this.state.err) {
             header = (
                 <blockquote className="mx_ReplyChain mx_ReplyChain_error">
-                    {_t(
-                        "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.",
-                    )}
+                    {_t("timeline|reply|error_loading")}
                 </blockquote>
             );
         } else if (this.state.loadedEv && shouldDisplayReply(this.state.events[0])) {
@@ -215,7 +213,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             header = (
                 <blockquote className={`mx_ReplyChain ${this.getReplyChainColorClass(ev)}`}>
                     {_t(
-                        "<a>In reply to</a> <pill>",
+                        "timeline|reply|in_reply_to",
                         {},
                         {
                             a: (sub) => (
@@ -244,7 +242,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             header = (
                 <p className="mx_ReplyChain_Export">
                     {_t(
-                        "In reply to <a>this message</a>",
+                        "timeline|reply|in_reply_to_for_export",
                         {},
                         {
                             a: (sub) => (

@@ -45,11 +45,8 @@ const onHelpClick = (): void => {
     Modal.createDialog(
         InfoDialog,
         {
-            title: _t("Server Options"),
-            description: _t(
-                "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.",
-                { brand },
-            ),
+            title: _t("auth|server_picker_title_default"),
+            description: _t("auth|server_picker_description", { brand }),
             button: _t("action|dismiss"),
             hasCloseButton: false,
             fixedWidth: false,
@@ -88,9 +85,7 @@ const ServerPicker: React.FC<IProps> = ({ title, dialogTitle, serverConfig, onSe
 
     let desc;
     if (serverConfig.hsName === "matrix.org") {
-        desc = (
-            <span className="mx_ServerPicker_desc">{_t("Join millions for free on the largest public server")}</span>
-        );
+        desc = <span className="mx_ServerPicker_desc">{_t("auth|server_picker_description_matrix.org")}</span>;
     }
 
     return (

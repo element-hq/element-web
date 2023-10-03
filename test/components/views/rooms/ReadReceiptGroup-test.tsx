@@ -15,32 +15,38 @@ limitations under the License.
 */
 
 import { determineAvatarPosition, readReceiptTooltip } from "../../../../src/components/views/rooms/ReadReceiptGroup";
+import * as languageHandler from "../../../../src/languageHandler";
 
 describe("ReadReceiptGroup", () => {
     describe("TooltipText", () => {
         it("returns '...and more' with hasMore", () => {
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve"], true)).toEqual(
-                "Alice, Bob, Charlie, Dan, Eve and more",
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve", "Fox"], 5)).toEqual(
+                "Alice, Bob, Charlie, Dan, Eve and one other",
             );
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan"], true)).toEqual(
-                "Alice, Bob, Charlie, Dan and more",
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve", "Fox"], 4)).toEqual(
+                "Alice, Bob, Charlie, Dan and 2 others",
             );
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie"], true)).toEqual("Alice, Bob, Charlie and more");
-            expect(readReceiptTooltip(["Alice", "Bob"], true)).toEqual("Alice, Bob and more");
-            expect(readReceiptTooltip(["Alice"], true)).toEqual("Alice and more");
-            expect(readReceiptTooltip([], false)).toBeUndefined();
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan"], 3)).toEqual(
+                "Alice, Bob, Charlie and one other",
+            );
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve", "Fox"], 2)).toEqual(
+                "Alice, Bob and 4 others",
+            );
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve", "Fox"], 1)).toEqual(
+                "Alice and 5 others",
+            );
+            expect(readReceiptTooltip([], 1)).toBe("");
         });
         it("returns a pretty list without hasMore", () => {
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve"], false)).toEqual(
+            jest.spyOn(languageHandler, "getUserLanguage").mockReturnValue("en-GB");
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve"], 5)).toEqual(
                 "Alice, Bob, Charlie, Dan and Eve",
             );
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan"], false)).toEqual(
-                "Alice, Bob, Charlie and Dan",
-            );
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie"], false)).toEqual("Alice, Bob and Charlie");
-            expect(readReceiptTooltip(["Alice", "Bob"], false)).toEqual("Alice and Bob");
-            expect(readReceiptTooltip(["Alice"], false)).toEqual("Alice");
-            expect(readReceiptTooltip([], false)).toBeUndefined();
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan"], 4)).toEqual("Alice, Bob, Charlie and Dan");
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie"], 5)).toEqual("Alice, Bob and Charlie");
+            expect(readReceiptTooltip(["Alice", "Bob"], 5)).toEqual("Alice and Bob");
+            expect(readReceiptTooltip(["Alice"], 5)).toEqual("Alice");
+            expect(readReceiptTooltip([], 5)).toBe("");
         });
     });
     describe("AvatarPosition", () => {

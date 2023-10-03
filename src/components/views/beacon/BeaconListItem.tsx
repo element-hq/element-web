@@ -71,7 +71,7 @@ const BeaconListItem: React.FC<Props & HTMLProps<HTMLLIElement>> = ({ beacon, ..
                     </div>
                 </BeaconStatus>
                 <span className="mx_BeaconListItem_lastUpdated">
-                    {_t("Updated %(humanizedUpdateTime)s", { humanizedUpdateTime })}
+                    {_t("location_sharing|live_update_time", { humanizedUpdateTime })}
                 </span>
             </div>
         </li>

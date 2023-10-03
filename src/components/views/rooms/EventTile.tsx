@@ -1298,7 +1298,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 <span className="mx_EventTile_truncated">
                                     {" "}
                                     {_t(
-                                        " in <strong>%(room)s</strong>",
+                                        "timeline|in_room_name",
                                         { room: room.name },
                                         { strong: (sub) => <strong>{sub}</strong> },
                                     )}

@@ -39,17 +39,13 @@ export default class ConfirmWipeDeviceDialog extends React.Component<IProps> {
                 className="mx_ConfirmWipeDeviceDialog"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Clear all data in this session?")}
+                title={_t("auth|soft_logout|clear_data_title")}
             >
                 <div className="mx_ConfirmWipeDeviceDialog_content">
-                    <p>
-                        {_t(
-                            "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.",
-                        )}
-                    </p>
+                    <p>{_t("auth|soft_logout|clear_data_description")}</p>
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Clear all data")}
+                    primaryButton={_t("auth|soft_logout|clear_data_button")}
                     onPrimaryButtonClick={this.onConfirm}
                     primaryButtonClass="danger"
                     cancelButton={_t("action|cancel")}

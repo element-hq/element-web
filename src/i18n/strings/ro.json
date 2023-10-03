@@ -1,5 +1,4 @@
 {
-    "Send": "Trimite",
     "Sun": "Dum",
     "Mon": "Lun",
     "Tue": "Mar",
@@ -94,5 +93,8 @@
     },
     "composer": {
         "poll_button_no_perms_title": "Permisul Obligatoriu"
+    },
+    "forward": {
+        "send_label": "Trimite"
     }
 }

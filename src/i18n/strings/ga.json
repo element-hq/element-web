@@ -1,10 +1,6 @@
 {
-    "An error has occurred.": "D’imigh earráid éigin.",
     "%(items)s and %(lastItem)s": "%(items)s agus %(lastItem)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s ar a %(time)s",
-    "Transfer": "Aistrigh",
-    "Hold": "Fan",
-    "Resume": "Tosaigh arís",
     "Zimbabwe": "an tSiombáib",
     "Zambia": "an tSaimbia",
     "Yemen": "Éimin",
@@ -187,17 +183,11 @@
     "Algeria": "an Ailgéir",
     "Albania": "an Albáin",
     "Afghanistan": "an Afganastáin",
-    "Information": "Eolas",
     "Ok": "Togha",
     "Lock": "Glasáil",
     "Home": "Tús",
-    "Removing…": "ag Baint…",
-    "Changelog": "Loga na n-athruithe",
-    "Unavailable": "Níl sé ar fáil",
-    "Notes": "Nótaí",
     "expand": "méadaigh",
     "collapse": "cumaisc",
-    "edited": "curtha in eagar",
     "Yesterday": "Inné",
     "Today": "Inniu",
     "Saturday": "Dé Sathairn",
@@ -297,23 +287,11 @@
     "Tue": "Mái",
     "Mon": "Lua",
     "Sun": "Doṁ",
-    "Send": "Seol",
-    "Sign out and remove encryption keys?": "Sínigh amach agus scrios eochracha criptiúcháin?",
-    "Clear Storage and Sign Out": "Scrios Stóras agus Sínigh Amach",
-    "Are you sure you want to sign out?": "An bhfuil tú cinnte go dteastaíonn uait sínigh amach?",
-    "Sent": "Seolta",
-    "Sending": "Ag Seoladh",
     "Unnamed room": "Seomra gan ainm",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "Join Room": "Téigh isteach an seomra",
-    "(~%(count)s results)": {
-        "one": "(~%(count)s toradh)",
-        "other": "(~%(count)s torthaí)"
-    },
-    "Email address": "Seoladh ríomhphoist",
-    "Custom level": "Leibhéal saincheaptha",
     "common": {
         "about": "Faoi",
         "analytics": "Anailísiú sonraí",
@@ -387,7 +365,9 @@
         "unencrypted": "Gan chriptiú",
         "show_more": "Taispeáin níos mó",
         "avatar": "Abhatár",
-        "are_you_sure": "An bhfuil tú cinnte?"
+        "are_you_sure": "An bhfuil tú cinnte?",
+        "email_address": "Seoladh ríomhphoist",
+        "edited": "curtha in eagar"
     },
     "action": {
         "continue": "Lean ar aghaidh",
@@ -467,7 +447,10 @@
         "submit": "Cuir isteach",
         "unban": "Bain an cosc",
         "unignore": "Stop ag tabhairt neamhaird air",
-        "explore_rooms": "Breathnaigh thart ar na seomraí"
+        "explore_rooms": "Breathnaigh thart ar na seomraí",
+        "transfer": "Aistrigh",
+        "resume": "Tosaigh arís",
+        "hold": "Fan"
     },
     "labs": {
         "pinning": "Ceangal teachtaireachta",
@@ -508,7 +491,8 @@
         "restricted": "Teoranta",
         "moderator": "Modhnóir",
         "admin": "Riarthóir",
-        "mod": "Mod"
+        "mod": "Mod",
+        "custom_level": "Leibhéal saincheaptha"
     },
     "settings": {
         "always_show_message_timestamps": "Taispeáin stampaí ama teachtaireachta i gcónaí",
@@ -662,7 +646,8 @@
         }
     },
     "bug_reporting": {
-        "collecting_logs": "ag Bailiú logaí"
+        "collecting_logs": "ag Bailiú logaí",
+        "textarea_label": "Nótaí"
     },
     "voip": {
         "dialpad": "Eochaircheap",
@@ -694,7 +679,6 @@
         "more_button": "Níos mó",
         "connecting": "Ag Ceangal"
     },
-    "Other": "Eile",
     "room_settings": {
         "permissions": {
             "m.room.power_levels": "Athraigh ceadanna",
@@ -790,6 +774,9 @@
         "create_account_title": "Déan cuntas a chruthú",
         "reset_password": {
             "password_not_entered": "Caithfear focal faire nua a iontráil."
+        },
+        "logout_dialog": {
+            "description": "An bhfuil tú cinnte go dteastaíonn uait sínigh amach?"
         }
     },
     "export_chat": {
@@ -805,7 +792,8 @@
         "show_less": "Taispeáin níos lú"
     },
     "report_content": {
-        "disagree": "Easaontaigh"
+        "disagree": "Easaontaigh",
+        "other_label": "Eile"
     },
     "setting": {
         "help_about": {
@@ -821,7 +809,9 @@
         }
     },
     "update": {
-        "see_changes_button": "Cad é nua?"
+        "see_changes_button": "Cad é nua?",
+        "unavailable": "Níl sé ar fáil",
+        "changelog": "Loga na n-athruithe"
     },
     "user_menu": {
         "switch_theme_light": "Athraigh go mód geal",
@@ -856,7 +846,11 @@
         "rejoin_button": "Téigh ar ais isteach",
         "invite_reject_ignore": "Diúltaigh ⁊ Neamaird do úsáideoir",
         "search": {
-            "field_placeholder": "Cuardaigh…"
+            "field_placeholder": "Cuardaigh…",
+            "result_count": {
+                "one": "(~%(count)s toradh)",
+                "other": "(~%(count)s torthaí)"
+            }
         },
         "inviter_unknown": "Anaithnid",
         "failed_reject_invite": "Níorbh fhéidir an cuireadh a dhiúltú"
@@ -886,7 +880,12 @@
     "error": {
         "mixed_content": "Ní féidir ceangal leis an bhfreastalaí baile trí HTTP nuair a bhíonn URL HTTPS i mbarra do bhrabhsálaí. Bain úsáid as HTTPS nó <a> scripteanna neamhshábháilte a chumasú </a>.",
         "tls": "Ní féidir ceangal leis an bhfreastalaí baile - seiceáil do nascacht le do thoil, déan cinnte go bhfuil muinín i dteastas <a>SSL do fhreastalaí baile</a>, agus nach bhfuil síneadh brabhsálaí ag cur bac ar iarratais.",
-        "update_power_level": "Níor éiríodh leis an leibhéal cumhachta a hathrú"
+        "update_power_level": "Níor éiríodh leis an leibhéal cumhachta a hathrú",
+        "dialog_description_default": "D’imigh earráid éigin.",
+        "session_restore": {
+            "clear_storage_description": "Sínigh amach agus scrios eochracha criptiúcháin?",
+            "clear_storage_button": "Scrios Stóras agus Sínigh Amach"
+        }
     },
     "notifications": {
         "enable_prompt_toast_title": "Fógraí",
@@ -929,5 +928,14 @@
     },
     "error_dialog": {
         "forget_room_failed": "Níor dhearnadh dearmad ar an seomra %(errCode)s"
+    },
+    "info_tooltip_title": "Eolas",
+    "redact": {
+        "ongoing": "ag Baint…"
+    },
+    "forward": {
+        "sending": "Ag Seoladh",
+        "sent": "Seolta",
+        "send_label": "Seol"
     }
 }

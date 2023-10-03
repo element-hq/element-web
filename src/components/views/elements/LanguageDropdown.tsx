@@ -130,7 +130,7 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
                 onSearchChange={this.onSearchChange}
                 searchEnabled={true}
                 value={value}
-                label={_t("Language Dropdown")}
+                label={_t("language_dropdown_label")}
                 disabled={this.props.disabled}
             >
                 {options}

@@ -1,9 +1,5 @@
 {
     "Moderator": "Moderador/a",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Por favor verifique seu email e clique no link enviado. Quando finalizar este processo, clique para continuar.",
-    "Session ID": "Identificador de sessão",
-    "unknown error code": "código de erro desconhecido",
-    "Verification Pending": "Verificação pendente",
     "Sun": "Dom",
     "Mon": "Seg",
     "Tue": "Ter",
@@ -26,47 +22,22 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s às %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s às %(time)s",
     "%(items)s and %(lastItem)s": "%(items)s e %(lastItem)s",
-    "and %(count)s others...": {
-        "other": "e %(count)s outros...",
-        "one": "e um outro..."
-    },
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s de %(fullYear)s às %(time)s",
     "Join Room": "Ingressar na sala",
-    "not specified": "não especificado",
-    "An error has occurred.": "Ocorreu um erro.",
-    "Email address": "Endereço de email",
     "Warning!": "Atenção!",
-    "Confirm Removal": "Confirmar Remoção",
-    "Unable to restore session": "Não foi possível restaurar a sessão",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Se você já usou antes uma versão mais recente do %(brand)s, a sua sessão pode ser incompatível com esta versão. Feche esta janela e tente abrir com a versão mais recente.",
-    "Add an Integration": "Adicionar uma integração",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?",
-    "Custom level": "Nível personalizado",
-    "Create new room": "Criar nova sala",
-    "(~%(count)s results)": {
-        "other": "(~%(count)s resultados)",
-        "one": "(~%(count)s resultado)"
-    },
     "Home": "Início",
     "AM": "AM",
     "PM": "PM",
-    "This will allow you to reset your password and receive notifications.": "Isto irá permitir-lhe redefinir a sua palavra-passe e receber notificações.",
     "Sunday": "Domingo",
     "Today": "Hoje",
     "Friday": "Sexta-feira",
-    "Changelog": "Histórico de alterações",
-    "Unavailable": "Indisponível",
-    "Filter results": "Filtrar resultados",
     "Tuesday": "Terça-feira",
     "Unnamed room": "Sala sem nome",
     "Saturday": "Sábado",
     "Monday": "Segunda-feira",
-    "Send": "Enviar",
-    "You cannot delete this message. (%(code)s)": "Não pode apagar esta mensagem. (%(code)s)",
     "Thursday": "Quinta-feira",
     "Yesterday": "Ontem",
     "Wednesday": "Quarta-feira",
-    "Thank you!": "Obrigado!",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s-%(monthName)s-%(fullYear)s",
     "Anguilla": "Anguilla",
     "United States": "Estados Unidos",
@@ -169,7 +140,6 @@
     "Lesotho": "Lesoto",
     "Maldives": "Maldivas",
     "Mali": "Mali",
-    "Start a conversation with someone using their name or username (like <userId/>).": "Comece uma conversa com alguém a partir do nome ou nome de utilizador (por exemplo: <userId/>).",
     "Malta": "Malta",
     "Lebanon": "Líbano",
     "Marshall Islands": "Ilhas Marshall",
@@ -194,11 +164,6 @@
     "Liberia": "Libéria",
     "Mexico": "México",
     "Moldova": "Moldávia",
-    "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Apenas um aviso, se não adicionar um email e depois esquecer a sua palavra-passe, poderá <b>perder permanentemente o acesso à sua conta</b>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Convide alguém a partir do nome, endereço de email, nome de utilizador (como <userId/>) ou <a>partilhe este espaço</a>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Convide alguém a partir do nome, email ou nome de utilizador (como <userId/>) ou <a>partilhe esta sala</a>.",
-    "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "Ninguém poderá reutilizar o seu nome de utilizador (MXID), incluindo o próprio: este nome de utilizador permanecerá indisponível",
-    "Start a conversation with someone using their name, email address or username (like <userId/>).": "Comece uma conversa com alguém a partir do nome, endereço de email ou nome de utilizador (por exemplo: <userId/>).",
     "Zambia": "Zâmbia",
     "Zimbabwe": "Zimbabué",
     "Yemen": "Iémen",
@@ -318,11 +283,9 @@
     "Heard & McDonald Islands": "Ilhas Heard e McDonald",
     "Haiti": "Haiti",
     "Madagascar": "Madagáscar",
-    "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Convide alguém a partir do nome, nome de utilizador (como <userId/>) ou <a>partilhe este espaço</a>.",
     "Macedonia": "Macedónia",
     "Luxembourg": "Luxemburgo",
     "St. Pierre & Miquelon": "São Pedro e Miquelon",
-    "Join millions for free on the largest public server": "Junte-se a milhões gratuitamente no maior servidor público",
     "common": {
         "analytics": "Análise",
         "error": "Erro",
@@ -357,7 +320,13 @@
         "rooms": "Salas",
         "low_priority": "Baixa prioridade",
         "historical": "Histórico",
-        "are_you_sure": "Você tem certeza?"
+        "are_you_sure": "Você tem certeza?",
+        "email_address": "Endereço de email",
+        "filter_results": "Filtrar resultados",
+        "and_n_others": {
+            "other": "e %(count)s outros...",
+            "one": "e um outro..."
+        }
     },
     "action": {
         "continue": "Continuar",
@@ -409,14 +378,16 @@
         "restricted": "Restrito",
         "moderator": "Moderador/a",
         "admin": "Administrador",
-        "custom": "Personalizado (%(level)s)"
+        "custom": "Personalizado (%(level)s)",
+        "custom_level": "Nível personalizado"
     },
     "bug_reporting": {
         "description": "Os registos de depuração contêm dados de utilização da aplicação, incluindo o seu nome de utilizador, os IDs ou pseudónimos das salas que visitou, os últimos elementos da IU com que interagiu e os nomes de utilizador de outros utilizadores. No entanto não contêm mensagens.",
         "send_logs": "Enviar relatórios de erro",
         "collecting_information": "A recolher informação da versão da app",
         "collecting_logs": "A recolher logs",
-        "waiting_for_server": "À espera de resposta do servidor"
+        "waiting_for_server": "À espera de resposta do servidor",
+        "thank_you": "Obrigado!"
     },
     "time": {
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
@@ -490,7 +461,8 @@
             "error_invalid_email": "Endereço de email inválido",
             "error_invalid_email_detail": "Este não aparenta ser um endereço de email válido",
             "error_add_email": "Não foi possível adicionar endereço de email",
-            "add_email_instructions": "Enviámos-lhe um email para confirmar o seu endereço. Por favor siga as instruções no email e depois clique no botão abaixo."
+            "add_email_instructions": "Enviámos-lhe um email para confirmar o seu endereço. Por favor siga as instruções no email e depois clique no botão abaixo.",
+            "deactivate_confirm_content_3": "Ninguém poderá reutilizar o seu nome de utilizador (MXID), incluindo o próprio: este nome de utilizador permanecerá indisponível"
         },
         "voip": {
             "audio_input_empty": "Não foi detetado nenhum microfone",
@@ -568,6 +540,10 @@
         },
         "m.video": {
             "error_decrypting": "Erro ao descriptografar o vídeo"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "Adicionar uma integração",
+            "dialog_description": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?"
         }
     },
     "slash_command": {
@@ -649,7 +625,6 @@
         "no_media_perms_title": "Não há permissões para o uso de vídeo/áudio no seu navegador",
         "no_media_perms_description": "Você talvez precise autorizar manualmente que o %(brand)s acesse seu microfone e webcam"
     },
-    "Other": "Outros",
     "labs": {
         "group_profile": "Perfil",
         "group_rooms": "Salas"
@@ -711,6 +686,15 @@
             "password_not_entered": "Deve ser introduzida uma nova palavra-passe.",
             "passwords_mismatch": "Novas palavras-passe devem coincidir.",
             "return_to_login": "Retornar à tela de login"
+        },
+        "server_picker_description_matrix.org": "Junte-se a milhões gratuitamente no maior servidor público",
+        "registration": {
+            "continue_without_email_description": "Apenas um aviso, se não adicionar um email e depois esquecer a sua palavra-passe, poderá <b>perder permanentemente o acesso à sua conta</b>."
+        },
+        "set_email": {
+            "verification_pending_title": "Verificação pendente",
+            "verification_pending_description": "Por favor verifique seu email e clique no link enviado. Quando finalizar este processo, clique para continuar.",
+            "description": "Isto irá permitir-lhe redefinir a sua palavra-passe e receber notificações."
         }
     },
     "export_chat": {
@@ -737,7 +721,9 @@
         "release_notes_toast_title": "Novidades",
         "error_encountered": "Erro encontrado (%(errorDetail)s).",
         "no_update": "Nenhuma atualização disponível.",
-        "check_action": "Procurar atualizações"
+        "check_action": "Procurar atualizações",
+        "unavailable": "Indisponível",
+        "changelog": "Histórico de alterações"
     },
     "composer": {
         "autocomplete": {
@@ -775,7 +761,11 @@
         "search": {
             "this_room": "Esta sala",
             "all_rooms": "Todas as salas",
-            "field_placeholder": "Pesquisar…"
+            "field_placeholder": "Pesquisar…",
+            "result_count": {
+                "other": "(~%(count)s resultados)",
+                "one": "(~%(count)s resultado)"
+            }
         },
         "jump_read_marker": "Ir diretamente para a primeira das mensagens não lidas.",
         "inviter_unknown": "Desconhecido",
@@ -816,7 +806,8 @@
         "advanced": {
             "unfederated": "Esta sala não é acessível para servidores Matrix remotos"
         },
-        "upload_avatar_label": "Enviar icone de perfil de usuário"
+        "upload_avatar_label": "Enviar icone de perfil de usuário",
+        "alias_not_specified": "não especificado"
     },
     "failed_load_async_component": "Impossível carregar! Verifique a sua ligação de rede e tente novamente.",
     "upload_failed_generic": "O carregamento do ficheiro '%(fileName)s' falhou.",
@@ -857,7 +848,12 @@
         "failed_generic": "A operação falhou",
         "room_failed_title": "Falha ao convidar utilizadores para %(roomName)s",
         "room_failed_partial": "Enviámos os outros, mas as pessoas abaixo não puderam ser convidadas para <RoomName/>",
-        "room_failed_partial_title": "Alguns convites não puderam ser enviados"
+        "room_failed_partial_title": "Alguns convites não puderam ser enviados",
+        "start_conversation_name_email_mxid_prompt": "Comece uma conversa com alguém a partir do nome, endereço de email ou nome de utilizador (por exemplo: <userId/>).",
+        "start_conversation_name_mxid_prompt": "Comece uma conversa com alguém a partir do nome ou nome de utilizador (por exemplo: <userId/>).",
+        "name_email_mxid_share_space": "Convide alguém a partir do nome, endereço de email, nome de utilizador (como <userId/>) ou <a>partilhe este espaço</a>.",
+        "name_mxid_share_space": "Convide alguém a partir do nome, nome de utilizador (como <userId/>) ou <a>partilhe este espaço</a>.",
+        "name_email_mxid_share_room": "Convide alguém a partir do nome, email ou nome de utilizador (como <userId/>) ou <a>partilhe esta sala</a>."
     },
     "widget": {
         "error_need_to_be_logged_in": "Você tem que estar logado.",
@@ -888,7 +884,10 @@
         "export_unsupported": "O seu navegador não suporta as extensões de criptografia necessárias",
         "import_invalid_keyfile": "Não é um ficheiro de chaves %(brand)s válido",
         "import_invalid_passphrase": "Erro de autenticação: palavra-passe incorreta?",
-        "not_supported": "<não suportado>"
+        "not_supported": "<não suportado>",
+        "verification": {
+            "manual_device_verification_device_id_label": "Identificador de sessão"
+        }
     },
     "error": {
         "mixed_content": "Não consigo conectar ao servidor padrão através de HTTP quando uma URL HTTPS está na barra de endereços do seu navegador. Use HTTPS ou então <a>habilite scripts não seguros no seu navegador</a>.",
@@ -896,7 +895,13 @@
         "failed_copy": "Falha ao copiar",
         "something_went_wrong": "Algo deu errado!",
         "update_power_level": "Não foi possível mudar o nível de permissões",
-        "unknown": "Erro desconhecido"
+        "unknown": "Erro desconhecido",
+        "dialog_description_default": "Ocorreu um erro.",
+        "session_restore": {
+            "title": "Não foi possível restaurar a sessão",
+            "description_2": "Se você já usou antes uma versão mais recente do %(brand)s, a sua sessão pode ser incompatível com esta versão. Feche esta janela e tente abrir com a versão mais recente."
+        },
+        "unknown_error_code": "código de erro desconhecido"
     },
     "notifications": {
         "enable_prompt_toast_title": "Notificações",
@@ -942,5 +947,18 @@
             "title": "Busca falhou",
             "server_unavailable": "O servidor pode estar indisponível, sobrecarregado, ou a busca ultrapassou o tempo limite :("
         }
+    },
+    "redact": {
+        "error": "Não pode apagar esta mensagem. (%(code)s)",
+        "confirm_button": "Confirmar Remoção"
+    },
+    "forward": {
+        "send_label": "Enviar"
+    },
+    "report_content": {
+        "other_label": "Outros"
+    },
+    "spotlight_dialog": {
+        "create_new_room_button": "Criar nova sala"
     }
 }

@@ -92,7 +92,7 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
                 {...props}
                 className="mx_BaseCard_header_title_button--option"
                 onClick={openMenu}
-                title={_t("Thread options")}
+                title={_t("right_panel|thread_list|context_menu_label")}
                 isExpanded={menuDisplayed}
                 inputRef={button}
                 data-testid="threadlist-dropdown-button"

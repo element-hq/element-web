@@ -1,32 +1,15 @@
 {
-    "Create new room": "Створити нову кімнату",
-    "unknown error code": "невідомий код помилки",
     "%(items)s and %(lastItem)s": "%(items)s та %(lastItem)s",
-    "and %(count)s others...": {
-        "one": "і інше...",
-        "other": "та %(count)s інші..."
-    },
-    "An error has occurred.": "Сталася помилка.",
-    "Email address": "Адреса е-пошти",
     "Sunday": "Неділя",
     "Today": "Сьогодні",
     "Friday": "П'ятниця",
-    "Changelog": "Журнал змін",
-    "Failed to send logs: ": "Не вдалося надіслати журнали: ",
-    "Unavailable": "Недоступний",
-    "Filter results": "Відфільтрувати результати",
     "Tuesday": "Вівторок",
-    "Preparing to send logs": "Приготування до надсилання журланла",
     "Unnamed room": "Неназвана кімната",
     "Saturday": "Субота",
     "Monday": "Понеділок",
     "Wednesday": "Середа",
-    "You cannot delete this message. (%(code)s)": "Ви не можете видалити це повідомлення. (%(code)s)",
-    "Send": "Надіслати",
     "Thursday": "Четвер",
-    "Logs sent": "Журнали надіслані",
     "Yesterday": "Вчора",
-    "Thank you!": "Дякуємо!",
     "Warning!": "Увага!",
     "Sun": "нд",
     "Mon": "пн",
@@ -55,49 +38,11 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s %(time)s",
     "Restricted": "Обмежено",
     "Moderator": "Модератор",
-    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Щоб уникнути втрати історії ваших листувань, ви маєте експортувати ключі кімнати перед виходом. Вам треба буде повернутися до новішої версії %(brand)s аби зробити це",
-    "Incompatible Database": "Несумісна база даних",
-    "Continue With Encryption Disabled": "Продовжити із вимкненим шифруванням",
-    "Are you sure you want to sign out?": "Ви впевнені, що хочете вийти?",
-    "Your homeserver doesn't seem to support this feature.": "Схоже, що ваш домашній сервер не підтримує цю властивість.",
-    "Sign out and remove encryption keys?": "Вийти та видалити ключі шифрування?",
-    "Clear Storage and Sign Out": "Очистити сховище та вийти",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Очищення сховища вашого браузера може усунути проблему, але ви вийдете з системи та зробить історію вашого зашифрованого спілкування непрочитною.",
-    "Verification Pending": "Очікується перевірка",
-    "Upload files (%(current)s of %(total)s)": "Вивантажити файли (%(current)s з %(total)s)",
-    "Upload files": "Вивантажити файли",
-    "Upload all": "Вивантажити всі",
-    "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Файл <b>є надто великим</b> для відвантаження. Допустимий розмір файлів — %(limit)s, але цей файл займає %(sizeOfThisFile)s.",
-    "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Ці файли є <b>надто великими</b> для відвантаження. Допустимий розмір файлів — %(limit)s.",
-    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Деякі файли є <b>надто великими</b> для відвантаження. Допустимий розмір файлів — %(limit)s.",
-    "Upload %(count)s other files": {
-        "other": "Вивантажити %(count)s інших файлів",
-        "one": "Вивантажити %(count)s інший файл"
-    },
-    "Upload Error": "Помилка вивантаження",
     "Deactivate account": "Деактивувати обліковий запис",
-    "Unable to restore session": "Не вдалося відновити сеанс",
-    "We encountered an error trying to restore your previous session.": "Ми натрапили на помилку, намагаючись відновити ваш попередній сеанс.",
-    "Are you sure you want to deactivate your account? This is irreversible.": "Ви впевнені, що бажаєте деактивувати обліковий запис? Ця дія безповоротна.",
-    "Confirm account deactivation": "Підтвердьте знедіювання облікового запису",
-    "Session name": "Назва сеансу",
-    "Session ID": "ID сеансу",
-    "Session key": "Ключ сеансу",
-    "Direct Messages": "Особисті повідомлення",
-    "Room Settings - %(roomName)s": "Налаштування кімнати - %(roomName)s",
-    "You signed in to a new session without verifying it:": "Ви увійшли в новий сеанс, не звіривши його:",
-    "Verify your other session using one of the options below.": "Звірте інший сеанс за допомогою одного з варіантів знизу.",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) починає новий сеанс без його звірення:",
-    "Ask this user to verify their session, or manually verify it below.": "Попросіть цього користувача звірити сеанс, або звірте його власноруч унизу.",
-    "Not Trusted": "Не довірений",
     "Your homeserver has exceeded its user limit.": "Ваш домашній сервер перевищив свій ліміт користувачів.",
     "Your homeserver has exceeded one of its resource limits.": "Ваш домашній сервер перевищив одне із своїх обмежень ресурсів.",
     "Ok": "Гаразд",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Щоб повідомити про проблеми безпеки Matrix, будь ласка, прочитайте <a>Політику розкриття інформації</a> Matrix.org.",
-    "Power level": "Рівень повноважень",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Використовуйте сервер ідентифікації щоб запрошувати через е-пошту. Керується у <settings>налаштуваннях</settings>.",
-    "Confirm by comparing the following with the User Settings in your other session:": "Підтвердьте шляхом порівняння наступного рядка з рядком у користувацьких налаштуваннях вашого іншого сеансу:",
-    "Confirm this user's session by comparing the following with their User Settings:": "Підтвердьте сеанс цього користувача шляхом порівняння наступного рядка з рядком з їхніх користувацьких налаштувань:",
     "Dog": "Пес",
     "Cat": "Кіт",
     "Lion": "Лев",
@@ -161,27 +106,10 @@
     "Santa": "Св. Миколай",
     "Gift": "Подарунок",
     "Lock": "Замок",
-    "Failed to upgrade room": "Не вдалось поліпшити кімнату",
-    "The room upgrade could not be completed": "Поліпшення кімнати не може бути завершене",
-    "Upgrade this room to version %(version)s": "Поліпшити цю кімнату до версії %(version)s",
-    "Upgrade Room Version": "Поліпшити версію кімнати",
-    "Upgrade private room": "Поліпшити закриту кімнату",
-    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Ви поліпшите цю кімнату з <oldVersion /> до <newVersion /> версії.",
-    "Share Room Message": "Поділитися повідомленням кімнати",
     "expand": "розгорнути",
-    "Upgrade public room": "Поліпшити відкриту кімнату",
     "IRC display name width": "Ширина псевдоніма IRC",
-    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Зашифровані повідомлення захищені наскрізним шифруванням. Лише ви та отримувачі повідомлень мають ключі для їх читання.",
     "Encrypted by a deleted session": "Зашифроване видаленим сеансом",
-    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Видалення даних з цього сеансу є безповоротним. Зашифровані повідомлення будуть втрачені якщо їхні ключі не було продубльовано.",
-    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Звірте цього користувача щоб позначити його довіреним. Довіряння користувачам додає спокою якщо ви користуєтесь наскрізно зашифрованими повідомленнями.",
-    "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Звірте цей пристрій щоб позначити його довіреним. Довіряння цьому пристрою додає вам та іншим користувачам спокою якщо ви користуєтесь наскрізно зашифрованими повідомленнями.",
-    "I don't want my encrypted messages": "Мені не потрібні мої зашифровані повідомлення",
-    "You'll lose access to your encrypted messages": "Ви втратите доступ до ваших зашифрованих повідомлень",
-    "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Бракує деяких даних сеансу, включно з ключами зашифрованих повідомлень. Вийдіть та зайдіть знову щоб виправити цю проблему, відновлюючи ключі з дубля.",
     "Failed to connect to integration manager": "Не вдалось з'єднатись з менеджером інтеграцій",
-    "Add an Integration": "Додати інтеграцію",
-    "Confirm your account deactivation by using Single Sign On to prove your identity.": "Підтвердьте деактивацію свого облікового запису через єдиний вхід, щоб підтвердити вашу особу.",
     "Comoros": "Коморські Острови",
     "Colombia": "Колумбія",
     "Cocos (Keeling) Islands": "Кокосові (Кілінг) Острови",
@@ -431,491 +359,50 @@
     "Finland": "Фінляндія",
     "Fiji": "Фіджі",
     "Faroe Islands": "Фарерські Острови",
-    "Can't find this server or its room list": "Не вдалося знайти цей сервер або список його кімнат",
-    "You're all caught up.": "Все готово.",
-    "Click the button below to confirm setting up encryption.": "Клацніть на кнопку внизу, щоб підтвердити налаштування шифрування.",
-    "Confirm encryption setup": "Підтвердити налаштування шифрування",
-    "<a>In reply to</a> <pill>": "<a>У відповідь на</a> <pill>",
-    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Ваш %(brand)s не дозволяє вам користуватись для цього менеджером інтеграцій. Зверніться до адміністратора.",
     "This backup is trusted because it has been restored on this session": "Ця резервна копія довірена, оскільки її було відновлено у цьому сеансі",
-    "Link to most recent message": "Посилання на останнє повідомлення",
-    "Share Room": "Поділитись кімнатою",
-    "edited": "змінено",
-    "Edited at %(date)s. Click to view edits.": "Змінено %(date)s. Натисніть, щоб переглянути зміни.",
-    "Edited at %(date)s": "Змінено %(date)s",
-    "Language Dropdown": "Спадне меню мов",
-    "Information": "Відомості",
     "collapse": "згорнути",
-    "Cancel search": "Скасувати пошук",
-    "Recently Direct Messaged": "Недавно надіслані особисті повідомлення",
-    "User Directory": "Каталог користувачів",
-    "Preparing to download logs": "Приготування до завантаження журналів",
-    "Share User": "Поділитися користувачем",
-    "Some suggestions may be hidden for privacy.": "Деякі пропозиції можуть бути сховані для приватності.",
-    "You may contact me if you have any follow up questions": "Можете зв’язатися зі мною, якщо у вас виникнуть додаткові запитання",
-    "Remove recent messages by %(user)s": "Вилучити останні повідомлення від %(user)s",
     "Home": "Домівка",
-    "Server Options": "Опції сервера",
-    "Allow this widget to verify your identity": "Дозволити цьому віджету перевіряти вашу особу",
     "Sign in with SSO": "Увійти за допомогою SSO",
-    "Click the button below to confirm your identity.": "Клацніть на кнопку внизу, щоб підтвердити свою особу.",
-    "Confirm to continue": "Підтвердьте, щоб продовжити",
     "Delete Widget": "Видалити віджет",
-    "Private space (invite only)": "Приватний простір (лише за запрошенням)",
-    "Space visibility": "Видимість простору",
-    "Reason (optional)": "Причина (не обов'язково)",
-    "Clear all data": "Очистити всі дані",
-    "Clear all data in this session?": "Очистити всі дані сеансу?",
-    "Confirm Removal": "Підтвердити вилучення",
-    "Removing…": "Вилучення…",
-    "Notes": "Примітки",
-    "Close dialog": "Закрити діалогове вікно",
-    "Invite anyway": "Усе одно запросити",
-    "Invite anyway and never warn me again": "Усе одно запросити й більше не попереджати",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Неможливо знайти профілі для Matrix ID, перерахованих унизу — все одно бажаєте запросити їх?",
-    "The following users may not exist": "Таких користувачів може не існувати",
-    "Adding spaces has moved.": "Додавання просторів переміщено.",
-    "Search for rooms": "Пошук кімнат",
-    "Create a new room": "Створити нову кімнату",
-    "Want to add a new room instead?": "Хочете додати нову кімнату натомість?",
-    "Add existing rooms": "Додати наявні кімнати",
-    "Space selection": "Вибір простору",
-    "Adding rooms... (%(progress)s out of %(count)s)": {
-        "one": "Додавання кімнат...",
-        "other": "Додавання кімнат... (%(progress)s з %(count)s)"
-    },
-    "Not all selected were added": "Не всі вибрані додано",
-    "Search for spaces": "Пошук просторів",
-    "Create a new space": "Створити новий простір",
-    "Want to add a new space instead?": "Хочете натомість цього додати новий простір?",
-    "Add existing space": "Додати наявний простір",
-    "Server name": "Назва сервера",
-    "Enter the name of a new server you want to explore.": "Введіть назву нового сервера, який ви хочете переглянути.",
-    "Add a new server": "Додати новий сервер",
-    "Resend %(unsentCount)s reaction(s)": "Повторно надіслати %(unsentCount)s реакцій",
-    "Your server": "Ваш сервер",
-    "You are not allowed to view this server's rooms list": "Вам не дозволено переглядати список кімнат цього сервера",
-    "Looks good": "Все добре",
-    "Enter a server name": "Введіть назву сервера",
-    "And %(count)s more...": {
-        "other": "І ще %(count)s..."
-    },
-    "Join millions for free on the largest public server": "Приєднуйтесь безплатно до мільйонів інших на найбільшому загальнодоступному сервері",
-    "This address is already in use": "Ця адреса вже використовується",
-    "This address is available to use": "Ця адреса доступна",
-    "Please provide an address": "Будь ласка, вкажіть адресу",
-    "Some characters not allowed": "Деякі символи не дозволені",
-    "e.g. my-room": "наприклад, моя-кімната",
-    "Room address": "Адреса кімнати",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Не вдалося завантажити подію, на яку було надано відповідь, її або не існує, або у вас немає дозволу на її перегляд.",
-    "Custom level": "Власний рівень",
-    "To leave the beta, visit your settings.": "Щоб вийти з бета-тестування, перейдіть до налаштувань.",
     "Switch theme": "Змінити тему",
-    "<inviter/> invites you": "<inviter/> запрошує вас",
-    "No results found": "Нічого не знайдено",
     "Backup version:": "Версія резервної копії:",
-    "Create a space": "Створити простір",
-    "Cancel All": "Скасувати все",
     "Send Logs": "Надіслати журнали",
-    "Email (optional)": "Е-пошта (необов'язково)",
-    "Search spaces": "Пошук просторів",
-    "Select spaces": "Вибрати простори",
-    "%(count)s rooms": {
-        "one": "%(count)s кімната",
-        "other": "%(count)s кімнат"
-    },
-    "%(count)s members": {
-        "one": "%(count)s учасник",
-        "other": "%(count)s учасників"
-    },
-    "There was a problem communicating with the server. Please try again.": "Виникла проблема зв'язку з сервером. Повторіть спробу.",
-    "Can't load this message": "Не вдалося завантажити це повідомлення",
-    "Add reaction": "Додати реакцію",
-    "Manually export keys": "Експорт ключів власноруч",
-    "Don't leave any rooms": "Не виходити з будь-якої кімнати",
-    "Updating %(brand)s": "Оновлення %(brand)s",
-    "Clear cache and resync": "Очистити кеш і повторно синхронізувати",
-    "Incompatible local cache": "Несумісний локальний кеш",
-    "Signature upload failed": "Не вдалося вивантажити підпис",
-    "Signature upload success": "Підпис успішно вивантажено",
-    "Unable to upload": "Не вдалося вивантажити",
-    "Cancelled signature upload": "Вивантаження підпису скасовано",
-    "Upload completed": "Вивантаження виконано",
-    "Leave some rooms": "Вийте з кількох кімнат",
-    "Leave all rooms": "Вийти з кімнати",
-    "Verification Request": "Запит підтвердження",
-    "Leave space": "Вийти з простору",
-    "Sent": "Надіслано",
-    "Sending": "Надсилання",
-    "MB": "МБ",
-    "In reply to <a>this message</a>": "У відповідь на <a>це повідомлення</a>",
-    "%(count)s sessions": {
-        "one": "%(count)s сеанс",
-        "other": "Сеансів: %(count)s"
-    },
-    "%(count)s verified sessions": {
-        "one": "1 звірений сеанс",
-        "other": "Довірених сеансів: %(count)s"
-    },
     "Not encrypted": "Не зашифровано",
-    "not specified": "не вказано",
     "Join Room": "Приєднатися до кімнати",
-    "(~%(count)s results)": {
-        "one": "(~%(count)s результат)",
-        "other": "(~%(count)s результатів)"
-    },
     "%(duration)sd": "%(duration)s дн",
     "%(duration)sh": "%(duration)s год",
     "%(duration)sm": "%(duration)s хв",
     "%(duration)ss": "%(duration)s с",
-    "%(count)s reply": {
-        "one": "%(count)s відповідь",
-        "other": "%(count)s відповідей"
-    },
-    "%(count)s people you know have already joined": {
-        "one": "%(count)s осіб, яких ви знаєте, уже приєдналися",
-        "other": "%(count)s людей, яких ви знаєте, уже приєдналися"
-    },
-    "Including %(commaSeparatedMembers)s": "Включно з %(commaSeparatedMembers)s",
-    "View all %(count)s members": {
-        "one": "Переглянути 1 учасника",
-        "other": "Переглянути усіх %(count)s учасників"
-    },
-    "This version of %(brand)s does not support searching encrypted messages": "Ця версія %(brand)s не підтримує пошук зашифрованих повідомлень",
-    "Keys restored": "Ключ відновлено",
-    "Successfully restored %(sessionCount)s keys": "Успішно відновлено %(sessionCount)s ключів",
-    "Failed to decrypt %(failedCount)s sessions!": "Не вдалося розшифрувати %(failedCount)s сеансів!",
-    "Enter Security Key": "Введіть ключ безпеки",
-    "This looks like a valid Security Key!": "Це схоже на дійсний ключ безпеки!",
-    "Not a valid Security Key": "Хибний ключ безпеки",
-    "No backup found!": "Резервних копій не знайдено!",
     "Forget": "Забути",
-    "Modal Widget": "Модальний віджет",
-    "Message edits": "Редагування повідомлення",
-    "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Ви раніше використовували новішу версію %(brand)s для цього сеансу. Щоб знову використовувати цю версію із наскрізним шифруванням, вам потрібно буде вийти та знову ввійти.",
-    "To continue, use Single Sign On to prove your identity.": "Щоб продовжити, скористайтеся єдиним входом для підтвердження особи.",
-    "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Якщо звірити цей пристрій, його буде позначено надійним, а користувачі, які перевірили у вас, будуть довіряти цьому пристрою.",
-    "Only do this if you have no other device to complete verification with.": "Робіть це лише якщо у вас немає іншого пристрою для виконання перевірки.",
-    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Видалення ключів перехресного підписування безповоротне. Усі, з ким ви звірили сеанси, бачитимуть сповіщення системи безпеки. Ви майже напевно не захочете цього робити, якщо тільки ви не втратили всі пристрої, з яких можна виконувати перехресне підписування.",
-    "The server is offline.": "Сервер вимкнено.",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s і %(count)s інших",
         "other": "%(spaceName)s і %(count)s інших"
     },
-    "Thread options": "Параметри гілки",
     "Developer": "Розробка",
     "Moderation": "Модерування",
     "Experimental": "Експериментально",
     "Themes": "Теми",
     "Messaging": "Спілкування",
-    "Spaces you know that contain this space": "Відомі вам простори, до яких входить цей",
-    "Failed to end poll": "Не вдалося завершити опитування",
-    "The poll has ended. No votes were cast.": "Опитування завершене. Жодного голосу не було.",
-    "The poll has ended. Top answer: %(topAnswer)s": "Опитування завершене. Перемогла відповідь: %(topAnswer)s",
-    "Sorry, the poll did not end. Please try again.": "Не вдалося завершити опитування. Спробуйте ще.",
-    "End Poll": "Завершити опитування",
-    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Точно завершити опитування? Буде показано підсумки опитування, і більше ніхто не зможе голосувати.",
-    "Link to room": "Посилання на кімнату",
-    "Command Help": "Допомога команди",
-    "Automatically invite members from this room to the new one": "Автоматично запросити учасників цієї кімнати до нової",
-    "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Зауважте, поліпшення створить нову версію кімнати</b>. Усі наявні повідомлення залишаться в цій архівованій кімнаті.",
-    "Anyone in <SpaceName/> will be able to find and join.": "Будь-хто в <SpaceName/> зможе знайти й приєднатись.",
-    "Anyone will be able to find and join this space, not just members of <SpaceName/>.": "Будь-хто зможе знайти цей простір і приєднатись, не лише учасники <SpaceName/>.",
-    "You won't be able to rejoin unless you are re-invited.": "Ви не зможете приєднатись, доки вас не запросять знову.",
-    "You're the only admin of this space. Leaving it will mean no one has control over it.": "Ви єдиний адміністратор цього простору. Вихід із нього залишить його без керівництва.",
-    "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Ви єдиний адміністратор кімнат чи просторів, з яких ви бажаєте вийти. Вихід із них залишить їх без адміністраторів.",
-    "Leave %(spaceName)s": "Вийти з %(spaceName)s",
     "To join a space you'll need an invite.": "Щоб приєднатись до простору, вам потрібне запрошення.",
-    "You are about to leave <spaceName/>.": "Ви збираєтеся вийти з <spaceName/>.",
-    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Введіть свою фразу безпеки чи <button>скористайтесь ключем безпеки</button> для продовження.",
-    "Link to selected message": "Посилання на вибране повідомлення",
-    "To help us prevent this in future, please <a>send us logs</a>.": "Щоб уникнути цього в майбутньому просимо <a>надіслати нам журнал</a>.",
-    "Missing session data": "Відсутні дані сеансу",
-    "Your browser likely removed this data when running low on disk space.": "Схоже, що ваш браузер вилучив ці дані через брак простору на диску.",
-    "Be found by phone or email": "Бути знайденим за номером телефону або е-поштою",
-    "Find others by phone or email": "Шукати інших за номером телефону або е-поштою",
-    "This will allow you to reset your password and receive notifications.": "Це дозволить вам скинути пароль і отримувати сповіщення.",
-    "Reset event store?": "Очистити сховище подій?",
-    "The server has denied your request.": "Сервер відхилив ваш запит.",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Перейдіть до своєї е-пошти й натисніть на отримане посилання. Після цього натисніть «Продовжити».",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Якщо ви досі користувались новішою версією %(brand)s, ваш сеанс може бути несумісним із цією версією. Закрийте це вікно й поверніться до новішої версії.",
-    "Reset event store": "Очистити сховище подій",
-    "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Якщо таки бажаєте, зауважте, що жодні ваші повідомлення не видаляться, проте пошук сповільниться, поки індекс буде перестворюватись",
-    "You most likely do not want to reset your event index store": "Сумніваємось, що ви бажаєте очистити своє сховище подій",
-    "Start a conversation with someone using their name or username (like <userId/>).": "Почніть розмову з кимось, ввівши їхнє ім'я чи користувацьке ім'я (вигляду <userId/>).",
-    "Start a conversation with someone using their name, email address or username (like <userId/>).": "Почніть розмову з кимось, ввівши їхнє ім'я, е-пошту чи користувацьке ім'я (вигляду <userId/>).",
-    "If you can't see who you're looking for, send them your invite link below.": "Якщо тут немає тих, кого шукаєте, надішліть їм запрошувальне посилання внизу.",
-    "Dial pad": "Номеронабирач",
-    "Only people invited will be able to find and join this space.": "Лише запрошені до цього простору люди зможуть знайти й приєднатися до нього.",
-    "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Ви використовували %(brand)s на %(host)s, ввімкнувши відкладене звантаження учасників. У цій версії відкладене звантаження вимкнене. Оскільки локальне кешування не підтримує переходу між цими опціями, %(brand)s мусить заново синхронізувати ваш обліковий запис.",
-    "Want to add an existing space instead?": "Бажаєте додати наявний простір натомість?",
-    "Invited people will be able to read old messages.": "Запрошені люди зможуть читати старі повідомлення.",
-    "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Запросіть когось за іменем, користувацьким іменем (вигляду <userId/>) чи <a>поділіться цим простором</a>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Запросіть когось за іменем, е-поштою, користувацьким іменем (вигляду <userId/>) чи <a>поділіться цим простором</a>.",
-    "Invite to %(roomName)s": "Запросити до %(roomName)s",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Ці користувачі не існують чи хибні, тож їх не вдалося запросити: %(csvNames)s",
-    "We couldn't invite those users. Please check the users you want to invite and try again.": "Не вдалося запросити користувачів. Перевірте, кого хочете запросити, й спробуйте ще.",
-    "Something went wrong trying to invite the users.": "Щось пішло не так при запрошенні користувачів.",
-    "Invite by email": "Запросити е-поштою",
-    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Запросіть когось за іменем, користувацьким іменем (вигляду <userId/>) чи <a>поділіться цією кімнатою</a>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Запросіть когось за іменем, е-поштою, користувацьким іменем (вигляду <userId/>) чи <a>поділіться цією кімнатою</a>.",
-    "Put a link back to the old room at the start of the new room so people can see old messages": "Додамо лінк старої кімнати нагорі нової, щоб люди могли бачити старі повідомлення",
-    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Вимкнемо користувачам можливість писати до старої версії кімнати й додамо повідомлення з порадою перейти до нової",
-    "Update any local room aliases to point to the new room": "Направимо всі локальні псевдоніми цієї кімнати до нової",
-    "Create a new room with the same name, description and avatar": "Створимо нову кімнату з такою ж назвою, описом і аватаром",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Поліпшення цієї кімнати потребує закриття наявного її примірника й створення нової кімнати натомість. Щоб забезпечити якнайкращі враження учасникам кімнати, ми:",
-    "a new cross-signing key signature": "новий підпис ключа перехресного підписування",
-    "a new master key signature": "новий підпис головного ключа",
-    "Or send invite link": "Або надішліть запрошувальне посилання",
-    "Spaces you're in": "Ваші простори",
-    "Other rooms in %(spaceName)s": "Інші кімнати в %(spaceName)s",
-    "Use \"%(query)s\" to search": "У якому контексті шукати \"%(query)s\"",
-    "Public rooms": "Загальнодоступні кімнати",
-    "Other searches": "Інші пошуки",
-    "To search messages, look for this icon at the top of a room <icon/>": "Шукайте повідомлення за допомогою піктограми <icon/> вгорі кімнати",
-    "Recent searches": "Недавні пошуки",
-    "This version of %(brand)s does not support viewing some encrypted files": "Ця версія %(brand)s не підтримує перегляд деяких зашифрованих файлів",
-    "Use the <a>Desktop app</a> to search encrypted messages": "Скористайтеся <a>стільничним застосунком</a>, щоб пошукати серед зашифрованих повідомлень",
-    "Use the <a>Desktop app</a> to see all encrypted files": "Скористайтеся <a>стільничним застосунком</a>, щоб переглянути всі зашифровані файли",
-    "Message search initialisation failed, check <a>your settings</a> for more information": "Не вдалося почати пошук, перевірте <a>налаштування</a>, щоб дізнатися більше",
     "Submit logs": "Надіслати журнали",
-    "Click to view edits": "Натисніть, щоб переглянути зміни",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Ви будете спрямовані до стороннього сайту, щоб автентифікувати використання облікового запису в %(integrationsUrl)s. Продовжити?",
-    "%(count)s votes": {
-        "one": "%(count)s голос",
-        "other": "%(count)s голосів"
-    },
-    "%(name)s wants to verify": "%(name)s бажає звірити",
-    "%(name)s cancelled": "%(name)s скасовує",
-    "%(name)s declined": "%(name)s відхиляє",
-    "%(name)s accepted": "%(name)s погоджується",
-    "Remove %(count)s messages": {
-        "one": "Видалити 1 повідомлення",
-        "other": "Видалити %(count)s повідомлень"
-    },
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Залежно від кількості повідомлень, це може тривати довго. Не перезавантажуйте клієнт, поки це триває.",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "Гортайте стрічку вище, щоб побачити, чи були такі раніше.",
-    "No recent messages by %(user)s found": "Не знайдено недавніх повідомлень %(user)s",
-    "Recently viewed": "Недавно переглянуті",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Перш ніж надіслати журнали, <a>створіть обговорення на GitHub</a> із описом проблеми.",
-    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Нагадуємо, що ваш браузер не підтримується, тож деякі функції можуть не працювати.",
-    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Будь ласка, повідомте нам, що пішло не так; а ще краще створіть обговорення на GitHub із описом проблеми.",
-    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Використовуйте сервер ідентифікації, щоб запрошувати через е-пошту. <default>Наприклад, типовий %(defaultIdentityServerName)s,</default> або інший у <settings>налаштуваннях</settings>.",
-    "Unable to load commit detail: %(msg)s": "Не вдалося звантажити дані про коміт: %(msg)s",
-    "Server did not return valid authentication information.": "Сервер надав хибні дані розпізнання.",
-    "Server did not require any authentication": "Сервер не попросив увійти",
-    "Add a space to a space you manage.": "Додайте простір до іншого простору, яким ви керуєте.",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "Зазвичай це впливає лише на деталі опрацювання кімнати сервером. Якщо проблема полягає саме в %(brand)s, просимо <a>повідомити нас про ваду</a>.",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Зазвичай це впливає лише на деталі опрацювання кімнати сервером. Якщо проблема полягає саме в %(brand)s, просимо повідомити нас про ваду.",
-    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Поліпшення кімнати — серйозна операція. Її зазвичай радять, коли кімната нестабільна через вади, брак функціоналу чи вразливості безпеки.",
-    "Would you like to leave the rooms in this space?": "Бажаєте вийти з кімнат у цьому просторі?",
-    "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Зауважте, якщо ви не додасте пошту й забудете пароль, то можете <b>назавжди втратити доступ до свого облікового запису</b>.",
-    "Continuing without email": "Продовження без е-пошти",
-    "Data on this screen is shared with %(widgetDomain)s": "Дані на цьому екрані надсилаються до %(widgetDomain)s",
-    "If they don't match, the security of your communication may be compromised.": "Якщо вони не збігаються, безпека вашого спілкування ймовірно скомпрометована.",
-    "These are likely ones other room admins are a part of.": "Ймовірно, інші адміністратори кімнати є їхніми учасниками.",
-    "Other spaces or rooms you might not know": "Інші простори чи кімнати, яких ви можете не знати",
-    "Spaces you know that contain this room": "Відомі вам простори, до яких входить кімната",
-    "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "Оберіть, які простори матимуть доступ до цієї кімнати. Якщо обрати простір, його учасники зможуть знаходити <RoomName/> і приєднуватися.",
-    "You're removing all spaces. Access will default to invite only": "Ви вилучаєте всі простори. Усталеним стане доступ за запрошенням",
-    "Start using Key Backup": "Скористайтеся резервним копіюванням ключів",
-    "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s тепер використовує в 3-5 разів менше пам'яті, звантажуючи дані про інших користувачів лише за потреби. Зачекайте, поки ми синхронізуємося з сервером!",
-    "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Якщо інший примірник %(brand)s досі відкритий в іншій вкладці, просимо закрити її, бо використання %(brand)s із водночас увімкненим і вимкненим відкладеним звантаженням створюватиме проблеми.",
-    "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "Якщо ви забули ключ безпеки, <button>налаштуйте нові параметри відновлення</button>",
-    "Access your secure message history and set up secure messaging by entering your Security Key.": "Отримайте історію своїх зашифрованих повідомлень і налаштуйте безпечне листування, ввівши свій ключ безпеки.",
-    "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>": "Якщо ви забули фразу безпеки, <button1>скористайтеся ключем безпеки</button1> чи <button2>налаштуйте нові параметри відновлення</button2>",
-    "Access your secure message history and set up secure messaging by entering your Security Phrase.": "Отримайте історію своїх зашифрованих повідомлень і налаштуйте безпечне листування, ввівши свою фразу безпеки.",
-    "Unable to load backup status": "Не вдалося отримати стан резервного копіювання",
-    "%(completed)s of %(total)s keys restored": "%(completed)s із %(total)s ключів відновлено",
-    "Restoring keys from backup": "Відновлення ключів із резервної копії",
-    "Unable to set up keys": "Не вдалося налаштувати ключі",
-    "Invalid Security Key": "Хибний ключ безпеки",
-    "Wrong Security Key": "Ключ безпеки не збігається",
-    "Wrong file type": "Тип файлу не підтримується",
-    "The widget will verify your user ID, but won't be able to perform actions for you:": "Віджет звірить ваш ID користувача, але не зможе виконувати такі дії від вашого імені:",
-    "Remember this": "Запам'ятати це",
-    "Remember my selection for this widget": "Запам'ятати мій вибір для цього віджета",
-    "Decline All": "Відхилити все",
-    "This widget would like to:": "Віджет бажає:",
-    "Approve widget permissions": "Підтвердьте дозволи віджета",
-    "Looks good!": "Виглядає файно!",
-    "Hold": "Утримувати",
-    "Resume": "Продовжити",
-    "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Застереження</b>: налаштовуйте резервне копіювання ключів лише на довіреному комп'ютері.",
-    "Enter Security Phrase": "Введіть фразу безпеки",
-    "Unable to restore backup": "Не вдалося відновити резервну копію",
-    "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.": "Не вдалося розшифрувати резервну копію цією фразою безпеки: переконайтеся, що вводите правильну фразу безпеки.",
-    "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.": "Не вдалося розшифрувати резервну копію цим ключем безпеки: переконайтеся, що вводите правильний ключ безпеки.",
-    "Incorrect Security Phrase": "Хибна фраза безпеки",
-    "Security Key mismatch": "Хибний ключ безпеки",
-    "Clear cross-signing keys": "Очистити ключі перехресного підписування",
-    "Destroy cross-signing keys?": "Знищити ключі перехресного підписування?",
-    "Use your Security Key to continue.": "Скористайтеся ключем безпеки для продовження.",
-    "Security Key": "Ключ безпеки",
-    "Unable to access secret storage. Please verify that you entered the correct Security Phrase.": "Не вдалося зайти до таємного сховища. Переконайтеся, що ввели правильну фразу безпеки.",
-    "Security Phrase": "Фраза безпеки",
-    "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Якщо ви скинете все, то почнете заново без довірених сеансів, користувачів і доступу до минулих повідомлень.",
-    "Reset everything": "Скинути все",
-    "Forgotten or lost all recovery methods? <a>Reset all</a>": "Забули чи втратили всі способи відновлення? <a>Скинути все</a>",
-    "Including you, %(commaSeparatedMembers)s": "Включно з вами, %(commaSeparatedMembers)s",
-    "Incoming Verification Request": "Надійшов запит на звірку",
-    "Integrations are disabled": "Інтеграції вимкнені",
-    "Integrations not allowed": "Інтеграції не дозволені",
-    "Unable to start audio streaming.": "Не вдалося почати аудіотрансляцію.",
-    "Failed to start livestream": "Не вдалося почати живу трансляцію",
-    "You don't have permission to do this": "У вас немає на це дозволу",
-    "Message preview": "Попередній перегляд повідомлення",
-    "We couldn't create your DM.": "Не вдалося створити особисте повідомлення.",
-    "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Звірка цього користувача позначить його сеанс довіреним вам, а ваш йому.",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Відновіть доступ до облікового запису й ключів шифрування, збережених у цьому сеансі. Без них ваші сеанси показуватимуть не всі ваші захищені повідомлення.",
-    "The server is not configured to indicate what the problem is (CORS).": "Сервер не налаштований на деталізацію суті проблеми (CORS).",
-    "A connection error occurred while trying to contact the server.": "Стався збій при спробі зв'язку з сервером.",
-    "Your area is experiencing difficulties connecting to the internet.": "У вашій місцевості зараз проблеми з інтернет-зв'язком.",
-    "A browser extension is preventing the request.": "Розширення браузера заблокувало запит.",
-    "Your firewall or anti-virus is blocking the request.": "Ваш файрвол чи антивірус заблокував запит.",
-    "The server (%(serverName)s) took too long to respond.": "Сервер (%(serverName)s) не відповів у прийнятний термін.",
-    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Не вдалося отримати відповідь на деякі запити до вашого сервера. Ось деякі можливі причини.",
-    "Server isn't responding": "Сервер не відповідає",
-    "Failed to find the following users": "Не вдалося знайти таких користувачів",
-    "Sections to show": "Показувані розділи",
-    "Recent changes that have not yet been received": "Останні зміни, котрі ще не отримано",
-    "%(brand)s encountered an error during upload of:": "%(brand)s зіткнувся з помилкою під час вивантаження:",
-    "a key signature": "відбиток ключа",
-    "a device cross-signing signature": "підпис перехресного підписування пристрою",
-    "Consult first": "Спочатку консультуватися",
-    "Transfer": "Переадресація",
-    "Recent Conversations": "Недавні бесіди",
-    "A call can only be transferred to a single user.": "Виклик можна переадресувати лише на одного користувача.",
-    "Search for rooms or people": "Пошук кімнат або людей",
-    "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Це групує ваші бесіди з учасниками цього простору. Вимкніть, щоб сховати ці бесіди з вашого огляду %(spaceName)s.",
-    "Open in OpenStreetMap": "Відкрити в OpenStreetMap",
-    "toggle event": "перемкнути подію",
-    "This address had invalid server or is already in use": "Ця адреса містить хибний сервер чи вже використовується",
-    "Missing room name or separator e.g. (my-room:domain.org)": "Бракує назви кімнати чи розділювача (my-room:domain.org)",
-    "Missing domain separator e.g. (:domain.org)": "Бракує розділювача домену (:domain.org)",
-    "Verify other device": "Звірити інший пристрій",
-    "Could not fetch location": "Не вдалося отримати місцеперебування",
-    "This address does not point at this room": "Ця адреса не вказує на цю кімнату",
-    "Location": "Місцеперебування",
-    "Use <arrows/> to scroll": "Використовуйте <arrows/>, щоб прокручувати",
     "Feedback sent! Thanks, we appreciate it!": "Відгук надісланий! Дякуємо, візьмемо до уваги!",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s і %(space2Name)s",
-    "Join %(roomAddress)s": "Приєднатися до %(roomAddress)s",
-    "Search Dialog": "Вікно пошуку",
-    "What location type do you want to share?": "Який вид місцеперебування поширити?",
-    "Drop a Pin": "Маркер на карті",
-    "My live location": "Змінне місцеперебування наживо",
-    "My current location": "Лише поточне місцеперебування",
-    "%(brand)s could not send your location. Please try again later.": "%(brand)s не вдалося надіслати ваше місцеперебування. Повторіть спробу пізніше.",
-    "We couldn't send your location": "Не вдалося надіслати ваше місцеперебування",
-    "You are sharing your live location": "Ви ділитеся місцеперебуванням",
-    "%(displayName)s's live location": "Місцеперебування %(displayName)s наживо",
-    "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Вимкніть, щоб також видалити системні повідомлення про користувача (зміни членства, редагування профілю…)",
-    "Preserve system messages": "Залишити системні повідомлення",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
-        "one": "Ви збираєтеся видалити %(count)s повідомлення від %(user)s. Це видалить його назавжди для всіх у розмові. Точно продовжити?",
-        "other": "Ви збираєтеся видалити %(count)s повідомлень від %(user)s. Це видалить їх назавжди для всіх у розмові. Точно продовжити?"
-    },
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Використайте нетипові параметри сервера, щоб увійти в інший домашній сервер Matrix, вказавши його URL-адресу. Це дасть вам змогу використовувати %(brand)s з уже наявним у вас на іншому домашньому сервері обліковим записом Matrix.",
-    "Unsent": "Не надіслано",
-    "An error occurred while stopping your live location, please try again": "Сталася помилка припинення надсилання вашого місцеперебування, повторіть спробу",
-    "%(count)s participants": {
-        "one": "1 учасник",
-        "other": "%(count)s учасників"
-    },
-    "%(featureName)s Beta feedback": "%(featureName)s — відгук про бетаверсію",
-    "Live location ended": "Показ місцеперебування наживо завершено",
-    "Live location enabled": "Показ місцеперебування наживо ввімкнено",
-    "Live location error": "Помилка показу місцеперебування наживо",
-    "Live until %(expiryTime)s": "Наживо до %(expiryTime)s",
-    "No live locations": "Передавання місцеперебування наживо відсутні",
-    "Close sidebar": "Закрити бічну панель",
     "View List": "Переглянути список",
-    "View list": "Переглянути список",
-    "Updated %(humanizedUpdateTime)s": "Оновлено %(humanizedUpdateTime)s",
-    "Hide my messages from new joiners": "Сховати мої повідомлення від нових учасників",
-    "Your old messages will still be visible to people who received them, just like emails you sent in the past. Would you like to hide your sent messages from people who join rooms in the future?": "Ваші старі повідомлення залишатимуться доступними людям, які їх уже отримали, аналогічно надісланій е-пошті. Бажаєте сховати надіслані повідомлення від тих, хто відтепер приєднуватиметься до кімнат?",
-    "You will be removed from the identity server: your friends will no longer be able to find you with your email or phone number": "Вас буде вилучено з сервера ідентифікації: ваші друзі не матимуть змоги знайти вас за е-поштою чи номером телефону",
-    "You will leave all rooms and DMs that you are in": "Вас буде вилучено з усіх кімнат і особистих розмов",
-    "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "Ніхто не зможе зареєструватись під вашим користувацьким іменем (MXID), навіть ви: це ім'я залишатиметься недоступним",
-    "You will no longer be able to log in": "Ви більше не зможете ввійти",
-    "You will not be able to reactivate your account": "Відновити обліковий запис буде неможливо",
-    "Confirm that you would like to deactivate your account. If you proceed:": "Підтвердьте, що справді бажаєте знищити обліковий запис. Якщо продовжите:",
-    "To continue, please enter your account password:": "Для продовження введіть пароль облікового запису:",
-    "An error occurred while stopping your live location": "Під час припинення поширення поточного місцеперебування сталася помилка",
     "%(members)s and %(last)s": "%(members)s і %(last)s",
     "%(members)s and more": "%(members)s та інші",
-    "Open room": "Відкрити кімнату",
-    "Cameras": "Камери",
-    "Output devices": "Пристрої виводу",
-    "Input devices": "Пристрої вводу",
-    "An error occurred whilst sharing your live location, please try again": "Сталася помилка під час надання доступу до вашого поточного місцеперебування наживо",
-    "An error occurred whilst sharing your live location": "Сталася помилка під час надання доступу до вашого поточного місцеперебування",
     "Unread email icon": "Піктограма непрочитаного електронного листа",
-    "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "Коли ви вийдете, ці ключі буде видалено з цього пристрою, і ви не зможете читати зашифровані повідомлення, якщо у вас немає ключів для них на інших пристроях або не створено їх резервну копію на сервері.",
-    "Remove search filter for %(filter)s": "Вилучити фільтр пошуку для %(filter)s",
-    "Start a group chat": "Розпочати нову бесіду",
-    "Other options": "Інші опції",
-    "If you can't find the room you're looking for, ask for an invite or create a new room.": "Якщо ви не можете знайти кімнату, яку шукаєте, попросіть запросити вас або створіть нову кімнату.",
-    "Some results may be hidden": "Деякі результати можуть бути приховані",
-    "Copy invite link": "Копіювати запрошувальне посилання",
-    "If you can't see who you're looking for, send them your invite link.": "Якщо ви не знаходите тих, кого шукаєте, надішліть їм своє запрошення.",
-    "Some results may be hidden for privacy": "Деякі результати можуть бути приховані через приватність",
-    "Search for": "Пошук",
-    "%(count)s Members": {
-        "one": "%(count)s учасник",
-        "other": "%(count)s учасників"
-    },
-    "Show: Matrix rooms": "Показати: кімнати Matrix",
-    "Show: %(instance)s rooms (%(server)s)": "Показати: кімнати %(instance)s (%(server)s)",
-    "Add new server…": "Додати новий сервер…",
-    "Remove server “%(roomServer)s”": "Вилучити сервер «%(roomServer)s»",
     "You cannot search for rooms that are neither a room nor a space": "Ви не можете шукати кімнати, які не є ні кімнатою, ні простором",
     "Show spaces": "Показати простори",
     "Show rooms": "Показати кімнати",
     "Explore public spaces in the new search dialog": "Знаходьте загальнодоступні простори в новому діалоговому вікні пошуку",
-    "You don't have permission to share locations": "Ви не маєте дозволу ділитися місцем перебування",
-    "Online community members": "Учасники онлайн-спільноти",
-    "Coworkers and teams": "Співробітники та команди",
-    "Friends and family": "Друзі та родина",
-    "We'll help you get connected.": "Ми допоможемо вам з'єднатися.",
-    "Who will you chat to the most?": "З ким ви спілкуватиметеся найбільше?",
-    "You're in": "Ви увійшли",
-    "You need to have the right permissions in order to share locations in this room.": "Вам потрібно мати відповідні дозволи, щоб ділитися геоданими в цій кімнаті.",
     "Saved Items": "Збережені елементи",
-    "Choose a locale": "Вибрати локаль",
-    "Interactively verify by emoji": "Звірити інтерактивно за допомогою емоджі",
-    "Manually verify by text": "Звірити вручну за допомогою тексту",
-    "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s або %(recoveryFile)s",
-    "%(name)s started a video call": "%(name)s розпочинає відеовиклик",
     "Thread root ID: %(threadRootId)s": "ID кореневої гілки: %(threadRootId)s",
-    "<w>WARNING:</w> <description/>": "<w>ПОПЕРЕДЖЕННЯ:</w> <description/>",
-    " in <strong>%(room)s</strong>": " в <strong>%(room)s</strong>",
-    "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Ви не можете розпочати запис голосового повідомлення, оскільки зараз відбувається запис трансляції наживо. Завершіть трансляцію, щоб розпочати запис голосового повідомлення.",
-    "Can't start voice message": "Не можливо запустити запис голосового повідомлення",
     "unknown": "невідомо",
-    "Enable '%(manageIntegrations)s' in Settings to do this.": "Увімкніть «%(manageIntegrations)s» в Налаштуваннях, щоб зробити це.",
-    "Loading live location…": "Завантаження місця перебування наживо…",
-    "Fetching keys from server…": "Отримання ключів із сервера…",
-    "Checking…": "Перевірка…",
-    "Waiting for partner to confirm…": "Очікування підтвердження партнером…",
-    "Adding…": "Додавання…",
     "Starting export process…": "Початок процесу експорту…",
-    "Invites by email can only be sent one at a time": "Запрошення електронною поштою можна надсилати лише одне за раз",
     "Desktop app logo": "Логотип комп'ютерного застосунку",
     "Requires your server to support the stable version of MSC3827": "Потрібно, щоб ваш сервер підтримував стабільну версію MSC3827",
-    "Message from %(user)s": "Повідомлення від %(user)s",
-    "Message in %(room)s": "Повідомлення в %(room)s",
-    "unavailable": "недоступний",
-    "unknown status code": "невідомий код стану",
-    "Start DM anyway": "Усе одно розпочати особисте спілкування",
-    "Start DM anyway and never warn me again": "Усе одно розпочати особисте спілкування і більше ніколи не попереджати мене",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "Не вдалося знайти профілі для перелічених далі Matrix ID — ви все одно хочете розпочати особисте спілкування?",
-    "Are you sure you wish to remove (delete) this event?": "Ви впевнені, що хочете вилучити (видалити) цю подію?",
-    "Upgrade room": "Поліпшити кімнату",
-    "Note that removing room changes like this could undo the change.": "Зауважте, що вилучення таких змін у кімнаті може призвести до їхнього скасування.",
-    "Other spaces you know": "Інші відомі вам простори",
-    "Failed to query public rooms": "Не вдалося зробити запит до загальнодоступних кімнат",
     "common": {
         "about": "Відомості",
         "analytics": "Аналітика",
@@ -1038,7 +525,31 @@
         "show_more": "Розгорнути",
         "joined": "Приєднано",
         "avatar": "Аватар",
-        "are_you_sure": "Ви впевнені?"
+        "are_you_sure": "Ви впевнені?",
+        "location": "Місцеперебування",
+        "email_address": "Адреса е-пошти",
+        "filter_results": "Відфільтрувати результати",
+        "no_results_found": "Нічого не знайдено",
+        "unsent": "Не надіслано",
+        "cameras": "Камери",
+        "n_participants": {
+            "one": "1 учасник",
+            "other": "%(count)s учасників"
+        },
+        "and_n_others": {
+            "one": "і інше...",
+            "other": "та %(count)s інші..."
+        },
+        "n_members": {
+            "one": "%(count)s учасник",
+            "other": "%(count)s учасників"
+        },
+        "unavailable": "недоступний",
+        "edited": "змінено",
+        "n_rooms": {
+            "one": "%(count)s кімната",
+            "other": "%(count)s кімнат"
+        }
     },
     "action": {
         "continue": "Продовжити",
@@ -1155,7 +666,11 @@
         "add_existing_room": "Додати наявну кімнату",
         "explore_public_rooms": "Переглянути загальнодоступні кімнати",
         "reply_in_thread": "Відповісти у гілці",
-        "click": "Клацнути"
+        "click": "Клацнути",
+        "transfer": "Переадресація",
+        "resume": "Продовжити",
+        "hold": "Утримувати",
+        "view_list": "Переглянути список"
     },
     "a11y": {
         "user_menu": "Користувацьке меню",
@@ -1254,7 +769,10 @@
         "beta_section": "Майбутні функції",
         "beta_description": "Що далі для %(brand)s? Експериментальні — це найкращий спосіб спробувати функції на ранній стадії розробки, протестувати їх і допомогти сформувати їх до фактичного запуску.",
         "experimental_section": "Ранній огляд",
-        "experimental_description": "Відчуваєте себе експериментатором? Спробуйте наші новітні задуми в розробці. Ці функції не остаточні; вони можуть бути нестабільними, можуть змінюватися або взагалі можуть бути відкинуті. <a>Докладніше</a>."
+        "experimental_description": "Відчуваєте себе експериментатором? Спробуйте наші новітні задуми в розробці. Ці функції не остаточні; вони можуть бути нестабільними, можуть змінюватися або взагалі можуть бути відкинуті. <a>Докладніше</a>.",
+        "beta_feedback_title": "%(featureName)s — відгук про бетаверсію",
+        "beta_feedback_leave_button": "Щоб вийти з бета-тестування, перейдіть до налаштувань.",
+        "sliding_sync_checking": "Перевірка…"
     },
     "keyboard": {
         "home": "Домівка",
@@ -1393,7 +911,9 @@
         "moderator": "Модератор",
         "admin": "Адміністратор",
         "mod": "Модератор",
-        "custom": "Власний (%(level)s)"
+        "custom": "Власний (%(level)s)",
+        "label": "Рівень повноважень",
+        "custom_level": "Власний рівень"
     },
     "bug_reporting": {
         "introduction": "Якщо ви надіслали звіт про ваду на GitHub, журнали зневадження можуть допомогти нам визначити проблему. ",
@@ -1411,7 +931,16 @@
         "uploading_logs": "Відвантаження журналів",
         "downloading_logs": "Завантаження журналів",
         "create_new_issue": "<newIssueLink>Створіть нове обговорення</newIssueLink> на GitHub, щоб ми могли розібратися з цією вадою.",
-        "waiting_for_server": "Очікується відповідь від сервера"
+        "waiting_for_server": "Очікується відповідь від сервера",
+        "error_empty": "Будь ласка, повідомте нам, що пішло не так; а ще краще створіть обговорення на GitHub із описом проблеми.",
+        "preparing_logs": "Приготування до надсилання журланла",
+        "logs_sent": "Журнали надіслані",
+        "thank_you": "Дякуємо!",
+        "failed_send_logs": "Не вдалося надіслати журнали: ",
+        "preparing_download": "Приготування до завантаження журналів",
+        "unsupported_browser": "Нагадуємо, що ваш браузер не підтримується, тож деякі функції можуть не працювати.",
+        "textarea_label": "Примітки",
+        "log_request": "Щоб уникнути цього в майбутньому просимо <a>надіслати нам журнал</a>."
     },
     "time": {
         "hours_minutes_seconds_left": "Залишилося %(hours)sгод %(minutes)sхв %(seconds)sс",
@@ -1493,7 +1022,13 @@
         "send_dm": "Надіслати особисте повідомлення",
         "explore_rooms": "Переглянути загальнодоступні кімнати",
         "create_room": "Створити групову бесіду",
-        "create_account": "Створити обліковий запис"
+        "create_account": "Створити обліковий запис",
+        "use_case_heading1": "Ви увійшли",
+        "use_case_heading2": "З ким ви спілкуватиметеся найбільше?",
+        "use_case_heading3": "Ми допоможемо вам з'єднатися.",
+        "use_case_personal_messaging": "Друзі та родина",
+        "use_case_work_messaging": "Співробітники та команди",
+        "use_case_community_messaging": "Учасники онлайн-спільноти"
     },
     "settings": {
         "show_breadcrumbs": "Показувати нещодавно переглянуті кімнати над списком кімнат",
@@ -1897,7 +1432,23 @@
             "email_address_label": "Адреса е-пошти",
             "remove_msisdn_prompt": "Вилучити %(phone)s?",
             "add_msisdn_instructions": "Текстове повідомлення надіслано на номер +%(msisdn)s. Введіть код перевірки з нього.",
-            "msisdn_label": "Телефонний номер"
+            "msisdn_label": "Телефонний номер",
+            "spell_check_locale_placeholder": "Вибрати локаль",
+            "deactivate_confirm_body_sso": "Підтвердьте деактивацію свого облікового запису через єдиний вхід, щоб підтвердити вашу особу.",
+            "deactivate_confirm_body": "Ви впевнені, що бажаєте деактивувати обліковий запис? Ця дія безповоротна.",
+            "deactivate_confirm_continue": "Підтвердьте знедіювання облікового запису",
+            "deactivate_confirm_body_password": "Для продовження введіть пароль облікового запису:",
+            "error_deactivate_communication": "Виникла проблема зв'язку з сервером. Повторіть спробу.",
+            "error_deactivate_no_auth": "Сервер не попросив увійти",
+            "error_deactivate_invalid_auth": "Сервер надав хибні дані розпізнання.",
+            "deactivate_confirm_content": "Підтвердьте, що справді бажаєте знищити обліковий запис. Якщо продовжите:",
+            "deactivate_confirm_content_1": "Відновити обліковий запис буде неможливо",
+            "deactivate_confirm_content_2": "Ви більше не зможете ввійти",
+            "deactivate_confirm_content_3": "Ніхто не зможе зареєструватись під вашим користувацьким іменем (MXID), навіть ви: це ім'я залишатиметься недоступним",
+            "deactivate_confirm_content_4": "Вас буде вилучено з усіх кімнат і особистих розмов",
+            "deactivate_confirm_content_5": "Вас буде вилучено з сервера ідентифікації: ваші друзі не матимуть змоги знайти вас за е-поштою чи номером телефону",
+            "deactivate_confirm_content_6": "Ваші старі повідомлення залишатимуться доступними людям, які їх уже отримали, аналогічно надісланій е-пошті. Бажаєте сховати надіслані повідомлення від тих, хто відтепер приєднуватиметься до кімнат?",
+            "deactivate_confirm_erase_label": "Сховати мої повідомлення від нових учасників"
         },
         "sidebar": {
             "title": "Бічна панель",
@@ -1962,7 +1513,8 @@
             "import_description_1": "Це дає змогу імпортувати ключі шифрування, які ви раніше експортували з іншого клієнта Matrix. Тоді ви зможете розшифрувати будь-які повідомлення, які міг розшифровувати той клієнт.",
             "import_description_2": "Введіть пароль для захисту експортованого файлу. Щоб розшифрувати файл потрібно буде ввести цей пароль.",
             "file_to_import": "Файл для імпорту"
-        }
+        },
+        "warning": "<w>ПОПЕРЕДЖЕННЯ:</w> <description/>"
     },
     "devtools": {
         "send_custom_account_data_event": "Надіслати нетипову подію даних облікового запису",
@@ -2064,7 +1616,8 @@
         "developer_mode": "Режим розробника",
         "view_source_decrypted_event_source": "Розшифрований початковий код події",
         "view_source_decrypted_event_source_unavailable": "Розшифроване джерело недоступне",
-        "original_event_source": "Оригінальний початковий код"
+        "original_event_source": "Оригінальний початковий код",
+        "toggle_event": "перемкнути подію"
     },
     "export_chat": {
         "html": "HTML",
@@ -2123,7 +1676,8 @@
         "format": "Формат",
         "messages": "Повідомлення",
         "size_limit": "Обмеження розміру",
-        "include_attachments": "Включити вкладення"
+        "include_attachments": "Включити вкладення",
+        "size_limit_postfix": "МБ"
     },
     "create_room": {
         "title_video_room": "Створити відеокімнату",
@@ -2157,7 +1711,8 @@
         "m.call": {
             "video_call_started": "Відеовиклик розпочато о %(roomName)s.",
             "video_call_started_unsupported": "Відеовиклик розпочато о %(roomName)s. (не підтримується цим браузером)",
-            "video_call_ended": "Відеовиклик завершено"
+            "video_call_ended": "Відеовиклик завершено",
+            "video_call_started_text": "%(name)s розпочинає відеовиклик"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s розпочинає голосовий виклик.",
@@ -2468,7 +2023,8 @@
         },
         "reactions": {
             "label": "%(reactors)s додає реакцію %(content)s",
-            "tooltip": "<reactors/><reactedWith>додає реакцію %(shortName)s</reactedWith>"
+            "tooltip": "<reactors/><reactedWith>додає реакцію %(shortName)s</reactedWith>",
+            "add_reaction_prompt": "Додати реакцію"
         },
         "m.room.create": {
             "continuation": "Ця кімната — продовження іншої розмови.",
@@ -2488,7 +2044,9 @@
             "external_url": "Початкова URL-адреса",
             "collapse_reply_thread": "Згорнути відповіді",
             "view_related_event": "Переглянути пов'язані події",
-            "report": "Поскаржитися"
+            "report": "Поскаржитися",
+            "resent_unsent_reactions": "Повторно надіслати %(unsentCount)s реакцій",
+            "open_in_osm": "Відкрити в OpenStreetMap"
         },
         "url_preview": {
             "show_n_more": {
@@ -2568,7 +2126,11 @@
             "you_declined": "Ви відхилили",
             "you_cancelled": "Ви скасували",
             "declining": "Відхилення…",
-            "you_started": "Ви надіслали запит перевірки"
+            "you_started": "Ви надіслали запит перевірки",
+            "user_accepted": "%(name)s погоджується",
+            "user_declined": "%(name)s відхиляє",
+            "user_cancelled": "%(name)s скасовує",
+            "user_wants_to_verify": "%(name)s бажає звірити"
         },
         "m.poll.end": {
             "sender_ended": "%(senderName)s завершує опитування",
@@ -2576,6 +2138,28 @@
         },
         "m.video": {
             "error_decrypting": "Помилка розшифрування відео"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "Додати інтеграцію",
+            "dialog_description": "Ви будете спрямовані до стороннього сайту, щоб автентифікувати використання облікового запису в %(integrationsUrl)s. Продовжити?"
+        },
+        "edits": {
+            "tooltip_title": "Змінено %(date)s",
+            "tooltip_sub": "Натисніть, щоб переглянути зміни",
+            "tooltip_label": "Змінено %(date)s. Натисніть, щоб переглянути зміни."
+        },
+        "error_rendering_message": "Не вдалося завантажити це повідомлення",
+        "reply": {
+            "error_loading": "Не вдалося завантажити подію, на яку було надано відповідь, її або не існує, або у вас немає дозволу на її перегляд.",
+            "in_reply_to": "<a>У відповідь на</a> <pill>",
+            "in_reply_to_for_export": "У відповідь на <a>це повідомлення</a>"
+        },
+        "in_room_name": " в <strong>%(room)s</strong>",
+        "m.poll": {
+            "count_of_votes": {
+                "one": "%(count)s голос",
+                "other": "%(count)s голосів"
+            }
         }
     },
     "slash_command": {
@@ -2668,7 +2252,8 @@
         "verify_nop_warning_mismatch": "ПОПЕРЕДЖЕННЯ: сеанс вже звірено, але ключі НЕ ЗБІГАЮТЬСЯ!",
         "verify_mismatch": "УВАГА: НЕ ВДАЛОСЯ ЗВІРИТИ КЛЮЧ! Ключем для %(userId)s та сеансу %(deviceId)s є «%(fprint)s», що не збігається з наданим ключем «%(fingerprint)s». Це може означати, що ваші повідомлення перехоплюють!",
         "verify_success_title": "Звірений ключ",
-        "verify_success_description": "Наданий вами ключ підпису збігається з ключем підпису, що ви отримали від сеансу %(deviceId)s %(userId)s. Сеанс позначено звіреним."
+        "verify_success_description": "Наданий вами ключ підпису збігається з ключем підпису, що ви отримали від сеансу %(deviceId)s %(userId)s. Сеанс позначено звіреним.",
+        "help_dialog_title": "Допомога команди"
     },
     "presence": {
         "busy": "Зайнятий",
@@ -2801,9 +2386,11 @@
         "unable_to_access_audio_input_title": "Не вдалося доступитися до мікрофона",
         "unable_to_access_audio_input_description": "Збій доступу до вашого мікрофона. Перевірте налаштування браузера й повторіть спробу.",
         "no_audio_input_title": "Мікрофона не знайдено",
-        "no_audio_input_description": "Мікрофона не знайдено. Перевірте налаштування й повторіть спробу."
+        "no_audio_input_description": "Мікрофона не знайдено. Перевірте налаштування й повторіть спробу.",
+        "transfer_consult_first_label": "Спочатку консультуватися",
+        "input_devices": "Пристрої вводу",
+        "output_devices": "Пристрої виводу"
     },
-    "Other": "Інше",
     "room_settings": {
         "permissions": {
             "m.room.avatar_space": "Змінити аватар простору",
@@ -2910,7 +2497,16 @@
                 "other": "Оновлення просторів... (%(progress)s із %(count)s)"
             },
             "error_join_rule_change_title": "Не вдалося оновити правила приєднання",
-            "error_join_rule_change_unknown": "Невідомий збій"
+            "error_join_rule_change_unknown": "Невідомий збій",
+            "join_rule_restricted_dialog_empty_warning": "Ви вилучаєте всі простори. Усталеним стане доступ за запрошенням",
+            "join_rule_restricted_dialog_title": "Вибрати простори",
+            "join_rule_restricted_dialog_description": "Оберіть, які простори матимуть доступ до цієї кімнати. Якщо обрати простір, його учасники зможуть знаходити <RoomName/> і приєднуватися.",
+            "join_rule_restricted_dialog_filter_placeholder": "Пошук просторів",
+            "join_rule_restricted_dialog_heading_space": "Відомі вам простори, до яких входить цей",
+            "join_rule_restricted_dialog_heading_room": "Відомі вам простори, до яких входить кімната",
+            "join_rule_restricted_dialog_heading_other": "Інші простори чи кімнати, яких ви можете не знати",
+            "join_rule_restricted_dialog_heading_unknown": "Ймовірно, інші адміністратори кімнати є їхніми учасниками.",
+            "join_rule_restricted_dialog_heading_known": "Інші відомі вам простори"
         },
         "general": {
             "publish_toggle": "Опублікувати цю кімнату для всіх у каталозі кімнат %(domain)s?",
@@ -2951,7 +2547,17 @@
             "canonical_alias_field_label": "Основна адреса",
             "avatar_field_label": "Аватар кімнати",
             "aliases_no_items_label": "Поки немає загальнодоступних адрес, додайте їх унизу",
-            "aliases_items_label": "Інші загальнодоступні адреси:"
+            "aliases_items_label": "Інші загальнодоступні адреси:",
+            "alias_heading": "Адреса кімнати",
+            "alias_field_has_domain_invalid": "Бракує розділювача домену (:domain.org)",
+            "alias_field_has_localpart_invalid": "Бракує назви кімнати чи розділювача (my-room:domain.org)",
+            "alias_field_safe_localpart_invalid": "Деякі символи не дозволені",
+            "alias_field_required_invalid": "Будь ласка, вкажіть адресу",
+            "alias_field_matches_invalid": "Ця адреса не вказує на цю кімнату",
+            "alias_field_taken_valid": "Ця адреса доступна",
+            "alias_field_taken_invalid_domain": "Ця адреса вже використовується",
+            "alias_field_taken_invalid": "Ця адреса містить хибний сервер чи вже використовується",
+            "alias_field_placeholder_default": "наприклад, моя-кімната"
         },
         "advanced": {
             "unfederated": "Ця кімната недоступна для віддалених серверів Matrix",
@@ -2964,7 +2570,25 @@
             "room_version_section": "Версія кімнати",
             "room_version": "Версія кімнати:",
             "information_section_space": "Відомості про простір",
-            "information_section_room": "Відомості про кімнату"
+            "information_section_room": "Відомості про кімнату",
+            "error_upgrade_title": "Не вдалось поліпшити кімнату",
+            "error_upgrade_description": "Поліпшення кімнати не може бути завершене",
+            "upgrade_button": "Поліпшити цю кімнату до версії %(version)s",
+            "upgrade_dialog_title": "Поліпшити версію кімнати",
+            "upgrade_dialog_description": "Поліпшення цієї кімнати потребує закриття наявного її примірника й створення нової кімнати натомість. Щоб забезпечити якнайкращі враження учасникам кімнати, ми:",
+            "upgrade_dialog_description_1": "Створимо нову кімнату з такою ж назвою, описом і аватаром",
+            "upgrade_dialog_description_2": "Направимо всі локальні псевдоніми цієї кімнати до нової",
+            "upgrade_dialog_description_3": "Вимкнемо користувачам можливість писати до старої версії кімнати й додамо повідомлення з порадою перейти до нової",
+            "upgrade_dialog_description_4": "Додамо лінк старої кімнати нагорі нової, щоб люди могли бачити старі повідомлення",
+            "upgrade_warning_dialog_invite_label": "Автоматично запросити учасників цієї кімнати до нової",
+            "upgrade_warning_dialog_title_private": "Поліпшити закриту кімнату",
+            "upgrade_dwarning_ialog_title_public": "Поліпшити відкриту кімнату",
+            "upgrade_warning_dialog_title": "Поліпшити кімнату",
+            "upgrade_warning_dialog_report_bug_prompt": "Зазвичай це впливає лише на деталі опрацювання кімнати сервером. Якщо проблема полягає саме в %(brand)s, просимо повідомити нас про ваду.",
+            "upgrade_warning_dialog_report_bug_prompt_link": "Зазвичай це впливає лише на деталі опрацювання кімнати сервером. Якщо проблема полягає саме в %(brand)s, просимо <a>повідомити нас про ваду</a>.",
+            "upgrade_warning_dialog_description": "Поліпшення кімнати — серйозна операція. Її зазвичай радять, коли кімната нестабільна через вади, брак функціоналу чи вразливості безпеки.",
+            "upgrade_warning_dialog_explainer": "<b>Зауважте, поліпшення створить нову версію кімнати</b>. Усі наявні повідомлення залишаться в цій архівованій кімнаті.",
+            "upgrade_warning_dialog_footer": "Ви поліпшите цю кімнату з <oldVersion /> до <newVersion /> версії."
         },
         "delete_avatar_label": "Видалити аватар",
         "upload_avatar_label": "Вивантажити аватар",
@@ -3004,7 +2628,9 @@
             "enable_element_call_caption": "%(brand)s наскрізно зашифровано, але наразі обмежений меншою кількістю користувачів.",
             "enable_element_call_no_permissions_tooltip": "Ви не маєте достатніх повноважень, щоб змінити це.",
             "call_type_section": "Тип викликів"
-        }
+        },
+        "title": "Налаштування кімнати - %(roomName)s",
+        "alias_not_specified": "не вказано"
     },
     "encryption": {
         "verification": {
@@ -3081,7 +2707,21 @@
             "timed_out": "Термін дії звірки завершився.",
             "cancelled_self": "Ви скасували звірення на іншому пристрої.",
             "cancelled_user": "%(displayName)s скасовує звірку.",
-            "cancelled": "Ви скасували звірку."
+            "cancelled": "Ви скасували звірку.",
+            "incoming_sas_user_dialog_text_1": "Звірте цього користувача щоб позначити його довіреним. Довіряння користувачам додає спокою якщо ви користуєтесь наскрізно зашифрованими повідомленнями.",
+            "incoming_sas_user_dialog_text_2": "Звірка цього користувача позначить його сеанс довіреним вам, а ваш йому.",
+            "incoming_sas_device_dialog_text_1": "Звірте цей пристрій щоб позначити його довіреним. Довіряння цьому пристрою додає вам та іншим користувачам спокою якщо ви користуєтесь наскрізно зашифрованими повідомленнями.",
+            "incoming_sas_device_dialog_text_2": "Якщо звірити цей пристрій, його буде позначено надійним, а користувачі, які перевірили у вас, будуть довіряти цьому пристрою.",
+            "incoming_sas_dialog_waiting": "Очікування підтвердження партнером…",
+            "incoming_sas_dialog_title": "Надійшов запит на звірку",
+            "manual_device_verification_self_text": "Підтвердьте шляхом порівняння наступного рядка з рядком у користувацьких налаштуваннях вашого іншого сеансу:",
+            "manual_device_verification_user_text": "Підтвердьте сеанс цього користувача шляхом порівняння наступного рядка з рядком з їхніх користувацьких налаштувань:",
+            "manual_device_verification_device_name_label": "Назва сеансу",
+            "manual_device_verification_device_id_label": "ID сеансу",
+            "manual_device_verification_device_key_label": "Ключ сеансу",
+            "manual_device_verification_footer": "Якщо вони не збігаються, безпека вашого спілкування ймовірно скомпрометована.",
+            "verification_dialog_title_device": "Звірити інший пристрій",
+            "verification_dialog_title_user": "Запит підтвердження"
         },
         "old_version_detected_title": "Виявлено старі криптографічні дані",
         "old_version_detected_description": "Було виявлено дані зі старої версії %(brand)s. Це призведе до збоїння наскрізного шифрування у старій версії. Наскрізно зашифровані повідомлення, що обмінювані нещодавно, під час використання старої версії, можуть бути недешифровними у цій версії. Це може призвести до збоїв повідомлень, обмінюваних також і з цією версією. У разі виникнення проблем вийдіть з програми та зайдіть знову. Задля збереження історії повідомлень експортуйте та переімпортуйте ваші ключі.",
@@ -3135,7 +2775,57 @@
         "cross_signing_room_warning": "Хтось користується невідомим сеансом",
         "cross_signing_room_verified": "Усі в цій кімнаті звірені",
         "cross_signing_room_normal": "Ця кімната є наскрізно зашифрованою",
-        "unsupported": "Цей клієнт не підтримує наскрізного шифрування."
+        "unsupported": "Цей клієнт не підтримує наскрізного шифрування.",
+        "incompatible_database_sign_out_description": "Щоб уникнути втрати історії ваших листувань, ви маєте експортувати ключі кімнати перед виходом. Вам треба буде повернутися до новішої версії %(brand)s аби зробити це",
+        "incompatible_database_description": "Ви раніше використовували новішу версію %(brand)s для цього сеансу. Щоб знову використовувати цю версію із наскрізним шифруванням, вам потрібно буде вийти та знову ввійти.",
+        "incompatible_database_title": "Несумісна база даних",
+        "incompatible_database_disable": "Продовжити із вимкненим шифруванням",
+        "key_signature_upload_completed": "Вивантаження виконано",
+        "key_signature_upload_cancelled": "Вивантаження підпису скасовано",
+        "key_signature_upload_failed": "Не вдалося вивантажити",
+        "key_signature_upload_success_title": "Підпис успішно вивантажено",
+        "key_signature_upload_failed_title": "Не вдалося вивантажити підпис",
+        "udd": {
+            "own_new_session_text": "Ви увійшли в новий сеанс, не звіривши його:",
+            "own_ask_verify_text": "Звірте інший сеанс за допомогою одного з варіантів знизу.",
+            "other_new_session_text": "%(name)s (%(userId)s) починає новий сеанс без його звірення:",
+            "other_ask_verify_text": "Попросіть цього користувача звірити сеанс, або звірте його власноруч унизу.",
+            "title": "Не довірений",
+            "manual_verification_button": "Звірити вручну за допомогою тексту",
+            "interactive_verification_button": "Звірити інтерактивно за допомогою емоджі"
+        },
+        "access_secret_storage_dialog": {
+            "key_validation_text": {
+                "wrong_file_type": "Тип файлу не підтримується",
+                "recovery_key_is_correct": "Виглядає файно!",
+                "wrong_security_key": "Ключ безпеки не збігається",
+                "invalid_security_key": "Хибний ключ безпеки"
+            },
+            "reset_title": "Скинути все",
+            "reset_warning_1": "Робіть це лише якщо у вас немає іншого пристрою для виконання перевірки.",
+            "reset_warning_2": "Якщо ви скинете все, то почнете заново без довірених сеансів, користувачів і доступу до минулих повідомлень.",
+            "security_phrase_title": "Фраза безпеки",
+            "security_phrase_incorrect_error": "Не вдалося зайти до таємного сховища. Переконайтеся, що ввели правильну фразу безпеки.",
+            "enter_phrase_or_key_prompt": "Введіть свою фразу безпеки чи <button>скористайтесь ключем безпеки</button> для продовження.",
+            "security_key_title": "Ключ безпеки",
+            "use_security_key_prompt": "Скористайтеся ключем безпеки для продовження.",
+            "separator": "%(securityKey)s або %(recoveryFile)s",
+            "restoring": "Відновлення ключів із резервної копії"
+        },
+        "reset_all_button": "Забули чи втратили всі способи відновлення? <a>Скинути все</a>",
+        "destroy_cross_signing_dialog": {
+            "title": "Знищити ключі перехресного підписування?",
+            "warning": "Видалення ключів перехресного підписування безповоротне. Усі, з ким ви звірили сеанси, бачитимуть сповіщення системи безпеки. Ви майже напевно не захочете цього робити, якщо тільки ви не втратили всі пристрої, з яких можна виконувати перехресне підписування.",
+            "primary_button_text": "Очистити ключі перехресного підписування"
+        },
+        "confirm_encryption_setup_title": "Підтвердити налаштування шифрування",
+        "confirm_encryption_setup_body": "Клацніть на кнопку внизу, щоб підтвердити налаштування шифрування.",
+        "unable_to_setup_keys_error": "Не вдалося налаштувати ключі",
+        "key_signature_upload_failed_master_key_signature": "новий підпис головного ключа",
+        "key_signature_upload_failed_cross_signing_key_signature": "новий підпис ключа перехресного підписування",
+        "key_signature_upload_failed_device_cross_signing_key_signature": "підпис перехресного підписування пристрою",
+        "key_signature_upload_failed_key_signature": "відбиток ключа",
+        "key_signature_upload_failed_body": "%(brand)s зіткнувся з помилкою під час вивантаження:"
     },
     "emoji": {
         "category_frequently_used": "Часто використовувані",
@@ -3285,7 +2975,10 @@
             "fallback_button": "Почати автентифікацію",
             "sso_title": "Використати єдиний вхід, щоб продовжити",
             "sso_body": "Підтвердьте додавання цієї адреси е-пошти скориставшись єдиним входом, щоб довести вашу справжність.",
-            "code": "Код"
+            "code": "Код",
+            "sso_preauth_body": "Щоб продовжити, скористайтеся єдиним входом для підтвердження особи.",
+            "sso_postauth_title": "Підтвердьте, щоб продовжити",
+            "sso_postauth_body": "Клацніть на кнопку внизу, щоб підтвердити свою особу."
         },
         "password_field_label": "Введіть пароль",
         "password_field_strong_label": "Хороший надійний пароль!",
@@ -3361,7 +3054,41 @@
         },
         "country_dropdown": "Спадний список країн",
         "common_failures": {},
-        "captcha_description": "Домашній сервер бажає впевнитися, що ви не робот."
+        "captcha_description": "Домашній сервер бажає впевнитися, що ви не робот.",
+        "autodiscovery_invalid": "Хибна відповідь самоналаштування домашнього сервера",
+        "autodiscovery_generic_failure": "Не вдалося отримати параметри самоналаштування від сервера",
+        "autodiscovery_invalid_hs_base_url": "Хибний base_url у m.homeserver",
+        "autodiscovery_invalid_hs": "Сервер за URL-адресою не виглядає дійсним домашнім сервером Matrix",
+        "autodiscovery_invalid_is_base_url": "Хибний base_url у m.identity_server",
+        "autodiscovery_invalid_is": "Сервер за URL-адресою не виглядає дійсним сервером ідентифікації Matrix",
+        "autodiscovery_invalid_is_response": "Хибна відповідь самоналаштування сервера ідентифікації",
+        "server_picker_description": "Використайте нетипові параметри сервера, щоб увійти в інший домашній сервер Matrix, вказавши його URL-адресу. Це дасть вам змогу використовувати %(brand)s з уже наявним у вас на іншому домашньому сервері обліковим записом Matrix.",
+        "server_picker_description_matrix.org": "Приєднуйтесь безплатно до мільйонів інших на найбільшому загальнодоступному сервері",
+        "server_picker_title_default": "Опції сервера",
+        "soft_logout": {
+            "clear_data_title": "Очистити всі дані сеансу?",
+            "clear_data_description": "Видалення даних з цього сеансу є безповоротним. Зашифровані повідомлення будуть втрачені якщо їхні ключі не було продубльовано.",
+            "clear_data_button": "Очистити всі дані"
+        },
+        "logout_dialog": {
+            "setup_secure_backup_description_1": "Зашифровані повідомлення захищені наскрізним шифруванням. Лише ви та отримувачі повідомлень мають ключі для їх читання.",
+            "setup_secure_backup_description_2": "Коли ви вийдете, ці ключі буде видалено з цього пристрою, і ви не зможете читати зашифровані повідомлення, якщо у вас немає ключів для них на інших пристроях або не створено їх резервну копію на сервері.",
+            "use_key_backup": "Скористайтеся резервним копіюванням ключів",
+            "skip_key_backup": "Мені не потрібні мої зашифровані повідомлення",
+            "megolm_export": "Експорт ключів власноруч",
+            "setup_key_backup_title": "Ви втратите доступ до ваших зашифрованих повідомлень",
+            "description": "Ви впевнені, що хочете вийти?"
+        },
+        "registration": {
+            "continue_without_email_title": "Продовження без е-пошти",
+            "continue_without_email_description": "Зауважте, якщо ви не додасте пошту й забудете пароль, то можете <b>назавжди втратити доступ до свого облікового запису</b>.",
+            "continue_without_email_field_label": "Е-пошта (необов'язково)"
+        },
+        "set_email": {
+            "verification_pending_title": "Очікується перевірка",
+            "verification_pending_description": "Перейдіть до своєї е-пошти й натисніть на отримане посилання. Після цього натисніть «Продовжити».",
+            "description": "Це дозволить вам скинути пароль і отримувати сповіщення."
+        }
     },
     "room_list": {
         "sort_unread_first": "Спочатку показувати кімнати з непрочитаними повідомленнями",
@@ -3415,7 +3142,8 @@
         "spam_or_propaganda": "Спам чи пропаганда",
         "report_entire_room": "Поскаржитися на всю кімнату",
         "report_content_to_homeserver": "Поскаржитися на вміст адміністратору вашого домашнього сервера",
-        "description": "Зі скаргою на це повідомлення буде надіслано його унікальний «ID події» адміністраторові вашого домашнього сервера. Якщо повідомлення у цій кімнаті зашифровані, то адміністратор не зможе побачити ані тексту повідомлень, ані жодних файлів чи зображень."
+        "description": "Зі скаргою на це повідомлення буде надіслано його унікальний «ID події» адміністраторові вашого домашнього сервера. Якщо повідомлення у цій кімнаті зашифровані, то адміністратор не зможе побачити ані тексту повідомлень, ані жодних файлів чи зображень.",
+        "other_label": "Інше"
     },
     "setting": {
         "help_about": {
@@ -3534,7 +3262,22 @@
         "popout": "Спливний віджет",
         "unpin_to_view_right_panel": "Відкріпіть віджет, щоб він зʼявився на цій панелі",
         "set_room_layout": "Встановити мій вигляд кімнати всім",
-        "close_to_view_right_panel": "Закрийте віджет, щоб він зʼявився на цій панелі"
+        "close_to_view_right_panel": "Закрийте віджет, щоб він зʼявився на цій панелі",
+        "modal_title_default": "Модальний віджет",
+        "modal_data_warning": "Дані на цьому екрані надсилаються до %(widgetDomain)s",
+        "capabilities_dialog": {
+            "title": "Підтвердьте дозволи віджета",
+            "content_starting_text": "Віджет бажає:",
+            "decline_all_permission": "Відхилити все",
+            "remember_Selection": "Запам'ятати мій вибір для цього віджета"
+        },
+        "open_id_permissions_dialog": {
+            "title": "Дозволити цьому віджету перевіряти вашу особу",
+            "starting_text": "Віджет звірить ваш ID користувача, але не зможе виконувати такі дії від вашого імені:",
+            "remember_selection": "Запам'ятати це"
+        },
+        "error_unable_start_audio_stream_description": "Не вдалося почати аудіотрансляцію.",
+        "error_unable_start_audio_stream_title": "Не вдалося почати живу трансляцію"
     },
     "feedback": {
         "sent": "Відгук надіслано",
@@ -3543,7 +3286,8 @@
         "may_contact_label": "Можете звернутись до мене за подальшими діями чи допомогою з випробуванням ідей",
         "pro_type": "ПОРАДА: Звітуючи про ваду, додайте <debugLogsLink>журнали зневадження</debugLogsLink>, щоб допомогти нам визначити проблему.",
         "existing_issue_link": "Спершу гляньте <existingIssuesLink>відомі вади на Github</existingIssuesLink>. Ця ще невідома? <newIssueLink>Звітувати про нову ваду</newIssueLink>.",
-        "send_feedback_action": "Надіслати відгук"
+        "send_feedback_action": "Надіслати відгук",
+        "can_contact_label": "Можете зв’язатися зі мною, якщо у вас виникнуть додаткові запитання"
     },
     "zxcvbn": {
         "suggestions": {
@@ -3616,7 +3360,10 @@
         "no_update": "Оновлення відсутні.",
         "downloading": "Завантаження оновлення…",
         "new_version_available": "Доступна нова версія. <a>Оновити зараз</a>",
-        "check_action": "Перевірити на наявність оновлень"
+        "check_action": "Перевірити на наявність оновлень",
+        "error_unable_load_commit": "Не вдалося звантажити дані про коміт: %(msg)s",
+        "unavailable": "Недоступний",
+        "changelog": "Журнал змін"
     },
     "threads": {
         "all_threads": "Усі гілки",
@@ -3631,7 +3378,11 @@
         "empty_heading": "Упорядкуйте обговорення за допомогою гілок",
         "unable_to_decrypt": "Не вдалося розшифрувати повідомлення",
         "open_thread": "Відкрити гілку",
-        "error_start_thread_existing_relation": "Неможливо створити гілку з події з наявним відношенням"
+        "error_start_thread_existing_relation": "Неможливо створити гілку з події з наявним відношенням",
+        "count_of_reply": {
+            "one": "%(count)s відповідь",
+            "other": "%(count)s відповідей"
+        }
     },
     "theme": {
         "light_high_contrast": "Контрастна світла",
@@ -3665,7 +3416,41 @@
         "title_when_query_available": "Результати",
         "search_placeholder": "Шукати назви та описи",
         "no_search_result_hint": "Ви можете спробувати інший пошуковий запит або перевірити помилки.",
-        "joining_space": "Приєднання"
+        "joining_space": "Приєднання",
+        "add_existing_subspace": {
+            "space_dropdown_title": "Додати наявний простір",
+            "create_prompt": "Хочете натомість цього додати новий простір?",
+            "create_button": "Створити новий простір",
+            "filter_placeholder": "Пошук просторів"
+        },
+        "add_existing_room_space": {
+            "error_heading": "Не всі вибрані додано",
+            "progress_text": {
+                "one": "Додавання кімнат...",
+                "other": "Додавання кімнат... (%(progress)s з %(count)s)"
+            },
+            "dm_heading": "Особисті повідомлення",
+            "space_dropdown_label": "Вибір простору",
+            "space_dropdown_title": "Додати наявні кімнати",
+            "create": "Хочете додати нову кімнату натомість?",
+            "create_prompt": "Створити нову кімнату",
+            "subspace_moved_note": "Додавання просторів переміщено."
+        },
+        "room_filter_placeholder": "Пошук кімнат",
+        "leave_dialog_public_rejoin_warning": "Ви не зможете приєднатись, доки вас не запросять знову.",
+        "leave_dialog_only_admin_warning": "Ви єдиний адміністратор цього простору. Вихід із нього залишить його без керівництва.",
+        "leave_dialog_only_admin_room_warning": "Ви єдиний адміністратор кімнат чи просторів, з яких ви бажаєте вийти. Вихід із них залишить їх без адміністраторів.",
+        "leave_dialog_title": "Вийти з %(spaceName)s",
+        "leave_dialog_description": "Ви збираєтеся вийти з <spaceName/>.",
+        "leave_dialog_option_intro": "Бажаєте вийти з кімнат у цьому просторі?",
+        "leave_dialog_option_none": "Не виходити з будь-якої кімнати",
+        "leave_dialog_option_all": "Вийти з кімнати",
+        "leave_dialog_option_specific": "Вийте з кількох кімнат",
+        "leave_dialog_action": "Вийти з простору",
+        "preferences": {
+            "sections_section": "Показувані розділи",
+            "show_people_in_space": "Це групує ваші бесіди з учасниками цього простору. Вимкніть, щоб сховати ці бесіди з вашого огляду %(spaceName)s."
+        }
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Цей домашній сервер не налаштовано на показ карт.",
@@ -3690,7 +3475,30 @@
         "click_move_pin": "Натисніть, щоб посунути маркер",
         "click_drop_pin": "Натисніть, щоб створити маркер",
         "share_button": "Поділитися місцеперебуванням",
-        "stop_and_close": "Припинити й закрити"
+        "stop_and_close": "Припинити й закрити",
+        "error_fetch_location": "Не вдалося отримати місцеперебування",
+        "error_no_perms_title": "Ви не маєте дозволу ділитися місцем перебування",
+        "error_no_perms_description": "Вам потрібно мати відповідні дозволи, щоб ділитися геоданими в цій кімнаті.",
+        "error_send_title": "Не вдалося надіслати ваше місцеперебування",
+        "error_send_description": "%(brand)s не вдалося надіслати ваше місцеперебування. Повторіть спробу пізніше.",
+        "live_description": "Місцеперебування %(displayName)s наживо",
+        "share_type_own": "Лише поточне місцеперебування",
+        "share_type_live": "Змінне місцеперебування наживо",
+        "share_type_pin": "Маркер на карті",
+        "share_type_prompt": "Який вид місцеперебування поширити?",
+        "live_update_time": "Оновлено %(humanizedUpdateTime)s",
+        "live_until": "Наживо до %(expiryTime)s",
+        "loading_live_location": "Завантаження місця перебування наживо…",
+        "live_location_ended": "Показ місцеперебування наживо завершено",
+        "live_location_error": "Помилка показу місцеперебування наживо",
+        "live_locations_empty": "Передавання місцеперебування наживо відсутні",
+        "close_sidebar": "Закрити бічну панель",
+        "error_stopping_live_location": "Під час припинення поширення поточного місцеперебування сталася помилка",
+        "error_sharing_live_location": "Сталася помилка під час надання доступу до вашого поточного місцеперебування",
+        "live_location_active": "Ви ділитеся місцеперебуванням",
+        "live_location_enabled": "Показ місцеперебування наживо ввімкнено",
+        "error_sharing_live_location_try_again": "Сталася помилка під час надання доступу до вашого поточного місцеперебування наживо",
+        "error_stopping_live_location_try_again": "Сталася помилка припинення надсилання вашого місцеперебування, повторіть спробу"
     },
     "labs_mjolnir": {
         "room_name": "Мій список блокувань",
@@ -3762,7 +3570,16 @@
         "address_label": "Адреса",
         "label": "Створити простір",
         "add_details_prompt_2": "Ви можете змінити це будь-коли.",
-        "creating": "Створення…"
+        "creating": "Створення…",
+        "subspace_join_rule_restricted_description": "Будь-хто в <SpaceName/> зможе знайти й приєднатись.",
+        "subspace_join_rule_public_description": "Будь-хто зможе знайти цей простір і приєднатись, не лише учасники <SpaceName/>.",
+        "subspace_join_rule_invite_description": "Лише запрошені до цього простору люди зможуть знайти й приєднатися до нього.",
+        "subspace_dropdown_title": "Створити простір",
+        "subspace_beta_notice": "Додайте простір до іншого простору, яким ви керуєте.",
+        "subspace_join_rule_label": "Видимість простору",
+        "subspace_join_rule_invite_only": "Приватний простір (лише за запрошенням)",
+        "subspace_existing_space_prompt": "Бажаєте додати наявний простір натомість?",
+        "subspace_adding": "Додавання…"
     },
     "user_menu": {
         "switch_theme_light": "Світла тема",
@@ -3931,7 +3748,11 @@
             "all_rooms": "Усі кімнати",
             "field_placeholder": "Пошук…",
             "this_room_button": "Шукати цю кімнату",
-            "all_rooms_button": "Вибрати всі кімнати"
+            "all_rooms_button": "Вибрати всі кімнати",
+            "result_count": {
+                "one": "(~%(count)s результат)",
+                "other": "(~%(count)s результатів)"
+            }
         },
         "jump_to_bottom_button": "Перейти до найновіших повідомлень",
         "jump_read_marker": "Перейти до першого непрочитаного повідомлення.",
@@ -3946,7 +3767,19 @@
         "error_jump_to_date_details": "Подробиці помилки",
         "jump_to_date_beginning": "Початок кімнати",
         "jump_to_date": "Перейти до дати",
-        "jump_to_date_prompt": "Виберіть до якої дати перейти"
+        "jump_to_date_prompt": "Виберіть до якої дати перейти",
+        "face_pile_tooltip_label": {
+            "one": "Переглянути 1 учасника",
+            "other": "Переглянути усіх %(count)s учасників"
+        },
+        "face_pile_tooltip_shortcut_joined": "Включно з вами, %(commaSeparatedMembers)s",
+        "face_pile_tooltip_shortcut": "Включно з %(commaSeparatedMembers)s",
+        "invites_you_text": "<inviter/> запрошує вас",
+        "unknown_status_code_for_timeline_jump": "невідомий код стану",
+        "face_pile_summary": {
+            "one": "%(count)s осіб, яких ви знаєте, уже приєдналися",
+            "other": "%(count)s людей, яких ви знаєте, уже приєдналися"
+        }
     },
     "file_panel": {
         "guest_note": "<a>Зареєструйтеся</a>, щоб скористатись цим функціоналом",
@@ -3967,7 +3800,9 @@
         "identity_server_no_terms_title": "Сервер ідентифікації не має умов надання послуг",
         "identity_server_no_terms_description_1": "Щоб підтвердити адресу е-пошти або телефон ця дія потребує доступу до типового серверу ідентифікації <server />, але сервер не має жодних умов надання послуг.",
         "identity_server_no_terms_description_2": "Продовжуйте лише якщо довіряєте власнику сервера.",
-        "inline_intro_text": "Погодьтеся з <policyLink /> для продовження:"
+        "inline_intro_text": "Погодьтеся з <policyLink /> для продовження:",
+        "summary_identity_server_1": "Шукати інших за номером телефону або е-поштою",
+        "summary_identity_server_2": "Бути знайденим за номером телефону або е-поштою"
     },
     "space_settings": {
         "title": "Налаштування — %(spaceName)s"
@@ -4004,7 +3839,13 @@
         "total_n_votes_voted": {
             "one": "На підставі %(count)s голосу",
             "other": "На підставі %(count)s голосів"
-        }
+        },
+        "end_message_no_votes": "Опитування завершене. Жодного голосу не було.",
+        "end_message": "Опитування завершене. Перемогла відповідь: %(topAnswer)s",
+        "error_ending_title": "Не вдалося завершити опитування",
+        "error_ending_description": "Не вдалося завершити опитування. Спробуйте ще.",
+        "end_title": "Завершити опитування",
+        "end_description": "Точно завершити опитування? Буде показано підсумки опитування, і більше ніхто не зможе голосувати."
     },
     "failed_load_async_component": "Завантаження неможливе! Перевірте інтернет-зʼєднання та спробуйте ще.",
     "upload_failed_generic": "Не вдалося вивантажити файл '%(fileName)s'.",
@@ -4052,7 +3893,39 @@
         "error_version_unsupported_space": "Домашній сервер користувача не підтримувати версію простору.",
         "error_version_unsupported_room": "Домашній сервер користувача не підтримує версію кімнати.",
         "error_unknown": "Невідома помилка з боку сервера",
-        "to_space": "Запросити до %(spaceName)s"
+        "to_space": "Запросити до %(spaceName)s",
+        "unable_find_profiles_description_default": "Неможливо знайти профілі для Matrix ID, перерахованих унизу — все одно бажаєте запросити їх?",
+        "unable_find_profiles_title": "Таких користувачів може не існувати",
+        "unable_find_profiles_invite_never_warn_label_default": "Усе одно запросити й більше не попереджати",
+        "unable_find_profiles_invite_label_default": "Усе одно запросити",
+        "email_caption": "Запросити е-поштою",
+        "error_dm": "Не вдалося створити особисте повідомлення.",
+        "ask_anyway_description": "Не вдалося знайти профілі для перелічених далі Matrix ID — ви все одно хочете розпочати особисте спілкування?",
+        "ask_anyway_never_warn_label": "Усе одно розпочати особисте спілкування і більше ніколи не попереджати мене",
+        "ask_anyway_label": "Усе одно розпочати особисте спілкування",
+        "error_find_room": "Щось пішло не так при запрошенні користувачів.",
+        "error_invite": "Не вдалося запросити користувачів. Перевірте, кого хочете запросити, й спробуйте ще.",
+        "error_transfer_multiple_target": "Виклик можна переадресувати лише на одного користувача.",
+        "error_find_user_title": "Не вдалося знайти таких користувачів",
+        "error_find_user_description": "Ці користувачі не існують чи хибні, тож їх не вдалося запросити: %(csvNames)s",
+        "recents_section": "Недавні бесіди",
+        "suggestions_section": "Недавно надіслані особисті повідомлення",
+        "email_use_default_is": "Використовуйте сервер ідентифікації, щоб запрошувати через е-пошту. <default>Наприклад, типовий %(defaultIdentityServerName)s,</default> або інший у <settings>налаштуваннях</settings>.",
+        "email_use_is": "Використовуйте сервер ідентифікації щоб запрошувати через е-пошту. Керується у <settings>налаштуваннях</settings>.",
+        "start_conversation_name_email_mxid_prompt": "Почніть розмову з кимось, ввівши їхнє ім'я, е-пошту чи користувацьке ім'я (вигляду <userId/>).",
+        "start_conversation_name_mxid_prompt": "Почніть розмову з кимось, ввівши їхнє ім'я чи користувацьке ім'я (вигляду <userId/>).",
+        "suggestions_disclaimer": "Деякі пропозиції можуть бути сховані для приватності.",
+        "suggestions_disclaimer_prompt": "Якщо тут немає тих, кого шукаєте, надішліть їм запрошувальне посилання внизу.",
+        "send_link_prompt": "Або надішліть запрошувальне посилання",
+        "to_room": "Запросити до %(roomName)s",
+        "name_email_mxid_share_space": "Запросіть когось за іменем, е-поштою, користувацьким іменем (вигляду <userId/>) чи <a>поділіться цим простором</a>.",
+        "name_mxid_share_space": "Запросіть когось за іменем, користувацьким іменем (вигляду <userId/>) чи <a>поділіться цим простором</a>.",
+        "name_email_mxid_share_room": "Запросіть когось за іменем, е-поштою, користувацьким іменем (вигляду <userId/>) чи <a>поділіться цією кімнатою</a>.",
+        "name_mxid_share_room": "Запросіть когось за іменем, користувацьким іменем (вигляду <userId/>) чи <a>поділіться цією кімнатою</a>.",
+        "key_share_warning": "Запрошені люди зможуть читати старі повідомлення.",
+        "email_limit_one": "Запрошення електронною поштою можна надсилати лише одне за раз",
+        "transfer_user_directory_tab": "Каталог користувачів",
+        "transfer_dial_pad_tab": "Номеронабирач"
     },
     "scalar": {
         "error_create": "Неможливо створити віджет.",
@@ -4085,7 +3958,21 @@
         "something_went_wrong": "Щось пішло не так!",
         "download_media": "Не вдалося завантажити початковий медіафайл, не знайдено url джерела",
         "update_power_level": "Не вдалося змінити рівень повноважень",
-        "unknown": "Невідома помилка"
+        "unknown": "Невідома помилка",
+        "dialog_description_default": "Сталася помилка.",
+        "edit_history_unsupported": "Схоже, що ваш домашній сервер не підтримує цю властивість.",
+        "session_restore": {
+            "clear_storage_description": "Вийти та видалити ключі шифрування?",
+            "clear_storage_button": "Очистити сховище та вийти",
+            "title": "Не вдалося відновити сеанс",
+            "description_1": "Ми натрапили на помилку, намагаючись відновити ваш попередній сеанс.",
+            "description_2": "Якщо ви досі користувались новішою версією %(brand)s, ваш сеанс може бути несумісним із цією версією. Закрийте це вікно й поверніться до новішої версії.",
+            "description_3": "Очищення сховища вашого браузера може усунути проблему, але ви вийдете з системи та зробить історію вашого зашифрованого спілкування непрочитною."
+        },
+        "storage_evicted_title": "Відсутні дані сеансу",
+        "storage_evicted_description_1": "Бракує деяких даних сеансу, включно з ключами зашифрованих повідомлень. Вийдіть та зайдіть знову щоб виправити цю проблему, відновлюючи ключі з дубля.",
+        "storage_evicted_description_2": "Схоже, що ваш браузер вилучив ці дані через брак простору на диску.",
+        "unknown_error_code": "невідомий код помилки"
     },
     "in_space1_and_space2": "У просторах %(space1Name)s і %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -4239,7 +4126,31 @@
         "deactivate_confirm_action": "Деактивувати користувача",
         "error_deactivate": "Не вдалося деактивувати користувача",
         "role_label": "Роль у <RoomName/>",
-        "edit_own_devices": "Керувати пристроями"
+        "edit_own_devices": "Керувати пристроями",
+        "redact": {
+            "no_recent_messages_title": "Не знайдено недавніх повідомлень %(user)s",
+            "no_recent_messages_description": "Гортайте стрічку вище, щоб побачити, чи були такі раніше.",
+            "confirm_title": "Вилучити останні повідомлення від %(user)s",
+            "confirm_description_1": {
+                "one": "Ви збираєтеся видалити %(count)s повідомлення від %(user)s. Це видалить його назавжди для всіх у розмові. Точно продовжити?",
+                "other": "Ви збираєтеся видалити %(count)s повідомлень від %(user)s. Це видалить їх назавжди для всіх у розмові. Точно продовжити?"
+            },
+            "confirm_description_2": "Залежно від кількості повідомлень, це може тривати довго. Не перезавантажуйте клієнт, поки це триває.",
+            "confirm_keep_state_label": "Залишити системні повідомлення",
+            "confirm_keep_state_explainer": "Вимкніть, щоб також видалити системні повідомлення про користувача (зміни членства, редагування профілю…)",
+            "confirm_button": {
+                "one": "Видалити 1 повідомлення",
+                "other": "Видалити %(count)s повідомлень"
+            }
+        },
+        "count_of_verified_sessions": {
+            "one": "1 звірений сеанс",
+            "other": "Довірених сеансів: %(count)s"
+        },
+        "count_of_sessions": {
+            "one": "%(count)s сеанс",
+            "other": "Сеансів: %(count)s"
+        }
     },
     "stickers": {
         "empty": "У вас поки немає пакунків наліпок",
@@ -4292,6 +4203,9 @@
                 "one": "Остаточний результат на підставі %(count)s голосу",
                 "other": "Остаточний результат на підставі %(count)s голосів"
             }
+        },
+        "thread_list": {
+            "context_menu_label": "Параметри гілки"
         }
     },
     "reject_invitation_dialog": {
@@ -4328,12 +4242,168 @@
     },
     "console_wait": "Заждіть!",
     "cant_load_page": "Не вдалося завантажити сторінку",
-    "Invalid homeserver discovery response": "Хибна відповідь самоналаштування домашнього сервера",
-    "Failed to get autodiscovery configuration from server": "Не вдалося отримати параметри самоналаштування від сервера",
-    "Invalid base_url for m.homeserver": "Хибний base_url у m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "Сервер за URL-адресою не виглядає дійсним домашнім сервером Matrix",
-    "Invalid identity server discovery response": "Хибна відповідь самоналаштування сервера ідентифікації",
-    "Invalid base_url for m.identity_server": "Хибний base_url у m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "Сервер за URL-адресою не виглядає дійсним сервером ідентифікації Matrix",
-    "General failure": "Загальний збій"
+    "General failure": "Загальний збій",
+    "emoji_picker": {
+        "cancel_search_label": "Скасувати пошук"
+    },
+    "info_tooltip_title": "Відомості",
+    "language_dropdown_label": "Спадне меню мов",
+    "pill": {
+        "permalink_other_room": "Повідомлення в %(room)s",
+        "permalink_this_room": "Повідомлення від %(user)s"
+    },
+    "seshat": {
+        "error_initialising": "Не вдалося почати пошук, перевірте <a>налаштування</a>, щоб дізнатися більше",
+        "warning_kind_files_app": "Скористайтеся <a>стільничним застосунком</a>, щоб переглянути всі зашифровані файли",
+        "warning_kind_search_app": "Скористайтеся <a>стільничним застосунком</a>, щоб пошукати серед зашифрованих повідомлень",
+        "warning_kind_files": "Ця версія %(brand)s не підтримує перегляд деяких зашифрованих файлів",
+        "warning_kind_search": "Ця версія %(brand)s не підтримує пошук зашифрованих повідомлень",
+        "reset_title": "Очистити сховище подій?",
+        "reset_description": "Сумніваємось, що ви бажаєте очистити своє сховище подій",
+        "reset_explainer": "Якщо таки бажаєте, зауважте, що жодні ваші повідомлення не видаляться, проте пошук сповільниться, поки індекс буде перестворюватись",
+        "reset_button": "Очистити сховище подій"
+    },
+    "truncated_list_n_more": {
+        "other": "І ще %(count)s..."
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_required_invalid": "Введіть назву сервера",
+            "network_dropdown_available_valid": "Все добре",
+            "network_dropdown_available_invalid_forbidden": "Вам не дозволено переглядати список кімнат цього сервера",
+            "network_dropdown_available_invalid": "Не вдалося знайти цей сервер або список його кімнат",
+            "network_dropdown_your_server_description": "Ваш сервер",
+            "network_dropdown_remove_server_adornment": "Вилучити сервер «%(roomServer)s»",
+            "network_dropdown_add_dialog_title": "Додати новий сервер",
+            "network_dropdown_add_dialog_description": "Введіть назву нового сервера, який ви хочете переглянути.",
+            "network_dropdown_add_dialog_placeholder": "Назва сервера",
+            "network_dropdown_add_server_option": "Додати новий сервер…",
+            "network_dropdown_selected_label_instance": "Показати: кімнати %(instance)s (%(server)s)",
+            "network_dropdown_selected_label": "Показати: кімнати Matrix"
+        }
+    },
+    "dialog_close_label": "Закрити діалогове вікно",
+    "voice_message": {
+        "cant_start_broadcast_title": "Не можливо запустити запис голосового повідомлення",
+        "cant_start_broadcast_description": "Ви не можете розпочати запис голосового повідомлення, оскільки зараз відбувається запис трансляції наживо. Завершіть трансляцію, щоб розпочати запис голосового повідомлення."
+    },
+    "redact": {
+        "error": "Ви не можете видалити це повідомлення. (%(code)s)",
+        "ongoing": "Вилучення…",
+        "confirm_description": "Ви впевнені, що хочете вилучити (видалити) цю подію?",
+        "confirm_description_state": "Зауважте, що вилучення таких змін у кімнаті може призвести до їхнього скасування.",
+        "confirm_button": "Підтвердити вилучення",
+        "reason_label": "Причина (не обов'язково)"
+    },
+    "forward": {
+        "no_perms_title": "У вас немає на це дозволу",
+        "sending": "Надсилання",
+        "sent": "Надіслано",
+        "open_room": "Відкрити кімнату",
+        "send_label": "Надіслати",
+        "message_preview_heading": "Попередній перегляд повідомлення",
+        "filter_placeholder": "Пошук кімнат або людей"
+    },
+    "integrations": {
+        "disabled_dialog_title": "Інтеграції вимкнені",
+        "disabled_dialog_description": "Увімкніть «%(manageIntegrations)s» в Налаштуваннях, щоб зробити це.",
+        "impossible_dialog_title": "Інтеграції не дозволені",
+        "impossible_dialog_description": "Ваш %(brand)s не дозволяє вам користуватись для цього менеджером інтеграцій. Зверніться до адміністратора."
+    },
+    "lazy_loading": {
+        "disabled_description1": "Ви використовували %(brand)s на %(host)s, ввімкнувши відкладене звантаження учасників. У цій версії відкладене звантаження вимкнене. Оскільки локальне кешування не підтримує переходу між цими опціями, %(brand)s мусить заново синхронізувати ваш обліковий запис.",
+        "disabled_description2": "Якщо інший примірник %(brand)s досі відкритий в іншій вкладці, просимо закрити її, бо використання %(brand)s із водночас увімкненим і вимкненим відкладеним звантаженням створюватиме проблеми.",
+        "disabled_title": "Несумісний локальний кеш",
+        "disabled_action": "Очистити кеш і повторно синхронізувати",
+        "resync_description": "%(brand)s тепер використовує в 3-5 разів менше пам'яті, звантажуючи дані про інших користувачів лише за потреби. Зачекайте, поки ми синхронізуємося з сервером!",
+        "resync_title": "Оновлення %(brand)s"
+    },
+    "message_edit_dialog_title": "Редагування повідомлення",
+    "server_offline": {
+        "empty_timeline": "Все готово.",
+        "title": "Сервер не відповідає",
+        "description": "Не вдалося отримати відповідь на деякі запити до вашого сервера. Ось деякі можливі причини.",
+        "description_1": "Сервер (%(serverName)s) не відповів у прийнятний термін.",
+        "description_2": "Ваш файрвол чи антивірус заблокував запит.",
+        "description_3": "Розширення браузера заблокувало запит.",
+        "description_4": "Сервер вимкнено.",
+        "description_5": "Сервер відхилив ваш запит.",
+        "description_6": "У вашій місцевості зараз проблеми з інтернет-зв'язком.",
+        "description_7": "Стався збій при спробі зв'язку з сервером.",
+        "description_8": "Сервер не налаштований на деталізацію суті проблеми (CORS).",
+        "recent_changes_heading": "Останні зміни, котрі ще не отримано"
+    },
+    "spotlight_dialog": {
+        "count_of_members": {
+            "one": "%(count)s учасник",
+            "other": "%(count)s учасників"
+        },
+        "public_rooms_label": "Загальнодоступні кімнати",
+        "heading_with_query": "У якому контексті шукати \"%(query)s\"",
+        "heading_without_query": "Пошук",
+        "spaces_title": "Ваші простори",
+        "failed_querying_public_rooms": "Не вдалося зробити запит до загальнодоступних кімнат",
+        "other_rooms_in_space": "Інші кімнати в %(spaceName)s",
+        "join_button_text": "Приєднатися до %(roomAddress)s",
+        "result_may_be_hidden_privacy_warning": "Деякі результати можуть бути приховані через приватність",
+        "cant_find_person_helpful_hint": "Якщо ви не знаходите тих, кого шукаєте, надішліть їм своє запрошення.",
+        "copy_link_text": "Копіювати запрошувальне посилання",
+        "result_may_be_hidden_warning": "Деякі результати можуть бути приховані",
+        "cant_find_room_helpful_hint": "Якщо ви не можете знайти кімнату, яку шукаєте, попросіть запросити вас або створіть нову кімнату.",
+        "create_new_room_button": "Створити нову кімнату",
+        "group_chat_section_title": "Інші опції",
+        "start_group_chat_button": "Розпочати нову бесіду",
+        "message_search_section_title": "Інші пошуки",
+        "recent_searches_section_title": "Недавні пошуки",
+        "recently_viewed_section_title": "Недавно переглянуті",
+        "search_dialog": "Вікно пошуку",
+        "remove_filter": "Вилучити фільтр пошуку для %(filter)s",
+        "search_messages_hint": "Шукайте повідомлення за допомогою піктограми <icon/> вгорі кімнати",
+        "keyboard_scroll_hint": "Використовуйте <arrows/>, щоб прокручувати"
+    },
+    "share": {
+        "title_room": "Поділитись кімнатою",
+        "permalink_most_recent": "Посилання на останнє повідомлення",
+        "title_user": "Поділитися користувачем",
+        "title_message": "Поділитися повідомленням кімнати",
+        "permalink_message": "Посилання на вибране повідомлення",
+        "link_title": "Посилання на кімнату"
+    },
+    "upload_file": {
+        "title_progress": "Вивантажити файли (%(current)s з %(total)s)",
+        "title": "Вивантажити файли",
+        "upload_all_button": "Вивантажити всі",
+        "error_file_too_large": "Файл <b>є надто великим</b> для відвантаження. Допустимий розмір файлів — %(limit)s, але цей файл займає %(sizeOfThisFile)s.",
+        "error_files_too_large": "Ці файли є <b>надто великими</b> для відвантаження. Допустимий розмір файлів — %(limit)s.",
+        "error_some_files_too_large": "Деякі файли є <b>надто великими</b> для відвантаження. Допустимий розмір файлів — %(limit)s.",
+        "upload_n_others_button": {
+            "other": "Вивантажити %(count)s інших файлів",
+            "one": "Вивантажити %(count)s інший файл"
+        },
+        "cancel_all_button": "Скасувати все",
+        "error_title": "Помилка вивантаження"
+    },
+    "restore_key_backup_dialog": {
+        "key_fetch_in_progress": "Отримання ключів із сервера…",
+        "load_error_content": "Не вдалося отримати стан резервного копіювання",
+        "recovery_key_mismatch_title": "Хибний ключ безпеки",
+        "recovery_key_mismatch_description": "Не вдалося розшифрувати резервну копію цим ключем безпеки: переконайтеся, що вводите правильний ключ безпеки.",
+        "incorrect_security_phrase_title": "Хибна фраза безпеки",
+        "incorrect_security_phrase_dialog": "Не вдалося розшифрувати резервну копію цією фразою безпеки: переконайтеся, що вводите правильну фразу безпеки.",
+        "restore_failed_error": "Не вдалося відновити резервну копію",
+        "no_backup_error": "Резервних копій не знайдено!",
+        "keys_restored_title": "Ключ відновлено",
+        "count_of_decryption_failures": "Не вдалося розшифрувати %(failedCount)s сеансів!",
+        "count_of_successfully_restored_keys": "Успішно відновлено %(sessionCount)s ключів",
+        "enter_phrase_title": "Введіть фразу безпеки",
+        "key_backup_warning": "<b>Застереження</b>: налаштовуйте резервне копіювання ключів лише на довіреному комп'ютері.",
+        "enter_phrase_description": "Отримайте історію своїх зашифрованих повідомлень і налаштуйте безпечне листування, ввівши свою фразу безпеки.",
+        "phrase_forgotten_text": "Якщо ви забули фразу безпеки, <button1>скористайтеся ключем безпеки</button1> чи <button2>налаштуйте нові параметри відновлення</button2>",
+        "enter_key_title": "Введіть ключ безпеки",
+        "key_is_valid": "Це схоже на дійсний ключ безпеки!",
+        "key_is_invalid": "Хибний ключ безпеки",
+        "enter_key_description": "Отримайте історію своїх зашифрованих повідомлень і налаштуйте безпечне листування, ввівши свій ключ безпеки.",
+        "key_forgotten_text": "Якщо ви забули ключ безпеки, <button>налаштуйте нові параметри відновлення</button>",
+        "load_keys_progress": "%(completed)s із %(total)s ключів відновлено"
+    }
 }

@@ -117,7 +117,7 @@ export const EventEditor: React.FC<IEventEditorProps> = ({ fieldDefs, defaultCon
     };
 
     return (
-        <BaseTool actionLabel={_t("Send")} onAction={onAction} onBack={onBack}>
+        <BaseTool actionLabel={_t("forward|send_label")} onAction={onAction} onBack={onBack}>
             <div className="mx_DevTools_eventTypeStateKeyGroup">{fields}</div>
 
             <Field

@@ -322,7 +322,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         }
 
         const editedSpan = this.props.mxEvent.replacingEvent() ? (
-            <span className="mx_MPollBody_edited"> ({_t("edited")})</span>
+            <span className="mx_MPollBody_edited"> ({_t("common|edited")})</span>
         ) : null;
 
         return (

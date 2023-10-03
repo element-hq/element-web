@@ -42,7 +42,7 @@ export default class TruncatedList extends React.Component<IProps> {
     public static defaultProps = {
         truncateAt: 2,
         createOverflowElement(overflowCount: number, totalCount: number) {
-            return <div>{_t("And %(count)s more...", { count: overflowCount })}</div>;
+            return <div>{_t("truncated_list_n_more", { count: overflowCount })}</div>;
         },
     };
 

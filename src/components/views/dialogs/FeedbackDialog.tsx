@@ -57,7 +57,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
 
             Modal.createDialog(InfoDialog, {
                 title: _t("feedback|sent"),
-                description: _t("Thank you!"),
+                description: _t("bug_reporting|thank_you"),
             });
         }
         props.onFinished();

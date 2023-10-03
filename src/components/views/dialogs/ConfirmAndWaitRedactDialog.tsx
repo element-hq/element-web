@@ -88,12 +88,12 @@ export default class ConfirmAndWaitRedactDialog extends React.PureComponent<IPro
                     <ErrorDialog
                         onFinished={this.props.onFinished}
                         title={_t("common|error")}
-                        description={_t("You cannot delete this message. (%(code)s)", { code })}
+                        description={_t("redact|error", { code })}
                     />
                 );
             } else {
                 return (
-                    <BaseDialog onFinished={this.props.onFinished} hasCancel={false} title={_t("Removing…")}>
+                    <BaseDialog onFinished={this.props.onFinished} hasCancel={false} title={_t("redact|ongoing")}>
                         <Spinner />
                     </BaseDialog>
                 );

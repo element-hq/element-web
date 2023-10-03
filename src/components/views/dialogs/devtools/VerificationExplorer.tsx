@@ -27,7 +27,7 @@ import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import { Tool } from "../DevtoolsDialog";
 
 const PHASE_MAP: Record<Phase, TranslationKey> = {
-    [Phase.Unsent]: _td("Unsent"),
+    [Phase.Unsent]: _td("common|unsent"),
     [Phase.Requested]: _td("devtools|phase_requested"),
     [Phase.Ready]: _td("devtools|phase_ready"),
     [Phase.Done]: _td("action|done"),

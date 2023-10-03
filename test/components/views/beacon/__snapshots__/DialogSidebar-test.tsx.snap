@@ -11,7 +11,7 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
       <h4
         class="mx_Heading_h4"
       >
-        View List
+        View list
       </h4>
       <div
         class="mx_AccessibleButton mx_DialogSidebar_closeButton"
@@ -115,7 +115,7 @@ exports[`<DialogSidebar /> renders sidebar correctly without beacons 1`] = `
       <h4
         class="mx_Heading_h4"
       >
-        View List
+        View list
       </h4>
       <div
         class="mx_AccessibleButton mx_DialogSidebar_closeButton"

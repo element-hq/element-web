@@ -45,7 +45,7 @@ export const OidcLogoutDialog: React.FC<OidcLogoutDialogProps> = ({
     return (
         <BaseDialog onFinished={onFinished} title={_t("action|sign_out")} contentId="mx_Dialog_content">
             <div className="mx_Dialog_content" id="mx_Dialog_content">
-                {_t("You will be redirected to your server's authentication provider to complete sign out.")}
+                {_t("auth|oidc|logout_redirect_warning")}
             </div>
             <div className="mx_Dialog_buttons">
                 {hasOpenedLogoutLink ? (

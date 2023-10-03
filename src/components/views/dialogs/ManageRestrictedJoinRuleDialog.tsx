@@ -43,10 +43,10 @@ const Entry: React.FC<{
 
     let description;
     if (localRoom) {
-        description = _t("%(count)s members", { count: room.getJoinedMemberCount() });
+        description = _t("common|n_members", { count: room.getJoinedMemberCount() });
         const numChildRooms = SpaceStore.instance.getChildRooms(room.roomId).length;
         if (numChildRooms > 0) {
-            description += " · " + _t("%(count)s rooms", { count: numChildRooms });
+            description += " · " + _t("common|n_rooms", { count: numChildRooms });
         }
     }
 
@@ -132,7 +132,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
     if (newSelected.size < 1) {
         inviteOnlyWarning = (
             <div className="mx_ManageRestrictedJoinRuleDialog_section_info">
-                {_t("You're removing all spaces. Access will default to invite only")}
+                {_t("room_settings|security|join_rule_restricted_dialog_empty_warning")}
             </div>
         );
     }
@@ -141,14 +141,14 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
         filteredSpacesContainingRoom.length + filteredOtherJoinedSpaces.length + filteredOtherEntries.length;
     return (
         <BaseDialog
-            title={_t("Select spaces")}
+            title={_t("room_settings|security|join_rule_restricted_dialog_title")}
             className="mx_ManageRestrictedJoinRuleDialog"
             onFinished={onFinished}
             fixedWidth={false}
         >
             <p>
                 {_t(
-                    "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.",
+                    "room_settings|security|join_rule_restricted_dialog_description",
                     {},
                     {
                         RoomName: () => <b>{room.name}</b>,
@@ -158,7 +158,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
             <MatrixClientContext.Provider value={cli}>
                 <SearchBox
                     className="mx_textinput_icon mx_textinput_search"
-                    placeholder={_t("Search spaces")}
+                    placeholder={_t("room_settings|security|join_rule_restricted_dialog_filter_placeholder")}
                     onSearch={setQuery}
                     autoFocus={true}
                 />
@@ -167,8 +167,8 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                         <div className="mx_ManageRestrictedJoinRuleDialog_section">
                             <h3>
                                 {room.isSpaceRoom()
-                                    ? _t("Spaces you know that contain this space")
-                                    : _t("Spaces you know that contain this room")}
+                                    ? _t("room_settings|security|join_rule_restricted_dialog_heading_space")
+                                    : _t("room_settings|security|join_rule_restricted_dialog_heading_room")}
                             </h3>
                             {filteredSpacesContainingRoom.map((space) => {
                                 return (
@@ -187,9 +187,9 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
 
                     {filteredOtherEntries.length > 0 ? (
                         <div className="mx_ManageRestrictedJoinRuleDialog_section">
-                            <h3>{_t("Other spaces or rooms you might not know")}</h3>
+                            <h3>{_t("room_settings|security|join_rule_restricted_dialog_heading_other")}</h3>
                             <div className="mx_ManageRestrictedJoinRuleDialog_section_info">
-                                <div>{_t("These are likely ones other room admins are a part of.")}</div>
+                                <div>{_t("room_settings|security|join_rule_restricted_dialog_heading_unknown")}</div>
                             </div>
                             {filteredOtherEntries.map((space) => {
                                 return (
@@ -208,7 +208,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
 
                     {filteredOtherJoinedSpaces.length > 0 ? (
                         <div className="mx_ManageRestrictedJoinRuleDialog_section">
-                            <h3>{_t("Other spaces you know")}</h3>
+                            <h3>{_t("room_settings|security|join_rule_restricted_dialog_heading_known")}</h3>
                             {filteredOtherJoinedSpaces.map((space) => {
                                 return (
                                     <Entry

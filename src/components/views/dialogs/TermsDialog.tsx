@@ -111,9 +111,9 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
             case SERVICE_TYPES.IS:
                 return (
                     <div>
-                        {_t("Find others by phone or email")}
+                        {_t("terms|summary_identity_server_1")}
                         <br />
-                        {_t("Be found by phone or email")}
+                        {_t("terms|summary_identity_server_2")}
                     </div>
                 );
             case SERVICE_TYPES.IM:

@@ -222,7 +222,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     as="div"
                     size="sm"
                     weight="medium"
-                    aria-label={_t("%(count)s members", { count: memberCount })}
+                    aria-label={_t("common|n_members", { count: memberCount })}
                     onClick={(e: React.MouseEvent) => {
                         RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
                         e.stopPropagation();

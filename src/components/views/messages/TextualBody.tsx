@@ -490,13 +490,10 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             const completeUrl = scalarClient.getStarterLink(starterLink);
             const integrationsUrl = integrationManager!.uiUrl;
             Modal.createDialog(QuestionDialog, {
-                title: _t("Add an Integration"),
+                title: _t("timeline|scalar_starter_link|dialog_title"),
                 description: (
                     <div>
-                        {_t(
-                            "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?",
-                            { integrationsUrl: integrationsUrl },
-                        )}
+                        {_t("timeline|scalar_starter_link|dialog_description", { integrationsUrl: integrationsUrl })}
                     </div>
                 ),
                 button: _t("action|continue"),
@@ -526,8 +523,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         const tooltip = (
             <div>
-                <div className="mx_Tooltip_title">{_t("Edited at %(date)s", { date: dateString })}</div>
-                <div className="mx_Tooltip_sub">{_t("Click to view edits")}</div>
+                <div className="mx_Tooltip_title">{_t("timeline|edits|tooltip_title", { date: dateString })}</div>
+                <div className="mx_Tooltip_sub">{_t("timeline|edits|tooltip_sub")}</div>
             </div>
         );
 
@@ -535,10 +532,10 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             <AccessibleTooltipButton
                 className="mx_EventTile_edited"
                 onClick={this.openHistoryDialog}
-                title={_t("Edited at %(date)s. Click to view edits.", { date: dateString })}
+                title={_t("timeline|edits|tooltip_label", { date: dateString })}
                 tooltip={tooltip}
             >
-                <span>{`(${_t("edited")})`}</span>
+                <span>{`(${_t("common|edited")})`}</span>
             </AccessibleTooltipButton>
         );
     }

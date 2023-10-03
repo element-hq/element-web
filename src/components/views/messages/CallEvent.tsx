@@ -67,7 +67,7 @@ const ActiveCallEvent = forwardRef<any, ActiveCallEventProps>(
                     <div className="mx_CallEvent_columns">
                         <div className="mx_CallEvent_details">
                             <span className="mx_CallEvent_title">
-                                {_t("%(name)s started a video call", { name: senderName })}
+                                {_t("timeline|m.call|video_call_started_text", { name: senderName })}
                             </span>
                             <LiveContentSummary
                                 type={LiveContentType.Video}

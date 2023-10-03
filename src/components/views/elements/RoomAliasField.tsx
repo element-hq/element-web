@@ -82,13 +82,13 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
         const { prefix, postfix, value, maxlength } = this.domainProps;
         return (
             <Field
-                label={this.props.label || _t("Room address")}
+                label={this.props.label || _t("room_settings|general|alias_heading")}
                 className="mx_RoomAliasField"
                 prefixComponent={prefix}
                 postfixComponent={postfix}
                 ref={this.fieldRef}
                 onValidate={this.onValidate}
-                placeholder={this.props.placeholder || _t("e.g. my-room")}
+                placeholder={this.props.placeholder || _t("room_settings|general|alias_field_placeholder_default")}
                 onChange={this.onChange}
                 value={value}
                 maxLength={maxlength}
@@ -124,7 +124,7 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
                     }
                     return true;
                 },
-                invalid: () => _t("Missing domain separator e.g. (:domain.org)"),
+                invalid: () => _t("room_settings|general|alias_field_has_domain_invalid"),
             },
             {
                 key: "hasLocalpart",
@@ -144,7 +144,7 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
                     }
                     return true;
                 },
-                invalid: () => _t("Missing room name or separator e.g. (my-room:domain.org)"),
+                invalid: () => _t("room_settings|general|alias_field_has_localpart_invalid"),
             },
             {
                 key: "safeLocalpart",
@@ -167,12 +167,12 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
                         );
                     }
                 },
-                invalid: () => _t("Some characters not allowed"),
+                invalid: () => _t("room_settings|general|alias_field_safe_localpart_invalid"),
             },
             {
                 key: "required",
                 test: async ({ value, allowEmpty }) => allowEmpty || !!value,
-                invalid: () => _t("Please provide an address"),
+                invalid: () => _t("room_settings|general|alias_field_required_invalid"),
             },
             this.props.roomId
                 ? {
@@ -191,7 +191,7 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
                               return false;
                           }
                       },
-                      invalid: () => _t("This address does not point at this room"),
+                      invalid: () => _t("room_settings|general|alias_field_matches_invalid"),
                   }
                 : {
                       key: "taken",
@@ -213,11 +213,11 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
                               return err instanceof MatrixError;
                           }
                       },
-                      valid: () => _t("This address is available to use"),
+                      valid: () => _t("room_settings|general|alias_field_taken_valid"),
                       invalid: () =>
                           this.props.domain
-                              ? _t("This address is already in use")
-                              : _t("This address had invalid server or is already in use"),
+                              ? _t("room_settings|general|alias_field_taken_invalid_domain")
+                              : _t("room_settings|general|alias_field_taken_invalid"),
                   },
         ],
     });

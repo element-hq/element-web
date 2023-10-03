@@ -22,7 +22,6 @@
     "PM": "PM",
     "AM": "AM",
     "Moderator": "Moderator",
-    "Thank you!": "Mercés !",
     "Ok": "Validar",
     "Fish": "Pes",
     "Butterfly": "Parpalhòl",
@@ -50,17 +49,6 @@
     "Saturday": "Dissabte",
     "Today": "Uèi",
     "Yesterday": "Ièr",
-    "Cancel search": "Anullar la recèrca",
-    "Server name": "Títol del servidor",
-    "Notes": "Nòtas",
-    "Unavailable": "Pas disponible",
-    "Changelog": "Istoric dels cambiaments (Changelog)",
-    "Removing…": "Supression en cors…",
-    "Send": "Mandar",
-    "An error has occurred.": "Una error s'es producha.",
-    "Session name": "Nom de session",
-    "Email address": "Adreça de corrièl",
-    "Upload files": "Mandar de fichièrs",
     "Home": "Dorsièr personal",
     "common": {
         "mute": "Copar lo son",
@@ -110,7 +98,8 @@
         "historical": "Istoric",
         "unencrypted": "Pas chifrat",
         "show_more": "Ne veire mai",
-        "are_you_sure": "O volètz vertadièrament ?"
+        "are_you_sure": "O volètz vertadièrament ?",
+        "email_address": "Adreça de corrièl"
     },
     "action": {
         "continue": "Contunhar",
@@ -243,7 +232,6 @@
         "voice_call": "Sonada vocala",
         "video_call": "Sonada vidèo"
     },
-    "Other": "Autre",
     "emoji": {
         "category_smileys_people": "Emoticònas e personatges",
         "category_animals_nature": "Animals e natura",
@@ -357,7 +345,8 @@
     },
     "encryption": {
         "verification": {
-            "cancelling": "Anullacion…"
+            "cancelling": "Anullacion…",
+            "manual_device_verification_device_name_label": "Nom de session"
         },
         "setup_secure_backup": {
             "title": "Parametrar"
@@ -378,7 +367,8 @@
     },
     "error": {
         "failed_copy": "Impossible de copiar",
-        "unknown": "Error desconeguda"
+        "unknown": "Error desconeguda",
+        "dialog_description_default": "Una error s'es producha."
     },
     "room": {
         "context_menu": {
@@ -426,5 +416,33 @@
         "m.image": {
             "show_image": "Afichar l'imatge"
         }
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Anullar la recèrca"
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_add_dialog_placeholder": "Títol del servidor"
+        }
+    },
+    "bug_reporting": {
+        "thank_you": "Mercés !",
+        "textarea_label": "Nòtas"
+    },
+    "update": {
+        "unavailable": "Pas disponible",
+        "changelog": "Istoric dels cambiaments (Changelog)"
+    },
+    "redact": {
+        "ongoing": "Supression en cors…"
+    },
+    "forward": {
+        "send_label": "Mandar"
+    },
+    "report_content": {
+        "other_label": "Autre"
+    },
+    "upload_file": {
+        "title": "Mandar de fichièrs"
     }
 }

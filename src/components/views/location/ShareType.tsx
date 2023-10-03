@@ -72,15 +72,15 @@ interface Props {
 }
 const ShareType: React.FC<Props> = ({ setShareType, enabledShareTypes }) => {
     const labels = {
-        [LocationShareType.Own]: _t("My current location"),
-        [LocationShareType.Live]: _t("My live location"),
-        [LocationShareType.Pin]: _t("Drop a Pin"),
+        [LocationShareType.Own]: _t("location_sharing|share_type_own"),
+        [LocationShareType.Live]: _t("location_sharing|share_type_live"),
+        [LocationShareType.Pin]: _t("location_sharing|share_type_pin"),
     };
     return (
         <div className="mx_ShareType">
             <LocationIcon className="mx_ShareType_badge" />
             <Heading className="mx_ShareType_heading" size="3">
-                {_t("What location type do you want to share?")}
+                {_t("location_sharing|share_type_prompt")}
             </Heading>
             <div className="mx_ShareType_wrapper_options">
                 {enabledShareTypes.map((type) => (

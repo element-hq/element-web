@@ -27,88 +27,28 @@
     "Restricted": "Ограничено",
     "Moderator": "Модератор",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
-    "Send": "Пошаљи",
-    "and %(count)s others...": {
-        "other": "и %(count)s других...",
-        "one": "и још један други..."
-    },
     "%(duration)ss": "%(duration)sс",
     "%(duration)sm": "%(duration)sм",
     "%(duration)sh": "%(duration)sч",
     "%(duration)sd": "%(duration)sд",
     "Unnamed room": "Неименована соба",
-    "(~%(count)s results)": {
-        "other": "(~%(count)s резултата)",
-        "one": "(~%(count)s резултат)"
-    },
     "Join Room": "Приступи соби",
-    "unknown error code": "непознати код грешке",
-    "not specified": "није наведено",
-    "Add an Integration": "Додај уградњу",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Бићете пребачени на сајт треће стране да бисте се идентификовали са својим налогом зарад коришћења уградње %(integrationsUrl)s. Да ли желите да наставите?",
-    "Email address": "Мејл адреса",
     "Delete Widget": "Обриши виџет",
-    "Create new room": "Направи нову собу",
     "Home": "Почетна",
     "%(items)s and %(lastItem)s": "%(items)s и %(lastItem)s",
     "collapse": "скупи",
     "expand": "рашири",
-    "Custom level": "Прилагођени ниво",
-    "And %(count)s more...": {
-        "other": "И %(count)s других..."
-    },
-    "Confirm Removal": "Потврди уклањање",
-    "An error has occurred.": "Догодила се грешка.",
-    "Unable to restore session": "Не могу да повратим сесију",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Ако сте претходно користили новије издање апликације %(brand)s, ваша сесија може бити некомпатибилна са овим издањем. Затворите овај прозор и вратите се на новије издање.",
-    "Verification Pending": "Чека се на проверу",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Проверите ваш мејл и кликните на везу унутар њега. Када ово урадите, кликните на дугме „настави“.",
-    "This will allow you to reset your password and receive notifications.": "Ово омогућава поновно постављање лозинке и примање обавештења.",
-    "<a>In reply to</a> <pill>": "<a>Као одговор за</a> <pill>",
-    "Session ID": "ИД сесије",
     "Sunday": "Недеља",
     "Today": "Данас",
     "Friday": "Петак",
-    "Changelog": "Записник о изменама",
-    "Unavailable": "Недоступан",
-    "Filter results": "Филтрирај резултате",
     "Tuesday": "Уторак",
     "Saturday": "Субота",
     "Monday": "Понедељак",
     "Wednesday": "Среда",
-    "You cannot delete this message. (%(code)s)": "Не можете обрисати ову поруку. (%(code)s)",
     "Thursday": "Четвртак",
     "Yesterday": "Јуче",
-    "Thank you!": "Хвала вам!",
-    "Preparing to send logs": "Припремам се за слање записника",
-    "Logs sent": "Записници су послати",
-    "Failed to send logs: ": "Нисам успео да пошаљем записнике: ",
     "Send Logs": "Пошаљи записнике",
-    "Clear Storage and Sign Out": "Очисти складиште и одјави ме",
-    "We encountered an error trying to restore your previous session.": "Наишли смо на грешку приликом повраћаја ваше претходне сесије.",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Чишћење складишта вашег прегледача може решити проблем али ће вас то одјавити и учинити шифровани историјат ћаскања нечитљивим.",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Не могу да учитам догађај на који је послат одговор, или не постоји или немате овлашћење да га погледате.",
-    "Share Room": "Подели собу",
-    "Link to most recent message": "Веза ка најновијој поруци",
-    "Share User": "Подели корисника",
-    "Share Room Message": "Подели поруку у соби",
-    "Link to selected message": "Веза ка изабраној поруци",
-    "Join millions for free on the largest public server": "Придружите се милионима других бесплатно на највећем јавном серверу",
-    "Email (optional)": "Мејл (изборно)",
-    "Are you sure you want to sign out?": "Заиста желите да се одјавите?",
-    "Direct Messages": "Директне поруке",
-    "%(count)s verified sessions": {
-        "other": "потврђених сесија: %(count)s",
-        "one": "1 потврђена сесија"
-    },
-    "Remove recent messages by %(user)s": "Уклони недавне поруке корисника %(user)s",
-    "Room Settings - %(roomName)s": "Подешавања собе - %(roomName)s",
-    "Resend %(unsentCount)s reaction(s)": "Поново пошаљи укупно %(unsentCount)s реакција",
     "Light bulb": "сијалица",
-    "Looks good": "Изгледа добро",
-    "Recent Conversations": "Недавни разговори",
-    "Recently Direct Messaged": "Недавне директне поруке",
-    "Looks good!": "Изгледа добро!",
     "Switch theme": "Промени тему",
     "Zimbabwe": "Зимбабве",
     "Zambia": "Замбија",
@@ -359,11 +299,7 @@
     "United Kingdom": "Уједињено Краљевство",
     "Your homeserver has exceeded one of its resource limits.": "Ваш домаћи сервер је прекорачио ограничење неког ресурса.",
     "Your homeserver has exceeded its user limit.": "Ваш домаћи сервер је прекорачио ограничење корисника.",
-    "Removing…": "Уклањам…",
-    "Clear all data in this session?": "Да очистим све податке у овој сесији?",
-    "Reason (optional)": "Разлог (опционо)",
     "Not encrypted": "Није шифровано",
-    "Power level": "Ниво снаге",
     "Folder": "фасцикла",
     "Headphones": "слушалице",
     "Anchor": "сидро",
@@ -426,25 +362,10 @@
     "Lion": "лав",
     "Cat": "мачка",
     "Dog": "Пас",
-    "This version of %(brand)s does not support searching encrypted messages": "Ова верзија %(brand)s с не подржава претраживање шифрованих порука",
-    "Cancel search": "Откажи претрагу",
-    "Confirm this user's session by comparing the following with their User Settings:": "Потврдите сесију овог корисника упоређивањем следећег са њиховим корисничким подешавањима:",
-    "Confirm by comparing the following with the User Settings in your other session:": "Потврдите упоређивањем следећег са корисничким подешавањима у вашој другој сесији:",
-    "Clear all data": "Очисти све податке",
     "Sign in with SSO": "Пријавите се помоћу SSO",
     "Kosovo": "/",
     "End": "",
     "Deactivate account": "Деактивирај налог",
-    "Server name": "Име сервера",
-    "Enter the name of a new server you want to explore.": "Унесите име новог сервера који желите да истражите.",
-    "Add a new server": "Додајте нови сервер",
-    "Your server": "Ваш сервер",
-    "Use the <a>Desktop app</a> to see all encrypted files": "Користи <a> десктоп апликација </a> да видиш све шифроване датотеке",
-    "Not Trusted": "Није поуздано",
-    "Ask this user to verify their session, or manually verify it below.": "Питајте овог корисника да потврди његову сесију или ручно да потврди у наставку.",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) се улоговао у нову сесију без потврђивања:",
-    "Verify your other session using one of the options below.": "Потврдите другу сесију помоћу једних од опција у испод.",
-    "You signed in to a new session without verifying it:": "Пријавили сте се у нову сесију без потврђивања:",
     "Réunion": "Реунион",
     "common": {
         "about": "О програму",
@@ -506,7 +427,13 @@
         "historical": "Историја",
         "go_to_settings": "Идите на подешавања",
         "show_more": "Прикажи више",
-        "are_you_sure": "Да ли сте сигурни?"
+        "are_you_sure": "Да ли сте сигурни?",
+        "email_address": "Мејл адреса",
+        "filter_results": "Филтрирај резултате",
+        "and_n_others": {
+            "other": "и %(count)s других...",
+            "one": "и још један други..."
+        }
     },
     "action": {
         "continue": "Настави",
@@ -615,14 +542,20 @@
         "restricted": "Ограничено",
         "moderator": "Модератор",
         "admin": "Админ",
-        "custom": "Посебан %(level)s"
+        "custom": "Посебан %(level)s",
+        "label": "Ниво снаге",
+        "custom_level": "Прилагођени ниво"
     },
     "bug_reporting": {
         "submit_debug_logs": "Пошаљи записнике за поправљање грешака",
         "send_logs": "Пошаљи записнике",
         "collecting_information": "Прикупљам податке о издању апликације",
         "collecting_logs": "Прикупљам записнике",
-        "waiting_for_server": "Чекам на одговор са сервера"
+        "waiting_for_server": "Чекам на одговор са сервера",
+        "preparing_logs": "Припремам се за слање записника",
+        "logs_sent": "Записници су послати",
+        "thank_you": "Хвала вам!",
+        "failed_send_logs": "Нисам успео да пошаљем записнике: "
     },
     "time": {
         "few_seconds_ago": "пре неколико секунди",
@@ -961,7 +894,8 @@
         },
         "creation_summary_room": "Корисник %(creator)s је направио и подесио собу.",
         "context_menu": {
-            "external_url": "Адреса извора"
+            "external_url": "Адреса извора",
+            "resent_unsent_reactions": "Поново пошаљи укупно %(unsentCount)s реакција"
         },
         "load_error": {
             "no_permission": "Покушао сам да учитам одређену тачку у временској линији ове собе али ви немате овлашћења за преглед наведене поруке.",
@@ -985,6 +919,14 @@
         },
         "m.video": {
             "error_decrypting": "Грешка при дешифровању видеа"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "Додај уградњу",
+            "dialog_description": "Бићете пребачени на сајт треће стране да бисте се идентификовали са својим налогом зарад коришћења уградње %(integrationsUrl)s. Да ли желите да наставите?"
+        },
+        "reply": {
+            "error_loading": "Не могу да учитам догађај на који је послат одговор, или не постоји или немате овлашћење да га погледате.",
+            "in_reply_to": "<a>Као одговор за</a> <pill>"
         }
     },
     "slash_command": {
@@ -1092,7 +1034,6 @@
         "no_media_perms_title": "Нема овлашћења за медије",
         "no_media_perms_description": "Можда ћете морати да ручно доделите овлашћења %(brand)s-у за приступ микрофону/веб камери"
     },
-    "Other": "Остало",
     "room_settings": {
         "permissions": {
             "m.room.avatar": "Промените аватар собе",
@@ -1142,7 +1083,9 @@
         "upload_avatar_label": "Отпреми аватар",
         "notifications": {
             "browse_button": "Прегледајте"
-        }
+        },
+        "title": "Подешавања собе - %(roomName)s",
+        "alias_not_specified": "није наведено"
     },
     "encryption": {
         "verification": {
@@ -1151,7 +1094,10 @@
             "in_person": "Да будете сигурни, ово обавите лично или путем поузданог начина комуникације.",
             "complete_action": "Разумем",
             "cancelling": "Отказујем…",
-            "unverified_session_toast_title": "Нова пријава. Да ли сте то били Ви?"
+            "unverified_session_toast_title": "Нова пријава. Да ли сте то били Ви?",
+            "manual_device_verification_self_text": "Потврдите упоређивањем следећег са корисничким подешавањима у вашој другој сесији:",
+            "manual_device_verification_user_text": "Потврдите сесију овог корисника упоређивањем следећег са њиховим корисничким подешавањима:",
+            "manual_device_verification_device_id_label": "ИД сесије"
         },
         "old_version_detected_title": "Нађени су стари криптографски подаци",
         "old_version_detected_description": "Подаци из старијег издања %(brand)s-а су нађени. Ово ће узроковати лош рад шифровања с краја на крај у старијем издању. Размењене поруке које су шифроване с краја на крај у старијем издању је можда немогуће дешифровати у овом издању. Такође, ово може узроковати неуспешно размењивање порука са овим издањем. Ако доживите проблеме, одјавите се и пријавите се поново. Да бисте задржали историјат поруке, извезите па поново увезите ваше кључеве.",
@@ -1174,7 +1120,19 @@
         "messages_not_secure": {
             "cause_1": "Ваш домаћи сервер"
         },
-        "event_shield_reason_mismatched_sender_key": "Шифровано од стране непотврђене сесије"
+        "event_shield_reason_mismatched_sender_key": "Шифровано од стране непотврђене сесије",
+        "udd": {
+            "own_new_session_text": "Пријавили сте се у нову сесију без потврђивања:",
+            "own_ask_verify_text": "Потврдите другу сесију помоћу једних од опција у испод.",
+            "other_new_session_text": "%(name)s (%(userId)s) се улоговао у нову сесију без потврђивања:",
+            "other_ask_verify_text": "Питајте овог корисника да потврди његову сесију или ручно да потврди у наставку.",
+            "title": "Није поуздано"
+        },
+        "access_secret_storage_dialog": {
+            "key_validation_text": {
+                "recovery_key_is_correct": "Изгледа добро!"
+            }
+        }
     },
     "emoji": {
         "category_smileys_people": "Смешци и особе",
@@ -1252,7 +1210,23 @@
         },
         "country_dropdown": "Падајући списак земаља",
         "common_failures": {},
-        "captcha_description": "Овај кућни сервер жели да се увери да нисте робот."
+        "captcha_description": "Овај кућни сервер жели да се увери да нисте робот.",
+        "server_picker_description_matrix.org": "Придружите се милионима других бесплатно на највећем јавном серверу",
+        "soft_logout": {
+            "clear_data_title": "Да очистим све податке у овој сесији?",
+            "clear_data_button": "Очисти све податке"
+        },
+        "logout_dialog": {
+            "description": "Заиста желите да се одјавите?"
+        },
+        "registration": {
+            "continue_without_email_field_label": "Мејл (изборно)"
+        },
+        "set_email": {
+            "verification_pending_title": "Чека се на проверу",
+            "verification_pending_description": "Проверите ваш мејл и кликните на везу унутар њега. Када ово урадите, кликните на дугме „настави“.",
+            "description": "Ово омогућава поновно постављање лозинке и примање обавештења."
+        }
     },
     "export_chat": {
         "messages": "Поруке"
@@ -1270,7 +1244,8 @@
         "breadcrumbs_empty": "Нема недавно посећених соба"
     },
     "report_content": {
-        "report_content_to_homeserver": "Пријави садржај администратору вашег домаћег сервера"
+        "report_content_to_homeserver": "Пријави садржај администратору вашег домаћег сервера",
+        "other_label": "Остало"
     },
     "onboarding": {
         "send_dm": "Пошаљи директну поруку",
@@ -1379,7 +1354,9 @@
         "toast_description": "Доступна је нова верзија %(brand)s",
         "error_encountered": "Догодила се грешка (%(errorDetail)s).",
         "no_update": "Нема нових ажурирања.",
-        "check_action": "Провери да ли има ажурирања"
+        "check_action": "Провери да ли има ажурирања",
+        "unavailable": "Недоступан",
+        "changelog": "Записник о изменама"
     },
     "user_menu": {
         "switch_theme_light": "Пребаци на светлу тему",
@@ -1425,7 +1402,11 @@
         "search": {
             "this_room": "Ова соба",
             "all_rooms": "Све собе",
-            "field_placeholder": "Претрага…"
+            "field_placeholder": "Претрага…",
+            "result_count": {
+                "other": "(~%(count)s резултата)",
+                "one": "(~%(count)s резултат)"
+            }
         },
         "jump_to_bottom_button": "Пребаци на најновије поруке",
         "jump_read_marker": "Скочи на прву непрочитану поруку.",
@@ -1440,7 +1421,10 @@
         "context_menu": {
             "explore": "Истражи собе"
         },
-        "no_search_result_hint": "Можда ћете желети да испробате другачију претрагу или да проверите да ли имате правописне грешке."
+        "no_search_result_hint": "Можда ћете желети да испробате другачију претрагу или да проверите да ли имате правописне грешке.",
+        "add_existing_room_space": {
+            "dm_heading": "Директне поруке"
+        }
     },
     "terms": {
         "tos": "Услови коришћења",
@@ -1471,7 +1455,9 @@
         "failed_title": "Нисам успео да пошаљем позивницу",
         "failed_generic": "Радња није успела",
         "error_permissions_room": "Немате дозволу за позивање људи у ову собу.",
-        "error_version_unsupported_room": "Корисников домаћи сервер не подржава верзију собе."
+        "error_version_unsupported_room": "Корисников домаћи сервер не подржава верзију собе.",
+        "recents_section": "Недавни разговори",
+        "suggestions_section": "Недавне директне поруке"
     },
     "scalar": {
         "error_create": "Не могу да направим виџет.",
@@ -1494,7 +1480,16 @@
         "failed_copy": "Нисам успео да ископирам",
         "something_went_wrong": "Нешто је пошло наопако!",
         "update_power_level": "Не могу да изменим ниво снаге",
-        "unknown": "Непозната грешка"
+        "unknown": "Непозната грешка",
+        "dialog_description_default": "Догодила се грешка.",
+        "session_restore": {
+            "clear_storage_button": "Очисти складиште и одјави ме",
+            "title": "Не могу да повратим сесију",
+            "description_1": "Наишли смо на грешку приликом повраћаја ваше претходне сесије.",
+            "description_2": "Ако сте претходно користили новије издање апликације %(brand)s, ваша сесија може бити некомпатибилна са овим издањем. Затворите овај прозор и вратите се на новије издање.",
+            "description_3": "Чишћење складишта вашег прегледача може решити проблем али ће вас то одјавити и учинити шифровани историјат ћаскања нечитљивим."
+        },
+        "unknown_error_code": "непознати код грешке"
     },
     "items_and_n_others": {
         "other": "<Items/> и %(count)s других",
@@ -1536,7 +1531,14 @@
         "redact_button": "Уклони недавне поруке",
         "error_ban_user": "Неуспех при забрањивању приступа кориснику",
         "error_mute_user": "Неуспех при пригушивању корисника",
-        "promote_warning": "Нећете моћи да опозовете ову измену јер унапређујете корисника тако да има исти ниво снаге као и ви."
+        "promote_warning": "Нећете моћи да опозовете ову измену јер унапређујете корисника тако да има исти ниво снаге као и ви.",
+        "redact": {
+            "confirm_title": "Уклони недавне поруке корисника %(user)s"
+        },
+        "count_of_verified_sessions": {
+            "other": "потврђених сесија: %(count)s",
+            "one": "1 потврђена сесија"
+        }
     },
     "stickers": {
         "empty": "Тренутно немате омогућено било које паковање са налепницама"
@@ -1570,5 +1572,43 @@
         }
     },
     "cant_load_page": "Учитавање странице није успело",
-    "General failure": "Општа грешка"
+    "General failure": "Општа грешка",
+    "emoji_picker": {
+        "cancel_search_label": "Откажи претрагу"
+    },
+    "seshat": {
+        "warning_kind_files_app": "Користи <a> десктоп апликација </a> да видиш све шифроване датотеке",
+        "warning_kind_search": "Ова верзија %(brand)s с не подржава претраживање шифрованих порука"
+    },
+    "truncated_list_n_more": {
+        "other": "И %(count)s других..."
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_available_valid": "Изгледа добро",
+            "network_dropdown_your_server_description": "Ваш сервер",
+            "network_dropdown_add_dialog_title": "Додајте нови сервер",
+            "network_dropdown_add_dialog_description": "Унесите име новог сервера који желите да истражите.",
+            "network_dropdown_add_dialog_placeholder": "Име сервера"
+        }
+    },
+    "redact": {
+        "error": "Не можете обрисати ову поруку. (%(code)s)",
+        "ongoing": "Уклањам…",
+        "confirm_button": "Потврди уклањање",
+        "reason_label": "Разлог (опционо)"
+    },
+    "forward": {
+        "send_label": "Пошаљи"
+    },
+    "spotlight_dialog": {
+        "create_new_room_button": "Направи нову собу"
+    },
+    "share": {
+        "title_room": "Подели собу",
+        "permalink_most_recent": "Веза ка најновијој поруци",
+        "title_user": "Подели корисника",
+        "title_message": "Подели поруку у соби",
+        "permalink_message": "Веза ка изабраној поруци"
+    }
 }

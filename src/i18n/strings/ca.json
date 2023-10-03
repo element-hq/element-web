@@ -1,6 +1,4 @@
 {
-    "Create new room": "Crea una sala nova",
-    "unknown error code": "codi d'error desconegut",
     "Warning!": "Avís!",
     "Sun": "dg.",
     "Mon": "dl.",
@@ -29,79 +27,26 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s de/d' %(monthName)s de %(fullYear)s %(time)s",
     "Restricted": "Restringit",
     "Moderator": "Moderador",
-    "Send": "Envia",
-    "and %(count)s others...": {
-        "other": "i %(count)s altres...",
-        "one": "i un altre..."
-    },
     "%(duration)ss": "%(duration)ss",
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)sh",
     "%(duration)sd": "%(duration)sd",
     "Unnamed room": "Sala sense nom",
-    "(~%(count)s results)": {
-        "other": "(~%(count)s resultats)",
-        "one": "(~%(count)s resultat)"
-    },
     "Join Room": "Entra a la sala",
-    "not specified": "sense especificar",
-    "Add an Integration": "Afegeix una integració",
-    "Email address": "Correu electrònic",
-    "<a>In reply to</a> <pill>": "<a>En resposta a</a> <pill>",
     "Delete Widget": "Suprimeix el giny",
     "Home": "Inici",
     "%(items)s and %(lastItem)s": "%(items)s i %(lastItem)s",
     "collapse": "col·lapsa",
     "expand": "expandeix",
-    "Custom level": "Nivell personalitzat",
-    "And %(count)s more...": {
-        "other": "I %(count)s més..."
-    },
-    "Confirm Removal": "Confirmeu l'eliminació",
-    "An error has occurred.": "S'ha produït un error.",
-    "Unable to restore session": "No s'ha pogut restaurar la sessió",
-    "Verification Pending": "Verificació pendent",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Reviseu el vostre correu electrònic i feu clic a l'enllaç que conté. Un cop fet això, feu clic a Continua.",
-    "This will allow you to reset your password and receive notifications.": "Això us permetrà restablir la vostra contrasenya i rebre notificacions.",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Si anteriorment heu utilitzat un versió de %(brand)s més recent, la vostra sessió podría ser incompatible amb aquesta versió. Tanqueu aquesta finestra i torneu a la versió més recent.",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Estàs a punt de ser redirigit a una web de tercers per autenticar el teu compte i poder ser utilitzat amb %(integrationsUrl)s. Vols continuar?",
-    "Session ID": "ID de la sessió",
     "Sunday": "Diumenge",
     "Today": "Avui",
     "Friday": "Divendres",
-    "Changelog": "Registre de canvis",
-    "Failed to send logs: ": "No s'han pogut enviar els logs: ",
-    "Unavailable": "No disponible",
-    "Filter results": "Resultats del filtre",
     "Tuesday": "Dimarts",
-    "Preparing to send logs": "Preparant l'enviament de logs",
     "Saturday": "Dissabte",
     "Monday": "Dilluns",
     "Wednesday": "Dimecres",
-    "You cannot delete this message. (%(code)s)": "No podeu eliminar aquest missatge. (%(code)s)",
     "Thursday": "Dijous",
-    "Logs sent": "Logs enviats",
     "Yesterday": "Ahir",
-    "Thank you!": "Gràcies!",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "No s'ha trobat el perfil pels IDs de Matrix següents, els voleu convidar igualment?",
-    "Invite anyway and never warn me again": "Convidar igualment i no avisar-me de nou",
-    "Invite anyway": "Convidar igualment",
-    "We encountered an error trying to restore your previous session.": "Hem trobat un error en intentar recuperar la teva sessió prèvia.",
-    "Upload Error": "Error de pujada",
-    "A connection error occurred while trying to contact the server.": "S'ha produït un error de connexió mentre s'intentava connectar al servidor.",
-    "%(brand)s encountered an error during upload of:": "%(brand)s ha trobat un error durant la pujada de:",
-    "Power level": "Nivell d'autoritat",
-    "e.g. my-room": "p.e. la-meva-sala",
-    "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Prèviament has fet servir %(brand)s a %(host)s amb la càrrega mandrosa de membres activada. En aquesta versió la càrrega mandrosa està desactivada. Com que la memòria cau local no és compatible entre les dues versions, %(brand)s necessita tornar a sincronitzar el teu compte.",
-    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. <default>Utilitza el predeterminat (%(defaultIdentityServerName)s)</default> o gestiona'l a <settings>Configuració</settings>.",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. Gestiona'l a <settings>Configuració</settings>.",
-    "Integrations not allowed": "No es permeten integracions",
-    "Integrations are disabled": "Les integracions estan desactivades",
-    "Room Settings - %(roomName)s": "Configuració de sala - %(roomName)s",
-    "Confirm this user's session by comparing the following with their User Settings:": "Confirma aquesta sessió d'usuari comparant amb la seva configuració d'usuari, el següent:",
-    "Confirm by comparing the following with the User Settings in your other session:": "Confirma comparant el següent amb la configuració d'usuari de la teva altra sessió:",
-    "To continue, use Single Sign On to prove your identity.": "Per continuar, utilitza la inscripció única SSO (per demostrar la teva identitat).",
-    "Confirm your account deactivation by using Single Sign On to prove your identity.": "Confirma la desactivació del teu compte mitjançant la inscripció única SSO (per demostrar la teva identitat).",
     "common": {
         "analytics": "Analítiques",
         "error": "Error",
@@ -137,7 +82,13 @@
         "low_priority": "Baixa prioritat",
         "historical": "Històric",
         "go_to_settings": "Ves a Configuració",
-        "are_you_sure": "Estàs segur?"
+        "are_you_sure": "Estàs segur?",
+        "email_address": "Correu electrònic",
+        "filter_results": "Resultats del filtre",
+        "and_n_others": {
+            "other": "i %(count)s altres...",
+            "one": "i un altre..."
+        }
     },
     "action": {
         "continue": "Continua",
@@ -196,14 +147,20 @@
         "restricted": "Restringit",
         "moderator": "Moderador",
         "admin": "Administrador",
-        "custom": "Personalitzat (%(level)s)"
+        "custom": "Personalitzat (%(level)s)",
+        "label": "Nivell d'autoritat",
+        "custom_level": "Nivell personalitzat"
     },
     "bug_reporting": {
         "submit_debug_logs": "Enviar logs de depuració",
         "send_logs": "Envia els registres",
         "collecting_information": "S'està recollint la informació de la versió de l'aplicació",
         "collecting_logs": "S'estan recopilant els registres",
-        "waiting_for_server": "S'està esperant una resposta del servidor"
+        "waiting_for_server": "S'està esperant una resposta del servidor",
+        "preparing_logs": "Preparant l'enviament de logs",
+        "logs_sent": "Logs enviats",
+        "thank_you": "Gràcies!",
+        "failed_send_logs": "No s'han pogut enviar els logs: "
     },
     "settings": {
         "use_12_hour_format": "Mostra les marques de temps en format de 12 hores (p.e. 2:30pm)",
@@ -276,7 +233,8 @@
             "error_invalid_email": "El correu electrònic no és vàlid",
             "error_invalid_email_detail": "Sembla que aquest correu electrònic no és vàlid",
             "error_add_email": "No s'ha pogut afegir el correu electrònic",
-            "msisdn_label": "Número de telèfon"
+            "msisdn_label": "Número de telèfon",
+            "deactivate_confirm_body_sso": "Confirma la desactivació del teu compte mitjançant la inscripció única SSO (per demostrar la teva identitat)."
         },
         "key_backup": {
             "setup_secure_backup": {
@@ -462,6 +420,13 @@
         },
         "m.video": {
             "error_decrypting": "Error desxifrant video"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "Afegeix una integració",
+            "dialog_description": "Estàs a punt de ser redirigit a una web de tercers per autenticar el teu compte i poder ser utilitzat amb %(integrationsUrl)s. Vols continuar?"
+        },
+        "reply": {
+            "in_reply_to": "<a>En resposta a</a> <pill>"
         }
     },
     "slash_command": {
@@ -531,7 +496,6 @@
         "no_permission_conference": "Es necessita permís",
         "no_permission_conference_description": "No tens permís per iniciar una conferència telefònica en aquesta sala"
     },
-    "Other": "Altres",
     "composer": {
         "placeholder_reply_encrypted": "Envia una resposta xifrada…",
         "placeholder_encrypted": "Envia un missatge xifrat…",
@@ -578,12 +542,15 @@
             "error_deleting_alias_title": "Error eliminant adreça",
             "error_deleting_alias_description": "S'ha produït un error en eliminar l'adreça. Pot ser que ja no existeixi o que s'hagi produït un error temporal.",
             "error_creating_alias_title": "Error creant adreça",
-            "error_creating_alias_description": "S'ha produït un error en crear l'adreça. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal."
+            "error_creating_alias_description": "S'ha produït un error en crear l'adreça. Pot ser que el servidor no ho permeti o que s'hagi produït un error temporal.",
+            "alias_field_placeholder_default": "p.e. la-meva-sala"
         },
         "advanced": {
             "unfederated": "Aquesta sala no és accessible per a servidors de Matrix remots"
         },
-        "upload_avatar_label": "Puja l'avatar"
+        "upload_avatar_label": "Puja l'avatar",
+        "title": "Configuració de sala - %(roomName)s",
+        "alias_not_specified": "sense especificar"
     },
     "auth": {
         "sign_in_with_sso": "Inicia sessió mitjançant la inscripció única (SSO)",
@@ -611,13 +578,19 @@
             "msisdn_token_prompt": "Introdueix el codi que conté:",
             "fallback_button": "Inicia l'autenticació",
             "sso_title": "Utilitza la inscripció única (SSO) per a continuar",
-            "sso_body": "Confirma l'addició d'aquest correu electrònic mitjançant la inscripció única SSO (per demostrar la teva identitat)."
+            "sso_body": "Confirma l'addició d'aquest correu electrònic mitjançant la inscripció única SSO (per demostrar la teva identitat).",
+            "sso_preauth_body": "Per continuar, utilitza la inscripció única SSO (per demostrar la teva identitat)."
         },
         "msisdn_field_label": "Telèfon",
         "identifier_label": "Inicieu sessió amb",
         "reset_password_email_not_found_title": "Aquesta adreça de correu electrònic no s'ha trobat",
         "autodiscovery_unexpected_error_hs": "Error inesperat resolent la configuració del servidor local",
-        "autodiscovery_unexpected_error_is": "Error inesperat resolent la configuració del servidor d'identitat"
+        "autodiscovery_unexpected_error_is": "Error inesperat resolent la configuració del servidor d'identitat",
+        "set_email": {
+            "verification_pending_title": "Verificació pendent",
+            "verification_pending_description": "Reviseu el vostre correu electrònic i feu clic a l'enllaç que conté. Un cop fet això, feu clic a Continua.",
+            "description": "Això us permetrà restablir la vostra contrasenya i rebre notificacions."
+        }
     },
     "export_chat": {
         "messages": "Missatges"
@@ -663,7 +636,9 @@
         "see_changes_button": "Què hi ha de nou?",
         "release_notes_toast_title": "Novetats",
         "error_encountered": "S'ha trobat un error (%(errorDetail)s).",
-        "no_update": "No hi ha cap actualització disponible."
+        "no_update": "No hi ha cap actualització disponible.",
+        "unavailable": "No disponible",
+        "changelog": "Registre de canvis"
     },
     "room_list": {
         "failed_remove_tag": "No s'ha pogut esborrar l'etiqueta %(tagName)s de la sala",
@@ -702,7 +677,11 @@
         "search": {
             "this_room": "Aquesta sala",
             "all_rooms": "Totes les sales",
-            "field_placeholder": "Cerca…"
+            "field_placeholder": "Cerca…",
+            "result_count": {
+                "other": "(~%(count)s resultats)",
+                "one": "(~%(count)s resultat)"
+            }
         },
         "jump_read_marker": "Salta al primer missatge no llegit.",
         "inviter_unknown": "Desconegut",
@@ -731,7 +710,13 @@
         },
         "recovery_method_removed": {
             "warning": "Si no has eliminat el mètode de recuperació, pot ser que un atacant estigui intentant accedir al teu compte. Canvia la teva contrasenya i configura un nou mètode de recuperació a Configuració, immediatament."
-        }
+        },
+        "verification": {
+            "manual_device_verification_self_text": "Confirma comparant el següent amb la configuració d'usuari de la teva altra sessió:",
+            "manual_device_verification_user_text": "Confirma aquesta sessió d'usuari comparant amb la seva configuració d'usuari, el següent:",
+            "manual_device_verification_device_id_label": "ID de la sessió"
+        },
+        "key_signature_upload_failed_body": "%(brand)s ha trobat un error durant la pujada de:"
     },
     "labs_mjolnir": {
         "error_adding_ignore": "Error afegint usuari/servidor ignorat",
@@ -762,7 +747,12 @@
         "failed_generic": "No s'ha pogut realitzar l'operació",
         "invalid_address": "Adreça no reconeguda",
         "error_permissions_room": "No teniu permís per convidar gent a aquesta sala.",
-        "error_unknown": "Error de servidor desconegut"
+        "error_unknown": "Error de servidor desconegut",
+        "unable_find_profiles_description_default": "No s'ha trobat el perfil pels IDs de Matrix següents, els voleu convidar igualment?",
+        "unable_find_profiles_invite_never_warn_label_default": "Convidar igualment i no avisar-me de nou",
+        "unable_find_profiles_invite_label_default": "Convidar igualment",
+        "email_use_default_is": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. <default>Utilitza el predeterminat (%(defaultIdentityServerName)s)</default> o gestiona'l a <settings>Configuració</settings>.",
+        "email_use_is": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. Gestiona'l a <settings>Configuració</settings>."
     },
     "widget": {
         "error_need_to_be_logged_in": "Has d'haver iniciat sessió.",
@@ -790,7 +780,14 @@
         "failed_copy": "No s'ha pogut copiar",
         "something_went_wrong": "Alguna cosa ha anat malament!",
         "update_power_level": "No s'ha pogut canviar el nivell d'autoritat",
-        "unknown": "Error desconegut"
+        "unknown": "Error desconegut",
+        "dialog_description_default": "S'ha produït un error.",
+        "session_restore": {
+            "title": "No s'ha pogut restaurar la sessió",
+            "description_1": "Hem trobat un error en intentar recuperar la teva sessió prèvia.",
+            "description_2": "Si anteriorment heu utilitzat un versió de %(brand)s més recent, la vostra sessió podría ser incompatible amb aquesta versió. Tanqueu aquesta finestra i torneu a la versió més recent."
+        },
+        "unknown_error_code": "codi d'error desconegut"
     },
     "items_and_n_others": {
         "other": "<Items/> i %(count)s altres",
@@ -852,5 +849,34 @@
             "title": "No s'ha pogut cercar",
             "server_unavailable": "Pot ser que el servidor no estigui disponible, que estigui sobrecarregat o que s'ha esgotat el temps de cerca :("
         }
+    },
+    "truncated_list_n_more": {
+        "other": "I %(count)s més..."
+    },
+    "redact": {
+        "error": "No podeu eliminar aquest missatge. (%(code)s)",
+        "confirm_button": "Confirmeu l'eliminació"
+    },
+    "forward": {
+        "send_label": "Envia"
+    },
+    "integrations": {
+        "disabled_dialog_title": "Les integracions estan desactivades",
+        "impossible_dialog_title": "No es permeten integracions"
+    },
+    "lazy_loading": {
+        "disabled_description1": "Prèviament has fet servir %(brand)s a %(host)s amb la càrrega mandrosa de membres activada. En aquesta versió la càrrega mandrosa està desactivada. Com que la memòria cau local no és compatible entre les dues versions, %(brand)s necessita tornar a sincronitzar el teu compte."
+    },
+    "report_content": {
+        "other_label": "Altres"
+    },
+    "server_offline": {
+        "description_7": "S'ha produït un error de connexió mentre s'intentava connectar al servidor."
+    },
+    "spotlight_dialog": {
+        "create_new_room_button": "Crea una sala nova"
+    },
+    "upload_file": {
+        "error_title": "Error de pujada"
     }
 }

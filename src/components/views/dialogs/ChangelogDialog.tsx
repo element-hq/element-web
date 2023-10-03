@@ -93,7 +93,7 @@ export default class ChangelogDialog extends React.Component<IProps, State> {
             if (this.state[repo] == null) {
                 content = <Spinner key={repo} />;
             } else if (typeof this.state[repo] === "string") {
-                content = _t("Unable to load commit detail: %(msg)s", {
+                content = _t("update|error_unable_load_commit", {
                     msg: this.state[repo],
                 });
             } else {
@@ -111,13 +111,17 @@ export default class ChangelogDialog extends React.Component<IProps, State> {
 
         const content = (
             <div className="mx_ChangelogDialog_content">
-                {this.props.version == null || this.props.newVersion == null ? <h2>{_t("Unavailable")}</h2> : logs}
+                {this.props.version == null || this.props.newVersion == null ? (
+                    <h2>{_t("update|unavailable")}</h2>
+                ) : (
+                    logs
+                )}
             </div>
         );
 
         return (
             <QuestionDialog
-                title={_t("Changelog")}
+                title={_t("update|changelog")}
                 description={content}
                 button={_t("action|update")}
                 onFinished={this.props.onFinished}

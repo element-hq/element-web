@@ -108,7 +108,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                 data-testid="leave-option"
                 iconClassName="mx_SpacePanel_iconLeave"
                 className="mx_IconizedContextMenu_option_red"
-                label={_t("Leave space")}
+                label={_t("space|leave_dialog_action")}
                 onClick={onLeaveClick}
             />
         );

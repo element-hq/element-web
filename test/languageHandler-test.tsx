@@ -211,7 +211,7 @@ describe("languageHandler JSX", function () {
     const basicString = "common|rooms";
     const selfClosingTagSub = "Accept <policyLink /> to continue:" as TranslationKey;
     const textInTagSub = "<a>Upgrade</a> to your own domain" as TranslationKey;
-    const plurals = "and %(count)s others...";
+    const plurals = "common|and_n_others";
     const variableSub = "slash_command|ignore_dialog_description";
 
     type TestCase = [

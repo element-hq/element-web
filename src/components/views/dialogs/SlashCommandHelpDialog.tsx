@@ -64,7 +64,7 @@ const SlashCommandHelpDialog: React.FC<IProps> = ({ onFinished }) => {
     return (
         <InfoDialog
             className="mx_SlashCommandHelpDialog"
-            title={_t("Command Help")}
+            title={_t("slash_command|help_dialog_title")}
             description={
                 <table>
                     <tbody>{body}</tbody>

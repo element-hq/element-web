@@ -61,8 +61,8 @@ const getPermissionsErrorParams = (
             : "Insufficient permissions to send your location";
 
     const modalParams = {
-        title: _t("You don't have permission to share locations"),
-        description: _t("You need to have the right permissions in order to share locations in this room."),
+        title: _t("location_sharing|error_no_perms_title"),
+        description: _t("location_sharing|error_no_perms_description"),
         button: _t("action|ok"),
         hasCancelButton: false,
         onFinished: () => {}, // NOOP
@@ -82,8 +82,8 @@ const getDefaultErrorParams = (
             ? "We couldn't start sharing your live location"
             : "We couldn't send your location";
     const modalParams = {
-        title: _t("We couldn't send your location"),
-        description: _t("%(brand)s could not send your location. Please try again later.", {
+        title: _t("location_sharing|error_send_title"),
+        description: _t("location_sharing|error_send_description", {
             brand: SdkConfig.get().brand,
         }),
         button: _t("action|try_again"),
@@ -111,7 +111,7 @@ const handleShareError = (error: unknown, openMenu: () => void, shareType: Locat
 export const shareLiveLocation =
     (client: MatrixClient, roomId: string, displayName: string, openMenu: () => void): ShareLocationFn =>
     async ({ timeout }): Promise<void> => {
-        const description = _t(`%(displayName)s's live location`, { displayName });
+        const description = _t("location_sharing|live_description", { displayName });
         try {
             await OwnBeaconStore.instance.createLiveBeacon(
                 roomId,

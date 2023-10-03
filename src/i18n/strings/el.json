@@ -1,18 +1,8 @@
 {
-    "unknown error code": "άγνωστος κωδικός σφάλματος",
-    "An error has occurred.": "Παρουσιάστηκε ένα σφάλμα.",
     "%(items)s and %(lastItem)s": "%(items)s και %(lastItem)s",
-    "and %(count)s others...": {
-        "one": "και ένας ακόμα...",
-        "other": "και %(count)s άλλοι..."
-    },
-    "Custom level": "Προσαρμοσμένο επίπεδο",
-    "Email address": "Ηλεκτρονική διεύθυνση",
     "Join Room": "Είσοδος σε δωμάτιο",
     "Moderator": "Συντονιστής",
-    "Create new room": "Δημιουργία νέου δωματίου",
     "Home": "Αρχική",
-    "Session ID": "Αναγνωριστικό συνεδρίας",
     "Warning!": "Προειδοποίηση!",
     "Sun": "Κυρ",
     "Mon": "Δευ",
@@ -35,32 +25,15 @@
     "Dec": "Δεκ",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "(~%(count)s results)": {
-        "one": "(~%(count)s αποτέλεσμα)",
-        "other": "(~%(count)s αποτελέσματα)"
-    },
-    "Confirm Removal": "Επιβεβαίωση αφαίρεσης",
-    "Unable to restore session": "Αδυναμία επαναφοράς συνεδρίας",
-    "Add an Integration": "Προσθήκη ενσωμάτωσης",
-    "not specified": "μη καθορισμένο",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Παρακαλούμε ελέγξτε την ηλεκτρονική σας αλληλογραφία και κάντε κλικ στον σύνδεσμο που περιέχει. Μόλις γίνει αυτό, κάντε κλίκ στο κουμπί συνέχεια.",
-    "Verification Pending": "Εκκρεμεί επιβεβαίωση",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s %(time)s",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Αν χρησιμοποιούσατε προηγουμένως μια πιο πρόσφατη έκδοση του %(brand)s, η συνεδρία σας ίσως είναι μη συμβατή με αυτήν την έκδοση. Κλείστε αυτό το παράθυρο και επιστρέψτε στην πιο πρόσφατη έκδοση.",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Θα μεταφερθείτε σε έναν ιστότοπου τρίτου για να πραγματοποιηθεί η πιστοποίηση του λογαριασμού σας με το %(integrationsUrl)s. Θα θέλατε να συνεχίσετε;",
-    "This will allow you to reset your password and receive notifications.": "Αυτό θα σας επιτρέψει να επαναφέρετε τον κωδικό πρόσβαση σας και θα μπορείτε να λαμβάνετε ειδοποιήσεις.",
     "Sunday": "Κυριακή",
     "Today": "Σήμερα",
     "Friday": "Παρασκευή",
-    "Changelog": "Αλλαγές",
-    "Unavailable": "Μη διαθέσιμο",
-    "Send": "Αποστολή",
     "Tuesday": "Τρίτη",
     "Unnamed room": "Ανώνυμο δωμάτιο",
     "Saturday": "Σάββατο",
     "Monday": "Δευτέρα",
     "Wednesday": "Τετάρτη",
-    "You cannot delete this message. (%(code)s)": "Δεν μπορείτε να διαγράψετε αυτό το μήνυμα. (%(code)s)",
     "Thursday": "Πέμπτη",
     "Yesterday": "Χθές",
     "AM": "ΠΜ",
@@ -73,10 +46,6 @@
     "%(duration)sd": "%(duration)sμ",
     "Ok": "Εντάξει",
     "Your homeserver has exceeded its user limit.": "Ο διακομιστής σας ξεπέρασε το όριο χρηστών.",
-    "Ask this user to verify their session, or manually verify it below.": "Ζητήστε από αυτόν τον χρήστη να επιβεβαιώσει την συνεδρία του, ή επιβεβαιώστε την χειροκίνητα παρακάτω.",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "Ο %(name)s (%(userId)s) συνδέθηκε σε μία νέα συνεδρία χωρίς να την επιβεβαιώσει:",
-    "Verify your other session using one of the options below.": "Επιβεβαιώστε την άλλη σας συνεδρία χρησιμοποιώντας μία από τις παρακάτω επιλογές.",
-    "You signed in to a new session without verifying it:": "Συνδεθήκατε σε μια νέα συνεδρία χωρίς να την επιβεβαιώσετε:",
     "Zimbabwe": "Ζιμπάμπουε",
     "Zambia": "Ζαμπία",
     "Yemen": "Υεμένη",
@@ -259,7 +228,6 @@
     "Afghanistan": "Αφγανιστάν",
     "United States": "Ηνωμένες Πολιτείες",
     "United Kingdom": "Ηνωμένο Βασίλειο",
-    "Not Trusted": "Μη Έμπιστο",
     "Wallis & Futuna": "Ουώλλις και Φουτούνα",
     "Vanuatu": "Βανουάτου",
     "U.S. Virgin Islands": "Αμερικανικές Παρθένοι Νήσο",
@@ -392,8 +360,6 @@
     "Robot": "Ρομπότ",
     "Smiley": "Χαμογελαστό πρόσωπο",
     "To join a space you'll need an invite.": "Για να συμμετάσχετε σε ένα χώρο θα χρειαστείτε μια πρόσκληση.",
-    "Create a space": "Δημιουργήστε ένα χώρο",
-    "Space selection": "Επιλογή χώρου",
     "Folder": "Φάκελος",
     "Headphones": "Ακουστικά",
     "Anchor": "Άγκυρα",
@@ -406,448 +372,25 @@
     "This backup is trusted because it has been restored on this session": "Αυτό το αντίγραφο ασφαλείας είναι αξιόπιστο επειδή έχει αποκατασταθεί σε αυτήν τη συνεδρία",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Για να αναφέρετε ένα ζήτημα ασφάλειας που σχετίζεται με το Matrix, διαβάστε την <a>Πολιτική Γνωστοποίησης Ασφαλείας</a> του Matrix.org.",
     "Deactivate account": "Απενεργοποίηση λογαριασμού",
-    "Signature upload failed": "Αποτυχία μεταφόρτωσης υπογραφής",
-    "Signature upload success": "Επιτυχία μεταφόρτωσης υπογραφής",
-    "Cancelled signature upload": "Ακυρώθηκε η μεταφόρτωση υπογραφής",
-    "Upload completed": "Η μεταφόρτωση ολοκληρώθηκε",
-    "Clear all data in this session?": "Εκκαθάριση όλων των δεδομένων σε αυτήν την περίοδο σύνδεσης;",
-    "Clear all data": "Εκκαθάριση όλων των δεδομένων",
-    "Remove %(count)s messages": {
-        "other": "Αφαίρεση %(count)s μηνυμάτων",
-        "one": "Αφαίρεση 1 μηνύματος"
-    },
-    "Recently viewed": "Προβλήθηκε πρόσφατα",
     "Encrypted by a deleted session": "Κρυπτογραφήθηκε από μια διαγραμμένη συνεδρία",
-    "Your homeserver doesn't seem to support this feature.": "Ο διακομιστής σας δε φαίνεται να υποστηρίζει αυτήν τη δυνατότητα.",
-    "If they don't match, the security of your communication may be compromised.": "Εάν δεν ταιριάζουν, η ασφάλεια της επικοινωνίας σας μπορεί να τεθεί σε κίνδυνο.",
-    "Session key": "Κλειδί συνεδρίας",
-    "Session name": "Όνομα συνεδρίας",
-    "Select spaces": "Επιλέξτε χώρους",
-    "%(count)s rooms": {
-        "one": "%(count)s δωμάτιο",
-        "other": "%(count)s δωμάτια"
-    },
-    "%(count)s members": {
-        "one": "%(count)s μέλος",
-        "other": "%(count)s μέλη"
-    },
-    "Are you sure you want to sign out?": "Είσαστε σίγουροι ότι θέλετε να αποσυνδεθείτε;",
-    "You'll lose access to your encrypted messages": "Θα χάσετε την πρόσβαση στα κρυπτογραφημένα μηνύματά σας",
-    "Manually export keys": "Μη αυτόματη εξαγωγή κλειδιών",
-    "I don't want my encrypted messages": "Δε θέλω τα κρυπτογραφημένα μηνύματά μου",
-    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Τα κρυπτογραφημένα μηνύματα προστατεύονται με κρυπτογράφηση από άκρο σε άκρο. Μόνο εσείς και οι παραλήπτες έχετε τα κλειδιά για να διαβάσετε αυτά τα μηνύματα.",
-    "Leave space": "Αποχώρηση από τον χώρο",
-    "Leave all rooms": "Αποχώρηση από όλα τα δωμάτια",
-    "Leave some rooms": "Αποχώρηση από κάποια δωμάτια",
-    "Would you like to leave the rooms in this space?": "Θα θέλατε να αποχωρήσετε από τα δωμάτια σε αυτόν τον χώρο;",
-    "Don't leave any rooms": "Μην αφήνετε κανένα δωμάτιο",
-    "You are about to leave <spaceName/>.": "Πρόκειται να αποχωρήσετε από το <spaceName/>.",
-    "Leave %(spaceName)s": "Αποχωρήστε από %(spaceName)s",
-    "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Είστε ο μοναδικός διαχειριστής ορισμένων από τα δωμάτια ή τους χώρους που θέλετε να αποχωρήσετε. Αν αποχωρήσετε, θα μείνουν χωρίς διαχειριστές.",
-    "You're the only admin of this space. Leaving it will mean no one has control over it.": "Είστε ο μοναδικός διαχειριστής αυτού του χώρου. Αν αποχωρήσετε τότε κανείς άλλος δε θα τον ελέγχει.",
-    "You won't be able to rejoin unless you are re-invited.": "Δε θα μπορείτε να συμμετάσχετε ξανά εκτός αν προσκληθείτε και πάλι.",
-    "Clear cache and resync": "Εκκαθάριση προσωρινής μνήμης και επανασυγχρονισμός",
-    "Enter Security Phrase": "Εισαγάγετε τη Φράση Ασφαλείας",
     "Moderation": "Συντονισμός",
-    "Continuing without email": "Συνέχεια χωρίς email",
-    "Upgrade Room Version": "Αναβάθμιση Έκδοσης Δωματίου",
-    "Upgrade this room to version %(version)s": "Αναβαθμίστε αυτό το δωμάτιο στην έκδοση %(version)s",
-    "The room upgrade could not be completed": "Δεν ήταν δυνατή η ολοκλήρωση της αναβάθμισης δωματίου",
-    "Failed to upgrade room": "Αποτυχία αναβάθμισης δωματίου",
-    "Room Settings - %(roomName)s": "Ρυθμίσεις Δωματίου - %(roomName)s",
-    "Email (optional)": "Email (προαιρετικό)",
-    "A connection error occurred while trying to contact the server.": "Παρουσιάστηκε σφάλμα σύνδεσης κατά την προσπάθεια επικοινωνίας με τον διακομιστή.",
-    "Your area is experiencing difficulties connecting to the internet.": "Η περιοχή σας αντιμετωπίζει δυσκολίες σύνδεσης στο διαδίκτυο.",
-    "The server has denied your request.": "Ο διακομιστής απέρριψε το αίτημά σας.",
-    "The server is offline.": "Ο διακομιστής είναι εκτός σύνδεσης.",
-    "A browser extension is preventing the request.": "Μια επέκταση προγράμματος περιήγησης αποτρέπει το αίτημα.",
-    "Your firewall or anti-virus is blocking the request.": "Το τείχος προστασίας ή το πρόγραμμα προστασίας από ιούς μπλοκάρει το αίτημα.",
-    "The server (%(serverName)s) took too long to respond.": "Ο διακομιστής (%(serverName)s) έκανε πολύ χρόνο να ανταποκριθεί.",
-    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Ο διακομιστής σας δεν ανταποκρίνεται σε ορισμένα από τα αιτήματά σας. Παρακάτω είναι μερικοί από τους πιο πιθανούς λόγους.",
-    "Server isn't responding": "Ο διακομιστής δεν ανταποκρίνεται",
-    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Θα αναβαθμίσετε αυτό το δωμάτιο από <oldVersion /> σε <newVersion />.",
-    "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Λάβετε υπόψη ότι η αναβάθμιση θα δημιουργήσει μια νέα έκδοση του δωματίου</b>. Όλα τα τρέχοντα μηνύματα θα παραμείνουν σε αυτό το αρχειοθετημένο δωμάτιο.",
-    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Η αναβάθμιση ενός δωματίου είναι μια προηγμένη ενέργεια και συνήθως συνιστάται όταν ένα δωμάτιο είναι ασταθές λόγω σφαλμάτων, ελλείψεων λειτουργιών ή ευπάθειας ασφαλείας.",
-    "Upgrade public room": "Αναβάθμιση δημόσιου δωματίου",
-    "Upgrade private room": "Αναβάθμιση ιδιωτικού δωματίου",
-    "Automatically invite members from this room to the new one": "Αυτόματη πρόσκληση μελών αυτού του δωματίου στο νέο",
-    "Put a link back to the old room at the start of the new room so people can see old messages": "Βάλτε έναν σύνδεσμο προς το παλιό δωμάτιο στην αρχή του νέου δωματίου, ώστε οι χρήστες να μπορούν να δουν παλιά μηνύματα",
-    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Εμποδίστε τους χρήστες να συνομιλούν στην παλιά έκδοση του δωματίου και αναρτήστε ένα μήνυμα που να τους συμβουλεύει να μετακινηθούν στο νέο δωμάτιο",
-    "Update any local room aliases to point to the new room": "Ενημερώστε τυχόν τοπικά ψευδώνυμα δωματίου για να οδηγούν στο νέο δωμάτιο",
-    "Create a new room with the same name, description and avatar": "Δημιουργήστε ένα νέο δωμάτιο με το ίδιο όνομα, περιγραφή και avatar",
     "Delete Widget": "Διαγραφή Μικροεφαρμογής",
     "Sign in with SSO": "Συνδεθείτε με SSO",
-    "Unable to start audio streaming.": "Δεν είναι δυνατή η έναρξη ροής ήχου.",
-    "Thread options": "Επιλογές νήματος συζήτησης",
-    "Open in OpenStreetMap": "Άνοιγμα στο OpenStreetMap",
-    "Not a valid Security Key": "Μη έγκυρο Κλειδί Ασφαλείας",
-    "This looks like a valid Security Key!": "Αυτό φαίνεται να είναι ένα έγκυρο Κλειδί Ασφαλείας!",
-    "Enter Security Key": "Εισάγετε το Κλειδί Ασφαλείας",
-    "Successfully restored %(sessionCount)s keys": "Επιτυχής επαναφορά %(sessionCount)s κλειδιών",
-    "Failed to decrypt %(failedCount)s sessions!": "Αποτυχία αποκρυπτογράφησης %(failedCount)s συνεδριών!",
-    "Keys restored": "Τα κλειδιά ανακτήθηκαν",
-    "No backup found!": "Δε βρέθηκε αντίγραφο ασφαλείας!",
-    "Unable to restore backup": "Δεν είναι δυνατή η επαναφορά του αντιγράφου ασφαλείας",
-    "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.": "Δεν ήταν δυνατή η αποκρυπτογράφηση του αντιγράφου ασφαλείας με αυτή τη Φράση Ασφαλείας: Βεβαιωθείτε ότι έχετε εισαγάγει τη σωστή Φράση Ασφαλείας.",
-    "Incorrect Security Phrase": "Λανθασμένη Φράση Ασφαλείας",
-    "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.": "Δεν ήταν δυνατή η αποκρυπτογράφηση του αντιγράφου ασφαλείας με αυτό το Κλειδί Ασφαλείας: Βεβαιωθείτε ότι έχετε εισαγάγει το σωστό Κλειδί Ασφαλείας.",
-    "Security Key mismatch": "Αναντιστοιχία Κλειδιού Ασφαλείας",
-    "Unable to load backup status": "Δεν είναι δυνατή η φόρτωση της κατάστασης αντιγράφου ασφαλείας",
-    "%(completed)s of %(total)s keys restored": "%(completed)s από %(total)s κλειδιά ανακτήθηκαν",
-    "Restoring keys from backup": "Επαναφορά κλειδιών από αντίγραφο ασφαλείας",
-    "Unable to set up keys": "Δεν είναι δυνατή η ρύθμιση των κλειδιών",
-    "Click the button below to confirm setting up encryption.": "Κάντε κλικ στο κουμπί παρακάτω για να επιβεβαιώσετε τη ρύθμιση της κρυπτογράφησης.",
-    "Confirm encryption setup": "Επιβεβαιώστε τη ρύθμιση κρυπτογράφησης",
-    "Use your Security Key to continue.": "Χρησιμοποιήστε το Κλειδί Ασφαλείας σας για να συνεχίσετε.",
-    "Security Key": "Κλειδί Ασφαλείας",
-    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Εισαγάγετε τη Φράση Ασφαλείας ή <button>χρησιμοποιήστε το Κλειδί Ασφαλείας</button> για να συνεχίσετε.",
-    "Unable to access secret storage. Please verify that you entered the correct Security Phrase.": "Δεν είναι δυνατή η πρόσβαση στον κρυφό χώρο αποθήκευσης. Βεβαιωθείτε ότι έχετε εισαγάγει τη σωστή Φράση Ασφαλείας.",
-    "Security Phrase": "Φράση Ασφαλείας",
-    "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Εάν επαναφέρετε τα πάντα, θα κάνετε επανεκκίνηση χωρίς αξιόπιστες συνεδρίες, χωρίς αξιόπιστους χρήστες και ενδέχεται να μην μπορείτε να δείτε προηγούμενα μηνύματα.",
-    "Only do this if you have no other device to complete verification with.": "Κάντε αυτό μόνο όταν δεν έχετε άλλη συσκευή για να ολοκληρώσετε την επαλήθευση.",
-    "Reset everything": "Επαναφορά όλων",
-    "Forgotten or lost all recovery methods? <a>Reset all</a>": "Ξεχάσατε ή χάσατε όλες τις μεθόδους ανάκτησης; <a>Επαναφορά όλων</a>",
-    "Invalid Security Key": "Μη έγκυρο Κλειδί Ασφαλείας",
-    "Wrong Security Key": "Λάθος Κλειδί Ασφαλείας",
-    "Looks good!": "Φαίνεται καλό!",
-    "Wrong file type": "Λάθος τύπος αρχείου",
-    "Decline All": "Απόρριψη όλων",
-    "Verification Request": "Αίτημα επαλήθευσης",
-    "Verify other device": "Επαλήθευση άλλης συσκευής",
-    "Upload Error": "Σφάλμα μεταφόρτωσης",
-    "Cancel All": "Ακύρωση Όλων",
-    "Upload %(count)s other files": {
-        "one": "Μεταφόρτωση %(count)s άλλου αρχείου",
-        "other": "Μεταφόρτωση %(count)s άλλων αρχείων"
-    },
-    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Ορισμένα αρχεία είναι <b>πολύ μεγάλα</b> για να μεταφορτωθούν. Το όριο μεγέθους αρχείου είναι %(limit)s.",
-    "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Αυτά τα αρχεία είναι <b>πολύ μεγάλα</b> για μεταφόρτωση. Το όριο μεγέθους αρχείου είναι %(limit)s.",
-    "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Αυτό το αρχείο είναι <b>πολύ μεγάλο</b> για μεταφόρτωση. Το όριο μεγέθους αρχείου είναι %(limit)s αλλά αυτό το αρχείο είναι %(sizeOfThisFile)s.",
-    "Upload all": "Μεταφόρτωση όλων",
-    "Upload files": "Μεταφόρτωση αρχείων",
-    "Upload files (%(current)s of %(total)s)": "Μεταφόρτωση αρχείων %(current)s από %(total)s",
-    "Find others by phone or email": "Βρείτε άλλους μέσω τηλεφώνου ή email",
-    "Your browser likely removed this data when running low on disk space.": "Το πρόγραμμα περιήγησης σας πιθανότατα αφαίρεσε αυτά τα δεδομένα όταν ο χώρος στο δίσκο εξαντλήθηκε.",
-    "Missing session data": "Λείπουν δεδομένα της συνεδρίας (session)",
-    "Search Dialog": "Παράθυρο Αναζήτησης",
-    "Use <arrows/> to scroll": "Χρησιμοποιήστε τα <arrows/> για κύλιση",
-    "Recent searches": "Πρόσφατες αναζητήσεις",
-    "Other searches": "'Άλλες αναζητήσεις",
-    "Public rooms": "Δημόσια δωμάτια",
-    "Join %(roomAddress)s": "Συμμετοχή στο %(roomAddress)s",
-    "Other rooms in %(spaceName)s": "Άλλα δωμάτιο στο %(spaceName)s",
-    "Spaces you're in": "Χώροι που ανήκετε",
-    "Sections to show": "Ενότητες προς εμφάνιση",
-    "Command Help": "Βοήθεια Εντολών",
-    "Link to room": "Σύνδεσμος στο δωμάτιο",
-    "Link to selected message": "Σύνδεσμος στο επιλεγμένο μήνυμα",
-    "Share Room Message": "Κοινή χρήση Μηνύματος Δωματίου",
-    "Share User": "Κοινή χρήση Χρήστη",
-    "Link to most recent message": "Σύνδεσμος προς το πιο πρόσφατο μήνυμα",
-    "Share Room": "Κοινή χρήση Δωματίου",
-    "We encountered an error trying to restore your previous session.": "Αντιμετωπίσαμε ένα σφάλμα κατά την επαναφορά της προηγούμενης συνεδρίας σας.",
     "Send Logs": "Αποστολή Αρχείων καταγραφής",
-    "Clear Storage and Sign Out": "Εκκαθάριση Χώρου αποθήκευσης και Αποσύνδεση",
-    "Sign out and remove encryption keys?": "Αποσύνδεση και κατάργηση κλειδιών κρυπτογράφησης;",
-    "Failed to send logs: ": "Αποτυχία αποστολής αρχείων καταγραφής: ",
-    "Thank you!": "Ευχαριστώ!",
     "expand": "επέκταση",
     "collapse": "σύμπτηξη",
-    "%(name)s wants to verify": "%(name)s θέλει να επαληθεύσει",
-    "%(name)s cancelled": "%(name)s ακύρωσε",
-    "%(name)s declined": "%(name)s αρνήθηκε",
-    "%(name)s accepted": "Ο/η %(name)s αποδέχθηκε",
-    "%(count)s reply": {
-        "one": "%(count)s απάντηση",
-        "other": "%(count)s απαντήσεις"
-    },
-    "MB": "MB",
-    "End Poll": "Τερματισμός δημοσκόπησης",
-    "Server did not require any authentication": "Ο διακομιστής δεν απαίτησε κάποιο έλεγχο ταυτότητας",
-    "Server did not return valid authentication information.": "Ο διακομιστής δεν επέστρεψε έγκυρες πληροφορίες ελέγχου ταυτότητας.",
-    "There was a problem communicating with the server. Please try again.": "Παρουσιάστηκε πρόβλημα κατά την επικοινωνία με τον διακομιστή. Παρακαλώ προσπαθήστε ξανά.",
-    "Confirm account deactivation": "Επιβεβαίωση απενεργοποίησης λογαριασμού",
-    "Are you sure you want to deactivate your account? This is irreversible.": "Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε τον λογαριασμό σας; Αυτό είναι μη αναστρέψιμο.",
-    "Confirm your account deactivation by using Single Sign On to prove your identity.": "Επιβεβαιώστε την απενεργοποίηση του λογαριασμού σας χρησιμοποιώντας Single Sign On για να αποδείξετε την ταυτότητά σας.",
-    "Continue With Encryption Disabled": "Συνέχεια με Απενεργοποίηση Κρυπτογράφησης",
-    "Incompatible Database": "Μη συμβατή Βάση Δεδομένων",
-    "Want to add an existing space instead?": "Θέλετε να προσθέσετε έναν υπάρχοντα χώρο;",
-    "Private space (invite only)": "Ιδιωτικός χώρος (μόνο με πρόσκληση)",
-    "Space visibility": "Ορατότητα χώρου",
-    "Only people invited will be able to find and join this space.": "Μόνο τα άτομα που έχουν προσκληθεί θα μπορούν να βρουν και να εγγραφούν σε αυτόν τον χώρο.",
-    "Anyone will be able to find and join this space, not just members of <SpaceName/>.": "Οποιοσδήποτε θα μπορεί να βρει και να εγγραφεί σε αυτόν τον χώρο, όχι μόνο μέλη του <SpaceName/>.",
-    "Could not fetch location": "Δεν ήταν δυνατή η ανάκτηση της τοποθεσίας",
-    "Location": "Τοποθεσία",
-    "Can't load this message": "Δεν είναι δυνατή η φόρτωση αυτού του μηνύματος",
     "Submit logs": "Υποβολή αρχείων καταγραφής",
-    "Edited at %(date)s. Click to view edits.": "Επεξεργάστηκε στις %(date)s. Κάντε κλικ για να δείτε τις τροποποιήσεις.",
-    "Edited at %(date)s": "Τροποποιήθηκε στις %(date)s",
-    "Click to view edits": "Κάντε κλικ για να δείτε τις τροποποιήσεις",
-    "Add reaction": "Προσθέστε αντίδραση",
-    "%(count)s votes": {
-        "one": "%(count)s ψήφος",
-        "other": "%(count)s ψήφοι"
-    },
-    "edited": "επεξεργάστηκε",
-    "%(count)s sessions": {
-        "one": "%(count)s συνεδρία",
-        "other": "%(count)s συνεδρίες"
-    },
-    "%(count)s verified sessions": {
-        "one": "1 επαληθευμένη συνεδρία",
-        "other": "%(count)s επαληθευμένες συνεδρίες"
-    },
     "Not encrypted": "Μη κρυπτογραφημένο",
-    "Sending": "Αποστολή",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Μπορείτε να χρησιμοποιήσετε τις προσαρμοσμένες επιλογές διακομιστή για να συνδεθείτε σε άλλους διακομιστές Matrix, καθορίζοντας μια διαφορετική διεύθυνση URL του κεντρικού διακομιστή. Αυτό σας επιτρέπει να χρησιμοποιείτε το %(brand)s με έναν υπάρχοντα λογαριασμό Matrix σε διαφορετικό τοπικό διακομιστή.",
-    "Message preview": "Προεπισκόπηση μηνύματος",
-    "You don't have permission to do this": "Δεν έχετε άδεια να το κάνετε αυτό",
-    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Είστε βέβαιοι ότι θέλετε να τερματίσετε αυτήν τη δημοσκόπηση; Αυτό θα εμφανίσει τα τελικά αποτελέσματα της δημοσκόπησης και θα εμποδίσει νέους ψήφους.",
-    "Sorry, the poll did not end. Please try again.": "Συγνώμη, η δημοσκόπηση δεν τερματίστηκε. Παρακαλώ προσπαθήστε ξανά.",
-    "Failed to end poll": "Αποτυχία τερματισμού της δημοσκόπησης",
-    "Anyone in <SpaceName/> will be able to find and join.": "Οποιοσδήποτε στο <SpaceName/> θα μπορεί να βρει και να συμμετάσχει σε αυτό το δωμάτιο.",
-    "Reason (optional)": "Αιτία (προαιρετικό)",
-    "Removing…": "Αφαίρεση…",
-    "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Καταργήστε την επιλογή εάν θέλετε επίσης να καταργήσετε τα μηνύματα συστήματος σε αυτόν τον χρήστη (π.χ. αλλαγή μέλους, αλλαγή προφίλ…)",
-    "Preserve system messages": "Διατήρηση μηνυμάτων συστήματος",
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Για μεγάλο αριθμό μηνυμάτων, αυτό μπορεί να πάρει κάποιο χρόνο. Μην ανανεώνετε το προγράμμα-πελάτη σας στο μεταξύ.",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
-        "other": "Πρόκειται να αφαιρέσετε %(count)s μηνύματα του χρήστη %(user)s. Αυτό θα τα καταργήσει οριστικά για όλους στη συνομιλία. Θέλετε να συνεχίσετε;",
-        "one": "Πρόκειται να αφαιρέσετε %(count)s μήνυμα του χρήστη %(user)s. Αυτό θα το καταργήσει οριστικά για όλους στη συνομιλία. Θέλετε να συνεχίσετε;"
-    },
-    "Remove recent messages by %(user)s": "Καταργήστε πρόσφατα μηνύματα από %(user)s",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "Δοκιμάστε να κάνετε κύλιση στη γραμμή χρόνου για να δείτε αν υπάρχουν παλαιότερα.",
-    "No recent messages by %(user)s found": "Δε βρέθηκαν πρόσφατα μηνύματα από %(user)s",
-    "Notes": "Σημειώσεις",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Προτού υποβάλετε αρχεία καταγραφής, πρέπει να <a>δημιουργήσετε ένα ζήτημα GitHub</a> για να περιγράψετε το πρόβλημά σας.",
-    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Υπενθύμιση: Το πρόγραμμα περιήγησής σας δεν υποστηρίζεται, επομένως η εμπειρία σας μπορεί να είναι απρόβλεπτη.",
-    "Preparing to download logs": "Προετοιμασία λήψης αρχείων καταγραφής",
-    "Logs sent": "Τα αρχεία καταγραφής στάλθηκαν",
-    "Preparing to send logs": "Προετοιμασία αποστολής αρχείων καταγραφής",
-    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Πείτε μας τι πήγε στραβά ή, καλύτερα, δημιουργήστε ένα ζήτημα στο GitHub που να περιγράφει το πρόβλημα.",
-    "To leave the beta, visit your settings.": "Για να αποχωρήσετε από την έκδοση beta, μεταβείτε στις ρυθμίσεις σας.",
-    "Close dialog": "Κλείσιμο διαλόγου",
-    "Invite anyway": "Πρόσκληση ούτως ή άλλως",
-    "Invite anyway and never warn me again": "Προσκαλέστε ούτως ή άλλως και μην με προειδοποιήσετε ποτέ ξανά",
-    "The following users may not exist": "Οι παρακάτω χρήστες ενδέχεται να μην υπάρχουν",
-    "Search for rooms": "Αναζητήστε δωμάτια",
-    "Create a new room": "Δημιουργήστε νέο δωμάτιο",
-    "Want to add a new space instead?": "Θέλετε να προσθέσετε ένα νέο χώρο αντί αυτού;",
-    "Want to add a new room instead?": "Θέλετε να προσθέσετε ένα νέο δωμάτιο αντί αυτού;",
-    "Add existing rooms": "Προσθέστε υπάρχοντα δωμάτια",
-    "Direct Messages": "Άμεσα Μηνύματα",
-    "Adding rooms... (%(progress)s out of %(count)s)": {
-        "one": "Προσθήκη δωματίου...",
-        "other": "Προσθήκη δωματίων... (%(progress)s από %(count)s)"
-    },
-    "Not all selected were added": "Δεν προστέθηκαν όλοι οι επιλεγμένοι",
-    "Search for spaces": "Αναζητήστε χώρους",
-    "Create a new space": "Δημιουργήστε ένα νέο χώρο",
-    "Add existing space": "Προσθήκη υπάρχοντος χώρου",
-    "Server name": "Ονομα διακομιστή",
-    "Server Options": "Επιλογές Διακομιστή",
-    "This address had invalid server or is already in use": "Αυτή η διεύθυνση έχει μη έγκυρο διακομιστή ή χρησιμοποιείται ήδη",
-    "This address is already in use": "Αυτή η διεύθυνση χρησιμοποιείται ήδη",
-    "This address is available to use": "Αυτή η διεύθυνση είναι διαθέσιμη για χρήση",
-    "This address does not point at this room": "Αυτή η διεύθυνση δεν οδηγεί σε αυτό το δωμάτιο",
-    "Please provide an address": "Παρακαλώ δώστε μια διεύθυνση",
-    "Some characters not allowed": "Ορισμένοι χαρακτήρες δεν επιτρέπονται",
-    "Missing room name or separator e.g. (my-room:domain.org)": "Λείπει το όνομα δωματίου ή το διαχωριστικό τομέα π.χ (my-room:domain.org)",
-    "Missing domain separator e.g. (:domain.org)": "Λείπει το διαχωριστικό τομέα π.χ. (:domain.org)",
-    "e.g. my-room": "π.χ. my-room",
-    "Room address": "Διεύθυνση δωματίου",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Αδυναμία φόρτωσης του συμβάντος στο οποίο δόθηκε απάντηση, είτε δεν υπάρχει είτε δεν έχετε άδεια να το προβάλετε.",
-    "Language Dropdown": "Επιλογή Γλώσσας",
-    "Information": "Πληροφορίες",
-    "View all %(count)s members": {
-        "one": "Προβολή 1 μέλους",
-        "other": "Προβολή όλων των %(count)s μελών"
-    },
-    "This version of %(brand)s does not support searching encrypted messages": "Αυτή η έκδοση του %(brand)s δεν υποστηρίζει την αναζήτηση κρυπτογραφημένων μηνυμάτων",
-    "This version of %(brand)s does not support viewing some encrypted files": "Αυτή η έκδοση του %(brand)s δεν υποστηρίζει την προβολή ορισμένων κρυπτογραφημένων αρχείων",
-    "Use the <a>Desktop app</a> to search encrypted messages": "Χρησιμοποιήστε την <a>εφαρμογή για υπολογιστή</a> για να δείτε όλα τα κρυπτογραφημένα μηνύματα",
-    "Use the <a>Desktop app</a> to see all encrypted files": "Χρησιμοποιήστε την <a>εφαρμογή για υπολογιστή</a> για να δείτε όλα τα κρυπτογραφημένα αρχεία",
-    "Message search initialisation failed, check <a>your settings</a> for more information": "Η προετοιμασία της αναζήτησης μηνυμάτων απέτυχε, ελέγξτε τις <a>ρυθμίσεις σας</a> για περισσότερες πληροφορίες",
-    "Cancel search": "Ακύρωση αναζήτησης",
-    "What location type do you want to share?": "Τι τύπο τοποθεσίας θέλετε να μοιραστείτε;",
-    "Drop a Pin": "Εισάγετε μια Καρφίτσα",
-    "My live location": "Η ζωντανή τοποθεσία μου",
-    "My current location": "Η τρέχουσα τοποθεσία μου",
-    "%(displayName)s's live location": "Η τρέχουσα τοποθεσία του/της %(displayName)s",
-    "%(brand)s could not send your location. Please try again later.": "Το %(brand)s δεν μπόρεσε να στείλει την τοποθεσία σας. Παρακαλώ δοκιμάστε ξανά αργότερα.",
-    "We couldn't send your location": "Αδυναμία αποστολής της τοποθεσίας σας",
     "Spanner": "Γερμανικό κλειδί",
     "Switch theme": "Αλλαγή θέματος",
-    "<inviter/> invites you": "<inviter/> σας προσκαλεί",
-    "You are sharing your live location": "Μοιράζεστε την τρέχουσα τοποθεσία σας",
-    "Search spaces": "Αναζήτηση χώρων",
-    "Updating %(brand)s": "Ενημέρωση %(brand)s",
-    "Unable to upload": "Αδυναμία μεταφόρτωσης",
-    "Recent Conversations": "Πρόσφατες Συνομιλίες",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Οι ακόλουθοι χρήστες ενδέχεται να μην υπάρχουν ή να μην είναι έγκυροι και δεν μπορούν να προσκληθούν: %(csvNames)s",
-    "Failed to find the following users": "Αποτυχία εύρεσης των παρακάτω χρηστών",
-    "A call can only be transferred to a single user.": "Μια κλήση μπορεί να μεταφερθεί μόνο σε έναν χρήστη.",
-    "We couldn't invite those users. Please check the users you want to invite and try again.": "Δεν ήταν δυνατή η πρόσκληση αυτών των χρηστών. Ελέγξτε τους χρήστες που θέλετε να προσκαλέσετε και δοκιμάστε ξανά.",
-    "Something went wrong trying to invite the users.": "Κάτι πήγε στραβά στην προσπάθεια πρόσκλησης των χρηστών.",
-    "Click the button below to confirm your identity.": "Κλικ στο κουμπί παρακάτω για να επιβεβαιώσετε την ταυτότητά σας.",
-    "Confirm to continue": "Επιβεβαιώστε για να συνεχίσετε",
-    "To continue, use Single Sign On to prove your identity.": "Για να συνεχίσετε, χρησιμοποιήστε σύνδεση Single Sign On για να αποδείξετε την ταυτότητά σας.",
-    "Enter the name of a new server you want to explore.": "Εισαγάγετε το όνομα ενός νέου διακομιστή που θέλετε να εξερευνήσετε.",
-    "Add a new server": "Προσθήκη νέου διακομιστή",
-    "Your server": "Ο διακομιστής σας",
-    "Can't find this server or its room list": "Αδυναμία εύρεσης του διακομιστή ή της λίστας δωματίων του",
-    "You are not allowed to view this server's rooms list": "Δεν επιτρέπεται να δείτε τη λίστα δωματίων αυτού του διακομιστή",
-    "Looks good": "Φαίνεται καλό",
-    "Enter a server name": "Εισαγάγετε ένα όνομα διακομιστή",
-    "Join millions for free on the largest public server": "Συμμετέχετε δωρεάν στον μεγαλύτερο δημόσιο διακομιστή",
-    "toggle event": "μεταβολή συμβάντος",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Δεν είναι δυνατή η εύρεση προφίλ για τα αναγνωριστικά Matrix που αναφέρονται παρακάτω - θα θέλατε να τα προσκαλέσετε ούτως ή άλλως;",
-    "Adding spaces has moved.": "Η προσθήκη χώρων μετακινήθηκε.",
-    "And %(count)s more...": {
-        "other": "Και %(count)s ακόμα..."
-    },
-    "In reply to <a>this message</a>": "Ως απαντηση σε<a>αυτό το μήνυμα</a>",
-    "<a>In reply to</a> <pill>": "<a>Ως απαντηση σε</a> <pill>",
-    "Power level": "Επίπεδο ισχύος",
-    "%(count)s people you know have already joined": {
-        "one": "%(count)s άτομο που γνωρίζετε έχει ήδη εγγραφεί",
-        "other": "%(count)s άτομα που γνωρίζετε έχουν ήδη εγγραφεί"
-    },
-    "Including %(commaSeparatedMembers)s": "Συμπεριλαμβανομένου %(commaSeparatedMembers)s",
-    "Including you, %(commaSeparatedMembers)s": "Συμπεριλαμβανομένου σας, %(commaSeparatedMembers)s",
-    "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Έχετε χρησιμοποιήσει στο παρελθόν μια νεότερη έκδοση του %(brand)s με αυτήν την συνεδρία. Για να χρησιμοποιήσετε ξανά αυτήν την έκδοση με κρυπτογράφηση από άκρο σε άκρο, θα πρέπει να αποσυνδεθείτε και να συνδεθείτε ξανά.",
-    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Για να αποφύγετε να χάσετε το ιστορικό των συνομιλιών σας, πρέπει να εξαγάγετε τα κλειδιά του δωματίου σας πριν αποσυνδεθείτε. Για να το κάνετε αυτό, θα χρειαστεί να επιστρέψετε στη νεότερη έκδοση του %(brand)s",
-    "Add a space to a space you manage.": "Προσθέστε έναν χώρο σε ένα χώρο που διαχειρίζεστε.",
-    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Η εκκαθάριση όλων των δεδομένων από αυτήν τη συνεδρία είναι μόνιμη. Τα κρυπτογραφημένα μηνύματα θα χαθούν εκτός εάν έχουν δημιουργηθεί αντίγραφα ασφαλείας των κλειδιών τους.",
-    "Unable to load commit detail: %(msg)s": "Δεν είναι δυνατή η φόρτωση των λεπτομερειών δέσμευσης: %(msg)s",
-    "Data on this screen is shared with %(widgetDomain)s": "Τα δεδομένα σε αυτήν την οθόνη μοιράζονται με το %(widgetDomain)s",
-    "Other spaces or rooms you might not know": "Άλλοι χώροι ή δωμάτια που ίσως δε γνωρίζετε",
-    "Spaces you know that contain this space": "Χώροι που γνωρίζετε ότι περιέχουν αυτόν το χώρο",
-    "Spaces you know that contain this room": "Χώροι που γνωρίζετε ότι περιέχουν αυτό το δωμάτιο",
-    "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "Αποφασίστε ποιοι χώροι μπορούν να έχουν πρόσβαση σε αυτό το δωμάτιο. Εάν επιλεγεί ένας χώρος, τα μέλη του μπορούν να βρουν και να εγγραφούν στο <RoomName/>.",
-    "Dial pad": "Πληκτρολόγιο κλήσης",
-    "Transfer": "Μεταφορά",
-    "Sent": "Απεσταλμένα",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Αποκτήστε ξανά πρόσβαση στον λογαριασμό σας και ανακτήστε τα κλειδιά κρυπτογράφησης που είναι αποθηκευμένα σε αυτήν τη συνεδρία. Χωρίς αυτά, δε θα μπορείτε να διαβάσετε όλα τα ασφαλή μηνύματά σας σε καμία συνεδρία.",
-    "Failed to start livestream": "Η έναρξη της ζωντανής ροής απέτυχε",
-    "Unsent": "Μη απεσταλμένα",
-    "No results found": "Δε βρέθηκαν αποτελέσματα",
-    "Filter results": "Φιλτράρισμα αποτελεσμάτων",
-    "To help us prevent this in future, please <a>send us logs</a>.": "Για να μας βοηθήσετε να το αποτρέψουμε αυτό στο μέλλον, <a>στείλτε μας τα αρχεία καταγραφής</a>.",
-    "To search messages, look for this icon at the top of a room <icon/>": "Για να αναζητήσετε μηνύματα, βρείτε αυτό το εικονίδιο στην κορυφή ενός δωματίου <icon/>",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Η εκκαθάριση του αποθηκευτικού χώρου του προγράμματος περιήγησής σας μπορεί να διορθώσει το πρόβλημα, αλλά θα αποσυνδεθείτε και θα κάνει τυχόν κρυπτογραφημένο ιστορικό συνομιλιών να μην είναι αναγνώσιμο.",
-    "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Εάν το κάνετε, σημειώστε ότι κανένα από τα μηνύματά σας δε θα διαγραφεί, αλλά η εμπειρία αναζήτησης ενδέχεται να υποβαθμιστεί για λίγα λεπτά κατά τη δημιουργία του ευρετηρίου",
-    "Recent changes that have not yet been received": "Πρόσφατες αλλαγές που δεν έχουν ληφθεί ακόμη",
-    "The server is not configured to indicate what the problem is (CORS).": "Ο διακομιστής δεν έχει ρυθμιστεί για να υποδεικνύει ποιο είναι το πρόβλημα (CORS).",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "Αυτό συνήθως επηρεάζει μόνο τον τρόπο επεξεργασίας του δωματίου στον διακομιστή. Εάν αντιμετωπίζετε προβλήματα με το %(brand)s σας, <a>αναφέρετε ένα σφάλμα</a>.",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Αυτό συνήθως επηρεάζει μόνο τον τρόπο επεξεργασίας του δωματίου στον διακομιστή. Εάν αντιμετωπίζετε προβλήματα με το %(brand)s σας, αναφέρετε ένα σφάλμα.",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Η αναβάθμιση αυτού του δωματίου απαιτεί τη διαγραφή του και τη δημιουργία ενός νέου δωματίου στη θέση του. Για να προσφέρουμε στα μέλη του την καλύτερη δυνατή εμπειρία, θα:",
-    "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Μια προειδοποίηση, αν δεν προσθέσετε ένα email και ξεχάσετε τον κωδικό πρόσβασης, ενδέχεται να <b>χάσετε οριστικά την πρόσβαση στον λογαριασμό σας</b>.",
-    "Incompatible local cache": "Μη συμβατή τοπική κρυφή μνήμη",
-    "%(brand)s encountered an error during upload of:": "Το %(brand)s αντιμετώπισε ένα σφάλμα κατά τη μεταφόρτωση του:",
-    "User Directory": "Κατάλογος Χρηστών",
-    "Consult first": "Συμβουλευτείτε πρώτα",
-    "Invited people will be able to read old messages.": "Οι προσκεκλημένοι θα μπορούν να διαβάζουν παλιά μηνύματα.",
-    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Προσκαλέστε κάποιον χρησιμοποιώντας το όνομά του, το όνομα χρήστη (όπως <userId/>) ή <a>κοινή χρήση αυτού του δωματίου</a>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Προσκαλέστε κάποιον χρησιμοποιώντας το όνομά του, τη διεύθυνση ηλεκτρονικού ταχυδρομείου, το όνομα χρήστη (όπως <userId/>) ή <a>κοινή χρήση αυτού του δωματίου</a>.",
-    "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Προσκαλέστε κάποιον χρησιμοποιώντας το όνομά του, το όνομα χρήστη (όπως <userId/>) ή <a>κοινή χρήση αυτού του χώρου</a>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Προσκαλέστε κάποιον χρησιμοποιώντας το όνομά του, τη διεύθυνση ηλεκτρονικού ταχυδρομείου, το όνομα χρήστη (όπως <userId/>) ή <a>κοινή χρήση αυτού του χώρου</a>.",
-    "Invite to %(roomName)s": "Πρόσκληση στο %(roomName)s",
-    "Or send invite link": "Ή στείλτε σύνδεσμο πρόσκλησης",
-    "If you can't see who you're looking for, send them your invite link below.": "Εάν δεν μπορείτε να βρείτε αυτόν που ψάχνετε, στείλτε τους τον παρακάτω σύνδεσμο πρόσκλησης.",
-    "Some suggestions may be hidden for privacy.": "Ορισμένες προτάσεις ενδέχεται να είναι κρυφές λόγω απορρήτου.",
-    "Start a conversation with someone using their name or username (like <userId/>).": "Ξεκινήστε μια συνομιλία με κάποιον χρησιμοποιώντας το όνομά του ή το όνομα χρήστη (όπως <userId/>).",
-    "Start a conversation with someone using their name, email address or username (like <userId/>).": "Ξεκινήστε μια συνομιλία με κάποιον χρησιμοποιώντας το όνομα, τη διεύθυνση email ή το όνομα χρήστη του (όπως <userId/>).",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Χρησιμοποιήστε έναν διακομιστή ταυτότητας για πρόσκληση μέσω email. Διαχείριση στις <settings>Ρυθμίσεις</settings>.",
-    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Χρησιμοποιήστε έναν διακομιστή ταυτότητας για πρόσκληση μέσω email. <default> Χρησιμοποιήστε τον προεπιλεγμένο (%(defaultIdentityServerName)s)</default> ή διαμορφώστε στις <settings>Ρυθμίσεις</settings>.",
-    "Recently Direct Messaged": "Πρόσφατα Απευθείας Μηνύματα",
-    "Invite by email": "Πρόσκληση μέσω email",
-    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Το %(brand)s σας δε σας επιτρέπει να χρησιμοποιήσετε έναν διαχειριστή πρόσθετων για να το κάνετε αυτό. Επικοινωνήστε με έναν διαχειριστή.",
-    "Integrations not allowed": "Δεν επιτρέπονται πρόσθετα",
-    "Integrations are disabled": "Τα πρόσθετα έχουν απενεργοποιηθεί",
-    "Incoming Verification Request": "Εισερχόμενο Αίτημα Επαλήθευσης",
-    "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Η επαλήθευση αυτής της συσκευής θα την επισημάνει ως αξιόπιστη και οι χρήστες που έχουν επαληθευτεί μαζί σας θα εμπιστεύονται αυτήν τη συσκευή.",
-    "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Επαληθεύστε αυτήν τη συσκευή για να την επισημάνετε ως αξιόπιστη. Η εμπιστοσύνη αυτής της συσκευής προσφέρει σε εσάς και σε άλλους χρήστες επιπλέον ηρεμία όταν χρησιμοποιείτε μηνύματα με κρυπτογράφηση από άκρο σε άκρο.",
-    "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Η επαλήθευση αυτού του χρήστη θα επισημάνει τη συνεδρία του ως αξιόπιστη και θα επισημάνει επίσης τη συνεδρία σας ως αξιόπιστη σε αυτόν.",
-    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Επαληθεύστε αυτόν τον χρήστη για να τον επισημάνετε ως αξιόπιστο. Η εμπιστοσύνη των χρηστών σάς προσφέρει επιπλέον ηρεμία όταν χρησιμοποιείτε μηνύματα με κρυπτογράφηση από άκρο σε άκρο.",
-    "You may contact me if you have any follow up questions": "Μπορείτε να επικοινωνήσετε μαζί μου εάν έχετε περαιτέρω ερωτήσεις",
     "Feedback sent! Thanks, we appreciate it!": "Τα σχόλια ανατροφοδότησης στάλθηκαν! Ευχαριστούμε, το εκτιμούμε!",
-    "Search for rooms or people": "Αναζήτηση δωματίων ή ατόμων",
-    "The poll has ended. Top answer: %(topAnswer)s": "Η δημοσκόπηση έληξε. Κορυφαία απάντηση: %(topAnswer)s",
-    "The poll has ended. No votes were cast.": "Η δημοσκόπηση έληξε. Δεν υπάρχουν ψήφοι.",
     "Failed to connect to integration manager": "Αποτυχία σύνδεσης με τον διαχειριστή πρόσθετων",
-    "The widget will verify your user ID, but won't be able to perform actions for you:": "Η μικροεφαρμογή θα επαληθεύσει το αναγνωριστικό χρήστη σας, αλλά δε θα μπορεί να εκτελέσει ενέργειες για εσάς:",
-    "Allow this widget to verify your identity": "Επιτρέψτε σε αυτήν τη μικροεφαρμογή να επαληθεύσει την ταυτότητά σας",
-    "Remember my selection for this widget": "Να θυμάστε την επιλογή μου για αυτήν τη μικροεφαρμογή",
-    "This widget would like to:": "Αυτή η μικροεφαρμογή θα ήθελε να:",
-    "Approve widget permissions": "Έγκριση αδειών μικροεφαρμογών",
-    "You're removing all spaces. Access will default to invite only": "Καταργείτε όλους τους χώρους. Η πρόσβαση θα είναι προεπιλεγμένη μόνο για πρόσκληση",
-    "Start using Key Backup": "Ξεκινήστε να χρησιμοποιείτε το αντίγραφο ασφαλείας κλειδιού",
-    "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "Το %(brand)s χρησιμοποιεί πλέον 3-5 φορές λιγότερη μνήμη, φορτώνοντας πληροφορίες για άλλους χρήστες μόνο όταν χρειάζεται. Περιμένετε όσο γίνεται εκ νέου συγχρονισμός με τον διακομιστή!",
-    "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Εάν η άλλη έκδοση του %(brand)s εξακολουθεί να είναι ανοιχτή σε άλλη καρτέλα, κλείστε την, καθώς η χρήση του %(brand)s στον ίδιο κεντρικό υπολογιστή με ενεργοποιημένη και απενεργοποιημένη την αργή φόρτωση ταυτόχρονα , θα προκαλέσει προβλήματα.",
-    "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Έχετε χρησιμοποιήσει στο παρελθόν %(brand)s στον %(host)s με ενεργοποιημένη την αργή φόρτωση μελών. Σε αυτήν την έκδοση η αργή φόρτωση είναι απενεργοποιημένη. Η τοπική κρυφή μνήμη δεν είναι συμβατή μεταξύ αυτών των δύο ρυθμίσεων και έτσι το %(brand)s πρέπει να συγχρονίσει ξανά τον λογαριασμό σας.",
-    "a key signature": "μια υπογραφή κλειδιού",
-    "a device cross-signing signature": "μια υπογραφή διασταυρούμενης υπογραφής συσκευής",
-    "a new cross-signing key signature": "μια νέα υπογραφή κλειδιού διασταυρούμενης υπογραφής",
-    "a new master key signature": "μια νέα υπογραφή κύριου κλειδιού",
-    "We couldn't create your DM.": "Δεν μπορέσαμε να δημιουργήσουμε το DM σας.",
     "Forget": "Ξεχάστε",
-    "Resend %(unsentCount)s reaction(s)": "Επανάληψη αποστολής %(unsentCount)s αντιδράσεων",
-    "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "Εάν έχετε ξεχάσει το κλειδί ασφαλείας σας, μπορείτε να <button>ρυθμίσετε νέες επιλογές ανάκτησης</button>",
-    "Access your secure message history and set up secure messaging by entering your Security Key.": "Αποκτήστε πρόσβαση στο ιστορικό ασφαλών μηνυμάτων σας και ρυθμίστε την ασφαλή ανταλλαγή μηνυμάτων εισάγοντας το Κλειδί ασφαλείας σας.",
-    "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>": "Εάν έχετε ξεχάσει τη φράση ασφαλείας σας, μπορείτε να <button1>χρησιμοποιήσετε το κλειδί ασφαλείας</button1> ή <button2>να ρυθμίστε νέες επιλογές ανάκτησης</button2>",
-    "Access your secure message history and set up secure messaging by entering your Security Phrase.": "Αποκτήστε πρόσβαση στο ιστορικό ασφαλών μηνυμάτων σας και ρυθμίστε την ασφαλή ανταλλαγή μηνυμάτων εισάγοντας τη Φράση Ασφαλείας σας.",
-    "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Προειδοποίηση</b>: θα πρέπει να δημιουργήσετε αντίγραφο ασφαλείας κλειδιού μόνο από έναν αξιόπιστο υπολογιστή.",
-    "Clear cross-signing keys": "Διαγράψτε τα κλειδιά διασταυρούμενης υπογραφής",
-    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Η διαγραφή κλειδιών διασταυρούμενης υπογραφής είναι μόνιμη. Οποιοσδήποτε με τον οποίο έχετε επαληθευτεί θα λάβει ειδοποιήσεις ασφαλείας. Πιθανότατα δεν θέλετε να το κάνετε αυτό, εκτός και αν έχετε χάσει όλες τις συσκευές από τις οποίες μπορείτε να υπογράψετε.",
-    "Destroy cross-signing keys?": "Να καταστραφούν τα κλειδιά διασταυρούμενης υπογραφής;",
-    "Remember this": "Να το θυμάσαι αυτό",
-    "Be found by phone or email": "Να βρεθεί μέσω τηλεφώνου ή email",
-    "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Ορισμένα δεδομένα συνεδρίας, συμπεριλαμβανομένων των κρυπτογραφημένων κλειδιών μηνυμάτων, λείπουν. Αποσυνδεθείτε και συνδεθείτε για να το διορθώσετε, επαναφέροντας τα κλειδιά από το αντίγραφο ασφαλείας.",
-    "Use \"%(query)s\" to search": "Χρησιμοποιήστε το \"%(query)s\" για αναζήτηση",
-    "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Αυτό ομαδοποιεί τις συνομιλίες σας με μέλη αυτού του χώρου. Η απενεργοποίηση του θα αποκρύψει αυτές τις συνομιλίες από την προβολή του %(spaceName)s.",
-    "Reset event store": "Επαναφορά καταστήματος συμβάντων",
-    "Reset event store?": "Eπαναφoρά στο κατάστημα συμβάντων;",
-    "You most likely do not want to reset your event index store": "Πιθανότατα δεν θέλετε να επαναφέρετε το κατάστημα ευρετηρίου συμβάντων",
-    "You're all caught up.": "Είστε πλήρως ενημερωμένοι.",
-    "Modal Widget": "Modal Widget",
-    "Message edits": "Επεξεργασίες μηνυμάτων",
-    "Confirm this user's session by comparing the following with their User Settings:": "Επιβεβαιώστε την συνεδρία αυτού του χρήστη συγκρίνοντας τα ακόλουθα με τις Ρυθμίσεις του:",
-    "Confirm by comparing the following with the User Settings in your other session:": "Επιβεβαιώστε συγκρίνοντας τα ακόλουθα με τις Ρυθμίσεις χρήστη στην άλλη συνεδρία σας:",
-    "Hold": "Αναμονή",
-    "These are likely ones other room admins are a part of.": "Πιθανότατα αυτά είναι μέρος στα οποία συμμετέχουν και άλλοι διαχειριστές δωματίου.",
-    "An error occurred while stopping your live location, please try again": "Παρουσιάστηκε σφάλμα κατά τη διακοπή της ζωντανής τοποθεσίας σας, δοκιμάστε ξανά",
-    "Resume": "Συνέχιση",
     "Thumbs up": "Μπράβο",
-    "Close sidebar": "Κλείσιμο πλαϊνής γραμμής",
     "View List": "Προβολή Λίστας",
-    "View list": "Προβολή λίστας",
-    "Cameras": "Κάμερες",
-    "Output devices": "Συσκευές εξόδου",
-    "Input devices": "Συσκευές εισόδου",
-    "To continue, please enter your account password:": "Για να συνεχίσετε παρακαλώ εισάγετε τον κωδικό σας:",
     "Unread email icon": "Εικονίδιο μη αναγνωσμένου μηνύματος",
-    "Start a group chat": "Ξεκινήστε μια ομαδική συνομιλία",
-    "Other options": "Αλλες επιλογές",
-    "Some results may be hidden": "Ορισμένα αποτελέσματα ενδέχεται να είναι κρυμμένα",
-    "Copy invite link": "Αντιγραφή συνδέσμου πρόσκλησης",
-    "If you can't see who you're looking for, send them your invite link.": "Εάν δεν εμφανίζεται το άτομο που αναζητάτε, στείλτε τους τον σύνδεσμο πρόσκλησης.",
-    "Some results may be hidden for privacy": "Ορισμένα αποτελέσματα ενδέχεται να είναι κρυφά για λόγους απορρήτου",
-    "Search for": "Αναζήτηση για",
-    "%(count)s Members": {
-        "one": "%(count)s Μέλος",
-        "other": "%(count)s Μέλη"
-    },
-    "You will leave all rooms and DMs that you are in": "Θα αποχωρήσετε από όλα τα δωμάτια και τις συνομιλίες σας",
-    "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "Κανείς δε θα μπορεί να επαναχρησιμοποιήσει το όνομα χρήστη σας (MXID), συμπεριλαμβανομένου εσάς: αυτό το όνομα χρήστη θα παραμείνει μη διαθέσιμο",
-    "You will not be able to reactivate your account": "Δεν θα μπορείτε να ενεργοποιήσετε ξανά τον λογαριασμό σας",
-    "You will no longer be able to log in": "Δεν θα μπορείτε πλέον να συνδεθείτε",
-    "Confirm that you would like to deactivate your account. If you proceed:": "Επιβεβαιώστε ότι θέλετε να απενεργοποιήσετε τον λογαριασμό σας. Εάν προχωρήσετε:",
-    "Add new server…": "Προσθήκη νέου διακομιστή…",
-    "%(count)s participants": {
-        "one": "1 συμμετέχων",
-        "other": "%(count)s συμμετέχοντες"
-    },
     "common": {
         "about": "Σχετικά με",
         "analytics": "Αναλυτικά δεδομένα",
@@ -956,7 +499,30 @@
         "show_more": "Δείτε περισσότερα",
         "joined": "Συνδέθηκε",
         "avatar": "Avatar",
-        "are_you_sure": "Είστε σίγουροι;"
+        "are_you_sure": "Είστε σίγουροι;",
+        "location": "Τοποθεσία",
+        "email_address": "Ηλεκτρονική διεύθυνση",
+        "filter_results": "Φιλτράρισμα αποτελεσμάτων",
+        "no_results_found": "Δε βρέθηκαν αποτελέσματα",
+        "unsent": "Μη απεσταλμένα",
+        "cameras": "Κάμερες",
+        "n_participants": {
+            "one": "1 συμμετέχων",
+            "other": "%(count)s συμμετέχοντες"
+        },
+        "and_n_others": {
+            "one": "και ένας ακόμα...",
+            "other": "και %(count)s άλλοι..."
+        },
+        "n_members": {
+            "one": "%(count)s μέλος",
+            "other": "%(count)s μέλη"
+        },
+        "edited": "επεξεργάστηκε",
+        "n_rooms": {
+            "one": "%(count)s δωμάτιο",
+            "other": "%(count)s δωμάτια"
+        }
     },
     "action": {
         "continue": "Συνέχεια",
@@ -1066,7 +632,11 @@
         "add_existing_room": "Προσθήκη υπάρχοντος δωματίου",
         "explore_public_rooms": "Εξερευνήστε δημόσια δωμάτια",
         "reply_in_thread": "Απάντηση στο νήμα",
-        "click": "Κλικ"
+        "click": "Κλικ",
+        "transfer": "Μεταφορά",
+        "resume": "Συνέχιση",
+        "hold": "Αναμονή",
+        "view_list": "Προβολή λίστας"
     },
     "a11y": {
         "user_menu": "Μενού χρήστη",
@@ -1120,7 +690,8 @@
         "bridge_state_creator": "Αυτή η γέφυρα παρέχεται από τον <user />.",
         "bridge_state_manager": "Αυτή τη γέφυρα τη διαχειρίζεται ο <user />.",
         "bridge_state_workspace": "Χώρος εργασίας: <networkLink/>",
-        "bridge_state_channel": "Κανάλι: <channelLink/>"
+        "bridge_state_channel": "Κανάλι: <channelLink/>",
+        "beta_feedback_leave_button": "Για να αποχωρήσετε από την έκδοση beta, μεταβείτε στις ρυθμίσεις σας."
     },
     "keyboard": {
         "home": "Αρχική",
@@ -1238,7 +809,9 @@
         "moderator": "Συντονιστής",
         "admin": "Διαχειριστής",
         "custom": "Προσαρμοσμένα (%(level)s)",
-        "mod": "Συντονιστής"
+        "mod": "Συντονιστής",
+        "label": "Επίπεδο ισχύος",
+        "custom_level": "Προσαρμοσμένο επίπεδο"
     },
     "bug_reporting": {
         "introduction": "Εάν έχετε υποβάλει ένα σφάλμα μέσω του GitHub, τα αρχεία καταγραφής εντοπισμού σφαλμάτων μπορούν να μας βοηθήσουν να εντοπίσουμε το πρόβλημα. ",
@@ -1256,7 +829,16 @@
         "uploading_logs": "Μεταφόρτωση αρχείων καταγραφής",
         "downloading_logs": "Λήψη αρχείων καταγραφής",
         "create_new_issue": "Παρακαλούμε <newIssueLink>δημιουργήστε ένα νέο issue</newIssueLink> στο GitHub ώστε να μπορέσουμε να διερευνήσουμε αυτό το σφάλμα.",
-        "waiting_for_server": "Αναμονή απάντησης από τον διακομιστή"
+        "waiting_for_server": "Αναμονή απάντησης από τον διακομιστή",
+        "error_empty": "Πείτε μας τι πήγε στραβά ή, καλύτερα, δημιουργήστε ένα ζήτημα στο GitHub που να περιγράφει το πρόβλημα.",
+        "preparing_logs": "Προετοιμασία αποστολής αρχείων καταγραφής",
+        "logs_sent": "Τα αρχεία καταγραφής στάλθηκαν",
+        "thank_you": "Ευχαριστώ!",
+        "failed_send_logs": "Αποτυχία αποστολής αρχείων καταγραφής: ",
+        "preparing_download": "Προετοιμασία λήψης αρχείων καταγραφής",
+        "unsupported_browser": "Υπενθύμιση: Το πρόγραμμα περιήγησής σας δεν υποστηρίζεται, επομένως η εμπειρία σας μπορεί να είναι απρόβλεπτη.",
+        "textarea_label": "Σημειώσεις",
+        "log_request": "Για να μας βοηθήσετε να το αποτρέψουμε αυτό στο μέλλον, <a>στείλτε μας τα αρχεία καταγραφής</a>."
     },
     "time": {
         "seconds_left": "%(seconds)ss απομένουν",
@@ -1545,7 +1127,19 @@
             "email_address_label": "Διεύθυνση Email",
             "remove_msisdn_prompt": "Κατάργηση %(phone)s;",
             "add_msisdn_instructions": "Ένα μήνυμα sms έχει σταλεί στο +%(msisdn)s. Παρακαλώ εισαγάγετε τον κωδικό επαλήθευσης που περιέχει.",
-            "msisdn_label": "Αριθμός Τηλεφώνου"
+            "msisdn_label": "Αριθμός Τηλεφώνου",
+            "deactivate_confirm_body_sso": "Επιβεβαιώστε την απενεργοποίηση του λογαριασμού σας χρησιμοποιώντας Single Sign On για να αποδείξετε την ταυτότητά σας.",
+            "deactivate_confirm_body": "Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε τον λογαριασμό σας; Αυτό είναι μη αναστρέψιμο.",
+            "deactivate_confirm_continue": "Επιβεβαίωση απενεργοποίησης λογαριασμού",
+            "deactivate_confirm_body_password": "Για να συνεχίσετε παρακαλώ εισάγετε τον κωδικό σας:",
+            "error_deactivate_communication": "Παρουσιάστηκε πρόβλημα κατά την επικοινωνία με τον διακομιστή. Παρακαλώ προσπαθήστε ξανά.",
+            "error_deactivate_no_auth": "Ο διακομιστής δεν απαίτησε κάποιο έλεγχο ταυτότητας",
+            "error_deactivate_invalid_auth": "Ο διακομιστής δεν επέστρεψε έγκυρες πληροφορίες ελέγχου ταυτότητας.",
+            "deactivate_confirm_content": "Επιβεβαιώστε ότι θέλετε να απενεργοποιήσετε τον λογαριασμό σας. Εάν προχωρήσετε:",
+            "deactivate_confirm_content_1": "Δεν θα μπορείτε να ενεργοποιήσετε ξανά τον λογαριασμό σας",
+            "deactivate_confirm_content_2": "Δεν θα μπορείτε πλέον να συνδεθείτε",
+            "deactivate_confirm_content_3": "Κανείς δε θα μπορεί να επαναχρησιμοποιήσει το όνομα χρήστη σας (MXID), συμπεριλαμβανομένου εσάς: αυτό το όνομα χρήστη θα παραμείνει μη διαθέσιμο",
+            "deactivate_confirm_content_4": "Θα αποχωρήσετε από όλα τα δωμάτια και τις συνομιλίες σας"
         },
         "sidebar": {
             "title": "Πλαϊνή μπάρα",
@@ -1676,7 +1270,8 @@
         "show_hidden_events": "Εμφάνιση κρυφών συμβάντων στη γραμμή χρόνου",
         "developer_mode": "Λειτουργία για προγραμματιστές",
         "view_source_decrypted_event_source": "Αποκρυπτογραφημένη πηγή συμβάντος",
-        "original_event_source": "Αρχική πηγή συμβάντος"
+        "original_event_source": "Αρχική πηγή συμβάντος",
+        "toggle_event": "μεταβολή συμβάντος"
     },
     "export_chat": {
         "html": "HTML",
@@ -1727,7 +1322,8 @@
         "format": "Μορφή",
         "messages": "Μηνύματα",
         "size_limit": "Όριο Μεγέθους",
-        "include_attachments": "Συμπεριλάβετε Συνημμένα"
+        "include_attachments": "Συμπεριλάβετε Συνημμένα",
+        "size_limit_postfix": "MB"
     },
     "create_room": {
         "title_video_room": "Δημιουργήστε ένα δωμάτιο βίντεο",
@@ -2054,7 +1650,8 @@
         },
         "reactions": {
             "label": "%(reactors)s αντέδρασαν με %(content)s",
-            "tooltip": "<reactors/><reactedWith>αντέδρασε με %(shortName)s</reactedWith>"
+            "tooltip": "<reactors/><reactedWith>αντέδρασε με %(shortName)s</reactedWith>",
+            "add_reaction_prompt": "Προσθέστε αντίδραση"
         },
         "m.room.create": {
             "continuation": "Αυτό το δωμάτιο είναι η συνέχεια μιας άλλης συνομιλίας.",
@@ -2067,7 +1664,9 @@
             "show_url_preview": "Εμφάνιση προεπισκόπησης",
             "external_url": "Πηγαίο URL",
             "collapse_reply_thread": "Σύμπτυξη νήματος απάντησης",
-            "report": "Αναφορά"
+            "report": "Αναφορά",
+            "resent_unsent_reactions": "Επανάληψη αποστολής %(unsentCount)s αντιδράσεων",
+            "open_in_osm": "Άνοιγμα στο OpenStreetMap"
         },
         "url_preview": {
             "show_n_more": {
@@ -2132,13 +1731,38 @@
             "you_accepted": "Αποδεχθήκατε",
             "you_declined": "Αρνηθήκατε",
             "you_cancelled": "Ακυρώσατε",
-            "you_started": "Στείλατε ένα αίτημα επαλήθευσης"
+            "you_started": "Στείλατε ένα αίτημα επαλήθευσης",
+            "user_accepted": "Ο/η %(name)s αποδέχθηκε",
+            "user_declined": "%(name)s αρνήθηκε",
+            "user_cancelled": "%(name)s ακύρωσε",
+            "user_wants_to_verify": "%(name)s θέλει να επαληθεύσει"
         },
         "m.poll.end": {
             "sender_ended": "%(senderName)s τερμάτισε μία δημοσκόπηση"
         },
         "m.video": {
             "error_decrypting": "Σφάλμα κατά την αποκρυπτογράφηση του βίντεο"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "Προσθήκη ενσωμάτωσης",
+            "dialog_description": "Θα μεταφερθείτε σε έναν ιστότοπου τρίτου για να πραγματοποιηθεί η πιστοποίηση του λογαριασμού σας με το %(integrationsUrl)s. Θα θέλατε να συνεχίσετε;"
+        },
+        "edits": {
+            "tooltip_title": "Τροποποιήθηκε στις %(date)s",
+            "tooltip_sub": "Κάντε κλικ για να δείτε τις τροποποιήσεις",
+            "tooltip_label": "Επεξεργάστηκε στις %(date)s. Κάντε κλικ για να δείτε τις τροποποιήσεις."
+        },
+        "error_rendering_message": "Δεν είναι δυνατή η φόρτωση αυτού του μηνύματος",
+        "reply": {
+            "error_loading": "Αδυναμία φόρτωσης του συμβάντος στο οποίο δόθηκε απάντηση, είτε δεν υπάρχει είτε δεν έχετε άδεια να το προβάλετε.",
+            "in_reply_to": "<a>Ως απαντηση σε</a> <pill>",
+            "in_reply_to_for_export": "Ως απαντηση σε<a>αυτό το μήνυμα</a>"
+        },
+        "m.poll": {
+            "count_of_votes": {
+                "one": "%(count)s ψήφος",
+                "other": "%(count)s ψήφοι"
+            }
         }
     },
     "slash_command": {
@@ -2223,7 +1847,8 @@
         "verify_nop": "Η συνεδρία έχει ήδη επιβεβαιωθεί!",
         "verify_mismatch": "ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Η ΕΠΑΛΗΘΕΥΣΗ ΚΛΕΙΔΙΟΥ ΑΠΕΤΥΧΕ! Το κλειδί σύνδεσης για %(userId)s και συνεδρίας %(deviceId)s είναι \"%(fprint)s\" που δεν ταιριάζει με το παρεχόμενο κλειδί\"%(fingerprint)s\". Αυτό μπορεί να σημαίνει ότι υπάρχει υποκλοπή στις επικοινωνίες σας!",
         "verify_success_title": "Επιβεβαιωμένο κλειδί",
-        "verify_success_description": "Το κλειδί υπογραφής που παρείχατε ταιριάζει με το κλειδί που λάβατε από την συνεδρία %(userId)s's %(deviceId)s. Η συνεδρία σημειώνεται ως επιβεβαιωμένη."
+        "verify_success_description": "Το κλειδί υπογραφής που παρείχατε ταιριάζει με το κλειδί που λάβατε από την συνεδρία %(userId)s's %(deviceId)s. Η συνεδρία σημειώνεται ως επιβεβαιωμένη.",
+        "help_dialog_title": "Βοήθεια Εντολών"
     },
     "presence": {
         "busy": "Απασχολημένος",
@@ -2330,9 +1955,11 @@
         "unable_to_access_audio_input_title": "Αδυναμία πρόσβασης μικροφώνου",
         "unable_to_access_audio_input_description": "Δεν ήταν δυνατή η πρόσβαση στο μικρόφωνο σας. Ελέγξτε τις ρυθμίσεις του προγράμματος περιήγησης σας και δοκιμάστε ξανά.",
         "no_audio_input_title": "Δε βρέθηκε μικρόφωνο",
-        "no_audio_input_description": "Δε βρέθηκε μικρόφωνο στη συσκευή σας. Παρακαλώ ελέγξτε τις ρυθμίσεις σας και δοκιμάστε ξανά."
+        "no_audio_input_description": "Δε βρέθηκε μικρόφωνο στη συσκευή σας. Παρακαλώ ελέγξτε τις ρυθμίσεις σας και δοκιμάστε ξανά.",
+        "transfer_consult_first_label": "Συμβουλευτείτε πρώτα",
+        "input_devices": "Συσκευές εισόδου",
+        "output_devices": "Συσκευές εξόδου"
     },
-    "Other": "Άλλα",
     "room_settings": {
         "permissions": {
             "m.room.avatar_space": "Αλλαγή εικόνας Χώρου",
@@ -2429,7 +2056,15 @@
                 "other": "Ενημέρωση χώρων... (%(progress)s out of %(count)s)"
             },
             "error_join_rule_change_title": "Αποτυχία ενημέρωσης των κανόνων συμμετοχής",
-            "error_join_rule_change_unknown": "Άγνωστο σφάλμα"
+            "error_join_rule_change_unknown": "Άγνωστο σφάλμα",
+            "join_rule_restricted_dialog_empty_warning": "Καταργείτε όλους τους χώρους. Η πρόσβαση θα είναι προεπιλεγμένη μόνο για πρόσκληση",
+            "join_rule_restricted_dialog_title": "Επιλέξτε χώρους",
+            "join_rule_restricted_dialog_description": "Αποφασίστε ποιοι χώροι μπορούν να έχουν πρόσβαση σε αυτό το δωμάτιο. Εάν επιλεγεί ένας χώρος, τα μέλη του μπορούν να βρουν και να εγγραφούν στο <RoomName/>.",
+            "join_rule_restricted_dialog_filter_placeholder": "Αναζήτηση χώρων",
+            "join_rule_restricted_dialog_heading_space": "Χώροι που γνωρίζετε ότι περιέχουν αυτόν το χώρο",
+            "join_rule_restricted_dialog_heading_room": "Χώροι που γνωρίζετε ότι περιέχουν αυτό το δωμάτιο",
+            "join_rule_restricted_dialog_heading_other": "Άλλοι χώροι ή δωμάτια που ίσως δε γνωρίζετε",
+            "join_rule_restricted_dialog_heading_unknown": "Πιθανότατα αυτά είναι μέρος στα οποία συμμετέχουν και άλλοι διαχειριστές δωματίου."
         },
         "general": {
             "publish_toggle": "Δημοσίευση αυτού του δωματίου στο κοινό κατάλογο δωματίων του %(domain)s;",
@@ -2470,7 +2105,17 @@
             "canonical_alias_field_label": "Κύρια διεύθυνση",
             "avatar_field_label": "Εικόνα δωματίου",
             "aliases_no_items_label": "Δεν υπάρχουν δημοσιευμένες διευθύνσεις, προσθέστε μία παρακάτω",
-            "aliases_items_label": "Άλλες δημοσιευμένες διευθύνσεις:"
+            "aliases_items_label": "Άλλες δημοσιευμένες διευθύνσεις:",
+            "alias_heading": "Διεύθυνση δωματίου",
+            "alias_field_has_domain_invalid": "Λείπει το διαχωριστικό τομέα π.χ. (:domain.org)",
+            "alias_field_has_localpart_invalid": "Λείπει το όνομα δωματίου ή το διαχωριστικό τομέα π.χ (my-room:domain.org)",
+            "alias_field_safe_localpart_invalid": "Ορισμένοι χαρακτήρες δεν επιτρέπονται",
+            "alias_field_required_invalid": "Παρακαλώ δώστε μια διεύθυνση",
+            "alias_field_matches_invalid": "Αυτή η διεύθυνση δεν οδηγεί σε αυτό το δωμάτιο",
+            "alias_field_taken_valid": "Αυτή η διεύθυνση είναι διαθέσιμη για χρήση",
+            "alias_field_taken_invalid_domain": "Αυτή η διεύθυνση χρησιμοποιείται ήδη",
+            "alias_field_taken_invalid": "Αυτή η διεύθυνση έχει μη έγκυρο διακομιστή ή χρησιμοποιείται ήδη",
+            "alias_field_placeholder_default": "π.χ. my-room"
         },
         "advanced": {
             "unfederated": "Αυτό το δωμάτιο δεν είναι προσβάσιμο από απομακρυσμένους διακομιστές Matrix",
@@ -2482,7 +2127,24 @@
             "room_version_section": "Έκδοση δωματίου",
             "room_version": "Έκδοση δωματίου:",
             "information_section_space": "Πληροφορίες Χώρου",
-            "information_section_room": "Πληροφορίες δωματίου"
+            "information_section_room": "Πληροφορίες δωματίου",
+            "error_upgrade_title": "Αποτυχία αναβάθμισης δωματίου",
+            "error_upgrade_description": "Δεν ήταν δυνατή η ολοκλήρωση της αναβάθμισης δωματίου",
+            "upgrade_button": "Αναβαθμίστε αυτό το δωμάτιο στην έκδοση %(version)s",
+            "upgrade_dialog_title": "Αναβάθμιση Έκδοσης Δωματίου",
+            "upgrade_dialog_description": "Η αναβάθμιση αυτού του δωματίου απαιτεί τη διαγραφή του και τη δημιουργία ενός νέου δωματίου στη θέση του. Για να προσφέρουμε στα μέλη του την καλύτερη δυνατή εμπειρία, θα:",
+            "upgrade_dialog_description_1": "Δημιουργήστε ένα νέο δωμάτιο με το ίδιο όνομα, περιγραφή και avatar",
+            "upgrade_dialog_description_2": "Ενημερώστε τυχόν τοπικά ψευδώνυμα δωματίου για να οδηγούν στο νέο δωμάτιο",
+            "upgrade_dialog_description_3": "Εμποδίστε τους χρήστες να συνομιλούν στην παλιά έκδοση του δωματίου και αναρτήστε ένα μήνυμα που να τους συμβουλεύει να μετακινηθούν στο νέο δωμάτιο",
+            "upgrade_dialog_description_4": "Βάλτε έναν σύνδεσμο προς το παλιό δωμάτιο στην αρχή του νέου δωματίου, ώστε οι χρήστες να μπορούν να δουν παλιά μηνύματα",
+            "upgrade_warning_dialog_invite_label": "Αυτόματη πρόσκληση μελών αυτού του δωματίου στο νέο",
+            "upgrade_warning_dialog_title_private": "Αναβάθμιση ιδιωτικού δωματίου",
+            "upgrade_dwarning_ialog_title_public": "Αναβάθμιση δημόσιου δωματίου",
+            "upgrade_warning_dialog_report_bug_prompt": "Αυτό συνήθως επηρεάζει μόνο τον τρόπο επεξεργασίας του δωματίου στον διακομιστή. Εάν αντιμετωπίζετε προβλήματα με το %(brand)s σας, αναφέρετε ένα σφάλμα.",
+            "upgrade_warning_dialog_report_bug_prompt_link": "Αυτό συνήθως επηρεάζει μόνο τον τρόπο επεξεργασίας του δωματίου στον διακομιστή. Εάν αντιμετωπίζετε προβλήματα με το %(brand)s σας, <a>αναφέρετε ένα σφάλμα</a>.",
+            "upgrade_warning_dialog_description": "Η αναβάθμιση ενός δωματίου είναι μια προηγμένη ενέργεια και συνήθως συνιστάται όταν ένα δωμάτιο είναι ασταθές λόγω σφαλμάτων, ελλείψεων λειτουργιών ή ευπάθειας ασφαλείας.",
+            "upgrade_warning_dialog_explainer": "<b>Λάβετε υπόψη ότι η αναβάθμιση θα δημιουργήσει μια νέα έκδοση του δωματίου</b>. Όλα τα τρέχοντα μηνύματα θα παραμείνουν σε αυτό το αρχειοθετημένο δωμάτιο.",
+            "upgrade_warning_dialog_footer": "Θα αναβαθμίσετε αυτό το δωμάτιο από <oldVersion /> σε <newVersion />."
         },
         "delete_avatar_label": "Διαγραφή avatar",
         "upload_avatar_label": "Αποστολή προσωπικής εικόνας",
@@ -2515,7 +2177,9 @@
             "notification_sound": "Ήχος ειδοποίησης",
             "custom_sound_prompt": "Ορίστε έναν νέο προσαρμοσμένο ήχο",
             "browse_button": "Εξερεύνηση"
-        }
+        },
+        "title": "Ρυθμίσεις Δωματίου - %(roomName)s",
+        "alias_not_specified": "μη καθορισμένο"
     },
     "encryption": {
         "verification": {
@@ -2584,7 +2248,20 @@
             "timed_out": "Η επαλήθευση έληξε.",
             "cancelled_self": "Ακυρώσατε την επαλήθευση στην άλλη συσκευή σας.",
             "cancelled_user": "%(displayName)s ακύρωσε την επαλύθευση.",
-            "cancelled": "Ακυρώσατε την επαλήθευση."
+            "cancelled": "Ακυρώσατε την επαλήθευση.",
+            "incoming_sas_user_dialog_text_1": "Επαληθεύστε αυτόν τον χρήστη για να τον επισημάνετε ως αξιόπιστο. Η εμπιστοσύνη των χρηστών σάς προσφέρει επιπλέον ηρεμία όταν χρησιμοποιείτε μηνύματα με κρυπτογράφηση από άκρο σε άκρο.",
+            "incoming_sas_user_dialog_text_2": "Η επαλήθευση αυτού του χρήστη θα επισημάνει τη συνεδρία του ως αξιόπιστη και θα επισημάνει επίσης τη συνεδρία σας ως αξιόπιστη σε αυτόν.",
+            "incoming_sas_device_dialog_text_1": "Επαληθεύστε αυτήν τη συσκευή για να την επισημάνετε ως αξιόπιστη. Η εμπιστοσύνη αυτής της συσκευής προσφέρει σε εσάς και σε άλλους χρήστες επιπλέον ηρεμία όταν χρησιμοποιείτε μηνύματα με κρυπτογράφηση από άκρο σε άκρο.",
+            "incoming_sas_device_dialog_text_2": "Η επαλήθευση αυτής της συσκευής θα την επισημάνει ως αξιόπιστη και οι χρήστες που έχουν επαληθευτεί μαζί σας θα εμπιστεύονται αυτήν τη συσκευή.",
+            "incoming_sas_dialog_title": "Εισερχόμενο Αίτημα Επαλήθευσης",
+            "manual_device_verification_self_text": "Επιβεβαιώστε συγκρίνοντας τα ακόλουθα με τις Ρυθμίσεις χρήστη στην άλλη συνεδρία σας:",
+            "manual_device_verification_user_text": "Επιβεβαιώστε την συνεδρία αυτού του χρήστη συγκρίνοντας τα ακόλουθα με τις Ρυθμίσεις του:",
+            "manual_device_verification_device_name_label": "Όνομα συνεδρίας",
+            "manual_device_verification_device_id_label": "Αναγνωριστικό συνεδρίας",
+            "manual_device_verification_device_key_label": "Κλειδί συνεδρίας",
+            "manual_device_verification_footer": "Εάν δεν ταιριάζουν, η ασφάλεια της επικοινωνίας σας μπορεί να τεθεί σε κίνδυνο.",
+            "verification_dialog_title_device": "Επαλήθευση άλλης συσκευής",
+            "verification_dialog_title_user": "Αίτημα επαλήθευσης"
         },
         "old_version_detected_title": "Εντοπίστηκαν παλιά δεδομένα κρυπτογράφησης",
         "old_version_detected_description": "Έχουν εντοπιστεί δεδομένα από μια παλαιότερη έκδοση του %(brand)s. Αυτό θα έχει προκαλέσει δυσλειτουργία της κρυπτογράφησης από άκρο σε άκρο στην παλαιότερη έκδοση. Τα κρυπτογραφημένα μηνύματα από άκρο σε άκρο που ανταλλάχθηκαν πρόσφατα κατά τη χρήση της παλαιότερης έκδοσης ενδέχεται να μην μπορούν να αποκρυπτογραφηθούν σε αυτήν την έκδοση. Αυτό μπορεί επίσης να προκαλέσει την αποτυχία των μηνυμάτων που ανταλλάσσονται με αυτήν την έκδοση. Εάν αντιμετωπίζετε προβλήματα, αποσυνδεθείτε και συνδεθείτε ξανά. Για να διατηρήσετε το ιστορικό μηνυμάτων, εξάγετε και εισαγάγετε ξανά τα κλειδιά σας.",
@@ -2638,7 +2315,54 @@
         "cross_signing_room_warning": "Κάποιος χρησιμοποιεί μια άγνωστη συνεδρία",
         "cross_signing_room_verified": "Όλοι σε αυτό το δωμάτιο έχουν επαληθευτεί",
         "cross_signing_room_normal": "Αυτό το δωμάτιο έχει κρυπτογράφηση από άκρο σε άκρο",
-        "unsupported": "Αυτό το πρόγραμμα-πελάτης δεν υποστηρίζει κρυπτογράφηση από άκρο σε άκρο."
+        "unsupported": "Αυτό το πρόγραμμα-πελάτης δεν υποστηρίζει κρυπτογράφηση από άκρο σε άκρο.",
+        "incompatible_database_sign_out_description": "Για να αποφύγετε να χάσετε το ιστορικό των συνομιλιών σας, πρέπει να εξαγάγετε τα κλειδιά του δωματίου σας πριν αποσυνδεθείτε. Για να το κάνετε αυτό, θα χρειαστεί να επιστρέψετε στη νεότερη έκδοση του %(brand)s",
+        "incompatible_database_description": "Έχετε χρησιμοποιήσει στο παρελθόν μια νεότερη έκδοση του %(brand)s με αυτήν την συνεδρία. Για να χρησιμοποιήσετε ξανά αυτήν την έκδοση με κρυπτογράφηση από άκρο σε άκρο, θα πρέπει να αποσυνδεθείτε και να συνδεθείτε ξανά.",
+        "incompatible_database_title": "Μη συμβατή Βάση Δεδομένων",
+        "incompatible_database_disable": "Συνέχεια με Απενεργοποίηση Κρυπτογράφησης",
+        "key_signature_upload_completed": "Η μεταφόρτωση ολοκληρώθηκε",
+        "key_signature_upload_cancelled": "Ακυρώθηκε η μεταφόρτωση υπογραφής",
+        "key_signature_upload_failed": "Αδυναμία μεταφόρτωσης",
+        "key_signature_upload_success_title": "Επιτυχία μεταφόρτωσης υπογραφής",
+        "key_signature_upload_failed_title": "Αποτυχία μεταφόρτωσης υπογραφής",
+        "udd": {
+            "own_new_session_text": "Συνδεθήκατε σε μια νέα συνεδρία χωρίς να την επιβεβαιώσετε:",
+            "own_ask_verify_text": "Επιβεβαιώστε την άλλη σας συνεδρία χρησιμοποιώντας μία από τις παρακάτω επιλογές.",
+            "other_new_session_text": "Ο %(name)s (%(userId)s) συνδέθηκε σε μία νέα συνεδρία χωρίς να την επιβεβαιώσει:",
+            "other_ask_verify_text": "Ζητήστε από αυτόν τον χρήστη να επιβεβαιώσει την συνεδρία του, ή επιβεβαιώστε την χειροκίνητα παρακάτω.",
+            "title": "Μη Έμπιστο"
+        },
+        "access_secret_storage_dialog": {
+            "key_validation_text": {
+                "wrong_file_type": "Λάθος τύπος αρχείου",
+                "recovery_key_is_correct": "Φαίνεται καλό!",
+                "wrong_security_key": "Λάθος Κλειδί Ασφαλείας",
+                "invalid_security_key": "Μη έγκυρο Κλειδί Ασφαλείας"
+            },
+            "reset_title": "Επαναφορά όλων",
+            "reset_warning_1": "Κάντε αυτό μόνο όταν δεν έχετε άλλη συσκευή για να ολοκληρώσετε την επαλήθευση.",
+            "reset_warning_2": "Εάν επαναφέρετε τα πάντα, θα κάνετε επανεκκίνηση χωρίς αξιόπιστες συνεδρίες, χωρίς αξιόπιστους χρήστες και ενδέχεται να μην μπορείτε να δείτε προηγούμενα μηνύματα.",
+            "security_phrase_title": "Φράση Ασφαλείας",
+            "security_phrase_incorrect_error": "Δεν είναι δυνατή η πρόσβαση στον κρυφό χώρο αποθήκευσης. Βεβαιωθείτε ότι έχετε εισαγάγει τη σωστή Φράση Ασφαλείας.",
+            "enter_phrase_or_key_prompt": "Εισαγάγετε τη Φράση Ασφαλείας ή <button>χρησιμοποιήστε το Κλειδί Ασφαλείας</button> για να συνεχίσετε.",
+            "security_key_title": "Κλειδί Ασφαλείας",
+            "use_security_key_prompt": "Χρησιμοποιήστε το Κλειδί Ασφαλείας σας για να συνεχίσετε.",
+            "restoring": "Επαναφορά κλειδιών από αντίγραφο ασφαλείας"
+        },
+        "reset_all_button": "Ξεχάσατε ή χάσατε όλες τις μεθόδους ανάκτησης; <a>Επαναφορά όλων</a>",
+        "destroy_cross_signing_dialog": {
+            "title": "Να καταστραφούν τα κλειδιά διασταυρούμενης υπογραφής;",
+            "warning": "Η διαγραφή κλειδιών διασταυρούμενης υπογραφής είναι μόνιμη. Οποιοσδήποτε με τον οποίο έχετε επαληθευτεί θα λάβει ειδοποιήσεις ασφαλείας. Πιθανότατα δεν θέλετε να το κάνετε αυτό, εκτός και αν έχετε χάσει όλες τις συσκευές από τις οποίες μπορείτε να υπογράψετε.",
+            "primary_button_text": "Διαγράψτε τα κλειδιά διασταυρούμενης υπογραφής"
+        },
+        "confirm_encryption_setup_title": "Επιβεβαιώστε τη ρύθμιση κρυπτογράφησης",
+        "confirm_encryption_setup_body": "Κάντε κλικ στο κουμπί παρακάτω για να επιβεβαιώσετε τη ρύθμιση της κρυπτογράφησης.",
+        "unable_to_setup_keys_error": "Δεν είναι δυνατή η ρύθμιση των κλειδιών",
+        "key_signature_upload_failed_master_key_signature": "μια νέα υπογραφή κύριου κλειδιού",
+        "key_signature_upload_failed_cross_signing_key_signature": "μια νέα υπογραφή κλειδιού διασταυρούμενης υπογραφής",
+        "key_signature_upload_failed_device_cross_signing_key_signature": "μια υπογραφή διασταυρούμενης υπογραφής συσκευής",
+        "key_signature_upload_failed_key_signature": "μια υπογραφή κλειδιού",
+        "key_signature_upload_failed_body": "Το %(brand)s αντιμετώπισε ένα σφάλμα κατά τη μεταφόρτωση του:"
     },
     "emoji": {
         "category_frequently_used": "Συχνά χρησιμοποιούμενα",
@@ -2763,7 +2487,10 @@
             "fallback_button": "Έναρξη πιστοποίησης",
             "sso_title": "Χρήση Single Sign On για συνέχεια",
             "sso_body": "Επιβεβαιώστε την προσθήκη αυτής της διεύθυνσης ηλ. ταχυδρομείου με την χρήση Single Sign On για να επικυρώσετε την ταυτότητα σας.",
-            "code": "Κωδικός"
+            "code": "Κωδικός",
+            "sso_preauth_body": "Για να συνεχίσετε, χρησιμοποιήστε σύνδεση Single Sign On για να αποδείξετε την ταυτότητά σας.",
+            "sso_postauth_title": "Επιβεβαιώστε για να συνεχίσετε",
+            "sso_postauth_body": "Κλικ στο κουμπί παρακάτω για να επιβεβαιώσετε την ταυτότητά σας."
         },
         "password_field_label": "Εισάγετε τον κωδικό πρόσβασης",
         "password_field_strong_label": "Πολύ καλά, ισχυρός κωδικός πρόσβασης!",
@@ -2803,7 +2530,40 @@
         },
         "country_dropdown": "Αναπτυσσόμενο μενού Χώρας",
         "common_failures": {},
-        "captcha_description": "Αυτός ο κεντρικός διακομιστής θα ήθελε να βεβαιωθεί ότι δεν είστε ρομπότ."
+        "captcha_description": "Αυτός ο κεντρικός διακομιστής θα ήθελε να βεβαιωθεί ότι δεν είστε ρομπότ.",
+        "autodiscovery_invalid": "Μη έγκυρη απόκριση εντοπισμού κεντρικού διακομιστή",
+        "autodiscovery_generic_failure": "Απέτυχε η λήψη της διαμόρφωσης αυτόματης ανακάλυψης από τον διακομιστή",
+        "autodiscovery_invalid_hs_base_url": "Μη έγκυρο base_url για m.homeserver",
+        "autodiscovery_invalid_hs": "Η διεύθυνση URL του κεντρικού διακομιστή δε φαίνεται να αντιστοιχεί σε έγκυρο διακομιστή Matrix",
+        "autodiscovery_invalid_is_base_url": "Μη έγκυρο base_url για m.identity_server",
+        "autodiscovery_invalid_is": "Η διεύθυνση URL διακομιστή ταυτοποίησης δε φαίνεται να είναι έγκυρη",
+        "autodiscovery_invalid_is_response": "Μη έγκυρη απόκριση εντοπισμού διακομιστή ταυτότητας",
+        "server_picker_description": "Μπορείτε να χρησιμοποιήσετε τις προσαρμοσμένες επιλογές διακομιστή για να συνδεθείτε σε άλλους διακομιστές Matrix, καθορίζοντας μια διαφορετική διεύθυνση URL του κεντρικού διακομιστή. Αυτό σας επιτρέπει να χρησιμοποιείτε το %(brand)s με έναν υπάρχοντα λογαριασμό Matrix σε διαφορετικό τοπικό διακομιστή.",
+        "server_picker_description_matrix.org": "Συμμετέχετε δωρεάν στον μεγαλύτερο δημόσιο διακομιστή",
+        "server_picker_title_default": "Επιλογές Διακομιστή",
+        "soft_logout": {
+            "clear_data_title": "Εκκαθάριση όλων των δεδομένων σε αυτήν την περίοδο σύνδεσης;",
+            "clear_data_description": "Η εκκαθάριση όλων των δεδομένων από αυτήν τη συνεδρία είναι μόνιμη. Τα κρυπτογραφημένα μηνύματα θα χαθούν εκτός εάν έχουν δημιουργηθεί αντίγραφα ασφαλείας των κλειδιών τους.",
+            "clear_data_button": "Εκκαθάριση όλων των δεδομένων"
+        },
+        "logout_dialog": {
+            "setup_secure_backup_description_1": "Τα κρυπτογραφημένα μηνύματα προστατεύονται με κρυπτογράφηση από άκρο σε άκρο. Μόνο εσείς και οι παραλήπτες έχετε τα κλειδιά για να διαβάσετε αυτά τα μηνύματα.",
+            "use_key_backup": "Ξεκινήστε να χρησιμοποιείτε το αντίγραφο ασφαλείας κλειδιού",
+            "skip_key_backup": "Δε θέλω τα κρυπτογραφημένα μηνύματά μου",
+            "megolm_export": "Μη αυτόματη εξαγωγή κλειδιών",
+            "setup_key_backup_title": "Θα χάσετε την πρόσβαση στα κρυπτογραφημένα μηνύματά σας",
+            "description": "Είσαστε σίγουροι ότι θέλετε να αποσυνδεθείτε;"
+        },
+        "registration": {
+            "continue_without_email_title": "Συνέχεια χωρίς email",
+            "continue_without_email_description": "Μια προειδοποίηση, αν δεν προσθέσετε ένα email και ξεχάσετε τον κωδικό πρόσβασης, ενδέχεται να <b>χάσετε οριστικά την πρόσβαση στον λογαριασμό σας</b>.",
+            "continue_without_email_field_label": "Email (προαιρετικό)"
+        },
+        "set_email": {
+            "verification_pending_title": "Εκκρεμεί επιβεβαίωση",
+            "verification_pending_description": "Παρακαλούμε ελέγξτε την ηλεκτρονική σας αλληλογραφία και κάντε κλικ στον σύνδεσμο που περιέχει. Μόλις γίνει αυτό, κάντε κλίκ στο κουμπί συνέχεια.",
+            "description": "Αυτό θα σας επιτρέψει να επαναφέρετε τον κωδικό πρόσβαση σας και θα μπορείτε να λαμβάνετε ειδοποιήσεις."
+        }
     },
     "room_list": {
         "sort_unread_first": "Εμφάνιση δωματίων με μη αναγνωσμένα μηνύματα πρώτα",
@@ -2851,7 +2611,8 @@
         "spam_or_propaganda": "Spam ή προπαγάνδα",
         "report_entire_room": "Αναφορά ολόκληρου του δωματίου",
         "report_content_to_homeserver": "Αναφορά Περιεχομένου στον Διαχειριστή του Διακομιστή σας",
-        "description": "Η αναφορά αυτού του μηνύματος θα στείλει το μοναδικό «αναγνωριστικό συμβάντος» στον διαχειριστή του διακομιστή σας. Εάν τα μηνύματα σε αυτό το δωμάτιο είναι κρυπτογραφημένα, ο διαχειριστής του διακομιστή σας δε θα μπορεί να διαβάσει το κείμενο του μηνύματος ή να προβάλει αρχεία και εικόνες."
+        "description": "Η αναφορά αυτού του μηνύματος θα στείλει το μοναδικό «αναγνωριστικό συμβάντος» στον διαχειριστή του διακομιστή σας. Εάν τα μηνύματα σε αυτό το δωμάτιο είναι κρυπτογραφημένα, ο διαχειριστής του διακομιστή σας δε θα μπορεί να διαβάσει το κείμενο του μηνύματος ή να προβάλει αρχεία και εικόνες.",
+        "other_label": "Άλλα"
     },
     "onboarding": {
         "has_avatar_label": "Τέλεια, αυτό θα βοηθήσει άλλα άτομα να καταλάβουν ότι είστε εσείς",
@@ -2975,7 +2736,22 @@
         "popout": "Αναδυόμενη μικροεφαρμογή",
         "unpin_to_view_right_panel": "Ξεκαρφιτσώστε αυτήν τη μικροεφαρμογή για να την προβάλετε σε αυτόν τον πίνακα",
         "set_room_layout": "Ορίστε τη διάταξη του δωματίου μου για όλους",
-        "close_to_view_right_panel": "Κλείστε αυτήν τη μικροεφαρμογή για να την προβάλετε σε αυτόν τον πίνακα"
+        "close_to_view_right_panel": "Κλείστε αυτήν τη μικροεφαρμογή για να την προβάλετε σε αυτόν τον πίνακα",
+        "modal_title_default": "Modal Widget",
+        "modal_data_warning": "Τα δεδομένα σε αυτήν την οθόνη μοιράζονται με το %(widgetDomain)s",
+        "capabilities_dialog": {
+            "title": "Έγκριση αδειών μικροεφαρμογών",
+            "content_starting_text": "Αυτή η μικροεφαρμογή θα ήθελε να:",
+            "decline_all_permission": "Απόρριψη όλων",
+            "remember_Selection": "Να θυμάστε την επιλογή μου για αυτήν τη μικροεφαρμογή"
+        },
+        "open_id_permissions_dialog": {
+            "title": "Επιτρέψτε σε αυτήν τη μικροεφαρμογή να επαληθεύσει την ταυτότητά σας",
+            "starting_text": "Η μικροεφαρμογή θα επαληθεύσει το αναγνωριστικό χρήστη σας, αλλά δε θα μπορεί να εκτελέσει ενέργειες για εσάς:",
+            "remember_selection": "Να το θυμάσαι αυτό"
+        },
+        "error_unable_start_audio_stream_description": "Δεν είναι δυνατή η έναρξη ροής ήχου.",
+        "error_unable_start_audio_stream_title": "Η έναρξη της ζωντανής ροής απέτυχε"
     },
     "feedback": {
         "sent": "Τα σχόλια στάλθηκαν",
@@ -2984,7 +2760,8 @@
         "may_contact_label": "Μπορείτε να επικοινωνήσετε μαζί μου εάν θέλετε να έρθετε σε επαφή ή να με αφήσετε να δοκιμάσω επερχόμενες ιδέες",
         "pro_type": "ΣΥΜΒΟΥΛΗ: Εάν αναφέρετε ένα σφάλμα, υποβάλετε <debugLogsLink>αρχεία καταγραφής εντοπισμού σφαλμάτων</debugLogsLink> για να μας βοηθήσετε να εντοπίσουμε το πρόβλημα.",
         "existing_issue_link": "Δείτε πρώτα τα <existingIssuesLink>υπάρχοντα ζητήματα (issues) στο Github</existingIssuesLink>. Δε βρήκατε κάτι; <newIssueLink>Ξεκινήστε ένα νέο</newIssueLink>.",
-        "send_feedback_action": "Στείλετε τα σχόλιά σας"
+        "send_feedback_action": "Στείλετε τα σχόλιά σας",
+        "can_contact_label": "Μπορείτε να επικοινωνήσετε μαζί μου εάν έχετε περαιτέρω ερωτήσεις"
     },
     "zxcvbn": {
         "suggestions": {
@@ -3027,7 +2804,10 @@
         "error_encountered": "Παρουσιάστηκε σφάλμα (%(errorDetail)s).",
         "no_update": "Δεν υπάρχει διαθέσιμη ενημέρωση.",
         "new_version_available": "Νέα έκδοση διαθέσιμη. <a>Ενημέρωση τώρα.</a>",
-        "check_action": "Έλεγχος για ενημέρωση"
+        "check_action": "Έλεγχος για ενημέρωση",
+        "error_unable_load_commit": "Δεν είναι δυνατή η φόρτωση των λεπτομερειών δέσμευσης: %(msg)s",
+        "unavailable": "Μη διαθέσιμο",
+        "changelog": "Αλλαγές"
     },
     "threads": {
         "all_threads": "Όλα τα νήματα",
@@ -3040,7 +2820,11 @@
         "empty_explainer": "Τα νήματα σας βοηθούν να οργανώνετε και να παρακολουθείτε καλύτερα τις συνομιλίες σας.",
         "empty_heading": "Διατηρήστε τις συζητήσεις οργανωμένες με νήματα",
         "open_thread": "Άνοιγμα νήματος",
-        "error_start_thread_existing_relation": "Δεν είναι δυνατή η δημιουργία νήματος από ένα συμβάν με μια υπάρχουσα σχέση"
+        "error_start_thread_existing_relation": "Δεν είναι δυνατή η δημιουργία νήματος από ένα συμβάν με μια υπάρχουσα σχέση",
+        "count_of_reply": {
+            "one": "%(count)s απάντηση",
+            "other": "%(count)s απαντήσεις"
+        }
     },
     "theme": {
         "light_high_contrast": "Ελαφριά υψηλή αντίθεση",
@@ -3074,7 +2858,41 @@
         "title_when_query_available": "Αποτελέσματα",
         "search_placeholder": "Αναζήτηση ονομάτων και περιγραφών",
         "no_search_result_hint": "Μπορεί να θέλετε να δοκιμάσετε μια διαφορετική αναζήτηση ή να ελέγξετε για ορθογραφικά λάθη.",
-        "joining_space": "Συνδέετε"
+        "joining_space": "Συνδέετε",
+        "add_existing_subspace": {
+            "space_dropdown_title": "Προσθήκη υπάρχοντος χώρου",
+            "create_prompt": "Θέλετε να προσθέσετε ένα νέο χώρο αντί αυτού;",
+            "create_button": "Δημιουργήστε ένα νέο χώρο",
+            "filter_placeholder": "Αναζητήστε χώρους"
+        },
+        "add_existing_room_space": {
+            "error_heading": "Δεν προστέθηκαν όλοι οι επιλεγμένοι",
+            "progress_text": {
+                "one": "Προσθήκη δωματίου...",
+                "other": "Προσθήκη δωματίων... (%(progress)s από %(count)s)"
+            },
+            "dm_heading": "Άμεσα Μηνύματα",
+            "space_dropdown_label": "Επιλογή χώρου",
+            "space_dropdown_title": "Προσθέστε υπάρχοντα δωμάτια",
+            "create": "Θέλετε να προσθέσετε ένα νέο δωμάτιο αντί αυτού;",
+            "create_prompt": "Δημιουργήστε νέο δωμάτιο",
+            "subspace_moved_note": "Η προσθήκη χώρων μετακινήθηκε."
+        },
+        "room_filter_placeholder": "Αναζητήστε δωμάτια",
+        "leave_dialog_public_rejoin_warning": "Δε θα μπορείτε να συμμετάσχετε ξανά εκτός αν προσκληθείτε και πάλι.",
+        "leave_dialog_only_admin_warning": "Είστε ο μοναδικός διαχειριστής αυτού του χώρου. Αν αποχωρήσετε τότε κανείς άλλος δε θα τον ελέγχει.",
+        "leave_dialog_only_admin_room_warning": "Είστε ο μοναδικός διαχειριστής ορισμένων από τα δωμάτια ή τους χώρους που θέλετε να αποχωρήσετε. Αν αποχωρήσετε, θα μείνουν χωρίς διαχειριστές.",
+        "leave_dialog_title": "Αποχωρήστε από %(spaceName)s",
+        "leave_dialog_description": "Πρόκειται να αποχωρήσετε από το <spaceName/>.",
+        "leave_dialog_option_intro": "Θα θέλατε να αποχωρήσετε από τα δωμάτια σε αυτόν τον χώρο;",
+        "leave_dialog_option_none": "Μην αφήνετε κανένα δωμάτιο",
+        "leave_dialog_option_all": "Αποχώρηση από όλα τα δωμάτια",
+        "leave_dialog_option_specific": "Αποχώρηση από κάποια δωμάτια",
+        "leave_dialog_action": "Αποχώρηση από τον χώρο",
+        "preferences": {
+            "sections_section": "Ενότητες προς εμφάνιση",
+            "show_people_in_space": "Αυτό ομαδοποιεί τις συνομιλίες σας με μέλη αυτού του χώρου. Η απενεργοποίηση του θα αποκρύψει αυτές τις συνομιλίες από την προβολή του %(spaceName)s."
+        }
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Αυτός ο κεντρικός διακομιστής δεν έχει ρυθμιστεί για εμφάνιση χαρτών.",
@@ -3088,7 +2906,18 @@
         "live_share_button": "Κοινή χρήση για %(duration)s",
         "click_move_pin": "Κλικ για να μετακινήσετε την καρφίτσα",
         "click_drop_pin": "Κλικ για να εισάγετε μια καρφίτσα",
-        "share_button": "Κοινή χρήση τοποθεσίας"
+        "share_button": "Κοινή χρήση τοποθεσίας",
+        "error_fetch_location": "Δεν ήταν δυνατή η ανάκτηση της τοποθεσίας",
+        "error_send_title": "Αδυναμία αποστολής της τοποθεσίας σας",
+        "error_send_description": "Το %(brand)s δεν μπόρεσε να στείλει την τοποθεσία σας. Παρακαλώ δοκιμάστε ξανά αργότερα.",
+        "live_description": "Η τρέχουσα τοποθεσία του/της %(displayName)s",
+        "share_type_own": "Η τρέχουσα τοποθεσία μου",
+        "share_type_live": "Η ζωντανή τοποθεσία μου",
+        "share_type_pin": "Εισάγετε μια Καρφίτσα",
+        "share_type_prompt": "Τι τύπο τοποθεσίας θέλετε να μοιραστείτε;",
+        "close_sidebar": "Κλείσιμο πλαϊνής γραμμής",
+        "live_location_active": "Μοιράζεστε την τρέχουσα τοποθεσία σας",
+        "error_stopping_live_location_try_again": "Παρουσιάστηκε σφάλμα κατά τη διακοπή της ζωντανής τοποθεσίας σας, δοκιμάστε ξανά"
     },
     "labs_mjolnir": {
         "room_name": "Η λίστα απαγορεύσεων μου",
@@ -3156,7 +2985,15 @@
         "address_placeholder": "π.χ. ο-χώρος-μου",
         "address_label": "Διεύθυνση",
         "label": "Δημιουργήστε ένα χώρο",
-        "add_details_prompt_2": "Μπορείτε να τα αλλάξετε ανά πάσα στιγμή."
+        "add_details_prompt_2": "Μπορείτε να τα αλλάξετε ανά πάσα στιγμή.",
+        "subspace_join_rule_restricted_description": "Οποιοσδήποτε στο <SpaceName/> θα μπορεί να βρει και να συμμετάσχει σε αυτό το δωμάτιο.",
+        "subspace_join_rule_public_description": "Οποιοσδήποτε θα μπορεί να βρει και να εγγραφεί σε αυτόν τον χώρο, όχι μόνο μέλη του <SpaceName/>.",
+        "subspace_join_rule_invite_description": "Μόνο τα άτομα που έχουν προσκληθεί θα μπορούν να βρουν και να εγγραφούν σε αυτόν τον χώρο.",
+        "subspace_dropdown_title": "Δημιουργήστε ένα χώρο",
+        "subspace_beta_notice": "Προσθέστε έναν χώρο σε ένα χώρο που διαχειρίζεστε.",
+        "subspace_join_rule_label": "Ορατότητα χώρου",
+        "subspace_join_rule_invite_only": "Ιδιωτικός χώρος (μόνο με πρόσκληση)",
+        "subspace_existing_space_prompt": "Θέλετε να προσθέσετε έναν υπάρχοντα χώρο;"
     },
     "user_menu": {
         "switch_theme_light": "Αλλαγή σε φωτεινό",
@@ -3290,7 +3127,11 @@
         "search": {
             "this_room": "Στο δωμάτιο",
             "all_rooms": "Όλα τα δωμάτια",
-            "field_placeholder": "Αναζήτηση…"
+            "field_placeholder": "Αναζήτηση…",
+            "result_count": {
+                "one": "(~%(count)s αποτέλεσμα)",
+                "other": "(~%(count)s αποτελέσματα)"
+            }
         },
         "jump_to_bottom_button": "Κύλιση στα πιο πρόσφατα μηνύματα",
         "jump_read_marker": "Πηγαίνετε στο πρώτο μη αναγνωσμένο μήνυμα.",
@@ -3298,7 +3139,18 @@
         "failed_reject_invite": "Δεν ήταν δυνατή η απόρριψη της πρόσκλησης",
         "jump_to_date_beginning": "Η αρχή του δωματίου",
         "jump_to_date": "Μετάβαση σε ημερομηνία",
-        "jump_to_date_prompt": "Επιλέξτε μια ημερομηνία για να μεταβείτε"
+        "jump_to_date_prompt": "Επιλέξτε μια ημερομηνία για να μεταβείτε",
+        "face_pile_tooltip_label": {
+            "one": "Προβολή 1 μέλους",
+            "other": "Προβολή όλων των %(count)s μελών"
+        },
+        "face_pile_tooltip_shortcut_joined": "Συμπεριλαμβανομένου σας, %(commaSeparatedMembers)s",
+        "face_pile_tooltip_shortcut": "Συμπεριλαμβανομένου %(commaSeparatedMembers)s",
+        "invites_you_text": "<inviter/> σας προσκαλεί",
+        "face_pile_summary": {
+            "one": "%(count)s άτομο που γνωρίζετε έχει ήδη εγγραφεί",
+            "other": "%(count)s άτομα που γνωρίζετε έχουν ήδη εγγραφεί"
+        }
     },
     "file_panel": {
         "guest_note": "Πρέπει να <a>εγγραφείτε</a> για να χρησιμοποιήσετε αυτή την λειτουργία",
@@ -3319,7 +3171,9 @@
         "identity_server_no_terms_title": "Ο διακομιστής ταυτοποίησης δεν έχει όρους χρήσης",
         "identity_server_no_terms_description_1": "Αυτή η δράση απαιτεί την πρόσβαση στο προκαθορισμένο διακομιστή ταυτοποίησης <server /> για να επιβεβαιώσει μια διεύθυνση ηλ. ταχυδρομείου ή αριθμό τηλεφώνου, αλλά ο διακομιστής δεν έχει όρους χρήσης.",
         "identity_server_no_terms_description_2": "Συνεχίστε μόνο εάν εμπιστεύεστε τον ιδιοκτήτη του διακομιστή.",
-        "inline_intro_text": "Αποδεχτείτε το <policyLink /> για να συνεχίσετε:"
+        "inline_intro_text": "Αποδεχτείτε το <policyLink /> για να συνεχίσετε:",
+        "summary_identity_server_1": "Βρείτε άλλους μέσω τηλεφώνου ή email",
+        "summary_identity_server_2": "Να βρεθεί μέσω τηλεφώνου ή email"
     },
     "space_settings": {
         "title": "Ρυθμίσεις - %(spaceName)s"
@@ -3354,7 +3208,13 @@
         "total_n_votes_voted": {
             "one": "Με βάση %(count)s ψήφο",
             "other": "Με βάση %(count)s ψήφους"
-        }
+        },
+        "end_message_no_votes": "Η δημοσκόπηση έληξε. Δεν υπάρχουν ψήφοι.",
+        "end_message": "Η δημοσκόπηση έληξε. Κορυφαία απάντηση: %(topAnswer)s",
+        "error_ending_title": "Αποτυχία τερματισμού της δημοσκόπησης",
+        "error_ending_description": "Συγνώμη, η δημοσκόπηση δεν τερματίστηκε. Παρακαλώ προσπαθήστε ξανά.",
+        "end_title": "Τερματισμός δημοσκόπησης",
+        "end_description": "Είστε βέβαιοι ότι θέλετε να τερματίσετε αυτήν τη δημοσκόπηση; Αυτό θα εμφανίσει τα τελικά αποτελέσματα της δημοσκόπησης και θα εμποδίσει νέους ψήφους."
     },
     "failed_load_async_component": "Αδυναμία φόρτωσης! Ελέγξτε την σύνδεση του δικτύου και προσπαθήστε ξανά.",
     "upload_failed_generic": "Απέτυχε το ανέβασμα του αρχείου '%(fileName)s'.",
@@ -3383,7 +3243,35 @@
         "error_version_unsupported_space": "Ο κεντρικός διακομιστής του χρήστη δεν υποστηρίζει την έκδοση του χώρου.",
         "error_version_unsupported_room": "Ο κεντρικός διακομιστής του χρήστη δεν υποστηρίζει την έκδοση του δωματίου.",
         "error_unknown": "Άγνωστο σφάλμα διακομιστή",
-        "to_space": "Πρόσκληση σε %(spaceName)s"
+        "to_space": "Πρόσκληση σε %(spaceName)s",
+        "unable_find_profiles_description_default": "Δεν είναι δυνατή η εύρεση προφίλ για τα αναγνωριστικά Matrix που αναφέρονται παρακάτω - θα θέλατε να τα προσκαλέσετε ούτως ή άλλως;",
+        "unable_find_profiles_title": "Οι παρακάτω χρήστες ενδέχεται να μην υπάρχουν",
+        "unable_find_profiles_invite_never_warn_label_default": "Προσκαλέστε ούτως ή άλλως και μην με προειδοποιήσετε ποτέ ξανά",
+        "unable_find_profiles_invite_label_default": "Πρόσκληση ούτως ή άλλως",
+        "email_caption": "Πρόσκληση μέσω email",
+        "error_dm": "Δεν μπορέσαμε να δημιουργήσουμε το DM σας.",
+        "error_find_room": "Κάτι πήγε στραβά στην προσπάθεια πρόσκλησης των χρηστών.",
+        "error_invite": "Δεν ήταν δυνατή η πρόσκληση αυτών των χρηστών. Ελέγξτε τους χρήστες που θέλετε να προσκαλέσετε και δοκιμάστε ξανά.",
+        "error_transfer_multiple_target": "Μια κλήση μπορεί να μεταφερθεί μόνο σε έναν χρήστη.",
+        "error_find_user_title": "Αποτυχία εύρεσης των παρακάτω χρηστών",
+        "error_find_user_description": "Οι ακόλουθοι χρήστες ενδέχεται να μην υπάρχουν ή να μην είναι έγκυροι και δεν μπορούν να προσκληθούν: %(csvNames)s",
+        "recents_section": "Πρόσφατες Συνομιλίες",
+        "suggestions_section": "Πρόσφατα Απευθείας Μηνύματα",
+        "email_use_default_is": "Χρησιμοποιήστε έναν διακομιστή ταυτότητας για πρόσκληση μέσω email. <default> Χρησιμοποιήστε τον προεπιλεγμένο (%(defaultIdentityServerName)s)</default> ή διαμορφώστε στις <settings>Ρυθμίσεις</settings>.",
+        "email_use_is": "Χρησιμοποιήστε έναν διακομιστή ταυτότητας για πρόσκληση μέσω email. Διαχείριση στις <settings>Ρυθμίσεις</settings>.",
+        "start_conversation_name_email_mxid_prompt": "Ξεκινήστε μια συνομιλία με κάποιον χρησιμοποιώντας το όνομα, τη διεύθυνση email ή το όνομα χρήστη του (όπως <userId/>).",
+        "start_conversation_name_mxid_prompt": "Ξεκινήστε μια συνομιλία με κάποιον χρησιμοποιώντας το όνομά του ή το όνομα χρήστη (όπως <userId/>).",
+        "suggestions_disclaimer": "Ορισμένες προτάσεις ενδέχεται να είναι κρυφές λόγω απορρήτου.",
+        "suggestions_disclaimer_prompt": "Εάν δεν μπορείτε να βρείτε αυτόν που ψάχνετε, στείλτε τους τον παρακάτω σύνδεσμο πρόσκλησης.",
+        "send_link_prompt": "Ή στείλτε σύνδεσμο πρόσκλησης",
+        "to_room": "Πρόσκληση στο %(roomName)s",
+        "name_email_mxid_share_space": "Προσκαλέστε κάποιον χρησιμοποιώντας το όνομά του, τη διεύθυνση ηλεκτρονικού ταχυδρομείου, το όνομα χρήστη (όπως <userId/>) ή <a>κοινή χρήση αυτού του χώρου</a>.",
+        "name_mxid_share_space": "Προσκαλέστε κάποιον χρησιμοποιώντας το όνομά του, το όνομα χρήστη (όπως <userId/>) ή <a>κοινή χρήση αυτού του χώρου</a>.",
+        "name_email_mxid_share_room": "Προσκαλέστε κάποιον χρησιμοποιώντας το όνομά του, τη διεύθυνση ηλεκτρονικού ταχυδρομείου, το όνομα χρήστη (όπως <userId/>) ή <a>κοινή χρήση αυτού του δωματίου</a>.",
+        "name_mxid_share_room": "Προσκαλέστε κάποιον χρησιμοποιώντας το όνομά του, το όνομα χρήστη (όπως <userId/>) ή <a>κοινή χρήση αυτού του δωματίου</a>.",
+        "key_share_warning": "Οι προσκεκλημένοι θα μπορούν να διαβάζουν παλιά μηνύματα.",
+        "transfer_user_directory_tab": "Κατάλογος Χρηστών",
+        "transfer_dial_pad_tab": "Πληκτρολόγιο κλήσης"
     },
     "scalar": {
         "error_create": "Αδυναμία δημιουργίας μικροεφαρμογής.",
@@ -3412,7 +3300,21 @@
         "failed_copy": "Αποτυχία αντιγραφής",
         "something_went_wrong": "Κάτι πήγε στραβά!",
         "update_power_level": "Δεν ήταν δυνατή η αλλαγή του επιπέδου δύναμης",
-        "unknown": "Άγνωστο σφάλμα"
+        "unknown": "Άγνωστο σφάλμα",
+        "dialog_description_default": "Παρουσιάστηκε ένα σφάλμα.",
+        "edit_history_unsupported": "Ο διακομιστής σας δε φαίνεται να υποστηρίζει αυτήν τη δυνατότητα.",
+        "session_restore": {
+            "clear_storage_description": "Αποσύνδεση και κατάργηση κλειδιών κρυπτογράφησης;",
+            "clear_storage_button": "Εκκαθάριση Χώρου αποθήκευσης και Αποσύνδεση",
+            "title": "Αδυναμία επαναφοράς συνεδρίας",
+            "description_1": "Αντιμετωπίσαμε ένα σφάλμα κατά την επαναφορά της προηγούμενης συνεδρίας σας.",
+            "description_2": "Αν χρησιμοποιούσατε προηγουμένως μια πιο πρόσφατη έκδοση του %(brand)s, η συνεδρία σας ίσως είναι μη συμβατή με αυτήν την έκδοση. Κλείστε αυτό το παράθυρο και επιστρέψτε στην πιο πρόσφατη έκδοση.",
+            "description_3": "Η εκκαθάριση του αποθηκευτικού χώρου του προγράμματος περιήγησής σας μπορεί να διορθώσει το πρόβλημα, αλλά θα αποσυνδεθείτε και θα κάνει τυχόν κρυπτογραφημένο ιστορικό συνομιλιών να μην είναι αναγνώσιμο."
+        },
+        "storage_evicted_title": "Λείπουν δεδομένα της συνεδρίας (session)",
+        "storage_evicted_description_1": "Ορισμένα δεδομένα συνεδρίας, συμπεριλαμβανομένων των κρυπτογραφημένων κλειδιών μηνυμάτων, λείπουν. Αποσυνδεθείτε και συνδεθείτε για να το διορθώσετε, επαναφέροντας τα κλειδιά από το αντίγραφο ασφαλείας.",
+        "storage_evicted_description_2": "Το πρόγραμμα περιήγησης σας πιθανότατα αφαίρεσε αυτά τα δεδομένα όταν ο χώρος στο δίσκο εξαντλήθηκε.",
+        "unknown_error_code": "άγνωστος κωδικός σφάλματος"
     },
     "name_and_id": "%(name)s (%(userId)s)",
     "items_and_n_others": {
@@ -3550,7 +3452,31 @@
         "deactivate_confirm_action": "Απενεργοποίηση χρήστη",
         "error_deactivate": "Η απενεργοποίηση χρήστη απέτυχε",
         "role_label": "Ρόλος στο <RoomName/>",
-        "edit_own_devices": "Επεξεργασία συσκευών"
+        "edit_own_devices": "Επεξεργασία συσκευών",
+        "redact": {
+            "no_recent_messages_title": "Δε βρέθηκαν πρόσφατα μηνύματα από %(user)s",
+            "no_recent_messages_description": "Δοκιμάστε να κάνετε κύλιση στη γραμμή χρόνου για να δείτε αν υπάρχουν παλαιότερα.",
+            "confirm_title": "Καταργήστε πρόσφατα μηνύματα από %(user)s",
+            "confirm_description_1": {
+                "other": "Πρόκειται να αφαιρέσετε %(count)s μηνύματα του χρήστη %(user)s. Αυτό θα τα καταργήσει οριστικά για όλους στη συνομιλία. Θέλετε να συνεχίσετε;",
+                "one": "Πρόκειται να αφαιρέσετε %(count)s μήνυμα του χρήστη %(user)s. Αυτό θα το καταργήσει οριστικά για όλους στη συνομιλία. Θέλετε να συνεχίσετε;"
+            },
+            "confirm_description_2": "Για μεγάλο αριθμό μηνυμάτων, αυτό μπορεί να πάρει κάποιο χρόνο. Μην ανανεώνετε το προγράμμα-πελάτη σας στο μεταξύ.",
+            "confirm_keep_state_label": "Διατήρηση μηνυμάτων συστήματος",
+            "confirm_keep_state_explainer": "Καταργήστε την επιλογή εάν θέλετε επίσης να καταργήσετε τα μηνύματα συστήματος σε αυτόν τον χρήστη (π.χ. αλλαγή μέλους, αλλαγή προφίλ…)",
+            "confirm_button": {
+                "other": "Αφαίρεση %(count)s μηνυμάτων",
+                "one": "Αφαίρεση 1 μηνύματος"
+            }
+        },
+        "count_of_verified_sessions": {
+            "one": "1 επαληθευμένη συνεδρία",
+            "other": "%(count)s επαληθευμένες συνεδρίες"
+        },
+        "count_of_sessions": {
+            "one": "%(count)s συνεδρία",
+            "other": "%(count)s συνεδρίες"
+        }
     },
     "stickers": {
         "empty": "Προς το παρόν δεν έχετε ενεργοποιημένο κάποιο πακέτο αυτοκόλλητων",
@@ -3581,6 +3507,9 @@
                 "one": "Τελικό αποτέλεσμα με βάση %(count)s ψήφο",
                 "other": "Τελικό αποτέλεσμα με βάση %(count)s ψήφους"
             }
+        },
+        "thread_list": {
+            "context_menu_label": "Επιλογές νήματος συζήτησης"
         }
     },
     "reject_invitation_dialog": {
@@ -3617,12 +3546,149 @@
     },
     "console_wait": "Μια στιγμή!",
     "cant_load_page": "Δεν ήταν δυνατή η φόρτωση της σελίδας",
-    "Invalid homeserver discovery response": "Μη έγκυρη απόκριση εντοπισμού κεντρικού διακομιστή",
-    "Failed to get autodiscovery configuration from server": "Απέτυχε η λήψη της διαμόρφωσης αυτόματης ανακάλυψης από τον διακομιστή",
-    "Invalid base_url for m.homeserver": "Μη έγκυρο base_url για m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "Η διεύθυνση URL του κεντρικού διακομιστή δε φαίνεται να αντιστοιχεί σε έγκυρο διακομιστή Matrix",
-    "Invalid identity server discovery response": "Μη έγκυρη απόκριση εντοπισμού διακομιστή ταυτότητας",
-    "Invalid base_url for m.identity_server": "Μη έγκυρο base_url για m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "Η διεύθυνση URL διακομιστή ταυτοποίησης δε φαίνεται να είναι έγκυρη",
-    "General failure": "Γενική αποτυχία"
+    "General failure": "Γενική αποτυχία",
+    "emoji_picker": {
+        "cancel_search_label": "Ακύρωση αναζήτησης"
+    },
+    "info_tooltip_title": "Πληροφορίες",
+    "language_dropdown_label": "Επιλογή Γλώσσας",
+    "seshat": {
+        "error_initialising": "Η προετοιμασία της αναζήτησης μηνυμάτων απέτυχε, ελέγξτε τις <a>ρυθμίσεις σας</a> για περισσότερες πληροφορίες",
+        "warning_kind_files_app": "Χρησιμοποιήστε την <a>εφαρμογή για υπολογιστή</a> για να δείτε όλα τα κρυπτογραφημένα αρχεία",
+        "warning_kind_search_app": "Χρησιμοποιήστε την <a>εφαρμογή για υπολογιστή</a> για να δείτε όλα τα κρυπτογραφημένα μηνύματα",
+        "warning_kind_files": "Αυτή η έκδοση του %(brand)s δεν υποστηρίζει την προβολή ορισμένων κρυπτογραφημένων αρχείων",
+        "warning_kind_search": "Αυτή η έκδοση του %(brand)s δεν υποστηρίζει την αναζήτηση κρυπτογραφημένων μηνυμάτων",
+        "reset_title": "Eπαναφoρά στο κατάστημα συμβάντων;",
+        "reset_description": "Πιθανότατα δεν θέλετε να επαναφέρετε το κατάστημα ευρετηρίου συμβάντων",
+        "reset_explainer": "Εάν το κάνετε, σημειώστε ότι κανένα από τα μηνύματά σας δε θα διαγραφεί, αλλά η εμπειρία αναζήτησης ενδέχεται να υποβαθμιστεί για λίγα λεπτά κατά τη δημιουργία του ευρετηρίου",
+        "reset_button": "Επαναφορά καταστήματος συμβάντων"
+    },
+    "truncated_list_n_more": {
+        "other": "Και %(count)s ακόμα..."
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_required_invalid": "Εισαγάγετε ένα όνομα διακομιστή",
+            "network_dropdown_available_valid": "Φαίνεται καλό",
+            "network_dropdown_available_invalid_forbidden": "Δεν επιτρέπεται να δείτε τη λίστα δωματίων αυτού του διακομιστή",
+            "network_dropdown_available_invalid": "Αδυναμία εύρεσης του διακομιστή ή της λίστας δωματίων του",
+            "network_dropdown_your_server_description": "Ο διακομιστής σας",
+            "network_dropdown_add_dialog_title": "Προσθήκη νέου διακομιστή",
+            "network_dropdown_add_dialog_description": "Εισαγάγετε το όνομα ενός νέου διακομιστή που θέλετε να εξερευνήσετε.",
+            "network_dropdown_add_dialog_placeholder": "Ονομα διακομιστή",
+            "network_dropdown_add_server_option": "Προσθήκη νέου διακομιστή…"
+        }
+    },
+    "dialog_close_label": "Κλείσιμο διαλόγου",
+    "redact": {
+        "error": "Δεν μπορείτε να διαγράψετε αυτό το μήνυμα. (%(code)s)",
+        "ongoing": "Αφαίρεση…",
+        "confirm_button": "Επιβεβαίωση αφαίρεσης",
+        "reason_label": "Αιτία (προαιρετικό)"
+    },
+    "forward": {
+        "no_perms_title": "Δεν έχετε άδεια να το κάνετε αυτό",
+        "sending": "Αποστολή",
+        "sent": "Απεσταλμένα",
+        "send_label": "Αποστολή",
+        "message_preview_heading": "Προεπισκόπηση μηνύματος",
+        "filter_placeholder": "Αναζήτηση δωματίων ή ατόμων"
+    },
+    "integrations": {
+        "disabled_dialog_title": "Τα πρόσθετα έχουν απενεργοποιηθεί",
+        "impossible_dialog_title": "Δεν επιτρέπονται πρόσθετα",
+        "impossible_dialog_description": "Το %(brand)s σας δε σας επιτρέπει να χρησιμοποιήσετε έναν διαχειριστή πρόσθετων για να το κάνετε αυτό. Επικοινωνήστε με έναν διαχειριστή."
+    },
+    "lazy_loading": {
+        "disabled_description1": "Έχετε χρησιμοποιήσει στο παρελθόν %(brand)s στον %(host)s με ενεργοποιημένη την αργή φόρτωση μελών. Σε αυτήν την έκδοση η αργή φόρτωση είναι απενεργοποιημένη. Η τοπική κρυφή μνήμη δεν είναι συμβατή μεταξύ αυτών των δύο ρυθμίσεων και έτσι το %(brand)s πρέπει να συγχρονίσει ξανά τον λογαριασμό σας.",
+        "disabled_description2": "Εάν η άλλη έκδοση του %(brand)s εξακολουθεί να είναι ανοιχτή σε άλλη καρτέλα, κλείστε την, καθώς η χρήση του %(brand)s στον ίδιο κεντρικό υπολογιστή με ενεργοποιημένη και απενεργοποιημένη την αργή φόρτωση ταυτόχρονα , θα προκαλέσει προβλήματα.",
+        "disabled_title": "Μη συμβατή τοπική κρυφή μνήμη",
+        "disabled_action": "Εκκαθάριση προσωρινής μνήμης και επανασυγχρονισμός",
+        "resync_description": "Το %(brand)s χρησιμοποιεί πλέον 3-5 φορές λιγότερη μνήμη, φορτώνοντας πληροφορίες για άλλους χρήστες μόνο όταν χρειάζεται. Περιμένετε όσο γίνεται εκ νέου συγχρονισμός με τον διακομιστή!",
+        "resync_title": "Ενημέρωση %(brand)s"
+    },
+    "message_edit_dialog_title": "Επεξεργασίες μηνυμάτων",
+    "server_offline": {
+        "empty_timeline": "Είστε πλήρως ενημερωμένοι.",
+        "title": "Ο διακομιστής δεν ανταποκρίνεται",
+        "description": "Ο διακομιστής σας δεν ανταποκρίνεται σε ορισμένα από τα αιτήματά σας. Παρακάτω είναι μερικοί από τους πιο πιθανούς λόγους.",
+        "description_1": "Ο διακομιστής (%(serverName)s) έκανε πολύ χρόνο να ανταποκριθεί.",
+        "description_2": "Το τείχος προστασίας ή το πρόγραμμα προστασίας από ιούς μπλοκάρει το αίτημα.",
+        "description_3": "Μια επέκταση προγράμματος περιήγησης αποτρέπει το αίτημα.",
+        "description_4": "Ο διακομιστής είναι εκτός σύνδεσης.",
+        "description_5": "Ο διακομιστής απέρριψε το αίτημά σας.",
+        "description_6": "Η περιοχή σας αντιμετωπίζει δυσκολίες σύνδεσης στο διαδίκτυο.",
+        "description_7": "Παρουσιάστηκε σφάλμα σύνδεσης κατά την προσπάθεια επικοινωνίας με τον διακομιστή.",
+        "description_8": "Ο διακομιστής δεν έχει ρυθμιστεί για να υποδεικνύει ποιο είναι το πρόβλημα (CORS).",
+        "recent_changes_heading": "Πρόσφατες αλλαγές που δεν έχουν ληφθεί ακόμη"
+    },
+    "spotlight_dialog": {
+        "count_of_members": {
+            "one": "%(count)s Μέλος",
+            "other": "%(count)s Μέλη"
+        },
+        "public_rooms_label": "Δημόσια δωμάτια",
+        "heading_with_query": "Χρησιμοποιήστε το \"%(query)s\" για αναζήτηση",
+        "heading_without_query": "Αναζήτηση για",
+        "spaces_title": "Χώροι που ανήκετε",
+        "other_rooms_in_space": "Άλλα δωμάτιο στο %(spaceName)s",
+        "join_button_text": "Συμμετοχή στο %(roomAddress)s",
+        "result_may_be_hidden_privacy_warning": "Ορισμένα αποτελέσματα ενδέχεται να είναι κρυφά για λόγους απορρήτου",
+        "cant_find_person_helpful_hint": "Εάν δεν εμφανίζεται το άτομο που αναζητάτε, στείλτε τους τον σύνδεσμο πρόσκλησης.",
+        "copy_link_text": "Αντιγραφή συνδέσμου πρόσκλησης",
+        "result_may_be_hidden_warning": "Ορισμένα αποτελέσματα ενδέχεται να είναι κρυμμένα",
+        "create_new_room_button": "Δημιουργία νέου δωματίου",
+        "group_chat_section_title": "Αλλες επιλογές",
+        "start_group_chat_button": "Ξεκινήστε μια ομαδική συνομιλία",
+        "message_search_section_title": "'Άλλες αναζητήσεις",
+        "recent_searches_section_title": "Πρόσφατες αναζητήσεις",
+        "recently_viewed_section_title": "Προβλήθηκε πρόσφατα",
+        "search_dialog": "Παράθυρο Αναζήτησης",
+        "search_messages_hint": "Για να αναζητήσετε μηνύματα, βρείτε αυτό το εικονίδιο στην κορυφή ενός δωματίου <icon/>",
+        "keyboard_scroll_hint": "Χρησιμοποιήστε τα <arrows/> για κύλιση"
+    },
+    "share": {
+        "title_room": "Κοινή χρήση Δωματίου",
+        "permalink_most_recent": "Σύνδεσμος προς το πιο πρόσφατο μήνυμα",
+        "title_user": "Κοινή χρήση Χρήστη",
+        "title_message": "Κοινή χρήση Μηνύματος Δωματίου",
+        "permalink_message": "Σύνδεσμος στο επιλεγμένο μήνυμα",
+        "link_title": "Σύνδεσμος στο δωμάτιο"
+    },
+    "upload_file": {
+        "title_progress": "Μεταφόρτωση αρχείων %(current)s από %(total)s",
+        "title": "Μεταφόρτωση αρχείων",
+        "upload_all_button": "Μεταφόρτωση όλων",
+        "error_file_too_large": "Αυτό το αρχείο είναι <b>πολύ μεγάλο</b> για μεταφόρτωση. Το όριο μεγέθους αρχείου είναι %(limit)s αλλά αυτό το αρχείο είναι %(sizeOfThisFile)s.",
+        "error_files_too_large": "Αυτά τα αρχεία είναι <b>πολύ μεγάλα</b> για μεταφόρτωση. Το όριο μεγέθους αρχείου είναι %(limit)s.",
+        "error_some_files_too_large": "Ορισμένα αρχεία είναι <b>πολύ μεγάλα</b> για να μεταφορτωθούν. Το όριο μεγέθους αρχείου είναι %(limit)s.",
+        "upload_n_others_button": {
+            "one": "Μεταφόρτωση %(count)s άλλου αρχείου",
+            "other": "Μεταφόρτωση %(count)s άλλων αρχείων"
+        },
+        "cancel_all_button": "Ακύρωση Όλων",
+        "error_title": "Σφάλμα μεταφόρτωσης"
+    },
+    "restore_key_backup_dialog": {
+        "load_error_content": "Δεν είναι δυνατή η φόρτωση της κατάστασης αντιγράφου ασφαλείας",
+        "recovery_key_mismatch_title": "Αναντιστοιχία Κλειδιού Ασφαλείας",
+        "recovery_key_mismatch_description": "Δεν ήταν δυνατή η αποκρυπτογράφηση του αντιγράφου ασφαλείας με αυτό το Κλειδί Ασφαλείας: Βεβαιωθείτε ότι έχετε εισαγάγει το σωστό Κλειδί Ασφαλείας.",
+        "incorrect_security_phrase_title": "Λανθασμένη Φράση Ασφαλείας",
+        "incorrect_security_phrase_dialog": "Δεν ήταν δυνατή η αποκρυπτογράφηση του αντιγράφου ασφαλείας με αυτή τη Φράση Ασφαλείας: Βεβαιωθείτε ότι έχετε εισαγάγει τη σωστή Φράση Ασφαλείας.",
+        "restore_failed_error": "Δεν είναι δυνατή η επαναφορά του αντιγράφου ασφαλείας",
+        "no_backup_error": "Δε βρέθηκε αντίγραφο ασφαλείας!",
+        "keys_restored_title": "Τα κλειδιά ανακτήθηκαν",
+        "count_of_decryption_failures": "Αποτυχία αποκρυπτογράφησης %(failedCount)s συνεδριών!",
+        "count_of_successfully_restored_keys": "Επιτυχής επαναφορά %(sessionCount)s κλειδιών",
+        "enter_phrase_title": "Εισαγάγετε τη Φράση Ασφαλείας",
+        "key_backup_warning": "<b>Προειδοποίηση</b>: θα πρέπει να δημιουργήσετε αντίγραφο ασφαλείας κλειδιού μόνο από έναν αξιόπιστο υπολογιστή.",
+        "enter_phrase_description": "Αποκτήστε πρόσβαση στο ιστορικό ασφαλών μηνυμάτων σας και ρυθμίστε την ασφαλή ανταλλαγή μηνυμάτων εισάγοντας τη Φράση Ασφαλείας σας.",
+        "phrase_forgotten_text": "Εάν έχετε ξεχάσει τη φράση ασφαλείας σας, μπορείτε να <button1>χρησιμοποιήσετε το κλειδί ασφαλείας</button1> ή <button2>να ρυθμίστε νέες επιλογές ανάκτησης</button2>",
+        "enter_key_title": "Εισάγετε το Κλειδί Ασφαλείας",
+        "key_is_valid": "Αυτό φαίνεται να είναι ένα έγκυρο Κλειδί Ασφαλείας!",
+        "key_is_invalid": "Μη έγκυρο Κλειδί Ασφαλείας",
+        "enter_key_description": "Αποκτήστε πρόσβαση στο ιστορικό ασφαλών μηνυμάτων σας και ρυθμίστε την ασφαλή ανταλλαγή μηνυμάτων εισάγοντας το Κλειδί ασφαλείας σας.",
+        "key_forgotten_text": "Εάν έχετε ξεχάσει το κλειδί ασφαλείας σας, μπορείτε να <button>ρυθμίσετε νέες επιλογές ανάκτησης</button>",
+        "load_keys_progress": "%(completed)s από %(total)s κλειδιά ανακτήθηκαν"
+    }
 }

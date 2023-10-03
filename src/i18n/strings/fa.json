@@ -2,21 +2,14 @@
     "Sunday": "یکشنبه",
     "Today": "امروز",
     "Friday": "آدینه",
-    "Changelog": "تغییراتِ به‌وجودآمده",
-    "Unavailable": "غیرقابل‌دسترسی",
     "Tuesday": "سه‌شنبه",
     "Unnamed room": "گپ نام‌گذاری نشده",
     "Saturday": "شنبه",
     "Monday": "دوشنبه",
     "Wednesday": "چهارشنبه",
-    "Send": "ارسال",
-    "unknown error code": "کد خطای ناشناخته",
-    "You cannot delete this message. (%(code)s)": "شما نمی‌توانید این پیام را پاک کنید. (%(code)s)",
     "Thursday": "پنج‌شنبه",
     "Yesterday": "دیروز",
     "Ok": "تأیید",
-    "Email address": "آدرس ایمیل",
-    "An error has occurred.": "خطایی رخ داده است.",
     "Home": "خانه",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s.%(day)s.%(fullYear)s.%(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s.%(day)s.%(fullYear)s",
@@ -294,259 +287,22 @@
     "Afghanistan": "افغانستان",
     "United States": "ایالات متحده",
     "United Kingdom": "انگلستان",
-    "The server has denied your request.": "سرور درخواست شما را رد کرده است.",
-    "Use your Security Key to continue.": "برای ادامه از کلید امنیتی خود استفاده کنید.",
-    "Be found by phone or email": "از طریق تلفن یا ایمیل پیدا شوید",
-    "Find others by phone or email": "دیگران را از طریق تلفن یا ایمیل پیدا کنید",
-    "Sign out and remove encryption keys?": "خروج از حساب کاربری و حذف کلیدهای رمزنگاری؟",
-    "Remember my selection for this widget": "انتخاب من برای این ابزارک را بخاطر بسپار",
-    "I don't want my encrypted messages": "پیام‌های رمزشده‌ی خود را نمی‌خواهم",
-    "Upgrade this room to version %(version)s": "این اتاق را به نسخه %(version)s ارتقا دهید",
-    "Not a valid Security Key": "کلید امنیتی معتبری نیست",
-    "This widget would like to:": "این ابزارک تمایل دارد:",
-    "Unable to set up keys": "تنظیم کلیدها امکان پذیر نیست",
-    "%(completed)s of %(total)s keys restored": "%(completed)s از %(total)s کلید بازیابی شدند",
-    "a new cross-signing key signature": "یک کلید امضای متقابل جدید",
-    "a new master key signature": "یک شاه‌کلید جدید",
-    "Upload files (%(current)s of %(total)s)": "بارگذاری فایل‌ها (%(current)s از %(total)s)",
-    "Failed to decrypt %(failedCount)s sessions!": "رمزگشایی %(failedCount)s نشست موفقیت‌آمیز نبود!",
-    "Unable to load backup status": "بارگیری و نمایش وضعیت نسخه‌ی پشتیبان امکان‌پذیر نیست",
-    "Link to most recent message": "پیوند به آخرین پیام",
-    "Clear Storage and Sign Out": "فضای ذخیره‌سازی را پاک کرده و از حساب کاربری خارج شوید",
-    "The server is offline.": "سرور آفلاین است.",
-    "You're all caught up.": "همه‌ی کارها را انجام دادید.",
-    "Successfully restored %(sessionCount)s keys": "کلیدهای %(sessionCount)s با موفقیت بازیابی شدند",
-    "Restoring keys from backup": "بازیابی کلیدها از نسخه پشتیبان",
-    "a device cross-signing signature": "کلید امضای متقابل یک دستگاه",
-    "Upload %(count)s other files": {
-        "one": "بارگذاری %(count)s فایل دیگر",
-        "other": "بارگذاری %(count)s فایل دیگر"
-    },
-    "Room Settings - %(roomName)s": "تنظیمات اتاق - %(roomName)s",
-    "Start using Key Backup": "شروع استفاده از نسخه‌ی پشتیبان کلید",
-    "Unable to restore backup": "بازیابی نسخه پشتیبان امکان پذیر نیست",
-    "Clear cache and resync": "پاک کردن حافظه‌ی کش و همگام سازی مجدد",
-    "Failed to upgrade room": "اتاق ارتقاء نیافت",
-    "Link to selected message": "پیوند به پیام انتخاب شده",
-    "Unable to restore session": "امکان بازیابی نشست وجود ندارد",
-    "Reset event store": "پاک‌کردن مخزن رخداد",
-    "Reset event store?": "پاک‌کردن مخزن رخداد؟",
-    "Invite to %(roomName)s": "دعوت به %(roomName)s",
-    "Enter Security Key": "کلید امنیتی را وارد کنید",
-    "Enter Security Phrase": "عبارت امنیتی را وارد کنید",
-    "Incorrect Security Phrase": "عبارت امنیتی نادرست است",
-    "Security Key mismatch": "عدم تطابق کلید امنیتی",
-    "Invalid Security Key": "کلید امنیتی نامعتبر است",
-    "Wrong Security Key": "کلید امنیتی اشتباه است",
-    "Continuing without email": "ادامه بدون ایمیل",
-    "Approve widget permissions": "دسترسی‌های ابزارک را تائید کنید",
-    "Server isn't responding": "سرور پاسخ نمی دهد",
-    "Unable to upload": "بارگذاری امکان پذیر نیست",
-    "Signature upload failed": "بارگذاری امضا انجام نشد",
-    "Signature upload success": "موفقیت در بارگذاری امضا",
-    "Cancelled signature upload": "بارگذاری امضا لغو شد",
-    "a key signature": "یک امضای کلیدی",
-    "Clear cross-signing keys": "کلیدهای امضای متقابل را پاک کن",
-    "Destroy cross-signing keys?": "کلیدهای امضای متقابل نابود شود؟",
-    "Recently Direct Messaged": "گفتگوهای خصوصی اخیر",
-    "Upgrade public room": "ارتقاء اتاق عمومی",
-    "Upgrade private room": "ارتقاء اتاق خصوصی",
-    "Resend %(unsentCount)s reaction(s)": "بازارسال %(unsentCount)s واکنش",
-    "Missing session data": "داده‌های نشست از دست رفته است",
-    "Manually export keys": "کلیدها را به صورت دستی استخراج (Export)کن",
-    "No backup found!": "نسخه پشتیبان یافت نشد!",
-    "Incompatible local cache": "حافظه‌ی محلی ناسازگار",
-    "Upgrade Room Version": "ارتقاء نسخه‌ی اتاق",
-    "Share Room Message": "به اشتراک گذاشتن پیام اتاق",
-    "Reset everything": "همه چیز را بازراه‌اندازی (reset) کنید",
-    "Consult first": "ابتدا مشورت کنید",
-    "Remember this": "این را به یاد داشته باش",
-    "Decline All": "رد کردن همه",
-    "Modal Widget": "ابزارک کمکی",
-    "Updating %(brand)s": "به‌روزرسانی %(brand)s",
-    "Looks good!": "به نظر خوب میاد!",
-    "Security Key": "کلید امنیتی",
-    "Security Phrase": "عبارت امنیتی",
-    "Keys restored": "کلیدها بازیابی شدند",
-    "Upload completed": "بارگذاری انجام شد",
-    "Not Trusted": "قابل اعتماد نیست",
-    "Session key": "کلید نشست",
-    "Session name": "نام نشست",
-    "Verification Request": "درخواست تأیید",
-    "Command Help": "راهنمای دستور",
-    "Message edits": "ویرایش پیام",
-    "Upload all": "بارگذاری همه",
-    "Upload Error": "خطای بارگذاری",
-    "Cancel All": "لغو همه",
-    "Upload files": "بارگذاری فایل‌ها",
-    "Email (optional)": "ایمیل (اختیاری)",
-    "Share User": "به اشتراک‌گذاری کاربر",
-    "Share Room": "به اشتراک‌گذاری اتاق",
     "Send Logs": "ارسال گزارش ها",
-    "Recent Conversations": "گفتگوهای اخیر",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "این کاربران ممکن است وجود نداشته یا نامعتبر باشند و نمی‌توان آنها را دعوت کرد: %(csvNames)s",
-    "Failed to find the following users": "این کاربران یافت نشدند",
-    "A call can only be transferred to a single user.": "تماس فقط می تواند به یک کاربر منتقل شود.",
-    "We couldn't invite those users. Please check the users you want to invite and try again.": "ما نتوانستیم آن کاربران را دعوت کنیم. لطفاً کاربرانی را که می خواهید دعوت کنید بررسی کرده و دوباره امتحان کنید.",
-    "Something went wrong trying to invite the users.": "در تلاش برای دعوت از کاربران مشکلی پیش آمد.",
-    "We couldn't create your DM.": "نتوانستیم گفتگوی خصوصی مد نظرتان را ایجاد کنیم.",
-    "Invite by email": "دعوت از طریق ایمیل",
-    "Click the button below to confirm your identity.": "برای تأیید هویت خود بر روی دکمه زیر کلیک کنید.",
-    "Confirm to continue": "برای ادامه تأیید کنید",
-    "To continue, use Single Sign On to prove your identity.": "برای ادامه از احراز هویت یکپارچه جهت اثبات هویت خود استفاده نمائید.",
-    "Integrations not allowed": "یکپارچه‌سازی‌ها اجازه داده نشده‌اند",
-    "Integrations are disabled": "پکپارچه‌سازی‌ها غیر فعال هستند",
-    "Incoming Verification Request": "درخواست تأیید دریافتی",
-    "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "با تأیید این دستگاه، آن را به عنوان مورد اعتماد علامت‌گذاری کرده و کاربرانی که شما را تأیید کرده اند، به این دستگاه اعتماد خواهند کرد.",
-    "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "این دستگاه را تأیید کنید تا به عنوان مورد اعتماد علامت‌گذاری شود. اعتماد به این دستگاه در هنگام استفاده از رمزنگاری سرتاسر آرامش و اطمینان بیشتری را برای شما به ارمغان می‌آورد.",
-    "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "با تأیید این کاربر ، نشست وی به عنوان مورد اعتماد علامت‌گذاری شده و همچنین نشست شما به عنوان مورد اعتماد برای وی علامت‌گذاری خواهد شد.",
-    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "این کاربر را تأیید کنید تا به عنوان کاربر مورد اعتماد علامت‌گذاری شود. اعتماد به کاربران آرامش و اطمینان بیشتری به شما در استفاده از رمزنگاری سرتاسر می‌دهد.",
-    "Clear all data": "پاک کردن همه داده ها",
-    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "پاک کردن همه داده های این جلسه غیرقابل بازگشت است. پیامهای رمزگذاری شده از بین می‌روند مگر اینکه از کلیدهای آنها پشتیبان تهیه شده باشد.",
-    "Clear all data in this session?": "همه داده‌های این نشست پاک شود؟",
-    "Reason (optional)": "دلیل (اختیاری)",
-    "Confirm Removal": "تأیید حذف",
-    "Removing…": "در حال حذف…",
-    "Unable to load commit detail: %(msg)s": "بارگیری جزئیات commit انجام نشد: %(msg)s",
-    "Notes": "یادداشت‌ها",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "قبل از ارسال گزارش‌ها، برای توصیف مشکل خود باید <a>یک مسئله در GitHub ایجاد کنید</a>.",
-    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "یادآوری: مرورگر شما پشتیبانی نمی شود ، بنابراین ممکن است تجربه شما غیرقابل پیش بینی باشد.",
-    "Preparing to download logs": "در حال آماده سازی برای بارگیری گزارش ها",
-    "Failed to send logs: ": "ارسال گزارش با خطا مواجه شد: ",
-    "Thank you!": "با سپاس!",
-    "Logs sent": "گزارش‌های مربوط ارسال شد",
-    "Preparing to send logs": "در حال آماده سازی برای ارسال گزارش ها",
-    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "لطفاً به ما بگویید چه مشکلی پیش آمد و یا اینکه لطف کنید و یک مسئله GitHub ایجاد کنید که مشکل را توصیف کند.",
-    "You may contact me if you have any follow up questions": "در صورت داشتن هرگونه سوال پیگیری ممکن است با من تماس بگیرید",
-    "To leave the beta, visit your settings.": "برای خروج از بتا به بخش تنظیمات مراجعه کنید.",
-    "Close dialog": "بستن گفتگو",
-    "Invite anyway": "به هر حال دعوت کن",
-    "Invite anyway and never warn me again": "به هر حال دعوت کن و دیگر هرگز به من هشدار نده",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "برای شناسه‌های ماتریکس زیر، پروفایلی پیدا نشد - آیا به هر حال می خواهید آنها را دعوت کنید؟",
-    "The following users may not exist": "کاربران زیر ممکن است وجود نداشته باشند",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "از یک سرور هویت‌سنجی برای دعوت از طریق ایمیل استفاده کنید. اینکار را می‌توانید از طریق بخش <settings>تنظیمات</settings> انجام دهید.",
-    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "از یک سرور هویت‌سنجی برای دعوت از طریق ایمیل استفاده کنید. <default>از پیش فرض (%(defaultIdentityServerName)s) استفاده کنید</default> یا آن را در بخش <settings>تنظیمات</settings> مدیریت کنید.",
-    "Wrong file type": "نوع فایل اشتباه است",
-    "Confirm encryption setup": "راه‌اندازی رمزگذاری را تأیید کنید",
-    "Create a new room": "ایجاد اتاق جدید",
-    "Want to add a new room instead?": "آیا می‌خواهید یک اتاق جدید را بیفزایید؟",
-    "Add existing rooms": "افزودن اتاق‌های موجود",
-    "Space selection": "انتخاب فضای کاری",
-    "Adding rooms... (%(progress)s out of %(count)s)": {
-        "one": "در حال افزودن اتاق‌ها...",
-        "other": "در حال افزودن اتاق‌ها... (%(progress)s از %(count)s)"
-    },
-    "Not all selected were added": "همه‌ی موارد انتخاب شده، اضافه نشدند",
-    "Server name": "نام سرور",
-    "Enter the name of a new server you want to explore.": "نام سرور جدیدی که می خواهید در آن کاوش کنید را وارد کنید.",
-    "Add a new server": "افزودن سرور جدید",
-    "Your server": "سرور شما",
-    "Can't find this server or its room list": "این سرور و یا لیست اتاق‌های آن پیدا نمی شود",
-    "You are not allowed to view this server's rooms list": "شما مجاز به مشاهده لیست اتاق‌های این سرور نمی‌باشید",
-    "Looks good": "به نظر خوب میاد",
-    "Enter a server name": "نام سرور را وارد کنید",
-    "And %(count)s more...": {
-        "other": "و %(count)s مورد بیشتر ..."
-    },
-    "Join millions for free on the largest public server": "به بزرگترین سرور عمومی با میلیون ها نفر کاربر بپیوندید",
-    "Server Options": "گزینه های سرور",
-    "This address is already in use": "این آدرس قبلاً استفاده شده‌است",
-    "This address is available to use": "این آدرس برای استفاده در دسترس است",
-    "e.g. my-room": "به عنوان مثال، my-room",
-    "Some characters not allowed": "برخی از کاراکترها مجاز نیستند",
-    "Room address": "آدرس اتاق",
-    "<a>In reply to</a> <pill>": "<a>در پاسخ به</a><pill>",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "بارگیری رویدادی که به آن پاسخ داده شد امکان پذیر نیست، یا وجود ندارد یا شما اجازه مشاهده آن را ندارید.",
-    "Custom level": "سطح دلخواه",
-    "Power level": "سطح قدرت",
-    "Filter results": "پالایش نتایج",
-    "Server did not return valid authentication information.": "سرور اطلاعات احراز هویت معتبری را باز نگرداند.",
-    "Server did not require any authentication": "سرور به احراز هویت احتیاج نداشت",
-    "There was a problem communicating with the server. Please try again.": "مشکلی در برقراری ارتباط با سرور وجود داشت. لطفا دوباره تلاش کنید.",
-    "Confirm account deactivation": "غیرفعال کردن حساب کاربری را تأیید کنید",
-    "Are you sure you want to deactivate your account? This is irreversible.": "آیا از غیرفعال‌کردن حساب کاربری خود اطمینان دارید؟ این کار غیر قابل بازگشت است.",
-    "Confirm your account deactivation by using Single Sign On to prove your identity.": "برای غیرفعال‌کردن حساب کاربری خود ابتدا باید هویت خود را ثابت کنید که برای این کار می‌توانید از احراز هویت یکپارچه استفاده کنید.",
-    "Continue With Encryption Disabled": "با رمزنگاری غیرفعال ادامه بده",
-    "Incompatible Database": "پایگاه داده ناسازگار",
-    "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "شما قبلاً با این نشست از نسخه جدیدتر %(brand)s استفاده کرده‌اید. برای استفاده مجدد از این نسخه با قابلیت رمزنگاری سرتاسر ، باید از حسابتان خارج شده و دوباره وارد برنامه شوید.",
-    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "برای جلوگیری از دست دادن تاریخچه‌ی گفتگوی خود باید قبل از ورود به برنامه ، کلیدهای اتاق خود را استخراج (Export) کنید. برای این کار باید از نسخه جدیدتر %(brand)s استفاده کنید",
-    "%(count)s members": {
-        "other": "%(count)s عضو",
-        "one": "%(count)s عضو"
-    },
-    "%(count)s rooms": {
-        "other": "%(count)s اتاق",
-        "one": "%(count)s اتاق"
-    },
-    "Remove %(count)s messages": {
-        "one": "حذف ۱ پیام",
-        "other": "حذف %(count)s پیام"
-    },
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "برای مقدار زیادی پیام ممکن است مدتی طول بکشد. لطفا در این بین مرورگر خود را refresh نکنید.",
-    "Remove recent messages by %(user)s": "حذف پیام‌های اخیر %(user)s",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "در پیام‌ها بالا بروید تا ببینید آیا موارد قدیمی وجود دارد یا خیر.",
-    "No recent messages by %(user)s found": "هیچ پیام جدیدی برای %(user)s یافت نشد",
-    "%(count)s sessions": {
-        "one": "%(count)s نشست",
-        "other": "%(count)s نشست"
-    },
-    "%(count)s verified sessions": {
-        "one": "1 نشست تأیید شده",
-        "other": "%(count)s نشست تایید شده"
-    },
     "Not encrypted": "رمزگذاری نشده",
-    "Direct Messages": "پیام مستقیم",
     "Join Room": "به اتاق بپیوندید",
-    "(~%(count)s results)": {
-        "one": "(~%(count)s نتیجه)",
-        "other": "(~%(count)s نتیجه)"
-    },
     "%(duration)sd": "%(duration)s روز",
     "%(duration)sh": "%(duration)s ساعت",
     "%(duration)sm": "%(duration)s دقیقه",
     "%(duration)ss": "%(duration)s ثانیه",
-    "and %(count)s others...": {
-        "one": "و یکی دیگر ...",
-        "other": "و %(count)s مورد دیگر ..."
-    },
     "Encrypted by a deleted session": "با یک نشست حذف شده رمزگذاری شده است",
-    "Language Dropdown": "منو زبان",
-    "Information": "اطلاعات",
-    "%(count)s people you know have already joined": {
-        "one": "%(count)s نفر از افرادی که می شناسید قبلاً پیوسته‌اند",
-        "other": "%(count)s نفر از افرادی که می شناسید قبلاً به آن پیوسته‌اند"
-    },
-    "Including %(commaSeparatedMembers)s": "شامل %(commaSeparatedMembers)s",
-    "View all %(count)s members": {
-        "one": "نمایش ۱ عضو",
-        "other": "نمایش همه %(count)s عضو"
-    },
     "expand": "گشودن",
     "collapse": "بستن",
-    "This version of %(brand)s does not support searching encrypted messages": "این نسخه از %(brand)s از جستجوی پیام های رمزگذاری شده پشتیبانی نمی کند",
-    "This version of %(brand)s does not support viewing some encrypted files": "این نسخه از %(brand)s از مشاهده برخی از پرونده های رمزگذاری شده پشتیبانی نمی کند",
-    "Use the <a>Desktop app</a> to search encrypted messages": "برای جستجوی میان پیام‌های رمز شده از <a>نسخه دسکتاپ</a> استفاده کنید",
-    "Use the <a>Desktop app</a> to see all encrypted files": "برای مشاهده همه پرونده های رمز شده از <a>نسخه دسکتاپ</a> استفاده کنید",
-    "Cancel search": "لغو جستجو",
-    "Can't load this message": "بارگیری این پیام امکان پذیر نیست",
     "Submit logs": "ارسال لاگ‌ها",
-    "edited": "ویرایش شده",
-    "Edited at %(date)s. Click to view edits.": "ویرایش شده در %(date)s. برای مشاهده ویرایش ها کلیک کنید.",
-    "Click to view edits": "برای مشاهده ویرایش ها کلیک کنید",
-    "Edited at %(date)s": "ویرایش شده در %(date)s",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "شما در آستانه هدایت شدن به یک سایت ثالث هستید بنابراین می توانید حساب خود را برای استفاده با %(integrationsUrl)s احراز هویت کنید. آیا مایل هستید ادامه دهید؟",
-    "Add an Integration": "یکپارچه سازی اضافه کنید",
-    "Add reaction": "افزودن واکنش",
-    "%(name)s wants to verify": "%(name)s می‌خواهد تأیید هویت کند",
-    "%(name)s cancelled": "%(name)s لغو کرد",
-    "%(name)s declined": "%(name)s رد کرد",
-    "%(name)s accepted": "%(name)s پذیرفت",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "برای گزارش مشکلات امنیتی مربوط به ماتریکس، لطفا سایت Matrix.org بخش <a>Security Disclosure Policy</a> را مطالعه فرمائید.",
     "Backup version:": "نسخه‌ی پشتیبان:",
     "This backup is trusted because it has been restored on this session": "این نسخه‌ی پشتیبان قابل اعتماد است چرا که بر روی این نشست بازیابی شد",
-    "not specified": "مشخص نشده",
     "Failed to connect to integration manager": "اتصال به سیستم مدیریت ادغام انجام نشد",
-    "Create a space": "ساختن یک محیط",
     "Folder": "پوشه",
     "Headphones": "هدفون",
     "Anchor": "لنگر",
@@ -610,112 +366,24 @@
     "Lion": "شیر",
     "Cat": "گربه",
     "Dog": "سگ",
-    "Dial pad": "صفحه شماره‌گیری",
     "IRC display name width": "عرض نمایش نام‌های IRC",
     "Switch theme": "تعویض پوسته",
-    "<inviter/> invites you": "<inviter/> شما را دعوت کرد",
-    "No results found": "نتیجه‌ای یافت نشد",
-    "Sending": "در حال ارسال",
     "Warning!": "هشدار!",
-    "Create new room": "ایجاد اتاق جدید",
-    "Leave space": "ترک محیط",
     "Sign in with SSO": "ورود با استفاده از احراز هویت یکپارچه",
     "Delete Widget": "حذف ویجت",
-    "Failed to start livestream": "آغاز livestream با شکست همراه بود",
-    "Unable to start audio streaming.": "شروع پخش جریان صدا امکان‌پذیر نیست.",
-    "Hold": "نگه‌داشتن",
-    "Resume": "ادامه",
     "Deactivate account": "غیرفعال‌کردن حساب کاربری",
     "Your homeserver has exceeded one of its resource limits.": "سرور شما از یکی از محدودیت‌های منابع خود فراتر رفته است.",
     "Your homeserver has exceeded its user limit.": "سرور شما از حد مجاز کاربر خود فراتر رفته است.",
-    "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "اگر این کار را انجام می‌دهید، لطفاً توجه داشته باشید که هیچ یک از پیام‌های شما حذف نمی‌شوند ، با این حال چون پیام‌ها مجددا ایندکس می‌شوند، ممکن است برای چند لحظه قابلیت جستجو با مشکل مواجه شود",
-    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "حذف کلیدهای امضای متقابل دائمی است. هرکسی که او را تائید کرده‌باشید، هشدارهای امنیتی را مشاهده خواهد کرد. به احتمال زیاد نمی‌خواهید این کار را انجام دهید ، مگر هیچ دستگاهی برای امضاء متقابل از طریق آن نداشته باشید.",
-    "Click the button below to confirm setting up encryption.": "برای تأیید و فعال‌سازی رمزگذاری ، روی دکمه زیر کلیک کنید.",
-    "Unable to access secret storage. Please verify that you entered the correct Security Phrase.": "دسترسی به حافظه نهان امکان‌پذیر نیست. لطفاً تأیید کنید که عبارت امنیتی صحیح را وارد کرده‌اید.",
-    "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "اگر همه موارد را بازراه‌اندازی (reset) کنید، دیگر هیچ نشست تائید شده‌ای و هیچ کاربر تائيد‌ شده‌ای نخواهید داشت و ممکن است نتوانید پیام‌های گذشته‌ی خود را مشاهده نمائید.",
-    "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.": "نسخه پشتیبان با این کلید امنیتی رمزگشایی نمی شود: لطفاً بررسی کنید که کلید امنیتی درست را وارد کرده اید.",
-    "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.": "نسخه پشتیبان با این عبارت امنیتی رمزگشایی نمی‌شود: لطفاً بررسی کنید که عبارت امنیتی درست را وارد کرده اید.",
-    "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>هشدا</b>: پشتیبان گیری از کلید را فقط از یک رایانه مطمئن انجام دهید.",
-    "Access your secure message history and set up secure messaging by entering your Security Phrase.": "با وارد کردن عبارت امنیتی خود به سابقه پیام‌های رمز شدتان دسترسی پیدا کرده و پیام امن ارسال کنید.",
-    "Only do this if you have no other device to complete verification with.": "این کار را فقط درصورتی انجام دهید که دستگاه دیگری برای تکمیل فرآیند تأیید ندارید.",
-    "Forgotten or lost all recovery methods? <a>Reset all</a>": "همه روش‌های بازیابی را فراموش کرده یا از دست داده‌اید؟ <a>بازراه‌اندازی (reset) همه</a>",
-    "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>": "اگر عبارت امنیتی خود را فراموش کرده اید، می توانید <button1>از کلید امنیتی خود استفاده کنید</button1> یا <button2>تنظیمات پشتیانی‌گیری را مجددا انجام دهید</button2>",
-    "The widget will verify your user ID, but won't be able to perform actions for you:": "ابزارک شناسه‌ی کاربری شما را تائید خواهد کرد، اما نمی‌تواند این کارها را برای شما انجام دهد:",
-    "This looks like a valid Security Key!": "به نظر می رسد این یک کلید امنیتی معتبر است!",
-    "Allow this widget to verify your identity": "به این ابزارک اجازه دهید هویت شما را تأیید کند",
-    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "برخی از فایل‌ها برای بارگذاری <b>بیش از حد بزرگ هستند</b>. محدودیت اندازه فایل %(limit)s است.",
-    "Access your secure message history and set up secure messaging by entering your Security Key.": "با وارد کردن کلید امنیتی خود به تاریخچه‌ی پیام‌‌های رمز شده خود دسترسی پیدا کرده و پیام امن ارسال کنید.",
-    "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "این فایل‌ها برای بارگذاری <b>بیش از حد بزرگ</b> هستند. محدودیت اندازه فایل %(limit)s است.",
-    "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "اگر کلید امنیتی خود را فراموش کرده‌اید ، می توانید <button>تنظیمات مجددا تنظیمات پشتیبان‌گیری را انجام دهید</button>",
-    "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "این فایل برای بارگذاری <b>بسیار بزرگ است</b>. محدودیت اندازه‌ی فایل برابر %(limit)s است اما حجم این فایل %(sizeOfThisFile)s.",
-    "Ask this user to verify their session, or manually verify it below.": "از این کاربر بخواهید نشست خود را تأیید کرده و یا آن را به صورت دستی تأیید کنید.",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) وارد یک نشست جدید شد بدون اینکه آن را تائید کند:",
-    "Verify your other session using one of the options below.": "نست دیگر خود را با استفاده از یکی از راهکارهای زیر تأیید کنید.",
-    "You signed in to a new session without verifying it:": "شما وارد یک نشست جدید شده‌اید بدون اینکه آن را تائید کنید:",
-    "Your browser likely removed this data when running low on disk space.": "هنگام کمبود فضای دیسک ، مرورگر شما این داده ها را حذف می کند.",
-    "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "برخی از داده‌های نشست ، از جمله کلیدهای رمزنگاری پیام‌ها موجود نیست. برای برطرف کردن این مشکل از برنامه خارج شده و مجددا وارد شوید و از کلیدها را از نسخه‌ی پشتیبان بازیابی نمائيد.",
-    "To help us prevent this in future, please <a>send us logs</a>.": "برای کمک به ما در جلوگیری از این امر در آینده ، لطفا <a>لاگ‌ها را برای ما ارسال کنید</a>.",
-    "This will allow you to reset your password and receive notifications.": "با این کار می‌توانید گذرواژه خود را تغییر داده و اعلان‌ها را دریافت کنید.",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "لطفاً ایمیل خود را بررسی کرده و روی لینکی که برایتان ارسال شده، کلیک کنید. پس از انجام این کار، روی ادامه کلیک کنید.",
-    "Verification Pending": "در انتظار تائید",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "پاک کردن فضای ذخیره‌سازی مرورگر ممکن است این مشکل را برطرف کند ، اما شما را از برنامه خارج کرده و باعث می‌شود هرگونه سابقه گفتگوی رمزشده غیرقابل خواندن باشد.",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "اگر در گذشته از نسخه جدیدتر %(brand)s استفاده کرده‌اید ، نشست شما ممکن است با این نسخه ناسازگار باشد. این پنجره را بسته و به نسخه جدیدتر برگردید.",
-    "We encountered an error trying to restore your previous session.": "هنگام تلاش برای بازیابی نشست قبلی شما، با خطایی روبرو شدیم.",
-    "You most likely do not want to reset your event index store": "به احتمال زیاد نمی‌خواهید مخزن فهرست رویدادهای خود را حذف کنید",
-    "Recent changes that have not yet been received": "تغییرات اخیری که هنوز دریافت نشده‌اند",
-    "The server is not configured to indicate what the problem is (CORS).": "سرور طوری پیکربندی نشده تا نشان دهد مشکل چیست (CORS).",
-    "A connection error occurred while trying to contact the server.": "هنگام تلاش برای اتصال به سرور خطایی رخ داده است.",
-    "Your area is experiencing difficulties connecting to the internet.": "منطقه شما در اتصال به اینترنت با مشکل روبرو است.",
-    "A browser extension is preventing the request.": "پلاگینی در مرورگر مانع از ارسال درخواست می‌گردد.",
-    "Your firewall or anti-virus is blocking the request.": "دیوار آتش یا آنتی‌ویروس شما مانع از ارسال درخواست می‌شود.",
-    "The server (%(serverName)s) took too long to respond.": "زمان پاسخگویی سرور (%(serverName)s) بسیار طولانی شده‌است.",
-    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "سرور شما به برخی از درخواست‌ها پاسخ نمی‌دهد. در ادامه برخی از دلایل محتمل آن ذکر شده است.",
-    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "این اتاق را از <oldVersion /> به <newVersion /> ارتقا خواهید داد.",
-    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "به‌روزرسانی اتاق اقدامی پیشرفته بوده و معمولاً در صورتی توصیه می‌شود که اتاق به دلیل اشکالات، فقدان قابلیت‌ها یا آسیب پذیری‌های امنیتی، پایدار و قابل استفاده نباشد.",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "این معمولاً فقط بر نحوه پردازش اتاق در سرور تأثیر می‌گذارد. اگر با %(brand)s خود مشکلی دارید، لطفاً <a>اشکال را گزارش کنید</a>.",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "این معمولاً فقط بر نحوه پردازش اتاق در سرور تأثیر می‌گذارد. اگر با %(brand)s خود مشکلی دارید ، لطفاً یک اشکال گزارش دهید.",
-    "Put a link back to the old room at the start of the new room so people can see old messages": "در ابتدای اتاق جدید پیوندی به اتاق قدیمی قرار دهید تا افراد بتوانند پیام‌های موجود در اتاق قدیمی را ببینند",
-    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "از گفتگوی کاربران در نسخه قدیمی اتاق جلوگیری کرده و با ارسال پیامی به کاربران توصیه کنید به اتاق جدید منتقل شوند",
-    "Update any local room aliases to point to the new room": "برای اشاره به اتاق جدید، نام‌های مستعار (aliases) اتاق محلی را به‌روز کنید",
-    "Create a new room with the same name, description and avatar": "یک اتاق جدید با همان نام ، توضیحات و نمایه ایجاد کنید",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "ارتقاء این اتاق نیازمند بستن نسخه‌ی فعلی و ساختن درجای یک اتاق جدید است. برای داشتن بهترین تجربه‌ی کاربری ممکن، ما:",
-    "The room upgrade could not be completed": "متاسفانه فرآیند ارتقاء اتاق به پایان نرسید",
-    "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "حواستان را جمع کنید، اگر ایمیلی اضافه نکرده و گذرواژه‌ی خود را فراموش کنید ، ممکن است <b>دسترسی به حساب کاربری خود را برای همیشه از دست دهید</b>.",
-    "If they don't match, the security of your communication may be compromised.": "اگر آنها مطابقت نداشته‌باشند ، ممکن است امنیت ارتباطات شما به خطر افتاده باشد.",
-    "Data on this screen is shared with %(widgetDomain)s": "داده‌های این صفحه با %(widgetDomain)s به اشتراک گذاشته می‌شود",
-    "Your homeserver doesn't seem to support this feature.": "به نظر نمی‌رسد که سرور شما از این قابلیت پشتیبانی کند.",
-    "Session ID": "شناسه‌ی نشست",
-    "Confirm this user's session by comparing the following with their User Settings:": "این نشست کاربر را از طریق مقایسه‌ی این با تنظیمات کاربری تائيد کنید:",
-    "Confirm by comparing the following with the User Settings in your other session:": "از طریق مقایسه‌ی این با تنظیمات کاربری در نشست‌های دیگرتان، تائيد کنید:",
-    "Are you sure you want to sign out?": "آیا مطمئن هستید که می خواهید از برنامه خارج شوید؟",
-    "You'll lose access to your encrypted messages": "دسترسی به پیام‌های رمزشده‌ی خود را از دست خواهید داد",
-    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "پیام‌های رمزشده با رمزنگاری سرتاسر ایمن می‌شوند. فقط شما و طرف گیرنده(ها) کلیدهای خواندن این پیام ها را در اختیار دارید.",
-    "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "هم‌اکنون %(brand)s از طریق بارگیری و نمایش اطلاعات کاربران تنها در زمان‌هایی که نیاز است، حدود ۳ تا ۵ مرتبه حافظه‌ی کمتری استفاده می‌کند. لطفا تا همگام‌سازی با سرور منتظر بمانید!",
-    "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "اگر نسخه دیگری از %(brand)s هنوز در تب‌های دیگر باز است، لطفاً آن را ببندید زیرا استفاده از %(brand)s با قابلیت بارگیری تکه‌تکه‌ی فعال روی یکی و غیرفعال روی دیگری، باعث ایجاد مشکل می شود.",
-    "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "شما از %(brand)s بر روی %(host)s با قابلیت بارگیری اعضا به شکل تکه‌تکه استفاده می‌کنید. در این نسخه قابلیت بارگیری تکه‌تکه غیرفعال است. از آن‌جایی که حافظه‌ی کش مورد استفاده برای این دو پیکربندی با هم سازگار نیست، %(brand)s نیاز به همگام‌سازی مجدد حساب کاربری شما دارد.",
-    "%(brand)s encountered an error during upload of:": "%(brand)s در حین بارگذاری این دچار مشکل شد:",
-    "Transfer": "منتقل کردن",
-    "Invited people will be able to read old messages.": "افراد دعوت‌شده خواهند توانست پیام‌های قدیمی را بخوانند.",
-    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "با استفاده از نام یا نام کاربری (مانند <userId/>) از افراد دعوت کرده و یا <a>این اتاق را به اشتراک بگذارید</a>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "با استفاده از نام، آدرس ایمیل، نام کاربری (مانند <userId/>) از فردی دعوت کرده و یا <a>این اتاق را به اشتراک بگذارید</a>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "با استفاده از نام ، آدرس ایمیل ، نام کاربری (مانند <userId/>) کسی را دعوت کرده یا <a>این فضای کاری را به اشتراک بگذارید</a>.",
-    "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "با استفاده از نام یا نام کاربری (مانند <userId/>) از افراد دعوت کرده و یا <a>این فضای کاری را به اشتراک بگذارید</a>.",
-    "Start a conversation with someone using their name or username (like <userId/>).": "با استفاده از نام یا نام کاربری (مانند <userId/>)، گفتگوی جدیدی را با دیگران شروع کنید.",
-    "Start a conversation with someone using their name, email address or username (like <userId/>).": "با استفاده از نام، آدرس ایمیل و یا نام کاربری (مانند <userId/>)، یک گفتگوی جدید را شروع کنید.",
-    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s شما اجازهٔ استفاده از یک مدیر یکپارچگی را برای این کار نمی دهد. لطفاً با مدیری تماس بگیرید.",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s و %(count)s دیگر",
         "other": "%(spaceName)s و %(count)s دیگران"
     },
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s و %(space2Name)s",
-    "Close sidebar": "بستن نوارکناری",
-    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "عبارت امنیتی خود را وارد کنید و یا <button>کلید امنیتی خود را استفاده کنید</button>.",
     "Developer": "توسعه دهنده",
     "Experimental": "تجربی",
     "Themes": "قالب ها",
     "Moderation": "اعتدال",
     "Messaging": "پیام رسانی",
-    "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "وقتی از سیستم خارج می‌شوید، این کلیدها از این دستگاه حذف می‌شوند، به این معنی که نمی‌توانید پیام‌های رمزگذاری‌شده را بخوانید مگر اینکه کلیدهای آن‌ها را در دستگاه‌های دیگر خود داشته باشید یا از آنها در سرور نسخه پشتیبان تهیه کنید.",
     "common": {
         "about": "درباره",
         "analytics": "تجزیه و تحلیل",
@@ -810,7 +478,23 @@
         "unencrypted": "رمزگذاری نشده",
         "show_more": "نمایش بیشتر",
         "avatar": "نمایه",
-        "are_you_sure": "مطمئنی؟"
+        "are_you_sure": "مطمئنی؟",
+        "email_address": "آدرس ایمیل",
+        "filter_results": "پالایش نتایج",
+        "no_results_found": "نتیجه‌ای یافت نشد",
+        "and_n_others": {
+            "one": "و یکی دیگر ...",
+            "other": "و %(count)s مورد دیگر ..."
+        },
+        "n_members": {
+            "other": "%(count)s عضو",
+            "one": "%(count)s عضو"
+        },
+        "edited": "ویرایش شده",
+        "n_rooms": {
+            "other": "%(count)s اتاق",
+            "one": "%(count)s اتاق"
+        }
     },
     "action": {
         "continue": "ادامه",
@@ -906,7 +590,10 @@
         "unignore": "لغو نادیده‌گرفتن",
         "explore_rooms": "جستجو در اتاق ها",
         "add_existing_room": "اضافه‌کردن اتاق موجود",
-        "explore_public_rooms": "کاوش در اتاق‌های عمومی"
+        "explore_public_rooms": "کاوش در اتاق‌های عمومی",
+        "transfer": "منتقل کردن",
+        "resume": "ادامه",
+        "hold": "نگه‌داشتن"
     },
     "a11y": {
         "user_menu": "منوی کاربر",
@@ -948,7 +635,8 @@
         "bridge_state_creator": "این پل ارتباطی توسط <user /> ارائه شده‌است.",
         "bridge_state_manager": "این پل ارتباطی توسط <user /> مدیریت می‌شود.",
         "bridge_state_workspace": "فضای کار:<networkLink/>",
-        "bridge_state_channel": "کانال:<channelLink/>"
+        "bridge_state_channel": "کانال:<channelLink/>",
+        "beta_feedback_leave_button": "برای خروج از بتا به بخش تنظیمات مراجعه کنید."
     },
     "keyboard": {
         "home": "خانه",
@@ -1051,7 +739,9 @@
         "moderator": "معاون",
         "admin": "ادمین",
         "custom": "%(level)s دلخواه",
-        "mod": "معاون"
+        "mod": "معاون",
+        "label": "سطح قدرت",
+        "custom_level": "سطح دلخواه"
     },
     "bug_reporting": {
         "matrix_security_issue": "برای گزارش مشکلات امنیتی مربوط به ماتریکس، لطفا سایت Matrix.org بخش <a>Security Disclosure Policy</a> را مطالعه فرمائید.",
@@ -1067,7 +757,16 @@
         "uploading_logs": "در حال بارگذاری لاگ‌ها",
         "downloading_logs": "در حال دریافت لاگ‌ها",
         "create_new_issue": "لطفا در GitHub <newIssueLink>یک مسئله جدید ایجاد کنید</newIssueLink> تا بتوانیم این اشکال را بررسی کنیم.",
-        "waiting_for_server": "در انتظار پاسخی از سمت سرور"
+        "waiting_for_server": "در انتظار پاسخی از سمت سرور",
+        "error_empty": "لطفاً به ما بگویید چه مشکلی پیش آمد و یا اینکه لطف کنید و یک مسئله GitHub ایجاد کنید که مشکل را توصیف کند.",
+        "preparing_logs": "در حال آماده سازی برای ارسال گزارش ها",
+        "logs_sent": "گزارش‌های مربوط ارسال شد",
+        "thank_you": "با سپاس!",
+        "failed_send_logs": "ارسال گزارش با خطا مواجه شد: ",
+        "preparing_download": "در حال آماده سازی برای بارگیری گزارش ها",
+        "unsupported_browser": "یادآوری: مرورگر شما پشتیبانی نمی شود ، بنابراین ممکن است تجربه شما غیرقابل پیش بینی باشد.",
+        "textarea_label": "یادداشت‌ها",
+        "log_request": "برای کمک به ما در جلوگیری از این امر در آینده ، لطفا <a>لاگ‌ها را برای ما ارسال کنید</a>."
     },
     "time": {
         "seconds_left": "%(seconds)s ثانیه باقی‌مانده",
@@ -1312,7 +1011,13 @@
             "email_address_label": "آدرس ایمیل",
             "remove_msisdn_prompt": "%(phone)s را پاک می‌کنید؟",
             "add_msisdn_instructions": "یک پیام متنی به +%(msisdn)s ارسال شد. لطفا کد تائید موجود در آن را وارد کنید.",
-            "msisdn_label": "شماره تلفن"
+            "msisdn_label": "شماره تلفن",
+            "deactivate_confirm_body_sso": "برای غیرفعال‌کردن حساب کاربری خود ابتدا باید هویت خود را ثابت کنید که برای این کار می‌توانید از احراز هویت یکپارچه استفاده کنید.",
+            "deactivate_confirm_body": "آیا از غیرفعال‌کردن حساب کاربری خود اطمینان دارید؟ این کار غیر قابل بازگشت است.",
+            "deactivate_confirm_continue": "غیرفعال کردن حساب کاربری را تأیید کنید",
+            "error_deactivate_communication": "مشکلی در برقراری ارتباط با سرور وجود داشت. لطفا دوباره تلاش کنید.",
+            "error_deactivate_no_auth": "سرور به احراز هویت احتیاج نداشت",
+            "error_deactivate_invalid_auth": "سرور اطلاعات احراز هویت معتبری را باز نگرداند."
         },
         "sidebar": {
             "title": "نوارکناری",
@@ -1672,7 +1377,8 @@
             "tooltip": "پیام در %(date)s حذف شد"
         },
         "reactions": {
-            "tooltip": "<reactors/><reactedWith> واکنش نشان داد با %(shortName)s</reactedWith>"
+            "tooltip": "<reactors/><reactedWith> واکنش نشان داد با %(shortName)s</reactedWith>",
+            "add_reaction_prompt": "افزودن واکنش"
         },
         "m.room.create": {
             "continuation": "این اتاق ادامه گفتگوی دیگر است.",
@@ -1681,7 +1387,8 @@
         "creation_summary_dm": "%(creator)s این گفتگو را ایجاد کرد.",
         "creation_summary_room": "%(creator)s اتاق را ایجاد و پیکربندی کرد.",
         "context_menu": {
-            "external_url": "آدرس مبدا"
+            "external_url": "آدرس مبدا",
+            "resent_unsent_reactions": "بازارسال %(unsentCount)s واکنش"
         },
         "url_preview": {
             "close": "بستن پیش نمایش"
@@ -1722,7 +1429,11 @@
             "you_accepted": "پذیرفتید",
             "you_declined": "شما رد کردید",
             "you_cancelled": "شما لغو کردید",
-            "you_started": "شما یک درخواست تأیید هویت ارسال کرده‌اید"
+            "you_started": "شما یک درخواست تأیید هویت ارسال کرده‌اید",
+            "user_accepted": "%(name)s پذیرفت",
+            "user_declined": "%(name)s رد کرد",
+            "user_cancelled": "%(name)s لغو کرد",
+            "user_wants_to_verify": "%(name)s می‌خواهد تأیید هویت کند"
         },
         "m.poll.end": {
             "sender_ended": "%(senderName)s به نظر سنجی پایان داد"
@@ -1732,6 +1443,20 @@
         },
         "m.audio": {
             "error_processing_voice_message": "خطا در پردازش پیام صوتی"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "یکپارچه سازی اضافه کنید",
+            "dialog_description": "شما در آستانه هدایت شدن به یک سایت ثالث هستید بنابراین می توانید حساب خود را برای استفاده با %(integrationsUrl)s احراز هویت کنید. آیا مایل هستید ادامه دهید؟"
+        },
+        "edits": {
+            "tooltip_title": "ویرایش شده در %(date)s",
+            "tooltip_sub": "برای مشاهده ویرایش ها کلیک کنید",
+            "tooltip_label": "ویرایش شده در %(date)s. برای مشاهده ویرایش ها کلیک کنید."
+        },
+        "error_rendering_message": "بارگیری این پیام امکان پذیر نیست",
+        "reply": {
+            "error_loading": "بارگیری رویدادی که به آن پاسخ داده شد امکان پذیر نیست، یا وجود ندارد یا شما اجازه مشاهده آن را ندارید.",
+            "in_reply_to": "<a>در پاسخ به</a><pill>"
         }
     },
     "slash_command": {
@@ -1817,7 +1542,8 @@
         "verify_nop": "نشست پیش از این تائید شده‌است!",
         "verify_mismatch": "هشدار: تایید کلید ناموفق بود! کلید امضا کننده %(userId)s در نشست %(deviceId)s برابر %(fprint)s است که با کلید %(fingerprint)s تطابق ندارد. این می تواند به معنی رهگیری ارتباطات شما باشد!",
         "verify_success_title": "کلید تأیید شده",
-        "verify_success_description": "کلید امضای ارائه شده با کلید امضای دریافت شده از جلسه %(deviceId)s کاربر %(userId)s مطابقت دارد. نشست به عنوان تأیید شده علامت گذاری شد."
+        "verify_success_description": "کلید امضای ارائه شده با کلید امضای دریافت شده از جلسه %(deviceId)s کاربر %(userId)s مطابقت دارد. نشست به عنوان تأیید شده علامت گذاری شد.",
+        "help_dialog_title": "راهنمای دستور"
     },
     "presence": {
         "online_for": "آنلاین برای مدت %(duration)s",
@@ -1910,9 +1636,9 @@
         "unable_to_access_audio_input_title": "دسترسی به میکروفن شما امکان پذیر نیست",
         "unable_to_access_audio_input_description": "ما نتوانستیم به میکروفون شما دسترسی پیدا کنیم. لطفا تنظیمات مرورگر خود را بررسی کنید و دوباره سعی کنید.",
         "no_audio_input_title": "میکروفونی یافت نشد",
-        "no_audio_input_description": "ما میکروفونی در دستگاه شما پیدا نکردیم. لطفاً تنظیمات خود را بررسی کنید و دوباره امتحان کنید."
+        "no_audio_input_description": "ما میکروفونی در دستگاه شما پیدا نکردیم. لطفاً تنظیمات خود را بررسی کنید و دوباره امتحان کنید.",
+        "transfer_consult_first_label": "ابتدا مشورت کنید"
     },
-    "Other": "دیگر",
     "room_settings": {
         "permissions": {
             "m.room.avatar": "تغییر نمایه اتاق",
@@ -1997,7 +1723,12 @@
             "canonical_alias_field_label": "آدرس اصلی",
             "avatar_field_label": "آواتار اتاق",
             "aliases_no_items_label": "آدرس دیگری منتشر نشده است، در زیر اضافه کنید",
-            "aliases_items_label": "دیگر آدرس‌های منتشر شده:"
+            "aliases_items_label": "دیگر آدرس‌های منتشر شده:",
+            "alias_heading": "آدرس اتاق",
+            "alias_field_safe_localpart_invalid": "برخی از کاراکترها مجاز نیستند",
+            "alias_field_taken_valid": "این آدرس برای استفاده در دسترس است",
+            "alias_field_taken_invalid_domain": "این آدرس قبلاً استفاده شده‌است",
+            "alias_field_placeholder_default": "به عنوان مثال، my-room"
         },
         "advanced": {
             "unfederated": "این اتاق توسط سرورهای ماتریکس در دسترس نیست",
@@ -2005,7 +1736,22 @@
             "room_predecessor": "پیام‌های قدیمی اتاق %(roomName)s را مشاهده کنید.",
             "room_version_section": "نسخه‌ی اتاق",
             "room_version": "نسخه‌ی اتاق:",
-            "information_section_room": "اطلاعات اتاق"
+            "information_section_room": "اطلاعات اتاق",
+            "error_upgrade_title": "اتاق ارتقاء نیافت",
+            "error_upgrade_description": "متاسفانه فرآیند ارتقاء اتاق به پایان نرسید",
+            "upgrade_button": "این اتاق را به نسخه %(version)s ارتقا دهید",
+            "upgrade_dialog_title": "ارتقاء نسخه‌ی اتاق",
+            "upgrade_dialog_description": "ارتقاء این اتاق نیازمند بستن نسخه‌ی فعلی و ساختن درجای یک اتاق جدید است. برای داشتن بهترین تجربه‌ی کاربری ممکن، ما:",
+            "upgrade_dialog_description_1": "یک اتاق جدید با همان نام ، توضیحات و نمایه ایجاد کنید",
+            "upgrade_dialog_description_2": "برای اشاره به اتاق جدید، نام‌های مستعار (aliases) اتاق محلی را به‌روز کنید",
+            "upgrade_dialog_description_3": "از گفتگوی کاربران در نسخه قدیمی اتاق جلوگیری کرده و با ارسال پیامی به کاربران توصیه کنید به اتاق جدید منتقل شوند",
+            "upgrade_dialog_description_4": "در ابتدای اتاق جدید پیوندی به اتاق قدیمی قرار دهید تا افراد بتوانند پیام‌های موجود در اتاق قدیمی را ببینند",
+            "upgrade_warning_dialog_title_private": "ارتقاء اتاق خصوصی",
+            "upgrade_dwarning_ialog_title_public": "ارتقاء اتاق عمومی",
+            "upgrade_warning_dialog_report_bug_prompt": "این معمولاً فقط بر نحوه پردازش اتاق در سرور تأثیر می‌گذارد. اگر با %(brand)s خود مشکلی دارید ، لطفاً یک اشکال گزارش دهید.",
+            "upgrade_warning_dialog_report_bug_prompt_link": "این معمولاً فقط بر نحوه پردازش اتاق در سرور تأثیر می‌گذارد. اگر با %(brand)s خود مشکلی دارید، لطفاً <a>اشکال را گزارش کنید</a>.",
+            "upgrade_warning_dialog_description": "به‌روزرسانی اتاق اقدامی پیشرفته بوده و معمولاً در صورتی توصیه می‌شود که اتاق به دلیل اشکالات، فقدان قابلیت‌ها یا آسیب پذیری‌های امنیتی، پایدار و قابل استفاده نباشد.",
+            "upgrade_warning_dialog_footer": "این اتاق را از <oldVersion /> به <newVersion /> ارتقا خواهید داد."
         },
         "upload_avatar_label": "بارگذاری نمایه",
         "bridges": {
@@ -2018,7 +1764,9 @@
             "notification_sound": "صدای اعلان",
             "custom_sound_prompt": "تنظیم صدای دلخواه جدید",
             "browse_button": "جستجو"
-        }
+        },
+        "title": "تنظیمات اتاق - %(roomName)s",
+        "alias_not_specified": "مشخص نشده"
     },
     "encryption": {
         "verification": {
@@ -2060,7 +1808,19 @@
             "prompt_user": "دوباره تأیید را از نمایه آنها شروع کنید.",
             "timed_out": "مهلت تأیید تمام شد.",
             "cancelled_user": "%(displayName)s تایید هویت را لغو کرد.",
-            "cancelled": "شما تأیید هویت را لغو کردید."
+            "cancelled": "شما تأیید هویت را لغو کردید.",
+            "incoming_sas_user_dialog_text_1": "این کاربر را تأیید کنید تا به عنوان کاربر مورد اعتماد علامت‌گذاری شود. اعتماد به کاربران آرامش و اطمینان بیشتری به شما در استفاده از رمزنگاری سرتاسر می‌دهد.",
+            "incoming_sas_user_dialog_text_2": "با تأیید این کاربر ، نشست وی به عنوان مورد اعتماد علامت‌گذاری شده و همچنین نشست شما به عنوان مورد اعتماد برای وی علامت‌گذاری خواهد شد.",
+            "incoming_sas_device_dialog_text_1": "این دستگاه را تأیید کنید تا به عنوان مورد اعتماد علامت‌گذاری شود. اعتماد به این دستگاه در هنگام استفاده از رمزنگاری سرتاسر آرامش و اطمینان بیشتری را برای شما به ارمغان می‌آورد.",
+            "incoming_sas_device_dialog_text_2": "با تأیید این دستگاه، آن را به عنوان مورد اعتماد علامت‌گذاری کرده و کاربرانی که شما را تأیید کرده اند، به این دستگاه اعتماد خواهند کرد.",
+            "incoming_sas_dialog_title": "درخواست تأیید دریافتی",
+            "manual_device_verification_self_text": "از طریق مقایسه‌ی این با تنظیمات کاربری در نشست‌های دیگرتان، تائيد کنید:",
+            "manual_device_verification_user_text": "این نشست کاربر را از طریق مقایسه‌ی این با تنظیمات کاربری تائيد کنید:",
+            "manual_device_verification_device_name_label": "نام نشست",
+            "manual_device_verification_device_id_label": "شناسه‌ی نشست",
+            "manual_device_verification_device_key_label": "کلید نشست",
+            "manual_device_verification_footer": "اگر آنها مطابقت نداشته‌باشند ، ممکن است امنیت ارتباطات شما به خطر افتاده باشد.",
+            "verification_dialog_title_user": "درخواست تأیید"
         },
         "old_version_detected_title": "داده‌های رمزنگاری قدیمی شناسایی شد",
         "old_version_detected_description": "داده هایی از نسخه قدیمی %(brand)s شناسایی شده است. این امر باعث اختلال در رمزنگاری سرتاسر در نسخه قدیمی شده است. پیام های رمزگذاری شده سرتاسر که اخیراً رد و بدل شده اند ممکن است با استفاده از نسخه قدیمی رمزگشایی نشوند. همچنین ممکن است پیام های رد و بدل شده با این نسخه با مشکل مواجه شود. اگر مشکلی رخ داد، از سیستم خارج شوید و مجددا وارد شوید. برای حفظ سابقه پیام، کلیدهای خود را خروجی گرفته و دوباره وارد کنید.",
@@ -2110,7 +1870,54 @@
         "cross_signing_room_warning": "فردی از یک نشست ناشناس استفاده می‌کند",
         "cross_signing_room_verified": "همه‌ی اعضای این اتاق تائید شده‌اند",
         "cross_signing_room_normal": "این اتاق به صورت سرتاسر رمزشده است",
-        "unsupported": "این کلاینت از رمزگذاری سرتاسر پشتیبانی نمی کند."
+        "unsupported": "این کلاینت از رمزگذاری سرتاسر پشتیبانی نمی کند.",
+        "incompatible_database_sign_out_description": "برای جلوگیری از دست دادن تاریخچه‌ی گفتگوی خود باید قبل از ورود به برنامه ، کلیدهای اتاق خود را استخراج (Export) کنید. برای این کار باید از نسخه جدیدتر %(brand)s استفاده کنید",
+        "incompatible_database_description": "شما قبلاً با این نشست از نسخه جدیدتر %(brand)s استفاده کرده‌اید. برای استفاده مجدد از این نسخه با قابلیت رمزنگاری سرتاسر ، باید از حسابتان خارج شده و دوباره وارد برنامه شوید.",
+        "incompatible_database_title": "پایگاه داده ناسازگار",
+        "incompatible_database_disable": "با رمزنگاری غیرفعال ادامه بده",
+        "key_signature_upload_completed": "بارگذاری انجام شد",
+        "key_signature_upload_cancelled": "بارگذاری امضا لغو شد",
+        "key_signature_upload_failed": "بارگذاری امکان پذیر نیست",
+        "key_signature_upload_success_title": "موفقیت در بارگذاری امضا",
+        "key_signature_upload_failed_title": "بارگذاری امضا انجام نشد",
+        "udd": {
+            "own_new_session_text": "شما وارد یک نشست جدید شده‌اید بدون اینکه آن را تائید کنید:",
+            "own_ask_verify_text": "نست دیگر خود را با استفاده از یکی از راهکارهای زیر تأیید کنید.",
+            "other_new_session_text": "%(name)s (%(userId)s) وارد یک نشست جدید شد بدون اینکه آن را تائید کند:",
+            "other_ask_verify_text": "از این کاربر بخواهید نشست خود را تأیید کرده و یا آن را به صورت دستی تأیید کنید.",
+            "title": "قابل اعتماد نیست"
+        },
+        "access_secret_storage_dialog": {
+            "key_validation_text": {
+                "wrong_file_type": "نوع فایل اشتباه است",
+                "recovery_key_is_correct": "به نظر خوب میاد!",
+                "wrong_security_key": "کلید امنیتی اشتباه است",
+                "invalid_security_key": "کلید امنیتی نامعتبر است"
+            },
+            "reset_title": "همه چیز را بازراه‌اندازی (reset) کنید",
+            "reset_warning_1": "این کار را فقط درصورتی انجام دهید که دستگاه دیگری برای تکمیل فرآیند تأیید ندارید.",
+            "reset_warning_2": "اگر همه موارد را بازراه‌اندازی (reset) کنید، دیگر هیچ نشست تائید شده‌ای و هیچ کاربر تائيد‌ شده‌ای نخواهید داشت و ممکن است نتوانید پیام‌های گذشته‌ی خود را مشاهده نمائید.",
+            "security_phrase_title": "عبارت امنیتی",
+            "security_phrase_incorrect_error": "دسترسی به حافظه نهان امکان‌پذیر نیست. لطفاً تأیید کنید که عبارت امنیتی صحیح را وارد کرده‌اید.",
+            "enter_phrase_or_key_prompt": "عبارت امنیتی خود را وارد کنید و یا <button>کلید امنیتی خود را استفاده کنید</button>.",
+            "security_key_title": "کلید امنیتی",
+            "use_security_key_prompt": "برای ادامه از کلید امنیتی خود استفاده کنید.",
+            "restoring": "بازیابی کلیدها از نسخه پشتیبان"
+        },
+        "reset_all_button": "همه روش‌های بازیابی را فراموش کرده یا از دست داده‌اید؟ <a>بازراه‌اندازی (reset) همه</a>",
+        "destroy_cross_signing_dialog": {
+            "title": "کلیدهای امضای متقابل نابود شود؟",
+            "warning": "حذف کلیدهای امضای متقابل دائمی است. هرکسی که او را تائید کرده‌باشید، هشدارهای امنیتی را مشاهده خواهد کرد. به احتمال زیاد نمی‌خواهید این کار را انجام دهید ، مگر هیچ دستگاهی برای امضاء متقابل از طریق آن نداشته باشید.",
+            "primary_button_text": "کلیدهای امضای متقابل را پاک کن"
+        },
+        "confirm_encryption_setup_title": "راه‌اندازی رمزگذاری را تأیید کنید",
+        "confirm_encryption_setup_body": "برای تأیید و فعال‌سازی رمزگذاری ، روی دکمه زیر کلیک کنید.",
+        "unable_to_setup_keys_error": "تنظیم کلیدها امکان پذیر نیست",
+        "key_signature_upload_failed_master_key_signature": "یک شاه‌کلید جدید",
+        "key_signature_upload_failed_cross_signing_key_signature": "یک کلید امضای متقابل جدید",
+        "key_signature_upload_failed_device_cross_signing_key_signature": "کلید امضای متقابل یک دستگاه",
+        "key_signature_upload_failed_key_signature": "یک امضای کلیدی",
+        "key_signature_upload_failed_body": "%(brand)s در حین بارگذاری این دچار مشکل شد:"
     },
     "emoji": {
         "category_frequently_used": "متداول",
@@ -2220,7 +2027,10 @@
             "fallback_button": "آغاز فرآیند احراز هویت",
             "sso_title": "برای ادامه، از ورود یکپارچه استفاده کنید",
             "sso_body": "برای تأیید هویتتان، این نشانی رایانامه را با ورود یکپارچه تأیید کنید.",
-            "code": "کد"
+            "code": "کد",
+            "sso_preauth_body": "برای ادامه از احراز هویت یکپارچه جهت اثبات هویت خود استفاده نمائید.",
+            "sso_postauth_title": "برای ادامه تأیید کنید",
+            "sso_postauth_body": "برای تأیید هویت خود بر روی دکمه زیر کلیک کنید."
         },
         "password_field_label": "گذرواژه را وارد کنید",
         "password_field_strong_label": "احسنت، گذرواژه‌ی انتخابی قوی است!",
@@ -2261,7 +2071,40 @@
         },
         "country_dropdown": "لیست کشور",
         "common_failures": {},
-        "captcha_description": "این سرور می خواهد مطمئن شود که شما یک ربات نیستید."
+        "captcha_description": "این سرور می خواهد مطمئن شود که شما یک ربات نیستید.",
+        "autodiscovery_invalid": "پاسخ جستجوی سرور معتبر نیست",
+        "autodiscovery_generic_failure": "دریافت پیکربندیِ جستجوی خودکار از سرور موفقیت‌آمیز نبود",
+        "autodiscovery_invalid_hs_base_url": "base_url نامعتبر برای m.homeserver",
+        "autodiscovery_invalid_hs": "به نظر می‌رسد که آدرس سرور، متعلق به یک سرور معتبر نباشد",
+        "autodiscovery_invalid_is_base_url": "base_url نامعتبر برای سرور m.identity_server",
+        "autodiscovery_invalid_is": "به نظر می‌رسد آدرس سرور هویت‌سنجی، متعلق به یک سرور هویت‌سنجی معتبر نیست",
+        "autodiscovery_invalid_is_response": "پاسخ نامعتبر برای جستجوی سرور هویت‌سنجی",
+        "server_picker_description_matrix.org": "به بزرگترین سرور عمومی با میلیون ها نفر کاربر بپیوندید",
+        "server_picker_title_default": "گزینه های سرور",
+        "soft_logout": {
+            "clear_data_title": "همه داده‌های این نشست پاک شود؟",
+            "clear_data_description": "پاک کردن همه داده های این جلسه غیرقابل بازگشت است. پیامهای رمزگذاری شده از بین می‌روند مگر اینکه از کلیدهای آنها پشتیبان تهیه شده باشد.",
+            "clear_data_button": "پاک کردن همه داده ها"
+        },
+        "logout_dialog": {
+            "setup_secure_backup_description_1": "پیام‌های رمزشده با رمزنگاری سرتاسر ایمن می‌شوند. فقط شما و طرف گیرنده(ها) کلیدهای خواندن این پیام ها را در اختیار دارید.",
+            "setup_secure_backup_description_2": "وقتی از سیستم خارج می‌شوید، این کلیدها از این دستگاه حذف می‌شوند، به این معنی که نمی‌توانید پیام‌های رمزگذاری‌شده را بخوانید مگر اینکه کلیدهای آن‌ها را در دستگاه‌های دیگر خود داشته باشید یا از آنها در سرور نسخه پشتیبان تهیه کنید.",
+            "use_key_backup": "شروع استفاده از نسخه‌ی پشتیبان کلید",
+            "skip_key_backup": "پیام‌های رمزشده‌ی خود را نمی‌خواهم",
+            "megolm_export": "کلیدها را به صورت دستی استخراج (Export)کن",
+            "setup_key_backup_title": "دسترسی به پیام‌های رمزشده‌ی خود را از دست خواهید داد",
+            "description": "آیا مطمئن هستید که می خواهید از برنامه خارج شوید؟"
+        },
+        "registration": {
+            "continue_without_email_title": "ادامه بدون ایمیل",
+            "continue_without_email_description": "حواستان را جمع کنید، اگر ایمیلی اضافه نکرده و گذرواژه‌ی خود را فراموش کنید ، ممکن است <b>دسترسی به حساب کاربری خود را برای همیشه از دست دهید</b>.",
+            "continue_without_email_field_label": "ایمیل (اختیاری)"
+        },
+        "set_email": {
+            "verification_pending_title": "در انتظار تائید",
+            "verification_pending_description": "لطفاً ایمیل خود را بررسی کرده و روی لینکی که برایتان ارسال شده، کلیک کنید. پس از انجام این کار، روی ادامه کلیک کنید.",
+            "description": "با این کار می‌توانید گذرواژه خود را تغییر داده و اعلان‌ها را دریافت کنید."
+        }
     },
     "room_list": {
         "sort_unread_first": "ابتدا اتاق های با پیام خوانده نشده را نمایش بده",
@@ -2286,7 +2129,8 @@
     "report_content": {
         "missing_reason": "لطفا توضیح دهید که چرا گزارش می‌دهید.",
         "report_content_to_homeserver": "گزارش محتوا به مدیر سرور خود",
-        "description": "گزارش این پیام شناسه‌ی منحصر به فرد رخداد آن را برای مدیر سرور ارسال می‌کند. اگر پیام‌های این اتاق رمزشده باشند، مدیر سرور شما امکان خواندن متن آن پیام یا مشاهده‌ی عکس یا فایل‌های دیگر را نخواهد داشت."
+        "description": "گزارش این پیام شناسه‌ی منحصر به فرد رخداد آن را برای مدیر سرور ارسال می‌کند. اگر پیام‌های این اتاق رمزشده باشند، مدیر سرور شما امکان خواندن متن آن پیام یا مشاهده‌ی عکس یا فایل‌های دیگر را نخواهد داشت.",
+        "other_label": "دیگر"
     },
     "onboarding": {
         "has_avatar_label": "احسنت، با این کار شما به سایر افراد کمک می‌کنید که شما را بشناسند",
@@ -2405,7 +2249,22 @@
         "added_by": "ابزارک اضافه شده توسط",
         "cookie_warning": "این ابزارک ممکن است از کوکی استفاده کند.",
         "popout": "بیرون انداختن ابزارک",
-        "set_room_layout": "چیدمان اتاق من را برای همه تنظیم کن"
+        "set_room_layout": "چیدمان اتاق من را برای همه تنظیم کن",
+        "modal_title_default": "ابزارک کمکی",
+        "modal_data_warning": "داده‌های این صفحه با %(widgetDomain)s به اشتراک گذاشته می‌شود",
+        "capabilities_dialog": {
+            "title": "دسترسی‌های ابزارک را تائید کنید",
+            "content_starting_text": "این ابزارک تمایل دارد:",
+            "decline_all_permission": "رد کردن همه",
+            "remember_Selection": "انتخاب من برای این ابزارک را بخاطر بسپار"
+        },
+        "open_id_permissions_dialog": {
+            "title": "به این ابزارک اجازه دهید هویت شما را تأیید کند",
+            "starting_text": "ابزارک شناسه‌ی کاربری شما را تائید خواهد کرد، اما نمی‌تواند این کارها را برای شما انجام دهد:",
+            "remember_selection": "این را به یاد داشته باش"
+        },
+        "error_unable_start_audio_stream_description": "شروع پخش جریان صدا امکان‌پذیر نیست.",
+        "error_unable_start_audio_stream_title": "آغاز livestream با شکست همراه بود"
     },
     "feedback": {
         "sent": "بازخورد ارسال شد",
@@ -2413,7 +2272,8 @@
         "platform_username": "سیستم‌عامل و نام کاربری شما ثبت خواهد شد تا به ما کمک کند تا جایی که می توانیم از نظرات شما استفاده کنیم.",
         "pro_type": "نکته‌ای برای کاربران حرفه‌ای: اگر به مشکل نرم‌افزاری در برنامه برخورد کردید، لطفاً <debugLogsLink>لاگ‌های مشکل</debugLogsLink> را ارسال کنید تا به ما در ردیابی و رفع آن کمک کند.",
         "existing_issue_link": "لطفاً ابتدا اشکالات موجود را در <existingIssuesLink>گیتهاب برنامه</existingIssuesLink> را مشاهده کنید. با اشکال شما مطابقتی وجود ندارد؟<newIssueLink> مورد جدیدی را ثبت کنید</newIssueLink>.",
-        "send_feedback_action": "ارسال بازخورد"
+        "send_feedback_action": "ارسال بازخورد",
+        "can_contact_label": "در صورت داشتن هرگونه سوال پیگیری ممکن است با من تماس بگیرید"
     },
     "zxcvbn": {
         "suggestions": {
@@ -2472,7 +2332,10 @@
         "error_encountered": "خطای رخ داده (%(errorDetail)s).",
         "no_update": "هیچ به روزرسانی جدیدی موجود نیست.",
         "new_version_available": "نسخه‌ی جدید موجود است. <a>هم‌اکنون به‌روزرسانی کنید.</a>",
-        "check_action": "بررسی برای به‌روزرسانی جدید"
+        "check_action": "بررسی برای به‌روزرسانی جدید",
+        "error_unable_load_commit": "بارگیری جزئیات commit انجام نشد: %(msg)s",
+        "unavailable": "غیرقابل‌دسترسی",
+        "changelog": "تغییراتِ به‌وجودآمده"
     },
     "theme": {
         "light_high_contrast": "بالاترین کنتراست قالب روشن"
@@ -2498,7 +2361,20 @@
         "invite_this_space": "به این فضای کاری دعوت کنید",
         "user_lacks_permission": "شما دسترسی ندارید",
         "search_placeholder": "جستجوی نام‌ها و توضیحات",
-        "no_search_result_hint": "ممکن است بخواهید یک جستجوی دیگر انجام دهید یا غلط‌های املایی را بررسی کنید."
+        "no_search_result_hint": "ممکن است بخواهید یک جستجوی دیگر انجام دهید یا غلط‌های املایی را بررسی کنید.",
+        "add_existing_room_space": {
+            "error_heading": "همه‌ی موارد انتخاب شده، اضافه نشدند",
+            "progress_text": {
+                "one": "در حال افزودن اتاق‌ها...",
+                "other": "در حال افزودن اتاق‌ها... (%(progress)s از %(count)s)"
+            },
+            "dm_heading": "پیام مستقیم",
+            "space_dropdown_label": "انتخاب فضای کاری",
+            "space_dropdown_title": "افزودن اتاق‌های موجود",
+            "create": "آیا می‌خواهید یک اتاق جدید را بیفزایید؟",
+            "create_prompt": "ایجاد اتاق جدید"
+        },
+        "leave_dialog_action": "ترک محیط"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "این سرور خانگی برای نمایش نقشه تنظیم نشده است.",
@@ -2508,7 +2384,8 @@
         "find_my_location": "پیدا کردن مکان",
         "location_not_available": "مکان در دسترس نیست",
         "mapbox_logo": "لوگوی جعبه نقشه",
-        "reset_bearing": "بازنشانی جهت شمال"
+        "reset_bearing": "بازنشانی جهت شمال",
+        "close_sidebar": "بستن نوارکناری"
     },
     "labs_mjolnir": {
         "room_name": "لیست تحریم‌های من",
@@ -2571,7 +2448,8 @@
         "setup_rooms_community_description": "بیایید برای هر یک از آنها یک اتاق درست کنیم.",
         "setup_rooms_description": "بعداً می توانید موارد بیشتری را اضافه کنید ، از جمله موارد موجود.",
         "label": "ساختن یک محیط",
-        "add_details_prompt_2": "شما می‌توانید این را هر زمان که خواستید، تغییر دهید."
+        "add_details_prompt_2": "شما می‌توانید این را هر زمان که خواستید، تغییر دهید.",
+        "subspace_dropdown_title": "ساختن یک محیط"
     },
     "user_menu": {
         "switch_theme_light": "انتخاب حالت روشن",
@@ -2675,12 +2553,26 @@
         "search": {
             "this_room": "این گپ",
             "all_rooms": "همه‌ی گپ‌ها",
-            "field_placeholder": "جستجو…"
+            "field_placeholder": "جستجو…",
+            "result_count": {
+                "one": "(~%(count)s نتیجه)",
+                "other": "(~%(count)s نتیجه)"
+            }
         },
         "jump_to_bottom_button": "به جدیدترین پیام‌ها بروید",
         "jump_read_marker": "رفتن به اولین پیام خوانده نشده.",
         "inviter_unknown": "ناشناخته",
-        "failed_reject_invite": "رد دعوتنامه با شکست همراه شد"
+        "failed_reject_invite": "رد دعوتنامه با شکست همراه شد",
+        "face_pile_tooltip_label": {
+            "one": "نمایش ۱ عضو",
+            "other": "نمایش همه %(count)s عضو"
+        },
+        "face_pile_tooltip_shortcut": "شامل %(commaSeparatedMembers)s",
+        "invites_you_text": "<inviter/> شما را دعوت کرد",
+        "face_pile_summary": {
+            "one": "%(count)s نفر از افرادی که می شناسید قبلاً پیوسته‌اند",
+            "other": "%(count)s نفر از افرادی که می شناسید قبلاً به آن پیوسته‌اند"
+        }
     },
     "file_panel": {
         "guest_note": "برای استفاده از این قابلیت باید <a>ثبت نام</a> کنید",
@@ -2701,7 +2593,9 @@
         "identity_server_no_terms_title": "سرور هویت هیچگونه شرایط خدمات ندارد",
         "identity_server_no_terms_description_1": "این اقدام نیاز به دسترسی به سرور هویت‌سنجی پیش‌فرض <server /> برای تایید آدرس ایمیل یا شماره تماس دارد، اما کارگزار هیچ گونه شرایط خدماتی (terms of service) ندارد.",
         "identity_server_no_terms_description_2": "تنها در صورتی که به صاحب سرور اطمینان دارید، ادامه دهید.",
-        "inline_intro_text": "برای ادامه <policyLink /> را بپذیرید:"
+        "inline_intro_text": "برای ادامه <policyLink /> را بپذیرید:",
+        "summary_identity_server_1": "دیگران را از طریق تلفن یا ایمیل پیدا کنید",
+        "summary_identity_server_2": "از طریق تلفن یا ایمیل پیدا شوید"
     },
     "poll": {
         "failed_send_poll_title": "ارسال نظرسنجی انجام نشد",
@@ -2753,7 +2647,31 @@
         "error_version_unsupported_space": "نسخه فضای شما با سرور خانگی کاربر سازگاری ندارد.",
         "error_version_unsupported_room": "سرور کاربر از نسخه‌ی اتاق پشتیبانی نمی‌کند.",
         "error_unknown": "خطای ناشناخته از سمت سرور",
-        "to_space": "دعوت به %(spaceName)s"
+        "to_space": "دعوت به %(spaceName)s",
+        "unable_find_profiles_description_default": "برای شناسه‌های ماتریکس زیر، پروفایلی پیدا نشد - آیا به هر حال می خواهید آنها را دعوت کنید؟",
+        "unable_find_profiles_title": "کاربران زیر ممکن است وجود نداشته باشند",
+        "unable_find_profiles_invite_never_warn_label_default": "به هر حال دعوت کن و دیگر هرگز به من هشدار نده",
+        "unable_find_profiles_invite_label_default": "به هر حال دعوت کن",
+        "email_caption": "دعوت از طریق ایمیل",
+        "error_dm": "نتوانستیم گفتگوی خصوصی مد نظرتان را ایجاد کنیم.",
+        "error_find_room": "در تلاش برای دعوت از کاربران مشکلی پیش آمد.",
+        "error_invite": "ما نتوانستیم آن کاربران را دعوت کنیم. لطفاً کاربرانی را که می خواهید دعوت کنید بررسی کرده و دوباره امتحان کنید.",
+        "error_transfer_multiple_target": "تماس فقط می تواند به یک کاربر منتقل شود.",
+        "error_find_user_title": "این کاربران یافت نشدند",
+        "error_find_user_description": "این کاربران ممکن است وجود نداشته یا نامعتبر باشند و نمی‌توان آنها را دعوت کرد: %(csvNames)s",
+        "recents_section": "گفتگوهای اخیر",
+        "suggestions_section": "گفتگوهای خصوصی اخیر",
+        "email_use_default_is": "از یک سرور هویت‌سنجی برای دعوت از طریق ایمیل استفاده کنید. <default>از پیش فرض (%(defaultIdentityServerName)s) استفاده کنید</default> یا آن را در بخش <settings>تنظیمات</settings> مدیریت کنید.",
+        "email_use_is": "از یک سرور هویت‌سنجی برای دعوت از طریق ایمیل استفاده کنید. اینکار را می‌توانید از طریق بخش <settings>تنظیمات</settings> انجام دهید.",
+        "start_conversation_name_email_mxid_prompt": "با استفاده از نام، آدرس ایمیل و یا نام کاربری (مانند <userId/>)، یک گفتگوی جدید را شروع کنید.",
+        "start_conversation_name_mxid_prompt": "با استفاده از نام یا نام کاربری (مانند <userId/>)، گفتگوی جدیدی را با دیگران شروع کنید.",
+        "to_room": "دعوت به %(roomName)s",
+        "name_email_mxid_share_space": "با استفاده از نام ، آدرس ایمیل ، نام کاربری (مانند <userId/>) کسی را دعوت کرده یا <a>این فضای کاری را به اشتراک بگذارید</a>.",
+        "name_mxid_share_space": "با استفاده از نام یا نام کاربری (مانند <userId/>) از افراد دعوت کرده و یا <a>این فضای کاری را به اشتراک بگذارید</a>.",
+        "name_email_mxid_share_room": "با استفاده از نام، آدرس ایمیل، نام کاربری (مانند <userId/>) از فردی دعوت کرده و یا <a>این اتاق را به اشتراک بگذارید</a>.",
+        "name_mxid_share_room": "با استفاده از نام یا نام کاربری (مانند <userId/>) از افراد دعوت کرده و یا <a>این اتاق را به اشتراک بگذارید</a>.",
+        "key_share_warning": "افراد دعوت‌شده خواهند توانست پیام‌های قدیمی را بخوانند.",
+        "transfer_dial_pad_tab": "صفحه شماره‌گیری"
     },
     "scalar": {
         "error_create": "ایجاد ابزارک امکان پذیر نیست.",
@@ -2782,7 +2700,21 @@
         "failed_copy": "خطا در گرفتن رونوشت",
         "something_went_wrong": "مشکلی پیش آمد!",
         "update_power_level": "تغییر سطح قدرت انجام نشد",
-        "unknown": "خطای ناشناخته"
+        "unknown": "خطای ناشناخته",
+        "dialog_description_default": "خطایی رخ داده است.",
+        "edit_history_unsupported": "به نظر نمی‌رسد که سرور شما از این قابلیت پشتیبانی کند.",
+        "session_restore": {
+            "clear_storage_description": "خروج از حساب کاربری و حذف کلیدهای رمزنگاری؟",
+            "clear_storage_button": "فضای ذخیره‌سازی را پاک کرده و از حساب کاربری خارج شوید",
+            "title": "امکان بازیابی نشست وجود ندارد",
+            "description_1": "هنگام تلاش برای بازیابی نشست قبلی شما، با خطایی روبرو شدیم.",
+            "description_2": "اگر در گذشته از نسخه جدیدتر %(brand)s استفاده کرده‌اید ، نشست شما ممکن است با این نسخه ناسازگار باشد. این پنجره را بسته و به نسخه جدیدتر برگردید.",
+            "description_3": "پاک کردن فضای ذخیره‌سازی مرورگر ممکن است این مشکل را برطرف کند ، اما شما را از برنامه خارج کرده و باعث می‌شود هرگونه سابقه گفتگوی رمزشده غیرقابل خواندن باشد."
+        },
+        "storage_evicted_title": "داده‌های نشست از دست رفته است",
+        "storage_evicted_description_1": "برخی از داده‌های نشست ، از جمله کلیدهای رمزنگاری پیام‌ها موجود نیست. برای برطرف کردن این مشکل از برنامه خارج شده و مجددا وارد شوید و از کلیدها را از نسخه‌ی پشتیبان بازیابی نمائيد.",
+        "storage_evicted_description_2": "هنگام کمبود فضای دیسک ، مرورگر شما این داده ها را حذف می کند.",
+        "unknown_error_code": "کد خطای ناشناخته"
     },
     "in_space1_and_space2": "در فضای %(space1Name)s و %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -2896,7 +2828,25 @@
         "deactivate_confirm_description": "با غیرفعال کردن این کاربر، او از سیستم خارج شده و از ورود مجدد وی جلوگیری می‌شود. علاوه بر این، او تمام اتاق هایی را که در آن هست ترک می کند. این عمل قابل برگشت نیست. آیا مطمئن هستید که می خواهید این کاربر را غیرفعال کنید؟",
         "deactivate_confirm_action": "غیرفعال کردن کاربر",
         "error_deactivate": "غیرفعال کردن کاربر انجام نشد",
-        "edit_own_devices": "ویرایش دستگاه‌ها"
+        "edit_own_devices": "ویرایش دستگاه‌ها",
+        "redact": {
+            "no_recent_messages_title": "هیچ پیام جدیدی برای %(user)s یافت نشد",
+            "no_recent_messages_description": "در پیام‌ها بالا بروید تا ببینید آیا موارد قدیمی وجود دارد یا خیر.",
+            "confirm_title": "حذف پیام‌های اخیر %(user)s",
+            "confirm_description_2": "برای مقدار زیادی پیام ممکن است مدتی طول بکشد. لطفا در این بین مرورگر خود را refresh نکنید.",
+            "confirm_button": {
+                "one": "حذف ۱ پیام",
+                "other": "حذف %(count)s پیام"
+            }
+        },
+        "count_of_verified_sessions": {
+            "one": "1 نشست تأیید شده",
+            "other": "%(count)s نشست تایید شده"
+        },
+        "count_of_sessions": {
+            "one": "%(count)s نشست",
+            "other": "%(count)s نشست"
+        }
     },
     "stickers": {
         "empty": "شما در حال حاضر هیچ بسته برچسب فعالی ندارید",
@@ -2943,12 +2893,120 @@
         "error_loading_user_profile": "امکان نمایش پروفایل کاربر میسر نیست"
     },
     "cant_load_page": "نمایش صفحه امکان‌پذیر نبود",
-    "Invalid homeserver discovery response": "پاسخ جستجوی سرور معتبر نیست",
-    "Failed to get autodiscovery configuration from server": "دریافت پیکربندیِ جستجوی خودکار از سرور موفقیت‌آمیز نبود",
-    "Invalid base_url for m.homeserver": "base_url نامعتبر برای m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "به نظر می‌رسد که آدرس سرور، متعلق به یک سرور معتبر نباشد",
-    "Invalid identity server discovery response": "پاسخ نامعتبر برای جستجوی سرور هویت‌سنجی",
-    "Invalid base_url for m.identity_server": "base_url نامعتبر برای سرور m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "به نظر می‌رسد آدرس سرور هویت‌سنجی، متعلق به یک سرور هویت‌سنجی معتبر نیست",
-    "General failure": "خطای عمومی"
+    "General failure": "خطای عمومی",
+    "emoji_picker": {
+        "cancel_search_label": "لغو جستجو"
+    },
+    "info_tooltip_title": "اطلاعات",
+    "language_dropdown_label": "منو زبان",
+    "seshat": {
+        "warning_kind_files_app": "برای مشاهده همه پرونده های رمز شده از <a>نسخه دسکتاپ</a> استفاده کنید",
+        "warning_kind_search_app": "برای جستجوی میان پیام‌های رمز شده از <a>نسخه دسکتاپ</a> استفاده کنید",
+        "warning_kind_files": "این نسخه از %(brand)s از مشاهده برخی از پرونده های رمزگذاری شده پشتیبانی نمی کند",
+        "warning_kind_search": "این نسخه از %(brand)s از جستجوی پیام های رمزگذاری شده پشتیبانی نمی کند",
+        "reset_title": "پاک‌کردن مخزن رخداد؟",
+        "reset_description": "به احتمال زیاد نمی‌خواهید مخزن فهرست رویدادهای خود را حذف کنید",
+        "reset_explainer": "اگر این کار را انجام می‌دهید، لطفاً توجه داشته باشید که هیچ یک از پیام‌های شما حذف نمی‌شوند ، با این حال چون پیام‌ها مجددا ایندکس می‌شوند، ممکن است برای چند لحظه قابلیت جستجو با مشکل مواجه شود",
+        "reset_button": "پاک‌کردن مخزن رخداد"
+    },
+    "truncated_list_n_more": {
+        "other": "و %(count)s مورد بیشتر ..."
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_required_invalid": "نام سرور را وارد کنید",
+            "network_dropdown_available_valid": "به نظر خوب میاد",
+            "network_dropdown_available_invalid_forbidden": "شما مجاز به مشاهده لیست اتاق‌های این سرور نمی‌باشید",
+            "network_dropdown_available_invalid": "این سرور و یا لیست اتاق‌های آن پیدا نمی شود",
+            "network_dropdown_your_server_description": "سرور شما",
+            "network_dropdown_add_dialog_title": "افزودن سرور جدید",
+            "network_dropdown_add_dialog_description": "نام سرور جدیدی که می خواهید در آن کاوش کنید را وارد کنید.",
+            "network_dropdown_add_dialog_placeholder": "نام سرور"
+        }
+    },
+    "dialog_close_label": "بستن گفتگو",
+    "redact": {
+        "error": "شما نمی‌توانید این پیام را پاک کنید. (%(code)s)",
+        "ongoing": "در حال حذف…",
+        "confirm_button": "تأیید حذف",
+        "reason_label": "دلیل (اختیاری)"
+    },
+    "forward": {
+        "sending": "در حال ارسال",
+        "send_label": "ارسال"
+    },
+    "integrations": {
+        "disabled_dialog_title": "پکپارچه‌سازی‌ها غیر فعال هستند",
+        "impossible_dialog_title": "یکپارچه‌سازی‌ها اجازه داده نشده‌اند",
+        "impossible_dialog_description": "%(brand)s شما اجازهٔ استفاده از یک مدیر یکپارچگی را برای این کار نمی دهد. لطفاً با مدیری تماس بگیرید."
+    },
+    "lazy_loading": {
+        "disabled_description1": "شما از %(brand)s بر روی %(host)s با قابلیت بارگیری اعضا به شکل تکه‌تکه استفاده می‌کنید. در این نسخه قابلیت بارگیری تکه‌تکه غیرفعال است. از آن‌جایی که حافظه‌ی کش مورد استفاده برای این دو پیکربندی با هم سازگار نیست، %(brand)s نیاز به همگام‌سازی مجدد حساب کاربری شما دارد.",
+        "disabled_description2": "اگر نسخه دیگری از %(brand)s هنوز در تب‌های دیگر باز است، لطفاً آن را ببندید زیرا استفاده از %(brand)s با قابلیت بارگیری تکه‌تکه‌ی فعال روی یکی و غیرفعال روی دیگری، باعث ایجاد مشکل می شود.",
+        "disabled_title": "حافظه‌ی محلی ناسازگار",
+        "disabled_action": "پاک کردن حافظه‌ی کش و همگام سازی مجدد",
+        "resync_description": "هم‌اکنون %(brand)s از طریق بارگیری و نمایش اطلاعات کاربران تنها در زمان‌هایی که نیاز است، حدود ۳ تا ۵ مرتبه حافظه‌ی کمتری استفاده می‌کند. لطفا تا همگام‌سازی با سرور منتظر بمانید!",
+        "resync_title": "به‌روزرسانی %(brand)s"
+    },
+    "message_edit_dialog_title": "ویرایش پیام",
+    "server_offline": {
+        "empty_timeline": "همه‌ی کارها را انجام دادید.",
+        "title": "سرور پاسخ نمی دهد",
+        "description": "سرور شما به برخی از درخواست‌ها پاسخ نمی‌دهد. در ادامه برخی از دلایل محتمل آن ذکر شده است.",
+        "description_1": "زمان پاسخگویی سرور (%(serverName)s) بسیار طولانی شده‌است.",
+        "description_2": "دیوار آتش یا آنتی‌ویروس شما مانع از ارسال درخواست می‌شود.",
+        "description_3": "پلاگینی در مرورگر مانع از ارسال درخواست می‌گردد.",
+        "description_4": "سرور آفلاین است.",
+        "description_5": "سرور درخواست شما را رد کرده است.",
+        "description_6": "منطقه شما در اتصال به اینترنت با مشکل روبرو است.",
+        "description_7": "هنگام تلاش برای اتصال به سرور خطایی رخ داده است.",
+        "description_8": "سرور طوری پیکربندی نشده تا نشان دهد مشکل چیست (CORS).",
+        "recent_changes_heading": "تغییرات اخیری که هنوز دریافت نشده‌اند"
+    },
+    "spotlight_dialog": {
+        "create_new_room_button": "ایجاد اتاق جدید"
+    },
+    "share": {
+        "title_room": "به اشتراک‌گذاری اتاق",
+        "permalink_most_recent": "پیوند به آخرین پیام",
+        "title_user": "به اشتراک‌گذاری کاربر",
+        "title_message": "به اشتراک گذاشتن پیام اتاق",
+        "permalink_message": "پیوند به پیام انتخاب شده"
+    },
+    "upload_file": {
+        "title_progress": "بارگذاری فایل‌ها (%(current)s از %(total)s)",
+        "title": "بارگذاری فایل‌ها",
+        "upload_all_button": "بارگذاری همه",
+        "error_file_too_large": "این فایل برای بارگذاری <b>بسیار بزرگ است</b>. محدودیت اندازه‌ی فایل برابر %(limit)s است اما حجم این فایل %(sizeOfThisFile)s.",
+        "error_files_too_large": "این فایل‌ها برای بارگذاری <b>بیش از حد بزرگ</b> هستند. محدودیت اندازه فایل %(limit)s است.",
+        "error_some_files_too_large": "برخی از فایل‌ها برای بارگذاری <b>بیش از حد بزرگ هستند</b>. محدودیت اندازه فایل %(limit)s است.",
+        "upload_n_others_button": {
+            "one": "بارگذاری %(count)s فایل دیگر",
+            "other": "بارگذاری %(count)s فایل دیگر"
+        },
+        "cancel_all_button": "لغو همه",
+        "error_title": "خطای بارگذاری"
+    },
+    "restore_key_backup_dialog": {
+        "load_error_content": "بارگیری و نمایش وضعیت نسخه‌ی پشتیبان امکان‌پذیر نیست",
+        "recovery_key_mismatch_title": "عدم تطابق کلید امنیتی",
+        "recovery_key_mismatch_description": "نسخه پشتیبان با این کلید امنیتی رمزگشایی نمی شود: لطفاً بررسی کنید که کلید امنیتی درست را وارد کرده اید.",
+        "incorrect_security_phrase_title": "عبارت امنیتی نادرست است",
+        "incorrect_security_phrase_dialog": "نسخه پشتیبان با این عبارت امنیتی رمزگشایی نمی‌شود: لطفاً بررسی کنید که عبارت امنیتی درست را وارد کرده اید.",
+        "restore_failed_error": "بازیابی نسخه پشتیبان امکان پذیر نیست",
+        "no_backup_error": "نسخه پشتیبان یافت نشد!",
+        "keys_restored_title": "کلیدها بازیابی شدند",
+        "count_of_decryption_failures": "رمزگشایی %(failedCount)s نشست موفقیت‌آمیز نبود!",
+        "count_of_successfully_restored_keys": "کلیدهای %(sessionCount)s با موفقیت بازیابی شدند",
+        "enter_phrase_title": "عبارت امنیتی را وارد کنید",
+        "key_backup_warning": "<b>هشدا</b>: پشتیبان گیری از کلید را فقط از یک رایانه مطمئن انجام دهید.",
+        "enter_phrase_description": "با وارد کردن عبارت امنیتی خود به سابقه پیام‌های رمز شدتان دسترسی پیدا کرده و پیام امن ارسال کنید.",
+        "phrase_forgotten_text": "اگر عبارت امنیتی خود را فراموش کرده اید، می توانید <button1>از کلید امنیتی خود استفاده کنید</button1> یا <button2>تنظیمات پشتیانی‌گیری را مجددا انجام دهید</button2>",
+        "enter_key_title": "کلید امنیتی را وارد کنید",
+        "key_is_valid": "به نظر می رسد این یک کلید امنیتی معتبر است!",
+        "key_is_invalid": "کلید امنیتی معتبری نیست",
+        "enter_key_description": "با وارد کردن کلید امنیتی خود به تاریخچه‌ی پیام‌‌های رمز شده خود دسترسی پیدا کرده و پیام امن ارسال کنید.",
+        "key_forgotten_text": "اگر کلید امنیتی خود را فراموش کرده‌اید ، می توانید <button>تنظیمات مجددا تنظیمات پشتیبان‌گیری را انجام دهید</button>",
+        "load_keys_progress": "%(completed)s از %(total)s کلید بازیابی شدند"
+    }
 }

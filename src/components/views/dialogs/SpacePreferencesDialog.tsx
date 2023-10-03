@@ -42,7 +42,7 @@ const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space 
 
     return (
         <SettingsTab>
-            <SettingsSection heading={_t("Sections to show")}>
+            <SettingsSection heading={_t("space|preferences|sections_section")}>
                 <SettingsSubsection>
                     <StyledCheckbox
                         checked={!!showPeople}
@@ -58,12 +58,9 @@ const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space 
                         {_t("common|people")}
                     </StyledCheckbox>
                     <SettingsSubsectionText>
-                        {_t(
-                            "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.",
-                            {
-                                spaceName: space.name,
-                            },
-                        )}
+                        {_t("space|preferences|show_people_in_space", {
+                            spaceName: space.name,
+                        })}
                     </SettingsSubsectionText>
                 </SettingsSubsection>
             </SettingsSection>

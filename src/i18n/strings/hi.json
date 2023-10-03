@@ -26,12 +26,7 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "Restricted": "वर्जित",
     "Moderator": "मध्यस्थ",
-    "Send": "भेजें",
     "Warning!": "चेतावनी!",
-    "and %(count)s others...": {
-        "other": "और %(count)s अन्य ...",
-        "one": "और एक अन्य..."
-    },
     "%(duration)ss": "%(duration)s सेकंड",
     "%(duration)sm": "%(duration)s मिनट",
     "%(duration)sh": "%(duration)s घंटा",
@@ -97,8 +92,6 @@
     "Anchor": "लंगर",
     "Headphones": "हेडफोन",
     "Folder": "फ़ोल्डर",
-    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "एन्क्रिप्ट किए गए संदेश एंड-टू-एंड एन्क्रिप्शन के साथ सुरक्षित हैं। केवल आपके और प्राप्तकर्ता के पास ही इन संदेशों को पढ़ने की कुंजी है।",
-    "Start using Key Backup": "कुंजी बैकअप का उपयोग करना शुरू करें",
     "Scissors": "कैंची",
     "Mongolia": "मंगोलिया",
     "Monaco": "मोनाको",
@@ -278,7 +271,11 @@
         "display_name": "प्रदर्शित होने वाला नाम",
         "user_avatar": "प्रोफ़ाइल फोटो",
         "authentication": "प्रमाणीकरण",
-        "are_you_sure": "क्या आपको यकीन है?"
+        "are_you_sure": "क्या आपको यकीन है?",
+        "and_n_others": {
+            "other": "और %(count)s अन्य ...",
+            "one": "और एक अन्य..."
+        }
     },
     "action": {
         "continue": "आगे बढ़ें",
@@ -617,7 +614,11 @@
         "oidc": {
             "error_title": "हम आपको लॉग इन नहीं कर सके"
         },
-        "reset_password_email_not_found_title": "यह ईमेल पता नहीं मिला था"
+        "reset_password_email_not_found_title": "यह ईमेल पता नहीं मिला था",
+        "logout_dialog": {
+            "setup_secure_backup_description_1": "एन्क्रिप्ट किए गए संदेश एंड-टू-एंड एन्क्रिप्शन के साथ सुरक्षित हैं। केवल आपके और प्राप्तकर्ता के पास ही इन संदेशों को पढ़ने की कुंजी है।",
+            "use_key_backup": "कुंजी बैकअप का उपयोग करना शुरू करें"
+        }
     },
     "setting": {
         "help_about": {
@@ -769,5 +770,8 @@
         "error_ban_user": "उपयोगकर्ता को प्रतिबंधित करने में विफल",
         "error_mute_user": "उपयोगकर्ता को म्यूट करने में विफल",
         "promote_warning": "आप इस परिवर्तन को पूर्ववत नहीं कर पाएंगे क्योंकि आप उपयोगकर्ता को अपने आप से समान शक्ति स्तर रखने के लिए प्रोत्साहित कर रहे हैं।"
+    },
+    "forward": {
+        "send_label": "भेजें"
     }
 }

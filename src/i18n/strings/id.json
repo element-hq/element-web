@@ -1,9 +1,4 @@
 {
-    "An error has occurred.": "Telah terjadi kesalahan.",
-    "Email address": "Alamat email",
-    "Session ID": "ID Sesi",
-    "unknown error code": "kode kesalahan tidak diketahui",
-    "Verification Pending": "Verifikasi Menunggu",
     "Warning!": "Peringatan!",
     "Sun": "Min",
     "Mon": "Sen",
@@ -27,19 +22,14 @@
     "%(items)s and %(lastItem)s": "%(items)s dan %(lastItem)s",
     "Sunday": "Minggu",
     "Today": "Hari Ini",
-    "Changelog": "Changelog",
-    "Unavailable": "Tidak Tersedia",
     "Tuesday": "Selasa",
     "Unnamed room": "Ruang tanpa nama",
     "Friday": "Jumat",
     "Saturday": "Sabtu",
     "Monday": "Senin",
     "Wednesday": "Rabu",
-    "You cannot delete this message. (%(code)s)": "Anda tidak dapat menghapus pesan ini. (%(code)s)",
-    "Send": "Kirim",
     "Thursday": "Kamis",
     "Yesterday": "Kemarin",
-    "Thank you!": "Terima kasih!",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
     "Moderator": "Moderator",
     "Restricted": "Dibatasi",
@@ -304,16 +294,11 @@
     "%(duration)sm": "%(duration)sm",
     "%(duration)ss": "%(duration)sd",
     "Home": "Beranda",
-    "Removing…": "Menghilangkan…",
-    "Resume": "Lanjutkan",
-    "Information": "Informasi",
     "Lock": "Gembok",
     "Mushroom": "Jamur",
     "Folder": "Map",
     "Scissors": "Gunting",
     "Ok": "Ok",
-    "Notes": "Nota",
-    "edited": "diedit",
     "Headphones": "Headphone",
     "Anchor": "Jangkar",
     "Bell": "Lonceng",
@@ -372,394 +357,27 @@
     "Cat": "Kucing",
     "Dog": "Anjing",
     "Deactivate account": "Nonaktifkan akun",
-    "Upload Error": "Kesalahan saat Mengunggah",
-    "Cancel All": "Batalkan Semua",
-    "Upload all": "Unggah semua",
-    "Upload files": "Unggah file",
-    "Power level": "Tingkat daya",
-    "Email (optional)": "Email (opsional)",
     "Light bulb": "Bohlam lampu",
     "Thumbs up": "Jempol",
-    "Share User": "Bagikan Pengguna",
-    "Share Room": "Bagikan Ruangan",
-    "Incompatible Database": "Databasis Tidak Kompatibel",
-    "Invite anyway": "Undang saja",
     "Send Logs": "Kirim Catatan",
-    "Filter results": "Saring hasil",
-    "Logs sent": "Catatan terkirim",
     "Delete Widget": "Hapus Widget",
-    "(~%(count)s results)": {
-        "one": "(~%(count)s hasil)",
-        "other": "(~%(count)s hasil)"
-    },
-    "Confirm Removal": "Konfirmasi Penghapusan",
-    "not specified": "tidak ditentukan",
     "Join Room": "Bergabung dengan Ruangan",
-    "Sent": "Terkirim",
-    "MB": "MB",
-    "Custom level": "Tingkat kustom",
-    "Hold": "Jeda",
-    "Transfer": "Pindah",
-    "Sending": "Mengirim",
     "Backup version:": "Versi cadangan:",
     "This backup is trusted because it has been restored on this session": "Cadangan ini dipercayai karena telah dipulihkan di sesi ini",
     "To join a space you'll need an invite.": "Untuk bergabung sebuah space Anda membutuhkan undangan.",
-    "Create a space": "Buat space",
     "IRC display name width": "Lebar nama tampilan IRC",
     "Your homeserver has exceeded one of its resource limits.": "Homeserver Anda telah melebihi batas sumber dayanya.",
     "Your homeserver has exceeded its user limit.": "Homeserver Anda telah melebihi batas penggunanya.",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Untuk melaporkan masalah keamanan yang berkaitan dengan Matrix, mohon baca <a>Kebijakan Penyingkapan Keamanan</a> Matrix.org.",
     "Failed to connect to integration manager": "Gagal untuk menghubung ke manajer integrasi",
-    "Create new room": "Buat ruangan baru",
-    "and %(count)s others...": {
-        "one": "dan satu lainnya...",
-        "other": "dan %(count)s lainnya..."
-    },
     "Encrypted by a deleted session": "Terenkripsi oleh sesi yang terhapus",
-    "%(count)s reply": {
-        "one": "%(count)s balasan",
-        "other": "%(count)s balasan"
-    },
-    "Can't load this message": "Tidak dapat memuat pesan ini",
     "Submit logs": "Kirim catatan",
-    "Edited at %(date)s. Click to view edits.": "Diedit di %(date)s. Klik untuk melihat editan.",
-    "Click to view edits": "Klik untuk melihat editan",
-    "Edited at %(date)s": "Diedit di %(date)s",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Anda akan dialihkan ke situs pihak ketiga sehingga Anda dapat mengautentikasi akun Anda untuk digunakan dengan %(integrationsUrl)s. Apakah Anda yakin untuk melanjutkan?",
-    "Add an Integration": "Tambahkan sebuah Integrasi",
-    "Add reaction": "Tambahkan reaksi",
-    "%(name)s wants to verify": "%(name)s ingin memverifikasi",
-    "%(name)s cancelled": "%(name)s membatalkan",
-    "%(name)s declined": "%(name)s menolak",
-    "%(name)s accepted": "%(name)s menerima",
-    "Remove %(count)s messages": {
-        "one": "Hapus 1 pesan",
-        "other": "Hapus %(count)s pesan"
-    },
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Untuk pesan yang jumlahnya banyak, ini mungkin membutuhkan beberapa waktu. Jangan muat ulang klien Anda untuk sementara.",
-    "Remove recent messages by %(user)s": "Hapus pesan terkini dari %(user)s",
-    "No recent messages by %(user)s found": "Tidak ada pesan terkini dari %(user)s yang ditemukan",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "Coba gulir ke atas di lini masa untuk melihat apa ada pesan-pesan sebelumnya.",
-    "%(count)s sessions": {
-        "one": "%(count)s sesi",
-        "other": "%(count)s sesi"
-    },
-    "%(count)s verified sessions": {
-        "one": "1 sesi terverifikasi",
-        "other": "%(count)s sesi terverifikasi"
-    },
     "Not encrypted": "Tidak terenkripsi",
-    "Server did not return valid authentication information.": "Server tidak memberikan informasi autentikasi yang absah.",
-    "Server did not require any authentication": "Server tidak membutuhkan autentikasi apa pun",
-    "There was a problem communicating with the server. Please try again.": "Terjadi sebuah masalah ketika berkomunikasi dengan server. Mohon coba lagi.",
-    "Confirm account deactivation": "Konfirmasi penonaktifan akun",
-    "Confirm your account deactivation by using Single Sign On to prove your identity.": "Konfirmasi penonaktifan akun Anda dengan menggunakan Single Sign On untuk membuktikan identitas Anda.",
-    "Are you sure you want to deactivate your account? This is irreversible.": "Apakah Anda yakin ingin menonaktifkan akun Anda? Ini tidak dapat dibatalkan.",
-    "Continue With Encryption Disabled": "Lanjutkan Dengan Enkripsi Dinonaktifkan",
-    "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Anda sebelumnya menggunakan sebuah versi %(brand)s yang baru dengan sesi ini. Untuk menggunakan versi ini lagi dengan enkripsi ujung ke ujung, Anda harus keluar dan masuk lagi.",
-    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Untuk menghindari kehilangan riwayat obrolan, Anda harus mengekspor kunci ruangan Anda sebelum keluar. Anda harus kembali ke versi %(brand)s yang baru untuk melakukannya",
-    "Want to add an existing space instead?": "Ingin menambahkan sebuah space yang sudah ada saja?",
-    "Add a space to a space you manage.": "Tambahkan sebuah space ke space yang Anda kelola.",
-    "Only people invited will be able to find and join this space.": "Hanya orang-orang yang diundang dapat menemukan dan bergabung dengan space ini.",
-    "Anyone will be able to find and join this space, not just members of <SpaceName/>.": "Siapa saja dapat menemukan dan bergabung space ini, tidak hanya anggota dari <SpaceName/>.",
-    "Anyone in <SpaceName/> will be able to find and join.": "Siapa saja di <SpaceName/> dapat menemukan dan bergabung.",
-    "Private space (invite only)": "Space pribadi (undangan saja)",
-    "Space visibility": "Visibilitas space",
-    "Clear all data": "Hapus semua data",
-    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Menghapus semua data dari sesi ini itu permanen. Pesan-pesan terenkripsi akan hilang kecuali jika kunci-kuncinya telah dicadangkan.",
-    "Clear all data in this session?": "Hapus semua data di sesi ini?",
-    "Reason (optional)": "Alasan (opsional)",
-    "Unable to load commit detail: %(msg)s": "Tidak dapat memuat detail komit: %(msg)s",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Sebelum mengirimkan catatan, Anda harus <a>membuat sebuah issue GitHub</a> untuk menjelaskan masalah Anda.",
-    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Ingat: Browser Anda tidak didukung, jadi pengalaman Anda mungkin tidak dapat diprediksi.",
-    "Preparing to download logs": "Mempersiapkan untuk mengunduh catatan",
-    "Failed to send logs: ": "Gagal untuk mengirimkan catatan: ",
-    "Preparing to send logs": "Mempersiapkan untuk mengirimkan catatan",
-    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Mohon beri tahu kami apa saja yang salah atau, lebih baik, buat sebuah issue GitHub yang menjelaskan masalahnya.",
-    "To leave the beta, visit your settings.": "Untuk keluar dari beta, pergi ke pengaturan Anda.",
-    "Close dialog": "Tutup dialog",
-    "Invite anyway and never warn me again": "Undang saja dan jangan peringatkan saya lagi",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Tidak dapat menemukan profil untuk ID Matrix yang dicantumkan di bawah — apakah Anda ingin mengundang mereka saja?",
-    "The following users may not exist": "Pengguna berikut ini mungkin tidak ada",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Gunakan sebuah server identitas untuk mengundang melalui email. Kelola di <settings>Pengaturan</settings>.",
-    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Gunakan sebuah server identitas untuk mengundang melalui email. <default>Gunakan bawaan (%(defaultIdentityServerName)s)</default> atau kelola di <settings>Pengaturan</settings>.",
-    "Adding spaces has moved.": "Menambahkan space telah dipindah.",
-    "Search for rooms": "Cari ruangan",
-    "Create a new room": "Buat sebuah ruangan baru",
-    "Want to add a new room instead?": "Ingin menambahkan sebuah ruangan yang baru saja?",
-    "Add existing rooms": "Tambahkan ruangan yang sudah ada",
-    "Space selection": "Pilihan space",
-    "Direct Messages": "Pesan Langsung",
-    "Adding rooms... (%(progress)s out of %(count)s)": {
-        "one": "Menambahkan ruangan...",
-        "other": "Menambahkan ruangan... (%(progress)s dari %(count)s)"
-    },
-    "Not all selected were added": "Tidak semua yang terpilih ditambahkan",
-    "Search for spaces": "Cari space",
-    "Create a new space": "Buat sebuah space baru",
-    "Want to add a new space instead?": "Ingin menambahkan sebuah space yang baru saja?",
-    "Add existing space": "Tambahkan space yang sudah ada",
-    "Server name": "Nama server",
-    "Enter the name of a new server you want to explore.": "Masukkan nama server baru yang Anda ingin jelajahi.",
-    "Add a new server": "Tambahkan sebuah server baru",
-    "Your server": "Server Anda",
-    "Can't find this server or its room list": "Tidak dapat menemukan server ini atau daftar ruangannya",
-    "You are not allowed to view this server's rooms list": "Anda tidak diizinkan untuk menampilkan daftar ruangan server ini",
-    "Looks good": "Kelihatannya bagus",
-    "Enter a server name": "Masukkan sebuah nama server",
-    "And %(count)s more...": {
-        "other": "Dan %(count)s lagi..."
-    },
-    "Join millions for free on the largest public server": "Bergabung dengan jutaan orang lainnya secara gratis di server publik terbesar",
-    "Server Options": "Opsi Server",
-    "This address is already in use": "Alamat ini sudah digunakan",
-    "This address is available to use": "Alamat ini dapat digunakan",
-    "Please provide an address": "Mohon masukkan sebuah alamat",
-    "Some characters not allowed": "Beberapa karakter tidak diizinkan",
-    "e.g. my-room": "mis. ruangan-saya",
-    "Room address": "Alamat ruangan",
-    "In reply to <a>this message</a>": "Membalas ke <a>pesan ini</a>",
-    "<a>In reply to</a> <pill>": "<a>Membalas ke</a> <pill>",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Tidak dapat memuat peristiwa yang dibalas, karena tidak ada atau Anda tidak memiliki izin untuk menampilkannya.",
-    "Language Dropdown": "Dropdown Bahasa",
-    "%(count)s people you know have already joined": {
-        "one": "%(count)s orang yang Anda tahu telah bergabung",
-        "other": "%(count)s orang yang Anda tahu telah bergabung"
-    },
-    "Including %(commaSeparatedMembers)s": "Termasuk %(commaSeparatedMembers)s",
-    "View all %(count)s members": {
-        "one": "Tampilkan 1 pengguna",
-        "other": "Tampilkan semua %(count)s anggota"
-    },
-    "This version of %(brand)s does not support searching encrypted messages": "Versi %(brand)s ini tidak mendukung pencarian pesan terenkripsi",
-    "This version of %(brand)s does not support viewing some encrypted files": "Versi %(brand)s ini tidak mendukung penampilan beberapa file terenkripsi",
-    "Use the <a>Desktop app</a> to search encrypted messages": "Gunakan <a>aplikasi desktop</a> untuk mencari pesan-pesan terenkripsi",
-    "Use the <a>Desktop app</a> to see all encrypted files": "Gunakan <a>aplikasi desktop</a> untuk melihat semua file terenkripsi",
-    "Message search initialisation failed, check <a>your settings</a> for more information": "Initialisasi pencarian pesan gagal, periksa <a>pengaturan Anda</a> untuk informasi lanjut",
-    "Cancel search": "Batalkan pencarian",
-    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Anda akan meningkatkan ruangan ini dari <oldVersion /> ke <newVersion />.",
-    "Recent changes that have not yet been received": "Perubahan terbaru yang belum diterima",
-    "The server is not configured to indicate what the problem is (CORS).": "Server tidak diatur untuk menandakan apa masalahnya (CORS).",
-    "A connection error occurred while trying to contact the server.": "Sebuah kesalahan koneksi terjadi ketika mencoba untuk menghubungi server.",
-    "Your area is experiencing difficulties connecting to the internet.": "Area Anda mengalami kesulitan menghubung ke internet.",
-    "The server has denied your request.": "Server menolak permintaan Anda.",
-    "The server is offline.": "Server sedang luring.",
-    "A browser extension is preventing the request.": "Sebuah ekstensi browser mencegah permintaannya.",
-    "Your firewall or anti-virus is blocking the request.": "Tembok api atau antivirus memblokir permintaannya.",
-    "The server (%(serverName)s) took too long to respond.": "Server (%(serverName)s) terlalu lama untuk merespon.",
-    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Server Anda tidak merespon dengan beberapa permintaan Anda. Berikut ini adalah beberapa alasan yang paling mungkin terjadi.",
-    "Server isn't responding": "Server tidak merespon",
-    "You're all caught up.": "Anda selesai.",
-    "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Mohon dicatat bahwa meningkatkan akan membuat versi yang baru dari ruangannya.</b> Semua pesan saat ini akan tetap di ruangan terarsip ini.",
-    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Meningkatkan sebuah ruangan adalah aksi lanjutan dan biasanya direkomendasikan ketika sebuah ruangan tidak stabil karena adanya bug, fitur-fitur yang tidak ada, atau kerentanan keamanan.",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "Ini biasanya hanya memengaruhi bagaimana ruangan diproses di servernya. Jika Anda memiliki masalah dengan %(brand)s, mohon <a>melaporkannya</a>.",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Ini biasanya hanya memengaruhi bagaimana ruangan diproses di servernya. Jika Anda memiliki masalah dengan %(brand)s, mohon melaporkannya.",
-    "Upgrade public room": "Tingkatkan ruangan publik",
-    "Upgrade private room": "Tingkatkan ruangan privat",
-    "Automatically invite members from this room to the new one": "Mengundang pengguna dari ruangan ini ke yang baru secara otomatis",
-    "Put a link back to the old room at the start of the new room so people can see old messages": "Letakkan sebuah tautan kembali ke ruangan yang lama di awal ruangan baru supaya orang-orang dapat melihat pesan-pesan lama",
-    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Menghentikan pengguna dari berbicara di versi ruangan yang lama, dan mengirimkan sebuah pesan memberi tahu pengguna untuk pindah ke ruangan yang baru",
-    "Update any local room aliases to point to the new room": "Memperbarui alias ruangan lokal apa saja untuk diarahkan ke ruangan yang baru",
-    "Create a new room with the same name, description and avatar": "Membuat ruangan baru dengan nama, deskripsi, dan avatar yang sama",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Meningkatkan ruangan ini membutuhkan penutupan instansi ruangan saat ini dan membuat ruangan yang baru di tempatnya. Untuk memberikan anggota ruangan pengalaman yang baik, kami akan:",
-    "Upgrade Room Version": "Tingkatkan Versi Ruangan",
-    "Upgrade this room to version %(version)s": "Tingkatkan ruangan ini ke versi %(version)s",
-    "The room upgrade could not be completed": "Peningkatan ruangan tidak dapat diselesaikan",
-    "Failed to upgrade room": "Gagal untuk meningkatkan ruangan",
-    "Room Settings - %(roomName)s": "Pengaturan Ruangan — %(roomName)s",
-    "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Sekadar mengingatkan saja, jika Anda belum menambahkan sebuah email dan Anda lupa kata sandi, Anda mungkin <b>dapat kehilangan akses ke akun Anda</b>.",
-    "You may contact me if you have any follow up questions": "Anda mungkin menghubungi saya jika Anda mempunyai pertanyaan lanjutan",
-    "Search for rooms or people": "Cari ruangan atau orang",
-    "Message preview": "Tampilan pesan",
-    "You don't have permission to do this": "Anda tidak memiliki izin untuk melakukannya",
     "Switch theme": "Ubah tema",
-    "<inviter/> invites you": "<inviter/> mengundang Anda",
-    "No results found": "Tidak ada hasil yang ditemukan",
     "Sign in with SSO": "Masuk dengan SSO",
-    "Unable to start audio streaming.": "Tidak dapat memulai penyiaran audio.",
-    "Failed to start livestream": "Gagal untuk memulai siaran langsung",
-    "Thread options": "Opsi utasan",
     "Forget": "Lupakan",
-    "Resend %(unsentCount)s reaction(s)": "Kirim ulang %(unsentCount)s reaksi",
-    "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "Jika Anda lupa Kunci Keamanan, Anda dapat <button>menyiapkan opsi pemulihan baru</button>",
-    "Access your secure message history and set up secure messaging by entering your Security Key.": "Akses riwayat pesan aman Anda dan siapkan perpesanan aman dengan memasukkan Kunci Keamanan Anda.",
-    "Not a valid Security Key": "Bukan Kunci Keamanan yang absah",
-    "This looks like a valid Security Key!": "Ini sepertinya Kunci Keamanan yang absah!",
-    "Enter Security Key": "Masukkan Kunci Keamanan",
-    "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>": "Jika Anda lupa Frasa Keamanan, Anda dapat <button1>menggunakan Kunci Keamanan Anda</button1> atau <button2>siapkan opsi pemulihan baru</button2>",
-    "Access your secure message history and set up secure messaging by entering your Security Phrase.": "Akses riwayat pesan aman Anda dan siapkan perpesanan aman dengan memasukkan Frasa Keamanan Anda.",
-    "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Peringatan</b>: Anda seharusnya menyiapkan cadangan kunci di komputer yang dipercayai.",
-    "Enter Security Phrase": "Masukkan Frasa Keamanan",
-    "Successfully restored %(sessionCount)s keys": "Berhasil memulihkan %(sessionCount)s kunci",
-    "Failed to decrypt %(failedCount)s sessions!": "Gagal untuk mendekripsi %(failedCount)s sesi!",
-    "Keys restored": "Kunci-kunci terpulihkan",
-    "No backup found!": "Tidak ada cadangan yang ditemukan!",
-    "Unable to restore backup": "Tidak dapat memulihkan cadangan",
-    "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.": "Cadangan tidak dapat didekripsikan dengan Frasa Keamanan ini: mohon periksa jika Anda memasukkan Frasa Keamanan yang benar.",
-    "Incorrect Security Phrase": "Frasa Keamanan tidak benar",
-    "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.": "Cadangan tidak dapat didekripsikan dengan Kunci Keamanan ini: mohon periksa jika Anda memasukkan Kunci Keamanan yang benar.",
-    "Security Key mismatch": "Kunci Keamanan tidak cocok",
-    "Unable to load backup status": "Tidak dapat memuat status cadangan",
-    "%(completed)s of %(total)s keys restored": "%(completed)s dari %(total)s kunci dipulihkan",
-    "Restoring keys from backup": "Memulihkan kunci-kunci dari cadangan",
-    "Unable to set up keys": "Tidak dapat mengatur kunci-kunci",
-    "Click the button below to confirm setting up encryption.": "Klik tombol di bawah untuk mengkonfirmasi menyiapkan enkripsi.",
-    "Confirm encryption setup": "Konfirmasi pengaturan enkripsi",
-    "Clear cross-signing keys": "Hapus kunci-kunci penandatanganan silang",
-    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Menghapus kunci penandatanganan silang itu permanen. Siapa saja yang Anda verifikasi akan melihat peringatan keamanan. Anda hampir pasti tidak ingin melakukan ini, kecuali jika Anda kehilangan setiap perangkat yang dapat digunakan untuk melakukan penandatanganan silang.",
-    "Destroy cross-signing keys?": "Hancurkan kunci-kunci penandatanganan silang?",
-    "Use your Security Key to continue.": "Gunakan Kunci Keamanan Anda untuk melanjutkan.",
-    "Security Key": "Kunci Keamanan",
-    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Masukkan Frasa Keamanan Anda atau <button>gunakan Kunci Keamanan Anda</button> untuk melanjutkan.",
-    "Unable to access secret storage. Please verify that you entered the correct Security Phrase.": "Tidak dapat mengakses penyimpanan rahasia. Periksa jika Anda memasukkan Frasa Keamanan yang benar.",
-    "Security Phrase": "Frasa Keamanan",
-    "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Jika Anda mengatur ulang semuanya, Anda dengan mulai ulang dengan tidak ada sesi yang dipercayai, tidak ada pengguna yang dipercayai, dan mungkin tidak dapat melihat pesan-pesan lama.",
-    "Only do this if you have no other device to complete verification with.": "Hanya lakukan ini jika Anda tidak memiliki perangkat yang lain untuk menyelesaikan verifikasi.",
-    "Reset everything": "Atur ulang semuanya",
-    "Forgotten or lost all recovery methods? <a>Reset all</a>": "Lupa atau kehilangan semua metode pemulihan? <a>Atur ulang semuanya</a>",
-    "Invalid Security Key": "Kunci Keamanan tidak absah",
-    "Wrong Security Key": "Kunci Keamanan salah",
-    "Looks good!": "Kelihatannya bagus!",
-    "Wrong file type": "Tipe file salah",
-    "Remember this": "Ingat ini",
-    "The widget will verify your user ID, but won't be able to perform actions for you:": "Widget ini akan memverifikasi ID pengguna Anda, tetapi tidak dapat melakukan aksi untuk Anda:",
-    "Allow this widget to verify your identity": "Izinkan widget ini untuk memverifikasi identitas Anda",
-    "Remember my selection for this widget": "Ingat pilihan saya untuk widget ini",
-    "Decline All": "Tolak Semua",
-    "This widget would like to:": "Widget ini ingin:",
-    "Approve widget permissions": "Setujui izin widget",
-    "Verification Request": "Permintaan Verifikasi",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Dapatkan kembali akses ke akun Anda dan pulihkan kunci enkripsi yang disimpan dalam sesi ini. Tanpa mereka, Anda tidak akan dapat membaca semua pesan aman Anda di sesi mana saja.",
-    "Upload %(count)s other files": {
-        "one": "Unggah %(count)s file lainnya",
-        "other": "Unggah %(count)s file lainnya"
-    },
-    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Beberapa file <b>terlalu besar</b> untuk diunggah. Batas ukuran unggahan file adalah %(limit)s.",
-    "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "File-file ini <b>terlalu besar</b> untuk diunggah. Batas ukuran unggahan file adalah %(limit)s.",
-    "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "File ini <b>terlalu besar</b> untuk diunggah. Batas ukuran unggahan file adalah %(limit)s tetapi file ini %(sizeOfThisFile)s.",
-    "Upload files (%(current)s of %(total)s)": "Mengunggah file (%(current)s dari %(total)s)",
-    "Not Trusted": "Tidak Dipercayai",
-    "Ask this user to verify their session, or manually verify it below.": "Tanyakan pengguna ini untuk memverifikasi sesinya, atau verifikasi secara manual di bawah.",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) masuk ke sesi yang baru tanpa memverifikasinya:",
-    "Verify your other session using one of the options below.": "Verifikasi sesi Anda lainnya dengan menggunakan salah satu pilihan di bawah.",
-    "You signed in to a new session without verifying it:": "Anda masuk ke sesi baru tanpa memverifikasinya:",
-    "Be found by phone or email": "Temukan oleh lainnya melalui ponsel atau email",
-    "Find others by phone or email": "Temukan lainnya melalui ponsel atau email",
-    "Your browser likely removed this data when running low on disk space.": "Kemungkinan browser Anda menghapus datanya ketika ruang disk rendah.",
-    "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Beberapa data sesi, termasuk kunci pesan terenkripsi, hilang. Keluar dan masuk lagi untuk memperbaikinya, memulihkan kunci-kunci dari cadangan.",
-    "Missing session data": "Data sesi hilang",
-    "To help us prevent this in future, please <a>send us logs</a>.": "Untuk membantu kami mencegahnya di masa mendatang, silakan <a>kirimkan kami catatan</a>.",
-    "Command Help": "Bantuan Perintah",
-    "Link to selected message": "Tautan ke pesan yang dipilih",
-    "Share Room Message": "Bagikan Pesan Ruangan",
-    "Link to most recent message": "Tautan ke pesan terkini",
-    "This will allow you to reset your password and receive notifications.": "Ini akan mengizinkan Anda untuk mengatur ulang kata sandi Anda dan menerima notifikasi.",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Mohon periksa email Anda dan klik tautannya. Setelah itu, klik lanjut.",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Menghapus penyimpanan browser Anda mungkin memperbaiki masalahnya, tetapi akan mengeluarkan Anda dan membuat riwayat obrolan tidak dapat dibaca.",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Jika Anda sebelumnya menggunakan versi %(brand)s yang lebih baru, sesi Anda mungkin tidak kompatibel dengan versi ini. Tutup jendela ini dan kembali ke versi yang lebih baru.",
-    "We encountered an error trying to restore your previous session.": "Kami mengalami sebuah kesalahan saat memulihkan sesi Anda sebelumnya.",
-    "Unable to restore session": "Tidak dapat memulihkan sesi",
-    "Clear Storage and Sign Out": "Hapus Penyimpanan dan Keluar",
-    "Sign out and remove encryption keys?": "Keluar dan hapus kunci-kunci enkripsi?",
-    "Reset event store": "Atur ulang penyimpanan peristiwa",
-    "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Jika Anda ingin, dicatat bahwa pesan-pesan Anda tidak dihapus, tetapi pengalaman pencarian mungkin terdegradasi untuk beberapa saat indeksnya sedang dibuat ulang",
-    "You most likely do not want to reset your event index store": "Kemungkinan besar Anda tidak ingin mengatur ulang penyimpanan indeks peristiwa Anda",
-    "Reset event store?": "Atur ulang penyimanan peristiwa?",
-    "Continuing without email": "Melanjutkan tanpa email",
-    "Data on this screen is shared with %(widgetDomain)s": "Data di layar ini dibagikan dengan %(widgetDomain)s",
-    "Modal Widget": "Widget Modal",
-    "Message edits": "Editan pesan",
-    "Your homeserver doesn't seem to support this feature.": "Homeserver Anda sepertinya tidak mendukung fitur ini.",
-    "If they don't match, the security of your communication may be compromised.": "Jika mereka tidak cocok, keamanan komunikasi Anda mungkin dikompromikan.",
-    "Session key": "Kunci sesi",
-    "Session name": "Nama sesi",
-    "Confirm this user's session by comparing the following with their User Settings:": "Konfirmasi sesi pengguna ini dengan membandingkan berikut ini dengan Pengaturan Pengguna:",
-    "Confirm by comparing the following with the User Settings in your other session:": "Konfirmasi dengan membandingkan berikut ini dengan Pengaturan Pengguna di sesi Anda yang lain:",
-    "These are likely ones other room admins are a part of.": "Ini kemungkinan adalah bagian dari admin ruangan lain.",
-    "Other spaces or rooms you might not know": "Space atau ruangan lainnya yang Anda mungkin tidak tahu",
-    "Spaces you know that contain this room": "Space yang Anda tahu yang berisi ruangan ini",
-    "Search spaces": "Cari space",
-    "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "Tentukan space mana yang dapat mengakses ruangan ini. Jika sebuah space dipilih, anggotanya dapat menemukan dan bergabung <RoomName/>.",
-    "Select spaces": "Pilih space",
-    "You're removing all spaces. Access will default to invite only": "Anda menghilangkan semua space. Akses secara bawaan ke undangan saja",
-    "%(count)s rooms": {
-        "one": "%(count)s ruangan",
-        "other": "%(count)s ruangan"
-    },
-    "%(count)s members": {
-        "one": "%(count)s anggota",
-        "other": "%(count)s anggota"
-    },
-    "Are you sure you want to sign out?": "Apakah Anda yakin ingin keluar?",
-    "You'll lose access to your encrypted messages": "Anda akan kehilangan akses ke pesan terenkripsi Anda",
-    "Manually export keys": "Ekspor kunci secara manual",
-    "I don't want my encrypted messages": "Saya tidak ingin pesan-pesan terenkripsi saya",
-    "Start using Key Backup": "Mulai menggunakan Cadangan Kunci",
-    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Pesan terenkripsi diamankan dengan enkripsi ujung ke ujung. Hanya Anda dan penerima punya kuncinya untuk membaca pesan ini.",
-    "Leave space": "Tinggalkan space",
-    "Leave some rooms": "Tinggalkan beberapa ruangan",
-    "Leave all rooms": "Tinggalkan semua ruangan",
-    "Don't leave any rooms": "Jangan tinggalkan ruangan apa pun",
-    "Would you like to leave the rooms in this space?": "Apakah Anda ingin keluar dari ruangan-ruangan di space ini?",
-    "You are about to leave <spaceName/>.": "Anda akan keluar dari <spaceName/>.",
-    "Leave %(spaceName)s": "Tinggalkan %(spaceName)s",
-    "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Anda adalah satu-satunya admin di beberapa ruangan atau space yang ingin Anda tinggalkan. Meninggalkan mereka akan meninggalkan mereka tanpa admin.",
-    "You're the only admin of this space. Leaving it will mean no one has control over it.": "Anda adalah satu-satu admin di space ini. Meninggalkannya akan berarti tidak ada siapa saja yang dapat melakukan apa-apa di spacenya.",
-    "You won't be able to rejoin unless you are re-invited.": "Anda tidak dapat bergabung lagi kecuali jika Anda diundang lagi.",
-    "Updating %(brand)s": "Memperbarui %(brand)s",
-    "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s sekarang menggunakan memori 3-5x kecil dari sebelumnya dengan hanya memuat informasi tentang pengguna lain jika dibutuhkan. Mohon tunggu selagi kita mengsinkronisasi ulang dengan servernya!",
-    "Clear cache and resync": "Hapus cache dan sinkron ulang",
-    "Incompatible local cache": "Cache lokal tidak kompatibel",
-    "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Jika versi %(brand)s yang lain masih terbuka di tab yang lain, mohon menutupnya karena menggunakan %(brand)s di host yang sama dengan pemuatan malas diaktifkan dan dinonaktifkan secara bersamaan akan mengakibatkan masalah.",
-    "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Anda sebelumnya menggunakan %(brand)s di %(host)s dengan pemuatan malas pengguna diaktifkan. Di versi ini pemuatan malas dinonaktifkan. Karena cache lokal tidak kompatibel antara dua pengaturan ini, %(brand)s harus mengsinkronisasi ulang akun Anda.",
-    "Signature upload failed": "Unggahan tandatangan gagal",
-    "Signature upload success": "Unggahan tandatangan berhasil",
-    "Unable to upload": "Tidak dapat mengunggah",
-    "Cancelled signature upload": "Unggahan tandatangan dibatalkan",
-    "Upload completed": "Unggahan selesai",
-    "%(brand)s encountered an error during upload of:": "%(brand)s mengalami sebuah kesalahan ketika mengunggah unggahan:",
-    "a key signature": "sebuah tandatangan kunci",
-    "a device cross-signing signature": "sebuah tandatangan penandatanganan silang perangkat",
-    "a new cross-signing key signature": "sebuah tandatangan kunci penandatanganan silang baru",
-    "a new master key signature": "sebuah tandatangan kunci utama baru",
-    "Dial pad": "Tombol penyetel",
-    "User Directory": "Direktori Pengguna",
-    "Consult first": "Konsultasi dahulu",
-    "Invited people will be able to read old messages.": "Orang-orang yang diundang dapat membaca pesan-pesan lama.",
-    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Undang seseorang menggunakan namanya, nama pengguna (seperti <userId/>) atau <a>bagikan ruangan ini</a>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Undang seseorang menggunakan namanya, alamat email, nama pengguna (seperti <userId/>) atau <a>bagikan ruangan ini</a>.",
-    "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Undang seseorang menggunakan namanya, nama pengguna (seperti <userId/>) atau <a>bagikan space ini</a>.",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Undang seseorang menggunakan namanya, alamat email, nama pengguna (seperti <userId/>) atau <a>bagikan space ini</a>.",
-    "Invite to %(roomName)s": "Undang ke %(roomName)s",
-    "Or send invite link": "Atau kirim tautan undangan",
-    "If you can't see who you're looking for, send them your invite link below.": "Jika Anda tidak dapat menemukan siapa yang Anda mencari, kirimkan tautan undangan Anda di bawah.",
-    "Some suggestions may be hidden for privacy.": "Beberapa saran mungkin disembunyikan untuk privasi.",
-    "Start a conversation with someone using their name, email address or username (like <userId/>).": "Mulai sebuah obrolan dengan sesorang menggunakan namanya, alamat email atau nama pengguna (seperti <userId/>).",
-    "Start a conversation with someone using their name or username (like <userId/>).": "Mulai sebuah obrolan dengan seseorang menggunakan namanya atau nama pengguna (seperti <userId/>).",
-    "Recently Direct Messaged": "Pesan Langsung Kini",
-    "Recent Conversations": "Obrolan Terkini",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Pengguna berikut ini mungkin tidak ada atau tidak absah, dan tidak dapat diundang: %(csvNames)s",
-    "Failed to find the following users": "Gagal untuk mencari pengguna berikut ini",
-    "A call can only be transferred to a single user.": "Sebuah panggilan dapat dipindah ke sebuah pengguna.",
-    "We couldn't invite those users. Please check the users you want to invite and try again.": "Kami tidak dapat mengundang penggunanya. Mohon periksa pengguna yang Anda ingin undang dan coba lagi.",
-    "Something went wrong trying to invite the users.": "Ada sesuatu yang salah ketika mengundang penggunanya.",
-    "We couldn't create your DM.": "Kami tidak dapat membuat pesan langsung Anda.",
-    "Invite by email": "Undang melalui email",
-    "Click the button below to confirm your identity.": "Klik tombol di bawah untuk mengkonfirmasi identitas Anda.",
-    "Confirm to continue": "Konfirmasi untuk melanjutkan",
-    "To continue, use Single Sign On to prove your identity.": "Untuk melanjutkan, gunakan Single Sign On untuk membuktikan identitas Anda.",
-    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s Anda tidak mengizinkan Anda menggunakan sebuah manajer integrasi untuk melakukan ini. Mohon hubungi sebuah admin.",
-    "Integrations not allowed": "Integrasi tidak diperbolehkan",
-    "Integrations are disabled": "Integrasi dinonaktifkan",
-    "Incoming Verification Request": "Permintaan Verifikasi Masuk",
-    "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Memverifikasi perangkat ini akan menandainya sebagai terpercaya, dan pengguna yang telah diverifikasi dengan Anda akan mempercayai perangkat ini.",
-    "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Verifikasi perangkat ini untuk menandainya sebagai terpercaya. Mempercayai perangkat ini akan memberikan Anda dan pengguna lain ketenangan saat menggunakan pesan terenkripsi secara ujung ke ujung.",
-    "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Memverifikasi pengguna ini akan menandai sesinya sebagai terpercaya, dan juga menandai sesi Anda sebagai terpercaya kepadanya.",
-    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Verifikasi pengguna ini untuk menandainya sebagai terpercaya. Mempercayai pengguna memberikan Anda ketenangan saat menggunakan pesan terenkripsi secara ujung ke ujung.",
-    "%(count)s votes": {
-        "one": "%(count)s suara",
-        "other": "%(count)s suara"
-    },
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s dan %(count)s lainnya",
         "other": "%(spaceName)s dan %(count)s lainnya"
@@ -769,153 +387,22 @@
     "Themes": "Tema",
     "Moderation": "Moderasi",
     "Messaging": "Perpesanan",
-    "Spaces you know that contain this space": "Space yang Anda tahu yang berisi space ini",
-    "Recently viewed": "Baru saja dilihat",
-    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Apakah Anda yakin untuk mengakhiri poll ini? Ini akan menampilkan hasil akhir dari poll dan orang-orang tidak dapat memberikan suara lagi.",
-    "End Poll": "Akhiri Poll",
-    "Sorry, the poll did not end. Please try again.": "Maaf, poll tidak berakhir. Silakan coba lagi.",
-    "Failed to end poll": "Gagal untuk mengakhiri poll",
-    "The poll has ended. Top answer: %(topAnswer)s": "Poll telah berakhir. Jawaban teratas: %(topAnswer)s",
-    "The poll has ended. No votes were cast.": "Poll telah berakhir. Tidak ada yang memberi suara.",
-    "Link to room": "Tautan ke ruangan",
-    "Recent searches": "Pencarian terkini",
-    "To search messages, look for this icon at the top of a room <icon/>": "Untuk mencari pesan-pesan, lihat ikon ini di atas ruangan <icon/>",
-    "Other searches": "Pencarian lainnya",
-    "Public rooms": "Ruangan publik",
-    "Use \"%(query)s\" to search": "Gunakan \"%(query)s\" untuk mencari",
-    "Other rooms in %(spaceName)s": "Ruangan lainnya di %(spaceName)s",
-    "Spaces you're in": "Space yang Anda berada",
-    "Including you, %(commaSeparatedMembers)s": "Termasuk Anda, %(commaSeparatedMembers)s",
-    "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Ini mengelompokkan obrolan Anda dengan anggota space ini. Menonaktifkan ini akan menyembunyikan obrolan dari tampilan %(spaceName)s Anda.",
-    "Sections to show": "Bagian untuk ditampilkan",
-    "Open in OpenStreetMap": "Buka di OpenStreetMap",
-    "toggle event": "alih peristiwa",
-    "Missing room name or separator e.g. (my-room:domain.org)": "Kurang nama ruangan atau pemisah mis. (ruangan-saya:domain.org)",
-    "Missing domain separator e.g. (:domain.org)": "Kurang pemisah domain mis. (:domain.org)",
-    "This address had invalid server or is already in use": "Alamat ini memiliki server yang tidak absah atau telah digunakan",
-    "Verify other device": "Verifikasi perangkat lain",
-    "Could not fetch location": "Tidak dapat mendapatkan lokasi",
-    "This address does not point at this room": "Alamat ini tidak mengarah ke ruangan ini",
-    "Location": "Lokasi",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s dan %(space2Name)s",
-    "Use <arrows/> to scroll": "Gunakan <arrows/> untuk menggulirkan",
     "Feedback sent! Thanks, we appreciate it!": "Masukan terkirim! Terima kasih, kami mengapresiasinya!",
-    "Join %(roomAddress)s": "Bergabung dengan %(roomAddress)s",
-    "Search Dialog": "Dialog Pencarian",
-    "What location type do you want to share?": "Tipe lokasi apa yang Anda ingin bagikan?",
-    "Drop a Pin": "Drop sebuah Pin",
-    "My live location": "Lokasi langsung saya",
-    "My current location": "Lokasi saya saat ini",
-    "%(brand)s could not send your location. Please try again later.": "%(brand)s tidak dapat mengirimkan lokasi Anda. Silakan coba lagi nanti.",
-    "We couldn't send your location": "Kami tidak dapat mengirimkan lokasi Anda",
-    "You are sharing your live location": "Anda membagikan lokasi langsung Anda",
-    "%(displayName)s's live location": "Lokasi langsung %(displayName)s",
-    "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Jangan centang jika Anda juga ingin menghapus pesan-pesan sistem pada pengguna ini (mis. perubahan keanggotaan, perubahan profil…)",
-    "Preserve system messages": "Simpan pesan-pesan sistem",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
-        "one": "Anda akan menghapus %(count)s pesan dari %(user)s. Ini akan dihapus secara permanen untuk semua dalam obrolan. Apakah Anda ingin lanjut?",
-        "other": "Anda akan menghapus %(count)s pesan dari %(user)s. Ini akan dihapus secara permanen untuk semua dalam obrolan. Apakah Anda ingin lanjut?"
-    },
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Anda dapat menggunakan opsi server khusus untuk masuk ke server Matrix lain dengan menentukan URL homeserver yang berbeda. Ini memungkinkan Anda untuk menggunakan %(brand)s dengan akun Matrix yang ada di homeserver yang berbeda.",
-    "Unsent": "Belum dikirim",
-    "An error occurred while stopping your live location, please try again": "Sebuah kesalahan terjadi saat menghentikan lokasi langsung Anda, mohon coba lagi",
-    "%(count)s participants": {
-        "one": "1 perserta",
-        "other": "%(count)s perserta"
-    },
-    "%(featureName)s Beta feedback": "Masukan %(featureName)s Beta",
-    "Live location ended": "Lokasi langsung berakhir",
-    "Live location enabled": "Lokasi langsung diaktifkan",
-    "Live location error": "Kesalahan lokasi langsung",
-    "Live until %(expiryTime)s": "Langsung sampai %(expiryTime)s",
-    "No live locations": "Tidak ada lokasi langsung",
-    "Close sidebar": "Tutup bilah samping",
     "View List": "Tampilkan Daftar",
-    "View list": "Tampilkan daftar",
-    "Updated %(humanizedUpdateTime)s": "Diperbarui %(humanizedUpdateTime)s",
-    "Hide my messages from new joiners": "Sembunyikan pesan saya dari orang baru bergabung",
-    "Your old messages will still be visible to people who received them, just like emails you sent in the past. Would you like to hide your sent messages from people who join rooms in the future?": "Pesan lama Anda akan masih terlihat kepada orang-orang yang menerimanya, sama seperti email yang Anda kirim di masa lalu. Apakah Anda ingin menyembunyikan pesan terkirim Anda dari orang-orang yang bergabung ruangan di masa depan?",
-    "You will be removed from the identity server: your friends will no longer be able to find you with your email or phone number": "Anda akan dihapus dari server identitas: teman-teman Anda tidak akan dapat menemukan Anda dari email atau nomor telepon Anda",
-    "You will leave all rooms and DMs that you are in": "Anda akan meninggalkan semua ruangan dan pesan langsung yang Anda berada",
-    "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "Siapa pun tidak akan dapat menggunakan ulang nama pengguna (MXID), termasuk Anda: nama pengguna ini akan tetap tidak tersedia",
-    "You will no longer be able to log in": "Anda tidak akan dapat lagi masuk",
-    "You will not be able to reactivate your account": "Anda tidak akan dapat mengaktifkan ulang akun Anda",
-    "Confirm that you would like to deactivate your account. If you proceed:": "Konfirmasi jika Anda ingin menonaktifkan akun Anda. Jika Anda lanjut:",
-    "To continue, please enter your account password:": "Untuk melanjutkan, mohon masukkan kata sandi akun Anda:",
-    "An error occurred while stopping your live location": "Sebuah kesalahan terjadi saat menghentikan lokasi langsung Anda",
     "%(members)s and %(last)s": "%(members)s dan %(last)s",
     "%(members)s and more": "%(members)s dan lainnya",
-    "Open room": "Buka ruangan",
-    "Cameras": "Kamera",
-    "Output devices": "Perangkat keluaran",
-    "Input devices": "Perangkat masukan",
-    "An error occurred whilst sharing your live location, please try again": "Sebuah kesalahan terjadi saat membagikan lokasi langsung Anda, mohon coba lagi",
-    "An error occurred whilst sharing your live location": "Sebuah kesalahan terjadi saat berbagi lokasi langsung Anda",
     "Unread email icon": "Ikon email belum dibaca",
-    "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "Ketika Anda keluar, kunci-kunci ini akan dihapus dari perangkat ini, yang berarti Anda tidak dapat membaca pesan-pesan terenkripsi kecuali jika Anda mempunyai kuncinya di perangkat Anda yang lain, atau telah mencadangkannya ke server.",
-    "Remove search filter for %(filter)s": "Hapus saringan pencarian untuk %(filter)s",
-    "Start a group chat": "Mulai sebuah grup obrolan",
-    "Other options": "Opsi lain",
-    "If you can't find the room you're looking for, ask for an invite or create a new room.": "Jika Anda tidak dapat menemukan ruangan yang Anda cari, minta sebuah undangan atau buat sebuah ruangan baru.",
-    "Some results may be hidden": "Beberapa hasil mungkin tersembunyi",
-    "Copy invite link": "Salin tautan undangan",
-    "If you can't see who you're looking for, send them your invite link.": "Jika Anda tidak dapat menemukan siapa yang Anda mencari, kirimkan tautan undangan Anda.",
-    "Some results may be hidden for privacy": "Beberapa hasil mungkin disembunyikan untuk privasi",
-    "Search for": "Cari",
-    "%(count)s Members": {
-        "one": "%(count)s Anggota",
-        "other": "%(count)s Anggota"
-    },
-    "Show: Matrix rooms": "Tampilkan: ruangan Matrix",
-    "Show: %(instance)s rooms (%(server)s)": "Tampilkan: %(instance)s ruangan (%(server)s)",
-    "Add new server…": "Tambahkan server baru…",
-    "Remove server “%(roomServer)s”": "Hapus server “%(roomServer)s”",
     "You cannot search for rooms that are neither a room nor a space": "Anda tidak dapat mencari ruangan yang bukan sebuah ruangan atau sebuah space",
     "Show spaces": "Tampilkan space",
     "Show rooms": "Tampilkan ruangan",
     "Explore public spaces in the new search dialog": "Jelajahi space publik di dialog pencarian baru",
-    "Online community members": "Anggota komunitas daring",
-    "Coworkers and teams": "Teman kerja dan tim",
-    "Friends and family": "Teman dan keluarga",
-    "We'll help you get connected.": "Kami akan membantu Anda untuk terhubung.",
-    "Who will you chat to the most?": "Siapa saja yang sering Anda obrol?",
-    "You're in": "Anda telah masuk",
-    "You need to have the right permissions in order to share locations in this room.": "Anda harus mempunyai izin yang diperlukan untuk membagikan lokasi di ruangan ini.",
-    "You don't have permission to share locations": "Anda tidak memiliki izin untuk membagikan lokasi",
     "Saved Items": "Item yang Tersimpan",
-    "Choose a locale": "Pilih locale",
-    "Interactively verify by emoji": "Verifikasi secara interaktif sengan emoji",
-    "Manually verify by text": "Verifikasi secara manual dengan teks",
-    "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s atau %(recoveryFile)s",
-    "%(name)s started a video call": "%(name)s memulai sebuah panggilan video",
     "Thread root ID: %(threadRootId)s": "ID akar utasan: %(threadRootId)s",
-    "<w>WARNING:</w> <description/>": "<w>PERINGATAN:</w> <description/>",
-    " in <strong>%(room)s</strong>": " di <strong>%(room)s</strong>",
-    "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Anda tidak dapat memulai sebuah pesan suara karena Anda saat ini merekam sebuah siaran langsung. Silakan mengakhiri siaran langsung Anda untuk memulai merekam sebuah pesan suara.",
-    "Can't start voice message": "Tidak dapat memulai pesan suara",
     "unknown": "tidak diketahui",
-    "Enable '%(manageIntegrations)s' in Settings to do this.": "Aktifkan '%(manageIntegrations)s' di Pengaturan untuk melakukan ini.",
-    "Loading live location…": "Memuat lokasi langsung…",
-    "Fetching keys from server…": "Mendapatkan kunci- dari server…",
-    "Checking…": "Memeriksa…",
-    "Waiting for partner to confirm…": "Menunggu pengguna untuk konfirmasi…",
-    "Adding…": "Menambahkan…",
     "Starting export process…": "Memulai proses pengeksporan…",
-    "Invites by email can only be sent one at a time": "Undangan lewat surel hanya dapat dikirim satu-satu",
     "Desktop app logo": "Logo aplikasi desktop",
     "Requires your server to support the stable version of MSC3827": "Mengharuslkan server Anda mendukung versi MSC3827 yang stabil",
-    "Message from %(user)s": "Pesan dari %(user)s",
-    "Message in %(room)s": "Pesan dalam %(room)s",
-    "unavailable": "tidak tersedia",
-    "unknown status code": "kode keadaan tidak diketahui",
-    "Start DM anyway": "Mulai percakapan langsung saja",
-    "Start DM anyway and never warn me again": "Mulai percakapan langsung saja dan jangan peringatkan saya lagi",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "Tidak dapat menemukan profil untuk ID Matrix yang disertakan di bawah — apakah Anda ingin memulai percakapan langsung saja?",
-    "Are you sure you wish to remove (delete) this event?": "Apakah Anda yakin ingin menghilangkan (menghapus) peristiwa ini?",
-    "Note that removing room changes like this could undo the change.": "Diingat bahwa menghilangkan perubahan ruangan dapat mengurungkan perubahannya.",
-    "Upgrade room": "Tingkatkan ruangan",
-    "Other spaces you know": "Space lainnya yang Anda tahu",
-    "Failed to query public rooms": "Gagal melakukan kueri ruangan publik",
     "common": {
         "about": "Tentang",
         "analytics": "Analitik",
@@ -1038,7 +525,31 @@
         "show_more": "Tampilkan lebih banyak",
         "joined": "Tergabung",
         "avatar": "Avatar",
-        "are_you_sure": "Apakah Anda yakin?"
+        "are_you_sure": "Apakah Anda yakin?",
+        "location": "Lokasi",
+        "email_address": "Alamat email",
+        "filter_results": "Saring hasil",
+        "no_results_found": "Tidak ada hasil yang ditemukan",
+        "unsent": "Belum dikirim",
+        "cameras": "Kamera",
+        "n_participants": {
+            "one": "1 perserta",
+            "other": "%(count)s perserta"
+        },
+        "and_n_others": {
+            "one": "dan satu lainnya...",
+            "other": "dan %(count)s lainnya..."
+        },
+        "n_members": {
+            "one": "%(count)s anggota",
+            "other": "%(count)s anggota"
+        },
+        "unavailable": "tidak tersedia",
+        "edited": "diedit",
+        "n_rooms": {
+            "one": "%(count)s ruangan",
+            "other": "%(count)s ruangan"
+        }
     },
     "action": {
         "continue": "Lanjut",
@@ -1156,7 +667,11 @@
         "add_existing_room": "Tambahkan ruangan yang sudah ada",
         "explore_public_rooms": "Jelajahi ruangan publik",
         "reply_in_thread": "Balas di utasan",
-        "click": "Klik"
+        "click": "Klik",
+        "transfer": "Pindah",
+        "resume": "Lanjutkan",
+        "hold": "Jeda",
+        "view_list": "Tampilkan daftar"
     },
     "a11y": {
         "user_menu": "Menu pengguna",
@@ -1255,7 +770,10 @@
         "beta_section": "Fitur yang akan datang",
         "beta_description": "Apa berikutnya untuk %(brand)s? Fitur Uji Coba merupakan cara yang terbaik untuk mendapatkan hal-hal baru lebih awal, mencoba fitur baru dan membantu memperbaikinya sebelum diluncurkan.",
         "experimental_section": "Pratinjau awal",
-        "experimental_description": "Merasa eksperimental? Coba ide terkini kami dalam pengembangan. Fitur ini belum selesai; mereka mungkin tidak stabil, mungkin berubah, atau dihapus sama sekali. <a>Pelajari lebih lanjut</a>."
+        "experimental_description": "Merasa eksperimental? Coba ide terkini kami dalam pengembangan. Fitur ini belum selesai; mereka mungkin tidak stabil, mungkin berubah, atau dihapus sama sekali. <a>Pelajari lebih lanjut</a>.",
+        "beta_feedback_title": "Masukan %(featureName)s Beta",
+        "beta_feedback_leave_button": "Untuk keluar dari beta, pergi ke pengaturan Anda.",
+        "sliding_sync_checking": "Memeriksa…"
     },
     "keyboard": {
         "home": "Beranda",
@@ -1394,7 +912,9 @@
         "moderator": "Moderator",
         "admin": "Admin",
         "mod": "Mod",
-        "custom": "Kustom (%(level)s)"
+        "custom": "Kustom (%(level)s)",
+        "label": "Tingkat daya",
+        "custom_level": "Tingkat kustom"
     },
     "bug_reporting": {
         "introduction": "Jika Anda mengirim sebuah kutu via GitHub, catatan pengawakutu dapat membantu kami melacak masalahnya. ",
@@ -1412,7 +932,16 @@
         "uploading_logs": "Mengunggah catatan",
         "downloading_logs": "Mengunduh catatan",
         "create_new_issue": "Mohon <newIssueLink>buat sebuah issue baru</newIssueLink> di GitHub supaya kami dapat memeriksa kutu ini.",
-        "waiting_for_server": "Menunggu respon dari server"
+        "waiting_for_server": "Menunggu respon dari server",
+        "error_empty": "Mohon beri tahu kami apa saja yang salah atau, lebih baik, buat sebuah issue GitHub yang menjelaskan masalahnya.",
+        "preparing_logs": "Mempersiapkan untuk mengirimkan catatan",
+        "logs_sent": "Catatan terkirim",
+        "thank_you": "Terima kasih!",
+        "failed_send_logs": "Gagal untuk mengirimkan catatan: ",
+        "preparing_download": "Mempersiapkan untuk mengunduh catatan",
+        "unsupported_browser": "Ingat: Browser Anda tidak didukung, jadi pengalaman Anda mungkin tidak dapat diprediksi.",
+        "textarea_label": "Nota",
+        "log_request": "Untuk membantu kami mencegahnya di masa mendatang, silakan <a>kirimkan kami catatan</a>."
     },
     "time": {
         "hours_minutes_seconds_left": "Sisa %(hours)sj %(minutes)sm %(seconds)sd",
@@ -1494,7 +1023,13 @@
         "send_dm": "Kirim sebuah Pesan Langsung",
         "explore_rooms": "Jelajahi Ruangan Publik",
         "create_room": "Buat sebuah Obrolan Grup",
-        "create_account": "Buat akun"
+        "create_account": "Buat akun",
+        "use_case_heading1": "Anda telah masuk",
+        "use_case_heading2": "Siapa saja yang sering Anda obrol?",
+        "use_case_heading3": "Kami akan membantu Anda untuk terhubung.",
+        "use_case_personal_messaging": "Teman dan keluarga",
+        "use_case_work_messaging": "Teman kerja dan tim",
+        "use_case_community_messaging": "Anggota komunitas daring"
     },
     "settings": {
         "show_breadcrumbs": "Tampilkan jalan pintas ke ruangan yang baru saja ditampilkan di atas daftar ruangan",
@@ -1898,7 +1433,23 @@
             "email_address_label": "Alamat Email",
             "remove_msisdn_prompt": "Hapus %(phone)s?",
             "add_msisdn_instructions": "Sebuah teks pesan telah dikirim ke +%(msisdn)s. Silakan masukkan kode verifikasinya.",
-            "msisdn_label": "Nomor Telepon"
+            "msisdn_label": "Nomor Telepon",
+            "spell_check_locale_placeholder": "Pilih locale",
+            "deactivate_confirm_body_sso": "Konfirmasi penonaktifan akun Anda dengan menggunakan Single Sign On untuk membuktikan identitas Anda.",
+            "deactivate_confirm_body": "Apakah Anda yakin ingin menonaktifkan akun Anda? Ini tidak dapat dibatalkan.",
+            "deactivate_confirm_continue": "Konfirmasi penonaktifan akun",
+            "deactivate_confirm_body_password": "Untuk melanjutkan, mohon masukkan kata sandi akun Anda:",
+            "error_deactivate_communication": "Terjadi sebuah masalah ketika berkomunikasi dengan server. Mohon coba lagi.",
+            "error_deactivate_no_auth": "Server tidak membutuhkan autentikasi apa pun",
+            "error_deactivate_invalid_auth": "Server tidak memberikan informasi autentikasi yang absah.",
+            "deactivate_confirm_content": "Konfirmasi jika Anda ingin menonaktifkan akun Anda. Jika Anda lanjut:",
+            "deactivate_confirm_content_1": "Anda tidak akan dapat mengaktifkan ulang akun Anda",
+            "deactivate_confirm_content_2": "Anda tidak akan dapat lagi masuk",
+            "deactivate_confirm_content_3": "Siapa pun tidak akan dapat menggunakan ulang nama pengguna (MXID), termasuk Anda: nama pengguna ini akan tetap tidak tersedia",
+            "deactivate_confirm_content_4": "Anda akan meninggalkan semua ruangan dan pesan langsung yang Anda berada",
+            "deactivate_confirm_content_5": "Anda akan dihapus dari server identitas: teman-teman Anda tidak akan dapat menemukan Anda dari email atau nomor telepon Anda",
+            "deactivate_confirm_content_6": "Pesan lama Anda akan masih terlihat kepada orang-orang yang menerimanya, sama seperti email yang Anda kirim di masa lalu. Apakah Anda ingin menyembunyikan pesan terkirim Anda dari orang-orang yang bergabung ruangan di masa depan?",
+            "deactivate_confirm_erase_label": "Sembunyikan pesan saya dari orang baru bergabung"
         },
         "sidebar": {
             "title": "Bilah Samping",
@@ -1963,7 +1514,8 @@
             "import_description_1": "Proses ini memungkinkan Anda untuk mengimpor kunci enkripsi yang sebelumnya telah Anda ekspor dari klien Matrix lain. Anda kemudian akan dapat mendekripsi pesan apa saja yang dapat didekripsi oleh klien lain.",
             "import_description_2": "File yang diekspor akan dilindungi dengan sebuah frasa sandi. Anda harus memasukkan frasa sandinya di sini untuk mendekripsi filenya.",
             "file_to_import": "File untuk diimpor"
-        }
+        },
+        "warning": "<w>PERINGATAN:</w> <description/>"
     },
     "devtools": {
         "send_custom_account_data_event": "Kirim peristiwa data akun kustom",
@@ -2065,7 +1617,8 @@
         "developer_mode": "Mode pengembang",
         "view_source_decrypted_event_source": "Sumber peristiwa terdekripsi",
         "view_source_decrypted_event_source_unavailable": "Sumber terdekripsi tidak tersedia",
-        "original_event_source": "Sumber peristiwa asli"
+        "original_event_source": "Sumber peristiwa asli",
+        "toggle_event": "alih peristiwa"
     },
     "export_chat": {
         "html": "HTML",
@@ -2124,7 +1677,8 @@
         "format": "Format",
         "messages": "Pesan",
         "size_limit": "Batas Ukuran",
-        "include_attachments": "Tambahkan Lampiran"
+        "include_attachments": "Tambahkan Lampiran",
+        "size_limit_postfix": "MB"
     },
     "create_room": {
         "title_video_room": "Buat sebuah ruangan video",
@@ -2158,7 +1712,8 @@
         "m.call": {
             "video_call_started": "Panggilan video dimulai di %(roomName)s.",
             "video_call_started_unsupported": "Panggilan video dimulai di %(roomName)s. (tidak didukung oleh peramban ini)",
-            "video_call_ended": "Panggilan video berakhir"
+            "video_call_ended": "Panggilan video berakhir",
+            "video_call_started_text": "%(name)s memulai sebuah panggilan video"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s melakukan panggilan video.",
@@ -2469,7 +2024,8 @@
         },
         "reactions": {
             "label": "%(reactors)s berekasi dengan %(content)s",
-            "tooltip": "<reactors/><reactedWith>bereaksi dengan %(shortName)s</reactedWith>"
+            "tooltip": "<reactors/><reactedWith>bereaksi dengan %(shortName)s</reactedWith>",
+            "add_reaction_prompt": "Tambahkan reaksi"
         },
         "m.room.create": {
             "continuation": "Ruangan ini adalah lanjutan dari obrolan sebelumnya.",
@@ -2489,7 +2045,9 @@
             "external_url": "URL Sumber",
             "collapse_reply_thread": "Tutup balasan utasan",
             "view_related_event": "Tampilkan peristiwa terkait",
-            "report": "Laporkan"
+            "report": "Laporkan",
+            "resent_unsent_reactions": "Kirim ulang %(unsentCount)s reaksi",
+            "open_in_osm": "Buka di OpenStreetMap"
         },
         "url_preview": {
             "show_n_more": {
@@ -2569,7 +2127,11 @@
             "you_declined": "Anda menolak",
             "you_cancelled": "Anda membatalkan",
             "declining": "Menolak…",
-            "you_started": "Anda mengirim sebuah permintaan verifikasi"
+            "you_started": "Anda mengirim sebuah permintaan verifikasi",
+            "user_accepted": "%(name)s menerima",
+            "user_declined": "%(name)s menolak",
+            "user_cancelled": "%(name)s membatalkan",
+            "user_wants_to_verify": "%(name)s ingin memverifikasi"
         },
         "m.poll.end": {
             "sender_ended": "%(senderName)s telah mengakhiri sebuah poll",
@@ -2577,6 +2139,28 @@
         },
         "m.video": {
             "error_decrypting": "Terjadi kesalahan mendekripsi video"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "Tambahkan sebuah Integrasi",
+            "dialog_description": "Anda akan dialihkan ke situs pihak ketiga sehingga Anda dapat mengautentikasi akun Anda untuk digunakan dengan %(integrationsUrl)s. Apakah Anda yakin untuk melanjutkan?"
+        },
+        "edits": {
+            "tooltip_title": "Diedit di %(date)s",
+            "tooltip_sub": "Klik untuk melihat editan",
+            "tooltip_label": "Diedit di %(date)s. Klik untuk melihat editan."
+        },
+        "error_rendering_message": "Tidak dapat memuat pesan ini",
+        "reply": {
+            "error_loading": "Tidak dapat memuat peristiwa yang dibalas, karena tidak ada atau Anda tidak memiliki izin untuk menampilkannya.",
+            "in_reply_to": "<a>Membalas ke</a> <pill>",
+            "in_reply_to_for_export": "Membalas ke <a>pesan ini</a>"
+        },
+        "in_room_name": " di <strong>%(room)s</strong>",
+        "m.poll": {
+            "count_of_votes": {
+                "one": "%(count)s suara",
+                "other": "%(count)s suara"
+            }
         }
     },
     "slash_command": {
@@ -2669,7 +2253,8 @@
         "verify_nop_warning_mismatch": "PERINGATAN: sesi telah diverifikasi, tetapi kuncinya TIDAK COCOK!",
         "verify_mismatch": "PERINGATAN: VERIFIKASI KUNCI GAGAL! Kunci penandatanganan untuk %(userId)s dan sesi %(deviceId)s adalah \"%(fprint)s\" yang tidak cocok dengan kunci \"%(fingerprint)s\" yang disediakan. Ini bisa saja berarti komunikasi Anda sedang disadap!",
         "verify_success_title": "Kunci terverifikasi",
-        "verify_success_description": "Kunci penandatanganan yang Anda sediakan cocok dengan kunci penandatanganan yang Anda terima dari sesi %(userId)s %(deviceId)s. Sesi ditandai sebagai terverifikasi."
+        "verify_success_description": "Kunci penandatanganan yang Anda sediakan cocok dengan kunci penandatanganan yang Anda terima dari sesi %(userId)s %(deviceId)s. Sesi ditandai sebagai terverifikasi.",
+        "help_dialog_title": "Bantuan Perintah"
     },
     "presence": {
         "busy": "Sibuk",
@@ -2802,9 +2387,11 @@
         "unable_to_access_audio_input_title": "Tidak dapat mengakses mikrofon Anda",
         "unable_to_access_audio_input_description": "Kami tidak dapat mengakses mikrofon Anda. Mohon periksa pengaturan browser Anda dan coba lagi.",
         "no_audio_input_title": "Tidak ada mikrofon yang ditemukan",
-        "no_audio_input_description": "Kami tidak menemukan sebuah mikrofon di perangkat Anda. Mohon periksa pengaturan Anda dan coba lagi."
+        "no_audio_input_description": "Kami tidak menemukan sebuah mikrofon di perangkat Anda. Mohon periksa pengaturan Anda dan coba lagi.",
+        "transfer_consult_first_label": "Konsultasi dahulu",
+        "input_devices": "Perangkat masukan",
+        "output_devices": "Perangkat keluaran"
     },
-    "Other": "Lainnya",
     "room_settings": {
         "permissions": {
             "m.room.avatar_space": "Ubah avatar space",
@@ -2911,7 +2498,16 @@
                 "other": "Memperbarui space... (%(progress)s dari %(count)s)"
             },
             "error_join_rule_change_title": "Gagal untuk memperbarui aturan bergabung",
-            "error_join_rule_change_unknown": "Kesalahan yang tidak diketahui"
+            "error_join_rule_change_unknown": "Kesalahan yang tidak diketahui",
+            "join_rule_restricted_dialog_empty_warning": "Anda menghilangkan semua space. Akses secara bawaan ke undangan saja",
+            "join_rule_restricted_dialog_title": "Pilih space",
+            "join_rule_restricted_dialog_description": "Tentukan space mana yang dapat mengakses ruangan ini. Jika sebuah space dipilih, anggotanya dapat menemukan dan bergabung <RoomName/>.",
+            "join_rule_restricted_dialog_filter_placeholder": "Cari space",
+            "join_rule_restricted_dialog_heading_space": "Space yang Anda tahu yang berisi space ini",
+            "join_rule_restricted_dialog_heading_room": "Space yang Anda tahu yang berisi ruangan ini",
+            "join_rule_restricted_dialog_heading_other": "Space atau ruangan lainnya yang Anda mungkin tidak tahu",
+            "join_rule_restricted_dialog_heading_unknown": "Ini kemungkinan adalah bagian dari admin ruangan lain.",
+            "join_rule_restricted_dialog_heading_known": "Space lainnya yang Anda tahu"
         },
         "general": {
             "publish_toggle": "Publikasi ruangan ini ke publik di direktori ruangan %(domain)s?",
@@ -2952,7 +2548,17 @@
             "canonical_alias_field_label": "Alamat utama",
             "avatar_field_label": "Avatar ruangan",
             "aliases_no_items_label": "Tidak ada alamat yang dipublikasikan, tambahkan satu di bawah",
-            "aliases_items_label": "Alamat lainnya yang dipublikasikan:"
+            "aliases_items_label": "Alamat lainnya yang dipublikasikan:",
+            "alias_heading": "Alamat ruangan",
+            "alias_field_has_domain_invalid": "Kurang pemisah domain mis. (:domain.org)",
+            "alias_field_has_localpart_invalid": "Kurang nama ruangan atau pemisah mis. (ruangan-saya:domain.org)",
+            "alias_field_safe_localpart_invalid": "Beberapa karakter tidak diizinkan",
+            "alias_field_required_invalid": "Mohon masukkan sebuah alamat",
+            "alias_field_matches_invalid": "Alamat ini tidak mengarah ke ruangan ini",
+            "alias_field_taken_valid": "Alamat ini dapat digunakan",
+            "alias_field_taken_invalid_domain": "Alamat ini sudah digunakan",
+            "alias_field_taken_invalid": "Alamat ini memiliki server yang tidak absah atau telah digunakan",
+            "alias_field_placeholder_default": "mis. ruangan-saya"
         },
         "advanced": {
             "unfederated": "Ruangan ini tidak dapat diakses oleh pengguna Matrix jarak jauh",
@@ -2965,7 +2571,25 @@
             "room_version_section": "Versi ruangan",
             "room_version": "Versi ruangan:",
             "information_section_space": "Informasi space",
-            "information_section_room": "Informasi ruangan"
+            "information_section_room": "Informasi ruangan",
+            "error_upgrade_title": "Gagal untuk meningkatkan ruangan",
+            "error_upgrade_description": "Peningkatan ruangan tidak dapat diselesaikan",
+            "upgrade_button": "Tingkatkan ruangan ini ke versi %(version)s",
+            "upgrade_dialog_title": "Tingkatkan Versi Ruangan",
+            "upgrade_dialog_description": "Meningkatkan ruangan ini membutuhkan penutupan instansi ruangan saat ini dan membuat ruangan yang baru di tempatnya. Untuk memberikan anggota ruangan pengalaman yang baik, kami akan:",
+            "upgrade_dialog_description_1": "Membuat ruangan baru dengan nama, deskripsi, dan avatar yang sama",
+            "upgrade_dialog_description_2": "Memperbarui alias ruangan lokal apa saja untuk diarahkan ke ruangan yang baru",
+            "upgrade_dialog_description_3": "Menghentikan pengguna dari berbicara di versi ruangan yang lama, dan mengirimkan sebuah pesan memberi tahu pengguna untuk pindah ke ruangan yang baru",
+            "upgrade_dialog_description_4": "Letakkan sebuah tautan kembali ke ruangan yang lama di awal ruangan baru supaya orang-orang dapat melihat pesan-pesan lama",
+            "upgrade_warning_dialog_invite_label": "Mengundang pengguna dari ruangan ini ke yang baru secara otomatis",
+            "upgrade_warning_dialog_title_private": "Tingkatkan ruangan privat",
+            "upgrade_dwarning_ialog_title_public": "Tingkatkan ruangan publik",
+            "upgrade_warning_dialog_title": "Tingkatkan ruangan",
+            "upgrade_warning_dialog_report_bug_prompt": "Ini biasanya hanya memengaruhi bagaimana ruangan diproses di servernya. Jika Anda memiliki masalah dengan %(brand)s, mohon melaporkannya.",
+            "upgrade_warning_dialog_report_bug_prompt_link": "Ini biasanya hanya memengaruhi bagaimana ruangan diproses di servernya. Jika Anda memiliki masalah dengan %(brand)s, mohon <a>melaporkannya</a>.",
+            "upgrade_warning_dialog_description": "Meningkatkan sebuah ruangan adalah aksi lanjutan dan biasanya direkomendasikan ketika sebuah ruangan tidak stabil karena adanya bug, fitur-fitur yang tidak ada, atau kerentanan keamanan.",
+            "upgrade_warning_dialog_explainer": "<b>Mohon dicatat bahwa meningkatkan akan membuat versi yang baru dari ruangannya.</b> Semua pesan saat ini akan tetap di ruangan terarsip ini.",
+            "upgrade_warning_dialog_footer": "Anda akan meningkatkan ruangan ini dari <oldVersion /> ke <newVersion />."
         },
         "delete_avatar_label": "Hapus avatar",
         "upload_avatar_label": "Unggah avatar",
@@ -3011,7 +2635,9 @@
             "enable_element_call_caption": "%(brand)s terenkripsi secara ujung ke ujung, tetapi saat ini terbatas jumlah penggunanya.",
             "enable_element_call_no_permissions_tooltip": "Anda tidak memiliki izin untuk mengubah ini.",
             "call_type_section": "Jenis panggilan"
-        }
+        },
+        "title": "Pengaturan Ruangan — %(roomName)s",
+        "alias_not_specified": "tidak ditentukan"
     },
     "encryption": {
         "verification": {
@@ -3088,7 +2714,21 @@
             "timed_out": "Waktu habis untuk memverifikasi.",
             "cancelled_self": "Anda membatalkan verifikasi di perangkat Anda yang lain.",
             "cancelled_user": "%(displayName)s membatalkan verifikasi.",
-            "cancelled": "Anda membatalkan verifikasi."
+            "cancelled": "Anda membatalkan verifikasi.",
+            "incoming_sas_user_dialog_text_1": "Verifikasi pengguna ini untuk menandainya sebagai terpercaya. Mempercayai pengguna memberikan Anda ketenangan saat menggunakan pesan terenkripsi secara ujung ke ujung.",
+            "incoming_sas_user_dialog_text_2": "Memverifikasi pengguna ini akan menandai sesinya sebagai terpercaya, dan juga menandai sesi Anda sebagai terpercaya kepadanya.",
+            "incoming_sas_device_dialog_text_1": "Verifikasi perangkat ini untuk menandainya sebagai terpercaya. Mempercayai perangkat ini akan memberikan Anda dan pengguna lain ketenangan saat menggunakan pesan terenkripsi secara ujung ke ujung.",
+            "incoming_sas_device_dialog_text_2": "Memverifikasi perangkat ini akan menandainya sebagai terpercaya, dan pengguna yang telah diverifikasi dengan Anda akan mempercayai perangkat ini.",
+            "incoming_sas_dialog_waiting": "Menunggu pengguna untuk konfirmasi…",
+            "incoming_sas_dialog_title": "Permintaan Verifikasi Masuk",
+            "manual_device_verification_self_text": "Konfirmasi dengan membandingkan berikut ini dengan Pengaturan Pengguna di sesi Anda yang lain:",
+            "manual_device_verification_user_text": "Konfirmasi sesi pengguna ini dengan membandingkan berikut ini dengan Pengaturan Pengguna:",
+            "manual_device_verification_device_name_label": "Nama sesi",
+            "manual_device_verification_device_id_label": "ID Sesi",
+            "manual_device_verification_device_key_label": "Kunci sesi",
+            "manual_device_verification_footer": "Jika mereka tidak cocok, keamanan komunikasi Anda mungkin dikompromikan.",
+            "verification_dialog_title_device": "Verifikasi perangkat lain",
+            "verification_dialog_title_user": "Permintaan Verifikasi"
         },
         "old_version_detected_title": "Data kriptografi lama terdeteksi",
         "old_version_detected_description": "Data dari %(brand)s versi lama telah terdeteksi. Ini akan menyebabkan kriptografi ujung ke ujung tidak berfungsi di versi yang lebih lama. Pesan terenkripsi secara ujung ke ujung yang dipertukarkan baru-baru ini saat menggunakan versi yang lebih lama mungkin tidak dapat didekripsi dalam versi ini. Ini juga dapat menyebabkan pesan yang dipertukarkan dengan versi ini gagal. Jika Anda mengalami masalah, keluar dan masuk kembali. Untuk menyimpan riwayat pesan, ekspor dan impor ulang kunci Anda.",
@@ -3142,7 +2782,57 @@
         "cross_signing_room_warning": "Seseorang menggunakan sesi yang tidak dikenal",
         "cross_signing_room_verified": "Semuanya di ruangan ini telah terverifikasi",
         "cross_signing_room_normal": "Ruangan ini dienkripsi secara ujung ke ujung",
-        "unsupported": "Klien ini tidak mendukung enkripsi ujung ke ujung."
+        "unsupported": "Klien ini tidak mendukung enkripsi ujung ke ujung.",
+        "incompatible_database_sign_out_description": "Untuk menghindari kehilangan riwayat obrolan, Anda harus mengekspor kunci ruangan Anda sebelum keluar. Anda harus kembali ke versi %(brand)s yang baru untuk melakukannya",
+        "incompatible_database_description": "Anda sebelumnya menggunakan sebuah versi %(brand)s yang baru dengan sesi ini. Untuk menggunakan versi ini lagi dengan enkripsi ujung ke ujung, Anda harus keluar dan masuk lagi.",
+        "incompatible_database_title": "Databasis Tidak Kompatibel",
+        "incompatible_database_disable": "Lanjutkan Dengan Enkripsi Dinonaktifkan",
+        "key_signature_upload_completed": "Unggahan selesai",
+        "key_signature_upload_cancelled": "Unggahan tandatangan dibatalkan",
+        "key_signature_upload_failed": "Tidak dapat mengunggah",
+        "key_signature_upload_success_title": "Unggahan tandatangan berhasil",
+        "key_signature_upload_failed_title": "Unggahan tandatangan gagal",
+        "udd": {
+            "own_new_session_text": "Anda masuk ke sesi baru tanpa memverifikasinya:",
+            "own_ask_verify_text": "Verifikasi sesi Anda lainnya dengan menggunakan salah satu pilihan di bawah.",
+            "other_new_session_text": "%(name)s (%(userId)s) masuk ke sesi yang baru tanpa memverifikasinya:",
+            "other_ask_verify_text": "Tanyakan pengguna ini untuk memverifikasi sesinya, atau verifikasi secara manual di bawah.",
+            "title": "Tidak Dipercayai",
+            "manual_verification_button": "Verifikasi secara manual dengan teks",
+            "interactive_verification_button": "Verifikasi secara interaktif sengan emoji"
+        },
+        "access_secret_storage_dialog": {
+            "key_validation_text": {
+                "wrong_file_type": "Tipe file salah",
+                "recovery_key_is_correct": "Kelihatannya bagus!",
+                "wrong_security_key": "Kunci Keamanan salah",
+                "invalid_security_key": "Kunci Keamanan tidak absah"
+            },
+            "reset_title": "Atur ulang semuanya",
+            "reset_warning_1": "Hanya lakukan ini jika Anda tidak memiliki perangkat yang lain untuk menyelesaikan verifikasi.",
+            "reset_warning_2": "Jika Anda mengatur ulang semuanya, Anda dengan mulai ulang dengan tidak ada sesi yang dipercayai, tidak ada pengguna yang dipercayai, dan mungkin tidak dapat melihat pesan-pesan lama.",
+            "security_phrase_title": "Frasa Keamanan",
+            "security_phrase_incorrect_error": "Tidak dapat mengakses penyimpanan rahasia. Periksa jika Anda memasukkan Frasa Keamanan yang benar.",
+            "enter_phrase_or_key_prompt": "Masukkan Frasa Keamanan Anda atau <button>gunakan Kunci Keamanan Anda</button> untuk melanjutkan.",
+            "security_key_title": "Kunci Keamanan",
+            "use_security_key_prompt": "Gunakan Kunci Keamanan Anda untuk melanjutkan.",
+            "separator": "%(securityKey)s atau %(recoveryFile)s",
+            "restoring": "Memulihkan kunci-kunci dari cadangan"
+        },
+        "reset_all_button": "Lupa atau kehilangan semua metode pemulihan? <a>Atur ulang semuanya</a>",
+        "destroy_cross_signing_dialog": {
+            "title": "Hancurkan kunci-kunci penandatanganan silang?",
+            "warning": "Menghapus kunci penandatanganan silang itu permanen. Siapa saja yang Anda verifikasi akan melihat peringatan keamanan. Anda hampir pasti tidak ingin melakukan ini, kecuali jika Anda kehilangan setiap perangkat yang dapat digunakan untuk melakukan penandatanganan silang.",
+            "primary_button_text": "Hapus kunci-kunci penandatanganan silang"
+        },
+        "confirm_encryption_setup_title": "Konfirmasi pengaturan enkripsi",
+        "confirm_encryption_setup_body": "Klik tombol di bawah untuk mengkonfirmasi menyiapkan enkripsi.",
+        "unable_to_setup_keys_error": "Tidak dapat mengatur kunci-kunci",
+        "key_signature_upload_failed_master_key_signature": "sebuah tandatangan kunci utama baru",
+        "key_signature_upload_failed_cross_signing_key_signature": "sebuah tandatangan kunci penandatanganan silang baru",
+        "key_signature_upload_failed_device_cross_signing_key_signature": "sebuah tandatangan penandatanganan silang perangkat",
+        "key_signature_upload_failed_key_signature": "sebuah tandatangan kunci",
+        "key_signature_upload_failed_body": "%(brand)s mengalami sebuah kesalahan ketika mengunggah unggahan:"
     },
     "emoji": {
         "category_frequently_used": "Sering Digunakan",
@@ -3292,7 +2982,10 @@
             "fallback_button": "Mulai autentikasi",
             "sso_title": "Gunakan Single Sign On untuk melanjutkan",
             "sso_body": "Konfirmasi penambahan alamat email ini dengan menggunakan Single Sign On untuk membuktikan identitas Anda.",
-            "code": "Kode"
+            "code": "Kode",
+            "sso_preauth_body": "Untuk melanjutkan, gunakan Single Sign On untuk membuktikan identitas Anda.",
+            "sso_postauth_title": "Konfirmasi untuk melanjutkan",
+            "sso_postauth_body": "Klik tombol di bawah untuk mengkonfirmasi identitas Anda."
         },
         "password_field_label": "Masukkan kata sandi",
         "password_field_strong_label": "Bagus, kata sandinya kuat!",
@@ -3368,7 +3061,41 @@
         },
         "country_dropdown": "Dropdown Negara",
         "common_failures": {},
-        "captcha_description": "Homeserver ini memastikan Anda bahwa Anda bukan sebuah robot."
+        "captcha_description": "Homeserver ini memastikan Anda bahwa Anda bukan sebuah robot.",
+        "autodiscovery_invalid": "Respons penemuan homeserver tidak absah",
+        "autodiscovery_generic_failure": "Gagal untuk mendapatkan konfigurasi penemuan otomatis dari server",
+        "autodiscovery_invalid_hs_base_url": "base_url tidak absah untuk m.homeserver",
+        "autodiscovery_invalid_hs": "URL homeserver sepertinya bukan sebagai homeserver Matrix yang absah",
+        "autodiscovery_invalid_is_base_url": "base_url tidak absah untuk m.identity_server",
+        "autodiscovery_invalid_is": "URL server identitas terlihat bukan sebagai server identitas yang absah",
+        "autodiscovery_invalid_is_response": "Respons penemuan server identitas tidak absah",
+        "server_picker_description": "Anda dapat menggunakan opsi server khusus untuk masuk ke server Matrix lain dengan menentukan URL homeserver yang berbeda. Ini memungkinkan Anda untuk menggunakan %(brand)s dengan akun Matrix yang ada di homeserver yang berbeda.",
+        "server_picker_description_matrix.org": "Bergabung dengan jutaan orang lainnya secara gratis di server publik terbesar",
+        "server_picker_title_default": "Opsi Server",
+        "soft_logout": {
+            "clear_data_title": "Hapus semua data di sesi ini?",
+            "clear_data_description": "Menghapus semua data dari sesi ini itu permanen. Pesan-pesan terenkripsi akan hilang kecuali jika kunci-kuncinya telah dicadangkan.",
+            "clear_data_button": "Hapus semua data"
+        },
+        "logout_dialog": {
+            "setup_secure_backup_description_1": "Pesan terenkripsi diamankan dengan enkripsi ujung ke ujung. Hanya Anda dan penerima punya kuncinya untuk membaca pesan ini.",
+            "setup_secure_backup_description_2": "Ketika Anda keluar, kunci-kunci ini akan dihapus dari perangkat ini, yang berarti Anda tidak dapat membaca pesan-pesan terenkripsi kecuali jika Anda mempunyai kuncinya di perangkat Anda yang lain, atau telah mencadangkannya ke server.",
+            "use_key_backup": "Mulai menggunakan Cadangan Kunci",
+            "skip_key_backup": "Saya tidak ingin pesan-pesan terenkripsi saya",
+            "megolm_export": "Ekspor kunci secara manual",
+            "setup_key_backup_title": "Anda akan kehilangan akses ke pesan terenkripsi Anda",
+            "description": "Apakah Anda yakin ingin keluar?"
+        },
+        "registration": {
+            "continue_without_email_title": "Melanjutkan tanpa email",
+            "continue_without_email_description": "Sekadar mengingatkan saja, jika Anda belum menambahkan sebuah email dan Anda lupa kata sandi, Anda mungkin <b>dapat kehilangan akses ke akun Anda</b>.",
+            "continue_without_email_field_label": "Email (opsional)"
+        },
+        "set_email": {
+            "verification_pending_title": "Verifikasi Menunggu",
+            "verification_pending_description": "Mohon periksa email Anda dan klik tautannya. Setelah itu, klik lanjut.",
+            "description": "Ini akan mengizinkan Anda untuk mengatur ulang kata sandi Anda dan menerima notifikasi."
+        }
     },
     "room_list": {
         "sort_unread_first": "Tampilkan ruangan dengan pesan yang belum dibaca dahulu",
@@ -3422,7 +3149,8 @@
         "spam_or_propaganda": "Spam atau propaganda",
         "report_entire_room": "Laporkan seluruh ruangan",
         "report_content_to_homeserver": "Laporkan Konten ke Administrator Homeserver Anda",
-        "description": "Melaporkan pesan ini akan mengirimkan ID peristiwa yang untuk ke administrator homeserver Anda. Jika pesan-pesan di ruangan ini terenkripsi, maka administrator homeserver Anda tidak akan dapat membaca teks pesan atau menampilkan file atau gambar apa saja."
+        "description": "Melaporkan pesan ini akan mengirimkan ID peristiwa yang untuk ke administrator homeserver Anda. Jika pesan-pesan di ruangan ini terenkripsi, maka administrator homeserver Anda tidak akan dapat membaca teks pesan atau menampilkan file atau gambar apa saja.",
+        "other_label": "Lainnya"
     },
     "setting": {
         "help_about": {
@@ -3541,7 +3269,22 @@
         "popout": "Widget popout",
         "unpin_to_view_right_panel": "Lepaskan pin widget ini untuk menampilkanya di panel ini",
         "set_room_layout": "Tetapkan tata letak ruangan saya untuk semuanya",
-        "close_to_view_right_panel": "Tutup widget ini untuk menampilkannya di panel ini"
+        "close_to_view_right_panel": "Tutup widget ini untuk menampilkannya di panel ini",
+        "modal_title_default": "Widget Modal",
+        "modal_data_warning": "Data di layar ini dibagikan dengan %(widgetDomain)s",
+        "capabilities_dialog": {
+            "title": "Setujui izin widget",
+            "content_starting_text": "Widget ini ingin:",
+            "decline_all_permission": "Tolak Semua",
+            "remember_Selection": "Ingat pilihan saya untuk widget ini"
+        },
+        "open_id_permissions_dialog": {
+            "title": "Izinkan widget ini untuk memverifikasi identitas Anda",
+            "starting_text": "Widget ini akan memverifikasi ID pengguna Anda, tetapi tidak dapat melakukan aksi untuk Anda:",
+            "remember_selection": "Ingat ini"
+        },
+        "error_unable_start_audio_stream_description": "Tidak dapat memulai penyiaran audio.",
+        "error_unable_start_audio_stream_title": "Gagal untuk memulai siaran langsung"
     },
     "feedback": {
         "sent": "Masukan terkirim",
@@ -3550,7 +3293,8 @@
         "may_contact_label": "Anda mungkin hubungi saya jika Anda ingin menindaklanjuti atau memberi tahu saya untuk menguji ide baru",
         "pro_type": "Jika Anda membuat issue, silakan kirimkan <debugLogsLink>log pengawakutu</debugLogsLink> untuk membantu kami menemukan masalahnya.",
         "existing_issue_link": "Mohon lihat <existingIssuesLink>bug yang sudah ada di GitHub</existingIssuesLink> dahulu. Tidak ada? <newIssueLink>Buat yang baru</newIssueLink>.",
-        "send_feedback_action": "Kirimkan masukan"
+        "send_feedback_action": "Kirimkan masukan",
+        "can_contact_label": "Anda mungkin menghubungi saya jika Anda mempunyai pertanyaan lanjutan"
     },
     "zxcvbn": {
         "suggestions": {
@@ -3623,7 +3367,10 @@
         "no_update": "Tidak ada pembaruan yang tersedia.",
         "downloading": "Mengunduh pembaruan…",
         "new_version_available": "Versi yang baru telah tersedia. <a>Perbarui sekarang.</a>",
-        "check_action": "Periksa untuk pembaruan"
+        "check_action": "Periksa untuk pembaruan",
+        "error_unable_load_commit": "Tidak dapat memuat detail komit: %(msg)s",
+        "unavailable": "Tidak Tersedia",
+        "changelog": "Changelog"
     },
     "threads": {
         "all_threads": "Semua utasan",
@@ -3638,7 +3385,11 @@
         "empty_heading": "Buat diskusi tetap teratur dengan utasan",
         "unable_to_decrypt": "Tidak dapat mendekripsi pesan",
         "open_thread": "Buka utasan",
-        "error_start_thread_existing_relation": "Tidak dapat membuat utasan dari sebuah peristiwa dengan relasi yang sudah ada"
+        "error_start_thread_existing_relation": "Tidak dapat membuat utasan dari sebuah peristiwa dengan relasi yang sudah ada",
+        "count_of_reply": {
+            "one": "%(count)s balasan",
+            "other": "%(count)s balasan"
+        }
     },
     "theme": {
         "light_high_contrast": "Kontras tinggi terang",
@@ -3672,7 +3423,41 @@
         "title_when_query_available": "Hasil",
         "search_placeholder": "Cari nama dan deskripsi",
         "no_search_result_hint": "Anda mungkin ingin mencoba pencarian yang berbeda atau periksa untuk typo.",
-        "joining_space": "Bergabung"
+        "joining_space": "Bergabung",
+        "add_existing_subspace": {
+            "space_dropdown_title": "Tambahkan space yang sudah ada",
+            "create_prompt": "Ingin menambahkan sebuah space yang baru saja?",
+            "create_button": "Buat sebuah space baru",
+            "filter_placeholder": "Cari space"
+        },
+        "add_existing_room_space": {
+            "error_heading": "Tidak semua yang terpilih ditambahkan",
+            "progress_text": {
+                "one": "Menambahkan ruangan...",
+                "other": "Menambahkan ruangan... (%(progress)s dari %(count)s)"
+            },
+            "dm_heading": "Pesan Langsung",
+            "space_dropdown_label": "Pilihan space",
+            "space_dropdown_title": "Tambahkan ruangan yang sudah ada",
+            "create": "Ingin menambahkan sebuah ruangan yang baru saja?",
+            "create_prompt": "Buat sebuah ruangan baru",
+            "subspace_moved_note": "Menambahkan space telah dipindah."
+        },
+        "room_filter_placeholder": "Cari ruangan",
+        "leave_dialog_public_rejoin_warning": "Anda tidak dapat bergabung lagi kecuali jika Anda diundang lagi.",
+        "leave_dialog_only_admin_warning": "Anda adalah satu-satu admin di space ini. Meninggalkannya akan berarti tidak ada siapa saja yang dapat melakukan apa-apa di spacenya.",
+        "leave_dialog_only_admin_room_warning": "Anda adalah satu-satunya admin di beberapa ruangan atau space yang ingin Anda tinggalkan. Meninggalkan mereka akan meninggalkan mereka tanpa admin.",
+        "leave_dialog_title": "Tinggalkan %(spaceName)s",
+        "leave_dialog_description": "Anda akan keluar dari <spaceName/>.",
+        "leave_dialog_option_intro": "Apakah Anda ingin keluar dari ruangan-ruangan di space ini?",
+        "leave_dialog_option_none": "Jangan tinggalkan ruangan apa pun",
+        "leave_dialog_option_all": "Tinggalkan semua ruangan",
+        "leave_dialog_option_specific": "Tinggalkan beberapa ruangan",
+        "leave_dialog_action": "Tinggalkan space",
+        "preferences": {
+            "sections_section": "Bagian untuk ditampilkan",
+            "show_people_in_space": "Ini mengelompokkan obrolan Anda dengan anggota space ini. Menonaktifkan ini akan menyembunyikan obrolan dari tampilan %(spaceName)s Anda."
+        }
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Homeserver ini tidak diatur untuk menampilkan peta.",
@@ -3697,7 +3482,30 @@
         "click_move_pin": "Klik untuk memindahkan pin",
         "click_drop_pin": "Klik untuk menaruh pin",
         "share_button": "Bagikan lokasi",
-        "stop_and_close": "Berhenti dan tutup"
+        "stop_and_close": "Berhenti dan tutup",
+        "error_fetch_location": "Tidak dapat mendapatkan lokasi",
+        "error_no_perms_title": "Anda tidak memiliki izin untuk membagikan lokasi",
+        "error_no_perms_description": "Anda harus mempunyai izin yang diperlukan untuk membagikan lokasi di ruangan ini.",
+        "error_send_title": "Kami tidak dapat mengirimkan lokasi Anda",
+        "error_send_description": "%(brand)s tidak dapat mengirimkan lokasi Anda. Silakan coba lagi nanti.",
+        "live_description": "Lokasi langsung %(displayName)s",
+        "share_type_own": "Lokasi saya saat ini",
+        "share_type_live": "Lokasi langsung saya",
+        "share_type_pin": "Drop sebuah Pin",
+        "share_type_prompt": "Tipe lokasi apa yang Anda ingin bagikan?",
+        "live_update_time": "Diperbarui %(humanizedUpdateTime)s",
+        "live_until": "Langsung sampai %(expiryTime)s",
+        "loading_live_location": "Memuat lokasi langsung…",
+        "live_location_ended": "Lokasi langsung berakhir",
+        "live_location_error": "Kesalahan lokasi langsung",
+        "live_locations_empty": "Tidak ada lokasi langsung",
+        "close_sidebar": "Tutup bilah samping",
+        "error_stopping_live_location": "Sebuah kesalahan terjadi saat menghentikan lokasi langsung Anda",
+        "error_sharing_live_location": "Sebuah kesalahan terjadi saat berbagi lokasi langsung Anda",
+        "live_location_active": "Anda membagikan lokasi langsung Anda",
+        "live_location_enabled": "Lokasi langsung diaktifkan",
+        "error_sharing_live_location_try_again": "Sebuah kesalahan terjadi saat membagikan lokasi langsung Anda, mohon coba lagi",
+        "error_stopping_live_location_try_again": "Sebuah kesalahan terjadi saat menghentikan lokasi langsung Anda, mohon coba lagi"
     },
     "labs_mjolnir": {
         "room_name": "Daftar Cekalan Saya",
@@ -3769,7 +3577,16 @@
         "address_label": "Alamat",
         "label": "Buat space",
         "add_details_prompt_2": "Anda dapat mengubahnya kapan saja.",
-        "creating": "Membuat…"
+        "creating": "Membuat…",
+        "subspace_join_rule_restricted_description": "Siapa saja di <SpaceName/> dapat menemukan dan bergabung.",
+        "subspace_join_rule_public_description": "Siapa saja dapat menemukan dan bergabung space ini, tidak hanya anggota dari <SpaceName/>.",
+        "subspace_join_rule_invite_description": "Hanya orang-orang yang diundang dapat menemukan dan bergabung dengan space ini.",
+        "subspace_dropdown_title": "Buat space",
+        "subspace_beta_notice": "Tambahkan sebuah space ke space yang Anda kelola.",
+        "subspace_join_rule_label": "Visibilitas space",
+        "subspace_join_rule_invite_only": "Space pribadi (undangan saja)",
+        "subspace_existing_space_prompt": "Ingin menambahkan sebuah space yang sudah ada saja?",
+        "subspace_adding": "Menambahkan…"
     },
     "user_menu": {
         "switch_theme_light": "Ubah ke mode terang",
@@ -3938,7 +3755,11 @@
             "all_rooms": "Semua Ruangan",
             "field_placeholder": "Cari…",
             "this_room_button": "Cari ruangan ini",
-            "all_rooms_button": "Cari semua ruangan"
+            "all_rooms_button": "Cari semua ruangan",
+            "result_count": {
+                "one": "(~%(count)s hasil)",
+                "other": "(~%(count)s hasil)"
+            }
         },
         "jump_to_bottom_button": "Gulir ke pesan yang terbaru",
         "jump_read_marker": "Pergi ke pesan pertama yang belum dibaca.",
@@ -3953,7 +3774,19 @@
         "error_jump_to_date_details": "Detail kesalahan",
         "jump_to_date_beginning": "Awalan ruangan",
         "jump_to_date": "Pergi ke tanggal",
-        "jump_to_date_prompt": "Pilih sebuah tanggal untuk pergi ke tanggalnya"
+        "jump_to_date_prompt": "Pilih sebuah tanggal untuk pergi ke tanggalnya",
+        "face_pile_tooltip_label": {
+            "one": "Tampilkan 1 pengguna",
+            "other": "Tampilkan semua %(count)s anggota"
+        },
+        "face_pile_tooltip_shortcut_joined": "Termasuk Anda, %(commaSeparatedMembers)s",
+        "face_pile_tooltip_shortcut": "Termasuk %(commaSeparatedMembers)s",
+        "invites_you_text": "<inviter/> mengundang Anda",
+        "unknown_status_code_for_timeline_jump": "kode keadaan tidak diketahui",
+        "face_pile_summary": {
+            "one": "%(count)s orang yang Anda tahu telah bergabung",
+            "other": "%(count)s orang yang Anda tahu telah bergabung"
+        }
     },
     "file_panel": {
         "guest_note": "Anda harus <a>mendaftar</a> untuk menggunakan kegunaan ini",
@@ -3974,7 +3807,9 @@
         "identity_server_no_terms_title": "Identitas server ini tidak memiliki syarat layanan",
         "identity_server_no_terms_description_1": "Aksi ini memerlukan mengakses server identitas bawaan <server /> untuk memvalidasi sebuah alamat email atau nomor telepon, tetapi server ini tidak memiliki syarat layanan apa pun.",
         "identity_server_no_terms_description_2": "Hanya lanjutkan jika Anda mempercayai pemilik server ini.",
-        "inline_intro_text": "Terima <policyLink /> untuk melanjutkan:"
+        "inline_intro_text": "Terima <policyLink /> untuk melanjutkan:",
+        "summary_identity_server_1": "Temukan lainnya melalui ponsel atau email",
+        "summary_identity_server_2": "Temukan oleh lainnya melalui ponsel atau email"
     },
     "space_settings": {
         "title": "Pengaturan — %(spaceName)s"
@@ -4011,7 +3846,13 @@
         "total_n_votes_voted": {
             "one": "Berdasarkan oleh %(count)s suara",
             "other": "Berdasarkan oleh %(count)s suara"
-        }
+        },
+        "end_message_no_votes": "Poll telah berakhir. Tidak ada yang memberi suara.",
+        "end_message": "Poll telah berakhir. Jawaban teratas: %(topAnswer)s",
+        "error_ending_title": "Gagal untuk mengakhiri poll",
+        "error_ending_description": "Maaf, poll tidak berakhir. Silakan coba lagi.",
+        "end_title": "Akhiri Poll",
+        "end_description": "Apakah Anda yakin untuk mengakhiri poll ini? Ini akan menampilkan hasil akhir dari poll dan orang-orang tidak dapat memberikan suara lagi."
     },
     "failed_load_async_component": "Tidak dapat memuat! Periksa koneksi jaringan Anda dan coba lagi.",
     "upload_failed_generic": "File '%(fileName)s' gagal untuk diunggah.",
@@ -4059,7 +3900,39 @@
         "error_version_unsupported_space": "Homeserver pengguna tidak mendukung versi space.",
         "error_version_unsupported_room": "Homeserver penggunanya tidak mendukung versi ruangannya.",
         "error_unknown": "Kesalahan server yang tidak diketahui",
-        "to_space": "Undang ke %(spaceName)s"
+        "to_space": "Undang ke %(spaceName)s",
+        "unable_find_profiles_description_default": "Tidak dapat menemukan profil untuk ID Matrix yang dicantumkan di bawah — apakah Anda ingin mengundang mereka saja?",
+        "unable_find_profiles_title": "Pengguna berikut ini mungkin tidak ada",
+        "unable_find_profiles_invite_never_warn_label_default": "Undang saja dan jangan peringatkan saya lagi",
+        "unable_find_profiles_invite_label_default": "Undang saja",
+        "email_caption": "Undang melalui email",
+        "error_dm": "Kami tidak dapat membuat pesan langsung Anda.",
+        "ask_anyway_description": "Tidak dapat menemukan profil untuk ID Matrix yang disertakan di bawah — apakah Anda ingin memulai percakapan langsung saja?",
+        "ask_anyway_never_warn_label": "Mulai percakapan langsung saja dan jangan peringatkan saya lagi",
+        "ask_anyway_label": "Mulai percakapan langsung saja",
+        "error_find_room": "Ada sesuatu yang salah ketika mengundang penggunanya.",
+        "error_invite": "Kami tidak dapat mengundang penggunanya. Mohon periksa pengguna yang Anda ingin undang dan coba lagi.",
+        "error_transfer_multiple_target": "Sebuah panggilan dapat dipindah ke sebuah pengguna.",
+        "error_find_user_title": "Gagal untuk mencari pengguna berikut ini",
+        "error_find_user_description": "Pengguna berikut ini mungkin tidak ada atau tidak absah, dan tidak dapat diundang: %(csvNames)s",
+        "recents_section": "Obrolan Terkini",
+        "suggestions_section": "Pesan Langsung Kini",
+        "email_use_default_is": "Gunakan sebuah server identitas untuk mengundang melalui email. <default>Gunakan bawaan (%(defaultIdentityServerName)s)</default> atau kelola di <settings>Pengaturan</settings>.",
+        "email_use_is": "Gunakan sebuah server identitas untuk mengundang melalui email. Kelola di <settings>Pengaturan</settings>.",
+        "start_conversation_name_email_mxid_prompt": "Mulai sebuah obrolan dengan sesorang menggunakan namanya, alamat email atau nama pengguna (seperti <userId/>).",
+        "start_conversation_name_mxid_prompt": "Mulai sebuah obrolan dengan seseorang menggunakan namanya atau nama pengguna (seperti <userId/>).",
+        "suggestions_disclaimer": "Beberapa saran mungkin disembunyikan untuk privasi.",
+        "suggestions_disclaimer_prompt": "Jika Anda tidak dapat menemukan siapa yang Anda mencari, kirimkan tautan undangan Anda di bawah.",
+        "send_link_prompt": "Atau kirim tautan undangan",
+        "to_room": "Undang ke %(roomName)s",
+        "name_email_mxid_share_space": "Undang seseorang menggunakan namanya, alamat email, nama pengguna (seperti <userId/>) atau <a>bagikan space ini</a>.",
+        "name_mxid_share_space": "Undang seseorang menggunakan namanya, nama pengguna (seperti <userId/>) atau <a>bagikan space ini</a>.",
+        "name_email_mxid_share_room": "Undang seseorang menggunakan namanya, alamat email, nama pengguna (seperti <userId/>) atau <a>bagikan ruangan ini</a>.",
+        "name_mxid_share_room": "Undang seseorang menggunakan namanya, nama pengguna (seperti <userId/>) atau <a>bagikan ruangan ini</a>.",
+        "key_share_warning": "Orang-orang yang diundang dapat membaca pesan-pesan lama.",
+        "email_limit_one": "Undangan lewat surel hanya dapat dikirim satu-satu",
+        "transfer_user_directory_tab": "Direktori Pengguna",
+        "transfer_dial_pad_tab": "Tombol penyetel"
     },
     "scalar": {
         "error_create": "Tidak dapat membuat widget.",
@@ -4092,7 +3965,21 @@
         "something_went_wrong": "Ada sesuatu yang salah!",
         "download_media": "Gagal mengunduh media sumber, tidak ada URL sumber yang ditemukan",
         "update_power_level": "Gagal untuk mengubah tingkat daya",
-        "unknown": "Kesalahan tidak diketahui"
+        "unknown": "Kesalahan tidak diketahui",
+        "dialog_description_default": "Telah terjadi kesalahan.",
+        "edit_history_unsupported": "Homeserver Anda sepertinya tidak mendukung fitur ini.",
+        "session_restore": {
+            "clear_storage_description": "Keluar dan hapus kunci-kunci enkripsi?",
+            "clear_storage_button": "Hapus Penyimpanan dan Keluar",
+            "title": "Tidak dapat memulihkan sesi",
+            "description_1": "Kami mengalami sebuah kesalahan saat memulihkan sesi Anda sebelumnya.",
+            "description_2": "Jika Anda sebelumnya menggunakan versi %(brand)s yang lebih baru, sesi Anda mungkin tidak kompatibel dengan versi ini. Tutup jendela ini dan kembali ke versi yang lebih baru.",
+            "description_3": "Menghapus penyimpanan browser Anda mungkin memperbaiki masalahnya, tetapi akan mengeluarkan Anda dan membuat riwayat obrolan tidak dapat dibaca."
+        },
+        "storage_evicted_title": "Data sesi hilang",
+        "storage_evicted_description_1": "Beberapa data sesi, termasuk kunci pesan terenkripsi, hilang. Keluar dan masuk lagi untuk memperbaikinya, memulihkan kunci-kunci dari cadangan.",
+        "storage_evicted_description_2": "Kemungkinan browser Anda menghapus datanya ketika ruang disk rendah.",
+        "unknown_error_code": "kode kesalahan tidak diketahui"
     },
     "in_space1_and_space2": "Dalam space %(space1Name)s dan %(space2Name)s.",
     "in_space_and_n_other_spaces": {
@@ -4246,7 +4133,31 @@
         "deactivate_confirm_action": "Nonaktifkan pengguna",
         "error_deactivate": "Gagal untuk menonaktifkan pengguna",
         "role_label": "Peran di <RoomName/>",
-        "edit_own_devices": "Edit perangkat"
+        "edit_own_devices": "Edit perangkat",
+        "redact": {
+            "no_recent_messages_title": "Tidak ada pesan terkini dari %(user)s yang ditemukan",
+            "no_recent_messages_description": "Coba gulir ke atas di lini masa untuk melihat apa ada pesan-pesan sebelumnya.",
+            "confirm_title": "Hapus pesan terkini dari %(user)s",
+            "confirm_description_1": {
+                "one": "Anda akan menghapus %(count)s pesan dari %(user)s. Ini akan dihapus secara permanen untuk semua dalam obrolan. Apakah Anda ingin lanjut?",
+                "other": "Anda akan menghapus %(count)s pesan dari %(user)s. Ini akan dihapus secara permanen untuk semua dalam obrolan. Apakah Anda ingin lanjut?"
+            },
+            "confirm_description_2": "Untuk pesan yang jumlahnya banyak, ini mungkin membutuhkan beberapa waktu. Jangan muat ulang klien Anda untuk sementara.",
+            "confirm_keep_state_label": "Simpan pesan-pesan sistem",
+            "confirm_keep_state_explainer": "Jangan centang jika Anda juga ingin menghapus pesan-pesan sistem pada pengguna ini (mis. perubahan keanggotaan, perubahan profil…)",
+            "confirm_button": {
+                "one": "Hapus 1 pesan",
+                "other": "Hapus %(count)s pesan"
+            }
+        },
+        "count_of_verified_sessions": {
+            "one": "1 sesi terverifikasi",
+            "other": "%(count)s sesi terverifikasi"
+        },
+        "count_of_sessions": {
+            "one": "%(count)s sesi",
+            "other": "%(count)s sesi"
+        }
     },
     "stickers": {
         "empty": "Anda saat ini tidak memiliki paket stiker apa pun yang diaktifkan",
@@ -4299,6 +4210,9 @@
                 "other": "Hasil akhir bedasarkan dari %(count)s suara",
                 "one": "Hasil akhir bedasarkan dari %(count)s suara"
             }
+        },
+        "thread_list": {
+            "context_menu_label": "Opsi utasan"
         }
     },
     "reject_invitation_dialog": {
@@ -4335,12 +4249,168 @@
     },
     "console_wait": "Tunggu!",
     "cant_load_page": "Tidak dapat memuat halaman",
-    "Invalid homeserver discovery response": "Respons penemuan homeserver tidak absah",
-    "Failed to get autodiscovery configuration from server": "Gagal untuk mendapatkan konfigurasi penemuan otomatis dari server",
-    "Invalid base_url for m.homeserver": "base_url tidak absah untuk m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "URL homeserver sepertinya bukan sebagai homeserver Matrix yang absah",
-    "Invalid identity server discovery response": "Respons penemuan server identitas tidak absah",
-    "Invalid base_url for m.identity_server": "base_url tidak absah untuk m.identity_server",
-    "Identity server URL does not appear to be a valid identity server": "URL server identitas terlihat bukan sebagai server identitas yang absah",
-    "General failure": "Kesalahan umum"
+    "General failure": "Kesalahan umum",
+    "emoji_picker": {
+        "cancel_search_label": "Batalkan pencarian"
+    },
+    "info_tooltip_title": "Informasi",
+    "language_dropdown_label": "Dropdown Bahasa",
+    "pill": {
+        "permalink_other_room": "Pesan dalam %(room)s",
+        "permalink_this_room": "Pesan dari %(user)s"
+    },
+    "seshat": {
+        "error_initialising": "Initialisasi pencarian pesan gagal, periksa <a>pengaturan Anda</a> untuk informasi lanjut",
+        "warning_kind_files_app": "Gunakan <a>aplikasi desktop</a> untuk melihat semua file terenkripsi",
+        "warning_kind_search_app": "Gunakan <a>aplikasi desktop</a> untuk mencari pesan-pesan terenkripsi",
+        "warning_kind_files": "Versi %(brand)s ini tidak mendukung penampilan beberapa file terenkripsi",
+        "warning_kind_search": "Versi %(brand)s ini tidak mendukung pencarian pesan terenkripsi",
+        "reset_title": "Atur ulang penyimanan peristiwa?",
+        "reset_description": "Kemungkinan besar Anda tidak ingin mengatur ulang penyimpanan indeks peristiwa Anda",
+        "reset_explainer": "Jika Anda ingin, dicatat bahwa pesan-pesan Anda tidak dihapus, tetapi pengalaman pencarian mungkin terdegradasi untuk beberapa saat indeksnya sedang dibuat ulang",
+        "reset_button": "Atur ulang penyimpanan peristiwa"
+    },
+    "truncated_list_n_more": {
+        "other": "Dan %(count)s lagi..."
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_required_invalid": "Masukkan sebuah nama server",
+            "network_dropdown_available_valid": "Kelihatannya bagus",
+            "network_dropdown_available_invalid_forbidden": "Anda tidak diizinkan untuk menampilkan daftar ruangan server ini",
+            "network_dropdown_available_invalid": "Tidak dapat menemukan server ini atau daftar ruangannya",
+            "network_dropdown_your_server_description": "Server Anda",
+            "network_dropdown_remove_server_adornment": "Hapus server “%(roomServer)s”",
+            "network_dropdown_add_dialog_title": "Tambahkan sebuah server baru",
+            "network_dropdown_add_dialog_description": "Masukkan nama server baru yang Anda ingin jelajahi.",
+            "network_dropdown_add_dialog_placeholder": "Nama server",
+            "network_dropdown_add_server_option": "Tambahkan server baru…",
+            "network_dropdown_selected_label_instance": "Tampilkan: %(instance)s ruangan (%(server)s)",
+            "network_dropdown_selected_label": "Tampilkan: ruangan Matrix"
+        }
+    },
+    "dialog_close_label": "Tutup dialog",
+    "voice_message": {
+        "cant_start_broadcast_title": "Tidak dapat memulai pesan suara",
+        "cant_start_broadcast_description": "Anda tidak dapat memulai sebuah pesan suara karena Anda saat ini merekam sebuah siaran langsung. Silakan mengakhiri siaran langsung Anda untuk memulai merekam sebuah pesan suara."
+    },
+    "redact": {
+        "error": "Anda tidak dapat menghapus pesan ini. (%(code)s)",
+        "ongoing": "Menghilangkan…",
+        "confirm_description": "Apakah Anda yakin ingin menghilangkan (menghapus) peristiwa ini?",
+        "confirm_description_state": "Diingat bahwa menghilangkan perubahan ruangan dapat mengurungkan perubahannya.",
+        "confirm_button": "Konfirmasi Penghapusan",
+        "reason_label": "Alasan (opsional)"
+    },
+    "forward": {
+        "no_perms_title": "Anda tidak memiliki izin untuk melakukannya",
+        "sending": "Mengirim",
+        "sent": "Terkirim",
+        "open_room": "Buka ruangan",
+        "send_label": "Kirim",
+        "message_preview_heading": "Tampilan pesan",
+        "filter_placeholder": "Cari ruangan atau orang"
+    },
+    "integrations": {
+        "disabled_dialog_title": "Integrasi dinonaktifkan",
+        "disabled_dialog_description": "Aktifkan '%(manageIntegrations)s' di Pengaturan untuk melakukan ini.",
+        "impossible_dialog_title": "Integrasi tidak diperbolehkan",
+        "impossible_dialog_description": "%(brand)s Anda tidak mengizinkan Anda menggunakan sebuah manajer integrasi untuk melakukan ini. Mohon hubungi sebuah admin."
+    },
+    "lazy_loading": {
+        "disabled_description1": "Anda sebelumnya menggunakan %(brand)s di %(host)s dengan pemuatan malas pengguna diaktifkan. Di versi ini pemuatan malas dinonaktifkan. Karena cache lokal tidak kompatibel antara dua pengaturan ini, %(brand)s harus mengsinkronisasi ulang akun Anda.",
+        "disabled_description2": "Jika versi %(brand)s yang lain masih terbuka di tab yang lain, mohon menutupnya karena menggunakan %(brand)s di host yang sama dengan pemuatan malas diaktifkan dan dinonaktifkan secara bersamaan akan mengakibatkan masalah.",
+        "disabled_title": "Cache lokal tidak kompatibel",
+        "disabled_action": "Hapus cache dan sinkron ulang",
+        "resync_description": "%(brand)s sekarang menggunakan memori 3-5x kecil dari sebelumnya dengan hanya memuat informasi tentang pengguna lain jika dibutuhkan. Mohon tunggu selagi kita mengsinkronisasi ulang dengan servernya!",
+        "resync_title": "Memperbarui %(brand)s"
+    },
+    "message_edit_dialog_title": "Editan pesan",
+    "server_offline": {
+        "empty_timeline": "Anda selesai.",
+        "title": "Server tidak merespon",
+        "description": "Server Anda tidak merespon dengan beberapa permintaan Anda. Berikut ini adalah beberapa alasan yang paling mungkin terjadi.",
+        "description_1": "Server (%(serverName)s) terlalu lama untuk merespon.",
+        "description_2": "Tembok api atau antivirus memblokir permintaannya.",
+        "description_3": "Sebuah ekstensi browser mencegah permintaannya.",
+        "description_4": "Server sedang luring.",
+        "description_5": "Server menolak permintaan Anda.",
+        "description_6": "Area Anda mengalami kesulitan menghubung ke internet.",
+        "description_7": "Sebuah kesalahan koneksi terjadi ketika mencoba untuk menghubungi server.",
+        "description_8": "Server tidak diatur untuk menandakan apa masalahnya (CORS).",
+        "recent_changes_heading": "Perubahan terbaru yang belum diterima"
+    },
+    "spotlight_dialog": {
+        "count_of_members": {
+            "one": "%(count)s Anggota",
+            "other": "%(count)s Anggota"
+        },
+        "public_rooms_label": "Ruangan publik",
+        "heading_with_query": "Gunakan \"%(query)s\" untuk mencari",
+        "heading_without_query": "Cari",
+        "spaces_title": "Space yang Anda berada",
+        "failed_querying_public_rooms": "Gagal melakukan kueri ruangan publik",
+        "other_rooms_in_space": "Ruangan lainnya di %(spaceName)s",
+        "join_button_text": "Bergabung dengan %(roomAddress)s",
+        "result_may_be_hidden_privacy_warning": "Beberapa hasil mungkin disembunyikan untuk privasi",
+        "cant_find_person_helpful_hint": "Jika Anda tidak dapat menemukan siapa yang Anda mencari, kirimkan tautan undangan Anda.",
+        "copy_link_text": "Salin tautan undangan",
+        "result_may_be_hidden_warning": "Beberapa hasil mungkin tersembunyi",
+        "cant_find_room_helpful_hint": "Jika Anda tidak dapat menemukan ruangan yang Anda cari, minta sebuah undangan atau buat sebuah ruangan baru.",
+        "create_new_room_button": "Buat ruangan baru",
+        "group_chat_section_title": "Opsi lain",
+        "start_group_chat_button": "Mulai sebuah grup obrolan",
+        "message_search_section_title": "Pencarian lainnya",
+        "recent_searches_section_title": "Pencarian terkini",
+        "recently_viewed_section_title": "Baru saja dilihat",
+        "search_dialog": "Dialog Pencarian",
+        "remove_filter": "Hapus saringan pencarian untuk %(filter)s",
+        "search_messages_hint": "Untuk mencari pesan-pesan, lihat ikon ini di atas ruangan <icon/>",
+        "keyboard_scroll_hint": "Gunakan <arrows/> untuk menggulirkan"
+    },
+    "share": {
+        "title_room": "Bagikan Ruangan",
+        "permalink_most_recent": "Tautan ke pesan terkini",
+        "title_user": "Bagikan Pengguna",
+        "title_message": "Bagikan Pesan Ruangan",
+        "permalink_message": "Tautan ke pesan yang dipilih",
+        "link_title": "Tautan ke ruangan"
+    },
+    "upload_file": {
+        "title_progress": "Mengunggah file (%(current)s dari %(total)s)",
+        "title": "Unggah file",
+        "upload_all_button": "Unggah semua",
+        "error_file_too_large": "File ini <b>terlalu besar</b> untuk diunggah. Batas ukuran unggahan file adalah %(limit)s tetapi file ini %(sizeOfThisFile)s.",
+        "error_files_too_large": "File-file ini <b>terlalu besar</b> untuk diunggah. Batas ukuran unggahan file adalah %(limit)s.",
+        "error_some_files_too_large": "Beberapa file <b>terlalu besar</b> untuk diunggah. Batas ukuran unggahan file adalah %(limit)s.",
+        "upload_n_others_button": {
+            "one": "Unggah %(count)s file lainnya",
+            "other": "Unggah %(count)s file lainnya"
+        },
+        "cancel_all_button": "Batalkan Semua",
+        "error_title": "Kesalahan saat Mengunggah"
+    },
+    "restore_key_backup_dialog": {
+        "key_fetch_in_progress": "Mendapatkan kunci- dari server…",
+        "load_error_content": "Tidak dapat memuat status cadangan",
+        "recovery_key_mismatch_title": "Kunci Keamanan tidak cocok",
+        "recovery_key_mismatch_description": "Cadangan tidak dapat didekripsikan dengan Kunci Keamanan ini: mohon periksa jika Anda memasukkan Kunci Keamanan yang benar.",
+        "incorrect_security_phrase_title": "Frasa Keamanan tidak benar",
+        "incorrect_security_phrase_dialog": "Cadangan tidak dapat didekripsikan dengan Frasa Keamanan ini: mohon periksa jika Anda memasukkan Frasa Keamanan yang benar.",
+        "restore_failed_error": "Tidak dapat memulihkan cadangan",
+        "no_backup_error": "Tidak ada cadangan yang ditemukan!",
+        "keys_restored_title": "Kunci-kunci terpulihkan",
+        "count_of_decryption_failures": "Gagal untuk mendekripsi %(failedCount)s sesi!",
+        "count_of_successfully_restored_keys": "Berhasil memulihkan %(sessionCount)s kunci",
+        "enter_phrase_title": "Masukkan Frasa Keamanan",
+        "key_backup_warning": "<b>Peringatan</b>: Anda seharusnya menyiapkan cadangan kunci di komputer yang dipercayai.",
+        "enter_phrase_description": "Akses riwayat pesan aman Anda dan siapkan perpesanan aman dengan memasukkan Frasa Keamanan Anda.",
+        "phrase_forgotten_text": "Jika Anda lupa Frasa Keamanan, Anda dapat <button1>menggunakan Kunci Keamanan Anda</button1> atau <button2>siapkan opsi pemulihan baru</button2>",
+        "enter_key_title": "Masukkan Kunci Keamanan",
+        "key_is_valid": "Ini sepertinya Kunci Keamanan yang absah!",
+        "key_is_invalid": "Bukan Kunci Keamanan yang absah",
+        "enter_key_description": "Akses riwayat pesan aman Anda dan siapkan perpesanan aman dengan memasukkan Kunci Keamanan Anda.",
+        "key_forgotten_text": "Jika Anda lupa Kunci Keamanan, Anda dapat <button>menyiapkan opsi pemulihan baru</button>",
+        "load_keys_progress": "%(completed)s dari %(total)s kunci dipulihkan"
+    }
 }

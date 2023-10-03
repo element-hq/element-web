@@ -414,7 +414,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             resendReactionsButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconResend"
-                    label={_t("Resend %(unsentCount)s reaction(s)", { unsentCount: unsentReactionsCount })}
+                    label={_t("timeline|context_menu|resent_unsent_reactions", { unsentCount: unsentReactionsCount })}
                     onClick={this.onResendReactionsClick}
                 />
             );
@@ -439,7 +439,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconOpenInMapSite"
                     onClick={null}
-                    label={_t("Open in OpenStreetMap")}
+                    label={_t("timeline|context_menu|open_in_osm")}
                     element="a"
                     {...{
                         href: mapSiteLink,
@@ -518,7 +518,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             endPollButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconEndPoll"
-                    label={_t("End Poll")}
+                    label={_t("poll|end_title")}
                     onClick={this.onEndPollClick}
                 />
             );

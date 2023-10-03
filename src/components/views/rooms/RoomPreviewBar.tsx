@@ -439,7 +439,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 }
                 const joinRule = this.joinRule();
                 const errCodeMessage = _t("room|3pid_invite_error_description", {
-                    errcode: this.state.threePidFetchError?.errcode || _t("unknown error code"),
+                    errcode: this.state.threePidFetchError?.errcode || _t("error|unknown_error_code"),
                 });
                 switch (joinRule) {
                     case "invite":

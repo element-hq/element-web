@@ -50,7 +50,7 @@ const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
 
     return (
         <BaseDialog
-            title={_t("Continuing without email")}
+            title={_t("auth|registration|continue_without_email_title")}
             className="mx_RegistrationEmailPromptDialog"
             contentId="mx_RegistrationEmailPromptDialog"
             onFinished={() => onFinished(false)}
@@ -59,7 +59,7 @@ const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
             <div className="mx_Dialog_content" id="mx_RegistrationEmailPromptDialog">
                 <p>
                     {_t(
-                        "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.",
+                        "auth|registration|continue_without_email_description",
                         {},
                         {
                             b: (sub) => <b>{sub}</b>,
@@ -70,7 +70,7 @@ const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
                     <EmailField
                         fieldRef={fieldRef}
                         autoFocus={true}
-                        label={_td("Email (optional)")}
+                        label={_td("auth|registration|continue_without_email_field_label")}
                         value={email}
                         onChange={(ev) => {
                             const target = ev.target as HTMLInputElement;

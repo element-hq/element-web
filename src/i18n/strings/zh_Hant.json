@@ -1,22 +1,11 @@
 {
-    "An error has occurred.": "出現一個錯誤。",
     "%(items)s and %(lastItem)s": "%(items)s 和 %(lastItem)s",
-    "Email address": "電子郵件地址",
     "Join Room": "加入聊天室",
-    "Session ID": "工作階段 ID",
     "Sun": "週日",
     "Mon": "週一",
     "Tue": "週二",
-    "unknown error code": "未知的錯誤代碼",
-    "Add an Integration": "新增整合器",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "您即將被帶到第三方網站，以便您可以驗證帳戶來使用 %(integrationsUrl)s。請問您要繼續嗎？",
-    "Create new room": "建立新聊天室",
-    "Custom level": "自訂等級",
     "Home": "首頁",
     "Moderator": "版主",
-    "not specified": "未指定",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "請收信並點擊信中的連結。完成後，再點擊「繼續」。",
-    "Verification Pending": "等待驗證",
     "Warning!": "警告！",
     "Wed": "週三",
     "Thu": "週四",
@@ -37,22 +26,9 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s，%(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s，%(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "(~%(count)s results)": {
-        "one": "（~%(count)s 結果）",
-        "other": "（~%(count)s 結果）"
-    },
-    "Confirm Removal": "確認刪除",
-    "Unable to restore session": "無法復原工作階段",
-    "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "若您先前使用過較新版本的 %(brand)s，您的工作階段可能與此版本不相容。關閉此視窗並回到較新的版本。",
-    "This will allow you to reset your password and receive notifications.": "這讓您可以重設您的密碼與接收通知。",
-    "and %(count)s others...": {
-        "other": "與另 %(count)s 個人…",
-        "one": "與另 1 個人…"
-    },
     "AM": "上午",
     "PM": "下午",
     "Restricted": "已限制",
-    "Send": "傳送",
     "%(duration)ss": "%(duration)s 秒",
     "%(duration)sm": "%(duration)s 分鐘",
     "%(duration)sh": "%(duration)s 小時",
@@ -61,68 +37,18 @@
     "Delete Widget": "刪除小工具",
     "collapse": "收折",
     "expand": "展開",
-    "And %(count)s more...": {
-        "other": "與更多 %(count)s 個…"
-    },
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s，%(monthName)s %(day)s %(fullYear)s",
-    "<a>In reply to</a> <pill>": "<a>回覆給</a> <pill>",
     "Sunday": "星期日",
     "Today": "今天",
     "Friday": "星期五",
-    "Changelog": "變更記錄檔",
-    "Failed to send logs: ": "無法傳送除錯訊息： ",
-    "Unavailable": "無法取得",
-    "Filter results": "過濾結果",
     "Tuesday": "星期二",
-    "Preparing to send logs": "準備傳送除錯訊息",
     "Saturday": "星期六",
     "Monday": "星期一",
-    "You cannot delete this message. (%(code)s)": "您無法刪除此訊息。(%(code)s)",
     "Thursday": "星期四",
-    "Logs sent": "記錄檔已經傳送",
     "Yesterday": "昨天",
     "Wednesday": "星期三",
-    "Thank you!": "感謝您！",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "無法載入要回覆的活動，它可能不存在或是您沒有權限檢視它。",
     "Send Logs": "傳送紀錄檔",
-    "Clear Storage and Sign Out": "清除儲存的東西並登出",
-    "We encountered an error trying to restore your previous session.": "我們在嘗試復原您先前的工作階段時遇到了一點錯誤。",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "清除您瀏覽器的儲存的東西也許可以修復問題，但會將您登出並造成任何已加密的聊天都無法讀取。",
-    "Share Room": "分享聊天室",
-    "Link to most recent message": "連結到最近的訊息",
-    "Share User": "分享使用者",
-    "Share Room Message": "分享聊天室訊息",
-    "Link to selected message": "連結到選定的訊息",
-    "Upgrade Room Version": "更新聊天室版本",
-    "Create a new room with the same name, description and avatar": "使用同樣的名稱、描述與大頭照建立新聊天室",
-    "Update any local room aliases to point to the new room": "更新任何本地聊天室別名來指向新的聊天室",
-    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "讓使用者在舊版聊天室停止發言，並張貼訊息建議使用者移動到新的聊天室",
-    "Put a link back to the old room at the start of the new room so people can see old messages": "在新聊天室的開始處放置連回舊聊天室的連結，這樣夥伴們就可以看到舊的訊息",
-    "Failed to upgrade room": "無法升級聊天室",
-    "The room upgrade could not be completed": "聊天室升級可能不完整",
-    "Upgrade this room to version %(version)s": "升級此聊天室到版本 %(version)s",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "在遞交紀錄檔前，您必須<a>建立 GitHub 議題</a>以描述您的問題。",
-    "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s 現在僅使用低於原本3-5倍的記憶體，僅在需要時才會載入其他使用者的資訊。請等待我們與伺服器重新同步！",
-    "Updating %(brand)s": "正在更新 %(brand)s",
-    "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "您之前曾在 %(host)s 上使用 %(brand)s 並啟用成員列表的延遲載入。在此版本中延遲載入已停用。由於本機快取在這兩個設定間不相容，%(brand)s 必須重新同步您的帳號。",
-    "Incompatible local cache": "不相容的本機快取",
-    "Clear cache and resync": "清除快取並重新同步",
-    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "為了避免遺失您的聊天歷史，您必須在登出前匯出您的聊天室金鑰。您必須回到較新版的 %(brand)s 才能執行此動作",
-    "Incompatible Database": "不相容的資料庫",
-    "Continue With Encryption Disabled": "在停用加密的情況下繼續",
-    "Unable to load backup status": "無法載入備份狀態",
-    "Unable to restore backup": "無法復原備份",
-    "No backup found!": "找不到備份！",
-    "Failed to decrypt %(failedCount)s sessions!": "無法解密 %(failedCount)s 個工作階段！",
-    "Unable to load commit detail: %(msg)s": "無法載入遞交的詳細資訊：%(msg)s",
-    "The following users may not exist": "以下的使用者可能不存在",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "找不到下列 Matrix ID 的簡介，您無論如何都想邀請他們嗎？",
-    "Invite anyway and never warn me again": "無論如何都要邀請，而且不要再警告我",
-    "Invite anyway": "無論如何都要邀請",
-    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "驗證此工作階段，並標記為可受信任。由您將工作階段標記為可受信任後，可讓聊天夥伴傳送端到端加密訊息時能更加放心。",
-    "Incoming Verification Request": "收到的驗證請求",
-    "Email (optional)": "電子郵件（選擇性）",
-    "Join millions for free on the largest public server": "在最大的公開伺服器上，免費與數百萬人一起交流",
     "Dog": "狗",
     "Cat": "貓",
     "Lion": "獅",
@@ -184,195 +110,22 @@
     "Anchor": "船錨",
     "Headphones": "耳機",
     "Folder": "資料夾",
-    "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "加密訊息是使用端對端加密。只有您和接收者才有金鑰可以閱讀這些訊息。",
-    "Start using Key Backup": "開始使用金鑰備份",
-    "I don't want my encrypted messages": "我不要我的加密訊息了",
-    "Manually export keys": "手動匯出金鑰",
-    "You'll lose access to your encrypted messages": "您將會失去您的加密訊息",
-    "Are you sure you want to sign out?": "您確定要登出嗎？",
-    "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>警告</b>：您應該只從信任的電腦設定金鑰備份。",
     "Scissors": "剪刀",
-    "Room Settings - %(roomName)s": "聊天室設定 - %(roomName)s",
-    "Power level": "權限等級",
-    "Remember my selection for this widget": "記住我對這個小工具的選擇",
-    "Notes": "註記",
-    "Sign out and remove encryption keys?": "登出並移除加密金鑰？",
-    "To help us prevent this in future, please <a>send us logs</a>.": "要協助我們讓這個問題不再發生，請<a>將紀錄檔傳送給我們</a>。",
-    "Missing session data": "遺失工作階段資料",
-    "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "某些工作階段資料遺失了，其中包含加密訊息金鑰。登出再登入並從備份中復原金鑰可以修復這個問題。",
-    "Your browser likely removed this data when running low on disk space.": "當硬碟空間不足時，您的瀏覽器可能會移除這些資料。",
-    "Upload files (%(current)s of %(total)s)": "上傳檔案 (%(total)s 中的 %(current)s)",
-    "Upload files": "上傳檔案",
-    "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "這個檔案<b>太大了</b>，沒辦法上傳。檔案大小限制為 %(limit)s 但這個檔案大小是 %(sizeOfThisFile)s。",
-    "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "這些檔案<b>太大了</b>，沒辦法上傳。檔案大小限制為 %(limit)s。",
-    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "某些檔案<b>太大了</b>，沒辦法上傳。檔案大小限制為 %(limit)s。",
-    "Upload %(count)s other files": {
-        "other": "上傳 %(count)s 個其他檔案",
-        "one": "上傳 %(count)s 個其他檔案"
-    },
-    "Cancel All": "全部取消",
-    "Upload Error": "上傳錯誤",
-    "edited": "已編輯",
-    "Some characters not allowed": "不允許某些字元",
-    "Upload all": "上傳全部",
-    "Edited at %(date)s. Click to view edits.": "編輯於 %(date)s。點擊以檢視編輯。",
-    "Message edits": "訊息編輯紀錄",
-    "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "升級這個聊天室需要關閉目前的執行個體並重新建立一個新的聊天室來替代。為了給予聊天室成員最佳的體驗，我們將會：",
-    "Resend %(unsentCount)s reaction(s)": "重新傳送 %(unsentCount)s 反應",
-    "Your homeserver doesn't seem to support this feature.": "您的家伺服器似乎並不支援此功能。",
-    "Clear all data": "清除所有資料",
-    "Removing…": "正在刪除…",
-    "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "請告訴我們發生了什麼錯誤，或更好的是，在 GitHub 上建立描述問題的議題。",
-    "Find others by phone or email": "透過電話或電子郵件尋找其他人",
-    "Be found by phone or email": "透過電話或電子郵件找到",
-    "Command Help": "指令說明",
     "Deactivate account": "停用帳號",
-    "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "使用身分伺服器以透過電子郵件邀請。<default>使用預設值 (%(defaultIdentityServerName)s)</default>或在<settings>設定</settings>中管理。",
-    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "使用身分伺服器以透過電子郵件邀請。在<settings>設定</settings>中管理。",
-    "No recent messages by %(user)s found": "找不到 %(user)s 最近的訊息",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "試著在時間軸上捲動以檢視有沒有較早的。",
-    "Remove recent messages by %(user)s": "移除 %(user)s 最近的訊息",
-    "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "若有大量訊息需刪除，可能需要一些時間。請不要在此時重新整理您的客戶端。",
-    "Remove %(count)s messages": {
-        "other": "移除 %(count)s 則訊息",
-        "one": "移除 1 則訊息"
-    },
-    "e.g. my-room": "例如：my-room",
-    "Close dialog": "關閉對話框",
-    "Cancel search": "取消搜尋",
-    "%(name)s accepted": "%(name)s 已接受",
-    "%(name)s cancelled": "%(name)s 已取消",
-    "%(name)s wants to verify": "%(name)s 想要驗證",
     "Failed to connect to integration manager": "無法連線到整合服務伺服器",
-    "Integrations are disabled": "整合已停用",
-    "Integrations not allowed": "不允許整合",
-    "Verification Request": "驗證請求",
-    "Upgrade private room": "升級私密聊天室",
-    "Upgrade public room": "升級公開聊天室",
-    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "升級聊天室為進階動作，通常建議在聊天室因為錯誤而不穩定、缺少功能或安全漏洞等才升級。",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "這通常僅影響如何在伺服器上處理聊天室的方式。如果您遇到與 %(brand)s 相關的問題，請<a>回報錯誤</a>。",
-    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "您將要把此聊天室從 <oldVersion /> 升級到 <newVersion />。",
-    "%(count)s verified sessions": {
-        "other": "%(count)s 個已驗證的工作階段",
-        "one": "1 個已驗證的工作階段"
-    },
-    "Language Dropdown": "語言下拉式選單",
-    "Recent Conversations": "最近的對話",
-    "Direct Messages": "私人訊息",
-    "Failed to find the following users": "找不到以下使用者",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "以下使用者可能不存在或無效，且無法被邀請：%(csvNames)s",
     "Lock": "鎖定",
-    "Something went wrong trying to invite the users.": "在嘗試邀請使用者時發生錯誤。",
-    "We couldn't invite those users. Please check the users you want to invite and try again.": "無法邀請使用者。請重新確認您想要邀請的使用者後再試一次。",
-    "Recently Direct Messaged": "最近傳送過私人訊息",
     "This backup is trusted because it has been restored on this session": "此備份已受信任，因為它已在此工作階段上復原",
     "Encrypted by a deleted session": "被已刪除的工作階段加密",
-    "%(count)s sessions": {
-        "other": "%(count)s 個工作階段",
-        "one": "%(count)s 個工作階段"
-    },
-    "Clear all data in this session?": "清除此工作階段中的所有資料？",
-    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "將會永久清除此工作階段的所有資料。除非已備份金鑰，否則將會遺失所有加密訊息。",
-    "Session name": "工作階段名稱",
-    "Session key": "工作階段金鑰",
-    "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "驗證此使用者將會把他們的工作階段標記為受信任，並同時為他們標記您的工作階段為可信任。",
-    "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "驗證此裝置，並標記為可受信任。由您將裝置標記為可受信任後，可讓聊天夥伴傳送端到端加密訊息時能更加放心。",
-    "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "驗證此裝置將會將其標記為受信任，且已驗證您的使用者將會信任此裝置。",
-    "Destroy cross-signing keys?": "摧毀交叉簽署金鑰？",
-    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "永久刪除交叉簽署金鑰。任何您已驗證過的人都會看到安全性警告。除非您遺失了所有可以進行交叉簽署的裝置，否則您不會想要這樣做。",
-    "Clear cross-signing keys": "清除交叉簽署金鑰",
-    "Not Trusted": "未受信任",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s （%(userId)s）登入到未驗證的新工作階段：",
-    "Ask this user to verify their session, or manually verify it below.": "要求此使用者驗證他們的工作階段，或在下方手動驗證。",
-    "%(name)s declined": "%(name)s 拒絕了",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "要回報與 Matrix 有關的安全性問題，請閱讀 Matrix.org 的<a>安全性揭露政策</a>。",
-    "Enter a server name": "輸入伺服器名稱",
-    "Looks good": "看起來不錯",
-    "Can't find this server or its room list": "找不到此伺服器或其聊天室清單",
-    "Your server": "您的伺服器",
-    "Add a new server": "加入新的伺服器",
-    "Enter the name of a new server you want to explore.": "輸入您想要探索的新伺服器的名稱。",
-    "Server name": "伺服器名稱",
-    "a new master key signature": "新的主金鑰簽署",
-    "a new cross-signing key signature": "新交叉簽署金鑰的簽章",
-    "a device cross-signing signature": "裝置交叉簽署",
-    "a key signature": "金鑰簽章",
-    "%(brand)s encountered an error during upload of:": "%(brand)s 在上傳以下內容時遇到錯誤：",
-    "Upload completed": "上傳完成",
-    "Cancelled signature upload": "已取消簽章上傳",
-    "Signature upload success": "簽章上傳成功",
-    "Signature upload failed": "無上傳簽章",
-    "Confirm by comparing the following with the User Settings in your other session:": "透過將下列內容與您其他工作階段中的「使用者設定」所顯示的內容來確認：",
-    "Confirm this user's session by comparing the following with their User Settings:": "將以下內容與對方的「使用者設定」當中顯示的內容進行比對，來確認對方的工作階段：",
-    "If they don't match, the security of your communication may be compromised.": "如果它們不相符，則可能會威脅到您的通訊安全。",
     "Sign in with SSO": "使用 SSO 登入",
-    "Confirm your account deactivation by using Single Sign On to prove your identity.": "透過使用單一登入系統來證您的身分以確認停用您的帳號。",
-    "Are you sure you want to deactivate your account? This is irreversible.": "確定您想要停用您的帳號嗎？此為不可逆的操作。",
-    "Confirm account deactivation": "確認停用帳號",
-    "Server did not require any authentication": "伺服器不需要任何驗證",
-    "Server did not return valid authentication information.": "伺服器沒有回傳有效的驗證資訊。",
-    "There was a problem communicating with the server. Please try again.": "與伺服器通訊時發生問題。請再試一次。",
-    "Can't load this message": "無法載入此訊息",
     "Submit logs": "遞交紀錄檔",
-    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "提醒：您的瀏覽器不受支援，所以您的使用體驗可能無法預測。",
-    "Unable to upload": "無法上傳",
-    "Restoring keys from backup": "從備份還原金鑰",
-    "%(completed)s of %(total)s keys restored": "%(total)s 中的 %(completed)s 金鑰已復原",
-    "Keys restored": "金鑰已復原",
-    "Successfully restored %(sessionCount)s keys": "成功復原 %(sessionCount)s 金鑰",
-    "You signed in to a new session without verifying it:": "您已登入新的工作階段但未驗證：",
-    "Verify your other session using one of the options below.": "使用下方的其中一個選項來驗證您其他工作階段。",
-    "To continue, use Single Sign On to prove your identity.": "要繼續，使用單一登入系統來證明您的身分。",
-    "Confirm to continue": "確認以繼續",
-    "Click the button below to confirm your identity.": "點擊下方按鈕以確認您的身分。",
-    "Confirm encryption setup": "確認加密設定",
-    "Click the button below to confirm setting up encryption.": "點擊下方按鈕以確認設定加密。",
     "IRC display name width": "IRC 顯示名稱寬度",
-    "Room address": "聊天室位址",
-    "This address is available to use": "此位址可用",
-    "This address is already in use": "此位址已被使用",
-    "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "您先前在此工作階段中使用了較新版本的 %(brand)s。要再次與此版本使用端對端加密，您必須先登出再登入。",
     "Your homeserver has exceeded its user limit.": "您的家伺服器已超過使用者限制。",
     "Your homeserver has exceeded one of its resource limits.": "您的家伺服器已超過其中一種資源限制。",
     "Ok": "確定",
     "Switch theme": "切換佈景主題",
-    "Message preview": "訊息預覽",
-    "Looks good!": "看起來真棒！",
-    "Wrong file type": "錯誤的檔案類型",
-    "Security Phrase": "安全密語",
-    "Security Key": "安全金鑰",
-    "Use your Security Key to continue.": "使用您的安全金鑰以繼續。",
-    "Edited at %(date)s": "編輯於 %(date)s",
-    "Click to view edits": "點擊以檢視編輯",
-    "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "如果其他版本的 %(brand)s 仍在其他分頁中開啟，請關閉它，因為在同一主機上使用同時啟用與停用惰性載入的 %(brand)s 可能會造成問題。",
-    "You're all caught up.": "您已完成。",
-    "Server isn't responding": "伺服器沒有回應",
-    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "您的伺服器未對您的某些請求回應。下列是可能的原因。",
-    "The server (%(serverName)s) took too long to respond.": "伺服器 (%(serverName)s) 花了太長的時間來回應。",
-    "Your firewall or anti-virus is blocking the request.": "您的防火牆或防毒軟體阻擋了請求。",
-    "A browser extension is preventing the request.": "瀏覽器擴充套件阻擋了請求。",
-    "The server is offline.": "伺服器離線。",
-    "The server has denied your request.": "伺服器拒絕了您的請求。",
-    "Your area is experiencing difficulties connecting to the internet.": "您所在區域可能遇到一些網際網路連線的問題。",
-    "A connection error occurred while trying to contact the server.": "在試圖與伺服器溝通時遇到連線錯誤。",
-    "The server is not configured to indicate what the problem is (CORS).": "伺服器沒有設定好來指示出問題是什麼 (CORS)。",
-    "Recent changes that have not yet been received": "尚未收到最新變更",
-    "Preparing to download logs": "正在準備下載紀錄檔",
-    "Information": "資訊",
     "Not encrypted": "未加密",
     "Backup version:": "備份版本：",
-    "Start a conversation with someone using their name or username (like <userId/>).": "使用某人的名字或使用者名稱（如 <userId/>）以與他們開始對話。",
-    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "使用某人的名字、使用者名稱（如 <userId/>）或<a>分享此聊天室</a>來邀請人。",
-    "Unable to set up keys": "無法設定金鑰",
-    "Use the <a>Desktop app</a> to see all encrypted files": "使用<a>桌面應用程式</a>以檢視所有加密的檔案",
-    "Use the <a>Desktop app</a> to search encrypted messages": "使用<a>桌面應用程式</a>搜尋加密訊息",
-    "This version of %(brand)s does not support viewing some encrypted files": "此版本的 %(brand)s 不支援檢視某些加密檔案",
-    "This version of %(brand)s does not support searching encrypted messages": "此版本的 %(brand)s 不支援搜尋加密訊息",
-    "Data on this screen is shared with %(widgetDomain)s": "在此畫面上的資料會與 %(widgetDomain)s 分享",
-    "Modal Widget": "程式小工具",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "使用某人的名字、電子郵件地址、使用者名稱（如 <userId/>）或<a>分享此聊天空間</a>來邀請人。",
-    "Start a conversation with someone using their name, email address or username (like <userId/>).": "使用某人的名字、電子郵件地址或使用者名稱（如 <userId/>）來與他們開始對話。",
-    "Invite by email": "透過電子郵件邀請",
     "Zimbabwe": "辛巴威",
     "Zambia": "尚比亞",
     "Yemen": "葉門",
@@ -622,144 +375,9 @@
     "Afghanistan": "阿富汗",
     "United States": "美國",
     "United Kingdom": "英國",
-    "Decline All": "全部拒絕",
-    "This widget would like to:": "這個小工具想要：",
-    "Approve widget permissions": "批准小工具權限",
-    "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "請注意，如果您不新增電子郵件且忘記密碼，您將<b>永遠失去對您帳號的存取權</b>。",
-    "Continuing without email": "不使用電子郵件來繼續",
-    "Server Options": "伺服器選項",
-    "Reason (optional)": "理由（選擇性）",
-    "Hold": "保留",
-    "Resume": "繼續",
-    "Transfer": "轉接",
-    "A call can only be transferred to a single user.": "一個通話只能轉接給ㄧ個使用者。",
-    "Dial pad": "撥號鍵盤",
-    "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "如果您忘了安全金鑰，您可以<button>設定新的復原選項</button>",
-    "Access your secure message history and set up secure messaging by entering your Security Key.": "透過輸入您的安全金鑰來存取您的安全訊息歷史並設定安全訊息。",
-    "Not a valid Security Key": "不是有效的安全金鑰",
-    "This looks like a valid Security Key!": "這看起來是有效的安全金鑰！",
-    "Enter Security Key": "輸入安全金鑰",
-    "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>": "如果您忘了安全密語，您可以<button1>使用您的安全金鑰</button1>或<button2>設定新的復原選項</button2>",
-    "Access your secure message history and set up secure messaging by entering your Security Phrase.": "請輸入您的安全密語來存取安全訊息紀錄，並設定安全訊息功能。",
-    "Enter Security Phrase": "輸入安全密語",
-    "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.": "無法使用此安全密語解密備份：請確認您是否輸入了正確的安全密語。",
-    "Incorrect Security Phrase": "不正確的安全密語",
-    "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.": "無法使用此安全金鑰解密備份：請確認您是否輸入了正確的安全金鑰。",
-    "Security Key mismatch": "安全金鑰不相符",
-    "Unable to access secret storage. Please verify that you entered the correct Security Phrase.": "無法存取祕密儲存空間。請確認您輸入了正確的安全密語。",
-    "Invalid Security Key": "無效的安全金鑰",
-    "Wrong Security Key": "錯誤的安全金鑰",
-    "Remember this": "記住這個",
-    "The widget will verify your user ID, but won't be able to perform actions for you:": "小工具將會驗證您的使用者 ID，但將無法為您執行動作：",
-    "Allow this widget to verify your identity": "允許此小工具驗證您的身分",
-    "%(count)s members": {
-        "one": "%(count)s 位成員",
-        "other": "%(count)s 位成員"
-    },
-    "Failed to start livestream": "無法開始直播",
-    "Unable to start audio streaming.": "無法開始音訊串流。",
-    "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "使用某人的名字、使用者名稱（如 <userId/>）或<a>分享此聊天室</a>來邀請人。",
-    "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "使用某人的名字、電子郵件地址、使用者名稱（如 <userId/>）或<a>分享此聊天空間</a>來邀請人。",
-    "Create a new room": "建立新聊天室",
-    "Space selection": "選取聊天空間",
-    "Leave space": "離開聊天空間",
-    "Create a space": "建立聊天空間",
-    "<inviter/> invites you": "<inviter/> 邀請您",
-    "No results found": "找不到結果",
-    "%(count)s rooms": {
-        "one": "%(count)s 個聊天室",
-        "other": "%(count)s 個聊天室"
-    },
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "這通常只影響伺服器如何處理聊天室。如果您的 %(brand)s 遇到問題，請回報錯誤。",
-    "Invite to %(roomName)s": "邀請加入 %(roomName)s",
-    "%(count)s people you know have already joined": {
-        "other": "%(count)s 個您認識的人已加入",
-        "one": "%(count)s 個您認識的人已加入"
-    },
-    "Add existing rooms": "新增既有聊天室",
-    "We couldn't create your DM.": "我們無法建立您的私人訊息。",
-    "Invited people will be able to read old messages.": "被邀請的人將能閱讀舊訊息。",
-    "Consult first": "先諮詢",
-    "Reset event store?": "重設活動儲存？",
-    "You most likely do not want to reset your event index store": "您很可能不想重設您的活動索引儲存",
-    "Reset event store": "重設活動儲存",
-    "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "如果您重設所有東西，您將會在沒有受信任的工作階段、沒有受信任的使用者的情況下重新啟動，且可能會看不到過去的訊息。",
-    "Only do this if you have no other device to complete verification with.": "當您沒有其他裝置可以完成驗證時，才執行此動作。",
-    "Reset everything": "重設所有東西",
-    "Forgotten or lost all recovery methods? <a>Reset all</a>": "忘記或遺失了所有復原方法？<a>重設全部</a>",
-    "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "如果這樣做，請注意，您的訊息不會被刪除，但在重新建立索引時，搜尋體驗可能會降低片刻",
-    "Sending": "傳送中",
-    "Including %(commaSeparatedMembers)s": "包含 %(commaSeparatedMembers)s",
-    "View all %(count)s members": {
-        "one": "檢視 1 個成員",
-        "other": "檢視全部 %(count)s 個成員"
-    },
-    "Want to add a new room instead?": "想要新增新聊天室嗎？",
-    "Adding rooms... (%(progress)s out of %(count)s)": {
-        "one": "正在新增聊天室…",
-        "other": "正在新增聊天室…（%(count)s 中的第 %(progress)s 個）"
-    },
-    "Not all selected were added": "並非所有選定的都被新增了",
-    "You are not allowed to view this server's rooms list": "您不被允許檢視此伺服器的聊天室清單",
-    "You may contact me if you have any follow up questions": "如果後續有任何問題，可以聯絡我",
-    "To leave the beta, visit your settings.": "請到設定頁面離開 Beta 測試版。",
-    "Add reaction": "新增反應",
-    "Or send invite link": "或傳送邀請連結",
-    "Some suggestions may be hidden for privacy.": "出於隱私考量，可能會隱藏一些建議。",
-    "Search for rooms or people": "搜尋聊天室或夥伴",
-    "Sent": "已傳送",
-    "You don't have permission to do this": "您沒有權限執行此動作",
-    "Please provide an address": "請提供位址",
-    "Message search initialisation failed, check <a>your settings</a> for more information": "訊息搜尋初始化失敗，請檢查<a>您的設定</a>以取得更多資訊",
-    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "您的 %(brand)s 不允許您使用整合管理員來執行此動作。請聯絡管理員。",
-    "User Directory": "使用者目錄",
-    "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>請注意，升級會讓聊天室變成全新的版本</b>。目前所有的訊息都只會留在被封存的聊天室。",
-    "Automatically invite members from this room to the new one": "自動將該聊天室的成員邀請至新的聊天室",
-    "These are likely ones other room admins are a part of.": "這些可能是其他聊天室管理員的一部分。",
-    "Other spaces or rooms you might not know": "您可能不知道的其他聊天空間或聊天室",
-    "Spaces you know that contain this room": "您已知包含此聊天室的聊天空間",
-    "Search spaces": "搜尋聊天空間",
-    "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "決定哪些聊天空間可以存取此聊天室。若選取了聊天空間，其成員就可以找到並加入<RoomName/>。",
-    "Select spaces": "選取聊天空間",
-    "You're removing all spaces. Access will default to invite only": "您將取消所有聊天空間。存取權限將會預設為邀請制",
-    "Want to add an existing space instead?": "想要新增既有的聊天空間嗎？",
-    "Private space (invite only)": "私密聊天空間（邀請制）",
-    "Space visibility": "空間能見度",
-    "Add a space to a space you manage.": "新增空間到您管理的聊天空間。",
-    "Only people invited will be able to find and join this space.": "僅有被邀請的人才能找到並加入此聊天空間。",
-    "Anyone will be able to find and join this space, not just members of <SpaceName/>.": "不只是 <SpaceName/> 的成員，任何人都可以找到並加入此聊天空間。",
-    "Anyone in <SpaceName/> will be able to find and join.": "<SpaceName/> 中的任何人都可以找到並加入。",
-    "Adding spaces has moved.": "新增的聊天空間已被移動。",
-    "Search for rooms": "搜尋聊天室",
-    "Search for spaces": "搜尋聊天空間",
-    "Create a new space": "建立新聊天空間",
-    "Want to add a new space instead?": "想要新增聊天空間？",
-    "Add existing space": "新增既有的聊天空間",
-    "Leave %(spaceName)s": "離開 %(spaceName)s",
-    "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "您是將要離開的聊天室與聊天空間唯一的管理員。您離開之後會讓它們沒有任何管理員。",
-    "You're the only admin of this space. Leaving it will mean no one has control over it.": "您是此聊天空間唯一的管理員。離開將代表沒有人可以控制它。",
-    "You won't be able to rejoin unless you are re-invited.": "您將無法重新加入，除非您再次被邀請。",
     "To join a space you'll need an invite.": "若要加入聊天空間，您必須被邀請。",
-    "Would you like to leave the rooms in this space?": "您想要離開此聊天空間中的聊天室嗎？",
-    "You are about to leave <spaceName/>.": "您將要離開 <spaceName/>。",
-    "Leave some rooms": "離開部份聊天室",
-    "Leave all rooms": "離開所有聊天室",
-    "Don't leave any rooms": "不要離開任何聊天室",
-    "MB": "MB",
-    "In reply to <a>this message</a>": "回覆<a>此訊息</a>",
-    "%(count)s reply": {
-        "one": "%(count)s 回覆",
-        "other": "%(count)s 回覆"
-    },
-    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "輸入您的安全密語或<button>使用您的安全金鑰</button>以繼續。",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "重新存取您的帳號並復原儲存在此工作階段中的加密金鑰。沒有它們，您將無法在任何工作階段中閱讀所有安全訊息。",
-    "If you can't see who you're looking for, send them your invite link below.": "如果您看不到您要找的人，請將您的邀請連結傳送給他們。",
-    "Thread options": "討論串選項",
     "Forget": "忘記",
-    "%(count)s votes": {
-        "one": "%(count)s 個投票",
-        "other": "%(count)s 個投票"
-    },
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s 與 %(count)s 個其他的",
         "other": "%(spaceName)s 與 %(count)s 個其他的"
@@ -769,153 +387,22 @@
     "Themes": "主題",
     "Moderation": "審核",
     "Messaging": "訊息傳遞",
-    "Spaces you know that contain this space": "您知道的包含此聊天空間的聊天空間",
-    "Recently viewed": "最近檢視過",
-    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "您確定您想要結束此投票？這將會顯示最終投票結果並阻止人們投票。",
-    "End Poll": "結束投票",
-    "Sorry, the poll did not end. Please try again.": "抱歉，投票沒有結束。請再試一次。",
-    "Failed to end poll": "無法結束投票",
-    "The poll has ended. Top answer: %(topAnswer)s": "投票已結束。最佳答案：%(topAnswer)s",
-    "The poll has ended. No votes were cast.": "投票已結束。沒有投票。",
-    "Link to room": "連結到聊天室",
-    "Recent searches": "近期搜尋",
-    "To search messages, look for this icon at the top of a room <icon/>": "要搜尋訊息，請在聊天室頂部尋找此圖示 <icon/>",
-    "Other searches": "其他搜尋",
-    "Public rooms": "公開聊天室",
-    "Use \"%(query)s\" to search": "使用「%(query)s」搜尋",
-    "Other rooms in %(spaceName)s": "其他在 %(spaceName)s 中的聊天室",
-    "Spaces you're in": "您所在的聊天空間",
-    "Including you, %(commaSeparatedMembers)s": "包含您，%(commaSeparatedMembers)s",
-    "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "將您與此空間成員的聊天進行分組。關閉此功能，將會在您的 %(spaceName)s 畫面中隱藏那些聊天室。",
-    "Sections to show": "要顯示的部份",
-    "Open in OpenStreetMap": "在 OpenStreetMap 中開啟",
-    "toggle event": "切換事件",
-    "This address had invalid server or is already in use": "此位址的伺服器無效或已被使用",
-    "Missing room name or separator e.g. (my-room:domain.org)": "缺少聊天室名稱或分隔符號，例如 (my-room:domain.org)",
-    "Missing domain separator e.g. (:domain.org)": "缺少網域名分隔符號，例如 (:domain.org)",
-    "Verify other device": "驗證其他裝置",
-    "Could not fetch location": "無法取得位置",
-    "This address does not point at this room": "此位址並未指向此聊天室",
-    "Location": "位置",
-    "Use <arrows/> to scroll": "使用 <arrows/> 捲動",
     "Feedback sent! Thanks, we appreciate it!": "已傳送回饋！謝謝，我們感激不盡！",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s 與 %(space2Name)s",
-    "Join %(roomAddress)s": "加入 %(roomAddress)s",
-    "Search Dialog": "搜尋對話方塊",
-    "What location type do you want to share?": "您要分享哪種位置類型？",
-    "Drop a Pin": "自訂位置",
-    "My live location": "我的即時位置",
-    "My current location": "我目前的位置",
-    "%(brand)s could not send your location. Please try again later.": "%(brand)s 無法傳送您的位置。請稍後再試。",
-    "We couldn't send your location": "我們無法傳送您的位置",
-    "You are sharing your live location": "您正在分享您的即時位置",
-    "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "若您也想移除此使用者的系統訊息（例如成員資格變更、個人資料變更…），請取消勾選",
-    "Preserve system messages": "保留系統訊息",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
-        "one": "您將要移除 %(user)s 的 %(count)s 則訊息。將會為對話中的所有人永久移除它們。確定要繼續嗎？",
-        "other": "您將要移除 %(user)s 的 %(count)s 則訊息。將會為對話中的所有人永久移除它們。確定要繼續嗎？"
-    },
-    "%(displayName)s's live location": "%(displayName)s 的即時位置",
-    "Unsent": "未傳送",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "您可以透過指定不同的家伺服器網址，來登入至其他的 Matrix 伺服器。使用自訂伺服器選項讓您可以使用 %(brand)s 登入到不同家伺服器上的 Matrix 帳號。",
-    "An error occurred while stopping your live location, please try again": "停止您的即時位置時發生錯誤，請再試一次",
-    "%(featureName)s Beta feedback": "%(featureName)s Beta 測試回饋",
-    "%(count)s participants": {
-        "one": "1 位成員",
-        "other": "%(count)s 個參與者"
-    },
-    "Live location ended": "即時位置已結束",
-    "Live location enabled": "即時位置已啟用",
-    "Live location error": "即時位置錯誤",
-    "Live until %(expiryTime)s": "即時分享直到 %(expiryTime)s",
-    "No live locations": "無即時位置",
-    "Close sidebar": "關閉側邊欄",
     "View List": "檢視清單",
-    "View list": "檢視清單",
-    "Updated %(humanizedUpdateTime)s": "已更新 %(humanizedUpdateTime)s",
-    "Hide my messages from new joiners": "對新加入的成員隱藏我的訊息",
-    "Your old messages will still be visible to people who received them, just like emails you sent in the past. Would you like to hide your sent messages from people who join rooms in the future?": "收到您舊訊息的人仍可以看見他們，就像您過去傳送的電子郵件一樣。您想要對未來加入聊天室的人隱藏您已傳送的訊息嗎？",
-    "You will be removed from the identity server: your friends will no longer be able to find you with your email or phone number": "您將從身分伺服器被移除：您的朋友將無法再透過您的電子郵件或電話號碼找到您",
-    "You will leave all rooms and DMs that you are in": "您將會離開您所在的所有聊天室與私人訊息",
-    "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "任何人都無法重新使用您的使用者名稱（MXID），包括您：此使用者名稱將會維持不可用",
-    "You will no longer be able to log in": "您將無法再登入",
-    "You will not be able to reactivate your account": "您將無法重新啟用您的帳號",
-    "Confirm that you would like to deactivate your account. If you proceed:": "確認您要停用您的帳號。若您繼續：",
-    "To continue, please enter your account password:": "請輸入您的 Matrix 帳號密碼繼續：",
-    "An error occurred while stopping your live location": "停止您的即時位置時發生錯誤",
     "%(members)s and %(last)s": "%(members)s 與 %(last)s",
     "%(members)s and more": "%(members)s 與更多",
-    "Open room": "開啟聊天室",
-    "Cameras": "相機",
-    "Output devices": "輸出裝置",
-    "Input devices": "輸入裝置",
-    "An error occurred whilst sharing your live location, please try again": "分享您的即時位置時發生錯誤，請再試一次",
-    "An error occurred whilst sharing your live location": "分享您的即時位置時發生錯誤",
     "Unread email icon": "未讀電子郵件圖示",
-    "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "當您登出時，這些金鑰將會從此裝置被刪除，這代表您將無法再閱讀加密的訊息，除非您在其他裝置上有那些訊息的金鑰，或是將它們備份到伺服器上。",
-    "Remove search filter for %(filter)s": "移除 %(filter)s 的搜尋過濾條件",
-    "Start a group chat": "開始群組聊天",
-    "Other options": "其他選項",
-    "If you can't find the room you're looking for, ask for an invite or create a new room.": "若您找不到您要找的聊天室，要求邀請或是建立新的聊天室。",
-    "Some results may be hidden": "某些結果可能會被隱藏",
-    "Copy invite link": "複製邀請連結",
-    "If you can't see who you're looking for, send them your invite link.": "若您看不到要找的人，請將您的邀請連結傳送給他們。",
-    "Some results may be hidden for privacy": "出於隱私考量，可能會隱藏一些結果",
-    "Search for": "搜尋",
-    "%(count)s Members": {
-        "one": "%(count)s 個成員",
-        "other": "%(count)s 個成員"
-    },
-    "Show: Matrix rooms": "顯示：Matrix 聊天室",
-    "Show: %(instance)s rooms (%(server)s)": "顯示：%(instance)s 聊天室 (%(server)s)",
-    "Add new server…": "加入新伺服器…",
-    "Remove server “%(roomServer)s”": "移除伺服器「%(roomServer)s」",
     "You cannot search for rooms that are neither a room nor a space": "您無法搜尋既不是聊天室也不是聊天空間的空間",
     "Show spaces": "顯示聊天空間",
     "Show rooms": "顯示聊天室",
     "Explore public spaces in the new search dialog": "在新的搜尋對話方框中探索公開聊天空間",
-    "Online community members": "線上社群成員",
-    "Coworkers and teams": "同事與團隊",
-    "Friends and family": "朋友與家人",
-    "We'll help you get connected.": "我們將會協助您建立聯繫。",
-    "Who will you chat to the most?": "您最常與誰聊天？",
-    "You're in": "加入成功！",
-    "You need to have the right permissions in order to share locations in this room.": "您必須有正確的權限才能在此聊天室中分享位置。",
-    "You don't have permission to share locations": "您沒有權限分享位置",
     "Saved Items": "已儲存的項目",
-    "Choose a locale": "選擇語系",
-    "Interactively verify by emoji": "透過表情符號互動來驗證",
-    "Manually verify by text": "透過文字手動驗證",
-    "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s 或 %(recoveryFile)s",
-    "%(name)s started a video call": "%(name)s 開始了視訊通話",
     "Thread root ID: %(threadRootId)s": "討論串根 ID：%(threadRootId)s",
-    "<w>WARNING:</w> <description/>": "<w>警告：</w> <description/>",
-    " in <strong>%(room)s</strong>": " 在 <strong>%(room)s</strong>",
-    "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "您無法開始語音訊息，因為您目前正在錄製直播。請結束您的直播以開始錄製語音訊息。",
-    "Can't start voice message": "無法開始語音訊息",
     "unknown": "未知",
-    "Enable '%(manageIntegrations)s' in Settings to do this.": "在設定中啟用「%(manageIntegrations)s」來執行此動作。",
-    "Loading live location…": "正在載入即時位置…",
-    "Fetching keys from server…": "正在取得來自伺服器的金鑰…",
-    "Checking…": "正在檢查…",
-    "Waiting for partner to confirm…": "正在等待夥伴確認…",
-    "Adding…": "正在新增…",
     "Starting export process…": "正在開始匯出流程…",
-    "Invites by email can only be sent one at a time": "透過電子郵件傳送的邀請一次只能傳送一個",
     "Desktop app logo": "桌面應用程式標誌",
     "Requires your server to support the stable version of MSC3827": "您的伺服器必須支援穩定版本的 MSC3827",
-    "Message from %(user)s": "來自 %(user)s 的訊息",
-    "Message in %(room)s": "%(room)s 中的訊息",
-    "unavailable": "無法使用",
-    "unknown status code": "未知狀態代碼",
-    "Start DM anyway": "開始直接訊息",
-    "Start DM anyway and never warn me again": "開始直接訊息且不要再次警告",
-    "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?": "找不到下方列出的 Matrix ID 個人檔案，您是否仍要開始直接訊息？",
-    "Upgrade room": "升級聊天室",
-    "Note that removing room changes like this could undo the change.": "請注意，像這樣移除聊天是變更可能會還原變更。",
-    "Are you sure you wish to remove (delete) this event?": "您真的想要移除（刪除）此活動嗎？",
-    "Other spaces you know": "您知道的其他空間",
-    "Failed to query public rooms": "檢索公開聊天室失敗",
     "common": {
         "about": "關於",
         "analytics": "分析",
@@ -1038,7 +525,31 @@
         "show_more": "顯示更多",
         "joined": "已加入",
         "avatar": "大頭照",
-        "are_you_sure": "您確定嗎？"
+        "are_you_sure": "您確定嗎？",
+        "location": "位置",
+        "email_address": "電子郵件地址",
+        "filter_results": "過濾結果",
+        "no_results_found": "找不到結果",
+        "unsent": "未傳送",
+        "cameras": "相機",
+        "n_participants": {
+            "one": "1 位成員",
+            "other": "%(count)s 個參與者"
+        },
+        "and_n_others": {
+            "other": "與另 %(count)s 個人…",
+            "one": "與另 1 個人…"
+        },
+        "n_members": {
+            "one": "%(count)s 位成員",
+            "other": "%(count)s 位成員"
+        },
+        "unavailable": "無法使用",
+        "edited": "已編輯",
+        "n_rooms": {
+            "one": "%(count)s 個聊天室",
+            "other": "%(count)s 個聊天室"
+        }
     },
     "action": {
         "continue": "繼續",
@@ -1155,7 +666,11 @@
         "add_existing_room": "新增既有的聊天室",
         "explore_public_rooms": "探索公開聊天室",
         "reply_in_thread": "在討論串中回覆",
-        "click": "點擊"
+        "click": "點擊",
+        "transfer": "轉接",
+        "resume": "繼續",
+        "hold": "保留",
+        "view_list": "檢視清單"
     },
     "a11y": {
         "user_menu": "使用者選單",
@@ -1254,7 +769,10 @@
         "beta_section": "即將推出的功能",
         "beta_description": "%(brand)s 的下一步是什麼？實驗室是提早取得資訊、測試新功能，並在實際釋出前協助塑造它們的最佳方式。",
         "experimental_section": "提早預覽",
-        "experimental_description": "想要做點實驗？歡迎測試我們開發中的最新創意功能。這些功能尚未完成設計；可能不穩定、可能會變動，也可能會被完全捨棄。<a>取得更多資訊</a>。"
+        "experimental_description": "想要做點實驗？歡迎測試我們開發中的最新創意功能。這些功能尚未完成設計；可能不穩定、可能會變動，也可能會被完全捨棄。<a>取得更多資訊</a>。",
+        "beta_feedback_title": "%(featureName)s Beta 測試回饋",
+        "beta_feedback_leave_button": "請到設定頁面離開 Beta 測試版。",
+        "sliding_sync_checking": "正在檢查…"
     },
     "keyboard": {
         "home": "首頁",
@@ -1393,7 +911,9 @@
         "moderator": "版主",
         "admin": "管理員",
         "mod": "版主",
-        "custom": "自訂 (%(level)s)"
+        "custom": "自訂 (%(level)s)",
+        "label": "權限等級",
+        "custom_level": "自訂等級"
     },
     "bug_reporting": {
         "introduction": "若您透過 GitHub 遞交錯誤，除錯紀錄檔可以協助我們追蹤問題。 ",
@@ -1411,7 +931,16 @@
         "uploading_logs": "正在上傳紀錄檔",
         "downloading_logs": "正在下載紀錄檔",
         "create_new_issue": "請在 GitHub 上<newIssueLink>建立新議題</newIssueLink>，這樣我們才能調查這個錯誤。",
-        "waiting_for_server": "正在等待來自伺服器的回應"
+        "waiting_for_server": "正在等待來自伺服器的回應",
+        "error_empty": "請告訴我們發生了什麼錯誤，或更好的是，在 GitHub 上建立描述問題的議題。",
+        "preparing_logs": "準備傳送除錯訊息",
+        "logs_sent": "記錄檔已經傳送",
+        "thank_you": "感謝您！",
+        "failed_send_logs": "無法傳送除錯訊息： ",
+        "preparing_download": "正在準備下載紀錄檔",
+        "unsupported_browser": "提醒：您的瀏覽器不受支援，所以您的使用體驗可能無法預測。",
+        "textarea_label": "註記",
+        "log_request": "要協助我們讓這個問題不再發生，請<a>將紀錄檔傳送給我們</a>。"
     },
     "time": {
         "hours_minutes_seconds_left": "剩餘 %(hours)s 小時 %(minutes)s 分鐘 %(seconds)s 秒",
@@ -1493,7 +1022,13 @@
         "send_dm": "傳送私人訊息",
         "explore_rooms": "探索公開聊天室",
         "create_room": "建立群組聊天",
-        "create_account": "建立帳號"
+        "create_account": "建立帳號",
+        "use_case_heading1": "加入成功！",
+        "use_case_heading2": "您最常與誰聊天？",
+        "use_case_heading3": "我們將會協助您建立聯繫。",
+        "use_case_personal_messaging": "朋友與家人",
+        "use_case_work_messaging": "同事與團隊",
+        "use_case_community_messaging": "線上社群成員"
     },
     "settings": {
         "show_breadcrumbs": "在聊天室清單上方顯示最近看過的聊天室的捷徑",
@@ -1897,7 +1432,23 @@
             "email_address_label": "電子郵件地址",
             "remove_msisdn_prompt": "移除 %(phone)s？",
             "add_msisdn_instructions": "文字訊息將會被傳送到 +%(msisdn)s。請輸入其中包含的驗證碼。",
-            "msisdn_label": "電話號碼"
+            "msisdn_label": "電話號碼",
+            "spell_check_locale_placeholder": "選擇語系",
+            "deactivate_confirm_body_sso": "透過使用單一登入系統來證您的身分以確認停用您的帳號。",
+            "deactivate_confirm_body": "確定您想要停用您的帳號嗎？此為不可逆的操作。",
+            "deactivate_confirm_continue": "確認停用帳號",
+            "deactivate_confirm_body_password": "請輸入您的 Matrix 帳號密碼繼續：",
+            "error_deactivate_communication": "與伺服器通訊時發生問題。請再試一次。",
+            "error_deactivate_no_auth": "伺服器不需要任何驗證",
+            "error_deactivate_invalid_auth": "伺服器沒有回傳有效的驗證資訊。",
+            "deactivate_confirm_content": "確認您要停用您的帳號。若您繼續：",
+            "deactivate_confirm_content_1": "您將無法重新啟用您的帳號",
+            "deactivate_confirm_content_2": "您將無法再登入",
+            "deactivate_confirm_content_3": "任何人都無法重新使用您的使用者名稱（MXID），包括您：此使用者名稱將會維持不可用",
+            "deactivate_confirm_content_4": "您將會離開您所在的所有聊天室與私人訊息",
+            "deactivate_confirm_content_5": "您將從身分伺服器被移除：您的朋友將無法再透過您的電子郵件或電話號碼找到您",
+            "deactivate_confirm_content_6": "收到您舊訊息的人仍可以看見他們，就像您過去傳送的電子郵件一樣。您想要對未來加入聊天室的人隱藏您已傳送的訊息嗎？",
+            "deactivate_confirm_erase_label": "對新加入的成員隱藏我的訊息"
         },
         "sidebar": {
             "title": "側邊欄",
@@ -1962,7 +1513,8 @@
             "import_description_1": "這個過程讓您可以匯入您先前從其他 Matrix 客戶端匯出的加密金鑰。您將可以解密在其他客戶端可以解密的訊息。",
             "import_description_2": "匯出檔案被安全密語所保護。您應該在這裡輸入安全密語來解密檔案。",
             "file_to_import": "要匯入的檔案"
-        }
+        },
+        "warning": "<w>警告：</w> <description/>"
     },
     "devtools": {
         "send_custom_account_data_event": "傳送自訂帳號資料事件",
@@ -2064,7 +1616,8 @@
         "developer_mode": "開發者模式",
         "view_source_decrypted_event_source": "解密活動來源",
         "view_source_decrypted_event_source_unavailable": "已解密的來源不可用",
-        "original_event_source": "原始活動來源"
+        "original_event_source": "原始活動來源",
+        "toggle_event": "切換事件"
     },
     "export_chat": {
         "html": "HTML",
@@ -2123,7 +1676,8 @@
         "format": "格式",
         "messages": "訊息",
         "size_limit": "大小限制",
-        "include_attachments": "包含附件"
+        "include_attachments": "包含附件",
+        "size_limit_postfix": "MB"
     },
     "create_room": {
         "title_video_room": "建立視訊聊天室",
@@ -2157,7 +1711,8 @@
         "m.call": {
             "video_call_started": "視訊通話在 %(roomName)s 開始。",
             "video_call_started_unsupported": "視訊通話在 %(roomName)s 開始。（此瀏覽器不支援）",
-            "video_call_ended": "視訊通話已結束"
+            "video_call_ended": "視訊通話已結束",
+            "video_call_started_text": "%(name)s 開始了視訊通話"
         },
         "m.call.invite": {
             "voice_call": "%(senderName)s 撥打了語音通話。",
@@ -2468,7 +2023,8 @@
         },
         "reactions": {
             "label": "%(reactors)s 使用了 %(content)s 反應",
-            "tooltip": "<reactors/><reactedWith> 反應時使用 %(shortName)s</reactedWith>"
+            "tooltip": "<reactors/><reactedWith> 反應時使用 %(shortName)s</reactedWith>",
+            "add_reaction_prompt": "新增反應"
         },
         "m.room.create": {
             "continuation": "此聊天室是另一個對話的延續。",
@@ -2488,7 +2044,9 @@
             "external_url": "來源網址",
             "collapse_reply_thread": "收折回覆討論串",
             "view_related_event": "檢視相關的事件",
-            "report": "回報"
+            "report": "回報",
+            "resent_unsent_reactions": "重新傳送 %(unsentCount)s 反應",
+            "open_in_osm": "在 OpenStreetMap 中開啟"
         },
         "url_preview": {
             "show_n_more": {
@@ -2568,7 +2126,11 @@
             "you_declined": "您拒絕了",
             "you_cancelled": "您已取消",
             "declining": "正在拒絕…",
-            "you_started": "您已傳送了驗證請求"
+            "you_started": "您已傳送了驗證請求",
+            "user_accepted": "%(name)s 已接受",
+            "user_declined": "%(name)s 拒絕了",
+            "user_cancelled": "%(name)s 已取消",
+            "user_wants_to_verify": "%(name)s 想要驗證"
         },
         "m.poll.end": {
             "sender_ended": "%(senderName)s 結束了投票",
@@ -2576,6 +2138,28 @@
         },
         "m.video": {
             "error_decrypting": "解密影片出錯"
+        },
+        "scalar_starter_link": {
+            "dialog_title": "新增整合器",
+            "dialog_description": "您即將被帶到第三方網站，以便您可以驗證帳戶來使用 %(integrationsUrl)s。請問您要繼續嗎？"
+        },
+        "edits": {
+            "tooltip_title": "編輯於 %(date)s",
+            "tooltip_sub": "點擊以檢視編輯",
+            "tooltip_label": "編輯於 %(date)s。點擊以檢視編輯。"
+        },
+        "error_rendering_message": "無法載入此訊息",
+        "reply": {
+            "error_loading": "無法載入要回覆的活動，它可能不存在或是您沒有權限檢視它。",
+            "in_reply_to": "<a>回覆給</a> <pill>",
+            "in_reply_to_for_export": "回覆<a>此訊息</a>"
+        },
+        "in_room_name": " 在 <strong>%(room)s</strong>",
+        "m.poll": {
+            "count_of_votes": {
+                "one": "%(count)s 個投票",
+                "other": "%(count)s 個投票"
+            }
         }
     },
     "slash_command": {
@@ -2668,7 +2252,8 @@
         "verify_nop_warning_mismatch": "警告：工作階段已驗證，但金鑰不相符！",
         "verify_mismatch": "警告：無法驗證金鑰！%(userId)s 與工作階段 %(deviceId)s 簽署的金鑰是「%(fprint)s」，並不符合提供的金鑰「%(fingerprint)s」。這可能代表您的通訊已被攔截！",
         "verify_success_title": "已驗證的金鑰",
-        "verify_success_description": "您提供的簽署金鑰符合您從 %(userId)s 的工作階段收到的簽署金鑰 %(deviceId)s。工作階段標記為已驗證。"
+        "verify_success_description": "您提供的簽署金鑰符合您從 %(userId)s 的工作階段收到的簽署金鑰 %(deviceId)s。工作階段標記為已驗證。",
+        "help_dialog_title": "指令說明"
     },
     "presence": {
         "busy": "忙碌",
@@ -2801,9 +2386,11 @@
         "unable_to_access_audio_input_title": "無法存取您的麥克風",
         "unable_to_access_audio_input_description": "我們無法存取您的麥克風。請檢查您的瀏覽器設定並再試一次。",
         "no_audio_input_title": "找不到麥克風",
-        "no_audio_input_description": "我們在您的裝置上找不到麥克風。請檢查您的設定並再試一次。"
+        "no_audio_input_description": "我們在您的裝置上找不到麥克風。請檢查您的設定並再試一次。",
+        "transfer_consult_first_label": "先諮詢",
+        "input_devices": "輸入裝置",
+        "output_devices": "輸出裝置"
     },
-    "Other": "其他",
     "room_settings": {
         "permissions": {
             "m.room.avatar_space": "變更聊天空間大頭照",
@@ -2910,7 +2497,16 @@
                 "other": "正在更新空間…（%(count)s 中的第 %(progress)s 個）"
             },
             "error_join_rule_change_title": "加入規則更新失敗",
-            "error_join_rule_change_unknown": "未知錯誤"
+            "error_join_rule_change_unknown": "未知錯誤",
+            "join_rule_restricted_dialog_empty_warning": "您將取消所有聊天空間。存取權限將會預設為邀請制",
+            "join_rule_restricted_dialog_title": "選取聊天空間",
+            "join_rule_restricted_dialog_description": "決定哪些聊天空間可以存取此聊天室。若選取了聊天空間，其成員就可以找到並加入<RoomName/>。",
+            "join_rule_restricted_dialog_filter_placeholder": "搜尋聊天空間",
+            "join_rule_restricted_dialog_heading_space": "您知道的包含此聊天空間的聊天空間",
+            "join_rule_restricted_dialog_heading_room": "您已知包含此聊天室的聊天空間",
+            "join_rule_restricted_dialog_heading_other": "您可能不知道的其他聊天空間或聊天室",
+            "join_rule_restricted_dialog_heading_unknown": "這些可能是其他聊天室管理員的一部分。",
+            "join_rule_restricted_dialog_heading_known": "您知道的其他空間"
         },
         "general": {
             "publish_toggle": "將這個聊天室公開到 %(domain)s 的聊天室目錄中？",
@@ -2951,7 +2547,17 @@
             "canonical_alias_field_label": "主要位址",
             "avatar_field_label": "聊天室大頭照",
             "aliases_no_items_label": "尚無其他已發佈的位址，在下方新增一個",
-            "aliases_items_label": "其他已發佈位址："
+            "aliases_items_label": "其他已發佈位址：",
+            "alias_heading": "聊天室位址",
+            "alias_field_has_domain_invalid": "缺少網域名分隔符號，例如 (:domain.org)",
+            "alias_field_has_localpart_invalid": "缺少聊天室名稱或分隔符號，例如 (my-room:domain.org)",
+            "alias_field_safe_localpart_invalid": "不允許某些字元",
+            "alias_field_required_invalid": "請提供位址",
+            "alias_field_matches_invalid": "此位址並未指向此聊天室",
+            "alias_field_taken_valid": "此位址可用",
+            "alias_field_taken_invalid_domain": "此位址已被使用",
+            "alias_field_taken_invalid": "此位址的伺服器無效或已被使用",
+            "alias_field_placeholder_default": "例如：my-room"
         },
         "advanced": {
             "unfederated": "此聊天室無法被遠端的 Matrix 伺服器存取",
@@ -2964,7 +2570,25 @@
             "room_version_section": "聊天室版本",
             "room_version": "聊天室版本：",
             "information_section_space": "聊天空間資訊",
-            "information_section_room": "聊天室資訊"
+            "information_section_room": "聊天室資訊",
+            "error_upgrade_title": "無法升級聊天室",
+            "error_upgrade_description": "聊天室升級可能不完整",
+            "upgrade_button": "升級此聊天室到版本 %(version)s",
+            "upgrade_dialog_title": "更新聊天室版本",
+            "upgrade_dialog_description": "升級這個聊天室需要關閉目前的執行個體並重新建立一個新的聊天室來替代。為了給予聊天室成員最佳的體驗，我們將會：",
+            "upgrade_dialog_description_1": "使用同樣的名稱、描述與大頭照建立新聊天室",
+            "upgrade_dialog_description_2": "更新任何本地聊天室別名來指向新的聊天室",
+            "upgrade_dialog_description_3": "讓使用者在舊版聊天室停止發言，並張貼訊息建議使用者移動到新的聊天室",
+            "upgrade_dialog_description_4": "在新聊天室的開始處放置連回舊聊天室的連結，這樣夥伴們就可以看到舊的訊息",
+            "upgrade_warning_dialog_invite_label": "自動將該聊天室的成員邀請至新的聊天室",
+            "upgrade_warning_dialog_title_private": "升級私密聊天室",
+            "upgrade_dwarning_ialog_title_public": "升級公開聊天室",
+            "upgrade_warning_dialog_title": "升級聊天室",
+            "upgrade_warning_dialog_report_bug_prompt": "這通常只影響伺服器如何處理聊天室。如果您的 %(brand)s 遇到問題，請回報錯誤。",
+            "upgrade_warning_dialog_report_bug_prompt_link": "這通常僅影響如何在伺服器上處理聊天室的方式。如果您遇到與 %(brand)s 相關的問題，請<a>回報錯誤</a>。",
+            "upgrade_warning_dialog_description": "升級聊天室為進階動作，通常建議在聊天室因為錯誤而不穩定、缺少功能或安全漏洞等才升級。",
+            "upgrade_warning_dialog_explainer": "<b>請注意，升級會讓聊天室變成全新的版本</b>。目前所有的訊息都只會留在被封存的聊天室。",
+            "upgrade_warning_dialog_footer": "您將要把此聊天室從 <oldVersion /> 升級到 <newVersion />。"
         },
         "delete_avatar_label": "刪除大頭照",
         "upload_avatar_label": "上傳大頭照",
@@ -3004,7 +2628,9 @@
             "enable_element_call_caption": "%(brand)s 提供端對端加密，但目前使用者數量較少。",
             "enable_element_call_no_permissions_tooltip": "您沒有足夠的權限來變更此設定。",
             "call_type_section": "通話類型"
-        }
+        },
+        "title": "聊天室設定 - %(roomName)s",
+        "alias_not_specified": "未指定"
     },
     "encryption": {
         "verification": {
@@ -3081,7 +2707,21 @@
             "timed_out": "驗證逾時。",
             "cancelled_self": "您在其他裝置上取消了驗證。",
             "cancelled_user": "%(displayName)s 取消驗證。",
-            "cancelled": "您取消了驗證。"
+            "cancelled": "您取消了驗證。",
+            "incoming_sas_user_dialog_text_1": "驗證此工作階段，並標記為可受信任。由您將工作階段標記為可受信任後，可讓聊天夥伴傳送端到端加密訊息時能更加放心。",
+            "incoming_sas_user_dialog_text_2": "驗證此使用者將會把他們的工作階段標記為受信任，並同時為他們標記您的工作階段為可信任。",
+            "incoming_sas_device_dialog_text_1": "驗證此裝置，並標記為可受信任。由您將裝置標記為可受信任後，可讓聊天夥伴傳送端到端加密訊息時能更加放心。",
+            "incoming_sas_device_dialog_text_2": "驗證此裝置將會將其標記為受信任，且已驗證您的使用者將會信任此裝置。",
+            "incoming_sas_dialog_waiting": "正在等待夥伴確認…",
+            "incoming_sas_dialog_title": "收到的驗證請求",
+            "manual_device_verification_self_text": "透過將下列內容與您其他工作階段中的「使用者設定」所顯示的內容來確認：",
+            "manual_device_verification_user_text": "將以下內容與對方的「使用者設定」當中顯示的內容進行比對，來確認對方的工作階段：",
+            "manual_device_verification_device_name_label": "工作階段名稱",
+            "manual_device_verification_device_id_label": "工作階段 ID",
+            "manual_device_verification_device_key_label": "工作階段金鑰",
+            "manual_device_verification_footer": "如果它們不相符，則可能會威脅到您的通訊安全。",
+            "verification_dialog_title_device": "驗證其他裝置",
+            "verification_dialog_title_user": "驗證請求"
         },
         "old_version_detected_title": "偵測到舊的加密資料",
         "old_version_detected_description": "偵測到來自舊版 %(brand)s 的資料。這將會造成舊版的端對端加密失敗。在此版本中使用最近在舊版本交換的金鑰可能無法解密訊息。這也會造成與此版本的訊息交換失敗。若您遇到問題，請登出並重新登入。要保留訊息歷史，請匯出並重新匯入您的金鑰。",
@@ -3135,7 +2775,57 @@
         "cross_signing_room_warning": "某人正在使用未知的工作階段",
         "cross_signing_room_verified": "此聊天室中每個人都已驗證",
         "cross_signing_room_normal": "此聊天室已端對端加密",
-        "unsupported": "此客戶端不支援端對端加密。"
+        "unsupported": "此客戶端不支援端對端加密。",
+        "incompatible_database_sign_out_description": "為了避免遺失您的聊天歷史，您必須在登出前匯出您的聊天室金鑰。您必須回到較新版的 %(brand)s 才能執行此動作",
+        "incompatible_database_description": "您先前在此工作階段中使用了較新版本的 %(brand)s。要再次與此版本使用端對端加密，您必須先登出再登入。",
+        "incompatible_database_title": "不相容的資料庫",
+        "incompatible_database_disable": "在停用加密的情況下繼續",
+        "key_signature_upload_completed": "上傳完成",
+        "key_signature_upload_cancelled": "已取消簽章上傳",
+        "key_signature_upload_failed": "無法上傳",
+        "key_signature_upload_success_title": "簽章上傳成功",
+        "key_signature_upload_failed_title": "無上傳簽章",
+        "udd": {
+            "own_new_session_text": "您已登入新的工作階段但未驗證：",
+            "own_ask_verify_text": "使用下方的其中一個選項來驗證您其他工作階段。",
+            "other_new_session_text": "%(name)s （%(userId)s）登入到未驗證的新工作階段：",
+            "other_ask_verify_text": "要求此使用者驗證他們的工作階段，或在下方手動驗證。",
+            "title": "未受信任",
+            "manual_verification_button": "透過文字手動驗證",
+            "interactive_verification_button": "透過表情符號互動來驗證"
+        },
+        "access_secret_storage_dialog": {
+            "key_validation_text": {
+                "wrong_file_type": "錯誤的檔案類型",
+                "recovery_key_is_correct": "看起來真棒！",
+                "wrong_security_key": "錯誤的安全金鑰",
+                "invalid_security_key": "無效的安全金鑰"
+            },
+            "reset_title": "重設所有東西",
+            "reset_warning_1": "當您沒有其他裝置可以完成驗證時，才執行此動作。",
+            "reset_warning_2": "如果您重設所有東西，您將會在沒有受信任的工作階段、沒有受信任的使用者的情況下重新啟動，且可能會看不到過去的訊息。",
+            "security_phrase_title": "安全密語",
+            "security_phrase_incorrect_error": "無法存取祕密儲存空間。請確認您輸入了正確的安全密語。",
+            "enter_phrase_or_key_prompt": "輸入您的安全密語或<button>使用您的安全金鑰</button>以繼續。",
+            "security_key_title": "安全金鑰",
+            "use_security_key_prompt": "使用您的安全金鑰以繼續。",
+            "separator": "%(securityKey)s 或 %(recoveryFile)s",
+            "restoring": "從備份還原金鑰"
+        },
+        "reset_all_button": "忘記或遺失了所有復原方法？<a>重設全部</a>",
+        "destroy_cross_signing_dialog": {
+            "title": "摧毀交叉簽署金鑰？",
+            "warning": "永久刪除交叉簽署金鑰。任何您已驗證過的人都會看到安全性警告。除非您遺失了所有可以進行交叉簽署的裝置，否則您不會想要這樣做。",
+            "primary_button_text": "清除交叉簽署金鑰"
+        },
+        "confirm_encryption_setup_title": "確認加密設定",
+        "confirm_encryption_setup_body": "點擊下方按鈕以確認設定加密。",
+        "unable_to_setup_keys_error": "無法設定金鑰",
+        "key_signature_upload_failed_master_key_signature": "新的主金鑰簽署",
+        "key_signature_upload_failed_cross_signing_key_signature": "新交叉簽署金鑰的簽章",
+        "key_signature_upload_failed_device_cross_signing_key_signature": "裝置交叉簽署",
+        "key_signature_upload_failed_key_signature": "金鑰簽章",
+        "key_signature_upload_failed_body": "%(brand)s 在上傳以下內容時遇到錯誤："
     },
     "emoji": {
         "category_frequently_used": "經常使用",
@@ -3285,7 +2975,10 @@
             "fallback_button": "開始認證",
             "sso_title": "使用單一登入來繼續",
             "sso_body": "使用單一登入來證明身分，以確認新增該電子郵件地址。",
-            "code": "代碼"
+            "code": "代碼",
+            "sso_preauth_body": "要繼續，使用單一登入系統來證明您的身分。",
+            "sso_postauth_title": "確認以繼續",
+            "sso_postauth_body": "點擊下方按鈕以確認您的身分。"
         },
         "password_field_label": "輸入密碼",
         "password_field_strong_label": "很好，密碼強度夠高！",
@@ -3361,7 +3054,41 @@
         },
         "country_dropdown": "國家下拉式選單",
         "common_failures": {},
-        "captcha_description": "這個家伺服器想要確認您不是機器人。"
+        "captcha_description": "這個家伺服器想要確認您不是機器人。",
+        "autodiscovery_invalid": "家伺服器的探索回應無效",
+        "autodiscovery_generic_failure": "無法從伺服器取得自動探索設定",
+        "autodiscovery_invalid_hs_base_url": "無效的 m.homeserver base_url",
+        "autodiscovery_invalid_hs": "家伺服器網址似乎不是有效的 Matrix 家伺服器",
+        "autodiscovery_invalid_is_base_url": "無效的 m.identity_server base_url",
+        "autodiscovery_invalid_is": "身分伺服器網址似乎不是有效的身分伺服器",
+        "autodiscovery_invalid_is_response": "身份伺服器探索回應無效",
+        "server_picker_description": "您可以透過指定不同的家伺服器網址，來登入至其他的 Matrix 伺服器。使用自訂伺服器選項讓您可以使用 %(brand)s 登入到不同家伺服器上的 Matrix 帳號。",
+        "server_picker_description_matrix.org": "在最大的公開伺服器上，免費與數百萬人一起交流",
+        "server_picker_title_default": "伺服器選項",
+        "soft_logout": {
+            "clear_data_title": "清除此工作階段中的所有資料？",
+            "clear_data_description": "將會永久清除此工作階段的所有資料。除非已備份金鑰，否則將會遺失所有加密訊息。",
+            "clear_data_button": "清除所有資料"
+        },
+        "logout_dialog": {
+            "setup_secure_backup_description_1": "加密訊息是使用端對端加密。只有您和接收者才有金鑰可以閱讀這些訊息。",
+            "setup_secure_backup_description_2": "當您登出時，這些金鑰將會從此裝置被刪除，這代表您將無法再閱讀加密的訊息，除非您在其他裝置上有那些訊息的金鑰，或是將它們備份到伺服器上。",
+            "use_key_backup": "開始使用金鑰備份",
+            "skip_key_backup": "我不要我的加密訊息了",
+            "megolm_export": "手動匯出金鑰",
+            "setup_key_backup_title": "您將會失去您的加密訊息",
+            "description": "您確定要登出嗎？"
+        },
+        "registration": {
+            "continue_without_email_title": "不使用電子郵件來繼續",
+            "continue_without_email_description": "請注意，如果您不新增電子郵件且忘記密碼，您將<b>永遠失去對您帳號的存取權</b>。",
+            "continue_without_email_field_label": "電子郵件（選擇性）"
+        },
+        "set_email": {
+            "verification_pending_title": "等待驗證",
+            "verification_pending_description": "請收信並點擊信中的連結。完成後，再點擊「繼續」。",
+            "description": "這讓您可以重設您的密碼與接收通知。"
+        }
     },
     "room_list": {
         "sort_unread_first": "先顯示有未讀訊息的聊天室",
@@ -3415,7 +3142,8 @@
         "spam_or_propaganda": "垃圾郵件或宣傳",
         "report_entire_room": "回報整個聊天室",
         "report_content_to_homeserver": "回報內容給您的家伺服器管理員",
-        "description": "回報此訊息將會傳送其獨特的「活動 ID」給您家伺服器的管理員。如果此聊天室中的訊息已加密，您的家伺服器管理員將無法閱讀訊息文字或檢視任何檔案或圖片。"
+        "description": "回報此訊息將會傳送其獨特的「活動 ID」給您家伺服器的管理員。如果此聊天室中的訊息已加密，您的家伺服器管理員將無法閱讀訊息文字或檢視任何檔案或圖片。",
+        "other_label": "其他"
     },
     "setting": {
         "help_about": {
@@ -3534,7 +3262,22 @@
         "popout": "彈出式小工具",
         "unpin_to_view_right_panel": "取消釘選這個小工具以在此面板中檢視",
         "set_room_layout": "為所有人設定我的聊天室佈局",
-        "close_to_view_right_panel": "關閉此小工具以在此面板中檢視"
+        "close_to_view_right_panel": "關閉此小工具以在此面板中檢視",
+        "modal_title_default": "程式小工具",
+        "modal_data_warning": "在此畫面上的資料會與 %(widgetDomain)s 分享",
+        "capabilities_dialog": {
+            "title": "批准小工具權限",
+            "content_starting_text": "這個小工具想要：",
+            "decline_all_permission": "全部拒絕",
+            "remember_Selection": "記住我對這個小工具的選擇"
+        },
+        "open_id_permissions_dialog": {
+            "title": "允許此小工具驗證您的身分",
+            "starting_text": "小工具將會驗證您的使用者 ID，但將無法為您執行動作：",
+            "remember_selection": "記住這個"
+        },
+        "error_unable_start_audio_stream_description": "無法開始音訊串流。",
+        "error_unable_start_audio_stream_title": "無法開始直播"
     },
     "feedback": {
         "sent": "已傳送回饋",
@@ -3543,7 +3286,8 @@
         "may_contact_label": "若您想跟進或讓我測試即將到來的想法，可以聯絡我",
         "pro_type": "專業建議：如果您開始了一個錯誤，請遞交<debugLogsLink>除錯紀錄檔</debugLogsLink>以協助我們尋找問題。",
         "existing_issue_link": "請先檢視 <existingIssuesLink>GitHub 上既有的錯誤</existingIssuesLink>。沒有相符的嗎？<newIssueLink>回報新的問題</newIssueLink>。",
-        "send_feedback_action": "傳送回饋"
+        "send_feedback_action": "傳送回饋",
+        "can_contact_label": "如果後續有任何問題，可以聯絡我"
     },
     "zxcvbn": {
         "suggestions": {
@@ -3616,7 +3360,10 @@
         "no_update": "沒有可用的更新。",
         "downloading": "正在下載更新…",
         "new_version_available": "有可用的新版本。<a>立刻更新。</a>",
-        "check_action": "檢查更新"
+        "check_action": "檢查更新",
+        "error_unable_load_commit": "無法載入遞交的詳細資訊：%(msg)s",
+        "unavailable": "無法取得",
+        "changelog": "變更記錄檔"
     },
     "threads": {
         "all_threads": "所有討論串",
@@ -3631,7 +3378,11 @@
         "empty_heading": "使用「討論串」功能，讓討論保持有條不紊",
         "unable_to_decrypt": "無法解密訊息",
         "open_thread": "開啟討論串",
-        "error_start_thread_existing_relation": "無法從討論串既有的關係建立活動"
+        "error_start_thread_existing_relation": "無法從討論串既有的關係建立活動",
+        "count_of_reply": {
+            "one": "%(count)s 回覆",
+            "other": "%(count)s 回覆"
+        }
     },
     "theme": {
         "light_high_contrast": "亮色高對比",
@@ -3665,7 +3416,41 @@
         "title_when_query_available": "結果",
         "search_placeholder": "搜尋名稱與描述",
         "no_search_result_hint": "您可能要嘗試其他搜尋或檢查是否有拼字錯誤。",
-        "joining_space": "正在加入"
+        "joining_space": "正在加入",
+        "add_existing_subspace": {
+            "space_dropdown_title": "新增既有的聊天空間",
+            "create_prompt": "想要新增聊天空間？",
+            "create_button": "建立新聊天空間",
+            "filter_placeholder": "搜尋聊天空間"
+        },
+        "add_existing_room_space": {
+            "error_heading": "並非所有選定的都被新增了",
+            "progress_text": {
+                "one": "正在新增聊天室…",
+                "other": "正在新增聊天室…（%(count)s 中的第 %(progress)s 個）"
+            },
+            "dm_heading": "私人訊息",
+            "space_dropdown_label": "選取聊天空間",
+            "space_dropdown_title": "新增既有聊天室",
+            "create": "想要新增新聊天室嗎？",
+            "create_prompt": "建立新聊天室",
+            "subspace_moved_note": "新增的聊天空間已被移動。"
+        },
+        "room_filter_placeholder": "搜尋聊天室",
+        "leave_dialog_public_rejoin_warning": "您將無法重新加入，除非您再次被邀請。",
+        "leave_dialog_only_admin_warning": "您是此聊天空間唯一的管理員。離開將代表沒有人可以控制它。",
+        "leave_dialog_only_admin_room_warning": "您是將要離開的聊天室與聊天空間唯一的管理員。您離開之後會讓它們沒有任何管理員。",
+        "leave_dialog_title": "離開 %(spaceName)s",
+        "leave_dialog_description": "您將要離開 <spaceName/>。",
+        "leave_dialog_option_intro": "您想要離開此聊天空間中的聊天室嗎？",
+        "leave_dialog_option_none": "不要離開任何聊天室",
+        "leave_dialog_option_all": "離開所有聊天室",
+        "leave_dialog_option_specific": "離開部份聊天室",
+        "leave_dialog_action": "離開聊天空間",
+        "preferences": {
+            "sections_section": "要顯示的部份",
+            "show_people_in_space": "將您與此空間成員的聊天進行分組。關閉此功能，將會在您的 %(spaceName)s 畫面中隱藏那些聊天室。"
+        }
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "此家伺服器未設定來顯示地圖。",
@@ -3690,7 +3475,30 @@
         "click_move_pin": "點擊以移動圖釘",
         "click_drop_pin": "點擊以放置圖釘",
         "share_button": "分享位置",
-        "stop_and_close": "停止並關閉"
+        "stop_and_close": "停止並關閉",
+        "error_fetch_location": "無法取得位置",
+        "error_no_perms_title": "您沒有權限分享位置",
+        "error_no_perms_description": "您必須有正確的權限才能在此聊天室中分享位置。",
+        "error_send_title": "我們無法傳送您的位置",
+        "error_send_description": "%(brand)s 無法傳送您的位置。請稍後再試。",
+        "live_description": "%(displayName)s 的即時位置",
+        "share_type_own": "我目前的位置",
+        "share_type_live": "我的即時位置",
+        "share_type_pin": "自訂位置",
+        "share_type_prompt": "您要分享哪種位置類型？",
+        "live_update_time": "已更新 %(humanizedUpdateTime)s",
+        "live_until": "即時分享直到 %(expiryTime)s",
+        "loading_live_location": "正在載入即時位置…",
+        "live_location_ended": "即時位置已結束",
+        "live_location_error": "即時位置錯誤",
+        "live_locations_empty": "無即時位置",
+        "close_sidebar": "關閉側邊欄",
+        "error_stopping_live_location": "停止您的即時位置時發生錯誤",
+        "error_sharing_live_location": "分享您的即時位置時發生錯誤",
+        "live_location_active": "您正在分享您的即時位置",
+        "live_location_enabled": "即時位置已啟用",
+        "error_sharing_live_location_try_again": "分享您的即時位置時發生錯誤，請再試一次",
+        "error_stopping_live_location_try_again": "停止您的即時位置時發生錯誤，請再試一次"
     },
     "labs_mjolnir": {
         "room_name": "我的封鎖清單",
@@ -3762,7 +3570,16 @@
         "address_label": "位址",
         "label": "建立聊天空間",
         "add_details_prompt_2": "您隨時可以變更這些。",
-        "creating": "正在建立…"
+        "creating": "正在建立…",
+        "subspace_join_rule_restricted_description": "<SpaceName/> 中的任何人都可以找到並加入。",
+        "subspace_join_rule_public_description": "不只是 <SpaceName/> 的成員，任何人都可以找到並加入此聊天空間。",
+        "subspace_join_rule_invite_description": "僅有被邀請的人才能找到並加入此聊天空間。",
+        "subspace_dropdown_title": "建立聊天空間",
+        "subspace_beta_notice": "新增空間到您管理的聊天空間。",
+        "subspace_join_rule_label": "空間能見度",
+        "subspace_join_rule_invite_only": "私密聊天空間（邀請制）",
+        "subspace_existing_space_prompt": "想要新增既有的聊天空間嗎？",
+        "subspace_adding": "正在新增…"
     },
     "user_menu": {
         "switch_theme_light": "切換至淺色模式",
@@ -3931,7 +3748,11 @@
             "all_rooms": "所有聊天室",
             "field_placeholder": "搜尋…",
             "this_room_button": "搜尋此聊天室",
-            "all_rooms_button": "搜尋所有聊天室"
+            "all_rooms_button": "搜尋所有聊天室",
+            "result_count": {
+                "one": "（~%(count)s 結果）",
+                "other": "（~%(count)s 結果）"
+            }
         },
         "jump_to_bottom_button": "捲動到最新訊息",
         "jump_read_marker": "跳到第一則未讀訊息。",
@@ -3946,7 +3767,19 @@
         "error_jump_to_date_details": "錯誤詳細資訊",
         "jump_to_date_beginning": "聊天室開頭",
         "jump_to_date": "跳至日期",
-        "jump_to_date_prompt": "挑選要跳至的日期"
+        "jump_to_date_prompt": "挑選要跳至的日期",
+        "face_pile_tooltip_label": {
+            "one": "檢視 1 個成員",
+            "other": "檢視全部 %(count)s 個成員"
+        },
+        "face_pile_tooltip_shortcut_joined": "包含您，%(commaSeparatedMembers)s",
+        "face_pile_tooltip_shortcut": "包含 %(commaSeparatedMembers)s",
+        "invites_you_text": "<inviter/> 邀請您",
+        "unknown_status_code_for_timeline_jump": "未知狀態代碼",
+        "face_pile_summary": {
+            "other": "%(count)s 個您認識的人已加入",
+            "one": "%(count)s 個您認識的人已加入"
+        }
     },
     "file_panel": {
         "guest_note": "您必須<a>註冊</a>以使用此功能",
@@ -3967,7 +3800,9 @@
         "identity_server_no_terms_title": "身分伺服器無使用條款",
         "identity_server_no_terms_description_1": "此動作需要存取預設的身分伺服器 <server /> 以驗證電子郵件或電話號碼，但伺服器沒有任何服務條款。",
         "identity_server_no_terms_description_2": "僅在您信任伺服器擁有者時才繼續。",
-        "inline_intro_text": "接受 <policyLink /> 以繼續："
+        "inline_intro_text": "接受 <policyLink /> 以繼續：",
+        "summary_identity_server_1": "透過電話或電子郵件尋找其他人",
+        "summary_identity_server_2": "透過電話或電子郵件找到"
     },
     "space_settings": {
         "title": "設定 - %(spaceName)s"
@@ -4004,7 +3839,13 @@
         "total_n_votes_voted": {
             "one": "總票數 %(count)s 票",
             "other": "總票數 %(count)s 票"
-        }
+        },
+        "end_message_no_votes": "投票已結束。沒有投票。",
+        "end_message": "投票已結束。最佳答案：%(topAnswer)s",
+        "error_ending_title": "無法結束投票",
+        "error_ending_description": "抱歉，投票沒有結束。請再試一次。",
+        "end_title": "結束投票",
+        "end_description": "您確定您想要結束此投票？這將會顯示最終投票結果並阻止人們投票。"
     },
     "failed_load_async_component": "無法載入！請檢查您的網路連線狀態並再試一次。",
     "upload_failed_generic": "無法上傳檔案「%(fileName)s」。",
@@ -4052,7 +3893,39 @@
         "error_version_unsupported_space": "使用者的家伺服器不支援這個聊天空間的版本。",
         "error_version_unsupported_room": "使用者的家伺服器不支援此聊天室版本。",
         "error_unknown": "未知的伺服器錯誤",
-        "to_space": "邀請加入 %(spaceName)s"
+        "to_space": "邀請加入 %(spaceName)s",
+        "unable_find_profiles_description_default": "找不到下列 Matrix ID 的簡介，您無論如何都想邀請他們嗎？",
+        "unable_find_profiles_title": "以下的使用者可能不存在",
+        "unable_find_profiles_invite_never_warn_label_default": "無論如何都要邀請，而且不要再警告我",
+        "unable_find_profiles_invite_label_default": "無論如何都要邀請",
+        "email_caption": "透過電子郵件邀請",
+        "error_dm": "我們無法建立您的私人訊息。",
+        "ask_anyway_description": "找不到下方列出的 Matrix ID 個人檔案，您是否仍要開始直接訊息？",
+        "ask_anyway_never_warn_label": "開始直接訊息且不要再次警告",
+        "ask_anyway_label": "開始直接訊息",
+        "error_find_room": "在嘗試邀請使用者時發生錯誤。",
+        "error_invite": "無法邀請使用者。請重新確認您想要邀請的使用者後再試一次。",
+        "error_transfer_multiple_target": "一個通話只能轉接給ㄧ個使用者。",
+        "error_find_user_title": "找不到以下使用者",
+        "error_find_user_description": "以下使用者可能不存在或無效，且無法被邀請：%(csvNames)s",
+        "recents_section": "最近的對話",
+        "suggestions_section": "最近傳送過私人訊息",
+        "email_use_default_is": "使用身分伺服器以透過電子郵件邀請。<default>使用預設值 (%(defaultIdentityServerName)s)</default>或在<settings>設定</settings>中管理。",
+        "email_use_is": "使用身分伺服器以透過電子郵件邀請。在<settings>設定</settings>中管理。",
+        "start_conversation_name_email_mxid_prompt": "使用某人的名字、電子郵件地址或使用者名稱（如 <userId/>）來與他們開始對話。",
+        "start_conversation_name_mxid_prompt": "使用某人的名字或使用者名稱（如 <userId/>）以與他們開始對話。",
+        "suggestions_disclaimer": "出於隱私考量，可能會隱藏一些建議。",
+        "suggestions_disclaimer_prompt": "如果您看不到您要找的人，請將您的邀請連結傳送給他們。",
+        "send_link_prompt": "或傳送邀請連結",
+        "to_room": "邀請加入 %(roomName)s",
+        "name_email_mxid_share_space": "使用某人的名字、電子郵件地址、使用者名稱（如 <userId/>）或<a>分享此聊天空間</a>來邀請人。",
+        "name_mxid_share_space": "使用某人的名字、使用者名稱（如 <userId/>）或<a>分享此聊天室</a>來邀請人。",
+        "name_email_mxid_share_room": "使用某人的名字、電子郵件地址、使用者名稱（如 <userId/>）或<a>分享此聊天空間</a>來邀請人。",
+        "name_mxid_share_room": "使用某人的名字、使用者名稱（如 <userId/>）或<a>分享此聊天室</a>來邀請人。",
+        "key_share_warning": "被邀請的人將能閱讀舊訊息。",
+        "email_limit_one": "透過電子郵件傳送的邀請一次只能傳送一個",
+        "transfer_user_directory_tab": "使用者目錄",
+        "transfer_dial_pad_tab": "撥號鍵盤"
     },
     "scalar": {
         "error_create": "無法建立小工具。",
@@ -4085,7 +3958,21 @@
         "something_went_wrong": "出了點問題！",
         "download_media": "下載來源媒體失敗，找不到來源 URL",
         "update_power_level": "無法變更權限等級",
-        "unknown": "未知的錯誤"
+        "unknown": "未知的錯誤",
+        "dialog_description_default": "出現一個錯誤。",
+        "edit_history_unsupported": "您的家伺服器似乎並不支援此功能。",
+        "session_restore": {
+            "clear_storage_description": "登出並移除加密金鑰？",
+            "clear_storage_button": "清除儲存的東西並登出",
+            "title": "無法復原工作階段",
+            "description_1": "我們在嘗試復原您先前的工作階段時遇到了一點錯誤。",
+            "description_2": "若您先前使用過較新版本的 %(brand)s，您的工作階段可能與此版本不相容。關閉此視窗並回到較新的版本。",
+            "description_3": "清除您瀏覽器的儲存的東西也許可以修復問題，但會將您登出並造成任何已加密的聊天都無法讀取。"
+        },
+        "storage_evicted_title": "遺失工作階段資料",
+        "storage_evicted_description_1": "某些工作階段資料遺失了，其中包含加密訊息金鑰。登出再登入並從備份中復原金鑰可以修復這個問題。",
+        "storage_evicted_description_2": "當硬碟空間不足時，您的瀏覽器可能會移除這些資料。",
+        "unknown_error_code": "未知的錯誤代碼"
     },
     "in_space1_and_space2": "在聊天空間 %(space1Name)s 與 %(space2Name)s。",
     "in_space_and_n_other_spaces": {
@@ -4239,7 +4126,31 @@
         "deactivate_confirm_action": "停用使用者",
         "error_deactivate": "無法停用使用者",
         "role_label": "<RoomName/> 中的角色",
-        "edit_own_devices": "編輯裝置"
+        "edit_own_devices": "編輯裝置",
+        "redact": {
+            "no_recent_messages_title": "找不到 %(user)s 最近的訊息",
+            "no_recent_messages_description": "試著在時間軸上捲動以檢視有沒有較早的。",
+            "confirm_title": "移除 %(user)s 最近的訊息",
+            "confirm_description_1": {
+                "one": "您將要移除 %(user)s 的 %(count)s 則訊息。將會為對話中的所有人永久移除它們。確定要繼續嗎？",
+                "other": "您將要移除 %(user)s 的 %(count)s 則訊息。將會為對話中的所有人永久移除它們。確定要繼續嗎？"
+            },
+            "confirm_description_2": "若有大量訊息需刪除，可能需要一些時間。請不要在此時重新整理您的客戶端。",
+            "confirm_keep_state_label": "保留系統訊息",
+            "confirm_keep_state_explainer": "若您也想移除此使用者的系統訊息（例如成員資格變更、個人資料變更…），請取消勾選",
+            "confirm_button": {
+                "other": "移除 %(count)s 則訊息",
+                "one": "移除 1 則訊息"
+            }
+        },
+        "count_of_verified_sessions": {
+            "other": "%(count)s 個已驗證的工作階段",
+            "one": "1 個已驗證的工作階段"
+        },
+        "count_of_sessions": {
+            "other": "%(count)s 個工作階段",
+            "one": "%(count)s 個工作階段"
+        }
     },
     "stickers": {
         "empty": "您目前沒有啟用任何貼圖包",
@@ -4292,6 +4203,9 @@
                 "one": "共計 %(count)s 票所獲得的投票結果",
                 "other": "共計 %(count)s 票所獲得的投票結果"
             }
+        },
+        "thread_list": {
+            "context_menu_label": "討論串選項"
         }
     },
     "reject_invitation_dialog": {
@@ -4328,12 +4242,168 @@
     },
     "console_wait": "等等！",
     "cant_load_page": "無法載入頁面",
-    "Invalid homeserver discovery response": "家伺服器的探索回應無效",
-    "Failed to get autodiscovery configuration from server": "無法從伺服器取得自動探索設定",
-    "Invalid base_url for m.homeserver": "無效的 m.homeserver base_url",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "家伺服器網址似乎不是有效的 Matrix 家伺服器",
-    "Invalid identity server discovery response": "身份伺服器探索回應無效",
-    "Invalid base_url for m.identity_server": "無效的 m.identity_server base_url",
-    "Identity server URL does not appear to be a valid identity server": "身分伺服器網址似乎不是有效的身分伺服器",
-    "General failure": "一般錯誤"
+    "General failure": "一般錯誤",
+    "emoji_picker": {
+        "cancel_search_label": "取消搜尋"
+    },
+    "info_tooltip_title": "資訊",
+    "language_dropdown_label": "語言下拉式選單",
+    "pill": {
+        "permalink_other_room": "%(room)s 中的訊息",
+        "permalink_this_room": "來自 %(user)s 的訊息"
+    },
+    "seshat": {
+        "error_initialising": "訊息搜尋初始化失敗，請檢查<a>您的設定</a>以取得更多資訊",
+        "warning_kind_files_app": "使用<a>桌面應用程式</a>以檢視所有加密的檔案",
+        "warning_kind_search_app": "使用<a>桌面應用程式</a>搜尋加密訊息",
+        "warning_kind_files": "此版本的 %(brand)s 不支援檢視某些加密檔案",
+        "warning_kind_search": "此版本的 %(brand)s 不支援搜尋加密訊息",
+        "reset_title": "重設活動儲存？",
+        "reset_description": "您很可能不想重設您的活動索引儲存",
+        "reset_explainer": "如果這樣做，請注意，您的訊息不會被刪除，但在重新建立索引時，搜尋體驗可能會降低片刻",
+        "reset_button": "重設活動儲存"
+    },
+    "truncated_list_n_more": {
+        "other": "與更多 %(count)s 個…"
+    },
+    "spotlight": {
+        "public_rooms": {
+            "network_dropdown_required_invalid": "輸入伺服器名稱",
+            "network_dropdown_available_valid": "看起來不錯",
+            "network_dropdown_available_invalid_forbidden": "您不被允許檢視此伺服器的聊天室清單",
+            "network_dropdown_available_invalid": "找不到此伺服器或其聊天室清單",
+            "network_dropdown_your_server_description": "您的伺服器",
+            "network_dropdown_remove_server_adornment": "移除伺服器「%(roomServer)s」",
+            "network_dropdown_add_dialog_title": "加入新的伺服器",
+            "network_dropdown_add_dialog_description": "輸入您想要探索的新伺服器的名稱。",
+            "network_dropdown_add_dialog_placeholder": "伺服器名稱",
+            "network_dropdown_add_server_option": "加入新伺服器…",
+            "network_dropdown_selected_label_instance": "顯示：%(instance)s 聊天室 (%(server)s)",
+            "network_dropdown_selected_label": "顯示：Matrix 聊天室"
+        }
+    },
+    "dialog_close_label": "關閉對話框",
+    "voice_message": {
+        "cant_start_broadcast_title": "無法開始語音訊息",
+        "cant_start_broadcast_description": "您無法開始語音訊息，因為您目前正在錄製直播。請結束您的直播以開始錄製語音訊息。"
+    },
+    "redact": {
+        "error": "您無法刪除此訊息。(%(code)s)",
+        "ongoing": "正在刪除…",
+        "confirm_description": "您真的想要移除（刪除）此活動嗎？",
+        "confirm_description_state": "請注意，像這樣移除聊天是變更可能會還原變更。",
+        "confirm_button": "確認刪除",
+        "reason_label": "理由（選擇性）"
+    },
+    "forward": {
+        "no_perms_title": "您沒有權限執行此動作",
+        "sending": "傳送中",
+        "sent": "已傳送",
+        "open_room": "開啟聊天室",
+        "send_label": "傳送",
+        "message_preview_heading": "訊息預覽",
+        "filter_placeholder": "搜尋聊天室或夥伴"
+    },
+    "integrations": {
+        "disabled_dialog_title": "整合已停用",
+        "disabled_dialog_description": "在設定中啟用「%(manageIntegrations)s」來執行此動作。",
+        "impossible_dialog_title": "不允許整合",
+        "impossible_dialog_description": "您的 %(brand)s 不允許您使用整合管理員來執行此動作。請聯絡管理員。"
+    },
+    "lazy_loading": {
+        "disabled_description1": "您之前曾在 %(host)s 上使用 %(brand)s 並啟用成員列表的延遲載入。在此版本中延遲載入已停用。由於本機快取在這兩個設定間不相容，%(brand)s 必須重新同步您的帳號。",
+        "disabled_description2": "如果其他版本的 %(brand)s 仍在其他分頁中開啟，請關閉它，因為在同一主機上使用同時啟用與停用惰性載入的 %(brand)s 可能會造成問題。",
+        "disabled_title": "不相容的本機快取",
+        "disabled_action": "清除快取並重新同步",
+        "resync_description": "%(brand)s 現在僅使用低於原本3-5倍的記憶體，僅在需要時才會載入其他使用者的資訊。請等待我們與伺服器重新同步！",
+        "resync_title": "正在更新 %(brand)s"
+    },
+    "message_edit_dialog_title": "訊息編輯紀錄",
+    "server_offline": {
+        "empty_timeline": "您已完成。",
+        "title": "伺服器沒有回應",
+        "description": "您的伺服器未對您的某些請求回應。下列是可能的原因。",
+        "description_1": "伺服器 (%(serverName)s) 花了太長的時間來回應。",
+        "description_2": "您的防火牆或防毒軟體阻擋了請求。",
+        "description_3": "瀏覽器擴充套件阻擋了請求。",
+        "description_4": "伺服器離線。",
+        "description_5": "伺服器拒絕了您的請求。",
+        "description_6": "您所在區域可能遇到一些網際網路連線的問題。",
+        "description_7": "在試圖與伺服器溝通時遇到連線錯誤。",
+        "description_8": "伺服器沒有設定好來指示出問題是什麼 (CORS)。",
+        "recent_changes_heading": "尚未收到最新變更"
+    },
+    "spotlight_dialog": {
+        "count_of_members": {
+            "one": "%(count)s 個成員",
+            "other": "%(count)s 個成員"
+        },
+        "public_rooms_label": "公開聊天室",
+        "heading_with_query": "使用「%(query)s」搜尋",
+        "heading_without_query": "搜尋",
+        "spaces_title": "您所在的聊天空間",
+        "failed_querying_public_rooms": "檢索公開聊天室失敗",
+        "other_rooms_in_space": "其他在 %(spaceName)s 中的聊天室",
+        "join_button_text": "加入 %(roomAddress)s",
+        "result_may_be_hidden_privacy_warning": "出於隱私考量，可能會隱藏一些結果",
+        "cant_find_person_helpful_hint": "若您看不到要找的人，請將您的邀請連結傳送給他們。",
+        "copy_link_text": "複製邀請連結",
+        "result_may_be_hidden_warning": "某些結果可能會被隱藏",
+        "cant_find_room_helpful_hint": "若您找不到您要找的聊天室，要求邀請或是建立新的聊天室。",
+        "create_new_room_button": "建立新聊天室",
+        "group_chat_section_title": "其他選項",
+        "start_group_chat_button": "開始群組聊天",
+        "message_search_section_title": "其他搜尋",
+        "recent_searches_section_title": "近期搜尋",
+        "recently_viewed_section_title": "最近檢視過",
+        "search_dialog": "搜尋對話方塊",
+        "remove_filter": "移除 %(filter)s 的搜尋過濾條件",
+        "search_messages_hint": "要搜尋訊息，請在聊天室頂部尋找此圖示 <icon/>",
+        "keyboard_scroll_hint": "使用 <arrows/> 捲動"
+    },
+    "share": {
+        "title_room": "分享聊天室",
+        "permalink_most_recent": "連結到最近的訊息",
+        "title_user": "分享使用者",
+        "title_message": "分享聊天室訊息",
+        "permalink_message": "連結到選定的訊息",
+        "link_title": "連結到聊天室"
+    },
+    "upload_file": {
+        "title_progress": "上傳檔案 (%(total)s 中的 %(current)s)",
+        "title": "上傳檔案",
+        "upload_all_button": "上傳全部",
+        "error_file_too_large": "這個檔案<b>太大了</b>，沒辦法上傳。檔案大小限制為 %(limit)s 但這個檔案大小是 %(sizeOfThisFile)s。",
+        "error_files_too_large": "這些檔案<b>太大了</b>，沒辦法上傳。檔案大小限制為 %(limit)s。",
+        "error_some_files_too_large": "某些檔案<b>太大了</b>，沒辦法上傳。檔案大小限制為 %(limit)s。",
+        "upload_n_others_button": {
+            "other": "上傳 %(count)s 個其他檔案",
+            "one": "上傳 %(count)s 個其他檔案"
+        },
+        "cancel_all_button": "全部取消",
+        "error_title": "上傳錯誤"
+    },
+    "restore_key_backup_dialog": {
+        "key_fetch_in_progress": "正在取得來自伺服器的金鑰…",
+        "load_error_content": "無法載入備份狀態",
+        "recovery_key_mismatch_title": "安全金鑰不相符",
+        "recovery_key_mismatch_description": "無法使用此安全金鑰解密備份：請確認您是否輸入了正確的安全金鑰。",
+        "incorrect_security_phrase_title": "不正確的安全密語",
+        "incorrect_security_phrase_dialog": "無法使用此安全密語解密備份：請確認您是否輸入了正確的安全密語。",
+        "restore_failed_error": "無法復原備份",
+        "no_backup_error": "找不到備份！",
+        "keys_restored_title": "金鑰已復原",
+        "count_of_decryption_failures": "無法解密 %(failedCount)s 個工作階段！",
+        "count_of_successfully_restored_keys": "成功復原 %(sessionCount)s 金鑰",
+        "enter_phrase_title": "輸入安全密語",
+        "key_backup_warning": "<b>警告</b>：您應該只從信任的電腦設定金鑰備份。",
+        "enter_phrase_description": "請輸入您的安全密語來存取安全訊息紀錄，並設定安全訊息功能。",
+        "phrase_forgotten_text": "如果您忘了安全密語，您可以<button1>使用您的安全金鑰</button1>或<button2>設定新的復原選項</button2>",
+        "enter_key_title": "輸入安全金鑰",
+        "key_is_valid": "這看起來是有效的安全金鑰！",
+        "key_is_invalid": "不是有效的安全金鑰",
+        "enter_key_description": "透過輸入您的安全金鑰來存取您的安全訊息歷史並設定安全訊息。",
+        "key_forgotten_text": "如果您忘了安全金鑰，您可以<button>設定新的復原選項</button>",
+        "load_keys_progress": "%(total)s 中的 %(completed)s 金鑰已復原"
+    }
 }

@@ -23,19 +23,12 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
     "Moderator": "Moderator",
-    "not specified": "qeyd edilmədi",
     "Join Room": "Otağa girmək",
-    "unknown error code": "naməlum səhv kodu",
     "Sunday": "Bazar",
     "Friday": "Cümə",
     "Today": "Bu gün",
-    "Create new room": "Otağı yaratmaq",
     "Home": "Başlanğıc",
     "%(items)s and %(lastItem)s": "%(items)s və %(lastItem)s",
-    "An error has occurred.": "Səhv oldu.",
-    "Verification Pending": "Gözləmə təsdiq etmələr",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "Öz elektron poçtunu yoxlayın və olan istinadı basın. Bundan sonra düyməni Davam etməyə basın.",
-    "Send": "Göndər",
     "PM": "24:00",
     "AM": "12:00",
     "Restricted": "Məhduddur",
@@ -233,7 +226,6 @@
     "devtools": {
         "category_other": "Digər"
     },
-    "Other": "Digər",
     "labs": {
         "group_profile": "Profil"
     },
@@ -260,6 +252,10 @@
             "password_not_entered": "Yeni parolu daxil edin.",
             "passwords_mismatch": "Yeni şifrələr uyğun olmalıdır.",
             "return_to_login": "Girişin ekranına qayıtmaq"
+        },
+        "set_email": {
+            "verification_pending_title": "Gözləmə təsdiq etmələr",
+            "verification_pending_description": "Öz elektron poçtunu yoxlayın və olan istinadı basın. Bundan sonra düyməni Davam etməyə basın."
         }
     },
     "update": {
@@ -293,7 +289,8 @@
         "upload_avatar_label": "Avatar-ı yükləmək",
         "general": {
             "other_section": "Digər"
-        }
+        },
+        "alias_not_specified": "qeyd edilmədi"
     },
     "failed_load_async_component": "Yükləmək olmur! Şəbəkə bağlantınızı yoxlayın və yenidən cəhd edin.",
     "upload_failed_generic": "'%(fileName)s' faylı yüklənə bilmədi.",
@@ -353,7 +350,9 @@
         "not_supported": "<dəstəklənmir>"
     },
     "error": {
-        "update_power_level": "Hüquqların səviyyəsini dəyişdirməyi bacarmadı"
+        "update_power_level": "Hüquqların səviyyəsini dəyişdirməyi bacarmadı",
+        "dialog_description_default": "Səhv oldu.",
+        "unknown_error_code": "naməlum səhv kodu"
     },
     "member_list": {
         "invited_list_heading": "Dəvət edilmişdir",
@@ -371,5 +370,14 @@
     "no_more_results": "Daha çox nəticə yoxdur",
     "error_dialog": {
         "forget_room_failed": "Otağı unutmağı bacarmadı: %(errCode)s"
+    },
+    "forward": {
+        "send_label": "Göndər"
+    },
+    "report_content": {
+        "other_label": "Digər"
+    },
+    "spotlight_dialog": {
+        "create_new_room_button": "Otağı yaratmaq"
     }
 }

@@ -98,13 +98,13 @@ export default class InteractiveAuthDialog<T> extends React.Component<Interactiv
         const ssoAesthetics = {
             [SSOAuthEntry.PHASE_PREAUTH]: {
                 title: _t("auth|uia|sso_title"),
-                body: _t("To continue, use Single Sign On to prove your identity."),
+                body: _t("auth|uia|sso_preauth_body"),
                 continueText: _t("auth|sso"),
                 continueKind: "primary",
             },
             [SSOAuthEntry.PHASE_POSTAUTH]: {
-                title: _t("Confirm to continue"),
-                body: _t("Click the button below to confirm your identity."),
+                title: _t("auth|uia|sso_postauth_title"),
+                body: _t("auth|uia|sso_postauth_body"),
                 continueText: _t("action|confirm"),
                 continueKind: "primary",
             },

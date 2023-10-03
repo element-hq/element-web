@@ -98,7 +98,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
     private onSubmit = (): void => {
         if ((!this.state.text || !this.state.text.trim()) && (!this.state.issueUrl || !this.state.issueUrl.trim())) {
             this.setState({
-                err: _t("Please tell us what went wrong or, better, create a GitHub issue that describes the problem."),
+                err: _t("bug_reporting|error_empty"),
             });
             return;
         }
@@ -109,7 +109,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
             (this.state.issueUrl.length > 0 ? this.state.issueUrl : "No issue link given");
 
         this.setState({ busy: true, progress: null, err: null });
-        this.sendProgressCallback(_t("Preparing to send logs"));
+        this.sendProgressCallback(_t("bug_reporting|preparing_logs"));
 
         sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
             userText,
@@ -121,8 +121,8 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                 if (!this.unmounted) {
                     this.props.onFinished(false);
                     Modal.createDialog(QuestionDialog, {
-                        title: _t("Logs sent"),
-                        description: _t("Thank you!"),
+                        title: _t("bug_reporting|logs_sent"),
+                        description: _t("bug_reporting|thank_you"),
                         hasCancelButton: false,
                     });
                 }
@@ -132,7 +132,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                     this.setState({
                         busy: false,
                         progress: null,
-                        err: _t("Failed to send logs: ") + `${err.message}`,
+                        err: _t("bug_reporting|failed_send_logs") + `${err.message}`,
                     });
                 }
             },
@@ -143,7 +143,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
 
     private onDownload = async (): Promise<void> => {
         this.setState({ downloadBusy: true });
-        this.downloadProgressCallback(_t("Preparing to download logs"));
+        this.downloadProgressCallback(_t("bug_reporting|preparing_download"));
 
         try {
             await downloadBugReport({
@@ -160,7 +160,8 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
             if (!this.unmounted) {
                 this.setState({
                     downloadBusy: false,
-                    downloadProgress: _t("Failed to send logs: ") + `${err instanceof Error ? err.message : ""}`,
+                    downloadProgress:
+                        _t("bug_reporting|failed_send_logs") + `${err instanceof Error ? err.message : ""}`,
                 });
             }
         }
@@ -208,7 +209,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
         if (window.Modernizr && Object.values(window.Modernizr).some((support) => support === false)) {
             warning = (
                 <p>
-                    <b>{_t("Reminder: Your browser is unsupported, so your experience may be unpredictable.")}</b>
+                    <b>{_t("bug_reporting|unsupported_browser")}</b>
                 </p>
             );
         }
@@ -261,7 +262,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                     <Field
                         className="mx_BugReportDialog_field_input"
                         element="textarea"
-                        label={_t("Notes")}
+                        label={_t("bug_reporting|textarea_label")}
                         rows={5}
                         onChange={this.onTextChange}
                         value={this.state.text}

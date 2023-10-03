@@ -51,7 +51,7 @@ const OwnBeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({ beacon, 
         <BeaconStatus
             beacon={beacon}
             displayStatus={ownDisplayStatus}
-            label={_t("Live location enabled")}
+            label={_t("location_sharing|live_location_enabled")}
             displayLiveTimeRemaining
             {...rest}
         >

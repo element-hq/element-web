@@ -33,11 +33,11 @@ const DialogSidebar: React.FC<Props> = ({ beacons, onBeaconClick, requestClose }
     return (
         <div className="mx_DialogSidebar">
             <div className="mx_DialogSidebar_header">
-                <Heading size="4">{_t("View List")}</Heading>
+                <Heading size="4">{_t("action|view_list")}</Heading>
                 <AccessibleButton
                     className="mx_DialogSidebar_closeButton"
                     onClick={requestClose}
-                    title={_t("Close sidebar")}
+                    title={_t("location_sharing|close_sidebar")}
                     data-testid="dialog-sidebar-close"
                 >
                     <CloseIcon className="mx_DialogSidebar_closeButtonIcon" />
@@ -50,7 +50,7 @@ const DialogSidebar: React.FC<Props> = ({ beacons, onBeaconClick, requestClose }
                     ))}
                 </ol>
             ) : (
-                <div className="mx_DialogSidebar_noResults">{_t("No live locations")}</div>
+                <div className="mx_DialogSidebar_noResults">{_t("location_sharing|live_locations_empty")}</div>
             )}
         </div>
     );
