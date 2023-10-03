@@ -41,7 +41,9 @@ limitations under the License.
         }
 
         .mx_RoomSummaryCard_avatar {
-            display: inline-flex;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
             .mx_RoomSummaryCard_e2ee {
                 display: inline-block;
@@ -50,7 +52,6 @@ limitations under the License.
                 height: 54px;
                 border-radius: 50%;
                 background-color: #737d8c;
-                margin-top: -3px; /* alignment */
                 margin-left: -10px; /* overlap */
                 border: 3px solid $dark-panel-bg-color;
 
