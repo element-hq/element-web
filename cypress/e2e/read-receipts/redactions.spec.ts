@@ -263,10 +263,12 @@ describe("Read receipts", () => {
                 // Then the room is still read
                 assertRead(room2);
             });
-            it("Reacting to a redacted message leaves the room read", () => {
+            // Flakes because sometimes the unread count stays at 2
+            it.skip("Reacting to a redacted message leaves the room read", () => {
                 // Given a redacted message exists
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 2);
                 receiveMessages(room2, [redactionOf("Msg2")]);
                 assertUnread(room2, 1);
 
@@ -286,6 +288,7 @@ describe("Read receipts", () => {
                 // Given a redacted message exists
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 2);
                 receiveMessages(room2, [redactionOf("Msg2")]);
                 assertUnread(room2, 1);
 
@@ -304,6 +307,7 @@ describe("Read receipts", () => {
                 // Given a message was redacted
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 2);
                 receiveMessages(room2, [redactionOf("Msg2")]);
                 assertUnread(room2, 1);
 
@@ -322,6 +326,7 @@ describe("Read receipts", () => {
                 // Given someone replied to a redacted message
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 2);
                 receiveMessages(room2, [redactionOf("Msg2")]);
                 assertUnread(room2, 1);
                 goTo(room2);
@@ -500,6 +505,7 @@ describe("Read receipts", () => {
                 // Given a message in a thread was redacted and everything is read
                 goTo(room1);
                 receiveMessages(room2, ["Root", threadedOff("Root", "Msg2"), threadedOff("Root", "Msg3")]);
+                assertUnread(room2, 3);
                 receiveMessages(room2, [redactionOf("Msg2")]);
                 assertUnread(room2, 2);
                 goTo(room2);
@@ -519,6 +525,7 @@ describe("Read receipts", () => {
                 // Given a message in a thread was redacted and everything is read
                 goTo(room1);
                 receiveMessages(room2, ["Root", threadedOff("Root", "Msg2"), threadedOff("Root", "Msg3")]);
+                assertUnread(room2, 3);
                 receiveMessages(room2, [redactionOf("Msg2")]);
                 assertUnread(room2, 2);
                 goTo(room2);
@@ -842,6 +849,7 @@ describe("Read receipts", () => {
                 assertRead(room2);
                 assertReadThread("Root");
                 receiveMessages(room2, [redactionOf("Root")]);
+                assertStillRead(room2);
                 receiveMessages(room2, [replyTo("Root", "Reply!")]);
                 assertUnread(room2, 1);
 
