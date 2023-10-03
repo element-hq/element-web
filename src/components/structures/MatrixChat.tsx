@@ -393,7 +393,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return;
         }
 
-        if (firstScreen === "login" || firstScreen === "register" || firstScreen === "forgot_password") {
+        // If the first screen is an auth screen, we don't want to wait for login.
+        if (firstScreen !== null && AUTH_SCREENS.includes(firstScreen)) {
             this.showScreenAfterLogin();
         }
     }
