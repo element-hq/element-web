@@ -225,6 +225,7 @@ function setupBotClient(
 
                 await cli.getCrypto()!.bootstrapSecretStorage({
                     setupNewSecretStorage: true,
+                    setupNewKeyBackup: true,
                     createSecretStorageKey: () => Promise.resolve(recoveryKey),
                 });
             }

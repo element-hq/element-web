@@ -21,7 +21,13 @@ import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api
 import { CypressBot } from "../../support/bot";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { emitPromise } from "../../support/util";
-import { checkDeviceIsCrossSigned, doTwoWaySasVerification, logIntoElement, waitForVerificationRequest } from "./utils";
+import {
+    checkDeviceIsConnectedKeyBackup,
+    checkDeviceIsCrossSigned,
+    doTwoWaySasVerification,
+    logIntoElement,
+    waitForVerificationRequest,
+} from "./utils";
 import { getToast } from "../../support/toasts";
 import { UserCredentials } from "../../support/login";
 
@@ -111,6 +117,9 @@ describe("Device verification", () => {
 
         // Check that our device is now cross-signed
         checkDeviceIsCrossSigned();
+
+        // Check that the current device is connected to key backup
+        checkDeviceIsConnectedKeyBackup();
     });
 
     it("Verify device during login with QR code", () => {
@@ -148,6 +157,9 @@ describe("Device verification", () => {
 
         // Check that our device is now cross-signed
         checkDeviceIsCrossSigned();
+
+        // Check that the current device is connected to key backup
+        checkDeviceIsConnectedKeyBackup();
     });
 
     it("Verify device during login with Security Phrase", () => {
@@ -170,6 +182,9 @@ describe("Device verification", () => {
 
         // Check that our device is now cross-signed
         checkDeviceIsCrossSigned();
+
+        // Check that the current device is connected to key backup
+        checkDeviceIsConnectedKeyBackup();
     });
 
     it("Verify device during login with Security Key", () => {
@@ -193,6 +208,9 @@ describe("Device verification", () => {
 
         // Check that our device is now cross-signed
         checkDeviceIsCrossSigned();
+
+        // Check that the current device is connected to key backup
+        checkDeviceIsConnectedKeyBackup();
     });
 
     it("Handle incoming verification request with SAS", () => {

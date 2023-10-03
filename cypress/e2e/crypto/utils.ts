@@ -98,6 +98,19 @@ export function checkDeviceIsCrossSigned(): void {
 }
 
 /**
+ * Check that the current device is connected to the key backup.
+ */
+export function checkDeviceIsConnectedKeyBackup() {
+    cy.findByRole("button", { name: "User menu" }).click();
+    cy.get(".mx_UserMenu_contextMenu").within(() => {
+        cy.findByRole("menuitem", { name: "Security & Privacy" }).click();
+    });
+    cy.get(".mx_Dialog").within(() => {
+        cy.findByRole("button", { name: "Restore from Backup" }).should("exist");
+    });
+}
+
+/**
  * Fill in the login form in element with the given creds.
  *
  * If a `securityKey` is given, verifies the new device using the key.
