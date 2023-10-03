@@ -20,7 +20,7 @@ import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api";
 import { CypressBot } from "../../support/bot";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
-import { emitPromise } from "../../support/util";
+import { emitPromise, skipIfRustCrypto } from "../../support/util";
 import {
     checkDeviceIsConnectedKeyBackup,
     checkDeviceIsCrossSigned,
@@ -123,6 +123,7 @@ describe("Device verification", () => {
     });
 
     it("Verify device during login with QR code", () => {
+        skipIfRustCrypto(); // https://github.com/vector-im/element-web/issues/26293
         logIntoElement(homeserver.baseUrl, aliceBotClient.getUserId(), aliceBotClient.__cypress_password);
 
         // Launch the verification request between alice and the bot
