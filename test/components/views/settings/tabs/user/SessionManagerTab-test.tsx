@@ -28,7 +28,7 @@ import {
     PUSHER_DEVICE_ID,
     PUSHER_ENABLED,
     IAuthData,
-    UNSTABLE_MSC3882_CAPABILITY,
+    GET_LOGIN_TOKEN_CAPABILITY,
     CryptoApi,
     DeviceVerificationStatus,
     MatrixError,
@@ -1534,7 +1534,7 @@ describe("<SessionManagerTab />", () => {
                 },
             });
             mockClient.getCapabilities.mockResolvedValue({
-                [UNSTABLE_MSC3882_CAPABILITY.name]: {
+                [GET_LOGIN_TOKEN_CAPABILITY.name]: {
                     enabled: true,
                 },
             });

@@ -16,9 +16,9 @@ limitations under the License.
 
 import React from "react";
 import {
-    IMSC3882GetLoginTokenCapability,
+    IGetLoginTokenCapability,
     IServerVersions,
-    UNSTABLE_MSC3882_CAPABILITY,
+    GET_LOGIN_TOKEN_CAPABILITY,
     Capabilities,
     IClientWellKnown,
 } from "matrix-js-sdk/src/matrix";
@@ -40,15 +40,15 @@ export default class LoginWithQRSection extends React.Component<IProps> {
     }
 
     public render(): JSX.Element | null {
-        // Needs server support for MSC3882 and MSC3886:
-        // in r0 of MSC3882 it is exposed as a feature flag, but in r1 it is a capability
-        const capability = UNSTABLE_MSC3882_CAPABILITY.findIn<IMSC3882GetLoginTokenCapability>(this.props.capabilities);
-        const msc3882Supported =
+        // Needs server support for get_login_token and MSC3886:
+        // in r0 of MSC3882 it is exposed as a feature flag, but in stable and unstable r1 it is a capability
+        const capability = GET_LOGIN_TOKEN_CAPABILITY.findIn<IGetLoginTokenCapability>(this.props.capabilities);
+        const getLoginTokenSupported =
             !!this.props.versions?.unstable_features?.["org.matrix.msc3882"] || !!capability?.enabled;
         const msc3886Supported =
             !!this.props.versions?.unstable_features?.["org.matrix.msc3886"] ||
             this.props.wellKnown?.["io.element.rendezvous"]?.server;
-        const offerShowQr = msc3882Supported && msc3886Supported;
+        const offerShowQr = getLoginTokenSupported && msc3886Supported;
 
         // don't show anything if no method is available
         if (!offerShowQr) {

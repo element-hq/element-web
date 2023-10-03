@@ -89,8 +89,7 @@ describe("<LoginWithQR />", () => {
         jest.spyOn(MSC3906Rendezvous.prototype, "verifyNewDeviceOnExistingDevice").mockResolvedValue(undefined);
         client.requestLoginToken.mockResolvedValue({
             login_token: "token",
-            expires_in: 1000, // this is as per MSC3882 r0
-            expires_in_ms: 1000 * 1000, // this is as per MSC3882 r1
+            expires_in_ms: 1000 * 1000,
         } as LoginTokenPostResponse); // we force the type here so that it works with versions of js-sdk that don't have r1 support yet
     });
 
