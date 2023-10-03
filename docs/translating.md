@@ -1,7 +1,5 @@
 # How to translate Element
 
-# 🚨 Translations are currently frozen as we are migrating Translation Management Systems! 🚨
-
 ## Requirements
 
 -   Web Browser
