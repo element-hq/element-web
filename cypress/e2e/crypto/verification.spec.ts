@@ -16,12 +16,14 @@ limitations under the License.
 
 import jsQR from "jsqr";
 
-import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api/verification";
+import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api";
 import { CypressBot } from "../../support/bot";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { emitPromise } from "../../support/util";
 import { checkDeviceIsCrossSigned, doTwoWaySasVerification, logIntoElement, waitForVerificationRequest } from "./utils";
 import { getToast } from "../../support/toasts";
+import { UserCredentials } from "../../support/login";
 
 /** Render a data URL and return the rendered image data */
 async function renderQRCode(dataUrl: string): Promise<ImageData> {
@@ -122,15 +124,9 @@ describe("Device verification", () => {
                 /* the bot scans the QR code */
                 cy.get<VerificationRequest>("@verificationRequest")
                     .then(async (request: VerificationRequest) => {
-                        // because I don't know how to scrape the imagedata from the cypress browser window,
-                        // we extract the data url and render it to a new canvas.
-                        const imageData = await renderQRCode(qrCode.attr("src"));
-
-                        // now we can decode the QR code...
-                        const result = jsQR(imageData.data, imageData.width, imageData.height);
-
-                        // ... and feed it into the verification request.
-                        return await request.scanQRCode(new Uint8Array(result.binaryData));
+                        // feed the QR code into the verification request.
+                        const qrData = await readQrCode(qrCode);
+                        return await request.scanQRCode(qrData);
                     })
                     .as("verifier");
             });
@@ -244,15 +240,7 @@ describe("Device verification", () => {
         cy.findByRole("button", { name: "Start" }).click();
 
         /* on the bot side, wait for the verifier to exist ... */
-        async function awaitVerifier() {
-            // wait for the verifier to exist
-            while (!botVerificationRequest.verifier) {
-                await emitPromise(botVerificationRequest, "change");
-            }
-            return botVerificationRequest.verifier;
-        }
-
-        cy.then(() => cy.wrap(awaitVerifier())).then((verifier: Verifier) => {
+        cy.then(() => cy.wrap(awaitVerifier(botVerificationRequest))).then((verifier: Verifier) => {
             // ... confirm ...
             botVerificationRequest.verifier.verify();
 
@@ -268,3 +256,145 @@ describe("Device verification", () => {
         });
     });
 });
+
+describe("User verification", () => {
+    // note that there are other tests that check user verification works in `crypto.spec.ts`.
+
+    let aliceCredentials: UserCredentials;
+    let homeserver: HomeserverInstance;
+    let bob: CypressBot;
+
+    beforeEach(() => {
+        cy.startHomeserver("default")
+            .as("homeserver")
+            .then((data) => {
+                homeserver = data;
+                cy.initTestUser(homeserver, "Alice", undefined, "alice_").then((credentials) => {
+                    aliceCredentials = credentials;
+                });
+                return cy.getBot(homeserver, {
+                    displayName: "Bob",
+                    autoAcceptInvites: true,
+                    userIdPrefix: "bob_",
+                });
+            })
+            .then((data) => {
+                bob = data;
+            });
+    });
+
+    afterEach(() => {
+        cy.stopHomeserver(homeserver);
+    });
+
+    it("can receive a verification request when there is no existing DM", () => {
+        cy.bootstrapCrossSigning(aliceCredentials);
+
+        // the other user creates a DM
+        let dmRoomId: string;
+        let bobVerificationRequest: VerificationRequest;
+        cy.wrap(0).then(async () => {
+            dmRoomId = await createDMRoom(bob, aliceCredentials.userId);
+        });
+
+        // accept the DM
+        cy.viewRoomByName("Bob");
+        cy.findByRole("button", { name: "Start chatting" }).click();
+
+        // once Alice has joined, Bob starts the verification
+        cy.wrap(0).then(async () => {
+            const room = bob.getRoom(dmRoomId)!;
+            while (room.getMember(aliceCredentials.userId)?.membership !== "join") {
+                await new Promise((resolve) => {
+                    // @ts-ignore can't access the enum here
+                    room.once("RoomState.members", resolve);
+                });
+            }
+            bobVerificationRequest = await bob.getCrypto()!.requestVerificationDM(aliceCredentials.userId, dmRoomId);
+        });
+
+        // there should also be a toast
+        getToast("Verification requested").within(() => {
+            // it should contain the details of the requesting user
+            cy.contains(`Bob (${bob.credentials.userId})`);
+
+            // Accept
+            cy.findByRole("button", { name: "Verify Session" }).click();
+        });
+
+        // request verification by emoji
+        cy.get("#mx_RightPanel").findByRole("button", { name: "Verify by emoji" }).click();
+
+        cy.wrap(0)
+            .then(async () => {
+                /* on the bot side, wait for the verifier to exist ... */
+                const verifier = await awaitVerifier(bobVerificationRequest);
+                // ... confirm ...
+                verifier.verify();
+                return verifier;
+            })
+            .then((botVerifier) => {
+                // ... and then check the emoji match
+                doTwoWaySasVerification(botVerifier);
+            });
+
+        cy.findByRole("button", { name: "They match" }).click();
+        cy.findByText("You've successfully verified Bob!").should("exist");
+        cy.findByRole("button", { name: "Got it" }).click();
+    });
+});
+
+/** Extract the qrcode out of an on-screen html element */
+async function readQrCode(qrCode: JQuery<HTMLElement>) {
+    // because I don't know how to scrape the imagedata from the cypress browser window,
+    // we extract the data url and render it to a new canvas.
+    const imageData = await renderQRCode(qrCode.attr("src"));
+
+    // now we can decode the QR code.
+    const result = jsQR(imageData.data, imageData.width, imageData.height);
+    return new Uint8Array(result.binaryData);
+}
+
+async function createDMRoom(client: MatrixClient, userId: string): Promise<string> {
+    const r = await client.createRoom({
+        // @ts-ignore can't access the enum here
+        preset: "trusted_private_chat",
+        // @ts-ignore can't access the enum here
+        visibility: "private",
+        invite: [userId],
+        is_direct: true,
+        initial_state: [
+            {
+                type: "m.room.encryption",
+                state_key: "",
+                content: {
+                    algorithm: "m.megolm.v1.aes-sha2",
+                },
+            },
+        ],
+    });
+
+    const roomId = r.room_id;
+
+    // wait for the room to come down /sync
+    while (!client.getRoom(roomId)) {
+        await new Promise((resolve) => {
+            //@ts-ignore can't access the enum here
+            client.once("Room", resolve);
+        });
+    }
+
+    return roomId;
+}
+
+/**
+ * Wait for a verifier to exist for a VerificationRequest
+ *
+ * @param botVerificationRequest
+ */
+async function awaitVerifier(botVerificationRequest: VerificationRequest): Promise<Verifier> {
+    while (!botVerificationRequest.verifier) {
+        await emitPromise(botVerificationRequest, "change");
+    }
+    return botVerificationRequest.verifier;
+}
