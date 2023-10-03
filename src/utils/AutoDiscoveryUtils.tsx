@@ -17,6 +17,7 @@ limitations under the License.
 import React, { ReactNode } from "react";
 import {
     AutoDiscovery,
+    AutoDiscoveryError,
     ClientConfig,
     OidcClientConfig,
     M_AUTHENTICATION,
@@ -210,7 +211,7 @@ export default class AutoDiscoveryUtils {
         } else if (isResult && isResult.state !== AutoDiscovery.PROMPT) {
             logger.error("Error determining preferred identity server URL:", isResult);
             if (isResult.state === AutoDiscovery.FAIL_ERROR) {
-                if (AutoDiscovery.ALL_ERRORS.indexOf(isResult.error as string) !== -1) {
+                if (AutoDiscovery.ALL_ERRORS.indexOf(isResult.error as AutoDiscoveryError) !== -1) {
                     // XXX: We mark these with _td at the top of Login.tsx - we should come up with a better solution
                     throw new UserFriendlyError(String(isResult.error) as TranslationKey);
                 }
@@ -227,7 +228,7 @@ export default class AutoDiscoveryUtils {
         if (hsResult.state !== AutoDiscovery.SUCCESS) {
             logger.error("Error processing homeserver config:", hsResult);
             if (!syntaxOnly || !AutoDiscoveryUtils.isLivelinessError(hsResult.error)) {
-                if (AutoDiscovery.ALL_ERRORS.indexOf(hsResult.error as string) !== -1) {
+                if (AutoDiscovery.ALL_ERRORS.indexOf(hsResult.error as AutoDiscoveryError) !== -1) {
                     // XXX: We mark these with _td at the top of Login.tsx - we should come up with a better solution
                     throw new UserFriendlyError(String(hsResult.error) as TranslationKey);
                 }
