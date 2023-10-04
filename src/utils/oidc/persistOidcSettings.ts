@@ -14,8 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { IdTokenClaims } from "oidc-client-ts";
+
 const clientIdStorageKey = "mx_oidc_client_id";
 const tokenIssuerStorageKey = "mx_oidc_token_issuer";
+const idTokenClaimsStorageKey = "mx_oidc_id_token_claims";
 
 /**
  * Persists oidc clientId and issuer in session storage
@@ -23,9 +26,14 @@ const tokenIssuerStorageKey = "mx_oidc_token_issuer";
  * @param clientId
  * @param issuer
  */
-export const persistOidcAuthenticatedSettings = (clientId: string, issuer: string): void => {
+export const persistOidcAuthenticatedSettings = (
+    clientId: string,
+    issuer: string,
+    idTokenClaims: IdTokenClaims,
+): void => {
     sessionStorage.setItem(clientIdStorageKey, clientId);
     sessionStorage.setItem(tokenIssuerStorageKey, issuer);
+    sessionStorage.setItem(idTokenClaimsStorageKey, JSON.stringify(idTokenClaims));
 };
 
 /**

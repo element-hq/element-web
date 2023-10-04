@@ -18,6 +18,7 @@ import { completeAuthorizationCodeGrant, generateOidcAuthorizationUrl } from "ma
 import { QueryDict } from "matrix-js-sdk/src/utils";
 import { OidcClientConfig } from "matrix-js-sdk/src/matrix";
 import { randomString } from "matrix-js-sdk/src/randomstring";
+import { IdTokenClaims } from "oidc-client-ts";
 
 /**
  * Start OIDC authorization code flow
@@ -81,6 +82,8 @@ type CompleteOidcLoginResponse = {
     clientId: string;
     // issuer used during authentication
     issuer: string;
+    // claims of the given access token; used during token refresh to validate new tokens
+    idTokenClaims: IdTokenClaims;
 };
 /**
  * Attempt to complete authorization code flow to get an access token
@@ -90,7 +93,7 @@ type CompleteOidcLoginResponse = {
  */
 export const completeOidcLogin = async (queryParams: QueryDict): Promise<CompleteOidcLoginResponse> => {
     const { code, state } = getCodeAndStateFromQueryParams(queryParams);
-    const { homeserverUrl, tokenResponse, identityServerUrl, oidcClientSettings } =
+    const { homeserverUrl, tokenResponse, idTokenClaims, identityServerUrl, oidcClientSettings } =
         await completeAuthorizationCodeGrant(code, state);
 
     return {
@@ -100,5 +103,6 @@ export const completeOidcLogin = async (queryParams: QueryDict): Promise<Complet
         refreshToken: tokenResponse.refresh_token,
         clientId: oidcClientSettings.clientId,
         issuer: oidcClientSettings.issuer,
+        idTokenClaims,
     };
 };
