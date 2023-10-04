@@ -55,7 +55,7 @@ jobs:
 
     i18n_lint:
         name: "i18n Check"
-        uses: matrix-org/matrix-react-sdk/.github/workflows/i18n_check.yml@develop
+        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
 
     rethemendex_lint:
         name: "Rethemendex Check"

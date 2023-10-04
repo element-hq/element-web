@@ -3,7 +3,7 @@
 ![Static Analysis](https://github.com/matrix-org/matrix-react-sdk/actions/workflows/static_analysis.yaml/badge.svg)
 [![matrix-react-sdk](https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/simple/ppvnzg/develop&style=flat&logo=cypress)](https://dashboard.cypress.io/projects/ppvnzg/runs)
 [![This project is using Percy.io for visual regression testing.](https://percy.io/static/images/percy-badge.svg)](https://percy.io/dfde73bd/matrix-react-sdk)
-[![Weblate](https://translate.element.io/widgets/element-web/-/matrix-react-sdk/svg-badge.svg)](https://translate.element.io/engage/element-web/)
+[![Localazy](https://img.shields.io/endpoint?url=https%3A%2F%2Fconnect.localazy.com%2Fstatus%2Felement-web%2Fdata%3Fcontent%3Dall%26title%3Dlocalazy%26logo%3Dtrue)](https://localazy.com/p/element-web)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matrix-react-sdk&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matrix-react-sdk)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=matrix-react-sdk&metric=coverage)](https://sonarcloud.io/summary/new_code?id=matrix-react-sdk)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=matrix-react-sdk&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=matrix-react-sdk)
@@ -27,10 +27,6 @@ As of Aug 2018, the only skin that exists is
 `matrix-org/matrix-react-sdk` should effectively
 be considered as a single project (for instance, matrix-react-sdk bugs
 are currently filed against vector-im/element-web rather than this project).
-
-## Translation Status
-
-[![Translation status](https://translate.element.io/widgets/element-web/-/multi-auto.svg)](https://translate.element.io/engage/element-web/?utm_source=widget)
 
 ## Developer Guide
 
