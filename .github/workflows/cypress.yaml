@@ -214,6 +214,8 @@ jobs:
                   PERCY_PARALLEL_NONCE: ${{ needs.prepare.outputs.uuid }}
                   # We manually finalize the build in the report stage
                   PERCY_PARALLEL_TOTAL: -1
+                  # Temporarily turn on debug logs to figure out why reports are not being created
+                  DEBUG: "cypress:*"
 
             - name: Upload Artifact
               if: failure()
