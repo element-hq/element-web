@@ -117,10 +117,10 @@ export default class MemberTile extends React.Component<IProps, IState> {
         const cli = MatrixClientPeg.safeGet();
         const { userId } = this.props.member;
         const isMe = userId === cli.getUserId();
-        const userTrust = cli.checkUserTrust(userId);
-        if (!userTrust.isCrossSigningVerified()) {
+        const userTrust = await cli.getCrypto()?.getUserVerificationStatus(userId);
+        if (!userTrust?.isCrossSigningVerified()) {
             this.setState({
-                e2eStatus: userTrust.wasCrossSigningVerified() ? E2EState.Warning : E2EState.Normal,
+                e2eStatus: userTrust?.wasCrossSigningVerified() ? E2EState.Warning : E2EState.Normal,
             });
             return;
         }
