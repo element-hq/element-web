@@ -50,6 +50,15 @@ export default function (on: PluginEvents, config: PluginConfigOptions) {
         config,
     );
     installLogsPrinter(on, {
-        // printLogsToConsole: "always",
+        printLogsToConsole: "never",
+
+        // write logs to cypress/results/cypresslogs/<spec>.txt
+        outputRoot: "cypress/results",
+        outputTarget: {
+            "cypresslogs|txt": "txt",
+        },
+
+        // strip 'cypress/e2e' from log filenames
+        specRoot: "cypress/e2e",
     });
 }

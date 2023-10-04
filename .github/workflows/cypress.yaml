@@ -224,13 +224,14 @@ jobs:
                       matrix-react-sdk/cypress/screenshots
                       matrix-react-sdk/cypress/videos
                       matrix-react-sdk/cypress/synapselogs
+                      matrix-react-sdk/cypress/results/cypresslogs
 
             - name: Upload reports
               if: always()
               uses: actions/upload-artifact@v3
               with:
                   name: cypress-junit
-                  path: matrix-react-sdk/cypress/results
+                  path: matrix-react-sdk/cypress/results/junit
 
     report:
         name: Report results
