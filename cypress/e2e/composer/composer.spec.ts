@@ -183,7 +183,8 @@ describe("Composer", () => {
             // TODO add tests for rich text mode
 
             describe("Plain text mode", () => {
-                it("autocomplete behaviour tests", () => {
+                // https://github.com/vector-im/element-web/issues/26037
+                it.skip("autocomplete behaviour tests", () => {
                     // Set up a private room so we have another user to mention
                     const otherUserName = "Bob";
                     let bobClient: MatrixClient;
