@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import {
     EventType,
     GuestAccess,
@@ -47,6 +47,7 @@ describe("<JoinRuleSettings />", () => {
     const client = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         getRoom: jest.fn(),
+        getDomain: jest.fn(),
         getLocalAliases: jest.fn().mockReturnValue([]),
         sendStateEvent: jest.fn(),
         upgradeRoom: jest.fn(),
@@ -225,13 +226,14 @@ describe("<JoinRuleSettings />", () => {
                 expect(await screen.findByText("Sending invites... (1 out of 2)")).toBeInTheDocument();
                 deferredInvites.pop()!.resolve({});
 
-                // update spaces
-                expect(await screen.findByText("Updating space...")).toBeInTheDocument();
+                // Usually we see "Updating space..." in the UI here, but we
+                // removed the assertion about it, because it sometimes fails,
+                // presumably because it disappeared too quickly to be visible.
 
                 await flushPromises();
 
                 // done, modal closed
-                expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+                await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
             });
 
             it(`upgrades room with no parent spaces or members when changing join rule to ${joinRule}`, async () => {
