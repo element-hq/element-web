@@ -130,7 +130,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'A-Packaging') ||
             contains(github.event.issue.labels.*.name, 'A-Technical-Debt') ||
             contains(github.event.issue.labels.*.name, 'A-Testing') ||
-            contains(github.event.issue.labels.*.name, 'Z-Flaky-Test') ||
+            contains(github.event.issue.labels.*.name, 'Z-Flaky-Test')
         steps:
             - uses: actions/add-to-project@main
               with:
