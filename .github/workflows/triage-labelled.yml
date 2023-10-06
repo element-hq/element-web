@@ -120,3 +120,19 @@ jobs:
               with:
                   project-url: https://github.com/orgs/vector-im/projects/57
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    tech_debt:
+        name: Add labelled issues to tech debt project
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'A-Developer-Experience') ||
+            contains(github.event.issue.labels.*.name, 'A-Documentation') ||
+            contains(github.event.issue.labels.*.name, 'A-Packaging') ||
+            contains(github.event.issue.labels.*.name, 'A-Technical-Debt') ||
+            contains(github.event.issue.labels.*.name, 'A-Testing') ||
+            contains(github.event.issue.labels.*.name, 'Z-Flaky-Test') ||
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/vector-im/projects/101
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
