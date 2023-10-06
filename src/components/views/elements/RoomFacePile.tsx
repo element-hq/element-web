@@ -23,6 +23,7 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import FacePile from "./FacePile";
 import { useRoomMembers } from "../../../hooks/useRoomMembers";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { ButtonEvent } from "./AccessibleButton";
 
 const DEFAULT_NUM_FACES = 5;
 
@@ -32,6 +33,7 @@ interface IProps extends HTMLAttributes<HTMLSpanElement> {
     room: Room;
     onlyKnownUsers?: boolean;
     numShown?: number;
+    onClick?: (e: ButtonEvent) => void | Promise<void>;
 }
 
 const RoomFacePile: FC<IProps> = ({ room, onlyKnownUsers = true, numShown = DEFAULT_NUM_FACES, ...props }) => {

@@ -7,18 +7,24 @@ exports[`<FacePile /> renders with a tooltip 1`] = `
     data-state="closed"
   >
     <div
-      class="_stacked-avatars_ylj7w_116"
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+      role="button"
+      tabindex="0"
     >
-      <span
-        class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
-        data-color="8"
-        data-testid="avatar-img"
-        data-type="round"
-        role="presentation"
-        style="--cpd-avatar-size: 36px;"
+      <div
+        class="_stacked-avatars_ylj7w_116"
       >
-        4
-      </span>
+        <span
+          class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
+          data-color="8"
+          data-testid="avatar-img"
+          data-type="round"
+          role="presentation"
+          style="--cpd-avatar-size: 36px;"
+        >
+          4
+        </span>
+      </div>
     </div>
   </div>
 </DocumentFragment>
