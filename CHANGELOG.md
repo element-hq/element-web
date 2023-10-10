@@ -1,5 +1,5 @@
-Changes in [3.82.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.82.0-rc.1) (2023-10-03)
-===============================================================================================================
+Changes in [3.82.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.82.0) (2023-10-10)
+=====================================================================================================
 
 ## ✨ Features
  * Use .well-known to discover a default rendezvous server for use with Sign in with QR ([\#11655](https://github.com/matrix-org/matrix-react-sdk/pull/11655)). Contributed by @hughns.
