@@ -1,11 +1,5 @@
-Changes in [1.11.46-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.46-rc.2) (2023-10-03)
-===========================================================================================================
-
-## 🐛 Bug Fixes
- * Bump matrix-web-i18n dependency to 3.1.3 ([\#26287](https://github.com/vector-im/element-web/pull/26287))
-
-Changes in [1.11.46-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.46-rc.1) (2023-10-03)
-===========================================================================================================
+Changes in [1.11.46](https://github.com/vector-im/element-web/releases/tag/v1.11.46) (2023-10-10)
+=================================================================================================
 
 ## ✨ Features
  * Use .well-known to discover a default rendezvous server for use with Sign in with QR ([\#11655](https://github.com/matrix-org/matrix-react-sdk/pull/11655)). Contributed by @hughns.
@@ -16,6 +10,7 @@ Changes in [1.11.46-rc.1](https://github.com/vector-im/element-web/releases/tag/
  * Show knock rooms in the list ([\#11573](https://github.com/matrix-org/matrix-react-sdk/pull/11573)). Contributed by @maheichyk.
 
 ## 🐛 Bug Fixes
+ * Bump matrix-web-i18n dependency to 3.1.3 ([\#26287](https://github.com/vector-im/element-web/pull/26287))
  * Fix: Avatar shrinks with long names ([\#11698](https://github.com/matrix-org/matrix-react-sdk/pull/11698)). Fixes #26252. Contributed by @manancodes.
  * Update custom translations to support nested fields in structured JSON ([\#11685](https://github.com/matrix-org/matrix-react-sdk/pull/11685)).
  * Fix: Edited message remove button is hard to reach. ([\#11674](https://github.com/matrix-org/matrix-react-sdk/pull/11674)). Fixes #24917. Contributed by @manancodes.
