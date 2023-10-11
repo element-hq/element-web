@@ -34,7 +34,6 @@ import {
     VerificationRequest,
     VerificationRequestEvent,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
-import { UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { defer } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";
 import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
@@ -158,7 +157,6 @@ beforeEach(() => {
         currentState: {
             on: jest.fn(),
         },
-        checkUserTrust: jest.fn(),
         getRoom: jest.fn(),
         credentials: {},
         setPowerLevel: jest.fn(),
@@ -327,8 +325,8 @@ describe("<UserInfo />", () => {
     describe("with crypto enabled", () => {
         beforeEach(() => {
             mockClient.isCryptoEnabled.mockReturnValue(true);
-            mockClient.checkUserTrust.mockReturnValue(new UserTrustLevel(false, false, false));
             mockClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
+            mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
 
             const device = new Device({
                 deviceId: "d1",
@@ -360,6 +358,8 @@ describe("<UserInfo />", () => {
         });
 
         it("renders <BasicUserInfo />", async () => {
+            mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
+
             const { container } = renderComponent({
                 phase: RightPanelPhases.SpaceMemberInfo,
                 verificationRequest,
@@ -379,7 +379,6 @@ describe("<UserInfo />", () => {
         });
 
         it("renders unverified user info", async () => {
-            mockClient.checkUserTrust.mockReturnValue(new UserTrustLevel(false, false, false));
             mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
             renderComponent({ room: mockRoom });
             await act(flushPromises);
@@ -391,7 +390,6 @@ describe("<UserInfo />", () => {
         });
 
         it("renders verified user info", async () => {
-            mockClient.checkUserTrust.mockReturnValue(new UserTrustLevel(true, false, false));
             mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(true, false, false));
             renderComponent({ room: mockRoom });
             await act(flushPromises);
@@ -448,6 +446,7 @@ describe("<DeviceItem />", () => {
     const defaultProps = {
         userId: defaultUserId,
         device,
+        isUserVerified: false,
     };
 
     const renderComponent = (props = {}) => {
@@ -460,9 +459,6 @@ describe("<DeviceItem />", () => {
         });
     };
 
-    const setMockUserTrust = (isVerified = false) => {
-        mockClient.checkUserTrust.mockReturnValue({ isVerified: () => isVerified } as UserTrustLevel);
-    };
     const setMockDeviceTrust = (isVerified = false, isCrossSigningVerified = false) => {
         mockCrypto.getDeviceVerificationStatus.mockResolvedValue({
             isVerified: () => isVerified,
@@ -473,13 +469,11 @@ describe("<DeviceItem />", () => {
     const mockVerifyDevice = jest.spyOn(mockVerification, "verifyDevice");
 
     beforeEach(() => {
-        setMockUserTrust();
         setMockDeviceTrust();
     });
 
     afterEach(() => {
         mockCrypto.getDeviceVerificationStatus.mockReset();
-        mockClient.checkUserTrust.mockReset();
         mockVerifyDevice.mockClear();
     });
 
@@ -496,8 +490,7 @@ describe("<DeviceItem />", () => {
     });
 
     it("with verified user only, displays button with a 'Not trusted' label", async () => {
-        setMockUserTrust(true);
-        renderComponent();
+        renderComponent({ isUserVerified: true });
         await act(flushPromises);
 
         expect(screen.getByRole("button", { name: `${device.displayName} Not trusted` })).toBeInTheDocument();
@@ -533,9 +526,8 @@ describe("<DeviceItem />", () => {
     });
 
     it("with verified user and device, displays no button and a 'Trusted' label", async () => {
-        setMockUserTrust(true);
         setMockDeviceTrust(true);
-        renderComponent();
+        renderComponent({ isUserVerified: true });
         await act(flushPromises);
 
         expect(screen.queryByRole("button")).not.toBeInTheDocument();
