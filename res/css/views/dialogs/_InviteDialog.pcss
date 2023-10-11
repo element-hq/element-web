@@ -151,13 +151,14 @@ limitations under the License.
     margin-inline-end: $spacing-8;
 
     .mx_InviteDialog_userTile_pill {
-        background-color: $username-variant1-color;
+        background-color: var(--cpd-color-bg-success-subtle);
         border-radius: 12px;
         display: inline-block;
         height: 24px;
         line-height: $font-24px;
         padding-inline: $spacing-8;
-        color: #ffffff; /* this is fine without a var because it's for both themes */
+        vertical-align: middle;
+        color: $primary-content;
 
         .mx_SearchResultAvatar {
             border-radius: 20px;
@@ -182,6 +183,7 @@ limitations under the License.
     .mx_InviteDialog_userTile_remove {
         display: inline-block;
         margin-inline-start: $spacing-4;
+        vertical-align: middle;
     }
 }
 
@@ -338,7 +340,7 @@ limitations under the License.
 
         .mx_InviteDialog_tile--room_selected {
             border-radius: 36px;
-            background-color: $username-variant1-color;
+            background-color: var(--cpd-color-bg-success-subtle);
 
             &::before {
                 content: "";
@@ -352,7 +354,7 @@ limitations under the License.
                 position: absolute;
                 top: 6px; /* 50% */
                 left: 6px; /* 50% */
-                background-color: #ffffff; /* this is fine without a var because it's for both themes */
+                background-color: $primary-content;
             }
         }
 
