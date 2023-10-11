@@ -25,9 +25,12 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
         class="_font-body-lg-semibold_1jx6b_83 mx_RoomHeader_heading"
         dir="auto"
         role="heading"
-        title="!1:example.org"
       >
-        !1:example.org
+        <span
+          class="mx_RoomHeader_truncated"
+        >
+          !1:example.org
+        </span>
       </div>
     </div>
     <nav

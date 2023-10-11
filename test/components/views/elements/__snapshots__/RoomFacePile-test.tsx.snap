@@ -3,28 +3,24 @@
 exports[`<RoomFacePile /> renders 1`] = `
 <DocumentFragment>
   <div
-    class="mx_FacePile"
+    class="mx_AccessibleButton mx_FacePile mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
     data-state="closed"
+    role="button"
+    tabindex="0"
   >
     <div
-      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
-      role="button"
-      tabindex="0"
+      class="_stacked-avatars_ylj7w_116"
     >
-      <div
-        class="_stacked-avatars_ylj7w_116"
+      <span
+        class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
+        data-color="8"
+        data-testid="avatar-img"
+        data-type="round"
+        role="presentation"
+        style="--cpd-avatar-size: 28px;"
       >
-        <span
-          class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
-          data-color="8"
-          data-testid="avatar-img"
-          data-type="round"
-          role="presentation"
-          style="--cpd-avatar-size: 28px;"
-        >
-          b
-        </span>
-      </div>
+        b
+      </span>
     </div>
   </div>
 </DocumentFragment>

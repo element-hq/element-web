@@ -65,12 +65,10 @@ const FacePile: FC<IProps> = ({
     );
 
     const content = (
-        <div className="mx_FacePile">
-            <AccessibleButton kind="link_inline" onClick={props.onClick ?? null}>
-                <AvatarStack>{pileContents}</AvatarStack>
-                {children}
-            </AccessibleButton>
-        </div>
+        <AccessibleButton className="mx_FacePile" kind="link_inline" onClick={props.onClick ?? null}>
+            <AvatarStack>{pileContents}</AvatarStack>
+            {children}
+        </AccessibleButton>
     );
 
     return tooltipLabel ? (

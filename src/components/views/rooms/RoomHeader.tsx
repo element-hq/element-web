@@ -123,48 +123,47 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     size="lg"
                     weight="semibold"
                     dir="auto"
-                    title={roomName}
                     role="heading"
                     aria-level={1}
                     className="mx_RoomHeader_heading"
                 >
-                    {roomName}
+                    <span className="mx_RoomHeader_truncated">{roomName}</span>
 
                     {!isDirectMessage && roomState.getJoinRule() === JoinRule.Public && (
-                        <Tooltip label={_t("common|public_room")}>
+                        <Tooltip label={_t("common|public_room")} side="right">
                             <PublicIcon
                                 width="16px"
                                 height="16px"
-                                className="text-secondary"
+                                className="mx_RoomHeader_icon text-secondary"
                                 aria-label={_t("common|public_room")}
                             />
                         </Tooltip>
                     )}
 
                     {isDirectMessage && e2eStatus === E2EStatus.Verified && (
-                        <Tooltip label={_t("common|verified")}>
+                        <Tooltip label={_t("common|verified")} side="right">
                             <VerifiedIcon
                                 width="16px"
                                 height="16px"
-                                className="mx_Verified"
+                                className="mx_RoomHeader_icon mx_Verified"
                                 aria-label={_t("common|verified")}
                             />
                         </Tooltip>
                     )}
 
                     {isDirectMessage && e2eStatus === E2EStatus.Warning && (
-                        <Tooltip label={_t("room|header_untrusted_label")}>
+                        <Tooltip label={_t("room|header_untrusted_label")} side="right">
                             <ErrorIcon
                                 width="16px"
                                 height="16px"
-                                className="mx_Untrusted"
+                                className="mx_RoomHeader_icon mx_Untrusted"
                                 aria-label={_t("room|header_untrusted_label")}
                             />
                         </Tooltip>
                     )}
                 </BodyText>
                 {roomTopic && (
-                    <BodyText as="div" size="sm" className="mx_RoomHeader_topic">
+                    <BodyText as="div" size="sm" className="mx_RoomHeader_topic mx_RoomHeader_truncated">
                         <Linkify>{roomTopicBody}</Linkify>
                     </BodyText>
                 )}
