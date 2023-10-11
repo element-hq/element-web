@@ -117,7 +117,7 @@ export const EventEditor: React.FC<IEventEditorProps> = ({ fieldDefs, defaultCon
     };
 
     return (
-        <BaseTool actionLabel={_t("forward|send_label")} onAction={onAction} onBack={onBack}>
+        <BaseTool actionLabel={_td("forward|send_label")} onAction={onAction} onBack={onBack}>
             <div className="mx_DevTools_eventTypeStateKeyGroup">{fields}</div>
 
             <Field
@@ -161,7 +161,7 @@ export const EventViewer: React.FC<IViewerProps> = ({ mxEvent, onBack, Editor, e
     };
 
     return (
-        <BaseTool onBack={onBack} actionLabel={_t("action|edit")} onAction={onAction} extraButton={extraButton}>
+        <BaseTool onBack={onBack} actionLabel={_td("action|edit")} onAction={onAction} extraButton={extraButton}>
             <SyntaxHighlight language="json">{stringify(mxEvent.event)}</SyntaxHighlight>
         </BaseTool>
     );

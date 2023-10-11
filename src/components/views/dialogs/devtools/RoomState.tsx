@@ -19,7 +19,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
-import { _t } from "../../../../languageHandler";
+import { _t, _td } from "../../../../languageHandler";
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { EventEditor, EventViewer, eventTypeField, stateKeyField, IEditorProps, stringify } from "./Event";
@@ -180,11 +180,11 @@ export const RoomStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool })
     }
 
     const onAction = async (): Promise<void> => {
-        setTool(_t("devtools|send_custom_state_event"), StateEventEditor);
+        setTool(_td("devtools|send_custom_state_event"), StateEventEditor);
     };
 
     return (
-        <BaseTool onBack={onBack} actionLabel={_t("devtools|send_custom_state_event")} onAction={onAction}>
+        <BaseTool onBack={onBack} actionLabel={_td("devtools|send_custom_state_event")} onAction={onAction}>
             <FilteredList query={query} onChange={setQuery}>
                 {Array.from(events.keys()).map((eventType) => (
                     <StateEventButton key={eventType} label={eventType} onClick={() => setEventType(eventType)} />

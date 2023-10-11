@@ -18,7 +18,7 @@ limitations under the License.
 import React, { ChangeEvent, useContext, useMemo, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from "../../../../languageHandler";
+import { _t, _td } from "../../../../languageHandler";
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import AccessibleButton from "../../elements/AccessibleButton";
 import SettingsStore, { LEVEL_ORDER } from "../../../../settings/SettingsStore";
@@ -130,7 +130,7 @@ const EditSetting: React.FC<IEditSettingProps> = ({ setting, onBack }) => {
     };
 
     return (
-        <BaseTool onBack={onBack} actionLabel={_t("devtools|save_setting_values")} onAction={onSave}>
+        <BaseTool onBack={onBack} actionLabel={_td("devtools|save_setting_values")} onAction={onSave}>
             <h3>
                 {_t("devtools|setting_colon")} <code>{setting}</code>
             </h3>
@@ -207,7 +207,7 @@ const ViewSetting: React.FC<IViewSettingProps> = ({ setting, onEdit, onBack }) =
     const context = useContext(DevtoolsContext);
 
     return (
-        <BaseTool onBack={onBack} actionLabel={_t("devtools|edit_values")} onAction={onEdit}>
+        <BaseTool onBack={onBack} actionLabel={_td("devtools|edit_values")} onAction={onEdit}>
             <h3>
                 {_t("devtools|setting_colon")} <code>{setting}</code>
             </h3>

@@ -19,13 +19,13 @@ import React, { createContext, ReactNode, useState } from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
-import { _t } from "../../../../languageHandler";
+import { _t, TranslationKey } from "../../../../languageHandler";
 import { XOR } from "../../../../@types/common";
 import { Tool } from "../DevtoolsDialog";
 
 export interface IDevtoolsProps {
     onBack(): void;
-    setTool(label: string, tool: Tool): void;
+    setTool(label: TranslationKey, tool: Tool): void;
 }
 
 interface IMinProps extends Pick<IDevtoolsProps, "onBack"> {
@@ -35,7 +35,7 @@ interface IMinProps extends Pick<IDevtoolsProps, "onBack"> {
 }
 
 interface IProps extends IMinProps {
-    actionLabel: string;
+    actionLabel: TranslationKey;
     onAction(): Promise<string | void>;
 }
 
@@ -69,7 +69,7 @@ const BaseTool: React.FC<XOR<IMinProps, IProps>> = ({
             });
         };
 
-        actionButton = <button onClick={onActionClick}>{actionLabel}</button>;
+        actionButton = <button onClick={onActionClick}>{_t(actionLabel)}</button>;
     }
 
     return (

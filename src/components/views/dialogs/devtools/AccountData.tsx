@@ -22,7 +22,7 @@ import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { EventEditor, EventViewer, eventTypeField, IEditorProps, stringify } from "./Event";
 import FilteredList from "./FilteredList";
-import { _t } from "../../../../languageHandler";
+import { _td, TranslationKey } from "../../../../languageHandler";
 
 export const AccountDataEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) => {
     const cli = useContext(MatrixClientContext);
@@ -54,7 +54,7 @@ export const RoomAccountDataEventEditor: React.FC<IEditorProps> = ({ mxEvent, on
 interface IProps extends IDevtoolsProps {
     events: Map<string, MatrixEvent>;
     Editor: React.FC<IEditorProps>;
-    actionLabel: string;
+    actionLabel: TranslationKey;
 }
 
 const BaseAccountDataExplorer: React.FC<IProps> = ({ events, Editor, actionLabel, onBack, setTool }) => {
@@ -98,7 +98,7 @@ export const AccountDataExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
         <BaseAccountDataExplorer
             events={cli.store.accountData}
             Editor={AccountDataEventEditor}
-            actionLabel={_t("devtools|send_custom_account_data_event")}
+            actionLabel={_td("devtools|send_custom_account_data_event")}
             onBack={onBack}
             setTool={setTool}
         />
@@ -112,7 +112,7 @@ export const RoomAccountDataExplorer: React.FC<IDevtoolsProps> = ({ onBack, setT
         <BaseAccountDataExplorer
             events={context.room.accountData}
             Editor={RoomAccountDataEventEditor}
-            actionLabel={_t("devtools|send_custom_room_account_data_event")}
+            actionLabel={_td("devtools|send_custom_room_account_data_event")}
             onBack={onBack}
             setTool={setTool}
         />

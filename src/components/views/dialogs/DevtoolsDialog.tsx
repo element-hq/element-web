@@ -69,7 +69,7 @@ interface IProps {
     onFinished(finished?: boolean): void;
 }
 
-type ToolInfo = [label: string, tool: Tool];
+type ToolInfo = [label: TranslationKey, tool: Tool];
 
 const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) => {
     const [tool, setTool] = useState<ToolInfo | null>(null);
@@ -116,7 +116,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
         );
     }
 
-    const label = tool ? tool[0] : _t("devtools|toolbox");
+    const label = tool ? _t(tool[0]) : _t("devtools|toolbox");
     return (
         <BaseDialog className="mx_QuestionDialog" onFinished={onFinished} title={_t("devtools|developer_tools")}>
             <MatrixClientContext.Consumer>
