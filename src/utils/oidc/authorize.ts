@@ -35,10 +35,13 @@ export const startOidcLogin = async (
     clientId: string,
     homeserverUrl: string,
     identityServerUrl?: string,
+    isRegistration?: boolean,
 ): Promise<void> => {
     const redirectUri = window.location.origin;
 
     const nonce = randomString(10);
+
+    const prompt = isRegistration ? "create" : undefined;
 
     const authorizationUrl = await generateOidcAuthorizationUrl({
         metadata: delegatedAuthConfig.metadata,
@@ -47,6 +50,7 @@ export const startOidcLogin = async (
         homeserverUrl,
         identityServerUrl,
         nonce,
+        prompt,
     });
 
     window.location.href = authorizationUrl;

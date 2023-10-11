@@ -38,7 +38,7 @@ import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import * as Lifecycle from "../../../Lifecycle";
 import { IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
 import AuthPage from "../../views/auth/AuthPage";
-import Login from "../../../Login";
+import Login, { OidcNativeFlow } from "../../../Login";
 import dis from "../../../dispatcher/dispatcher";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from "../../views/elements/ServerPicker";
@@ -52,6 +52,8 @@ import { AuthHeaderDisplay } from "./header/AuthHeaderDisplay";
 import { AuthHeaderProvider } from "./header/AuthHeaderProvider";
 import SettingsStore from "../../../settings/SettingsStore";
 import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
+import { Features } from "../../../settings/Settings";
+import { startOidcLogin } from "../../../utils/oidc/authorize";
 
 const debuglog = (...args: any[]): void => {
     if (SettingsStore.getValue("debug_registration")) {
@@ -123,12 +125,17 @@ interface IState {
     // the SSO flow definition, this is fetched from /login as that's the only
     // place it is exposed.
     ssoFlow?: SSOFlow;
+    // the OIDC native login flow, when supported and enabled
+    // if present, must be used for registration
+    oidcNativeFlow?: OidcNativeFlow;
 }
 
 export default class Registration extends React.Component<IProps, IState> {
     private readonly loginLogic: Login;
     // `replaceClient` tracks latest serverConfig to spot when it changes under the async method which fetches flows
     private latestServerConfig?: ValidatedServerConfig;
+    // cache value from settings store
+    private oidcNativeFlowEnabled = false;
 
     public constructor(props: IProps) {
         super(props);
@@ -147,9 +154,14 @@ export default class Registration extends React.Component<IProps, IState> {
             serverDeadError: "",
         };
 
-        const { hsUrl, isUrl } = this.props.serverConfig;
+        // only set on a config level, so we don't need to watch
+        this.oidcNativeFlowEnabled = SettingsStore.getValue(Features.OidcNativeFlow);
+
+        const { hsUrl, isUrl, delegatedAuthentication } = this.props.serverConfig;
         this.loginLogic = new Login(hsUrl, isUrl, null, {
             defaultDeviceDisplayName: "Element login check", // We shouldn't ever be used
+            // if native OIDC is enabled in the client pass the server's delegated auth settings
+            delegatedAuthentication: this.oidcNativeFlowEnabled ? delegatedAuthentication : undefined,
         });
     }
 
@@ -219,22 +231,38 @@ export default class Registration extends React.Component<IProps, IState> {
 
         this.loginLogic.setHomeserverUrl(hsUrl);
         this.loginLogic.setIdentityServerUrl(isUrl);
+        // if native OIDC is enabled in the client pass the server's delegated auth settings
+        const delegatedAuthentication = this.oidcNativeFlowEnabled ? serverConfig.delegatedAuthentication : undefined;
+
+        this.loginLogic.setDelegatedAuthentication(delegatedAuthentication);
 
         let ssoFlow: SSOFlow | undefined;
+        let oidcNativeFlow: OidcNativeFlow | undefined;
         try {
-            const loginFlows = await this.loginLogic.getFlows();
+            const loginFlows = await this.loginLogic.getFlows(true);
             if (serverConfig !== this.latestServerConfig) return; // discard, serverConfig changed from under us
             ssoFlow = loginFlows.find((f) => f.type === "m.login.sso" || f.type === "m.login.cas") as SSOFlow;
+            oidcNativeFlow = loginFlows.find((f) => f.type === "oidcNativeFlow") as OidcNativeFlow;
         } catch (e) {
             if (serverConfig !== this.latestServerConfig) return; // discard, serverConfig changed from under us
             logger.error("Failed to get login flows to check for SSO support", e);
         }
 
-        this.setState({
+        this.setState(({ flows }) => ({
             matrixClient: cli,
             ssoFlow,
+            oidcNativeFlow,
+            // if we are using oidc native we won't continue with flow discovery on HS
+            // so set an empty array to indicate flows are no longer loading
+            flows: oidcNativeFlow ? [] : flows,
             busy: false,
-        });
+        }));
+
+        // don't need to check with homeserver for login flows
+        // since we are going to use OIDC native flow
+        if (oidcNativeFlow) {
+            return;
+        }
 
         try {
             // We do the first registration request ourselves to discover whether we need to
@@ -512,6 +540,24 @@ export default class Registration extends React.Component<IProps, IState> {
                 <div className="mx_AuthBody_spinner">
                     <Spinner />
                 </div>
+            );
+        } else if (this.state.matrixClient && this.state.oidcNativeFlow) {
+            return (
+                <AccessibleButton
+                    className="mx_Login_fullWidthButton"
+                    kind="primary"
+                    onClick={async () => {
+                        await startOidcLogin(
+                            this.props.serverConfig.delegatedAuthentication!,
+                            this.state.oidcNativeFlow!.clientId,
+                            this.props.serverConfig.hsUrl,
+                            this.props.serverConfig.isUrl,
+                            true /* isRegistration */,
+                        );
+                    }}
+                >
+                    {_t("action|continue")}
+                </AccessibleButton>
             );
         } else if (this.state.matrixClient && this.state.flows.length) {
             let ssoSection: JSX.Element | undefined;
