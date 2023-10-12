@@ -57,3 +57,15 @@ export const getStoredOidcClientId = (): string => {
     }
     return clientId;
 };
+
+/**
+ * Retrieve stored id token claims from session storage
+ * @returns idtokenclaims or undefined
+ */
+export const getStoredOidcIdTokenClaims = (): IdTokenClaims | undefined => {
+    const idTokenClaims = sessionStorage.getItem(idTokenClaimsStorageKey);
+    if (!idTokenClaims) {
+        return;
+    }
+    return JSON.parse(idTokenClaims) as IdTokenClaims;
+};

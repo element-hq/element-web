@@ -27,6 +27,7 @@ import {
     IStartClientOpts,
     MatrixClient,
     MemoryStore,
+    TokenRefreshFunction,
 } from "matrix-js-sdk/src/matrix";
 import * as utils from "matrix-js-sdk/src/utils";
 import { verificationMethods } from "matrix-js-sdk/src/crypto";
@@ -122,8 +123,10 @@ export interface IMatrixClientPeg {
      * homeserver / identity server URLs and active credentials
      *
      * @param {IMatrixClientCreds} creds The new credentials to use.
+     * @param {TokenRefreshFunction} tokenRefreshFunction OPTIONAL function used by MatrixClient to attempt token refresh
+     *          see {@link ICreateClientOpts.tokenRefreshFunction}
      */
-    replaceUsingCreds(creds: IMatrixClientCreds): void;
+    replaceUsingCreds(creds: IMatrixClientCreds, tokenRefreshFunction?: TokenRefreshFunction): void;
 }
 
 /**
@@ -196,8 +199,8 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         }
     }
 
-    public replaceUsingCreds(creds: IMatrixClientCreds): void {
-        this.createClient(creds);
+    public replaceUsingCreds(creds: IMatrixClientCreds, tokenRefreshFunction?: TokenRefreshFunction): void {
+        this.createClient(creds, tokenRefreshFunction);
     }
 
     private onUnexpectedStoreClose = async (): Promise<void> => {
@@ -378,11 +381,13 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         });
     }
 
-    private createClient(creds: IMatrixClientCreds): void {
+    private createClient(creds: IMatrixClientCreds, tokenRefreshFunction?: TokenRefreshFunction): void {
         const opts: ICreateClientOpts = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
             accessToken: creds.accessToken,
+            refreshToken: creds.refreshToken,
+            tokenRefreshFunction,
             userId: creds.userId,
             deviceId: creds.deviceId,
             pickleKey: creds.pickleKey,
