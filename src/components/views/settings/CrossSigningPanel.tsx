@@ -258,7 +258,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
             <>
                 {summarisedStatus}
                 <details>
-                    <summary>{_t("common|advanced")}</summary>
+                    <summary className="mx_CrossSigningPanel_advanced">{_t("common|advanced")}</summary>
                     <table className="mx_CrossSigningPanel_statusList">
                         <tr>
                             <th scope="row">{_t("settings|security|cross_signing_public_keys")}</th>

@@ -51,7 +51,9 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                 />
               </div>
               <details>
-                <summary>
+                <summary
+                  class="mx_SecureBackupPanel_advanced"
+                >
                   Advanced
                 </summary>
                 <table
@@ -165,7 +167,9 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                 />
               </div>
               <details>
-                <summary>
+                <summary
+                  class="mx_CrossSigningPanel_advanced"
+                >
                   Advanced
                 </summary>
                 <table

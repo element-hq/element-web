@@ -13,7 +13,9 @@ exports[`<SecureBackupPanel /> handles error fetching backup 1`] = `
     Unable to load key backup status
   </div>
   <details>
-    <summary>
+    <summary
+      class="mx_SecureBackupPanel_advanced"
+    >
       Advanced
     </summary>
     <table
@@ -89,7 +91,9 @@ exports[`<SecureBackupPanel /> suggests connecting session to key backup when ba
     Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.
   </div>
   <details>
-    <summary>
+    <summary
+      class="mx_SecureBackupPanel_advanced"
+    >
       Advanced
     </summary>
     <table

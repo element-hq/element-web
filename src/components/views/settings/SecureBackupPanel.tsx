@@ -384,7 +384,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                 <SettingsSubsectionText>{_t("settings|security|backup_keys_description")}</SettingsSubsectionText>
                 {statusDescription}
                 <details>
-                    <summary>{_t("common|advanced")}</summary>
+                    <summary className="mx_SecureBackupPanel_advanced">{_t("common|advanced")}</summary>
                     <table className="mx_SecureBackupPanel_statusList">
                         <tr>
                             <th scope="row">{_t("settings|security|backup_key_stored_status")}</th>

@@ -195,7 +195,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
                     <button onClick={this.onLogoutConfirm}>{_t("auth|logout_dialog|skip_key_backup")}</button>
                 </DialogButtons>
                 <details>
-                    <summary>{_t("common|advanced")}</summary>
+                    <summary className="mx_LogoutDialog_ExportKeyAdvanced">{_t("common|advanced")}</summary>
                     <p>
                         <button onClick={this.onExportE2eKeysClicked}>{_t("auth|logout_dialog|megolm_export")}</button>
                     </p>
