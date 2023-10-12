@@ -57,7 +57,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for an 
         <span
           aria-hidden="true"
           aria-label="Profile picture"
-          class="_avatar_ylj7w_17 mx_BaseAvatar"
+          class="_avatar_1o69u_17 mx_BaseAvatar"
           data-color="8"
           data-testid="avatar-img"
           data-type="round"
@@ -65,7 +65,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for an 
         >
           <img
             alt=""
-            class="_image_ylj7w_45"
+            class="_image_1o69u_49"
             crossorigin="anonymous"
             data-type="round"
             height="16px"
@@ -106,7 +106,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
             <span
               aria-hidden="true"
               aria-label="Avatar"
-              class="_avatar_ylj7w_17 mx_BaseAvatar"
+              class="_avatar_1o69u_17 mx_BaseAvatar"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -114,7 +114,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
             >
               <img
                 alt=""
-                class="_image_ylj7w_45"
+                class="_image_1o69u_49"
                 crossorigin="anonymous"
                 data-type="round"
                 height="16px"
@@ -157,7 +157,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
             <span
               aria-hidden="true"
               aria-label="Avatar"
-              class="_avatar_ylj7w_17 mx_BaseAvatar"
+              class="_avatar_1o69u_17 mx_BaseAvatar"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -165,7 +165,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
             >
               <img
                 alt=""
-                class="_image_ylj7w_45"
+                class="_image_1o69u_49"
                 crossorigin="anonymous"
                 data-type="round"
                 height="16px"
@@ -267,7 +267,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
         <span
           aria-hidden="true"
           aria-label="Profile picture"
-          class="_avatar_ylj7w_17 mx_BaseAvatar"
+          class="_avatar_1o69u_17 mx_BaseAvatar"
           data-color="8"
           data-testid="avatar-img"
           data-type="round"
@@ -275,7 +275,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
         >
           <img
             alt=""
-            class="_image_ylj7w_45"
+            class="_image_1o69u_49"
             crossorigin="anonymous"
             data-type="round"
             height="16px"
@@ -310,7 +310,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
         data-testid="avatar-img"
         data-type="round"
         data-color="8"
-        class="_avatar_ylj7w_17 mx_BaseAvatar"
+        class="_avatar_1o69u_17 mx_BaseAvatar"
         style="--cpd-avatar-size: 16px"
         ><img
           loading="lazy"
@@ -318,7 +318,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
           src="mxc://avatar.url/image.png"
           crossorigin="anonymous"
           referrerpolicy="no-referrer"
-          class="_image_ylj7w_45"
+          class="_image_1o69u_49"
           data-type="round"
           width="16px"
           height="16px" /></span
@@ -343,7 +343,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
         data-testid="avatar-img"
         data-type="round"
         data-color="4"
-        class="_avatar_ylj7w_17 mx_BaseAvatar"
+        class="_avatar_1o69u_17 mx_BaseAvatar"
         style="--cpd-avatar-size: 16px"
         ><img
           loading="lazy"
@@ -351,7 +351,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
           src="mxc://avatar.url/room.png"
           crossorigin="anonymous"
           referrerpolicy="no-referrer"
-          class="_image_ylj7w_45"
+          class="_image_1o69u_49"
           data-type="round"
           width="16px"
           height="16px" /></span

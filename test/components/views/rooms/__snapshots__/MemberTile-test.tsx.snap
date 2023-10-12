@@ -14,7 +14,7 @@ exports[`MemberTile should display an verified E2EIcon when the e2E status = Ver
       >
         <span
           aria-hidden="true"
-          class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
+          class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
           data-color="2"
           data-testid="avatar-img"
           data-type="round"
@@ -71,7 +71,7 @@ exports[`MemberTile should display an warning E2EIcon when the e2E status = Warn
       >
         <span
           aria-hidden="true"
-          class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
+          class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
           data-color="2"
           data-testid="avatar-img"
           data-type="round"
@@ -128,7 +128,7 @@ exports[`MemberTile should not display an E2EIcon when the e2E status = normal 1
       >
         <span
           aria-hidden="true"
-          class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
+          class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
           data-color="2"
           data-testid="avatar-img"
           data-type="round"

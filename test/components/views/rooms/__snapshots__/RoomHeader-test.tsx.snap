@@ -7,7 +7,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
   >
     <span
-      class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
+      class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
       data-color="7"
       data-testid="avatar-img"
       data-type="round"
@@ -39,7 +39,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
     >
       <button
         aria-label="There's no one here to call"
-        class="_icon-button_9uxnz_17"
+        class="_icon-button_1qjaf_17"
         data-state="closed"
         disabled=""
         style="--cpd-icon-button-size: 32px;"
@@ -48,7 +48,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       </button>
       <button
         aria-label="There's no one here to call"
-        class="_icon-button_9uxnz_17"
+        class="_icon-button_1qjaf_17"
         data-state="closed"
         disabled=""
         style="--cpd-icon-button-size: 32px;"
@@ -57,7 +57,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       </button>
       <button
         aria-label="Threads"
-        class="_icon-button_9uxnz_17"
+        class="_icon-button_1qjaf_17"
         data-state="closed"
         style="--cpd-icon-button-size: 32px;"
       >

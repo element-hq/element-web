@@ -23,7 +23,7 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding mes
   </h3>
   <p>
     <span
-      class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
+      class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
       data-color="4"
       data-testid="avatar-img"
       data-type="round"
@@ -48,7 +48,7 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding mes
   </h3>
   <p>
     <span
-      class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
+      class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -227,7 +227,7 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when client has
   </h3>
   <p>
     <span
-      class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
+      class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
       data-color="4"
       data-testid="avatar-img"
       data-type="round"
@@ -285,7 +285,7 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a dm roo
   </h3>
   <p>
     <span
-      class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
+      class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
       data-color="4"
       data-testid="avatar-img"
       data-type="round"
@@ -350,7 +350,7 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm
   </h3>
   <p>
     <span
-      class="_avatar_ylj7w_17 mx_BaseAvatar _avatar-imageless_ylj7w_56"
+      class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
       data-color="4"
       data-testid="avatar-img"
       data-type="round"

@@ -6,7 +6,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
     class="mx_PinnedEventTile"
   >
     <span
-      class="_avatar_ylj7w_17 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_ylj7w_56"
+      class="_avatar_1o69u_17 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1o69u_60"
       data-color="6"
       data-testid="avatar-img"
       data-type="round"
