@@ -66,12 +66,12 @@ export class ReadReceiptSetup {
                 cy.inviteUser(this.alphaRoomId, this.bot.getUserId());
                 cy.viewRoomById(this.alphaRoomId);
                 cy.get(".mx_LegacyRoomHeader").within(() => cy.findByTitle(roomAlpha).should("exist"));
-                cy.findByText(botName + " joined the room").should("exist");
+                cy.findByText(botName + " joined the room", { timeout: 20000 }).should("exist");
 
                 cy.inviteUser(this.betaRoomId, this.bot.getUserId());
                 cy.viewRoomById(this.betaRoomId);
                 cy.get(".mx_LegacyRoomHeader").within(() => cy.findByTitle(roomBeta).should("exist"));
-                cy.findByText(botName + " joined the room").should("exist");
+                cy.findByText(botName + " joined the room", { timeout: 20000 }).should("exist");
             });
     }
 }
