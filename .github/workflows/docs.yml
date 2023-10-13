@@ -10,18 +10,40 @@ jobs:
         name: GitHub Pages
         runs-on: ubuntu-latest
         steps:
+            - name: Fetch element-desktop
+              uses: actions/checkout@v4
+              with:
+                  repository: vector-im/element-desktop
+                  path: element-desktop
+
             - name: Fetch element-web
               uses: actions/checkout@v4
               with:
                   path: element-web
+
+            - name: Fetch matrix-react-sdk
+              uses: actions/checkout@v4
+              with:
+                  repository: matrix-org/matrix-react-sdk
+                  path: matrix-react-sdk
 
             - name: Setup mdBook
               uses: peaceiris/actions-mdbook@v1
               with:
                   mdbook-version: "0.4.10"
 
-            - run: mdbook build
-              working-directory: element-web
+            - name: Install mdbook-combiner
+              run: cargo install mdbook-combiner
+
+            - name: Build docs
+              run: |
+                  mkdir docs
+                  mv element-desktop/docs docs/element-desktop
+                  mv element-web/docs docs/element-web
+                  mv matrix-react-sdk/docs docs/matrix-react-sdk
+                  mdbook-combiner -m docs
+                  cp element-web/book.toml .
+                  mdbook build
 
             - name: Deploy to gh pages
               uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3
