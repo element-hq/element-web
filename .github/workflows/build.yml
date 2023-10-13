@@ -18,8 +18,12 @@ jobs:
                     - ubuntu-latest
                     - windows-latest
                     - macos-latest
-        # Skip the ubuntu-latest build for the develop branch as the dedicated CD build_develop workflow handles that
-        if: github.event_name != 'push' || github.ref_name != 'develop' || matrix.image != 'ubuntu-latest'
+                isDevelop:
+                    - ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
+                # Skip the ubuntu-latest build for the develop branch as the dedicated CD build_develop workflow handles that
+                exclude:
+                    - isDevelop: true
+                      image: ubuntu-latest
         runs-on: ${{ matrix.image }}
         steps:
             - uses: actions/checkout@v4
