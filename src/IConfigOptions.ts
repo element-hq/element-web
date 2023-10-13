@@ -95,7 +95,7 @@ export interface IConfigOptions {
     integrations_rest_url?: string;
     integrations_widgets_urls?: string[];
 
-    show_labs_settings?: boolean;
+    show_labs_settings: boolean;
     features?: Record<string, boolean>; // <FeatureName, EnabledBool>
 
     bug_report_endpoint_url?: string; // omission disables bug reporting

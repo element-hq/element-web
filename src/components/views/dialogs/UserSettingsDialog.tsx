@@ -21,14 +21,13 @@ import TabbedView, { Tab } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
 import GeneralUserSettingsTab from "../settings/tabs/user/GeneralUserSettingsTab";
 import SettingsStore, { CallbackFn } from "../../../settings/SettingsStore";
-import LabsUserSettingsTab from "../settings/tabs/user/LabsUserSettingsTab";
+import LabsUserSettingsTab, { showLabsFlags } from "../settings/tabs/user/LabsUserSettingsTab";
 import AppearanceUserSettingsTab from "../settings/tabs/user/AppearanceUserSettingsTab";
 import SecurityUserSettingsTab from "../settings/tabs/user/SecurityUserSettingsTab";
 import NotificationUserSettingsTab from "../settings/tabs/user/NotificationUserSettingsTab";
 import PreferencesUserSettingsTab from "../settings/tabs/user/PreferencesUserSettingsTab";
 import VoiceUserSettingsTab from "../settings/tabs/user/VoiceUserSettingsTab";
 import HelpUserSettingsTab from "../settings/tabs/user/HelpUserSettingsTab";
-import SdkConfig from "../../../SdkConfig";
 import MjolnirUserSettingsTab from "../settings/tabs/user/MjolnirUserSettingsTab";
 import { UIFeature } from "../../../settings/UIFeature";
 import BaseDialog from "./BaseDialog";
@@ -161,10 +160,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             ),
         );
         // Show the Labs tab if enabled or if there are any active betas
-        if (
-            SdkConfig.get("show_labs_settings") ||
-            SettingsStore.getFeatureSettingNames().some((k) => SettingsStore.getBetaInfo(k))
-        ) {
+        if (showLabsFlags() || SettingsStore.getFeatureSettingNames().some((k) => SettingsStore.getBetaInfo(k))) {
             tabs.push(
                 new Tab(
                     UserTab.Labs,

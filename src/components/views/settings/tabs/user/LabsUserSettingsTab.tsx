@@ -29,6 +29,10 @@ import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 
+export const showLabsFlags = (): boolean => {
+    return SdkConfig.get("show_labs_settings") || SettingsStore.getValue("developerMode");
+};
+
 export default class LabsUserSettingsTab extends React.Component<{}> {
     private readonly labs: string[];
     private readonly betas: string[];
@@ -48,7 +52,7 @@ export default class LabsUserSettingsTab extends React.Component<{}> {
         this.labs = labs;
         this.betas = betas;
 
-        if (!SdkConfig.get("show_labs_settings")) {
+        if (!showLabsFlags()) {
             this.labs = [];
         }
     }

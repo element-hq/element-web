@@ -18,7 +18,6 @@ limitations under the License.
 import React from "react";
 
 import { ICategory, CATEGORIES, CategoryName, KeyBindingAction } from "../../../../../accessibility/KeyboardShortcuts";
-import SdkConfig from "../../../../../SdkConfig";
 import { _t } from "../../../../../languageHandler";
 import {
     getKeyboardShortcutDisplayName,
@@ -28,6 +27,7 @@ import { KeyboardShortcut } from "../../KeyboardShortcut";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection from "../../shared/SettingsSubsection";
+import { showLabsFlags } from "./LabsUserSettingsTab";
 
 interface IKeyboardShortcutRowProps {
     name: KeyBindingAction;
@@ -35,7 +35,7 @@ interface IKeyboardShortcutRowProps {
 
 // Filter out the labs section if labs aren't enabled.
 const visibleCategories = (Object.entries(CATEGORIES) as [CategoryName, ICategory][]).filter(
-    ([categoryName]) => categoryName !== CategoryName.LABS || SdkConfig.get("show_labs_settings"),
+    ([categoryName]) => categoryName !== CategoryName.LABS || showLabsFlags(),
 );
 
 const KeyboardShortcutRow: React.FC<IKeyboardShortcutRowProps> = ({ name }) => {
