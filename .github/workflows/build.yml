@@ -13,6 +13,7 @@ jobs:
         name: "Build"
         # We build on all 3 platforms to ensure we don't have any OS-specific build incompatibilities
         strategy:
+            fail-fast: false
             matrix:
                 image:
                     - ubuntu-latest
