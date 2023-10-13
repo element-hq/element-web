@@ -77,6 +77,7 @@ class PassphraseConfirmField extends PureComponent<IProps> {
                 value={this.props.value}
                 onChange={this.props.onChange}
                 onValidate={this.onValidate}
+                autoFocus={this.props.autoFocus}
             />
         );
     }
