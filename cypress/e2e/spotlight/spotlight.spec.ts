@@ -346,7 +346,14 @@ describe("Spotlight", () => {
             });
     });
 
-    it("should find unknown people", () => {
+    /**
+     * Search sends the correct query to Synapse.
+     * Synapse doesn't return the user in the result list.
+     * Waiting for the profile to be available via APIs before the tests didn't help.
+     *
+     * https://github.com/matrix-org/synapse/issues/16472
+     */
+    it.skip("should find unknown people", () => {
         cy.openSpotlightDialog()
             .within(() => {
                 cy.wait(500); // Wait for dialog to settle
