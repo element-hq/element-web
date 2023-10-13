@@ -174,7 +174,6 @@ jobs:
                   record: true
                   parallel: true
                   command: "yarn percy exec --parallel -- npx cypress-cloud run"
-                  config: '{"reporter":"cypress-multi-reporters", "reporterOptions": { "configFile": "cypress-ci-reporter-config.json" } }'
                   ci-build-id: ${{ needs.prepare.outputs.uuid }}
               env:
                   # pass the Dashboard record key as an environment variable

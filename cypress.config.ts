@@ -45,4 +45,10 @@ export default defineConfig({
     // disable logging of HTTP requests made to the Cypress server. They are noisy and not very helpful.
     // @ts-ignore https://github.com/cypress-io/cypress/issues/26284
     morgan: false,
+
+    // Create XML result files
+    reporter: "cypress-multi-reporters",
+    reporterOptions: {
+        configFile: "cypress-ci-reporter-config.json",
+    },
 });
