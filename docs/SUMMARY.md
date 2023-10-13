@@ -1,5 +1,7 @@
 # Summary
 
+-   [Introduction](../README.md)
+
 # Usage
 
 -   [Betas](betas.md)
