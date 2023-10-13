@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from "react";
+import { Tooltip } from "@vector-im/compound-web";
 
 import { formatFullDate, formatTime, formatFullTime, formatRelativeTime } from "../../../DateUtils";
 
@@ -42,14 +43,11 @@ export default class MessageTimestamp extends React.Component<IProps> {
         }
 
         return (
-            <span
-                className="mx_MessageTimestamp"
-                title={formatFullDate(date, this.props.showTwelveHour)}
-                aria-hidden={true}
-                aria-live="off"
-            >
-                {timestamp}
-            </span>
+            <Tooltip label={formatFullDate(date, this.props.showTwelveHour)}>
+                <span className="mx_MessageTimestamp" aria-hidden={true} aria-live="off">
+                    {timestamp}
+                </span>
+            </Tooltip>
         );
     }
 }
