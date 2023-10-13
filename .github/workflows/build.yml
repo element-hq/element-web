@@ -10,7 +10,7 @@ env:
     PR_NUMBER: ${{ github.event.pull_request.number }}
 jobs:
     build:
-        name: "Build"
+        name: "Build on ${{ matrix.image }}"
         # We build on all 3 platforms to ensure we don't have any OS-specific build incompatibilities
         strategy:
             fail-fast: false
@@ -36,9 +36,10 @@ jobs:
             - name: Install Dependencies
               run: "./scripts/layered.sh"
 
-            - name: "[Windows] Add bin to path"
+            # This is a CI specific issue, not worth investigating
+            - name: "[Windows] Manually install rimraf"
               if: matrix.image == 'windows-latest'
-              run: echo "${{ github.workspace }}\\node_modules\\.bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+              run: npm i -g rimraf
 
             - name: Build
               run: "yarn build"
