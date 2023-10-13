@@ -75,7 +75,7 @@
         "@zxcvbn-ts/language-common": "^3.0.4",
         "@zxcvbn-ts/language-en": "^3.0.2",
         "await-lock": "^2.1.0",
-        "blurhash": "^1.1.3",
+        "blurhash": "^2.0.3",
         "classnames": "^2.2.6",
         "commonmark": "^0.30.0",
         "counterpart": "^0.18.6",
@@ -149,6 +149,7 @@
         "@percy/cli": "^1.11.0",
         "@percy/cypress": "^3.1.2",
         "@testing-library/cypress": "^9.0.0",
+        "@testing-library/dom": "^7.21.4",
         "@testing-library/jest-dom": "^6.0.0",
         "@testing-library/react": "^12.1.5",
         "@testing-library/user-event": "^14.4.3",
@@ -228,6 +229,10 @@
         "ts-node": "^10.9.1",
         "typescript": "5.1.6",
         "walk": "^2.3.14"
+    },
+    "peerDependencies": {
+        "postcss": "^8.4.19",
+        "webpack": "^4.0.0 || ^5.0.0"
     },
     "@casualbot/jest-sonar-reporter": {
         "outputDirectory": "coverage",
