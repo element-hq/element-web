@@ -26,6 +26,9 @@ jobs:
                     - isDevelop: true
                       image: ubuntu-latest
         runs-on: ${{ matrix.image }}
+        defaults:
+            run:
+                shell: bash
         steps:
             - uses: actions/checkout@v4
 
@@ -35,11 +38,6 @@ jobs:
 
             - name: Install Dependencies
               run: "./scripts/layered.sh"
-
-            # This is a CI specific issue, not worth investigating
-            - name: "[Windows] Manually install rimraf"
-              if: matrix.image == 'windows-latest'
-              run: npm i -g rimraf
 
             - name: Build
               run: "yarn build"
