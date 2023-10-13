@@ -16,7 +16,7 @@ limitations under the License.
 
 import { useMemo } from "react";
 
-import { AppDownloadDialog } from "../components/views/dialogs/AppDownloadDialog";
+import { AppDownloadDialog, showAppDownloadDialogPrompt } from "../components/views/dialogs/AppDownloadDialog";
 import { UserTab } from "../components/views/dialogs/UserTab";
 import { ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { Action } from "../dispatcher/actions";
@@ -42,6 +42,7 @@ interface UserOnboardingTask {
         hideOnComplete?: boolean;
     };
     completed: (ctx: UserOnboardingContext) => boolean;
+    disabled?(): boolean;
 }
 
 export interface UserOnboardingTaskWithResolvedCompletion extends Omit<UserOnboardingTask, "completed"> {
@@ -111,6 +112,9 @@ const tasks: UserOnboardingTask[] = [
                 Modal.createDialog(AppDownloadDialog, {}, "mx_AppDownloadDialog_wrapper", false, true);
             },
         },
+        disabled(): boolean {
+            return !showAppDownloadDialogPrompt();
+        },
     },
     {
         id: "setup-profile",
@@ -149,7 +153,10 @@ export function useUserOnboardingTasks(context: UserOnboardingContext): UserOnbo
 
     return useMemo<UserOnboardingTaskWithResolvedCompletion[]>(() => {
         return tasks
-            .filter((task) => !task.relevant || task.relevant.includes(useCase))
+            .filter((task) => {
+                if (task.disabled?.()) return false;
+                return !task.relevant || task.relevant.includes(useCase);
+            })
             .map((task) => ({
                 ...task,
                 completed: task.completed(context),

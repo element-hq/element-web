@@ -44,7 +44,7 @@ import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import { IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
-import SdkConfig from "../../SdkConfig";
+import SdkConfig, { ConfigOptions } from "../../SdkConfig";
 import dis from "../../dispatcher/dispatcher";
 import Notifier from "../../Notifier";
 import Modal from "../../Modal";
@@ -122,7 +122,6 @@ import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePaylo
 import { AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
 import { DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
 import { ViewStartChatOrReusePayload } from "../../dispatcher/payloads/ViewStartChatOrReusePayload";
-import { IConfigOptions } from "../../IConfigOptions";
 import { SnakedObject } from "../../utils/SnakedObject";
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
 import { CallStore } from "../../stores/CallStore";
@@ -165,7 +164,7 @@ interface IScreen {
 }
 
 interface IProps {
-    config: IConfigOptions;
+    config: ConfigOptions;
     onNewScreen: (screen: string, replaceLast: boolean) => void;
     enableGuest?: boolean;
     // the queryParams extracted from the [real] query-string of the URI
@@ -1138,7 +1137,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private chatCreateOrReuse(userId: string): void {
-        const snakedConfig = new SnakedObject<IConfigOptions>(this.props.config);
+        const snakedConfig = new SnakedObject(this.props.config);
         // Use a deferred action to reshow the dialog once the user has registered
         if (MatrixClientPeg.safeGet().isGuest()) {
             // No point in making 2 DMs with welcome bot. This assumes view_set_mxid will
@@ -1295,7 +1294,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * @returns {string} The room ID of the new room, or null if no room was created
      */
     private async startWelcomeUserChat(): Promise<string | null> {
-        const snakedConfig = new SnakedObject<IConfigOptions>(this.props.config);
+        const snakedConfig = new SnakedObject(this.props.config);
         const welcomeUserId = snakedConfig.get("welcome_user_id");
         if (!welcomeUserId) return null;
 
@@ -1390,7 +1389,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (MatrixClientPeg.currentUserIsJustRegistered()) {
             MatrixClientPeg.setJustRegisteredUserId(null);
 
-            const snakedConfig = new SnakedObject<IConfigOptions>(this.props.config);
+            const snakedConfig = new SnakedObject(this.props.config);
             if (snakedConfig.get("welcome_user_id") && getCurrentLanguage().startsWith("en")) {
                 const welcomeUserRoom = await this.startWelcomeUserChat();
                 if (welcomeUserRoom === null) {

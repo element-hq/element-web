@@ -71,15 +71,15 @@ export interface IConfigOptions {
     permalink_prefix?: string;
 
     update_base_url?: string;
-    desktop_builds?: {
+    desktop_builds: {
         available: boolean;
         logo: string; // url
         url: string; // download url
     };
-    mobile_builds?: {
-        ios?: string; // download url
-        android?: string; // download url
-        fdroid?: string; // download url
+    mobile_builds: {
+        ios: string | null; // download url
+        android: string | null; // download url
+        fdroid: string | null; // download url
     };
 
     mobile_guide_toast?: boolean;
