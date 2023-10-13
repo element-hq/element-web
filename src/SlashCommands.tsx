@@ -149,7 +149,7 @@ export const Commands = [
         command: "upgraderoom",
         args: "<new_version>",
         description: _td("slash_command|upgraderoom"),
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
+        isEnabled: (cli) => !isCurrentLocalRoom(cli) && SettingsStore.getValue("developerMode"),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
                 const room = cli.getRoom(roomId);

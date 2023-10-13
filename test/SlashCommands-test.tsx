@@ -28,6 +28,7 @@ import WidgetUtils from "../src/utils/WidgetUtils";
 import { WidgetType } from "../src/widgets/WidgetType";
 import { warnSelfDemote } from "../src/components/views/right_panel/UserInfo";
 import dispatcher from "../src/dispatcher/dispatcher";
+import { SettingLevel } from "../src/settings/SettingLevel";
 
 jest.mock("../src/components/views/right_panel/UserInfo");
 
@@ -88,7 +89,6 @@ describe("SlashCommands", () => {
     });
 
     describe.each([
-        ["upgraderoom"],
         ["myroomnick"],
         ["roomavatar"],
         ["myroomavatar"],
@@ -123,6 +123,22 @@ describe("SlashCommands", () => {
                 setCurrentLocalRoom();
                 expect(command.isEnabled(client)).toBe(false);
             });
+        });
+    });
+
+    describe("/upgraderoom", () => {
+        beforeEach(() => {
+            command = findCommand("upgraderoom")!;
+            setCurrentRoom();
+        });
+
+        it("should be disabled by default", () => {
+            expect(command.isEnabled(client)).toBe(false);
+        });
+
+        it("should be enabled for developerMode", () => {
+            SettingsStore.setValue("developerMode", null, SettingLevel.DEVICE, true);
+            expect(command.isEnabled(client)).toBe(true);
         });
     });
 
