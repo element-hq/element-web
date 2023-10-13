@@ -2,7 +2,7 @@ name: Build
 on:
     pull_request: {}
     push:
-        branches: [master]
+        branches: [develop, master]
 # develop pushes and repository_dispatch handled in build_develop.yaml
 env:
     # These must be set for fetchdep.sh to get the right branch
@@ -11,7 +11,16 @@ env:
 jobs:
     build:
         name: "Build"
-        runs-on: ubuntu-latest
+        # We build on all 3 platforms to ensure we don't have any OS-specific build incompatibilities
+        strategy:
+            matrix:
+                image:
+                    - ubuntu-latest
+                    - windows-latest
+                    - macos-latest
+        # Skip the ubuntu-latest build for the develop branch as the dedicated CD build_develop workflow handles that
+        if: github.event_name != 'push' || github.ref_name != 'develop' || matrix.image != 'ubuntu-latest'
+        runs-on: ${{ matrix.image }}
         steps:
             - uses: actions/checkout@v4
 
