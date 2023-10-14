@@ -3417,6 +3417,8 @@
             "label": "Message Actions",
             "view_in_room": "View in room"
         },
+        "message_timestamp_received_at": "Recovered at: %(dateTime)s",
+        "message_timestamp_sent_at": "Sent at: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s",
             "changed_rule_rooms": "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s",

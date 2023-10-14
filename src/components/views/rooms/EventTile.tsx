@@ -1126,6 +1126,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 showRelative={this.context.timelineRenderingType === TimelineRenderingType.ThreadsList}
                 showTwelveHour={this.props.isTwelveHour}
                 ts={ts}
+                receivedTs={this.props.mxEvent.getUnsigned()["io.element.late_event"]?.received_at}
             />
         );
 

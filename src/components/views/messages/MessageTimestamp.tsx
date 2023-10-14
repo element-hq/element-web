@@ -19,9 +19,14 @@ import React from "react";
 import { Tooltip } from "@vector-im/compound-web";
 
 import { formatFullDate, formatTime, formatFullTime, formatRelativeTime } from "../../../DateUtils";
+import { _t } from "../../../languageHandler";
 
 interface IProps {
     ts: number;
+    /**
+     * If specified will render both the sent-at and received-at timestamps in the tooltip
+     */
+    receivedTs?: number;
     showTwelveHour?: boolean;
     showFullDate?: boolean;
     showSeconds?: boolean;
@@ -42,8 +47,18 @@ export default class MessageTimestamp extends React.Component<IProps> {
             timestamp = formatTime(date, this.props.showTwelveHour);
         }
 
+        let label = formatFullDate(date, this.props.showTwelveHour);
+        let caption: string | undefined;
+        if (this.props.receivedTs !== undefined) {
+            label = _t("timeline|message_timestamp_sent_at", { dateTime: label });
+            const receivedDate = new Date(this.props.receivedTs);
+            caption = _t("timeline|message_timestamp_received_at", {
+                dateTime: formatFullDate(receivedDate, this.props.showTwelveHour),
+            });
+        }
+
         return (
-            <Tooltip label={formatFullDate(date, this.props.showTwelveHour)}>
+            <Tooltip label={label} caption={caption}>
                 <span className="mx_MessageTimestamp" aria-hidden={true} aria-live="off">
                     {timestamp}
                 </span>
