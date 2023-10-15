@@ -650,7 +650,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 Promise.all([
                     ...[...CallStore.instance.activeCalls].map((call) => call.disconnect()),
                     cleanUpBroadcasts(this.stores),
-                ]).finally(() => Lifecycle.logout());
+                ]).finally(() => Lifecycle.logout(this.stores.oidcClientStore));
                 break;
             case "require_registration":
                 startAnyRegistrationFlow(payload as any);

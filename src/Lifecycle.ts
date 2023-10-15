@@ -65,6 +65,7 @@ import { OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPaylo
 import { SdkContextClass } from "./contexts/SDKContext";
 import { messageForLoginError } from "./utils/ErrorUtils";
 import { completeOidcLogin } from "./utils/oidc/authorize";
+import { OidcClientStore } from "./stores/oidc/OidcClientStore";
 import {
     getStoredOidcClientId,
     getStoredOidcIdTokenClaims,
@@ -922,9 +923,28 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
 let _isLoggingOut = false;
 
 /**
- * Logs the current session out and transitions to the logged-out state
+ * Logs out the current session.
+ * When user has authenticated using OIDC native flow revoke tokens with OIDC provider.
+ * Otherwise, call /logout on the homeserver.
+ * @param client
+ * @param oidcClientStore
  */
-export function logout(): void {
+async function doLogout(client: MatrixClient, oidcClientStore?: OidcClientStore): Promise<void> {
+    if (oidcClientStore?.isUserAuthenticatedWithOidc) {
+        const accessToken = client.getAccessToken() ?? undefined;
+        const refreshToken = client.getRefreshToken() ?? undefined;
+
+        await oidcClientStore.revokeTokens(accessToken, refreshToken);
+    } else {
+        await client.logout(true);
+    }
+}
+
+/**
+ * Logs the current session out and transitions to the logged-out state
+ * @param oidcClientStore store instance from SDKContext
+ */
+export function logout(oidcClientStore?: OidcClientStore): void {
     const client = MatrixClientPeg.get();
     if (!client) return;
 
@@ -940,7 +960,8 @@ export function logout(): void {
 
     _isLoggingOut = true;
     PlatformPeg.get()?.destroyPickleKey(client.getSafeUserId(), client.getDeviceId() ?? "");
-    client.logout(true).then(onLoggedOut, (err) => {
+
+    doLogout(client, oidcClientStore).then(onLoggedOut, (err) => {
         // Just throwing an error here is going to be very unhelpful
         // if you're trying to log out because your server's down and
         // you want to log into a different server, so just forget the

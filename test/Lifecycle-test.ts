@@ -19,15 +19,17 @@ import { logger } from "matrix-js-sdk/src/logger";
 import * as MatrixJs from "matrix-js-sdk/src/matrix";
 import { setCrypto } from "matrix-js-sdk/src/crypto/crypto";
 import * as MatrixCryptoAes from "matrix-js-sdk/src/crypto/aes";
+import { MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
 import StorageEvictedDialog from "../src/components/views/dialogs/StorageEvictedDialog";
-import { restoreFromLocalStorage, setLoggedIn } from "../src/Lifecycle";
+import { logout, restoreFromLocalStorage, setLoggedIn } from "../src/Lifecycle";
 import { MatrixClientPeg } from "../src/MatrixClientPeg";
 import Modal from "../src/Modal";
 import * as StorageManager from "../src/utils/StorageManager";
-import { getMockClientWithEventEmitter, mockPlatformPeg } from "./test-utils";
+import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser, mockPlatformPeg } from "./test-utils";
 import ToastStore from "../src/stores/ToastStore";
+import { OidcClientStore } from "../src/stores/oidc/OidcClientStore";
 import { makeDelegatedAuthConfig } from "./test-utils/oidc";
 import { persistOidcAuthenticatedSettings } from "../src/utils/oidc/persistOidcSettings";
 
@@ -40,24 +42,29 @@ describe("Lifecycle", () => {
 
     const realLocalStorage = global.localStorage;
 
-    const mockClient = getMockClientWithEventEmitter({
-        stopClient: jest.fn(),
-        removeAllListeners: jest.fn(),
-        clearStores: jest.fn(),
-        getAccountData: jest.fn(),
-        getUserId: jest.fn(),
-        getDeviceId: jest.fn(),
-        isVersionSupported: jest.fn().mockResolvedValue(true),
-        getCrypto: jest.fn(),
-        getClientWellKnown: jest.fn(),
-        getThirdpartyProtocols: jest.fn(),
-        store: {
-            destroy: jest.fn(),
-        },
-        getVersions: jest.fn().mockResolvedValue({ versions: ["v1.1"] }),
-    });
+    let mockClient!: MockedObject<MatrixJs.MatrixClient>;
 
     beforeEach(() => {
+        mockClient = getMockClientWithEventEmitter({
+            ...mockClientMethodsUser(),
+            stopClient: jest.fn(),
+            removeAllListeners: jest.fn(),
+            clearStores: jest.fn(),
+            getAccountData: jest.fn(),
+            getDeviceId: jest.fn(),
+            isVersionSupported: jest.fn().mockResolvedValue(true),
+            getCrypto: jest.fn(),
+            getClientWellKnown: jest.fn(),
+            waitForClientWellKnown: jest.fn(),
+            getThirdpartyProtocols: jest.fn(),
+            store: {
+                destroy: jest.fn(),
+            },
+            getVersions: jest.fn().mockResolvedValue({ versions: ["v1.1"] }),
+            logout: jest.fn().mockResolvedValue(undefined),
+            getAccessToken: jest.fn(),
+            getRefreshToken: jest.fn(),
+        });
         // stub this
         jest.spyOn(MatrixClientPeg, "replaceUsingCreds").mockImplementation(() => {});
         jest.spyOn(MatrixClientPeg, "start").mockResolvedValue(undefined);
@@ -692,7 +699,7 @@ describe("Lifecycle", () => {
 
             beforeEach(() => {
                 // mock oidc config for oidc client initialisation
-                mockClient.getClientWellKnown.mockReturnValue({
+                mockClient.waitForClientWellKnown.mockResolvedValue({
                     "m.authentication": {
                         issuer: issuer,
                     },
@@ -774,6 +781,49 @@ describe("Lifecycle", () => {
                     undefined,
                 );
             });
+        });
+    });
+
+    describe("logout()", () => {
+        let oidcClientStore!: OidcClientStore;
+        const accessToken = "test-access-token";
+        const refreshToken = "test-refresh-token";
+
+        beforeEach(() => {
+            oidcClientStore = new OidcClientStore(mockClient);
+            // stub
+            jest.spyOn(oidcClientStore, "revokeTokens").mockResolvedValue(undefined);
+
+            mockClient.getAccessToken.mockReturnValue(accessToken);
+            mockClient.getRefreshToken.mockReturnValue(refreshToken);
+        });
+
+        it("should call logout on the client when oidcClientStore is falsy", async () => {
+            logout();
+
+            await flushPromises();
+
+            expect(mockClient.logout).toHaveBeenCalledWith(true);
+        });
+
+        it("should call logout on the client when oidcClientStore.isUserAuthenticatedWithOidc is falsy", async () => {
+            jest.spyOn(oidcClientStore, "isUserAuthenticatedWithOidc", "get").mockReturnValue(false);
+            logout(oidcClientStore);
+
+            await flushPromises();
+
+            expect(mockClient.logout).toHaveBeenCalledWith(true);
+            expect(oidcClientStore.revokeTokens).not.toHaveBeenCalled();
+        });
+
+        it("should revoke tokens when user is authenticated with oidc", async () => {
+            jest.spyOn(oidcClientStore, "isUserAuthenticatedWithOidc", "get").mockReturnValue(true);
+            logout(oidcClientStore);
+
+            await flushPromises();
+
+            expect(mockClient.logout).not.toHaveBeenCalled();
+            expect(oidcClientStore.revokeTokens).toHaveBeenCalledWith(accessToken, refreshToken);
         });
     });
 });
