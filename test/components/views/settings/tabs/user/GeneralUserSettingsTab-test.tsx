@@ -13,11 +13,11 @@ limitations under the License.
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import React from "react";
-import { M_AUTHENTICATION, ThreepidMedium } from "matrix-js-sdk/src/matrix";
+import { ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import GeneralUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/GeneralUserSettingsTab";
-import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
+import { SdkContextClass, SDKContext } from "../../../../../../src/contexts/SDKContext";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import {
     getMockClientWithEventEmitter,
@@ -28,6 +28,7 @@ import {
 } from "../../../../../test-utils";
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
+import { OidcClientStore } from "../../../../../../src/stores/oidc/OidcClientStore";
 
 describe("<GeneralUserSettingsTab />", () => {
     const defaultProps = {
@@ -44,19 +45,18 @@ describe("<GeneralUserSettingsTab />", () => {
         deleteThreePid: jest.fn(),
     });
 
-    const getComponent = () => (
-        <MatrixClientContext.Provider value={mockClient}>
-            <GeneralUserSettingsTab {...defaultProps} />
-        </MatrixClientContext.Provider>
-    );
+    let stores: SdkContextClass;
 
-    const clientWellKnownSpy = jest.spyOn(mockClient, "getClientWellKnown");
+    const getComponent = () => (
+        <SDKContext.Provider value={stores}>
+            <GeneralUserSettingsTab {...defaultProps} />
+        </SDKContext.Provider>
+    );
 
     beforeEach(() => {
         jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
         mockPlatformPeg();
         jest.clearAllMocks();
-        clientWellKnownSpy.mockReturnValue({});
         jest.spyOn(SettingsStore, "getValue").mockRestore();
         jest.spyOn(logger, "error").mockRestore();
 
@@ -67,6 +67,12 @@ describe("<GeneralUserSettingsTab />", () => {
         mockClient.deleteThreePid.mockResolvedValue({
             id_server_unbind_result: "success",
         });
+
+        stores = new SdkContextClass();
+        stores.client = mockClient;
+        // stub out this store completely to avoid mocking initialisation
+        const mockOidcClientStore = {} as unknown as OidcClientStore;
+        jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
     });
 
     it("does not show account management link when not available", () => {
@@ -78,12 +84,11 @@ describe("<GeneralUserSettingsTab />", () => {
 
     it("show account management link in expected format", async () => {
         const accountManagementLink = "https://id.server.org/my-account";
-        clientWellKnownSpy.mockReturnValue({
-            [M_AUTHENTICATION.name]: {
-                issuer: "https://id.server.org",
-                account: accountManagementLink,
-            },
-        });
+        const mockOidcClientStore = {
+            accountManagementEndpoint: accountManagementLink,
+        } as unknown as OidcClientStore;
+        jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
+
         const { getByTestId } = render(getComponent());
 
         // wait for well-known call to settle
@@ -167,12 +172,11 @@ describe("<GeneralUserSettingsTab />", () => {
                 (settingName) => settingName === UIFeature.Deactivate,
             );
             // account is managed externally when we have delegated auth configured
-            mockClient.getClientWellKnown.mockReturnValue({
-                [M_AUTHENTICATION.name]: {
-                    issuer: "https://issuer.org",
-                    account: "https://issuer.org/account",
-                },
-            });
+            const accountManagementLink = "https://id.server.org/my-account";
+            const mockOidcClientStore = {
+                accountManagementEndpoint: accountManagementLink,
+            } as unknown as OidcClientStore;
+            jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
             render(getComponent());
 
             await flushPromises();

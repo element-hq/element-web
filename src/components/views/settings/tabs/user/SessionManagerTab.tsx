@@ -19,7 +19,6 @@ import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
-import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import Modal from "../../../../../Modal";
 import SettingsSubsection from "../../shared/SettingsSubsection";
 import SetupEncryptionDialog from "../../../dialogs/security/SetupEncryptionDialog";
@@ -39,8 +38,8 @@ import QuestionDialog from "../../../dialogs/QuestionDialog";
 import { FilterVariation } from "../../devices/filter";
 import { OtherSessionsSectionHeading } from "../../devices/OtherSessionsSectionHeading";
 import { SettingsSection } from "../../shared/SettingsSection";
-import { getDelegatedAuthAccountUrl } from "../../../../../utils/oidc/getDelegatedAuthAccountUrl";
 import { OidcLogoutDialog } from "../../../dialogs/oidc/OidcLogoutDialog";
+import { SDKContext } from "../../../../../contexts/SDKContext";
 
 const confirmSignOut = async (sessionsToSignOutCount: number): Promise<boolean> => {
     const { finished } = Modal.createDialog(QuestionDialog, {
@@ -167,13 +166,14 @@ const SessionManagerTab: React.FC = () => {
     const filteredDeviceListRef = useRef<HTMLDivElement>(null);
     const scrollIntoViewTimeoutRef = useRef<number>();
 
-    const matrixClient = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
+    const matrixClient = sdkContext.client!;
     /**
      * If we have a delegated auth account management URL, all sessions but the current session need to be managed in the
      * delegated auth provider.
      * See https://github.com/matrix-org/matrix-spec-proposals/pull/3824
      */
-    const delegatedAuthAccountUrl = getDelegatedAuthAccountUrl(matrixClient.getClientWellKnown());
+    const delegatedAuthAccountUrl = sdkContext.oidcClientStore.accountManagementEndpoint;
     const disableMultipleSignout = !!delegatedAuthAccountUrl;
 
     const userId = matrixClient?.getUserId();

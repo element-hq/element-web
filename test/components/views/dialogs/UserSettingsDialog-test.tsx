@@ -16,7 +16,8 @@ limitations under the License.
 
 import React, { ReactElement } from "react";
 import { render } from "@testing-library/react";
-import { mocked } from "jest-mock";
+import { mocked, MockedObject } from "jest-mock";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore, { CallbackFn } from "../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../src/SdkConfig";
@@ -30,6 +31,7 @@ import {
 } from "../../../test-utils";
 import { UIFeature } from "../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
+import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 
 mockPlatformPeg({
     supportsSpellCheckSettings: jest.fn().mockReturnValue(false),
@@ -55,18 +57,22 @@ describe("<UserSettingsDialog />", () => {
     const userId = "@alice:server.org";
     const mockSettingsStore = mocked(SettingsStore);
     const mockSdkConfig = mocked(SdkConfig);
-    getMockClientWithEventEmitter({
-        ...mockClientMethodsUser(userId),
-        ...mockClientMethodsServer(),
-    });
+    let mockClient!: MockedObject<MatrixClient>;
 
+    let sdkContext: SdkContextClass;
     const defaultProps = { onFinished: jest.fn() };
     const getComponent = (props: Partial<typeof defaultProps & { initialTabId?: UserTab }> = {}): ReactElement => (
-        <UserSettingsDialog {...defaultProps} {...props} />
+        <UserSettingsDialog sdkContext={sdkContext} {...defaultProps} {...props} />
     );
 
     beforeEach(() => {
         jest.clearAllMocks();
+        mockClient = getMockClientWithEventEmitter({
+            ...mockClientMethodsUser(userId),
+            ...mockClientMethodsServer(),
+        });
+        sdkContext = new SdkContextClass();
+        sdkContext.client = mockClient;
         mockSettingsStore.getValue.mockReturnValue(false);
         mockSettingsStore.getFeatureSettingNames.mockReturnValue([]);
         mockSdkConfig.get.mockReturnValue({ brand: "Test" });

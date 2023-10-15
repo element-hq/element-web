@@ -32,9 +32,9 @@ import {
     CryptoApi,
     DeviceVerificationStatus,
     MatrixError,
-    M_AUTHENTICATION,
+    MatrixClient,
 } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
+import { mocked, MockedObject } from "jest-mock";
 
 import {
     clearAllModals,
@@ -45,13 +45,14 @@ import {
     mockPlatformPeg,
 } from "../../../../../test-utils";
 import SessionManagerTab from "../../../../../../src/components/views/settings/tabs/user/SessionManagerTab";
-import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import Modal from "../../../../../../src/Modal";
 import LogoutDialog from "../../../../../../src/components/views/dialogs/LogoutDialog";
 import { DeviceSecurityVariation, ExtendedDevice } from "../../../../../../src/components/views/settings/devices/types";
 import { INACTIVE_DEVICE_AGE_MS } from "../../../../../../src/components/views/settings/devices/filter";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import { getClientInformationEventType } from "../../../../../../src/utils/device/clientInformation";
+import { SDKContext, SdkContextClass } from "../../../../../../src/contexts/SDKContext";
+import { OidcClientStore } from "../../../../../../src/stores/oidc/OidcClientStore";
 
 mockPlatformPeg();
 
@@ -91,31 +92,14 @@ describe("<SessionManagerTab />", () => {
         requestDeviceVerification: jest.fn().mockResolvedValue(mockVerificationRequest),
     } as unknown as CryptoApi);
 
-    let mockClient = getMockClientWithEventEmitter({
-        ...mockClientMethodsUser(aliceId),
-        getCrypto: jest.fn().mockReturnValue(mockCrypto),
-        getDevices: jest.fn(),
-        getStoredDevice: jest.fn(),
-        getDeviceId: jest.fn().mockReturnValue(deviceId),
-        deleteMultipleDevices: jest.fn(),
-        generateClientSecret: jest.fn(),
-        setDeviceDetails: jest.fn(),
-        getAccountData: jest.fn(),
-        deleteAccountData: jest.fn(),
-        doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(true),
-        getPushers: jest.fn(),
-        setPusher: jest.fn(),
-        setLocalNotificationSettings: jest.fn(),
-        getVersions: jest.fn().mockResolvedValue({}),
-        getCapabilities: jest.fn().mockResolvedValue({}),
-        getClientWellKnown: jest.fn().mockReturnValue({}),
-    });
+    let mockClient!: MockedObject<MatrixClient>;
+    let sdkContext: SdkContextClass;
 
     const defaultProps = {};
     const getComponent = (props = {}): React.ReactElement => (
-        <MatrixClientContext.Provider value={mockClient}>
+        <SDKContext.Provider value={sdkContext}>
             <SessionManagerTab {...defaultProps} {...props} />
-        </MatrixClientContext.Provider>
+        </SDKContext.Provider>
     );
 
     const toggleDeviceDetails = (
@@ -229,6 +213,9 @@ describe("<SessionManagerTab />", () => {
                 });
             }
         });
+
+        sdkContext = new SdkContextClass();
+        sdkContext.client = mockClient;
 
         // @ts-ignore allow delete of non-optional prop
         delete window.location;
@@ -1051,12 +1038,11 @@ describe("<SessionManagerTab />", () => {
 
         describe("for an OIDC-aware server", () => {
             beforeEach(() => {
-                mockClient.getClientWellKnown.mockReturnValue({
-                    [M_AUTHENTICATION.name]: {
-                        issuer: "https://issuer.org",
-                        account: "https://issuer.org/account",
-                    },
-                });
+                // just do an ugly mock here to avoid mocking initialisation
+                const mockOidcClientStore = {
+                    accountManagementEndpoint: "https://issuer.org/account",
+                } as unknown as OidcClientStore;
+                jest.spyOn(sdkContext, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
             });
 
             // signing out the current device works as usual

@@ -36,9 +36,11 @@ import KeyboardUserSettingsTab from "../settings/tabs/user/KeyboardUserSettingsT
 import SessionManagerTab from "../settings/tabs/user/SessionManagerTab";
 import { UserTab } from "./UserTab";
 import { NonEmptyArray } from "../../../@types/common";
+import { SDKContext, SdkContextClass } from "../../../contexts/SDKContext";
 
 interface IProps {
     initialTabId?: UserTab;
+    sdkContext: SdkContextClass;
     onFinished(): void;
 }
 
@@ -197,20 +199,25 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
 
     public render(): React.ReactNode {
         return (
-            <BaseDialog
-                className="mx_UserSettingsDialog"
-                hasCancel={true}
-                onFinished={this.props.onFinished}
-                title={_t("common|settings")}
-            >
-                <div className="mx_SettingsDialog_content">
-                    <TabbedView
-                        tabs={this.getTabs()}
-                        initialTabId={this.props.initialTabId}
-                        screenName="UserSettings"
-                    />
-                </div>
-            </BaseDialog>
+            // XXX: SDKContext is provided within the LoggedInView subtree.
+            // Modals function outside the MatrixChat React tree, so sdkContext is reprovided here to simulate that.
+            // The longer term solution is to move our ModalManager into the React tree to inherit contexts properly.
+            <SDKContext.Provider value={this.props.sdkContext}>
+                <BaseDialog
+                    className="mx_UserSettingsDialog"
+                    hasCancel={true}
+                    onFinished={this.props.onFinished}
+                    title={_t("common|settings")}
+                >
+                    <div className="mx_SettingsDialog_content">
+                        <TabbedView
+                            tabs={this.getTabs()}
+                            initialTabId={this.props.initialTabId}
+                            screenName="UserSettings"
+                        />
+                    </div>
+                </BaseDialog>
+            </SDKContext.Provider>
         );
     }
 }

@@ -32,13 +32,13 @@ import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
-import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { _t } from "../../../../languageHandler";
 import { getDeviceClientInformation, pruneClientInformation } from "../../../../utils/device/clientInformation";
 import { DevicesDictionary, ExtendedDevice, ExtendedDeviceAppInfo } from "./types";
 import { useEventEmitter } from "../../../../hooks/useEventEmitter";
 import { parseUserAgent } from "../../../../utils/device/parseUserAgent";
 import { isDeviceVerified } from "../../../../utils/device/isDeviceVerified";
+import { SDKContext } from "../../../../contexts/SDKContext";
 
 const parseDeviceExtendedInformation = (matrixClient: MatrixClient, device: IMyDevice): ExtendedDeviceAppInfo => {
     const { name, version, url } = getDeviceClientInformation(matrixClient, device.device_id);
@@ -90,7 +90,8 @@ export type DevicesState = {
     supportsMSC3881?: boolean | undefined;
 };
 export const useOwnDevices = (): DevicesState => {
-    const matrixClient = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
+    const matrixClient = sdkContext.client!;
 
     const currentDeviceId = matrixClient.getDeviceId()!;
     const userId = matrixClient.getSafeUserId();
