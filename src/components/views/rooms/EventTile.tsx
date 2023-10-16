@@ -85,6 +85,7 @@ import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { ElementCall } from "../../../models/Call";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
+import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -1126,7 +1127,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 showRelative={this.context.timelineRenderingType === TimelineRenderingType.ThreadsList}
                 showTwelveHour={this.props.isTwelveHour}
                 ts={ts}
-                receivedTs={this.props.mxEvent.getUnsigned()["io.element.late_event"]?.received_at}
+                receivedTs={getLateEventInfo(this.props.mxEvent)?.received_at}
             />
         );
 

@@ -25,6 +25,7 @@ import { _t } from "../../../languageHandler";
 import DateSeparator from "../../views/messages/DateSeparator";
 import NewRoomIntro from "../../views/rooms/NewRoomIntro";
 import GenericEventListSummary from "../../views/elements/GenericEventListSummary";
+import { SeparatorKind } from "../../views/messages/TimelineSeparator";
 
 // Wrap initial room creation events into a GenericEventListSummary
 // Grouping only events sent by the same user that sent the `m.room.create` and only until
@@ -41,7 +42,7 @@ export class CreationGrouper extends BaseGrouper {
         if (!shouldShow) {
             return true;
         }
-        if (panel.wantsDateSeparator(this.firstEventAndShouldShow.event, event.getDate())) {
+        if (panel.wantsSeparator(this.firstEventAndShouldShow.event, event) === SeparatorKind.Date) {
             return false;
         }
         const eventType = event.getType();
@@ -96,7 +97,7 @@ export class CreationGrouper extends BaseGrouper {
         const createEvent = this.firstEventAndShouldShow;
         const lastShownEvent = this.lastShownEvent;
 
-        if (panel.wantsDateSeparator(this.prevEvent, createEvent.event.getDate())) {
+        if (panel.wantsSeparator(this.prevEvent, createEvent.event) === SeparatorKind.Date) {
             const ts = createEvent.event.getTs();
             ret.push(
                 <li key={ts + "~"}>

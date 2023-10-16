@@ -14,30 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_DateSeparator_dateContent {
-    padding: 0 25px;
-}
-
-.mx_DateSeparator_dateHeading {
-    flex: 0 0 auto;
-    margin: 0;
-    font-size: inherit;
-    font-weight: inherit;
-    color: inherit;
-    text-transform: capitalize;
-}
-
-.mx_DateSeparator_jumpToDateMenu {
+.mx_TimelineSeparator {
+    clear: both;
+    margin: 4px 0;
     display: flex;
+    align-items: center;
+    font: var(--cpd-font-body-md-regular);
+    color: $roomtopic-color;
 }
 
-.mx_DateSeparator_chevron {
-    align-self: center;
-    width: 16px;
-    height: 16px;
-    mask-position: center;
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
-    background-color: $tertiary-content;
+.mx_TimelineSeparator > hr {
+    flex: 1 1 0;
+    height: 0;
+    border: none;
+    border-bottom: 1px solid $menu-selected-color;
 }

@@ -25,6 +25,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import DateSeparator from "../../views/messages/DateSeparator";
 import HistoryTile from "../../views/rooms/HistoryTile";
 import EventListSummary from "../../views/elements/EventListSummary";
+import { SeparatorKind } from "../../views/messages/TimelineSeparator";
 
 const groupedStateEvents = [
     EventType.RoomMember,
@@ -70,7 +71,7 @@ export class MainGrouper extends BaseGrouper {
             // absorb hidden events so that they do not break up streams of messages & redaction events being grouped
             return true;
         }
-        if (this.panel.wantsDateSeparator(this.events[0].event, ev.getDate())) {
+        if (this.panel.wantsSeparator(this.events[0].event, ev) === SeparatorKind.Date) {
             return false;
         }
         if (ev.isState() && groupedStateEvents.includes(ev.getType() as EventType)) {
@@ -114,7 +115,7 @@ export class MainGrouper extends BaseGrouper {
         const lastShownEvent = this.lastShownEvent;
         const ret: ReactNode[] = [];
 
-        if (panel.wantsDateSeparator(this.prevEvent, this.events[0].event.getDate())) {
+        if (panel.wantsSeparator(this.prevEvent, this.events[0].event) === SeparatorKind.Date) {
             const ts = this.events[0].event.getTs();
             ret.push(
                 <li key={ts + "~"}>

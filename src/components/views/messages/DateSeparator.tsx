@@ -40,6 +40,7 @@ import IconizedContextMenu, {
 import JumpToDatePicker from "./JumpToDatePicker";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { SdkContextClass } from "../../../contexts/SDKContext";
+import TimelineSeparator from "./TimelineSeparator";
 
 interface IProps {
     roomId: string;
@@ -52,6 +53,11 @@ interface IState {
     jumpToDateEnabled: boolean;
 }
 
+/**
+ * Timeline separator component to render within a MessagePanel bearing the date of the ts given
+ *
+ * Has additional jump to date functionality when labs flag is enabled
+ */
 export default class DateSeparator extends React.Component<IProps, IState> {
     private settingWatcherRef?: string;
 
@@ -328,13 +334,6 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             );
         }
 
-        // ARIA treats <hr/>s as separators, here we abuse them slightly so manually treat this entire thing as one
-        return (
-            <div className="mx_DateSeparator" role="separator" aria-label={label}>
-                <hr role="none" />
-                {dateHeaderContent}
-                <hr role="none" />
-            </div>
-        );
+        return <TimelineSeparator label={label}>{dateHeaderContent}</TimelineSeparator>;
     }
 }

@@ -3203,6 +3203,7 @@
             "you": "You ended a <a>voice broadcast</a>"
         },
         "io.element.widgets.layout": "%(senderName)s has updated the room layout",
+        "late_event_separator": "Originally sent %(dateTime)s",
         "load_error": {
             "no_permission": "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.",
             "title": "Failed to load timeline position",

@@ -4,7 +4,7 @@ exports[`DateSeparator renders the date separator correctly 1`] = `
 <DocumentFragment>
   <div
     aria-label="today"
-    class="mx_DateSeparator"
+    class="mx_TimelineSeparator"
     role="separator"
   >
     <hr
@@ -31,7 +31,7 @@ exports[`DateSeparator when feature_jump_to_date is enabled renders the date sep
 <DocumentFragment>
   <div
     aria-label="Fri, Dec 17, 2021"
-    class="mx_DateSeparator"
+    class="mx_TimelineSeparator"
     role="separator"
   >
     <hr

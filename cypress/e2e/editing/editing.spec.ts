@@ -117,7 +117,7 @@ describe("Editing", () => {
                 cy.get(".mx_EventTile").should("have.css", "padding-block-start", "0px");
 
                 // Assert that the date separator is rendered at the top
-                cy.get("li:nth-child(1) .mx_DateSeparator").within(() => {
+                cy.get("li:nth-child(1) .mx_TimelineSeparator").within(() => {
                     cy.get("h2").within(() => {
                         cy.findByText("today").should("have.css", "text-transform", "capitalize");
                     });
@@ -182,7 +182,7 @@ describe("Editing", () => {
             // Assert that the message edit history dialog is rendered again
             cy.get(".mx_MessageEditHistoryDialog").within(() => {
                 // Assert that the date is rendered
-                cy.get("li:nth-child(1) .mx_DateSeparator").within(() => {
+                cy.get("li:nth-child(1) .mx_TimelineSeparator").within(() => {
                     cy.get("h2").within(() => {
                         cy.findByText("today").should("have.css", "text-transform", "capitalize");
                     });
