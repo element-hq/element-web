@@ -113,15 +113,17 @@ Unless otherwise specified, the following applies to all code:
     }
     ```
 
-14. Explicitly cast to a boolean, rather than relying on implicit truthiness of non-boolean values:
+14. If a variable's type should be boolean, make sure it really is one.
 
     ```typescript
-    const isRealUser = !!userId && ...;
-    // ... or ...
-    const isRealUser = Boolean(userId) && ...;
+    const isRealUser = !!userId && ...; // good
+    const isRealUser = Boolean(userId) && Boolean(userName); // also good
+    const isRealUser = Boolean(userId) && isReal; // also good (where isReal is another boolean variable)
+    const isRealUser = Boolean(userId && userName); // also fine
+    const isRealUser = Boolean(userId || userName); // good: same as &&
+    const isRealUser = userId && ...;   // bad: isRealUser is userId's type, not a boolean
 
-    // but *not*:
-    const isRealUser = userId && ...;   // invalid implicit cast
+    if (userId) // fine: userId is evaluated for truthiness, not stored as a boolean
     ```
 
 15. Use `switch` statements when checking against more than a few enum-like values.
