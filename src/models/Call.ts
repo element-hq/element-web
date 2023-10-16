@@ -642,9 +642,10 @@ export class ElementCall extends Call {
 
         // Splice together the Element Call URL for this call
         const params = new URLSearchParams({
-            embed: "",
-            preload: "",
-            hideHeader: "",
+            embed: "true", // We're embedding EC within another application
+            preload: "true", // We want it to load in the background
+            skipLobby: "true", // Skip the lobby since we show a lobby component of our own
+            hideHeader: "true", // Hide the header since our room header is enough
             userId: client.getUserId()!,
             deviceId: client.getDeviceId()!,
             roomId: groupCall.room.roomId,
