@@ -59,6 +59,7 @@ export async function dockerRun(opts: {
         "--name",
         `${opts.containerName}-${crypto.randomBytes(4).toString("hex")}`,
         "-d",
+        "--rm",
         ...params,
         opts.image,
     ];
