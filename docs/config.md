@@ -139,7 +139,7 @@ complete re-branding/private labeling, a more personalised experience can be ach
    configuration found in the well-known location is used instead.
 10. `welcome_user_id`: An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created).
 11. `custom_translations_url`: An optional URL to allow overriding of translatable strings. The JSON file must be in a format of
-    `{"affected string": {"languageCode": "new string"}}`. See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
+    `{"affected|translation|key": {"languageCode": "new string"}}`. See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
 12. `branding`: Options for configuring various assets used within the app. Described in more detail down below.
 13. `embedded_pages`: Further optional URLs for various assets used within the app. Described in more detail down below.
 14. `disable_3pid_login`: When `false` (default), **enables** the options to log in with email address or phone number. Set to
