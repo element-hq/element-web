@@ -127,7 +127,7 @@
         "upgrade": "Aktualisieren",
         "upload": "Hochladen",
         "verify": "Verifizieren",
-        "view": "Öffnen",
+        "view": "Ansicht",
         "view_all": "Alles anzeigen",
         "view_list": "Liste anzeigen",
         "view_message": "Nachricht anzeigen",
@@ -336,6 +336,7 @@
         "sync_footer_subtitle": "Du bist einer Menge Räumen beigetreten, das kann eine Weile dauern",
         "syncing": "Synchronisiere …",
         "uia": {
+            "code": "Code",
             "email": "Um dein Konto zu erstellen, öffne den Link in der E-Mail, die wir gerade an %(emailAddress)s geschickt haben.",
             "email_auth_header": "Zum Fortfahren prüfe deine E-Mails",
             "email_resend_prompt": "Nicht angekommen? <a>Erneut senden</a>",
@@ -573,6 +574,7 @@
         "format_unordered_list": "Ungeordnete Liste",
         "formatting_toolbar_label": "Formatierung",
         "link_modal": {
+            "link_field_label": "Link",
             "title_create": "Link erstellen",
             "title_edit": "Link bearbeiten"
         },
