@@ -16,7 +16,7 @@
         "cannot_load_config": "Nie udało się załadować pliku konfiguracyjnego: odśwież stronę, aby spróbować ponownie.",
         "invalid_configuration_mixed_server": "Nieprawidłowa konfiguracja: nie można określić default_hs_url wraz z default_server_name lub default_server_config",
         "invalid_configuration_no_server": "Błędna konfiguracja: nie wybrano domyślnego serwera.",
-        "invalid_json": "Twoja konfiguracja Elementa zawiera nieprawidłowy JSON. Rozwiąż problem i odśwież stronę.",
+        "invalid_json": "Twoja konfiguracja Element zawiera nieprawidłowy JSON. Rozwiąż problem i odśwież stronę.",
         "invalid_json_detail": "Wiadomość od parsera to: %(message)s",
         "invalid_json_generic": "Błędny JSON",
         "misconfigured": "Twój Element jest nieprawidłowo skonfigurowany"
