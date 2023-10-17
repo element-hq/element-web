@@ -142,6 +142,15 @@ describe("createRoom", () => {
             }),
         );
     });
+
+    it("should strip self-invite", async () => {
+        await createRoom(client, { dmUserId: client.getSafeUserId() });
+        expect(client.createRoom).toHaveBeenCalledWith(
+            expect.not.objectContaining({
+                invite: expect.any(Array),
+            }),
+        );
+    });
 });
 
 describe("canEncryptToAllUsers", () => {

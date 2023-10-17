@@ -119,7 +119,10 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
     const createOpts: ICreateRoomOpts = opts.createOpts || {};
     createOpts.preset = createOpts.preset || defaultPreset;
     createOpts.visibility = createOpts.visibility || Visibility.Private;
-    if (opts.dmUserId && createOpts.invite === undefined) {
+
+    // We allow UX of DMing ourselves as a form of creating a personal room but the server throws
+    // an error when a user tries to invite themselves so we filter it out
+    if (opts.dmUserId && opts.dmUserId !== client.getUserId() && createOpts.invite === undefined) {
         switch (getAddressType(opts.dmUserId)) {
             case "mx-user-id":
                 createOpts.invite = [opts.dmUserId];
