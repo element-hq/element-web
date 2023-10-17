@@ -62,7 +62,7 @@ jobs:
                   mdbook-combiner -m docs
                   cat <<EOF > docs/SUMMARY.md
                   # Summary
-                  - [Introduction](Element Web/README.md)
+                  - [Introduction](<Element Web/README.md>)
 
                   EOF
                   cat SUMMARY.md >> docs/SUMMARY.md
