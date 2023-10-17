@@ -238,7 +238,8 @@ describe("Read receipts", () => {
                 // Then the unread count is still reduced
                 assertUnread(room2, 1);
             });
-            it("Redacting all unread messages makes the room read", () => {
+            // XXX: fails because flakes with matrix-js-sdk#3798 (only when all other tests are enabled!)
+            it.skip("Redacting all unread messages makes the room read", () => {
                 // Given an unread room
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", "Msg2"]);
@@ -627,7 +628,8 @@ describe("Read receipts", () => {
                 // Then the room is read
                 assertRead(room2);
             });
-            it("A thread with a redacted unread is still read after restart", () => {
+            // XXX: fails because flakes with matrix-js-sdk#3798 (only when all other tests are enabled!)
+            it.skip("A thread with a redacted unread is still read after restart", () => {
                 // Given I sent and redacted a message in an otherwise-read thread
                 goTo(room1);
                 receiveMessages(room2, ["Root", threadedOff("Root", "ThreadMsg1"), threadedOff("Root", "ThreadMsg2")]);
