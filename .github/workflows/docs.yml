@@ -6,13 +6,13 @@ on:
     workflow_dispatch: {}
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+    contents: read
+    pages: write
+    id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+    group: "pages"
+    cancel-in-progress: false
 
 jobs:
     build:
@@ -46,16 +46,18 @@ jobs:
 
             - name: Prepare docs
               run: |
-                  mkdir -p docs/element-{desktop,web} docs/matrix-react-sdk
+                  mkdir docs
 
-                  mv element-desktop/docs "docs/element-desktop/Element Desktop"
-                  mv element-desktop/README.md docs/element-desktop/
+                  mv element-desktop/README.md element-desktop/docs/
+                  mv element-desktop/docs "docs/Element Desktop"
 
-                  mv element-web/docs "docs/element-web/Element Web"
-                  mv element-web/README.md docs/element-web/
+                  mv element-web/README.md element-web/docs/
+                  mv element-web/docs "docs/Element Web"
 
-                  mv matrix-react-sdk/docs "docs/matrix-react-sdk/Matrix React SDK"
-                  mv matrix-react-sdk/README.md docs/matrix-react-sdk/
+                  mv matrix-react-sdk/README.md matrix-react-sdk/docs/
+                  mv matrix-react-sdk/docs "docs/Matrix React SDK"
+
+                  sed -i -e 's/\.\.\/README.md/README.md/' docs/**/SUMMARY.md
 
                   mdbook-combiner -m docs
                   mv SUMMARY.md docs/
