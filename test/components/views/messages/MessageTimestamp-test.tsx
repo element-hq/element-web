@@ -57,7 +57,7 @@ describe("MessageTimestamp", () => {
         );
         await userEvent.hover(container.querySelector(".mx_MessageTimestamp")!);
         expect((await screen.findByRole("tooltip")).textContent).toMatchInlineSnapshot(
-            `"Sent at: Fri, Dec 17, 2021, 08:09:00Recovered at: Sat, Dec 18, 2021, 08:09:00"`,
+            `"Sent at: Fri, Dec 17, 2021, 08:09:00Received at: Sat, Dec 18, 2021, 08:09:00"`,
         );
     });
 });
