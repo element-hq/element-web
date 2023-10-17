@@ -69,7 +69,16 @@ jobs:
                   sed -i -e 's/\.\.\/README.md/README.md/' docs/**/SUMMARY.md
 
                   mdbook-combiner -m docs
-                  mv SUMMARY.md docs/
+                  sed -i -E 's/^\t# (.+)$/- [\1]()/gm;t' SUMMARY.md
+                  sed -i -E 's/^- \[(.+)]\(<>\)$/---\n# \1/gm;t' SUMMARY.md
+                  sed -i -E 's/\t- \[Introduction]/- [Introduction]/gm;t' SUMMARY.md
+
+                  cat <<EOF > docs/SUMMARY.md
+                  # Summary
+                  - [Introduction](<Element Web/README.md>)
+
+                  EOF
+                  cat SUMMARY.md >> docs/SUMMARY.md
 
                   mv element-web/book.toml .
 
