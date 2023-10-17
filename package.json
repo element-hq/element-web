@@ -149,7 +149,7 @@
         "@percy/cli": "^1.11.0",
         "@percy/cypress": "^3.1.2",
         "@testing-library/cypress": "^9.0.0",
-        "@testing-library/dom": "^7.21.4",
+        "@testing-library/dom": "^9.0.0",
         "@testing-library/jest-dom": "^6.0.0",
         "@testing-library/react": "^12.1.5",
         "@testing-library/user-event": "^14.4.3",
