@@ -42,7 +42,8 @@ jobs:
                   mv element-web/docs docs/element-web
                   mv matrix-react-sdk/docs docs/matrix-react-sdk
                   mdbook-combiner -m docs
-                  cp element-web/book.toml .
+                  mv element-web/book.toml .
+                  mv SUMMARY.md docs/
                   mdbook build
 
             - name: Deploy to gh pages
