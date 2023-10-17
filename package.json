@@ -81,7 +81,7 @@
         "counterpart": "^0.18.6",
         "diff-dom": "^4.2.2",
         "diff-match-patch": "^1.0.5",
-        "emojibase-regex": "15.0.0",
+        "emojibase-regex": "15.2.0",
         "escape-html": "^1.0.3",
         "file-saver": "^2.0.5",
         "filesize": "10.0.12",

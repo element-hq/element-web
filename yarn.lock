@@ -4750,10 +4750,10 @@ emojibase-data@^15.0.0:
   resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-15.0.0.tgz#d1f5467f3080688b9605103d0abdcd54bbc76419"
   integrity sha512-hqrLNhEeBejKOQp5ArJcofkzV3qZBcp8czXj8nIKUGpBVc50NddNGwir4yAYxn3oNgrSj/lYdB9XxIVAKTkong==
 
-emojibase-regex@15.0.0:
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/emojibase-regex/-/emojibase-regex-15.0.0.tgz#b4d1c6328500aaea4a794b11fe61f97df20af4ee"
-  integrity sha512-b5y58xrmZhH551zIa3ZOHl1mRI5KecA+5sAyWZCQEaj1maufZJJoENVwDqigzJoAkG604DuRqfdpy4E5rzSUsg==
+emojibase-regex@15.2.0:
+  version "15.2.0"
+  resolved "https://registry.yarnpkg.com/emojibase-regex/-/emojibase-regex-15.2.0.tgz#71e91ab162ef8b3de42788d40bb8621d655273d8"
+  integrity sha512-65H5YepRW3gdrghV/Ed9kW3Qry8/qeKJmMlm31nTsOrEZfuAgyr28FmloXpyak86+chR8cukZA7dlafZzrJXbw==
 
 emojibase@^15.0.0:
   version "15.0.0"
