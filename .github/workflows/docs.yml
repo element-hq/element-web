@@ -35,16 +35,26 @@ jobs:
             - name: Install mdbook-combiner
               run: cargo install mdbook-combiner
 
-            - name: Build docs
+            - name: Prepare docs
               run: |
-                  mkdir docs
-                  mv element-desktop/docs docs/element-desktop
-                  mv element-web/docs docs/element-web
-                  mv matrix-react-sdk/docs docs/matrix-react-sdk
+                  mkdir -p docs/element-{desktop,web} docs/matrix-react-sdk
+
+                  mv element-desktop/docs "docs/element-desktop/Element Desktop"
+                  mv element-desktop/README.md docs/element-desktop/
+
+                  mv element-web/docs "docs/element-web/Element Web"
+                  mv element-web/README.md docs/element-web/
+
+                  mv matrix-react-sdk/docs "docs/matrix-react-sdk/Matrix React SDK"
+                  mv matrix-react-sdk/README.md docs/matrix-react-sdk/
+
                   mdbook-combiner -m docs
-                  mv element-web/book.toml .
                   mv SUMMARY.md docs/
-                  mdbook build
+
+                  mv element-web/book.toml .
+
+            - name: Build docs
+              run: mdbook build
 
             - name: Deploy to gh pages
               uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3
