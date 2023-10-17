@@ -5,8 +5,17 @@ on:
         branches: [develop]
     workflow_dispatch: {}
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-    docs:
+    build:
         name: GitHub Pages
         runs-on: ubuntu-latest
         steps:
@@ -56,8 +65,18 @@ jobs:
             - name: Build docs
               run: mdbook build
 
-            - name: Deploy to gh pages
-              uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3
+            - name: Upload artifact
+              uses: actions/upload-pages-artifact@v2
               with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
-                  publish_dir: ./book
+                  path: ./book
+
+    deploy:
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        runs-on: ubuntu-latest
+        needs: build
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v2
