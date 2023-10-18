@@ -38,68 +38,77 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Element Desktop
-              if: inputs.element-desktop
               uses: actions/checkout@v4
               with:
                   repository: vector-im/element-desktop
                   path: element-desktop
                   ref: staging
                   fetch-depth: 0
+                  fetch-tags: true
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
             - name: Checkout Element Web
-              if: inputs.element-web
               uses: actions/checkout@v4
               with:
                   repository: vector-im/element-web
                   path: element-web
                   ref: staging
                   fetch-depth: 0
+                  fetch-tags: true
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
             - name: Checkout Matrix React SDK
-              if: inputs.matrix-react-sdk
               uses: actions/checkout@v4
               with:
                   repository: matrix-org/matrix-react-sdk
                   path: matrix-react-sdk
                   ref: staging
                   fetch-depth: 0
+                  fetch-tags: true
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
             - name: Checkout Matrix JS SDK
-              if: inputs.matrix-js-sdk
               uses: actions/checkout@v4
               with:
                   repository: matrix-org/matrix-js-sdk
                   path: matrix-js-sdk
                   ref: staging
                   fetch-depth: 0
+                  fetch-tags: true
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
             - name: Resolve repos
+              env:
+                  ELEMENT_DESKTOP: ${{ inputs.element-desktop && 'element-desktop' || '' }}
+                  ELEMENT_WEB: ${{ inputs.element-web && 'element-web' || '' }}
+                  MATRIX_REACT_SDK: ${{ inputs.matrix-react-sdk && 'matrix-react-sdk' || '' }}
+                  MATRIX_JS_SDK: ${{ inputs.matrix-js-sdk && 'matrix-js-sdk' || '' }}
               run: |
-                  echo "REPOS=$(ls .)" >> $GITHUB_ENV
-
-            - name: Fetch develop
-              if: inputs.cut-branches
-              run: for REPO in "$REPOS"; do git -C "$REPO" fetch origin develop --depth 1; done
+                  echo "REPOS=$ELEMENT_DESKTOP $ELEMENT_WEB $MATRIX_REACT_SDK $MATRIX_JS_SDK" >> $GITHUB_ENV
 
             - name: Merge develop
               if: inputs.cut-branches
-              run: for REPO in "$REPOS"; do git -C "$REPO" merge origin/develop; done
+              run: |
+                  git config --global user.email "releases@riot.im"
+                  git config --global user.name "RiotRobot"
+                  for REPO in $REPOS; do git -C "$REPO" merge origin/develop; done
 
             - name: Push staging
               if: inputs.cut-branches
-              run: for REPO in "$REPOS"; do git -C "$REPO" push origin staging; done
+              run: for REPO in $REPOS; do git -C "$REPO" push origin staging; done
 
             - name: Calculate versions
               if: inputs.calculate-versions
               run: |
+                  for REPO in $REPOS; do git -C "$REPO" fetch origin develop:develop; done
+
+                  yarn global add allchange
+                  echo "$(yarn global bin)" >> $GITHUB_PATH
+
                   echo "Release plan" >> $GITHUB_STEP_SUMMARY
                   echo "| Repo | Semver | Version |" >> $GITHUB_STEP_SUMMARY
                   echo "| ---- | ------ | ------- |" >> $GITHUB_STEP_SUMMARY
 
-                  for REPO in "$REPOS"
+                  for REPO in $REPOS
                   do
-                      RES=$(yarn allchange --check)
+                      RES=$(cd "$REPO" && allchange --check)
                       NOCOLOR=$(echo "$RES" | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2};?)?)?[mGK]//g")
                       SEMVER=$(echo "$NOCOLOR" | grep "According to semver, this would be a" | cut -d" " -f8)
                       VERSION=$(echo "$NOCOLOR" | grep "Suggested version number" | cut -d" " -f4)
