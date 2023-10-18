@@ -58,9 +58,31 @@ limitations under the License.
         margin-right: 0;
     }
 
+    .mx_EventTile_avatar {
+        line-height: 0;
+        border: 4px solid $background;
+        border-radius: 50%;
+        position: absolute;
+        top: 6px;
+        z-index: 9;
+        img {
+            box-shadow: 0 0 0 3px $background;
+            border-radius: 50%;
+        }
+    }
+
     &.mx_EventTile_highlight {
+        .mx_EventTile_avatar {
+            border-color: $event-highlight-bg-color;
+        }
         &::before {
             background-color: $event-highlight-bg-color;
+        }
+    }
+
+    &:hover {
+        .mx_EventTile_avatar {
+            border-color: $eventbubble-bg-hover;
         }
     }
 
@@ -177,7 +199,7 @@ limitations under the License.
         }
 
         .mx_EventTile_avatar {
-            left: -34px;
+            left: -36px;
         }
 
         .mx_MessageActionBar {
@@ -241,7 +263,7 @@ limitations under the License.
 
         .mx_EventTile_avatar {
             top: -19px; /* height of the sender block */
-            right: -35px;
+            right: -38px;
         }
 
         .mx_MediaBody {
@@ -398,17 +420,6 @@ limitations under the License.
         .mx_MLocationBody_map,
         .mx_MBeaconBody {
             border-bottom-right-radius: var(--cornerRadius);
-        }
-    }
-
-    .mx_EventTile_avatar {
-        position: absolute;
-        top: 0;
-        line-height: 1;
-        z-index: 9;
-        img {
-            box-shadow: 0 0 0 3px $background;
-            border-radius: 50%;
         }
     }
 
