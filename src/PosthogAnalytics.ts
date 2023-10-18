@@ -307,7 +307,7 @@ export class PosthogAnalytics {
                     // No point identifying again
                     return;
                 }
-                if (this.posthog.persistence.get_user_state() === "identified") {
+                if (this.posthog.persistence?.get_user_state() === "identified") {
                     // Analytics ID has changed, reset as Posthog will refuse to merge in this case
                     this.posthog.reset();
                 }
