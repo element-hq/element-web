@@ -452,7 +452,7 @@ describe("Cryptography", function () {
         });
 
         it("Should show a grey padlock for a key restored from backup", () => {
-            skipIfRustCrypto(); // requires key backup (https://github.com/vector-im/element-web/issues/24828)
+            skipIfRustCrypto(); // doesn't work due to https://github.com/vector-im/element-web/issues/26393
 
             enableKeyBackup();
 
