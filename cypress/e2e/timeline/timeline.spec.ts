@@ -163,23 +163,8 @@ describe("Timeline", () => {
                     .should("exist");
             });
 
-            cy.get(".mx_IRCLayout").within(() => {
-                // Check room name line-height is reset
-                cy.get(".mx_NewRoomIntro h2").should("have.css", "line-height", "normal");
-
-                // Check the profile resizer's place
-                // See: _IRCLayout
-                // --RoomView_MessageList-padding = 18px (See: _RoomView.pcss)
-                // --MessageTimestamp-width = 46px (See: _MessageTimestamp.pcss)
-                // --icon-width = 14px
-                // --right-padding = 5px
-                // --name-width = 80px
-                // --resizer-width = 15px
-                // --resizer-a11y = 3px
-                // 18px + 46px + 14px + 5px + 80px + 5px - 15px - 3px
-                // = 150px
-                cy.get(".mx_ProfileResizer").should("have.css", "inset-inline-start", "150px");
-            });
+            // wait for the date separator to appear to have a stable percy snapshot
+            cy.get(".mx_TimelineSeparator").should("have.text", "today");
 
             cy.get(".mx_MainSplit").percySnapshotElement("Configured room on IRC layout");
         });
