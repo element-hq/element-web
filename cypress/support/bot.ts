@@ -16,13 +16,16 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
+import * as loglevel from "loglevel";
+
 import type { ISendEventResponse, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import type { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import type { AddSecretStorageKeyOpts } from "matrix-js-sdk/src/secret-storage";
 import { HomeserverInstance } from "../plugins/utils/homeserver";
 import { Credentials } from "./homeserver";
-import Chainable = Cypress.Chainable;
 import { collapseLastLogGroup } from "./log";
+import type { Logger } from "matrix-js-sdk/src/logger";
+import Chainable = Cypress.Chainable;
 
 interface CreateBotOpts {
     /**
@@ -140,6 +143,8 @@ function setupBotClient(
         // extra timeout, as this sometimes takes a while
         { timeout: 30_000 },
         async (win): Promise<MatrixClient> => {
+            const logger = getLogger(win, `cypress bot ${credentials.userId}`);
+
             const keys = {};
 
             const getCrossSigningKey = (type: string) => {
@@ -176,6 +181,7 @@ function setupBotClient(
                 store: new win.matrixcs.MemoryStore(),
                 scheduler: new win.matrixcs.MatrixScheduler(),
                 cryptoStore: new win.matrixcs.MemoryCryptoStore(),
+                logger: logger,
                 cryptoCallbacks,
             });
 
@@ -323,3 +329,45 @@ Cypress.Commands.add(
         );
     },
 );
+
+/** Get a Logger implementation based on `loglevel` with the given logger name */
+function getLogger(win: Cypress.AUTWindow, loggerName: string): Logger {
+    const logger = loglevel.getLogger(loggerName);
+
+    // If this is the first time this logger has been returned, turn it into a `Logger` and set the default level
+    if (!("extend" in logger)) {
+        logger["extend"] = (namespace: string) => getLogger(win, loggerName + ":" + namespace);
+        logger.methodFactory = makeLogMethodFactory(win);
+        logger.setLevel(loglevel.levels.DEBUG);
+    }
+
+    return logger as unknown as Logger;
+}
+
+/**
+ * Helper for getLogger: a factory for loglevel method factories.
+ */
+function makeLogMethodFactory(win: Cypress.AUTWindow): loglevel.MethodFactory {
+    function methodFactory(
+        methodName: loglevel.LogLevelNames,
+        level: loglevel.LogLevelNumbers,
+        loggerName: string | symbol,
+    ): loglevel.LoggingMethod {
+        // here's the actual log method, which implements `Logger.info`, `Logger.debug`, etc.
+        return function (first: any, ...rest): void {
+            // include the logger name in the output...
+            first = `\x1B[31m[${loggerName.toString()}]\x1B[m ${first.toString()}`;
+
+            // ... and delegate to the corresponding method in the console of the application under test.
+            // Doing so (rather than using the global `console`) ensures that the output is collected
+            // by the `cypress-terminal-report` plugin.
+            const console = win.console;
+            if (methodName in console) {
+                console[methodName](first, ...rest);
+            } else {
+                console.log(first, ...rest);
+            }
+        };
+    }
+    return methodFactory;
+}
