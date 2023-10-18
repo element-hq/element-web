@@ -12,10 +12,23 @@ jobs:
         name: Docker Buildx
         runs-on: ubuntu-latest
         environment: dockerhub
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - variant: vanilla
+                      image: vectorim/element-web
+                    - variant: opencode
+                      image: vectorim/element-web-opencode
+                      prepare: mv variants/OpenCoDE/* .
         steps:
             - uses: actions/checkout@v4
               with:
                   fetch-depth: 0 # needed for docker-package to be able to calculate the version
+
+            - name: Prepare
+              if: matrix.prepare
+              run: ${{ matrix.prepare }}
 
             - name: Set up QEMU
               uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3
@@ -36,7 +49,7 @@ jobs:
               uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5
               with:
                   images: |
-                      vectorim/element-web
+                      ${{ matrix.image }}
                   tags: |
                       type=ref,event=branch
                       type=ref,event=tag
