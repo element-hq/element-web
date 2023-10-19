@@ -54,8 +54,8 @@ One of the following options **must** be supplied:
    being optional.
 
 If both `default_server_config` and `default_server_name` are used, Element will try to look up the connection
-infomation using `.well-known`, and if that fails, take `default_server_config` as the homeserver connection
-infomation.
+information using `.well-known`, and if that fails, take `default_server_config` as the homeserver connection
+information.
 
 ## Labs flags
 

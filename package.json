@@ -66,8 +66,8 @@
         "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp"
     },
     "resolutions": {
-        "@types/react-dom": "17.0.19",
-        "@types/react": "17.0.58"
+        "@types/react-dom": "17.0.21",
+        "@types/react": "17.0.68"
     },
     "dependencies": {
         "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz",
@@ -101,7 +101,7 @@
         "@babel/preset-typescript": "^7.12.7",
         "@babel/register": "^7.12.10",
         "@babel/runtime": "^7.12.5",
-        "@casualbot/jest-sonar-reporter": "^2.2.5",
+        "@casualbot/jest-sonar-reporter": "2.2.7",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
         "@sentry/webpack-plugin": "^2.0.0",
         "@svgr/webpack": "^5.5.0",
@@ -113,8 +113,8 @@
         "@types/lodash": "^4.14.197",
         "@types/node": "^16",
         "@types/node-fetch": "^2.6.4",
-        "@types/react": "17.0.58",
-        "@types/react-dom": "17.0.19",
+        "@types/react": "17.0.68",
+        "@types/react-dom": "17.0.21",
         "@types/ua-parser-js": "^0.7.36",
         "@typescript-eslint/eslint-plugin": "^5.45.0",
         "@typescript-eslint/parser": "^5.45.0",
@@ -126,10 +126,10 @@
         "cpx": "1.5.0",
         "css-loader": "^4",
         "dotenv": "^16.0.2",
-        "eslint": "8.48.0",
+        "eslint": "8.51.0",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^9.0.0",
-        "eslint-plugin-deprecate": "0.7.0",
+        "eslint-plugin-deprecate": "0.8.4",
         "eslint-plugin-import": "^2.26.0",
         "eslint-plugin-matrix-org": "^1.0.0",
         "eslint-plugin-react": "^7.28.0",
@@ -179,7 +179,7 @@
         "terser-webpack-plugin": "^4.0.0",
         "ts-node": "^10.9.1",
         "ts-prune": "^0.10.3",
-        "typescript": "5.1.6",
+        "typescript": "5.2.2",
         "webpack": "^4.46.0",
         "webpack-bundle-analyzer": "^4.8.0",
         "webpack-cli": "^3.3.12",
