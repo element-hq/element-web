@@ -141,7 +141,7 @@ jobs:
         name: Add Element R issues to Crypto Team board
         runs-on: ubuntu-latest
         if: >
-            contains(github.event.issue.labels.*.name, 'A-Element-R') ||
+            contains(github.event.issue.labels.*.name, 'A-Element-R')
         steps:
             - id: add_to_project
               uses: actions/add-to-project@v0.5.0
