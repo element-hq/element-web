@@ -228,9 +228,10 @@
         "msisdn_field_required_invalid": "Enter phone number",
         "no_hs_url_provided": "No homeserver URL provided",
         "oidc": {
-            "error_generic": "Something went wrong.",
             "error_title": "We couldn't log you in",
-            "logout_redirect_warning": "You will be redirected to your server's authentication provider to complete sign out."
+            "generic_auth_error": "Something went wrong during authentication. Go to the sign in page and try again.",
+            "logout_redirect_warning": "You will be redirected to your server's authentication provider to complete sign out.",
+            "missing_or_invalid_stored_state": "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again."
         },
         "password_field_keep_going_prompt": "Keep going…",
         "password_field_label": "Enter password",

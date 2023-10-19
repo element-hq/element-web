@@ -22,6 +22,7 @@ import { mocked } from "jest-mock";
 
 import { completeOidcLogin, startOidcLogin } from "../../../src/utils/oidc/authorize";
 import { makeDelegatedAuthConfig } from "../../test-utils/oidc";
+import { OidcClientError } from "../../../src/utils/oidc/error";
 
 jest.unmock("matrix-js-sdk/src/randomstring");
 
@@ -125,8 +126,8 @@ describe("OIDC authorization", () => {
         });
 
         it("should throw when query params do not include state and code", async () => {
-            await expect(completeOidcLogin({})).rejects.toThrow(
-                "Invalid query parameters for OIDC native login. `code` and `state` are required.",
+            await expect(async () => await completeOidcLogin({})).rejects.toThrow(
+                OidcClientError.InvalidQueryParameters,
             );
         });
 

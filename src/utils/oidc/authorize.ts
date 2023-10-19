@@ -20,6 +20,8 @@ import { OidcClientConfig } from "matrix-js-sdk/src/matrix";
 import { randomString } from "matrix-js-sdk/src/randomstring";
 import { IdTokenClaims } from "oidc-client-ts";
 
+import { OidcClientError } from "./error";
+
 /**
  * Start OIDC authorization code flow
  * Generates auth params, stores them in session storage and
@@ -68,7 +70,7 @@ const getCodeAndStateFromQueryParams = (queryParams: QueryDict): { code: string;
     const state = queryParams["state"];
 
     if (!code || typeof code !== "string" || !state || typeof state !== "string") {
-        throw new Error("Invalid query parameters for OIDC native login. `code` and `state` are required.");
+        throw new Error(OidcClientError.InvalidQueryParameters);
     }
     return { code, state };
 };

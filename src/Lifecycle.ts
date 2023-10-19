@@ -65,6 +65,7 @@ import { OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPaylo
 import { SdkContextClass } from "./contexts/SDKContext";
 import { messageForLoginError } from "./utils/ErrorUtils";
 import { completeOidcLogin } from "./utils/oidc/authorize";
+import { getOidcErrorMessage } from "./utils/oidc/error";
 import { OidcClientStore } from "./stores/oidc/OidcClientStore";
 import {
     getStoredOidcClientId,
@@ -306,8 +307,7 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
     } catch (error) {
         logger.error("Failed to login via OIDC", error);
 
-        // TODO(kerrya) nice error messages https://github.com/vector-im/element-web/issues/25665
-        await onFailedDelegatedAuthLogin(_t("auth|oidc|error_generic"));
+        await onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
         return false;
     }
 }
