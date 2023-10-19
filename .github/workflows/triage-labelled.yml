@@ -147,13 +147,13 @@ jobs:
             - id: add_to_project
               uses: actions/add-to-project@v0.5.0
               with:
-                  project_url: ${{ env.PROJECT_URL }}
+                  project-url: ${{ env.PROJECT_URL }}
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
             - id: set_fields
               uses: titoportas/update-project-fields@020b5aa9db8f9501d4b16d6417c2132ff26e6279 # v0.1.0
               with:
-                  project_url: ${{ env.PROJECT_URL }}
+                  project-url: ${{ env.PROJECT_URL }}
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   item-id: ${{ steps.add_to_project.outputs.itemId }} # Use the item-id output of the previous step
                   field-keys: Workstream,module
