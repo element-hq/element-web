@@ -17,9 +17,9 @@ jobs:
             matrix:
                 include:
                     - variant: vanilla
-                    - variant: opencode
-                      flavor: suffix=-opencode,onlatest=true
-                      prepare: mv variants/OpenCoDE/* .
+                    - variant: opendesk
+                      flavor: suffix=-opendesk,onlatest=true
+                      prepare: mv variants/openDesk/* .
         steps:
             - uses: actions/checkout@v4
               with:
