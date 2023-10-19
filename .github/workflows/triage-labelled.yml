@@ -156,7 +156,7 @@ jobs:
                   project-url: ${{ env.PROJECT_URL }}
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   item-id: ${{ steps.add_to_project.outputs.itemId }} # Use the item-id output of the previous step
-                  field-keys: Workstream,module,Status
-                  field-values: Element-R,web,Qualification
+                  field-keys: Workstream,module
+                  field-values: Element-R,web
         env:
             PROJECT_URL: https://github.com/orgs/vector-im/projects/76
