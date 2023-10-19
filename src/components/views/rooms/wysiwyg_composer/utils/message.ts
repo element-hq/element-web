@@ -69,7 +69,7 @@ export async function sendMessage(
     const posthogEvent: ComposerEvent = {
         eventName: "Composer",
         isEditing: false,
-        isLocation: false,
+        messageType: "Text",
         isReply: Boolean(replyToEvent),
         // TODO thread
         inThread: relation?.rel_type === THREAD_RELATION_TYPE.name,
@@ -205,7 +205,7 @@ export async function editMessage(
     PosthogAnalytics.instance.trackEvent<ComposerEvent>({
         eventName: "Composer",
         isEditing: true,
-        isLocation: false,
+        messageType: "Text",
         inThread: Boolean(editedEvent?.getThread()),
         isReply: Boolean(editedEvent.replyEventId),
     });

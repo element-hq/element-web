@@ -1800,15 +1800,15 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@matrix-org/analytics-events@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.7.0.tgz#a9ea47209473d1075704db4eabb6d94c8d99be25"
-  integrity sha512-9M1ESpFbXaU0v8Kzm0N61eAiVymv0tlXP5FfqCUH+BDP7DmW/tqyIpDs9ooUxXoFg1bBEQaRy/xOyO15ZykCAg==
+"@matrix-org/analytics-events@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.8.0.tgz#2e99ee00913f94dfba82092300c6b225d26e9ef6"
+  integrity sha512-gwA6DSw43krshh4GFFLHcxcFOBgg+q/bvI4TQ19Lxh+OjHyHDAiIHghfoErco9q0Yl6rlpVemg9/7cNcP2WkaA==
 
 "@matrix-org/emojibase-bindings@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@matrix-org/emojibase-bindings/-/emojibase-bindings-1.1.2.tgz#3cbbed06258418895910b8778a3d9c885f0c48c5"
-  integrity sha512-6FLR4nzyeQPZl2FBsdPpbAvvDF7TuAZgEbNeFkID47/bzTovFS4MUXIHOMzwMy/PWehlVziuKMOe1AxD9PauKw==
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@matrix-org/emojibase-bindings/-/emojibase-bindings-1.1.3.tgz#d35f0367d586d83261564662b6bb67fda8845d68"
+  integrity sha512-ljr0kPerx8yUc4JVJz7japebb1ZbtGH4V4cvlO2LYgTg+warjagDwkJ5x+ZUVuTU6MH8x0LrUxmkqVgmSoQyWA==
   dependencies:
     emojibase "^15.0.0"
     emojibase-data "^15.0.0"
@@ -1818,13 +1818,14 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-1.2.3-alpha.0.tgz#f6f93e3ee44c5f1e0e255badd26f4a7d3fb1dab8"
   integrity sha512-BFLqfq/WbYZ+83r4UWLhwtBYvTp5DKTHNeWUSDBVvudFtqBvkntNAAUz+xmhmO1XkyNm+sBaElxF8IS9S8zdww==
 
-"@matrix-org/matrix-wysiwyg@^2.4.1":
+"@matrix-org/matrix-wysiwyg@2.4.1":
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.4.1.tgz#e1325a42366a1c891b2ba90c88e597b39187b2cb"
   integrity sha512-RyUijZXVKenE9s3LczDUhWFeOfIyLcsOrAyHqYxnizXX5nxMkHxTgLeoTvaIJ+1dOhI+H2SS9G4VcN6odZ0aNg==
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz":
   version "3.2.14"
+  uid acd96c00a881d0f462e1f97a56c73742c8dbc984
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz#acd96c00a881d0f462e1f97a56c73742c8dbc984"
 
 "@matrix-org/react-sdk-module-api@^2.1.1":
@@ -1835,9 +1836,9 @@
     "@babel/runtime" "^7.17.9"
 
 "@matrix-org/spec@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/spec/-/spec-1.7.0.tgz#8a6b93edf0d99f8a6e0a25eea8613b5ada3e6b56"
-  integrity sha512-sLRdmk64dNd7X+jXgWFEatJbf2BOFX/a1VxHqWWTerzZntKsjKzz42sD2Mj1QWrsGp01u99fRNU8oy4DcmFn3w==
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/spec/-/spec-1.8.0.tgz#5d46f0ddcdff01934a63aa1f070f0ce960326acc"
+  integrity sha512-QKPIfrJDz5kKiaFluSfFLqAHu1fyMpYAc7sLWSyxj2flPAbajyy4zM7kfyF5yh5iGrunVLXi1iDSXYoM5/a4ZQ==
 
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3":
   version "2.1.8-no-fsevents.3"
@@ -4741,9 +4742,9 @@ emoji-regex@^9.2.2:
   integrity sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==
 
 emojibase-data@^15.0.0:
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-15.0.0.tgz#d1f5467f3080688b9605103d0abdcd54bbc76419"
-  integrity sha512-hqrLNhEeBejKOQp5ArJcofkzV3qZBcp8czXj8nIKUGpBVc50NddNGwir4yAYxn3oNgrSj/lYdB9XxIVAKTkong==
+  version "15.2.0"
+  resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-15.2.0.tgz#475a786c091a101ef4bcf57227771c6260ee39b2"
+  integrity sha512-hDiw4ugxnI4pcVQO+73NlKx6aZP/A+BAPfDgK/3A83RVbHZa0Ut6GHpd5r5XUV9G7BZhKejlIRuxhXialpbt6Q==
 
 emojibase-regex@15.2.0:
   version "15.2.0"
@@ -4751,9 +4752,9 @@ emojibase-regex@15.2.0:
   integrity sha512-65H5YepRW3gdrghV/Ed9kW3Qry8/qeKJmMlm31nTsOrEZfuAgyr28FmloXpyak86+chR8cukZA7dlafZzrJXbw==
 
 emojibase@^15.0.0:
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/emojibase/-/emojibase-15.0.0.tgz#f41b7773ec9a8a332373c18628ff4471255bd769"
-  integrity sha512-bvSIs98sHaVnyKPmW+obRjo49MFx0g+rhfSz6mTePAagEZSlDPosq0b6AcSJa5gt48z3VP2ooXclyBs8vIkpGA==
+  version "15.2.0"
+  resolved "https://registry.yarnpkg.com/emojibase/-/emojibase-15.2.0.tgz#0a175d4218f4a1600f2ada6b3a3184cef1b3ec7b"
+  integrity sha512-gB6rIVtyJPersQvAo4nOGYPeILMhlcfZdiwCWVeRAtkJ7sm0tExZETGyLhrTQcHvZQhDEYI1vlCeqUhn5gZkQA==
 
 emojis-list@^3.0.0:
   version "3.0.0"

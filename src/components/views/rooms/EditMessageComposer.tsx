@@ -306,7 +306,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         PosthogAnalytics.instance.trackEvent<ComposerEvent>({
             eventName: "Composer",
             isEditing: true,
-            isLocation: false,
+            messageType: "Text",
             inThread: !!editedEvent?.getThread(),
             isReply: !!editedEvent.replyEventId,
         });
