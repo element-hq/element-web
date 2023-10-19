@@ -444,8 +444,11 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         default: false,
     },
     [Features.OidcNativeFlow]: {
+        isFeature: true,
+        labsGroup: LabGroup.Developer,
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("labs|oidc_native_flow"),
+        description: _td("labs|oidc_native_flow_description"),
         default: false,
     },
     "feature_rust_crypto": {
