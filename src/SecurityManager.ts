@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { DeviceVerificationStatus, ICryptoCallbacks, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { DeviceVerificationStatus, ICryptoCallbacks, MatrixClient, encodeBase64 } from "matrix-js-sdk/src/matrix";
 import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 import { deriveKey } from "matrix-js-sdk/src/crypto/key_passphrase";
 import { decodeRecoveryKey } from "matrix-js-sdk/src/crypto/recoverykey";
-import { encodeBase64 } from "matrix-js-sdk/src/crypto/olmlib";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import type CreateSecretStorageDialog from "./async-components/views/dialogs/security/CreateSecretStorageDialog";

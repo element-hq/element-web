@@ -17,8 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, MatrixEvent, Room, SSOAction } from "matrix-js-sdk/src/matrix";
-import { encodeUnpaddedBase64 } from "matrix-js-sdk/src/crypto/olmlib";
+import { MatrixClient, MatrixEvent, Room, SSOAction, encodeUnpaddedBase64 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import dis from "./dispatcher/dispatcher";
