@@ -72,7 +72,7 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.El
     let text: ReactNode | undefined;
     let logo: JSX.Element | undefined;
     if (desktopBuilds?.get("available")) {
-        logo = <img alt="" src={desktopBuilds.get("logo")} />;
+        logo = <img alt="" src={desktopBuilds.get("logo")} width="32px" />;
         const buildUrl = desktopBuilds.get("url");
         switch (kind) {
             case WarningKind.Files:
