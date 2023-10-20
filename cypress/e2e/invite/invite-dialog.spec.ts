@@ -53,7 +53,7 @@ describe("Invite dialog", function () {
             cy.findByRole("button", { name: /People/ }).click();
         });
 
-        cy.get(".mx_BaseCard_header").within(() => {
+        cy.get(".mx_BaseCard").within(() => {
             // Click "Invite to this room" button
             // Regex pattern due to "mx_MemberList_invite span::before"
             cy.findByRole("button", { name: /Invite to this room/ }).click();

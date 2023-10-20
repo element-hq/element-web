@@ -77,36 +77,6 @@ limitations under the License.
 }
 
 .mx_MemberList_invite {
-    flex: 0 0 auto;
-    position: relative;
-    background-color: $accent;
-    border-radius: 4px;
-    margin: 5px 9px 9px;
-    display: flex;
-    justify-content: center;
-    color: $button-fg-color;
-    font-weight: var(--cpd-font-weight-semibold);
-}
-
-.mx_MemberList_invite.mx_AccessibleButton_disabled {
-    background-color: $info-plinth-fg-color;
-    cursor: not-allowed;
-}
-
-.mx_MemberList_invite span {
-    padding: 8px 0;
-    display: inline-flex;
-
-    &::before {
-        content: "";
-        display: inline-block;
-        background-color: $button-fg-color;
-        mask-image: url("$(res)/img/element-icons/room/invite.svg");
-        mask-position: center;
-        mask-repeat: no-repeat;
-        mask-size: 20px;
-        width: 20px;
-        height: 20px;
-        margin-right: 5px;
-    }
+    margin: 0 var(--cpd-space-2x);
+    width: calc(100% - var(--cpd-space-2x));
 }

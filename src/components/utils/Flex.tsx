@@ -46,7 +46,7 @@ type FlexProps = {
      * The justification of the flex children
      * @default start
      */
-    justify?: "start" | "center" | "end" | "between";
+    justify?: "start" | "center" | "end" | "space-between";
     /**
      * The spacing between the flex children, expressed with the CSS unit
      * @default 0

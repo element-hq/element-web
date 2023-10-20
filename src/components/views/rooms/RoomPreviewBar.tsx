@@ -696,7 +696,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
 
         const isPanel = this.props.canPreview;
 
-        const classes = classNames("mx_RoomPreviewBar", "dark-panel", `mx_RoomPreviewBar_${messageCase}`, {
+        const classes = classNames("mx_RoomPreviewBar", `mx_RoomPreviewBar_${messageCase}`, {
             mx_RoomPreviewBar_panel: isPanel,
             mx_RoomPreviewBar_dialog: !isPanel,
         });

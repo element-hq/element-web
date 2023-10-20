@@ -739,7 +739,7 @@ exports[`RoomView should show error view if failed to look up room alias 1`] = `
     data-room-header="legacy"
   >
     <div
-      class="mx_RoomPreviewBar dark-panel mx_RoomPreviewBar_RoomNotFound mx_RoomPreviewBar_dialog"
+      class="mx_RoomPreviewBar mx_RoomPreviewBar_RoomNotFound mx_RoomPreviewBar_dialog"
     >
       <div
         class="mx_RoomPreviewBar_message"

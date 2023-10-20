@@ -25,7 +25,7 @@ import { backLabelForPhase } from "../../../stores/right-panel/RightPanelStorePh
 import { CardContext } from "./context";
 
 interface IProps {
-    header?: ReactNode;
+    header?: ReactNode | null;
     footer?: ReactNode;
     className?: string;
     withoutScrollContainer?: boolean;
@@ -86,11 +86,13 @@ const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
         return (
             <CardContext.Provider value={{ isCard: true }}>
                 <div className={classNames("mx_BaseCard", className)} ref={ref} onKeyDown={onKeyDown}>
-                    <div className="mx_BaseCard_header">
-                        {backButton}
-                        {closeButton}
-                        {header}
-                    </div>
+                    {header !== null && (
+                        <div className="mx_BaseCard_header">
+                            {backButton}
+                            {closeButton}
+                            {header}
+                        </div>
+                    )}
                     {children}
                     {footer && <div className="mx_BaseCard_footer">{footer}</div>}
                 </div>

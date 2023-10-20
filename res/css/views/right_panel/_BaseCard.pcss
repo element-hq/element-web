@@ -15,12 +15,10 @@ limitations under the License.
 */
 
 .mx_BaseCard {
-    --BaseCard_padding-inline: $spacing-8;
     --BaseCard_EventTile_line-padding-block: 2px;
     --BaseCard_EventTile-spacing-inline: 36px;
-    --BaseCard_header-button-size: 24px;
+    --BaseCard_header-button-size: 28px;
 
-    padding: 0 var(--BaseCard_padding-inline);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -28,9 +26,18 @@ limitations under the License.
     font-size: var(--cpd-font-size-body-md);
 
     .mx_BaseCard_header {
-        --BaseCard_header_button-margin: $spacing-12;
-
-        margin: $spacing-4 0 $spacing-12;
+        height: 64px;
+        padding: var(--cpd-space-3x);
+        box-sizing: border-box;
+        /* changing the color from $separator to transparent as it is
+           the best visual output during the transition period. This will be
+           reintroduced at a later stage. */
+        border-bottom: 1px solid transparent;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--cpd-space-2x);
+        flex-shrink: 0;
 
         > h2 {
             margin: 0 44px;
@@ -38,60 +45,6 @@ limitations under the License.
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-        }
-
-        .mx_BaseCard_back,
-        .mx_BaseCard_close {
-            position: absolute;
-            background-color: rgba(141, 151, 165, 0.2);
-            width: var(--BaseCard_header-button-size);
-            height: var(--BaseCard_header-button-size);
-            margin: var(--BaseCard_header_button-margin);
-            top: 0;
-            border-radius: 50%;
-
-            &::before {
-                content: "";
-                position: absolute;
-                height: inherit;
-                width: inherit;
-                top: 0;
-                left: 0;
-                mask-repeat: no-repeat;
-                mask-position: center;
-                background-color: $icon-button-color;
-            }
-        }
-
-        .mx_BaseCard_back {
-            left: 0;
-            margin-inline-start: calc(var(--BaseCard_header_button-margin) - $spacing-4);
-
-            &::before {
-                transform: rotate(90deg);
-                mask-size: 22px;
-                mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
-            }
-
-            /* Header title with the back button */
-            ~ .mx_BaseCard_header_title {
-                width: calc(100% - 60px);
-                margin-inline-start: var(--BaseCard_header-button-size);
-
-                .mx_BaseCard_header_title_heading {
-                    margin-inline-start: 6px;
-                }
-            }
-        }
-
-        .mx_BaseCard_close {
-            right: 0;
-            margin-inline-end: calc(var(--BaseCard_header_button-margin) - $spacing-4);
-
-            &::before {
-                mask-image: url("$(res)/img/icons-close.svg");
-                mask-size: 8px;
-            }
         }
 
         .mx_BaseCard_header_title {
@@ -103,7 +56,7 @@ limitations under the License.
             flex: 1;
 
             .mx_BaseCard_header_title_heading {
-                color: $icon-button-color;
+                color: $primary-content;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
@@ -164,7 +117,6 @@ limitations under the License.
             position: relative;
             font: var(--cpd-font-heading-sm-medium);
             height: 20px;
-            border-radius: 8px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -206,16 +158,40 @@ limitations under the License.
     }
 }
 
-.mx_FilePanel,
-.mx_UserInfo,
-.mx_MemberList {
-    &.mx_BaseCard {
-        padding: $spacing-32 0 0;
+.mx_BaseCard_back,
+.mx_BaseCard_close {
+    position: relative;
+    background-color: var(--cpd-color-bg-subtle-secondary);
+    width: var(--BaseCard_header-button-size);
+    height: var(--BaseCard_header-button-size);
+    border-radius: 50%;
 
-        .mx_AutoHideScrollbar {
-            margin-right: unset;
-            padding-right: unset;
-        }
+    &::before {
+        content: "";
+        position: absolute;
+        height: inherit;
+        width: inherit;
+        top: 0;
+        left: 0;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        background-color: var(--cpd-color-icon-secondary);
+    }
+}
+
+.mx_BaseCard_back {
+    order: 0; /* always first! */
+    &::before {
+        transform: rotate(90deg);
+        mask-size: 22px;
+        mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
+    }
+}
+
+.mx_BaseCard_close {
+    order: 999; /* always last */
+    &::before {
+        mask-image: url("$(res)/img/icons-close.svg");
     }
 }
 
@@ -230,7 +206,7 @@ limitations under the License.
         }
 
         font: var(--cpd-font-body-sm-regular);
-        color: $secondary-content;
+        color: $primary-content;
         padding-top: 10px;
         padding-bottom: 10px;
 

@@ -3,7 +3,7 @@
 exports[`AppTile destroys non-persisted right panel widget on room change 1`] = `
 <DocumentFragment>
   <aside
-    class="mx_RightPanel dark-panel"
+    class="mx_RightPanel"
     id="mx_RightPanel"
   >
     <div

@@ -2587,27 +2587,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <EffectsOverlay roomWidth={this.roomView.current.offsetWidth} />
                     )}
                     <ErrorBoundary>
-                        {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
-                            <RoomHeader room={this.state.room} />
-                        ) : (
-                            <LegacyRoomHeader
-                                room={this.state.room}
-                                searchInfo={this.state.search}
-                                oobData={this.props.oobData}
-                                inRoom={myMembership === "join"}
-                                onSearchClick={onSearchClick}
-                                onInviteClick={onInviteClick}
-                                onForgetClick={showForgetButton ? onForgetClick : null}
-                                e2eStatus={this.state.e2eStatus}
-                                onAppsClick={this.state.hasPinnedWidgets ? onAppsClick : null}
-                                appsShown={this.state.showApps}
-                                excludedRightPanelPhaseButtons={excludedRightPanelPhaseButtons}
-                                showButtons={!this.viewsLocalRoom}
-                                enableRoomOptionsMenu={!this.viewsLocalRoom}
-                                viewingCall={viewingCall}
-                                activeCall={this.state.activeCall}
-                            />
-                        )}
                         <MainSplit
                             panel={rightPanel}
                             resizeNotifier={this.props.resizeNotifier}
@@ -2621,6 +2600,27 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 ref={this.roomViewBody}
                                 data-layout={this.state.layout}
                             >
+                                {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
+                                    <RoomHeader room={this.state.room} />
+                                ) : (
+                                    <LegacyRoomHeader
+                                        room={this.state.room}
+                                        searchInfo={this.state.search}
+                                        oobData={this.props.oobData}
+                                        inRoom={myMembership === "join"}
+                                        onSearchClick={onSearchClick}
+                                        onInviteClick={onInviteClick}
+                                        onForgetClick={showForgetButton ? onForgetClick : null}
+                                        e2eStatus={this.state.e2eStatus}
+                                        onAppsClick={this.state.hasPinnedWidgets ? onAppsClick : null}
+                                        appsShown={this.state.showApps}
+                                        excludedRightPanelPhaseButtons={excludedRightPanelPhaseButtons}
+                                        showButtons={!this.viewsLocalRoom}
+                                        enableRoomOptionsMenu={!this.viewsLocalRoom}
+                                        viewingCall={viewingCall}
+                                        activeCall={this.state.activeCall}
+                                    />
+                                )}
                                 {mainSplitBody}
                             </div>
                         </MainSplit>

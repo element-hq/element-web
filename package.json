@@ -70,7 +70,7 @@
         "@sentry/tracing": "^7.0.0",
         "@testing-library/react-hooks": "^8.0.1",
         "@vector-im/compound-design-tokens": "^0.0.6",
-        "@vector-im/compound-web": "^0.5.0",
+        "@vector-im/compound-web": "0.5.4",
         "@zxcvbn-ts/core": "^3.0.4",
         "@zxcvbn-ts/language-common": "^3.0.4",
         "@zxcvbn-ts/language-en": "^3.0.2",

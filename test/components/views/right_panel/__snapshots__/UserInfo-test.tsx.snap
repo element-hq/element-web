@@ -84,6 +84,12 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
         tabindex="0"
         title="Close"
       />
+      <span />
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
       <div
         class="mx_UserInfo_avatar"
       >
@@ -141,11 +147,6 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
           </div>
         </div>
       </div>
-    </div>
-    <div
-      class="mx_AutoHideScrollbar"
-      tabindex="-1"
-    >
       <div
         class="mx_UserInfo_container"
       >

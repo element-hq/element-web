@@ -127,7 +127,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     aria-level={1}
                     className="mx_RoomHeader_heading"
                 >
-                    <span className="mx_RoomHeader_truncated">{roomName}</span>
+                    <span className="mx_RoomHeader_truncated mx_lineClamp">{roomName}</span>
 
                     {!isDirectMessage && roomState.getJoinRule() === JoinRule.Public && (
                         <Tooltip label={_t("common|public_room")} side="right">
@@ -163,7 +163,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     )}
                 </BodyText>
                 {roomTopic && (
-                    <BodyText as="div" size="sm" className="mx_RoomHeader_topic mx_RoomHeader_truncated">
+                    <BodyText as="div" size="sm" className="mx_RoomHeader_topic mx_RoomHeader_truncated mx_lineClamp">
                         <Linkify>{roomTopicBody}</Linkify>
                     </BodyText>
                 )}

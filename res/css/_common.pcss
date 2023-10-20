@@ -292,29 +292,6 @@ legend {
     }
 }
 
-/*** panels ***/
-.dark-panel {
-    background-color: $dark-panel-bg-color;
-
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="text"],
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="search"],
-    .mx_textinput {
-        color: $input-darker-fg-color;
-        background-color: $background;
-        border: none;
-    }
-}
-
-.light-panel {
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="text"],
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="search"],
-    .mx_textinput {
-        color: $input-darker-fg-color;
-        background-color: $input-lighter-bg-color;
-        border: none;
-    }
-}
-
 /* Prevent ugly dotted highlight around selected elements in Firefox */
 ::-moz-focus-inner {
     border: 0;
@@ -890,4 +867,11 @@ legend {
             background-color: $hover-color;
         }
     }
+}
+
+.mx_lineClamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--mx-line-clamp, 1);
+    overflow: hidden;
 }

@@ -30,7 +30,7 @@ const viewRoomSummaryByName = (name: string): Chainable<JQuery<HTMLElement>> => 
 
 const checkRoomSummaryCard = (name: string): Chainable<JQuery<HTMLElement>> => {
     cy.get(".mx_RoomSummaryCard").should("have.length", 1);
-    return cy.get(".mx_BaseCard_header").should("contain", name);
+    return cy.get(".mx_RoomSummaryCard").should("contain", name);
 };
 
 const uploadFile = (file: string) => {

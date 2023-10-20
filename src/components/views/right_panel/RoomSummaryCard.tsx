@@ -17,6 +17,8 @@ limitations under the License.
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/matrix";
+import { Tooltip } from "@vector-im/compound-web";
+import { Icon as SearchIcon } from "@vector-im/compound-design-tokens/icons/search.svg";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
@@ -53,6 +55,7 @@ import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { PollHistoryDialog } from "../dialogs/PollHistoryDialog";
+import { Flex } from "../../utils/Flex";
 
 interface IProps {
     room: Room;
@@ -306,7 +309,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, on
 
     const alias = room.getCanonicalAlias() || room.getAltAliases()[0] || "";
     const header = (
-        <React.Fragment>
+        <header className="mx_RoomSummaryCard_container">
             <div className="mx_RoomSummaryCard_avatar" role="presentation">
                 <RoomAvatar room={room} size="54px" viewAvatarOnClick />
                 <TextWithTooltip
@@ -329,7 +332,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, on
             <div className="mx_RoomSummaryCard_alias" title={alias}>
                 {alias}
             </div>
-        </React.Fragment>
+        </header>
     );
 
     const memberCount = useRoomMemberCount(room);
@@ -337,22 +340,40 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, on
     const pinCount = usePinnedEvents(pinningEnabled ? room : undefined)?.length;
 
     return (
-        <BaseCard header={header} className="mx_RoomSummaryCard" onClose={onClose}>
+        <BaseCard header={null} className="mx_RoomSummaryCard" onClose={onClose}>
+            <Flex
+                as="header"
+                className="mx_RoomSummaryCard_header"
+                gap="var(--cpd-space-3x)"
+                align="center"
+                justify="space-between"
+            >
+                <Tooltip label={_t("action|search")} side="right">
+                    <button
+                        className="mx_RoomSummaryCard_searchBtn"
+                        data-testid="summary-search"
+                        onClick={() => {
+                            onSearchClick?.();
+                        }}
+                        aria-label={_t("action|search")}
+                    >
+                        <SearchIcon width="100%" height="100%" />
+                    </button>
+                </Tooltip>
+                <AccessibleButton
+                    data-testid="base-card-close-button"
+                    className="mx_BaseCard_close"
+                    onClick={onClose}
+                    title={_t("action|close")}
+                />
+            </Flex>
+
+            {header}
             <Group title={_t("common|about")} className="mx_RoomSummaryCard_aboutGroup">
                 <Button className="mx_RoomSummaryCard_icon_people" onClick={onRoomMembersClick}>
                     {_t("common|people")}
                     <span className="mx_BaseCard_Button_sublabel">{memberCount}</span>
                 </Button>
-                {SettingsStore.getValue("feature_new_room_decoration_ui") && (
-                    <Button
-                        className="mx_RoomSummaryCard_icon_search"
-                        onClick={() => {
-                            onSearchClick?.();
-                        }}
-                    >
-                        {_t("right_panel|search_button")}
-                    </Button>
-                )}
                 {!isVideoRoom && (
                     <Button className="mx_RoomSummaryCard_icon_files" onClick={onRoomFilesClick}>
                         {_t("right_panel|files_button")}

@@ -27,7 +27,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
         role="heading"
       >
         <span
-          class="mx_RoomHeader_truncated"
+          class="mx_RoomHeader_truncated mx_lineClamp"
         >
           !1:example.org
         </span>

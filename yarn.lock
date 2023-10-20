@@ -3016,7 +3016,7 @@
   dependencies:
     svg2vectordrawable "^2.9.1"
 
-"@vector-im/compound-web@^0.5.0":
+"@vector-im/compound-web@0.5.4":
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-0.5.4.tgz#a99b346fe8de34a6f8bcbf9e1040ce1d79615dbc"
   integrity sha512-w4Nwzid5Y89Dt9GaxKO+kWPTjSitLpkmoAjMYHVUajNMCfUxluzu4eOgjPRCpubPH5lZUB6/95y43wOI+pEC1Q==

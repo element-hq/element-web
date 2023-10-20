@@ -31,6 +31,7 @@ import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelS
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
 import { PollHistoryDialog } from "../../../../src/components/views/dialogs/PollHistoryDialog";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
+import { _t } from "../../../../src/languageHandler";
 
 describe("<RoomSummaryCard />", () => {
     const userId = "@alice:domain.org";
@@ -82,6 +83,17 @@ describe("<RoomSummaryCard />", () => {
     it("renders the room summary", () => {
         const { container } = getComponent();
         expect(container).toMatchSnapshot();
+    });
+
+    it("opens the search", async () => {
+        const onSearchClick = jest.fn();
+        const { getByLabelText } = getComponent({
+            onSearchClick,
+        });
+
+        const searchBtn = getByLabelText(_t("action|search"));
+        fireEvent.click(searchBtn);
+        expect(onSearchClick).toHaveBeenCalled();
     });
 
     it("opens room members list on button click", () => {

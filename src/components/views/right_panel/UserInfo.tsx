@@ -1763,7 +1763,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     return (
         <BaseCard
             className={classes.join(" ")}
-            header={header}
+            header={<span />}
             onClose={onClose}
             closeLabel={closeLabel}
             cardState={cardState}
@@ -1773,6 +1773,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
                 }
             }}
         >
+            {header}
             {content}
         </BaseCard>
     );
