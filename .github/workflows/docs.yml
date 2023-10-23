@@ -47,8 +47,8 @@ jobs:
               with:
                   mdbook-version: "0.4.10"
 
-            - name: Install mdbook-combiner
-              run: cargo install mdbook-combiner
+            - name: Install mdbook extensions
+              run: cargo install mdbook-combiner mdbook-mermaid
 
             - name: Prepare docs
               run: |
