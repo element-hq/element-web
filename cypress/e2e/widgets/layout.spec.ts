@@ -129,4 +129,20 @@ describe("Widget Layout", () => {
 
         cy.get('iframe[title="widget"]').invoke("height").should("be.greaterThan", 400);
     });
+    it("open right panel with chat when maximizing widget", () => {
+        cy.get('iframe[title="widget"]').invoke("height").should("be.lessThan", 250);
+        cy.findByRole("button", { name: "Maximise" }).click();
+        cy.get(".mx_RightPanel").within(() => {
+            cy.get(".mx_BaseCard_header").should("contain", "Chat");
+        });
+    });
+    it("close right panel with chat when unmaximizing widget", () => {
+        cy.get('iframe[title="widget"]').invoke("height").should("be.lessThan", 250);
+        cy.findByRole("button", { name: "Maximise" }).click();
+        cy.get(".mx_RightPanel").within(() => {
+            cy.get(".mx_BaseCard_header").should("contain", "Chat");
+        });
+        cy.findByRole("button", { name: "Un-maximise" }).click();
+        cy.get(".mx_RightPanel").should("not.exist");
+    });
 });
