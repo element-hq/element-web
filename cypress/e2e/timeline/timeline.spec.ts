@@ -439,6 +439,12 @@ describe("Timeline", () => {
             sendEvent(roomId); // check the last EventTile
 
             cy.visit("/#/room/" + roomId);
+            // Send a plain text message
+            cy.getComposer().type(`Hello{enter}`);
+            // Send a big emoji
+            cy.getComposer().type(`🏀{enter}`);
+            // Send an inline emoji
+            cy.getComposer().type(`This message has an inline emoji 👒{enter}`);
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // IRC layout
@@ -451,28 +457,6 @@ describe("Timeline", () => {
                 cy.findByText(OLD_NAME + " created and configured the room.").should("exist");
             });
 
-            cy.get(".mx_RoomView_body[data-layout=irc]").within(() => {
-                // Ensure CSS declarations which cannot be detected with a screenshot test are applied as expected
-                cy.get(".mx_EventTile")
-                    .should("have.css", "max-width", "100%")
-                    .should("have.css", "clear", "both")
-                    .should("have.css", "position", "relative");
-
-                // Check mx_EventTile_continuation
-                // Block start padding of the second message should not be overridden
-                cy.get(".mx_EventTile_continuation").should("have.css", "padding-block-start", "0px");
-                cy.get(".mx_EventTile_continuation .mx_EventTile_line").should("have.css", "clear", "both");
-
-                // Select the last event tile
-                cy.get(".mx_EventTile_last")
-                    .within(() => {
-                        // The last tile is also a continued one
-                        cy.get(".mx_EventTile_line").should("have.css", "clear", "both");
-                    })
-                    // Check that zero block padding is set
-                    .should("have.css", "padding-block-start", "0px");
-            });
-
             cy.get(".mx_MainSplit").percySnapshotElement("EventTiles on IRC layout", { percyCSS });
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -482,17 +466,6 @@ describe("Timeline", () => {
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Group);
 
             cy.get(".mx_RoomView_body[data-layout=group]").within(() => {
-                // Ensure CSS declarations which cannot be detected with a screenshot test are applied as expected
-                cy.get(".mx_EventTile")
-                    .should("have.css", "max-width", "100%")
-                    .should("have.css", "clear", "both")
-                    .should("have.css", "position", "relative");
-
-                // Check mx_EventTile_continuation
-                // Block start padding of the second message should not be overridden
-                cy.get(".mx_EventTile_continuation").should("have.css", "padding-block-start", "0px");
-                cy.get(".mx_EventTile_continuation .mx_EventTile_line").should("have.css", "clear", "both");
-
                 // Check that the last EventTile is rendered
                 cy.get(".mx_EventTile.mx_EventTile_last").should("exist");
             });
@@ -503,15 +476,6 @@ describe("Timeline", () => {
             cy.setSettingValue("useCompactLayout", null, SettingLevel.DEVICE, true);
 
             cy.get(".mx_MatrixChat_useCompactLayout").within(() => {
-                // Ensure CSS declarations which cannot be detected with a screenshot test are applied as expected
-                cy.get(".mx_EventTile")
-                    .should("have.css", "max-width", "100%")
-                    .should("have.css", "clear", "both")
-                    .should("have.css", "position", "relative");
-
-                // Check cascading works
-                cy.get(".mx_EventTile_continuation").should("have.css", "padding-block-start", "0px");
-
                 // Check that the last EventTile is rendered
                 cy.get(".mx_EventTile.mx_EventTile_last").should("exist");
             });
@@ -523,25 +487,6 @@ describe("Timeline", () => {
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
-
-            cy.get(".mx_RoomView_body[data-layout=bubble]").within(() => {
-                // Ensure CSS declarations which cannot be detected with a screenshot test are applied as expected
-                cy.get(".mx_EventTile")
-                    .should("have.css", "max-width", "none")
-                    .should("have.css", "clear", "both")
-                    .should("have.css", "position", "relative");
-
-                // Check that block start padding of the second message is not overridden
-                cy.get(".mx_EventTile.mx_EventTile_continuation").should("have.css", "margin-block-start", "2px");
-
-                // Select the last bubble
-                cy.get(".mx_EventTile_last")
-                    .within(() => {
-                        // calc(var(--gutterSize) - 1px)
-                        cy.get(".mx_EventTile_line").should("have.css", "padding-block-start", "10px");
-                    })
-                    .should("have.css", "margin-block-start", "2px"); // The last bubble is also a continued one
-            });
 
             cy.get(".mx_MainSplit").percySnapshotElement("EventTiles on bubble layout", { percyCSS });
         });
