@@ -482,18 +482,24 @@ for (const workflow of workflows.values()) {
 graph.cull();
 
 // This is an awful hack to make the output graphs much better by allowing the splitting of certain nodes //
-const manualNode = triggers.get("on:workflow_dispatch")!;
-const manualNodeEdges = graph.removeNode(manualNode);
-const components = graph.components;
+const bifurcatedNodes = [triggers.get("on:workflow_dispatch")].filter(Boolean) as Node[];
+const removedEdgeMap = new Map<Node, Edge<any>[]>();
+for (const node of bifurcatedNodes) {
+    removedEdgeMap.set(node, graph.removeNode(node));
+}
 
-components.forEach((graph) => {
-    manualNodeEdges.forEach((edge) => {
-        if (graph.nodes.has(edge[1].id)) {
-            graph.addNode(manualNode);
-            graph.addEdge(...edge);
-        }
+const components = graph.components;
+for (const node of bifurcatedNodes) {
+    const removedEdges = removedEdgeMap.get(node)!;
+    components.forEach((graph) => {
+        removedEdges.forEach((edge) => {
+            if (graph.nodes.has(edge[1].id)) {
+                graph.addNode(node);
+                graph.addEdge(...edge);
+            }
+        });
     });
-});
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 if (argv.debug) {
@@ -527,44 +533,35 @@ components.forEach((graph) => {
             }
 
             printer.subgraph(node.id, node.name, () => {
-                const roots = subgraph.roots;
-                subgraph.nodes.forEach((node) => {
-                    if (roots.has(node)) return;
-                    printer.node(node);
-                });
-
                 subgraph.edges.forEach(([source, destination, text]) => {
                     printer.edge(source, destination, text);
                 });
 
-                roots.forEach((job) => {
+                subgraph.nodes.forEach((job) => {
                     if (!job.strategy?.matrix) {
                         printer.node(job);
                         return;
                     }
 
-                    let variations: { [p: string]: string }[] = [{}];
-                    if (job.strategy?.matrix) {
-                        variations = cartesianProduct(
-                            Object.keys(job.strategy.matrix)
-                                .filter((key) => key !== "include" && key !== "exclude")
-                                .map((matrixKey) => {
-                                    return job.strategy!.matrix[matrixKey].map((value) => ({ [matrixKey]: value }));
-                                }),
-                        )
-                            .map((variation) => Object.assign({}, ...variation))
-                            .filter((variation) => Object.keys(variation).length > 0);
+                    let variations = cartesianProduct(
+                        Object.keys(job.strategy.matrix)
+                            .filter((key) => key !== "include" && key !== "exclude")
+                            .map((matrixKey) => {
+                                return job.strategy!.matrix[matrixKey].map((value) => ({ [matrixKey]: value }));
+                            }),
+                    )
+                        .map((variation) => Object.assign({}, ...variation))
+                        .filter((variation) => Object.keys(variation).length > 0);
 
-                        if (job.strategy.matrix.include) {
-                            variations.push(...job.strategy.matrix.include);
-                        }
-                        if (job.strategy.matrix.exclude) {
-                            job.strategy.matrix.exclude.forEach((exclusion) => {
-                                variations = variations.filter((variation) => {
-                                    return !shallowCompare(exclusion, variation);
-                                });
+                    if (job.strategy.matrix.include) {
+                        variations.push(...job.strategy.matrix.include);
+                    }
+                    if (job.strategy.matrix.exclude) {
+                        job.strategy.matrix.exclude.forEach((exclusion) => {
+                            variations = variations.filter((variation) => {
+                                return !shallowCompare(exclusion, variation);
                             });
-                        }
+                        });
                     }
 
                     // TODO validate edge case
