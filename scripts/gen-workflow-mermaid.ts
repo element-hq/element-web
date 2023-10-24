@@ -220,7 +220,8 @@ const TRIGGERS: {
         name: `Pull Request<br>${project.name}`,
         shape: "circle",
     }),
-    workflow_run: (data) => data.workflows.map((parent) => workflows.get(parent)!),
+    // TODO should we be just dropping these?
+    workflow_run: (data) => data.workflows.map((parent) => workflows.get(parent)).filter(Boolean) as Workflow[],
 };
 /* eslint-enable @typescript-eslint/naming-convention */
 
@@ -439,6 +440,7 @@ for (const workflow of workflows.values()) {
         continue;
     }
 
+    graph.addNode(workflow);
     Object.keys(workflow.on).forEach((trigger) => {
         const nodes = getTriggerNodes(trigger as keyof WorkflowYaml["on"], workflow);
         nodes.forEach((node) => {
@@ -448,7 +450,13 @@ for (const workflow of workflows.values()) {
     });
 }
 
+// TODO separate disconnected nodes into their own graph
 graph.cull();
+
+if (argv.debug) {
+    debugGraph("global", graph);
+}
+
 graph.connectedSubgraphs.forEach((graph) => {
     const title = [...graph.roots]
         .map((root) => root.name)
@@ -550,14 +558,14 @@ graph.connectedSubgraphs.forEach((graph) => {
 
     if (argv.debug) {
         printer.idGenerator.debug();
-        debugGraph(graph);
-        graph.connectedSubgraphs.forEach(debugGraph);
+        debugGraph("subgraph", graph);
     }
 });
 
-function debugGraph(graph: Graph<any>): void {
+function debugGraph(name: string, graph: Graph<any>): void {
     console.log("```");
-    console.log(graph.nodes);
+    console.log(`## ${name}`);
+    console.log(new Map(graph.nodes));
     console.log(graph.edges.map((edge) => ({ source: edge[0].id, destination: edge[1].id, text: edge[2] })));
     console.log("```");
     console.log("");
