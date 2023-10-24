@@ -458,7 +458,7 @@ for (const workflow of workflows.values()) {
         const nodes = getTriggerNodes(trigger as keyof WorkflowYaml["on"], workflow);
         nodes.forEach((node) => {
             graph.addNode(node);
-            graph.addEdge(node, workflow);
+            graph.addEdge(node, workflow, "project" in node ? "workflow_run" : undefined);
         });
     });
 }
