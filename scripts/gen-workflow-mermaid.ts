@@ -535,5 +535,15 @@ graph.connectedSubgraphs.forEach((graph) => {
 
     if (argv.debug) {
         printer.idGenerator.debug();
+        debugGraph(graph);
+        graph.connectedSubgraphs.forEach(debugGraph);
     }
 });
+
+function debugGraph(graph: Graph<any>): void {
+    console.log("```");
+    console.log(graph.nodes);
+    console.log(graph.edges.map((edge) => ({ source: edge[0].id, destination: edge[1].id, text: edge[2] })));
+    console.log("```");
+    console.log("");
+}
