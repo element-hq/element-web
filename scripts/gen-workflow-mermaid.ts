@@ -92,30 +92,43 @@ class Graph<T extends Node> {
         return roots;
     }
 
-    public search(root: T, fn: (node: T) => void): void {
-        fn(root);
+    private componentsRecurse(root: T, visited: Set<T>): T[] {
+        if (visited.has(root)) return [root];
+        visited.add(root);
+
+        const neighbours = [root];
         this.edges.forEach(([source, destination]) => {
             if (source === root) {
-                this.search(destination, fn);
+                neighbours.push(...this.componentsRecurse(destination, visited));
+            } else if (destination === root) {
+                neighbours.push(...this.componentsRecurse(source, visited));
             }
         });
+
+        return neighbours;
     }
 
-    public get connectedSubgraphs(): Graph<T>[] {
-        return [...this.roots].map((root) => {
-            const graph = new Graph<T>();
+    public get components(): Graph<T>[] {
+        const graphs: Graph<T>[] = [];
+        const visited = new Set<T>();
+        this.nodes.forEach((node) => {
+            if (visited.has(node)) return;
 
-            this.search(root, (node) => {
+            const graph = new Graph<T>();
+            graphs.push(graph);
+
+            const nodes = this.componentsRecurse(node, visited);
+            nodes.forEach((node) => {
                 graph.addNode(node);
                 this.edges.forEach((edge) => {
-                    if (edge[0] === node) {
+                    if (edge[0] === node || edge[1] === node) {
                         graph.addEdge(...edge);
                     }
                 });
             });
-
-            return graph;
         });
+
+        return graphs;
     }
 }
 
@@ -457,7 +470,7 @@ if (argv.debug) {
     debugGraph("global", graph);
 }
 
-graph.connectedSubgraphs.forEach((graph) => {
+graph.components.forEach((graph) => {
     const title = [...graph.roots]
         .map((root) => root.name)
         .join(" & ")
