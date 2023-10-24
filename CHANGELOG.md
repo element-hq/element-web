@@ -1,5 +1,5 @@
-Changes in [3.83.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.83.0-rc.1) (2023-10-17)
-===============================================================================================================
+Changes in [3.83.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.83.0) (2023-10-24)
+=====================================================================================================
 
 ## ✨ Features
  * Iterate `io.element.late_event` decoration ([\#11760](https://github.com/matrix-org/matrix-react-sdk/pull/11760)). Fixes vector-im/element-web#26384.
@@ -16,6 +16,7 @@ Changes in [3.83.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
  * Use stable get_login_token and remove unstable MSC3882 support ([\#11001](https://github.com/matrix-org/matrix-react-sdk/pull/11001)). Contributed by @hughns.
 
 ## 🐛 Bug Fixes
+ * Set max size for Element logo in search warning ([\#11779](https://github.com/matrix-org/matrix-react-sdk/pull/11779)). Fixes vector-im/element-web#26408.
  * Avoid error when DMing oneself ([\#11754](https://github.com/matrix-org/matrix-react-sdk/pull/11754)). Fixes vector-im/element-web#7242.
  * Fix: Message shield alignment is not right. ([\#11703](https://github.com/matrix-org/matrix-react-sdk/pull/11703)). Fixes vector-im/element-web#26142. Contributed by @manancodes.
  * fix logging full event ([\#11755](https://github.com/matrix-org/matrix-react-sdk/pull/11755)). Fixes vector-im/element-web#26376.
