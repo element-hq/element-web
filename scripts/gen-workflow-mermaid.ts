@@ -336,14 +336,16 @@ class MermaidFlowchartPrinter {
         this.currentIndent += delta * MermaidFlowchartPrinter.INDENT;
     }
 
-    public constructor(direction: "TD" | "TB" | "BT" | "RL" | "LR", private readonly markdown = false) {
+    public constructor(direction: "TD" | "TB" | "BT" | "RL" | "LR", title?: string, private readonly markdown = false) {
         if (this.markdown) {
             this.print("```mermaid");
-            this.print("---");
-            this.print(`title: Test`); // TODO
-            this.print("---");
         }
         // Print heading
+        if (title) {
+            this.print("---");
+            this.print(`title: ${title}`);
+            this.print("---");
+        }
         this.print(`flowchart ${direction}`);
         this.indent();
     }
@@ -437,7 +439,11 @@ for (const workflow of workflows.values()) {
 
 graph.cull();
 graph.connectedSubgraphs.forEach((graph) => {
-    const printer = new MermaidFlowchartPrinter("LR", true);
+    const title = [...graph.roots]
+        .map((root) => root.name)
+        .join(" & ")
+        .replaceAll("<br>", " ");
+    const printer = new MermaidFlowchartPrinter("LR", title, true);
     graph.nodes.forEach((node) => {
         if ("project" in node) {
             // TODO unsure about this edge
