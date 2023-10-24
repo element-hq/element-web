@@ -124,6 +124,7 @@
         "chokidar": "^3.5.1",
         "concurrently": "^8.0.0",
         "cpx": "1.5.0",
+        "cronstrue": "^2.41.0",
         "css-loader": "^4",
         "dotenv": "^16.0.2",
         "eslint": "8.51.0",

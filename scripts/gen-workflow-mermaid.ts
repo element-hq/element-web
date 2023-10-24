@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import YAML from "yaml";
 import parseArgs from "minimist";
+import cronstrue from "cronstrue";
 
 const argv = parseArgs<{
     debug: boolean;
@@ -225,7 +226,7 @@ const TRIGGERS: {
     schedule: (data) =>
         data.map(({ cron }) => ({
             id: `on:schedule/${cron}`,
-            name: `Schedule<br>${cron}`,
+            name: cronstrue.toString(cron),
             shape: "circle",
         })),
     pull_request: (_, { project }) => ({
