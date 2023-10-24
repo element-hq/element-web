@@ -3,7 +3,7 @@ on:
     push:
         branches: [develop]
         paths:
-            - "src/strings/i18n/en_EN.json"
+            - "src/i18n/strings/en_EN.json"
 jobs:
     upload:
         uses: matrix-org/matrix-web-i18n/.github/workflows/localazy_upload.yaml@main
