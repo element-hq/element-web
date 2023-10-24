@@ -131,7 +131,7 @@ interface Workflow extends Node {
 }
 
 interface Job extends Node {
-    id: string;
+    jobId: string; // id relative to workflow
     needs?: string[];
     strategy?: {
         matrix: {
@@ -288,7 +288,7 @@ for (const projectPath of argv._) {
         const data = readYaml<WorkflowYaml>(workflowsPath, file);
         const name = data.name ?? file;
         const workflow: Workflow = {
-            id: name,
+            id: `${project.name}/${name}`,
             name,
             shape: "hexagon",
             path: path.join(workflowsPath, file),
@@ -302,7 +302,8 @@ for (const projectPath of argv._) {
         for (const jobId in data.jobs) {
             const job = data.jobs[jobId];
             workflow.jobs.push({
-                id: jobId,
+                id: `${workflow.name}/${jobId}`,
+                jobId,
                 name: job.name ?? jobId,
                 strategy: job.strategy,
                 needs: job.needs ? toArray(job.needs) : undefined,
@@ -352,9 +353,8 @@ class MermaidFlowchartPrinter {
         this.indent();
     }
 
-    public subgraph(name: string, fn: () => void): void {
-        const id = this.idGenerator.get(name);
-        this.print(`subgraph ${id}["${name}"]`);
+    public subgraph(id: string, name: string, fn: () => void): void {
+        this.print(`subgraph ${this.idGenerator.get(id)}["${name}"]`);
         this.indent();
         fn();
         this.indent(-1);
@@ -457,13 +457,15 @@ graph.connectedSubgraphs.forEach((graph) => {
                 subgraph.addNode(job);
                 if (job.needs) {
                     toArray(job.needs).forEach((req) => {
-                        subgraph.addEdge(node.jobs.find((job) => job.id === req)!, job, "needs");
+                        subgraph.addEdge(node.jobs.find((job) => job.jobId === req)!, job, "needs");
                     });
                 }
             }
 
-            printer.subgraph(node.name, () => {
+            printer.subgraph(node.id, node.name, () => {
+                const roots = subgraph.roots;
                 subgraph.nodes.forEach((node) => {
+                    if (roots.has(node)) return;
                     printer.node(node);
                 });
 
@@ -471,7 +473,7 @@ graph.connectedSubgraphs.forEach((graph) => {
                     printer.edge(source, destination, text);
                 });
 
-                subgraph.roots.forEach((job) => {
+                roots.forEach((job) => {
                     if (!job.strategy?.matrix) {
                         printer.node(job);
                         return;
@@ -507,8 +509,8 @@ graph.connectedSubgraphs.forEach((graph) => {
                         return;
                     }
 
-                    printer.subgraph(job.name, () => {
-                        variations.forEach((variation) => {
+                    printer.subgraph(job.id, job.name, () => {
+                        variations.forEach((variation, i) => {
                             let variationName = job.name;
                             if (variationName.includes("${{ matrix.")) {
                                 Object.keys(variation).map((key) => {
@@ -518,7 +520,7 @@ graph.connectedSubgraphs.forEach((graph) => {
                                 variationName = `${variationName} (${Object.values(variation).join(", ")})`;
                             }
 
-                            printer.node({ ...job, name: variationName });
+                            printer.node({ ...job, id: `${job.id}-variation-${i}`, name: variationName });
                         });
                     });
                 });
