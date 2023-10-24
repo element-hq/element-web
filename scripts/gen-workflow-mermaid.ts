@@ -15,12 +15,12 @@ const argv = parseArgs<{
 });
 
 class IdGenerator {
-    private id = 10;
+    private id = 0;
     private map = new Map<string, string>();
 
     public get(s: string): string {
         if (this.map.has(s)) return this.map.get(s)!;
-        const id = this.id.toString(36).toLowerCase();
+        const id = "ID" + this.id.toString(36).toLowerCase();
         this.map.set(s, id);
         this.id++;
         return id;
