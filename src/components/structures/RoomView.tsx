@@ -539,9 +539,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (this.context.widgetLayoutStore.hasMaximisedWidget(this.state.room)) {
             // Show chat in right panel when a widget is maximised
             this.context.rightPanelStore.setCard({ phase: RightPanelPhases.Timeline });
-        } else {
-            // Close the chat in right panel when the widget is unmaximised
-            this.context.rightPanelStore.togglePanel(null);
         }
         this.checkWidgets(this.state.room);
     };
