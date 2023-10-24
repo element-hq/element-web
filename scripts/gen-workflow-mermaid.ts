@@ -174,6 +174,7 @@ interface WorkflowYaml {
 
 type Trigger = Node;
 
+// TODO workflow_call reusables
 /* eslint-disable @typescript-eslint/naming-convention */
 const TRIGGERS: {
     [key in keyof WorkflowYaml["on"]]: (
@@ -216,6 +217,7 @@ const TRIGGERS: {
         name: `Pull Request<br>${project.name}`,
         shape: "circle",
     }),
+    workflow_run: (data) => data.workflows.map((parent) => workflows.get(parent)!),
 };
 /* eslint-enable @typescript-eslint/naming-convention */
 
@@ -430,10 +432,6 @@ for (const workflow of workflows.values()) {
             graph.addNode(node);
             graph.addEdge(node, workflow);
         });
-    });
-
-    workflow.on.workflow_run?.workflows.forEach((parent) => {
-        graph.addEdge(workflows.get(parent)!, workflow);
     });
 }
 
