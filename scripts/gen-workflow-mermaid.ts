@@ -30,7 +30,7 @@ class IdGenerator {
 }
 
 interface Node {
-    // Workflows are keyed by name??id
+    // Workflows are keyed by project/name??id
     // Jobs are keyed by id
     // Triggers are keyed by id
     id: string;
@@ -221,9 +221,9 @@ const TRIGGERS: {
 };
 /* eslint-enable @typescript-eslint/naming-convention */
 
-const triggers = new Map<string, Trigger>();
-const projects = new Map<string, Project>();
-const workflows = new Map<string, Workflow>();
+const triggers = new Map<string, Trigger>(); // keyed by trigger id
+const projects = new Map<string, Project>(); // keyed by project name
+const workflows = new Map<string, Workflow>(); // keyed by workflow name
 
 function getTriggerNodes<K extends keyof WorkflowYaml["on"]>(key: K, workflow: Workflow): Trigger[] {
     if (!TRIGGERS[key]) return [];
