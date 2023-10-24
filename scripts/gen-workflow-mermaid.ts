@@ -556,13 +556,11 @@ components.forEach((graph) => {
                     if (job.strategy.matrix.include) {
                         variations.push(...job.strategy.matrix.include);
                     }
-                    if (job.strategy.matrix.exclude) {
-                        job.strategy.matrix.exclude.forEach((exclusion) => {
-                            variations = variations.filter((variation) => {
-                                return !shallowCompare(exclusion, variation);
-                            });
+                    job.strategy.matrix.exclude?.forEach((exclusion) => {
+                        variations = variations.filter((variation) => {
+                            return !shallowCompare(exclusion, variation);
                         });
-                    }
+                    });
 
                     // TODO validate edge case
                     if (variations.length === 0) {
