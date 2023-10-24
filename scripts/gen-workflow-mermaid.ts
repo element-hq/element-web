@@ -226,7 +226,7 @@ const TRIGGERS: {
     schedule: (data) =>
         data.map(({ cron }) => ({
             id: `on:schedule/${cron}`,
-            name: cronstrue.toString(cron),
+            name: cronstrue.toString(cron).replaceAll(", ", "<br>"),
             shape: "circle",
         })),
     pull_request: (_, { project }) => ({
@@ -480,8 +480,8 @@ graph.components.forEach((graph) => {
     graph.nodes.forEach((node) => {
         if ("project" in node) {
             // TODO unsure about this edge
-            // if (Object.keys(node.jobs).length === 1) {
-            //     printer.node(node.name, node.shape, link);
+            // if (node.jobs.length === 1) {
+            //     printer.node(node);
             //     return;
             // }
 
