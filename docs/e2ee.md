@@ -36,7 +36,7 @@ When `force_disable` is true:
 -   any `io.element.e2ee.default` value will be disregarded.
 
 Note: If the server is configured to forcibly enable encryption for some or all rooms,
-this behaviour will be overriden.
+this behaviour will be overridden.
 
 # Secure backup
 

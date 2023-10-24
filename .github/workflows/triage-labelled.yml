@@ -20,7 +20,8 @@ jobs:
             contains(github.event.issue.labels.*.name, 'A-Video-Rooms') ||
             contains(github.event.issue.labels.*.name, 'A-Message-Starring') ||
             contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor') ||
-            contains(github.event.issue.labels.*.name, 'A-Element-Call')
+            contains(github.event.issue.labels.*.name, 'A-Element-Call') ||
+            contains(github.event.issue.labels.*.name, 'A-Element-R')
         steps:
             - uses: actions/github-script@v6
               with:
@@ -99,45 +100,6 @@ jobs:
                   project-url: https://github.com/orgs/vector-im/projects/48
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
-    ps_features1:
-        name: Add labelled issues to PS features team 1
-        runs-on: ubuntu-latest
-        if: >
-            contains(github.event.issue.labels.*.name, 'A-Polls') ||
-            contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
-            (contains(github.event.issue.labels.*.name, 'A-Voice-Messages') &&
-              !contains(github.event.issue.labels.*.name, 'A-Broadcast')) ||
-            (contains(github.event.issue.labels.*.name, 'A-Session-Mgmt') &&
-              contains(github.event.issue.labels.*.name, 'A-User-Settings'))
-        steps:
-            - uses: actions/add-to-project@main
-              with:
-                  project-url: https://github.com/orgs/vector-im/projects/56
-                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
-    ps_features2:
-        name: Add labelled issues to PS features team 2
-        runs-on: ubuntu-latest
-        if: >
-            contains(github.event.issue.labels.*.name, 'A-DM-Start') ||
-            contains(github.event.issue.labels.*.name, 'A-Broadcast')
-        steps:
-            - uses: actions/add-to-project@main
-              with:
-                  project-url: https://github.com/orgs/vector-im/projects/58
-                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
-    ps_features3:
-        name: Add labelled issues to PS features team 3
-        runs-on: ubuntu-latest
-        if: >
-            contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor')
-        steps:
-            - uses: actions/add-to-project@main
-              with:
-                  project-url: https://github.com/orgs/vector-im/projects/57
-                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
     voip:
         name: Add labelled issues to VoIP project board
         runs-on: ubuntu-latest
@@ -159,3 +121,42 @@ jobs:
               with:
                   project-url: https://github.com/orgs/vector-im/projects/57
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    tech_debt:
+        name: Add labelled issues to tech debt project
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'A-Developer-Experience') ||
+            contains(github.event.issue.labels.*.name, 'A-Documentation') ||
+            contains(github.event.issue.labels.*.name, 'A-Packaging') ||
+            contains(github.event.issue.labels.*.name, 'A-Technical-Debt') ||
+            contains(github.event.issue.labels.*.name, 'A-Testing') ||
+            contains(github.event.issue.labels.*.name, 'Z-Flaky-Test')
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/vector-im/projects/101
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    element_r:
+        name: Add Element R issues to Crypto Team board
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'A-Element-R')
+        steps:
+            - id: add_to_project
+              uses: actions/add-to-project@v0.5.0
+              with:
+                  project-url: ${{ env.PROJECT_URL }}
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+            - id: set_fields
+              uses: titoportas/update-project-fields@020b5aa9db8f9501d4b16d6417c2132ff26e6279 # v0.1.0
+              with:
+                  project-url: ${{ env.PROJECT_URL }}
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  item-id: ${{ steps.add_to_project.outputs.itemId }} # Use the item-id output of the previous step
+                  field-keys: Workstream,module
+                  field-values: Element-R,web
+        env:
+            PROJECT_URL: https://github.com/orgs/vector-im/projects/76

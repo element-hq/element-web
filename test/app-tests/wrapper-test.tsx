@@ -22,6 +22,7 @@ import fetchMock from "fetch-mock-jest";
 import { render, RenderResult, screen } from "@testing-library/react";
 import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
 import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
+import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 
 import WebPlatform from "../../src/vector/platform/WebPlatform";
 import { loadApp } from "../../src/vector/app";
@@ -68,7 +69,8 @@ describe("Wrapper", () => {
             }
         });
 
-        const matrixChatResult: RenderResult = render(await loadApp({}));
+        const ref = React.createRef<MatrixChat>();
+        const matrixChatResult: RenderResult = render(await loadApp({}, ref));
 
         // at this point, we're trying to do a guest registration;
         // we expect a spinner
@@ -83,5 +85,8 @@ describe("Wrapper", () => {
 
         expect(header.nextSibling).toBe(matrixChat);
         expect(matrixChat.nextSibling).toBe(footer);
+
+        // Should still hold a reference to the MatrixChat component
+        expect(ref.current).toBeInstanceOf(MatrixChat);
     });
 });
