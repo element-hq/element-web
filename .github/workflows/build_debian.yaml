@@ -12,8 +12,23 @@ jobs:
         env:
             R2_INCOMING_BUCKET: ${{ vars.R2_INCOMING_BUCKET }}
             R2_URL: ${{ vars.CF_R2_S3_API }}
+            VERSION: ${{ github.ref_name }}
         steps:
             - uses: actions/checkout@v4
+
+            - name: Download package
+              run: |
+                  wget "https://github.com/vector-im/element-web/releases/download/$VERSION/element-$VERSION.tar.gz"
+                  wget "https://github.com/vector-im/element-web/releases/download/$VERSION/element-$VERSION.tar.gz.asc"
+
+            - name: Check GPG signature
+              run: |
+                  wget "https://packages.element.io/element-release-key.gpg"
+                  gpg --import element-release-key.gpg
+                  gpg --fingerprint "$FINGERPRINT"
+                  gpg --verify "element-$VERSION.tar.gz.asc" "element-$VERSION.tar.gz"
+              env:
+                  FINGERPRINT: ${{ vars.GPG_FINGERPRINT }}
 
             - name: Prepare
               run: |
@@ -21,11 +36,8 @@ jobs:
                   cp -R debian/ /tmp/element-web-debian/DEBIAN/
                   mkdir -p /tmp/element-web-debian/usr/share/element-web/
 
-                  wget https://github.com/vector-im/element-web/releases/download/$VERSION/element-$VERSION.tar.gz
-                  mv element-* /tmp/element-web-debian/usr/share/element-web
-                  mv debian/usr/share/element-web/config.sample.json /tmp/element-web-debian/usr/share/element-web/config.json
-              env:
-                  VERSION: ${{ github.ref_name }}
+                  tar -xf "element-$VERSION.tar.gz" -C /tmp/element-web/debian/usr/share/element-web --strip-components=1
+                  cp config.sample.json /tmp/element-web-debian/usr/share/element-web/config.json
 
             - name: Build deb package
               run: |
