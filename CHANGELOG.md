@@ -1,5 +1,5 @@
-Changes in [1.11.47-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.47-rc.1) (2023-10-17)
-===========================================================================================================
+Changes in [1.11.47](https://github.com/vector-im/element-web/releases/tag/v1.11.47) (2023-10-24)
+=================================================================================================
 
 ## 🦖 Deprecations
  * Deprecate customisations in favour of Module API ([\#25736](https://github.com/vector-im/element-web/pull/25736)). Fixes #25733.
@@ -20,6 +20,7 @@ Changes in [1.11.47-rc.1](https://github.com/vector-im/element-web/releases/tag/
  * Use stable get_login_token and remove unstable MSC3882 support ([\#11001](https://github.com/matrix-org/matrix-react-sdk/pull/11001)). Contributed by @hughns.
 
 ## 🐛 Bug Fixes
+ * Set max size for Element logo in search warning ([\#11779](https://github.com/matrix-org/matrix-react-sdk/pull/11779)). Fixes #26408.
  * Avoid error when DMing oneself ([\#11754](https://github.com/matrix-org/matrix-react-sdk/pull/11754)). Fixes #7242.
  * Fix: Message shield alignment is not right. ([\#11703](https://github.com/matrix-org/matrix-react-sdk/pull/11703)). Fixes #26142. Contributed by @manancodes.
  * fix logging full event ([\#11755](https://github.com/matrix-org/matrix-react-sdk/pull/11755)). Fixes #26376.
