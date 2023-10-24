@@ -136,6 +136,9 @@ interface Job extends Node {
     strategy?: {
         matrix: {
             [key: string]: string[];
+        } & {
+            include?: Record<string, string>[];
+            exclude?: Record<string, string>[];
         };
     };
 }
@@ -220,11 +223,10 @@ const triggers = new Map<string, Trigger>();
 const projects = new Map<string, Project>();
 const workflows = new Map<string, Workflow>();
 
-function getTriggerNodes(key: keyof WorkflowYaml["on"], workflow: Workflow): Trigger[] {
+function getTriggerNodes<K extends keyof WorkflowYaml["on"]>(key: K, workflow: Workflow): Trigger[] {
     if (!TRIGGERS[key]) return [];
     const data = workflow.on[key]!;
-    // TODO types
-    const nodes = toArray(TRIGGERS[key]!(data as any, workflow));
+    const nodes = toArray(TRIGGERS[key]!(data, workflow));
     return nodes.map((node) => {
         if (triggers.has(node.id)) return triggers.get(node.id)!;
         triggers.set(node.id, node);
@@ -484,14 +486,12 @@ graph.connectedSubgraphs.forEach((graph) => {
                             .filter((variation) => Object.keys(variation).length > 0);
 
                         if (job.strategy.matrix.include) {
-                            // TODO types
-                            variations.push(...(job.strategy.matrix.include as any));
+                            variations.push(...job.strategy.matrix.include);
                         }
                         if (job.strategy.matrix.exclude) {
                             job.strategy.matrix.exclude.forEach((exclusion) => {
                                 variations = variations.filter((variation) => {
-                                    // TODO types
-                                    return !shallowCompare(exclusion as any, variation);
+                                    return !shallowCompare(exclusion, variation);
                                 });
                             });
                         }
