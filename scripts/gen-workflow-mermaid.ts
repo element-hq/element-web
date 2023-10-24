@@ -5,6 +5,7 @@ import path from "node:path";
 import YAML from "yaml";
 import parseArgs from "minimist";
 import cronstrue from "cronstrue";
+import { partition } from "lodash";
 
 const argv = parseArgs<{
     debug: boolean;
@@ -56,14 +57,27 @@ interface Node {
     link?: string;
 }
 
+type Edge<T> = [source: T, destination: T, label?: string];
+
 class Graph<T extends Node> {
     public nodes = new Map<string, T>();
-    public edges: [source: T, destination: T, label?: string][] = [];
+    public edges: Edge<T>[] = [];
 
     public addNode(node: T): void {
         if (!this.nodes.has(node.id)) {
             this.nodes.set(node.id, node);
         }
+    }
+
+    public removeNode(node: T): Edge<T>[] {
+        if (!this.nodes.has(node.id)) return [];
+        this.nodes.delete(node.id);
+        const [removedEdges, keptEdges] = partition(
+            this.edges,
+            ([source, destination]) => source === node || destination === node,
+        );
+        this.edges = keptEdges;
+        return removedEdges;
     }
 
     public addEdge(source: T, destination: T, label?: string): void {
@@ -467,11 +481,26 @@ for (const workflow of workflows.values()) {
 // TODO separate disconnected nodes into their own graph
 graph.cull();
 
+// This is an awful hack to make the output graphs much better by allowing the splitting of certain nodes //
+const manualNode = triggers.get("on:workflow_dispatch")!;
+const manualNodeEdges = graph.removeNode(manualNode);
+const components = graph.components;
+
+components.forEach((graph) => {
+    manualNodeEdges.forEach((edge) => {
+        if (graph.nodes.has(edge[1].id)) {
+            graph.addNode(manualNode);
+            graph.addEdge(...edge);
+        }
+    });
+});
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 if (argv.debug) {
     debugGraph("global", graph);
 }
 
-graph.components.forEach((graph) => {
+components.forEach((graph) => {
     const title = [...graph.roots]
         .map((root) => root.name)
         .join(" & ")
