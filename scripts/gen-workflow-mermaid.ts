@@ -5,7 +5,10 @@ import path from "node:path";
 import YAML from "yaml";
 import parseArgs from "minimist";
 
-const argv = parseArgs(process.argv.slice(2), {
+const argv = parseArgs<{
+    debug: boolean;
+    on: string | string[];
+}>(process.argv.slice(2), {
     string: ["on"],
     boolean: ["debug"],
 });
@@ -227,6 +230,11 @@ const workflows = new Map<string, Workflow>(); // keyed by workflow name
 
 function getTriggerNodes<K extends keyof WorkflowYaml["on"]>(key: K, workflow: Workflow): Trigger[] {
     if (!TRIGGERS[key]) return [];
+
+    if ((typeof argv.on === "string" || Array.isArray(argv.on)) && !toArray(argv.on).includes(key)) {
+        return [];
+    }
+
     const data = workflow.on[key]!;
     const nodes = toArray(TRIGGERS[key]!(data, workflow));
     return nodes.map((node) => {
@@ -424,7 +432,12 @@ class MermaidFlowchartPrinter {
 
 const graph = new Graph<Workflow | Node>();
 for (const workflow of workflows.values()) {
-    if (typeof argv.on === "string" && !(argv.on in workflow.on)) continue;
+    if (
+        (typeof argv.on === "string" || Array.isArray(argv.on)) &&
+        !toArray(argv.on).some((trigger) => trigger in workflow.on)
+    ) {
+        continue;
+    }
 
     Object.keys(workflow.on).forEach((trigger) => {
         const nodes = getTriggerNodes(trigger as keyof WorkflowYaml["on"], workflow);
