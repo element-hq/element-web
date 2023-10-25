@@ -25,7 +25,7 @@ interface UnsignedLateEventInfo {
     /**
      * Milliseconds since epoch representing the time the event was received by the server
      */
-    received_at: number;
+    received_ts: number;
     /**
      * An opaque identifier representing the group the server has put the late arriving event into
      */
