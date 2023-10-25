@@ -62,7 +62,14 @@ jobs:
                               headers,
                           });
 
+                          if (!res.ok) {
+                              console.log(roomId, "failed to fetch", await res.text());
+                              return;
+                          }
+
                           const data = await res.json();
+                          console.log(roomId, "got event", data);
+                          
                           const topic = data.topic.replace(regex, releaseTopic);
                           if (topic === data.topic) {
                               console.log(roomId, "nothing to do");
