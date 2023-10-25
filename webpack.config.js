@@ -86,9 +86,9 @@ function parseOverridesToReplacements(overrides) {
                 // Starting with Webpack 5 we also need to set the context as otherwise replacing
                 // files in e.g. matrix-react-sdk with files from element-web will try to resolve
                 // them within matrix-react-sdk (https://github.com/webpack/webpack/issues/17716)
-                resource.context = path.dirname(resource.request)
+                resource.context = path.dirname(resource.request);
                 resource.createData.context = path.dirname(resource.createData.resource);
-              }
+            },
         );
     });
 }
@@ -243,18 +243,18 @@ module.exports = (env, argv) => {
             },
             fallback: {
                 // Mock out the NodeFS module: The opus decoder imports this wrongly.
-                fs: false,
-                net: false,
-                tls: false,
-                crypto: false,
+                "fs": false,
+                "net": false,
+                "tls": false,
+                "crypto": false,
 
                 // Polyfill needed by counterpart
-                util: require.resolve("util/"),
+                "util": require.resolve("util/"),
                 // Polyfill needed by matrix-js-sdk/src/crypto
-                buffer: require.resolve("buffer/"),
+                "buffer": require.resolve("buffer/"),
                 // Polyfill needed by sentry
-                "process/browser": require.resolve("process/browser")
-            }
+                "process/browser": require.resolve("process/browser"),
+            },
         },
 
         module: {
@@ -728,8 +728,8 @@ module.exports = (env, argv) => {
             // Automatically load buffer & process modules as we use them without explicitly
             // importing them.
             new webpack.ProvidePlugin({
-                Buffer: ['buffer', 'Buffer'],
-                process: 'process/browser',
+                Buffer: ["buffer", "Buffer"],
+                process: "process/browser",
             }),
         ].filter(Boolean),
 
