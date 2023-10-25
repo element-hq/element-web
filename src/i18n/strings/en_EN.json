@@ -1260,6 +1260,8 @@
         "error_permissions_space": "You do not have permission to invite people to this space.",
         "error_profile_undisclosed": "User may or may not exist",
         "error_transfer_multiple_target": "A call can only be transferred to a single user.",
+        "error_unfederated_room": "This room is unfederated. You cannot invite people from external servers.",
+        "error_unfederated_space": "This space is unfederated. You cannot invite people from external servers.",
         "error_unknown": "Unknown server error",
         "error_user_not_found": "User does not exist",
         "error_version_unsupported_room": "The user's homeserver does not support the version of the room.",

@@ -246,16 +246,26 @@ export default class MultiInviter {
 
                     logger.error(err);
 
-                    const isSpace = this.roomId && this.matrixClient.getRoom(this.roomId)?.isSpaceRoom();
+                    const room = this.roomId ? this.matrixClient.getRoom(this.roomId) : null;
+                    const isSpace = room?.isSpaceRoom();
+                    const isFederated = room?.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent()[
+                        "m.federate"
+                    ];
 
                     let errorText: string | undefined;
                     let fatal = false;
                     switch (err.errcode) {
                         case "M_FORBIDDEN":
                             if (isSpace) {
-                                errorText = _t("invite|error_permissions_space");
+                                errorText =
+                                    isFederated === false
+                                        ? _t("invite|error_unfederated_space")
+                                        : _t("invite|error_permissions_space");
                             } else {
-                                errorText = _t("invite|error_permissions_room");
+                                errorText =
+                                    isFederated === false
+                                        ? _t("invite|error_unfederated_room")
+                                        : _t("invite|error_permissions_room");
                             }
                             fatal = true;
                             break;

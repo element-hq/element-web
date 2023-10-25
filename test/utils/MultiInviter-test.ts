@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixClient, MatrixError, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixClient, MatrixError, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import Modal, { ComponentType, ComponentProps } from "../../src/Modal";
@@ -186,6 +186,57 @@ describe("MultiInviter", () => {
                 action: "Unban",
             });
             expect(client.unban).toHaveBeenCalledWith(ROOMID, MXID1);
+        });
+
+        it("should show sensible error when attempting to invite over federation with m.federate=false", async () => {
+            mocked(client.invite).mockRejectedValueOnce(
+                new MatrixError({
+                    errcode: "M_FORBIDDEN",
+                }),
+            );
+            const room = new Room(ROOMID, client, client.getSafeUserId());
+            room.currentState.setStateEvents([
+                new MatrixEvent({
+                    type: EventType.RoomCreate,
+                    state_key: "",
+                    content: {
+                        "m.federate": false,
+                    },
+                    room_id: ROOMID,
+                }),
+            ]);
+            mocked(client.getRoom).mockReturnValue(room);
+
+            await inviter.invite(["@user:other_server"]);
+            expect(inviter.getErrorText("@user:other_server")).toMatchInlineSnapshot(
+                `"This room is unfederated. You cannot invite people from external servers."`,
+            );
+        });
+
+        it("should show sensible error when attempting to invite over federation with m.federate=false to space", async () => {
+            mocked(client.invite).mockRejectedValueOnce(
+                new MatrixError({
+                    errcode: "M_FORBIDDEN",
+                }),
+            );
+            const room = new Room(ROOMID, client, client.getSafeUserId());
+            room.currentState.setStateEvents([
+                new MatrixEvent({
+                    type: EventType.RoomCreate,
+                    state_key: "",
+                    content: {
+                        "m.federate": false,
+                        "type": "m.space",
+                    },
+                    room_id: ROOMID,
+                }),
+            ]);
+            mocked(client.getRoom).mockReturnValue(room);
+
+            await inviter.invite(["@user:other_server"]);
+            expect(inviter.getErrorText("@user:other_server")).toMatchInlineSnapshot(
+                `"This space is unfederated. You cannot invite people from external servers."`,
+            );
         });
     });
 });

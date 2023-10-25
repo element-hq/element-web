@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { createRef, ReactNode, SyntheticEvent } from "react";
 import classNames from "classnames";
-import { RoomMember, Room, MatrixError } from "matrix-js-sdk/src/matrix";
+import { RoomMember, Room, MatrixError, EventType } from "matrix-js-sdk/src/matrix";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqBy } from "lodash";
@@ -368,26 +368,32 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         this.profilesStore = SdkContextClass.instance.userProfilesStore;
 
-        const alreadyInvited = new Set([MatrixClientPeg.safeGet().getUserId()!]);
+        const excludedIds = new Set([MatrixClientPeg.safeGet().getUserId()!]);
         const welcomeUserId = SdkConfig.get("welcome_user_id");
-        if (welcomeUserId) alreadyInvited.add(welcomeUserId);
+        if (welcomeUserId) excludedIds.add(welcomeUserId);
 
         if (isRoomInvite(props)) {
             const room = MatrixClientPeg.safeGet().getRoom(props.roomId);
+            const isFederated = room?.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent()["m.federate"];
             if (!room) throw new Error("Room ID given to InviteDialog does not look like a room");
-            room.getMembersWithMembership("invite").forEach((m) => alreadyInvited.add(m.userId));
-            room.getMembersWithMembership("join").forEach((m) => alreadyInvited.add(m.userId));
+            room.getMembersWithMembership("invite").forEach((m) => excludedIds.add(m.userId));
+            room.getMembersWithMembership("join").forEach((m) => excludedIds.add(m.userId));
             // add banned users, so we don't try to invite them
-            room.getMembersWithMembership("ban").forEach((m) => alreadyInvited.add(m.userId));
+            room.getMembersWithMembership("ban").forEach((m) => excludedIds.add(m.userId));
+            if (isFederated === false) {
+                // exclude users from external servers
+                const homeserver = props.roomId.split(":")[1];
+                this.excludeExternals(homeserver, excludedIds);
+            }
         }
 
         this.state = {
             targets: [], // array of Member objects (see interface above)
             filterText: this.props.initialText || "",
             // Mutates alreadyInvited set so that buildSuggestions doesn't duplicate any users
-            recents: InviteDialog.buildRecents(alreadyInvited),
+            recents: InviteDialog.buildRecents(excludedIds),
             numRecentsShown: INITIAL_ROOMS_SHOWN,
-            suggestions: this.buildSuggestions(alreadyInvited),
+            suggestions: this.buildSuggestions(excludedIds),
             numSuggestionsShown: INITIAL_ROOMS_SHOWN,
             serverResultsMixin: [],
             threepidResultsMixin: [],
@@ -417,6 +423,18 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private onConsultFirstChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({ consultFirst: ev.target.checked });
     };
+
+    private excludeExternals(homeserver: string, excludedTargetIds: Set<string>): void {
+        const client = MatrixClientPeg.safeGet();
+        // users with room membership
+        const members = Object.values(buildMemberScores(client)).map(({ member }) => member.userId);
+        // users with dm membership
+        const roomMembers = Object.keys(DMRoomMap.shared().getUniqueRoomsWithIndividuals());
+        roomMembers.forEach((id) => members.push(id));
+        // filter duplicates and user IDs from external servers
+        const externals = new Set(members.filter((id) => !id.includes(homeserver)));
+        externals.forEach((id) => excludedTargetIds.add(id));
+    }
 
     public static buildRecents(excludedTargetIds: Set<string>): Result[] {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room

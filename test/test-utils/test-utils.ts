@@ -291,13 +291,14 @@ type MakeEventProps = MakeEventPassThruProps & {
     unsigned?: IUnsigned;
 };
 
-export const mkRoomCreateEvent = (userId: string, roomId: string): MatrixEvent => {
+export const mkRoomCreateEvent = (userId: string, roomId: string, content?: IContent): MatrixEvent => {
     return mkEvent({
         event: true,
         type: EventType.RoomCreate,
         content: {
             creator: userId,
             room_version: KNOWN_SAFE_ROOM_VERSION,
+            ...content,
         },
         skey: "",
         user: userId,
