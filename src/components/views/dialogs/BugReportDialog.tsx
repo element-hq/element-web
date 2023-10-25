@@ -233,7 +233,8 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                                     a: (sub) => (
                                         <a
                                             target="_blank"
-                                            href="https://github.com/vector-im/element-web/issues/new/choose"
+                                            href={SdkConfig.get().feedback.new_issue_url}
+                                            rel="noreferrer noopener"
                                         >
                                             {sub}
                                         </a>

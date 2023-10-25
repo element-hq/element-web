@@ -599,7 +599,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                         {
                             issueLink: (label) => (
                                 <a
-                                    href="https://github.com/vector-im/element-web/issues/new/choose"
+                                    href={SdkConfig.get().feedback.new_issue_url}
                                     target="_blank"
                                     rel="noreferrer noopener"
                                 >

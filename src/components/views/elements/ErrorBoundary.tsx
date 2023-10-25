@@ -77,7 +77,7 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
 
     public render(): ReactNode {
         if (this.state.error) {
-            const newIssueUrl = "https://github.com/vector-im/element-web/issues/new/choose";
+            const newIssueUrl = SdkConfig.get().feedback.new_issue_url;
 
             let bugReportSection;
             if (SdkConfig.get().bug_report_endpoint_url) {
