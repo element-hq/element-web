@@ -43,6 +43,7 @@ import {
     saveAndReload,
     sendMessageAsClient,
 } from "./read-receipts-utils";
+import { skipIfRustCrypto } from "../../support/util";
 
 describe("Read receipts", () => {
     const roomAlpha = "Room Alpha";
@@ -321,6 +322,10 @@ describe("Read receipts", () => {
             assertUnreadThread("Root3");
         });
         it("After marking room as read, paging up to find old threads that were never read leaves the room read", () => {
+            // Flaky with rust crypto
+            // See https://github.com/vector-im/element-web/issues/26341
+            skipIfRustCrypto();
+
             // Given lots of messages in threads that are unread but I marked as read on a main timeline message
             goTo(room1);
             receiveMessages(room2, [
