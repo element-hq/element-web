@@ -28,6 +28,7 @@ import {
     mockClientMethodsUser,
     mockClientMethodsServer,
     mockPlatformPeg,
+    mockClientMethodsCrypto,
 } from "../../../test-utils";
 import { UIFeature } from "../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
@@ -70,6 +71,7 @@ describe("<UserSettingsDialog />", () => {
         mockClient = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(userId),
             ...mockClientMethodsServer(),
+            ...mockClientMethodsCrypto(),
         });
         sdkContext = new SdkContextClass();
         sdkContext.client = mockClient;

@@ -168,5 +168,6 @@ export const mockClientMethodsCrypto = (): Partial<
         isCrossSigningReady: jest.fn().mockResolvedValue(true),
         isSecretStorageReady: jest.fn(),
         getSessionBackupPrivateKey: jest.fn(),
+        getVersion: jest.fn().mockReturnValue("Version 0"),
     }),
 });
