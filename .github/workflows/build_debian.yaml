@@ -6,7 +6,6 @@ concurrency: ${{ github.workflow }}
 jobs:
     build:
         name: Build package
-        if: github.event.release.prerelease == false
         environment: packages.element.io
         runs-on: ubuntu-latest
         env:
@@ -53,7 +52,8 @@ jobs:
                   retention-days: 14
 
             #- name: Upload incoming deb
-            #  run: aws s3 cp element-io-archive-keyring.deb "s3://$R2_INCOMING_BUCKET" --endpoint-url "$R2_URL" --region auto
+            #  if: github.event.release.prerelease == false
+            #  run: aws s3 cp element-web.deb "s3://$R2_INCOMING_BUCKET" --endpoint-url "$R2_URL" --region auto
             #  env:
             #      AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
             #      AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
@@ -61,7 +61,7 @@ jobs:
     #reprepro:
     #    needs: build
     #    name: Run reprepro
-    #    if: inputs.deploy && github.event.release.prerelease == false
+    #    if: github.event.release.prerelease == false
     #    uses: ./.github/workflows/reprepro.yaml
     #    secrets: inherit
     #    with:
