@@ -48,7 +48,8 @@
     },
     "privacy_policy_url": "https://element.io/cookie-policy",
     "features": {
-        "feature_video_rooms": true
+        "feature_video_rooms": true,
+        "feature_rust_crypto": true
     },
     "element_call": {
         "url": "https://call.element.dev"
