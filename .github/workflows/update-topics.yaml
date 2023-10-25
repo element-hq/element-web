@@ -62,6 +62,11 @@ jobs:
                               headers,
                           });
 
+                          if (!res.ok) {
+                              console.log(roomId, "failed to fetch", await res.text());
+                              return;
+                          }
+
                           const data = await res.json();
                           const topic = data.topic.replace(regex, releaseTopic);
                           if (topic === data.topic) {
