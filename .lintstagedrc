@@ -1,0 +1,6 @@
+{
+    "src/**/*.(ts|tsx)": ["eslint --fix"],
+    "module_system/**/*.(ts|tsx)": ["eslint --fix --config .eslintrc-module_system.js module_system"],
+    "**/*.(ts|tsx)": ["prettier --write"],
+    "res/css/**/*.pcss": ["stylelint --fix"]
+}
