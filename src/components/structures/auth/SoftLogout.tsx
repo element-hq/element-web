@@ -114,8 +114,9 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         const hasAllParams = queryParams?.["loginToken"];
         if (hasAllParams) {
             this.setState({ loginView: LoginView.Loading });
-            this.trySsoLogin();
-            return;
+
+            const loggedIn = await this.trySsoLogin();
+            if (loggedIn) return;
         }
 
         // Note: we don't use the existing Login class because it is heavily flow-based. We don't
@@ -183,14 +184,18 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         });
     };
 
-    private async trySsoLogin(): Promise<void> {
+    /**
+     * Attempt to login via SSO
+     * @returns A promise that resolves to a boolean -  true when sso login was successful
+     */
+    private async trySsoLogin(): Promise<boolean> {
         this.setState({ busy: true });
 
         const hsUrl = localStorage.getItem(SSO_HOMESERVER_URL_KEY);
         if (!hsUrl) {
             logger.error("Homeserver URL unknown for SSO login callback");
             this.setState({ busy: false, loginView: LoginView.Unsupported });
-            return;
+            return false;
         }
 
         const isUrl = localStorage.getItem(SSO_ID_SERVER_URL_KEY) || MatrixClientPeg.safeGet().getIdentityServerUrl();
@@ -206,16 +211,20 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         } catch (e) {
             logger.error(e);
             this.setState({ busy: false, loginView: LoginView.Unsupported });
-            return;
+            return false;
         }
 
-        Lifecycle.hydrateSession(credentials)
+        return Lifecycle.hydrateSession(credentials)
             .then(() => {
-                if (this.props.onTokenLoginCompleted) this.props.onTokenLoginCompleted();
+                if (this.props.onTokenLoginCompleted) {
+                    this.props.onTokenLoginCompleted();
+                }
+                return true;
             })
             .catch((e) => {
                 logger.error(e);
                 this.setState({ busy: false, loginView: LoginView.Unsupported });
+                return false;
             });
     }
 

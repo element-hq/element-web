@@ -72,9 +72,6 @@ describe("Soft logout", () => {
         });
 
         it("shows the soft-logout page when a request fails, and allows a re-login", () => {
-            // there is a bug in Element which means this only actually works if there is an app reload between
-            // the token login and the soft-logout: https://github.com/vector-im/element-web/issues/25957
-            cy.reload();
             cy.findByRole("heading", { name: "Welcome Alice" });
 
             interceptRequestsWithSoftLogout();
