@@ -568,7 +568,8 @@ components.forEach((graph) => {
                         return;
                     }
 
-                    printer.subgraph(job.id, job.name, () => {
+                    const jobName = job.name.replace(/\${{.+}}/g, "").replace(/(?:\(\)| )+/g, " ");
+                    printer.subgraph(job.id, jobName, () => {
                         variations.forEach((variation, i) => {
                             let variationName = job.name;
                             if (variationName.includes("${{ matrix.")) {
