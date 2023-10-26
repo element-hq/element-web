@@ -10,7 +10,7 @@ jobs:
         if: |
             contains(github.event.issue.assignees.*.login, 't3chguy') ||
             contains(github.event.issue.assignees.*.login, 'andybalaam') ||
-            contains(github.event.issue.assignees.*.login, 'justjanne')
+            contains(github.event.issue.assignees.*.login, 'MidhunSureshR')
         steps:
             - uses: actions/add-to-project@main
               with:

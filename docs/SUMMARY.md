@@ -36,3 +36,4 @@
 -   [Memory profiling](memory-profiles-and-leaks.md)
 -   [Jitsi](jitsi-dev.md)
 -   [Feature flags](feature-flags.md)
+-   [OIDC and delegated authentication](oidc.md)
