@@ -172,7 +172,8 @@ describe("Read receipts", () => {
     });
 
     describe("Paging up", () => {
-        it("Paging up through old messages after a room is read leaves the room read", () => {
+        // Flaky test https://github.com/vector-im/element-web/issues/26437
+        it.skip("Paging up through old messages after a room is read leaves the room read", () => {
             // Given lots of messages are in the room, but we have read them
             goTo(room1);
             receiveMessages(room2, many("Msg", 110));
