@@ -38,6 +38,7 @@ type UserContext = {
 };
 
 type CryptoContext = {
+    crypto_version?: string;
     device_keys?: string;
     cross_signing_ready?: string;
     cross_signing_supported_by_hs?: string;
@@ -116,29 +117,27 @@ function getEnabledLabs(): string {
 }
 
 async function getCryptoContext(client: MatrixClient): Promise<CryptoContext> {
-    // TODO: make this work with rust crypto
-    if (!client.isCryptoEnabled() || !client.crypto) {
+    const cryptoApi = client.getCrypto();
+    if (!cryptoApi) {
         return {};
     }
     const keys = [`ed25519:${client.getDeviceEd25519Key()}`];
     if (client.getDeviceCurve25519Key) {
         keys.push(`curve25519:${client.getDeviceCurve25519Key()}`);
     }
-    const crossSigning = client.crypto.crossSigningInfo;
-    const secretStorage = client.crypto.secretStorage;
-    const pkCache = client.getCrossSigningCacheCallbacks();
-    const sessionBackupKeyFromCache = await client.crypto.getSessionBackupPrivateKey();
+    const crossSigningStatus = await cryptoApi.getCrossSigningStatus();
+    const secretStorage = client.secretStorage;
+    const sessionBackupKeyFromCache = await cryptoApi.getSessionBackupPrivateKey();
 
     return {
+        crypto_version: cryptoApi.getVersion(),
         device_keys: keys.join(", "),
-        cross_signing_ready: String(await client.isCrossSigningReady()),
-        cross_signing_key: crossSigning.getId()!,
-        cross_signing_privkey_in_secret_storage: String(!!(await crossSigning.isStoredInSecretStorage(secretStorage))),
-        cross_signing_master_privkey_cached: String(!!(pkCache && (await pkCache.getCrossSigningKeyCache?.("master")))),
-        cross_signing_user_signing_privkey_cached: String(
-            !!(pkCache && (await pkCache.getCrossSigningKeyCache?.("user_signing"))),
-        ),
-        secret_storage_ready: String(await client.isSecretStorageReady()),
+        cross_signing_ready: String(await cryptoApi.isCrossSigningReady()),
+        cross_signing_key: (await cryptoApi.getCrossSigningKeyId()) ?? undefined,
+        cross_signing_privkey_in_secret_storage: String(crossSigningStatus.privateKeysInSecretStorage),
+        cross_signing_master_privkey_cached: String(crossSigningStatus.privateKeysCachedLocally.masterKey),
+        cross_signing_user_signing_privkey_cached: String(crossSigningStatus.privateKeysCachedLocally.userSigningKey),
+        secret_storage_ready: String(await cryptoApi.isSecretStorageReady()),
         secret_storage_key_in_account: String(await secretStorage.hasKey()),
         session_backup_key_in_secret_storage: String(!!(await client.isKeyBackupKeyStored())),
         session_backup_key_cached: String(!!sessionBackupKeyFromCache),
