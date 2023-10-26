@@ -247,6 +247,10 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
 
                         return pc.plainWithEmoji(`${delimLeft}${tex}${delimRight}`);
                     }
+                    // Spoilers are translated back into their slash command form
+                    else if ((n as Element).hasAttribute("data-mx-spoiler")) {
+                        return [pc.plain("/spoiler "), ...parseChildren(n, pc, opts)];
+                    }
             }
     }
 

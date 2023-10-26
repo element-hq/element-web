@@ -98,6 +98,11 @@ describe("editor/deserialize", function () {
             expect(parts.length).toBe(1);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "/me says DON'T SHOUT!" });
         });
+        it("spoiler", function () {
+            const parts = normalize(parseEvent(textMessage("/spoiler broiler"), createPartCreator()));
+            expect(parts.length).toBe(1);
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "/spoiler broiler" });
+        });
     });
     describe("html messages", function () {
         it("inline styling", function () {
@@ -294,6 +299,13 @@ describe("editor/deserialize", function () {
             const parts = normalize(parseEvent(htmlMessage(html, "m.emote"), createPartCreator()));
             expect(parts.length).toBe(1);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "/me says _DON'T SHOUT_!" });
+        });
+        it("spoiler", function () {
+            const parts = normalize(
+                parseEvent(htmlMessage("<span data-mx-spoiler>broiler</span>"), createPartCreator()),
+            );
+            expect(parts.length).toBe(1);
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "/spoiler broiler" });
         });
         it("preserves nested quotes", () => {
             const html = "<blockquote>foo<blockquote>bar</blockquote></blockquote>";
