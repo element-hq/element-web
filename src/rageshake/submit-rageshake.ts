@@ -82,45 +82,46 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
         body.append("user_id", client.credentials.userId!);
         body.append("device_id", client.deviceId!);
 
-        // TODO: make this work with rust crypto
-        if (client.isCryptoEnabled() && client.crypto) {
+        const cryptoApi = client.getCrypto();
+
+        if (cryptoApi) {
+            body.append("crypto_version", cryptoApi.getVersion());
+
             const keys = [`ed25519:${client.getDeviceEd25519Key()}`];
             if (client.getDeviceCurve25519Key) {
                 keys.push(`curve25519:${client.getDeviceCurve25519Key()}`);
             }
             body.append("device_keys", keys.join(", "));
-            body.append("cross_signing_key", (await client.getCrypto()?.getCrossSigningKeyId()) ?? "n/a");
 
             // add cross-signing status information
-            const crossSigning = client.crypto.crossSigningInfo;
-            const secretStorage = client.crypto.secretStorage;
+            const crossSigningStatus = await cryptoApi.getCrossSigningStatus();
+            const secretStorage = client.secretStorage;
 
-            body.append("cross_signing_ready", String(await client.isCrossSigningReady()));
-            body.append("cross_signing_key", crossSigning.getId() ?? "n/a");
+            body.append("cross_signing_ready", String(await cryptoApi.isCrossSigningReady()));
+            body.append("cross_signing_key", (await cryptoApi.getCrossSigningKeyId()) ?? "n/a");
             body.append(
                 "cross_signing_privkey_in_secret_storage",
-                String(!!(await crossSigning.isStoredInSecretStorage(secretStorage))),
+                String(crossSigningStatus.privateKeysInSecretStorage),
             );
 
-            const pkCache = client.getCrossSigningCacheCallbacks();
             body.append(
                 "cross_signing_master_privkey_cached",
-                String(!!(pkCache && (await pkCache?.getCrossSigningKeyCache?.("master")))),
+                String(crossSigningStatus.privateKeysCachedLocally.masterKey),
             );
             body.append(
                 "cross_signing_self_signing_privkey_cached",
-                String(!!(pkCache && (await pkCache?.getCrossSigningKeyCache?.("self_signing")))),
+                String(crossSigningStatus.privateKeysCachedLocally.selfSigningKey),
             );
             body.append(
                 "cross_signing_user_signing_privkey_cached",
-                String(!!(pkCache && (await pkCache?.getCrossSigningKeyCache?.("user_signing")))),
+                String(crossSigningStatus.privateKeysCachedLocally.userSigningKey),
             );
 
-            body.append("secret_storage_ready", String(await client.isSecretStorageReady()));
+            body.append("secret_storage_ready", String(await cryptoApi.isSecretStorageReady()));
             body.append("secret_storage_key_in_account", String(await secretStorage.hasKey()));
 
             body.append("session_backup_key_in_secret_storage", String(!!(await client.isKeyBackupKeyStored())));
-            const sessionBackupKeyFromCache = await client.crypto.getSessionBackupPrivateKey();
+            const sessionBackupKeyFromCache = await cryptoApi.getSessionBackupPrivateKey();
             body.append("session_backup_key_cached", String(!!sessionBackupKeyFromCache));
             body.append("session_backup_key_well_formed", String(sessionBackupKeyFromCache instanceof Uint8Array));
         }
