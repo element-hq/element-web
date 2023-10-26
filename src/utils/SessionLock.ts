@@ -171,6 +171,27 @@ export async function getSessionLock(onNewInstance: () => Promise<void>): Promis
         }
     }
 
+    // handler for pagehide and unload events, used later
+    function onPagehideEvent(): void {
+        // only remove the ping if we still think we're the owner. Otherwise we could be removing someone else's claim!
+        if (lockServicer !== null) {
+            prefixedLogger.debug("page hide: clearing our claim");
+            window.clearInterval(lockServicer);
+            window.localStorage.removeItem(SESSION_LOCK_CONSTANTS.STORAGE_ITEM_PING);
+            window.localStorage.removeItem(SESSION_LOCK_CONSTANTS.STORAGE_ITEM_OWNER);
+            lockServicer = null;
+        }
+
+        // It's worth noting that, according to the spec, the page might come back to life again after a pagehide.
+        //
+        // In practice that's unlikely because Element is unlikely to qualify for the bfcache, but if it does,
+        // this is probably the best we can do: we certainly don't want to stop the user loading any new tabs because
+        // Element happens to be in a bfcache somewhere.
+        //
+        // So, we just hope that we aren't in the middle of any crypto operations, and rely on `onStorageEvent` kicking
+        // in soon enough after we resume to tell us if another tab woke up while we were asleep.
+    }
+
     async function releaseLock(): Promise<void> {
         // tell the app to shut down
         await onNewInstance();
@@ -239,23 +260,11 @@ export async function getSessionLock(onNewInstance: () => Promise<void>): Promis
     window.addEventListener("storage", onStorageEvent);
 
     // also add a listener to clear our claims when our tab closes or navigates away
-    window.addEventListener("pagehide", (event) => {
-        // only remove the ping if we still think we're the owner. Otherwise we could be removing someone else's claim!
-        if (lockServicer !== null) {
-            prefixedLogger.debug("page hide: clearing our claim");
-            window.localStorage.removeItem(SESSION_LOCK_CONSTANTS.STORAGE_ITEM_PING);
-            window.localStorage.removeItem(SESSION_LOCK_CONSTANTS.STORAGE_ITEM_OWNER);
-        }
+    window.addEventListener("pagehide", onPagehideEvent);
 
-        // It's worth noting that, according to the spec, the page might come back to life again after a pagehide.
-        //
-        // In practice that's unlikely because Element is unlikely to qualify for the bfcache, but if it does,
-        // this is probably the best we can do: we certainly don't want to stop the user loading any new tabs because
-        // Element happens to be in a bfcache somewhere.
-        //
-        // So, we just hope that we aren't in the middle of any crypto operations, and rely on `onStorageEvent` kicking
-        // in soon enough after we resume to tell us if another tab woke up while we were asleep.
-    });
+    // The pagehide event is called unreliably on Firefox, so additionally add an unload handler.
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=1854492
+    window.addEventListener("unload", onPagehideEvent);
 
     return true;
 }
