@@ -70,6 +70,7 @@ jobs:
                   mv element-desktop/docs "docs/Element Desktop"
 
                   mv element-web/README.md element-web/docs/
+                  mv element-web/docs/lib docs/
                   mv element-web/docs "docs/Element Web"
 
                   mv matrix-react-sdk/README.md matrix-react-sdk/docs/
@@ -93,7 +94,6 @@ jobs:
                   cat SUMMARY.md >> docs/SUMMARY.md
 
                   mv element-web/book.toml .
-                  mv element-web/docs/lib docs/
 
             - name: Build docs
               run: mdbook build
