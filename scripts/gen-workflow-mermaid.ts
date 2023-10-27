@@ -15,11 +15,14 @@ const argv = parseArgs<{
     boolean: ["debug"],
 });
 
-class IdGenerator {
+/**
+ * Generates unique ID strings (incremental base36) representing the given inputs.
+ */
+class IdGenerator<T> {
     private id = 0;
-    private map = new Map<string, string>();
+    private map = new Map<T, string>();
 
-    public get(s: string): string {
+    public get(s: T): string {
         if (this.map.has(s)) return this.map.get(s)!;
         const id = "ID" + this.id.toString(36).toLowerCase();
         this.map.set(s, id);
@@ -34,6 +37,9 @@ class IdGenerator {
     }
 }
 
+/**
+ * Type representing a node on a graph with additional metadata
+ */
 interface Node {
     // Workflows are keyed by project/name??id
     // Jobs are keyed by id
@@ -57,6 +63,9 @@ interface Node {
     link?: string;
 }
 
+/**
+ * Type representing a directed edge on a graph with an optional label
+ */
 type Edge<T> = [source: T, destination: T, label?: string];
 
 class Graph<T extends Node> {
@@ -147,6 +156,9 @@ class Graph<T extends Node> {
     }
 }
 
+/**
+ * Type representing a GitHub project
+ */
 interface Project {
     url: string;
     name: string;
@@ -154,6 +166,9 @@ interface Project {
     workflows: Map<string, Workflow>;
 }
 
+/**
+ * Type representing a GitHub Actions Workflow
+ */
 interface Workflow extends Node {
     path: string;
     project: Project;
@@ -161,6 +176,9 @@ interface Workflow extends Node {
     on: WorkflowYaml["on"];
 }
 
+/**
+ * Type representing a job within a GitHub Actions Workflow
+ */
 interface Job extends Node {
     jobId: string; // id relative to workflow
     needs?: string[];
@@ -174,6 +192,9 @@ interface Job extends Node {
     };
 }
 
+/**
+ * Type representing the YAML structure of a GitHub Actions Workflow file
+ */
 interface WorkflowYaml {
     name: string;
     on: {
@@ -203,6 +224,9 @@ interface WorkflowYaml {
     };
 }
 
+/**
+ * Type representing a trigger of a GitHub Actions Workflow
+ */
 type Trigger = Node;
 
 // TODO workflow_call reusables
