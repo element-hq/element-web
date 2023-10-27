@@ -51,7 +51,7 @@ jobs:
               working-directory: element-web
               run: |
                   yarn install --frozen-lockfile
-                  yarn ts-node element-web/scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-react-sdk ../matrix-js-sdk > docs/automations.md
+                  yarn ts-node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-react-sdk ../matrix-js-sdk > docs/automations.md
                   echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
 
             - name: Setup mdBook
