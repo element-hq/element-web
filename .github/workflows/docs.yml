@@ -93,6 +93,7 @@ jobs:
                   cat SUMMARY.md >> docs/SUMMARY.md
 
                   mv element-web/book.toml .
+                  mv element-web/docs/lib docs/
 
             - name: Build docs
               run: mdbook build
