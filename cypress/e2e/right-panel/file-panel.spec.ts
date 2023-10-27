@@ -183,7 +183,8 @@ describe("FilePanel", () => {
             });
         });
 
-        it("should render the audio player and play the audio file on the panel", () => {
+        // https://github.com/vector-im/element-web/issues/26045
+        it.skip("should render the audio player and play the audio file on the panel", () => {
             // Upload an image file
             uploadFile("cypress/fixtures/1sec.ogg");
 
