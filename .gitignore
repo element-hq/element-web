@@ -28,5 +28,4 @@ electron/pub
 /src/modules.ts
 /build_config.yaml
 /book
-/mermaid*
 /index.html

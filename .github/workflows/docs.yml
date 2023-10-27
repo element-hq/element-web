@@ -93,7 +93,6 @@ jobs:
                   cat SUMMARY.md >> docs/SUMMARY.md
 
                   mv element-web/book.toml .
-                  mdbook-mermaid install .
 
             - name: Build docs
               run: mdbook build
