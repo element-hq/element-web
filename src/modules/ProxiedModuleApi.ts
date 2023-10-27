@@ -37,6 +37,7 @@ import { getCachedRoomIDForAlias } from "../RoomAliasCache";
 import { Action } from "../dispatcher/actions";
 import { OverwriteLoginPayload } from "../dispatcher/payloads/OverwriteLoginPayload";
 import { ActionPayload } from "../dispatcher/payloads";
+import SettingsStore from "../settings/SettingsStore";
 
 /**
  * Glue between the `ModuleApi` interface and the react-sdk. Anticipates one instance
@@ -202,6 +203,7 @@ export class ProxiedModuleApi implements ModuleApi {
             if (andJoin) {
                 dispatcher.dispatch({
                     action: Action.JoinRoom,
+                    canAskToJoin: SettingsStore.getValue("feature_ask_to_join"),
                 });
             }
         }
