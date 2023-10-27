@@ -186,7 +186,8 @@
         "webpack-dev-server": "^4.15.1",
         "worker-loader": "^3.0.0",
         "worklet-loader": "^2.0.0",
-        "yaml": "^2.0.1"
+        "yaml": "^2.3.3",
+        "cronstrue": "^2.41.0"
     },
     "@casualbot/jest-sonar-reporter": {
         "outputDirectory": "coverage",

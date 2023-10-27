@@ -83,6 +83,11 @@ jobs:
                   mv element-web/book.toml .
                   mdbook-mermaid install .
 
+            - name: Generate automations docs
+              run: |
+                  npx ts-node element-web/scripts/gen-workflow-mermaid.ts element-desktop element-web matrix-react-sdk matrix-js-sdk > docs/automations.md
+                  echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
+
             - name: Build docs
               run: mdbook build
 
