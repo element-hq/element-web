@@ -20,6 +20,7 @@ export class WidgetType {
     public static readonly STICKERPICKER = new WidgetType("m.stickerpicker", "m.stickerpicker");
     public static readonly INTEGRATION_MANAGER = new WidgetType("m.integration_manager", "m.integration_manager");
     public static readonly CUSTOM = new WidgetType("m.custom", "m.custom");
+    public static readonly CALL = new WidgetType("m.call", "m.call");
 
     public constructor(public readonly preferred: string, public readonly legacy: string) {}
 

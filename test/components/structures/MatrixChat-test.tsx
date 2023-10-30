@@ -34,6 +34,7 @@ import { Action } from "../../../src/dispatcher/actions";
 import { UserTab } from "../../../src/components/views/dialogs/UserTab";
 import {
     clearAllModals,
+    createStubMatrixRTC,
     filterConsole,
     flushPromises,
     getMockClientWithEventEmitter,
@@ -109,6 +110,7 @@ describe("<MatrixChat />", () => {
         secretStorage: {
             isStored: jest.fn().mockReturnValue(null),
         },
+        matrixRTC: createStubMatrixRTC(),
         getDehydratedDevice: jest.fn(),
         whoami: jest.fn(),
         isRoomEncrypted: jest.fn(),

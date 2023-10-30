@@ -33,7 +33,7 @@ import MemberAvatar from "../avatars/MemberAvatar";
 import { LiveContentSummary, LiveContentType } from "../rooms/LiveContentSummary";
 import FacePile from "../elements/FacePile";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { CallDuration, GroupCallDuration } from "../voip/CallDuration";
+import { CallDuration, SessionDuration } from "../voip/CallDuration";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 const MAX_FACES = 8;
@@ -77,7 +77,7 @@ const ActiveCallEvent = forwardRef<any, ActiveCallEventProps>(
                             />
                             <FacePile members={facePileMembers} size="24px" overflow={facePileOverflow} />
                         </div>
-                        {call && <GroupCallDuration groupCall={call.groupCall} />}
+                        {call && <SessionDuration session={call.session} />}
                         <AccessibleTooltipButton
                             className="mx_CallEvent_button"
                             kind={buttonKind}

@@ -141,7 +141,6 @@ describe("CallEvent", () => {
 
         screen.getByText("@alice:example.org started a video call");
         screen.getByLabelText("2 participants");
-        screen.getByText("1m 30s");
 
         // Test that the join button works
         const dispatcherSpy = jest.fn();

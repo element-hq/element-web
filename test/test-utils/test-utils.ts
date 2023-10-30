@@ -45,6 +45,10 @@ import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 import { CryptoBackend } from "matrix-js-sdk/src/common-crypto/CryptoBackend";
 import { MapperOpts } from "matrix-js-sdk/src/event-mapper";
+// eslint-disable-next-line no-restricted-imports
+import { MatrixRTCSessionManager } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
+// eslint-disable-next-line no-restricted-imports
+import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
 
 import type { GroupCall } from "matrix-js-sdk/src/matrix";
 import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
@@ -89,6 +93,7 @@ export function stubClient(): MatrixClient {
  */
 export function createTestClient(): MatrixClient {
     const eventEmitter = new EventEmitter();
+
     let txnId = 1;
 
     const client = {
@@ -256,6 +261,7 @@ export function createTestClient(): MatrixClient {
         submitMsisdnToken: jest.fn(),
         getMediaConfig: jest.fn(),
         baseUrl: "https://matrix-client.matrix.org",
+        matrixRTC: createStubMatrixRTC(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
@@ -272,6 +278,26 @@ export function createTestClient(): MatrixClient {
     return client;
 }
 
+export function createStubMatrixRTC(): MatrixRTCSessionManager {
+    const eventEmitterMatrixRTCSessionManager = new EventEmitter();
+    const mockGetRoomSession = jest.fn();
+    mockGetRoomSession.mockImplementation((roomId) => {
+        const session = new EventEmitter() as MatrixRTCSession;
+        session.memberships = [];
+        session.getOldestMembership = () => undefined;
+        return session;
+    });
+    return {
+        start: jest.fn(),
+        stop: jest.fn(),
+        getActiveRoomSession: jest.fn(),
+        getRoomSession: mockGetRoomSession,
+        on: eventEmitterMatrixRTCSessionManager.on.bind(eventEmitterMatrixRTCSessionManager),
+        off: eventEmitterMatrixRTCSessionManager.off.bind(eventEmitterMatrixRTCSessionManager),
+        removeListener: eventEmitterMatrixRTCSessionManager.removeListener.bind(eventEmitterMatrixRTCSessionManager),
+        emit: eventEmitterMatrixRTCSessionManager.emit.bind(eventEmitterMatrixRTCSessionManager),
+    } as unknown as MatrixRTCSessionManager;
+}
 type MakeEventPassThruProps = {
     user: User["userId"];
     relatesTo?: IEventRelation;

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { useCallback } from "react";
-import { EventType, Room } from "matrix-js-sdk/src/matrix";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
@@ -27,7 +27,7 @@ import { ConnectionState, ElementCall } from "../../../models/Call";
 import { useCall } from "../../../hooks/useCall";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../../stores/OwnBeaconStore";
-import { GroupCallDuration } from "../voip/CallDuration";
+import { SessionDuration } from "../voip/CallDuration";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 
 interface RoomCallBannerProps {
@@ -49,12 +49,13 @@ const RoomCallBannerInner: React.FC<RoomCallBannerProps> = ({ roomId, call }) =>
         [roomId],
     );
 
+    // TODO matrix rtc
     const onClick = useCallback(() => {
-        const event = call.groupCall.room.currentState.getStateEvents(
-            EventType.GroupCallPrefix,
-            call.groupCall.groupCallId,
-        );
-        if (event === null) {
+        logger.log("clicking on the call banner is not supported anymore - there are no timeline events anymore.");
+        let messageLikeEventId: string | undefined;
+        if (!messageLikeEventId) {
+            // Until we have a timeline event for calls this will always be true.
+            // We will never jump to the non existing timeline event.
             logger.error("Couldn't find a group call event to jump to");
             return;
         }
@@ -63,17 +64,17 @@ const RoomCallBannerInner: React.FC<RoomCallBannerProps> = ({ roomId, call }) =>
             action: Action.ViewRoom,
             room_id: roomId,
             metricsTrigger: undefined,
-            event_id: event.getId(),
+            event_id: messageLikeEventId,
             scroll_into_view: true,
             highlighted: true,
         });
-    }, [call, roomId]);
+    }, [roomId]);
 
     return (
         <div className="mx_RoomCallBanner" onClick={onClick}>
             <div className="mx_RoomCallBanner_text">
                 <span className="mx_RoomCallBanner_label">{_t("voip|video_call")}</span>
-                <GroupCallDuration groupCall={call.groupCall} />
+                <SessionDuration session={call.session} />
             </div>
 
             <AccessibleButton onClick={connect} kind="primary" element="button" disabled={false}>

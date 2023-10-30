@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import React, { FC, useState, useEffect, memo } from "react";
-import { GroupCall } from "matrix-js-sdk/src/matrix";
+// eslint-disable-next-line no-restricted-imports
+import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
 
 import { formatPreciseDuration } from "../../../DateUtils";
 
@@ -32,20 +33,25 @@ export const CallDuration: FC<CallDurationProps> = memo(({ delta }) => {
     return <div className="mx_CallDuration">{formatPreciseDuration(delta)}</div>;
 });
 
-interface GroupCallDurationProps {
-    groupCall: GroupCall;
+interface SessionDurationProps {
+    session: MatrixRTCSession | undefined;
 }
 
 /**
- * A call duration counter that automatically counts up, given a live GroupCall
+ * A call duration counter that automatically counts up, given a matrixRTC session
  * object.
  */
-export const GroupCallDuration: FC<GroupCallDurationProps> = ({ groupCall }) => {
+export const SessionDuration: FC<SessionDurationProps> = ({ session }) => {
     const [now, setNow] = useState(() => Date.now());
+
     useEffect(() => {
         const timer = window.setInterval(() => setNow(Date.now()), 1000);
         return () => clearInterval(timer);
     }, []);
 
-    return groupCall.creationTs === null ? null : <CallDuration delta={now - groupCall.creationTs} />;
+    // This is a temporal solution.
+    // Using the oldest membership will update when this user leaves.
+    // This implies that the displayed call duration will also update consequently.
+    const createdTs = session?.getOldestMembership()?.createdTs();
+    return createdTs ? <CallDuration delta={now - createdTs} /> : <CallDuration delta={0} />;
 };

@@ -65,7 +65,7 @@ import IconizedContextMenu, {
     IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { GroupCallDuration } from "../voip/CallDuration";
+import { SessionDuration } from "../voip/CallDuration";
 import { Alignment } from "../elements/Tooltip";
 import RoomCallBanner from "../beacon/RoomCallBanner";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
@@ -787,7 +787,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                         {icon}
                         {name}
                         {this.props.activeCall instanceof ElementCall && (
-                            <GroupCallDuration groupCall={this.props.activeCall.groupCall} />
+                            <SessionDuration session={this.props.activeCall?.session} />
                         )}
                         {/* Empty topic element to fill out space */}
                         <div className="mx_LegacyRoomHeader_topic" />
