@@ -69,7 +69,7 @@ jobs:
 
             - name: Resolve repos
               run: |
-                  echo "REPOS=$(ls .)" >> $GITHUB_ENV
+                  echo "REPOS=$(ls . | tr '\n' ' ')" >> $GITHUB_ENV
 
             - name: Merge develop
               run: |
