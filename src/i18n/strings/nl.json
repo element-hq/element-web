@@ -1567,7 +1567,6 @@
         "room_summary_card": {
             "title": "Kamer informatie"
         },
-        "search_button": "Zoeken",
         "settings_button": "Kamerinstellingen",
         "share_button": "Kamer delen",
         "thread_list": {
@@ -2039,7 +2038,6 @@
             "clear_cache_reload": "Cache wissen en herladen",
             "help_link": "Klik <a>hier</a> voor hulp bij het gebruiken van %(brand)s.",
             "help_link_chat_bot": "Klik <a>hier</a> voor hulp bij het gebruiken van %(brand)s of begin een kamer met onze robot met de knop hieronder.",
-            "olm_version": "Olm-versie:",
             "title": "Hulp & info",
             "versions": "Versies"
         }

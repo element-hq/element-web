@@ -220,7 +220,6 @@
         "msisdn_field_required_invalid": "Nhập số điện thoại",
         "no_hs_url_provided": "Không có đường dẫn server",
         "oidc": {
-            "error_generic": "Đã xảy ra lỗi.",
             "error_title": "Chúng tôi không thể đăng nhập cho bạn"
         },
         "password_field_label": "Nhập mật khẩu",
@@ -1626,7 +1625,6 @@
         "room_summary_card": {
             "title": "Thông tin phòng"
         },
-        "search_button": "Tìm kiếm",
         "settings_button": "Cài đặt phòng",
         "share_button": "Phòng chia sẻ",
         "thread_list": {
@@ -2118,7 +2116,6 @@
             "help_link_chat_bot": "Để được trợ giúp về cách sử dụng %(brand)s, hãy nhấp vào đây <a>here</a> hoặc bắt đầu trò chuyện với bot của chúng tôi bằng nút bên dưới.",
             "homeserver": "Máy chủ nhà là <code>%(homeserverUrl)s</code>",
             "identity_server": "Máy chủ định danh là <code>%(identityServerUrl)s</code>",
-            "olm_version": "Phiên bản Olm:",
             "title": "Trợ giúp & Giới thiệu",
             "versions": "Phiên bản"
         }

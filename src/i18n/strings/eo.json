@@ -1308,7 +1308,6 @@
             },
             "title": "Fiksitaj mesaĝoj"
         },
-        "search_button": "Serĉi",
         "settings_button": "Agordoj de ĉambro",
         "share_button": "Kunhavigi ĉambron",
         "widgets_section": "Fenestraĵoj"
@@ -1706,7 +1705,6 @@
             "clear_cache_reload": "Vakigi kaŝmemoron kaj relegi",
             "help_link": "Por helpo pri uzado de %(brand)s, klaku <a>ĉi tien</a>.",
             "help_link_chat_bot": "Por helpo pri uzado de %(brand)s, klaku <a>ĉi tien</a> aŭ komencu babilon kun nia roboto per la butono sube.",
-            "olm_version": "Versio de Olm:",
             "title": "Helpo kaj Prio",
             "versions": "Versioj"
         }

@@ -1573,7 +1573,6 @@
                 "other": "Resultado final baseado en %(count)s votos"
             }
         },
-        "search_button": "Busca",
         "settings_button": "Axustes da sala",
         "share_button": "Compartir sala",
         "thread_list": {
@@ -2033,7 +2032,6 @@
             "clear_cache_reload": "Baleirar caché e recargar",
             "help_link": "Para ter axuda con %(brand)s, preme <a>aquí</a>.",
             "help_link_chat_bot": "Se precisas axuda usando %(brand)s, preme <a>aquí</a> ou inicia unha conversa co noso bot usando o botón inferior.",
-            "olm_version": "Version olm:",
             "title": "Axuda & Acerca de",
             "versions": "Versións"
         }

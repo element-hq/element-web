@@ -228,9 +228,10 @@
         "msisdn_field_required_invalid": "Wprowadź numer telefonu",
         "no_hs_url_provided": "Nie podano URL serwera głównego",
         "oidc": {
-            "error_generic": "Coś poszło nie tak.",
             "error_title": "Nie mogliśmy Cię zalogować",
-            "logout_redirect_warning": "Zostaniesz przekierowany do dostawcy uwierzytelniania Twojego serwera w celu zakończenia wylogowania."
+            "generic_auth_error": "Coś poszło nie tak podczas uwierzytelniania. Przejdź do strony logowania i spróbuj ponownie.",
+            "logout_redirect_warning": "Zostaniesz przekierowany do dostawcy uwierzytelniania Twojego serwera w celu zakończenia wylogowania.",
+            "missing_or_invalid_stored_state": "Poprosiliśmy przeglądarkę, aby zapamiętała za pomocą jakiego serwera domowego się logujesz, lecz niestety go zapomniała. Przejdź do strony logowania i spróbuj ponownie."
         },
         "password_field_keep_going_prompt": "Kontynuuj…",
         "password_field_label": "Wprowadź hasło",
@@ -1259,6 +1260,8 @@
         "error_permissions_space": "Nie masz uprawnień, by zapraszać ludzi do tej przestrzeni.",
         "error_profile_undisclosed": "Użytkownik może istnieć lub nie",
         "error_transfer_multiple_target": "Połączenie może zostać przekazane tylko do pojedynczego użytkownika.",
+        "error_unfederated_room": "Ten pokój jest niezrzeszony. Nie możesz zapraszać osób z serwerów zewnętrznych.",
+        "error_unfederated_space": "Ta przestrzeń jest niezrzeszona. Nie możesz zapraszać osób z serwerów zewnętrznych.",
         "error_unknown": "Nieznany błąd serwera",
         "error_user_not_found": "Użytkownik nie istnieje",
         "error_version_unsupported_room": "Serwer domowy użytkownika nie wspiera tej wersji pokoju.",
@@ -1426,7 +1429,8 @@
         "notification_settings_beta_caption": "Przedstawiamy prostszy sposób zmiany ustawień powiadomień. Dostosuj %(brand)s wedle swojego upodobania.",
         "notification_settings_beta_title": "Ustawienia powiadomień",
         "notifications": "Włącz panel powiadomień w nagłówku pokoju.",
-        "oidc_native_flow": "Włącz natywne przepływy OIDC (W trakcie aktywnego rozwoju)",
+        "oidc_native_flow": "Uwierzytelnianie natywne OIDC",
+        "oidc_native_flow_description": "⚠ OSTRZEŻENIE: Funkcja eksperymentalna. Użyj uwierzytelniania natywnego OIDC, gdy jest wspierane przez serwer.",
         "pinning": "Przypinanie wiadomości",
         "render_reaction_images": "Renderuj niestandardowe obrazy w reakcjach",
         "render_reaction_images_description": "Czasami określane jako \"emoji niestandardowe\".",
@@ -1848,7 +1852,6 @@
         "room_summary_card": {
             "title": "Informacje pokoju"
         },
-        "search_button": "Szukaj",
         "settings_button": "Ustawienia pokoju",
         "share_button": "Udostępnij pokój",
         "thread_list": {
@@ -2383,11 +2386,11 @@
             "brand_version": "Wersja %(brand)s:",
             "chat_bot": "Rozmowa z Botem %(brand)s",
             "clear_cache_reload": "Wyczyść pamięć podręczną i przeładuj",
+            "crypto_version": "Wersja krypto:",
             "help_link": "Aby uzyskać pomoc w używaniu %(brand)s, naciśnij <a>tutaj</a>.",
             "help_link_chat_bot": "Aby uzyskać pomoc w korzystaniu z %(brand)s, kliknij <a>tutaj</a> lub rozpocznij czat z botem za pomocą przycisku poniżej.",
             "homeserver": "Serwer domowy to <code>%(homeserverUrl)s</code>",
             "identity_server": "Serwer tożsamości to <code>%(identityServerUrl)s</code>",
-            "olm_version": "Wersja Olm:",
             "title": "Pomoc i o aplikacji",
             "versions": "Wersje"
         }
@@ -3204,6 +3207,7 @@
             "you": "Zakończyłeś <a>transmisje głosową</a>"
         },
         "io.element.widgets.layout": "%(senderName)s zmienił układ pokoju",
+        "late_event_separator": "Pierwotnie wysłano %(dateTime)s",
         "load_error": {
             "no_permission": "Nastąpiła próba załadowania danego punktu w historii tego pokoju, lecz nie masz uprawnień, by zobaczyć określoną wiadomość.",
             "title": "Nie udało się wczytać pozycji osi czasu",
@@ -3418,6 +3422,8 @@
             "label": "Działania na wiadomościach",
             "view_in_room": "Wyświetl w pokoju"
         },
+        "message_timestamp_received_at": "Odebrano: %(dateTime)s",
+        "message_timestamp_sent_at": "Wysłano: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s zaktualizował zasadę banowania z pasowania do %(oldGlob)s na %(newGlob)s ponieważ %(reason)s",
             "changed_rule_rooms": "%(senderName)s zmienił regułę banującą pokoje pasujące do wzorca na %(oldGlob)s ustawiając nowy wzorzec %(newGlob)s z powodu %(reason)s",

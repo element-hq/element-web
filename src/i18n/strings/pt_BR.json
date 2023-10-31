@@ -1223,7 +1223,6 @@
                 "other": "Resultado final baseado em %(count)s votos"
             }
         },
-        "search_button": "Buscar",
         "settings_button": "Configurações da sala",
         "share_button": "Compartilhar sala",
         "video_room_chat": {
@@ -1615,7 +1614,6 @@
             "clear_cache_reload": "Limpar cache e recarregar",
             "help_link": "Para obter ajuda com o uso do %(brand)s, clique <a>aqui</a>.",
             "help_link_chat_bot": "Para obter ajuda com o uso do %(brand)s, clique <a>aqui</a> ou inicie um bate-papo com nosso bot usando o botão abaixo.",
-            "olm_version": "Versão do Olm:",
             "title": "Ajuda e sobre",
             "versions": "Versões"
         }

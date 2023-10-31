@@ -1183,7 +1183,6 @@
                 "other": "فقط می توانید تا %(count)s ابزارک را پین کنید"
             }
         },
-        "search_button": "جستجو",
         "settings_button": "تنظیمات اتاق",
         "share_button": "به اشتراک گذاری اتاق",
         "widgets_section": "ابزارک ها"

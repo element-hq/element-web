@@ -223,7 +223,6 @@
         "msisdn_field_required_invalid": "Inserisci numero di telefono",
         "no_hs_url_provided": "Nessun URL homeserver fornito",
         "oidc": {
-            "error_generic": "Qualcosa è andato storto.",
             "error_title": "Non abbiamo potuto farti accedere"
         },
         "password_field_keep_going_prompt": "Continua…",
@@ -1793,7 +1792,6 @@
         "room_summary_card": {
             "title": "Info stanza"
         },
-        "search_button": "Cerca",
         "settings_button": "Impostazioni stanza",
         "share_button": "Condividi stanza",
         "thread_list": {
@@ -2318,7 +2316,6 @@
             "help_link_chat_bot": "Per aiuto su come usare %(brand)s, clicca <a>qui</a> o inizia una chat con il nostro bot usando il pulsante sotto.",
             "homeserver": "L'homeserver è <code>%(homeserverUrl)s</code>",
             "identity_server": "Il server d'identità è <code>%(identityServerUrl)s</code>",
-            "olm_version": "Versione Olm:",
             "title": "Aiuto e informazioni",
             "versions": "Versioni"
         }

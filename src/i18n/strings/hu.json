@@ -1780,7 +1780,6 @@
         "room_summary_card": {
             "title": "Szoba információ"
         },
-        "search_button": "Keresés",
         "settings_button": "Szoba beállítások",
         "share_button": "Szoba megosztása",
         "thread_list": {
@@ -2284,7 +2283,6 @@
             "help_link_chat_bot": "Az %(brand)s használatában való segítségért kattintson <a>ide</a>, vagy kezdjen beszélgetést a botunkkal az alábbi gombra kattintva.",
             "homeserver": "Matrix-kiszolgáló: <code>%(homeserverUrl)s</code>",
             "identity_server": "Azonosítási kiszolgáló: <code>%(identityServerUrl)s</code>",
-            "olm_version": "Olm verzió:",
             "title": "Súgó és névjegy",
             "versions": "Verziók"
         }

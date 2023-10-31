@@ -226,7 +226,6 @@
         "msisdn_field_required_invalid": "Telefonnummer eingeben",
         "no_hs_url_provided": "Keine Heim-Server-URL angegeben",
         "oidc": {
-            "error_generic": "Etwas ist schiefgelaufen.",
             "error_title": "Wir konnten dich nicht anmelden"
         },
         "password_field_keep_going_prompt": "Fortfahren …",
@@ -1786,7 +1785,6 @@
         "room_summary_card": {
             "title": "Raum-Info"
         },
-        "search_button": "Suchen",
         "settings_button": "Raumeinstellungen",
         "share_button": "Raum teilen",
         "thread_list": {
@@ -2314,7 +2312,6 @@
             "help_link_chat_bot": "Um Hilfe zur Benutzung von %(brand)s zu erhalten, klicke <a>hier</a> oder beginne eine Unterhaltung mit unserem Bot mittels nachfolgender Schaltfläche.",
             "homeserver": "Heim-Server ist <code>%(homeserverUrl)s</code>",
             "identity_server": "Identitäts-Server ist <code>%(identityServerUrl)s</code>",
-            "olm_version": "Version von Olm:",
             "title": "Hilfe und Info",
             "versions": "Versionen"
         }

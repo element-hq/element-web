@@ -224,7 +224,6 @@
         "msisdn_field_required_invalid": "Ange telefonnummer",
         "no_hs_url_provided": "Ingen hemserver-URL angiven",
         "oidc": {
-            "error_generic": "Nånting gick snett.",
             "error_title": "Vi kunde inte logga in dig"
         },
         "password_field_keep_going_prompt": "Fortsätter …",
@@ -1782,7 +1781,6 @@
         "room_summary_card": {
             "title": "Rumsinfo"
         },
-        "search_button": "Sök",
         "settings_button": "Rumsinställningar",
         "share_button": "Dela rum",
         "thread_list": {
@@ -2293,7 +2291,6 @@
             "help_link_chat_bot": "För hjälp med att använda %(brand)s, klicka <a>här</a> eller starta en chatt med vår bott med knappen nedan.",
             "homeserver": "Hemservern är <code>%(homeserverUrl)s</code>",
             "identity_server": "Identitetsservern är <code>%(identityServerUrl)s</code>",
-            "olm_version": "Olm-version:",
             "title": "Hjälp & om",
             "versions": "Versioner"
         }

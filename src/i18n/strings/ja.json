@@ -1721,7 +1721,6 @@
         "room_summary_card": {
             "title": "ルームの情報"
         },
-        "search_button": "検索",
         "settings_button": "ルームの設定",
         "share_button": "ルームを共有",
         "thread_list": {
@@ -2205,7 +2204,6 @@
             "clear_cache_reload": "キャッシュを削除して再読み込み",
             "help_link": "%(brand)sの使用方法に関するヘルプは<a>こちら</a>をご覧ください。",
             "help_link_chat_bot": "%(brand)sの使用についてサポートが必要な場合は、<a>こちら</a>をクリックするか、下のボタンを使用してボットとチャットを開始してください。",
-            "olm_version": "Olmのバージョン：",
             "title": "ヘルプと概要",
             "versions": "バージョン"
         }

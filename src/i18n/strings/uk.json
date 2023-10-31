@@ -226,7 +226,6 @@
         "msisdn_field_required_invalid": "Введіть телефонний номер",
         "no_hs_url_provided": "URL адресу домашнього сервера не вказано",
         "oidc": {
-            "error_generic": "Щось пішло не так.",
             "error_title": "Нам не вдалося виконати вхід"
         },
         "password_field_keep_going_prompt": "Продовжуйте…",
@@ -1810,7 +1809,6 @@
         "room_summary_card": {
             "title": "Відомості про кімнату"
         },
-        "search_button": "Пошук",
         "settings_button": "Налаштування кімнати",
         "share_button": "Поділитись кімнатою",
         "thread_list": {
@@ -2333,7 +2331,6 @@
             "help_link_chat_bot": "Якщо необхідна допомога у користуванні %(brand)s, клацніть <a>тут</a> або розпочніть бесіду з нашим ботом, клацнувши на кнопку внизу.",
             "homeserver": "Домашній сервер <code>%(homeserverUrl)s</code>",
             "identity_server": "Сервер ідентифікації <code>%(identityServerUrl)s</code>",
-            "olm_version": "Версія Olm:",
             "title": "Допомога та про програму",
             "versions": "Версії"
         }

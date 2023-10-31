@@ -226,7 +226,6 @@
         "msisdn_field_required_invalid": "Sisesta telefoninumber",
         "no_hs_url_provided": "Koduserveri aadress on puudu",
         "oidc": {
-            "error_generic": "Midagi läks nüüd valesti.",
             "error_title": "Meil ei õnnestunud sind sisse logida"
         },
         "password_field_keep_going_prompt": "Jätka…",
@@ -1803,7 +1802,6 @@
         "room_summary_card": {
             "title": "Jututoa teave"
         },
-        "search_button": "Otsing",
         "settings_button": "Jututoa seadistused",
         "share_button": "Jaga jututuba",
         "thread_list": {
@@ -2326,7 +2324,6 @@
             "help_link_chat_bot": "%(brand)s'i kasutamisega seotud abiteabe otsimiseks klõpsi <a>seda viidet</a> või vajutades järgnevat nuppu alusta vestlust meie robotiga.",
             "homeserver": "Koduserveri aadress <code>%(homeserverUrl)s</code>",
             "identity_server": "Isikutuvastusserveri aadress <code>%(identityServerUrl)s</code>",
-            "olm_version": "Olm-teegi versioon:",
             "title": "Abiteave ning info meie kohta",
             "versions": "Versioonid"
         }

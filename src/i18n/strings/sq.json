@@ -1757,7 +1757,6 @@
         "room_summary_card": {
             "title": "Hollësi dhome"
         },
-        "search_button": "Kërkoni",
         "settings_button": "Rregullime dhome",
         "share_button": "Ndani dhomë me të tjerë",
         "thread_list": {
@@ -2263,7 +2262,6 @@
             "help_link_chat_bot": "Për ndihmë rreth përdorimit të %(brand)s-it, klikoni <a>këtu</a>, ose nisni një fjalosje me robotin tonë duke përdorur butonin më poshtë.",
             "homeserver": "Shërbyes Home është <code>%(homeserverUrl)s</code>",
             "identity_server": "Shërbyes identiteti është <code>%(identityServerUrl)s</code>",
-            "olm_version": "Version Olm:",
             "title": "Ndihmë & Rreth",
             "versions": "Versione"
         }

@@ -226,7 +226,6 @@
         "msisdn_field_required_invalid": "輸入電話號碼",
         "no_hs_url_provided": "未提供家伺服器網址",
         "oidc": {
-            "error_generic": "出了點問題。",
             "error_title": "我們無法讓您登入"
         },
         "password_field_keep_going_prompt": "繼續前進…",
@@ -1809,7 +1808,6 @@
         "room_summary_card": {
             "title": "聊天室資訊"
         },
-        "search_button": "搜尋",
         "settings_button": "聊天室設定",
         "share_button": "分享聊天室",
         "thread_list": {
@@ -2331,7 +2329,6 @@
             "help_link_chat_bot": "對於使用 %(brand)s 的說明，點選<a>這裡</a>或是使用下面的按鈕開始與我們的聊天機器人聊天。",
             "homeserver": "家伺服器為 <code>%(homeserverUrl)s</code>",
             "identity_server": "身分伺服器為 <code>%(identityServerUrl)s</code>",
-            "olm_version": "Olm 版本：",
             "title": "說明與關於",
             "versions": "版本"
         }

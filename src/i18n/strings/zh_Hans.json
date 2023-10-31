@@ -1597,7 +1597,6 @@
         "room_summary_card": {
             "title": "房间信息"
         },
-        "search_button": "搜索",
         "settings_button": "房间设置",
         "share_button": "分享房间",
         "thread_list": {
@@ -2075,7 +2074,6 @@
             "clear_cache_reload": "清理缓存并重载",
             "help_link": "关于 %(brand)s 的<a>使用说明</a>。",
             "help_link_chat_bot": "关于 %(brand)s 的使用说明，请点击<a>这里</a>或者通过下方按钮同我们的机器人聊聊。",
-            "olm_version": "Olm 版本：",
             "title": "帮助及关于",
             "versions": "版本"
         }

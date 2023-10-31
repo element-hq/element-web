@@ -227,7 +227,6 @@
         "msisdn_field_required_invalid": "Zadejte telefonní číslo",
         "no_hs_url_provided": "Nebyla zadána URL adresa domovského server",
         "oidc": {
-            "error_generic": "Něco se pokazilo.",
             "error_title": "Nemohli jsme vás přihlásit"
         },
         "password_field_keep_going_prompt": "Pokračujte…",
@@ -1819,7 +1818,6 @@
         "room_summary_card": {
             "title": "Informace o místnosti"
         },
-        "search_button": "Hledání",
         "settings_button": "Nastavení místnosti",
         "share_button": "Sdílet místnost",
         "thread_list": {
@@ -2345,7 +2343,6 @@
             "help_link_chat_bot": "Pro pomoc s používáním %(brand)su klepněte <a>sem</a> nebo následujícím tlačítkem zahajte konverzaci s robotem.",
             "homeserver": "Domovský server je <code>%(homeserverUrl)s</code>",
             "identity_server": "Server identit je <code>%(identityServerUrl)s</code>",
-            "olm_version": "Verze Olm:",
             "title": "O aplikaci a pomoc",
             "versions": "Verze"
         }

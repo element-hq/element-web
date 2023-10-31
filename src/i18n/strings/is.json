@@ -1504,7 +1504,6 @@
         "room_summary_card": {
             "title": "Upplýsingar um spjallrás"
         },
-        "search_button": "Leita",
         "settings_button": "Stillingar spjallrásar",
         "share_button": "Deila spjallrás",
         "thread_list": {
@@ -1927,7 +1926,6 @@
             "clear_cache_reload": "Hreinsa skyndiminni og endurhlaða",
             "help_link": "Til að fá aðstoð við að nota %(brand)s, smelltu <a>hér</a>.",
             "help_link_chat_bot": "Til að fá aðstoð við að nota %(brand)s, smelltu <a>hér</a> eða byrjaðu að spjalla við vélmennið okkar með hnappnum hér fyrir neðan.",
-            "olm_version": "Útgáfa olm:",
             "title": "Hjálp og um hugbúnaðinn",
             "versions": "Útgáfur"
         }

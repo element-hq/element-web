@@ -223,7 +223,6 @@
         "msisdn_field_required_invalid": "Masukkan nomor telepon",
         "no_hs_url_provided": "Tidak ada URL homeserver yang disediakan",
         "oidc": {
-            "error_generic": "Ada sesuatu yang salah.",
             "error_title": "Kami tidak dapat memasukkan Anda"
         },
         "password_field_keep_going_prompt": "Lanjutkan…",
@@ -1786,7 +1785,6 @@
         "room_summary_card": {
             "title": "Informasi ruangan"
         },
-        "search_button": "Cari",
         "settings_button": "Pengaturan ruangan",
         "share_button": "Bagikan ruangan",
         "thread_list": {
@@ -2314,7 +2312,6 @@
             "help_link_chat_bot": "Untuk bantuan dengan menggunakan %(brand)s, klik <a>di sini</a> atau mulai sebuah obrolan dengan bot kami dengan menggunakan tombol di bawah.",
             "homeserver": "Homeserver adalah <code>%(homeserverUrl)s</code>",
             "identity_server": "Server identitas adalah <code>%(identityServerUrl)s</code>",
-            "olm_version": "Versi Olm:",
             "title": "Bantuan & Tentang",
             "versions": "Versi"
         }

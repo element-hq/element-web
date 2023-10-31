@@ -1617,7 +1617,6 @@
         "room_summary_card": {
             "title": "Huoneen tiedot"
         },
-        "search_button": "Haku",
         "settings_button": "Huoneen asetukset",
         "share_button": "Jaa huone",
         "thread_list": {
@@ -2095,7 +2094,6 @@
             "help_link_chat_bot": "Saadaksesi apua %(brand)sin käytössä, napsauta <a>tästä</a> tai aloita keskustelu bottimme kanssa alla olevasta painikkeesta.",
             "homeserver": "Kotipalvelin on <code>%(homeserverUrl)s</code>",
             "identity_server": "Identiteettipalvelin on <code>%(identityServerUrl)s</code>",
-            "olm_version": "Olm-versio:",
             "title": "Ohje ja tietoja",
             "versions": "Versiot"
         }

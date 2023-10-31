@@ -1108,7 +1108,6 @@
             "title": "Prisegtos žinutės"
         },
         "pinned_messages_button": "Prisegta",
-        "search_button": "Ieškoti",
         "settings_button": "Kambario nustatymai",
         "share_button": "Bendrinti kambarį",
         "video_room_chat": {
@@ -1521,7 +1520,6 @@
             "clear_cache_reload": "Išvalyti podėlį ir perkrauti",
             "help_link": "Norėdami gauti pagalbos naudojant %(brand)s, paspauskite <a>čia</a>.",
             "help_link_chat_bot": "Norėdami gauti pagalbos naudojant %(brand)s, paspauskite <a>čia</a> arba pradėkite pokalbį su mūsų botu pasinaudoję žemiau esančiu mygtuku.",
-            "olm_version": "Olm versija:",
             "title": "Pagalba ir Apie",
             "versions": "Versijos"
         }

@@ -224,7 +224,6 @@
         "msisdn_field_required_invalid": "Zadajte telefónne číslo",
         "no_hs_url_provided": "Nie je zadaná adresa domovského servera",
         "oidc": {
-            "error_generic": "Niečo sa pokazilo.",
             "error_title": "Nemohli sme vás prihlásiť"
         },
         "password_field_keep_going_prompt": "Pokračujte…",
@@ -1800,7 +1799,6 @@
         "room_summary_card": {
             "title": "Informácie o miestnosti"
         },
-        "search_button": "Hľadať",
         "settings_button": "Nastavenia miestnosti",
         "share_button": "Zdieľať miestnosť",
         "thread_list": {
@@ -2322,7 +2320,6 @@
             "help_link_chat_bot": "Pomoc pri používaní aplikácie %(brand)s môžete získať kliknutím <a>sem</a>, alebo začnite konverzáciu s našim robotom pomocou tlačidla dole.",
             "homeserver": "Domovský server je <code>%(homeserverUrl)s</code>",
             "identity_server": "Server identity je <code>%(identityServerUrl)s</code>",
-            "olm_version": "Olm verzia:",
             "title": "Pomocník a o programe",
             "versions": "Verzie"
         }

@@ -1714,7 +1714,6 @@
         "room_summary_card": {
             "title": "Info. de la sala"
         },
-        "search_button": "Buscar",
         "settings_button": "Configuración de la sala",
         "share_button": "Compartir la sala",
         "thread_list": {
@@ -2210,7 +2209,6 @@
             "help_link": "Si necesitas ayuda usando %(brand)s, haz clic <a>aquí</a>.",
             "help_link_chat_bot": "Si necesitas ayuda usando %(brand)s, haz clic <a>aquí</a> o abre un chat con nuestro bot usando el botón de abajo.",
             "homeserver": "El servidor base es <code>%(homeserverUrl)s</code>",
-            "olm_version": "Versión de Olm:",
             "title": "Ayuda y acerca de",
             "versions": "Versiones"
         }
