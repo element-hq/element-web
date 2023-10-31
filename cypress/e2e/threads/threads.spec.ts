@@ -39,7 +39,8 @@ describe("Threads", () => {
         cy.stopHomeserver(homeserver);
     });
 
-    it("should be usable for a conversation", () => {
+    // Flaky: https://github.com/vector-im/element-web/issues/26452
+    it.skip("should be usable for a conversation", () => {
         let bot: MatrixClient;
         cy.getBot(homeserver, {
             displayName: "BotBob",
