@@ -3,9 +3,9 @@ on:
     workflow_dispatch: {}
     push:
         tags: [v*]
-    schedule:
+    # schedule:
         # This job can take a while, and we have usage limits, so just publish develop only twice a day
-        - cron: "0 7/12 * * *"
+        # - cron: "0 7/12 * * *"
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
 jobs:
     buildx:
@@ -36,7 +36,7 @@ jobs:
               uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5
               with:
                   images: |
-                      vectorim/element-web
+                      superherodotcom/element-web
                   tags: |
                       type=ref,event=branch
                       type=ref,event=tag
@@ -58,4 +58,4 @@ jobs:
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
-                  repository: vectorim/element-web
+                  repository: superherodotcom/element-web
