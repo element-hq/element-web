@@ -126,7 +126,7 @@
         "cpx": "1.5.0",
         "css-loader": "^4",
         "dotenv": "^16.0.2",
-        "eslint": "8.51.0",
+        "eslint": "8.52.0",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-deprecate": "0.8.4",
