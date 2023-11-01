@@ -35,7 +35,7 @@ jobs:
                   cp -R debian/ /tmp/element-web-debian/DEBIAN/
                   mkdir -p /tmp/element-web-debian/usr/share/element-web/
 
-                  tar -xf "element-$VERSION.tar.gz" -C /tmp/element-web/debian/usr/share/element-web --strip-components=1
+                  tar -xf "element-$VERSION.tar.gz" -C /tmp/element-web-debian/usr/share/element-web --strip-components=1
                   cp config.sample.json /tmp/element-web-debian/usr/share/element-web/config.json
 
             - name: Build deb package
