@@ -42,6 +42,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
+import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { _t } from "../../languageHandler";
@@ -246,6 +247,8 @@ export interface IRoomState {
 
     canAskToJoin: boolean;
     promptAskToJoin: boolean;
+
+    viewRoomOpts: ViewRoomOpts;
 }
 
 interface LocalRoomViewProps {
@@ -458,6 +461,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             msc3946ProcessDynamicPredecessor: SettingsStore.getValue("feature_dynamic_room_predecessors"),
             canAskToJoin: this.askToJoinEnabled,
             promptAskToJoin: false,
+            viewRoomOpts: { buttons: [] },
         };
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -663,6 +667,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 : false,
             activeCall: roomId ? CallStore.instance.getActiveCall(roomId) : null,
             promptAskToJoin: this.context.roomViewStore.promptAskToJoin(),
+            viewRoomOpts: this.context.roomViewStore.getViewRoomOpts(),
         };
 
         if (
@@ -1407,6 +1412,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             tombstone: this.getRoomTombstone(room),
             liveTimeline: room.getLiveTimeline(),
         });
+
+        dis.dispatch<ActionPayload>({ action: Action.RoomLoaded });
     };
 
     private onRoomTimelineReset = (room?: Room): void => {
@@ -2601,7 +2608,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 data-layout={this.state.layout}
                             >
                                 {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
-                                    <RoomHeader room={this.state.room} />
+                                    <RoomHeader
+                                        room={this.state.room}
+                                        additionalButtons={this.state.viewRoomOpts.buttons}
+                                    />
                                 ) : (
                                     <LegacyRoomHeader
                                         room={this.state.room}
@@ -2619,6 +2629,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                         enableRoomOptionsMenu={!this.viewsLocalRoom}
                                         viewingCall={viewingCall}
                                         activeCall={this.state.activeCall}
+                                        additionalButtons={this.state.viewRoomOpts.buttons}
                                     />
                                 )}
                                 {mainSplitBody}

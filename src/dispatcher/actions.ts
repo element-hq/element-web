@@ -371,4 +371,9 @@ export enum Action {
      * Fired when we want to open spotlight search. Use with a OpenSpotlightPayload.
      */
     OpenSpotlight = "open_spotlight",
+
+    /**
+     * Fired when the room loaded.
+     */
+    RoomLoaded = "room_loaded",
 }

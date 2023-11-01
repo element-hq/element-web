@@ -24,6 +24,7 @@ import { ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/ty
 import { JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
 import { Optional } from "matrix-events-sdk";
 import EventEmitter from "events";
+import { RoomViewLifecycle, ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { MatrixDispatcher } from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -60,6 +61,7 @@ import { pauseNonLiveBroadcastFromOtherRoom } from "../voice-broadcast/utils/pau
 import { ActionPayload } from "../dispatcher/payloads";
 import { CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
 import { SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
+import { ModuleRunner } from "../modules/ModuleRunner";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -119,6 +121,8 @@ interface State {
     viewingCall: boolean;
 
     promptAskToJoin: boolean;
+
+    viewRoomOpts: ViewRoomOpts;
 }
 
 const INITIAL_STATE: State = {
@@ -140,6 +144,7 @@ const INITIAL_STATE: State = {
     wasContextSwitch: false,
     viewingCall: false,
     promptAskToJoin: false,
+    viewRoomOpts: { buttons: [] },
 };
 
 type Listener = (isActive: boolean) => void;
@@ -368,6 +373,10 @@ export class RoomViewStore extends EventEmitter {
             }
             case Action.CancelAskToJoin: {
                 this.cancelAskToJoin(payload as CancelAskToJoinPayload);
+                break;
+            }
+            case Action.RoomLoaded: {
+                this.setViewRoomOpts();
                 break;
             }
         }
@@ -804,5 +813,25 @@ export class RoomViewStore extends EventEmitter {
                     description: err.message,
                 }),
             );
+    }
+
+    /**
+     * Gets the current state of the 'viewRoomOpts' property.
+     *
+     * @returns {ViewRoomOpts} The value of the 'viewRoomOpts' property.
+     */
+    public getViewRoomOpts(): ViewRoomOpts {
+        return this.state.viewRoomOpts;
+    }
+
+    /**
+     * Invokes the view room lifecycle to set the view room options.
+     *
+     * @returns {void}
+     */
+    private setViewRoomOpts(): void {
+        const viewRoomOpts: ViewRoomOpts = { buttons: [] };
+        ModuleRunner.instance.invoke(RoomViewLifecycle.ViewRoom, viewRoomOpts, this.getRoomId());
+        this.setState({ viewRoomOpts });
     }
 }

@@ -17,6 +17,7 @@ limitations under the License.
 import { mocked } from "jest-mock";
 import { MatrixError, Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
+import { RoomViewLifecycle, ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { RoomViewStore } from "../../src/stores/RoomViewStore";
 import { Action } from "../../src/dispatcher/actions";
@@ -43,6 +44,7 @@ import ErrorDialog from "../../src/components/views/dialogs/ErrorDialog";
 import { CancelAskToJoinPayload } from "../../src/dispatcher/payloads/CancelAskToJoinPayload";
 import { JoinRoomErrorPayload } from "../../src/dispatcher/payloads/JoinRoomErrorPayload";
 import { SubmitAskToJoinPayload } from "../../src/dispatcher/payloads/SubmitAskToJoinPayload";
+import { ModuleRunner } from "../../src/modules/ModuleRunner";
 
 jest.mock("../../src/Modal");
 
@@ -130,6 +132,11 @@ describe("RoomViewStore", function () {
     const dispatchCancelAskToJoin = async (roomId: string) => {
         dis.dispatch<CancelAskToJoinPayload>({ action: Action.CancelAskToJoin, roomId });
         await untilDispatch(Action.CancelAskToJoin, dis);
+    };
+
+    const dispatchRoomLoaded = async () => {
+        dis.dispatch({ action: Action.RoomLoaded });
+        await untilDispatch(Action.RoomLoaded, dis);
     };
 
     let roomViewStore: RoomViewStore;
@@ -567,6 +574,32 @@ describe("RoomViewStore", function () {
                 description: error.message,
                 title: "Failed to cancel",
             });
+        });
+    });
+
+    describe("getViewRoomOpts", () => {
+        it("returns viewRoomOpts", () => {
+            expect(roomViewStore.getViewRoomOpts()).toEqual({ buttons: [] });
+        });
+    });
+
+    describe("Action.RoomLoaded", () => {
+        it("updates viewRoomOpts", async () => {
+            const buttons: ViewRoomOpts["buttons"] = [
+                {
+                    icon: "test-icon",
+                    id: "test-id",
+                    label: () => "test-label",
+                    onClick: () => {},
+                },
+            ];
+            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
+                if (lifecycleEvent === RoomViewLifecycle.ViewRoom) {
+                    opts.buttons = buttons;
+                }
+            });
+            await dispatchRoomLoaded();
+            expect(roomViewStore.getViewRoomOpts()).toEqual({ buttons });
         });
     });
 });

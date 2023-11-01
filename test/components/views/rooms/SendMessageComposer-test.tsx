@@ -84,6 +84,7 @@ describe("<SendMessageComposer/>", () => {
         msc3946ProcessDynamicPredecessor: false,
         canAskToJoin: false,
         promptAskToJoin: false,
+        viewRoomOpts: { buttons: [] },
     };
     describe("createMessageContent", () => {
         const permalinkCreator = jest.fn() as any;

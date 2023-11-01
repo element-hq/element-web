@@ -24,6 +24,7 @@ import { Icon as VerifiedIcon } from "@vector-im/compound-design-tokens/icons/ve
 import { Icon as ErrorIcon } from "@vector-im/compound-design-tokens/icons/error.svg";
 import { Icon as PublicIcon } from "@vector-im/compound-design-tokens/icons/public.svg";
 import { EventType, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
+import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { useRoomName } from "../../../hooks/useRoomName";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
@@ -63,7 +64,13 @@ function notificationColorToIndicator(color: NotificationColor): React.Component
     }
 }
 
-export default function RoomHeader({ room }: { room: Room }): JSX.Element {
+export default function RoomHeader({
+    room,
+    additionalButtons,
+}: {
+    room: Room;
+    additionalButtons?: ViewRoomOpts["buttons"];
+}): JSX.Element {
     const client = useMatrixClientContext();
 
     const roomName = useRoomName(room);
@@ -169,6 +176,23 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                 )}
             </Box>
             <Flex as="nav" align="center" gap="var(--cpd-space-2x)">
+                {additionalButtons?.map((props) => {
+                    const label = props.label();
+
+                    return (
+                        <Tooltip label={label} key={props.id}>
+                            <IconButton
+                                aria-label={label}
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    props.onClick();
+                                }}
+                            >
+                                {props.icon}
+                            </IconButton>
+                        </Tooltip>
+                    );
+                })}
                 {!useElementCallExclusively && (
                     <Tooltip label={!voiceCallDisabledReason ? _t("voip|voice_call") : voiceCallDisabledReason!}>
                         <IconButton
