@@ -291,6 +291,10 @@ describe("TimelinePanel", () => {
 
                     it("and forgetting the read markers, should send the stored marker again", async () => {
                         timelineSet.addLiveEvent(ev2, {});
+                        // Add the event to the room as well as the timeline, so we can find it when we
+                        // call findEventById in getEventReadUpTo. This is odd because in our test
+                        // setup, timelineSet is not actually the timelineSet of the room.
+                        await room.addLiveEvents([ev2], {});
                         room.addEphemeralEvents([newReceipt(ev2.getId()!, userId, 222, 200)]);
                         await timelinePanel.forgetReadMarker();
                         expect(client.setRoomReadMarkers).toHaveBeenCalledWith(roomId, ev2.getId());
