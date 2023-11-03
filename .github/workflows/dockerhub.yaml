@@ -17,6 +17,7 @@ jobs:
             matrix:
                 include:
                     - variant: vanilla
+                    # Variant we ship to aid ESS in providing a build on the OpenCoDE platform including specific modules
                     - variant: opendesk
                       flavor: suffix=-opendesk,onlatest=true
                       prepare: mv variants/openDesk/* .
