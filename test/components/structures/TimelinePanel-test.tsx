@@ -89,16 +89,16 @@ const getProps = (room: Room, events: MatrixEvent[]): TimelinePanel["props"] => 
 const mockEvents = (room: Room, count = 2): MatrixEvent[] => {
     const events: MatrixEvent[] = [];
     for (let index = 0; index < count; index++) {
-        events.push(
-            new MatrixEvent({
-                room_id: room.roomId,
-                event_id: `${room.roomId}_event_${index}`,
-                type: EventType.RoomMessage,
-                sender: "userId",
-                content: createMessageEventContent("`Event${index}`"),
-                origin_server_ts: index,
-            }),
-        );
+        const event = new MatrixEvent({
+            room_id: room.roomId,
+            event_id: `${room.roomId}_event_${index}`,
+            type: EventType.RoomMessage,
+            sender: "userId",
+            content: createMessageEventContent("`Event${index}`"),
+            origin_server_ts: index,
+        });
+        event.localTimestamp = index;
+        events.push(event);
     }
 
     return events;
@@ -546,12 +546,14 @@ describe("TimelinePanel", () => {
                 event_id: `virtualCallEvent1`,
                 origin_server_ts: 0,
             });
+            virtualCallInvite.localTimestamp = 2;
             const virtualCallMetaEvent = new MatrixEvent({
                 type: "org.matrix.call.sdp_stream_metadata_changed",
                 room_id: virtualRoom.roomId,
                 event_id: `virtualCallEvent2`,
                 origin_server_ts: 0,
             });
+            virtualCallMetaEvent.localTimestamp = 2;
             const virtualEvents = [virtualCallInvite, ...mockEvents(virtualRoom), virtualCallMetaEvent];
             const { timelineSet: overlayTimelineSet } = getProps(virtualRoom, virtualEvents);
 
@@ -562,7 +564,6 @@ describe("TimelinePanel", () => {
                     overlayTimelineSetFilter={isCallEvent}
                 />,
             );
-
             await waitFor(() =>
                 expectEvents(container, [
                     // main timeline events are included
