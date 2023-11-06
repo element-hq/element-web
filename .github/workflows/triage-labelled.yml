@@ -3,6 +3,7 @@ name: Move labelled issues to correct projects
 on:
     issues:
         types: [labeled]
+    workflow_call:
 
 jobs:
     apply_Z-Labs_label:
