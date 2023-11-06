@@ -42,13 +42,25 @@ jobs:
                   repository: matrix-org/matrix-js-sdk
                   path: matrix-js-sdk
 
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+                  cache-dependency-path: element-web/yarn.lock
+
+            - name: Generate automations docs
+              working-directory: element-web
+              run: |
+                  yarn install --frozen-lockfile
+                  yarn ts-node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-react-sdk ../matrix-js-sdk > docs/automations.md
+                  echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
+
             - name: Setup mdBook
               uses: peaceiris/actions-mdbook@v1
               with:
                   mdbook-version: "0.4.10"
 
-            - name: Install mdbook-combiner
-              run: cargo install mdbook-combiner
+            - name: Install mdbook extensions
+              run: cargo install mdbook-combiner mdbook-mermaid
 
             - name: Prepare docs
               run: |
@@ -58,6 +70,7 @@ jobs:
                   mv element-desktop/docs "docs/Element Desktop"
 
                   mv element-web/README.md element-web/docs/
+                  mv element-web/docs/lib docs/
                   mv element-web/docs "docs/Element Web"
 
                   mv matrix-react-sdk/README.md matrix-react-sdk/docs/

@@ -24,3 +24,9 @@ git-repository-url = "https://github.com/vector-im/element-web"
 
 # The path that the docs are hosted on
 site-url = "/element-web/"
+additional-js = ["docs/lib/mermaid.min.js", "docs/lib/mermaid-init.js"]
+
+[preprocessor]
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"

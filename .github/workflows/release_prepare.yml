@@ -1,0 +1,81 @@
+name: Cut branches
+on:
+    workflow_dispatch:
+        inputs:
+            element-desktop:
+                description: Prepare element-desktop
+                required: true
+                type: boolean
+                default: true
+            element-web:
+                description: Prepare element-web
+                required: true
+                type: boolean
+                default: true
+            matrix-react-sdk:
+                description: Prepare matrix-react-sdk
+                required: true
+                type: boolean
+                default: true
+            matrix-js-sdk:
+                description: Prepare matrix-js-sdk
+                required: true
+                type: boolean
+                default: true
+jobs:
+    prepare:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Element Desktop
+              uses: actions/checkout@v4
+              if: inputs.element-desktop
+              with:
+                  repository: vector-im/element-desktop
+                  path: element-desktop
+                  ref: staging
+                  fetch-depth: 0
+                  fetch-tags: true
+                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+            - name: Checkout Element Web
+              uses: actions/checkout@v4
+              if: inputs.element-web
+              with:
+                  repository: vector-im/element-web
+                  path: element-web
+                  ref: staging
+                  fetch-depth: 0
+                  fetch-tags: true
+                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+            - name: Checkout Matrix React SDK
+              uses: actions/checkout@v4
+              if: inputs.matrix-react-sdk
+              with:
+                  repository: matrix-org/matrix-react-sdk
+                  path: matrix-react-sdk
+                  ref: staging
+                  fetch-depth: 0
+                  fetch-tags: true
+                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+            - name: Checkout Matrix JS SDK
+              uses: actions/checkout@v4
+              if: inputs.matrix-js-sdk
+              with:
+                  repository: matrix-org/matrix-js-sdk
+                  path: matrix-js-sdk
+                  ref: staging
+                  fetch-depth: 0
+                  fetch-tags: true
+                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+            - name: Resolve repos
+              run: |
+                  echo "REPOS=$(ls . | tr '\n' ' ')" >> $GITHUB_ENV
+
+            - name: Merge develop
+              run: |
+                  git config --global user.email "releases@riot.im"
+                  git config --global user.name "RiotRobot"
+                  for REPO in $REPOS; do git -C "$REPO" merge origin/develop; done
+
+            - name: Push staging
+              run: for REPO in $REPOS; do git -C "$REPO" push origin staging; done
