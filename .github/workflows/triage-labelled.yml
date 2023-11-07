@@ -4,6 +4,9 @@ on:
     issues:
         types: [labeled]
     workflow_call:
+        secrets:
+            ELEMENT_BOT_TOKEN:
+                required: true
 
 jobs:
     apply_Z-Labs_label:
