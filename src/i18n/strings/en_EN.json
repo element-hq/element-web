@@ -1740,7 +1740,8 @@
         "online": "Online",
         "online_for": "Online for %(duration)s",
         "unknown": "Unknown",
-        "unknown_for": "Unknown for %(duration)s"
+        "unknown_for": "Unknown for %(duration)s",
+        "unreachable": "User's server unreachable"
     },
     "quick_settings": {
         "all_settings": "All settings",

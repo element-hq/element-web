@@ -35,12 +35,13 @@ const PowerLabel: Record<PowerStatus, TranslationKey> = {
     [PowerStatus.Moderator]: _td("power_level|mod"),
 };
 
-export type PresenceState = "offline" | "online" | "unavailable";
+export type PresenceState = "offline" | "online" | "unavailable" | "io.element.unreachable";
 
 const PRESENCE_CLASS: Record<PresenceState, string> = {
-    offline: "mx_EntityTile_offline",
-    online: "mx_EntityTile_online",
-    unavailable: "mx_EntityTile_unavailable",
+    "offline": "mx_EntityTile_offline",
+    "online": "mx_EntityTile_online",
+    "unavailable": "mx_EntityTile_unavailable",
+    "io.element.unreachable": "mx_EntityTile_unreachable",
 };
 
 function presenceClassForMember(presenceState?: PresenceState, lastActiveAgo?: number, showPresence?: boolean): string {
@@ -75,7 +76,6 @@ interface IProps {
     presenceCurrentlyActive?: boolean;
     showInviteButton: boolean;
     onClick(): void;
-    suppressOnHover: boolean;
     showPresence: boolean;
     subtextLabel?: string;
     e2eStatus?: E2EState;
@@ -93,7 +93,6 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
         presenceLastActiveAgo: 0,
         presenceLastTs: 0,
         showInviteButton: false,
-        suppressOnHover: false,
         showPresence: true,
     };
 
@@ -105,10 +104,27 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
         };
     }
 
+    /**
+     * Creates the PresenceLabel component if needed
+     * @returns The PresenceLabel component if we need to render it, undefined otherwise
+     */
+    private getPresenceLabel(): JSX.Element | undefined {
+        if (!this.props.showPresence) return;
+        const activeAgo = this.props.presenceLastActiveAgo
+            ? Date.now() - (this.props.presenceLastTs - this.props.presenceLastActiveAgo)
+            : -1;
+        return (
+            <PresenceLabel
+                activeAgo={activeAgo}
+                currentlyActive={this.props.presenceCurrentlyActive}
+                presenceState={this.props.presenceState}
+            />
+        );
+    }
+
     public render(): React.ReactNode {
         const mainClassNames: Record<string, boolean> = {
             mx_EntityTile: true,
-            mx_EntityTile_noHover: !!this.props.suppressOnHover,
         };
         if (this.props.className) mainClassNames[this.props.className] = true;
 
@@ -119,43 +135,13 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
         );
         mainClassNames[presenceClass] = true;
 
-        let nameEl;
         const name = this.props.nameJSX || this.props.name;
-
-        if (!this.props.suppressOnHover) {
-            const activeAgo = this.props.presenceLastActiveAgo
-                ? Date.now() - (this.props.presenceLastTs - this.props.presenceLastActiveAgo)
-                : -1;
-
-            let presenceLabel: JSX.Element | undefined;
-            if (this.props.showPresence) {
-                presenceLabel = (
-                    <PresenceLabel
-                        activeAgo={activeAgo}
-                        currentlyActive={this.props.presenceCurrentlyActive}
-                        presenceState={this.props.presenceState}
-                    />
-                );
-            }
-            if (this.props.subtextLabel) {
-                presenceLabel = <span className="mx_EntityTile_subtext">{this.props.subtextLabel}</span>;
-            }
-            nameEl = (
-                <div className="mx_EntityTile_details">
-                    <div className="mx_EntityTile_name">{name}</div>
-                    {presenceLabel}
-                </div>
-            );
-        } else if (this.props.subtextLabel) {
-            nameEl = (
-                <div className="mx_EntityTile_details">
-                    <div className="mx_EntityTile_name">{name}</div>
-                    <span className="mx_EntityTile_subtext">{this.props.subtextLabel}</span>
-                </div>
-            );
-        } else {
-            nameEl = <div className="mx_EntityTile_name">{name}</div>;
-        }
+        const nameAndPresence = (
+            <div className="mx_EntityTile_details">
+                <div className="mx_EntityTile_name">{name}</div>
+                {this.getPresenceLabel()}
+            </div>
+        );
 
         let inviteButton;
         if (this.props.showInviteButton) {
@@ -198,7 +184,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
                         {av}
                         {e2eIcon}
                     </div>
-                    {nameEl}
+                    {nameAndPresence}
                     {powerLabel}
                     {inviteButton}
                 </AccessibleButton>

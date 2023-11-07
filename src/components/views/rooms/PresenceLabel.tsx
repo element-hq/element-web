@@ -44,6 +44,8 @@ export default class PresenceLabel extends React.Component<IProps> {
         // the 'active ago' ends up being 0.
         if (presence && BUSY_PRESENCE_NAME.matches(presence)) return _t("presence|busy");
 
+        if (presence === "io.element.unreachable") return _t("presence|unreachable");
+
         if (!currentlyActive && activeAgo !== undefined && activeAgo > 0) {
             const duration = formatDuration(activeAgo);
             if (presence === "online") return _t("presence|online_for", { duration: duration });

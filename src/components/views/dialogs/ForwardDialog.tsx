@@ -264,8 +264,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                     <BaseAvatar url={require("../../../../res/img/ellipsis.svg").default} name="..." size="36px" />
                 }
                 name={text}
-                presenceState="online"
-                suppressOnHover={true}
+                showPresence={false}
                 onClick={() => setTruncateAt(totalCount)}
             />
         );

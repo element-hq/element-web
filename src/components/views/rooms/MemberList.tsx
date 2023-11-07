@@ -81,6 +81,7 @@ export default class MemberList extends React.Component<IProps, IState> {
 
     public static contextType = SDKContext;
     public context!: React.ContextType<typeof SDKContext>;
+    private tiles: Map<string, MemberTile> = new Map();
 
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props);
@@ -154,7 +155,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         // Attach a SINGLE listener for global presence changes then locate the
         // member tile and re-render it. This is more efficient than every tile
         // ever attaching their own listener.
-        const tile = this.refs[user.userId];
+        const tile = this.tiles.get(user.userId);
         if (tile) {
             this.updateList(); // reorder the membership list
         }
@@ -245,8 +246,7 @@ export default class MemberList extends React.Component<IProps, IState> {
                     <BaseAvatar url={require("../../../../res/img/ellipsis.svg").default} name="..." size="36px" />
                 }
                 name={text}
-                presenceState="online"
-                suppressOnHover={true}
+                showPresence={false}
                 onClick={onClick}
             />
         );
@@ -307,14 +307,24 @@ export default class MemberList extends React.Component<IProps, IState> {
         return members.map((m) => {
             if (m instanceof RoomMember) {
                 // Is a Matrix invite
-                return <MemberTile key={m.userId} member={m} ref={m.userId} showPresence={this.showPresence} />;
+                return (
+                    <MemberTile
+                        key={m.userId}
+                        member={m}
+                        ref={(tile) => {
+                            if (tile) this.tiles.set(m.userId, tile);
+                            else this.tiles.delete(m.userId);
+                        }}
+                        showPresence={this.showPresence}
+                    />
+                );
             } else {
                 // Is a 3pid invite
                 return (
                     <EntityTile
                         key={m.getStateKey()}
                         name={m.getContent().display_name}
-                        suppressOnHover={true}
+                        showPresence={false}
                         onClick={() => this.onPending3pidInviteClick(m)}
                     />
                 );

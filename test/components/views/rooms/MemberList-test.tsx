@@ -16,8 +16,8 @@ limitations under the License.
 */
 
 import React from "react";
-import { act, render, RenderResult } from "@testing-library/react";
-import { Room, MatrixClient, RoomState, RoomMember, User } from "matrix-js-sdk/src/matrix";
+import { act, render, RenderResult, screen } from "@testing-library/react";
+import { Room, MatrixClient, RoomState, RoomMember, User, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { compare } from "matrix-js-sdk/src/utils";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -137,84 +137,88 @@ describe("MemberList", () => {
         }
     }
 
+    function renderMemberList(enablePresence: boolean): void {
+        TestUtils.stubClient();
+        client = MatrixClientPeg.safeGet();
+        client.hasLazyLoadMembersEnabled = () => false;
+
+        // Make room
+        memberListRoom = createRoom();
+        expect(memberListRoom.roomId).toBeTruthy();
+
+        // Make users
+        adminUsers = [];
+        moderatorUsers = [];
+        defaultUsers = [];
+        const usersPerLevel = 2;
+        for (let i = 0; i < usersPerLevel; i++) {
+            const adminUser = new RoomMember(memberListRoom.roomId, `@admin${i}:localhost`);
+            adminUser.membership = "join";
+            adminUser.powerLevel = 100;
+            adminUser.user = User.createUser(adminUser.userId, client);
+            adminUser.user.currentlyActive = true;
+            adminUser.user.presence = "online";
+            adminUser.user.lastPresenceTs = 1000;
+            adminUser.user.lastActiveAgo = 10;
+            adminUsers.push(adminUser);
+
+            const moderatorUser = new RoomMember(memberListRoom.roomId, `@moderator${i}:localhost`);
+            moderatorUser.membership = "join";
+            moderatorUser.powerLevel = 50;
+            moderatorUser.user = User.createUser(moderatorUser.userId, client);
+            moderatorUser.user.currentlyActive = true;
+            moderatorUser.user.presence = "online";
+            moderatorUser.user.lastPresenceTs = 1000;
+            moderatorUser.user.lastActiveAgo = 10;
+            moderatorUsers.push(moderatorUser);
+
+            const defaultUser = new RoomMember(memberListRoom.roomId, `@default${i}:localhost`);
+            defaultUser.membership = "join";
+            defaultUser.powerLevel = 0;
+            defaultUser.user = User.createUser(defaultUser.userId, client);
+            defaultUser.user.currentlyActive = true;
+            defaultUser.user.presence = "online";
+            defaultUser.user.lastPresenceTs = 1000;
+            defaultUser.user.lastActiveAgo = 10;
+            defaultUsers.push(defaultUser);
+        }
+
+        client.getRoom = (roomId) => {
+            if (roomId === memberListRoom.roomId) return memberListRoom;
+            else return null;
+        };
+        memberListRoom.currentState = {
+            members: {},
+            getMember: jest.fn(),
+            getStateEvents: ((eventType, stateKey) =>
+                stateKey === undefined ? [] : null) as RoomState["getStateEvents"], // ignore 3pid invites
+        } as unknown as RoomState;
+        for (const member of [...adminUsers, ...moderatorUsers, ...defaultUsers]) {
+            memberListRoom.currentState.members[member.userId] = member;
+        }
+
+        const gatherWrappedRef = (r: MemberList) => {
+            memberList = r;
+        };
+        const context = new TestSdkContext();
+        context.client = client;
+        context.memberListStore.isPresenceEnabled = jest.fn().mockReturnValue(enablePresence);
+        root = render(
+            <SDKContext.Provider value={context}>
+                <MemberList
+                    searchQuery=""
+                    onClose={jest.fn()}
+                    onSearchQueryChanged={jest.fn()}
+                    roomId={memberListRoom.roomId}
+                    ref={gatherWrappedRef}
+                />
+            </SDKContext.Provider>,
+        );
+    }
+
     describe.each([false, true])("does order members correctly (presence %s)", (enablePresence) => {
         beforeEach(function () {
-            TestUtils.stubClient();
-            client = MatrixClientPeg.safeGet();
-            client.hasLazyLoadMembersEnabled = () => false;
-
-            // Make room
-            memberListRoom = createRoom();
-            expect(memberListRoom.roomId).toBeTruthy();
-
-            // Make users
-            adminUsers = [];
-            moderatorUsers = [];
-            defaultUsers = [];
-            const usersPerLevel = 2;
-            for (let i = 0; i < usersPerLevel; i++) {
-                const adminUser = new RoomMember(memberListRoom.roomId, `@admin${i}:localhost`);
-                adminUser.membership = "join";
-                adminUser.powerLevel = 100;
-                adminUser.user = new User(adminUser.userId);
-                adminUser.user.currentlyActive = true;
-                adminUser.user.presence = "online";
-                adminUser.user.lastPresenceTs = 1000;
-                adminUser.user.lastActiveAgo = 10;
-                adminUsers.push(adminUser);
-
-                const moderatorUser = new RoomMember(memberListRoom.roomId, `@moderator${i}:localhost`);
-                moderatorUser.membership = "join";
-                moderatorUser.powerLevel = 50;
-                moderatorUser.user = new User(moderatorUser.userId);
-                moderatorUser.user.currentlyActive = true;
-                moderatorUser.user.presence = "online";
-                moderatorUser.user.lastPresenceTs = 1000;
-                moderatorUser.user.lastActiveAgo = 10;
-                moderatorUsers.push(moderatorUser);
-
-                const defaultUser = new RoomMember(memberListRoom.roomId, `@default${i}:localhost`);
-                defaultUser.membership = "join";
-                defaultUser.powerLevel = 0;
-                defaultUser.user = new User(defaultUser.userId);
-                defaultUser.user.currentlyActive = true;
-                defaultUser.user.presence = "online";
-                defaultUser.user.lastPresenceTs = 1000;
-                defaultUser.user.lastActiveAgo = 10;
-                defaultUsers.push(defaultUser);
-            }
-
-            client.getRoom = (roomId) => {
-                if (roomId === memberListRoom.roomId) return memberListRoom;
-                else return null;
-            };
-            memberListRoom.currentState = {
-                members: {},
-                getMember: jest.fn(),
-                getStateEvents: ((eventType, stateKey) =>
-                    stateKey === undefined ? [] : null) as RoomState["getStateEvents"], // ignore 3pid invites
-            } as unknown as RoomState;
-            for (const member of [...adminUsers, ...moderatorUsers, ...defaultUsers]) {
-                memberListRoom.currentState.members[member.userId] = member;
-            }
-
-            const gatherWrappedRef = (r: MemberList) => {
-                memberList = r;
-            };
-            const context = new TestSdkContext();
-            context.client = client;
-            context.memberListStore.isPresenceEnabled = jest.fn().mockReturnValue(enablePresence);
-            root = render(
-                <SDKContext.Provider value={context}>
-                    <MemberList
-                        searchQuery=""
-                        onClose={jest.fn()}
-                        onSearchQueryChanged={jest.fn()}
-                        roomId={memberListRoom.roomId}
-                        ref={gatherWrappedRef}
-                    />
-                </SDKContext.Provider>,
-            );
+            renderMemberList(enablePresence);
         });
 
         describe("does order members correctly", () => {
@@ -306,6 +310,26 @@ describe("MemberList", () => {
                 const tiles = root.container.querySelectorAll(".mx_EntityTile");
                 expectOrderedByPresenceAndPowerLevel(tiles, enablePresence);
             });
+        });
+    });
+
+    describe("memberlist is rendered correctly", () => {
+        beforeEach(function () {
+            renderMemberList(true);
+        });
+
+        it("memberlist is re-rendered on unreachable presence event", async () => {
+            defaultUsers[0].user?.setPresenceEvent(
+                new MatrixEvent({
+                    type: "m.presence",
+                    sender: defaultUsers[0].userId,
+                    content: {
+                        presence: "io.element.unreachable",
+                        currently_active: false,
+                    },
+                }),
+            );
+            expect(await screen.findByText(/User's server unreachable/)).toBeInTheDocument();
         });
     });
 });

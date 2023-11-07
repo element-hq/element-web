@@ -46,11 +46,11 @@ limitations under the License.
     background-color: $header-panel-text-primary-color;
 }
 
-.mx_EntityTile .mx_PresenceLabel {
+.mx_EntityTile:not(.mx_EntityTile_unreachable) .mx_PresenceLabel {
     display: none;
 }
 
-.mx_EntityTile:not(.mx_EntityTile_noHover):hover .mx_PresenceLabel {
+.mx_EntityTile:hover .mx_PresenceLabel {
     display: block;
 }
 
@@ -106,7 +106,9 @@ limitations under the License.
 }
 
 .mx_EntityTile_unknown .mx_EntityTile_avatar,
-.mx_EntityTile_unknown .mx_EntityTile_name {
+.mx_EntityTile_unknown .mx_EntityTile_name,
+.mx_EntityTile_unreachable .mx_EntityTile_avatar,
+.mx_EntityTile_unreachable .mx_EntityTile_name {
     opacity: 0.25;
 }
 
