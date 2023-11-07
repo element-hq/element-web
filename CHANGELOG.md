@@ -1,5 +1,5 @@
-Changes in [1.11.48-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.48-rc.1) (2023-10-31)
-===========================================================================================================
+Changes in [1.11.48](https://github.com/vector-im/element-web/releases/tag/v1.11.48) (2023-11-07)
+=================================================================================================
 
 ## ✨ Features
  * Correctly fill window.matrixChat even when a Wrapper module is active ([\#26395](https://github.com/vector-im/element-web/pull/26395)). Contributed by @dhenneke.
@@ -12,6 +12,7 @@ Changes in [1.11.48-rc.1](https://github.com/vector-im/element-web/releases/tag/
  * OIDC: add friendly errors ([\#11184](https://github.com/matrix-org/matrix-react-sdk/pull/11184)). Fixes #25665. Contributed by @kerryarchibald.
 
 ## 🐛 Bug Fixes
+ * Fix rightpanel hiding scrollbar ([\#11831](https://github.com/matrix-org/matrix-react-sdk/pull/11831)). Contributed by @kerryarchibald.
  * Fix multi-tab session lock on Firefox not being cleared ([\#11800](https://github.com/matrix-org/matrix-react-sdk/pull/11800)). Fixes #26165. Contributed by @ManuelHu.
  * Deserialise spoilers back into slash command form ([\#11805](https://github.com/matrix-org/matrix-react-sdk/pull/11805)). Fixes #26344.
  * Fix Incorrect message scaling for verification request ([\#11793](https://github.com/matrix-org/matrix-react-sdk/pull/11793)). Fixes #24304. Contributed by @capGoblin.
