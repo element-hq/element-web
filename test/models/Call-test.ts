@@ -596,16 +596,19 @@ describe("ElementCall", () => {
         it("finds calls", async () => {
             await ElementCall.create(room);
             expect(Call.get(room)).toBeInstanceOf(ElementCall);
+            Call.get(room)?.destroy();
         });
 
         it("finds ongoing calls that are created by the session manager", async () => {
             // There is an existing session created by another user in this room.
             client.matrixRTC.getRoomSession.mockReturnValue({
                 on: (ev: any, fn: any) => {},
+                off: (ev: any, fn: any) => {},
                 memberships: [{ fakeVal: "fake membership" }],
             } as unknown as MatrixRTCSession);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+            call.destroy();
         });
 
         it("passes font settings through widget URL", async () => {
@@ -642,6 +645,7 @@ describe("ElementCall", () => {
 
             const urlParams1 = new URLSearchParams(new URL(call1.widget.url).hash.slice(1));
             expect(urlParams1.has("allowIceFallback")).toBe(false);
+            call1.destroy();
 
             // Now test with the preference set to true
             const originalGetValue = SettingsStore.getValue;
@@ -654,13 +658,14 @@ describe("ElementCall", () => {
                 }
             };
 
-            await ElementCall.create(room);
+            ElementCall.create(room);
             const call2 = Call.get(room);
             if (!(call2 instanceof ElementCall)) throw new Error("Failed to create call");
 
             const urlParams2 = new URLSearchParams(new URL(call2.widget.url).hash.slice(1));
             expect(urlParams2.has("allowIceFallback")).toBe(true);
 
+            call2.destroy();
             SettingsStore.getValue = originalGetValue;
         });
 
@@ -677,6 +682,7 @@ describe("ElementCall", () => {
 
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
             expect(urlParams.get("analyticsID")).toBe("123456789987654321");
+            call.destroy();
         });
 
         it("does not pass analyticsID if `pseudonymousAnalyticsOptIn` set to false", async () => {

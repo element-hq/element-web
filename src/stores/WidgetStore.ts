@@ -202,7 +202,6 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         const app = WidgetUtils.makeAppConfig(widget.id, widget, widget.creatorUserId, roomId, undefined);
         this.widgetMap.set(WidgetUtils.getWidgetUid(app), app);
         this.roomMap.get(roomId)!.widgets.push(app);
-        this.emit(UPDATE_EVENT, roomId);
         return app;
     }
 
