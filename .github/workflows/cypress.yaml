@@ -45,7 +45,6 @@ jobs:
             commit_author: ${{ steps.commit.outputs.author }}
             commit_email: ${{ steps.commit.outputs.email }}
             percy_enable: ${{ steps.percy.outputs.value || '0' }}
-            kiwi_enable: ${{ steps.kiwi.outputs.value || '1' }}
         steps:
             # We create the status here and then update it to success/failure in the `report` stage
             # This provides an easy link to this workflow_run from the PR before Cypress is done.
@@ -89,14 +88,6 @@ jobs:
                     contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy')
                   )
               run: echo "value=1" >> $GITHUB_OUTPUT
-
-            # Only export to kiwi when it is demanded or on develop
-            - name: Disable Kiwi if not needed
-              id: kiwi
-              if: |
-                  github.event.workflow_run.event == 'pull_request' &&
-                  !contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Send-Kiwi')
-              run: echo "value=0" >> $GITHUB_OUTPUT
 
             - name: Generate unique ID 💎
               id: uuid
@@ -224,13 +215,6 @@ jobs:
                       matrix-react-sdk/cypress/synapselogs
                       matrix-react-sdk/cypress/results/cypresslogs
 
-            - name: 📤 Upload JUnit report artifact
-              if: always()
-              uses: actions/upload-artifact@v3
-              with:
-                  name: cypress-junit-${{ matrix.crypto }}-crypto
-                  path: matrix-react-sdk/cypress/results/junit
-
     report:
         name: Finalize results
         needs:
@@ -266,31 +250,3 @@ jobs:
                   context: ${{ github.workflow }} / cypress
                   sha: ${{ github.event.workflow_run.head_sha }}
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
-    kiwi:
-        name: 🥝 Report results to kiwi (${{ matrix.crypto }} crypto)
-        needs:
-            - prepare
-            - tests
-        environment: Kiwi
-        runs-on: ubuntu-latest
-        if: ${{ needs.prepare.outputs.kiwi_enable == '1' }}
-        strategy:
-            matrix:
-                crypto: [legacy, rust]
-        steps:
-            - name: 📥 Download Junit report artifact
-              uses: actions/download-artifact@v3
-              with:
-                  name: cypress-junit-${{ matrix.crypto }}-crypto
-            - name: 📤 Upload results to kiwi
-              uses: vector-im/kiwitcms-upload-action@main
-              with:
-                  file-pattern: results-*.xml
-                  kiwi-username: ${{ secrets.TCMS_USERNAME }}
-                  kiwi-password: ${{ secrets.TCMS_PASSWORD }}
-                  product: "Element Web"
-                  product-version: ${{ github.event.workflow_run.head_branch }}
-                  build-id: ${{ github.event.workflow_run.head_sha }}-${{ matrix.crypto }}-crypto
-                  suite-name: "Cypress E2E"
-                  summary-template: "$name"
