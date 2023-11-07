@@ -17,13 +17,6 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
-import Chainable = Cypress.Chainable;
-
-function openCreateRoomDialog(): Chainable<JQuery<HTMLElement>> {
-    cy.findByRole("button", { name: "Add room" }).click();
-    cy.findByRole("menuitem", { name: "New room" }).click();
-    return cy.get(".mx_CreateRoomDialog");
-}
 
 describe("Create Room", () => {
     let homeserver: HomeserverInstance;
@@ -44,7 +37,7 @@ describe("Create Room", () => {
         const name = "Test room 1";
         const topic = "This room is dedicated to this test and this test only!";
 
-        openCreateRoomDialog().within(() => {
+        cy.openCreateRoomDialog().within(() => {
             // Fill name & topic
             cy.findByRole("textbox", { name: "Name" }).type(name);
             cy.findByRole("textbox", { name: "Topic (optional)" }).type(topic);

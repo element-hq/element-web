@@ -19,9 +19,10 @@ limitations under the License.
 
 import { IWidget } from "matrix-widget-api/src/interfaces/IWidget";
 
-import type { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { UserCredentials } from "../../support/login";
+import { waitForRoom } from "../utils";
 
 const DEMO_WIDGET_ID = "demo-widget-id";
 const DEMO_WIDGET_NAME = "Demo Widget";
@@ -67,30 +68,6 @@ const DEMO_WIDGET_HTML = `
         </body>
     </html>
 `;
-
-function waitForRoom(win: Cypress.AUTWindow, roomId: string, predicate: (room: Room) => boolean): Promise<void> {
-    const matrixClient = win.mxMatrixClientPeg.get();
-
-    return new Promise((resolve, reject) => {
-        const room = matrixClient.getRoom(roomId);
-
-        if (predicate(room)) {
-            resolve();
-            return;
-        }
-
-        function onEvent(ev: MatrixEvent) {
-            if (ev.getRoomId() !== roomId) return;
-
-            if (predicate(room)) {
-                matrixClient.removeListener(win.matrixcs.ClientEvent.Event, onEvent);
-                resolve();
-            }
-        }
-
-        matrixClient.on(win.matrixcs.ClientEvent.Event, onEvent);
-    });
-}
 
 describe("Widget Events", () => {
     let homeserver: HomeserverInstance;
@@ -182,7 +159,7 @@ describe("Widget Events", () => {
 
                 // widget should receive 'm.room.topic' event after invite
                 cy.window().then(async (win) => {
-                    await waitForRoom(win, roomId, (room) => {
+                    await waitForRoom(win, win.mxMatrixClientPeg.get(), roomId, (room) => {
                         const events = room.getLiveTimeline().getEvents();
                         return events.some(
                             (e) =>
@@ -207,7 +184,7 @@ describe("Widget Events", () => {
 
                 // widget should receive updated 'm.room.topic' event after re-invite
                 cy.window().then(async (win) => {
-                    await waitForRoom(win, roomId, (room) => {
+                    await waitForRoom(win, win.mxMatrixClientPeg.get(), roomId, (room) => {
                         const events = room.getLiveTimeline().getEvents();
                         return events.some(
                             (e) =>
