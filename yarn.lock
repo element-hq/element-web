@@ -1656,10 +1656,10 @@
     emojibase "^15.0.0"
     emojibase-data "^15.0.0"
 
-"@matrix-org/matrix-sdk-crypto-wasm@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-2.1.1.tgz#5b20125d73eb404b1c49b61380f443c5fcfbacd2"
-  integrity sha512-PNFdLr68uLNT81iFmJL0PH98t7/U4g+a51d5+BmbKo0LEqchLkEKNraD1vq/kzPK6X7p/3IapQI5P+5Lr8jHsg==
+"@matrix-org/matrix-sdk-crypto-wasm@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-2.2.0.tgz#7c60afe01915281a6b71502821bc8e01afbfa70d"
+  integrity sha512-txmvaTiZpVV0/kWCRcE7tZvRESCEc1ynLJDVh9OUsFlaXfl13c7qdD3E6IJEJ8YiPMIn+PHogdfBZsO84reaMg==
 
 "@matrix-org/matrix-wysiwyg@2.4.1":
   version "2.4.1"
@@ -1671,10 +1671,17 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/olm/-/olm-3.2.15.tgz#55f3c1b70a21bbee3f9195cecd6846b1083451ec"
   integrity sha512-S7lOrndAK9/8qOtaTq/WhttJC/o4GAzdfK0MUPpo8ApzsJEC0QjtwrkC3KBXdFP1cD1MXi/mlKR7aaoVMKgs6Q==
 
-"@matrix-org/react-sdk-module-api@^2.1.0", "@matrix-org/react-sdk-module-api@^2.1.1":
+"@matrix-org/react-sdk-module-api@^2.1.0":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-2.1.1.tgz#54e8617c15185010d608c0325ecaec8d1574d12b"
   integrity sha512-dYPY3aXtNwPrg2aEmFeWddMdohus/Ha17XES2QH+WMCawt+hH+uq28jH1EmW1RUOOzxVcdY36lRGOwqRtAJbhA==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+
+"@matrix-org/react-sdk-module-api@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-2.2.0.tgz#cb284601a82448dc23fac31949c466eb34ec64b4"
+  integrity sha512-HSicxLdagZRbQp35d3t2SeDFTiT4GmEQDQGih8dWSKRHXK4krVQjb6Kf1NkwweiFDAeU0qgbz2pP4RZqbv0XIg==
   dependencies:
     "@babel/runtime" "^7.17.9"
 
@@ -8428,11 +8435,11 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "29.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d750e33ec955a9305a29426e5a64f05e66b14310"
+  version "30.0.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/107e28e1145c8b2667701e1f75b9f09b5d2ac3d6"
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^2.1.1"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^2.2.0"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"
@@ -8454,14 +8461,14 @@ matrix-mock-request@^2.5.0:
     expect "^28.1.0"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.83.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/6e24b4d221e6deb9b84173f1afb753ce7211de00"
+  version "3.84.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/5ae461989d3a32b04421891918ae2b66ae0d7bea"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.8.0"
     "@matrix-org/emojibase-bindings" "^1.1.2"
     "@matrix-org/matrix-wysiwyg" "2.4.1"
-    "@matrix-org/react-sdk-module-api" "^2.1.1"
+    "@matrix-org/react-sdk-module-api" "^2.2.0"
     "@matrix-org/spec" "^1.7.0"
     "@sentry/browser" "^7.0.0"
     "@sentry/tracing" "^7.0.0"
@@ -8506,7 +8513,7 @@ matrix-mock-request@^2.5.0:
     opus-recorder "^8.0.3"
     pako "^2.0.3"
     png-chunks-extract "^1.0.0"
-    posthog-js "1.83.0"
+    posthog-js "1.87.2"
     proposal-temporal "^0.9.0"
     qrcode "1.5.3"
     re-resizable "^6.9.0"
@@ -10166,10 +10173,10 @@ postcss@^8.2.1, postcss@^8.3.11, postcss@^8.4.28, postcss@^8.4.31:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-posthog-js@1.83.0:
-  version "1.83.0"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.83.0.tgz#e13d114922f863f4bfbf7c7cc4e11dc194139a91"
-  integrity sha512-3dp/yNbRCYsOgvJovFUMCLv9/KxnwmGBy5Ft27Q7/rbW++iJXVR64liX7i0NrXkudjoL9j1GW1LGh84rV7kv8Q==
+posthog-js@1.87.2:
+  version "1.87.2"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.87.2.tgz#0e9395ea93d50bb624f0be19f254e62e54ae504d"
+  integrity sha512-pdxEylfxwEDwwz7g5dunPucvAN51RAOWWQmkcqHsLNHlV5o5bTaTwcAXaWB1IUn3xKPuKYE2lqbdB3vC4H4rFQ==
   dependencies:
     fflate "^0.4.1"
 
