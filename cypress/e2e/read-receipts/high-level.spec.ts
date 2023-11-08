@@ -156,7 +156,7 @@ describe("Read receipts", () => {
             assertRead(room2);
             goTo(room1);
 
-            // When we receive important messages
+            // When we receive unimportant messages
             receiveMessages(room2, [customEvent("org.custom.event", { body: "foobar" })]);
 
             // Then the room is still read
@@ -168,7 +168,23 @@ describe("Read receipts", () => {
             // The room is unread again
             assertUnread(room2, 1);
         });
-        it.skip("A receipt for the last unimportant event makes the room read, even if all are unimportant", () => {});
+        it("A receipt for the last unimportant event makes the room read, even if all are unimportant", () => {
+            // Display room 1
+            goTo(room1);
+
+            // The room 2 is read
+            assertRead(room2);
+
+            // We received 3 unimportant messages to room2
+            receiveMessages(room2, [
+                customEvent("org.custom.event", { body: "foobar1" }),
+                customEvent("org.custom.event", { body: "foobar2" }),
+                customEvent("org.custom.event", { body: "foobar3" }),
+            ]);
+
+            // The room 2 is still read
+            assertStillRead(room2);
+        });
     });
 
     describe("Paging up", () => {
