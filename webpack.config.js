@@ -6,7 +6,7 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackInjectPreload = require("@principalstudio/html-webpack-inject-preload");
 const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
 const crypto = require("crypto");
@@ -198,7 +198,7 @@ module.exports = (env, argv) => {
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
             minimize: enableMinification,
-            minimizer: enableMinification ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
+            minimizer: enableMinification ? [new TerserPlugin({}), new CssMinimizerPlugin()] : [],
 
             // Set the value of `process.env.NODE_ENV` for libraries like React
             // See also https://v4.webpack.js.org/configuration/optimization/#optimizationnodeenv
