@@ -105,8 +105,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                # Run 4 instances in Parallel
-                runner: [1, 2, 3, 4]
+                # Naive segmentation of tests
+                segment: ["a-i", "j-p", "q-s", "t-z"]
                 # Run tests using both crypto stacks
                 crypto: [legacy, rust]
         steps:
@@ -161,9 +161,10 @@ jobs:
                   start: npx serve -p 8080 -L ../webapp
                   wait-on: "http://localhost:8080"
                   record: true
-                  parallel: true
+                  parallel: false
                   command: "yarn percy exec --parallel -- npx cypress-cloud run"
                   ci-build-id: ${{ needs.prepare.outputs.uuid }}-${{ matrix.crypto }}
+                  spec: cypress/e2e/[${{ matrix.segment }}]*/**
               env:
                   # pass the Dashboard record key as an environment variable
                   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
