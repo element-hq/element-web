@@ -7,7 +7,7 @@ import * as chokidar from "chokidar";
 import * as fs from "node:fs";
 import _ from "lodash";
 import { Cpx } from "cpx";
-import { util } from 'webpack';
+import { util } from "webpack";
 import { Translations } from "matrix-web-i18n";
 
 const REACT_I18N_BASE_PATH = "node_modules/matrix-react-sdk/src/i18n/strings/";
