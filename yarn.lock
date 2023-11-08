@@ -2275,6 +2275,14 @@
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-slot" "1.0.2"
 
+"@radix-ui/react-separator@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-separator/-/react-separator-1.0.3.tgz#be5a931a543d5726336b112f465f58585c04c8aa"
+  integrity sha512-itYmTy/kokS21aiV5+Z56MZB54KrhPgn6eHDKkFeOLR34HMN2s8PaN47qZZAGnvupcjxHaFZnW4pQEh0BvvVuw==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/react-primitive" "1.0.3"
+
 "@radix-ui/react-slot@1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-slot/-/react-slot-1.0.2.tgz#a9ff4423eade67f501ffb32ec22064bc9d3099ab"
@@ -3011,19 +3019,20 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vector-im/compound-design-tokens@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-0.0.6.tgz#dd25364e947d0f06b404f9bfba69daa0f7cda998"
-  integrity sha512-Jij7Vfzed7UL+AfVK4ykuJhufbzWu/aaEYn9swOS7Rhy9wJFp35CaUY32Du51lwg7Rkt3OwSWXSYeHKcZAsEEA==
+"@vector-im/compound-design-tokens@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-0.0.7.tgz#b0716dd4782dd95900491e45b003b58f93748024"
+  integrity sha512-RCQc6qr+s8cp4xKbNi/I3OL43uPCH+N4L9vYf0r+qwRy4WCKdI4QL0TBTV4bOo8hF49z8e+BgU5ZIu5TVQXNMQ==
   dependencies:
     svg2vectordrawable "^2.9.1"
 
-"@vector-im/compound-web@0.5.4":
-  version "0.5.4"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-0.5.4.tgz#a99b346fe8de34a6f8bcbf9e1040ce1d79615dbc"
-  integrity sha512-w4Nwzid5Y89Dt9GaxKO+kWPTjSitLpkmoAjMYHVUajNMCfUxluzu4eOgjPRCpubPH5lZUB6/95y43wOI+pEC1Q==
+"@vector-im/compound-web@0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-0.6.3.tgz#e5d025a3e5de1d94e721b0f6a5127dfa90968a2b"
+  integrity sha512-Jw63AWRltUC/AH4f+0rxdeWgf/qin7fc9E3ZqtdI10tGAOz9YdHadeGg4aGTKjUgv8/J0GvF8VnEfVq9kRAbag==
   dependencies:
     "@radix-ui/react-form" "^0.0.3"
+    "@radix-ui/react-separator" "^1.0.3"
     "@radix-ui/react-tooltip" "^1.0.6"
     classnames "^2.3.2"
     graphemer "^1.4.0"
