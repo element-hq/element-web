@@ -7,7 +7,7 @@ import * as chokidar from "chokidar";
 import * as fs from "node:fs";
 import _ from "lodash";
 import { Cpx } from "cpx";
-import * as loaderUtils from "loader-utils";
+import { util } from 'webpack';
 import { Translations } from "matrix-web-i18n";
 
 const REACT_I18N_BASE_PATH = "node_modules/matrix-react-sdk/src/i18n/strings/";
@@ -124,7 +124,7 @@ function genLangFile(lang: string, dest: string): string {
 
     const json = JSON.stringify(translations, null, 4);
     const jsonBuffer = Buffer.from(json);
-    const digest = loaderUtils.getHashDigest(jsonBuffer, null, "hex", 7);
+    const digest = util.createHash("xxhash64").update(jsonBuffer).digest("hex").slice(0, 7);
     const filename = `${lang}.${digest}.json`;
 
     fs.writeFileSync(dest + filename, json);
