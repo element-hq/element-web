@@ -262,8 +262,7 @@ describe("Read receipts", () => {
             assertReadThread("Root2");
             assertReadThread("Root3");
         });
-        // https://github.com/vector-im/element-web/issues/26294
-        it.skip("Paging up to find old threads that were never read keeps the room unread", () => {
+        it("Paging up to find old threads that were never read keeps the room unread", () => {
             // Given lots of messages in threads that are unread
             goTo(room1);
             receiveMessages(room2, [
@@ -300,8 +299,7 @@ describe("Read receipts", () => {
             assertUnreadThread("Root2");
             assertUnreadThread("Root3");
         });
-        // XXX: fails because flakes, sometimes finding 7 unread instead of 6
-        it.skip("Looking in thread view to find old threads that were never read makes the room unread", () => {
+        it("Looking in thread view to find old threads that were never read makes the room unread", () => {
             // Given lots of messages in threads that are unread
             goTo(room1);
             receiveMessages(room2, [

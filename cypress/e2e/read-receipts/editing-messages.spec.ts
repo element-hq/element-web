@@ -97,7 +97,6 @@ describe("Read receipts", () => {
 
     describe("editing messages", () => {
         describe("in the main timeline", () => {
-            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
             it("Editing a message leaves a room read", () => {
                 // Given I am not looking at the room
                 goTo(room1);
@@ -165,8 +164,7 @@ describe("Read receipts", () => {
                 // Then it remains read
                 assertStillRead(room2);
             });
-            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
-            it.skip("Editing a reply after marking as read makes the room unread", () => {
+            it("Editing a reply after marking as read makes the room unread", () => {
                 // Given a reply is marked as read
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", replyTo("Msg1", "Reply1")]);
@@ -180,8 +178,7 @@ describe("Read receipts", () => {
                 // Then the room remains read
                 assertStillRead(room2);
             });
-            // https://github.com/vector-im/element-web/issues/26273
-            it.skip("A room with an edit is still read after restart", () => {
+            it("A room with an edit is still read after restart", () => {
                 // Given a message is marked as read
                 goTo(room2);
                 receiveMessages(room2, ["Msg1"]);
@@ -227,8 +224,7 @@ describe("Read receipts", () => {
         });
 
         describe("in threads", () => {
-            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
-            it.skip("An edit of a threaded message makes the room unread", () => {
+            it("An edit of a threaded message makes the room unread", () => {
                 // Given we have read the thread
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
@@ -247,8 +243,7 @@ describe("Read receipts", () => {
                 goTo(room2);
                 assertReadThread("Msg1");
             });
-            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
-            it.skip("Reading an edit of a threaded message makes the room read", () => {
+            it("Reading an edit of a threaded message makes the room read", () => {
                 // Given an edited thread message appears after we read it
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
@@ -269,12 +264,12 @@ describe("Read receipts", () => {
                 assertStillRead(room2);
                 assertReadThread("Msg1");
             });
-            // XXX: fails because the room is still "bold" even though the notification counts all disappear
+            // XXX: fails because the unread dot remains after marking as read
             it.skip("Marking a room as read after an edit in a thread makes it read", () => {
                 // Given an edit in a thread is making the room unread
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), editOf("Resp1", "Edit1")]);
-                assertUnread(room2, 3); // TODO: the edit counts as a message!
+                assertUnread(room2, 2);
 
                 // When I mark the room as read
                 markAsRead(room2);
@@ -312,8 +307,7 @@ describe("Read receipts", () => {
                 // Then is it still unread
                 assertRead(room2);
             });
-            // XXX: fails because it flakes, sometimes having 2 unread messages instead of 1
-            it.skip("A room where all threaded edits are read is still read after restart", () => {
+            it("A room where all threaded edits are read is still read after restart", () => {
                 goTo(room2);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), editOf("Resp1", "Edit1")]);
                 assertUnread(room2, 1);
@@ -342,8 +336,7 @@ describe("Read receipts", () => {
         });
 
         describe("thread roots", () => {
-            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
-            it.skip("An edit of a thread root leaves the room read", () => {
+            it("An edit of a thread root leaves the room read", () => {
                 // Given I have read a thread
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
@@ -385,8 +378,7 @@ describe("Read receipts", () => {
                 goTo(room1);
                 assertStillRead(room2);
             });
-            // XXX: fails because it shows a dot instead of unread count
-            it.skip("Editing a thread root after reading leaves the room read", () => {
+            it("Editing a thread root after reading leaves the room read", () => {
                 // Given a fully-read thread exists
                 goTo(room2);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
@@ -440,8 +432,7 @@ describe("Read receipts", () => {
                 goTo(room2);
                 assertReadThread("EditedReply");
             });
-            // XXX: fails because the room has an unread dot after I marked it as read
-            it.skip("Marking a room as read after an edit of a thread root that is a reply leaves it read", () => {
+            it("Marking a room as read after an edit of a thread root that is a reply leaves it read", () => {
                 // Given a thread based on a reply exists and the reply has been edited
                 goTo(room1);
                 receiveMessages(room2, ["Msg", replyTo("Msg", "Reply"), threadedOff("Reply", "InThread")]);

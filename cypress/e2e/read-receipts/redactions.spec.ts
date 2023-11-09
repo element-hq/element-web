@@ -170,8 +170,7 @@ describe("Read receipts", () => {
                 // Then it becomes read
                 assertRead(room2);
             });
-            // XXX: fails because it flakes with the room unread when it should be read
-            it.skip("Sending and redacting a message after marking the room as read makes it read", () => {
+            it("Sending and redacting a message after marking the room as read makes it read", () => {
                 // Given a room that is marked as read
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", "Msg2"]);
@@ -236,8 +235,7 @@ describe("Read receipts", () => {
                 // Then the unread count is still reduced
                 assertUnread(room2, 1);
             });
-            // XXX: fails because flakes with matrix-js-sdk#3798 (only when all other tests are enabled!)
-            it.skip("Redacting all unread messages makes the room read", () => {
+            it("Redacting all unread messages makes the room read", () => {
                 // Given an unread room
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", "Msg2"]);
@@ -266,8 +264,7 @@ describe("Read receipts", () => {
                 // Then the room is still read
                 assertRead(room2);
             });
-            // Flakes because sometimes the unread count stays at 2
-            it.skip("Reacting to a redacted message leaves the room read", () => {
+            it("Reacting to a redacted message leaves the room read", () => {
                 // Given a redacted message exists
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", "Msg2"]);
