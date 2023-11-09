@@ -191,8 +191,7 @@ module.exports = (env, argv) => {
                 },
             },
 
-            // This fixes duplicate files showing up in chrome with sourcemaps enabled.
-            // See https://github.com/webpack/webpack/issues/7128 for more info.
+            // Readable IDs for better debugging
             moduleIds: "named",
 
             // Minification is normally enabled by default for webpack in production mode, but
