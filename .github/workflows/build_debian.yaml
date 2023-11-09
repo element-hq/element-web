@@ -61,25 +61,18 @@ jobs:
                   dpkg-gencontrol -v"$VERSION" -ldebian/tmp/DEBIAN/changelog
                   dpkg-deb -Zxz --root-owner-group --build debian/tmp element-web.deb
 
-            # For now just upload the artifact to github
             - uses: actions/upload-artifact@v3
               with:
-                  name: debs
-                  path: "*.deb"
+                  name: element-web.deb
+                  path: element-web.deb
                   retention-days: 14
 
-            #- name: Upload incoming deb
-            #  if: github.event.release.prerelease == false
-            #  run: aws s3 cp element-web.deb "s3://$R2_INCOMING_BUCKET" --endpoint-url "$R2_URL" --region auto
-            #  env:
-            #      AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
-            #      AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
-
-    #reprepro:
-    #    needs: build
-    #    name: Run reprepro
-    #    if: github.event.release.prerelease == false
-    #    uses: ./.github/workflows/reprepro.yaml
-    #    secrets: inherit
-    #    with:
-    #        incoming: element-web.deb
+            - name: Publish to packages.element.io
+              if: github.event.release.prerelease == false
+              uses: vector-im/packages.element.io@master
+              with:
+                  file: element-web.deb
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  bucket-api: ${{ vars.CF_R2_S3_API }}
+                  bucket-key-id: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
+                  bucket-access-key: ${{ secrets.CF_R2_TOKEN }}
