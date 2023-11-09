@@ -187,7 +187,6 @@
         "webpack-cli": "^4.10.0",
         "webpack-dev-server": "^4.15.1",
         "worker-loader": "^3.0.0",
-        "worklet-loader": "^2.0.0",
         "yaml": "^2.3.3"
     },
     "@casualbot/jest-sonar-reporter": {

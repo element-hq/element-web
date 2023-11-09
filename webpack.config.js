@@ -271,6 +271,18 @@ module.exports = (env, argv) => {
                 // optimised, so there is little to gain by us uglifying it.
                 /olm[\\/](javascript[\\/])?olm\.js$/,
             ],
+            parser: {
+                javascript: {
+                    worker: [
+                        // Special syntax for loading audio worklets as documented in
+                        // https://github.com/webpack/webpack.js.org/issues/6869. Note
+                        // that this only works when using literal strings as argument
+                        // in the addModule call.
+                        "*context.audioWorklet.addModule()",
+                        "*audioWorklet.addModule()",
+                    ],
+                  },
+            },
             rules: [
                 useHMR && {
                     test: /devcss\.ts$/,
@@ -462,27 +474,6 @@ module.exports = (env, argv) => {
                         name: "opus-encoderWorker.min.[hash:7].[ext]",
                         outputPath: ".",
                     },
-                },
-                {
-                    // Special case the recorder worklet as it can't end up HMR'd, but the worker-loader
-                    // isn't good enough for us. Note that the worklet-loader is listed as "do not use",
-                    // however it seems to work fine for our purposes.
-                    test: /RecorderWorklet\.ts$/,
-                    type: "javascript/auto",
-                    use: [
-                        // executed last -> first, for some reason.
-                        {
-                            loader: "worklet-loader",
-                            options: {
-                                // Override name so we know what it is in the output.
-                                name: "recorder-worklet.[hash:7].js",
-                            },
-                        },
-                        {
-                            // TS -> JS because the worklet-loader won't do this for us.
-                            loader: "babel-loader",
-                        },
-                    ],
                 },
                 {
                     // This is from the same place as the encoderWorker above, but only needed
