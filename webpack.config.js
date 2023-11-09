@@ -281,7 +281,7 @@ module.exports = (env, argv) => {
                         "*context.audioWorklet.addModule()",
                         "*audioWorklet.addModule()",
                     ],
-                  },
+                },
             },
             rules: [
                 useHMR && {
@@ -744,9 +744,9 @@ module.exports = (env, argv) => {
                 overlay: {
                     // Only show overlay on build errors as anything more can get annoying quickly
                     errors: true,
-                    warnings : false,
+                    warnings: false,
                     runtimeErrors: false,
-                }
+                },
             },
 
             static: {
