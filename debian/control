@@ -9,3 +9,5 @@ Architecture: all
 Recommends: httpd, element-io-archive-keyring
 Description:
   A feature-rich client for Matrix.org
+  This package contains the web-based client that can be served through a web
+   server.
