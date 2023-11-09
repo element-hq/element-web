@@ -6,6 +6,6 @@ Homepage: https://element.io/
 
 Package: element-web
 Architecture: all
-Recommends: element-io-archive-keyring
+Recommends: httpd, element-io-archive-keyring
 Description:
   A feature-rich client for Matrix.org
