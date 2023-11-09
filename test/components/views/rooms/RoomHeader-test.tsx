@@ -522,7 +522,7 @@ describe("RoomHeader", () => {
     it("renders additionalButtons", async () => {
         const additionalButtons: ViewRoomOpts["buttons"] = [
             {
-                icon: <>test-icon</>,
+                icon: () => <>test-icon</>,
                 id: "test-id",
                 label: () => "test-label",
                 onClick: () => {},
@@ -539,7 +539,7 @@ describe("RoomHeader", () => {
         const callback = jest.fn();
         const additionalButtons: ViewRoomOpts["buttons"] = [
             {
-                icon: <>test-icon</>,
+                icon: () => <>test-icon</>,
                 id: "test-id",
                 label: () => "test-label",
                 onClick: callback,

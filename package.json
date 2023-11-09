@@ -64,7 +64,7 @@
         "@matrix-org/analytics-events": "^0.8.0",
         "@matrix-org/emojibase-bindings": "^1.1.2",
         "@matrix-org/matrix-wysiwyg": "2.4.1",
-        "@matrix-org/react-sdk-module-api": "^2.2.0",
+        "@matrix-org/react-sdk-module-api": "^2.2.1",
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^7.0.0",
         "@sentry/tracing": "^7.0.0",

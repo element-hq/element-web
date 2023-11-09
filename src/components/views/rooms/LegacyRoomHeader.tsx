@@ -684,7 +684,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                                 }}
                                 title={label}
                             >
-                                {props.icon}
+                                {typeof props.icon === "function" ? props.icon() : props.icon}
                             </IconButton>
                         </Tooltip>
                     );

@@ -188,7 +188,7 @@ export default function RoomHeader({
                                     props.onClick();
                                 }}
                             >
-                                {props.icon}
+                                {typeof props.icon === "function" ? props.icon() : props.icon}
                             </IconButton>
                         </Tooltip>
                     );
