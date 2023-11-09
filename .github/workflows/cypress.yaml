@@ -162,15 +162,12 @@ jobs:
                   wait-on: "http://localhost:8080"
                   record: true
                   parallel: false
-                  command: "yarn percy exec --parallel -- npx cypress-cloud run"
+                  command: "yarn percy exec --parallel --"
                   ci-build-id: ${{ needs.prepare.outputs.uuid }}-${{ matrix.crypto }}
                   spec: cypress/e2e/[${{ matrix.segment }}]*/**
               env:
                   # pass the Dashboard record key as an environment variable
                   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-                  CURRENTS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-                  CURRENTS_PROJECT_ID: ${{ github.repository }}
-                  CURRENTS_API_URL: ${{ vars.CURRENTS_API_URL }}
 
                   # Use existing chromium rather than downloading another
                   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
