@@ -32,11 +32,11 @@ jobs:
             - name: Prepare
               run: |
                   mkdir -p debian/tmp/DEBIAN
-                  find debian -type f -exec cp "{}" debian/tmp/DEBIAN/ \;
+                  find debian -maxdepth 1 -type f -exec cp "{}" debian/tmp/DEBIAN/ \;
                   mkdir -p debian/tmp/usr/share/element-web/
 
                   tar -xf "element-$VERSION.tar.gz" -C debian/tmp/usr/share/element-web --strip-components=1 --no-same-owner --no-same-permissions
-                  cp config.sample.json debian/tmp/usr/share/element-web/config.json
+                  mv debian/tmp/usr/share/element-web/config{.sample,}.json
 
             - name: Write changelog
               run: |
