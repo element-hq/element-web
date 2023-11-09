@@ -749,6 +749,15 @@ module.exports = (env, argv) => {
 
         // configuration for the webpack-dev-server
         devServer: {
+            client: {
+                overlay: {
+                    // Only show overlay on build errors as anything more can get annoying quickly
+                    errors: true,
+                    warnings : false,
+                    runtimeErrors: false,
+                }
+            },
+
             static: {
                 // Where to serve static assets from
                 directory: "./webapp",
