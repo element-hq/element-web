@@ -162,7 +162,7 @@ jobs:
                   wait-on: "http://localhost:8080"
                   record: true
                   parallel: false
-                  command: "yarn percy exec --parallel --"
+                  command-prefix: "yarn percy exec --parallel --"
                   ci-build-id: ${{ needs.prepare.outputs.uuid }}-${{ matrix.crypto }}
                   spec: cypress/e2e/[${{ matrix.segment }}]*/**
               env:
