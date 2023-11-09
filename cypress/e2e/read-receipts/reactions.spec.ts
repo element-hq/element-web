@@ -252,6 +252,38 @@ describe("Read receipts", () => {
                 assertReadThread("Msg1");
                 assertReadThread("Msg2");
             });
+            it("Can remove a reaction in a thread", () => {
+                // Note: this is not strictly a read receipt test, but it checks
+                // for a bug we caused when we were fixing unreads, so it's
+                // included here. The bug is:
+                // https://github.com/vector-im/element-web/issues/26498
+
+                // Given a thread exists
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Reply1a")]);
+                assertUnread(room2, 2);
+
+                // When I react to a thread message
+                goTo(room2);
+                openThread("Msg1");
+                cy.get(".mx_ThreadPanel").findByText("Reply1a").realHover();
+                cy.findByRole("button", { name: "React" }).click();
+                cy.get(".mx_EmojiPicker_body").findByText("😀").click();
+
+                // And cancel the reaction
+                cy.get(".mx_ThreadPanel").findByLabelText("Mae reacted with 😀").click();
+
+                // Then it disappears
+                cy.get(".mx_ThreadPanel").findByLabelText("Mae reacted with 😀").should("not.exist");
+
+                // And I can do it all again without an error
+                cy.get(".mx_ThreadPanel").findByText("Reply1a").realHover();
+                cy.findByRole("button", { name: "React" }).click();
+                cy.get(".mx_EmojiPicker_body").findAllByText("😀").first().click();
+                cy.get(".mx_ThreadPanel").findByLabelText("Mae reacted with 😀").click();
+                cy.get(".mx_ThreadPanel").findByLabelText("Mae reacted with 😀").should("not.exist");
+            });
         });
 
         describe("thread roots", () => {
