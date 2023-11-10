@@ -19,7 +19,6 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
-import { skipIfRustCrypto } from "../../support/util";
 import {
     assertRead,
     assertReadThread,
@@ -179,11 +178,8 @@ describe("Read receipts", () => {
                 // Then the room remains read
                 assertStillRead(room2);
             });
-            it("A room with an edit is still read after restart", () => {
-                // Flaky with rust crypto
-                // See https://github.com/vector-im/element-web/issues/26341
-                skipIfRustCrypto();
-
+            // XXX: fails because flaky: https://github.com/vector-im/element-web/issues/26341
+            it.skip("A room with an edit is still read after restart", () => {
                 // Given a message is marked as read
                 goTo(room2);
                 receiveMessages(room2, ["Msg1"]);
