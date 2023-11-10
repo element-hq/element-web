@@ -263,6 +263,10 @@ describe("Read receipts", () => {
             assertReadThread("Root3");
         });
         it("Paging up to find old threads that were never read keeps the room unread", () => {
+            // Flaky with rust crypto
+            // See https://github.com/vector-im/element-web/issues/26539
+            skipIfRustCrypto();
+
             // Given lots of messages in threads that are unread
             goTo(room1);
             receiveMessages(room2, [
