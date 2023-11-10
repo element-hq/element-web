@@ -29,3 +29,8 @@ A special case is `%(count)s` as this is also used to determine which pluralisat
 
 These things are markup tags, they encapsulate sections of translations to be marked up, with links, buttons, emphasis and such.
 You must keep these markers surrounding the equivalent string in your language that needs to be marked up.
+
+### When will my translations be available?
+
+We automatically pull changes from Localazy 3 times a week, so your translations should be available at https://develop.element.io
+within a few days of you submitting them and them being approved. They will then also be included in the following release cycle.
