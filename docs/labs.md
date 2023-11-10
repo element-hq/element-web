@@ -122,8 +122,8 @@ If you're enabling this at the deployment level, you may also want to reference 
 
 ## Disable per-sender encryption for Element Call (`feature_disable_call_per_sender_encryption`)
 
-The default for embedded Element Call in Element Web is per participant sender key encryption. 
-This labs flag disables encryption for embedded Element Call.
+The default for embedded Element Call in Element Web is per-participant encryption. 
+This labs flag disables encryption for embedded Element Call in encrypted rooms.
 
 Under the hood this stops Element Web from adding the `perParticipantE2EE` flag for the Element Call widget url.
 
