@@ -404,6 +404,13 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         controller: new ReloadOnChangeController(),
         default: false,
     },
+    "feature_disable_call_per_sender_encryption": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        labsGroup: LabGroup.VoiceAndVideo,
+        displayName: _td("labs|feature_disable_call_per_sender_encryption"),
+        default: false,
+    },
     "feature_allow_screen_share_only_mode": {
         isFeature: true,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
