@@ -78,16 +78,19 @@ jobs:
                       core.setOutput("author", response.data.author.name);
                       core.setOutput("email", response.data.author.email);
 
-            # Only run Percy when it is demanded or we are running the daily build
-            - name: Enable Percy
-              id: percy
-              if: |
-                  github.event.workflow_run.event == 'schedule' ||
-                  (
-                    github.event.workflow_run.event == 'merge_group' &&
-                    contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy')
-                  )
-              run: echo "value=1" >> $GITHUB_OUTPUT
+            # Percy is disabled while we're figuring out https://github.com/vector-im/wat-internal/issues/36
+            # and https://github.com/vector-im/wat-internal/issues/56. We're hoping to turn it back on or switch
+            # to an alternative in the future.
+            # # Only run Percy when it is demanded or we are running the daily build
+            # - name: Enable Percy
+            #   id: percy
+            #   if: |
+            #       github.event.workflow_run.event == 'schedule' ||
+            #       (
+            #         github.event.workflow_run.event == 'merge_group' &&
+            #         contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy')
+            #       )
+            #   run: echo "value=1" >> $GITHUB_OUTPUT
 
             - name: Generate unique ID 💎
               id: uuid

@@ -3,8 +3,12 @@
 # as an artifact and run integration tests.
 name: Element Web - Build
 on:
-    schedule:
-        - cron: "17 4 * * 1-5" # every weekday at 04:17 UTC
+    # We only need the nightly run for Percy which is disabled while we're
+    # figuring out https://github.com/vector-im/wat-internal/issues/36 and
+    # https://github.com/vector-im/wat-internal/issues/56. We're hoping to
+    # turn it back on or switch to an alternative in the future.
+    # schedule:
+    #     - cron: "17 4 * * 1-5" # every weekday at 04:17 UTC
     pull_request: {}
     merge_group:
         types: [checks_requested]
