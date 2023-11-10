@@ -47,10 +47,6 @@ We are aiming for a set of common strings to be shared then some more localised 
 4. Otherwise, try to group keys logically and nest where appropriate, such as `keyboard_` for strings relating to keyboard shortcuts.
 5. Ensure your translation keys do not include `.` or `|` or ` `. Try to balance string length against descriptiveness.
 
-## matrix-react-sdk is still undergoing migration to translation keys
-
-If you are fortunate enough to be modifying not yet migrated strings please treat them as a new string using instructions below.
-
 ## Adding new strings
 
 1. Check if the import `import { _t } from 'matrix-react-sdk/src/languageHandler';` is present. If not add it to the other import statements. Also import `_td` if needed.
