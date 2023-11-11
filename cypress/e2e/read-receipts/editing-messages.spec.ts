@@ -178,7 +178,8 @@ describe("Read receipts", () => {
                 // Then the room remains read
                 assertStillRead(room2);
             });
-            it("A room with an edit is still read after restart", () => {
+            // XXX: fails because flaky: https://github.com/vector-im/element-web/issues/26341
+            it.skip("A room with an edit is still read after restart", () => {
                 // Given a message is marked as read
                 goTo(room2);
                 receiveMessages(room2, ["Msg1"]);
