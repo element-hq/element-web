@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 // @ts-ignore - `.ts` is needed here to make TS happy
-import BlurhashWorker, { Request, Response } from "./workers/blurhash.worker.ts";
+import { Request, Response } from "./workers/blurhash.worker.ts";
 import { WorkerManager } from "./WorkerManager";
 
 export class BlurhashEncoder {
@@ -25,7 +25,9 @@ export class BlurhashEncoder {
         return BlurhashEncoder.internalInstance;
     }
 
-    private readonly worker = new WorkerManager<Request, Response>(BlurhashWorker);
+    private readonly worker = new WorkerManager<Request, Response>(
+        new Worker(new URL("./workers/blurhash.worker.ts", import.meta.url)),
+    );
 
     public getBlurhash(imageData: ImageData): Promise<string> {
         return this.worker.call({ imageData }).then((resp) => resp.blurhash);
