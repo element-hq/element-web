@@ -31,66 +31,10 @@ limitations under the License.
 
     .mx_RoomSummaryCard_roomName {
         margin: $spacing-12 0 $spacing-4;
-        font-weight: var(--cpd-font-weight-semibold);
-        font-size: $font-17px;
     }
 
     .mx_RoomSummaryCard_alias {
-        font: var(--cpd-font-body-md-regular);
-        color: $secondary-content;
         text-overflow: ellipsis;
-    }
-
-    .mx_RoomSummaryCard_avatar {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .mx_RoomSummaryCard_e2ee {
-            display: inline-block;
-            position: relative;
-            width: 54px;
-            height: 54px;
-            border-radius: 50%;
-            background-color: #737d8c;
-            margin-left: -10px; /* overlap */
-            border: 3px solid $dark-panel-bg-color;
-
-            &::before {
-                content: "";
-                position: absolute;
-                top: 13px;
-                left: 13px;
-                height: 28px;
-                width: 28px;
-                mask-size: cover;
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-image: url("$(res)/img/e2e/disabled.svg");
-                background-color: #ffffff;
-            }
-        }
-
-        .mx_RoomSummaryCard_e2ee_normal {
-            background-color: #424446;
-            &::before {
-                mask-image: url("$(res)/img/e2e/normal.svg");
-            }
-        }
-
-        .mx_RoomSummaryCard_e2ee_verified {
-            background-color: $e2e-verified-color;
-            &::before {
-                mask-image: url("$(res)/img/e2e/verified.svg");
-            }
-        }
-
-        .mx_RoomSummaryCard_e2ee_warning {
-            background-color: $e2e-warning-color;
-            &::before {
-                mask-image: url("$(res)/img/e2e/warning.svg");
-            }
-        }
     }
 
     .mx_RoomSummaryCard_aboutGroup {
@@ -242,6 +186,10 @@ limitations under the License.
         font-size: $font-13px;
         font-weight: var(--cpd-font-weight-semibold);
     }
+}
+
+.mx_RoomSummaryCard_badges {
+    margin: var(--cpd-space-4x) 0;
 }
 
 .mx_RoomSummaryCard_header {
