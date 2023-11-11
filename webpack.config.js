@@ -293,15 +293,6 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
-                    test: /\.worker\.ts$/,
-                    loader: "worker-loader",
-                    options: {
-                        // Prevent bundling workers since CSP forbids loading them
-                        // from another origin.
-                        filename: "[hash].worker.js",
-                    },
-                },
-                {
                     test: /\.(ts|js)x?$/,
                     include: (f) => {
                         // our own source needs babel-ing
