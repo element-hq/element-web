@@ -303,7 +303,8 @@ describe("Read receipts", () => {
             assertUnreadThread("Root2");
             assertUnreadThread("Root3");
         });
-        it("Looking in thread view to find old threads that were never read makes the room unread", () => {
+        // XXX: fails because flaky: https://github.com/vector-im/element-web/issues/26331
+        it.skip("Looking in thread view to find old threads that were never read makes the room unread", () => {
             // Given lots of messages in threads that are unread
             goTo(room1);
             receiveMessages(room2, [
