@@ -276,10 +276,11 @@ module.exports = (env, argv) => {
                     worker: [
                         // Special syntax for loading audio worklets as documented in
                         // https://github.com/webpack/webpack.js.org/issues/6869. Note
-                        // that this only works when using literal strings as argument
-                        // in the addModule call.
+                        // that this only works when using a URL as argument to the
+                        // addModule call.
                         "*context.audioWorklet.addModule()",
                         "*audioWorklet.addModule()",
+                        "...", // The defaults
                     ],
                 },
             },
