@@ -737,6 +737,10 @@ module.exports = (env, argv) => {
             filename: "bundles/[hash]/[name].js",
             chunkFilename: "bundles/[hash]/[name].js",
             webassemblyModuleFilename: "bundles/[hash]/[modulehash].wasm",
+
+            // Disable automatic public path as it doesn't appear to function with
+            // worklets in Webpack 5
+            publicPath: "",
         },
 
         // configuration for the webpack-dev-server
