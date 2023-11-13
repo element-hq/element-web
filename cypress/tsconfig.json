@@ -7,7 +7,7 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
-        "module": "commonjs"
+        "module": "es2022"
     },
     "include": ["**/*.ts"]
 }
