@@ -14,6 +14,7 @@
     "error": {
         "app_launch_unexpected_error": "准备软件时出现意外错误，详细信息请查看控制台。",
         "cannot_load_config": "无法加载配置文件：请刷新页面以重试。",
+        "invalid_configuration_mixed_server": "配置无效：无法与 default_server_name 或 default_server_config 一起指定 default_hs_url",
         "invalid_configuration_no_server": "配置无效：没有指定默认服务器。",
         "invalid_json": "Element 配置文件中包含无效的 JSON。请改正错误并重新加载页面。",
         "invalid_json_detail": "来自解析器的消息：%(message)s",
