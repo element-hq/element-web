@@ -1,3 +1,12 @@
+Changes in [1.11.49](https://github.com/vector-im/element-web/releases/tag/v1.11.49) (2023-11-13)
+=================================================================================================
+
+## ✨ Features
+ * Ship element-web as a debian package ([\#26533](https://github.com/vector-im/element-web/pull/26533)). Fixes #2777.
+
+## 🐛 Bug Fixes
+ * Ensure `setUserCreator` is called when a store is assigned ([\#3867](https://github.com/matrix-org/matrix-js-sdk/pull/3867)). Fixes vector-im/element-web#26520. Contributed by @MidhunSureshR.
+
 Changes in [1.11.48](https://github.com/vector-im/element-web/releases/tag/v1.11.48) (2023-11-07)
 =================================================================================================
 
