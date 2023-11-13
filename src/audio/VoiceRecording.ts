@@ -28,6 +28,10 @@ import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { createAudioContext } from "./compat";
 import { FixedRollingArray } from "../utils/FixedRollingArray";
 import { clamp } from "../utils/numbers";
+// This import is needed for dead code analysis but not actually used because the
+// built-in worker / worklet handling in Webpack 5 only supports static paths
+// @ts-ignore no-unused-locals
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import mxRecorderWorkletPath from "./RecorderWorklet";
 
 const CHANNELS = 1; // stereo isn't important
@@ -129,7 +133,13 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             if (this.recorderContext.audioWorklet) {
                 // Set up our worklet. We use this for timing information and waveform analysis: the
                 // web audio API prefers this be done async to avoid holding the main thread with math.
-                await this.recorderContext.audioWorklet.addModule(mxRecorderWorkletPath);
+
+                // The audioWorklet.addModule syntax is required for Webpack 5 to correctly recognise
+                // this as a worklet rather than an asset. This also requires the parser.javascript.worker
+                // configuration described in https://github.com/webpack/webpack.js.org/issues/6869.
+                const audioWorklet = this.recorderContext.audioWorklet;
+                await audioWorklet.addModule(new URL("./RecorderWorklet.ts", import.meta.url));
+
                 this.recorderWorklet = new AudioWorkletNode(this.recorderContext, WORKLET_NAME);
                 this.recorderSource.connect(this.recorderWorklet);
                 this.recorderWorklet.connect(this.recorderContext.destination);
