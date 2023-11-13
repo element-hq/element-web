@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { useEffect, useMemo, useState } from "react";
 import { Body as BodyText, IconButton, Tooltip } from "@vector-im/compound-web";
-import { Icon as VideoCallIcon } from "@vector-im/compound-design-tokens/icons/video-call.svg";
+import { Icon as VideoCallIcon } from "@vector-im/compound-design-tokens/icons/video-call-solid.svg";
 import { Icon as VoiceCallIcon } from "@vector-im/compound-design-tokens/icons/voice-call.svg";
 import { Icon as ThreadsIcon } from "@vector-im/compound-design-tokens/icons/threads-solid.svg";
 import { Icon as NotificationsIcon } from "@vector-im/compound-design-tokens/icons/notifications-solid.svg";
