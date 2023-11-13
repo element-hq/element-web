@@ -29,7 +29,7 @@ import { createAudioContext, decodeOgg } from "./compat";
 import { clamp } from "../utils/numbers";
 import { WorkerManager } from "../WorkerManager";
 import { DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES } from "./consts";
-import playbackWorkerFactory from "../workers/playbackWorkerFactory.js";
+import playbackWorkerFactory from "../workers/playbackWorkerFactory";
 
 export enum PlaybackState {
     Decoding = "decoding",

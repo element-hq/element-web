@@ -17,7 +17,7 @@ limitations under the License.
 // @ts-ignore - `.ts` is needed here to make TS happy
 import { Request, Response } from "./workers/blurhash.worker.ts";
 import { WorkerManager } from "./WorkerManager";
-import blurhashWorkerFactory from "./workers/blurhashWorkerFactory.js";
+import blurhashWorkerFactory from "./workers/blurhashWorkerFactory";
 
 export class BlurhashEncoder {
     private static internalInstance = new BlurhashEncoder();

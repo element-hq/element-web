@@ -15,5 +15,5 @@ limitations under the License.
 */
 
 export default function blurhashWorkerFactory(options?: WorkerOptions | undefined): Worker {
-    return new Worker(new URL("../workers/indexeddb.worker.ts", import.meta.url), options);
+    return new Worker(new URL("./indexeddb.worker.ts", import.meta.url), options);
 }

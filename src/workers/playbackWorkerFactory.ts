@@ -15,5 +15,5 @@ limitations under the License.
 */
 
 export default function blurhashWorkerFactory(options?: WorkerOptions | undefined): Worker {
-    return new Worker(new URL("../workers/playback.worker.ts", import.meta.url), options);
+    return new Worker(new URL("./playback.worker.ts", import.meta.url), options);
 }
