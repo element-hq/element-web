@@ -127,7 +127,7 @@ This labs flag disables encryption for embedded Element Call in encrypted rooms.
 
 Under the hood this stops Element Web from adding the `perParticipantE2EE` flag for the Element Call widget url.
 
-This is useful while we experiment with encryption and to make calling compatible with platforms that don't use encryption it.
+This is useful while we experiment with encryption and to make calling compatible with platforms that don't use encryption yet.
 
 ## Rich text in room topics (`feature_html_topic`) [In Development]
 
