@@ -16,6 +16,7 @@ limitations under the License.
 
 import { mocked } from "jest-mock";
 import { PostHog } from "posthog-js";
+import { CryptoApi, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { Anonymity, getRedactedCurrentLocation, IPosthogEvent, PosthogAnalytics } from "../src/PosthogAnalytics";
 import SdkConfig from "../src/SdkConfig";
@@ -37,6 +38,7 @@ const getFakePosthog = (): PostHog =>
         persistence: {
             get_user_state: jest.fn(),
         },
+        identifyUser: jest.fn(),
     } as unknown as PostHog);
 
 interface ITestEvent extends IPosthogEvent {
@@ -272,6 +274,80 @@ describe("PosthogAnalytics", () => {
             expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toStrictEqual({
                 WebLayout: "Compact",
             });
+        });
+    });
+
+    describe("CryptoSdk", () => {
+        let analytics: PosthogAnalytics;
+        const getFakeClient = (): MatrixClient =>
+            ({
+                getCrypto: jest.fn(),
+                setAccountData: jest.fn(),
+                // just fake return an `im.vector.analytics` content
+                getAccountDataFromServer: jest.fn().mockReturnValue({
+                    id: "0000000",
+                    pseudonymousAnalyticsOptIn: true,
+                }),
+            } as unknown as MatrixClient);
+
+        beforeEach(async () => {
+            SdkConfig.put({
+                brand: "Testing",
+                posthog: {
+                    project_api_key: "foo",
+                    api_host: "bar",
+                },
+            });
+
+            analytics = new PosthogAnalytics(fakePosthog);
+        });
+
+        // `updateAnonymityFromSettings` is called On page load / login / account data change.
+        // We manually call it so we can test the behaviour.
+        async function simulateLogin(rustBackend: boolean, pseudonymous = true) {
+            // To simulate a switch we call updateAnonymityFromSettings.
+            // As per documentation this function is called On login.
+            const mockClient = getFakeClient();
+            mocked(mockClient.getCrypto).mockReturnValue({
+                getVersion: () => {
+                    return rustBackend ? "Rust SDK 0.6.0 (9c6b550), Vodozemac 0.5.0" : "Olm 3.2.0";
+                },
+            } as unknown as CryptoApi);
+            await analytics.updateAnonymityFromSettings(mockClient, pseudonymous);
+        }
+
+        it("should send rust cryptoSDK superProperty correctly", async () => {
+            analytics.setAnonymity(Anonymity.Pseudonymous);
+
+            await simulateLogin(false);
+
+            expect(mocked(fakePosthog).register.mock.lastCall![0]["cryptoSDK"]).toStrictEqual("Legacy");
+        });
+
+        it("should send Legacy cryptoSDK superProperty correctly", async () => {
+            analytics.setAnonymity(Anonymity.Pseudonymous);
+
+            await simulateLogin(false);
+
+            // Super Properties are properties associated with events that are set once and then sent with every capture call.
+            // They are set using posthog.register
+            expect(mocked(fakePosthog).register.mock.lastCall![0]["cryptoSDK"]).toStrictEqual("Legacy");
+        });
+
+        it("should send cryptoSDK superProperty when enabling analytics", async () => {
+            analytics.setAnonymity(Anonymity.Disabled);
+
+            await simulateLogin(true, false);
+
+            // This initial call is due to the call to register platformSuperProperties
+            // The important thing is that the cryptoSDK superProperty is not set.
+            expect(mocked(fakePosthog).register.mock.lastCall![0]).toStrictEqual({});
+
+            // switching to pseudonymous should ensure that the cryptoSDK superProperty is set correctly
+            analytics.setAnonymity(Anonymity.Pseudonymous);
+            // Super Properties are properties associated with events that are set once and then sent with every capture call.
+            // They are set using posthog.register
+            expect(mocked(fakePosthog).register.mock.lastCall![0]["cryptoSDK"]).toStrictEqual("Rust");
         });
     });
 });
