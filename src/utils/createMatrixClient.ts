@@ -23,6 +23,7 @@ import {
     IndexedDBStore,
     LocalStorageCryptoStore,
 } from "matrix-js-sdk/src/matrix";
+import indexeddbWorkerFactory from "../workers/indexeddbWorkerFactory";
 
 const localStorage = window.localStorage;
 
@@ -52,7 +53,7 @@ export default function createMatrixClient(opts: ICreateClientOpts): MatrixClien
             indexedDB: indexedDB,
             dbName: "riot-web-sync",
             localStorage,
-            workerFactory: () => new Worker(new URL("../workers/indexeddb.worker.ts", import.meta.url)),
+            workerFactory: indexeddbWorkerFactory,
         });
     } else if (localStorage) {
         storeOpts.store = new MemoryStore({ localStorage });

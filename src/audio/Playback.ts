@@ -29,6 +29,7 @@ import { createAudioContext, decodeOgg } from "./compat";
 import { clamp } from "../utils/numbers";
 import { WorkerManager } from "../WorkerManager";
 import { DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES } from "./consts";
+import playbackWorkerFactory from "../workers/playbackWorkerFactory.js";
 
 export enum PlaybackState {
     Decoding = "decoding",
@@ -63,9 +64,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
     private waveformObservable = new SimpleObservable<number[]>();
     private readonly clock: PlaybackClock;
     private readonly fileSize: number;
-    private readonly worker = new WorkerManager<Request, Response>(
-        new Worker(new URL("../workers/playback.worker.ts", import.meta.url)),
-    );
+    private readonly worker = new WorkerManager<Request, Response>(playbackWorkerFactory());
 
     /**
      * Creates a new playback instance from a buffer.

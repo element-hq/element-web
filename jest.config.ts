@@ -31,7 +31,7 @@ const config: Config = {
         "decoderWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
         "decoderWorker\\.min\\.wasm": "<rootDir>/__mocks__/empty.js",
         "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
-        "workers/(.+)\\.worker\\.ts": "<rootDir>/__mocks__/workerMock.js",
+        "workers/(.+)Factory": "<rootDir>/__mocks__/workerFactoryMock.js",
         "^!!raw-loader!.*": "jest-raw-loader",
         "RecorderWorklet": "<rootDir>/__mocks__/empty.js",
     },
