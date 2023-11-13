@@ -14,6 +14,7 @@
     "error": {
         "app_launch_unexpected_error": "Váratlan hiba történt az alkalmazás előkészítésénél. A részletekért lásd a konzolt.",
         "cannot_load_config": "A konfigurációs fájlt nem sikerült betölteni: frissítse az oldalt és próbálja meg újra.",
+        "invalid_configuration_mixed_server": "Érvénytelen konfiguráció: a default_hs_url nem adható meg a default_server_name vagy a default_server_config kulcsokkal együtt",
         "invalid_configuration_no_server": "Érvénytelen konfiguráció: nincs megadva alapértelmezett kiszolgáló.",
         "invalid_json": "Az Element érvénytelen JSON-t tartalmazó konfigurációval rendelkezik. Javítsa és töltse újra az oldalt.",
         "invalid_json_detail": "A feldolgozó algoritmus üzenete: %(message)s",

@@ -9,6 +9,7 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Sisselogimiseks ava oma brauser"
     },
+    "desktop_default_device_name": "%(brand)s töölaud: %(platformName)s",
     "download_completed": "Allalaadimine on lõpetatud",
     "error": {
         "app_launch_unexpected_error": "Rakenduse ettevalmistamisel tekkis ootamatu viga. Täpsema teabe leiad konsoolist.",
