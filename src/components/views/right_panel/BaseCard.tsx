@@ -90,7 +90,7 @@ const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
                         <div className="mx_BaseCard_header">
                             {backButton}
                             {closeButton}
-                            {header}
+                            <div className="mx_BaseCard_headerProp">{header}</div>
                         </div>
                     )}
                     {children}

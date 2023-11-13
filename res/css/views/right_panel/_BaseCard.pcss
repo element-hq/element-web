@@ -51,7 +51,6 @@ limitations under the License.
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: calc(100% - 38px);
             height: 24px;
             flex: 1;
 
@@ -157,6 +156,7 @@ limitations under the License.
 
 .mx_BaseCard_back,
 .mx_BaseCard_close {
+    flex-shrink: 0;
     position: relative;
     background-color: var(--cpd-color-bg-subtle-secondary);
     width: var(--BaseCard_header-button-size);
@@ -225,4 +225,8 @@ limitations under the License.
             left: -8px;
         }
     }
+}
+
+.mx_BaseCard_headerProp {
+    flex: 1 1 100%;
 }
