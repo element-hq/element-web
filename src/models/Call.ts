@@ -661,9 +661,11 @@ export class ElementCall extends Call {
             analyticsID,
         });
 
-        if (client.isRoomEncrypted(roomId)) params.append("perParticipantE2EE", "");
-        if (SettingsStore.getValue("fallbackICEServerAllowed")) params.append("allowIceFallback", "");
-        if (SettingsStore.getValue("feature_allow_screen_share_only_mode")) params.append("allowVoipWithNoMedia", "");
+        if (client.isRoomEncrypted(roomId) && !SettingsStore.getValue("feature_disable_call_per_sender_encryption"))
+            params.append("perParticipantE2EE", "true");
+        if (SettingsStore.getValue("fallbackICEServerAllowed")) params.append("allowIceFallback", "true");
+        if (SettingsStore.getValue("feature_allow_screen_share_only_mode"))
+            params.append("allowVoipWithNoMedia", "true");
 
         // Set custom fonts
         if (SettingsStore.getValue("useSystemFont")) {

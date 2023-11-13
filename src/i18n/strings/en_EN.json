@@ -1398,6 +1398,7 @@
         "element_call_video_rooms": "Element Call video rooms",
         "experimental_description": "Feeling experimental? Try out our latest ideas in development. These features are not finalised; they may be unstable, may change, or may be dropped altogether. <a>Learn more</a>.",
         "experimental_section": "Early previews",
+        "feature_disable_call_per_sender_encryption": "Disable per-sender encryption for Element Call",
         "feature_wysiwyg_composer_description": "Use rich text instead of Markdown in the message composer.",
         "group_calls": "New group call experience",
         "group_developer": "Developer",

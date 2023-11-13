@@ -1,0 +1,13 @@
+# Gitflow merge-back master->develop
+name: Merge master -> develop
+on:
+    push:
+        branches: [master]
+concurrency: ${{ github.repository }}-${{ github.workflow }}
+jobs:
+    merge:
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-gitflow.yml@develop
+        secrets: inherit
+        with:
+            dependencies: |
+                matrix-js-sdk

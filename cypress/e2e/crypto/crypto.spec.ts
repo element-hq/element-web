@@ -269,7 +269,7 @@ describe("Cryptography", function () {
         // Assert that verified icon is rendered
         cy.findByRole("button", { name: "Room members" }).click();
         cy.findByRole("button", { name: "Room information" }).click();
-        cy.get(".mx_RoomSummaryCard_e2ee_verified").should("exist");
+        cy.get('.mx_RoomSummaryCard_badges [data-kind="success"]').should("contain.text", "Encrypted");
 
         // Take a snapshot of RoomSummaryCard with a verified E2EE icon
         cy.get(".mx_RightPanel").percySnapshotElement("RoomSummaryCard - with a verified E2EE icon", {

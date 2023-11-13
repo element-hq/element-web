@@ -238,6 +238,10 @@ should generally try to adhere to them.
 
 ## Screenshot testing with Percy
 
+**⚠️ Percy is disabled while we're figuring out https://github.com/vector-im/wat-internal/issues/36**
+**and https://github.com/vector-im/wat-internal/issues/56. We're hoping to turn it back on or switch**
+**to an alternative in the future.**
+
 We also support visual testing via [Percy](https://percy.io). Within many of our
 Cypress tests you can see lines calling `cy.percySnapshot()`. This creates a
 screenshot and uses Percy to check whether it has changed from the last time

@@ -35,36 +35,40 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
       <header
         class="mx_RoomSummaryCard_container"
       >
-        <div
-          class="mx_RoomSummaryCard_avatar"
+        <span
+          class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
+          data-color="7"
+          data-testid="avatar-img"
+          data-type="round"
           role="presentation"
+          style="--cpd-avatar-size: 80px;"
         >
-          <span
-            class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
-            data-color="7"
-            data-testid="avatar-img"
-            data-type="round"
-            role="presentation"
-            style="--cpd-avatar-size: 54px;"
-          >
-            !
-          </span>
-          <div
-            aria-describedby="mx_TooltipTarget_vY7Q4uEh"
-            class="mx_TextWithTooltip_target mx_RoomSummaryCard_e2ee"
-            tabindex="0"
-          />
-        </div>
+          !
+        </span>
         <h1
-          class="mx_RoomSummaryCard_roomName"
+          class="_font-heading-md-semibold_1jx6b_121 mx_RoomSummaryCard_roomName text-primary"
           title="!room:domain.org"
         >
           !room:domain.org
         </h1>
         <div
-          class="mx_RoomSummaryCard_alias"
+          class="_font-body-sm-semibold_1jx6b_45 mx_RoomSummaryCard_alias text-secondary"
           title=""
         />
+        <section
+          class="mx_Flex mx_RoomSummaryCard_badges"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+        >
+          <span
+            class="_font-body-sm-medium_1jx6b_50 _badge_qipht_17"
+            data-kind="default"
+          >
+            <div
+              width="1em"
+            />
+            Not encrypted
+          </span>
+        </section>
       </header>
       <div
         class="mx_BaseCard_Group mx_RoomSummaryCard_aboutGroup"

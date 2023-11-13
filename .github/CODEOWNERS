@@ -2,3 +2,4 @@
 /.github/workflows/**     @matrix-org/element-web-app-team
 /package.json             @matrix-org/element-web-app-team
 /yarn.lock                @matrix-org/element-web-app-team
+/src/i18n/strings

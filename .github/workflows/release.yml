@@ -1,11 +1,32 @@
 name: Release Process
 on:
-    release:
-        types: [published]
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+    workflow_dispatch:
+        inputs:
+            mode:
+                description: What type of release
+                required: true
+                default: rc
+                type: choice
+                options:
+                    - rc
+                    - final
+            matrix-js-sdk:
+                description: JS SDK version to use (current|X.Y.Z)
+                required: false
+                default: current
+                type: string
+            npm:
+                description: Publish to npm
+                required: true
+                type: boolean
+                default: true
+concurrency: ${{ github.workflow }}
 jobs:
-    npm:
-        name: Publish
-        uses: matrix-org/matrix-js-sdk/.github/workflows/release-npm.yml@develop
-        secrets:
-            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    release:
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-action.yml@develop
+        secrets: inherit
+        with:
+            final: ${{ inputs.mode == 'final' }}
+            npm: ${{ inputs.npm }}
+            dependencies: |
+                matrix-js-sdk=${{ inputs.matrix-js-sdk }}
