@@ -294,15 +294,6 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
-                    test: /\.worker\.ts$/,
-                    loader: "worker-loader",
-                    options: {
-                        // Prevent bundling workers since CSP forbids loading them
-                        // from another origin.
-                        filename: "[hash].worker.js",
-                    },
-                },
-                {
                     test: /\.(ts|js)x?$/,
                     include: (f) => {
                         // our own source needs babel-ing
@@ -740,6 +731,7 @@ module.exports = (env, argv) => {
 
             // Disable automatic public path as it doesn't appear to function with
             // worklets in Webpack 5
+            // TODO: This appears to break workers though 🤦‍♂️
             publicPath: "",
         },
 
