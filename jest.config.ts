@@ -33,7 +33,7 @@ const config: Config = {
         "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
         "workers/(.+)Factory": "<rootDir>/__mocks__/workerFactoryMock.js",
         "^!!raw-loader!.*": "jest-raw-loader",
-        "RecorderWorklet": "<rootDir>/__mocks__/empty.js",
+        "recorderWorkletFactory": "<rootDir>/__mocks__/empty.js",
     },
     transformIgnorePatterns: ["/node_modules/(?!matrix-js-sdk).+$"],
     collectCoverageFrom: [
