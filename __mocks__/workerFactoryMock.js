@@ -15,5 +15,5 @@ limitations under the License.
 */
 
 export default function workerFactory(options) {
-  return jest.fn;
+    return jest.fn;
 }

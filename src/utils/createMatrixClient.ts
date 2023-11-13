@@ -23,6 +23,7 @@ import {
     IndexedDBStore,
     LocalStorageCryptoStore,
 } from "matrix-js-sdk/src/matrix";
+
 import indexeddbWorkerFactory from "../workers/indexeddbWorkerFactory";
 
 const localStorage = window.localStorage;

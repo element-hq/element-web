@@ -21,8 +21,8 @@ limitations under the License.
 import mxRecorderWorkletPath from "./RecorderWorklet";
 
 export default function recorderWorkletFactory(context: AudioContext): Promise<void> {
-  // The context.audioWorklet.addModule syntax is required for Webpack 5 to correctly recognise
-  // this as a worklet rather than an asset. This also requires the parser.javascript.worker
-  // configuration described in https://github.com/webpack/webpack.js.org/issues/6869.
-  return context.audioWorklet.addModule(new URL("./RecorderWorklet.ts", import.meta.url));
+    // The context.audioWorklet.addModule syntax is required for Webpack 5 to correctly recognise
+    // this as a worklet rather than an asset. This also requires the parser.javascript.worker
+    // configuration described in https://github.com/webpack/webpack.js.org/issues/6869.
+    return context.audioWorklet.addModule(new URL("./RecorderWorklet.ts", import.meta.url));
 }
