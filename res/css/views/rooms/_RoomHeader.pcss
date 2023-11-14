@@ -83,8 +83,19 @@ limitations under the License.
     cursor: pointer;
     user-select: none;
 
+    /* RoomAvatar doesn't pass classes down to avatar
+    So set style here
+    using div because compound classes are not stable */
+    > div {
+        flex-shrink: 0;
+    }
+
     &:hover {
         color: $primary-content;
         background: var(--cpd-color-bg-subtle-primary);
     }
+}
+
+.mx_RoomHeader .mx_BaseAvatar {
+    flex-shrink: 0;
 }
