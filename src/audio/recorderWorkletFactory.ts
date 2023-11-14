@@ -24,5 +24,5 @@ export default function recorderWorkletFactory(context: AudioContext): Promise<v
     // The context.audioWorklet.addModule syntax is required for Webpack 5 to correctly recognise
     // this as a worklet rather than an asset. This also requires the parser.javascript.worker
     // configuration described in https://github.com/webpack/webpack.js.org/issues/6869.
-    return context.audioWorklet.addModule(new URL("./RecorderWorklet.ts", import.meta.url));
+    return context.audioWorklet.addModule(/* webpackChunkName: "recorder.worklet" */ new URL("./RecorderWorklet.ts", import.meta.url));
 }
