@@ -193,6 +193,15 @@ export default function RoomHeader({
                         </Tooltip>
                     );
                 })}
+                <Tooltip label={!videoCallDisabledReason ? _t("voip|video_call") : videoCallDisabledReason!}>
+                    <IconButton
+                        disabled={!!videoCallDisabledReason}
+                        aria-label={!videoCallDisabledReason ? _t("voip|video_call") : videoCallDisabledReason!}
+                        onClick={videoCallClick}
+                    >
+                        <VideoCallIcon />
+                    </IconButton>
+                </Tooltip>
                 {!useElementCallExclusively && (
                     <Tooltip label={!voiceCallDisabledReason ? _t("voip|voice_call") : voiceCallDisabledReason!}>
                         <IconButton
@@ -204,15 +213,7 @@ export default function RoomHeader({
                         </IconButton>
                     </Tooltip>
                 )}
-                <Tooltip label={!videoCallDisabledReason ? _t("voip|video_call") : videoCallDisabledReason!}>
-                    <IconButton
-                        disabled={!!videoCallDisabledReason}
-                        aria-label={!videoCallDisabledReason ? _t("voip|video_call") : videoCallDisabledReason!}
-                        onClick={videoCallClick}
-                    >
-                        <VideoCallIcon />
-                    </IconButton>
-                </Tooltip>
+
                 <Tooltip label={_t("common|threads")}>
                     <IconButton
                         indicator={notificationColorToIndicator(threadNotifications)}

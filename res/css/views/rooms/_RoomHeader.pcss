@@ -55,6 +55,11 @@ limitations under the License.
     height: 0;
     opacity: 0;
     transition: all var(--transition-standard) ease 0.1s;
+    /* Emojis are rendered a bit bigger than text in the timeline
+        Make them compact/the same size as text here */
+    .mx_Emoji {
+        font-size: inherit;
+    }
 }
 
 .mx_RoomHeader:hover .mx_RoomHeader_topic {
