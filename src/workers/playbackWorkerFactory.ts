@@ -14,6 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export default function blurhashWorkerFactory(options?: WorkerOptions | undefined): Worker {
-    return new Worker(new URL("./playback.worker.ts", import.meta.url), options);
+export default function factory(options?: WorkerOptions | undefined): Worker {
+    return new Worker(/* webpackChunkName: "playback.worker" */ new URL("./playback.worker.ts", import.meta.url), options);
 }
