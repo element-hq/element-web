@@ -1827,10 +1827,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@matrix-org/analytics-events@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.8.0.tgz#2e99ee00913f94dfba82092300c6b225d26e9ef6"
-  integrity sha512-gwA6DSw43krshh4GFFLHcxcFOBgg+q/bvI4TQ19Lxh+OjHyHDAiIHghfoErco9q0Yl6rlpVemg9/7cNcP2WkaA==
+"@matrix-org/analytics-events@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.9.0.tgz#ac958b1f49ab84af6325da0264df2f459e87a985"
+  integrity sha512-pKhIspX2lHNe3sUdi42T8lL3RPFqI0kHkxfrF9R0jneJska6GNBzQwPENMY1SjM3YnGYdhz5GZ/QMm6gozuiJg==
 
 "@matrix-org/emojibase-bindings@^1.1.2":
   version "1.1.3"
@@ -1845,10 +1845,10 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-3.0.1.tgz#56a0376f8a389264bcf4d5325b378a71f18b7664"
   integrity sha512-r0PBfUKlLHm67+fpIV21netX5+DujbY2XjJy7JUGJ55oW4XWBNbSf9vElfaQkrdt/iDscL/8I5PoD5lCuVW6zA==
 
-"@matrix-org/matrix-wysiwyg@2.4.1":
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.4.1.tgz#e1325a42366a1c891b2ba90c88e597b39187b2cb"
-  integrity sha512-RyUijZXVKenE9s3LczDUhWFeOfIyLcsOrAyHqYxnizXX5nxMkHxTgLeoTvaIJ+1dOhI+H2SS9G4VcN6odZ0aNg==
+"@matrix-org/matrix-wysiwyg@2.16.0":
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.16.0.tgz#e9c648bf728f40ccc76dcd49cb340490f7162153"
+  integrity sha512-4Rid/FwUrL24lXdUJhMcd40QkCJvVKQKqg6lSHBlh/g12SwTMSQfFhAOJqQ1QAKcu5K/RdJPYkToNcAqYv+ZIA==
 
 "@matrix-org/olm@3.2.15":
   version "3.2.15"
