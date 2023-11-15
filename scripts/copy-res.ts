@@ -19,10 +19,7 @@ const INCLUDE_LANGS = [...new Set([...fs.readdirSync(I18N_BASE_PATH), ...fs.read
 // cpx includes globbed parts of the filename in the destination, but excludes
 // common parents. Hence, "res/{a,b}/**": the output will be "dest/a/..." and
 // "dest/b/...".
-const COPY_LIST: [
-    sourceGlob: string,
-    outputPath: string,
-][] = [
+const COPY_LIST: [sourceGlob: string, outputPath: string][] = [
     ["res/apple-app-site-association", "webapp"],
     ["res/manifest.json", "webapp"],
     ["res/sw.js", "webapp"],
@@ -65,7 +62,7 @@ function createCpx(source: string, dest: string): Cpx {
         });
     }
     return cpx;
-};
+}
 
 const logWatch = (path: string) => {
     if (verbose) {
@@ -96,8 +93,12 @@ function next(i: number, err?: Error): void {
         const copy = (path: string): void => {
             createCpx(path, dest).copy(errCheck);
         };
-        chokidar.watch(source)
-            .on("ready", () => { logWatch(source); cb(); })
+        chokidar
+            .watch(source)
+            .on("ready", () => {
+                logWatch(source);
+                cb();
+            })
             .on("add", copy)
             .on("change", copy)
             .on("error", errCheck);
@@ -182,8 +183,11 @@ function watchLanguage(lang: string, dest: string, langFileMap: Record<string, s
     };
 
     [reactSdkFile, riotWebFile].forEach(function (f) {
-        chokidar.watch(f)
-            .on("ready", () => { logWatch(f); })
+        chokidar
+            .watch(f)
+            .on("ready", () => {
+                logWatch(f);
+            })
             .on("add", makeLang)
             .on("change", makeLang)
             .on("error", errCheck);
