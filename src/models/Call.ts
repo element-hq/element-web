@@ -623,6 +623,7 @@ export class ElementCall extends Call {
     public static readonly MEMBER_EVENT_TYPE = new NamespacedValue(null, EventType.GroupCallMemberPrefix);
     public readonly STUCK_DEVICE_TIMEOUT_MS = 1000 * 60 * 60; // 1 hour
 
+    private settingsStoreCallEncryptionWatcher: string | null = null;
     private terminationTimer: number | null = null;
     private _layout = Layout.Tile;
     public get layout(): Layout {
@@ -633,11 +634,7 @@ export class ElementCall extends Call {
         this.emit(CallEvent.Layout, value);
     }
 
-    private static createOrGetCallWidget(roomId: string, client: MatrixClient): IApp {
-        const ecWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
-        if (ecWidget) {
-            return ecWidget;
-        }
+    private static generateWidgetUrl(client: MatrixClient, roomId: string): URL {
         const accountAnalyticsData = client.getAccountData(PosthogAnalytics.ANALYTICS_EVENT_TYPE);
         // The analyticsID is passed directly to element call (EC) since this codepath is only for EC and no other widget.
         // We really don't want the same analyticID's for the EC and EW posthog instances (Data on posthog should be limited/anonymized as much as possible).
@@ -683,6 +680,20 @@ export class ElementCall extends Call {
         const url = new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url!);
         url.pathname = "/room";
         url.hash = `#?${params.toString()}`;
+        return url;
+    }
+
+    private static createOrGetCallWidget(roomId: string, client: MatrixClient): IApp {
+        const ecWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
+        const url = ElementCall.generateWidgetUrl(client, roomId);
+
+        if (ecWidget) {
+            // always update the url because even if the widget is already created
+            // we might have settings changes that update the widget.
+            ecWidget.url = url.toString();
+
+            return ecWidget;
+        }
 
         // To use Element Call without touching room state, we create a virtual
         // widget (one that doesn't have a corresponding state event)
@@ -698,12 +709,21 @@ export class ElementCall extends Call {
             roomId,
         );
     }
+
+    private onCallEncryptionSettingsChange(): void {
+        this.widget.url = ElementCall.generateWidgetUrl(this.client, this.roomId).toString();
+    }
+
     private constructor(public session: MatrixRTCSession, widget: IApp, client: MatrixClient) {
         super(widget, client);
 
         this.session.on(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);
         this.client.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionEnded, this.onRTCSessionEnded);
-
+        SettingsStore.watchSetting(
+            "feature_disable_call_per_sender_encryption",
+            null,
+            this.onCallEncryptionSettingsChange.bind(this),
+        );
         this.updateParticipants();
     }
 
@@ -784,6 +804,9 @@ export class ElementCall extends Call {
         this.session.off(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);
         this.client.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionEnded, this.onRTCSessionEnded);
 
+        if (this.settingsStoreCallEncryptionWatcher) {
+            SettingsStore.unwatchSetting(this.settingsStoreCallEncryptionWatcher);
+        }
         if (this.terminationTimer !== null) {
             clearTimeout(this.terminationTimer);
             this.terminationTimer = null;
