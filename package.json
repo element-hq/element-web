@@ -142,6 +142,7 @@
         "@babel/preset-typescript": "^7.12.7",
         "@babel/register": "^7.12.10",
         "@casualbot/jest-sonar-reporter": "2.2.7",
+        "@knapsack-pro/cypress": "^8.0.1",
         "@peculiar/webcrypto": "^1.4.3",
         "@percy/cli": "^1.11.0",
         "@percy/cypress": "^3.1.2",

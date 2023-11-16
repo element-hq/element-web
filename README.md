@@ -1,7 +1,8 @@
 [![npm](https://img.shields.io/npm/v/matrix-react-sdk)](https://www.npmjs.com/package/matrix-react-sdk)
 ![Tests](https://github.com/matrix-org/matrix-react-sdk/actions/workflows/tests.yml/badge.svg)
 ![Static Analysis](https://github.com/matrix-org/matrix-react-sdk/actions/workflows/static_analysis.yaml/badge.svg)
-[![matrix-react-sdk](https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/simple/ppvnzg/develop&style=flat&logo=cypress)](https://dashboard.cypress.io/projects/ppvnzg/runs)
+[![Knapsack Pro Parallel CI builds for Cypress Test - Legacy Crypto](https://img.shields.io/badge/Knapsack%20Pro-Parallel%20%2F%20Cypress%20Test%20--%20Legacy%20Crypto-%230074ff)](https://knapsackpro.com/dashboard/organizations/3882/projects/2469/test_suites/3724/builds?utm_campaign=organization-id-3882&utm_content=test-suite-id-3724&utm_medium=readme&utm_source=knapsack-pro-badge&utm_term=project-id-2469)
+[![Knapsack Pro Parallel CI builds for Cypress Test - Rust Crypto](https://img.shields.io/badge/Knapsack%20Pro-Parallel%20%2F%20Cypress%20Test%20--%20Rust%20Crypto-%230074ff)](https://knapsackpro.com/dashboard/organizations/3882/projects/2469/test_suites/3729/builds?utm_campaign=organization-id-3882&utm_content=test-suite-id-3729&utm_medium=readme&utm_source=knapsack-pro-badge&utm_term=project-id-2469)
 
 <!--
 Percy is disabled while we're figuring out https://github.com/vector-im/wat-internal/issues/36
