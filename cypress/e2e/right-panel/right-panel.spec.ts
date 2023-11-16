@@ -103,21 +103,21 @@ describe("RightPanel", () => {
         it("should handle viewing export chat", () => {
             viewRoomSummaryByName(ROOM_NAME);
 
-            cy.findByRole("button", { name: "Export chat" }).click();
+            cy.findByRole("menuitem", { name: "Export Chat" }).click();
             cy.get(".mx_ExportDialog").should("have.length", 1);
         });
 
         it("should handle viewing share room", () => {
             viewRoomSummaryByName(ROOM_NAME);
 
-            cy.findByRole("button", { name: "Share room" }).click();
+            cy.findByRole("menuitem", { name: "Copy link" }).click();
             cy.get(".mx_ShareDialog").should("have.length", 1);
         });
 
         it("should handle viewing room settings", () => {
             viewRoomSummaryByName(ROOM_NAME);
 
-            cy.findByRole("button", { name: "Room settings" }).click();
+            cy.findByRole("menuitem", { name: "Settings" }).click();
             cy.get(".mx_RoomSettingsDialog").should("have.length", 1);
             cy.get(".mx_Dialog_title").within(() => {
                 cy.findByText("Room Settings - " + ROOM_NAME).should("exist");
@@ -127,7 +127,7 @@ describe("RightPanel", () => {
         it("should handle viewing files", () => {
             viewRoomSummaryByName(ROOM_NAME);
 
-            cy.findByRole("button", { name: "Files" }).click();
+            cy.findByRole("menuitem", { name: "Files" }).click();
             cy.get(".mx_FilePanel").should("have.length", 1);
             cy.get(".mx_FilePanel_empty").should("have.length", 1);
 
@@ -138,8 +138,7 @@ describe("RightPanel", () => {
         it("should handle viewing room member", () => {
             viewRoomSummaryByName(ROOM_NAME);
 
-            // \d represents the number of the room members inside mx_BaseCard_Button_sublabel
-            cy.findByRole("button", { name: /People \d/ }).click();
+            cy.findByRole("menuitem", { name: "People" }).click();
             cy.get(".mx_MemberList").should("have.length", 1);
 
             getMemberTileByName(NAME).click();

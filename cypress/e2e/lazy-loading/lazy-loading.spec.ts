@@ -121,7 +121,7 @@ describe("Lazy Loading", () => {
         });
 
         cy.get(".mx_RoomSummaryCard").within(() => {
-            cy.findByRole("button", { name: /People \d/ }).click(); // \d represents the number of the room members
+            cy.findByRole("menuitem", { name: "People" }).click(); // \d represents the number of the room members
         });
     }
 

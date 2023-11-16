@@ -40,6 +40,7 @@ import {
     resetAsyncStoreWithClient,
     mockPlatformPeg,
     mkEvent,
+    filterConsole,
 } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
@@ -73,6 +74,10 @@ describe("LegacyRoomHeader", () => {
     let alice: RoomMember;
     let bob: RoomMember;
     let carol: RoomMember;
+
+    filterConsole(
+        "Age for event was not available, using `now - origin_server_ts` as a fallback. If the device clock is not correct issues might occur.",
+    );
 
     beforeEach(async () => {
         // some of our tests rely on the jest canvas mock, and `afterEach` will have reset the mock, so we need to

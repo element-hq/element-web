@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { jest } from "@jest/globals";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
@@ -84,47 +83,6 @@ describe("RightPanel", () => {
     };
 
     const waitForRpsUpdate = () => new Promise<void>((resolve) => RightPanelStore.instance.once(UPDATE_EVENT, resolve));
-
-    it("navigates from room summary to member list", async () => {
-        const r1 = mkRoom(cli, "r1");
-        cli.getRoom.mockImplementation((roomId) => (roomId === "r1" ? r1 : null));
-
-        // Set up right panel state
-        const realGetValue = SettingsStore.getValue;
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name, roomId) => {
-            if (name !== "RightPanel.phases") return realGetValue(name, roomId);
-            if (roomId === "r1") {
-                return {
-                    history: [{ phase: RightPanelPhases.RoomSummary }],
-                    isOpen: true,
-                };
-            }
-            return null;
-        });
-
-        await spinUpStores();
-        const viewedRoom = waitForRpsUpdate();
-        dis.dispatch({
-            action: Action.ViewRoom,
-            room_id: "r1",
-        });
-        await viewedRoom;
-
-        const { container } = render(
-            <RightPanel
-                room={r1}
-                resizeNotifier={resizeNotifier}
-                permalinkCreator={new RoomPermalinkCreator(r1, r1.roomId)}
-            />,
-        );
-        expect(container.getElementsByClassName("mx_RoomSummaryCard")).toHaveLength(1);
-
-        const switchedPhases = waitForRpsUpdate();
-        userEvent.click(screen.getByText(/people/i));
-        await switchedPhases;
-
-        expect(container.getElementsByClassName("mx_MemberList")).toHaveLength(1);
-    });
 
     it("renders info from only one room during room changes", async () => {
         const r1 = mkRoom(cli, "r1");

@@ -17,7 +17,7 @@ limitations under the License.
 .mx_RoomSummaryCard {
     .mx_RoomSummaryCard_container {
         text-align: center;
-        margin-top: $spacing-20;
+        margin: $spacing-20 var(--cpd-space-4x) 0;
     }
 
     .mx_RoomSummaryCard_roomName,
@@ -27,10 +27,6 @@ limitations under the License.
         -webkit-box-orient: vertical;
         white-space: pre-wrap;
         overflow: hidden;
-    }
-
-    .mx_RoomSummaryCard_roomName {
-        margin: $spacing-12 0 $spacing-4;
     }
 
     .mx_RoomSummaryCard_alias {
@@ -203,42 +199,6 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_RoomSummaryCard_icon_people::before {
-    mask-image: url("$(res)/img/element-icons/room/members.svg");
-}
-
-.mx_RoomSummaryCard_icon_files::before {
-    mask-image: url("$(res)/img/element-icons/room/files.svg");
-}
-
-.mx_RoomSummaryCard_icon_pins::before {
-    mask-image: url("$(res)/img/element-icons/room/pin-upright.svg");
-}
-
-.mx_RoomSummaryCard_icon_threads::before {
-    mask-image: url("$(res)/img/element-icons/message/thread.svg");
-}
-
-.mx_RoomSummaryCard_icon_share::before {
-    mask-image: url("$(res)/img/element-icons/room/share.svg");
-}
-
-.mx_RoomSummaryCard_icon_settings::before {
-    mask-image: url("$(res)/img/element-icons/settings.svg");
-}
-
-.mx_RoomSummaryCard_icon_export::before {
-    mask-image: url("$(res)/img/element-icons/export.svg");
-}
-
-.mx_RoomSummaryCard_icon_poll::before {
-    mask-image: url("$(res)/img/element-icons/room/composer/poll.svg");
-}
-
-.mx_RoomSummaryCard_icon_search::before {
-    mask-image: url("$(res)/img/element-icons/room/search-inset.svg");
-}
-
 .mx_RoomSummaryCard_searchBtn {
     background: var(--cpd-color-bg-canvas-default);
     color: var(--cpd-color-icon-primary);
@@ -248,9 +208,12 @@ limitations under the License.
     height: 36px;
     padding: var(--cpd-space-2x);
     cursor: pointer;
-    transition: all 0.3s ease;
 
     &:hover {
         background: var(--cpd-color-bg-subtle-primary);
     }
+}
+
+.mx_RoomSummaryCard_roomName {
+    margin: $spacing-12 0 $spacing-4;
 }

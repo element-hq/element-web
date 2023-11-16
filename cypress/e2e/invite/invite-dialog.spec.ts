@@ -47,16 +47,8 @@ describe("Invite dialog", function () {
         // Open the room info panel
         cy.findByRole("button", { name: "Room info" }).click();
 
-        cy.get(".mx_RightPanel").within(() => {
-            // Click "People" button on the panel
-            // Regex pattern due to the string of "mx_BaseCard_Button_sublabel"
-            cy.findByRole("button", { name: /People/ }).click();
-        });
-
         cy.get(".mx_BaseCard").within(() => {
-            // Click "Invite to this room" button
-            // Regex pattern due to "mx_MemberList_invite span::before"
-            cy.findByRole("button", { name: /Invite to this room/ }).click();
+            cy.findByRole("menuitem", { name: "Invite" }).click();
         });
 
         cy.get(".mx_InviteDialog_other").within(() => {
