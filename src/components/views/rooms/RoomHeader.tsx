@@ -49,6 +49,7 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import { formatCount } from "../../../utils/FormattingUtils";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { Linkify, topicToHtml } from "../../../HtmlUtils";
+import PosthogTrackers from "../../../PosthogTrackers";
 
 /**
  * A helper to transform a notification color to the what the Compound Icon Button
@@ -220,6 +221,7 @@ export default function RoomHeader({
                         onClick={(evt) => {
                             evt.stopPropagation();
                             RightPanelStore.instance.showOrHidePanel(RightPanelPhases.ThreadPanel);
+                            PosthogTrackers.trackInteraction("WebRoomHeaderButtonsThreadsButton", evt);
                         }}
                         aria-label={_t("common|threads")}
                     >
