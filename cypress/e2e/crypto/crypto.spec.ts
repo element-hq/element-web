@@ -116,7 +116,7 @@ const verify = function (this: CryptoTestContext) {
     const bobsVerificationRequestPromise = waitForVerificationRequest(this.bob);
 
     openRoomInfo().within(() => {
-        cy.findByRole("button", { name: /People \d/ }).click(); // \d is the number of the room members
+        cy.findByRole("menuitem", { name: "People" }).click();
         cy.findByText("Bob").click();
         cy.findByRole("button", { name: "Verify" }).click();
         cy.findByRole("button", { name: "Start Verification" }).click();

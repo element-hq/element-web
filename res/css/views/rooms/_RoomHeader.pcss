@@ -55,6 +55,11 @@ limitations under the License.
     height: 0;
     opacity: 0;
     transition: all var(--transition-standard) ease 0.1s;
+    /* Emojis are rendered a bit bigger than text in the timeline
+        Make them compact/the same size as text here */
+    .mx_Emoji {
+        font-size: inherit;
+    }
 }
 
 .mx_RoomHeader:hover .mx_RoomHeader_topic {
@@ -83,8 +88,19 @@ limitations under the License.
     cursor: pointer;
     user-select: none;
 
+    /* RoomAvatar doesn't pass classes down to avatar
+    So set style here
+    using div because compound classes are not stable */
+    > div {
+        flex-shrink: 0;
+    }
+
     &:hover {
         color: $primary-content;
         background: var(--cpd-color-bg-subtle-primary);
     }
+}
+
+.mx_RoomHeader .mx_BaseAvatar {
+    flex-shrink: 0;
 }

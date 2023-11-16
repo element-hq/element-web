@@ -61,7 +61,7 @@ describe("FilePanel", () => {
 
         // Open the file panel
         viewRoomSummaryByName(ROOM_NAME);
-        cy.get(".mx_RoomSummaryCard_icon_files").click();
+        cy.findByRole("menuitem", { name: "Files" }).click();
         cy.get(".mx_FilePanel").should("have.length", 1);
     });
 

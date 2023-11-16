@@ -48,7 +48,10 @@ import { Container, WidgetLayoutStore } from "../../../../src/stores/widgets/Wid
 jest.mock("../../../../src/utils/ShieldUtils");
 
 describe("RoomHeader", () => {
-    filterConsole("[getType] Room !1:example.org does not have an m.room.create event");
+    filterConsole(
+        "[getType] Room !1:example.org does not have an m.room.create event",
+        "Age for event was not available, using `now - origin_server_ts` as a fallback. If the device clock is not correct issues might occur.",
+    );
 
     let room: Room;
 

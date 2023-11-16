@@ -46,13 +46,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           !
         </span>
         <h1
-          class="_font-heading-md-semibold_1jx6b_121 mx_RoomSummaryCard_roomName text-primary"
+          class="_typography_yh5dq_162 _font-heading-md-semibold_yh5dq_121 mx_RoomSummaryCard_roomName text-primary"
           title="!room:domain.org"
         >
           !room:domain.org
         </h1>
         <div
-          class="_font-body-sm-semibold_1jx6b_45 mx_RoomSummaryCard_alias text-secondary"
+          class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 mx_RoomSummaryCard_alias text-secondary"
           title=""
         />
         <section
@@ -60,7 +60,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
         >
           <span
-            class="_font-body-sm-medium_1jx6b_50 _badge_qipht_17"
+            class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50 _badge_qipht_17"
             data-kind="default"
           >
             <div
@@ -71,60 +71,299 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </section>
       </header>
       <div
-        class="mx_BaseCard_Group mx_RoomSummaryCard_aboutGroup"
+        class="_separator_1uqhh_17"
+        data-orientation="horizontal"
+        role="separator"
+      />
+      <label
+        class="_item_zxa40_17 _interactive_zxa40_36"
+        data-kind="primary"
+        for=":r1:"
+        role="menuitemcheckbox"
       >
-        <h2>
-          About
-        </h2>
         <div
-          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_people"
-          role="button"
-          tabindex="0"
+          aria-hidden="true"
+          class="_icon_zxa40_49"
+          height="24"
+          width="24"
+        />
+        <span
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
+        >
+          Favourite
+        </span>
+        <div
+          class="_container_ik1u1_18"
+        >
+          <input
+            class="_input_ik1u1_32"
+            id=":r1:"
+            type="checkbox"
+          />
+          <div
+            class="_ui_ik1u1_42"
+          />
+        </div>
+      </label>
+      <button
+        class="_item_zxa40_17 _interactive_zxa40_36 _disabled_zxa40_125"
+        data-kind="primary"
+        disabled=""
+        role="menuitem"
+      >
+        <div
+          aria-hidden="true"
+          class="_icon_zxa40_49"
+          height="24"
+          width="24"
+        />
+        <span
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
+        >
+          Invite
+        </span>
+        <svg
+          aria-hidden="true"
+          class="_nav-hint_zxa40_65"
+          fill="none"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.70005 17.3C8.51672 17.1167 8.42505 16.8834 8.42505 16.6C8.42505 16.3167 8.51672 16.0834 8.70005 15.9L12.6 12L8.70005 8.10005C8.51672 7.91672 8.42505 7.68338 8.42505 7.40005C8.42505 7.11672 8.51672 6.88338 8.70005 6.70005C8.88338 6.51672 9.11672 6.42505 9.40005 6.42505C9.68338 6.42505 9.91672 6.51672 10.1 6.70005L14.7 11.3C14.8 11.4 14.8709 11.5084 14.9125 11.625C14.9542 11.7417 14.975 11.8667 14.975 12C14.975 12.1334 14.9542 12.2584 14.9125 12.375C14.8709 12.4917 14.8 12.6 14.7 12.7L10.1 17.3C9.91672 17.4834 9.68338 17.575 9.40005 17.575C9.11672 17.575 8.88338 17.4834 8.70005 17.3Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+      <button
+        class="_item_zxa40_17 _interactive_zxa40_36"
+        data-kind="primary"
+        role="menuitem"
+      >
+        <div
+          aria-hidden="true"
+          class="_icon_zxa40_49"
+          height="24"
+          width="24"
+        />
+        <span
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
+        >
+          Copy link
+        </span>
+        <svg
+          aria-hidden="true"
+          class="_nav-hint_zxa40_65"
+          fill="none"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.70005 17.3C8.51672 17.1167 8.42505 16.8834 8.42505 16.6C8.42505 16.3167 8.51672 16.0834 8.70005 15.9L12.6 12L8.70005 8.10005C8.51672 7.91672 8.42505 7.68338 8.42505 7.40005C8.42505 7.11672 8.51672 6.88338 8.70005 6.70005C8.88338 6.51672 9.11672 6.42505 9.40005 6.42505C9.68338 6.42505 9.91672 6.51672 10.1 6.70005L14.7 11.3C14.8 11.4 14.8709 11.5084 14.9125 11.625C14.9542 11.7417 14.975 11.8667 14.975 12C14.975 12.1334 14.9542 12.2584 14.9125 12.375C14.8709 12.4917 14.8 12.6 14.7 12.7L10.1 17.3C9.91672 17.4834 9.68338 17.575 9.40005 17.575C9.11672 17.575 8.88338 17.4834 8.70005 17.3Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+      <button
+        class="_item_zxa40_17 _interactive_zxa40_36"
+        data-kind="primary"
+        role="menuitem"
+      >
+        <div
+          aria-hidden="true"
+          class="_icon_zxa40_49"
+          height="24"
+          width="24"
+        />
+        <span
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
+        >
+          Settings
+        </span>
+        <svg
+          aria-hidden="true"
+          class="_nav-hint_zxa40_65"
+          fill="none"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.70005 17.3C8.51672 17.1167 8.42505 16.8834 8.42505 16.6C8.42505 16.3167 8.51672 16.0834 8.70005 15.9L12.6 12L8.70005 8.10005C8.51672 7.91672 8.42505 7.68338 8.42505 7.40005C8.42505 7.11672 8.51672 6.88338 8.70005 6.70005C8.88338 6.51672 9.11672 6.42505 9.40005 6.42505C9.68338 6.42505 9.91672 6.51672 10.1 6.70005L14.7 11.3C14.8 11.4 14.8709 11.5084 14.9125 11.625C14.9542 11.7417 14.975 11.8667 14.975 12C14.975 12.1334 14.9542 12.2584 14.9125 12.375C14.8709 12.4917 14.8 12.6 14.7 12.7L10.1 17.3C9.91672 17.4834 9.68338 17.575 9.40005 17.575C9.11672 17.575 8.88338 17.4834 8.70005 17.3Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+      <div
+        class="_separator_1uqhh_17"
+        data-orientation="horizontal"
+        role="separator"
+      />
+      <button
+        class="_item_zxa40_17 _interactive_zxa40_36"
+        data-kind="primary"
+        role="menuitem"
+      >
+        <div
+          aria-hidden="true"
+          class="_icon_zxa40_49"
+          height="24"
+          width="24"
+        />
+        <span
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
         >
           People
-          <span
-            class="mx_BaseCard_Button_sublabel"
-          >
-            0
-          </span>
-        </div>
+        </span>
+        <svg
+          aria-hidden="true"
+          class="_nav-hint_zxa40_65"
+          fill="none"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.70005 17.3C8.51672 17.1167 8.42505 16.8834 8.42505 16.6C8.42505 16.3167 8.51672 16.0834 8.70005 15.9L12.6 12L8.70005 8.10005C8.51672 7.91672 8.42505 7.68338 8.42505 7.40005C8.42505 7.11672 8.51672 6.88338 8.70005 6.70005C8.88338 6.51672 9.11672 6.42505 9.40005 6.42505C9.68338 6.42505 9.91672 6.51672 10.1 6.70005L14.7 11.3C14.8 11.4 14.8709 11.5084 14.9125 11.625C14.9542 11.7417 14.975 11.8667 14.975 12C14.975 12.1334 14.9542 12.2584 14.9125 12.375C14.8709 12.4917 14.8 12.6 14.7 12.7L10.1 17.3C9.91672 17.4834 9.68338 17.575 9.40005 17.575C9.11672 17.575 8.88338 17.4834 8.70005 17.3Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+      <button
+        class="_item_zxa40_17 _interactive_zxa40_36"
+        data-kind="primary"
+        role="menuitem"
+      >
         <div
-          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_files"
-          role="button"
-          tabindex="0"
+          aria-hidden="true"
+          class="_icon_zxa40_49"
+          height="24"
+          width="24"
+        />
+        <span
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
         >
           Files
-        </div>
+        </span>
+        <svg
+          aria-hidden="true"
+          class="_nav-hint_zxa40_65"
+          fill="none"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.70005 17.3C8.51672 17.1167 8.42505 16.8834 8.42505 16.6C8.42505 16.3167 8.51672 16.0834 8.70005 15.9L12.6 12L8.70005 8.10005C8.51672 7.91672 8.42505 7.68338 8.42505 7.40005C8.42505 7.11672 8.51672 6.88338 8.70005 6.70005C8.88338 6.51672 9.11672 6.42505 9.40005 6.42505C9.68338 6.42505 9.91672 6.51672 10.1 6.70005L14.7 11.3C14.8 11.4 14.8709 11.5084 14.9125 11.625C14.9542 11.7417 14.975 11.8667 14.975 12C14.975 12.1334 14.9542 12.2584 14.9125 12.375C14.8709 12.4917 14.8 12.6 14.7 12.7L10.1 17.3C9.91672 17.4834 9.68338 17.575 9.40005 17.575C9.11672 17.575 8.88338 17.4834 8.70005 17.3Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+      <button
+        class="_item_zxa40_17 _interactive_zxa40_36"
+        data-kind="primary"
+        role="menuitem"
+      >
         <div
-          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_poll"
-          role="button"
-          tabindex="0"
+          aria-hidden="true"
+          class="_icon_zxa40_49"
+          height="24"
+          width="24"
+        />
+        <span
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
         >
           Poll history
-        </div>
-        <div
-          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_export"
-          role="button"
-          tabindex="0"
+        </span>
+        <svg
+          aria-hidden="true"
+          class="_nav-hint_zxa40_65"
+          fill="none"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          Export chat
-        </div>
+          <path
+            d="M8.70005 17.3C8.51672 17.1167 8.42505 16.8834 8.42505 16.6C8.42505 16.3167 8.51672 16.0834 8.70005 15.9L12.6 12L8.70005 8.10005C8.51672 7.91672 8.42505 7.68338 8.42505 7.40005C8.42505 7.11672 8.51672 6.88338 8.70005 6.70005C8.88338 6.51672 9.11672 6.42505 9.40005 6.42505C9.68338 6.42505 9.91672 6.51672 10.1 6.70005L14.7 11.3C14.8 11.4 14.8709 11.5084 14.9125 11.625C14.9542 11.7417 14.975 11.8667 14.975 12C14.975 12.1334 14.9542 12.2584 14.9125 12.375C14.8709 12.4917 14.8 12.6 14.7 12.7L10.1 17.3C9.91672 17.4834 9.68338 17.575 9.40005 17.575C9.11672 17.575 8.88338 17.4834 8.70005 17.3Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+      <button
+        class="_item_zxa40_17 _interactive_zxa40_36"
+        data-kind="primary"
+        role="menuitem"
+      >
         <div
-          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_share"
-          data-testid="shareRoomButton"
-          role="button"
-          tabindex="0"
+          aria-hidden="true"
+          class="_icon_zxa40_49"
+          height="24"
+          width="24"
+        />
+        <span
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
         >
-          Share room
-        </div>
+          Export Chat
+        </span>
+        <svg
+          aria-hidden="true"
+          class="_nav-hint_zxa40_65"
+          fill="none"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.70005 17.3C8.51672 17.1167 8.42505 16.8834 8.42505 16.6C8.42505 16.3167 8.51672 16.0834 8.70005 15.9L12.6 12L8.70005 8.10005C8.51672 7.91672 8.42505 7.68338 8.42505 7.40005C8.42505 7.11672 8.51672 6.88338 8.70005 6.70005C8.88338 6.51672 9.11672 6.42505 9.40005 6.42505C9.68338 6.42505 9.91672 6.51672 10.1 6.70005L14.7 11.3C14.8 11.4 14.8709 11.5084 14.9125 11.625C14.9542 11.7417 14.975 11.8667 14.975 12C14.975 12.1334 14.9542 12.2584 14.9125 12.375C14.8709 12.4917 14.8 12.6 14.7 12.7L10.1 17.3C9.91672 17.4834 9.68338 17.575 9.40005 17.575C9.11672 17.575 8.88338 17.4834 8.70005 17.3Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+      <div
+        class="_separator_1uqhh_17"
+        data-orientation="horizontal"
+        role="separator"
+      />
+      <button
+        class="_item_zxa40_17 _interactive_zxa40_36"
+        data-kind="critical"
+        role="menuitem"
+      >
         <div
-          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_settings"
-          role="button"
-          tabindex="0"
+          aria-hidden="true"
+          class="_icon_zxa40_49"
+          height="24"
+          width="24"
+        />
+        <span
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
         >
-          Room settings
-        </div>
-      </div>
+          Leave room
+        </span>
+        <svg
+          aria-hidden="true"
+          class="_nav-hint_zxa40_65"
+          fill="none"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.70005 17.3C8.51672 17.1167 8.42505 16.8834 8.42505 16.6C8.42505 16.3167 8.51672 16.0834 8.70005 15.9L12.6 12L8.70005 8.10005C8.51672 7.91672 8.42505 7.68338 8.42505 7.40005C8.42505 7.11672 8.51672 6.88338 8.70005 6.70005C8.88338 6.51672 9.11672 6.42505 9.40005 6.42505C9.68338 6.42505 9.91672 6.51672 10.1 6.70005L14.7 11.3C14.8 11.4 14.8709 11.5084 14.9125 11.625C14.9542 11.7417 14.975 11.8667 14.975 12C14.975 12.1334 14.9542 12.2584 14.9125 12.375C14.8709 12.4917 14.8 12.6 14.7 12.7L10.1 17.3C9.91672 17.4834 9.68338 17.575 9.40005 17.575C9.11672 17.575 8.88338 17.4834 8.70005 17.3Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
       <div
         class="mx_BaseCard_Group mx_RoomSummaryCard_appsGroup"
       >

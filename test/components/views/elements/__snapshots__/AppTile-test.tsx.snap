@@ -20,22 +20,26 @@ exports[`AppTile destroys non-persisted right panel widget on room change 1`] = 
           title="Close"
         />
         <div
-          class="mx_BaseCard_header_title"
+          class="mx_BaseCard_headerProp"
         >
-          <h4
-            class="mx_Heading_h4 mx_BaseCard_header_title_heading"
-          >
-            Example 1
-          </h4>
           <div
-            aria-expanded="false"
-            aria-haspopup="true"
-            aria-label="Options"
-            class="mx_AccessibleButton mx_BaseCard_header_title_button--option"
-            role="button"
-            tabindex="0"
-            title="Options"
-          />
+            class="mx_BaseCard_header_title"
+          >
+            <h4
+              class="mx_Heading_h4 mx_BaseCard_header_title_heading"
+            >
+              Example 1
+            </h4>
+            <div
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-label="Options"
+              class="mx_AccessibleButton mx_BaseCard_header_title_button--option"
+              role="button"
+              tabindex="0"
+              title="Options"
+            />
+          </div>
         </div>
       </div>
       <div

@@ -51,7 +51,6 @@ limitations under the License.
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: calc(100% - 38px);
             height: 24px;
             flex: 1;
 
@@ -157,11 +156,19 @@ limitations under the License.
 
 .mx_BaseCard_back,
 .mx_BaseCard_close {
+    flex-shrink: 0;
     position: relative;
+    // @TODO(kerrya) background colours here are not semantic
+    // these buttons to be replaced with IconButton after secondary variant is added
+    // https://github.com/vector-im/compound/issues/279
     background-color: var(--cpd-color-bg-subtle-secondary);
     width: var(--BaseCard_header-button-size);
     height: var(--BaseCard_header-button-size);
     border-radius: 50%;
+
+    &:hover {
+        background-color: var(--cpd-color-bg-subtle-primary);
+    }
 
     &::before {
         content: "";
@@ -225,4 +232,8 @@ limitations under the License.
             left: -8px;
         }
     }
+}
+
+.mx_BaseCard_headerProp {
+    flex: 1 1 100%;
 }

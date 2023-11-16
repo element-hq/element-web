@@ -22,7 +22,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
     >
       <div
         aria-level="1"
-        class="_font-body-lg-semibold_1jx6b_83 mx_RoomHeader_heading"
+        class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 mx_RoomHeader_heading"
         dir="auto"
         role="heading"
       >
