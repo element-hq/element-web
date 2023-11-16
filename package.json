@@ -123,7 +123,7 @@
         "buffer": "^6.0.3",
         "chokidar": "^3.5.1",
         "concurrently": "^8.0.0",
-        "copy-webpack-plugin": "^6.0.0",
+        "copy-webpack-plugin": "^11.0.0",
         "cronstrue": "^2.41.0",
         "css-loader": "^4",
         "css-minimizer-webpack-plugin": "^5.0.1",
