@@ -10,6 +10,7 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackInjectPreload = require("@principalstudio/html-webpack-inject-preload");
 const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
 const crypto = require("crypto");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 // XXX: mangle Crypto::createHash to replace md4 with sha256, output.hashFunction is insufficient as multiple bits
 // of webpack hardcode md4. The proper fix it to upgrade to webpack 5.
@@ -707,8 +708,25 @@ module.exports = (env, argv) => {
 
             new webpack.EnvironmentPlugin(["VERSION"]),
 
+            new CopyWebpackPlugin({
+                patterns: [
+                    "res/apple-app-site-association",
+                    "res/manifest.json",
+                    "res/sw.js",
+                    "res/welcome.html",
+                    { from: "welcome/**", context: path.resolve(__dirname, "res") },
+                    { from: "themes/**", context: path.resolve(__dirname, "res") },
+                    { from: "vector-icons/**", context: path.resolve(__dirname, "res") },
+                    { from: "decoder-ring/**", context: path.resolve(__dirname, "res") },
+                    { from: "media/**", context: path.resolve(__dirname, "node_modules/matrix-react-sdk/res/") },
+                    "node_modules/@matrix-org/olm/olm_legacy.js",
+                    { from: "config.json", noErrorOnMissing: true },
+                    "contribute.json",
+                ],
+            }),
+
             // Automatically load buffer & process modules as we use them without explicitly
-            // importing them.
+            // importing them
             new webpack.ProvidePlugin({
                 Buffer: ["buffer", "Buffer"],
                 process: "process/browser",

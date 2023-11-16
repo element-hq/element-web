@@ -13,7 +13,7 @@ jobs:
             URL: "https://github.com/pulls?q=is%3Apr+is%3Aopen+repo%3Amatrix-org%2Fmatrix-js-sdk+repo%3Amatrix-org%2Fmatrix-react-sdk+repo%3Avector-im%2Felement-web+repo%3Avector-im%2Felement-desktop+review-requested%3A%40me+sort%3Aupdated-desc+"
             RELEASE_BLOCKERS_URL: "https://github.com/pulls?q=is%3Aopen+repo%3Amatrix-org%2Fmatrix-js-sdk+repo%3Amatrix-org%2Fmatrix-react-sdk+repo%3Avector-im%2Felement-web+repo%3Avector-im%2Felement-desktop+sort%3Aupdated-desc+label%3AX-Release-Blocker+"
         steps:
-            - uses: actions/github-script@v6
+            - uses: actions/github-script@v7
               env:
                   HS_URL: ${{ secrets.BETABOT_HS_URL }}
                   ROOM_ID: ${{ secrets.ROOM_ID }}
