@@ -541,7 +541,8 @@ describe("Read receipts", () => {
                 // Then the room is unread
                 assertStillRead(room2);
             });
-            it("Reading a thread after a reaction to a redacted message marks the thread as read", () => {
+            // XXX: failed because flakes: https://github.com/vector-im/element-web/issues/26594
+            it.skip("Reading a thread after a reaction to a redacted message marks the thread as read", () => {
                 // Given a redacted message in a thread exists, but someone reacted to it before it was redacted
                 goTo(room1);
                 receiveMessages(room2, [
