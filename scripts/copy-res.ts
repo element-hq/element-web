@@ -94,7 +94,7 @@ function next(i: number, err?: Error): void {
             createCpx(path, dest).copy(errCheck);
         };
         chokidar
-            .watch(source)
+            .watch(source, { ignoreInitial: true })
             .on("ready", () => {
                 logWatch(source);
                 cb();
@@ -107,7 +107,7 @@ function next(i: number, err?: Error): void {
     }
 }
 
-function genLangFile(lang: string, dest: string): string {
+function prepareLangFile(lang: string, dest: string): [filename: string, json: string] {
     const reactSdkFile = REACT_I18N_BASE_PATH + lang + ".json";
     const riotWebFile = I18N_BASE_PATH + lang + ".json";
 
@@ -128,12 +128,14 @@ function genLangFile(lang: string, dest: string): string {
     const digest = loaderUtils.getHashDigest(jsonBuffer, null, "hex", 7);
     const filename = `${lang}.${digest}.json`;
 
+    return [filename, json];
+}
+
+function genLangFile(dest: string, filename: string, json: string) {
     fs.writeFileSync(dest + filename, json);
     if (verbose) {
         console.log("Generated language file: " + filename);
     }
-
-    return filename;
 }
 
 function genLangList(langFileMap: Record<string, string>): void {
@@ -176,7 +178,8 @@ function watchLanguage(lang: string, dest: string, langFileMap: Record<string, s
             clearTimeout(makeLangDebouncer);
         }
         makeLangDebouncer = setTimeout(() => {
-            const filename = genLangFile(lang, dest);
+            const [filename, json] = prepareLangFile(lang, dest);
+            genLangFile(dest, filename, json);
             langFileMap[lang] = filename;
             genLangList(langFileMap);
         }, 500);
@@ -184,7 +187,7 @@ function watchLanguage(lang: string, dest: string, langFileMap: Record<string, s
 
     [reactSdkFile, riotWebFile].forEach(function (f) {
         chokidar
-            .watch(f)
+            .watch(f, { ignoreInitial: true })
             .on("ready", () => {
                 logWatch(f);
             })
@@ -197,14 +200,18 @@ function watchLanguage(lang: string, dest: string, langFileMap: Record<string, s
 // language resources
 const I18N_DEST = "webapp/i18n/";
 const I18N_FILENAME_MAP = INCLUDE_LANGS.reduce<Record<string, string>>((m, l) => {
-    const filename = genLangFile(l, I18N_DEST);
+    const [filename, json] = prepareLangFile(l, I18N_DEST);
+    if (!watch) {
+        genLangFile(I18N_DEST, filename, json);
+    }
     m[l] = filename;
     return m;
 }, {});
-genLangList(I18N_FILENAME_MAP);
 
 if (watch) {
     INCLUDE_LANGS.forEach((l) => watchLanguage(l, I18N_DEST, I18N_FILENAME_MAP));
+} else {
+    genLangList(I18N_FILENAME_MAP);
 }
 
 // non-language resources
