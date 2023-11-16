@@ -63,7 +63,7 @@
         "@babel/runtime": "^7.12.5",
         "@matrix-org/analytics-events": "^0.9.0",
         "@matrix-org/emojibase-bindings": "^1.1.2",
-        "@matrix-org/matrix-wysiwyg": "2.16.0",
+        "@matrix-org/matrix-wysiwyg": "2.17.0",
         "@matrix-org/react-sdk-module-api": "^2.2.1",
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^7.0.0",
