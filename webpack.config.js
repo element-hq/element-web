@@ -723,7 +723,7 @@ module.exports = (env, argv) => {
                     { from: "decoder-ring/**", context: path.resolve(__dirname, "res") },
                     { from: "media/**", context: path.resolve(__dirname, "node_modules/matrix-react-sdk/res/") },
                     "node_modules/@matrix-org/olm/olm_legacy.js",
-                    "config.json",
+                    { from: "config.json", noErrorOnMissing: true },
                     "contribute.json",
                 ],
             }),
