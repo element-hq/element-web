@@ -6,7 +6,6 @@ import parseArgs from "minimist";
 import * as chokidar from "chokidar";
 import * as fs from "node:fs";
 import _ from "lodash";
-import { Cpx } from "cpx";
 import * as loaderUtils from "loader-utils";
 import { Translations } from "matrix-web-i18n";
 
@@ -16,23 +15,6 @@ const INCLUDE_LANGS = [...new Set([...fs.readdirSync(I18N_BASE_PATH), ...fs.read
     .filter((fn) => fn.endsWith(".json"))
     .map((f) => f.slice(0, -5));
 
-// cpx includes globbed parts of the filename in the destination, but excludes
-// common parents. Hence, "res/{a,b}/**": the output will be "dest/a/..." and
-// "dest/b/...".
-const COPY_LIST: [sourceGlob: string, outputPath: string][] = [
-    ["res/apple-app-site-association", "webapp"],
-    ["res/manifest.json", "webapp"],
-    ["res/sw.js", "webapp"],
-    ["res/welcome.html", "webapp"],
-    ["res/welcome/**", "webapp/welcome"],
-    ["res/themes/**", "webapp/themes"],
-    ["res/vector-icons/**", "webapp/vector-icons"],
-    ["res/decoder-ring/**", "webapp/decoder-ring"],
-    ["node_modules/matrix-react-sdk/res/media/**", "webapp/media"],
-    ["node_modules/@matrix-org/olm/olm_legacy.js", "webapp"],
-    ["./config.json", "webapp"],
-    ["contribute.json", "webapp"],
-];
 const argv = parseArgs(process.argv.slice(2), {});
 
 const watch = argv.w;
@@ -54,58 +36,11 @@ if (!fs.existsSync("webapp/i18n/")) {
     fs.mkdirSync("webapp/i18n/");
 }
 
-function createCpx(source: string, dest: string): Cpx {
-    const cpx = new Cpx(source, dest);
-    if (verbose) {
-        cpx.on("copy", (event) => {
-            console.log(`Copied: ${event.srcPath} --> ${event.dstPath}`);
-        });
-    }
-    return cpx;
-}
-
 const logWatch = (path: string) => {
     if (verbose) {
         console.log(`Watching: ${path}`);
     }
 };
-
-function next(i: number, err?: Error): void {
-    errCheck(err);
-
-    if (i >= COPY_LIST.length) {
-        return;
-    }
-
-    const ent = COPY_LIST[i];
-    const source = ent[0];
-    const dest = ent[1];
-
-    const cb = (err?: Error): void => {
-        next(i + 1, err);
-    };
-
-    if (watch) {
-        // cpx -w creates a watcher for the parent of any files specified,
-        // which in the case of e.g. config.json is '.', which inevitably takes
-        // ages to crawl. To prevent this, we only use cpx for copying and resort
-        // to chokidar for watching.
-        const copy = (path: string): void => {
-            createCpx(path, dest).copy(errCheck);
-        };
-        chokidar
-            .watch(source, { ignoreInitial: true })
-            .on("ready", () => {
-                logWatch(source);
-                cb();
-            })
-            .on("add", copy)
-            .on("change", copy)
-            .on("error", errCheck);
-    } else {
-        createCpx(source, dest).copy(cb);
-    }
-}
 
 function prepareLangFile(lang: string, dest: string): [filename: string, json: string] {
     const reactSdkFile = REACT_I18N_BASE_PATH + lang + ".json";
@@ -213,6 +148,3 @@ if (watch) {
 } else {
     genLangList(I18N_FILENAME_MAP);
 }
-
-// non-language resources
-next(0);

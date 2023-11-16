@@ -24,5 +24,3 @@ declare module "loader-utils" {
         maxLength: number,
     ): string;
 }
-
-export as namespace Cpx;
