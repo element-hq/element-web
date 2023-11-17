@@ -37,3 +37,4 @@
 -   [Jitsi](jitsi-dev.md)
 -   [Feature flags](feature-flags.md)
 -   [OIDC and delegated authentication](oidc.md)
+-   [Release Process](release.md)
