@@ -1846,10 +1846,10 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-3.0.1.tgz#56a0376f8a389264bcf4d5325b378a71f18b7664"
   integrity sha512-r0PBfUKlLHm67+fpIV21netX5+DujbY2XjJy7JUGJ55oW4XWBNbSf9vElfaQkrdt/iDscL/8I5PoD5lCuVW6zA==
 
-"@matrix-org/matrix-wysiwyg@2.16.0":
-  version "2.16.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.16.0.tgz#e9c648bf728f40ccc76dcd49cb340490f7162153"
-  integrity sha512-4Rid/FwUrL24lXdUJhMcd40QkCJvVKQKqg6lSHBlh/g12SwTMSQfFhAOJqQ1QAKcu5K/RdJPYkToNcAqYv+ZIA==
+"@matrix-org/matrix-wysiwyg@2.17.0":
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.17.0.tgz#68c83da17826fb43828f0c1ddd8d6e0b9d155ae5"
+  integrity sha512-PZGSrNqKCSdUnyUVglEvHrV8uowU3JuWUlYYKBslYnnIrJHw9aS2nnCpLVqwACFD6N82+L+Net8ME9i3qy7BGQ==
 
 "@matrix-org/react-sdk-module-api@^2.2.1":
   version "2.2.1"
