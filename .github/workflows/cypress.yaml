@@ -148,7 +148,7 @@ jobs:
                   record: false
                   parallel: false
                   # The built-in Electron runner seems to grind to a halt trying to run the tests, so use chrome.
-                  command: yarn percy exec --parallel -- npx knapsack-pro-cypress --config trashAssetsBeforeRuns=false --browser "$BROWSER_PATH"
+                  command: yarn percy exec --parallel -- npx knapsack-pro-cypress --config trashAssetsBeforeRuns=false --browser ${{ env.BROWSER_PATH }}
               env:
                   # Knapsack token and config
                   KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS: ${{ matrix.crypto == 'rust' && secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS_RUST || secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS_LEGACY }}
