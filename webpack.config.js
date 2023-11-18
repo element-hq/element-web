@@ -272,19 +272,6 @@ module.exports = (env, argv) => {
                 // optimised, so there is little to gain by us uglifying it.
                 /olm[\\/](javascript[\\/])?olm\.js$/,
             ],
-            parser: {
-                javascript: {
-                    worker: [
-                        // Special syntax for loading audio worklets as documented in
-                        // https://github.com/webpack/webpack.js.org/issues/6869. Note
-                        // that this only works when using a URL as argument to the
-                        // addModule call.
-                        "*context.audioWorklet.addModule()",
-                        "*audioWorklet.addModule()",
-                        "...", // The defaults
-                    ],
-                },
-            },
             rules: [
                 useHMR && {
                     test: /devcss\.ts$/,
@@ -492,6 +479,22 @@ module.exports = (env, argv) => {
                         name: "decoderWorker.min.wasm",
                         outputPath: ".",
                     },
+                },
+                {
+                    // Ideally we should use the built-in worklet support in Webpack 5 with the syntax
+                    // described in https://github.com/webpack/webpack.js.org/issues/6869. However, this
+                    // doesn't currently appear to work with our public path setup. So we handle this
+                    // with a custom loader instead.
+                    test: /RecorderWorklet\.ts$/,
+                    type: "javascript/auto",
+                    use: [
+                        {
+                            loader: path.resolve("./recorder-worklet-loader.js"),
+                        },
+                        {
+                            loader: "babel-loader",
+                        },
+                    ],
                 },
                 {
                     // This is from the same place as the encoderWorker above, but only needed
