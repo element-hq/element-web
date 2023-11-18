@@ -14,15 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// This import is needed for dead code analysis but not actually used because the
-// built-in worker / worklet handling in Webpack 5 only supports static paths
-// @ts-ignore no-unused-locals
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import mxRecorderWorkletPath from "./RecorderWorklet";
 
 export default function recorderWorkletFactory(context: AudioContext): Promise<void> {
-    // The context.audioWorklet.addModule syntax is required for Webpack 5 to correctly recognise
-    // this as a worklet rather than an asset. This also requires the parser.javascript.worker
-    // configuration described in https://github.com/webpack/webpack.js.org/issues/6869.
-    return context.audioWorklet.addModule(/* webpackChunkName: "recorder.worklet" */ new URL("./RecorderWorklet.ts", import.meta.url));
+    // In future we should be using the built-in worklet support in Webpack 5 with the syntax
+    // described in https://github.com/webpack/webpack.js.org/issues/6869:
+    // addModule(/* webpackChunkName: "recorder.worklet" */ new URL("./RecorderWorklet.ts", import.meta.url));
+    return context.audioWorklet.addModule(mxRecorderWorkletPath);
 }
