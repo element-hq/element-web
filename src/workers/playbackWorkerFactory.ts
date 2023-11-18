@@ -15,5 +15,8 @@ limitations under the License.
 */
 
 export default function factory(options?: WorkerOptions | undefined): Worker {
-    return new Worker(/* webpackChunkName: "playback.worker" */ new URL("./playback.worker.ts", import.meta.url), options);
+    return new Worker(
+        /* webpackChunkName: "playback.worker" */ new URL("./playback.worker.ts", import.meta.url),
+        options,
+    );
 }

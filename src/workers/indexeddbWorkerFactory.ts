@@ -15,5 +15,8 @@ limitations under the License.
 */
 
 export default function factory(options?: WorkerOptions | undefined): Worker {
-    return new Worker(/* webpackChunkName: "indexeddb.worker" */ new URL("./indexeddb.worker.ts", import.meta.url), options);
+    return new Worker(
+        /* webpackChunkName: "indexeddb.worker" */ new URL("./indexeddb.worker.ts", import.meta.url),
+        options,
+    );
 }
