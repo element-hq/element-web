@@ -4,7 +4,7 @@
         "emitDecoratorMetadata": false,
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "module": "commonjs",
+        "module": "es2022",
         "moduleResolution": "node",
         "target": "es2016",
         "noUnusedLocals": true,
@@ -28,6 +28,9 @@
         "./scripts/*.ts"
     ],
     "ts-node": {
-        "files": true
+        "files": true,
+        "moduleTypes": {
+            "*": "cjs"
+        }
     }
 }

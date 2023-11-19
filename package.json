@@ -43,7 +43,7 @@
         "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
         "build:bundle": "webpack --progress --mode production",
         "build:bundle-stats": "webpack --progress --mode production --json > webpack-stats.json",
-        "build:module_system": "tsc --project ./tsconfig.module_system.json && node ./lib/module_system/scripts/install.js",
+        "build:module_system": "ts-node --project ./tsconfig.module_system.json module_system/scripts/install.ts",
         "dist": "scripts/package.sh",
         "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n modules,res,jitsi \"yarn build:module_system\" \"yarn build:res\" \"yarn build:jitsi\" && concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js\"",
         "start:https": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js --https\"",
