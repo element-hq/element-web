@@ -216,8 +216,6 @@ The next stop is element-desktop; kick off a release using [the automation](http
 
 # Deploying
 
-TODO deploying app/staging
-
 We ship the SDKs to npm, this happens as part of the release process.
 We ship Element Web to dockerhub, `*.element.io`, and packages.element.io.
 We ship Element Desktop to packages.element.io.
