@@ -206,10 +206,6 @@ function setupBotClient(
             await cli.startClient();
 
             if (opts.bootstrapCrossSigning) {
-                // XXX: workaround https://github.com/matrix-org/matrix-rust-sdk/issues/2193
-                //   wait for out device list to be available, as a proxy for the device keys having been uploaded.
-                await cli.getCrypto()!.getUserDeviceInfo([credentials.userId]);
-
                 await cli.getCrypto()!.bootstrapCrossSigning({
                     authUploadDeviceSigningKeys: async (func) => {
                         await func({
