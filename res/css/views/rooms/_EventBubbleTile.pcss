@@ -358,6 +358,11 @@ limitations under the License.
             // Keep height equal to text for shield alignment, additional 2px because of 1px padding on text
             height: calc($font-18px + 2px);
         }
+
+        .mx_MPollEndBody {
+            // Prevent the poll end body from exceeding the tile width
+            width: 100%;
+        }
     }
 
     &:not(.mx_EventTile_noBubble) .mx_EventTile_line:not(.mx_EventTile_mediaLine) {

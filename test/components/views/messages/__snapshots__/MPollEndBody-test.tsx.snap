@@ -10,7 +10,9 @@ exports[`<MPollEndBody /> when poll start event does not exist in current timeli
 
 exports[`<MPollEndBody /> when poll start event exists in current timeline renders an ended poll 1`] = `
 <div>
-  <div>
+  <div
+    class="mx_MPollEndBody"
+  >
     <span
       class="mx_Caption"
     >
