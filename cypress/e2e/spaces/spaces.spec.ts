@@ -294,6 +294,11 @@ describe("Spaces", () => {
                 "nested-interactive": {
                     enabled: false,
                 },
+                // Disable this check as it wrongly triggers on the room list container which has
+                // roving tab index elements with automatic scrolling
+                "scrollable-region-focusable": {
+                    enabled: false,
+                },
             },
         };
         cy.checkA11y(undefined, axeOptions);
