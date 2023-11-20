@@ -544,10 +544,7 @@ export default class EventIndex extends EventEmitter {
             const decryptionPromises = matrixEvents
                 .filter((event) => event.isEncrypted())
                 .map((event) => {
-                    return client.decryptEventIfNeeded(event, {
-                        isRetry: true,
-                        emit: false,
-                    });
+                    return client.decryptEventIfNeeded(event, { emit: false });
                 });
 
             // Let us wait for all the events to get decrypted.

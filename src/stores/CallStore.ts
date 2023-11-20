@@ -49,6 +49,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
 
     private constructor() {
         super(defaultDispatcher);
+        this.setMaxListeners(100); // One for each RoomTile
     }
 
     protected async onAction(): Promise<void> {

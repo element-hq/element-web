@@ -435,11 +435,6 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         }
 
         this.matrixClient = createMatrixClient(opts);
-
-        // we're going to add eventlisteners for each matrix event tile, so the
-        // potential number of event listeners is quite high.
-        this.matrixClient.setMaxListeners(500);
-
         this.matrixClient.setGuest(Boolean(creds.guest));
 
         const notifTimelineSet = new EventTimelineSet(undefined, {

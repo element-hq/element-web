@@ -204,10 +204,7 @@ export default abstract class Exporter {
         const decryptionPromises = events
             .filter((event) => event.isEncrypted())
             .map((event) => {
-                return this.room.client.decryptEventIfNeeded(event, {
-                    isRetry: true,
-                    emit: false,
-                });
+                return this.room.client.decryptEventIfNeeded(event, { emit: false });
             });
 
         // Wait for all the events to get decrypted.
