@@ -54,10 +54,16 @@ describe("EditWysiwygComposer", () => {
         );
     };
 
-    beforeAll(() => {
-        // Load the dynamic import
-        customRender(false).unmount();
-    });
+    beforeAll(
+        async () => {
+            // Load the dynamic import
+            const component = customRender(false);
+            await component.findByRole("textbox");
+            component.unmount();
+        },
+        // it can take a while to load the wasm
+        20000,
+    );
 
     it("Should not render the component when not ready", async () => {
         // When
