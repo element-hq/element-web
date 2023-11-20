@@ -28,7 +28,7 @@ import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { createAudioContext } from "./compat";
 import { FixedRollingArray } from "../utils/FixedRollingArray";
 import { clamp } from "../utils/numbers";
-import mxRecorderWorkletPath from "./RecorderWorklet";
+import recorderWorkletFactory from "./recorderWorkletFactory";
 
 const CHANNELS = 1; // stereo isn't important
 export const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
@@ -129,7 +129,8 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             if (this.recorderContext.audioWorklet) {
                 // Set up our worklet. We use this for timing information and waveform analysis: the
                 // web audio API prefers this be done async to avoid holding the main thread with math.
-                await this.recorderContext.audioWorklet.addModule(mxRecorderWorkletPath);
+                await recorderWorkletFactory(this.recorderContext);
+
                 this.recorderWorklet = new AudioWorkletNode(this.recorderContext, WORKLET_NAME);
                 this.recorderSource.connect(this.recorderWorklet);
                 this.recorderWorklet.connect(this.recorderContext.destination);

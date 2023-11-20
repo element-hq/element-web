@@ -23,8 +23,8 @@ export class WorkerManager<Request extends {}, Response> {
     private seq = 0;
     private pendingDeferredMap = new Map<number, IDeferred<Response>>();
 
-    public constructor(WorkerConstructor: { new (): Worker }) {
-        this.worker = new WorkerConstructor();
+    public constructor(worker: Worker) {
+        this.worker = worker;
         this.worker.onmessage = this.onMessage;
     }
 

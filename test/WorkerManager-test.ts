@@ -19,7 +19,7 @@ import { WorkerManager } from "../src/WorkerManager";
 describe("WorkerManager", () => {
     it("should generate consecutive sequence numbers for each call", () => {
         const postMessage = jest.fn();
-        const manager = new WorkerManager(jest.fn(() => ({ postMessage } as unknown as Worker)));
+        const manager = new WorkerManager({ postMessage } as unknown as Worker);
 
         manager.call({ data: "One" });
         manager.call({ data: "Two" });
@@ -37,7 +37,7 @@ describe("WorkerManager", () => {
     it("should support resolving out of order", async () => {
         const postMessage = jest.fn();
         const worker = { postMessage } as unknown as Worker;
-        const manager = new WorkerManager(jest.fn(() => worker));
+        const manager = new WorkerManager(worker);
 
         const oneProm = manager.call({ data: "One" });
         const twoProm = manager.call({ data: "Two" });
