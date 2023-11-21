@@ -33,6 +33,8 @@ import { IWidgetApiRequest } from "matrix-widget-api";
 import { MatrixRTCSession, MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
 // eslint-disable-next-line no-restricted-imports
 import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
+// eslint-disable-next-line no-restricted-imports
+import { ICallNotifyContent } from "matrix-js-sdk/src/matrixrtc/types";
 
 import type EventEmitter from "events";
 import type { ClientWidgetApi } from "matrix-widget-api";
@@ -51,6 +53,7 @@ import { getCurrentLanguage } from "../languageHandler";
 import { FontWatcher } from "../settings/watchers/FontWatcher";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
+import { getFunctionalMembers } from "../utils/room/getFunctionalMembers";
 
 const TIMEOUT_MS = 16000;
 
@@ -758,10 +761,30 @@ export class ElementCall extends Call {
             SettingsStore.getValue("feature_video_rooms") &&
             SettingsStore.getValue("feature_element_call_video_rooms") &&
             room.isCallRoom();
-
-        console.log("Intend is ", isVideoRoom ? "VideoRoom" : "Prompt", " TODO, handle intent appropriately");
         ElementCall.createOrGetCallWidget(room.roomId, room.client);
         WidgetStore.instance.emit(UPDATE_EVENT, null);
+
+        // Send Call notify
+
+        const existingRoomCallMembers = MatrixRTCSession.callMembershipsForRoom(room).filter(
+            // filter all memberships where the application is m.call and the call_id is ""
+            (m) => m.application === "m.call" && m.callId === "",
+        );
+
+        // We only want to ring in rooms that have less or equal to NOTIFY_MEMBER_LIMIT participants. For really large rooms we don't want to ring.
+        const NOTIFY_MEMBER_LIMIT = 15;
+        const memberCount = getFunctionalMembers(room).length;
+        if (!isVideoRoom && existingRoomCallMembers.length == 0 && memberCount <= NOTIFY_MEMBER_LIMIT) {
+            // send ringing event
+            const content: ICallNotifyContent = {
+                "application": "m.call",
+                "m.mentions": { user_ids: [], room: true },
+                "notify_type": memberCount == 2 ? "ring" : "notify",
+                "call_id": "",
+            };
+
+            await room.client.sendEvent(room.roomId, EventType.CallNotify, content);
+        }
     }
 
     protected async performConnection(

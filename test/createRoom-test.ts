@@ -16,6 +16,8 @@ limitations under the License.
 
 import { mocked, Mocked } from "jest-mock";
 import { CryptoApi, MatrixClient, Device, Preset, RoomType } from "matrix-js-sdk/src/matrix";
+// eslint-disable-next-line no-restricted-imports
+import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
 
 import { stubClient, setupAsyncStoreWithClient, mockPlatformPeg, getMockClientWithEventEmitter } from "./test-utils";
 import { MatrixClientPeg } from "../src/MatrixClientPeg";
@@ -74,6 +76,9 @@ describe("createRoom", () => {
     it("sets up Element video rooms correctly", async () => {
         const userId = client.getUserId()!;
         const createCallSpy = jest.spyOn(ElementCall, "create");
+        const callMembershipSpy = jest.spyOn(MatrixRTCSession, "callMembershipsForRoom");
+        callMembershipSpy.mockReturnValue([]);
+
         const roomId = await createRoom(client, { roomType: RoomType.UnstableCall });
 
         const userPower = client.createRoom.mock.calls[0][0].power_level_content_override?.users?.[userId];

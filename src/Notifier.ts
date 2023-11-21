@@ -28,6 +28,7 @@ import {
     SyncStateData,
     IRoomTimelineData,
     M_LOCATION,
+    EventType,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
@@ -54,7 +55,6 @@ import { SdkContextClass } from "./contexts/SDKContext";
 import { localNotificationsAreSilenced, createLocalNotificationSettingsIfNeeded } from "./utils/notifications";
 import { getIncomingCallToastKey, IncomingCallToast } from "./toasts/IncomingCallToast";
 import ToastStore from "./stores/ToastStore";
-import { ElementCall } from "./models/Call";
 import { VoiceBroadcastChunkEventType, VoiceBroadcastInfoEventType } from "./voice-broadcast";
 import { getSenderName } from "./utils/event/getSenderName";
 import { stripPlainReply } from "./utils/Reply";
@@ -516,13 +516,27 @@ class NotifierClass {
      * Some events require special handling such as showing in-app toasts
      */
     private performCustomEventHandling(ev: MatrixEvent): void {
-        if (ElementCall.CALL_EVENT_TYPE.names.includes(ev.getType()) && SettingsStore.getValue("feature_group_calls")) {
+        if (
+            EventType.CallNotify === ev.getType() &&
+            SettingsStore.getValue("feature_group_calls") &&
+            (ev.getAge() ?? 0) < 10000
+        ) {
+            const content = ev.getContent();
+            const roomId = ev.getRoomId();
+            if (typeof content.call_id !== "string") {
+                logger.warn("Received malformatted CallNotify event. Did not contain 'call_id' of type 'string'");
+                return;
+            }
+            if (!roomId) {
+                logger.warn("Could not get roomId for CallNotify event");
+                return;
+            }
             ToastStore.sharedInstance().addOrReplaceToast({
-                key: getIncomingCallToastKey(ev.getStateKey()!),
+                key: getIncomingCallToastKey(content.call_id, roomId),
                 priority: 100,
                 component: IncomingCallToast,
                 bodyClassName: "mx_IncomingCallToast",
-                props: { callEvent: ev },
+                props: { notifyEvent: ev },
             });
         }
     }
