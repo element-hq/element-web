@@ -82,14 +82,18 @@ jobs:
             - uses: actions/setup-node@v3
               with:
                   cache: "yarn"
+                  cache-dependency-path: matrix-react-sdk/yarn.lock
 
             - name: Install dependencies
+              working-directory: matrix-react-sdk
               run: yarn install --frozen-lockfile
 
             - name: Install Playwright browsers
+              working-directory: matrix-react-sdk
               run: yarn playwright install --with-deps
 
             - name: Run Playwright tests
+              working-directory: matrix-react-sdk
               run: yarn playwright test --shard ${{ matrix.ci_node_index }}/${{ matrix.ci_node_total }}
 
             - name: Upload blob report to GitHub Actions Artifacts
@@ -97,7 +101,7 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                   name: all-blob-reports
-                  path: blob-report
+                  path: matrix-react-sdk/blob-report
                   retention-days: 1
 
     report:
