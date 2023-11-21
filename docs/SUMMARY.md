@@ -9,6 +9,7 @@
 
 # Setup
 
+-   [Install](install.md)
 -   [Config](config.md)
 -   [Custom home page](custom-home.md)
 -   [Kubernetes](kubernetes.md)
