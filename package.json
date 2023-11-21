@@ -37,15 +37,14 @@
         "clean": "rimraf lib webapp",
         "build": "yarn clean && yarn build:genfiles && yarn build:bundle",
         "build-stats": "yarn clean && yarn build:genfiles && yarn build:bundle-stats",
-        "build:jitsi": "ts-node scripts/build-jitsi.ts",
         "build:res": "ts-node scripts/copy-res.ts",
-        "build:genfiles": "yarn build:res && yarn build:jitsi && yarn build:module_system",
+        "build:genfiles": "yarn build:res && yarn build:module_system",
         "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
         "build:bundle": "webpack --progress --mode production",
         "build:bundle-stats": "webpack --progress --mode production --json > webpack-stats.json",
         "build:module_system": "ts-node --project ./tsconfig.module_system.json module_system/scripts/install.ts",
         "dist": "scripts/package.sh",
-        "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n modules,res,jitsi \"yarn build:module_system\" \"yarn build:res\" \"yarn build:jitsi\" && concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js\"",
+        "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n modules,res \"yarn build:module_system\" \"yarn build:res\" && concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js\"",
         "start:https": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js --https\"",
         "start:res": "ts-node scripts/copy-res.ts -w",
         "start:js": "webpack serve --output-path webapp --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js --mode development",
@@ -63,7 +62,8 @@
         "test": "jest",
         "coverage": "yarn test --coverage",
         "analyse:unused-exports": "ts-node ./scripts/analyse_unused_exports.ts",
-        "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp"
+        "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp",
+        "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js"
     },
     "resolutions": {
         "@types/react-dom": "17.0.21",

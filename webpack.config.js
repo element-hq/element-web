@@ -714,6 +714,7 @@ module.exports = (env, argv) => {
             new CopyWebpackPlugin({
                 patterns: [
                     "res/apple-app-site-association",
+                    "res/jitsi_external_api.min.js",
                     "res/manifest.json",
                     "res/sw.js",
                     "res/welcome.html",
