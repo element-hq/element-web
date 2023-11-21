@@ -16,21 +16,37 @@ limitations under the License.
 */
 
 import React from "react";
-import { act, render, RenderResult, screen } from "@testing-library/react";
+import { act, fireEvent, render, RenderResult, screen } from "@testing-library/react";
 import { Room, MatrixClient, RoomState, RoomMember, User, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { compare } from "matrix-js-sdk/src/utils";
+import { mocked, MockedObject } from "jest-mock";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import * as TestUtils from "../../../test-utils";
 import MemberList from "../../../../src/components/views/rooms/MemberList";
 import { SDKContext } from "../../../../src/contexts/SDKContext";
 import { TestSdkContext } from "../../../TestSdkContext";
+import {
+    filterConsole,
+    flushPromises,
+    getMockClientWithEventEmitter,
+    mockClientMethodsUser,
+} from "../../../test-utils";
+import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
+import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
+
+jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
+    shouldShowComponent: jest.fn(),
+}));
 
 function generateRoomId() {
     return "!" + Math.random().toString().slice(2, 10) + ":domain";
 }
 
 describe("MemberList", () => {
+    filterConsole(
+        "Age for event was not available, using `now - origin_server_ts` as a fallback. If the device clock is not correct issues might occur.",
+    );
     function createRoom(opts = {}) {
         const room = new Room(generateRoomId(), client, client.getUserId()!);
         if (opts) {
@@ -330,6 +346,94 @@ describe("MemberList", () => {
                 }),
             );
             expect(await screen.findByText(/User's server unreachable/)).toBeInTheDocument();
+        });
+
+        describe("Invite button", () => {
+            const roomId = "!room:server.org";
+            let client!: MockedObject<MatrixClient>;
+            let room!: Room;
+
+            beforeEach(function () {
+                mocked(shouldShowComponent).mockReturnValue(true);
+                client = getMockClientWithEventEmitter({
+                    ...mockClientMethodsUser(),
+                    getRoom: jest.fn(),
+                    hasLazyLoadMembersEnabled: jest.fn(),
+                });
+                room = new Room(roomId, client, client.getSafeUserId());
+                client.getRoom.mockReturnValue(room);
+            });
+
+            afterEach(() => {
+                jest.restoreAllMocks();
+            });
+
+            const renderComponent = () => {
+                const context = new TestSdkContext();
+                context.client = client;
+                render(
+                    <SDKContext.Provider value={context}>
+                        <MemberList
+                            searchQuery=""
+                            onClose={jest.fn()}
+                            onSearchQueryChanged={jest.fn()}
+                            roomId={room.roomId}
+                        />
+                    </SDKContext.Provider>,
+                );
+            };
+
+            it("does not render invite button when current user is not a member", async () => {
+                renderComponent();
+                await flushPromises();
+
+                expect(screen.queryByText("Invite to this room")).not.toBeInTheDocument();
+            });
+
+            it("does not render invite button UI customisation hides invites", async () => {
+                mocked(shouldShowComponent).mockReturnValue(false);
+                renderComponent();
+                await flushPromises();
+
+                expect(screen.queryByText("Invite to this room")).not.toBeInTheDocument();
+            });
+
+            it("renders disabled invite button when current user is a member but does not have rights to invite", async () => {
+                jest.spyOn(room, "getMyMembership").mockReturnValue("join");
+                jest.spyOn(room, "canInvite").mockReturnValue(false);
+
+                renderComponent();
+                await flushPromises();
+
+                // button rendered but disabled
+                expect(screen.getByText("Invite to this room")).toBeDisabled();
+            });
+
+            it("renders enabled invite button when current user is a member and has rights to invite", async () => {
+                jest.spyOn(room, "getMyMembership").mockReturnValue("join");
+                jest.spyOn(room, "canInvite").mockReturnValue(true);
+
+                renderComponent();
+                await flushPromises();
+
+                expect(screen.getByText("Invite to this room")).not.toBeDisabled();
+            });
+
+            it("opens room inviter on button click", async () => {
+                jest.spyOn(defaultDispatcher, "dispatch");
+                jest.spyOn(room, "getMyMembership").mockReturnValue("join");
+                jest.spyOn(room, "canInvite").mockReturnValue(true);
+
+                renderComponent();
+                await flushPromises();
+
+                fireEvent.click(screen.getByText("Invite to this room"));
+
+                expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                    action: "view_invite",
+                    roomId,
+                });
+            });
         });
     });
 });

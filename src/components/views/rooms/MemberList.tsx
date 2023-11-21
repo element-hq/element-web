@@ -28,7 +28,6 @@ import {
     RoomStateEvent,
     User,
     UserEvent,
-    JoinRule,
     EventType,
     ClientEvent,
 } from "matrix-js-sdk/src/matrix";
@@ -54,6 +53,8 @@ import { shouldShowComponent } from "../../../customisations/helpers/UIComponent
 import { UIComponent } from "../../../settings/UIFeature";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { SDKContext } from "../../../contexts/SDKContext";
+import { canInviteTo } from "../../../utils/room/canInviteTo";
+import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -132,9 +133,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(this.props.roomId);
 
-        return (
-            !!room?.canInvite(cli.getSafeUserId()) || !!(room?.isSpaceRoom() && room.getJoinRule() === JoinRule.Public)
-        );
+        return !!room && canInviteTo(room);
     }
 
     private getMembersState(invitedMembers: Array<RoomMember>, joinedMembers: Array<RoomMember>): IState {
@@ -365,32 +364,25 @@ export default class MemberList extends React.Component<IProps, IState> {
         let inviteButton: JSX.Element | undefined;
 
         if (room?.getMyMembership() === "join" && shouldShowComponent(UIComponent.InviteUsers)) {
-            let inviteButtonText = _t("room|invite_this_room");
-            if (room.isSpaceRoom()) {
-                inviteButtonText = _t("space|invite_this_space");
-            }
+            const inviteButtonText = room.isSpaceRoom() ? _t("space|invite_this_space") : _t("room|invite_this_room");
+
+            const button = (
+                <Button
+                    size="sm"
+                    kind="secondary"
+                    className="mx_MemberList_invite"
+                    onClick={this.onInviteButtonClick}
+                    disabled={!this.state.canInvite}
+                >
+                    <UserAddIcon width="1em" height="1em" />
+                    {inviteButtonText}
+                </Button>
+            );
 
             if (this.state.canInvite) {
-                inviteButton = (
-                    <Button
-                        size="sm"
-                        kind="secondary"
-                        className="mx_MemberList_invite"
-                        onClick={this.onInviteButtonClick}
-                    >
-                        <UserAddIcon width="1em" height="1em" />
-                        {inviteButtonText}
-                    </Button>
-                );
+                inviteButton = button;
             } else {
-                inviteButton = (
-                    <Tooltip label={_t("member_list|invite_button_no_perms_tooltip")}>
-                        <Button size="sm" kind="secondary" className="mx_MemberList_invite" onClick={() => {}}>
-                            <UserAddIcon width="1em" height="1em" />
-                            {inviteButtonText}
-                        </Button>
-                    </Tooltip>
-                );
+                inviteButton = <Tooltip label={_t("member_list|invite_button_no_perms_tooltip")}>{button}</Tooltip>;
             }
         }
 
@@ -454,15 +446,9 @@ export default class MemberList extends React.Component<IProps, IState> {
     private onInviteButtonClick = (ev: ButtonEvent): void => {
         PosthogTrackers.trackInteraction("WebRightPanelMemberListInviteButton", ev);
 
-        if (MatrixClientPeg.safeGet().isGuest()) {
-            dis.dispatch({ action: "require_registration" });
-            return;
-        }
+        const cli = MatrixClientPeg.safeGet();
+        const room = cli.getRoom(this.props.roomId)!;
 
-        // open the room inviter
-        dis.dispatch({
-            action: "view_invite",
-            roomId: this.props.roomId,
-        });
+        inviteToRoom(room);
     };
 }
