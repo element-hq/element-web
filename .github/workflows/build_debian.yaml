@@ -33,10 +33,11 @@ jobs:
               run: |
                   mkdir -p debian/tmp/DEBIAN
                   find debian -maxdepth 1 -type f -exec cp "{}" debian/tmp/DEBIAN/ \;
-                  mkdir -p debian/tmp/usr/share/element-web/
+                  mkdir -p debian/tmp/usr/share/element-web/ debian/tmp/etc/element-web/
 
                   tar -xf "element-$VERSION.tar.gz" -C debian/tmp/usr/share/element-web --strip-components=1 --no-same-owner --no-same-permissions
-                  mv debian/tmp/usr/share/element-web/config{.sample,}.json
+                  mv debian/tmp/usr/share/element-web/config.sample.json debian/tmp/etc/element-web/config.json
+                  ln -s /etc/element-web/config.json debian/tmp/usr/share/element-web/config.json
 
             - name: Write changelog
               run: |
