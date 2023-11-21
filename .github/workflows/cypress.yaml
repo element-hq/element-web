@@ -156,6 +156,7 @@ jobs:
                   KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
                   KNAPSACK_PRO_TEST_FILE_PATTERN: cypress/e2e/**/*.spec.ts
                   KNAPSACK_PRO_BRANCH: ${{ github.event.workflow_run.head_branch }}
+                  KNAPSACK_PRO_COMMIT_HASH: ${{ github.event.workflow_run.head_sha }}
 
                   # Use existing chromium rather than downloading another
                   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
