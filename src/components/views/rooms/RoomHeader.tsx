@@ -50,6 +50,7 @@ import { formatCount } from "../../../utils/FormattingUtils";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { Linkify, topicToHtml } from "../../../HtmlUtils";
 import PosthogTrackers from "../../../PosthogTrackers";
+import { VideoRoomChatButton } from "./RoomHeader/VideoRoomChatButton";
 
 /**
  * A helper to transform a notification color to the what the Compound Icon Button
@@ -214,6 +215,9 @@ export default function RoomHeader({
                         </IconButton>
                     </Tooltip>
                 )}
+
+                {/* Renders nothing when room is not a video room */}
+                <VideoRoomChatButton room={room} />
 
                 <Tooltip label={_t("common|threads")}>
                     <IconButton

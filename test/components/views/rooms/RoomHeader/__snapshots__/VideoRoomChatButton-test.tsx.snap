@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<VideoRoomChatButton /> renders button when room is a video room 1`] = `
+<button
+  aria-label="Chat"
+  class="_icon-button_1qjaf_17"
+  data-state="closed"
+  style="--cpd-icon-button-size: 32px;"
+>
+  <div />
+</button>
+`;
+
+exports[`<VideoRoomChatButton /> renders button with an unread marker when room is unread 1`] = `
+<button
+  aria-label="Chat"
+  class="_icon-button_1qjaf_17"
+  data-indicator="default"
+  data-state="closed"
+  style="--cpd-icon-button-size: 32px;"
+>
+  <div />
+</button>
+`;
