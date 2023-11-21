@@ -1,3 +1,23 @@
+Changes in [3.85.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.85.0) (2023-11-21)
+=====================================================================================================
+## ✨ Features
+
+* Update room summary card header ([#11823](https://github.com/matrix-org/matrix-react-sdk/pull/11823)). Contributed by @germain-gg.
+* Add feature flag for disabling encryption in Element Call ([#11837](https://github.com/matrix-org/matrix-react-sdk/pull/11837)). Contributed by @toger5.
+* Adapt the rendering of extra icons in the room header ([#11835](https://github.com/matrix-org/matrix-react-sdk/pull/11835)). Contributed by @charlynguyen.
+* Implement new unreachable state and fix broken string ref  ([#11748](https://github.com/matrix-org/matrix-react-sdk/pull/11748)). Contributed by @MidhunSureshR.
+* Allow adding extra icons to the room header ([#11799](https://github.com/matrix-org/matrix-react-sdk/pull/11799)). Contributed by @charlynguyen.
+
+## 🐛 Bug Fixes
+
+* Room header: do not collapse avatar or facepile ([#11866](https://github.com/matrix-org/matrix-react-sdk/pull/11866)). Contributed by @kerryarchibald.
+* New right panel: fix button alignment in memberlist ([#11861](https://github.com/matrix-org/matrix-react-sdk/pull/11861)). Contributed by @kerryarchibald.
+* Use the correct video call icon variant ([#11859](https://github.com/matrix-org/matrix-react-sdk/pull/11859)). Contributed by @robintown.
+* fix broken warning icon ([#11862](https://github.com/matrix-org/matrix-react-sdk/pull/11862)). Contributed by @ara4n.
+* Fix rightpanel hiding scrollbar ([#11831](https://github.com/matrix-org/matrix-react-sdk/pull/11831)). Contributed by @kerryarchibald.
+* Switch to updating presence via /sync calls instead of PUT /presence ([#11824](https://github.com/matrix-org/matrix-react-sdk/pull/11824)). Contributed by @t3chguy.
+
+
 Changes in [3.84.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.84.1) (2023-11-13)
 =====================================================================================================
 
