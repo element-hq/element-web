@@ -7,7 +7,7 @@ on:
         paths:
             - .github/labels.yml
 jobs:
-    call-sync:
+    sync-labels:
         uses: vector-im/element-meta/.github/workflows/sync-labels.yml@develop
         with:
             LABELS: |
