@@ -1,3 +1,18 @@
+Changes in [1.11.50](https://github.com/vector-im/element-web/releases/tag/v1.11.50) (2023-11-21)
+=================================================================================================
+## ✨ Features
+
+* Ship element-web as a debian package ([#26533](https://github.com/vector-im/element-web/pull/26533)). Contributed by @t3chguy.
+
+* Update room summary card header ([#11823](https://github.com/matrix-org/matrix-react-sdk/pull/11823)). Contributed by @germain-gg.
+* Add feature flag for disabling encryption in Element Call ([#11837](https://github.com/matrix-org/matrix-react-sdk/pull/11837)). Contributed by @toger5.
+* Adapt the rendering of extra icons in the room header ([#11835](https://github.com/matrix-org/matrix-react-sdk/pull/11835)). Contributed by @charlynguyen.
+* Implement new unreachable state and fix broken string ref  ([#11748](https://github.com/matrix-org/matrix-react-sdk/pull/11748)). Contributed by @MidhunSureshR.
+* Allow adding extra icons to the room header ([#11799](https://github.com/matrix-org/matrix-react-sdk/pull/11799)). Contributed by @charlynguyen.
+
+
+
+
 Changes in [1.11.49](https://github.com/vector-im/element-web/releases/tag/v1.11.49) (2023-11-13)
 =================================================================================================
 

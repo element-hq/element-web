@@ -1730,10 +1730,10 @@
     emojibase "^15.0.0"
     emojibase-data "^15.0.0"
 
-"@matrix-org/matrix-sdk-crypto-wasm@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-2.2.0.tgz#7c60afe01915281a6b71502821bc8e01afbfa70d"
-  integrity sha512-txmvaTiZpVV0/kWCRcE7tZvRESCEc1ynLJDVh9OUsFlaXfl13c7qdD3E6IJEJ8YiPMIn+PHogdfBZsO84reaMg==
+"@matrix-org/matrix-sdk-crypto-wasm@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-3.0.1.tgz#56a0376f8a389264bcf4d5325b378a71f18b7664"
+  integrity sha512-r0PBfUKlLHm67+fpIV21netX5+DujbY2XjJy7JUGJ55oW4XWBNbSf9vElfaQkrdt/iDscL/8I5PoD5lCuVW6zA==
 
 "@matrix-org/matrix-wysiwyg@2.4.1":
   version "2.4.1"
@@ -2025,6 +2025,14 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-slot" "1.0.2"
+
+"@radix-ui/react-separator@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-separator/-/react-separator-1.0.3.tgz#be5a931a543d5726336b112f465f58585c04c8aa"
+  integrity sha512-itYmTy/kokS21aiV5+Z56MZB54KrhPgn6eHDKkFeOLR34HMN2s8PaN47qZZAGnvupcjxHaFZnW4pQEh0BvvVuw==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/react-primitive" "1.0.3"
 
 "@radix-ui/react-slot@1.0.2":
   version "1.0.2"
@@ -2541,9 +2549,9 @@
   integrity sha512-2JwWnHK9H+wUZNorf2Zr6ves96WHoWDJIftkcxPKsS7Djta6Zu519LarhRNljPXkpsZR2ZMwNCPeW7omW07BJw==
 
 "@types/events@^3.0.0":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.2.tgz#c9b18152fdac34e924260532762255e34ef1d491"
-  integrity sha512-v4Mr60wJuF069iZZCdY5DKhfj0l6eXNJtbSM/oMDNdRLoBEUsktmKnswkz0X3OAic5W8Qy/YU6owKE4A66Y46A==
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.3.tgz#a8ef894305af28d1fc6d2dfdfc98e899591ea529"
+  integrity sha512-trOc4AAUThEz9hapPtSd7wf5tiQKvTtu5b371UxXdTuqzIh0ArcRspRP0i0Viu+LXstIQ1z96t1nsPxT9ol01g==
 
 "@types/express-serve-static-core@*", "@types/express-serve-static-core@^4.17.33":
   version "4.17.36"
@@ -2947,19 +2955,20 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vector-im/compound-design-tokens@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-0.0.6.tgz#dd25364e947d0f06b404f9bfba69daa0f7cda998"
-  integrity sha512-Jij7Vfzed7UL+AfVK4ykuJhufbzWu/aaEYn9swOS7Rhy9wJFp35CaUY32Du51lwg7Rkt3OwSWXSYeHKcZAsEEA==
+"@vector-im/compound-design-tokens@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-0.0.7.tgz#b0716dd4782dd95900491e45b003b58f93748024"
+  integrity sha512-RCQc6qr+s8cp4xKbNi/I3OL43uPCH+N4L9vYf0r+qwRy4WCKdI4QL0TBTV4bOo8hF49z8e+BgU5ZIu5TVQXNMQ==
   dependencies:
     svg2vectordrawable "^2.9.1"
 
-"@vector-im/compound-web@0.5.4":
-  version "0.5.4"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-0.5.4.tgz#a99b346fe8de34a6f8bcbf9e1040ce1d79615dbc"
-  integrity sha512-w4Nwzid5Y89Dt9GaxKO+kWPTjSitLpkmoAjMYHVUajNMCfUxluzu4eOgjPRCpubPH5lZUB6/95y43wOI+pEC1Q==
+"@vector-im/compound-web@0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-0.6.3.tgz#e5d025a3e5de1d94e721b0f6a5127dfa90968a2b"
+  integrity sha512-Jw63AWRltUC/AH4f+0rxdeWgf/qin7fc9E3ZqtdI10tGAOz9YdHadeGg4aGTKjUgv8/J0GvF8VnEfVq9kRAbag==
   dependencies:
     "@radix-ui/react-form" "^0.0.3"
+    "@radix-ui/react-separator" "^1.0.3"
     "@radix-ui/react-tooltip" "^1.0.6"
     classnames "^2.3.2"
     graphemer "^1.4.0"
@@ -8241,13 +8250,13 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-js-sdk@30.0.1:
-  version "30.0.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-30.0.1.tgz#33a1fb2d9a9a8875f51f48a1b3124c1e82457472"
-  integrity sha512-/yefRQ7e8xU0Aox8w6lYUDjYdK+9Wmpz59K1SJZX3E1KE1SUvIo4rkPkGojN3RkRFqXXBBP4ciJiy5vH6OodAg==
+matrix-js-sdk@30.1.0:
+  version "30.1.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-30.1.0.tgz#5ab8caf933ddc646ffd1076c5ce6b5d48376d392"
+  integrity sha512-QhYAMD6kD6vE3DLsbEnPVLmvk8LQrGIMvVEnQGOkBq3eUjg0r49gZEtDeRbCfOVwFO1hoTfxIgm6CfqG0l5AAg==
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^2.2.0"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^3.0.1"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"
@@ -8268,10 +8277,10 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.84.1:
-  version "3.84.1"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.84.1.tgz#2e915c3b6253a2157dadcde33deed1240a1acb12"
-  integrity sha512-yVL+vevxQxxZwN1gcOjEqz+I0RN6Ou6dXMxkO1zjTQdplJyVhOmePM0P8gH13ZLpsnLEc0ut9tFphPQdpoRypw==
+matrix-react-sdk@3.85.0:
+  version "3.85.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.85.0.tgz#f58b27f80809503f20d7d5b794a54f8b237260cf"
+  integrity sha512-nU5uN/W3CoXInayJ6bmGLk4vzSyl6ALLlMNGc4ZoU4WoJn9Ek+Pa8fG9m49z4/Yr0lyk2eGSA0UMH8MxL0+h0Q==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.8.0"
@@ -8282,8 +8291,8 @@ matrix-react-sdk@3.84.1:
     "@sentry/browser" "^7.0.0"
     "@sentry/tracing" "^7.0.0"
     "@testing-library/react-hooks" "^8.0.1"
-    "@vector-im/compound-design-tokens" "^0.0.6"
-    "@vector-im/compound-web" "0.5.4"
+    "@vector-im/compound-design-tokens" "^0.0.7"
+    "@vector-im/compound-web" "0.6.3"
     "@zxcvbn-ts/core" "^3.0.4"
     "@zxcvbn-ts/language-common" "^3.0.4"
     "@zxcvbn-ts/language-en" "^3.0.2"
@@ -8314,7 +8323,7 @@ matrix-react-sdk@3.84.1:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "30.0.1"
+    matrix-js-sdk "30.1.0"
     matrix-widget-api "^1.5.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
@@ -8915,11 +8924,11 @@ obuf@^1.0.0, obuf@^1.1.2:
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
 oidc-client-ts@^2.2.4:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/oidc-client-ts/-/oidc-client-ts-2.3.0.tgz#43c90f1f0cc3be2e4ede38b8c68642ba00bfa8f6"
-  integrity sha512-7RUKU+TJFQo+4X9R50IGJAIDF18uRBaFXyZn4VVCfwmwbSUhKcdDnw4zgeut3uEXkiD3NqURq+d88sDPxjf1FA==
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/oidc-client-ts/-/oidc-client-ts-2.4.0.tgz#764c8a33de542026e2798de9849ce8049047d7e5"
+  integrity sha512-WijhkTrlXK2VvgGoakWJiBdfIsVGz6CFzgjNNqZU1hPKV2kyeEaJgLs7RwuiSp2WhLfWBQuLvr2SxVlZnk3N1w==
   dependencies:
-    crypto-js "^4.1.1"
+    crypto-js "^4.2.0"
     jwt-decode "^3.1.2"
 
 on-finished@2.4.1:
