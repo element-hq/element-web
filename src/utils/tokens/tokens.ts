@@ -126,20 +126,21 @@ export async function persistTokenInStorage(
 
     if (pickleKey) {
         let encryptedToken: IEncryptedPayload | undefined;
-        try {
-            if (!token) {
-                throw new Error("No token: not attempting encryption");
+        if (token) {
+            try {
+                // try to encrypt the access token using the pickle key
+                const encrKey = await pickleKeyToAesKey(pickleKey);
+                encryptedToken = await encryptAES(token, encrKey, initializationVector);
+                encrKey.fill(0);
+            } catch (e) {
+                // This is likely due to the browser not having WebCrypto or somesuch.
+                // Warn about it, but fall back to storing the unencrypted token.
+                logger.warn(`Could not encrypt token for ${storageKey}`, e);
             }
-            // try to encrypt the access token using the pickle key
-            const encrKey = await pickleKeyToAesKey(pickleKey);
-            encryptedToken = await encryptAES(token, encrKey, initializationVector);
-            encrKey.fill(0);
-        } catch (e) {
-            logger.warn("Could not encrypt access token", e);
         }
         try {
-            // save either the encrypted access token, or the plain access
-            // token if we were unable to encrypt (e.g. if the browser doesn't
+            // Save either the encrypted access token, or the plain access
+            // token if there is no token or we were unable to encrypt (e.g. if the browser doesn't
             // have WebCrypto).
             await StorageManager.idbSave("account", storageKey, encryptedToken || token);
         } catch (e) {
