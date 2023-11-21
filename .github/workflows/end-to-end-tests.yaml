@@ -1,0 +1,142 @@
+# Triggers after the layered build has finished, taking the artifact and running Playwright on it
+name: End to End Tests
+on:
+    workflow_run:
+        workflows: ["Element Web - Build"]
+        types:
+            - completed
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.run_id }}
+    cancel-in-progress: ${{ github.event.workflow_run.event == 'pull_request' }}
+
+jobs:
+    prepare:
+        name: Prepare
+        if: github.event.workflow_run.conclusion == 'success'
+        runs-on: ubuntu-latest
+        permissions:
+            statuses: write
+        steps:
+            # We create the status here and then update it to success/failure in the `report` stage
+            # This provides an easy link to this workflow_run from the PR before the tests are done.
+            - uses: Sibz/github-status-action@faaa4d96fecf273bd762985e0e7f9f933c774918 # v1
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: pending
+                  context: ${{ github.workflow }} / end-to-end-tests
+                  sha: ${{ github.event.workflow_run.head_sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+    tests:
+        name: "Run Tests"
+        needs: prepare
+        runs-on: ubuntu-latest
+        permissions:
+            actions: read
+            issues: read
+            pull-requests: read
+        environment: EndToEndTests
+        strategy:
+            fail-fast: false
+            matrix:
+                # Run 2 instances in Parallel
+                ci_node_total: [2]
+                ci_node_index: [0, 1]
+        steps:
+            - uses: browser-actions/setup-chrome@803ef6dfb4fdf22089c9563225d95e4a515820a0 # v1
+            - run: echo "BROWSER_PATH=$(which chrome)" >> $GITHUB_ENV
+
+            # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
+            # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
+            - name: 📥 Download artifact
+              uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615 # v2
+              with:
+                  run_id: ${{ github.event.workflow_run.id }}
+                  name: previewbuild
+                  path: webapp
+
+            # The workflow_run.head_sha is the sha of the head commit but the element-web was built using a simulated
+            # merge commit - https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
+            # so use the sha from the tarball for the checkout of the tests
+            # to make sure we get a matching set of code and tests.
+            - name: Grab sha from webapp
+              id: sha
+              run: |
+                  echo "sha=$(cat webapp/sha)" >> $GITHUB_OUTPUT
+
+            - uses: actions/checkout@v4
+              with:
+                  # XXX: We're checking out untrusted code in a secure context
+                  # We need to be careful to not trust anything this code outputs/may do
+                  #
+                  # Note that (in the absence of a `react-sdk-repository` input),
+                  # we check out from the default repository, which is (for this workflow) the
+                  # *target* repository for the pull request.
+                  #
+                  ref: ${{ steps.sha.outputs.sha }}
+                  persist-credentials: false
+                  path: matrix-react-sdk
+                  repository: ${{ inputs.react-sdk-repository || github.repository }}
+
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Install Playwright browsers
+              run: yarn playwright install --with-deps
+
+            - name: Run Playwright tests
+              run: yarn playwright test --shard ${{ matrix.ci_node_index }}/${{ matrix.ci_node_total }}
+
+            - name: Upload blob report to GitHub Actions Artifacts
+              if: always()
+              uses: actions/upload-artifact@v3
+              with:
+                  name: all-blob-reports
+                  path: blob-report
+                  retention-days: 1
+
+    report:
+        name: Report results
+        needs: tests
+        runs-on: ubuntu-latest
+        if: always()
+        permissions:
+            statuses: write
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Download blob reports from GitHub Actions Artifacts
+              uses: actions/download-artifact@v3
+              with:
+                  name: all-blob-reports
+                  path: all-blob-reports
+
+            - name: Merge into HTML Report
+              run: yarn playwright merge-reports --reporter=html,github ./all-blob-reports
+
+            - name: Upload HTML report
+              uses: actions/upload-artifact@v3
+              with:
+                  name: html-report--attempt-${{ github.run_attempt }}
+                  path: playwright-report
+                  retention-days: 14
+
+            - uses: Sibz/github-status-action@faaa4d96fecf273bd762985e0e7f9f933c774918 # v1
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: ${{ needs.tests.result == 'success' && 'success' || 'failure' }}
+                  context: ${{ github.workflow }} / end-to-end-tests
+                  sha: ${{ github.event.workflow_run.head_sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

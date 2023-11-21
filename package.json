@@ -53,6 +53,8 @@
         "test": "jest",
         "test:cypress": "cypress run",
         "test:cypress:open": "cypress open",
+        "test:playwright": "playwright test",
+        "test:playwright:open": "yarn test:playwright --ui",
         "coverage": "yarn test --coverage"
     },
     "resolutions": {
@@ -146,6 +148,7 @@
         "@peculiar/webcrypto": "^1.4.3",
         "@percy/cli": "^1.11.0",
         "@percy/cypress": "^3.1.2",
+        "@playwright/test": "^1.40.0",
         "@testing-library/cypress": "^9.0.0",
         "@testing-library/dom": "^9.0.0",
         "@testing-library/jest-dom": "^6.0.0",
