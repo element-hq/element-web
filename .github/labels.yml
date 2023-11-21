@@ -126,7 +126,7 @@
 - name: A-SSO
   color: "bfd4f2"
 - name: A-Status-Bar
-  description: "Unsent messages warning and "Connectivity to the server has been lost""
+  description: "Unsent messages warning and 'Connectivity to the server has been lost'"
   color: "bfd4f2"
 - name: A-Storage
   description: "Storage layer of the app, including IndexedDB, local storage, etc."
