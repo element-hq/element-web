@@ -1056,7 +1056,8 @@
         "unknown_error_code": "unknown error code",
         "update_power_level": "Failed to change power level"
     },
-    "error_app_open_in_another_tab": "%(brand)s has been opened in another tab.",
+    "error_app_open_in_another_tab": "Switch to the other tab to connect to %(brand)s. This tab can now be closed.",
+    "error_app_open_in_another_tab_title": "%(brand)s is connected in another tab",
     "error_app_opened_in_another_window": "%(brand)s is open in another window. Click \"%(label)s\" to use %(brand)s here and disconnect the other window.",
     "error_database_closed_description": "This may be caused by having the app open in multiple tabs or due to clearing browser data.",
     "error_database_closed_title": "Database unexpectedly closed",

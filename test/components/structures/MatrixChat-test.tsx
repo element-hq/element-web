@@ -1325,7 +1325,7 @@ describe("<MatrixChat />", () => {
                 await flushPromises();
 
                 // now we should see the error page
-                rendered.getByText("Test has been opened in another tab.");
+                rendered.getByText("Test is connected in another tab");
 
                 // let initCrypto complete, and check we don't get a modal
                 initCryptoCompleteDefer.resolve();

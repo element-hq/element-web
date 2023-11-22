@@ -6,10 +6,10 @@ exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second t
     class="mx_SessionLockStolenView mx_SplashPage"
   >
     <h1>
-      Error
+      Test is connected in another tab
     </h1>
     <h2>
-      Test has been opened in another tab.
+      Switch to the other tab to connect to Test. This tab can now be closed.
     </h2>
   </main>
 </div>
@@ -22,10 +22,10 @@ exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second t
       class="mx_SessionLockStolenView mx_SplashPage"
     >
       <h1>
-        Error
+        Test is connected in another tab
       </h1>
       <h2>
-        Test has been opened in another tab.
+        Switch to the other tab to connect to Test. This tab can now be closed.
       </h2>
     </main>
   </div>
@@ -38,10 +38,10 @@ exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second t
     class="mx_SessionLockStolenView mx_SplashPage"
   >
     <h1>
-      Error
+      Test is connected in another tab
     </h1>
     <h2>
-      Test has been opened in another tab.
+      Switch to the other tab to connect to Test. This tab can now be closed.
     </h2>
   </main>
 </div>
@@ -53,10 +53,10 @@ exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second t
     class="mx_SessionLockStolenView mx_SplashPage"
   >
     <h1>
-      Error
+      Test is connected in another tab
     </h1>
     <h2>
-      Test has been opened in another tab.
+      Switch to the other tab to connect to Test. This tab can now be closed.
     </h2>
   </main>
 </div>
