@@ -17,15 +17,7 @@ limitations under the License.
 import EventEmitter from "events";
 import { mocked } from "jest-mock";
 import { waitFor } from "@testing-library/react";
-import {
-    RoomType,
-    Room,
-    RoomEvent,
-    MatrixEvent,
-    RoomStateEvent,
-    PendingEventOrdering,
-    UNSTABLE_ELEMENT_FUNCTIONAL_USERS,
-} from "matrix-js-sdk/src/matrix";
+import { RoomType, Room, RoomEvent, MatrixEvent, RoomStateEvent, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
 import { Widget } from "matrix-widget-api";
 // eslint-disable-next-line no-restricted-imports
 import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
@@ -991,20 +983,11 @@ describe("ElementCall", () => {
         });
     });
     describe("create call", () => {
-        function setFunctionalMembers(members: string[]) {
-            room.currentState.setStateEvents([
-                mkEvent({
-                    event: true,
-                    type: UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name,
-                    user: "@user:example.com",
-                    room: room.roomId,
-                    skey: "",
-                    content: { service_members: members },
-                }),
-            ]);
+        function setRoomMembers(memberIds: string[]) {
+            jest.spyOn(room, "getJoinedMembers").mockReturnValue(memberIds.map((id) => ({ userId: id } as RoomMember)));
         }
         beforeEach(async () => {
-            setFunctionalMembers(["@user:example.com", "@user2:example.com", "@user4:example.com"]);
+            setRoomMembers(["@user:example.com", "@user2:example.com", "@user4:example.com"]);
         });
         it("sends notify event on create in a room with more than two members", async () => {
             const sendEventSpy = jest.spyOn(room.client, "sendEvent");
@@ -1017,7 +1000,7 @@ describe("ElementCall", () => {
             });
         });
         it("sends ring on create in a DM (two participants) room", async () => {
-            setFunctionalMembers(["@user:example.com", "@user2:example.com"]);
+            setRoomMembers(["@user:example.com", "@user2:example.com"]);
 
             const sendEventSpy = jest.spyOn(room.client, "sendEvent");
             await ElementCall.create(room);

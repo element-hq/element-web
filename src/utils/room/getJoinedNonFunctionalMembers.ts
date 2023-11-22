@@ -19,7 +19,9 @@ import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { getFunctionalMembers } from "./getFunctionalMembers";
 
 /**
- * Returns all room members that are non-functional (bots etc.).
+ * Returns all room members that are non-functional (all actual room members).
+ *
+ * A functional user is a user that is not a real user, but a bot, assistant, etc.
  */
 export const getJoinedNonFunctionalMembers = (room: Room): RoomMember[] => {
     const functionalMembers = getFunctionalMembers(room);
