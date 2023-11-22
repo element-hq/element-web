@@ -29,7 +29,7 @@ jobs:
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
     tests:
-        name: "Run Tests ${{ matrix.ci_node_index }}/${{ matrix.ci_node_total }}"
+        name: "Run Tests ${{ matrix.runner }}/${{ strategy.job-total }}"
         needs: prepare
         runs-on: ubuntu-latest
         permissions:
@@ -41,8 +41,7 @@ jobs:
             fail-fast: false
             matrix:
                 # Run 2 instances in Parallel
-                ci_node_index: [0, 1]
-                ci_node_total: [2]
+                runner: [1, 2]
         steps:
             - uses: browser-actions/setup-chrome@803ef6dfb4fdf22089c9563225d95e4a515820a0 # v1
             - run: echo "BROWSER_PATH=$(which chrome)" >> $GITHUB_ENV
@@ -95,7 +94,7 @@ jobs:
             - name: Run Playwright tests
               uses: coactions/setup-xvfb@b6b4fcfb9f5a895edadc3bc76318fae0ac17c8b3 # v1
               with:
-                  run: yarn playwright test --shard ${{ matrix.ci_node_index }}/${{ matrix.ci_node_total }}
+                  run: yarn playwright test --shard ${{ matrix.runner }}/${{ strategy.job-total }}
                   working-directory: matrix-react-sdk
 
             - name: Upload blob report to GitHub Actions Artifacts
