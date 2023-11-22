@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-
 import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
@@ -35,15 +33,8 @@ interface IComposerInsertMentionPayload extends IBaseComposerInsertPayload {
     userId: string;
 }
 
-interface IComposerInsertQuotePayload extends IBaseComposerInsertPayload {
-    event: MatrixEvent;
-}
-
 interface IComposerInsertPlaintextPayload extends IBaseComposerInsertPayload {
     text: string;
 }
 
-export type ComposerInsertPayload =
-    | IComposerInsertMentionPayload
-    | IComposerInsertQuotePayload
-    | IComposerInsertPlaintextPayload;
+export type ComposerInsertPayload = IComposerInsertMentionPayload | IComposerInsertPlaintextPayload;

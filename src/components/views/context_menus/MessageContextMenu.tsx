@@ -49,7 +49,6 @@ import ViewSource from "../../structures/ViewSource";
 import { createRedactEventDialog } from "../dialogs/ConfirmRedactDialog";
 import ShareDialog from "../dialogs/ShareDialog";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
-import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import EndPollDialog from "../dialogs/EndPollDialog";
 import { isPollEnded } from "../messages/MPollBody";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
@@ -286,15 +285,6 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         this.closeMenu();
     };
 
-    private onQuoteClick = (): void => {
-        dis.dispatch<ComposerInsertPayload>({
-            action: Action.ComposerInsert,
-            event: this.props.mxEvent,
-            timelineRenderingType: this.context.timelineRenderingType,
-        });
-        this.closeMenu();
-    };
-
     private onShareClick = (e: ButtonEvent): void => {
         e.preventDefault();
         Modal.createDialog(ShareDialog, {
@@ -524,18 +514,6 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let quoteButton: JSX.Element | undefined;
-        if (eventTileOps && canSendMessages) {
-            // this event is rendered using TextualBody
-            quoteButton = (
-                <IconizedContextMenuOption
-                    iconClassName="mx_MessageContextMenu_iconQuote"
-                    label={_t("action|quote")}
-                    onClick={this.onQuoteClick}
-                />
-            );
-        }
-
         // Bridges can provide a 'external_url' to link back to the source.
         let externalURLButton: JSX.Element | undefined;
         if (
@@ -709,7 +687,6 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 {viewInRoomButton}
                 {openInMapSiteButton}
                 {endPollButton}
-                {quoteButton}
                 {forwardButton}
                 {pinButton}
                 {permalinkButton}
