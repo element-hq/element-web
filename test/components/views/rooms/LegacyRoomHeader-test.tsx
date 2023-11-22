@@ -347,6 +347,8 @@ describe("LegacyRoomHeader", () => {
             placeCallSpy.mockClear();
             fireEvent.click(screen.getByRole("button", { name: "Video call" }));
             await act(() => Promise.resolve()); // Allow effects to settle
+            fireEvent.click(screen.getByRole("menuitem", { name: "Legacy video call" }));
+            await act(() => Promise.resolve()); // Allow effects to settle
             expect(placeCallSpy).toHaveBeenCalledWith(room.roomId, CallType.Video);
         },
     );

@@ -1933,6 +1933,7 @@
             "show_widgets_button": "Show Widgets",
             "video_call_button_ec": "Video call (%(brand)s)",
             "video_call_button_jitsi": "Video call (Jitsi)",
+            "video_call_button_legacy": "Legacy video call",
             "video_call_ec_change_layout": "Change layout",
             "video_call_ec_layout_freedom": "Freedom",
             "video_call_ec_layout_spotlight": "Spotlight",

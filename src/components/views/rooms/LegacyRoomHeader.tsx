@@ -126,7 +126,7 @@ interface VideoCallButtonProps {
     room: Room;
     busy: boolean;
     setBusy: (value: boolean) => void;
-    behavior: DisabledWithReason | "legacy_or_jitsi" | "element" | "jitsi_or_element";
+    behavior: DisabledWithReason | "legacy_or_jitsi" | "element" | "jitsi_or_element" | "legacy_or_element";
 }
 
 /**
@@ -178,7 +178,7 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
                 disabled: false,
             };
         } else {
-            // behavior === "jitsi_or_element"
+            // behavior === "jitsi_or_element" | "legacy_or_element"
             return {
                 onClick: async (ev: ButtonEvent): Promise<void> => {
                     ev.preventDefault();
@@ -215,7 +215,11 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
             <IconizedContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
                 <IconizedContextMenuOptionList>
                     <IconizedContextMenuOption
-                        label={_t("room|header|video_call_button_jitsi")}
+                        label={
+                            behavior == "legacy_or_element"
+                                ? _t("room|header|video_call_button_legacy")
+                                : _t("room|header|video_call_button_jitsi")
+                        }
                         onClick={onJitsiClick}
                     />
                     <IconizedContextMenuOption
@@ -319,7 +323,7 @@ const CallButtons: FC<CallButtonsProps> = ({ room }) => {
             return (
                 <>
                     {makeVoiceCallButton("legacy_or_jitsi")}
-                    {makeVideoCallButton("legacy_or_jitsi")}
+                    {makeVideoCallButton("legacy_or_element")}
                 </>
             );
         } else if (mayEditWidgets) {
