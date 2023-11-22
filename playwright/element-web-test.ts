@@ -35,15 +35,30 @@ const CONFIG_JSON = {
     map_style_url: "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx",
 };
 
-export const test = base.extend<{
-    startHomeserverOpts: StartHomeserverOpts | string;
-    homeserver: HomeserverInstance;
-}>({
-    page: async ({ context, page }, use) => {
-        await context.route(`http://localhost:8080/config.json*`, async (route) => {
-            await route.fulfill({ json: CONFIG_JSON });
-        });
+export type TestOptions = {
+    crypto: "legacy" | "rust";
+};
 
+export const test = base.extend<
+    TestOptions & {
+        config: typeof CONFIG_JSON;
+        startHomeserverOpts: StartHomeserverOpts | string;
+        homeserver: HomeserverInstance;
+    }
+>({
+    crypto: ["legacy", { option: true }],
+    config: CONFIG_JSON,
+    page: async ({ context, page, config, crypto }, use) => {
+        await context.route(`http://localhost:8080/config.json*`, async (route) => {
+            const json = { ...config };
+            if (crypto === "rust") {
+                json["features"] = {
+                    ...json["features"],
+                    feature_rust_crypto: true,
+                };
+            }
+            await route.fulfill({ json });
+        });
         await use(page);
     },
 

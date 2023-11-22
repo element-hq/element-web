@@ -14,11 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import type { PlaywrightTestConfig } from "@playwright/test";
+import { defineConfig } from "@playwright/test";
+
+import { TestOptions } from "./playwright/element-web-test";
 
 const baseURL = process.env["BASE_URL"] ?? "http://localhost:8080";
 
-const config: PlaywrightTestConfig = {
+export default defineConfig<TestOptions>({
     use: {
         headless: false,
         viewport: { width: 1280, height: 720 },
@@ -35,5 +37,14 @@ const config: PlaywrightTestConfig = {
     outputDir: "playwright/test-results",
     workers: 1,
     reporter: process.env.CI ? "blob" : [["html", { outputFolder: "playwright/html-report" }]],
-};
-export default config;
+    projects: [
+        {
+            name: "Legacy Crypto",
+            use: { crypto: "legacy" },
+        },
+        {
+            name: "Rust Crypto",
+            use: { crypto: "rust" },
+        },
+    ],
+});
