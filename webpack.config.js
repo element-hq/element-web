@@ -198,7 +198,17 @@ module.exports = (env, argv) => {
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
             minimize: enableMinification,
-            minimizer: enableMinification ? [new TerserPlugin({}), new CssMinimizerPlugin()] : [],
+            minimizer: enableMinification
+                ? [
+                      new TerserPlugin({
+                          // Already minified and includes an auto-generated license comment
+                          // that the plugin would otherwise pointlessly extract into a separate
+                          // file. We add the actual license using CopyWebpackPlugin below.
+                          exclude: "jitsi_external_api.min.js",
+                      }),
+                      new CssMinimizerPlugin(),
+                  ]
+                : [],
 
             // Set the value of `process.env.NODE_ENV` for libraries like React
             // See also https://v4.webpack.js.org/configuration/optimization/#optimizationnodeenv
@@ -714,6 +724,8 @@ module.exports = (env, argv) => {
             new CopyWebpackPlugin({
                 patterns: [
                     "res/apple-app-site-association",
+                    "res/jitsi_external_api.min.js",
+                    "res/jitsi_external_api.min.js.LICENSE.txt",
                     "res/manifest.json",
                     "res/sw.js",
                     "res/welcome.html",
