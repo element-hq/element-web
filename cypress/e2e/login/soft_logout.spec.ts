@@ -33,6 +33,7 @@ describe("Soft logout", () => {
 
     afterEach(() => {
         cy.stopHomeserver(homeserver);
+        cy.task("stopOAuthServer");
     });
 
     describe("with password user", () => {
