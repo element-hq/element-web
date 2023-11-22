@@ -18,11 +18,11 @@ limitations under the License.
 */
 
 import BasePlatform from "matrix-react-sdk/src/BasePlatform";
-import { _t } from "matrix-react-sdk/src/languageHandler";
 
 import type { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { getVectorConfig } from "../getconfig";
 import Favicon from "../../favicon";
+import { _t } from "../../languageHandler";
 
 /**
  * Vector-specific extensions to the BasePlatform template
@@ -85,6 +85,6 @@ export default abstract class VectorBasePlatform extends BasePlatform {
      * device Vector is running on
      */
     public getDefaultDeviceDisplayName(): string {
-        return _t("Unknown device");
+        return _t("unknown_device");
     }
 }

@@ -54,8 +54,8 @@ One of the following options **must** be supplied:
    being optional.
 
 If both `default_server_config` and `default_server_name` are used, Element will try to look up the connection
-infomation using `.well-known`, and if that fails, take `default_server_config` as the homeserver connection
-infomation.
+information using `.well-known`, and if that fails, take `default_server_config` as the homeserver connection
+information.
 
 ## Labs flags
 
@@ -139,7 +139,7 @@ complete re-branding/private labeling, a more personalised experience can be ach
    configuration found in the well-known location is used instead.
 10. `welcome_user_id`: An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created).
 11. `custom_translations_url`: An optional URL to allow overriding of translatable strings. The JSON file must be in a format of
-    `{"affected string": {"languageCode": "new string"}}`. See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
+    `{"affected|translation|key": {"languageCode": "new string"}}`. See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
 12. `branding`: Options for configuring various assets used within the app. Described in more detail down below.
 13. `embedded_pages`: Further optional URLs for various assets used within the app. Described in more detail down below.
 14. `disable_3pid_login`: When `false` (default), **enables** the options to log in with email address or phone number. Set to
@@ -355,6 +355,8 @@ If you run your own rageshake server to collect bug reports, the following optio
 2. `uisi_autorageshake_app`: If a user has enabled the "automatically send debug logs on decryption errors" flag, this option will be sent
    alongside the rageshake so the rageshake server can filter them by app name. By default, this will be `element-auto-uisi`
    (in contrast to other rageshakes submitted by the app, which use `element-web`).
+3. `existing_issues_url`: URL for where to find existing issues.
+4. `new_issue_url`: URL for where to submit new issues.
 
 If you would like to use [Sentry](https://sentry.io/) for rageshake data, add a `sentry` object to your config with the following values:
 

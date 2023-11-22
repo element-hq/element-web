@@ -1,0 +1,11 @@
+name: Localazy Upload
+on:
+    push:
+        branches: [develop]
+        paths:
+            - "src/i18n/strings/en_EN.json"
+jobs:
+    upload:
+        uses: matrix-org/matrix-web-i18n/.github/workflows/localazy_upload.yaml@main
+        secrets:
+            LOCALAZY_WRITE_KEY: ${{ secrets.LOCALAZY_WRITE_KEY }}

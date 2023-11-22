@@ -6,10 +6,11 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackInjectPreload = require("@principalstudio/html-webpack-inject-preload");
 const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
 const crypto = require("crypto");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 // XXX: mangle Crypto::createHash to replace md4 with sha256, output.hashFunction is insufficient as multiple bits
 // of webpack hardcode md4. The proper fix it to upgrade to webpack 5.
@@ -80,7 +81,15 @@ function parseOverridesToReplacements(overrides) {
             // because the input is effectively defined by the person running the build, we don't
             // need to do anything special to protect against regex overrunning, etc.
             new RegExp(oldPath.replace(/\//g, "[\\/\\\\]").replace(/\./g, "\\.")),
-            path.resolve(__dirname, newPath),
+            function (resource) {
+                resource.request = path.resolve(__dirname, newPath);
+                resource.createData.resource = path.resolve(__dirname, newPath);
+                // Starting with Webpack 5 we also need to set the context as otherwise replacing
+                // files in e.g. matrix-react-sdk with files from element-web will try to resolve
+                // them within matrix-react-sdk (https://github.com/webpack/webpack/issues/17716)
+                resource.context = path.dirname(resource.request);
+                resource.createData.context = path.dirname(resource.createData.resource);
+            },
         );
     });
 }
@@ -143,13 +152,8 @@ module.exports = (env, argv) => {
 
     return {
         ...development,
-        node: {
-            // Mock out the NodeFS module: The opus decoder imports this wrongly.
-            fs: "empty",
-            net: "empty",
-            tls: "empty",
-            crypto: "empty",
-        },
+
+        bail: true,
 
         entry: {
             bundle: "./src/vector/index.ts",
@@ -171,20 +175,30 @@ module.exports = (env, argv) => {
                         enforce: true,
                         // Do not add `chunks: 'all'` here because you'll break the app entry point.
                     },
+
+                    // put the unhomoglyph data in its own file. It contains
+                    // magic characters which mess up line numbers in the
+                    // javascript debugger.
+                    unhomoglyph_data: {
+                        name: "unhomoglyph_data",
+                        test: /unhomoglyph\/data\.json$/,
+                        enforce: true,
+                        chunks: "all",
+                    },
+
                     default: {
                         reuseExistingChunk: true,
                     },
                 },
             },
 
-            // This fixes duplicate files showing up in chrome with sourcemaps enabled.
-            // See https://github.com/webpack/webpack/issues/7128 for more info.
-            namedModules: false,
+            // Readable IDs for better debugging
+            moduleIds: "named",
 
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
             minimize: enableMinification,
-            minimizer: enableMinification ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
+            minimizer: enableMinification ? [new TerserPlugin({}), new CssMinimizerPlugin()] : [],
 
             // Set the value of `process.env.NODE_ENV` for libraries like React
             // See also https://v4.webpack.js.org/configuration/optimization/#optimizationnodeenv
@@ -216,12 +230,30 @@ module.exports = (env, argv) => {
                 // Same goes for js/react-sdk - we don't need two copies.
                 "matrix-js-sdk": path.resolve(__dirname, "node_modules/matrix-js-sdk"),
                 "matrix-react-sdk": path.resolve(__dirname, "node_modules/matrix-react-sdk"),
+                "@matrix-org/react-sdk-module-api": path.resolve(
+                    __dirname,
+                    "node_modules/@matrix-org/react-sdk-module-api",
+                ),
                 // and matrix-events-sdk & matrix-widget-api
                 "matrix-events-sdk": path.resolve(__dirname, "node_modules/matrix-events-sdk"),
                 "matrix-widget-api": path.resolve(__dirname, "node_modules/matrix-widget-api"),
 
                 // Define a variable so the i18n stuff can load
                 "$webapp": path.resolve(__dirname, "webapp"),
+            },
+            fallback: {
+                // Mock out the NodeFS module: The opus decoder imports this wrongly.
+                "fs": false,
+                "net": false,
+                "tls": false,
+                "crypto": false,
+
+                // Polyfill needed by counterpart
+                "util": require.resolve("util/"),
+                // Polyfill needed by matrix-js-sdk/src/crypto
+                "buffer": require.resolve("buffer/"),
+                // Polyfill needed by sentry
+                "process/browser": require.resolve("process/browser"),
             },
         },
 
@@ -250,15 +282,6 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
-                    test: /\.worker\.ts$/,
-                    loader: "worker-loader",
-                    options: {
-                        // Prevent bundling workers since CSP forbids loading them
-                        // from another origin.
-                        filename: "[hash].worker.js",
-                    },
-                },
-                {
                     test: /\.(ts|js)x?$/,
                     include: (f) => {
                         // our own source needs babel-ing
@@ -270,6 +293,12 @@ module.exports = (env, argv) => {
                         // include node modules inside these modules, so we add 'src'.
                         if (f.startsWith(reactSdkSrcDir)) return true;
                         if (f.startsWith(jsSdkSrcDir)) return true;
+
+                        // Some of the syntax in this package is not understood by
+                        // either webpack or our babel setup.
+                        // When we do get to upgrade our current setup, this should
+                        // probably be removed.
+                        if (f.includes(path.join("@vector-im", "compound-web"))) return true;
 
                         // but we can't run all of our dependencies through babel (many of them still
                         // use module.exports which breaks if babel injects an 'include' for its
@@ -427,22 +456,17 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
-                    // Special case the recorder worklet as it can't end up HMR'd, but the worker-loader
-                    // isn't good enough for us. Note that the worklet-loader is listed as "do not use",
-                    // however it seems to work fine for our purposes.
+                    // Ideally we should use the built-in worklet support in Webpack 5 with the syntax
+                    // described in https://github.com/webpack/webpack.js.org/issues/6869. However, this
+                    // doesn't currently appear to work with our public path setup. So we handle this
+                    // with a custom loader instead.
                     test: /RecorderWorklet\.ts$/,
                     type: "javascript/auto",
                     use: [
-                        // executed last -> first, for some reason.
                         {
-                            loader: "worklet-loader",
-                            options: {
-                                // Override name so we know what it is in the output.
-                                name: "recorder-worklet.[hash:7].js",
-                            },
+                            loader: path.resolve("./recorder-worklet-loader.js"),
                         },
                         {
-                            // TS -> JS because the worklet-loader won't do this for us.
                             loader: "babel-loader",
                         },
                     ],
@@ -486,7 +510,7 @@ module.exports = (env, argv) => {
                 },
                 {
                     // cache-bust languages.json file placed in
-                    // element-web/webapp/i18n during build by copy-res.js
+                    // element-web/webapp/i18n during build by copy-res.ts
                     test: /\.*languages.json$/,
                     type: "javascript/auto",
                     loader: "file-loader",
@@ -514,6 +538,12 @@ module.exports = (env, argv) => {
                                         removeDimensions: true,
                                     },
                                 },
+                                /**
+                                 * Forwards the React ref to the root SVG element
+                                 * Useful when using things like `asChild` in
+                                 * radix-ui
+                                 */
+                                ref: true,
                                 esModule: false,
                                 name: "[name].[hash:7].[ext]",
                                 outputPath: getAssetOutputPath,
@@ -678,7 +708,32 @@ module.exports = (env, argv) => {
                         console.log(`::warning title=Sentry error::${err.message}`);
                     },
                 }),
+
             new webpack.EnvironmentPlugin(["VERSION"]),
+
+            new CopyWebpackPlugin({
+                patterns: [
+                    "res/apple-app-site-association",
+                    "res/manifest.json",
+                    "res/sw.js",
+                    "res/welcome.html",
+                    { from: "welcome/**", context: path.resolve(__dirname, "res") },
+                    { from: "themes/**", context: path.resolve(__dirname, "res") },
+                    { from: "vector-icons/**", context: path.resolve(__dirname, "res") },
+                    { from: "decoder-ring/**", context: path.resolve(__dirname, "res") },
+                    { from: "media/**", context: path.resolve(__dirname, "node_modules/matrix-react-sdk/res/") },
+                    "node_modules/@matrix-org/olm/olm_legacy.js",
+                    { from: "config.json", noErrorOnMissing: true },
+                    "contribute.json",
+                ],
+            }),
+
+            // Automatically load buffer & process modules as we use them without explicitly
+            // importing them
+            new webpack.ProvidePlugin({
+                Buffer: ["buffer", "Buffer"],
+                process: "process/browser",
+            }),
         ].filter(Boolean),
 
         output: {
@@ -698,14 +753,32 @@ module.exports = (env, argv) => {
 
         // configuration for the webpack-dev-server
         devServer: {
-            // serve unwebpacked assets from webapp.
-            contentBase: ["./webapp"],
+            client: {
+                overlay: {
+                    // Only show overlay on build errors as anything more can get annoying quickly
+                    errors: true,
+                    warnings: false,
+                    runtimeErrors: false,
+                },
+            },
 
-            // Only output errors, warnings, or new compilations.
-            // This hides the massive list of modules.
-            stats: "minimal",
-            hotOnly: true,
-            inline: true,
+            static: {
+                // Where to serve static assets from
+                directory: "./webapp",
+            },
+
+            devMiddleware: {
+                // Only output errors, warnings, or new compilations.
+                // This hides the massive list of modules.
+                stats: "minimal",
+            },
+
+            // Enable Hot Module Replacement without page refresh as a fallback in
+            // case of build failures
+            hot: "only",
+
+            // Disable host check
+            allowedHosts: "all",
         },
     };
 };
@@ -719,14 +792,36 @@ module.exports = (env, argv) => {
  * @return {string} The returned paths will look like `img/warning.1234567.svg`.
  */
 function getAssetOutputPath(url, resourcePath) {
+    const isKaTeX = resourcePath.includes("KaTeX");
     // `res` is the parent dir for our own assets in various layers
     // `dist` is the parent dir for KaTeX assets
     const prefix = /^.*[/\\](dist|res)[/\\]/;
-    if (!resourcePath.match(prefix)) {
+
+    /**
+     * Only needed for https://github.com/vector-im/element-web/pull/15939
+     * If keeping this, we are not able to load external assets such as SVG
+     * images coming from @vector-im/compound-web.
+     */
+    if (isKaTeX && !resourcePath.match(prefix)) {
         throw new Error(`Unexpected asset path: ${resourcePath}`);
     }
     let outputDir = path.dirname(resourcePath).replace(prefix, "");
-    if (resourcePath.includes("KaTeX")) {
+
+    /**
+     * Imports from Compound are "absolute", we need to strip out the prefix
+     * coming before the npm package name.
+     *
+     * This logic is scoped to compound packages for now as they are the only
+     * package that imports external assets. This might need to be made more
+     * generic in the future
+     */
+    const compoundImportsPrefix = /@vector-im(?:\\|\/)compound-(.*?)(?:\\|\/)/;
+    const compoundMatch = outputDir.match(compoundImportsPrefix);
+    if (compoundMatch) {
+        outputDir = outputDir.substring(compoundMatch.index + compoundMatch[0].length);
+    }
+
+    if (isKaTeX) {
         // Add a clearly named directory segment, rather than leaving the KaTeX
         // assets loose in each asset type directory.
         outputDir = path.join(outputDir, "KaTeX");

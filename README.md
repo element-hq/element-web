@@ -1,7 +1,7 @@
 [![Chat](https://img.shields.io/matrix/element-web:matrix.org?logo=matrix)](https://matrix.to/#/#element-web:matrix.org)
 ![Tests](https://github.com/vector-im/element-web/actions/workflows/tests.yaml/badge.svg)
 ![Static Analysis](https://github.com/vector-im/element-web/actions/workflows/static_analysis.yaml/badge.svg)
-[![Weblate](https://translate.element.io/widgets/element-web/-/element-web/svg-badge.svg)](https://translate.element.io/engage/element-web/)
+[![Localazy](https://img.shields.io/endpoint?url=https%3A%2F%2Fconnect.localazy.com%2Fstatus%2Felement-web%2Fdata%3Fcontent%3Dall%26title%3Dlocalazy%26logo%3Dtrue)](https://localazy.com/p/element-web)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=element-web)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=coverage)](https://sonarcloud.io/summary/new_code?id=element-web)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-web)
@@ -41,29 +41,9 @@ The easiest way to test Element is to just use the hosted copy at <https://app.e
 The `develop` branch is continuously deployed to <https://develop.element.io>
 for those who like living dangerously.
 
-To host your own copy of Element, the quickest bet is to use a pre-built
-released version of Element:
+To host your own instance of Element see [Installing Element Web](docs/install.md).
 
-1. Download the latest version from <https://github.com/vector-im/element-web/releases>
-1. Untar the tarball on your web server
-1. Move (or symlink) the `element-x.x.x` directory to an appropriate name
-1. Configure the correct caching headers in your webserver (see below)
-1. Configure the app by copying `config.sample.json` to `config.json` and
-   modifying it. See the [configuration docs](docs/config.md) for details.
-1. Enter the URL into your browser and log into Element!
-
-Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
-at <https://packages.riot.im/element-release-key.asc>.
-
-Note that for the security of your chats will need to serve Element
-over HTTPS. Major browsers also do not allow you to use VoIP/video
-chats over HTTP, as WebRTC is only usable over HTTPS.
-There are some exceptions like when using localhost, which is
-considered a [secure context](https://developer.mozilla.org/docs/Web/Security/Secure_Contexts)
-and thus allowed.
-
-To install Element as a desktop application, see [Running as a desktop
-app](#running-as-a-desktop-app) below.
+To install Element as a desktop application, see [Running as a desktop app](#running-as-a-desktop-app) below.
 
 # Important Security Notes
 
@@ -161,61 +141,7 @@ To build it yourself, follow the instructions at <https://github.com/vector-im/e
 
 Many thanks to @aviraldg for the initial work on the Electron integration.
 
-Other options for running as a desktop app:
-
--   @asdf:matrix.org points out that you can use nativefier and it just works(tm)
-
-```bash
-yarn global add nativefier
-nativefier https://app.element.io/
-```
-
-The [configuration docs](docs/config.md#desktop-app-configuration) show how to
-override the desktop app's default settings if desired.
-
-# Running from Docker
-
-The Docker image can be used to serve element-web as a web server. The easiest way to use
-it is to use the prebuilt image:
-
-```bash
-docker run -p 80:80 vectorim/element-web
-```
-
-To supply your own custom `config.json`, map a volume to `/app/config.json`. For example,
-if your custom config was located at `/etc/element-web/config.json` then your Docker command
-would be:
-
-```bash
-docker run -p 80:80 -v /etc/element-web/config.json:/app/config.json vectorim/element-web
-```
-
-To build the image yourself:
-
-```bash
-git clone https://github.com/vector-im/element-web.git element-web
-cd element-web
-git checkout master
-docker build .
-```
-
-If you're building a custom branch, or want to use the develop branch, check out the appropriate
-element-web branch and then run:
-
-```bash
-docker build -t \
-    --build-arg USE_CUSTOM_SDKS=true \
-    --build-arg REACT_SDK_REPO="https://github.com/matrix-org/matrix-react-sdk.git" \
-    --build-arg REACT_SDK_BRANCH="develop" \
-    --build-arg JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git" \
-    --build-arg JS_SDK_BRANCH="develop" \
-    .
-```
-
-# Running in Kubernetes
-
-The provided element-web docker image can also be run from within a Kubernetes cluster.
-See the [Kubernetes example](docs/kubernetes.md) for more details.
+The [configuration docs](docs/config.md#desktop-app-configuration) show how to override the desktop app's default settings if desired.
 
 # config.json
 
@@ -387,8 +313,6 @@ See [matrix-react-sdk](https://github.com/matrix-org/matrix-react-sdk/#end-to-en
 To add a new translation, head to the [translating doc](docs/translating.md).
 
 For a developer guide, see the [translating dev doc](docs/translating-dev.md).
-
-[<img src="https://translate.element.io/widgets/element-web/-/multi-auto.svg" alt="translationsstatus" width="340">](https://translate.element.io/engage/element-web/?utm_source=widget)
 
 # Triaging issues
 

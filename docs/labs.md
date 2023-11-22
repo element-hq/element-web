@@ -77,15 +77,6 @@ For some sample themes, check out [aaronraimist/element-themes](https://github.c
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
 
-## Right panel stays open (`feature_right_panel_default_open`)
-
-This is an experimental default open right panel mode as a quick fix for those
-who prefer to have the right panel open consistently across rooms.
-
-If no right panel state is known for the room or it was closed on the last room
-visit, it will default to the room member list. Otherwise, the saved card last
-used in that room is shown.
-
 ## Live location sharing (`feature_location_share_live`) [In Development]
 
 Enables sharing your current location to the timeline, with live updates.
@@ -106,17 +97,33 @@ This feature allows users to place and join native [MSC3401](https://github.com/
 
 If you're enabling this at the deployment level, you may also want to reference the docs for the `element_call` config section.
 
+## Disable per-sender encryption for Element Call (`feature_disable_call_per_sender_encryption`)
+
+The default for embedded Element Call in Element Web is per-participant encryption.
+This labs flag disables encryption for embedded Element Call in encrypted rooms.
+
+Under the hood this stops Element Web from adding the `perParticipantE2EE` flag for the Element Call widget url.
+
+This is useful while we experiment with encryption and to make calling compatible with platforms that don't use encryption yet.
+
 ## Rich text in room topics (`feature_html_topic`) [In Development]
 
 Enables rendering of MD / HTML in room topics.
-
-## Exploring public spaces (`feature_exploring_public_spaces`)
-
-Enables exploring public spaces in the new search dialog. Requires the server to
-have [MSC3827](https://github.com/matrix-org/matrix-spec-proposals/pull/3827) enabled.
 
 ## Use the Rust cryptography implementation (`feature_rust_crypto`) [In Development]
 
 Configures Element to use a new cryptography implementation based on the [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk).
 
-This setting is (currently) _sticky_ to a user's session: it only takes effect when the user logs in to a new session. Likewise, even after disabling the setting in `config.json`, the Rust implemention will remain in use until users log out.
+This setting is (currently) _sticky_ to a user's session: it only takes effect when the user logs in to a new session. Likewise, even after disabling the setting in `config.json`, the Rust implementation will remain in use until users log out.
+
+## New room header & details (`feature_new_room_decoration_ui`) [In Development]
+
+Refactors visually the room header and room sidebar
+
+## Enable the notifications panel in the room header (`feature_notifications`)
+
+Unreliable in encrypted rooms.
+
+## Knock rooms (`feature_ask_to_join`) [In Development]
+
+Enables knock feature for rooms. This allows users to ask to join a room.

@@ -1,29 +1,37 @@
 {
-    "Dismiss": "Απόρριψη",
-    "Unknown device": "Άγνωστη συσκευή",
-    "Welcome to Element": "Καλώς ήλθατε στο Element",
-    "Sign In": "Σύνδεση",
-    "Create Account": "Δημιουργία Λογαριασμού",
-    "The message from the parser is: %(message)s": "Το μήνυμα από τον αναλυτή είναι: %(message)s",
-    "Invalid JSON": "Μη έγκυρο JSON",
-    "Unexpected error preparing the app. See console for details.": "Απρόοπτο σφάλμα κατά την προετοιμασία της εφαρμογής. Δείτε το τερματικό για λεπτομέρειες.",
-    "Invalid configuration: no default server specified.": "Μη έγκυρη ρύθμιση παραμέτρων: δεν έχει οριστεί προκαθορισμένος διακομιστής.",
-    "Explore rooms": "Εξερευνήστε δωμάτια",
-    "Open": "Άνοιγμα",
-    "Go to your browser to complete Sign In": "Μεταβείτε στο πρόγραμμα περιήγησής σας για να ολοκληρώσετε τη σύνδεση",
-    "Powered by Matrix": "Με την υποστήριξη του Matrix",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Παρακαλούμε εγκαταστήστε <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ή <safariLink>Safari</safariLink> για καλύτερη εμπειρία χρήσης.",
-    "Your Element is misconfigured": "Το Element σας δεν εχει ρυθμιστεί σωστά",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Η ρύθμιση του Element περιέχει μη έγκυρο JSON. Διορθώστε το πρόβλημα και φορτώστε ξανά τη σελίδα.",
-    "Unable to load config file: please refresh the page to try again.": "Δεν είναι δυνατή η φόρτωση του αρχείου config: ανανεώστε τη σελίδα για να δοκιμάσετε ξανά.",
-    "Download Completed": "Η λήψη ολοκληρώθηκε",
-    "Unsupported browser": "Μη υποστηριζόμενο πρόγραμμα περιήγησης",
-    "Your browser can't run %(brand)s": "Το πρόγραμμα περιήγησής σας δεν μπορεί να εκτελέσει %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s χρησιμοποιεί προηγμένες δυνατότητες προγράμματος περιήγησης που δεν υποστηρίζονται από το τρέχον πρόγραμμα περιήγησής σας.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Μπορείτε να συνεχίσετε να χρησιμοποιείτε το τρέχον πρόγραμμα περιήγησής σας, αλλά ορισμένες ή όλες οι λειτουργίες ενδέχεται να μην λειτουργούν και η εμφάνιση και η αίσθηση της εφαρμογής ενδέχεται να είναι λανθασμένη.",
-    "I understand the risks and wish to continue": "Κατανοώ τους κινδύνους και επιθυμώ να συνεχίσω",
-    "Go to element.io": "Πήγαινε στο element.io",
-    "Failed to start": "Αποτυχία έναρξης",
-    "Use %(brand)s on mobile": "Χρήση %(brand)s σε κινητό",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Αποκεντρωμένη, κρυπτογραφημένη συνομιλία και συνεργασία χρησιμοποιώντας το $matrixLogo"
+    "action": {
+        "create_account": "Δημιουργία Λογαριασμού",
+        "dismiss": "Απόρριψη",
+        "explore_rooms": "Εξερευνήστε δωμάτια",
+        "open": "Άνοιγμα",
+        "sign_in": "Σύνδεση"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Μεταβείτε στο πρόγραμμα περιήγησής σας για να ολοκληρώσετε τη σύνδεση"
+    },
+    "download_completed": "Η λήψη ολοκληρώθηκε",
+    "error": {
+        "app_launch_unexpected_error": "Απρόοπτο σφάλμα κατά την προετοιμασία της εφαρμογής. Δείτε το τερματικό για λεπτομέρειες.",
+        "cannot_load_config": "Δεν είναι δυνατή η φόρτωση του αρχείου config: ανανεώστε τη σελίδα για να δοκιμάσετε ξανά.",
+        "invalid_configuration_no_server": "Μη έγκυρη ρύθμιση παραμέτρων: δεν έχει οριστεί προκαθορισμένος διακομιστής.",
+        "invalid_json": "Η ρύθμιση του Element περιέχει μη έγκυρο JSON. Διορθώστε το πρόβλημα και φορτώστε ξανά τη σελίδα.",
+        "invalid_json_detail": "Το μήνυμα από τον αναλυτή είναι: %(message)s",
+        "invalid_json_generic": "Μη έγκυρο JSON",
+        "misconfigured": "Το Element σας δεν εχει ρυθμιστεί σωστά"
+    },
+    "failed_to_start": "Αποτυχία έναρξης",
+    "go_to_element_io": "Πήγαινε στο element.io",
+    "incompatible_browser": {
+        "browser_links": "Παρακαλούμε εγκαταστήστε <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ή <safariLink>Safari</safariLink> για καλύτερη εμπειρία χρήσης.",
+        "continue_warning": "Κατανοώ τους κινδύνους και επιθυμώ να συνεχίσω",
+        "feature_warning": "Μπορείτε να συνεχίσετε να χρησιμοποιείτε το τρέχον πρόγραμμα περιήγησής σας, αλλά ορισμένες ή όλες οι λειτουργίες ενδέχεται να μην λειτουργούν και η εμφάνιση και η αίσθηση της εφαρμογής ενδέχεται να είναι λανθασμένη.",
+        "features": "%(brand)s χρησιμοποιεί προηγμένες δυνατότητες προγράμματος περιήγησης που δεν υποστηρίζονται από το τρέχον πρόγραμμα περιήγησής σας.",
+        "summary": "Το πρόγραμμα περιήγησής σας δεν μπορεί να εκτελέσει %(brand)s",
+        "title": "Μη υποστηριζόμενο πρόγραμμα περιήγησης"
+    },
+    "powered_by_matrix": "Με την υποστήριξη του Matrix",
+    "powered_by_matrix_with_logo": "Αποκεντρωμένη, κρυπτογραφημένη συνομιλία και συνεργασία χρησιμοποιώντας το $matrixLogo",
+    "unknown_device": "Άγνωστη συσκευή",
+    "use_brand_on_mobile": "Χρήση %(brand)s σε κινητό",
+    "welcome_to_element": "Καλώς ήλθατε στο Element"
 }

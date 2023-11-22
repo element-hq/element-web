@@ -21,7 +21,7 @@ jobs:
         runs-on: ubuntu-latest
         environment: Matrix
         steps:
-            - uses: actions/github-script@v6
+            - uses: actions/github-script@v7
               env:
                   HS_URL: ${{ secrets.BETABOT_HS_URL }}
                   LOBBY_ROOM_ID: ${{ secrets.ROOM_ID }}
@@ -62,7 +62,14 @@ jobs:
                               headers,
                           });
 
+                          if (!res.ok) {
+                              console.log(roomId, "failed to fetch", await res.text());
+                              return;
+                          }
+
                           const data = await res.json();
+                          console.log(roomId, "got event", data);
+                          
                           const topic = data.topic.replace(regex, releaseTopic);
                           if (topic === data.topic) {
                               console.log(roomId, "nothing to do");

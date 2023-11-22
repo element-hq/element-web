@@ -29,7 +29,7 @@ describe("Loading server config", function () {
         PlatformPeg.set(new WebPlatform());
         fetchMock.get("https://matrix-client.matrix.org/_matrix/client/versions", {
             unstable_features: {},
-            versions: [],
+            versions: ["v1.1"],
         });
         fetchMock.get("https://matrix.org/.well-known/matrix/client", {
             "m.homeserver": {
@@ -47,7 +47,7 @@ describe("Loading server config", function () {
                 },
             },
         });
-        await loadApp({});
+        await loadApp({}, null);
         expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.matrix.org");
     });
 
@@ -55,7 +55,7 @@ describe("Loading server config", function () {
         SdkConfig.put({
             default_server_name: "matrix.org",
         });
-        await loadApp({});
+        await loadApp({}, null);
         expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.matrix.org");
     });
 
@@ -72,7 +72,7 @@ describe("Loading server config", function () {
                     },
                 },
             });
-            await loadApp({});
+            await loadApp({}, null);
             expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.matrix.org");
         },
     );

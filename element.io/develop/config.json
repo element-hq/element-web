@@ -48,10 +48,11 @@
     },
     "privacy_policy_url": "https://element.io/cookie-policy",
     "features": {
-        "feature_video_rooms": true
+        "feature_video_rooms": true,
+        "feature_rust_crypto": true
     },
     "element_call": {
-        "url": "https://element-call-livekit.netlify.app"
+        "url": "https://call.element.dev"
     },
     "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
 }

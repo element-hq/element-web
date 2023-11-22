@@ -15,10 +15,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Yarn cache
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
                   cache: "yarn"
 
@@ -27,7 +27,7 @@ jobs:
 
             - name: Get number of CPU cores
               id: cpu-cores
-              uses: SimenB/github-actions-cpu-cores@410541432439795d30db6501fb1d8178eb41e502 # v1
+              uses: SimenB/github-actions-cpu-cores@97ba232459a8e02ff6121db9362b09661c875ab8 # v2
 
             - name: Run tests with coverage
               run: "yarn coverage --ci --max-workers ${{ steps.cpu-cores.outputs.count }}"

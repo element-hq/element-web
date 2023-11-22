@@ -1,30 +1,38 @@
 {
-    "Unknown device": "Nežinomas įrenginys",
-    "Welcome to Element": "Sveiki atvykę į Element",
-    "Dismiss": "Atmesti",
-    "Sign In": "Prisijungti",
-    "Create Account": "Sukurti Paskyrą",
-    "Explore rooms": "Žvalgyti kambarius",
-    "The message from the parser is: %(message)s": "Analizatoriaus žinutė yra: %(message)s",
-    "Invalid JSON": "Klaidingas JSON",
-    "Unexpected error preparing the app. See console for details.": "Netikėta klaida ruošiant programą. Norėdami sužinoti daugiau detalių, žiūrėkite konsolę.",
-    "Invalid configuration: no default server specified.": "Klaidinga konfigūracija: nenurodytas numatytasis serveris.",
-    "Go to your browser to complete Sign In": "Norėdami užbaigti prisijungimą, eikite į naršyklę",
-    "Unable to load config file: please refresh the page to try again.": "Nepavyko įkelti konfigūracijos failo: atnaujinkite puslapį, kad pabandytumėte dar kartą.",
-    "Unsupported browser": "Nepalaikoma naršyklė",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Jūs galite toliau naudotis savo dabartine naršykle, bet kai kurios arba visos funkcijos gali neveikti ir programos išvaizda bei sąsaja gali būti neteisingai rodoma.",
-    "I understand the risks and wish to continue": "Suprantu šią riziką ir noriu tęsti",
-    "Go to element.io": "Eiti į element.io",
-    "Failed to start": "Nepavyko paleisti",
-    "Your Element is misconfigured": "Jūsų Element yra neteisingai sukonfigūruotas",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Jūsų Element konfigūracijoje yra klaidingas JSON. Ištaisykite problemą ir iš naujo įkelkite puslapį.",
-    "Download Completed": "Atsisiuntimas baigtas",
-    "Open": "Atidaryti",
-    "Your browser can't run %(brand)s": "Jūsų naršyklė negali paleisti %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s naudoja išplėstines naršyklės funkcijas, kurių jūsų dabartinė naršyklė nepalaiko.",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Geriausiam veikimui suinstaliuokite <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, arba <safariLink>Safari</safariLink>.",
-    "Powered by Matrix": "Veikia su Matrix",
-    "Use %(brand)s on mobile": "Naudoti %(brand)s mobiliajame telefone",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentralizuotas, užšifruotų pokalbių &amp; bendradarbiavimas, paremtas $matrixLogo",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s Kompiuteryje: %(platformName)s"
+    "action": {
+        "create_account": "Sukurti Paskyrą",
+        "dismiss": "Atmesti",
+        "explore_rooms": "Žvalgyti kambarius",
+        "open": "Atidaryti",
+        "sign_in": "Prisijungti"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Norėdami užbaigti prisijungimą, eikite į naršyklę"
+    },
+    "desktop_default_device_name": "%(brand)s Kompiuteryje: %(platformName)s",
+    "download_completed": "Atsisiuntimas baigtas",
+    "error": {
+        "app_launch_unexpected_error": "Netikėta klaida ruošiant programą. Norėdami sužinoti daugiau detalių, žiūrėkite konsolę.",
+        "cannot_load_config": "Nepavyko įkelti konfigūracijos failo: atnaujinkite puslapį, kad pabandytumėte dar kartą.",
+        "invalid_configuration_no_server": "Klaidinga konfigūracija: nenurodytas numatytasis serveris.",
+        "invalid_json": "Jūsų Element konfigūracijoje yra klaidingas JSON. Ištaisykite problemą ir iš naujo įkelkite puslapį.",
+        "invalid_json_detail": "Analizatoriaus žinutė yra: %(message)s",
+        "invalid_json_generic": "Klaidingas JSON",
+        "misconfigured": "Jūsų Element yra neteisingai sukonfigūruotas"
+    },
+    "failed_to_start": "Nepavyko paleisti",
+    "go_to_element_io": "Eiti į element.io",
+    "incompatible_browser": {
+        "browser_links": "Geriausiam veikimui suinstaliuokite <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, arba <safariLink>Safari</safariLink>.",
+        "continue_warning": "Suprantu šią riziką ir noriu tęsti",
+        "feature_warning": "Jūs galite toliau naudotis savo dabartine naršykle, bet kai kurios arba visos funkcijos gali neveikti ir programos išvaizda bei sąsaja gali būti neteisingai rodoma.",
+        "features": "%(brand)s naudoja išplėstines naršyklės funkcijas, kurių jūsų dabartinė naršyklė nepalaiko.",
+        "summary": "Jūsų naršyklė negali paleisti %(brand)s",
+        "title": "Nepalaikoma naršyklė"
+    },
+    "powered_by_matrix": "Veikia su Matrix",
+    "powered_by_matrix_with_logo": "Decentralizuotas, užšifruotų pokalbių &amp; bendradarbiavimas, paremtas $matrixLogo",
+    "unknown_device": "Nežinomas įrenginys",
+    "use_brand_on_mobile": "Naudoti %(brand)s mobiliajame telefone",
+    "welcome_to_element": "Sveiki atvykę į Element"
 }

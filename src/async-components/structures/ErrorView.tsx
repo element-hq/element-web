@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { _t } from "matrix-react-sdk/src/languageHandler";
+
+import { _t } from "../../languageHandler";
 
 // directly import the style here as this layer does not support rethemedex at this time so no matrix-react-sdk
 // PostCSS variables will be accessible.
@@ -35,7 +36,7 @@ const ErrorView: React.FC<IProps> = ({ title, messages }) => {
                     <span className="mx_HomePage_logo">
                         <img height="42" src="themes/element/img/logos/element-logo.svg" alt="Element" />
                     </span>
-                    <h1>{_t("Failed to start")}</h1>
+                    <h1>{_t("failed_to_start")}</h1>
                 </div>
                 <div className="mx_HomePage_col">
                     <div className="mx_HomePage_row">
@@ -48,7 +49,7 @@ const ErrorView: React.FC<IProps> = ({ title, messages }) => {
                 <div className="mx_HomePage_row mx_Center mx_Spacer">
                     <p className="mx_Spacer">
                         <a href="https://element.io" target="_blank" className="mx_FooterLink">
-                            {_t("Go to element.io")}
+                            {_t("go_to_element_io")}
                         </a>
                     </p>
                 </div>
