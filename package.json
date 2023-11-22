@@ -45,11 +45,12 @@
         "start": "echo THIS IS FOR LEGACY PURPOSES ONLY. && yarn start:all",
         "start:all": "echo THIS IS FOR LEGACY PURPOSES ONLY. && yarn start:build",
         "start:build": "babel src -w -s -d lib --verbose --extensions \".ts,.js\"",
-        "lint": "yarn lint:types && yarn lint:js && yarn lint:style",
+        "lint": "yarn lint:types && yarn lint:js && yarn lint:style && yarn lint:workflows",
         "lint:js": "eslint --max-warnings 0 src test cypress && prettier --check .",
         "lint:js-fix": "eslint --fix src test cypress && prettier --loglevel=warn --write .",
         "lint:types": "tsc --noEmit --jsx react && tsc --noEmit --jsx react -p cypress",
         "lint:style": "stylelint \"res/css/**/*.pcss\"",
+        "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) | xargs -I {} sh -c 'echo \"Linting {}\"; action-validator \"{}\"'",
         "test": "jest",
         "test:cypress": "cypress run",
         "test:cypress:open": "cypress open",
@@ -129,6 +130,8 @@
         "what-input": "^5.2.10"
     },
     "devDependencies": {
+        "@action-validator/cli": "^0.5.3",
+        "@action-validator/core": "^0.5.3",
         "@babel/cli": "^7.12.10",
         "@babel/core": "^7.12.10",
         "@babel/eslint-parser": "^7.12.10",

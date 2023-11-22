@@ -101,6 +101,23 @@ jobs:
             - name: Run Linter
               run: "yarn run lint:style"
 
+    workflow_lint:
+        name: "Workflow Lint"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+
+            # Does not need branch matching as only analyses this layer
+            - name: Install Deps
+              run: "yarn install --frozen-lockfile"
+
+            - name: Run Linter
+              run: "yarn lint:workflows"
+
     analyse_dead_code:
         name: "Analyse Dead Code"
         runs-on: ubuntu-latest
