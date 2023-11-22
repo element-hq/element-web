@@ -192,7 +192,8 @@
         "msisdn_field_required_invalid": "Digite o número de telefone",
         "no_hs_url_provided": "Nenhum endereço fornecido do servidor local",
         "oidc": {
-            "error_title": "Não foi possível fazer login"
+            "error_title": "Não foi possível fazer login",
+            "missing_or_invalid_stored_state": "Anteriormente, pedimos ao seu navegador para lembrar qual servidor local você usa para fazer login, mas infelizmente o navegador se esqueceu disso. Vá para a página de login e tente novamente."
         },
         "password_field_label": "Digite a senha",
         "password_field_strong_label": "Muito bem, uma senha forte!",
@@ -319,7 +320,6 @@
         "spaceinvaders_message": "envia os invasores do espaço"
     },
     "common": {
-        "about": "Sobre a sala",
         "access_token": "Símbolo de acesso",
         "advanced": "Avançado",
         "all_rooms": "Todas as salas",
@@ -1223,8 +1223,6 @@
                 "other": "Resultado final baseado em %(count)s votos"
             }
         },
-        "settings_button": "Configurações da sala",
-        "share_button": "Compartilhar sala",
         "video_room_chat": {
             "title": "Bate-papo"
         }

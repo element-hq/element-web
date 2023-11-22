@@ -172,7 +172,8 @@
         "msisdn_field_label": "Telefonas",
         "no_hs_url_provided": "Nepateiktas serverio URL",
         "oidc": {
-            "error_title": "Mes negalėjome jūsų prijungti"
+            "error_title": "Mes negalėjome jūsų prijungti",
+            "missing_or_invalid_stored_state": "Paprašėme naršyklės įsiminti, kurį namų serverį naudojate prisijungimui, bet, deja, naršyklė tai pamiršo. Eikite į prisijungimo puslapį ir bandykite dar kartą."
         },
         "password_field_strong_label": "Puiku, stiprus slaptažodis!",
         "phone_label": "Telefonas",
@@ -286,7 +287,6 @@
         "spaceinvaders_message": "siunčia kosmoso įsibrovėlius"
     },
     "common": {
-        "about": "Apie",
         "access_token": "Prieigos žetonas",
         "advanced": "Išplėstiniai",
         "all_rooms": "Visi kambariai",
@@ -1108,8 +1108,6 @@
             "title": "Prisegtos žinutės"
         },
         "pinned_messages_button": "Prisegta",
-        "settings_button": "Kambario nustatymai",
-        "share_button": "Bendrinti kambarį",
         "video_room_chat": {
             "title": "Pokalbis"
         },

@@ -219,7 +219,8 @@
         "msisdn_field_required_invalid": "Escribe tu teléfono móvil",
         "no_hs_url_provided": "No se ha indicado la URL del servidor local",
         "oidc": {
-            "error_title": "No hemos podido iniciar tu sesión"
+            "error_title": "No hemos podido iniciar tu sesión",
+            "missing_or_invalid_stored_state": "Le hemos preguntado a tu navegador qué servidor base usar para iniciar tu sesión, pero parece que no lo recuerda. Vuelve a la página de inicio de sesión e inténtalo de nuevo."
         },
         "password_field_keep_going_prompt": "Sigue…",
         "password_field_label": "Escribe tu contraseña",
@@ -391,7 +392,6 @@
         "spaceinvaders_message": "enviar space invaders"
     },
     "common": {
-        "about": "Acerca de",
         "access_token": "Token de acceso",
         "accessibility": "Accesibilidad",
         "advanced": "Avanzado",
@@ -1714,8 +1714,6 @@
         "room_summary_card": {
             "title": "Info. de la sala"
         },
-        "settings_button": "Configuración de la sala",
-        "share_button": "Compartir la sala",
         "thread_list": {
             "context_menu_label": "Ajustes del hilo"
         },

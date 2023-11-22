@@ -219,7 +219,8 @@
         "msisdn_field_required_invalid": "電話番号を入力",
         "no_hs_url_provided": "ホームサーバーのURLが指定されていません",
         "oidc": {
-            "error_title": "ログインできませんでした"
+            "error_title": "ログインできませんでした",
+            "missing_or_invalid_stored_state": "残念ながら、ブラウザーはサインインするホームサーバーを忘れてしまいました。サインインページに移動して再試行してください。"
         },
         "password_field_keep_going_prompt": "続行…",
         "password_field_label": "パスワードを入力してください",
@@ -401,7 +402,6 @@
         "spaceinvaders_message": "スペースインベーダーを送る"
     },
     "common": {
-        "about": "概要",
         "access_token": "アクセストークン",
         "accessibility": "アクセシビリティー",
         "advanced": "詳細",
@@ -1721,8 +1721,6 @@
         "room_summary_card": {
             "title": "ルームの情報"
         },
-        "settings_button": "ルームの設定",
-        "share_button": "ルームを共有",
         "thread_list": {
             "context_menu_label": "スレッドの設定"
         },

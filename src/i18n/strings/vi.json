@@ -220,7 +220,8 @@
         "msisdn_field_required_invalid": "Nhập số điện thoại",
         "no_hs_url_provided": "Không có đường dẫn server",
         "oidc": {
-            "error_title": "Chúng tôi không thể đăng nhập cho bạn"
+            "error_title": "Chúng tôi không thể đăng nhập cho bạn",
+            "missing_or_invalid_stored_state": "Chúng tôi đã yêu cầu trình duyệt ghi nhớ máy chủ bạn đã sử dụng để bạn có thể đăng nhập lại, nhưng có vẻ như trình duyệt của bạn đã quên máy chủ đó :( Truy cập trang đăng nhập và thử lại."
         },
         "password_field_label": "Nhập mật khẩu",
         "password_field_strong_label": "Mật khẩu mạnh, tốt đó!",
@@ -369,7 +370,6 @@
         "spaceinvaders_message": "gửi những kẻ xâm lược space"
     },
     "common": {
-        "about": "Giới thiệu",
         "access_token": "Token truy cập",
         "advanced": "Nâng cao",
         "all_rooms": "Tất cả các phòng",
@@ -1625,8 +1625,6 @@
         "room_summary_card": {
             "title": "Thông tin phòng"
         },
-        "settings_button": "Cài đặt phòng",
-        "share_button": "Phòng chia sẻ",
         "thread_list": {
             "context_menu_label": "Tùy chọn theo chủ đề"
         },

@@ -226,7 +226,8 @@
         "msisdn_field_required_invalid": "Telefonnummer eingeben",
         "no_hs_url_provided": "Keine Heim-Server-URL angegeben",
         "oidc": {
-            "error_title": "Wir konnten dich nicht anmelden"
+            "error_title": "Wir konnten dich nicht anmelden",
+            "missing_or_invalid_stored_state": "Wir haben deinen Browser gebeten, sich zu merken, bei welchem Heim-Server du dich anmeldest, aber dein Browser hat dies leider vergessen. Gehe zur Anmeldeseite und versuche es erneut."
         },
         "password_field_keep_going_prompt": "Fortfahren …",
         "password_field_label": "Passwort eingeben",
@@ -312,7 +313,7 @@
         "set_email_prompt": "Möchtest du eine E-Mail-Adresse setzen?",
         "sign_in_description": "Nutze dein Konto, um fortzufahren.",
         "sign_in_instead": "Stattdessen anmelden",
-        "sign_in_instead_prompt": "Stattdessen anmelden",
+        "sign_in_instead_prompt": "Konto schon vorhanden? <a>Hier anmelden</a>",
         "sign_in_or_register": "Anmelden oder Konto erstellen",
         "sign_in_or_register_description": "Benutze dein Konto oder erstelle ein neues, um fortzufahren.",
         "sign_in_prompt": "Du hast bereits ein Konto? <a>Melde dich an</a>",
@@ -412,7 +413,6 @@
         "spaceinvaders_message": "sendet Space Invaders"
     },
     "common": {
-        "about": "Über",
         "access_token": "Zugriffstoken",
         "accessibility": "Barrierefreiheit",
         "advanced": "Erweitert",
@@ -1785,8 +1785,6 @@
         "room_summary_card": {
             "title": "Raum-Info"
         },
-        "settings_button": "Raumeinstellungen",
-        "share_button": "Raum teilen",
         "thread_list": {
             "context_menu_label": "Thread-Optionen"
         },

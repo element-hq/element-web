@@ -205,7 +205,8 @@
         "msisdn_field_required_invalid": "ໃສ່ເບີໂທລະສັບ",
         "no_hs_url_provided": "ບໍ່ມີການສະໜອງ URL homeserver",
         "oidc": {
-            "error_title": "ພວກເຮົາບໍ່ສາມາດເຂົ້າສູ່ລະບົບທ່ານໄດ້"
+            "error_title": "ພວກເຮົາບໍ່ສາມາດເຂົ້າສູ່ລະບົບທ່ານໄດ້",
+            "missing_or_invalid_stored_state": "ພວກເຮົາໃຫ້ບຣາວເຊີຈື່ homeserver ທີ່ທ່ານໃຊ້ ເຂົ້າສູ່ລະບົບ, ແຕ່ເສຍດາຍບຣາວເຊີຂອງທ່ານລືມມັນ. ກັບໄປທີ່ໜ້າເຂົ້າສູ່ລະບົບແລ້ວ ລອງໃໝ່ອີກຄັ້ງ."
         },
         "password_field_label": "ໃສ່ລະຫັດຜ່ານ",
         "password_field_strong_label": "ດີ, ລະຫັດຜ່ານທີ່ເຂັ້ມແຂງ!",
@@ -349,7 +350,6 @@
         "spaceinvaders_message": "ສົ່ງຜູ້ຮຸກຮານພື້ນທີ່"
     },
     "common": {
-        "about": "ກ່ຽວກັບ",
         "access_token": "ເຂົ້າເຖິງToken",
         "accessibility": "ການເຂົ້າເຖິງ",
         "advanced": "ຂັ້ນສູງ",
@@ -1484,8 +1484,6 @@
                 "other": "ຜົນສຸດທ້າຍໂດຍອີງໃສ່ %(count)s ຄະແນນສຽງ"
             }
         },
-        "settings_button": "ການຕັ້ງຄ່າຫ້ອງ",
-        "share_button": "ແບ່ງປັນຫ້ອງ",
         "thread_list": {
             "context_menu_label": "ຕົວເລືອກກະທູ້"
         },

@@ -223,7 +223,8 @@
         "msisdn_field_required_invalid": "Masukkan nomor telepon",
         "no_hs_url_provided": "Tidak ada URL homeserver yang disediakan",
         "oidc": {
-            "error_title": "Kami tidak dapat memasukkan Anda"
+            "error_title": "Kami tidak dapat memasukkan Anda",
+            "missing_or_invalid_stored_state": "Kami menanyakan browser ini untuk mengingat homeserver apa yang Anda gunakan untuk membantu Anda masuk, tetapi sayangnya browser ini melupakannya. Pergi ke halaman masuk dan coba lagi."
         },
         "password_field_keep_going_prompt": "Lanjutkan…",
         "password_field_label": "Masukkan kata sandi",
@@ -408,7 +409,6 @@
         "spaceinvaders_message": "mengirim penjajah luar angkasa"
     },
     "common": {
-        "about": "Tentang",
         "access_token": "Token Akses",
         "accessibility": "Aksesibilitas",
         "advanced": "Tingkat Lanjut",
@@ -1785,8 +1785,6 @@
         "room_summary_card": {
             "title": "Informasi ruangan"
         },
-        "settings_button": "Pengaturan ruangan",
-        "share_button": "Bagikan ruangan",
         "thread_list": {
             "context_menu_label": "Opsi utasan"
         },

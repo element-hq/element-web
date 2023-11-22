@@ -186,7 +186,8 @@
         "msisdn_field_required_invalid": "شماره تلفن را وارد کنید",
         "no_hs_url_provided": "هیچ آدرس سروری وارد نشده‌است",
         "oidc": {
-            "error_title": "نتوانستیم شما را وارد کنیم"
+            "error_title": "نتوانستیم شما را وارد کنیم",
+            "missing_or_invalid_stored_state": "ما از مرورگر خواستیم تا سروری را که شما برای ورود استفاده می‌کنید به خاطر بسپارد، اما متاسفانه مرورگر شما آن را فراموش کرده‌است. به صفحه‌ی ورود بروید و دوباره امتحان کنید."
         },
         "password_field_label": "گذرواژه را وارد کنید",
         "password_field_strong_label": "احسنت، گذرواژه‌ی انتخابی قوی است!",
@@ -314,7 +315,6 @@
         "spaceinvaders_message": "ارسال مهاجمان فضایی"
     },
     "common": {
-        "about": "درباره",
         "access_token": "توکن دسترسی",
         "accessibility": "دسترسی",
         "advanced": "پیشرفته",
@@ -1183,8 +1183,6 @@
                 "other": "فقط می توانید تا %(count)s ابزارک را پین کنید"
             }
         },
-        "settings_button": "تنظیمات اتاق",
-        "share_button": "به اشتراک گذاری اتاق",
         "widgets_section": "ابزارک ها"
     },
     "room": {

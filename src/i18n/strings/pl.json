@@ -418,7 +418,6 @@
         "spaceinvaders_message": "wysyła kosmicznych najeźdźców"
     },
     "common": {
-        "about": "Informacje",
         "access_token": "Token dostępu",
         "accessibility": "Ułatwienia dostępu",
         "advanced": "Zaawansowane",
@@ -485,7 +484,8 @@
         "mute": "Wycisz",
         "n_members": {
             "one": "%(count)s członek",
-            "other": "%(count)s członkowie"
+            "few": "%(count)s członki",
+            "many": "%(count)s członków"
         },
         "n_participants": {
             "one": "1 uczestnik",
@@ -1395,9 +1395,10 @@
         "dehydration": "Szyfrowane wiadomości offline korzystające z urządzeń odwodnionych",
         "dynamic_room_predecessors": "Dynamiczne poprzedniki pokoju",
         "dynamic_room_predecessors_description": "Włącz MSC3946 (dla opóźnionych archiwów pokoju)",
-        "element_call_video_rooms": "Pokoje rozmów wideo Element",
+        "element_call_video_rooms": "Pokoje rozmów wideo Element Call",
         "experimental_description": "Chcesz poeksperymentować? Wypróbuj nasze najnowsze pomysły w trakcie rozwoju. Przedstawione funkcje nie zostały w pełni ukończone; mogą być niestabilne; mogą się zmienić lub zostać kompletnie porzucone. <a>Dowiedz się więcej</a>.",
         "experimental_section": "Wczesny podgląd",
+        "feature_disable_call_per_sender_encryption": "Wyłącz szyfrowanie nadawcy dla Element Call",
         "feature_wysiwyg_composer_description": "Użyj bogatego edytora tekstu zamiast edytora Markdown podczas tworzenia wiadomości.",
         "group_calls": "Nowe wrażenia rozmów grupowych",
         "group_developer": "Deweloper",
@@ -1740,7 +1741,8 @@
         "online": "Dostępny",
         "online_for": "Online przez %(duration)s",
         "unknown": "Nieznany",
-        "unknown_for": "Nieznany przez %(duration)s"
+        "unknown_for": "Nieznany przez %(duration)s",
+        "unreachable": "Serwer użytkownika jest nieosiągalny"
     },
     "quick_settings": {
         "all_settings": "Wszystkie ustawienia",
@@ -1852,8 +1854,6 @@
         "room_summary_card": {
             "title": "Informacje pokoju"
         },
-        "settings_button": "Ustawienia pokoju",
-        "share_button": "Udostępnij pokój",
         "thread_list": {
             "context_menu_label": "Opcje wątków"
         },
@@ -2911,7 +2911,7 @@
         "devtools": "Otwiera narzędzia deweloperskie",
         "discardsession": "Wymusza odrzucenie bieżącej sesji grupowej wychodzącej z zaszyfrowanego pokoju",
         "error_invalid_rendering_type": "Błąd polecenia: Nie można znaleźć renderowania typu (%(renderingType)s)",
-        "error_invalid_room": "Błąd komendy: Nie można znaleźć pokoju (%(roomId)s",
+        "error_invalid_room": "Błąd komendy: Nie można znaleźć pokoju (%(roomId)s)",
         "error_invalid_runfn": "Błąd polecenia: Nie można obsłużyć polecenia z ukośnikiem.",
         "error_invalid_user_in_room": "Nie można znaleźć użytkownika w pokoju",
         "help": "Wyświetla listę komend z przykładami i opisami",
@@ -3044,7 +3044,7 @@
         "suggested_tooltip": "Ten pokój jest polecany jako dobry do dołączenia",
         "title_when_query_available": "Wyniki",
         "title_when_query_unavailable": "Pokoje i przestrzenie",
-        "unmark_suggested": "Oznacz jako nie sugerowane",
+        "unmark_suggested": "Oznacz jako niesugerowane",
         "user_lacks_permission": "Nie masz uprawnień"
     },
     "space_settings": {

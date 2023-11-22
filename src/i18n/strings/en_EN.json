@@ -2909,7 +2909,7 @@
         "devtools": "Opens the Developer Tools dialog",
         "discardsession": "Forces the current outbound group session in an encrypted room to be discarded",
         "error_invalid_rendering_type": "Command error: Unable to find rendering type (%(renderingType)s)",
-        "error_invalid_room": "Command failed: Unable to find room (%(roomId)s",
+        "error_invalid_room": "Command failed: Unable to find room (%(roomId)s)",
         "error_invalid_runfn": "Command error: Unable to handle slash command.",
         "error_invalid_user_in_room": "Could not find user in room",
         "help": "Displays list of commands with usages and descriptions",

@@ -209,7 +209,8 @@
         "msisdn_field_required_invalid": "Telefoonnummer invoeren",
         "no_hs_url_provided": "Geen homeserver-URL opgegeven",
         "oidc": {
-            "error_title": "We konden je niet inloggen"
+            "error_title": "We konden je niet inloggen",
+            "missing_or_invalid_stored_state": "De browser is verzocht de homeserver te onthouden die je gebruikt om in te loggen, maar helaas is de browser deze vergeten. Ga naar de inlog-pagina en probeer het opnieuw."
         },
         "password_field_label": "Voer wachtwoord in",
         "password_field_strong_label": "Dit is een sterk wachtwoord!",
@@ -372,7 +373,6 @@
         "spaceinvaders_message": "stuurt space invaders"
     },
     "common": {
-        "about": "Over",
         "access_token": "Toegangstoken",
         "accessibility": "Toegankelijkheid",
         "advanced": "Geavanceerd",
@@ -1567,8 +1567,6 @@
         "room_summary_card": {
             "title": "Kamer informatie"
         },
-        "settings_button": "Kamerinstellingen",
-        "share_button": "Kamer delen",
         "thread_list": {
             "context_menu_label": "Draad opties"
         }

@@ -226,7 +226,8 @@
         "msisdn_field_required_invalid": "輸入電話號碼",
         "no_hs_url_provided": "未提供家伺服器網址",
         "oidc": {
-            "error_title": "我們無法讓您登入"
+            "error_title": "我們無法讓您登入",
+            "missing_or_invalid_stored_state": "我們要求瀏覽器記住它讓您登入時使用的家伺服器，但不幸的是，您的瀏覽器忘了它。到登入頁面然後重試。"
         },
         "password_field_keep_going_prompt": "繼續前進…",
         "password_field_label": "輸入密碼",
@@ -412,7 +413,6 @@
         "spaceinvaders_message": "傳送太空侵略者"
     },
     "common": {
-        "about": "關於",
         "access_token": "存取權杖",
         "accessibility": "可近用性",
         "advanced": "進階",
@@ -1808,8 +1808,6 @@
         "room_summary_card": {
             "title": "聊天室資訊"
         },
-        "settings_button": "聊天室設定",
-        "share_button": "分享聊天室",
         "thread_list": {
             "context_menu_label": "討論串選項"
         },

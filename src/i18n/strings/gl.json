@@ -209,7 +209,8 @@
         "msisdn_field_required_invalid": "Escribe número de teléfono",
         "no_hs_url_provided": "Non se estableceu URL do servidor",
         "oidc": {
-            "error_title": "Non puidemos conectarte"
+            "error_title": "Non puidemos conectarte",
+            "missing_or_invalid_stored_state": "Pedíramoslle ao teu navegador que lembrase o teu servidor de inicio para acceder, pero o navegador esqueceuno. Vaite á páxina de conexión e inténtao outra vez."
         },
         "password_field_label": "Escribe contrasinal",
         "password_field_strong_label": "Ben, bo contrasinal!",
@@ -352,7 +353,6 @@
         "spaceinvaders_message": "enviar invasores espaciais"
     },
     "common": {
-        "about": "Acerca de",
         "access_token": "Token de acceso",
         "accessibility": "Accesibilidade",
         "advanced": "Avanzado",
@@ -1573,8 +1573,6 @@
                 "other": "Resultado final baseado en %(count)s votos"
             }
         },
-        "settings_button": "Axustes da sala",
-        "share_button": "Compartir sala",
         "thread_list": {
             "context_menu_label": "Opcións da conversa"
         }

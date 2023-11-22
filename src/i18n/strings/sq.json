@@ -221,7 +221,8 @@
         "msisdn_field_required_invalid": "Jepni numër telefoni",
         "no_hs_url_provided": "S’u dha URL shërbyesi Home",
         "oidc": {
-            "error_title": "S’ju nxorëm dot nga llogaria juaj"
+            "error_title": "S’ju nxorëm dot nga llogaria juaj",
+            "missing_or_invalid_stored_state": "I kërkuam shfletuesit të mbajë mend cilin shërbyes Home përdorni, për t’ju lënë të bëni hyrje, por për fat të keq, shfletuesi juaj e ka harruar këtë. Kaloni te faqja e hyrjeve dhe riprovoni."
         },
         "password_field_keep_going_prompt": "Vazhdoni…",
         "password_field_label": "Jepni fjalëkalim",
@@ -406,7 +407,6 @@
         "spaceinvaders_message": "dërgon pushtues hapësire"
     },
     "common": {
-        "about": "Mbi",
         "access_token": "Token Hyrjesh",
         "accessibility": "Përdorim nga persona me aftësi të kufizuara",
         "advanced": "Të mëtejshme",
@@ -1757,8 +1757,6 @@
         "room_summary_card": {
             "title": "Hollësi dhome"
         },
-        "settings_button": "Rregullime dhome",
-        "share_button": "Ndani dhomë me të tjerë",
         "thread_list": {
             "context_menu_label": "Mundësi rrjedhe"
         },

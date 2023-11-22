@@ -191,7 +191,8 @@
         "msisdn_field_required_invalid": "הזן טלפון",
         "no_hs_url_provided": "לא סופקה כתובת של שרת הראשי",
         "oidc": {
-            "error_title": "לא הצלחנו להתחבר אליך"
+            "error_title": "לא הצלחנו להתחבר אליך",
+            "missing_or_invalid_stored_state": "ביקשנו מהדפדפן לזכור באיזה שרת בית אתה משתמש כדי לאפשר לך להיכנס, אך למרבה הצער הדפדפן שלך שכח אותו. עבור לדף הכניסה ונסה שוב."
         },
         "password_field_label": "הזן סיסמה",
         "password_field_strong_label": "יפה, סיסמה חזקה!",
@@ -322,7 +323,6 @@
         "spaceinvaders_message": "שולח פולשים לחלל"
     },
     "common": {
-        "about": "אודות",
         "accessibility": "נגישות",
         "advanced": "מתקדם",
         "all_rooms": "כל החדרים",
@@ -1254,8 +1254,6 @@
         "room_summary_card": {
             "title": "מידע על החדר"
         },
-        "settings_button": "הגדרות חדר",
-        "share_button": "שתף חדר",
         "thread_list": {
             "context_menu_label": "אפשרויות שרשור"
         },

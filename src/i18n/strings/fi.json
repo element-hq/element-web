@@ -219,7 +219,8 @@
         "msisdn_field_required_invalid": "Syötä puhelinnumero",
         "no_hs_url_provided": "Kotipalvelimen osoite puuttuu",
         "oidc": {
-            "error_title": "Emme voineet kirjata sinua sisään"
+            "error_title": "Emme voineet kirjata sinua sisään",
+            "missing_or_invalid_stored_state": "Pyysimme selainta muistamaan kirjautumista varten mitä kotipalvelinta käytät, mutta selain on unohtanut sen. Mene kirjautumissivulle ja yritä uudelleen."
         },
         "password_field_keep_going_prompt": "Jatka…",
         "password_field_label": "Syötä salasana",
@@ -385,7 +386,6 @@
         "spaceinvaders_description": "Lähetä annettu viesti avaruusteemaisella tehosteella"
     },
     "common": {
-        "about": "Tietoa",
         "access_token": "Käyttöpoletti",
         "accessibility": "Saavutettavuus",
         "advanced": "Lisäasetukset",
@@ -1617,8 +1617,6 @@
         "room_summary_card": {
             "title": "Huoneen tiedot"
         },
-        "settings_button": "Huoneen asetukset",
-        "share_button": "Jaa huone",
         "thread_list": {
             "context_menu_label": "Ketjun valinnat"
         },

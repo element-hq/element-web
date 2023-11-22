@@ -40,6 +40,7 @@
         "create_a_room": "Loo jututuba",
         "decline": "Keeldu",
         "delete": "Kustuta",
+        "deny": "Keeldu",
         "disable": "Lülita välja",
         "disconnect": "Katkesta ühendus",
         "dismiss": "Loobu",
@@ -162,6 +163,7 @@
         "autodiscovery_invalid_is_base_url": "m.identity_server'i kehtetu base_url",
         "autodiscovery_invalid_is_response": "Vigane vastus isikutuvastusserveri tuvastamise päringule",
         "autodiscovery_invalid_json": "Vigane JSON",
+        "autodiscovery_no_well_known": "Ühtegi .well-known JSON-faili ei leitud",
         "autodiscovery_unexpected_error_hs": "Koduserveri seadistustest selguse saamisel tekkis ootamatu viga",
         "autodiscovery_unexpected_error_is": "Isikutuvastusserveri seadistustest selguse saamisel tekkis ootamatu viga",
         "captcha_description": "See server soovib kindlaks teha, et sa ei ole robot.",
@@ -226,7 +228,10 @@
         "msisdn_field_required_invalid": "Sisesta telefoninumber",
         "no_hs_url_provided": "Koduserveri aadress on puudu",
         "oidc": {
-            "error_title": "Meil ei õnnestunud sind sisse logida"
+            "error_title": "Meil ei õnnestunud sind sisse logida",
+            "generic_auth_error": "Autentimisel läks midagi valesti. Mine sisselogimise lehele ja proovi uuesti.",
+            "logout_redirect_warning": "Sind suunatakse välja logimise lõpuleviimiseks ümber oma serveri autentimise teenusepakkujale.",
+            "missing_or_invalid_stored_state": "Me sättisime nii, et sinu veebibrauser jätaks järgmiseks sisselogimiseks meelde sinu koduserveri, kuid kahjuks on ta selle unustanud. Palun mine sisselogimise lehele ja proovi uuesti."
         },
         "password_field_keep_going_prompt": "Jätka…",
         "password_field_label": "Sisesta salasõna",
@@ -283,6 +288,7 @@
             "sign_out_other_devices": "Logi kõik oma seadmed võrgust välja"
         },
         "reset_password_action": "Lähtesta salasõna",
+        "reset_password_button": "Unustasid parooli?",
         "reset_password_email_field_description": "Kasuta e-posti aadressi ligipääsu taastamiseks oma kontole",
         "reset_password_email_field_required_invalid": "Sisesta e-posti aadress (nõutav selles koduserveris)",
         "reset_password_email_not_associated": "Sinu e-posti aadress ei tundu olema selles koduserveris seotud Matrixi kasutajatunnusega.",
@@ -412,7 +418,6 @@
         "spaceinvaders_message": "korraldab ühe pisikese tulnukate vallutusretke"
     },
     "common": {
-        "about": "Rakenduse teave",
         "access_token": "Pääsuluba",
         "accessibility": "Ligipääsetavus",
         "advanced": "Teave arendajatele",
@@ -422,6 +427,7 @@
             "other": "ja %(count)s muud...",
             "one": "ja üks muu..."
         },
+        "android": "Android",
         "appearance": "Välimus",
         "application": "Rakendus",
         "are_you_sure": "Kas sa oled kindel?",
@@ -442,6 +448,7 @@
         "display_name": "Kuvatav nimi",
         "edited": "muudetud",
         "email_address": "E-posti aadress",
+        "emoji": "Emotikon",
         "encrypted": "Krüptitud",
         "encryption_enabled": "Krüptimine on kasutusel",
         "error": "Viga",
@@ -460,6 +467,7 @@
         "identity_server": "Isikutuvastusserver",
         "image": "Pilt",
         "integration_manager": "Lõiminguhaldur",
+        "ios": "iOS",
         "joined": "Liitunud",
         "labs": "Katsed",
         "legal": "Juriidiline teave",
@@ -467,6 +475,7 @@
         "loading": "Laadime…",
         "location": "Asukoht",
         "low_priority": "Vähetähtis",
+        "matrix": "Matrix",
         "message": "Sõnum",
         "message_layout": "Sõnumite paigutus",
         "microphone": "Mikrofon",
@@ -518,6 +527,7 @@
         "secure_backup": "Turvaline varundus",
         "security": "Turvalisus",
         "select_all": "Vali kõik",
+        "server": "Server",
         "settings": "Seadistused",
         "setup_secure_messages": "Võta kasutusele krüptitud sõnumid",
         "show_more": "Näita rohkem",
@@ -548,6 +558,7 @@
         "verification_cancelled": "Verifitseerimine tühistatud",
         "verified": "Verifitseeritud",
         "version": "Versioon",
+        "video": "Video",
         "video_room": "Videotuba",
         "view_message": "Vaata sõnumit",
         "warning": "Hoiatus",
@@ -576,12 +587,14 @@
         "format_insert_link": "Lisa link",
         "format_italic": "Kaldkiri",
         "format_italics": "Kaldkiri",
+        "format_link": "Viide",
         "format_ordered_list": "Nummerdatud loend",
         "format_strikethrough": "Läbikriipsutus",
         "format_underline": "Allajoonitud tekst",
         "format_unordered_list": "Täpploend",
         "formatting_toolbar_label": "Vormindame andmeid",
         "link_modal": {
+            "link_field_label": "Viide",
             "text_field_label": "Tekst",
             "title_create": "Tee link",
             "title_edit": "Muuda linki"
@@ -668,6 +681,7 @@
         "private_space_description": "Privaatne kogukonnakeskus sinu ja sinu kaasteeliste jaoks",
         "public_description": "Avaliku ligipääsuga kogukonnakeskus",
         "public_heading": "Sinu avalik kogukonnakeskus",
+        "search_public_button": "Avalike ruumide otsing",
         "setup_rooms_community_description": "Teeme siis iga teema jaoks oma jututoa.",
         "setup_rooms_community_heading": "Mida sa sooviksid arutada %(spaceName)s kogukonnakeskuses?",
         "setup_rooms_description": "Sa võid ka hiljem siia luua uusi jututubasid või lisada olemasolevaid.",
@@ -713,6 +727,7 @@
         "failed_to_load": "Laadimine ei õnnestunud.",
         "failed_to_save": "Seadistuste salvestamine ei õnnestunud.",
         "failed_to_send": "Päringu või sündmuse saatmine ei õnnestunud!",
+        "id": "ID:",
         "invalid_json": "See ei tundu olema korrektse json-andmestikuna.",
         "level": "Tase",
         "low_bandwidth_mode": "Vähese ribalaiusega režiim",
@@ -854,6 +869,9 @@
         },
         "event_shield_reason_authenticity_not_guaranteed": "Selle krüptitud sõnumi autentsus pole selles seadmes tagatud.",
         "event_shield_reason_mismatched_sender_key": "Krüptitud verifitseerimata sessiooni poolt",
+        "event_shield_reason_unknown_device": "Krüpteeritud tundmatu või kustutatud seadme poolt.",
+        "event_shield_reason_unsigned_device": "Krüpteeritud seadme poolt, mida selle omanik ei ole verifitseerinud.",
+        "event_shield_reason_unverified_identity": "Krüpteeritud verifitseerimata kasutaja poolt.",
         "export_unsupported": "Sinu brauser ei toeta vajalikke krüptoteeke",
         "import_invalid_keyfile": "See ei ole sobilik võtmefail %(brand)s'i jaoks",
         "import_invalid_passphrase": "Autentimine ebaõnnestus: kas salasõna pole õige?",
@@ -1038,6 +1056,8 @@
         "unknown_error_code": "tundmatu veakood",
         "update_power_level": "Õiguste muutmine ei õnnestunud"
     },
+    "error_app_open_in_another_tab": "%(brand)s on avatud teises vahekaardis.",
+    "error_app_opened_in_another_window": "%(brand)s on avatud teises aknas. Klõpsa \"%(label)s\", et kasutada siin %(brand)s ja katkestada teise akna ühendus.",
     "error_database_closed_description": "See võib olla seotud asjaoluga, et rakendus on avatud mitmes brauseriaknas korraga või brauseri andmete kustutamise tõttu.",
     "error_database_closed_title": "Andmebaasiühendus sulgus ootamatult",
     "error_dialog": {
@@ -1073,10 +1093,13 @@
             "user": "%(senderName)s alustas kõnet",
             "you": "Sa alustasid kõnet"
         },
+        "m.emote": "* %(senderName)s %(emote)s",
         "m.reaction": {
             "user": "%(sender)s reageeris %(message)s sõnumile %(reaction)s'ga",
             "you": "Sa reageerisid %(message)s sõnumile %(reaction)s'ga"
-        }
+        },
+        "m.sticker": "%(senderName)s: %(stickerName)s",
+        "m.text": "%(senderName)s: %(message)s"
     },
     "export_chat": {
         "cancelled": "Eksport on katkestatud",
@@ -1112,8 +1135,10 @@
         "format": "Vorming",
         "from_the_beginning": "Algusest alates",
         "generating_zip": "Pakin ZIP faili",
+        "html": "HTML",
         "html_title": "Eksporditud andmed",
         "include_attachments": "Kaasa manused",
+        "json": "JSON",
         "media_omitted": "Osa meediat jäi eksportimata",
         "media_omitted_file_size": "Osa meediat jäi vahele failisuuruse piirangu tõttu",
         "messages": "Sõnumid",
@@ -1127,6 +1152,7 @@
         "select_option": "Kui soovid oma ajajoonelt mõnda vestlust eksportida, siis vali tingimused alljärgnevalt",
         "size_limit": "Andmemahu piir",
         "size_limit_min_max": "Suurus saab olla number %(min)s MB ja %(max)s MB vahemikust",
+        "size_limit_postfix": "MB",
         "starting_export": "Alustame eksportimist…",
         "successful": "Eksport õnnestus",
         "successful_detail": "Sinu andmete eksport õnnestus. Faili leiad tavapärasest allalaadimiste kaustast.",
@@ -1233,6 +1259,8 @@
         "error_permissions_space": "Sul pole õigusi siia kogukonda osalejate kutsumiseks.",
         "error_profile_undisclosed": "Kasutaja võib olla, aga ka võib mitte olla olemas",
         "error_transfer_multiple_target": "Kõnet on võimalik edasi suunata vaid ühele kasutajale.",
+        "error_unfederated_room": "See jututuba on föderatsioonita. Te ei saa kutsuda inimesi välistest serveritest.",
+        "error_unfederated_space": "See ruum on föderatsioonita. Te ei saa kutsuda inimesi välistest serveritest.",
         "error_unknown": "Tundmatu serveriviga",
         "error_user_not_found": "Sellist kasutajat pole olemas",
         "error_version_unsupported_room": "Kasutaja koduserver ei toeta selle jututoa versiooni.",
@@ -1802,8 +1830,6 @@
         "room_summary_card": {
             "title": "Jututoa teave"
         },
-        "settings_button": "Jututoa seadistused",
-        "share_button": "Jaga jututuba",
         "thread_list": {
             "context_menu_label": "Jutulõnga valikud"
         },

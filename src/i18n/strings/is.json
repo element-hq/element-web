@@ -209,7 +209,8 @@
         "msisdn_field_required_invalid": "Settu inn símanúmer",
         "no_hs_url_provided": "Engin slóð heimaþjóns tilgreind",
         "oidc": {
-            "error_title": "Við gátum ekki skráð þig inn"
+            "error_title": "Við gátum ekki skráð þig inn",
+            "missing_or_invalid_stored_state": "Við báðum vafrann þinn að muna hvaða heimaþjón þú notar til að skrá þig inn, en því miður virðist það hafa gleymst. Farðu á innskráningarsíðuna og reyndu aftur."
         },
         "password_field_label": "Settu inn lykilorð",
         "password_field_strong_label": "Fínt, sterkt lykilorð!",
@@ -351,7 +352,6 @@
         "spaceinvaders_message": "sendir geimverur til árásar"
     },
     "common": {
-        "about": "Um hugbúnaðinn",
         "access_token": "Aðgangsteikn",
         "accessibility": "Auðveldað aðgengi",
         "advanced": "Nánar",
@@ -1504,8 +1504,6 @@
         "room_summary_card": {
             "title": "Upplýsingar um spjallrás"
         },
-        "settings_button": "Stillingar spjallrásar",
-        "share_button": "Deila spjallrás",
         "thread_list": {
             "context_menu_label": "Valkostir spjallþráðar"
         },

@@ -196,7 +196,8 @@
         "msisdn_field_required_invalid": "Enigu telefonnumeron",
         "no_hs_url_provided": "Neniu hejmservila URL donita",
         "oidc": {
-            "error_title": "Ni ne povis salutigi vin"
+            "error_title": "Ni ne povis salutigi vin",
+            "missing_or_invalid_stored_state": "Ni petis la foliumilon memori, kiun hejmservilon vi uzas por saluti, sed domaĝe, via foliumilo forgesis. Iru al la saluta paĝo kaj reprovu."
         },
         "password_field_label": "Enigu pasvorton",
         "password_field_strong_label": "Bona, forta pasvorto!",
@@ -329,7 +330,6 @@
         "spaceinvaders_message": "sendas imiton de ludo « Space Invaders »"
     },
     "common": {
-        "about": "Prio",
         "access_token": "Alirpeco",
         "accessibility": "Alirebleco",
         "advanced": "Altnivela",
@@ -1308,8 +1308,6 @@
             },
             "title": "Fiksitaj mesaĝoj"
         },
-        "settings_button": "Agordoj de ĉambro",
-        "share_button": "Kunhavigi ĉambron",
         "widgets_section": "Fenestraĵoj"
     },
     "room": {

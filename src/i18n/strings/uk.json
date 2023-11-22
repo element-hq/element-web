@@ -226,7 +226,8 @@
         "msisdn_field_required_invalid": "Введіть телефонний номер",
         "no_hs_url_provided": "URL адресу домашнього сервера не вказано",
         "oidc": {
-            "error_title": "Нам не вдалося виконати вхід"
+            "error_title": "Нам не вдалося виконати вхід",
+            "missing_or_invalid_stored_state": "Ми попросили браузер запам’ятати, який домашній сервер ви використовуєте, щоб дозволити вам увійти, але, на жаль, ваш браузер забув його. Перейдіть на сторінку входу та повторіть спробу."
         },
         "password_field_keep_going_prompt": "Продовжуйте…",
         "password_field_label": "Введіть пароль",
@@ -412,7 +413,6 @@
         "spaceinvaders_message": "надсилає тему про космічних загарбників"
     },
     "common": {
-        "about": "Відомості",
         "access_token": "Токен доступу",
         "accessibility": "Доступність",
         "advanced": "Подробиці",
@@ -1809,8 +1809,6 @@
         "room_summary_card": {
             "title": "Відомості про кімнату"
         },
-        "settings_button": "Налаштування кімнати",
-        "share_button": "Поділитись кімнатою",
         "thread_list": {
             "context_menu_label": "Параметри гілки"
         },

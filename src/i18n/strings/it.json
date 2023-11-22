@@ -76,6 +76,8 @@
         "new_room": "Nuova stanza",
         "new_video_room": "Nuova stanza video",
         "next": "Avanti",
+        "no": "No",
+        "ok": "OK",
         "pause": "Pausa",
         "pin": "Spillo",
         "play": "Riproduci",
@@ -182,6 +184,7 @@
         "create_account_prompt": "Prima volta qui? <a>Crea un account</a>",
         "create_account_title": "Crea account",
         "email_discovery_text": "Usa l'email per essere facoltativamente trovabile dai contatti esistenti.",
+        "email_field_label": "Email",
         "email_field_label_invalid": "Non sembra essere un indirizzo email valido",
         "email_field_label_required": "Inserisci indirizzo email",
         "email_help_text": "Aggiungi un'email per poter reimpostare la password.",
@@ -223,7 +226,8 @@
         "msisdn_field_required_invalid": "Inserisci numero di telefono",
         "no_hs_url_provided": "Nessun URL homeserver fornito",
         "oidc": {
-            "error_title": "Non abbiamo potuto farti accedere"
+            "error_title": "Non abbiamo potuto farti accedere",
+            "missing_or_invalid_stored_state": "Abbiamo chiesto al browser di ricordare quale homeserver usi per farti accedere, ma sfortunatamente l'ha dimenticato. Vai alla pagina di accesso e riprova."
         },
         "password_field_keep_going_prompt": "Continua…",
         "password_field_label": "Inserisci password",
@@ -280,6 +284,7 @@
             "sign_out_other_devices": "Disconnetti tutti i dispositivi"
         },
         "reset_password_action": "Reimposta password",
+        "reset_password_button": "Password dimenticata?",
         "reset_password_email_field_description": "Usa un indirizzo email per ripristinare il tuo account",
         "reset_password_email_field_required_invalid": "Inserisci indirizzo email (necessario in questo homeserver)",
         "reset_password_email_not_associated": "Il tuo indirizzo email non sembra associato a nessun ID utente registrato su questo homeserver.",
@@ -408,7 +413,6 @@
         "spaceinvaders_message": "invia space invaders"
     },
     "common": {
-        "about": "Al riguardo",
         "access_token": "Token di accesso",
         "accessibility": "Accessibilità",
         "advanced": "Avanzato",
@@ -418,11 +422,13 @@
             "other": "e altri %(count)s ...",
             "one": "e un altro..."
         },
+        "android": "Android",
         "appearance": "Aspetto",
         "application": "Applicazione",
         "are_you_sure": "Sei sicuro?",
         "attachment": "Allegato",
         "authentication": "Autenticazione",
+        "beta": "Beta",
         "camera": "Videocamera",
         "cameras": "Fotocamere",
         "capabilities": "Capacità",
@@ -436,7 +442,8 @@
         "display_name": "Nome visualizzato",
         "edited": "modificato",
         "email_address": "Indirizzo email",
-        "encrypted": "Cifrato",
+        "emoji": "Emoji",
+        "encrypted": "Crittografato",
         "encryption_enabled": "Crittografia attivata",
         "error": "Errore",
         "favourites": "Preferiti",
@@ -451,6 +458,7 @@
         "identity_server": "Server di identità",
         "image": "Immagine",
         "integration_manager": "Gestore di integrazioni",
+        "ios": "iOS",
         "joined": "Entrato/a",
         "labs": "Laboratori",
         "legal": "Informazioni legali",
@@ -458,6 +466,7 @@
         "loading": "Caricamento…",
         "location": "Posizione",
         "low_priority": "Bassa priorità",
+        "matrix": "Matrix",
         "message": "Messaggio",
         "message_layout": "Disposizione del messaggio",
         "microphone": "Microfono",
@@ -481,13 +490,16 @@
         "no_results_found": "Nessun risultato trovato",
         "not_trusted": "Non fidato",
         "off": "Spento",
+        "offline": "Offline",
         "on": "Acceso",
         "options": "Opzioni",
         "orphan_rooms": "Altre stanze",
+        "password": "Password",
         "people": "Persone",
         "preferences": "Preferenze",
         "presence": "Presenza",
         "preview_message": "Ehi tu. Sei il migliore!",
+        "privacy": "Privacy",
         "private": "Privato",
         "private_room": "Stanza privata",
         "private_space": "Spazio privato",
@@ -506,6 +518,7 @@
         "secure_backup": "Backup Sicuro",
         "security": "Sicurezza",
         "select_all": "Seleziona tutti",
+        "server": "Server",
         "settings": "Impostazioni",
         "setup_secure_messages": "Imposta i messaggi sicuri",
         "show_more": "Mostra altro",
@@ -535,6 +548,7 @@
         "verification_cancelled": "Verifica annullata",
         "verified": "Verificato",
         "version": "Versione",
+        "video": "Video",
         "video_room": "Stanza video",
         "view_message": "Vedi messaggio",
         "warning": "Attenzione",
@@ -578,7 +592,7 @@
         "mode_rich_text": "Mostra formattazione",
         "no_perms_notice": "Non hai il permesso di inviare in questa stanza",
         "placeholder": "Invia un messaggio…",
-        "placeholder_encrypted": "Invia un messaggio criptato…",
+        "placeholder_encrypted": "Invia un messaggio crittografato…",
         "placeholder_reply": "Invia risposta…",
         "placeholder_reply_encrypted": "Invia una risposta criptata…",
         "placeholder_thread": "Rispondi alla conversazione…",
@@ -656,6 +670,7 @@
         "private_space_description": "Uno spazio privato per te e i tuoi compagni",
         "public_description": "Spazio aperto a tutti, la scelta migliore per le comunità",
         "public_heading": "Il tuo spazio pubblico",
+        "search_public_button": "Cerca spazi pubblici",
         "setup_rooms_community_description": "Creiamo una stanza per ognuno di essi.",
         "setup_rooms_community_heading": "Quali sono le cose di cui vuoi discutere in %(spaceName)s?",
         "setup_rooms_description": "Puoi aggiungerne anche altri in seguito, inclusi quelli già esistenti.",
@@ -701,6 +716,7 @@
         "failed_to_load": "Caricamento fallito.",
         "failed_to_save": "Salvataggio impostazioni fallito.",
         "failed_to_send": "Invio dell'evento fallito!",
+        "id": "ID: ",
         "invalid_json": "Non sembra essere un JSON valido.",
         "level": "Livello",
         "low_bandwidth_mode": "Modalità larghezza di banda bassa",
@@ -842,6 +858,9 @@
         },
         "event_shield_reason_authenticity_not_guaranteed": "L'autenticità di questo messaggio cifrato non può essere garantita su questo dispositivo.",
         "event_shield_reason_mismatched_sender_key": "Cifrato da una sessione non verificata",
+        "event_shield_reason_unknown_device": "Crittografato da un dispositivo sconosciuto o eliminato.",
+        "event_shield_reason_unsigned_device": "Crittografato da un dispositivo non verificato dal suo proprietario.",
+        "event_shield_reason_unverified_identity": "Cifrato da un utente non verificato.",
         "export_unsupported": "Il tuo browser non supporta l'estensione crittografica richiesta",
         "import_invalid_keyfile": "Non è una chiave di %(brand)s valida",
         "import_invalid_passphrase": "Controllo di autenticazione fallito: password sbagliata?",
@@ -1061,10 +1080,13 @@
             "user": "%(senderName)s ha iniziato una chiamata",
             "you": "Hai iniziato una chiamata"
         },
+        "m.emote": "* %(senderName)s %(emote)s",
         "m.reaction": {
             "user": "%(sender)s ha reagito con %(reaction)s a %(message)s",
             "you": "Hai reagito con %(reaction)s a %(message)s"
-        }
+        },
+        "m.sticker": "%(senderName)s: %(stickerName)s",
+        "m.text": "%(senderName)s: %(message)s"
     },
     "export_chat": {
         "cancelled": "Esportazione annullata",
@@ -1100,8 +1122,10 @@
         "format": "Formato",
         "from_the_beginning": "Dall'inizio",
         "generating_zip": "Generazione di uno ZIP",
+        "html": "HTML",
         "html_title": "Dati esportati",
         "include_attachments": "Includi allegati",
+        "json": "JSON",
         "media_omitted": "File omesso",
         "media_omitted_file_size": "File omesso - superata dimensione massima",
         "messages": "Messaggi",
@@ -1115,6 +1139,7 @@
         "select_option": "Seleziona dalle opzioni sotto per esportare le chat dalla linea temporale",
         "size_limit": "Limite dimensione",
         "size_limit_min_max": "La dimensione può essere solo tra %(min)s MB e %(max)s MB",
+        "size_limit_postfix": "MB",
         "starting_export": "Inizio esportazione…",
         "successful": "Esportazione riuscita",
         "successful_detail": "Esportazione riuscita. La puoi trovare nella cartella Download.",
@@ -1286,6 +1311,7 @@
         "composer_toggle_link": "Attiva/disattiva collegamento",
         "composer_toggle_quote": "Attiva/disattiva citazione",
         "composer_undo": "Annulla modifica",
+        "control": "Ctrl",
         "dismiss_read_marker_and_jump_bottom": "Scarta il segno di lettura e salta alla fine",
         "end": "Fine",
         "enter": "Invio",
@@ -1408,6 +1434,7 @@
         "video_rooms_faq1_question": "Come posso creare una stanza video?",
         "video_rooms_faq2_answer": "Sì, la cronologia della chat viene mostrata assieme al video.",
         "video_rooms_faq2_question": "Posso usare la chat testuale assieme alla chiamata video?",
+        "video_rooms_feedbackSubheading": "Grazie per aver provato la beta, ti preghiamo di fornire tutti i dettagli possibili in modo da poterla migliorare.",
         "voice_broadcast": "Trasmissione vocale",
         "voice_broadcast_force_small_chunks": "Forza lunghezza pezzo trasmissione vocale a 15s",
         "wysiwyg_composer": "Editor in rich text"
@@ -1530,6 +1557,7 @@
         "toast_description": "%(brand)s è sperimentale su un browser web mobile. Per un'esperienza migliore e le ultime funzionalità, usa la nostra app nativa gratuita.",
         "toast_title": "Usa l'app per un'esperienza migliore"
     },
+    "name_and_id": "%(name)s (%(userId)s)",
     "no_more_results": "Nessun altro risultato",
     "notif_panel": {
         "empty_description": "Non hai notifiche visibili.",
@@ -1680,7 +1708,9 @@
         "busy": "Occupato",
         "idle": "Inattivo",
         "idle_for": "Inattivo per %(duration)s",
+        "offline": "Offline",
         "offline_for": "Offline per %(duration)s",
+        "online": "Online",
         "online_for": "Online per %(duration)s",
         "unknown": "Sconosciuto",
         "unknown_for": "Sconosciuto per %(duration)s"
@@ -1792,10 +1822,11 @@
         "room_summary_card": {
             "title": "Info stanza"
         },
-        "settings_button": "Impostazioni stanza",
-        "share_button": "Condividi stanza",
         "thread_list": {
             "context_menu_label": "Opzioni conversazione"
+        },
+        "video_room_chat": {
+            "title": "Chat"
         },
         "widgets_section": "Widget"
     },
@@ -2015,6 +2046,7 @@
         "show_previews": "Mostra anteprime dei messaggi",
         "sort_by": "Ordina per",
         "sort_by_activity": "Attività",
+        "sort_by_alphabet": "A-Z",
         "sort_unread_first": "Mostra prima le stanze con messaggi non letti",
         "space_menu_label": "Menu di %(spaceName)s",
         "sublist_options": "Opzioni lista",
@@ -2241,6 +2273,8 @@
             },
             "join_rule_upgrade_upgrading_room": "Aggiornamento stanza",
             "public_without_alias_warning": "Per collegare a questa stanza, aggiungi un indirizzo.",
+            "publish_room": "Rendi questa stanza visibile nell'elenco delle stanze pubbliche.",
+            "publish_space": "Rendi visibile questo spazio nell'elenco delle stanze pubbliche.",
             "strict_encryption": "Non inviare mai messaggi cifrati a sessioni non verificate in questa stanza da questa sessione",
             "title": "Sicurezza e privacy"
         },
@@ -2360,6 +2394,7 @@
         "enable_markdown_description": "Inizia i messaggi con <code>/plain</code> per inviarli senza markdown.",
         "general": {
             "account_management_section": "Gestione account",
+            "account_section": "Account",
             "add_email_dialog_title": "Aggiungi indirizzo email",
             "add_email_failed_verification": "Impossibile verificare l'indirizzo e-mail: assicurati di aver cliccato il link nell'e-mail",
             "add_email_instructions": "Ti abbiamo inviato un'email per verificare il tuo indirizzo. Segui le istruzioni contenute e poi clicca il pulsante sotto.",
@@ -2550,6 +2585,7 @@
             "voip": "Chiamate audio e video"
         },
         "preferences": {
+            "Electron.enableHardwareAcceleration": "Abilita l'accelerazione hardware (riavvia %(appName)s per avere effetto)",
             "always_show_menu_bar": "Mostra sempre la barra dei menu della finestra",
             "autocomplete_delay": "Ritardo autocompletamento (ms)",
             "code_blocks_heading": "Blocchi di codice",
@@ -2576,6 +2612,7 @@
         "security": {
             "4s_public_key_in_account_data": "nei dati dell'account",
             "4s_public_key_status": "Chiave pubblica dell'archivio segreto:",
+            "analytics_description": "Condividi dati anonimi per aiutarci ad identificare i problemi. Niente di personale. Niente terze parti.",
             "backup_key_cached_status": "Chiave di backup in cache:",
             "backup_key_stored_status": "Chiave di backup salvata:",
             "backup_key_unexpected_type": "tipo inatteso",
@@ -2611,14 +2648,17 @@
             "ignore_users_section": "Utenti ignorati",
             "import_megolm_keys": "Importa chiavi E2E stanza",
             "key_backup_active": "Questa sessione sta facendo il backup delle tue chiavi.",
+            "key_backup_active_version": "Versione di backup attiva:",
             "key_backup_active_version_none": "Nessuno",
             "key_backup_algorithm": "Algoritmo:",
+            "key_backup_can_be_restored": "Questo backup può essere ripristinato in questa sessione",
             "key_backup_complete": "Tutte le chiavi sono state copiate",
             "key_backup_connect": "Connetti questa sessione al backup chiavi",
             "key_backup_connect_prompt": "Connetti questa sessione al backup chiavi prima di disconnetterti per non perdere eventuali chiavi che possono essere solo in questa sessione.",
             "key_backup_in_progress": "Backup di %(sessionsRemaining)s chiavi…",
             "key_backup_inactive": "Questa sessione <b>non sta facendo il backup delle tue chiavi</b>, ma hai un backup esistente dal quale puoi ripristinare e che puoi usare da ora in poi.",
             "key_backup_inactive_warning": "Il backup chiavi <b>non viene fatto per questa sessione</b>.",
+            "key_backup_latest_version": "Ultima versione del backup sul server:",
             "manually_verify_all_sessions": "Verifica manualmente tutte le sessioni remote",
             "message_search_disable_warning": "Se disattivato, i messaggi delle stanze cifrate non appariranno nei risultati di ricerca.",
             "message_search_disabled": "Tieni in cache localmente i messaggi cifrati in modo sicuro affinché appaiano nei risultati di ricerca.",
@@ -2652,6 +2692,7 @@
         "send_read_receipts_unsupported": "Il tuo server non supporta la disattivazione delle conferme di lettura.",
         "send_typing_notifications": "Invia notifiche di scrittura",
         "sessions": {
+            "browser": "Browser",
             "confirm_sign_out": {
                 "one": "Conferma la disconnessione da questo dispositivo",
                 "other": "Conferma la disconnessione da questi dispositivi"
@@ -2676,6 +2717,7 @@
             "device_verified_description": "Questa sessione è pronta per i messaggi sicuri.",
             "device_verified_description_current": "La tua sessione attuale è pronta per i messaggi sicuri.",
             "error_pusher_state": "Impostazione stato del push fallita",
+            "error_set_name": "Impossibile impostare il nome della sessione",
             "filter_all": "Tutte",
             "filter_inactive": "Inattiva",
             "filter_inactive_description": "Inattiva da %(inactiveAgeDays)s giorni o più",
@@ -2736,6 +2778,7 @@
             "unverified_sessions_explainer_1": "Le sessioni non verificate sono quelle che hanno effettuato l'accesso con le tue credenziali ma non sono state verificate.",
             "unverified_sessions_explainer_2": "Dovresti essere particolarmente certo di riconoscere queste sessioni dato che potrebbero rappresentare un uso non autorizzato del tuo account.",
             "unverified_sessions_list_description": "Verifica le tue sessioni per avere conversazioni più sicure o disconnetti quelle che non riconosci o che non usi più.",
+            "url": "URL",
             "verified_session": "Sessione verificata",
             "verified_sessions": "Sessioni verificate",
             "verified_sessions_explainer_1": "Le sessioni verificate sono ovunque tu usi questo account dopo l'inserimento della frase di sicurezza o la conferma della tua identità con un'altra sessione verificata.",
@@ -3002,6 +3045,7 @@
         "message_search_section_title": "Altre ricerche",
         "other_rooms_in_space": "Altre stanze in %(spaceName)s",
         "public_rooms_label": "Stanze pubbliche",
+        "public_spaces_label": "Spazi pubblici",
         "recent_searches_section_title": "Ricerche recenti",
         "recently_viewed_section_title": "Visti di recente",
         "remove_filter": "Rimuovi filtro di ricerca per %(filter)s",
@@ -3080,7 +3124,10 @@
         "short_days": "%(value)sg",
         "short_days_hours_minutes_seconds": "%(days)sg %(hours)so %(minutes)sm %(seconds)ss",
         "short_hours": "%(value)so",
-        "short_hours_minutes_seconds": "%(hours)so %(minutes)sm %(seconds)ss"
+        "short_hours_minutes_seconds": "%(hours)so %(minutes)sm %(seconds)ss",
+        "short_minutes": "%(value)sm",
+        "short_minutes_seconds": "%(minutes)sm %(seconds)ss",
+        "short_seconds": "%(value)ss"
     },
     "timeline": {
         "context_menu": {
@@ -3096,6 +3143,7 @@
         "creation_summary_dm": "%(creator)s ha creato questo MD.",
         "creation_summary_room": "%(creator)s ha creato e configurato la stanza.",
         "decryption_failure_blocked": "Il mittente ti ha bloccato dalla ricezione di questo messaggio",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Decifrazione",
         "download_action_downloading": "Scaricamento",
         "edits": {
@@ -3107,6 +3155,7 @@
         "error_no_renderer": "Questo evento non può essere mostrato",
         "error_rendering_message": "Impossibile caricare questo messaggio",
         "historical_messages_unavailable": "Non puoi vedere i messaggi precedenti",
+        "in_room_name": " in <strong>%(room)s</strong>",
         "io.element.voice_broadcast_info": {
             "user": "%(senderName)s ha terminato una <a>trasmissione vocale</a>",
             "you": "Hai terminato una <a>trasmissione vocale</a>"
@@ -3352,6 +3401,7 @@
         "pending_moderation_reason": "Messaggio in attesa di moderazione: %(reason)s",
         "reactions": {
             "add_reaction_prompt": "Aggiungi reazione",
+            "custom_reaction_fallback_label": "Reazione personalizzata",
             "label": "%(reactors)s ha reagito con %(content)s",
             "tooltip": "<reactors/><reactedWith>ha reagito con %(shortName)s</reactedWith>"
         },
@@ -3403,6 +3453,7 @@
                 "other": "%(severalUsers)shanno modificato il loro nome %(count)s volte",
                 "one": "%(severalUsers)shanno modificato il loro nome"
             },
+            "format": "%(nameList)s %(transitionList)s",
             "hidden_event": {
                 "one": "%(oneUser)sha inviato un messaggio nascosto",
                 "other": "%(oneUser)sha inviato %(count)s messaggi nascosti"
@@ -3911,6 +3962,7 @@
             "l33t": "Sostituzioni prevedibili come '@' al posto di 'a' non aiutano molto",
             "longerKeyboardPattern": "Usa una tastiera più lunga con più variazioni",
             "noNeed": "Non sono necessari simboli, numeri o maiuscole",
+            "pwned": "Se utilizzi questa password altrove, dovresti cambiarla.",
             "recentYears": "Evita anni recenti",
             "repeated": "Evita ripetizioni di parole e caratteri",
             "reverseWords": "Le parole invertite non sono molto più difficili da indovinare",
@@ -3924,6 +3976,7 @@
             "extendedRepeat": "Ripetizioni come \"abcabcabc\" sono solo leggermente più difficili da indovinare di \"abc\"",
             "keyPattern": "Sequenze di tasti brevi sono facili da indovinare",
             "namesByThemselves": "Nomi e cognomi di per sé sono facili da indovinare",
+            "pwned": "La tua password è stata esposta a causa di una violazione dei dati su Internet.",
             "recentYears": "Gli anni recenti sono facili da indovinare",
             "sequences": "Sequenze come abc o 6543 sono facili da indovinare",
             "similarToCommon": "Questa è simile a una password usata comunemente",
@@ -3931,6 +3984,7 @@
             "straightRow": "Sequenze di tasti in riga sono facili da indovinare",
             "topHundred": "Queste sono le 100 password più comuni",
             "topTen": "Queste sono le 10 password più comuni",
+            "userInputs": "Non dovrebbero esserci dati personali o relativi alla pagina.",
             "wordByItself": "Una parola di per sé è facile da indovinare"
         }
     }
