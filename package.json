@@ -50,13 +50,13 @@
         "lint:js-fix": "eslint --fix src test cypress && prettier --loglevel=warn --write .",
         "lint:types": "tsc --noEmit --jsx react && tsc --noEmit --jsx react -p cypress",
         "lint:style": "stylelint \"res/css/**/*.pcss\"",
-        "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) | xargs -I {} sh -c 'echo \"Linting {}\"; action-validator \"{}\"'",
         "test": "jest",
         "test:cypress": "cypress run",
         "test:cypress:open": "cypress open",
         "test:playwright": "playwright test",
         "test:playwright:open": "yarn test:playwright --ui",
-        "coverage": "yarn test --coverage"
+        "coverage": "yarn test --coverage",
+        "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) | xargs -I {} sh -c 'echo \"Linting {}\"; action-validator \"{}\"'"
     },
     "resolutions": {
         "@types/react-dom": "17.0.21",
@@ -130,8 +130,6 @@
         "what-input": "^5.2.10"
     },
     "devDependencies": {
-        "@action-validator/cli": "^0.5.3",
-        "@action-validator/core": "^0.5.3",
         "@babel/cli": "^7.12.10",
         "@babel/core": "^7.12.10",
         "@babel/eslint-parser": "^7.12.10",
@@ -187,7 +185,6 @@
         "@typescript-eslint/parser": "^5.6.0",
         "allchange": "^1.1.0",
         "axe-core": "4.8.2",
-        "axe-playwright": "^1.2.3",
         "babel-jest": "^29.0.0",
         "blob-polyfill": "^7.0.0",
         "cypress": "^12.0.0",
@@ -228,7 +225,10 @@
         "stylelint-config-standard": "^34.0.0",
         "stylelint-scss": "^5.0.0",
         "ts-node": "^10.9.1",
-        "typescript": "5.1.6"
+        "typescript": "5.1.6",
+        "@axe-core/playwright": "^4.8.1",
+        "@action-validator/core": "^0.5.3",
+        "@action-validator/cli": "^0.5.3"
     },
     "peerDependencies": {
         "postcss": "^8.4.19",

@@ -40,7 +40,6 @@ import "./network";
 import "./composer";
 import "./proxy";
 import "./axe";
-import "./mailhog";
 import "./promise";
 
 installLogsCollector({
