@@ -25,6 +25,9 @@ import { extractErrorMessageFromError } from "matrix-react-sdk/src/components/vi
 import { parseQsFromFragment } from "./url_utils";
 import "./modernizr";
 
+// Make setImmediate available in bundle
+import "setimmediate";
+
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js

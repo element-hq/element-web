@@ -6,10 +6,11 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackInjectPreload = require("@principalstudio/html-webpack-inject-preload");
 const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
 const crypto = require("crypto");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 // XXX: mangle Crypto::createHash to replace md4 with sha256, output.hashFunction is insufficient as multiple bits
 // of webpack hardcode md4. The proper fix it to upgrade to webpack 5.
@@ -80,7 +81,15 @@ function parseOverridesToReplacements(overrides) {
             // because the input is effectively defined by the person running the build, we don't
             // need to do anything special to protect against regex overrunning, etc.
             new RegExp(oldPath.replace(/\//g, "[\\/\\\\]").replace(/\./g, "\\.")),
-            path.resolve(__dirname, newPath),
+            function (resource) {
+                resource.request = path.resolve(__dirname, newPath);
+                resource.createData.resource = path.resolve(__dirname, newPath);
+                // Starting with Webpack 5 we also need to set the context as otherwise replacing
+                // files in e.g. matrix-react-sdk with files from element-web will try to resolve
+                // them within matrix-react-sdk (https://github.com/webpack/webpack/issues/17716)
+                resource.context = path.dirname(resource.request);
+                resource.createData.context = path.dirname(resource.createData.resource);
+            },
         );
     });
 }
@@ -146,14 +155,6 @@ module.exports = (env, argv) => {
 
         bail: true,
 
-        node: {
-            // Mock out the NodeFS module: The opus decoder imports this wrongly.
-            fs: "empty",
-            net: "empty",
-            tls: "empty",
-            crypto: "empty",
-        },
-
         entry: {
             bundle: "./src/vector/index.ts",
             mobileguide: "./src/vector/mobile_guide/index.ts",
@@ -191,14 +192,23 @@ module.exports = (env, argv) => {
                 },
             },
 
-            // This fixes duplicate files showing up in chrome with sourcemaps enabled.
-            // See https://github.com/webpack/webpack/issues/7128 for more info.
-            namedModules: false,
+            // Readable IDs for better debugging
+            moduleIds: "named",
 
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
             minimize: enableMinification,
-            minimizer: enableMinification ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
+            minimizer: enableMinification
+                ? [
+                      new TerserPlugin({
+                          // Already minified and includes an auto-generated license comment
+                          // that the plugin would otherwise pointlessly extract into a separate
+                          // file. We add the actual license using CopyWebpackPlugin below.
+                          exclude: "jitsi_external_api.min.js",
+                      }),
+                      new CssMinimizerPlugin(),
+                  ]
+                : [],
 
             // Set the value of `process.env.NODE_ENV` for libraries like React
             // See also https://v4.webpack.js.org/configuration/optimization/#optimizationnodeenv
@@ -241,6 +251,20 @@ module.exports = (env, argv) => {
                 // Define a variable so the i18n stuff can load
                 "$webapp": path.resolve(__dirname, "webapp"),
             },
+            fallback: {
+                // Mock out the NodeFS module: The opus decoder imports this wrongly.
+                "fs": false,
+                "net": false,
+                "tls": false,
+                "crypto": false,
+
+                // Polyfill needed by counterpart
+                "util": require.resolve("util/"),
+                // Polyfill needed by matrix-js-sdk/src/crypto
+                "buffer": require.resolve("buffer/"),
+                // Polyfill needed by sentry
+                "process/browser": require.resolve("process/browser"),
+            },
         },
 
         module: {
@@ -265,15 +289,6 @@ module.exports = (env, argv) => {
                     options: {
                         search: '"use theming";',
                         replace: getThemesImports(),
-                    },
-                },
-                {
-                    test: /\.worker\.ts$/,
-                    loader: "worker-loader",
-                    options: {
-                        // Prevent bundling workers since CSP forbids loading them
-                        // from another origin.
-                        filename: "[hash].worker.js",
                     },
                 },
                 {
@@ -451,22 +466,17 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
-                    // Special case the recorder worklet as it can't end up HMR'd, but the worker-loader
-                    // isn't good enough for us. Note that the worklet-loader is listed as "do not use",
-                    // however it seems to work fine for our purposes.
+                    // Ideally we should use the built-in worklet support in Webpack 5 with the syntax
+                    // described in https://github.com/webpack/webpack.js.org/issues/6869. However, this
+                    // doesn't currently appear to work with our public path setup. So we handle this
+                    // with a custom loader instead.
                     test: /RecorderWorklet\.ts$/,
                     type: "javascript/auto",
                     use: [
-                        // executed last -> first, for some reason.
                         {
-                            loader: "worklet-loader",
-                            options: {
-                                // Override name so we know what it is in the output.
-                                name: "recorder-worklet.[hash:7].js",
-                            },
+                            loader: path.resolve("./recorder-worklet-loader.js"),
                         },
                         {
-                            // TS -> JS because the worklet-loader won't do this for us.
                             loader: "babel-loader",
                         },
                     ],
@@ -708,7 +718,34 @@ module.exports = (env, argv) => {
                         console.log(`::warning title=Sentry error::${err.message}`);
                     },
                 }),
+
             new webpack.EnvironmentPlugin(["VERSION"]),
+
+            new CopyWebpackPlugin({
+                patterns: [
+                    "res/apple-app-site-association",
+                    "res/jitsi_external_api.min.js",
+                    "res/jitsi_external_api.min.js.LICENSE.txt",
+                    "res/manifest.json",
+                    "res/sw.js",
+                    "res/welcome.html",
+                    { from: "welcome/**", context: path.resolve(__dirname, "res") },
+                    { from: "themes/**", context: path.resolve(__dirname, "res") },
+                    { from: "vector-icons/**", context: path.resolve(__dirname, "res") },
+                    { from: "decoder-ring/**", context: path.resolve(__dirname, "res") },
+                    { from: "media/**", context: path.resolve(__dirname, "node_modules/matrix-react-sdk/res/") },
+                    "node_modules/@matrix-org/olm/olm_legacy.js",
+                    { from: "config.json", noErrorOnMissing: true },
+                    "contribute.json",
+                ],
+            }),
+
+            // Automatically load buffer & process modules as we use them without explicitly
+            // importing them
+            new webpack.ProvidePlugin({
+                Buffer: ["buffer", "Buffer"],
+                process: "process/browser",
+            }),
         ].filter(Boolean),
 
         output: {
@@ -728,6 +765,15 @@ module.exports = (env, argv) => {
 
         // configuration for the webpack-dev-server
         devServer: {
+            client: {
+                overlay: {
+                    // Only show overlay on build errors as anything more can get annoying quickly
+                    errors: true,
+                    warnings: false,
+                    runtimeErrors: false,
+                },
+            },
+
             static: {
                 // Where to serve static assets from
                 directory: "./webapp",

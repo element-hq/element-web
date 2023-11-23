@@ -1,0 +1,16 @@
+name: Sync labels
+on:
+    workflow_dispatch: {}
+    push:
+        branches:
+            - develop
+        paths:
+            - .github/labels.yml
+jobs:
+    sync-labels:
+        uses: vector-im/element-meta/.github/workflows/sync-labels.yml@develop
+        with:
+            LABELS: |
+                .github/labels.yml
+        secrets:
+            ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}

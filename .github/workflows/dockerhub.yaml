@@ -12,10 +12,23 @@ jobs:
         name: Docker Buildx
         runs-on: ubuntu-latest
         environment: dockerhub
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - variant: vanilla
+                    # Variant we ship to aid ESS in providing a build on the OpenCoDE platform including specific modules
+                    - variant: opendesk
+                      flavor: suffix=-opendesk,onlatest=true
+                      prepare: mv variants/openDesk/* .
         steps:
             - uses: actions/checkout@v4
               with:
                   fetch-depth: 0 # needed for docker-package to be able to calculate the version
+
+            - name: Prepare
+              if: matrix.prepare
+              run: ${{ matrix.prepare }}
 
             - name: Set up QEMU
               uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3
@@ -42,6 +55,7 @@ jobs:
                       type=ref,event=tag
                   flavor: |
                       latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
+                      ${{ matrix.flavor }}
 
             - name: Build and push
               uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5
@@ -53,6 +67,7 @@ jobs:
                   labels: ${{ steps.meta.outputs.labels }}
 
             - name: Update repo description
+              if: matrix.variant == 'vanilla'
               uses: peter-evans/dockerhub-description@dc67fad7001ef9e8e3c124cb7a64e16d0a63d864 # v3
               continue-on-error: true
               with:

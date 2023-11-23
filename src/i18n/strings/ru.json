@@ -14,6 +14,7 @@
     "error": {
         "app_launch_unexpected_error": "Неожиданная ошибка при подготовке приложения. Подробности см. в консоли.",
         "cannot_load_config": "Не удалось загрузить файл конфигурации. Попробуйте обновить страницу.",
+        "invalid_configuration_mixed_server": "Неверная конфигурация: нельзя указать default_hs_url вместе с default_server_name или default_server_config",
         "invalid_configuration_no_server": "Неверная конфигурация: сервер по умолчанию не указан.",
         "invalid_json": "Конфигурация Element содержит неверный JSON. Исправьте проблему и обновите страницу.",
         "invalid_json_detail": "Сообщение из парсера: %(message)s",

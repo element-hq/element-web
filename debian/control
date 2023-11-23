@@ -1,12 +1,13 @@
-Package: element-web
-License: Apache-2.0
-Vendor: support@element.io
-Architecture: all
+Source: element-web
 Maintainer: support@element.io
-Recommends: element-io-archive-keyring
 Section: web
 Priority: optional
 Homepage: https://element.io/
-Version: ${Version}
+
+Package: element-web
+Architecture: all
+Recommends: httpd, element-io-archive-keyring
 Description:
   A feature-rich client for Matrix.org
+  This package contains the web-based client that can be served through a web
+   server.

@@ -9,6 +9,7 @@
 
 # Setup
 
+-   [Install](install.md)
 -   [Config](config.md)
 -   [Custom home page](custom-home.md)
 -   [Kubernetes](kubernetes.md)
@@ -37,3 +38,4 @@
 -   [Jitsi](jitsi-dev.md)
 -   [Feature flags](feature-flags.md)
 -   [OIDC and delegated authentication](oidc.md)
+-   [Release Process](release.md)

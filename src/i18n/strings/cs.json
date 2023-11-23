@@ -9,6 +9,7 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Přejděte do prohlížeče a dokončete přihlášení"
     },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Stahování dokončeno",
     "error": {
         "app_launch_unexpected_error": "Neočekávaná chyba při přípravě aplikace. Podrobnosti najdete v konzoli.",
