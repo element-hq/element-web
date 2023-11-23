@@ -53,5 +53,5 @@ export interface Credentials {
     userId: string;
     deviceId: string;
     homeServer: string;
-    password: string;
+    password: string | null; // null for password-less users
 }

@@ -8,5 +8,5 @@
         "moduleResolution": "node",
         "module": "es2022"
     },
-    "include": ["**/*.ts"]
+    "include": ["**/*.ts", "../src/@types/global.d.ts"]
 }

@@ -26,17 +26,12 @@ import { slidingSyncProxyDocker } from "./sliding-sync";
 import { webserver } from "./webserver";
 import { docker } from "./docker";
 import { log } from "./log";
-import { oAuthServer } from "./oauth_server";
 
 /**
  * @type {Cypress.PluginConfig}
  */
 export default function (on: PluginEvents, config: PluginConfigOptions) {
-    initPlugins(
-        on,
-        [docker, synapseDocker, dendriteDocker, slidingSyncProxyDocker, webserver, oAuthServer, log],
-        config,
-    );
+    initPlugins(on, [docker, synapseDocker, dendriteDocker, slidingSyncProxyDocker, webserver, log], config);
     installLogsPrinter(on, {
         printLogsToConsole: "never",
 
