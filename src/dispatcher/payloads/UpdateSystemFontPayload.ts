@@ -21,6 +21,11 @@ export interface UpdateSystemFontPayload extends ActionPayload {
     action: Action.UpdateSystemFont;
 
     /**
+     * Specify whether to use the bundled emoji font or the system font
+     */
+    useBundledEmojiFont: boolean;
+
+    /**
      * Specify whether to use a system font or the stylesheet font
      */
     useSystemFont: boolean;

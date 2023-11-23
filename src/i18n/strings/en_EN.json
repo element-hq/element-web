@@ -2400,6 +2400,7 @@
         "all_rooms_home_description": "All rooms you're in will appear in Home.",
         "always_show_message_timestamps": "Always show message timestamps",
         "appearance": {
+            "bundled_emoji_font": "Use bundled emoji font",
             "custom_font": "Use a system font",
             "custom_font_description": "Set the name of a font installed on your system & %(brand)s will attempt to use it.",
             "custom_font_name": "System font name",

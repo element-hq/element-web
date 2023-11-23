@@ -86,6 +86,7 @@ export class FontWatcher implements IWatcher {
     private updateFont(): void {
         this.setRootFontSize(SettingsStore.getValue("baseFontSizeV2"));
         this.setSystemFont({
+            useBundledEmojiFont: SettingsStore.getValue("useBundledEmojiFont"),
             useSystemFont: SettingsStore.getValue("useSystemFont"),
             font: SettingsStore.getValue("systemFont"),
         });
@@ -102,6 +103,7 @@ export class FontWatcher implements IWatcher {
             // Clear font overrides when logging out
             this.setRootFontSize(FontWatcher.DEFAULT_SIZE);
             this.setSystemFont({
+                useBundledEmojiFont: false,
                 useSystemFont: false,
                 font: "",
             });
@@ -121,31 +123,46 @@ export class FontWatcher implements IWatcher {
     };
 
     public static readonly FONT_FAMILY_CUSTOM_PROPERTY = "--cpd-font-family-sans";
+    public static readonly EMOJI_FONT_FAMILY_CUSTOM_PROPERTY = "--emoji-font-family";
+    public static readonly BUNDLED_EMOJI_FONT = "Twemoji";
 
     private setSystemFont = ({
+        useBundledEmojiFont,
         useSystemFont,
         font,
-    }: Pick<UpdateSystemFontPayload, "useSystemFont" | "font">): void => {
+    }: Pick<UpdateSystemFontPayload, "useBundledEmojiFont" | "useSystemFont" | "font">): void => {
         if (useSystemFont) {
+            let fontString = font
+                .split(",")
+                .map((font) => {
+                    font = font.trim();
+                    if (!font.startsWith('"') && !font.endsWith('"')) {
+                        font = `"${font}"`;
+                    }
+                    return font;
+                })
+                .join(",");
+
+            if (useBundledEmojiFont) {
+                fontString += ", " + FontWatcher.BUNDLED_EMOJI_FONT;
+            }
+
             /**
              * Overrides the default font family from Compound
              * Make sure that fonts with spaces in their names get interpreted properly
              */
-            document.body.style.setProperty(
-                FontWatcher.FONT_FAMILY_CUSTOM_PROPERTY,
-                font
-                    .split(",")
-                    .map((font) => {
-                        font = font.trim();
-                        if (!font.startsWith('"') && !font.endsWith('"')) {
-                            font = `"${font}"`;
-                        }
-                        return font;
-                    })
-                    .join(","),
-            );
+            document.body.style.setProperty(FontWatcher.FONT_FAMILY_CUSTOM_PROPERTY, fontString);
         } else {
             document.body.style.removeProperty(FontWatcher.FONT_FAMILY_CUSTOM_PROPERTY);
+
+            if (useBundledEmojiFont) {
+                document.body.style.setProperty(
+                    FontWatcher.EMOJI_FONT_FAMILY_CUSTOM_PROPERTY,
+                    FontWatcher.BUNDLED_EMOJI_FONT,
+                );
+            } else {
+                document.body.style.removeProperty(FontWatcher.EMOJI_FONT_FAMILY_CUSTOM_PROPERTY);
+            }
         }
     };
 }

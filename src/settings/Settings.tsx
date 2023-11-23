@@ -28,7 +28,6 @@ import PushToMatrixClientController from "./controllers/PushToMatrixClientContro
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import FontSizeController from "./controllers/FontSizeController";
 import SystemFontController from "./controllers/SystemFontController";
-import UseSystemFontController from "./controllers/UseSystemFontController";
 import { SettingLevel } from "./SettingLevel";
 import SettingController from "./controllers/SettingController";
 import { IS_MAC } from "../Keyboard";
@@ -712,11 +711,17 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         default: true,
         displayName: _td("settings|appearance|match_system_theme"),
     },
+    "useBundledEmojiFont": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+        displayName: _td("settings|appearance|bundled_emoji_font"),
+        controller: new SystemFontController(),
+    },
     "useSystemFont": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
         displayName: _td("settings|appearance|custom_font"),
-        controller: new UseSystemFontController(),
+        controller: new SystemFontController(),
     },
     "systemFont": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

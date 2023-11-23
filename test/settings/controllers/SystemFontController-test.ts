@@ -17,22 +17,26 @@ limitations under the License.
 import { Action } from "../../../src/dispatcher/actions";
 import dis from "../../../src/dispatcher/dispatcher";
 import SystemFontController from "../../../src/settings/controllers/SystemFontController";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 
 const dispatchSpy = jest.spyOn(dis, "dispatch");
 
 describe("SystemFontController", () => {
-    it("dispatches a font size action on change", () => {
-        const getValueSpy = jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+    it("dispatches a system font update action on change", () => {
         const controller = new SystemFontController();
 
-        controller.onChange(SettingLevel.ACCOUNT, "$room:server", 12);
+        const getValueSpy = jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+            if (settingName === "useBundledEmojiFont") return false;
+            if (settingName === "useSystemFont") return true;
+            if (settingName === "systemFont") return "Comic Sans MS";
+        });
+        controller.onChange();
 
         expect(dispatchSpy).toHaveBeenCalledWith({
             action: Action.UpdateSystemFont,
+            useBundledEmojiFont: false,
             useSystemFont: true,
-            font: 12,
+            font: "Comic Sans MS",
         });
 
         expect(getValueSpy).toHaveBeenCalledWith("useSystemFont");
