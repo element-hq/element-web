@@ -24,12 +24,6 @@ jobs:
                       Do you trust the author of this PR? Maybe this build will steal your keys or give you malware.
                       Exercise caution. Use test accounts.
 
-            - id: prdetails
-              uses: matrix-org/pr-details-action@v1.3
-              with:
-                  owner: ${{ github.event.workflow_run.head_repository.owner.login }}
-                  branch: ${{ github.event.workflow_run.head_branch }}
-
             # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
             # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
             - name: 📥 Download artifact
@@ -39,32 +33,17 @@ jobs:
                   name: previewbuild
                   path: webapp
 
-            - name: ☁️ Deploy to Netlify
-              id: netlify
-              uses: nwtgck/actions-netlify@7a92f00dde8c92a5a9e8385ec2919775f7647352 # v2.1
+            - name: 📤 Deploy to Netlify
+              uses: matrix-org/netlify-pr-preview@v2
               with:
-                  publish-dir: webapp
-                  deploy-message: "Deploy from GitHub Actions"
-                  # These don't work because we're in workflow_run
-                  enable-pull-request-comment: false
-                  enable-commit-comment: false
-                  alias: pr${{ steps.prdetails.outputs.pr_id }}
-              env:
-                  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-                  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-              timeout-minutes: 1
-
-            - name: 🚦 Update deployment status
-              uses: bobheadxi/deployments@88ce5600046c82542f8246ac287d0a53c461bca3 # v1
-              if: always()
-              with:
-                  step: finish
-                  override: false
-                  token: ${{ secrets.GITHUB_TOKEN }}
-                  status: ${{ job.status }}
-                  env: ${{ steps.deployment.outputs.env }}
+                  path: webapp
+                  owner: ${{ github.event.workflow_run.head_repository.owner.login }}
+                  branch: ${{ github.event.workflow_run.head_branch }}
+                  revision: ${{ github.event.workflow_run.head_sha }}
+                  token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+                  site_id: ${{ secrets.NETLIFY_SITE_ID }}
+                  deployment_env: ${{ steps.deployment.outputs.env }}
                   deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-                  env_url: ${{ steps.netlify.outputs.deploy-url }}
                   desc: |
                       Do you trust the author of this PR? Maybe this build will steal your keys or give you malware.
                       Exercise caution. Use test accounts.
