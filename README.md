@@ -3,14 +3,6 @@
 ![Static Analysis](https://github.com/matrix-org/matrix-react-sdk/actions/workflows/static_analysis.yaml/badge.svg)
 [![Knapsack Pro Parallel CI builds for Cypress Test - Legacy Crypto](https://img.shields.io/badge/Knapsack%20Pro-Parallel%20%2F%20Cypress%20Test%20--%20Legacy%20Crypto-%230074ff)](https://knapsackpro.com/dashboard/organizations/3882/projects/2469/test_suites/3724/builds?utm_campaign=organization-id-3882&utm_content=test-suite-id-3724&utm_medium=readme&utm_source=knapsack-pro-badge&utm_term=project-id-2469)
 [![Knapsack Pro Parallel CI builds for Cypress Test - Rust Crypto](https://img.shields.io/badge/Knapsack%20Pro-Parallel%20%2F%20Cypress%20Test%20--%20Rust%20Crypto-%230074ff)](https://knapsackpro.com/dashboard/organizations/3882/projects/2469/test_suites/3729/builds?utm_campaign=organization-id-3882&utm_content=test-suite-id-3729&utm_medium=readme&utm_source=knapsack-pro-badge&utm_term=project-id-2469)
-
-<!--
-Percy is disabled while we're figuring out https://github.com/vector-im/wat-internal/issues/36
-and https://github.com/vector-im/wat-internal/issues/56. We're hoping to turn it back on or switch
-to an alternative in the future.
-[![This project is using Percy.io for visual regression testing.](https://percy.io/static/images/percy-badge.svg)](https://percy.io/dfde73bd/matrix-react-sdk)
--->
-
 [![Localazy](https://img.shields.io/endpoint?url=https%3A%2F%2Fconnect.localazy.com%2Fstatus%2Felement-web%2Fdata%3Fcontent%3Dall%26title%3Dlocalazy%26logo%3Dtrue)](https://localazy.com/p/element-web)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matrix-react-sdk&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matrix-react-sdk)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=matrix-react-sdk&metric=coverage)](https://sonarcloud.io/summary/new_code?id=matrix-react-sdk)

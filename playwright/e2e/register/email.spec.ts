@@ -59,7 +59,7 @@ test.describe("Email Registration", async () => {
     }) => {
         await expect(page.getByRole("textbox", { name: "Username" })).toBeVisible();
         // Hide the server text as it contains the randomly allocated Homeserver port
-        // const percyCSS = ".mx_ServerPicker_server { visibility: hidden !important; }"; // XXX: Percy
+        const screenshotOptions = { mask: [page.locator(".mx_ServerPicker_server")] };
 
         await page.getByRole("textbox", { name: "Username" }).fill("alice");
         await page.getByPlaceholder("Password", { exact: true }).fill("totally a great password");
@@ -68,7 +68,7 @@ test.describe("Email Registration", async () => {
         await page.getByRole("button", { name: "Register" }).click();
 
         await expect(page.getByText("Check your email to continue")).toBeVisible();
-        // cy.percySnapshot("Registration check your email", { percyCSS }); // XXX: Percy
+        await expect(page).toHaveScreenshot("registration_check_your_email.png", screenshotOptions);
         await checkA11y();
 
         await expect(page.getByText("An error was encountered when sending the email")).not.toBeVisible();

@@ -1,3 +1,6 @@
 /test-results/
 /html-report/
 /synapselogs/
+# Only commit snapshots from Linux
+/e2e/*/*-snapshots/*.png
+!/e2e/*/*-snapshots/*-linux.png

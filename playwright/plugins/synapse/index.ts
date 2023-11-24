@@ -114,7 +114,7 @@ export class Synapse implements Homeserver, HomeserverInstance {
      * one of the templates in the playwright/plugins/synapsedocker/templates
      * directory.
      *
-     * Any value in opts.variables that is set to `{{HOST_DOCKER_INTERNAL}}'
+     * Any value in `opts.variables` that is set to `{{HOST_DOCKER_INTERNAL}}'
      * will be replaced with 'host.docker.internal' (if we are on Docker) or
      * 'host.containers.internal' if we are on Podman.
      */
