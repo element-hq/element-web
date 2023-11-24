@@ -170,7 +170,7 @@ describe("DateSeparator", () => {
                 const returnedEventId = "$abc";
                 mockClient.timestampToEvent.mockResolvedValue({
                     event_id: returnedEventId,
-                    origin_server_ts: String(returnedDate.getTime()),
+                    origin_server_ts: returnedDate.getTime(),
                 } satisfies TimestampToEventResponse);
                 const jumpToXButton = await screen.findByTestId(testCase.jumpButtonTestId);
                 fireEvent.click(jumpToXButton);
@@ -207,7 +207,7 @@ describe("DateSeparator", () => {
             // Jump to "last week"
             mockClient.timestampToEvent.mockResolvedValue({
                 event_id: "$abc",
-                origin_server_ts: "0",
+                origin_server_ts: 0,
             });
             const jumpToLastWeekButton = await screen.findByTestId("jump-to-date-last-week");
             fireEvent.click(jumpToLastWeekButton);
