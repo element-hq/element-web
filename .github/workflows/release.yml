@@ -23,7 +23,7 @@ on:
 concurrency: ${{ github.workflow }}
 jobs:
     release:
-        uses: matrix-org/matrix-js-sdk/.github/workflows/release-action.yml@develop
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-make.yml@develop
         secrets: inherit
         with:
             final: ${{ inputs.mode == 'final' }}
