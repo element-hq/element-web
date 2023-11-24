@@ -40,6 +40,8 @@ The following requirements are key for any module:
    which takes a single parameter: a `ModuleApi` instance. This instance is passed to `super()`.
 3. The module must be deployed in a way where `yarn add` can access it, as that is how the build system will try to
    install it. Note that while this is often NPM, it can also be a GitHub/GitLab repo or private NPM registry.
+   Be careful when using git dependencies in yarn classic, many lifecycle scripts will not be executed which may mean
+   that your module is not built and thus may fail to be imported.
 
 ... and that's pretty much it. As with any code, please be responsible and call things in line with the documentation.
 Both `RuntimeModule` and `ModuleApi` have extensive documentation to describe what is proper usage and how to set things
