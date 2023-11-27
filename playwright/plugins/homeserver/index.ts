@@ -18,6 +18,7 @@ export interface HomeserverConfig {
     readonly configDir: string;
     readonly baseUrl: string;
     readonly port: number;
+    readonly registrationSecret: string;
 }
 
 export interface HomeserverInstance {

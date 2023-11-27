@@ -16,8 +16,11 @@ limitations under the License.
 
 import { test, expect } from "../../element-web-test";
 import { MailHogServer } from "../../plugins/mailhog";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Email Registration", async () => {
+    test.skip(isDendrite, "not yet wired up");
+
     test.use({
         // eslint-disable-next-line no-empty-pattern
         mailhog: async ({}, use) => {

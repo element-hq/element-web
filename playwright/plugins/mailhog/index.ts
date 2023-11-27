@@ -37,7 +37,7 @@ export class MailHogServer {
         console.log(`Starting mailhog...`);
         const containerId = await this.docker.run({
             image: "mailhog/mailhog:latest",
-            containerName: `react-sdk-cypress-mailhog`,
+            containerName: `react-sdk-playwright-mailhog`,
             params: ["--rm", "-p", `${smtpPort}:1025/tcp`, "-p", `${httpPort}:8025/tcp`],
         });
         console.log(`Started mailhog on ports smtp=${smtpPort} http=${httpPort}.`);

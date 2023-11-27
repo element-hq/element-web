@@ -16,7 +16,7 @@ limitations under the License.
 
 import { Page, expect } from "@playwright/test";
 
-import { Credentials, HomeserverInstance } from "../../plugins/utils/homeserver";
+import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 
 /** Visit the login page, choose to log in with "OAuth test", register a new account, and redirect back to Element
  */

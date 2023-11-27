@@ -14,29 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as path from "path";
-import * as os from "os";
-import * as crypto from "crypto";
+import * as path from "node:path";
+import * as os from "node:os";
+import * as crypto from "node:crypto";
 import * as fse from "fs-extra";
 import { APIRequestContext } from "@playwright/test";
 
-import { getFreePort } from "../utils/port";
-import { Docker } from "../docker";
-import {
-    HomeserverConfig,
-    HomeserverInstance,
-    Homeserver,
-    StartHomeserverOpts,
-    Credentials,
-} from "../utils/homeserver";
+import { getFreePort } from "../../utils/port";
+import { Docker } from "../../docker";
+import { HomeserverConfig, HomeserverInstance, Homeserver, StartHomeserverOpts, Credentials } from "..";
+import { randB64Bytes } from "../../utils/rand";
 
-function randB64Bytes(numBytes: number): string {
-    return crypto.randomBytes(numBytes).toString("base64").replace(/=*$/, "");
-}
-
-async function cfgDirFromTemplate(
-    opts: StartHomeserverOpts,
-): Promise<HomeserverConfig & { registrationSecret: string }> {
+async function cfgDirFromTemplate(opts: StartHomeserverOpts): Promise<HomeserverConfig> {
     const templateDir = path.join(__dirname, "templates", opts.template);
 
     const stats = await fse.stat(templateDir);
@@ -104,8 +93,8 @@ async function cfgDirFromTemplate(
 }
 
 export class Synapse implements Homeserver, HomeserverInstance {
-    private docker: Docker = new Docker();
-    public config: HomeserverConfig & { serverId: string; registrationSecret: string };
+    protected docker: Docker = new Docker();
+    public config: HomeserverConfig & { serverId: string };
 
     public constructor(private readonly request: APIRequestContext) {}
 

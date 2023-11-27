@@ -16,6 +16,7 @@ limitations under the License.
 
 import { test, expect } from "../../element-web-test";
 import { doTokenRegistration } from "./utils";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Login", () => {
     test.describe("m.login.password", () => {
@@ -79,6 +80,8 @@ test.describe("Login", () => {
 
     // tests for old-style SSO login, in which we exchange tokens with Synapse, and Synapse talks to an auth server
     test.describe("SSO login", () => {
+        test.skip(isDendrite, "does not yet support SSO");
+
         test.use({
             startHomeserverOpts: ({ oAuthServer }, use) =>
                 use({
