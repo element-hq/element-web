@@ -2,11 +2,15 @@
     "compilerOptions": {
         "target": "es2016",
         "jsx": "react",
-        "lib": ["es2021", "dom", "dom.iterable"],
+        "lib": ["ESNext", "es2021", "dom", "dom.iterable"],
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
         "module": "es2022"
     },
-    "include": ["**/*.ts", "../src/@types/global.d.ts"]
+    "include": [
+        "**/*.ts",
+        "../node_modules/matrix-js-sdk/src/@types/*.d.ts",
+        "../node_modules/matrix-js-sdk/node_modules/@matrix-org/olm/index.d.ts"
+    ]
 }

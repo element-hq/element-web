@@ -193,6 +193,10 @@ export class Synapse implements Homeserver, HomeserverInstance {
             },
         });
 
+        if (!res.ok()) {
+            throw await res.json();
+        }
+
         const data = await res.json();
         return {
             homeServer: data.home_server,
