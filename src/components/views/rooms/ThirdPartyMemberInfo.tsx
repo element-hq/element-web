@@ -27,6 +27,7 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import AccessibleButton from "../elements/AccessibleButton";
+import { Action } from "../../../dispatcher/actions";
 
 interface IProps {
     event: MatrixEvent;
@@ -91,7 +92,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
 
     public onCancel = (): void => {
         dis.dispatch({
-            action: "view_3pid_invite",
+            action: Action.View3pidInvite,
             event: null,
         });
     };
