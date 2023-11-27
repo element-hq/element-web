@@ -219,6 +219,7 @@ describe("Appearance user settings tab", () => {
         cy.findByRole("button", { name: "Show advanced" }).click();
 
         // force click as checkbox size is zero
+        cy.findByLabelText("Use bundled emoji font").click({ force: true });
         cy.findByLabelText("Use a system font").click({ force: true });
 
         // Assert that the font-family value was removed

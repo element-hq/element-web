@@ -713,7 +713,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "useBundledEmojiFont": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: false,
+        default: true,
         displayName: _td("settings|appearance|bundled_emoji_font"),
         controller: new SystemFontController(),
     },
