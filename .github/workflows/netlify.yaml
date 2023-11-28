@@ -34,7 +34,7 @@ jobs:
                   path: webapp
 
             - name: 📤 Deploy to Netlify
-              uses: matrix-org/netlify-pr-preview@v2
+              uses: matrix-org/netlify-pr-preview@v3
               with:
                   path: webapp
                   owner: ${{ github.event.workflow_run.head_repository.owner.login }}
