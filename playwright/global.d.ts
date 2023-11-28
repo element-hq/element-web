@@ -16,10 +16,15 @@ limitations under the License.
 
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
+import { type SettingLevel } from "../src/settings/SettingLevel";
+
 declare global {
     interface Window {
         mxMatrixClientPeg: {
             get(): MatrixClient;
+        };
+        mxSettingsStore: {
+            setValue(settingName: string, roomId: string | null, level: SettingLevel, value: any): Promise<void>;
         };
     }
 }

@@ -64,6 +64,7 @@ export const test = base.extend<
         app: ElementAppPage;
         mailhog?: { api: mailhog.API; instance: Instance };
         crypto: Crypto;
+        room?: { roomId: string };
         toasts: Toasts;
     }
 >({
