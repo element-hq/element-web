@@ -127,7 +127,7 @@ describe("createRoom", () => {
             ];
 
         expect(callPower).toBe(100);
-        expect(callMemberPower).toBe(100);
+        expect(callMemberPower).toBe(0);
     });
 
     it("should upload avatar if one is passed", async () => {
