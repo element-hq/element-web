@@ -160,3 +160,4 @@ jobs:
                   site_id: ${{ secrets.NETLIFY_SITE_ID }}
                   desc: Playwright Report
                   deployment_env: EndToEndTests
+                  prefix: "e2e-"
