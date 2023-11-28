@@ -1747,6 +1747,11 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-3.0.1.tgz#56a0376f8a389264bcf4d5325b378a71f18b7664"
   integrity sha512-r0PBfUKlLHm67+fpIV21netX5+DujbY2XjJy7JUGJ55oW4XWBNbSf9vElfaQkrdt/iDscL/8I5PoD5lCuVW6zA==
 
+"@matrix-org/matrix-sdk-crypto-wasm@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-3.1.0.tgz#38d8707dd5bdad4e98a0a66bf266accfc401b3cd"
+  integrity sha512-jFl8jeL16u9pyo1NIdg6US4r+Srm7KixL+cMYVbRG8EwB4UpF4Bt+3TdBUhWGbVc1Qte1htdBjPs8ZB+gZWkYw==
+
 "@matrix-org/matrix-wysiwyg@2.17.0":
   version "2.17.0"
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.17.0.tgz#68c83da17826fb43828f0c1ddd8d6e0b9d155ae5"
@@ -3053,10 +3058,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vector-im/compound-design-tokens@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-0.0.7.tgz#b0716dd4782dd95900491e45b003b58f93748024"
-  integrity sha512-RCQc6qr+s8cp4xKbNi/I3OL43uPCH+N4L9vYf0r+qwRy4WCKdI4QL0TBTV4bOo8hF49z8e+BgU5ZIu5TVQXNMQ==
+"@vector-im/compound-design-tokens@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-0.1.0.tgz#1a574fba872ff93b1de8490f475e30b922cd02a2"
+  integrity sha512-vnDrd1CPPR7CwQLss/JnIE1ga6QwmCkhgBvXm1huMhCs7nIiqf90Sbgc0WugbHNaRXGEEhMVGrE69DaQIUcqOA==
   dependencies:
     svg2vectordrawable "^2.9.1"
 
@@ -8353,6 +8358,26 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
+matrix-js-sdk@30.2.0-rc.0:
+  version "30.2.0-rc.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-30.2.0-rc.0.tgz#1afda91a54115a09c943b9873799fc87758739ad"
+  integrity sha512-Tf2qdKJnpYUZX/jddvVn+KbP7BHl5hGywSL1I+QA1hJ0L45HeEh6P1bHJvbChOI40VMHGVG611+WZXWw4pHv5A==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^3.1.0"
+    another-json "^0.2.0"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    jwt-decode "^3.1.2"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.6.0"
+    oidc-client-ts "^2.2.4"
+    p-retry "4"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+    uuid "9"
+
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "30.1.0"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b2018ef81b1b5be71cef073e85f77592a9dadae3"
@@ -8379,19 +8404,21 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.85.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/c968f118336a4639a693a66ea923a68ce8538bbf"
+matrix-react-sdk@3.86.0-rc.2:
+  version "3.86.0-rc.2"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.86.0-rc.2.tgz#cab90ed97bf9a567ba6e7ba3ea30957544b07277"
+  integrity sha512-8jeMGJfWnjDqbm24p3Ka9IW+NC/jDGCcqmTdkqrA+qo6M1TGJocPTDADpL6esST+HaZo/pxQUnP1bvllREQ/vQ==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.9.0"
     "@matrix-org/emojibase-bindings" "^1.1.2"
     "@matrix-org/matrix-wysiwyg" "2.17.0"
+    "@matrix-org/olm" "3.2.15"
     "@matrix-org/react-sdk-module-api" "^2.2.1"
     "@matrix-org/spec" "^1.7.0"
     "@sentry/browser" "^7.0.0"
     "@testing-library/react-hooks" "^8.0.1"
-    "@vector-im/compound-design-tokens" "^0.0.7"
+    "@vector-im/compound-design-tokens" "^0.1.0"
     "@vector-im/compound-web" "0.8.1"
     "@zxcvbn-ts/core" "^3.0.4"
     "@zxcvbn-ts/language-common" "^3.0.4"
@@ -8423,7 +8450,7 @@ matrix-mock-request@^2.5.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "30.2.0-rc.0"
     matrix-widget-api "^1.5.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
