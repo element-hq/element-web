@@ -164,7 +164,7 @@
         "@types/file-saver": "^2.0.3",
         "@types/fs-extra": "^11.0.0",
         "@types/glob-to-regexp": "^0.4.1",
-        "@types/jest": "29.5.8",
+        "@types/jest": "29.5.10",
         "@types/katex": "^0.16.0",
         "@types/lodash": "^4.14.168",
         "@types/modernizr": "^3.5.3",
