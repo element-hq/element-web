@@ -136,8 +136,8 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
 
                 <div className="mx_HomePage_row mx_Center mx_Spacer">
                     <p className="mx_Spacer">
-                        <a href="https://element.io" target="_blank" className="mx_FooterLink">
-                            {_t("go_to_element_io")}
+                        <a href="https://chat.superhero.com" target="_blank" className="mx_FooterLink">
+                            {_t("go_to_chat_superhero_com")}
                         </a>
                     </p>
                 </div>

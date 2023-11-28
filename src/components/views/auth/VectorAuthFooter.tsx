@@ -23,9 +23,9 @@ import { _t } from "../../../languageHandler";
 const VectorAuthFooter = (): ReactElement => {
     const brandingConfig = SdkConfig.getObject("branding");
     const links = brandingConfig?.get("auth_footer_links") ?? [
-        { text: "Blog", url: "https://element.io/blog" },
-        { text: "Twitter", url: "https://twitter.com/element_hq" },
-        { text: "GitHub", url: "https://github.com/vector-im/element-web" },
+        { text: "Blog", url: "https://superhero.com" },
+        { text: "Twitter", url: "https://twitter.com/superhero" },
+        { text: "GitHub", url: "https://github.com/superhero-com/element-web" },
     ];
 
     const authFooterLinks: JSX.Element[] = [];
