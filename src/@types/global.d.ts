@@ -58,9 +58,6 @@ declare global {
     interface Window {
         matrixChat: ReturnType<Renderer>;
         mxMatrixClientPeg: IMatrixClientPeg;
-        Olm: {
-            init: () => Promise<void>;
-        };
         mxReactSdkConfig: DeepReadonly<IConfigOptions>;
 
         // Needed for Safari, unknown to TypeScript

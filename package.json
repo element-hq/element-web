@@ -232,6 +232,7 @@
         "typescript": "5.2.2"
     },
     "peerDependencies": {
+        "@matrix-org/olm": "3.2.15",
         "postcss": "^8.4.19",
         "webpack": "^4.0.0 || ^5.0.0"
     },
