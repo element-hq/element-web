@@ -15,9 +15,9 @@ exports[`<ErrorView /> should match snapshot 1`] = `
           class="mx_HomePage_logo"
         >
           <img
-            alt="Element"
+            alt="Superhero"
             height="42"
-            src="themes/element/img/logos/element-logo.svg"
+            src="themes/superhero/img/logos/superhero-logo.svg"
           />
         </span>
         <h1>
@@ -53,10 +53,10 @@ exports[`<ErrorView /> should match snapshot 1`] = `
         >
           <a
             class="mx_FooterLink"
-            href="https://element.io"
+            href="https://chat.superhero.com"
             target="_blank"
           >
-            Go to element.io
+            Go to chat.superhero.com
           </a>
         </p>
       </div>

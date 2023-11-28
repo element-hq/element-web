@@ -7,21 +7,21 @@ exports[`<VectorAuthFooter /> should match snapshot 1`] = `
     role="contentinfo"
   >
     <a
-      href="https://element.io/blog"
+      href="https://superhero.com"
       rel="noreferrer noopener"
       target="_blank"
     >
       Blog
     </a>
     <a
-      href="https://twitter.com/element_hq"
+      href="https://twitter.com/superhero"
       rel="noreferrer noopener"
       target="_blank"
     >
       Twitter
     </a>
     <a
-      href="https://github.com/vector-im/element-web"
+      href="https://github.com/superhero-com/element-web"
       rel="noreferrer noopener"
       target="_blank"
     >
