@@ -39,11 +39,11 @@ export default defineConfig<TestOptions>({
     projects: [
         {
             name: "Legacy Crypto",
-            use: { crypto: "legacy" },
+            use: { cryptoBackend: "legacy" },
         },
         {
             name: "Rust Crypto",
-            use: { crypto: "rust" },
+            use: { cryptoBackend: "rust" },
         },
     ],
     snapshotDir: "playwright/snapshots",
