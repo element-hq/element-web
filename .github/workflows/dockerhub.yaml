@@ -4,8 +4,8 @@ on:
     push:
         tags: [v*]
     # schedule:
-        # This job can take a while, and we have usage limits, so just publish develop only twice a day
-        # - cron: "0 7/12 * * *"
+    # This job can take a while, and we have usage limits, so just publish develop only twice a day
+    # - cron: "0 7/12 * * *"
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
 jobs:
     buildx:
