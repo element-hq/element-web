@@ -46,4 +46,6 @@ export default defineConfig<TestOptions>({
             use: { crypto: "rust" },
         },
     ],
+    snapshotDir: "playwright/snapshots",
+    snapshotPathTemplate: "{snapshotDir}/{testFilePath}/{arg}-{platform}{ext}",
 });

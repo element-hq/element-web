@@ -45,7 +45,7 @@ test.describe("User Onboarding (new user)", () => {
         await expect(
             page.getByRole("dialog").getByRole("heading", { level: 2, name: "Download Element" }),
         ).toBeVisible();
-        await expect(page.getByRole("dialog")).toHaveScreenshot();
+        await expect(page.locator(".mx_Dialog")).toHaveScreenshot();
     });
 
     test("using find friends action should increase progress", async ({ page, homeserver }) => {
