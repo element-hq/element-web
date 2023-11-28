@@ -113,6 +113,7 @@ jobs:
         if: always()
         permissions:
             statuses: write
+            deployments: write
         steps:
             - uses: actions/checkout@v3
 
