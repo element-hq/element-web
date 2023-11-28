@@ -106,6 +106,21 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
             authorId: client.getUserId()!,
             participantUserIds: ["@alice:example.org"],
         });
+        // We need some receipt, otherwise we treat this thread as
+        // "older than all threaded receipts" and consider it read.
+        let receipt = new MatrixEvent({
+            type: "m.receipt",
+            room_id: room.roomId,
+            content: {
+                [events[0].getId()!]: {
+                    // Receipt for the first event in the thread
+                    [ReceiptType.Read]: {
+                        [client.getUserId()!]: { ts: 1, thread_id: rootEvent.getId() },
+                    },
+                },
+            },
+        });
+        room.addReceipt(receipt);
         expect(isIndicatorOfType(container, "bold")).toBe(true);
 
         // Sending the last event should clear the notification.
@@ -145,7 +160,7 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
         expect(isIndicatorOfType(container, "bold")).toBe(true);
 
         // Sending a read receipt on an earlier event shouldn't do anything.
-        let receipt = new MatrixEvent({
+        receipt = new MatrixEvent({
             type: "m.receipt",
             room_id: room.roomId,
             content: {
