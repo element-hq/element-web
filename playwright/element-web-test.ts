@@ -58,9 +58,7 @@ export const test = base.extend<
         startHomeserverOpts: StartHomeserverOpts | string;
         homeserver: HomeserverInstance;
         oAuthServer: { port: number };
-        user: Credentials & {
-            displayName: string;
-        };
+        user: Credentials;
         displayName?: string;
         app: ElementAppPage;
         mailhog?: { api: mailhog.API; instance: Instance };
@@ -144,10 +142,7 @@ export const test = base.extend<
 
         await page.waitForSelector(".mx_MatrixChat", { timeout: 30000 });
 
-        await use({
-            ...credentials,
-            displayName,
-        });
+        await use(credentials);
     },
 
     axe: async ({ page }, use) => {

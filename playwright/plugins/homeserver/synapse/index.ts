@@ -193,6 +193,7 @@ export class Synapse implements Homeserver, HomeserverInstance {
             userId: data.user_id,
             deviceId: data.device_id,
             password,
+            displayName,
         };
     }
 }
