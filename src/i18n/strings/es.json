@@ -15,13 +15,13 @@
         "app_launch_unexpected_error": "Error inesperado preparando la aplicación. Ver la consola para más detalles.",
         "cannot_load_config": "No se ha podido cargar el archivo de configuración. Recarga la página para intentarlo otra vez.",
         "invalid_configuration_no_server": "Configuración errónea: no se ha especificado servidor.",
-        "invalid_json": "Tu configuración de Element contiene JSON inválido. Por favor corrígelo e inténtelo de nuevo.",
+        "invalid_json": "Tu configuración de Superhero contiene JSON inválido. Por favor corrígelo e inténtelo de nuevo.",
         "invalid_json_detail": "El mensaje del parser es: %(message)s",
         "invalid_json_generic": "JSON inválido",
-        "misconfigured": "Tu aplicación Element está mal configurada"
+        "misconfigured": "Tu aplicación Superhero está mal configurada"
     },
     "failed_to_start": "Fallo al iniciar",
-    "go_to_element_io": "Ir a element.io",
+    "go_to_chat_superhero_com": "Ir a chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "Por favor, instale <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, o <safariLink>Safari</safariLink> para la mejor experiencia.",
         "continue_warning": "Entiendo los riesgos y quiero continuar",
@@ -35,5 +35,5 @@
     "unknown_device": "Dispositivo desconocido",
     "use_brand_on_mobile": "Usar %(brand)s en modo móvil",
     "web_default_device_name": "%(appName)s: %(browserName)s en %(osName)s",
-    "welcome_to_element": "Te damos la bienvenida a Element"
+    "welcome_to_superhero": "Te damos la bienvenida a Superhero"
 }

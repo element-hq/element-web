@@ -15,13 +15,13 @@
         "app_launch_unexpected_error": "Óvænt villa við undirbúning forritsins. Sjá nánar á stjórnskjá.",
         "cannot_load_config": "Ekki er hægt að hlaða stillingaskrána: endurnýjaðu síðuna til að reyna aftur.",
         "invalid_configuration_no_server": "Ógild uppsetning: enginn sjálfgefinn vefþjónn tilgreindur.",
-        "invalid_json": "Element-stillingar þínar innihalda ógilt JSON. Leiðréttu vandamálið og endurlestu síðuna.",
+        "invalid_json": "Superhero-stillingar þínar innihalda ógilt JSON. Leiðréttu vandamálið og endurlestu síðuna.",
         "invalid_json_detail": "Skilaboðið frá þáttaranum er %(message)s",
         "invalid_json_generic": "Ógilt JSON",
-        "misconfigured": "Element-tilvikið þitt er rangt stillt"
+        "misconfigured": "Superhero-tilvikið þitt er rangt stillt"
     },
     "failed_to_start": "Mistókst að ræsa",
-    "go_to_element_io": "Fara á element.io",
+    "go_to_chat_superhero_com": "Fara á chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "Þú ættir að setja upp <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eða <safariLink>Safari</safariLink> til að fá sem besta útkomu.",
         "continue_warning": "Ég skil áhættuna og óska að halda áfram",
@@ -35,5 +35,5 @@
     "unknown_device": "Óþekkt tæki",
     "use_brand_on_mobile": "Nota %(brand)s í síma",
     "web_default_device_name": "%(appName)s: %(browserName)s á %(osName)s",
-    "welcome_to_element": "Velkomin í Element"
+    "welcome_to_superhero": "Velkomin í Superhero"
 }

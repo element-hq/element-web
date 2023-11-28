@@ -16,13 +16,13 @@
         "cannot_load_config": "S’arrihet të ngarkohet kartelë formësimesh: ju lutemi, rifreskoni faqen dhe riprovoni.",
         "invalid_configuration_mixed_server": "Formësim i pavlefshëm: një default_hs_url s’mund të jepet tok me default_server_name, apo default_server_config",
         "invalid_configuration_no_server": "Formësim i pavlefshëm: s’është caktuar shërbyes parazgjedhje.",
-        "invalid_json": "Formësimi juaj i Element-it përmban JSON të pavlefshëm. Ju lutemi, ndreqeni problemin dhe ringarkoni faqen.",
+        "invalid_json": "Formësimi juaj i Superhero-it përmban JSON të pavlefshëm. Ju lutemi, ndreqeni problemin dhe ringarkoni faqen.",
         "invalid_json_detail": "Mesazhi prej procesit është: %(message)s",
         "invalid_json_generic": "JSON i pavlefshëm",
-        "misconfigured": "Element-i juaj është i keqformësuar"
+        "misconfigured": "Superhero-i juaj është i keqformësuar"
     },
     "failed_to_start": "S’u arrit të nisej",
-    "go_to_element_io": "Shko te element.io",
+    "go_to_chat_superhero_com": "Shko te chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "Ju lutemi, për funksionimin më të mirë, instaloni <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ose <safariLink>Safari</safariLink>.",
         "continue_warning": "I kuptoj rreziqet dhe dëshiroj të vazhdoj",
@@ -36,5 +36,5 @@
     "unknown_device": "Pajisje e panjohur",
     "use_brand_on_mobile": "Përdor %(brand)s në celular",
     "web_default_device_name": "%(appName)s: %(browserName)s në %(osName)s",
-    "welcome_to_element": "Mirë se vini te Element"
+    "welcome_to_superhero": "Mirë se vini te Superhero"
 }

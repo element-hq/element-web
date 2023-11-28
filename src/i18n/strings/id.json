@@ -15,13 +15,13 @@
         "cannot_load_config": "Tidak dapat memuat file konfigurasi: mohon muat ulang laman ini untuk mencoba lagi.",
         "invalid_configuration_mixed_server": "Konfigurasi tidak valid: default_hs_url tidak dapat ditentukan bersama dengan default_server_name atau default_server_config",
         "invalid_configuration_no_server": "Konfigurasi tidak absah: server bawaan belum ditentukan.",
-        "invalid_json": "Konfigurasi Element Anda berisi JSON yang tidak absah. Mohon perbaiki masalahnya dan muat ulang laman ini.",
+        "invalid_json": "Konfigurasi Superhero Anda berisi JSON yang tidak absah. Mohon perbaiki masalahnya dan muat ulang laman ini.",
         "invalid_json_detail": "Pesan dari pengurai adalah: %(message)s",
         "invalid_json_generic": "JSON tidak absah",
-        "misconfigured": "Anda salah mengatur Element"
+        "misconfigured": "Anda salah mengatur Superhero"
     },
     "failed_to_start": "Gagal untuk memulai",
-    "go_to_element_io": "Buka element.io",
+    "go_to_chat_superhero_com": "Buka chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "Silakan instal <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, atau <safariLink>Safari</safariLink> untuk pengalaman yang terbaik.",
         "continue_warning": "Saya memahami risikonya dan ingin melanjutkan",
@@ -35,5 +35,5 @@
     "unknown_device": "Perangkat tidak diketahui",
     "use_brand_on_mobile": "Gunakan %(brand)s di ponsel",
     "web_default_device_name": "%(appName)s: %(browserName)s di %(osName)s",
-    "welcome_to_element": "Selamat datang di Element"
+    "welcome_to_superhero": "Selamat datang di Superhero"
 }

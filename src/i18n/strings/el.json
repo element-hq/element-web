@@ -14,13 +14,13 @@
         "app_launch_unexpected_error": "Απρόοπτο σφάλμα κατά την προετοιμασία της εφαρμογής. Δείτε το τερματικό για λεπτομέρειες.",
         "cannot_load_config": "Δεν είναι δυνατή η φόρτωση του αρχείου config: ανανεώστε τη σελίδα για να δοκιμάσετε ξανά.",
         "invalid_configuration_no_server": "Μη έγκυρη ρύθμιση παραμέτρων: δεν έχει οριστεί προκαθορισμένος διακομιστής.",
-        "invalid_json": "Η ρύθμιση του Element περιέχει μη έγκυρο JSON. Διορθώστε το πρόβλημα και φορτώστε ξανά τη σελίδα.",
+        "invalid_json": "Η ρύθμιση του Superhero περιέχει μη έγκυρο JSON. Διορθώστε το πρόβλημα και φορτώστε ξανά τη σελίδα.",
         "invalid_json_detail": "Το μήνυμα από τον αναλυτή είναι: %(message)s",
         "invalid_json_generic": "Μη έγκυρο JSON",
-        "misconfigured": "Το Element σας δεν εχει ρυθμιστεί σωστά"
+        "misconfigured": "Το Superhero σας δεν εχει ρυθμιστεί σωστά"
     },
     "failed_to_start": "Αποτυχία έναρξης",
-    "go_to_element_io": "Πήγαινε στο element.io",
+    "go_to_chat_superhero_com": "Πήγαινε στο chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "Παρακαλούμε εγκαταστήστε <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ή <safariLink>Safari</safariLink> για καλύτερη εμπειρία χρήσης.",
         "continue_warning": "Κατανοώ τους κινδύνους και επιθυμώ να συνεχίσω",
@@ -33,5 +33,5 @@
     "powered_by_matrix_with_logo": "Αποκεντρωμένη, κρυπτογραφημένη συνομιλία και συνεργασία χρησιμοποιώντας το $matrixLogo",
     "unknown_device": "Άγνωστη συσκευή",
     "use_brand_on_mobile": "Χρήση %(brand)s σε κινητό",
-    "welcome_to_element": "Καλώς ήλθατε στο Element"
+    "welcome_to_superhero": "Καλώς ήλθατε στο Superhero"
 }

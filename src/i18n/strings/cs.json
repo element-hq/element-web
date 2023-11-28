@@ -16,13 +16,13 @@
         "cannot_load_config": "Nepodařilo se načíst konfigurační soubor: abyste to zkusili znovu, načtěte prosím znovu stránku.",
         "invalid_configuration_mixed_server": "Neplatná konfigurace: default_hs_url nelze použít spolu s default_server_name nebo default_server_config",
         "invalid_configuration_no_server": "Neplatná konfigurace: není zadán výchozí server.",
-        "invalid_json": "Vaše konfigurace Elementu obsahuje nesprávná data JSON. Vyřešte prosím problém a načtěte znovu stránku.",
+        "invalid_json": "Vaše konfigurace Superhero obsahuje nesprávná data JSON. Vyřešte prosím problém a načtěte znovu stránku.",
         "invalid_json_detail": "Zpráva z parseru je: %(message)s",
         "invalid_json_generic": "Neplatný JSON",
-        "misconfigured": "Váš Element je nesprávně nastaven"
+        "misconfigured": "Váš Superhero je nesprávně nastaven"
     },
     "failed_to_start": "Nepovedlo se nastartovat",
-    "go_to_element_io": "Přejít na element.io",
+    "go_to_chat_superhero_com": "Přejít na chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "Pro nejlepší zážitek si prosím nainstalujte prohlížeč <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, nebo <safariLink>Safari</safariLink>.",
         "continue_warning": "Rozumím a přesto chci pokračovat",
@@ -36,5 +36,5 @@
     "unknown_device": "Neznámé zařízení",
     "use_brand_on_mobile": "Používání %(brand)s v mobilních zařízeních",
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Vítá vás Element"
+    "welcome_to_superhero": "Vítá vás Superhero"
 }

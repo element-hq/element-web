@@ -14,13 +14,13 @@
         "app_launch_unexpected_error": "ເກີດຄວາມຜິດພາດທີ່ບໍ່ຄາດຄິດໃນການກະກຽມແອັບຯ. ເບິ່ງ console ສໍາລັບລາຍລະອຽດ.",
         "cannot_load_config": "ບໍ່ສາມາດໂຫຼດໄຟລ໌ config ໄດ້: ກະລຸນາໂຫຼດໜ້ານີ້ຄືນໃໝ່ເພື່ອລອງອີກຄັ້ງ.",
         "invalid_configuration_no_server": "ການຕັ້ງຄ່າບໍ່ຖືກຕ້ອງ: ບໍ່ໄດ້ລະບຸເຊີບເວີເລີ່ມຕົ້ນ.",
-        "invalid_json": "ການຕັ້ງຄ່າແອັບ Element ຂອງທ່ານມີຄ່າ JSON ທີ່ບໍ່ຖືກຕ້ອງ. ກະລຸນາແກ້ໄຂບັນຫາ ແລະໂຫຼດໜ້ານີ້ຄືນໃໝ່.",
+        "invalid_json": "ການຕັ້ງຄ່າແອັບ Superhero ຂອງທ່ານມີຄ່າ JSON ທີ່ບໍ່ຖືກຕ້ອງ. ກະລຸນາແກ້ໄຂບັນຫາ ແລະໂຫຼດໜ້ານີ້ຄືນໃໝ່.",
         "invalid_json_detail": "ຂໍ້ຄວາມຈາກຕົວປ່ຽນແມ່ນ: %(message)s",
         "invalid_json_generic": "JSON ບໍ່ຖືກຕ້ອງ",
-        "misconfigured": "ການຕັ້ງຄ່າແອັບ Element ຂອງທ່ານບໍ່ຖືກຕ້ອງ"
+        "misconfigured": "ການຕັ້ງຄ່າແອັບ Superhero ຂອງທ່ານບໍ່ຖືກຕ້ອງ"
     },
     "failed_to_start": "ບໍ່ສາມາດເປີດໄດ້",
-    "go_to_element_io": "ໄປຫາ element.io",
+    "go_to_chat_superhero_com": "ໄປຫາ chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "ກະລຸນາຕິດຕັ້ງ <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> ສຳລັບປະສົບການທີ່ດີທີ່ສຸດ.",
         "continue_warning": "ຂ້າພະເຈົ້າເຂົ້າໃຈຄວາມສ່ຽງ ແລະຢາກສືບຕໍ່",
@@ -33,5 +33,5 @@
     "powered_by_matrix_with_logo": "ການສົນທະນາແບບເຂົ້າລະຫັດ ແລະກະຈ່າຍການຄຸ້ມຄອງ &amp; ການຮ່ວມມື້ ແລະສະໜັບສະໜູນໂດຍ $matrixLogo",
     "unknown_device": "ທີ່ບໍ່ຮູ້ຈັກອຸປະກອນນີ້",
     "use_brand_on_mobile": "ໃຊ້ມືຖື %(brand)s",
-    "welcome_to_element": "ຍິນດີຕ້ອນຮັບ"
+    "welcome_to_superhero": "ຍິນດີຕ້ອນຮັບ"
 }

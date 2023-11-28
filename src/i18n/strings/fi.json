@@ -15,13 +15,13 @@
         "app_launch_unexpected_error": "Odottamaton virhe sovellusta valmisteltaessa. Katso konsolista lisätietoja.",
         "cannot_load_config": "Asetustiedostoa ei voi ladata. Yritä uudelleen lataamalla sivu uudelleen.",
         "invalid_configuration_no_server": "Virheellinen asetus: oletuspalvelinta ei ole määritetty.",
-        "invalid_json": "Element-asetuksesi sisältävät epäkelpoa JSONia. Korjaa ongelma ja lataa sivu uudelleen.",
+        "invalid_json": "Superhero-asetuksesi sisältävät epäkelpoa JSONia. Korjaa ongelma ja lataa sivu uudelleen.",
         "invalid_json_detail": "Viesti jäsentimeltä: %(message)s",
         "invalid_json_generic": "Virheellinen JSON",
-        "misconfigured": "Elementisi asetukset ovat pielessä"
+        "misconfigured": "Superheroisi asetukset ovat pielessä"
     },
     "failed_to_start": "Käynnistys ei onnistunut",
-    "go_to_element_io": "Mene osoitteeseen riot.im",
+    "go_to_chat_superhero_com": "Mene osoitteeseen riot.im",
     "incompatible_browser": {
         "browser_links": "Asenna <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> tai <safariLink>Safari</safariLink>, jotta kaikki toimii parhaiten.",
         "continue_warning": "Ymmärrän riskit ja haluan jatkaa",
@@ -35,5 +35,5 @@
     "unknown_device": "Tuntematon laite",
     "use_brand_on_mobile": "Käytä %(brand)sia mobiilisti",
     "web_default_device_name": "%(appName)s: %(browserName)s käyttöjärjestelmällä %(osName)s",
-    "welcome_to_element": "Tervetuloa Element-sovellukseen"
+    "welcome_to_superhero": "Tervetuloa Superhero-sovellukseen"
 }

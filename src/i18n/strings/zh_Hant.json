@@ -16,13 +16,13 @@
         "cannot_load_config": "無法載入設定檔：請重新整理頁面以再試一次。",
         "invalid_configuration_mixed_server": "無效設定：default_hs_url 不能與 default_server_name 或 default_server_config 一起指定",
         "invalid_configuration_no_server": "無效設定：未指定預設伺服器。",
-        "invalid_json": "您的 Element 設定中包含無效 JSON，請修正後重新載入網頁。",
+        "invalid_json": "您的 Superhero 設定中包含無效 JSON，請修正後重新載入網頁。",
         "invalid_json_detail": "解析器收到的訊息：%(message)s",
         "invalid_json_generic": "無效的 JSON",
-        "misconfigured": "您的 Element 設定錯誤"
+        "misconfigured": "您的 Superhero 設定錯誤"
     },
     "failed_to_start": "啟動失敗",
-    "go_to_element_io": "前往 element.io",
+    "go_to_chat_superhero_com": "前往 chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "請安裝 <chromeLink>Chrome</chromeLink>、<firefoxLink>Firefox</firefoxLink> 或 <safariLink>Safari</safariLink> 以取得最佳體驗。",
         "continue_warning": "我了解風險並希望繼續",
@@ -35,5 +35,5 @@
     "unknown_device": "未知裝置",
     "use_brand_on_mobile": "在行動裝置上使用 %(brand)s",
     "web_default_device_name": "%(appName)s：%(osName)s 的 %(browserName)s",
-    "welcome_to_element": "歡迎使用 Element"
+    "welcome_to_superhero": "歡迎使用 Superhero"
 }
