@@ -109,6 +109,7 @@ jobs:
         name: Report results
         needs: tests
         runs-on: ubuntu-latest
+        environment: Netlify
         if: always()
         permissions:
             statuses: write
@@ -146,3 +147,15 @@ jobs:
                   context: ${{ github.workflow }} / end-to-end-tests
                   sha: ${{ github.event.workflow_run.head_sha }}
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            - name: 📤 Deploy to Netlify
+              uses: matrix-org/netlify-pr-preview@v2
+              with:
+                  path: playwright-report
+                  owner: ${{ github.event.workflow_run.head_repository.owner.login }}
+                  branch: ${{ github.event.workflow_run.head_branch }}
+                  revision: ${{ github.event.workflow_run.head_sha }}
+                  token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+                  site_id: ${{ secrets.NETLIFY_SITE_ID }}
+                  desc: Playwright Report
+                  deployment_env: EndToEndTests
