@@ -116,67 +116,72 @@ export default function RoomHeader({
     );
 
     return (
-        <Flex
-            as="header"
-            align="center"
-            gap="var(--cpd-space-3x)"
-            className="mx_RoomHeader light-panel"
-            onClick={() => {
-                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary);
-            }}
-        >
-            <RoomAvatar room={room} size="40px" />
-            <Box flex="1" className="mx_RoomHeader_info">
-                <BodyText
-                    as="div"
-                    size="lg"
-                    weight="semibold"
-                    dir="auto"
-                    role="heading"
-                    aria-level={1}
-                    className="mx_RoomHeader_heading"
-                >
-                    <span className="mx_RoomHeader_truncated mx_lineClamp">{roomName}</span>
+        <Flex as="header" align="center" gap="var(--cpd-space-3x)" className="mx_RoomHeader light-panel">
+            <button
+                aria-label={_t("right_panel|room_summary_card|title")}
+                tabIndex={0}
+                onClick={() => {
+                    RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary);
+                }}
+                className="mx_RoomHeader_infoWrapper"
+            >
+                <RoomAvatar room={room} size="40px" />
+                <Box flex="1" className="mx_RoomHeader_info">
+                    <BodyText
+                        as="div"
+                        size="lg"
+                        weight="semibold"
+                        dir="auto"
+                        role="heading"
+                        aria-level={1}
+                        className="mx_RoomHeader_heading"
+                    >
+                        <span className="mx_RoomHeader_truncated mx_lineClamp">{roomName}</span>
 
-                    {!isDirectMessage && roomState.getJoinRule() === JoinRule.Public && (
-                        <Tooltip label={_t("common|public_room")} side="right">
-                            <PublicIcon
-                                width="16px"
-                                height="16px"
-                                className="mx_RoomHeader_icon text-secondary"
-                                aria-label={_t("common|public_room")}
-                            />
-                        </Tooltip>
-                    )}
+                        {!isDirectMessage && roomState.getJoinRule() === JoinRule.Public && (
+                            <Tooltip label={_t("common|public_room")} side="right">
+                                <PublicIcon
+                                    width="16px"
+                                    height="16px"
+                                    className="mx_RoomHeader_icon text-secondary"
+                                    aria-label={_t("common|public_room")}
+                                />
+                            </Tooltip>
+                        )}
 
-                    {isDirectMessage && e2eStatus === E2EStatus.Verified && (
-                        <Tooltip label={_t("common|verified")} side="right">
-                            <VerifiedIcon
-                                width="16px"
-                                height="16px"
-                                className="mx_RoomHeader_icon mx_Verified"
-                                aria-label={_t("common|verified")}
-                            />
-                        </Tooltip>
-                    )}
+                        {isDirectMessage && e2eStatus === E2EStatus.Verified && (
+                            <Tooltip label={_t("common|verified")} side="right">
+                                <VerifiedIcon
+                                    width="16px"
+                                    height="16px"
+                                    className="mx_RoomHeader_icon mx_Verified"
+                                    aria-label={_t("common|verified")}
+                                />
+                            </Tooltip>
+                        )}
 
-                    {isDirectMessage && e2eStatus === E2EStatus.Warning && (
-                        <Tooltip label={_t("room|header_untrusted_label")} side="right">
-                            <ErrorIcon
-                                width="16px"
-                                height="16px"
-                                className="mx_RoomHeader_icon mx_Untrusted"
-                                aria-label={_t("room|header_untrusted_label")}
-                            />
-                        </Tooltip>
-                    )}
-                </BodyText>
-                {roomTopic && (
-                    <BodyText as="div" size="sm" className="mx_RoomHeader_topic mx_RoomHeader_truncated mx_lineClamp">
-                        <Linkify>{roomTopicBody}</Linkify>
+                        {isDirectMessage && e2eStatus === E2EStatus.Warning && (
+                            <Tooltip label={_t("room|header_untrusted_label")} side="right">
+                                <ErrorIcon
+                                    width="16px"
+                                    height="16px"
+                                    className="mx_RoomHeader_icon mx_Untrusted"
+                                    aria-label={_t("room|header_untrusted_label")}
+                                />
+                            </Tooltip>
+                        )}
                     </BodyText>
-                )}
-            </Box>
+                    {roomTopic && (
+                        <BodyText
+                            as="div"
+                            size="sm"
+                            className="mx_RoomHeader_topic mx_RoomHeader_truncated mx_lineClamp"
+                        >
+                            <Linkify>{roomTopicBody}</Linkify>
+                        </BodyText>
+                    )}
+                </Box>
+            </button>
             <Flex as="nav" align="center" gap="var(--cpd-space-2x)">
                 {additionalButtons?.map((props) => {
                     const label = props.label();

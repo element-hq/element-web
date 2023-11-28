@@ -21,15 +21,27 @@ limitations under the License.
     border-bottom: 1px solid $separator;
     background-color: $background;
     transition: all 0.3s ease;
-    cursor: pointer;
 }
 
 .mx_RoomHeader:hover {
     background-color: $header-panel-bg-hover;
 }
 
-.mx_RoomHeader_info {
+.mx_RoomHeader_infoWrapper {
+    // unset button styles
+    background: unset;
+    border: unset;
     flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+    gap: var(--cpd-space-3x);
+    text-align: left;
+}
+
+.mx_RoomHeader_info {
     /* We want the spacing to be 64px, 13x = 52px but we have a flex gap of
        12px set on the flex container, which sums up to 64 */
     padding-right: var(--cpd-space-13x);
