@@ -15,13 +15,13 @@
         "app_launch_unexpected_error": "Neatendita eraro okazis dum la preparado de la aplikaĵo. Rigardu la konzolon por detaloj.",
         "cannot_load_config": "Ne povas enlegi agordan dosieron: bonvolu reprovi per aktualigo de la paĝo.",
         "invalid_configuration_no_server": "Nevalida agordo: neniu implicita servilo estas specifita.",
-        "invalid_json": "Via agordaro de Elemento enhavas nevalidajn datumojn de JSON. Bonvolu korekti la problemon kaj aktualigi la paĝon.",
+        "invalid_json": "Via agordaro de Superhero enhavas nevalidajn datumojn de JSON. Bonvolu korekti la problemon kaj aktualigi la paĝon.",
         "invalid_json_detail": "La mesaĝo el la analizilo estas: %(message)s",
         "invalid_json_generic": "Nevalida JSON",
-        "misconfigured": "Via Elemento estas misagordita"
+        "misconfigured": "Via Superhero estas misagordita"
     },
     "failed_to_start": "Malsukcesis starti",
-    "go_to_element_io": "Iri al element.io",
+    "go_to_chat_superhero_com": "Iri al chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "Bonvolu instali retumilon <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, aŭ <safariLink>Safari</safariLink>, por la plej bona sperto.",
         "continue_warning": "Mi komprenas la riskon kaj volas pluiĝi",
@@ -35,5 +35,5 @@
     "unknown_device": "Nekonata aparato",
     "use_brand_on_mobile": "Uzi %(brand)s poŝtelefone",
     "web_default_device_name": "%(appName)s: %(browserName)s sur %(osName)s",
-    "welcome_to_element": "Bonvenon al Element"
+    "welcome_to_superhero": "Bonvenon al Superhero"
 }

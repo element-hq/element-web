@@ -15,13 +15,13 @@
         "app_launch_unexpected_error": "アプリケーションの準備中に予期しないエラーが発生しました。詳細はコンソールを参照してください。",
         "cannot_load_config": "設定ファイルの読み込みに失敗しました：ページを再読み込みして、もう一度やり直してください。",
         "invalid_configuration_no_server": "不正な設定：デフォルトのサーバーが設定されていません。",
-        "invalid_json": "Elementの設定ファイルに不正なJSONが含まれています。問題を修正してからページを再読み込みしてください。",
+        "invalid_json": "Superheroの設定ファイルに不正なJSONが含まれています。問題を修正してからページを再読み込みしてください。",
         "invalid_json_detail": "パーサーのメッセージ：%(message)s",
         "invalid_json_generic": "不正なJSON",
-        "misconfigured": "Elementの設定が誤っています"
+        "misconfigured": "Superheroの設定が誤っています"
     },
     "failed_to_start": "起動に失敗しました",
-    "go_to_element_io": "element.ioへ移動",
+    "go_to_chat_superhero_com": "chat.superhero.comへ移動",
     "incompatible_browser": {
         "browser_links": "最高のユーザー体験を得るためには、<chromeLink>Chrome</chromeLink>か<firefoxLink>Firefox</firefoxLink>、もしくは<safariLink>Safari</safariLink>をインストールしてください。",
         "continue_warning": "リスクを理解して続行",
@@ -34,5 +34,5 @@
     "unknown_device": "不明な端末",
     "use_brand_on_mobile": "携帯端末で%(brand)sを使用できます",
     "web_default_device_name": "%(appName)s： %(osName)sの%(browserName)s",
-    "welcome_to_element": "Elementにようこそ"
+    "welcome_to_superhero": "Superheroにようこそ"
 }

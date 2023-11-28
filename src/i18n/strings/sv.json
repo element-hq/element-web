@@ -16,13 +16,13 @@
         "cannot_load_config": "Kan inte ladda konfigurationsfilen: ladda om sidan för att försöka igen.",
         "invalid_configuration_mixed_server": "Ogiltig konfiguration: en default_hs_url kan inte anges tillsammans med default_server_name eller default_server_config",
         "invalid_configuration_no_server": "Ogiltiga inställningar: ingen standardserver specificerad.",
-        "invalid_json": "Din Elementkonfiguration innehåller ogiltig JSON. Vänligen rätta till problemet och ladda om sidan.",
+        "invalid_json": "Din Superherokonfiguration innehåller ogiltig JSON. Vänligen rätta till problemet och ladda om sidan.",
         "invalid_json_detail": "Meddelandet från parsern är: %(message)s",
         "invalid_json_generic": "Ogiltig JSON",
-        "misconfigured": "Din Element är felkonfigurerad"
+        "misconfigured": "Din Superhero är felkonfigurerad"
     },
     "failed_to_start": "Misslyckade att starta",
-    "go_to_element_io": "Gå till element.io",
+    "go_to_chat_superhero_com": "Gå till chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "Installera <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eller <safariLink>Safari</safariLink> för den bästa upplevelsen.",
         "continue_warning": "Jag förstår riskerna och vill fortsätta",
@@ -36,5 +36,5 @@
     "unknown_device": "Okänd enhet",
     "use_brand_on_mobile": "Använd %(brand)s på mobilen",
     "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
-    "welcome_to_element": "Välkommen till Element"
+    "welcome_to_superhero": "Välkommen till Superhero"
 }

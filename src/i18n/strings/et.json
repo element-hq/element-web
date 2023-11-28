@@ -16,13 +16,13 @@
         "cannot_load_config": "Seadistuste faili laadimine ei õnnestunud: uuesti proovimiseks palun laadi leht uuesti.",
         "invalid_configuration_mixed_server": "Vigane seadistus: default_hs_url ei saa olla määratud koos default_server_name või default_server_config tunnustega",
         "invalid_configuration_no_server": "Vigane seadistus: vaikimisi server on määramata.",
-        "invalid_json": "Sinu Element'i seadistustes on vigased JSON-vormingus andmed. Palun paranda see viga ja laadi leht uuesti.",
+        "invalid_json": "Sinu Superhero'i seadistustes on vigased JSON-vormingus andmed. Palun paranda see viga ja laadi leht uuesti.",
         "invalid_json_detail": "Sõnum parserist on: %(message)s",
         "invalid_json_generic": "Vigane JSON",
-        "misconfigured": "Sinu Element on valesti seadistatud"
+        "misconfigured": "Sinu Superhero on valesti seadistatud"
     },
     "failed_to_start": "Käivitamine ei õnnestunud",
-    "go_to_element_io": "Mine element.io lehele",
+    "go_to_chat_superhero_com": "Mine chat.superhero.com lehele",
     "incompatible_browser": {
         "browser_links": "Parima kasutuskogemuse jaoks palun paigalda <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> või <safariLink>Safari</safariLink>.",
         "continue_warning": "Ma mõistan riske ja soovin jätkata",
@@ -36,5 +36,5 @@
     "unknown_device": "Tundmatu seade",
     "use_brand_on_mobile": "Kasuta rakendust %(brand)s nutiseadmes",
     "web_default_device_name": "%(appName)s: %(browserName)s operatsioonisüsteemis %(osName)s",
-    "welcome_to_element": "Tere tulemast kasutama suhtlusrakendust Element"
+    "welcome_to_superhero": "Tere tulemast kasutama suhtlusrakendust Superhero"
 }

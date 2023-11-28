@@ -16,13 +16,13 @@
         "cannot_load_config": "Неможливо завантажити файл конфігурації. Оновіть, будь ласка, сторінку, щоб спробувати знову.",
         "invalid_configuration_mixed_server": "Неправильна конфігурація: не можна вказати default_hs_url разом з default_server_name або default_server_config",
         "invalid_configuration_no_server": "Невірна конфігурація: не вказано сервер за замовчуванням.",
-        "invalid_json": "Ваша конфігурація Element містить хибний JSON. Виправте проблему та оновіть сторінку.",
+        "invalid_json": "Ваша конфігурація Superhero містить хибний JSON. Виправте проблему та оновіть сторінку.",
         "invalid_json_detail": "Повідомлення від аналізатора : %(message)s",
         "invalid_json_generic": "Хибний JSON",
-        "misconfigured": "Ваш Element налаштовано неправильно"
+        "misconfigured": "Ваш Superhero налаштовано неправильно"
     },
     "failed_to_start": "Не вдалося запустити",
-    "go_to_element_io": "Перейти на element.io",
+    "go_to_chat_superhero_com": "Перейти на chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "Для найкращих вражень від користування встановіть, будь ласка, <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, або <safariLink>Safari</safariLink>.",
         "continue_warning": "Я усвідомлюю ризик і бажаю продовжити",
@@ -36,5 +36,5 @@
     "unknown_device": "Невідомий пристрій",
     "use_brand_on_mobile": "Користуйтеся %(brand)s на мобільному",
     "web_default_device_name": "%(appName)s: %(browserName)s на %(osName)s",
-    "welcome_to_element": "Ласкаво просимо до Element"
+    "welcome_to_superhero": "Ласкаво просимо до Superhero"
 }

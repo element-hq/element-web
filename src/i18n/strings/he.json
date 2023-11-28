@@ -18,10 +18,10 @@
         "invalid_json": "האלמנט מכיל הגדרת JSON שגויה, אנא תקנו את הבעיה ואתחלו את הדף.",
         "invalid_json_detail": "ההודעה מהמנתח היא: %(message)s",
         "invalid_json_generic": "JSON לא חוקי",
-        "misconfigured": "Element אינו מוגדר תקין"
+        "misconfigured": "Superhero אינו מוגדר תקין"
     },
     "failed_to_start": "כשל בהעלאת התוכנה",
-    "go_to_element_io": "חזור לאתר הראשי: element.io",
+    "go_to_chat_superhero_com": "חזור לאתר הראשי: chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "נא התקן את דפדפן <chromeLink>כרום</chromeLink>, <firefoxLink>פיירפוקס</firefoxLink> או <safariLink>סאפרי</safariLink> בשביל החוויה הטובה ביותר.",
         "continue_warning": "הסיכונים מובנים לי ואני מעוניינ/ת להמשיך",
@@ -35,5 +35,5 @@
     "unknown_device": "מכשיר לא ידוע",
     "use_brand_on_mobile": "השתמש ב-%(brand)s במכשיר הנייד",
     "web_default_device_name": "%(appName)s: %(browserName)s עַל %(osName)s",
-    "welcome_to_element": "ברוכים הבאים ל Element"
+    "welcome_to_superhero": "ברוכים הבאים ל Superhero"
 }

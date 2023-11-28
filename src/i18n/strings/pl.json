@@ -16,13 +16,13 @@
         "cannot_load_config": "Nie udało się załadować pliku konfiguracyjnego: odśwież stronę, aby spróbować ponownie.",
         "invalid_configuration_mixed_server": "Nieprawidłowa konfiguracja: nie można określić default_hs_url wraz z default_server_name lub default_server_config",
         "invalid_configuration_no_server": "Błędna konfiguracja: nie wybrano domyślnego serwera.",
-        "invalid_json": "Twoja konfiguracja Element zawiera nieprawidłowy JSON. Rozwiąż problem i odśwież stronę.",
+        "invalid_json": "Twoja konfiguracja Superhero zawiera nieprawidłowy JSON. Rozwiąż problem i odśwież stronę.",
         "invalid_json_detail": "Wiadomość od parsera to: %(message)s",
         "invalid_json_generic": "Błędny JSON",
-        "misconfigured": "Twój Element jest nieprawidłowo skonfigurowany"
+        "misconfigured": "Twój Superhero jest nieprawidłowo skonfigurowany"
     },
     "failed_to_start": "Nie udało się wystartować",
-    "go_to_element_io": "Przejdź do element.io",
+    "go_to_chat_superhero_com": "Przejdź do chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "Zainstaluj <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, lub <safariLink>Safari</safariLink> w celu zapewnienia najlepszego działania.",
         "continue_warning": "Rozumiem ryzyko i chcę kontynuować",
@@ -36,5 +36,5 @@
     "unknown_device": "Nieznane urządzenie",
     "use_brand_on_mobile": "Użyj %(brand)s w telefonie",
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Witamy w Element"
+    "welcome_to_superhero": "Witamy w Superhero"
 }

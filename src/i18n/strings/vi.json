@@ -16,13 +16,13 @@
         "cannot_load_config": "Không thể tải tệp cấu hình: hãy tải lại trang để thử lại.",
         "invalid_configuration_mixed_server": "Cấu hình không hợp lệ: không thể xác định default_hs_url song song với default_server_name hay default_server_config",
         "invalid_configuration_no_server": "Thiết lập không hợp lệ: chưa chỉ định máy chủ mặc định.",
-        "invalid_json": "Thiết lập Element của bạn đang chứa mã JSON không hợp lệ. Vui lòng sửa lại và tải lại trang.",
+        "invalid_json": "Thiết lập Superhero của bạn đang chứa mã JSON không hợp lệ. Vui lòng sửa lại và tải lại trang.",
         "invalid_json_detail": "Thông báo của trình xử lý là: %(message)s",
         "invalid_json_generic": "JSON không hợp lệ",
-        "misconfigured": "Element đang bị thiết lập sai"
+        "misconfigured": "Superhero đang bị thiết lập sai"
     },
     "failed_to_start": "Không khởi động được",
-    "go_to_element_io": "Qua element.io",
+    "go_to_chat_superhero_com": "Qua chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "Hãy cài đặt <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, hoặc <safariLink>Safari</safariLink> để có trải nghiệm tốt nhất.",
         "continue_warning": "Tôi hiểu rủi ro và muốn tiếp tục",
@@ -36,5 +36,5 @@
     "unknown_device": "Thiết bị không xác định",
     "use_brand_on_mobile": "Sử dụng %(brand)s trên di động",
     "web_default_device_name": "%(appName)s: %(browserName)s trên %(osName)s",
-    "welcome_to_element": "Chào mừng tới Element"
+    "welcome_to_superhero": "Chào mừng tới Superhero"
 }

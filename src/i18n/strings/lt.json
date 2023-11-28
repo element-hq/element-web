@@ -15,13 +15,13 @@
         "app_launch_unexpected_error": "Netikėta klaida ruošiant programą. Norėdami sužinoti daugiau detalių, žiūrėkite konsolę.",
         "cannot_load_config": "Nepavyko įkelti konfigūracijos failo: atnaujinkite puslapį, kad pabandytumėte dar kartą.",
         "invalid_configuration_no_server": "Klaidinga konfigūracija: nenurodytas numatytasis serveris.",
-        "invalid_json": "Jūsų Element konfigūracijoje yra klaidingas JSON. Ištaisykite problemą ir iš naujo įkelkite puslapį.",
+        "invalid_json": "Jūsų Superhero konfigūracijoje yra klaidingas JSON. Ištaisykite problemą ir iš naujo įkelkite puslapį.",
         "invalid_json_detail": "Analizatoriaus žinutė yra: %(message)s",
         "invalid_json_generic": "Klaidingas JSON",
-        "misconfigured": "Jūsų Element yra neteisingai sukonfigūruotas"
+        "misconfigured": "Jūsų Superhero yra neteisingai sukonfigūruotas"
     },
     "failed_to_start": "Nepavyko paleisti",
-    "go_to_element_io": "Eiti į element.io",
+    "go_to_chat_superhero_com": "Eiti į chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "Geriausiam veikimui suinstaliuokite <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, arba <safariLink>Safari</safariLink>.",
         "continue_warning": "Suprantu šią riziką ir noriu tęsti",
@@ -34,5 +34,5 @@
     "powered_by_matrix_with_logo": "Decentralizuotas, užšifruotų pokalbių &amp; bendradarbiavimas, paremtas $matrixLogo",
     "unknown_device": "Nežinomas įrenginys",
     "use_brand_on_mobile": "Naudoti %(brand)s mobiliajame telefone",
-    "welcome_to_element": "Sveiki atvykę į Element"
+    "welcome_to_superhero": "Sveiki atvykę į Superhero"
 }

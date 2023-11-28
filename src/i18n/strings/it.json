@@ -22,7 +22,7 @@
         "misconfigured": "Il tuo elemento è configurato male"
     },
     "failed_to_start": "Avvio fallito",
-    "go_to_element_io": "Vai su element.io",
+    "go_to_chat_superhero_com": "Vai su chat.superhero.com",
     "incompatible_browser": {
         "browser_links": "Installa <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, o <safariLink>Safari</safariLink> per una migliore esperienza.",
         "continue_warning": "Capisco i rischi e desidero continuare",
@@ -36,5 +36,5 @@
     "unknown_device": "Dispositivo sconosciuto",
     "use_brand_on_mobile": "Usa %(brand)s su mobile",
     "web_default_device_name": "%(appName)s: %(browserName)s su %(osName)s",
-    "welcome_to_element": "Benvenuti su Element"
+    "welcome_to_superhero": "Benvenuti su Superhero"
 }
