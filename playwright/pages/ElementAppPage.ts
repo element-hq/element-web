@@ -62,6 +62,13 @@ export class ElementAppPage {
     }
 
     /**
+     * Close dialog currently open dialog
+     */
+    public async closeDialog(): Promise<void> {
+        return this.page.getByRole("button", { name: "Close dialog", exact: true }).click();
+    }
+
+    /**
      * Create a room with given options.
      * @param options the options to apply when creating the room
      * @return the ID of the newly created room
@@ -73,5 +80,24 @@ export class ElementAppPage {
                 .createRoom(options)
                 .then((res) => res.room_id);
         }, options);
+    }
+
+    /**
+     * Get the composer element
+     * @param isRightPanel whether to select the right panel composer, otherwise the main timeline composer
+     */
+    public async getComposer(isRightPanel?: boolean): Promise<Locator> {
+        const panelClass = isRightPanel ? ".mx_RightPanel" : ".mx_RoomView_body";
+        return this.page.locator(`${panelClass} .mx_MessageComposer`);
+    }
+
+    /**
+     * Open the message composer kebab menu
+     * @param isRightPanel whether to select the right panel composer, otherwise the main timeline composer
+     */
+    public async openMessageComposerOptions(isRightPanel?: boolean): Promise<Locator> {
+        const composer = await this.getComposer(isRightPanel);
+        await composer.getByRole("button", { name: "More options", exact: true }).click();
+        return this.page.getByRole("menu");
     }
 }
