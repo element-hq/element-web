@@ -8,3 +8,12 @@
     height: 16px;
     margin-right: 4px;
 }
+.mx_QuickSettingsButton.sh_SuperheroDexButton::before {
+    -webkit-mask-image: url(../../themes/superhero/img/icons/diamond.svg);
+    mask-image: url(../../themes/superhero/img/icons/diamond.svg);
+}
+
+.mx_QuickSettingsButton.sh_MintTokenButton::before {
+    -webkit-mask-image: url(../../themes/superhero/img/icons/tokens.svg);
+    mask-image: url(../../themes/superhero/img/icons/tokens.svg);
+}

@@ -36,5 +36,7 @@
     "unknown_device": "Unknown device",
     "use_brand_on_mobile": "Use %(brand)s on mobile",
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
-    "welcome_to_superhero": "Welcome to Superhero"
+    "welcome_to_superhero": "Welcome to Superhero",
+    "superhero_dex": "Superhero DEX",
+    "mint_a_token": "Mint a token"
 }
