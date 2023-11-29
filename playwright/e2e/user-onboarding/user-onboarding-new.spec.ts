@@ -36,7 +36,7 @@ test.describe("User Onboarding (new user)", () => {
 
     test("page is shown and preference exists", async ({ page, app }) => {
         await expect(page.locator(".mx_UserOnboardingPage")).toHaveScreenshot();
-        await app.openUserSettings("Preferences");
+        await app.settings.openUserSettings("Preferences");
         await expect(page.getByText("Show shortcut to welcome checklist above the room list")).toBeVisible();
     });
 

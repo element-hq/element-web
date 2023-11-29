@@ -30,7 +30,7 @@ test.describe("User Onboarding (old user)", () => {
     test("page and preference are hidden", async ({ page, user, app }) => {
         await expect(page.locator(".mx_UserOnboardingPage")).not.toBeVisible();
         await expect(page.locator(".mx_UserOnboardingButton")).not.toBeVisible();
-        await app.openUserSettings("Preferences");
+        await app.settings.openUserSettings("Preferences");
         await expect(page.getByText("Show shortcut to welcome checklist above the room list")).not.toBeVisible();
     });
 });

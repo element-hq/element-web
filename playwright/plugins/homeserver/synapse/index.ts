@@ -196,4 +196,27 @@ export class Synapse implements Homeserver, HomeserverInstance {
             displayName,
         };
     }
+
+    public async loginUser(userId: string, password: string): Promise<Credentials> {
+        const url = `${this.config.baseUrl}/_matrix/client/v3/login`;
+        const res = await this.request.post(url, {
+            data: {
+                type: "m.login.password",
+                identifier: {
+                    type: "m.id.user",
+                    user: userId,
+                },
+                password: password,
+            },
+        });
+        const json = await res.json();
+
+        return {
+            password,
+            accessToken: json.access_token,
+            userId: json.user_id,
+            deviceId: json.device_id,
+            homeServer: json.home_server,
+        };
+    }
 }

@@ -31,6 +31,13 @@ export interface HomeserverInstance {
      * @param displayName optional display name to set on the newly registered user
      */
     registerUser(username: string, password: string, displayName?: string): Promise<Credentials>;
+
+    /**
+     * Logs into synapse with the given username/password
+     * @param userId login username
+     * @param password login password
+     */
+    loginUser(userId: string, password: string): Promise<Credentials>;
 }
 
 export interface StartHomeserverOpts {

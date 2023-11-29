@@ -216,7 +216,7 @@ test.describe("Editing", () => {
         await app.closeDialog();
 
         // Enable developer mode
-        await app.setSettingValue("developerMode", null, SettingLevel.ACCOUNT, true);
+        await app.settings.setValue("developerMode", null, SettingLevel.ACCOUNT, true);
 
         await clickEditedMessage(page, "Massage");
 
