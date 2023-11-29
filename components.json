@@ -4,5 +4,6 @@
     "src/components/views/auth/AuthPage.tsx": "src/components/views/auth/VectorAuthPage.tsx",
     "src/components/views/rooms/Autocomplete.tsx": "src/components/views/rooms/Autocomplete.tsx",
     "src/components/views/rooms/RoomTile.tsx": "src/components/views/rooms/RoomTile.tsx",
+    "src/components/views/elements/RoomName.tsx": "src/components/views/elements/RoomName.tsx",
     "src/editor/commands.tsx": "src/editor/commands.tsx"
 }
