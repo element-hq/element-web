@@ -2,7 +2,7 @@
     "action": {
         "create_account": "创建账户",
         "dismiss": "忽略",
-        "explore_rooms": "探索房间",
+        "explore_rooms": "探索聊天室",
         "open": "打开",
         "sign_in": "登录"
     },
