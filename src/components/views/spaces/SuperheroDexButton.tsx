@@ -1,7 +1,8 @@
 import classNames from "classnames";
 import AccessibleTooltipButton from "matrix-react-sdk/src/components/views/elements/AccessibleTooltipButton";
-import { _t } from "matrix-react-sdk/src/languageHandler";
 import React, { useCallback } from "react";
+
+import { _t } from "../../../languageHandler";
 
 const SuperheroDexButton: React.FC<{
     isPanelCollapsed: boolean;
