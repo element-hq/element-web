@@ -536,7 +536,7 @@
         "timeline": "Linea temporale",
         "trusted": "Fidato",
         "unavailable": "non disponibile",
-        "unencrypted": "Non criptato",
+        "unencrypted": "Non crittografato",
         "unmute": "Togli silenzio",
         "unnamed_room": "Stanza senza nome",
         "unnamed_space": "Spazio senza nome",
@@ -793,7 +793,7 @@
         "values_explicit_this_room_colon": "Valori a livelli espliciti in questa stanza:",
         "verification_explorer": "Esploratore di verifiche",
         "view_servers_in_room": "Vedi i server nella stanza",
-        "view_source_decrypted_event_source": "Sorgente dell'evento decifrato",
+        "view_source_decrypted_event_source": "Sorgente dell'evento decrittografato",
         "view_source_decrypted_event_source_unavailable": "Sorgente decifrata non disponibile",
         "widget_screenshots": "Attiva le schermate dei widget sui widget supportati"
     },
@@ -856,8 +856,8 @@
             "title": "Distruggere le chiavi di firma incrociata?",
             "warning": "L'eliminazione delle chiavi di firma incrociata è permanente. Chiunque si sia verificato con te vedrà avvisi di sicurezza. Quasi sicuramente non vuoi fare questa cosa, a meno che tu non abbia perso tutti i dispositivi da cui puoi fare l'accesso."
         },
-        "event_shield_reason_authenticity_not_guaranteed": "L'autenticità di questo messaggio cifrato non può essere garantita su questo dispositivo.",
-        "event_shield_reason_mismatched_sender_key": "Cifrato da una sessione non verificata",
+        "event_shield_reason_authenticity_not_guaranteed": "L'autenticità di questo messaggio crittografato non può essere garantita su questo dispositivo.",
+        "event_shield_reason_mismatched_sender_key": "Crittografato da una sessione non verificata",
         "event_shield_reason_unknown_device": "Crittografato da un dispositivo sconosciuto o eliminato.",
         "event_shield_reason_unsigned_device": "Crittografato da un dispositivo non verificato dal suo proprietario.",
         "event_shield_reason_unverified_identity": "Cifrato da un utente non verificato.",
@@ -3079,7 +3079,7 @@
     },
     "theme": {
         "light_high_contrast": "Alto contrasto chiaro",
-        "match_system": "Sistema di corrispondenza"
+        "match_system": "Uguale al sistema"
     },
     "thread_view_back_action_label": "Torna alla conversazione",
     "threads": {

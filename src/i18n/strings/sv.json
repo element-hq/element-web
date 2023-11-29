@@ -1397,6 +1397,7 @@
         "element_call_video_rooms": "Element Call videorum",
         "experimental_description": "Känner du dig äventyrlig? Pröva våra senaste idéer under utveckling. Dessa funktioner är inte slutförda; de kan vara instabila, kan ändras, eller kan tas bort helt. <a>Läs mer</a>.",
         "experimental_section": "Tidiga förhandstittar",
+        "feature_disable_call_per_sender_encryption": "Inaktivera kryptering per avsändare för Element Call",
         "feature_wysiwyg_composer_description": "Använd rik text istället för Markdown i meddelanderedigeraren.",
         "group_calls": "Ny gruppsamtalsupplevelse",
         "group_developer": "Utvecklare",
@@ -1739,7 +1740,8 @@
         "online": "Online",
         "online_for": "Online i %(duration)s",
         "unknown": "Okänt",
-        "unknown_for": "Okänt i %(duration)s"
+        "unknown_for": "Okänt i %(duration)s",
+        "unreachable": "Användarens server kan inte nås"
     },
     "quick_settings": {
         "all_settings": "Alla inställningar",
@@ -2192,7 +2194,10 @@
             "uploaded_sound": "Uppladdat ljud"
         },
         "people": {
-            "knock_empty": "Inga förfrågningar"
+            "knock_empty": "Inga förfrågningar",
+            "knock_section": "Ber om att gå med",
+            "see_less": "Visa mindre",
+            "see_more": "Visa mer"
         },
         "permissions": {
             "add_privileged_user_description": "Ge en eller flera användare i det här rummet fler privilegier",
@@ -2278,6 +2283,7 @@
             "join_rule_restricted_dialog_description": "Bestäm vilka utrymmen som kan komma åt det hör rummet. Om ett utrymme väljs så kan dess medlemmar hitta och gå med i <RoomName/>.",
             "join_rule_restricted_dialog_empty_warning": "Du tar bort alla utrymmen. Åtkomst kommer att sättas som förval till endast inbjudan",
             "join_rule_restricted_dialog_filter_placeholder": "Sök i utrymmen",
+            "join_rule_restricted_dialog_heading_known": "Andra utrymmen du känner till",
             "join_rule_restricted_dialog_heading_other": "Andra utrymmen du kanske inte känner till",
             "join_rule_restricted_dialog_heading_room": "Utrymmen du känner till som innehåller det här rummet",
             "join_rule_restricted_dialog_heading_space": "Utrymmen du känner till som innehåller det här utrymmet",
@@ -2305,6 +2311,8 @@
             },
             "join_rule_upgrade_upgrading_room": "Uppgraderar rum",
             "public_without_alias_warning": "För att länka till det här rummet, lägg till en adress.",
+            "publish_room": "Gör det här rummet synligt i den offentliga rumskatalogen.",
+            "publish_space": "Gör det här utrymmet synligt i den offentliga rumskatalogen.",
             "strict_encryption": "Skicka aldrig krypterade meddelanden till overifierade sessioner i det här rummet från den här sessionen",
             "title": "Säkerhet & sekretess"
         },
@@ -2376,6 +2384,7 @@
             "brand_version": "%(brand)s-version:",
             "chat_bot": "Chatta med %(brand)s-bott",
             "clear_cache_reload": "Rensa cache och ladda om",
+            "crypto_version": "Kryptoversion:",
             "help_link": "För hjälp med att använda %(brand)s, klicka <a>här</a>.",
             "help_link_chat_bot": "För hjälp med att använda %(brand)s, klicka <a>här</a> eller starta en chatt med vår bott med knappen nedan.",
             "homeserver": "Hemservern är <code>%(homeserverUrl)s</code>",
@@ -2546,18 +2555,21 @@
             "confirm_passphrase": "Bekräfta lösenfrasen",
             "enter_passphrase": "Ange lösenfras",
             "export_description_1": "Denna process låter dig exportera nycklarna för meddelanden som du har fått i krypterade rum till en lokal fil. Du kommer sedan att kunna importera filen i en annan Matrix-klient i framtiden, så att den klienten också kan avkryptera meddelandena.",
+            "export_description_2": "Den exporterade filen låter alla som kan läsa den avkryptera alla krypterade meddelanden som du kan se, så du bör vara noga med att hålla den säker. För att hjälpa till med detta bör du ange en unik lösenfras nedan, som endast kommer att användas för att kryptera exporterade data. Det kommer bara att vara möjligt att importera datan med samma lösenfras.",
             "export_title": "Exportera rumsnycklar",
             "file_to_import": "Fil att importera",
             "import_description_1": "Denna process möjliggör import av krypteringsnycklar som tidigare exporterats från en annan Matrix-klient. Du kommer då kunna avkryptera alla meddelanden som den andra klienten kunde avkryptera.",
             "import_description_2": "Den exporterade filen kommer vara skyddad med en lösenfras. Du måste ange lösenfrasen här, för att avkryptera filen.",
             "import_title": "Importera rumsnycklar",
             "phrase_cannot_be_empty": "Lösenfrasen får inte vara tom",
-            "phrase_must_match": "Lösenfraser måste matcha"
+            "phrase_must_match": "Lösenfraser måste matcha",
+            "phrase_strong_enough": "Bra! Den här lösenfrasen ser tillräckligt stark ut"
         },
         "keyboard": {
             "title": "Tangentbord"
         },
         "notifications": {
+            "default_setting_description": "Denna inställning kommer att tillämpas som standard för alla dina rum.",
             "enable_audible_notifications_session": "Aktivera ljudaviseringar för den här sessionen",
             "enable_desktop_notifications_session": "Aktivera skrivbordsaviseringar för den här sessionen",
             "enable_email_notifications": "Aktivera e-postaviseringar för %(email)s",

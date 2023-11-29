@@ -2877,7 +2877,7 @@
             "reject_invite": "%(targetName)s heeft de uitnodiging geweigerd",
             "remove_avatar": "%(senderName)s profielfoto is verwijderd",
             "remove_name": "%(senderName)s weergavenaam (%(oldDisplayName)s) is verwijderd",
-            "set_avatar": "%(senderName)s profielfoto is ingesteld",
+            "set_avatar": "%(senderName)s heeft een profielfoto ingesteld",
             "set_name": "%(senderName)s heeft de weergavenaam %(displayName)s aangenomen",
             "unban": "%(senderName)s heeft %(targetName)s ontbannen",
             "withdrew_invite": "%(senderName)s heeft de uitnodiging van %(targetName)s ingetrokken",

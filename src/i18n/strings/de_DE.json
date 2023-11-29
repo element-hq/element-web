@@ -441,7 +441,7 @@
         "edited": "bearbeitet",
         "email_address": "E-Mail-Adresse",
         "emoji": "Emojis",
-        "encrypted": "Verschlüsseln",
+        "encrypted": "Verschlüsselt",
         "encryption_enabled": "Verschlüsselung aktiviert",
         "error": "Fehler",
         "faq": "Häufige Fragen",
@@ -1856,6 +1856,10 @@
             "close_call_button": "Anruf schließen",
             "forget_room_button": "Raum entfernen",
             "hide_widgets_button": "Widgets verstecken",
+            "n_people_asking_to_join": {
+                "one": "Möchte beitreten",
+                "other": "%(count)s Personen möchten beitreten"
+            },
             "room_is_public": "Dieser Raum ist öffentlich",
             "show_widgets_button": "Widgets anzeigen",
             "video_call_button_ec": "Videoanruf (%(brand)s)",
@@ -1913,6 +1917,8 @@
         "kicked_by": "Du wurdest von %(memberName)s entfernt",
         "kicked_from_room_by": "%(memberName)s hat dich aus %(roomName)s entfernt",
         "knock_cancel_action": "Anfrage abbrechen",
+        "knock_denied_subtitle": "Da deine Beitrittsanfrage abgelehnt wurde, bitten wir um Geduld, bis du eine Einladung vom Administrator oder Moderator erhältst.",
+        "knock_denied_title": "Deine Beitrittsanfrage wurde abgelehnt",
         "knock_message_field_placeholder": "Nachricht (optional)",
         "knock_prompt": "Beitrittsanfrage stellen?",
         "knock_prompt_name": "Beitrittsanfrage für %(roomName)s stellen?",
@@ -2235,6 +2241,8 @@
             },
             "join_rule_upgrade_upgrading_room": "Raum wird aktualisiert",
             "public_without_alias_warning": "Um den Raum zu verlinken, füge bitte eine Adresse hinzu.",
+            "publish_room": "Diesen Raum im Raumverzeichnis veröffentlichen.",
+            "publish_space": "Diesen Space im Raumerzeichnis veröffentlichen.",
             "strict_encryption": "Niemals verschlüsselte Nachrichten von dieser Sitzung zu unverifizierten Sitzungen in diesem Raum senden",
             "title": "Sicherheit"
         },

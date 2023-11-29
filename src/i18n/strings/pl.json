@@ -1057,7 +1057,7 @@
         "unknown_error_code": "nieznany kod błędu",
         "update_power_level": "Nie udało się zmienić poziomu mocy"
     },
-    "error_app_open_in_another_tab": "%(brand)s został otwarty w innej karcie.",
+    "error_app_open_in_another_tab": "Zmień kartę aby połączyć się do %(brand)s. Ta karta może zostać zamknięta.",
     "error_app_opened_in_another_window": "%(brand)s jest już otwarty w innym oknie. Kliknij \"%(label)s\", aby otworzyć tutaj %(brand)s i odłączyć drugie okno.",
     "error_database_closed_description": "Może być to spowodowane przez aplikacje otwartą w wielu kartach lub po wyczyszczeniu danych przeglądarki.",
     "error_database_closed_title": "Baza danych została nieoczekiwanie zamknięta",
@@ -1935,6 +1935,7 @@
             "show_widgets_button": "Pokaż widżety",
             "video_call_button_ec": "Rozmowa wideo (%(brand)s)",
             "video_call_button_jitsi": "Rozmowa wideo (Jitsi)",
+            "video_call_button_legacy": "Stary tryb połączenia video",
             "video_call_ec_change_layout": "Zmień układ",
             "video_call_ec_layout_freedom": "Wolność",
             "video_call_ec_layout_spotlight": "Centrum uwagi",
@@ -2400,6 +2401,7 @@
         "all_rooms_home_description": "Wszystkie pokoje w których jesteś zostaną pokazane na ekranie głównym.",
         "always_show_message_timestamps": "Zawsze pokazuj znaczniki czasu wiadomości",
         "appearance": {
+            "bundled_emoji_font": "Użyj wbudowanej czcionki emoji",
             "custom_font": "Użyj czcionki systemowej",
             "custom_font_description": "Wybierz nazwę czcionki zainstalowanej w systemie, a %(brand)s spróbuje jej użyć.",
             "custom_font_name": "Nazwa czcionki systemowej",
