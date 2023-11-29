@@ -277,7 +277,6 @@ describe("Cryptography", function () {
     });
 
     it("should allow verification when there is no existing DM", function (this: CryptoTestContext) {
-        skipIfRustCrypto(); // https://github.com/vector-im/element-web/issues/26447
         cy.bootstrapCrossSigning(aliceCredentials);
         autoJoin(this.bob);
 
