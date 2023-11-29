@@ -61,6 +61,7 @@ import SpaceStore from "matrix-react-sdk/src/stores/spaces/SpaceStore";
 import React, {
     ComponentProps,
     Dispatch,
+    ReactElement,
     ReactNode,
     RefCallback,
     SetStateAction,
@@ -71,6 +72,7 @@ import React, {
     useState,
 } from "react";
 import { DragDropContext, Draggable, Droppable, DroppableProvidedProps } from "react-beautiful-dnd";
+
 import SuperheroDexButton from "./SuperheroDexButton";
 import MintTokenButton from "./MintTokenButton";
 
@@ -104,7 +106,7 @@ export const HomeButtonContextMenu: React.FC<ComponentProps<typeof SpaceContextM
                     iconClassName="mx_SpacePanel_noIcon"
                     label={_t("settings|sidebar|metaspaces_home_all_rooms")}
                     active={allRoomsInHome}
-                    onClick={() => {
+                    onClick={(): void => {
                         onFinished();
                         SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.ACCOUNT, !allRoomsInHome);
                     }}
@@ -228,7 +230,7 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
 
     const onNewClick = menuDisplayed
         ? closeMenu
-        : () => {
+        : (): void => {
               if (!isPanelCollapsed) setPanelCollapsed(true);
               openMenu();
           };
@@ -307,12 +309,12 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
                         space={s}
                         activeSpaces={activeSpaces}
                         isPanelCollapsed={isPanelCollapsed}
-                        onExpand={() => setPanelCollapsed(false)}
+                        onExpand={(): void => setPanelCollapsed(false)}
                     />
                 ))}
                 {actualSpaces.map((s, i) => (
                     <Draggable key={s.roomId} draggableId={s.roomId} index={i}>
-                        {(provided, snapshot) => (
+                        {(provided, snapshot): ReactElement => (
                             <SpaceItem
                                 {...provided.draggableProps}
                                 dragHandleProps={provided.dragHandleProps}
@@ -322,7 +324,7 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
                                 space={s}
                                 activeSpaces={activeSpaces}
                                 isPanelCollapsed={isPanelCollapsed}
-                                onExpand={() => setPanelCollapsed(false)}
+                                onExpand={(): void => setPanelCollapsed(false)}
                             />
                         )}
                     </Draggable>
@@ -353,12 +355,12 @@ const SpacePanel: React.FC = () => {
 
     return (
         <RovingTabIndexProvider handleHomeEnd handleUpDown={!dragging}>
-            {({ onKeyDownHandler, onDragEndHandler }) => (
+            {({ onKeyDownHandler, onDragEndHandler }): ReactElement => (
                 <DragDropContext
-                    onDragStart={() => {
+                    onDragStart={(): void => {
                         setDragging(true);
                     }}
-                    onDragEnd={(result) => {
+                    onDragEnd={(result): void => {
                         setDragging(false);
                         if (!result.destination) return; // dropped outside the list
                         SpaceStore.instance.moveRootSpace(result.source.index, result.destination.index);
@@ -373,7 +375,7 @@ const SpacePanel: React.FC = () => {
                         <UserMenu isPanelCollapsed={isPanelCollapsed}>
                             <AccessibleTooltipButton
                                 className={classNames("mx_SpacePanel_toggleCollapse", { expanded: !isPanelCollapsed })}
-                                onClick={() => setPanelCollapsed(!isPanelCollapsed)}
+                                onClick={(): void => setPanelCollapsed(!isPanelCollapsed)}
                                 title={isPanelCollapsed ? _t("action|expand") : _t("action|collapse")}
                                 tooltip={
                                     <div>
@@ -393,7 +395,7 @@ const SpacePanel: React.FC = () => {
                             />
                         </UserMenu>
                         <Droppable droppableId="top-level-spaces">
-                            {(provided, snapshot) => (
+                            {(provided, snapshot): ReactElement => (
                                 <InnerSpacePanel
                                     {...provided.droppableProps}
                                     isPanelCollapsed={isPanelCollapsed}

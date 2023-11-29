@@ -1,7 +1,8 @@
 import classNames from "classnames";
 import AccessibleTooltipButton from "matrix-react-sdk/src/components/views/elements/AccessibleTooltipButton";
-import { _t } from "matrix-react-sdk/src/languageHandler";
 import React, { useCallback } from "react";
+
+import { _t } from "../../../languageHandler";
 
 const MintTokenButton: React.FC<{
     isPanelCollapsed: boolean;
@@ -19,11 +20,11 @@ const MintTokenButton: React.FC<{
                     expanded: !isPanelCollapsed,
                 })}
                 onClick={onOpenDex}
-                title={_t('mint_a_token')}
+                title={_t("mint_a_token")}
                 forceHide={!isPanelCollapsed}
                 aria-expanded={!isPanelCollapsed}
             >
-                {!isPanelCollapsed ? _t('mint_a_token') : null}
+                {!isPanelCollapsed ? _t("mint_a_token") : null}
             </AccessibleTooltipButton>
         </>
     );

@@ -189,6 +189,7 @@
         "process": "^0.11.10",
         "proxy-agent": "^6.3.0",
         "raw-loader": "^4.0.2",
+        "react-beautiful-dnd": "^13.1.0",
         "rimraf": "^5.0.0",
         "semver": "^7.5.2",
         "setimmediate": "^1.0.5",
