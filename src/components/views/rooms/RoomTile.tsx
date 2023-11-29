@@ -59,6 +59,8 @@ import { MessagePreview, MessagePreviewStore } from "matrix-react-sdk/src/stores
 import { DefaultTagID, TagID } from "matrix-react-sdk/src/stores/room-list/models";
 import { isKnockDenied } from "matrix-react-sdk/src/utils/membership";
 import { useHasRoomLiveVoiceBroadcast } from "matrix-react-sdk/src/voice-broadcast";
+import { CustomRoomName } from "./CustomRoomName";
+import { getRoomName } from "../../../hooks/useTokengatedRoom";
 
 interface Props {
     room: Room;
@@ -399,10 +401,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
             mx_RoomTile_minimized: this.props.isMinimized,
         });
 
-        let name = this.props.room.name;
-        if (typeof name !== "string") name = "";
-        name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
-
+        const name = getRoomName(this.props.room);
         let badge: React.ReactNode;
         if (!this.props.isMinimized && this.notificationState) {
             // aria-hidden because we summarise the unread count/highlight status in a manual aria-label below
@@ -436,7 +435,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
         const titleContainer = this.props.isMinimized ? null : (
             <div className="mx_RoomTile_titleContainer">
                 <div title={name} className={titleClasses} tabIndex={-1}>
-                    <span dir="auto">{name}</span>
+                    <CustomRoomName room={this.props.room} />
                 </div>
                 {subtitle}
             </div>

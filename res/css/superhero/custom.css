@@ -1,0 +1,9 @@
+.sh_RoomTokenGatedRoomIcon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+.mx_RoomTile .mx_RoomTile_titleContainer .mx_RoomTile_title {
+    align-items: center;
+    display: flex;
+}
