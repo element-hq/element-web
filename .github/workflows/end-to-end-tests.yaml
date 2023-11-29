@@ -6,6 +6,14 @@ on:
         types:
             - completed
 
+    # support calls from other workflows for downstream testing
+    workflow_call:
+        inputs:
+            react-sdk-repository:
+                type: string
+                required: true
+                description: "The name of the github repository to check out and build."
+
 concurrency:
     group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.run_id }}
     cancel-in-progress: ${{ github.event.workflow_run.event == 'pull_request' }}
