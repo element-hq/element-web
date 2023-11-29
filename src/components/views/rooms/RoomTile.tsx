@@ -17,7 +17,7 @@ limitations under the License.
 
 import classNames from "classnames";
 import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import React, { createRef } from "react";
+import React, { ReactElement, createRef } from "react";
 import { getKeyBindingsManager } from "matrix-react-sdk/src/KeyBindingsManager";
 import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 import PosthogTrackers from "matrix-react-sdk/src/PosthogTrackers";
@@ -43,7 +43,6 @@ import defaultDispatcher from "matrix-react-sdk/src/dispatcher/dispatcher";
 import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
 import { ViewRoomPayload } from "matrix-react-sdk/src/dispatcher/payloads/ViewRoomPayload";
 import { _t } from "matrix-react-sdk/src/languageHandler";
-import type { Call } from "matrix-react-sdk/src/models/Call";
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import { UIComponent } from "matrix-react-sdk/src/settings/UIFeature";
 import { CallStore, CallStoreEvent } from "matrix-react-sdk/src/stores/CallStore";
@@ -59,8 +58,10 @@ import { MessagePreview, MessagePreviewStore } from "matrix-react-sdk/src/stores
 import { DefaultTagID, TagID } from "matrix-react-sdk/src/stores/room-list/models";
 import { isKnockDenied } from "matrix-react-sdk/src/utils/membership";
 import { useHasRoomLiveVoiceBroadcast } from "matrix-react-sdk/src/voice-broadcast";
-import { CustomRoomName } from "./CustomRoomName";
-import { getRoomName } from "../../../hooks/useTokengatedRoom";
+
+import type { Call } from "matrix-react-sdk/src/models/Call";
+import { RoomName } from "../elements/RoomName";
+import { getRoomName } from "../../../hooks/useRoomName";
 
 interface Props {
     room: Room;
@@ -358,16 +359,16 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
                         {...contextMenuBelow(this.state.generalMenuPosition)}
                         onFinished={this.onCloseGeneralMenu}
                         room={this.props.room}
-                        onPostFavoriteClick={(ev: ButtonEvent) =>
+                        onPostFavoriteClick={(ev: ButtonEvent): void =>
                             PosthogTrackers.trackInteraction("WebRoomListRoomTileContextMenuFavouriteToggle", ev)
                         }
-                        onPostInviteClick={(ev: ButtonEvent) =>
+                        onPostInviteClick={(ev: ButtonEvent): void =>
                             PosthogTrackers.trackInteraction("WebRoomListRoomTileContextMenuInviteItem", ev)
                         }
-                        onPostSettingsClick={(ev: ButtonEvent) =>
+                        onPostSettingsClick={(ev: ButtonEvent): void =>
                             PosthogTrackers.trackInteraction("WebRoomListRoomTileContextMenuSettingsItem", ev)
                         }
-                        onPostLeaveClick={(ev: ButtonEvent) =>
+                        onPostLeaveClick={(ev: ButtonEvent): void =>
                             PosthogTrackers.trackInteraction("WebRoomListRoomTileContextMenuLeaveItem", ev)
                         }
                     />
@@ -435,7 +436,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
         const titleContainer = this.props.isMinimized ? null : (
             <div className="mx_RoomTile_titleContainer">
                 <div title={name} className={titleClasses} tabIndex={-1}>
-                    <CustomRoomName room={this.props.room} />
+                    <RoomName room={this.props.room} />
                 </div>
                 {subtitle}
             </div>
@@ -478,7 +479,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
         return (
             <React.Fragment>
                 <RovingTabIndexWrapper inputRef={this.roomTileRef}>
-                    {({ onFocus, isActive, ref }) => (
+                    {({ onFocus, isActive, ref }): ReactElement => (
                         <Button
                             {...props}
                             onFocus={onFocus}
