@@ -261,9 +261,16 @@ export function determineUnreadState(
     }
 
     // We don't have any notified messages, but we might have unread messages. Let's find out.
-    let hasUnread: boolean;
-    if (threadId) hasUnread = doesRoomOrThreadHaveUnreadMessages(room.getThread(threadId)!);
-    else hasUnread = doesRoomHaveUnreadMessages(room);
+    let hasUnread = false;
+    if (threadId) {
+        const thread = room.getThread(threadId);
+        if (thread) {
+            hasUnread = doesRoomOrThreadHaveUnreadMessages(thread);
+        }
+        // If the thread does not exist, assume it contains no unreads
+    } else {
+        hasUnread = doesRoomHaveUnreadMessages(room);
+    }
 
     return {
         symbol: null,

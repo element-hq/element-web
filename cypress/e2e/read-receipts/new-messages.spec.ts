@@ -221,6 +221,8 @@ describe("Read receipts", () => {
                 assertRead(room2);
             });
             // XXX: fails because the room remains unread even though I sent a message
+            // Note: this test should not re-use the same MatrixClient - it
+            // should create a new one logged in as the same user.
             it.skip("Me sending a message from a different client marks room as read", () => {
                 // Given I have unread messages
                 goTo(room1);
@@ -345,8 +347,7 @@ describe("Read receipts", () => {
                 // Then thread does appear unread
                 assertUnreadThread("Msg1");
             });
-            // XXX: fails because the room is still "bold" even though the notification counts all disappear
-            it.skip("Marking a room with unread threads as read makes it read", () => {
+            it("Marking a room with unread threads as read makes it read", () => {
                 // Given I have an unread thread
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), threadedOff("Msg1", "Resp2")]);
@@ -358,8 +359,7 @@ describe("Read receipts", () => {
                 // Then the room is read
                 assertRead(room2);
             });
-            // XXX: fails for the same reason as "Marking a room with unread threads as read makes it read"
-            it.skip("Sending a new thread message after marking as read makes it unread", () => {
+            it("Sending a new thread message after marking as read makes it unread", () => {
                 // Given a thread exists
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), threadedOff("Msg1", "Resp2")]);
@@ -374,8 +374,7 @@ describe("Read receipts", () => {
                 // Then the room becomes unread
                 assertUnread(room2, 1);
             });
-            // XXX: fails for the same reason as "Marking a room with unread threads as read makes it read"
-            it.skip("Sending a new different-thread message after marking as read makes it unread", () => {
+            it("Sending a new different-thread message after marking as read makes it unread", () => {
                 // Given 2 threads exist, and Thread2 has the latest message in it
                 goTo(room1);
                 receiveMessages(room2, ["Thread1", "Thread2", threadedOff("Thread1", "t1a")]);

@@ -105,6 +105,7 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
             client,
             authorId: client.getUserId()!,
             participantUserIds: ["@alice:example.org"],
+            length: 5,
         });
         // We need some receipt, otherwise we treat this thread as
         // "older than all threaded receipts" and consider it read.
@@ -112,7 +113,7 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
             type: "m.receipt",
             room_id: room.roomId,
             content: {
-                [events[0].getId()!]: {
+                [events[1].getId()!]: {
                     // Receipt for the first event in the thread
                     [ReceiptType.Read]: {
                         [client.getUserId()!]: { ts: 1, thread_id: rootEvent.getId() },
@@ -139,7 +140,7 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
             },
         });
         room.addLiveEvents([event]);
-        await expect(container.querySelector(".mx_RightPanel_threadsButton .mx_Indicator")).toBeNull();
+        expect(container.querySelector(".mx_RightPanel_threadsButton .mx_Indicator")).toBeNull();
 
         // Mark it as unread again.
         event = mkEvent({

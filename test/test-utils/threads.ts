@@ -111,6 +111,13 @@ type MakeThreadProps = {
     ts?: number;
 };
 
+/**
+ * Create a thread but don't actually populate it with events - see
+ * populateThread for what you probably want to do.
+ *
+ * Leaving this here in case it is needed by some people, but I (andyb) would
+ * expect us to move to use populateThread exclusively.
+ */
 export const mkThread = ({
     room,
     client,
@@ -135,8 +142,29 @@ export const mkThread = ({
 
     const thread = room.createThread(rootEvent.getId()!, rootEvent, events, true);
 
-    // So that we do not have to mock the thread loading
-    thread.initialEventsFetched = true;
-
     return { thread, rootEvent, events };
+};
+
+/**
+ * Create a thread, and make sure the events added to the thread and the room's
+ * timeline as if they came in via sync.
+ *
+ * Note that mkThread doesn't actually add the events properly to the room.
+ */
+export const populateThread = async ({
+    room,
+    client,
+    authorId,
+    participantUserIds,
+    length = 2,
+    ts = 1,
+}: MakeThreadProps): Promise<{ thread: Thread; rootEvent: MatrixEvent; events: MatrixEvent[] }> => {
+    const ret = mkThread({ room, client, authorId, participantUserIds, length, ts });
+
+    // So that we do not have to mock the thread loading, tell the thread
+    // that it is already loaded, and send the events again to the room
+    // so they are added to the thread timeline.
+    ret.thread.initialEventsFetched = true;
+    await room.addLiveEvents(ret.events);
+    return ret;
 };

@@ -188,7 +188,7 @@ describe("Read receipts", () => {
     });
 
     describe("Paging up", () => {
-        // Flaky test https://github.com/vector-im/element-web/issues/26437
+        // XXX: Fails because flaky test https://github.com/vector-im/element-web/issues/26437
         it.skip("Paging up through old messages after a room is read leaves the room read", () => {
             // Given lots of messages are in the room, but we have read them
             goTo(room1);

@@ -20,7 +20,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { haveRendererForEvent } from "../src/events/EventTileFactory";
 import { makeBeaconEvent, mkEvent, stubClient } from "./test-utils";
-import { mkThread } from "./test-utils/threads";
+import { makeThreadEvents, mkThread, populateThread } from "./test-utils/threads";
 import {
     doesRoomHaveUnreadMessages,
     doesRoomOrThreadHaveUnreadMessages,
@@ -213,7 +213,7 @@ describe("Unread", () => {
                 expect(doesRoomHaveUnreadMessages(room)).toBe(true);
             });
 
-            it("returns true for a room with an unread message in a thread", () => {
+            it("returns true for a room with an unread message in a thread", async () => {
                 // Mark the main timeline as read.
                 const receipt = new MatrixEvent({
                     type: "m.receipt",
@@ -245,12 +245,12 @@ describe("Unread", () => {
                 room.addReceipt(receipt2);
 
                 // Create a thread as a different user.
-                mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
+                await populateThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
 
                 expect(doesRoomHaveUnreadMessages(room)).toBe(true);
             });
 
-            it("returns false for a room when the latest thread event was sent by the current user", () => {
+            it("returns false for a room when the latest thread event was sent by the current user", async () => {
                 // Mark the main timeline as read.
                 const receipt = new MatrixEvent({
                     type: "m.receipt",
@@ -266,12 +266,12 @@ describe("Unread", () => {
                 room.addReceipt(receipt);
 
                 // Create a thread as the current user.
-                mkThread({ room, client, authorId: myId, participantUserIds: [myId] });
+                await populateThread({ room, client, authorId: myId, participantUserIds: [myId] });
 
                 expect(doesRoomHaveUnreadMessages(room)).toBe(false);
             });
 
-            it("returns false for a room with read thread messages", () => {
+            it("returns false for a room with read thread messages", async () => {
                 // Mark the main timeline as read.
                 let receipt = new MatrixEvent({
                     type: "m.receipt",
@@ -287,7 +287,12 @@ describe("Unread", () => {
                 room.addReceipt(receipt);
 
                 // Create threads.
-                const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
+                const { rootEvent, events } = await populateThread({
+                    room,
+                    client,
+                    authorId: myId,
+                    participantUserIds: [aliceId],
+                });
 
                 // Mark the thread as read.
                 receipt = new MatrixEvent({
@@ -306,7 +311,7 @@ describe("Unread", () => {
                 expect(doesRoomHaveUnreadMessages(room)).toBe(false);
             });
 
-            it("returns true for a room when read receipt is not on the latest thread messages", () => {
+            it("returns true for a room when read receipt is not on the latest thread messages", async () => {
                 // Mark the main timeline as read.
                 let receipt = new MatrixEvent({
                     type: "m.receipt",
@@ -322,7 +327,12 @@ describe("Unread", () => {
                 room.addReceipt(receipt);
 
                 // Create threads.
-                const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
+                const { rootEvent, events } = await populateThread({
+                    room,
+                    client,
+                    authorId: myId,
+                    participantUserIds: [aliceId],
+                });
 
                 // Mark the thread as read.
                 receipt = new MatrixEvent({
@@ -341,8 +351,7 @@ describe("Unread", () => {
                 expect(doesRoomHaveUnreadMessages(room)).toBe(true);
             });
 
-            // Fails with current implementation. Will be fixed or replaced after matrix-js-sdk#3901
-            it.skip("returns false when the event for a thread receipt can't be found, but the receipt ts is late", () => {
+            it("returns true when the event for a thread receipt can't be found", async () => {
                 // Given a room that is read
                 let receipt = new MatrixEvent({
                     type: "m.receipt",
@@ -358,69 +367,12 @@ describe("Unread", () => {
                 room.addReceipt(receipt);
 
                 // And a thread
-                const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
-
-                // When we provide a receipt that points at an unknown event,
-                // but its timestamp is after all events in the thread
-                //
-                // (This could happen if we mis-filed a reaction into the main
-                // thread when it should actually have gone into this thread, or
-                // maybe the event is just not loaded for some reason.)
-                const receiptTs = Math.max(...events.map((e) => e.getTs())) + 100;
-                receipt = new MatrixEvent({
-                    type: "m.receipt",
-                    room_id: "!foo:bar",
-                    content: {
-                        ["UNKNOWN_EVENT_ID"]: {
-                            [ReceiptType.Read]: {
-                                [myId]: { ts: receiptTs, thread_id: rootEvent.getId()! },
-                            },
-                        },
-                    },
-                });
-                room.addReceipt(receipt);
-
-                expect(doesRoomHaveUnreadMessages(room)).toBe(false);
-            });
-
-            it("returns true when the event for a thread receipt can't be found, and the receipt ts is early", () => {
-                // Given a room that is read
-                let receipt = new MatrixEvent({
-                    type: "m.receipt",
-                    room_id: "!foo:bar",
-                    content: {
-                        [event.getId()!]: {
-                            [ReceiptType.Read]: {
-                                [myId]: { ts: 1 },
-                            },
-                        },
-                    },
-                });
-                room.addReceipt(receipt);
-
-                // Create a read thread, so we don't consider all threads read
-                // because there are no threaded read receipts.
-                const { rootEvent: rootEvent1, events: events1 } = mkThread({
+                const { rootEvent, events } = await populateThread({
                     room,
                     client,
                     authorId: myId,
                     participantUserIds: [aliceId],
                 });
-                const receipt2 = new MatrixEvent({
-                    type: "m.receipt",
-                    room_id: "!foo:bar",
-                    content: {
-                        [events1[events1.length - 1].getId()!]: {
-                            [ReceiptType.Read]: {
-                                [myId]: { ts: 1, thread_id: rootEvent1.getId() },
-                            },
-                        },
-                    },
-                });
-                room.addReceipt(receipt2);
-
-                // And a thread
-                const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
 
                 // When we provide a receipt that points at an unknown event,
                 // but its timestamp is before some of the events in the thread
@@ -464,8 +416,8 @@ describe("Unread", () => {
             expect(logger.warn).toHaveBeenCalledWith(
                 "Falling back to unread room because of no read receipt or counting message found",
                 {
-                    roomOrThreadId: room.roomId,
-                    readUpToId: null,
+                    roomId: room.roomId,
+                    earliestUnimportantEventId: redactedEvent.getId(),
                 },
             );
         });
@@ -484,59 +436,96 @@ describe("Unread", () => {
         beforeEach(() => {
             room = new Room(roomId, client, myId);
             jest.spyOn(logger, "warn");
-            event = mkEvent({
-                event: true,
-                type: "m.room.message",
-                user: aliceId,
-                room: roomId,
-                content: {},
-            });
-            room.addLiveEvents([event]);
 
             // Don't care about the code path of hidden events.
             mocked(haveRendererForEvent).mockClear().mockReturnValue(true);
         });
 
-        it("should consider unthreaded read receipts for main timeline", () => {
-            // Send unthreaded receipt into room pointing at the latest event
-            room.addReceipt(
-                new MatrixEvent({
-                    type: "m.receipt",
-                    room_id: "!foo:bar",
-                    content: {
-                        [event.getId()!]: {
-                            [ReceiptType.Read]: {
-                                [myId]: { ts: 1 },
+        describe("with a single event on the main timeline", () => {
+            beforeEach(() => {
+                event = mkEvent({
+                    event: true,
+                    type: "m.room.message",
+                    user: aliceId,
+                    room: roomId,
+                    content: {},
+                });
+                room.addLiveEvents([event]);
+            });
+
+            it("an unthreaded receipt for the event makes the room read", () => {
+                // Send unthreaded receipt into room pointing at the latest event
+                room.addReceipt(
+                    new MatrixEvent({
+                        type: "m.receipt",
+                        room_id: "!foo:bar",
+                        content: {
+                            [event.getId()!]: {
+                                [ReceiptType.Read]: {
+                                    [myId]: { ts: 1 },
+                                },
                             },
                         },
-                    },
-                }),
-            );
+                    }),
+                );
 
-            expect(doesRoomOrThreadHaveUnreadMessages(room)).toBe(false);
+                expect(doesRoomOrThreadHaveUnreadMessages(room)).toBe(false);
+            });
+
+            it("a threaded receipt for the event makes the room read", () => {
+                // Send threaded receipt into room pointing at the latest event
+                room.addReceipt(
+                    new MatrixEvent({
+                        type: "m.receipt",
+                        room_id: "!foo:bar",
+                        content: {
+                            [event.getId()!]: {
+                                [ReceiptType.Read]: {
+                                    [myId]: { ts: 1, thread_id: "main" },
+                                },
+                            },
+                        },
+                    }),
+                );
+
+                expect(doesRoomOrThreadHaveUnreadMessages(room)).toBe(false);
+            });
         });
 
-        it("should consider unthreaded read receipts for thread timelines", () => {
-            // Provide an unthreaded read receipt with ts greater than the latest thread event
-            const receipt = new MatrixEvent({
-                type: "m.receipt",
-                room_id: "!foo:bar",
-                content: {
-                    [event.getId()!]: {
-                        [ReceiptType.Read]: {
-                            [myId]: { ts: 10000000000 },
-                        },
-                    },
-                },
+        describe("with an event on the main timeline and a later one in a thread", () => {
+            let threadEvent: MatrixEvent;
+
+            beforeEach(() => {
+                const { events } = makeThreadEvents({
+                    roomId: roomId,
+                    authorId: aliceId,
+                    participantUserIds: ["@x:s.co"],
+                    length: 2,
+                    ts: 100,
+                    currentUserId: myId,
+                });
+                room.addLiveEvents(events);
+                threadEvent = events[1];
             });
-            room.addReceipt(receipt);
 
-            const { thread } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
+            it("an unthreaded receipt for the later threaded event makes the room read", () => {
+                // Send unthreaded receipt into room pointing at the latest event
+                room.addReceipt(
+                    new MatrixEvent({
+                        type: "m.receipt",
+                        room_id: roomId,
+                        content: {
+                            [threadEvent.getId()!]: {
+                                [ReceiptType.Read]: {
+                                    [myId]: { ts: 1 },
+                                },
+                            },
+                        },
+                    }),
+                );
 
-            expect(thread.replyToEvent!.getTs()).toBeLessThan(
-                receipt.getContent()[event.getId()!][ReceiptType.Read][myId].ts,
-            );
-            expect(doesRoomOrThreadHaveUnreadMessages(thread)).toBe(false);
+                expect(doesRoomOrThreadHaveUnreadMessages(room)).toBe(false);
+            });
         });
     });
 });

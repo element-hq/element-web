@@ -78,7 +78,7 @@ exports[`RoomTile when message previews are enabled and there is a message in th
 <DocumentFragment>
   <div
     aria-describedby="mx_RoomTile_messagePreview_!1:example.org"
-    aria-label="!1:​example.org"
+    aria-label="!1:​example.org Unread messages."
     aria-selected="false"
     class="mx_AccessibleButton mx_RoomTile"
     role="treeitem"
@@ -102,7 +102,7 @@ exports[`RoomTile when message previews are enabled and there is a message in th
       class="mx_RoomTile_titleContainer"
     >
       <div
-        class="mx_RoomTile_title mx_RoomTile_titleWithSubtitle"
+        class="mx_RoomTile_title mx_RoomTile_titleWithSubtitle mx_RoomTile_titleHasUnreadEvents"
         tabindex="-1"
         title="!1:​example.org"
       >
@@ -127,7 +127,15 @@ exports[`RoomTile when message previews are enabled and there is a message in th
     <div
       aria-hidden="true"
       class="mx_RoomTile_badgeContainer"
-    />
+    >
+      <div
+        class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_dot"
+      >
+        <span
+          class="mx_NotificationBadge_count"
+        />
+      </div>
+    </div>
     <div
       aria-expanded="false"
       aria-haspopup="true"

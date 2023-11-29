@@ -57,68 +57,66 @@ export function doesRoomHaveUnreadMessages(room: Room): boolean {
         return false;
     }
 
-    for (const timeline of [room, ...room.getThreads()]) {
-        // If the current timeline has unread messages, we're done.
-        if (doesRoomOrThreadHaveUnreadMessages(timeline)) {
+    for (const withTimeline of [room, ...room.getThreads()]) {
+        if (doesTimelineHaveUnreadMessages(room, withTimeline.timeline)) {
+            // We found an unread, so the room is unread
             return true;
         }
     }
+
     // If we got here then no timelines were found with unread messages.
     return false;
 }
 
-export function doesRoomOrThreadHaveUnreadMessages(roomOrThread: Room | Thread): boolean {
-    // NOTE: this shares logic with hasUserReadEvent in
-    // matrix-js-sdk/src/models/read-receipt.ts. They are not combined (yet)
-    // because hasUserReadEvent is focussed on a single event, and this is
-    // focussed on the whole room/thread.
-
-    // If there are no messages yet in the timeline then it isn't fully initialised
-    // and cannot be unread.
-    if (!roomOrThread || roomOrThread.timeline.length === 0) {
-        return false;
-    }
-
-    const myUserId = roomOrThread.client.getSafeUserId();
-
-    // as we don't send RRs for our own messages, make sure we special case that
-    // if *we* sent the last message into the room, we consider it not unread!
-    // Should fix: https://github.com/vector-im/element-web/issues/3263
-    //             https://github.com/vector-im/element-web/issues/2427
-    // ...and possibly some of the others at
-    //             https://github.com/vector-im/element-web/issues/3363
-    if (roomOrThread.timeline[roomOrThread.timeline.length - 1]?.getSender() === myUserId) {
-        return false;
-    }
-
-    const readUpToId = roomOrThread.getEventReadUpTo(myUserId);
-    const hasReceipt = makeHasReceipt(roomOrThread, readUpToId, myUserId);
-
-    // Loop through messages, starting with the most recent...
-    for (let i = roomOrThread.timeline.length - 1; i >= 0; --i) {
-        const ev = roomOrThread.timeline[i];
-
-        if (hasReceipt(ev)) {
-            // If we've read up to this event, there's nothing more recent
-            // that counts and we can stop looking because the user's read
-            // this and everything before.
+function doesTimelineHaveUnreadMessages(room: Room, timeline: Array<MatrixEvent>): boolean {
+    const myUserId = room.client.getSafeUserId();
+    const latestImportantEventId = findLatestImportantEvent(room.client, timeline)?.getId();
+    if (latestImportantEventId) {
+        return !room.hasUserReadEvent(myUserId, latestImportantEventId);
+    } else {
+        // We couldn't find an important event to check - check the unimportant ones.
+        const earliestUnimportantEventId = timeline.at(0)?.getId();
+        if (!earliestUnimportantEventId) {
+            // There are no events in this timeline - it is uninitialised, so we
+            // consider it read
             return false;
-        } else if (isImportantEvent(roomOrThread.client, ev)) {
-            // We've found a message that counts before we hit
-            // the user's read receipt, so this room is definitely unread.
+        } else if (room.hasUserReadEvent(myUserId, earliestUnimportantEventId)) {
+            // Some of the unimportant events are read, and there are no
+            // important ones after them, so we've read everything.
+            return false;
+        } else {
+            // We have events. and none of them are read.  We must guess that
+            // the timeline is unread, because there could be older unread
+            // important events that we don't have loaded.
+            logger.warn("Falling back to unread room because of no read receipt or counting message found", {
+                roomId: room.roomId,
+                earliestUnimportantEventId: earliestUnimportantEventId,
+            });
             return true;
         }
     }
+}
 
-    // If we got here, we didn't find a message was important but didn't find
-    // the user's read receipt either, so we guess and say that the room is
-    // unread on the theory that false positives are better than false
-    // negatives here.
-    logger.warn("Falling back to unread room because of no read receipt or counting message found", {
-        roomOrThreadId: roomOrThread.roomId,
-        readUpToId,
-    });
-    return true;
+export function doesRoomOrThreadHaveUnreadMessages(roomOrThread: Room | Thread): boolean {
+    const room = roomOrThread instanceof Thread ? roomOrThread.room : roomOrThread;
+    const events = roomOrThread instanceof Thread ? roomOrThread.timeline : room.getLiveTimeline().getEvents();
+    return doesTimelineHaveUnreadMessages(room, events);
+}
+
+/**
+ * Look backwards through the timeline and find the last event that is
+ * "important" in the sense of isImportantEvent.
+ *
+ * @returns the latest important event, or null if none were found
+ */
+function findLatestImportantEvent(client: MatrixClient, timeline: Array<MatrixEvent>): MatrixEvent | null {
+    for (let index = timeline.length - 1; index >= 0; index--) {
+        const event = timeline[index];
+        if (isImportantEvent(client, event)) {
+            return event;
+        }
+    }
+    return null;
 }
 
 /**
@@ -127,40 +125,4 @@ export function doesRoomOrThreadHaveUnreadMessages(roomOrThread: Room | Thread):
  */
 function isImportantEvent(client: MatrixClient, event: MatrixEvent): boolean {
     return !shouldHideEvent(event) && eventTriggersUnreadCount(client, event);
-}
-
-/**
- * @returns a function that tells us whether a given event matches our read
- *          receipt.
- *
- * We have the ID of an event based on a read receipt. If we can find the
- * corresponding event, then it's easy - our returned function just decides
- * whether the receipt refers to the event we are asking about.
- *
- * If we can't find the event, we guess by saying of the receipt's timestamp is
- * after this event's timestamp, then it's probably saying this event is read.
- */
-function makeHasReceipt(
-    roomOrThread: Room | Thread,
-    readUpToId: string | null,
-    myUserId: string,
-): (event: MatrixEvent) => boolean {
-    // get the most recent read receipt sent by our account.
-    // N.B. this is NOT a read marker (RM, aka "read up to marker"),
-    // despite the name of the method :((
-    const readEvent = readUpToId ? roomOrThread.findEventById(readUpToId) : null;
-
-    if (readEvent) {
-        // If we found an event matching our receipt, then it's easy: this event
-        // has a receipt if its ID is the same as the one in the receipt.
-        return (ev) => ev.getId() == readUpToId;
-    }
-
-    // If we didn't, we have to guess by saying if this event is before the
-    // receipt's ts, then it we pretend it has a receipt.
-    const receiptTs = roomOrThread.getReadReceiptForUserId(myUserId)?.data.ts ?? 0;
-    const unthreadedReceiptTs = roomOrThread.getLastUnthreadedReceiptFor(myUserId)?.ts ?? 0;
-    // We pick the more recent of the two receipts as the latest
-    const receiptTimestamp = Math.max(receiptTs, unthreadedReceiptTs);
-    return (ev) => ev.getTs() < receiptTimestamp;
 }
