@@ -213,7 +213,9 @@ export default class RightPanel extends React.Component<Props, IState> {
             case RightPanelPhases.Room3pidMemberInfo:
             case RightPanelPhases.Space3pidMemberInfo:
                 if (!!cardState?.memberInfoEvent) {
-                    card = <ThirdPartyMemberInfo event={cardState.memberInfoEvent} key={roomId} />;
+                    card = (
+                        <ThirdPartyMemberInfo event={cardState.memberInfoEvent} key={roomId} onClose={this.onClose} />
+                    );
                 }
                 break;
 

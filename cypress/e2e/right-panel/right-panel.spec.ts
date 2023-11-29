@@ -164,7 +164,7 @@ describe("RightPanel", () => {
                 cy.findByRole("button", { name: /\d member/ }).click();
             });
             cy.get(".mx_MemberList").should("have.length", 1);
-            cy.get(".mx_RightPanel_scopeHeader").within(() => {
+            cy.get(".mx_SpaceScopeHeader").within(() => {
                 cy.findByText(SPACE_NAME);
             });
 
@@ -173,7 +173,7 @@ describe("RightPanel", () => {
             cy.get(".mx_UserInfo_profile").within(() => {
                 cy.findByText(NAME);
             });
-            cy.get(".mx_RightPanel_scopeHeader").within(() => {
+            cy.get(".mx_SpaceScopeHeader").within(() => {
                 cy.findByText(SPACE_NAME);
             });
 

@@ -40,8 +40,6 @@ import dis from "../../../dispatcher/dispatcher";
 import { isValid3pidInvite } from "../../../RoomInvite";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import BaseCard from "../right_panel/BaseCard";
-import RoomAvatar from "../avatars/RoomAvatar";
-import RoomName from "../elements/RoomName";
 import TruncatedList from "../elements/TruncatedList";
 import Spinner from "../elements/Spinner";
 import SearchBox from "../../structures/SearchBox";
@@ -56,6 +54,7 @@ import { SDKContext } from "../../../contexts/SDKContext";
 import { canInviteTo } from "../../../utils/room/canInviteTo";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 import { Action } from "../../../dispatcher/actions";
+import { SpaceScopeHeader } from "./SpaceScopeHeader";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -411,15 +410,7 @@ export default class MemberList extends React.Component<IProps, IState> {
             />
         );
 
-        let scopeHeader;
-        if (room?.isSpaceRoom()) {
-            scopeHeader = (
-                <div className="mx_RightPanel_scopeHeader">
-                    <RoomAvatar room={room} size="32px" />
-                    <RoomName room={room} />
-                </div>
-            );
-        }
+        const scopeHeader = room ? <SpaceScopeHeader room={room} /> : undefined;
 
         return (
             <BaseCard

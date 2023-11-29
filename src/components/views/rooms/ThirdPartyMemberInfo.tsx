@@ -1,5 +1,5 @@
 /*
-Copyright 2019-2021 The Matrix.org Foundation C.I.C.
+Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,20 +17,22 @@ limitations under the License.
 import React from "react";
 import { MatrixEvent, Room, RoomStateEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Button, Text } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import Modal from "../../../Modal";
 import { isValid3pidInvite } from "../../../RoomInvite";
-import RoomAvatar from "../avatars/RoomAvatar";
-import RoomName from "../elements/RoomName";
-import ErrorDialog from "../dialogs/ErrorDialog";
-import AccessibleButton from "../elements/AccessibleButton";
 import { Action } from "../../../dispatcher/actions";
+import ErrorDialog from "../dialogs/ErrorDialog";
+import BaseCard from "../right_panel/BaseCard";
+import { Flex } from "../../utils/Flex";
+import { SpaceScopeHeader } from "./SpaceScopeHeader";
 
 interface IProps {
     event: MatrixEvent;
+    onClose?: () => void;
 }
 
 interface IState {
@@ -120,42 +122,32 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         let adminTools: JSX.Element | undefined;
         if (this.state.canKick && this.state.invited) {
             adminTools = (
-                <div className="mx_MemberInfo_container">
-                    <h3>{_t("user_info|admin_tools_section")}</h3>
-                    <AccessibleButton className="mx_MemberInfo_field" onClick={this.onKickClick}>
+                <Flex direction="column" as="section" justify="start" gap="var(--cpd-space-2x)">
+                    <Text as="span" role="heading" size="lg" weight="semibold">
+                        {_t("user_info|admin_tools_section")}
+                    </Text>
+                    <Button size="sm" kind="destructive" className="mx_MemberInfo_field" onClick={this.onKickClick}>
                         {_t("user_info|revoke_invite")}
-                    </AccessibleButton>
-                </div>
+                    </Button>
+                </Flex>
             );
         }
 
-        let scopeHeader: JSX.Element | undefined;
-        if (this.room?.isSpaceRoom()) {
-            scopeHeader = (
-                <div className="mx_RightPanel_scopeHeader">
-                    <RoomAvatar room={this.room} size="32px" />
-                    <RoomName room={this.room} />
-                </div>
-            );
-        }
+        const scopeHeader: JSX.Element | undefined = this.room ? <SpaceScopeHeader room={this.room} /> : undefined;
 
-        // We shamelessly rip off the MemberInfo styles here.
         return (
-            <div className="mx_MemberInfo" role="tabpanel">
-                {scopeHeader}
-                <div className="mx_MemberInfo_name">
-                    <AccessibleButton
-                        className="mx_MemberInfo_cancel"
-                        onClick={this.onCancel}
-                        title={_t("action|close")}
-                    />
-                    <h2>{this.state.displayName}</h2>
-                </div>
-                <div className="mx_MemberInfo_container mx_MemberInfo_container--profile">
-                    {_t("user_info|invited_by", { sender: this.state.senderName })}
-                </div>
-                {adminTools}
-            </div>
+            <BaseCard header={scopeHeader} onClose={this.props.onClose}>
+                <Flex className="mx_ThirdPartyMemberInfo" direction="column" gap="var(--cpd-space-4x)">
+                    <Flex direction="column" as="section" justify="start" gap="var(--cpd-space-2x)">
+                        {/* same as userinfo name style */}
+                        <Text as="span" role="heading" size="lg" weight="semibold">
+                            {this.state.displayName}
+                        </Text>
+                        <Text as="span">{_t("user_info|invited_by", { sender: this.state.senderName })}</Text>
+                    </Flex>
+                    {adminTools}
+                </Flex>
+            </BaseCard>
         );
     }
 }

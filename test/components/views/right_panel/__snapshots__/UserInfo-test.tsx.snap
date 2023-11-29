@@ -86,9 +86,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
       />
       <div
         class="mx_BaseCard_headerProp"
-      >
-        <span />
-      </div>
+      />
     </div>
     <div
       class="mx_AutoHideScrollbar"

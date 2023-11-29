@@ -3,26 +3,40 @@
 exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
 <div>
   <div
-    class="mx_MemberInfo"
-    role="tabpanel"
+    class="mx_BaseCard"
   >
     <div
-      class="mx_MemberInfo_name"
+      class="mx_BaseCard_header"
     >
       <div
-        class="mx_AccessibleButton mx_MemberInfo_cancel"
-        role="button"
-        tabindex="0"
-        title="Close"
+        class="mx_BaseCard_headerProp"
       />
-      <h2>
-        bob@bob.com
-      </h2>
     </div>
     <div
-      class="mx_MemberInfo_container mx_MemberInfo_container--profile"
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
     >
-      Invited by Alice DisplayName
+      <div
+        class="mx_Flex mx_ThirdPartyMemberInfo"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
+      >
+        <section
+          class="mx_Flex"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+        >
+          <span
+            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83"
+            role="heading"
+          >
+            bob@bob.com
+          </span>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59"
+          >
+            Invited by Alice DisplayName
+          </span>
+        </section>
+      </div>
     </div>
   </div>
 </div>
@@ -31,26 +45,40 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
 exports[`<ThirdPartyMemberInfo /> should render invite when room in not available 1`] = `
 <div>
   <div
-    class="mx_MemberInfo"
-    role="tabpanel"
+    class="mx_BaseCard"
   >
     <div
-      class="mx_MemberInfo_name"
+      class="mx_BaseCard_header"
     >
       <div
-        class="mx_AccessibleButton mx_MemberInfo_cancel"
-        role="button"
-        tabindex="0"
-        title="Close"
+        class="mx_BaseCard_headerProp"
       />
-      <h2>
-        bob@bob.com
-      </h2>
     </div>
     <div
-      class="mx_MemberInfo_container mx_MemberInfo_container--profile"
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
     >
-      Invited by Alice DisplayName
+      <div
+        class="mx_Flex mx_ThirdPartyMemberInfo"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
+      >
+        <section
+          class="mx_Flex"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+        >
+          <span
+            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83"
+            role="heading"
+          >
+            bob@bob.com
+          </span>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59"
+          >
+            Invited by Alice DisplayName
+          </span>
+        </section>
+      </div>
     </div>
   </div>
 </div>

@@ -65,8 +65,6 @@ import ShareDialog from "../dialogs/ShareDialog";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import ConfirmUserActionDialog from "../dialogs/ConfirmUserActionDialog";
-import RoomAvatar from "../avatars/RoomAvatar";
-import RoomName from "../elements/RoomName";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import ConfirmSpaceUserActionDialog from "../dialogs/ConfirmSpaceUserActionDialog";
@@ -83,6 +81,7 @@ import { DirectoryMember, startDmOnFirstMessage } from "../../../utils/direct-me
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { asyncSome } from "../../../utils/arrays";
 import UIStore from "../../../stores/UIStore";
+import { SpaceScopeHeader } from "../rooms/SpaceScopeHeader";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -1744,26 +1743,15 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
         }
     }
 
-    let scopeHeader;
-    if (room?.isSpaceRoom()) {
-        scopeHeader = (
-            <div data-testid="space-header" className="mx_RightPanel_scopeHeader">
-                <RoomAvatar room={room} size="32px" />
-                <RoomName room={room} />
-            </div>
-        );
-    }
-
     const header = (
         <>
-            {scopeHeader}
             <UserInfoHeader member={member} e2eStatus={e2eStatus} roomId={room?.roomId} />
         </>
     );
     return (
         <BaseCard
             className={classes.join(" ")}
-            header={<span />}
+            header={room ? <SpaceScopeHeader room={room} /> : undefined}
             onClose={onClose}
             closeLabel={closeLabel}
             cardState={cardState}
