@@ -16,6 +16,6 @@ jobs:
                 vector-im/element-meta
                 .github/labels.yml
             DELETE: true
-            WET: false
+            WET: true
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
