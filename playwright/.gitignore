@@ -2,5 +2,5 @@
 /html-report/
 /synapselogs/
 # Only commit snapshots from Linux
-/snapshots/*/*.png
-!/snapshots/*/*-linux.png
+/snapshots/**/*.png
+!/snapshots/**/*-linux.png
