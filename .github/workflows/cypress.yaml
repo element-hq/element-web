@@ -17,7 +17,9 @@ on:
                 required: true
                 description: "The name of the github repository to check out and build."
         secrets:
-            CYPRESS_RECORD_KEY:
+            KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS_RUST:
+                required: true
+            KNAPSACK_PRO_TEST_SUITE_TOKEN_CYPRESS_LEGACY:
                 required: true
             TCMS_USERNAME:
                 required: true
