@@ -5,6 +5,15 @@ import { IOOBData } from "matrix-react-sdk/src/stores/ThreepidInviteStore";
 import { useMemo } from "react";
 
 /**
+ * Removes the [TG] prefix and leading whitespace from a room name
+ * @param roomName
+ * @returns {string}
+ */
+export function getSafeRoomName(roomName?: string): string {
+    return roomName?.replace(/^(\s|\[TG\])*/, "") || "";
+}
+
+/**
  * Determines the room name from a combination of the room model and potential
  * @param room - The room model
  * @param oobData - out-of-band information about the room
@@ -20,9 +29,9 @@ export function getRoomName(room?: Room | IPublicRoomsChunkRoom, oobName?: IOOBD
         ) ||
         _t("common|unnamed_room");
 
-    return (roomName || "")
-        .replace(":", ":\u200b") // add a zero-width space to allow linewrapping after the colon (matrix defaults)
-        .replace("[TG]", "");
+    return getSafeRoomName(
+        (roomName || "").replace(":", ":\u200b"), // add a zero-width space to allow linewrapping after the colon (matrix defaults)
+    );
 }
 
 /**
