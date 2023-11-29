@@ -14,31 +14,44 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useEffect, useState } from "react";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { useTypedEventEmitter } from "matrix-react-sdk/src/hooks/useEventEmitter";
+import { IPublicRoomsChunkRoom, Room } from "matrix-js-sdk/src/matrix";
+import React, { useCallback, useMemo } from "react";
 
-import { getRoomName } from "../../../hooks/useTokengatedRoom";
+import { Icon as TokenGatedRoomIcon } from "../../../../res/themes/superhero/img/icons/tokengated-room.svg";
+import { isTokenGatedRoom, useRoomName } from "../../../hooks/useRoomName";
 
 interface IProps {
-    room?: Room;
-    children?(name: string): JSX.Element;
+    room?: Room | IPublicRoomsChunkRoom;
+    children?(name: JSX.Element): JSX.Element;
+    maxLength?: number;
 }
 
-/**
- * @deprecated use `useRoomName.ts` instead
- */
-const RoomName = ({ room, children }: IProps): JSX.Element => {
-    const [name, setName] = useState(getRoomName(room));
-    useTypedEventEmitter(room, RoomEvent.Name, () => {
-        setName(getRoomName(room));
-    });
-    useEffect(() => {
-        setName(getRoomName(room));
+export const RoomName = ({ room, children, maxLength }: IProps): JSX.Element => {
+    const roomName = useRoomName(room);
+
+    const isVerifiedRoom = useMemo(() => {
+        return isTokenGatedRoom(room);
     }, [room]);
 
-    if (children) return children(name ?? "");
-    return <>{name || ""}</>;
+    const truncatedRoomName = useMemo(() => {
+        if (maxLength && roomName.length > maxLength) {
+            return `${roomName.substring(0, maxLength)}...`;
+        }
+        return roomName;
+    }, [roomName, maxLength]);
+
+    const renderRoomName = useCallback(
+        () => (
+            <span className="sh_RoomTokenGatedRoom">
+                {isVerifiedRoom && <TokenGatedRoomIcon className="sh_RoomTokenGatedRoomIcon" />}
+                <span dir="auto">{truncatedRoomName}</span>
+            </span>
+        ),
+        [truncatedRoomName, isVerifiedRoom],
+    );
+
+    if (children) return children(renderRoomName());
+    return renderRoomName();
 };
 
 export default RoomName;
