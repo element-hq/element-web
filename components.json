@@ -6,6 +6,7 @@
     "src/components/views/rooms/RoomTile.tsx": "src/components/views/rooms/RoomTile.tsx",
     "src/components/views/elements/RoomName.tsx": "src/components/views/elements/RoomName.tsx",
     "src/components/views/dialogs/spotlight/PublicRoomResultDetails.tsx": "src/components/views/dialogs/spotlight/PublicRoomResultDetails.tsx",
+    "src/components/views/avatars/BaseAvatar.tsx": "src/components/views/avatars/BaseAvatar.tsx",
     "src/editor/commands.tsx": "src/editor/commands.tsx",
     "src/hooks/useRoomName.ts": "src/hooks/useRoomName.ts"
 }
