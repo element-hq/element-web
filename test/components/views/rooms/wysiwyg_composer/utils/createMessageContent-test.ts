@@ -15,7 +15,7 @@ limitations under the License.
 */
 import { MsgType } from "matrix-js-sdk/src/matrix";
 
-import { mkEvent } from "../../../../../test-utils";
+import { filterConsole, mkEvent } from "../../../../../test-utils";
 import { RoomPermalinkCreator } from "../../../../../../src/utils/permalinks/Permalinks";
 import {
     createMessageContent,
@@ -42,6 +42,17 @@ describe("createMessageContent", () => {
     });
 
     describe("Richtext composer input", () => {
+        filterConsole(
+            "WebAssembly.instantiateStreaming` failed because your server does not serve wasm with `application/wasm`",
+        );
+
+        beforeAll(async () => {
+            // Warm up by creating the component once, with a long timeout.
+            // This prevents tests timing out because of the time spent loading
+            // the WASM component.
+            await createMessageContent(message, true, { permalinkCreator });
+        }, 10000);
+
         it("Should create html message", async () => {
             // When
             const content = await createMessageContent(message, true, { permalinkCreator });
