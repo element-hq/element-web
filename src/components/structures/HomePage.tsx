@@ -84,7 +84,7 @@ const UserWelcomeTop: React.FC = () => {
                     idName={userId}
                     name={ownProfile.displayName}
                     url={ownProfile.avatarUrl}
-                    size={AVATAR_SIZE + "px"}
+                    size={AVATAR_SIZE}
                 />
             </MiniAvatarUploader>
 
