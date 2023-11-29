@@ -78,7 +78,7 @@ jobs:
                   path: matrix-react-sdk
                   repository: ${{ inputs.react-sdk-repository || github.repository }}
 
-            - uses: actions/setup-node@v3
+            - uses: actions/setup-node@v4
               with:
                   cache: "yarn"
                   cache-dependency-path: matrix-react-sdk/yarn.lock
@@ -117,7 +117,7 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - uses: actions/setup-node@v3
+            - uses: actions/setup-node@v4
               with:
                   cache: "yarn"
 
