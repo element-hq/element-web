@@ -33,6 +33,7 @@ import "setimmediate";
 // in webpack.config.js
 require("gfm.css/gfm.css");
 require("katex/dist/katex.css");
+require("../../res/css/superhero/custom.css");
 
 /**
  * This require is necessary only for purposes of CSS hot-reload, as otherwise
