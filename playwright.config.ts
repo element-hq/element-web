@@ -35,6 +35,7 @@ export default defineConfig<TestOptions>({
     testDir: "playwright/e2e",
     outputDir: "playwright/test-results",
     workers: 1,
+    retries: process.env.CI ? 2 : 0,
     reporter: process.env.CI ? "blob" : [["html", { outputFolder: "playwright/html-report" }]],
     projects: [
         {
