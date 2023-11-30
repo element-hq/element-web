@@ -8,6 +8,12 @@
     height: 16px;
     margin-right: 4px;
 }
+
+h2 .sh_RoomTokenGatedRoomIcon {
+    width: 26px;
+    height: 26px;
+}
+
 .mx_QuickSettingsButton.sh_SuperheroDexButton::before {
     -webkit-mask-image: url(../../themes/superhero/img/icons/diamond.svg);
     mask-image: url(../../themes/superhero/img/icons/diamond.svg);

@@ -38,5 +38,8 @@
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_superhero": "Welcome to Superhero",
     "superhero_dex": "Superhero DEX",
-    "mint_a_token": "Mint a token"
+    "mint_a_token": "Mint a token",
+    "composer": {
+        "no_perms_notice": "You need to own the room token to be able to post in this room."
+    }
 }
