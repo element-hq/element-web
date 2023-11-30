@@ -15,106 +15,85 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, within } from "@testing-library/react";
-import { EventEmitter } from "events";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { VerificationPhase } from "matrix-js-sdk/src/crypto-api/verification";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { RenderResult, render } from "@testing-library/react";
+import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
 import MKeyVerificationRequest from "../../../../src/components/views/messages/MKeyVerificationRequest";
+import TileErrorBoundary from "../../../../src/components/views/messages/TileErrorBoundary";
+import { Layout } from "../../../../src/settings/enums/Layout";
+import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
+import { filterConsole } from "../../../test-utils";
 
 describe("MKeyVerificationRequest", () => {
-    const userId = "@user:server";
-    const getMockVerificationRequest = (props: Partial<VerificationRequest>) => {
-        const res = new EventEmitter();
-        Object.assign(res, {
-            phase: VerificationPhase.Requested,
-            canAccept: false,
-            initiatedByMe: true,
-            ...props,
-        });
-        return res as unknown as VerificationRequest;
-    };
+    filterConsole(
+        "The above error occurred in the <MKeyVerificationRequest> component",
+        "Error: Attempting to render verification request without a client context!",
+        "Error: Verification request did not include a sender!",
+        "Error: Verification request did not include a room ID!",
+    );
 
-    beforeEach(() => {
-        jest.clearAllMocks();
-        getMockClientWithEventEmitter({
-            ...mockClientMethodsUser(userId),
-            getRoom: jest.fn(),
-        });
-    });
-
-    afterAll(() => {
-        jest.spyOn(MatrixClientPeg, "get").mockRestore();
-    });
-
-    it("should not render if the request is absent", () => {
+    it("shows an error if not wrapped in a client context", () => {
         const event = new MatrixEvent({ type: "m.key.verification.request" });
-        const { container } = render(<MKeyVerificationRequest mxEvent={event} />);
-        expect(container).toBeEmptyDOMElement();
+        const { container } = renderEventNoClient(event);
+        expect(container).toHaveTextContent("Can't load this message");
     });
 
-    it("should not render if the request is unsent", () => {
+    it("shows an error if the event has no sender", () => {
+        const { client } = setup();
         const event = new MatrixEvent({ type: "m.key.verification.request" });
-        event.verificationRequest = getMockVerificationRequest({
-            phase: VerificationPhase.Unsent,
-        });
-        const { container } = render(<MKeyVerificationRequest mxEvent={event} />);
-        expect(container).toBeEmptyDOMElement();
+        const { container } = renderEvent(client, event);
+        expect(container).toHaveTextContent("Can't load this message");
     });
 
-    it("should render appropriately when the request was sent", () => {
-        const event = new MatrixEvent({ type: "m.key.verification.request" });
-        event.verificationRequest = getMockVerificationRequest({});
-        const { container } = render(<MKeyVerificationRequest mxEvent={event} />);
+    it("shows an error if the event has no room", () => {
+        const { client } = setup();
+        const event = new MatrixEvent({ type: "m.key.verification.request", sender: "@a:b.co" });
+        const { container } = renderEvent(client, event);
+        expect(container).toHaveTextContent("Can't load this message");
+    });
+
+    it("displays a request from me", () => {
+        const { client, myUserId } = setup();
+        const event = new MatrixEvent({ type: "m.key.verification.request", sender: myUserId, room_id: "!x:y.co" });
+        const { container } = renderEvent(client, event);
         expect(container).toHaveTextContent("You sent a verification request");
     });
 
-    it("should render appropriately when the request was initiated by me and has been accepted", () => {
-        const event = new MatrixEvent({ type: "m.key.verification.request" });
-        event.verificationRequest = getMockVerificationRequest({
-            phase: VerificationPhase.Ready,
-            otherUserId: "@other:user",
-        });
-        const { container } = render(<MKeyVerificationRequest mxEvent={event} />);
-        expect(container).toHaveTextContent("You sent a verification request");
-        expect(within(container).getByRole("button")).toHaveTextContent("@other:user accepted");
-    });
-
-    it("should render appropriately when the request was initiated by the other user and has not yet been accepted", () => {
-        const event = new MatrixEvent({ type: "m.key.verification.request" });
-        event.verificationRequest = getMockVerificationRequest({
-            phase: VerificationPhase.Requested,
-            initiatedByMe: false,
-            otherUserId: "@other:user",
-        });
-        const result = render(<MKeyVerificationRequest mxEvent={event} />);
-        expect(result.container).toHaveTextContent("@other:user wants to verify");
-        result.getByRole("button", { name: "Accept" });
-    });
-
-    it("should render appropriately when the request was initiated by the other user and has been accepted", () => {
-        const event = new MatrixEvent({ type: "m.key.verification.request" });
-        event.verificationRequest = getMockVerificationRequest({
-            phase: VerificationPhase.Ready,
-            initiatedByMe: false,
-            otherUserId: "@other:user",
-        });
-        const { container } = render(<MKeyVerificationRequest mxEvent={event} />);
-        expect(container).toHaveTextContent("@other:user wants to verify");
-        expect(within(container).getByRole("button")).toHaveTextContent("You accepted");
-    });
-
-    it("should render appropriately when the request was cancelled", () => {
-        const event = new MatrixEvent({ type: "m.key.verification.request" });
-        event.verificationRequest = getMockVerificationRequest({
-            phase: VerificationPhase.Cancelled,
-            cancellingUserId: userId,
-        });
-        const { container } = render(<MKeyVerificationRequest mxEvent={event} />);
-        expect(container).toHaveTextContent("You sent a verification request");
-        expect(container).toHaveTextContent("You cancelled");
+    it("displays a request from someone else to me", () => {
+        const otherUserId = "@other:s.uk";
+        const { client } = setup();
+        const event = new MatrixEvent({ type: "m.key.verification.request", sender: otherUserId, room_id: "!x:y.co" });
+        const { container } = renderEvent(client, event);
+        expect(container).toHaveTextContent("other:s.uk wants to verify");
     });
 });
+
+function renderEventNoClient(event: MatrixEvent): RenderResult {
+    return render(
+        <TileErrorBoundary mxEvent={event} layout={Layout.Group}>
+            <MKeyVerificationRequest mxEvent={event} />
+        </TileErrorBoundary>,
+    );
+}
+
+function renderEvent(client: MatrixClient, event: MatrixEvent): RenderResult {
+    return render(
+        <TileErrorBoundary mxEvent={event} layout={Layout.Group}>
+            <MatrixClientContext.Provider value={client}>
+                <MKeyVerificationRequest mxEvent={event} />
+            </MatrixClientContext.Provider>
+            ,
+        </TileErrorBoundary>,
+    );
+}
+
+function setup(): { client: MatrixClient; myUserId: string } {
+    const myUserId = "@me:s.co";
+
+    const client = {
+        getSafeUserId: jest.fn().mockReturnValue(myUserId),
+        getRoom: jest.fn(),
+    } as unknown as MatrixClient;
+
+    return { client, myUserId };
+}

@@ -3267,14 +3267,7 @@
         },
         "m.key.verification.done": "You verified %(name)s",
         "m.key.verification.request": {
-            "declining": "Declining…",
-            "user_accepted": "%(name)s accepted",
-            "user_cancelled": "%(name)s cancelled",
-            "user_declined": "%(name)s declined",
             "user_wants_to_verify": "%(name)s wants to verify",
-            "you_accepted": "You accepted",
-            "you_cancelled": "You cancelled",
-            "you_declined": "You declined",
             "you_started": "You sent a verification request"
         },
         "m.location": {
