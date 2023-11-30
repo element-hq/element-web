@@ -179,7 +179,8 @@ export const test = base.extend<
         }),
 
     app: async ({ page }, use) => {
-        await use(new ElementAppPage(page));
+        const app = new ElementAppPage(page);
+        await use(app);
     },
     crypto: async ({ page, homeserver, request }, use) => {
         await use(new Crypto(page, homeserver, request));
@@ -191,7 +192,7 @@ export const test = base.extend<
     botCreateOpts: {},
     bot: async ({ page, homeserver, botCreateOpts }, use) => {
         const bot = new Bot(page, homeserver, botCreateOpts);
-        await bot.start();
+        await bot.prepareClient(); // eagerly register the bot
         await use(bot);
     },
 });

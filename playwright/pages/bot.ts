@@ -17,9 +17,10 @@ limitations under the License.
 import { JSHandle, Page } from "@playwright/test";
 import { uniqueId } from "lodash";
 
-import type { MatrixClient, ISendEventResponse } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { AddSecretStorageKeyOpts } from "matrix-js-sdk/src/secret-storage";
 import type { Credentials, HomeserverInstance } from "../plugins/homeserver";
+import { Client } from "./client";
 
 export interface CreateBotOpts {
     /**
@@ -59,27 +60,24 @@ const defaultCreateBotOptions = {
     bootstrapCrossSigning: true,
 } satisfies CreateBotOpts;
 
-export class Bot {
-    private client: JSHandle<MatrixClient>;
+export class Bot extends Client {
     public credentials?: Credentials;
 
-    constructor(private page: Page, private homeserver: HomeserverInstance, private readonly opts: CreateBotOpts) {
+    constructor(page: Page, private homeserver: HomeserverInstance, private readonly opts: CreateBotOpts) {
+        super(page);
         this.opts = Object.assign({}, defaultCreateBotOptions, opts);
     }
 
-    public async start(): Promise<void> {
-        this.credentials = await this.getCredentials();
-        this.client = await this.setupBotClient();
-    }
-
     private async getCredentials(): Promise<Credentials> {
+        if (this.credentials) return this.credentials;
         const username = uniqueId(this.opts.userIdPrefix);
         const password = uniqueId("password_");
         console.log(`getBot: Create bot user ${username} with opts ${JSON.stringify(this.opts)}`);
-        return await this.homeserver.registerUser(username, password, this.opts.displayName);
+        this.credentials = await this.homeserver.registerUser(username, password, this.opts.displayName);
+        return this.credentials;
     }
 
-    private async setupBotClient(): Promise<JSHandle<MatrixClient>> {
+    protected async getClientHandle(): Promise<JSHandle<MatrixClient>> {
         return this.page.evaluateHandle(
             async ({ homeserver, credentials, opts }) => {
                 const keys = {};
@@ -123,7 +121,7 @@ export class Bot {
                 });
 
                 if (opts.autoAcceptInvites) {
-                    cli.on((window as any).matrixcs.RoomMemberEvent.Membership, (event, member) => {
+                    cli.on(window.matrixcs.RoomMemberEvent.Membership, (event, member) => {
                         if (member.membership === "invite" && member.userId === cli.getUserId()) {
                             cli.joinRoom(member.roomId);
                         }
@@ -173,47 +171,8 @@ export class Bot {
             },
             {
                 homeserver: this.homeserver.config,
-                credentials: this.credentials,
+                credentials: await this.getCredentials(),
                 opts: this.opts,
-            },
-        );
-    }
-
-    /**
-     * Make this bot join a room by name
-     * @param roomName Name of the room to join
-     */
-    public async joinRoomByName(roomName: string): Promise<void> {
-        await this.client.evaluate(
-            (client, { roomName }) => {
-                const room = client.getRooms().find((r) => r.getDefaultRoomName(client.getUserId()) === roomName);
-                if (room) {
-                    return client.joinRoom(room.roomId);
-                }
-                throw new Error(`Bot room join failed. Cannot find room '${roomName}'`);
-            },
-            {
-                roomName,
-            },
-        );
-    }
-
-    /**
-     * Send a message as a bot into a room
-     * @param roomId ID of the room to join
-     * @param message the message body to send
-     */
-    public async sendStringMessage(roomId: string, message: string): Promise<ISendEventResponse> {
-        return this.client.evaluate(
-            (client, { roomId, message }) => {
-                return client.sendMessage(roomId, {
-                    msgtype: "m.text",
-                    body: message,
-                });
-            },
-            {
-                roomId,
-                message,
             },
         );
     }

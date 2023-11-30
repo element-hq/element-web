@@ -24,7 +24,7 @@ test.describe("LeftPanel", () => {
     test("should render the Rooms list", async ({ page, app, user }) => {
         // create rooms and check room names are correct
         for (const name of ["Apple", "Pineapple", "Orange"]) {
-            await app.createRoom({ name });
+            await app.client.createRoom({ name });
             await expect(page.getByRole("treeitem", { name })).toBeVisible();
         }
     });

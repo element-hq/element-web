@@ -38,7 +38,7 @@ test.describe("Location sharing", () => {
     });
 
     test("sends and displays pin drop location message successfully", async ({ page, user, app }) => {
-        const roomId = await app.createRoom({});
+        const roomId = await app.client.createRoom({});
         await page.goto(`/#/room/${roomId}`);
 
         const composerOptions = await app.openMessageComposerOptions();

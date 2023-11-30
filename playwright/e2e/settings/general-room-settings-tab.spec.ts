@@ -24,7 +24,7 @@ test.describe("General room settings tab", () => {
     });
 
     test.beforeEach(async ({ user, app }) => {
-        await app.createRoom({ name: roomName });
+        await app.client.createRoom({ name: roomName });
         await app.viewRoomByName(roomName);
     });
 

@@ -16,17 +16,27 @@ limitations under the License.
 
 import { Locator, Page } from "@playwright/test";
 
-import type { EventType, MsgType, ISendEventResponse } from "matrix-js-sdk/src/matrix";
-import { test, expect } from "../../element-web-test";
+import type { EventType, IContent, ISendEventResponse, MsgType, Visibility } from "matrix-js-sdk/src/matrix";
+import { expect, test } from "../../element-web-test";
 import { ElementAppPage } from "../../pages/ElementAppPage";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 
-const sendEvent = async (app: ElementAppPage, roomId: string): Promise<ISendEventResponse> => {
-    return app.sendEvent(roomId, null, "m.room.message" as EventType, {
+async function sendEvent(app: ElementAppPage, roomId: string): Promise<ISendEventResponse> {
+    return app.client.sendEvent(roomId, null, "m.room.message" as EventType, {
         msgtype: "m.text" as MsgType,
         body: "Message",
     });
-};
+}
+
+/** generate a message event which will take up some room on the page. */
+function mkPadding(n: number): IContent {
+    return {
+        msgtype: "m.text" as MsgType,
+        body: `padding ${n}`,
+        format: "org.matrix.custom.html",
+        formatted_body: `<h3>Test event ${n}</h3>\n`.repeat(10),
+    };
+}
 
 test.describe("Editing", () => {
     // Edit "Message"
@@ -58,9 +68,10 @@ test.describe("Editing", () => {
     test.use({
         displayName: "Edith",
         room: async ({ user, app }, use) => {
-            const roomId = await app.createRoom({ name: "Test room" });
+            const roomId = await app.client.createRoom({ name: "Test room" });
             await use({ roomId });
         },
+        botCreateOpts: { displayName: "Bob" },
     });
 
     test("should render and interact with the message edit history dialog", async ({ page, user, app, room }) => {
@@ -288,5 +299,75 @@ test.describe("Editing", () => {
 
         // Assert that the edit composer has gone away
         await expect(page.getByRole("textbox", { name: "Edit message" })).not.toBeVisible();
+    });
+
+    test("should correctly display events which are edited, where we lack the edit event", async ({
+        page,
+        user,
+        app,
+        axe,
+        checkA11y,
+        bot: bob,
+    }) => {
+        // This tests the behaviour when a message has been edited some time after it has been sent, and we
+        // jump back in room history to view the event, but do not have the actual edit event.
+        //
+        // In that scenario, we rely on the server to replace the content (pre-MSC3925), or do it ourselves based on
+        // the bundled edit event (post-MSC3925).
+        //
+        // To test it, we need to have a room with lots of events in, so we can jump around the timeline without
+        // paginating in the event itself. Hence, we create a bot user which creates the room and populates it before
+        // we join.
+
+        // "bob" now creates the room, and sends a load of events in it. Note that all of this happens via calls on
+        // the js-sdk rather than Cypress commands, so uses regular async/await.
+        const testRoomId = await bob.createRoom({ name: "TestRoom", visibility: "public" as Visibility });
+
+        const { event_id: originalEventId } = await bob.sendMessage(testRoomId, {
+            body: "original",
+            msgtype: "m.text",
+        });
+
+        // send a load of padding events. We make them large, so that they fill the whole screen
+        // and the client doesn't end up paginating into the event we want.
+        let i = 0;
+        while (i < 10) {
+            await bob.sendMessage(testRoomId, mkPadding(i++));
+        }
+
+        // ... then the edit ...
+        const editEventId = (
+            await bob.sendMessage(testRoomId, {
+                "m.new_content": { body: "Edited body", msgtype: "m.text" },
+                "m.relates_to": {
+                    rel_type: "m.replace",
+                    event_id: originalEventId,
+                },
+                "body": "* edited",
+                "msgtype": "m.text",
+            })
+        ).event_id;
+
+        // ... then a load more padding ...
+        while (i < 20) {
+            await bob.sendMessage(testRoomId, mkPadding(i++));
+        }
+
+        // now have the cypress user join the room, jump to the original event, and wait for the event to be visible
+        await app.client.joinRoom(testRoomId);
+        await app.viewRoomByName("TestRoom");
+        await page.goto(`#/room/${testRoomId}/${originalEventId}`);
+
+        const messageTile = page.locator(`[data-event-id="${originalEventId}"]`);
+        // at this point, the edit event should still be unknown
+        const timeline = await app.client.evaluate(
+            (cli, { testRoomId, editEventId }) => cli.getRoom(testRoomId).getTimelineForEvent(editEventId),
+            { testRoomId, editEventId },
+        );
+        expect(timeline).toBeNull();
+
+        // nevertheless, the event should be updated
+        await expect(messageTile.locator(".mx_EventTile_body")).toHaveText("Edited body");
+        await expect(messageTile.locator(".mx_EventTile_edited")).toBeVisible();
     });
 });
