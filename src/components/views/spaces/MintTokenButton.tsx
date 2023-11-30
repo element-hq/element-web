@@ -7,7 +7,7 @@ import { _t } from "../../../languageHandler";
 const MintTokenButton: React.FC<{
     isPanelCollapsed: boolean;
 }> = ({ isPanelCollapsed = false }) => {
-    const MINT_TOKEN_URL = "https://wallet.superhero.com/";
+    const MINT_TOKEN_URL = "https://kenodressel.github.io/more-tokens/";
 
     const onOpenDex = useCallback(async () => {
         window.open(MINT_TOKEN_URL, "_blank");
