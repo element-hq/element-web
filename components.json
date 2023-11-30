@@ -4,6 +4,7 @@
     "src/components/views/auth/AuthPage.tsx": "src/components/views/auth/VectorAuthPage.tsx",
     "src/components/views/rooms/Autocomplete.tsx": "src/components/views/rooms/Autocomplete.tsx",
     "src/components/views/rooms/RoomTile.tsx": "src/components/views/rooms/RoomTile.tsx",
+    "src/components/views/rooms/NewRoomIntro.tsx": "src/components/views/rooms/NewRoomIntro.tsx",
     "src/components/views/elements/RoomName.tsx": "src/components/views/elements/RoomName.tsx",
     "src/components/views/dialogs/spotlight/PublicRoomResultDetails.tsx": "src/components/views/dialogs/spotlight/PublicRoomResultDetails.tsx",
     "src/components/views/avatars/BaseAvatar.tsx": "src/components/views/avatars/BaseAvatar.tsx",
