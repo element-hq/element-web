@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016, 2017, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,11 +15,8 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { lexicographicCompare } from "matrix-js-sdk/src/utils";
-import { Room, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { throttle } from "lodash";
+import { Room } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AppsDrawer from "./AppsDrawer";
 import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
@@ -37,91 +34,13 @@ interface IProps {
     children?: ReactNode;
 }
 
-interface Counter {
-    title: string;
-    value: number;
-    link: string;
-    severity: string;
-    stateKey: string;
-}
-
-interface IState {
-    counters: Counter[];
-}
-
-export default class AuxPanel extends React.Component<IProps, IState> {
+export default class AuxPanel extends React.Component<IProps> {
     public static defaultProps = {
         showApps: true,
     };
 
-    public constructor(props: IProps) {
-        super(props);
-
-        this.state = {
-            counters: this.computeCounters(),
-        };
-    }
-
-    public componentDidMount(): void {
-        const cli = MatrixClientPeg.safeGet();
-        if (SettingsStore.getValue("feature_state_counters")) {
-            cli.on(RoomStateEvent.Events, this.onRoomStateEvents);
-        }
-    }
-
-    public componentWillUnmount(): void {
-        if (SettingsStore.getValue("feature_state_counters")) {
-            MatrixClientPeg.get()?.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
-        }
-    }
-
-    public shouldComponentUpdate(nextProps: IProps, nextState: IState): boolean {
-        return objectHasDiff(this.props, nextProps) || objectHasDiff(this.state, nextState);
-    }
-
-    private onRoomStateEvents = (ev: MatrixEvent): void => {
-        if (ev.getType() === "re.jki.counter") {
-            this.updateCounters();
-        }
-    };
-
-    private updateCounters = throttle(
-        () => {
-            this.setState({ counters: this.computeCounters() });
-        },
-        500,
-        { leading: true, trailing: true },
-    );
-
-    private computeCounters(): Counter[] {
-        const counters: Counter[] = [];
-
-        if (this.props.room && SettingsStore.getValue("feature_state_counters")) {
-            const stateEvs = this.props.room.currentState.getStateEvents("re.jki.counter");
-            stateEvs.sort((a, b) => lexicographicCompare(a.getStateKey()!, b.getStateKey()!));
-
-            for (const ev of stateEvs) {
-                const title = ev.getContent().title;
-                const value = ev.getContent().value;
-                const link = ev.getContent().link;
-                const severity = ev.getContent().severity || "normal";
-                const stateKey = ev.getStateKey()!;
-
-                // We want a non-empty title but can accept falsy values (e.g.
-                // zero)
-                if (title && value !== undefined) {
-                    counters.push({
-                        title,
-                        value,
-                        link,
-                        severity,
-                        stateKey,
-                    });
-                }
-            }
-        }
-
-        return counters;
+    public shouldComponentUpdate(nextProps: IProps): boolean {
+        return objectHasDiff(this.props, nextProps);
     }
 
     public render(): React.ReactNode {
@@ -145,55 +64,8 @@ export default class AuxPanel extends React.Component<IProps, IState> {
             );
         }
 
-        let stateViews: JSX.Element | null = null;
-        if (this.state.counters && SettingsStore.getValue("feature_state_counters")) {
-            const counters: JSX.Element[] = [];
-
-            this.state.counters.forEach((counter, idx) => {
-                const title = counter.title;
-                const value = counter.value;
-                const link = counter.link;
-                const severity = counter.severity;
-                const stateKey = counter.stateKey;
-
-                let span = (
-                    <span>
-                        {title}: {value}
-                    </span>
-                );
-
-                if (link) {
-                    span = (
-                        <a href={link} target="_blank" rel="noreferrer noopener">
-                            {span}
-                        </a>
-                    );
-                }
-
-                span = (
-                    <span className="mx_AuxPanel_stateViews_span" data-severity={severity} key={"x-" + stateKey}>
-                        {span}
-                    </span>
-                );
-
-                counters.push(span);
-                counters.push(
-                    <span className="mx_AuxPanel_stateViews_delim" key={"delim" + idx}>
-                        {" "}
-                        ─{" "}
-                    </span>,
-                );
-            });
-
-            if (counters.length > 0) {
-                counters.pop(); // remove last deliminator
-                stateViews = <div className="mx_AuxPanel_stateViews">{counters}</div>;
-            }
-        }
-
         return (
             <AutoHideScrollbar className="mx_AuxPanel">
-                {stateViews}
                 {this.props.children}
                 {appsDrawer}
                 {callView}
