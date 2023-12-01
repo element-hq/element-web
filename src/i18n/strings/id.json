@@ -1394,7 +1394,6 @@
         "sliding_sync_server_no_support": "Server Anda belum mendukungnya",
         "sliding_sync_server_specify_proxy": "Server Anda belum mendukungnya, Anda harus menetapkan sebuah proksi",
         "sliding_sync_server_support": "Server Anda mendukungnya",
-        "state_counters": "Tampilkan penghitung sederhana di tajukan ruangan",
         "under_active_development": "Dalam pengembangan aktif.",
         "video_rooms": "Ruangan video",
         "video_rooms_a_new_way_to_chat": "Sebuah cara baru untuk mengobrol melalui suara dan video di %(brand)s.",
@@ -3166,14 +3165,7 @@
         },
         "m.key.verification.done": "Anda memverifikasi %(name)s",
         "m.key.verification.request": {
-            "declining": "Menolak…",
-            "user_accepted": "%(name)s menerima",
-            "user_cancelled": "%(name)s membatalkan",
-            "user_declined": "%(name)s menolak",
             "user_wants_to_verify": "%(name)s ingin memverifikasi",
-            "you_accepted": "Anda menerima",
-            "you_cancelled": "Anda membatalkan",
-            "you_declined": "Anda menolak",
             "you_started": "Anda mengirim sebuah permintaan verifikasi"
         },
         "m.location": {

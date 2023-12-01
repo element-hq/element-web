@@ -1268,7 +1268,6 @@
         "sliding_sync_proxy_url_optional_label": "Välityspalvelimen URL-osoite (valinnainen)",
         "sliding_sync_server_no_support": "Palvelimellasi ei ole natiivitukea",
         "sliding_sync_server_support": "Palvelimellasi on natiivituki",
-        "state_counters": "Näytä yksinkertaiset laskurit huoneen yläpalkissa",
         "under_active_development": "Aktiivisen kehityksen kohteena.",
         "video_rooms": "Videohuoneet",
         "video_rooms_a_new_way_to_chat": "Uusi tapa keskustella äänen ja videon välityksellä %(brand)sissä.",
@@ -2873,13 +2872,7 @@
         },
         "m.key.verification.done": "Varmensit käyttäjän %(name)s",
         "m.key.verification.request": {
-            "user_accepted": "%(name)s hyväksyi",
-            "user_cancelled": "%(name)s peruutti",
-            "user_declined": "%(name)s kieltäytyi",
             "user_wants_to_verify": "%(name)s haluaa varmentaa",
-            "you_accepted": "Hyväksyit",
-            "you_cancelled": "Peruutit",
-            "you_declined": "Kieltäydyit",
             "you_started": "Lähetit varmennuspyynnön"
         },
         "m.location": {

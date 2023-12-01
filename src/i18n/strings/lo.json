@@ -1195,8 +1195,7 @@
         "latex_maths": "ສະແດງຜົນຄະນິດສາດ LaTeX ໃນຂໍ້ຄວາມ",
         "leave_beta": "ອອກຈາກເບຕ້າ",
         "msc3531_hide_messages_pending_moderation": "ໃຫ້ຜູ້ຄວບຄຸມການເຊື່ອງຂໍ້ຄວາມທີ່ລໍຖ້າການກັ່ນຕອງ.",
-        "pinning": "ການປັກໝຸດຂໍ້ຄວາມ",
-        "state_counters": "ສະເເດງຕົວຢ່າງກົງກັນຂ້າມໃຫ້ຫົວຂໍ້ຂອງຫ້ອງ"
+        "pinning": "ການປັກໝຸດຂໍ້ຄວາມ"
     },
     "labs_mjolnir": {
         "advanced_warning": "⚠ ການຕັ້ງຄ່າເຫຼົ່ານີ້ແມ່ນຫມາຍເຖິງຜູ້ໃຊ້ຂັ້ນສູງ.",
@@ -2597,13 +2596,7 @@
         },
         "m.key.verification.done": "ທ່ານໄດ້ຢັ້ງຢືນ %(name)s",
         "m.key.verification.request": {
-            "user_accepted": "ຍອມຮັບ %(name)s",
-            "user_cancelled": "%(name)s ຖືກຍົກເລີກ",
-            "user_declined": "%(name)s ປະຕິເສດ",
             "user_wants_to_verify": "%(name)s ຕ້ອງການກວດສອບ",
-            "you_accepted": "ທ່ານຍອມຮັບ",
-            "you_cancelled": "ທ່ານໄດ້ຍົກເລີກ",
-            "you_declined": "ທ່ານປະຕິເສດ",
             "you_started": "ທ່ານໄດ້ສົ່ງຄໍາຮ້ອງຂໍການຢັ້ງຢືນ"
         },
         "m.location": {

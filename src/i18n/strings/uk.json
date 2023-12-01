@@ -1413,7 +1413,6 @@
         "sliding_sync_server_no_support": "На вашому сервері немає вбудованої підтримки",
         "sliding_sync_server_specify_proxy": "На вашому сервері немає вбудованої підтримки, ви повинні вказати проксі",
         "sliding_sync_server_support": "Ваш сервер має вбудовану підтримку",
-        "state_counters": "Показувати звичайні лічильники у заголовку кімнати",
         "under_active_development": "У стадії активної розробки.",
         "video_rooms": "Відеокімнати",
         "video_rooms_a_new_way_to_chat": "Новий спосіб спілкування за допомогою голосового та відеозв’язку в %(brand)s.",
@@ -3190,14 +3189,7 @@
         },
         "m.key.verification.done": "Ви звірили %(name)s",
         "m.key.verification.request": {
-            "declining": "Відхилення…",
-            "user_accepted": "%(name)s погоджується",
-            "user_cancelled": "%(name)s скасовує",
-            "user_declined": "%(name)s відхиляє",
             "user_wants_to_verify": "%(name)s бажає звірити",
-            "you_accepted": "Ви погодились",
-            "you_cancelled": "Ви скасували",
-            "you_declined": "Ви відхилили",
             "you_started": "Ви надіслали запит перевірки"
         },
         "m.location": {

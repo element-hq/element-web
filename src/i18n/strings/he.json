@@ -1022,8 +1022,7 @@
         "jump_to_date": "קיפצו לתאריך (מוסיף /jumptodate וקפוץ לכותרות תאריך)",
         "latex_maths": "בצע מתמטיקה של LaTeX בהודעות",
         "leave_beta_reload": "עזיבת הניסוי תטען מחדש את %(brand)s.",
-        "pinning": "נעיצת הודעות",
-        "state_counters": "הצג ספירה בראש החדר"
+        "pinning": "נעיצת הודעות"
     },
     "labs_mjolnir": {
         "advanced_warning": "⚠ הגדרות אלה מיועדות למשתמשים מתקדמים.",
@@ -2189,13 +2188,7 @@
         },
         "m.key.verification.done": "אימתת את %(name)s",
         "m.key.verification.request": {
-            "user_accepted": "%(name)s אישרו",
-            "user_cancelled": "%(name)s ביטל",
-            "user_declined": "%(name)s סרב",
             "user_wants_to_verify": "%(name)s רוצה לאמת",
-            "you_accepted": "אשרתם",
-            "you_cancelled": "ביטלתם",
-            "you_declined": "דחיתם",
             "you_started": "שלחתם בקשה לקוד אימות"
         },
         "m.location": {

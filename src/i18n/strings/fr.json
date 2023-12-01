@@ -1422,7 +1422,6 @@
         "sliding_sync_server_no_support": "Votre serveur manque d’un support natif",
         "sliding_sync_server_specify_proxy": "Votre serveur manque d’un support natif, vous devez spécifier un serveur mandataire (proxy)",
         "sliding_sync_server_support": "Votre serveur a un support natif",
-        "state_counters": "Afficher des compteurs simplifiés dans l’en-tête des salons",
         "under_active_development": "En cours de développement.",
         "video_rooms": "Salons vidéo",
         "video_rooms_a_new_way_to_chat": "Une nouvelle façons de discuter avec la voix et la vidéo dans %(brand)s.",
@@ -3188,14 +3187,7 @@
         },
         "m.key.verification.done": "Vous avez vérifié %(name)s",
         "m.key.verification.request": {
-            "declining": "Refus…",
-            "user_accepted": "%(name)s a accepté",
-            "user_cancelled": "%(name)s a annulé",
-            "user_declined": "%(name)s a refusé",
             "user_wants_to_verify": "%(name)s veut vérifier",
-            "you_accepted": "Vous avez accepté",
-            "you_cancelled": "Vous avez annulé",
-            "you_declined": "Vous avez refusé",
             "you_started": "Vous avez envoyé une demande de vérification"
         },
         "m.location": {

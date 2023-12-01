@@ -1341,7 +1341,6 @@
         "sliding_sync_server_no_support": "Tu servidor no es compatible",
         "sliding_sync_server_specify_proxy": "Tu servidor no es compatible, debes configurar un intermediario (proxy)",
         "sliding_sync_server_support": "Tu servidor es compatible",
-        "state_counters": "Muestra contadores simples en la cabecera de la sala",
         "under_active_development": "Funcionalidad en desarrollo.",
         "video_rooms": "Salas de vídeo",
         "video_rooms_a_new_way_to_chat": "Una nueva forma de hablar por voz y vídeo en %(brand)s.",
@@ -3004,14 +3003,7 @@
         },
         "m.key.verification.done": "Has verificado a %(name)s",
         "m.key.verification.request": {
-            "declining": "Rechazando…",
-            "user_accepted": "%(name)s aceptó",
-            "user_cancelled": "%(name)s canceló",
-            "user_declined": "%(name)s declinó",
             "user_wants_to_verify": "%(name)s quiere verificar",
-            "you_accepted": "Aceptaste",
-            "you_cancelled": "Cancelaste",
-            "you_declined": "Declinaste",
             "you_started": "Has enviado solicitud de verificación"
         },
         "m.location": {

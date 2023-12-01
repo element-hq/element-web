@@ -1177,7 +1177,6 @@
         "leave_beta": "Αποχώρηση από τη beta",
         "msc3531_hide_messages_pending_moderation": "Επιτρέψτε στους επόπτες να αποκρύψουν μηνύματα που βρίσκονται σε εκκρεμότητα.",
         "pinning": "Καρφίτσωμα Μηνυμάτων",
-        "state_counters": "Απόδοση απλών μετρητών στην κεφαλίδα δωματίου",
         "video_rooms": "Δωμάτια βίντεο",
         "video_rooms_a_new_way_to_chat": "Ένας νέος τρόπος για συνομιλία μέσω φωνής και βίντεο με το %(brand)s.",
         "video_rooms_beta": "Οι αίθουσες βίντεο είναι μια λειτουργία beta",
@@ -2581,13 +2580,7 @@
         },
         "m.key.verification.done": "Επαληθεύσατε τον χρήστη %(name)s",
         "m.key.verification.request": {
-            "user_accepted": "Ο/η %(name)s αποδέχθηκε",
-            "user_cancelled": "%(name)s ακύρωσε",
-            "user_declined": "%(name)s αρνήθηκε",
             "user_wants_to_verify": "%(name)s θέλει να επαληθεύσει",
-            "you_accepted": "Αποδεχθήκατε",
-            "you_cancelled": "Ακυρώσατε",
-            "you_declined": "Αρνηθήκατε",
             "you_started": "Στείλατε ένα αίτημα επαλήθευσης"
         },
         "m.location": {

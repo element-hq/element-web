@@ -1320,7 +1320,6 @@
         "sliding_sync_server_no_support": "你的服务器缺少原生支持",
         "sliding_sync_server_specify_proxy": "你的服务器缺少原生支持，你必须指定代理",
         "sliding_sync_server_support": "你的服务器有原生支持",
-        "state_counters": "在房间标题中显示简单计数",
         "under_active_development": "积极开发中。",
         "video_rooms": "视频房间",
         "video_rooms_a_new_way_to_chat": "在 %(brand)s 中使用语音和视频的新方式。",
@@ -2918,13 +2917,7 @@
         },
         "m.key.verification.done": "你验证了 %(name)s",
         "m.key.verification.request": {
-            "user_accepted": "%(name)s 接受了",
-            "user_cancelled": "%(name)s 取消了",
-            "user_declined": "%(name)s 拒绝了",
             "user_wants_to_verify": "%(name)s 想要验证",
-            "you_accepted": "你接受了",
-            "you_cancelled": "你取消了",
-            "you_declined": "你拒绝了",
             "you_started": "你发送了一个验证请求"
         },
         "m.location": {

@@ -1450,7 +1450,6 @@
         "sliding_sync_server_no_support": "Twój serwer nie posiada wsparcia natywnego",
         "sliding_sync_server_specify_proxy": "Twój serwer nie posiada wsparcia natywnego, musisz podać serwer proxy",
         "sliding_sync_server_support": "Twój serwer posiada wsparcie natywne",
-        "state_counters": "Wyświetl proste liczniki w nagłówku pokoju",
         "under_active_development": "W trakcie aktywnego rozwoju.",
         "unrealiable_e2e": "Problematyczny w pokojach szyfrowanych",
         "video_rooms": "Pokoje wideo",
@@ -3269,14 +3268,7 @@
         },
         "m.key.verification.done": "Zweryfikowałeś %(name)s",
         "m.key.verification.request": {
-            "declining": "Odrzucanie…",
-            "user_accepted": "%(name)s zaakceptował",
-            "user_cancelled": "%(name)s anulował",
-            "user_declined": "%(name)s odrzucił",
             "user_wants_to_verify": "%(name)s chce weryfikacji",
-            "you_accepted": "Zaakceptowałeś",
-            "you_cancelled": "Anulowałeś",
-            "you_declined": "Odrzuciłeś",
             "you_started": "Wysłałeś żądanie weryfikacji"
         },
         "m.location": {

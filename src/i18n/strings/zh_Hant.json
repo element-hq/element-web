@@ -1412,7 +1412,6 @@
         "sliding_sync_server_no_support": "您的伺服器缺乏原生支援",
         "sliding_sync_server_specify_proxy": "您的伺服器缺乏原生支援，您必須指定代理",
         "sliding_sync_server_support": "您的伺服器有原生支援",
-        "state_counters": "在聊天室標頭顯示簡單的計數器",
         "under_active_development": "正在積極開發中。",
         "video_rooms": "視訊聊天室",
         "video_rooms_a_new_way_to_chat": "在 %(brand)s 中透過語音及視訊聊天的新方式。",
@@ -3185,14 +3184,7 @@
         },
         "m.key.verification.done": "您驗證了 %(name)s",
         "m.key.verification.request": {
-            "declining": "正在拒絕…",
-            "user_accepted": "%(name)s 已接受",
-            "user_cancelled": "%(name)s 已取消",
-            "user_declined": "%(name)s 拒絕了",
             "user_wants_to_verify": "%(name)s 想要驗證",
-            "you_accepted": "您已接受",
-            "you_cancelled": "您已取消",
-            "you_declined": "您拒絕了",
             "you_started": "您已傳送了驗證請求"
         },
         "m.location": {

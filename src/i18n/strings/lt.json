@@ -890,7 +890,6 @@
         "leave_beta": "Palikti beta versiją",
         "msc3531_hide_messages_pending_moderation": "Leisti moderatoriams slėpti žinutes, laukiančias moderavimo.",
         "pinning": "Žinučių prisegimas",
-        "state_counters": "Užkrauti paprastus skaitiklius kambario antraštėje",
         "video_rooms": "Vaizdo kambariai",
         "video_rooms_a_new_way_to_chat": "Naujas būdas kalbėtis balsu ir vaizdu per %(brand)s.",
         "video_rooms_always_on_voip_channels": "Vaizdo kambariai - tai visada veikiantys VoIP kanalai, įterpti į %(brand)s kambarį.",
@@ -2075,13 +2074,7 @@
         },
         "m.key.verification.done": "Jūs patvirtinote %(name)s",
         "m.key.verification.request": {
-            "user_accepted": "%(name)s priimtas",
-            "user_cancelled": "%(name)s atšauktas",
-            "user_declined": "%(name)s atmestas",
             "user_wants_to_verify": "%(name)s nori patvirtinti",
-            "you_accepted": "Jūs priėmėte",
-            "you_cancelled": "Jūs atšaukėte",
-            "you_declined": "Jūs atsisakėte",
             "you_started": "Jūs išsiuntėte patvirtinimo užklausą"
         },
         "m.location": {

@@ -1354,7 +1354,6 @@
         "sliding_sync_server_no_support": "あなたのサーバーはネイティブでサポートしていません",
         "sliding_sync_server_specify_proxy": "あなたのサーバーはネイティブでサポートしていません。プロクシーを指定してください",
         "sliding_sync_server_support": "あなたのサーバーはネイティブでサポートしています",
-        "state_counters": "ルームのヘッダーにな単純なカウンターを表示",
         "under_active_development": "開発中。",
         "video_rooms": "ビデオ通話ルーム",
         "video_rooms_a_new_way_to_chat": "%(brand)sで音声と動画により会話する新しい方法です。",
@@ -3015,14 +3014,7 @@
         },
         "m.key.verification.done": "%(name)sを認証しました",
         "m.key.verification.request": {
-            "declining": "拒否しています…",
-            "user_accepted": "%(name)sは受け付けました",
-            "user_cancelled": "%(name)sは中止しました",
-            "user_declined": "%(name)sは拒否しました",
             "user_wants_to_verify": "%(name)sが認証を要求しています",
-            "you_accepted": "受け付けました",
-            "you_cancelled": "中止しました",
-            "you_declined": "拒否しました",
             "you_started": "認証リクエストを送信しました"
         },
         "m.location": {

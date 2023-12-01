@@ -1394,7 +1394,6 @@
         "sliding_sync_server_no_support": "Dein Server unterstützt dies nicht nativ",
         "sliding_sync_server_specify_proxy": "Dein Server unterstützt dies nicht nativ, du musst einen Proxy angeben",
         "sliding_sync_server_support": "Dein Server unterstützt dies nativ",
-        "state_counters": "Einfache Zähler in Raumkopfzeile anzeigen",
         "under_active_development": "In aktiver Entwicklung.",
         "video_rooms": "Videoräume",
         "video_rooms_a_new_way_to_chat": "Eine neue Möglichkeit in %(brand)s über Audio und Video zu kommunizieren.",
@@ -3173,14 +3172,7 @@
         },
         "m.key.verification.done": "Du hast %(name)s verifiziert",
         "m.key.verification.request": {
-            "declining": "Ablehnen …",
-            "user_accepted": "%(name)s hat akzeptiert",
-            "user_cancelled": "%(name)s hat abgebrochen",
-            "user_declined": "%(name)s hat abgelehnt",
             "user_wants_to_verify": "%(name)s will eine Verifizierung",
-            "you_accepted": "Du hast angenommen",
-            "you_cancelled": "Du brachst ab",
-            "you_declined": "Du hast abgelehnt",
             "you_started": "Du hast eine Verifizierungsanfrage gesendet"
         },
         "m.location": {

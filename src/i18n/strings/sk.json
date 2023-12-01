@@ -1448,7 +1448,6 @@
         "sliding_sync_server_no_support": "Váš server nemá natívnu podporu",
         "sliding_sync_server_specify_proxy": "Váš server nemá natívnu podporu, musíte zadať proxy server",
         "sliding_sync_server_support": "Váš server má natívnu podporu",
-        "state_counters": "Zobraziť jednoduchú štatistiku v záhlaví miestnosti",
         "under_active_development": "V štádiu aktívneho vývoja.",
         "unrealiable_e2e": "Nespoľahlivé v šifrovaných miestnostiach",
         "video_rooms": "Video miestnosti",
@@ -3265,14 +3264,7 @@
         },
         "m.key.verification.done": "Overili ste používateľa %(name)s",
         "m.key.verification.request": {
-            "declining": "Odmietanie …",
-            "user_accepted": "%(name)s prijal",
-            "user_cancelled": "%(name)s zrušil/a",
-            "user_declined": "%(name)s odmietol/a",
             "user_wants_to_verify": "%(name)s chce overiť",
-            "you_accepted": "Prijali ste",
-            "you_cancelled": "Zrušili ste overenie",
-            "you_declined": "Zamietli ste overenie",
             "you_started": "Odoslali ste žiadosť o overenie"
         },
         "m.location": {

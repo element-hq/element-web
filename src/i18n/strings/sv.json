@@ -1449,7 +1449,6 @@
         "sliding_sync_server_no_support": "Din server saknar nativt stöd",
         "sliding_sync_server_specify_proxy": "Din server saknar nativt stöd, du måste ange en proxy",
         "sliding_sync_server_support": "Din server har nativt stöd",
-        "state_counters": "Rendera enkla räknare i rumsrubriken",
         "under_active_development": "Under aktiv utveckling.",
         "unrealiable_e2e": "Otillförlitlig i krypterade rum",
         "video_rooms": "Videorum",
@@ -3220,14 +3219,7 @@
         },
         "m.key.verification.done": "Du verifierade %(name)s",
         "m.key.verification.request": {
-            "declining": "Nekar…",
-            "user_accepted": "%(name)s accepterade",
-            "user_cancelled": "%(name)s avbröt",
-            "user_declined": "%(name)s avslog",
             "user_wants_to_verify": "%(name)s vill verifiera",
-            "you_accepted": "Du accepterade",
-            "you_cancelled": "Du avbröt",
-            "you_declined": "Du avslog",
             "you_started": "Du skickade en verifieringsbegäran"
         },
         "m.location": {

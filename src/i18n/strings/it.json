@@ -1424,7 +1424,6 @@
         "sliding_sync_server_no_support": "Il tuo server non ha il supporto nativo",
         "sliding_sync_server_specify_proxy": "Il tuo server non ha il supporto nativo, devi specificare un proxy",
         "sliding_sync_server_support": "Il tuo server ha il supporto nativo",
-        "state_counters": "Mostra contatori semplici nell'header della stanza",
         "under_active_development": "In sviluppo attivo.",
         "video_rooms": "Stanze video",
         "video_rooms_a_new_way_to_chat": "Un nuovo modo di fare chiamate audio e video in %(brand)s.",
@@ -3220,14 +3219,7 @@
         },
         "m.key.verification.done": "Hai verificato %(name)s",
         "m.key.verification.request": {
-            "declining": "Rifiuto…",
-            "user_accepted": "%(name)s ha accettato",
-            "user_cancelled": "%(name)s ha annullato",
-            "user_declined": "%(name)s ha rifiutato",
             "user_wants_to_verify": "%(name)s vuole verificare",
-            "you_accepted": "Hai accettato",
-            "you_cancelled": "Hai annullato",
-            "you_declined": "Hai rifiutato",
             "you_started": "Hai inviato una richiesta di verifica"
         },
         "m.location": {

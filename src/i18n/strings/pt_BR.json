@@ -1004,7 +1004,6 @@
         "group_voip": "Voz e vídeo",
         "latex_maths": "Renderizar fórmulas matemáticas LaTeX em mensagens",
         "pinning": "Fixar mensagem",
-        "state_counters": "Renderizar contadores simples no cabeçalho da sala",
         "video_rooms": "Salas de vídeo"
     },
     "labs_mjolnir": {
@@ -2216,13 +2215,7 @@
         },
         "m.key.verification.done": "Você confirmou %(name)s",
         "m.key.verification.request": {
-            "user_accepted": "%(name)s aceitou",
-            "user_cancelled": "%(name)s cancelou",
-            "user_declined": "%(name)s recusou",
             "user_wants_to_verify": "%(name)s solicita confirmação",
-            "you_accepted": "Você aceitou",
-            "you_cancelled": "Você cancelou",
-            "you_declined": "Você recusou",
             "you_started": "Você enviou uma solicitação de confirmação"
         },
         "m.location": {

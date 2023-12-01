@@ -984,7 +984,6 @@
         "latex_maths": "نمایش لاتکس ریاضیات در پیام‌ها",
         "leave_beta": "ترک نسخه‌ی بتا",
         "pinning": "پین کردن پیام",
-        "state_counters": "شمارنده‌های ساده‌ای در سرآیند اتاق نمایش بده",
         "video_rooms": "اتاق های تصویری",
         "video_rooms_a_new_way_to_chat": "راهکار جدیدی برای گفتگوی صوتی و تصویری در%(brand)sوجود دارد.",
         "voice_broadcast": "صدای جمعی"
@@ -2017,13 +2016,7 @@
         },
         "m.key.verification.done": "شما هویت %(name)s را تأیید کردید",
         "m.key.verification.request": {
-            "user_accepted": "%(name)s پذیرفت",
-            "user_cancelled": "%(name)s لغو کرد",
-            "user_declined": "%(name)s رد کرد",
             "user_wants_to_verify": "%(name)s می‌خواهد تأیید هویت کند",
-            "you_accepted": "پذیرفتید",
-            "you_cancelled": "شما لغو کردید",
-            "you_declined": "شما رد کردید",
             "you_started": "شما یک درخواست تأیید هویت ارسال کرده‌اید"
         },
         "m.location": {

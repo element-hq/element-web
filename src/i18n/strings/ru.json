@@ -1445,7 +1445,6 @@
         "sliding_sync_server_no_support": "На вашем сервере отсутствует встроенная поддержка",
         "sliding_sync_server_specify_proxy": "На вашем сервере отсутствует встроенная поддержка, необходимо указать прокси-сервер",
         "sliding_sync_server_support": "Ваш сервер имеет встроенную поддержку",
-        "state_counters": "Отображать простые счетчики в заголовке комнаты",
         "under_active_development": "В активной разработке.",
         "unrealiable_e2e": "Ненадежно в зашифрованных комнатах",
         "video_rooms": "Видеокомнаты",
@@ -3249,14 +3248,7 @@
         },
         "m.key.verification.done": "Вы подтвердили %(name)s",
         "m.key.verification.request": {
-            "declining": "Ухудшение...",
-            "user_accepted": "%(name)s принял(а)",
-            "user_cancelled": "%(name)s отменил(а)",
-            "user_declined": "%(name)s отказал(а)",
             "user_wants_to_verify": "%(name)s желает подтвердить",
-            "you_accepted": "Вы приняли",
-            "you_cancelled": "Вы отменили",
-            "you_declined": "Вы отказали",
             "you_started": "Вы отправили запрос подтверждения"
         },
         "m.location": {

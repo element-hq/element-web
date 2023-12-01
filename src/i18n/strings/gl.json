@@ -1223,7 +1223,6 @@
         "sliding_sync_server_no_support": "O teu servidor non ten soporte nativo",
         "sliding_sync_server_specify_proxy": "O teu servidor non ten servidor nativo, tes que indicar un proxy",
         "sliding_sync_server_support": "O teu servidor ten soporte nativo",
-        "state_counters": "Mostrar contadores simples na cabeceira da sala",
         "video_rooms": "Salas de vídeo",
         "video_rooms_a_new_way_to_chat": "Un novo xeito de conversar con voz e vídeo en %(brand)s.",
         "video_rooms_always_on_voip_channels": "As salas de vídeo son canles VoIP sempre activas dentro dunha sala en %(brand)s.",
@@ -2752,13 +2751,7 @@
         },
         "m.key.verification.done": "Verificaches a %(name)s",
         "m.key.verification.request": {
-            "user_accepted": "%(name)s aceptou",
-            "user_cancelled": "%(name)s cancelou",
-            "user_declined": "%(name)s declinou",
             "user_wants_to_verify": "%(name)s desexa verificar",
-            "you_accepted": "Aceptaches",
-            "you_cancelled": "Cancelaches",
-            "you_declined": "Declinaches",
             "you_started": "Enviaches unha solicitude de verificación"
         },
         "m.location": {

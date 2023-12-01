@@ -1368,7 +1368,6 @@
         "sliding_sync_server_no_support": "Shërbyesit tuaj i mungon mbulim i brendshëm për këtë",
         "sliding_sync_server_specify_proxy": "Shërbyesit tuaj i mungon mbulimi së brendshmi, duhet të specifikoni një ndërmjetës",
         "sliding_sync_server_support": "Shërbyesi juaj ka mbulim të brendshëm për këtë",
-        "state_counters": "Vizato numëratorë të thjeshtë te kryet e dhomës",
         "under_active_development": "Nën zhvillim aktiv.",
         "video_rooms": "Dhoma me video",
         "video_rooms_a_new_way_to_chat": "Një rrugë e re për të biseduar me zë dhe video në %(brand)s.",
@@ -3079,14 +3078,7 @@
         },
         "m.key.verification.done": "Verifikuat %(name)s",
         "m.key.verification.request": {
-            "declining": "Po hidhet poshtë…",
-            "user_accepted": "%(name)s pranoi",
-            "user_cancelled": "%(name)s anuloi",
-            "user_declined": "%(name)s hodhi poshtë",
             "user_wants_to_verify": "%(name)s dëshiron të verifikojë",
-            "you_accepted": "Pranuat",
-            "you_cancelled": "Anuluat",
-            "you_declined": "Hodhët poshtë",
             "you_started": "Dërguat një kërkesë verifikimi"
         },
         "m.location": {

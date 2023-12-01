@@ -1067,7 +1067,6 @@
         "mjolnir": "Novaj manieroj ignori personojn",
         "pinning": "Fiksado de mesaĝoj",
         "report_to_moderators": "Raportu al moderigaĵoj",
-        "state_counters": "Bildigi simplajn kalkulilojn en la ĉapo de la fenestro",
         "video_rooms": "Videoĉambroj",
         "video_rooms_a_new_way_to_chat": "Nova maniero babili per voĉo kaj video en %(brand)s.",
         "video_rooms_always_on_voip_channels": "Videoĉambroj estas ĉiam ŝaltitaj VoIP-kanaloj enkonstruitaj en ĉambro en %(brand)s.",
@@ -2319,13 +2318,7 @@
         },
         "m.key.verification.done": "Vi kontrolis %(name)s",
         "m.key.verification.request": {
-            "user_accepted": "%(name)s akceptis",
-            "user_cancelled": "%(name)s nuligis",
-            "user_declined": "%(name)s rifuzis",
             "user_wants_to_verify": "%(name)s volas kontroli",
-            "you_accepted": "Vi akceptis",
-            "you_cancelled": "Vi nuligis",
-            "you_declined": "Vi rifuzis",
             "you_started": "Vi sendis peton de kontrolo"
         },
         "m.location": {

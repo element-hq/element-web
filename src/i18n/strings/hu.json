@@ -1434,7 +1434,6 @@
         "sliding_sync_server_no_support": "A kiszolgálója nem támogatja natívan",
         "sliding_sync_server_specify_proxy": "A kiszolgálója nem támogatja natívan, proxy kiszolgálót kell beállítani",
         "sliding_sync_server_support": "A kiszolgálója natívan támogatja",
-        "state_counters": "Egyszerű számlálók a szoba fejlécében",
         "under_active_development": "Aktív fejlesztés alatt.",
         "video_rooms": "Videószobák",
         "video_rooms_a_new_way_to_chat": "Új csevegési lehetőség a(z) %(brand)s alkalmazásban, hanggal és videóval.",
@@ -3210,14 +3209,7 @@
         },
         "m.key.verification.done": "Ellenőrizte: %(name)s",
         "m.key.verification.request": {
-            "declining": "Elutasítás…",
-            "user_accepted": "%(name)s elfogadta",
-            "user_cancelled": "%(name)s megszakította",
-            "user_declined": "%(name)s elutasította",
             "user_wants_to_verify": "%(name)s ellenőrizni szeretné",
-            "you_accepted": "Elfogadtad",
-            "you_cancelled": "Megszakítottad",
-            "you_declined": "Elutasítottad",
             "you_started": "Ellenőrzési kérést küldtél"
         },
         "m.location": {

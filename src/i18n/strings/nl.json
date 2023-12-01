@@ -1218,7 +1218,6 @@
         "sliding_sync_server_no_support": "Jouw server heeft geen native ondersteuning",
         "sliding_sync_server_specify_proxy": "Jouw server heeft geen native ondersteuning, je moet een proxy opgeven",
         "sliding_sync_server_support": "Jouw server heeft native ondersteuning",
-        "state_counters": "Eenvoudige tellers bovenaan de kamer tonen",
         "video_rooms": "Video kamers",
         "video_rooms_a_new_way_to_chat": "Een nieuwe manier om te chatten via spraak en video in %(brand)s.",
         "video_rooms_always_on_voip_channels": "Videoruimten zijn altijd-aan VoIP-kanalen die zijn geïntegreerd in een kamer in %(brand)s.",
@@ -2785,13 +2784,7 @@
         },
         "m.key.verification.done": "Je hebt %(name)s geverifieerd",
         "m.key.verification.request": {
-            "user_accepted": "%(name)s heeft aanvaard",
-            "user_cancelled": "%(name)s heeft geannuleerd",
-            "user_declined": "%(name)s heeft geweigerd",
             "user_wants_to_verify": "%(name)s wil verifiëren",
-            "you_accepted": "Je hebt aanvaard",
-            "you_cancelled": "Je hebt geannuleerd",
-            "you_declined": "Je hebt geweigerd",
             "you_started": "Je hebt een verificatieverzoek verstuurd"
         },
         "m.location": {

@@ -1434,7 +1434,6 @@
         "sliding_sync_server_no_support": "Selle funktsionaalsuse tugi on sinu koduserveris puudu",
         "sliding_sync_server_specify_proxy": "Selle funktsionaalsuse tugi on sinu koduserveris puudu, palun kasuta puhverserverit",
         "sliding_sync_server_support": "Selle funktsionaalsuse tugi on sinu koduserveris olemas",
-        "state_counters": "Näita jututoa päises lihtsaid loendure",
         "under_active_development": "Aktiivselt arendamisel.",
         "video_rooms": "Videotoad",
         "video_rooms_a_new_way_to_chat": "Uus võimalus videovestlusteks rakenduses %(brand)s.",
@@ -3211,14 +3210,7 @@
         },
         "m.key.verification.done": "Sa verifitseerisid %(name)s",
         "m.key.verification.request": {
-            "declining": "Keeldumisel…",
-            "user_accepted": "%(name)s nõustus",
-            "user_cancelled": "%(name)s tühistas",
-            "user_declined": "%(name)s keeldus",
             "user_wants_to_verify": "%(name)s soovib verifitseerida",
-            "you_accepted": "Sa nõustusid",
-            "you_cancelled": "Sa tühistasid",
-            "you_declined": "Sa keeldusid",
             "you_started": "Sa saatsid verifitseerimispalve"
         },
         "m.location": {

@@ -1300,7 +1300,6 @@
         "sliding_sync_server_no_support": "Máy chủ của bạn không hoàn toàn hỗ trợ",
         "sliding_sync_server_specify_proxy": "Máy chủ của bạn không hỗ trợ, bạn cần chỉ định máy chủ ủy nhiệm (proxy)",
         "sliding_sync_server_support": "Máy chủ của bạn hoàn toàn hỗ trợ",
-        "state_counters": "Hiển thị số đếm giản đơn ở tiêu đề phòng",
         "under_active_development": "Đang được phát triển tích cực.",
         "video_rooms": "Phòng video",
         "video_rooms_a_new_way_to_chat": "Một cách mới để trò chuyện bằng thoại và video trong %(brand)s.",
@@ -2932,14 +2931,7 @@
         },
         "m.key.verification.done": "Bạn đã xác thực %(name)s",
         "m.key.verification.request": {
-            "declining": "Đang từ chối…",
-            "user_accepted": "%(name)s được chấp nhận",
-            "user_cancelled": "%(name)s đã bị hủy",
-            "user_declined": "%(name)s đã từ chối",
             "user_wants_to_verify": "%(name)s muốn xác thực",
-            "you_accepted": "Bạn đã chấp nhận",
-            "you_cancelled": "Bạn đã hủy bỏ",
-            "you_declined": "Bạn đã từ chối",
             "you_started": "Bạn đã gửi một yêu cầu xác thực"
         },
         "m.location": {
