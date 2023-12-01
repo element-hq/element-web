@@ -2,7 +2,6 @@
     "src/components/views/auth/AuthFooter.tsx": "src/components/views/auth/VectorAuthFooter.tsx",
     "src/components/views/auth/AuthHeaderLogo.tsx": "src/components/views/auth/VectorAuthHeaderLogo.tsx",
     "src/components/views/auth/AuthPage.tsx": "src/components/views/auth/VectorAuthPage.tsx",
-    "src/components/views/rooms/Autocomplete.tsx": "src/components/views/rooms/Autocomplete.tsx",
     "src/components/views/rooms/RoomTile.tsx": "src/components/views/rooms/RoomTile.tsx",
     "src/components/views/rooms/NewRoomIntro.tsx": "src/components/views/rooms/NewRoomIntro.tsx",
     "src/components/views/elements/RoomName.tsx": "src/components/views/elements/RoomName.tsx",
@@ -10,5 +9,6 @@
     "src/components/views/avatars/BaseAvatar.tsx": "src/components/views/avatars/BaseAvatar.tsx",
     "src/components/views/spaces/SpacePanel.tsx": "src/components/views/spaces/SpacePanel.tsx",
     "src/hooks/useRoomName.ts": "src/hooks/useRoomName.ts",
-    "src/editor/commands.tsx": "src/editor/commands.tsx"
+    "src/editor/commands.tsx": "src/editor/commands.tsx",
+    "src/autocomplete/Autocompleter.ts": "src/autocomplete/Autocompleter.ts"
 }
