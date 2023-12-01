@@ -378,8 +378,13 @@ describe("Read receipts", () => {
                 // Given 2 threads exist, and Thread2 has the latest message in it
                 goTo(room1);
                 receiveMessages(room2, ["Thread1", "Thread2", threadedOff("Thread1", "t1a")]);
+                // Make sure the message in Thread 1 has definitely arrived, so that we know for sure
+                // that the one in Thread 2 is the latest.
                 assertUnread(room2, 3);
+
                 receiveMessages(room2, [threadedOff("Thread2", "t2a")]);
+                // Make sure the 4th message has arrived before we mark as read.
+                assertUnread(room2, 4);
 
                 // When I mark the room as read (making an unthreaded receipt for t2a)
                 markAsRead(room2);
