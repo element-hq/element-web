@@ -3261,11 +3261,6 @@
             "sent": "%(senderDisplayName)s sent an image.",
             "show_image": "Show image"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s cancelled verifying",
-            "you_cancelled": "You cancelled verifying %(name)s"
-        },
-        "m.key.verification.done": "You verified %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s wants to verify",
             "you_started": "You sent a verification request"

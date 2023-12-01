@@ -32,7 +32,6 @@ import LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrou
 import { EventTileProps } from "../components/views/rooms/EventTile";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
-import MKeyVerificationConclusion from "../components/views/messages/MKeyVerificationConclusion";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
 import { CallEvent } from "../components/views/messages/CallEvent";
 import TextualEvent from "../components/views/messages/TextualEvent";
@@ -87,7 +86,6 @@ type FactoryProps = Omit<EventTileTypeProps, "ref">;
 type Factory<X = FactoryProps> = (ref: Optional<React.RefObject<any>>, props: X) => JSX.Element;
 
 export const MessageEventFactory: Factory = (ref, props) => <MessageEvent ref={ref} {...props} />;
-const KeyVerificationConclFactory: Factory = (ref, props) => <MKeyVerificationConclusion ref={ref} {...props} />;
 const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyCallEventGrouper }> = (ref, props) => (
     <LegacyCallEvent ref={ref} {...props} />
 );
@@ -108,8 +106,6 @@ const EVENT_TILE_TYPES = new Map<string, Factory>([
     [M_POLL_START.altName, MessageEventFactory],
     [M_POLL_END.name, MessageEventFactory],
     [M_POLL_END.altName, MessageEventFactory],
-    [EventType.KeyVerificationCancel, KeyVerificationConclFactory],
-    [EventType.KeyVerificationDone, KeyVerificationConclFactory],
     [EventType.CallInvite, LegacyCallEventFactory as Factory], // note that this requires a special factory type
 ]);
 
@@ -204,23 +200,6 @@ export function pickFactory(
                 // override the factory
                 return VerificationReqFactory;
             }
-        }
-    } else if (evType === EventType.KeyVerificationDone) {
-        // these events are sent by both parties during verification, but we only want to render one
-        // tile once the verification concludes, so filter out the one from the other party.
-        const me = cli.getUserId();
-        if (mxEvent.getSender() !== me) {
-            return noEventFactoryFactory();
-        }
-    }
-
-    if (evType === EventType.KeyVerificationCancel || evType === EventType.KeyVerificationDone) {
-        // sometimes MKeyVerificationConclusion declines to render. Jankily decline to render and
-        // fall back to showing hidden events, if we're viewing hidden events
-        // XXX: This is extremely a hack. Possibly these components should have an interface for
-        // declining to render?
-        if (!MKeyVerificationConclusion.shouldRender(mxEvent, mxEvent.verificationRequest)) {
-            return noEventFactoryFactory();
         }
     }
 
