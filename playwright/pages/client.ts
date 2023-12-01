@@ -117,6 +117,21 @@ export class Client {
     }
 
     /**
+     * Create a space with given options.
+     * @param options the options to apply when creating the space
+     * @return the ID of the newly created space (room)
+     */
+    public async createSpace(options: ICreateRoomOpts): Promise<string> {
+        return this.createRoom({
+            ...options,
+            creation_content: {
+                ...options.creation_content,
+                type: "m.space",
+            },
+        });
+    }
+
+    /**
      * Joins the given room by alias or ID
      * @param roomIdOrAlias the id or alias of the room to join
      */

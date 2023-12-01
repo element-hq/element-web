@@ -33,7 +33,9 @@ test.describe("Appearance user settings tab", () => {
         // Assert that "Hide advanced" link button is rendered
         await expect(tab.getByRole("button", { name: "Hide advanced" })).toBeVisible();
 
-        await expect(tab).toHaveScreenshot();
+        await expect(tab).toHaveScreenshot("appearance-tab.png", {
+            mask: [tab.locator(".mx_DisambiguatedProfile_displayName, .mx_BaseAvatar")],
+        });
     });
 
     test("should support switching layouts", async ({ page, user, app }) => {

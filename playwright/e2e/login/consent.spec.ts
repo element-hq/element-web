@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Page } from "@playwright/test";
-
 import { test, expect } from "../../element-web-test";
 
 test.describe("Consent", () => {
@@ -32,7 +30,7 @@ test.describe("Consent", () => {
     }) => {
         // Attempt to create a room using the js-sdk which should return an error with `M_CONSENT_NOT_GIVEN`
         await app.client.createRoom({}).catch(() => {});
-        const newPagePromise = new Promise<Page>((resolve) => context.once("page", resolve));
+        const newPagePromise = context.waitForEvent("page");
 
         const dialog = page.locator(".mx_QuestionDialog");
         // Accept terms & conditions

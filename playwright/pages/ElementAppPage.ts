@@ -14,14 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { type Locator, type Page } from "@playwright/test";
+import { type Locator, type Page, expect } from "@playwright/test";
 
 import { Settings } from "./settings";
 import { Client } from "./client";
+import { Labs } from "./labs";
 
 export class ElementAppPage {
     public constructor(private readonly page: Page) {}
 
+    public labs = new Labs(this.page);
     public settings = new Settings(this.page);
     public client: Client = new Client(this.page);
 
@@ -93,5 +95,26 @@ export class ElementAppPage {
         const composer = await this.getComposer(isRightPanel);
         await composer.getByRole("button", { name: "More options", exact: true }).click();
         return this.page.getByRole("menu");
+    }
+
+    /**
+     * Returns the space panel space button based on a name. The space
+     * must be visible in the space panel
+     * @param name The space name to find
+     */
+    public async getSpacePanelButton(name: string): Promise<Locator> {
+        const button = this.page.getByRole("button", { name: name });
+        await expect(button).toHaveClass(/mx_SpaceButton/);
+        return button;
+    }
+
+    /**
+     * Opens the given space home by name. The space must be visible in
+     * the space list.
+     * @param name The space name to find and click on/open.
+     */
+    public async viewSpaceHomeByName(name: string): Promise<void> {
+        const button = await this.getSpacePanelButton(name);
+        return button.dblclick();
     }
 }
