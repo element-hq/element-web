@@ -29,6 +29,7 @@ import { OAuthServer } from "./plugins/oauth_server";
 import { Crypto } from "./pages/crypto";
 import { Toasts } from "./pages/toasts";
 import { Bot, CreateBotOpts } from "./pages/bot";
+import { Webserver } from "./plugins/webserver";
 
 const CONFIG_JSON: Partial<IConfigOptions> = {
     // This is deliberately quite a minimal config.json, so that we can test that the default settings
@@ -75,6 +76,7 @@ export const test = base.extend<
         uut?: Locator; // Unit Under Test, useful place to refer a prepared locator
         botCreateOpts: CreateBotOpts;
         bot: Bot;
+        webserver: Webserver;
     }
 >({
     cryptoBackend: ["legacy", { option: true }],
@@ -194,6 +196,13 @@ export const test = base.extend<
         const bot = new Bot(page, homeserver, botCreateOpts);
         await bot.prepareClient(); // eagerly register the bot
         await use(bot);
+    },
+
+    // eslint-disable-next-line no-empty-pattern
+    webserver: async ({}, use) => {
+        const webserver = new Webserver();
+        await use(webserver);
+        webserver.stop();
     },
 });
 

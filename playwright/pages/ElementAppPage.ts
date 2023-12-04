@@ -82,7 +82,7 @@ export class ElementAppPage {
      * Get the composer element
      * @param isRightPanel whether to select the right panel composer, otherwise the main timeline composer
      */
-    public async getComposer(isRightPanel?: boolean): Promise<Locator> {
+    public getComposer(isRightPanel?: boolean): Locator {
         const panelClass = isRightPanel ? ".mx_RightPanel" : ".mx_RoomView_body";
         return this.page.locator(`${panelClass} .mx_MessageComposer`);
     }
@@ -92,7 +92,7 @@ export class ElementAppPage {
      * @param isRightPanel whether to select the right panel composer, otherwise the main timeline composer
      */
     public async openMessageComposerOptions(isRightPanel?: boolean): Promise<Locator> {
-        const composer = await this.getComposer(isRightPanel);
+        const composer = this.getComposer(isRightPanel);
         await composer.getByRole("button", { name: "More options", exact: true }).click();
         return this.page.getByRole("menu");
     }
