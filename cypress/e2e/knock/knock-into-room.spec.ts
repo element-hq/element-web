@@ -63,7 +63,7 @@ describe("Knock Into Room", () => {
         cy.stopHomeserver(homeserver);
     });
 
-    it("should knock into the room then knock is approved and user joins the room", () => {
+    it("should knock into the room then knock is approved and user joins the room then user is kicked and joins again", () => {
         cy.viewRoomById(roomId);
 
         cy.get(".mx_RoomPreviewBar").within(() => {
@@ -104,6 +104,124 @@ describe("Knock Into Room", () => {
         cy.findByRole("group", { name: "Rooms" }).findByRole("treeitem", { name: "Cybersecurity" });
 
         cy.findByText("Alice joined the room").should("exist");
+
+        cy.window().then(async (win) => {
+            // bot kicks Alice
+            await bot.kick(roomId, user.userId);
+        });
+
+        cy.get(".mx_RoomPreviewBar").within(() => {
+            cy.findByRole("button", { name: "Re-join" }).click();
+
+            cy.findByRole("heading", { name: "Ask to join Cybersecurity?" });
+            cy.findByRole("button", { name: "Request access" }).click();
+        });
+
+        cy.window().then(async (win) => {
+            // bot waits for knock request from Alice
+            await waitForRoom(win, bot, roomId, (room) => {
+                const events = room.getLiveTimeline().getEvents();
+                return events.some(
+                    (e) =>
+                        e.getType() === "m.room.member" &&
+                        e.getContent()?.membership === "knock" &&
+                        e.getContent()?.displayname === "Alice",
+                );
+            });
+
+            // bot invites Alice
+            await bot.invite(roomId, user.userId);
+        });
+
+        // Alice have to accept invitation in order to join the room.
+        // It will be not needed when homeserver implements auto accept knock requests.
+        cy.get(".mx_RoomView").findByRole("button", { name: "Accept" }).click();
+
+        cy.findByText("Alice was invited, joined, was removed, was invited, and joined").should("exist");
+    });
+
+    it("should knock into the room then knock is approved and user joins the room then user is banned/unbanned and joins again", () => {
+        cy.viewRoomById(roomId);
+
+        cy.get(".mx_RoomPreviewBar").within(() => {
+            cy.findByRole("button", { name: "Join the discussion" }).click();
+
+            cy.findByRole("heading", { name: "Ask to join?" });
+            cy.findByRole("textbox");
+            cy.findByRole("button", { name: "Request access" }).click();
+
+            cy.findByRole("heading", { name: "Request to join sent" });
+        });
+
+        // Knocked room should appear in Rooms
+        cy.findByRole("group", { name: "Rooms" }).findByRole("treeitem", { name: "Cybersecurity" });
+
+        cy.window().then(async (win) => {
+            // bot waits for knock request from Alice
+            await waitForRoom(win, bot, roomId, (room) => {
+                const events = room.getLiveTimeline().getEvents();
+                return events.some(
+                    (e) =>
+                        e.getType() === "m.room.member" &&
+                        e.getContent()?.membership === "knock" &&
+                        e.getContent()?.displayname === "Alice",
+                );
+            });
+
+            // bot invites Alice
+            await bot.invite(roomId, user.userId);
+        });
+
+        cy.findByRole("group", { name: "Invites" }).findByRole("treeitem", { name: "Cybersecurity" });
+
+        // Alice have to accept invitation in order to join the room.
+        // It will be not needed when homeserver implements auto accept knock requests.
+        cy.get(".mx_RoomView").findByRole("button", { name: "Accept" }).click();
+
+        cy.findByRole("group", { name: "Rooms" }).findByRole("treeitem", { name: "Cybersecurity" });
+
+        cy.findByText("Alice joined the room").should("exist");
+
+        cy.window().then(async (win) => {
+            // bot bans Alice
+            await bot.ban(roomId, user.userId);
+        });
+
+        cy.get(".mx_RoomPreviewBar").findByText("You were banned from Cybersecurity by Bob").should("exist");
+
+        cy.window().then(async (win) => {
+            // bot unbans Alice
+            await bot.unban(roomId, user.userId);
+        });
+
+        cy.get(".mx_RoomPreviewBar").within(() => {
+            cy.findByRole("button", { name: "Re-join" }).click();
+
+            cy.findByRole("heading", { name: "Ask to join Cybersecurity?" });
+            cy.findByRole("button", { name: "Request access" }).click();
+        });
+
+        cy.window().then(async (win) => {
+            // bot waits for knock request from Alice
+            await waitForRoom(win, bot, roomId, (room) => {
+                const events = room.getLiveTimeline().getEvents();
+                return events.some(
+                    (e) =>
+                        e.getType() === "m.room.member" &&
+                        e.getContent()?.membership === "knock" &&
+                        e.getContent()?.displayname === "Alice",
+                );
+            });
+
+            // bot invites Alice
+            await bot.invite(roomId, user.userId);
+        });
+
+        // Alice have to accept invitation in order to join the room.
+        // It will be not needed when homeserver implements auto accept knock requests.
+        cy.get(".mx_RoomView").findByRole("button", { name: "Accept" }).click();
+
+        cy.findByText("Alice was invited, joined, was banned, was unbanned, was invited, and joined").should("exist");
     });
 
     it("should knock into the room and knock is cancelled by user himself", () => {

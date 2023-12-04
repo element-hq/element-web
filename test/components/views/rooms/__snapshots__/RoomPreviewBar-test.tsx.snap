@@ -39,6 +39,31 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding mes
 </div>
 `;
 
+exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding message when kicked 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    Ask to join RoomPreviewBar-test-room?
+  </h3>
+  <p>
+    <span
+      class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
+      data-color="4"
+      data-testid="avatar-img"
+      data-type="round"
+      role="presentation"
+      style="--cpd-avatar-size: 36px;"
+    >
+      R
+    </span>
+  </p>
+  <p>
+    You need to be granted access to this room in order to view or participate in the conversation. You can send a request to join below.
+  </p>
+</div>
+`;
+
 exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding message with a generic title 1`] = `
 <div
   class="mx_RoomPreviewBar_message"

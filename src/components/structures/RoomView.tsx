@@ -2229,8 +2229,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 <div className="mx_RoomView" data-room-header={roomHeaderType}>
                     <ErrorBoundary>
                         <RoomPreviewBar
+                            onJoinClick={this.onJoinButtonClicked}
                             room={this.state.room}
-                            promptAskToJoin={myMembership === "leave" || this.state.promptAskToJoin}
+                            canAskToJoinAndMembershipIsLeave={myMembership === "leave"}
+                            promptAskToJoin={this.state.promptAskToJoin}
                             knocked={myMembership === "knock"}
                             onSubmitAskToJoin={this.onSubmitAskToJoin}
                             onCancelAskToJoin={this.onCancelAskToJoin}

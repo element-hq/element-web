@@ -172,7 +172,7 @@ describe("<RoomPreviewBar />", () => {
     it("renders kicked message", () => {
         const room = createRoom(roomId, otherUserId);
         jest.spyOn(room, "getMember").mockReturnValue(makeMockRoomMember({ isKicked: true }));
-        const component = getComponent({ room, promptAskToJoin: true });
+        const component = getComponent({ room, canAskToJoinAndMembershipIsLeave: true, promptAskToJoin: false });
 
         expect(getMessage(component)).toMatchSnapshot();
     });
@@ -455,6 +455,14 @@ describe("<RoomPreviewBar />", () => {
     describe("message case AskToJoin", () => {
         it("renders the corresponding message", () => {
             const component = getComponent({ promptAskToJoin: true });
+            expect(getMessage(component)).toMatchSnapshot();
+        });
+
+        it("renders the corresponding message when kicked", () => {
+            const room = createRoom(roomId, otherUserId);
+            jest.spyOn(room, "getMember").mockReturnValue(makeMockRoomMember({ isKicked: true }));
+            const component = getComponent({ room, promptAskToJoin: true });
+
             expect(getMessage(component)).toMatchSnapshot();
         });
 

@@ -106,6 +106,7 @@ interface IProps {
     onRejectAndIgnoreClick?(): void;
     onForgetClick?(): void;
 
+    canAskToJoinAndMembershipIsLeave?: boolean;
     promptAskToJoin?: boolean;
     knocked?: boolean;
     onSubmitAskToJoin?(reason?: string): void;
@@ -193,6 +194,8 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             if (myMember.isKicked()) {
                 if (previousMembership === "knock") {
                     return MessageCase.RequestDenied;
+                } else if (this.props.promptAskToJoin) {
+                    return MessageCase.PromptAskToJoin;
                 }
                 return MessageCase.Kicked;
             } else if (myMember.membership === "ban") {
@@ -208,7 +211,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             return MessageCase.Loading;
         } else if (this.props.knocked) {
             return MessageCase.Knocked;
-        } else if (this.props.promptAskToJoin) {
+        } else if (this.props.canAskToJoinAndMembershipIsLeave || this.props.promptAskToJoin) {
             return MessageCase.PromptAskToJoin;
         }
 
