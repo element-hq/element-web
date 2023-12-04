@@ -48,8 +48,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                # Run 2 instances in Parallel
-                runner: [1, 2]
+                # Run 4 instances in Parallel
+                runner: [1, 2, 3, 4]
         steps:
             - uses: browser-actions/setup-chrome@803ef6dfb4fdf22089c9563225d95e4a515820a0 # v1
             - run: echo "BROWSER_PATH=$(which chrome)" >> $GITHUB_ENV
