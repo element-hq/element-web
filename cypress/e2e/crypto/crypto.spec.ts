@@ -28,7 +28,6 @@ import {
     logOutOfElement,
     waitForVerificationRequest,
 } from "./utils";
-import { skipIfRustCrypto } from "../../support/util";
 
 interface CryptoTestContext extends Mocha.Context {
     homeserver: HomeserverInstance;
@@ -451,8 +450,6 @@ describe("Cryptography", function () {
         });
 
         it("Should show a grey padlock for a key restored from backup", () => {
-            skipIfRustCrypto(); // doesn't work due to https://github.com/vector-im/element-web/issues/26393
-
             enableKeyBackup();
 
             // bob sends a valid event
@@ -464,6 +461,10 @@ describe("Cryptography", function () {
                 .should("contain", "test encrypted 1")
                 // no e2e icon
                 .should("not.have.descendants", ".mx_EventTile_e2eIcon");
+
+            // It can take up to 10 seconds for the key to be backed up. We don't really have much option other than
+            // to wait :/
+            cy.wait(10000);
 
             /* log out, and back in */
             logOutOfElement();

@@ -155,6 +155,9 @@ export function logOutOfElement() {
     cy.get(".mx_Dialog .mx_QuestionDialog").within(() => {
         cy.findByRole("button", { name: "Sign out" }).click();
     });
+
+    // Wait for the login page to load
+    cy.findByRole("heading", { name: "Sign in" }).click();
 }
 
 /**
