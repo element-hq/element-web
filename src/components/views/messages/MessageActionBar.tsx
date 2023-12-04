@@ -466,7 +466,8 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                         </RovingAccessibleTooltipButton>,
                     );
                 }
-                if (this.context.canReact) {
+                // We hide the react button in search results as we don't show reactions in results
+                if (this.context.canReact && !this.context.search) {
                     toolbarOpts.splice(
                         0,
                         0,
