@@ -35,7 +35,7 @@ test.describe("General user settings tab", () => {
     });
 
     test("should be rendered properly", async ({ uut }) => {
-        await expect(uut).toHaveScreenshot("general.png", {
+        await expect(uut).toMatchScreenshot("general.png", {
             // Exclude userId from snapshots
             mask: [uut.locator(".mx_ProfileSettings_profile_controls > p")],
         });

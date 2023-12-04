@@ -14,15 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* Screenshot test specific CSS */
-@media only percy {
-    /* Stick the default room avatar colour, so it doesn't cause a false diff on the screenshot */
-    .mx_BaseAvatar {
-        background-color: var(--percy-color-avatar) !important;
-        color: white !important;
-    }
-}
-
 button.mx_BaseAvatar {
     /* <button> is a form element and by default it uses the user agent (browser) styling.
        We want it to inherit the font-family and line-height from its parent.

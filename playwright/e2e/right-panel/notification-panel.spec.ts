@@ -38,6 +38,6 @@ test.describe("NotificationPanel", () => {
         await expect(page.locator(".mx_NotificationPanel_empty")).toBeVisible();
 
         // Take a snapshot of RightPanel
-        await expect(page.locator(".mx_RightPanel")).toHaveScreenshot("empty.png");
+        await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("empty.png");
     });
 });

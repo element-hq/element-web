@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { type Page } from "@playwright/test";
+import { Download, type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "./utils";
@@ -53,7 +53,7 @@ test.describe("FilePanel", () => {
             await expect(page.locator(".mx_FilePanel_empty")).toBeVisible();
 
             // Take a snapshot of RightPanel - fix https://github.com/vector-im/element-web/issues/25332
-            await expect(page.locator(".mx_RightPanel")).toHaveScreenshot("empty.png");
+            await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("empty.png");
         });
 
         test("should list tiles on the panel", async ({ page }) => {
@@ -135,17 +135,9 @@ test.describe("FilePanel", () => {
             await expect(senderDetails.locator(".mx_MessageTimestamp")).toBeVisible();
 
             // Take a snapshot of file tiles list on FilePanel
-            // XXX: We remove the RM as masking it in different locations causes a false positive
-            await page.evaluate(() => {
-                document.querySelectorAll(".mx_MessagePanel_myReadMarker").forEach((e) => e.remove());
-            });
-            await expect(filePanelMessageList).toHaveScreenshot("file-tiles-list.png", {
-                // Exclude timestamps, profiles, avatars & flaky seek bar from snapshot
-                mask: [
-                    page.locator(
-                        ".mx_MessageTimestamp, .mx_DisambiguatedProfile, .mx_BaseAvatar, .mx_AudioPlayer_seek",
-                    ),
-                ],
+            await expect(filePanelMessageList).toMatchScreenshot("file-tiles-list.png", {
+                // Exclude timestamps, profile & flaky seek bar from snapshot
+                mask: [page.locator(".mx_MessageTimestamp, .mx_DisambiguatedProfile, .mx_AudioPlayer_seek")],
             });
         });
 
@@ -210,18 +202,22 @@ test.describe("FilePanel", () => {
             const link = imageBody.locator(".mx_MFileBody_download a");
 
             const newPagePromise = context.waitForEvent("page");
-            // const downloadPromise = page.waitForEvent("download");
+
+            const downloadPromise = new Promise<Download>((resolve) => {
+                page.once("download", resolve);
+            });
 
             // Click the anchor link (not the image itself)
             await link.click();
 
             const newPage = await newPagePromise;
-            // XXX: Clicking the link opens the image in a new tab on some browsers rather than downloading, so handle that case
-            await expect(newPage).toHaveURL(/.+\/_matrix\/media\/\w+\/download\/localhost\/\w+/);
-            // .catch(async () => {
-            //     const download = await downloadPromise;
-            //     expect(download.suggestedFilename()).toBe("riot.png");
-            // });
+            // XXX: Clicking the link opens the image in a new tab on some browsers rather than downloading
+            await expect(newPage)
+                .toHaveURL(/.+\/_matrix\/media\/\w+\/download\/localhost\/\w+/)
+                .catch(async () => {
+                    const download = await downloadPromise;
+                    expect(download.suggestedFilename()).toBe("riot.png");
+                });
         });
     });
 });

@@ -71,7 +71,7 @@ test.describe("Email Registration", async () => {
         await page.getByRole("button", { name: "Register" }).click();
 
         await expect(page.getByText("Check your email to continue")).toBeVisible();
-        await expect(page).toHaveScreenshot("registration_check_your_email.png", screenshotOptions);
+        await expect(page).toMatchScreenshot("registration_check_your_email.png", screenshotOptions);
         await checkA11y();
 
         await expect(page.getByText("An error was encountered when sending the email")).not.toBeVisible();

@@ -27,7 +27,7 @@ test.describe("Registration", () => {
         await page.getByRole("button", { name: "Edit", exact: true }).click();
         await expect(page.getByRole("button", { name: "Continue", exact: true })).toBeVisible();
 
-        await expect(page.locator(".mx_Dialog")).toHaveScreenshot("server-picker.png");
+        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("server-picker.png");
         await checkA11y();
 
         await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.config.baseUrl);
@@ -38,7 +38,7 @@ test.describe("Registration", () => {
         await expect(page.getByRole("textbox", { name: "Username", exact: true })).toBeVisible();
         // Hide the server text as it contains the randomly allocated Homeserver port
         const screenshotOptions = { mask: [page.locator(".mx_ServerPicker_server")] };
-        await expect(page).toHaveScreenshot("registration.png", screenshotOptions);
+        await expect(page).toMatchScreenshot("registration.png", screenshotOptions);
         await checkA11y();
 
         await page.getByRole("textbox", { name: "Username", exact: true }).fill("alice");
@@ -48,12 +48,12 @@ test.describe("Registration", () => {
 
         const dialog = page.getByRole("dialog");
         await expect(dialog).toBeVisible();
-        await expect(page).toHaveScreenshot("email-prompt.png", screenshotOptions);
+        await expect(page).toMatchScreenshot("email-prompt.png", screenshotOptions);
         await checkA11y();
         await dialog.getByRole("button", { name: "Continue", exact: true }).click();
 
         await expect(page.locator(".mx_InteractiveAuthEntryComponents_termsPolicy")).toBeVisible();
-        await expect(page).toHaveScreenshot("terms-prompt.png", screenshotOptions);
+        await expect(page).toMatchScreenshot("terms-prompt.png", screenshotOptions);
         await checkA11y();
 
         const termsPolicy = page.locator(".mx_InteractiveAuthEntryComponents_termsPolicy");
@@ -63,7 +63,7 @@ test.describe("Registration", () => {
         await page.getByRole("button", { name: "Accept", exact: true }).click();
 
         await expect(page.locator(".mx_UseCaseSelection_skip")).toBeVisible();
-        await expect(page).toHaveScreenshot("use-case-selection.png", screenshotOptions);
+        await expect(page).toMatchScreenshot("use-case-selection.png", screenshotOptions);
         await checkA11y();
         await page.getByRole("button", { name: "Skip", exact: true }).click();
 

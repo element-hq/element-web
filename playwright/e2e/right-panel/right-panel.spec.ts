@@ -67,9 +67,7 @@ test.describe("RightPanel", () => {
             await expect(page.locator(".mx_RightPanel")).not.toBeVisible();
             await page.getByRole("button", { name: "Room info" }).click();
 
-            await expect(page.locator(".mx_RightPanel")).toHaveScreenshot("with-name-and-address.png", {
-                mask: [page.locator(".mx_BaseAvatar")],
-            });
+            await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("with-name-and-address.png");
         });
 
         test("should handle clicking add widgets", async ({ page, app }) => {

@@ -118,11 +118,13 @@ async function interceptRequestsWithSoftLogout(page: Page, user: Credentials): P
         await route.continue();
     });
 
+    const promise = page.waitForResponse((resp) => resp.url().includes("/sync") && resp.status() === 401);
+
     // do something to make the active /sync return: create a new room
     await page.evaluate(() => {
         // don't wait for this to complete: it probably won't, because of the broken sync
         window.mxMatrixClientPeg.get().createRoom({});
     });
 
-    await page.waitForResponse((resp) => resp.url().includes("/sync") && resp.status() === 401);
+    await promise;
 }

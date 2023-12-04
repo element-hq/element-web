@@ -139,7 +139,7 @@ test.describe("Editing", () => {
         ).toBeVisible();
 
         // Take a snapshot of the dialog
-        await expect(dialog).toHaveScreenshot("message-edit-history-dialog.png", {
+        await expect(dialog).toMatchScreenshot("message-edit-history-dialog.png", {
             mask: [page.locator(".mx_MessageTimestamp")],
         });
 

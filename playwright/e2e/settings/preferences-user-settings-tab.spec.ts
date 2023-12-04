@@ -26,6 +26,6 @@ test.describe("Preferences user settings tab", () => {
 
         // Assert that the top heading is rendered
         await expect(tab.getByRole("heading", { name: "Preferences" })).toBeVisible();
-        await expect(tab).toHaveScreenshot();
+        await expect(tab).toMatchScreenshot();
     });
 });

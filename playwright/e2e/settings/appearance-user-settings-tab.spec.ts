@@ -33,9 +33,7 @@ test.describe("Appearance user settings tab", () => {
         // Assert that "Hide advanced" link button is rendered
         await expect(tab.getByRole("button", { name: "Hide advanced" })).toBeVisible();
 
-        await expect(tab).toHaveScreenshot("appearance-tab.png", {
-            mask: [tab.locator(".mx_DisambiguatedProfile_displayName, .mx_BaseAvatar")],
-        });
+        await expect(tab).toMatchScreenshot("appearance-tab.png");
     });
 
     test("should support switching layouts", async ({ page, user, app }) => {
@@ -94,7 +92,7 @@ test.describe("Appearance user settings tab", () => {
             fontSliderSection.locator("output .mx_Slider_selection_label", { hasText: String(MIN_FONT_SIZE) }),
         ).toBeVisible();
 
-        await expect(fontSliderSection).toHaveScreenshot(`font-slider-${MIN_FONT_SIZE}.png`);
+        await expect(fontSliderSection).toMatchScreenshot(`font-slider-${MIN_FONT_SIZE}.png`);
 
         // Click the right position of the slider
         await slider.click({ position: { x: 572, y: 10 } });
@@ -106,7 +104,7 @@ test.describe("Appearance user settings tab", () => {
             fontSliderSection.locator("output .mx_Slider_selection_label", { hasText: String(MAX_FONT_SIZE) }),
         ).toBeVisible();
 
-        await expect(fontSliderSection).toHaveScreenshot(`font-slider-${MAX_FONT_SIZE}.png`);
+        await expect(fontSliderSection).toMatchScreenshot(`font-slider-${MAX_FONT_SIZE}.png`);
     });
 
     test("should disable font size slider when custom font size is used", async ({ page, app, user }) => {
