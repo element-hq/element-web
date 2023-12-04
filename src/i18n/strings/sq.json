@@ -3072,11 +3072,6 @@
             "sent": "%(senderDisplayName)s dërgoi një figurë.",
             "show_image": "Shfaq figurë"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s anuloi verifikimin",
-            "you_cancelled": "Anuluat verifikimin e %(name)s"
-        },
-        "m.key.verification.done": "Verifikuat %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s dëshiron të verifikojë",
             "you_started": "Dërguat një kërkesë verifikimi"

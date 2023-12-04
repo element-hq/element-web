@@ -2925,11 +2925,6 @@
             "sent": "%(senderDisplayName)s đã gửi một hình.",
             "show_image": "Hiển thị hình ảnh"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s đã hủy xác thực",
-            "you_cancelled": "Bạn đã hủy xác thực %(name)s"
-        },
-        "m.key.verification.done": "Bạn đã xác thực %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s muốn xác thực",
             "you_started": "Bạn đã gửi một yêu cầu xác thực"

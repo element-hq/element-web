@@ -3263,11 +3263,6 @@
             "sent": "%(senderDisplayName)s poslal(a) obrázek.",
             "show_image": "Zobrazit obrázek"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s zrušil(a) ověření",
-            "you_cancelled": "Zrušili jste ověření %(name)s"
-        },
-        "m.key.verification.done": "Ověřili jste %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s chce ověřit",
             "you_started": "Poslali jste požadavek na ověření"

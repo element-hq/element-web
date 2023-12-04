@@ -3159,11 +3159,6 @@
             "sent": "%(senderDisplayName)s mengirim sebuah gambar.",
             "show_image": "Tampilkan gambar"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s membatalkan verifikasi",
-            "you_cancelled": "Anda membatalkan memverifikasi %(name)s"
-        },
-        "m.key.verification.done": "Anda memverifikasi %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s ingin memverifikasi",
             "you_started": "Anda mengirim sebuah permintaan verifikasi"

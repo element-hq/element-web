@@ -3203,11 +3203,6 @@
             "sent": "%(senderDisplayName)s képet küldött.",
             "show_image": "Kép megjelenítése"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s megszakította az ellenőrzést",
-            "you_cancelled": "Az ellenőrzést megszakítottad ehhez: %(name)s"
-        },
-        "m.key.verification.done": "Ellenőrizte: %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s ellenőrizni szeretné",
             "you_started": "Ellenőrzési kérést küldtél"

@@ -3204,11 +3204,6 @@
             "sent": "%(senderDisplayName)s saatis pildi.",
             "show_image": "Näita pilti"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s tühistas verifitseerimise",
-            "you_cancelled": "Sa tühistasid %(name)s verifitseerimise"
-        },
-        "m.key.verification.done": "Sa verifitseerisid %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s soovib verifitseerida",
             "you_started": "Sa saatsid verifitseerimispalve"

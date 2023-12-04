@@ -3181,11 +3181,6 @@
             "sent": "%(senderDisplayName)s a envoyé une image.",
             "show_image": "Afficher l’image"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s a annulé la vérification",
-            "you_cancelled": "Vous avez annulé la vérification de %(name)s"
-        },
-        "m.key.verification.done": "Vous avez vérifié %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s veut vérifier",
             "you_started": "Vous avez envoyé une demande de vérification"

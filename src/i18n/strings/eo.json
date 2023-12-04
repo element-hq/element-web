@@ -2312,11 +2312,6 @@
             "sent": "%(senderDisplayName)s sendis bildon.",
             "show_image": "Montri bildon"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s nuligis kontrolon",
-            "you_cancelled": "Vi nuligis kontrolon de %(name)s"
-        },
-        "m.key.verification.done": "Vi kontrolis %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s volas kontroli",
             "you_started": "Vi sendis peton de kontrolo"

@@ -2182,11 +2182,6 @@
             "sent": "%(senderDisplayName)s שלח תמונה.",
             "show_image": "הצג תמונה"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s ביטל את האימות",
-            "you_cancelled": "בטלתם אימות עם %(name)s"
-        },
-        "m.key.verification.done": "אימתת את %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s רוצה לאמת",
             "you_started": "שלחתם בקשה לקוד אימות"

@@ -2574,11 +2574,6 @@
             "sent": "Ο %(senderDisplayName)s έστειλε μια φωτογραφία.",
             "show_image": "Εμφάνιση εικόνας"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s ακύρωσε την επαλήθευση",
-            "you_cancelled": "Ακυρώσατε την επαλήθευση του χρήστη %(name)s"
-        },
-        "m.key.verification.done": "Επαληθεύσατε τον χρήστη %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s θέλει να επαληθεύσει",
             "you_started": "Στείλατε ένα αίτημα επαλήθευσης"

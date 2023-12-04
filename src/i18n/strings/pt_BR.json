@@ -2209,11 +2209,6 @@
             "sent": "%(senderDisplayName)s enviou uma imagem.",
             "show_image": "Mostrar imagem"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s cancelou a confirmação",
-            "you_cancelled": "Você cancelou a confirmação de %(name)s"
-        },
-        "m.key.verification.done": "Você confirmou %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s solicita confirmação",
             "you_started": "Você enviou uma solicitação de confirmação"

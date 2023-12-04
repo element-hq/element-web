@@ -2778,11 +2778,6 @@
             "sent": "%(senderDisplayName)s heeft een afbeelding gestuurd.",
             "show_image": "Afbeelding tonen"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s heeft de verificatie geannuleerd",
-            "you_cancelled": "Je hebt de verificatie van %(name)s geannuleerd"
-        },
-        "m.key.verification.done": "Je hebt %(name)s geverifieerd",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s wil verifiëren",
             "you_started": "Je hebt een verificatieverzoek verstuurd"

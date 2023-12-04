@@ -2745,11 +2745,6 @@
             "sent": "%(senderDisplayName)s enviou unha imaxe.",
             "show_image": "Mostrar imaxe"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s cancelou a verificación",
-            "you_cancelled": "Cancelaches a verificación de %(name)s"
-        },
-        "m.key.verification.done": "Verificaches a %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s desexa verificar",
             "you_started": "Enviaches unha solicitude de verificación"

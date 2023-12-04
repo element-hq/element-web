@@ -3258,11 +3258,6 @@
             "sent": "%(senderDisplayName)s poslal obrázok.",
             "show_image": "Zobraziť obrázok"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s zrušil/a overovanie",
-            "you_cancelled": "Zrušili ste overenie používateľa %(name)s"
-        },
-        "m.key.verification.done": "Overili ste používateľa %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s chce overiť",
             "you_started": "Odoslali ste žiadosť o overenie"

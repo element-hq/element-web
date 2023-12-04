@@ -2911,11 +2911,6 @@
             "sent": "%(senderDisplayName)s 发送了一张图片。",
             "show_image": "显示图像"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s 取消了验证",
-            "you_cancelled": "你取消了 %(name)s 的验证"
-        },
-        "m.key.verification.done": "你验证了 %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s 想要验证",
             "you_started": "你发送了一个验证请求"

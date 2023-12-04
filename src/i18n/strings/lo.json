@@ -2590,11 +2590,6 @@
             "sent": "%(senderDisplayName)s ສົ່ງຮູບ.",
             "show_image": "ສະແດງຮູບພາບ"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "ຍົກເລີກການຢັ້ງຢືນ %(name)s",
-            "you_cancelled": "ທ່ານໄດ້ຍົກເລີກການຢືນຢັນ %(name)s"
-        },
-        "m.key.verification.done": "ທ່ານໄດ້ຢັ້ງຢືນ %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s ຕ້ອງການກວດສອບ",
             "you_started": "ທ່ານໄດ້ສົ່ງຄໍາຮ້ອງຂໍການຢັ້ງຢືນ"

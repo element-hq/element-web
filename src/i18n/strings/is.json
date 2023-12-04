@@ -2655,11 +2655,6 @@
             "sent": "%(senderDisplayName)s sendi mynd.",
             "show_image": "Birta mynd"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s hætti við sannvottun",
-            "you_cancelled": "Þú hættir við sannvottun á %(name)s"
-        },
-        "m.key.verification.done": "Þú sannreyndir %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s vill sannreyna",
             "you_started": "Þú sendir beiðni um sannvottun"

@@ -2068,11 +2068,6 @@
             "sent": "%(senderDisplayName)s išsiuntė vaizdą.",
             "show_image": "Rodyti vaizdą"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s atšaukė patvirtinimą",
-            "you_cancelled": "Jūs atšaukėte %(name)s patvirtinimą"
-        },
-        "m.key.verification.done": "Jūs patvirtinote %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s nori patvirtinti",
             "you_started": "Jūs išsiuntėte patvirtinimo užklausą"

@@ -3183,11 +3183,6 @@
             "sent": "%(senderDisplayName)s надсилає зображення.",
             "show_image": "Показати зображення"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s скасовує звірку",
-            "you_cancelled": "Ви скасували звірку %(name)s"
-        },
-        "m.key.verification.done": "Ви звірили %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s бажає звірити",
             "you_started": "Ви надіслали запит перевірки"

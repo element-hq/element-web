@@ -3008,11 +3008,6 @@
             "sent": "%(senderDisplayName)sが画像を送信しました。",
             "show_image": "画像を表示"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)sは認証を中止しました",
-            "you_cancelled": "%(name)sの認証を中止しました"
-        },
-        "m.key.verification.done": "%(name)sを認証しました",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)sが認証を要求しています",
             "you_started": "認証リクエストを送信しました"

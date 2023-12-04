@@ -3242,11 +3242,6 @@
             "sent": "%(senderDisplayName)s отправил(а) изображение.",
             "show_image": "Показать изображение"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s отменил(а) подтверждение",
-            "you_cancelled": "Вы отменили подтверждение %(name)s"
-        },
-        "m.key.verification.done": "Вы подтвердили %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s желает подтвердить",
             "you_started": "Вы отправили запрос подтверждения"

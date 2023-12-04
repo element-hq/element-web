@@ -3178,11 +3178,6 @@
             "sent": "%(senderDisplayName)s 傳了一張圖片。",
             "show_image": "顯示圖片"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s 已取消驗證",
-            "you_cancelled": "您已取消驗證 %(name)s"
-        },
-        "m.key.verification.done": "您驗證了 %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s 想要驗證",
             "you_started": "您已傳送了驗證請求"

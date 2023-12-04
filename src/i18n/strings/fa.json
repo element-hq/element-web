@@ -2010,11 +2010,6 @@
             "sent": "%(senderDisplayName)s تصویری ارسال کرد.",
             "show_image": "نمایش تصویر"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s تأیید هویت را لغو کرد",
-            "you_cancelled": "شما تأیید هویت %(name)s را لغو کردید"
-        },
-        "m.key.verification.done": "شما هویت %(name)s را تأیید کردید",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s می‌خواهد تأیید هویت کند",
             "you_started": "شما یک درخواست تأیید هویت ارسال کرده‌اید"

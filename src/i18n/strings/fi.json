@@ -2866,11 +2866,6 @@
             "sent": "%(senderDisplayName)s lähetti kuvan.",
             "show_image": "Näytä kuva"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s peruutti varmennuksen",
-            "you_cancelled": "Peruutit käyttäjän %(name)s varmennuksen"
-        },
-        "m.key.verification.done": "Varmensit käyttäjän %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s haluaa varmentaa",
             "you_started": "Lähetit varmennuspyynnön"

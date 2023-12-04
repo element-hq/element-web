@@ -3213,11 +3213,6 @@
             "sent": "%(senderDisplayName)s ha inviato un'immagine.",
             "show_image": "Mostra immagine"
         },
-        "m.key.verification.cancel": {
-            "user_cancelled": "%(name)s ha annullato la verifica",
-            "you_cancelled": "Hai annullato la verifica di %(name)s"
-        },
-        "m.key.verification.done": "Hai verificato %(name)s",
         "m.key.verification.request": {
             "user_wants_to_verify": "%(name)s vuole verificare",
             "you_started": "Hai inviato una richiesta di verifica"
