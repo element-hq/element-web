@@ -26,6 +26,7 @@ export default defineConfig<TestOptions>({
         ignoreHTTPSErrors: true,
         video: "retain-on-failure",
         baseURL,
+        permissions: ["clipboard-write", "clipboard-read"],
     },
     webServer: {
         command: process.env.CI ? "npx serve -p 8080 -L ../webapp" : "yarn --cwd ../element-web start",

@@ -117,4 +117,18 @@ export class ElementAppPage {
         const button = await this.getSpacePanelButton(name);
         return button.dblclick();
     }
+
+    /**
+     * Opens the given space by name. The space must be visible in the
+     * space list.
+     * @param name The space name to find and click on/open.
+     */
+    public async viewSpaceByName(name: string): Promise<void> {
+        const button = await this.getSpacePanelButton(name);
+        return button.click();
+    }
+
+    public async getClipboardText(): Promise<string> {
+        return this.page.evaluate("navigator.clipboard.readText()");
+    }
 }
