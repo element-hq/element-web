@@ -13,7 +13,7 @@ There are some exceptions like when using localhost, which is considered a [secu
 1. Move (or symlink) the `element-x.x.x` directory to an appropriate name
 1. Configure the correct caching headers in your webserver (see below)
 1. Configure the app by copying `config.sample.json` to `config.json` and
-   modifying it. See the [configuration docs](docs/config.md) for details.
+   modifying it. See the [configuration docs](config.md) for details.
 1. Enter the URL into your browser and log into Element!
 
 Releases are signed using gpg and the OpenPGP standard,
@@ -31,7 +31,7 @@ sudo apt update
 sudo apt install element-web
 ```
 
-Configure the app by modifying `/etc/element-web/config.json`. See the [configuration docs](docs/config.md) for details.
+Configure the app by modifying `/etc/element-web/config.json`. See the [configuration docs](config.md) for details.
 
 ## Docker
 
