@@ -20,7 +20,7 @@ import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api";
 import { CypressBot } from "../../support/bot";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
-import { emitPromise, skipIfRustCrypto } from "../../support/util";
+import { emitPromise } from "../../support/util";
 import {
     checkDeviceIsConnectedKeyBackup,
     checkDeviceIsCrossSigned,
@@ -317,10 +317,6 @@ describe("User verification", () => {
     });
 
     it("can receive a verification request when there is no existing DM", () => {
-        // Extremely flaky with rust crypto
-        // see https://github.com/vector-im/element-web/issues/26420
-        skipIfRustCrypto();
-
         cy.bootstrapCrossSigning(aliceCredentials);
 
         // the other user creates a DM
