@@ -1,6 +1,6 @@
 {
     "name": "matrix-react-sdk",
-    "version": "3.85.0",
+    "version": "3.86.0",
     "description": "SDK for matrix.org using React",
     "author": "matrix.org",
     "repository": {
@@ -23,7 +23,7 @@
         "package.json",
         ".stylelintrc.js"
     ],
-    "main": "./src/index.ts",
+    "main": "./lib/index.ts",
     "matrix_src_main": "./src/index.ts",
     "matrix_lib_main": "./lib/index.ts",
     "matrix_lib_typings": "./lib/index.d.ts",
@@ -67,6 +67,7 @@
         "@matrix-org/analytics-events": "^0.9.0",
         "@matrix-org/emojibase-bindings": "^1.1.2",
         "@matrix-org/matrix-wysiwyg": "2.17.0",
+        "@matrix-org/olm": "3.2.15",
         "@matrix-org/react-sdk-module-api": "^2.2.1",
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^7.0.0",
@@ -103,7 +104,7 @@
         "maplibre-gl": "^2.0.0",
         "matrix-encrypt-attachment": "^1.0.3",
         "matrix-events-sdk": "0.0.1",
-        "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
+        "matrix-js-sdk": "30.2.0",
         "matrix-widget-api": "^1.5.0",
         "memoize-one": "^6.0.0",
         "minimist": "^1.2.5",
@@ -130,6 +131,9 @@
         "what-input": "^5.2.10"
     },
     "devDependencies": {
+        "@action-validator/cli": "^0.5.3",
+        "@action-validator/core": "^0.5.3",
+        "@axe-core/playwright": "^4.8.1",
         "@babel/cli": "^7.12.10",
         "@babel/core": "^7.12.10",
         "@babel/eslint-parser": "^7.12.10",
@@ -239,5 +243,6 @@
         "outputDirectory": "coverage",
         "outputName": "jest-sonar-report.xml",
         "relativePaths": true
-    }
+    },
+    "typings": "./lib/index.d.ts"
 }
