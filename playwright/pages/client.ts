@@ -25,6 +25,7 @@ import type {
     Room,
     MatrixEvent,
     ReceiptType,
+    IRoomDirectoryOptions,
 } from "matrix-js-sdk/src/matrix";
 
 export class Client {
@@ -222,5 +223,12 @@ export class Client {
             },
             { event, receiptType, unthreaded },
         );
+    }
+
+    public async publicRooms(options?: IRoomDirectoryOptions): ReturnType<MatrixClient["publicRooms"]> {
+        const client = await this.prepareClient();
+        return await client.evaluate((client, options) => {
+            return client.publicRooms(options);
+        }, options);
     }
 }
