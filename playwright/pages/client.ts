@@ -17,7 +17,15 @@ limitations under the License.
 import { JSHandle, Page } from "@playwright/test";
 import { PageFunctionOn } from "playwright-core/types/structs";
 
-import type { IContent, ICreateRoomOpts, ISendEventResponse, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import type {
+    IContent,
+    ICreateRoomOpts,
+    ISendEventResponse,
+    MatrixClient,
+    Room,
+    MatrixEvent,
+    ReceiptType,
+} from "matrix-js-sdk/src/matrix";
 
 export class Client {
     protected client: JSHandle<MatrixClient>;
@@ -195,5 +203,24 @@ export class Client {
             roomId,
             userId,
         });
+    }
+
+    /**
+     * @param {MatrixEvent} event
+     * @param {ReceiptType} receiptType
+     * @param {boolean} unthreaded
+     */
+    public async sendReadReceipt(
+        event: JSHandle<MatrixEvent>,
+        receiptType?: ReceiptType,
+        unthreaded?: boolean,
+    ): Promise<{}> {
+        const client = await this.prepareClient();
+        return client.evaluate(
+            (client, { event, receiptType, unthreaded }) => {
+                return client.sendReadReceipt(event, receiptType, unthreaded);
+            },
+            { event, receiptType, unthreaded },
+        );
     }
 }
