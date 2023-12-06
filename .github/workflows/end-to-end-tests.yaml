@@ -48,8 +48,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                # Run 4 instances in Parallel
-                runner: [1, 2, 3, 4]
+                # Run multiple instances in parallel to speed up the tests
+                runner: [1, 2, 3, 4, 5, 6]
         steps:
             # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
             # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
