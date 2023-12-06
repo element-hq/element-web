@@ -249,8 +249,7 @@ test.describe("Read receipts", () => {
                 // Then it is read
                 await util.assertRead(room2);
             });
-            // XXX: flaky
-            test.skip("Editing a thread message after marking as read leaves the room read", async ({
+            test("Editing a thread message after marking as read leaves the room read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -269,8 +268,7 @@ test.describe("Read receipts", () => {
                 // Then the room remains read
                 await util.assertStillRead(room2);
             });
-            // XXX: flaky
-            test.skip("A room with an edited threaded message is still read after restart", async ({
+            test("A room with an edited threaded message is still read after restart", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -337,8 +335,7 @@ test.describe("Read receipts", () => {
         });
 
         test.describe("thread roots", () => {
-            // XXX: flaky
-            test.skip("An edit of a thread root leaves the room read", async ({
+            test("An edit of a thread root leaves the room read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -435,8 +432,7 @@ test.describe("Read receipts", () => {
                 await util.goTo(room1);
                 await util.assertStillRead(room2);
             });
-            // XXX: flaky
-            test.skip("Editing a thread root that is a reply after marking as read leaves the room read", async ({
+            test("Editing a thread root that is a reply after marking as read leaves the room read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
