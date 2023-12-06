@@ -319,8 +319,13 @@ export async function promptForBackupPassphrase(): Promise<Uint8Array> {
  * @param {Function} [func] An operation to perform once secret storage has been
  * bootstrapped. Optional.
  * @param {bool} [forceReset] Reset secret storage even if it's already set up
+ * @param {bool} [setupNewKeyBackup] Reset secret storage even if it's already set up
  */
-export async function accessSecretStorage(func = async (): Promise<void> => {}, forceReset = false): Promise<void> {
+export async function accessSecretStorage(
+    func = async (): Promise<void> => {},
+    forceReset = false,
+    setupNewKeyBackup = true,
+): Promise<void> {
     secretStorageBeingAccessed = true;
     try {
         const cli = MatrixClientPeg.safeGet();
@@ -352,7 +357,12 @@ export async function accessSecretStorage(func = async (): Promise<void> => {}, 
                 throw new Error("Secret storage creation canceled");
             }
         } else {
-            await cli.bootstrapCrossSigning({
+            const crypto = cli.getCrypto();
+            if (!crypto) {
+                throw new Error("End-to-end encryption is disabled - unable to access secret storage.");
+            }
+
+            await crypto.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
                     const { finished } = Modal.createDialog(InteractiveAuthDialog, {
                         title: _t("encryption|bootstrap_title"),
@@ -365,8 +375,9 @@ export async function accessSecretStorage(func = async (): Promise<void> => {}, 
                     }
                 },
             });
-            await cli.bootstrapSecretStorage({
+            await crypto.bootstrapSecretStorage({
                 getKeyBackupPassphrase: promptForBackupPassphrase,
+                setupNewKeyBackup,
             });
 
             const keyId = Object.keys(secretStorageKeys)[0];
