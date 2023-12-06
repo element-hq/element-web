@@ -51,9 +51,6 @@ jobs:
                 # Run 4 instances in Parallel
                 runner: [1, 2, 3, 4]
         steps:
-            - uses: browser-actions/setup-chrome@803ef6dfb4fdf22089c9563225d95e4a515820a0 # v1
-            - run: echo "BROWSER_PATH=$(which chrome)" >> $GITHUB_ENV
-
             # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
             # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
             - name: 📥 Download artifact
@@ -95,7 +92,19 @@ jobs:
               working-directory: matrix-react-sdk
               run: yarn install --frozen-lockfile
 
+            - name: Get installed Playwright version
+              run: echo "PLAYWRIGHT_VERSION=$(yarn info @playwright/test -A --json | jq -r .data.version)" >> $GITHUB_ENV
+
+            - name: Cache playwright binaries
+              uses: actions/cache@v3
+              id: playwright-cache
+              with:
+                  path: |
+                      ~/.cache/ms-playwright
+                  key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+
             - name: Install Playwright browsers
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
               working-directory: matrix-react-sdk
               run: yarn playwright install --with-deps
 

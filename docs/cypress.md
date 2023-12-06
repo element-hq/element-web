@@ -1,5 +1,9 @@
 # Cypress in Element Web
 
+# 🚨 We are moving away from Cypress in favour of Playwright.
+
+Please do not write any new tests in Cypress and check out [the Playwright docs](playwright.md).
+
 ## Contents
 
 -   How to run the tests

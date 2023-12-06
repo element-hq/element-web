@@ -55,6 +55,9 @@
         "test:cypress:open": "cypress open",
         "test:playwright": "playwright test",
         "test:playwright:open": "yarn test:playwright --ui",
+        "test:playwright:screenshots": "yarn test:playwright:screenshots:build && yarn test:playwright:screenshots:run",
+        "test:playwright:screenshots:build": "docker build playwright -t matrix-react-sdk-playwright",
+        "test:playwright:screenshots:run": "docker run --rm --network host -v $(pwd)/../:/work/ -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/:/tmp/ -it matrix-react-sdk-playwright",
         "coverage": "yarn test --coverage",
         "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) | xargs -I {} sh -c 'echo \"Linting {}\"; action-validator \"{}\"'"
     },
