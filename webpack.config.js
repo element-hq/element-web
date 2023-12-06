@@ -736,6 +736,7 @@ module.exports = (env, argv) => {
                     { from: "media/**", context: path.resolve(__dirname, "node_modules/matrix-react-sdk/res/") },
                     "node_modules/@matrix-org/olm/olm_legacy.js",
                     { from: "config.json", noErrorOnMissing: true },
+                    { from: "*.json", context: path.resolve(__dirname, "conf.d"), noErrorOnMissing: true },
                     "contribute.json",
                 ],
             }),
