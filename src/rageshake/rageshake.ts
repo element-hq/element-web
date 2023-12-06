@@ -45,8 +45,11 @@ import { getCircularReplacer } from "../utils/JSON";
 
 const FLUSH_RATE_MS = 30 * 1000;
 
-// the length of log data we keep in indexeddb (and include in the reports)
+/** the length of log data we keep in indexeddb (and include in the reports), if there are more than 24 hours of logs */
 const MAX_LOG_SIZE = 1024 * 1024 * 5; // 5 MB
+
+/** the length of log data we keep in indexeddb (and include in the reports), if there are less than 24 hours of logs */
+const MAX_LOG_SIZE_24H = 1024 * 1024 * 100; // 100 MB
 
 type LogFunction = (...args: (Error | DOMException | object | string)[]) => void;
 const consoleFunctionsToLevels = {
@@ -257,107 +260,27 @@ export class IndexedDBLogStore {
      * is a big string with all the new-line delimited logs.
      */
     public async consume(): Promise<{ lines: string; id: string }[]> {
-        const db = this.db;
-
-        // Returns: a string representing the concatenated logs for this ID.
-        // Stops adding log fragments when the size exceeds maxSize
-        function fetchLogs(id: string, maxSize: number): Promise<string> {
-            if (!db) return Promise.reject("DB unavailable");
-
-            const objectStore = db.transaction("logs", "readonly").objectStore("logs");
-
-            return new Promise((resolve, reject) => {
-                const query = objectStore.index("id").openCursor(IDBKeyRange.only(id), "prev");
-                let lines = "";
-                query.onerror = () => {
-                    reject(new Error("Query failed: " + query.error?.message));
-                };
-                query.onsuccess = () => {
-                    const cursor = query.result;
-                    if (!cursor) {
-                        resolve(lines);
-                        return; // end of results
-                    }
-                    lines = cursor.value.lines + lines;
-                    if (lines.length >= maxSize) {
-                        resolve(lines);
-                    } else {
-                        cursor.continue();
-                    }
-                };
-            });
-        }
-
-        // Returns: A sorted array of log IDs. (newest first)
-        function fetchLogIds(): Promise<string[]> {
-            if (!db) return Promise.reject("DB unavailable");
-
-            // To gather all the log IDs, query for all records in logslastmod.
-            const o = db.transaction("logslastmod", "readonly").objectStore("logslastmod");
-            return selectQuery(o, undefined, (cursor) => {
-                return {
-                    id: cursor.value.id,
-                    ts: cursor.value.ts,
-                };
-            }).then((res) => {
-                // Sort IDs by timestamp (newest first)
-                return res
-                    .sort((a, b) => {
-                        return b.ts - a.ts;
-                    })
-                    .map((a) => a.id);
-            });
-        }
-
-        function deleteLogs(id: string): Promise<void> {
-            if (!db) return Promise.reject("DB unavailable");
-
-            return new Promise<void>((resolve, reject) => {
-                const txn = db.transaction(["logs", "logslastmod"], "readwrite");
-                const o = txn.objectStore("logs");
-                // only load the key path, not the data which may be huge
-                const query = o.index("id").openKeyCursor(IDBKeyRange.only(id));
-                query.onsuccess = () => {
-                    const cursor = query.result;
-                    if (!cursor) {
-                        return;
-                    }
-                    o.delete(cursor.primaryKey);
-                    cursor.continue();
-                };
-                txn.oncomplete = () => {
-                    resolve();
-                };
-                txn.onerror = () => {
-                    reject(new Error("Failed to delete logs for " + `'${id}' : ${query.error?.message}`));
-                };
-                // delete last modified entries
-                const lastModStore = txn.objectStore("logslastmod");
-                lastModStore.delete(id);
-            });
-        }
-
-        const allLogIds = await fetchLogIds();
+        const allLogIds = await this.fetchLogIds();
         let removeLogIds: string[] = [];
-        const logs: {
-            lines: string;
-            id: string;
-        }[] = [];
+        const logs: { lines: string; id: string }[] = [];
         let size = 0;
         for (let i = 0; i < allLogIds.length; i++) {
-            const lines = await fetchLogs(allLogIds[i], MAX_LOG_SIZE - size);
+            const instanceId = allLogIds[i];
+            const { lines, truncated } = await this.fetchLogs(instanceId, size);
 
-            // always add the log file: fetchLogs will truncate once the maxSize we give it is
-            // exceeded, so we'll go over the max but only by one fragment's worth.
-            logs.push({
-                lines,
-                id: allLogIds[i],
-            });
+            // always add the returned logs: fetchLogs will truncate once it hits the size limit,
+            // so we'll go over the max but only by one fragment's worth.
+            logs.push({ lines, id: instanceId });
             size += lines.length;
 
             // If fetchLogs truncated we'll now be at or over the size limit,
             // in which case we should stop and remove the rest of the log files.
-            if (size >= MAX_LOG_SIZE) {
+            if (truncated) {
+                logger.log(
+                    `rageshake: reached size limit while processing instance ${i + 1}/${
+                        allLogIds.length
+                    } (${instanceId}), with ${size} bytes of logs: will drop further instances`,
+                );
                 // the remaining log IDs should be removed. If we go out of
                 // bounds this is just []
                 removeLogIds = allLogIds.slice(i + 1);
@@ -365,10 +288,10 @@ export class IndexedDBLogStore {
             }
         }
         if (removeLogIds.length > 0) {
-            logger.log("Removing logs: ", removeLogIds);
+            logger.log(`rageshake: removing logs: ${removeLogIds}`);
             // Don't await this because it's non-fatal if we can't clean up
             // logs.
-            Promise.all(removeLogIds.map((id) => deleteLogs(id))).then(
+            Promise.all(removeLogIds.map((id) => this.deleteLogs(id))).then(
                 () => {
                     logger.log(`Removed ${removeLogIds.length} old logs.`);
                 },
@@ -380,11 +303,143 @@ export class IndexedDBLogStore {
         return logs;
     }
 
-    private generateLogEntry(lines: string): { id: string; lines: string; index: number } {
+    /**
+     * Fetch all the application instance names from the database.
+     */
+    private fetchLogIds(): Promise<string[]> {
+        const db = this.db;
+        if (!db) return Promise.reject("DB unavailable");
+
+        // To gather all the log IDs, query for all records in logslastmod.
+        const o = db.transaction("logslastmod", "readonly").objectStore("logslastmod");
+        return selectQuery(o, undefined, (cursor) => {
+            return {
+                id: cursor.value.id,
+                ts: cursor.value.ts,
+            };
+        }).then((res) => {
+            // Sort IDs by timestamp (newest first)
+            return res
+                .sort((a, b) => {
+                    return b.ts - a.ts;
+                })
+                .map((a) => a.id);
+        });
+    }
+
+    /**
+     * Fetch logs for a given application instance from the database, stopping once we hit the size limit.
+     *
+     * @param id - Application instance to fetch logs for.
+     * @param sizeSoFar - Amount of logs we have already retrieved from other instances.
+     *
+     * @returns An object with the properties:
+     *  * `lines`: the concatenated logs for this ID
+     *  * `truncated`: whether the output was truncated due to hitting the size limit.
+     */
+    private fetchLogs(
+        id: string,
+        sizeSoFar: number,
+    ): Promise<{
+        lines: string;
+        truncated: boolean;
+    }> {
+        const db = this.db;
+        if (!db) return Promise.reject("DB unavailable");
+
+        const objectStore = db.transaction("logs", "readonly").objectStore("logs");
+
+        /** Determine whether we should stop collecting logs after this batch.
+         *
+         * @param sizeSoFar - The total amount of logs collected so far.
+         * @param logBatchTimestamp - The timestamp of the most recent batch of logs collected.
+         *
+         * @returns `true` if we should stop after this batch.
+         */
+        function shouldTruncateAfterLogBatch(sizeSoFar: number, logBatchTimestamp: number): boolean {
+            // First check if we have exceeded the absolute limit
+            if (sizeSoFar >= MAX_LOG_SIZE_24H) {
+                return true;
+            }
+
+            // Otherwise, check if the most recent batch is more than 24H old, and we have exceeded the limit for logs over 24H
+            if (Date.now() - logBatchTimestamp >= 24 * 3600 * 1000 && sizeSoFar >= MAX_LOG_SIZE) {
+                return true;
+            }
+
+            // Otherwise, we're good.
+            return false;
+        }
+
+        return new Promise((resolve, reject) => {
+            const query = objectStore.index("id").openCursor(IDBKeyRange.only(id), "prev");
+            let lines = "";
+            query.onerror = () => {
+                reject(new Error("Query failed: " + query.error?.message));
+            };
+            query.onsuccess = () => {
+                const cursor = query.result;
+                if (!cursor) {
+                    // end of results
+                    resolve({ lines, truncated: false });
+                    return;
+                }
+                const newLines = cursor.value.lines;
+                lines += newLines;
+                sizeSoFar += newLines.length;
+
+                // If we have now exceeded the size limit, stop.
+                if (shouldTruncateAfterLogBatch(sizeSoFar, cursor.value.ts ?? 0)) {
+                    resolve({ lines, truncated: true });
+                } else {
+                    cursor.continue();
+                }
+            };
+        });
+    }
+
+    /**
+     * Delete logs for a given application instance.
+     *
+     * @param id - Application instance to delete logs for.
+     */
+    private deleteLogs(id: string): Promise<void> {
+        const db = this.db;
+        if (!db) return Promise.reject("DB unavailable");
+
+        return new Promise<void>((resolve, reject) => {
+            const txn = db.transaction(["logs", "logslastmod"], "readwrite");
+            const o = txn.objectStore("logs");
+            // only load the key path, not the data which may be huge
+            const query = o.index("id").openKeyCursor(IDBKeyRange.only(id));
+            query.onsuccess = () => {
+                const cursor = query.result;
+                if (!cursor) {
+                    return;
+                }
+                o.delete(cursor.primaryKey);
+                cursor.continue();
+            };
+            txn.oncomplete = () => {
+                resolve();
+            };
+            txn.onerror = () => {
+                reject(new Error("Failed to delete logs for " + `'${id}' : ${query.error?.message}`));
+            };
+            // delete last modified entries
+            const lastModStore = txn.objectStore("logslastmod");
+            lastModStore.delete(id);
+        });
+    }
+
+    /** Generate the object to be stored in the `logs` store */
+    private generateLogEntry(lines: string): { id: string; lines: string; index: number; ts: number } {
         return {
             id: this.id,
             lines: lines,
             index: this.index++,
+            /** The timestamp at which the line was *flushed* (not necessarily when it was written). */
+            ts: Date.now(),
         };
     }
 
