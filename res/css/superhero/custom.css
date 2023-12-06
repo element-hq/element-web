@@ -23,3 +23,802 @@ h2 .sh_RoomTokenGatedRoomIcon {
     -webkit-mask-image: url(../../themes/superhero/img/icons/tokens.svg);
     mask-image: url(../../themes/superhero/img/icons/tokens.svg);
 }
+
+
+/* START - Update @user chat message highlighting */
+.mx_EventTile.mx_EventTile_highlight, .mx_EventTile.mx_EventTile_highlight .markdown-body, .mx_EventTile.mx_EventTile_highlight .mx_EventTile_edited {
+    color: var(--cpd-color-orange-1000)!important;
+    /* font-weight: bold; */
+}
+
+.mx_EventTile[data-layout="irc"].mx_EventTile_highlight .mx_EventTile_line, .mx_EventTile[data-layout="irc"].mx_EventTile_highlight .markdown-body .mx_EventTile_line, .mx_EventTile[data-layout="group"].mx_EventTile_highlight .mx_EventTile_line, .mx_EventTile[data-layout="group"].mx_EventTile_highlight .markdown-body .mx_EventTile_line {
+    /* background-color:var(--cpd-color-alpha-yellow-300)!important; */
+}
+
+.mx_EventTile[data-layout="group"].mx_EventTile_highlight .markdown-body .mx_EventTile_line, .mx_EventTile[data-layout="group"].mx_EventTile_highlight .mx_EventTile_line, .mx_EventTile[data-layout="irc"].mx_EventTile_highlight .markdown-body .mx_EventTile_line, .mx_EventTile[data-layout="irc"].mx_EventTile_highlight .mx_EventTile_line {
+    /* background-color:var(--cpd-color-alpha-yellow-700)!important; */
+}
+/* END - Update @user chat message highlighting */
+
+
+/* START - Custom Side Panel styling */
+.mx_SpacePanel {
+    --activeBackground-color: var(--cpd-color-alpha-gray-500)!important;
+    background-image: linear-gradient(-75deg, #cc3ae6, #6147ff);
+}
+.mx_SpacePanel .mx_UserMenu_name {
+    color: white!important;
+    margin-left: 14px!important;
+}
+
+.mx_SpacePanel .mx_SpaceButton.mx_SpaceButton_active.mx_SpaceButton_narrow .mx_SpaceButton_selectionWrapper {
+    background: white!important;
+}
+
+.mx_SpaceButton_home .mx_SpaceButton_icon {
+    background: white!important;
+    outline: 1px solid white;
+}
+
+.mx_SpacePanel .mx_SpaceButton_avatarWrapper .mx_BaseAvatar {
+    border: 0px solid white;
+    outline: 2px solid white;
+    /* border-radius: 9px; */
+}
+
+.mx_SpacePanel .mx_SpaceButton.mx_SpaceButton_active .mx_BaseAvatar {
+    border: 0px solid white;
+    outline: 1px solid white;
+}
+
+.mx_SpacePanel .mx_SpaceButton.mx_SpaceButton_active.mx_SpaceButton_narrow .mx_SpaceButton_selectionWrapper {
+    outline: 1px rgb(36, 36, 36) solid!important;
+    border: 3px rgb(36, 36, 36) solid!important;
+}
+
+.mx_NotificationBadge.mx_NotificationBadge_visible.mx_NotificationBadge_dot {
+    background-color: var(--cpd-color-text-action-accent)!important;
+}
+
+.mx_NotificationBadge_visible {
+    background-color: black!important;
+    font-weight: 700!important;
+}
+
+.mx_SpacePanel .mx_SpaceButton_active .mx_SpaceButton_avatarWrapper .mx_BaseAvatar {
+    border: 0px solid white;
+}
+
+.mx_SpacePanel .mx_SpaceButton .mx_SpaceButton_name {
+    color: white!important;
+    margin-left: 14px!important;
+}
+
+.mx_SpacePanel .mx_SpaceButton .mx_SpaceButton_selectionWrapper {
+    padding-right: 20px!important;
+}
+
+.mx_SpacePanel.collapsed .mx_SpaceButton .mx_SpaceButton_selectionWrapper {
+    padding-right: 0px!important;
+}
+
+.mx_SpacePanel .mx_AccessibleButton.mx_SpacePanel_toggleCollapse {
+    background-color: rgb(36, 36, 36)!important;
+}
+
+.cpd-theme-dark .mx_SpacePanel .mx_AccessibleButton.mx_SpacePanel_toggleCollapse {
+    background-color: white!important;
+}
+
+.mx_SpacePanel .mx_QuickSettingsButton {
+    color: white!important;
+}
+
+.mx_SpacePanel .mx_QuickSettingsButton::before {
+    background-color: white!important;
+}
+
+.mx_SpacePanel .mx_QuickSettingsButton:not(.expanded):hover {
+    background-color: rgba(255, 255, 255, 0.3)!important;
+}
+
+.mx_ToastContainer {
+    top: 3px!important;
+    left: 72px!important;
+}
+
+.mx_Toast_toast {
+    background: var(--cpd-color-theme-bg)!important;
+    width: 260px;
+}
+/* END - Custom Side Panel styling */
+
+.cpd-theme-light {
+    --cpd-color-text-primary: black!important;
+    /* --cpd-color-text-secondary: black!important; */
+}
+
+.mx_LegacyRoomHeader_button:hover {
+    background: rgba(0, 0, 0, 0.06)!important;
+}
+
+/* START - Custom Room Info Panel styling */
+.mx_BaseCard {
+    background-color: rgba(0, 0, 0, 0.025)!important;
+}
+
+.mx_BaseCard ._item_zxa40_17 {
+    background: transparent!important;
+}
+
+.cpd-theme-dark .mx_BaseCard {
+    background-color: rgba(0, 0, 0, 0.13)!important;
+}
+/* END - Custom Room Info Panel styling */
+
+.cpd-theme-dark .mx_LeftPanel_wrapper .mx_LeftPanel_wrapper--user {
+    background-color: rgba(0, 0, 0, 0.74)!important;
+}
+
+.cpd-theme-dark .mx_LeftPanel .mx_LeftPanel_roomListContainer {
+    background-color: rgba(38, 40, 45, 0.9)!important;
+}
+
+.cpd-theme-dark {
+    --cpd-color-text-primary: white!important;
+    --cpd-color-text-secondary: var(--cpd-color-gray-1200)!important;
+}
+
+.cpd-theme-dark .mx_SpacePanel {
+    /* --activeBackground-color: var(--cpd-color-alpha-gray-500)!important; */
+    /* background-image: linear-gradient(25deg, #700483, #110177)!important; */
+    background: linear-gradient(25deg, rgba(204, 58, 230, 0.20) 0%, rgba(97, 71, 255, 0.20) 100%), #313338;
+}
+
+.cpd-theme-dark .mx_SpacePanel .mx_SpaceButton.mx_SpaceButton_home .mx_SpaceButton_icon::before {
+    background-color: #393559!important;
+}
+
+.cpd-theme-dark .mx_NotificationBadge_visible {
+    background-color: white!important;
+}
+
+.cpd-theme-dark .mx_NotificationBadge_visible .mx_NotificationBadge_count {
+    color: black!important;
+}
+
+
+/* CPD Light Theme Overwrite */
+.cpd-theme-light.cpd-theme-light {
+    --cpd-color-text-action-accent: #6147ff!important;
+    /* --cpd-color-alpha-pink-1400: hsl(339, 100%, 13%, 1);
+    --cpd-color-alpha-pink-1300: hsl(333, 100%, 19%, 1);
+    --cpd-color-alpha-pink-1200: hsla(330, 98%, 24%, 0.98);
+    --cpd-color-alpha-pink-1100: hsla(331, 100%, 31%, 0.97);
+    --cpd-color-alpha-pink-1000: hsla(332, 98%, 36%, 0.97);
+    --cpd-color-alpha-pink-900: hsla(333, 98%, 41%, 0.96);
+    --cpd-color-alpha-pink-800: hsla(340, 100%, 48%, 0.75);
+    --cpd-color-alpha-pink-700: hsla(345, 100%, 50%, 0.47);
+    --cpd-color-alpha-pink-600: hsla(346, 100%, 51%, 0.33);
+    --cpd-color-alpha-pink-500: hsla(347, 100%, 50%, 0.24);
+    --cpd-color-alpha-pink-400: hsla(347, 100%, 50%, 0.13);
+    --cpd-color-alpha-pink-300: hsla(347, 100%, 54%, 0.08);
+    --cpd-color-alpha-pink-200: hsla(348, 100%, 51%, 0.04);
+    --cpd-color-alpha-pink-100: hsla(348, 100%, 51%, 0.02);
+    --cpd-color-alpha-fuchsia-1400: hsl(281, 100%, 15%, 1);
+    --cpd-color-alpha-fuchsia-1300: hsl(285, 100%, 20%, 1);
+    --cpd-color-alpha-fuchsia-1200: hsla(286, 97%, 24%, 0.93);
+    --cpd-color-alpha-fuchsia-1100: hsla(289, 96%, 28%, 0.88);
+    --cpd-color-alpha-fuchsia-1000: hsla(291, 99%, 30%, 0.84);
+    --cpd-color-alpha-fuchsia-900: hsla(293, 100%, 34%, 0.8);
+    --cpd-color-alpha-fuchsia-800: hsla(295, 97%, 37%, 0.64);
+    --cpd-color-alpha-fuchsia-700: hsla(295, 96%, 37%, 0.43);
+    --cpd-color-alpha-fuchsia-600: hsla(297, 93%, 38%, 0.31);
+    --cpd-color-alpha-fuchsia-500: hsla(296, 93%, 39%, 0.23);
+    --cpd-color-alpha-fuchsia-400: hsla(298, 91%, 40%, 0.13);
+    --cpd-color-alpha-fuchsia-300: hsla(295, 89%, 41%, 0.07);
+    --cpd-color-alpha-fuchsia-200: hsla(293, 95%, 41%, 0.04);
+    --cpd-color-alpha-fuchsia-100: hsla(300, 95%, 41%, 0.02);
+    --cpd-color-alpha-purple-1400: hsl(259, 100%, 20%, 1);
+    --cpd-color-alpha-purple-1300: hsl(262, 100%, 28%, 1);
+    --cpd-color-alpha-purple-1200: hsla(264, 98%, 36%, 0.99);
+    --cpd-color-alpha-purple-1100: hsla(260, 97%, 39%, 0.86);
+    --cpd-color-alpha-purple-1000: hsla(259, 98%, 42%, 0.79);
+    --cpd-color-alpha-purple-900: hsla(258, 98%, 47%, 0.73);
+    --cpd-color-alpha-purple-800: hsla(254, 99%, 49%, 0.56);
+    --cpd-color-alpha-purple-700: hsla(251, 100%, 51%, 0.38);
+    --cpd-color-alpha-purple-600: hsla(249, 100%, 51%, 0.27);
+    --cpd-color-alpha-purple-500: hsla(248, 100%, 51%, 0.2);
+    --cpd-color-alpha-purple-400: hsla(248, 100%, 53%, 0.12);
+    --cpd-color-alpha-purple-300: hsla(248, 100%, 55%, 0.07);
+    --cpd-color-alpha-purple-200: hsla(248, 100%, 61%, 0.04);
+    --cpd-color-alpha-purple-100: hsla(240, 100%, 61%, 0.02);
+    --cpd-color-alpha-blue-1400: hsl(232, 100%, 20%, 1);
+    --cpd-color-alpha-blue-1300: hsl(222, 98%, 24%, 1);
+    --cpd-color-alpha-blue-1200: hsla(218, 99%, 29%, 0.99);
+    --cpd-color-alpha-blue-1100: hsla(216, 99%, 35%, 0.98);
+    --cpd-color-alpha-blue-1000: hsla(214, 98%, 39%, 0.99);
+    --cpd-color-alpha-blue-900: hsla(213, 99%, 44%, 0.99);
+    --cpd-color-alpha-blue-800: hsla(215, 100%, 46%, 0.75);
+    --cpd-color-alpha-blue-700: hsla(215, 98%, 47%, 0.51);
+    --cpd-color-alpha-blue-600: hsla(216, 95%, 48%, 0.37);
+    --cpd-color-alpha-blue-500: hsla(215, 93%, 50%, 0.28);
+    --cpd-color-alpha-blue-400: hsla(216, 95%, 51%, 0.16);
+    --cpd-color-alpha-blue-300: hsla(215, 100%, 52%, 0.09);
+    --cpd-color-alpha-blue-200: hsla(218, 100%, 57%, 0.05);
+    --cpd-color-alpha-blue-100: hsla(210, 100%, 61%, 0.03);
+    --cpd-color-alpha-cyan-1400: hsl(221, 100%, 16%, 1);
+    --cpd-color-alpha-cyan-1300: hsl(213, 100%, 19%, 1);
+    --cpd-color-alpha-cyan-1200: hsl(208, 100%, 23%, 1);
+    --cpd-color-alpha-cyan-1100: hsl(204, 100%, 28%, 1);
+    --cpd-color-alpha-cyan-1000: hsl(202, 100%, 31%, 1);
+    --cpd-color-alpha-cyan-900: hsl(200, 100%, 34%, 1);
+    --cpd-color-alpha-cyan-800: hsl(194, 100%, 38%, 1);
+    --cpd-color-alpha-cyan-700: hsla(186, 99%, 40%, 0.92);
+    --cpd-color-alpha-cyan-600: hsla(187, 99%, 38%, 0.54);
+    --cpd-color-alpha-cyan-500: hsla(186, 95%, 38%, 0.4);
+    --cpd-color-alpha-cyan-400: hsla(186, 100%, 37%, 0.22);
+    --cpd-color-alpha-cyan-300: hsla(188, 100%, 38%, 0.11);
+    --cpd-color-alpha-cyan-200: hsla(186, 79%, 41%, 0.06);
+    --cpd-color-alpha-cyan-100: hsla(180, 79%, 41%, 0.03);
+    --cpd-color-alpha-green-1400: hsl(149, 100%, 7%, 1);
+    --cpd-color-alpha-green-1300: hsl(157, 100%, 10%, 1);
+    --cpd-color-alpha-green-1200: hsl(162, 100%, 14%, 1);
+    --cpd-color-alpha-green-1100: hsl(165, 100%, 18%, 1);
+    --cpd-color-alpha-green-1000: hsl(166, 100%, 21%, 1);
+    --cpd-color-alpha-green-900: hsl(168, 100%, 24%, 1);
+    --cpd-color-alpha-green-800: hsl(166, 100%, 30%, 1);
+    --cpd-color-alpha-green-700: hsla(163, 99%, 38%, 0.96);
+    --cpd-color-alpha-green-600: hsla(156, 99%, 36%, 0.56);
+    --cpd-color-alpha-green-500: hsla(154, 96%, 37%, 0.41);
+    --cpd-color-alpha-green-400: hsla(151, 93%, 37%, 0.23);
+    --cpd-color-alpha-green-300: hsla(150, 100%, 36%, 0.11);
+    --cpd-color-alpha-green-200: hsla(150, 79%, 41%, 0.06);
+    --cpd-color-alpha-green-100: hsla(156, 79%, 41%, 0.03);
+    --cpd-color-alpha-lime-1400: hsl(120, 100%, 7%, 1);
+    --cpd-color-alpha-lime-1300: hsl(120, 100%, 11%, 1);
+    --cpd-color-alpha-lime-1200: hsl(120, 100%, 15%, 1);
+    --cpd-color-alpha-lime-1100: hsl(120, 100%, 19%, 1);
+    --cpd-color-alpha-lime-1000: hsl(120, 100%, 22%, 1);
+    --cpd-color-alpha-lime-900: hsla(113, 97%, 24%, 0.96);
+    --cpd-color-alpha-lime-800: hsla(107, 99%, 29%, 0.91);
+    --cpd-color-alpha-lime-700: hsla(102, 100%, 37%, 0.86);
+    --cpd-color-alpha-lime-600: hsla(102, 97%, 41%, 0.71);
+    --cpd-color-alpha-lime-500: hsla(104, 98%, 40%, 0.51);
+    --cpd-color-alpha-lime-400: hsla(105, 92%, 42%, 0.28);
+    --cpd-color-alpha-lime-300: hsla(107, 98%, 41%, 0.15);
+    --cpd-color-alpha-lime-200: hsla(107, 89%, 44%, 0.07);
+    --cpd-color-alpha-lime-100: hsla(103, 75%, 46%, 0.04);
+    --cpd-color-alpha-yellow-1400: hsl(6, 100%, 13%, 1);
+    --cpd-color-alpha-yellow-1300: hsl(19, 100%, 17%, 1);
+    --cpd-color-alpha-yellow-1200: hsl(26, 100%, 21%, 1);
+    --cpd-color-alpha-yellow-1100: hsl(30, 100%, 25%, 1);
+    --cpd-color-alpha-yellow-1000: hsl(32, 100%, 28%, 1);
+    --cpd-color-alpha-yellow-900: hsl(34, 100%, 31%, 1);
+    --cpd-color-alpha-yellow-800: hsl(39, 100%, 37%, 1);
+    --cpd-color-alpha-yellow-700: hsl(44, 100%, 44%, 1);
+    --cpd-color-alpha-yellow-600: hsl(47, 100%, 47%, 1);
+    --cpd-color-alpha-yellow-500: hsl(49, 100%, 49%, 1);
+    --cpd-color-alpha-yellow-400: hsla(47, 100%, 51%, 0.49);
+    --cpd-color-alpha-yellow-300: hsla(47, 100%, 51%, 0.25);
+    --cpd-color-alpha-yellow-200: hsla(46, 100%, 53%, 0.13);
+    --cpd-color-alpha-yellow-100: hsla(48, 100%, 51%, 0.06);
+    --cpd-color-alpha-orange-1400: hsl(0, 100%, 14%, 1);
+    --cpd-color-alpha-orange-1300: hsl(0, 100%, 19%, 1);
+    --cpd-color-alpha-orange-1200: hsl(0, 100%, 26%, 1);
+    --cpd-color-alpha-orange-1100: hsl(13, 100%, 30%, 1);
+    --cpd-color-alpha-orange-1000: hsl(18, 100%, 34%, 1);
+    --cpd-color-alpha-orange-900: hsl(22, 100%, 37%, 1);
+    --cpd-color-alpha-orange-800: hsl(28, 100%, 43%, 1);
+    --cpd-color-alpha-orange-700: hsla(27, 100%, 48%, 0.75);
+    --cpd-color-alpha-orange-600: hsla(26, 98%, 50%, 0.52);
+    --cpd-color-alpha-orange-500: hsla(25, 100%, 50%, 0.37);
+    --cpd-color-alpha-orange-400: hsla(25, 100%, 51%, 0.22);
+    --cpd-color-alpha-orange-300: hsla(24, 100%, 52%, 0.11);
+    --cpd-color-alpha-orange-200: hsla(26, 100%, 55%, 0.07);
+    --cpd-color-alpha-orange-100: hsla(22, 100%, 61%, 0.04);
+    --cpd-color-alpha-red-1400: hsl(0, 100%, 14%, 1);
+    --cpd-color-alpha-red-1300: hsl(0, 100%, 19%, 1);
+    --cpd-color-alpha-red-1200: hsl(357, 100%, 26%, 1);
+    --cpd-color-alpha-red-1100: hsla(350, 99%, 32%, 0.99);
+    --cpd-color-alpha-red-1000: hsla(353, 98%, 37%, 0.95);
+    --cpd-color-alpha-red-900: hsla(355, 98%, 41%, 0.91);
+    --cpd-color-alpha-red-800: hsla(0, 100%, 51%, 0.77);
+    --cpd-color-alpha-red-700: hsla(5, 100%, 51%, 0.5);
+    --cpd-color-alpha-red-600: hsla(7, 100%, 51%, 0.36);
+    --cpd-color-alpha-red-500: hsla(8, 100%, 51%, 0.27);
+    --cpd-color-alpha-red-400: hsla(8, 100%, 52%, 0.15);
+    --cpd-color-alpha-red-300: hsla(9, 100%, 54%, 0.08);
+    --cpd-color-alpha-red-200: hsla(7, 100%, 56%, 0.04);
+    --cpd-color-alpha-red-100: hsla(10, 100%, 61%, 0.03);
+    --cpd-color-alpha-gray-1400: hsla(223, 64%, 2%, 0.9);
+    --cpd-color-alpha-gray-1300: hsla(225, 57%, 3%, 0.84);
+    --cpd-color-alpha-gray-1200: hsla(213, 73%, 3%, 0.77);
+    --cpd-color-alpha-gray-1100: hsla(215, 74%, 5%, 0.71);
+    --cpd-color-alpha-gray-1000: hsla(218, 79%, 6%, 0.66);
+    --cpd-color-alpha-gray-900: hsla(213, 83%, 7%, 0.61);
+    --cpd-color-alpha-gray-800: hsla(213, 87%, 9%, 0.5);
+    --cpd-color-alpha-gray-700: hsla(215, 96%, 10%, 0.35);
+    --cpd-color-alpha-gray-600: hsla(212, 97%, 12%, 0.26);
+    --cpd-color-alpha-gray-500: hsla(212, 87%, 15%, 0.2);
+    --cpd-color-alpha-gray-400: hsla(213, 90%, 20%, 0.12);
+    --cpd-color-alpha-gray-300: hsla(216, 89%, 18%, 0.06);
+    --cpd-color-alpha-gray-200: hsla(200, 41%, 36%, 0.04);
+    --cpd-color-alpha-gray-100: hsla(210, 48%, 41%, 0.02);
+    --cpd-color-pink-1400: #430017;
+    --cpd-color-pink-1300: #5f002b; */
+    --cpd-color-pink-1200: #a80298!important;
+    /* --cpd-color-pink-1100: #9f0850;
+    --cpd-color-pink-1000: #b80a5b;
+    --cpd-color-pink-900: #d20c65;
+    --cpd-color-pink-800: #f7407d;
+    --cpd-color-pink-700: #ff88a6;
+    --cpd-color-pink-600: #ffadc0;
+    --cpd-color-pink-500: #ffc2cf;
+    --cpd-color-pink-400: #ffdee5;
+    --cpd-color-pink-300: #ffecf0;
+    --cpd-color-pink-200: #fff5f7;
+    --cpd-color-pink-100: #fffafb;
+    --cpd-color-fuchsia-1400: #34004c;
+    --cpd-color-fuchsia-1300: #4e0068; */
+    --cpd-color-fuchsia-1200: #8201aa!important; 
+    /* --cpd-color-fuchsia-1100: #822198;
+    --cpd-color-fuchsia-1000: #972aaa;
+    --cpd-color-fuchsia-900: #ad33bd;
+    --cpd-color-fuchsia-800: #c85ed1;
+    --cpd-color-fuchsia-700: #db93e1;
+    --cpd-color-fuchsia-600: #e7b2ea;
+    --cpd-color-fuchsia-500: #edc6f0;
+    --cpd-color-fuchsia-400: #f6dff7;
+    --cpd-color-fuchsia-300: #faeefb;
+    --cpd-color-fuchsia-200: #fcf5fd;
+    --cpd-color-fuchsia-100: #fefafe;
+    --cpd-color-purple-1400: #200066;
+    --cpd-color-purple-1300: #33008d; */
+    --cpd-color-purple-1200: #5f01ed!important;
+    /* --cpd-color-purple-1100: #5d26cd;
+    --cpd-color-purple-1000: #6b37de;
+    --cpd-color-purple-900: #7a47f1;
+    --cpd-color-purple-800: #9271fd;
+    --cpd-color-purple-700: #b1a0ff;
+    --cpd-color-purple-600: #c5bbff;
+    --cpd-color-purple-500: #d4cdff;
+    --cpd-color-purple-400: #e6e2ff;
+    --cpd-color-purple-300: #f1efff;
+    --cpd-color-purple-200: #f8f7ff;
+    --cpd-color-purple-100: #fbfbff;
+    --cpd-color-blue-1400: #000e65;
+    --cpd-color-blue-1300: #012478; */
+    --cpd-color-blue-1200: #0530cd!important;
+    /* --cpd-color-blue-1100: #064ab1;
+    --cpd-color-blue-1000: #0558c7;
+    --cpd-color-blue-900: #0467dd;
+    --cpd-color-blue-800: #4088ee;
+    --cpd-color-blue-700: #7eaff6;
+    --cpd-color-blue-600: #a3c6fa;
+    --cpd-color-blue-500: #bad5fc;
+    --cpd-color-blue-400: #d8e7fe;
+    --cpd-color-blue-300: #e9f2ff;
+    --cpd-color-blue-200: #f4f8ff;
+    --cpd-color-blue-100: #f9fcff;
+    --cpd-color-cyan-1400: #00194f;
+    --cpd-color-cyan-1300: #002b61; */
+    --cpd-color-cyan-1200: #02b5c5!important;
+    /* --cpd-color-cyan-1100: #00548c;
+    --cpd-color-cyan-1000: #00629c;
+    --cpd-color-cyan-900: #0072ac;
+    --cpd-color-cyan-800: #0094c0;
+    --cpd-color-cyan-700: #15becf;
+    --cpd-color-cyan-600: #76d1dd;
+    --cpd-color-cyan-500: #9bdde5;
+    --cpd-color-cyan-400: #c7ecf0;
+    --cpd-color-cyan-300: #e3f5f8;
+    --cpd-color-cyan-200: #f1fafb;
+    --cpd-color-cyan-100: #f8fdfd;
+    --cpd-color-green-1400: #002311;
+    --cpd-color-green-1300: #003420; */
+    --cpd-color-green-1200: #009e3d!important;
+    /* --cpd-color-green-1100: #005c45;
+    --cpd-color-green-1000: #006b52; */
+    --cpd-color-green-900: #02a769!important;
+    /* --cpd-color-green-800: #009b78;
+    --cpd-color-green-700: #0bc491;
+    --cpd-color-green-600: #71d7ae;
+    --cpd-color-green-500: #98e1c1;
+    --cpd-color-green-400: #c6eedb;
+    --cpd-color-green-300: #e3f7ed;
+    --cpd-color-green-200: #f1fbf6;
+    --cpd-color-green-100: #f8fdfb;
+    --cpd-color-lime-1400: #002400;
+    --cpd-color-lime-1300: #003600; */
+    --cpd-color-lime-1200: #00b300!important;
+    /* --cpd-color-lime-1100: #005f00;
+    --cpd-color-lime-1000: #006e00;
+    --cpd-color-lime-900: #197d0c;
+    --cpd-color-lime-800: #359d18;
+    --cpd-color-lime-700: #54c424;
+    --cpd-color-lime-600: #76db4c;
+    --cpd-color-lime-500: #99e57e;
+    --cpd-color-lime-400: #c8f1ba;
+    --cpd-color-lime-300: #e0f8d9;
+    --cpd-color-lime-200: #f1fcee;
+    --cpd-color-lime-100: #f8fdf6;
+    --cpd-color-yellow-1400: #410600;
+    --cpd-color-yellow-1300: #541a00; */
+    --cpd-color-yellow-1200: #c09000!important;
+    /* --cpd-color-yellow-1100: #803f00;
+    --cpd-color-yellow-1000: #8f4d00;
+    --cpd-color-yellow-900: #9f5b00;
+    --cpd-color-yellow-800: #be7a00;
+    --cpd-color-yellow-700: #dea200;
+    --cpd-color-yellow-600: #f1bd00;
+    --cpd-color-yellow-500: #fbce00;
+    --cpd-color-yellow-400: #ffe484;
+    --cpd-color-yellow-300: #fff2c1;
+    --cpd-color-yellow-200: #fff8e0;
+    --cpd-color-yellow-100: #fffcf0;
+    --cpd-color-orange-1400: #450000;
+    --cpd-color-orange-1300: #620000; */
+    --cpd-color-orange-1200: #d4570f!important;
+    /* --cpd-color-orange-1100: #9b2200;
+    --cpd-color-orange-1000: #ac3300;
+    --cpd-color-orange-900: #bc4500;
+    --cpd-color-orange-800: #dc6700;
+    --cpd-color-orange-700: #f89440;
+    --cpd-color-orange-600: #fdb37c;
+    --cpd-color-orange-500: #ffc8a1;
+    --cpd-color-orange-400: #ffdfc8;
+    --cpd-color-orange-300: #ffefe4;
+    --cpd-color-orange-200: #fff6ef;
+    --cpd-color-orange-100: #fffaf7;
+    --cpd-color-red-1400: #450000;
+    --cpd-color-red-1300: #620000;
+    --cpd-color-red-1200: #c5000a; */
+    --cpd-color-red-1100: #a4041d!important;
+    /* --cpd-color-red-1000: #bc0f22;
+    --cpd-color-red-900: #d51928;
+    --cpd-color-red-800: #ff3d3d;
+    --cpd-color-red-700: #ff8c81;
+    --cpd-color-red-600: #ffafa5;
+    --cpd-color-red-500: #ffc5bc;
+    --cpd-color-red-400: #ffdfda;
+    --cpd-color-red-300: #ffefec;
+    --cpd-color-red-200: #fff7f6;
+    --cpd-color-red-100: #fffaf9;
+    --cpd-color-gray-1400: #1b1d22;
+    --cpd-color-gray-1300: #2b2d32;
+    --cpd-color-gray-1200: #3c4045;
+    --cpd-color-gray-1100: #4c5158;
+    --cpd-color-gray-1000: #595e67;
+    --cpd-color-gray-900: #656d77;
+    --cpd-color-gray-800: #818a95;
+    --cpd-color-gray-700: #a6adb7;
+    --cpd-color-gray-600: #bdc4cc;
+    --cpd-color-gray-500: #cdd3da;
+    --cpd-color-gray-400: #e1e6ec;
+    --cpd-color-gray-300: #f0f2f5;
+    --cpd-color-gray-200: #f7f9fa;
+    --cpd-color-gray-100: #fbfcfd;
+    --cpd-color-theme-bg: #ffffff; */
+    --cpd-color-bg-subtle-secondary-level-0: var(--cpd-color-gray-300);
+    --cpd-color-bg-canvas-default-level-1: var(--cpd-color-theme-bg);
+  }
+  
+/* CPD Dark Theme Overwrite */
+.cpd-theme-dark.cpd-theme-dark {
+    --cpd-color-text-action-accent: #6147ff!important;
+    --cpd-color-theme-bg: #313338!important;
+    --cpd-color-text-link-external: rgb(141, 149, 255)!important;
+    --cpd-color-bg-subtle-secondary-level-0: var(--cpd-color-theme-bg);
+    --cpd-color-bg-subtle-primary:rgba(0, 0, 0, 0.075)!important;
+    --cpd-color-bg-canvas-default-level-1: var(--cpd-color-gray-300);
+    /* --cpd-color-alpha-pink-1400: hsl(347, 100%, 96%, 1);
+    --cpd-color-alpha-pink-1300: hsl(347, 100%, 91%, 1);
+    --cpd-color-alpha-pink-1200: hsl(346, 100%, 84%, 1);
+    --cpd-color-alpha-pink-1100: hsl(345, 98%, 76%, 1);
+    --cpd-color-alpha-pink-1000: hsla(343, 100%, 70%, 0.98);
+    --cpd-color-alpha-pink-900: hsla(340, 99%, 63%, 0.96);
+    --cpd-color-alpha-pink-800: hsla(335, 99%, 55%, 0.8);
+    --cpd-color-alpha-pink-700: hsla(334, 98%, 53%, 0.58);
+    --cpd-color-alpha-pink-600: hsla(333, 97%, 50%, 0.46);
+    --cpd-color-alpha-pink-500: hsl(330, 100%, 21%, 1);
+    --cpd-color-alpha-pink-400: hsl(335, 100%, 17%, 1);
+    --cpd-color-alpha-pink-300: hsl(339, 100%, 14%, 1);
+    --cpd-color-alpha-pink-200: hsl(342, 100%, 12%, 1);
+    --cpd-color-alpha-pink-100: hsl(344, 100%, 11%, 1);
+    --cpd-color-alpha-fuchsia-1400: hsla(296, 90%, 96%, 0.98);
+    --cpd-color-alpha-fuchsia-1300: hsla(296, 100%, 94%, 0.95);
+    --cpd-color-alpha-fuchsia-1200: hsla(296, 97%, 88%, 0.91);
+    --cpd-color-alpha-fuchsia-1100: hsla(297, 98%, 82%, 0.86);
+    --cpd-color-alpha-fuchsia-1000: hsla(296, 98%, 78%, 0.83);
+    --cpd-color-alpha-fuchsia-900: hsla(295, 97%, 72%, 0.8);
+    --cpd-color-alpha-fuchsia-800: hsla(294, 98%, 63%, 0.71);
+    --cpd-color-alpha-fuchsia-700: hsla(289, 99%, 59%, 0.54);
+    --cpd-color-alpha-fuchsia-600: hsla(288, 100%, 56%, 0.44);
+    --cpd-color-alpha-fuchsia-500: hsla(287, 100%, 52%, 0.38);
+    --cpd-color-alpha-fuchsia-400: hsl(285, 100%, 18%, 1);
+    --cpd-color-alpha-fuchsia-300: hsl(282, 100%, 15%, 1);
+    --cpd-color-alpha-fuchsia-200: hsl(281, 100%, 13%, 1);
+    --cpd-color-alpha-fuchsia-100: hsl(279, 100%, 12%, 1);
+    --cpd-color-alpha-purple-1400: hsl(249, 100%, 96%, 1);
+    --cpd-color-alpha-purple-1300: hsl(246, 100%, 93%, 1);
+    --cpd-color-alpha-purple-1200: hsl(249, 100%, 87%, 1);
+    --cpd-color-alpha-purple-1100: hsl(250, 98%, 80%, 1);
+    --cpd-color-alpha-purple-1000: hsla(252, 98%, 77%, 0.99);
+    --cpd-color-alpha-purple-900: hsla(254, 99%, 72%, 0.98);
+    --cpd-color-alpha-purple-800: hsla(257, 100%, 65%, 0.92);
+    --cpd-color-alpha-purple-700: hsla(260, 98%, 58%, 0.76);
+    --cpd-color-alpha-purple-600: hsla(263, 98%, 52%, 0.67);
+    --cpd-color-alpha-purple-500: hsl(263, 100%, 31%, 1);
+    --cpd-color-alpha-purple-400: hsl(261, 100%, 25%, 1);
+    --cpd-color-alpha-purple-300: hsl(259, 100%, 21%, 1);
+    --cpd-color-alpha-purple-200: hsl(259, 100%, 18%, 1);
+    --cpd-color-alpha-purple-100: hsl(258, 100%, 17%, 1);
+    --cpd-color-alpha-blue-1400: hsl(217, 93%, 95%, 1);
+    --cpd-color-alpha-blue-1300: hsla(216, 96%, 90%, 0.99);
+    --cpd-color-alpha-blue-1200: hsla(216, 100%, 82%, 0.97);
+    --cpd-color-alpha-blue-1100: hsla(215, 97%, 74%, 0.96);
+    --cpd-color-alpha-blue-1000: hsla(216, 99%, 69%, 0.94);
+    --cpd-color-alpha-blue-900: hsla(215, 98%, 63%, 0.92);
+    --cpd-color-alpha-blue-800: hsla(214, 99%, 53%, 0.84);
+    --cpd-color-alpha-blue-700: hsla(217, 99%, 51%, 0.64);
+    --cpd-color-alpha-blue-600: hsla(219, 99%, 50%, 0.53);
+    --cpd-color-alpha-blue-500: hsla(221, 100%, 37%, 0.63);
+    --cpd-color-alpha-blue-400: hsl(224, 100%, 22%, 1);
+    --cpd-color-alpha-blue-300: hsl(229, 100%, 20%, 1);
+    --cpd-color-alpha-blue-200: hsl(234, 100%, 18%, 1);
+    --cpd-color-alpha-blue-100: hsl(237, 100%, 18%, 1);
+    --cpd-color-alpha-cyan-1400: hsla(187, 93%, 94%, 0.96);
+    --cpd-color-alpha-cyan-1300: hsla(187, 93%, 89%, 0.92);
+    --cpd-color-alpha-cyan-1200: hsla(187, 100%, 77%, 0.85);
+    --cpd-color-alpha-cyan-1100: hsla(186, 98%, 57%, 0.79);
+    --cpd-color-alpha-cyan-1000: hsla(189, 100%, 44%, 0.88);
+    --cpd-color-alpha-cyan-900: hsl(194, 100%, 37%, 1);
+    --cpd-color-alpha-cyan-800: hsla(200, 100%, 37%, 0.88);
+    --cpd-color-alpha-cyan-700: hsl(204, 100%, 27%, 1);
+    --cpd-color-alpha-cyan-600: hsl(208, 100%, 23%, 1);
+    --cpd-color-alpha-cyan-500: hsl(210, 100%, 20%, 1);
+    --cpd-color-alpha-cyan-400: hsl(215, 100%, 18%, 1);
+    --cpd-color-alpha-cyan-300: hsl(219, 100%, 15%, 1);
+    --cpd-color-alpha-cyan-200: hsl(223, 100%, 14%, 1);
+    --cpd-color-alpha-cyan-100: hsl(225, 100%, 13%, 1);
+    --cpd-color-alpha-green-1400: hsla(152, 88%, 94%, 0.96);
+    --cpd-color-alpha-green-1300: hsla(152, 93%, 88%, 0.91);
+    --cpd-color-alpha-green-1200: hsla(156, 97%, 76%, 0.83);
+    --cpd-color-alpha-green-1100: hsla(162, 98%, 57%, 0.74);
+    --cpd-color-alpha-green-1000: hsla(163, 99%, 55%, 0.65);
+    --cpd-color-alpha-green-900: hsla(164, 98%, 53%, 0.58);
+    --cpd-color-alpha-green-800: hsl(168, 100%, 24%, 1);
+    --cpd-color-alpha-green-700: hsl(165, 100%, 18%, 1);
+    --cpd-color-alpha-green-600: hsl(162, 100%, 14%, 1);
+    --cpd-color-alpha-green-500: hsl(160, 100%, 12%, 1);
+    --cpd-color-alpha-green-400: hsl(155, 100%, 9%, 1);
+    --cpd-color-alpha-green-300: hsl(151, 100%, 7%, 1);
+    --cpd-color-alpha-green-200: hsl(147, 100%, 6%, 1);
+    --cpd-color-alpha-green-100: hsl(144, 100%, 6%, 1);
+    --cpd-color-alpha-lime-1400: hsla(105, 91%, 92%, 0.97);
+    --cpd-color-alpha-lime-1300: hsla(104, 100%, 84%, 0.92);
+    --cpd-color-alpha-lime-1200: hsla(102, 100%, 68%, 0.84);
+    --cpd-color-alpha-lime-1100: hsla(102, 98%, 60%, 0.74);
+    --cpd-color-alpha-lime-1000: hsla(105, 97%, 58%, 0.66);
+    --cpd-color-alpha-lime-900: hsla(107, 98%, 57%, 0.58);
+    --cpd-color-alpha-lime-800: hsla(112, 98%, 52%, 0.45);
+    --cpd-color-alpha-lime-700: hsl(120, 100%, 18%, 1);
+    --cpd-color-alpha-lime-600: hsl(120, 100%, 15%, 1);
+    --cpd-color-alpha-lime-500: hsl(120, 100%, 12%, 1);
+    --cpd-color-alpha-lime-400: hsl(120, 100%, 9%, 1);
+    --cpd-color-alpha-lime-300: hsl(120, 100%, 8%, 1);
+    --cpd-color-alpha-lime-200: hsl(120, 100%, 6%, 1);
+    --cpd-color-alpha-lime-100: hsl(120, 100%, 5%, 1);
+    --cpd-color-alpha-yellow-1400: hsl(46, 100%, 85%, 1);
+    --cpd-color-alpha-yellow-1300: hsl(47, 99%, 67%, 1);
+    --cpd-color-alpha-yellow-1200: hsla(46, 98%, 52%, 0.94);
+    --cpd-color-alpha-yellow-1100: hsl(44, 100%, 43%, 1);
+    --cpd-color-alpha-yellow-1000: hsl(41, 100%, 40%, 1);
+    --cpd-color-alpha-yellow-900: hsl(39, 100%, 37%, 1);
+    --cpd-color-alpha-yellow-800: hsl(35, 100%, 31%, 1);
+    --cpd-color-alpha-yellow-700: hsla(30, 100%, 26%, 0.92);
+    --cpd-color-alpha-yellow-600: hsla(26, 100%, 23%, 0.87);
+    --cpd-color-alpha-yellow-500: hsl(23, 100%, 18%, 1);
+    --cpd-color-alpha-yellow-400: hsl(16, 100%, 15%, 1);
+    --cpd-color-alpha-yellow-300: hsl(8, 100%, 13%, 1);
+    --cpd-color-alpha-yellow-200: hsl(3, 100%, 11%, 1);
+    --cpd-color-alpha-yellow-100: hsl(0, 100%, 11%, 1);
+    --cpd-color-alpha-orange-1400: hsl(25, 100%, 93%, 1);
+    --cpd-color-alpha-orange-1300: hsl(24, 100%, 86%, 1);
+    --cpd-color-alpha-orange-1200: hsla(26, 97%, 75%, 0.99);
+    --cpd-color-alpha-orange-1100: hsla(27, 98%, 62%, 0.97);
+    --cpd-color-alpha-orange-1000: hsla(29, 99%, 53%, 0.92);
+    --cpd-color-alpha-orange-900: hsla(26, 99%, 52%, 0.85);
+    --cpd-color-alpha-orange-800: hsla(21, 100%, 50%, 0.71);
+    --cpd-color-alpha-orange-700: hsla(12, 100%, 39%, 0.74);
+    --cpd-color-alpha-orange-600: hsl(2, 100%, 26%, 1);
+    --cpd-color-alpha-orange-500: hsl(0, 100%, 22%, 1);
+    --cpd-color-alpha-orange-400: hsl(0, 100%, 17%, 1);
+    --cpd-color-alpha-orange-300: hsl(0, 100%, 14%, 1);
+    --cpd-color-alpha-orange-200: hsl(0, 100%, 12%, 1);
+    --cpd-color-alpha-orange-100: hsl(0, 100%, 11%, 1);
+    --cpd-color-alpha-red-1400: hsl(7, 100%, 95%, 1);
+    --cpd-color-alpha-red-1300: hsl(8, 100%, 90%, 1);
+    --cpd-color-alpha-red-1200: hsl(7, 100%, 82%, 1);
+    --cpd-color-alpha-red-1100: hsl(5, 100%, 74%, 1);
+    --cpd-color-alpha-red-1000: hsl(3, 100%, 68%, 1);
+    --cpd-color-alpha-red-900: hsl(1, 98%, 61%, 1);
+    --cpd-color-alpha-red-800: hsla(357, 99%, 57%, 0.81);
+    --cpd-color-alpha-red-700: hsla(354, 99%, 52%, 0.6);
+    --cpd-color-alpha-red-600: hsl(356, 100%, 26%, 1);
+    --cpd-color-alpha-red-500: hsl(0, 100%, 22%, 1);
+    --cpd-color-alpha-red-400: hsl(0, 100%, 18%, 1);
+    --cpd-color-alpha-red-300: hsl(0, 100%, 14%, 1);
+    --cpd-color-alpha-red-200: hsl(0, 100%, 12%, 1);
+    --cpd-color-alpha-red-100: hsl(0, 100%, 11%, 1);
+    --cpd-color-alpha-gray-1400: hsla(214, 78%, 98%, 0.95);
+    --cpd-color-alpha-gray-1300: hsla(213, 73%, 97%, 0.89);
+    --cpd-color-alpha-gray-1200: hsla(215, 74%, 96%, 0.79);
+    --cpd-color-alpha-gray-1100: hsla(215, 92%, 95%, 0.68);
+    --cpd-color-alpha-gray-1000: hsla(213, 93%, 94%, 0.61);
+    --cpd-color-alpha-gray-900: hsla(211, 94%, 94%, 0.54);
+    --cpd-color-alpha-gray-800: hsla(216, 100%, 94%, 0.41);
+    --cpd-color-alpha-gray-700: hsla(213, 85%, 95%, 0.27);
+    --cpd-color-alpha-gray-600: hsla(225, 46%, 95%, 0.2);
+    --cpd-color-alpha-gray-500: hsla(214, 41%, 97%, 0.15);
+    --cpd-color-alpha-gray-400: hsla(270, 37%, 93%, 0.1);
+    --cpd-color-alpha-gray-300: hsla(280, 41%, 90%, 0.06);
+    --cpd-color-alpha-gray-200: hsla(286, 31%, 82%, 0.04);
+    --cpd-color-alpha-gray-100: hsla(214, 10%, 86%, 0.02);
+    --cpd-color-pink-1400: #ffe8ed;
+    --cpd-color-pink-1300: #ffd2dc;  */
+    --cpd-color-pink-1200: #c81fb7!important;
+    /* --cpd-color-pink-1100: #fe84a2;
+    --cpd-color-pink-1000: #fa658f;
+    --cpd-color-pink-900: #f4427d;
+    --cpd-color-pink-800: #ce1865;
+    --cpd-color-pink-700: #99114f;
+    --cpd-color-pink-600: #7c0c41;
+    --cpd-color-pink-500: #6d0036;
+    --cpd-color-pink-400: #550024; */
+    --cpd-color-pink-300: #544352!important;
+    /* --cpd-color-pink-200: #3c0012;
+    --cpd-color-pink-100: #37000f;
+    --cpd-color-fuchsia-1400: #f8e9f9;
+    --cpd-color-fuchsia-1300: #f1d4f3; */
+    --cpd-color-fuchsia-1200: #b11c91!important;
+    /* --cpd-color-fuchsia-1100: #d991de;
+    --cpd-color-fuchsia-1000: #cf78d7;
+    --cpd-color-fuchsia-900: #c560cf;
+    --cpd-color-fuchsia-800: #aa36ba;
+    --cpd-color-fuchsia-700: #7d2394;
+    --cpd-color-fuchsia-600: #65177d;
+    --cpd-color-fuchsia-500: #560f6f;
+    --cpd-color-fuchsia-400: #46005e; */
+    --cpd-color-fuchsia-300: #52424f!important;
+    /* --cpd-color-fuchsia-200: #2e0044;
+    --cpd-color-fuchsia-100: #28003d;
+    --cpd-color-purple-1400: #eeebff;
+    --cpd-color-purple-1300: #dedaff; */
+    --cpd-color-purple-1200: #9a30fd!important;
+    /* --cpd-color-purple-1100: #ad9cfe;
+    --cpd-color-purple-1000: #9e87fc;
+    --cpd-color-purple-900: #9171f9;
+    --cpd-color-purple-800: #7849ec;
+    --cpd-color-purple-700: #5a27c6;
+    --cpd-color-purple-600: #4a0db1;
+    --cpd-color-purple-500: #3d009e;
+    --cpd-color-purple-400: #2c0080; */
+    --cpd-color-purple-300: #443f4c!important;
+    /* --cpd-color-purple-200: #1c005a;
+    --cpd-color-purple-100: #1a0055;
+    --cpd-color-blue-1400: #e4eefe;
+    --cpd-color-blue-1300: #cbdffc; */
+    --cpd-color-blue-1200: #006aff!important;
+    /* --cpd-color-blue-1100: #7aacf4;
+    --cpd-color-blue-1000: #5e99f0;
+    --cpd-color-blue-900: #4187eb;
+    --cpd-color-blue-800: #0e67d9;
+    --cpd-color-blue-700: #0b49ab;
+    --cpd-color-blue-600: #083891;
+    --cpd-color-blue-500: #062d80;
+    --cpd-color-blue-400: #001e6f; */
+    --cpd-color-blue-300: #414852!important;
+    /* --cpd-color-blue-200: #00095d;
+    --cpd-color-blue-100: #00055a;
+    --cpd-color-cyan-1400: #dbf2f5;
+    --cpd-color-cyan-1300: #b8e5eb; */
+    --cpd-color-cyan-1200: #08eaff!important;
+    /* --cpd-color-cyan-1100: #21bacd;
+    --cpd-color-cyan-1000: #02a7c6;
+    --cpd-color-cyan-900: #0093be;
+    --cpd-color-cyan-800: #0271aa;
+    --cpd-color-cyan-700: #005188;
+    --cpd-color-cyan-600: #003f75;
+    --cpd-color-cyan-500: #003468;
+    --cpd-color-cyan-400: #002559; */
+    --cpd-color-cyan-300: #374445!important;
+    /* --cpd-color-cyan-200: #001448;
+    --cpd-color-cyan-100: #001144;
+    --cpd-color-green-1400: #d9f4e7;
+    --cpd-color-green-1300: #b5e8d1; */
+    --cpd-color-green-1200: #00ff80!important;
+    /* --cpd-color-green-1100: #1fc090;
+    --cpd-color-green-1000: #17ac84; */
+    --cpd-color-green-900: #00ff80!important;
+    /* --cpd-color-green-800: #007a62;
+    --cpd-color-green-700: #005a43;
+    --cpd-color-green-600: #004832;
+    --cpd-color-green-500: #003d29; */
+    --cpd-color-green-400: #3f4d46!important;
+    --cpd-color-green-300: #3f4d46!important;
+    /* --cpd-color-green-200: #001f0e;
+    --cpd-color-green-100: #001c0b;
+    --cpd-color-lime-1400: #daf6d0;
+    --cpd-color-lime-1300: #b6eca3; */
+    --cpd-color-lime-1200: #48ff00!important;
+    /* --cpd-color-lime-1100: #56c02c;
+    --cpd-color-lime-1000: #47ad26;
+    --cpd-color-lime-900: #389b20;
+    --cpd-color-lime-800: #1d7c13;
+    --cpd-color-lime-700: #005c00;
+    --cpd-color-lime-600: #004a00;
+    --cpd-color-lime-500: #003e00;
+    --cpd-color-lime-400: #003000; */
+    --cpd-color-lime-300: #414d3c!important;
+    /* --cpd-color-lime-200: #002000;
+    --cpd-color-lime-100: #001b00;
+    --cpd-color-yellow-1400: #ffedb1;
+    --cpd-color-yellow-1300: #fef358; */
+    --cpd-color-yellow-1200: #ffe100!important;
+    /* --cpd-color-yellow-1100: #db9f00;
+    --cpd-color-yellow-1000: #cc8c00;
+    --cpd-color-yellow-900: #bc7a00;
+    --cpd-color-yellow-800: #9d5b00;
+    --cpd-color-yellow-700: #7c3e02;
+    --cpd-color-yellow-600: #682e03;
+    --cpd-color-yellow-500: #5c2400;
+    --cpd-color-yellow-400: #4c1400; */
+    --cpd-color-yellow-300: #514e3e!important;
+    /* --cpd-color-yellow-200: #3a0300;
+    --cpd-color-yellow-100: #360000;
+    --cpd-color-orange-1400: #ffeadb;
+    --cpd-color-orange-1300: #ffd5b9; */
+    --cpd-color-orange-1200: #ff7700!important;
+    /* --cpd-color-orange-1100: #f6913d;
+    --cpd-color-orange-1000: #eb7a12;
+    --cpd-color-orange-900: #da670d;
+    --cpd-color-orange-800: #b94607;
+    --cpd-color-orange-700: #972206;
+    --cpd-color-orange-600: #830500;
+    --cpd-color-orange-500: #710000;
+    --cpd-color-orange-400: #580000; */
+    --cpd-color-orange-300: #574c42!important;
+    /* --cpd-color-orange-200: #3c0000;
+    --cpd-color-orange-100: #380000;
+    --cpd-color-red-1400: #ffe9e6;
+    --cpd-color-red-1300: #ffd4cd; */
+    --cpd-color-red-1200: #ff2600!important;
+    /* --cpd-color-red-1100: #ff877c;
+    --cpd-color-red-1000: #ff665d;
+    --cpd-color-red-900: #fd3e3c;
+    --cpd-color-red-800: #d1212a;
+    --cpd-color-red-700: #9f0d1e;
+    --cpd-color-red-600: #830009;
+    --cpd-color-red-500: #710000;
+    --cpd-color-red-400: #590000; */
+    --cpd-color-red-300: #51423f!important;
+    /* --cpd-color-red-200: #3e0000;
+    --cpd-color-red-100: #370000;
+    --cpd-color-gray-1400: #ebeef2;
+    --cpd-color-gray-1300: #d9dee4;
+    --cpd-color-gray-1200: #bdc3cc;
+    --cpd-color-gray-1100: #a3aab4;
+    --cpd-color-gray-1000: #9199a4;
+    --cpd-color-gray-900: #808994;
+    --cpd-color-gray-800: #656c76;
+    --cpd-color-gray-700: #4a4f55;
+    --cpd-color-gray-600: #3c3f44;
+    --cpd-color-gray-500: #323539;
+    --cpd-color-gray-400: #26282d;
+    --cpd-color-gray-300: #1d1f24;
+    --cpd-color-gray-200: #181a1f;
+    --cpd-color-gray-100: #14171b; */
+  }
+  
