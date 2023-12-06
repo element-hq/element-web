@@ -116,18 +116,18 @@ test.describe("Read receipts", () => {
                 // Then the room remains read
                 await util.assertStillRead(room2);
             });
-            // XXX: fails because flaky: https://github.com/vector-im/element-web/issues/26341
-            test.skip("A room with an edit is still read after restart", async ({
+            test("A room with an edit is still read after restart", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
                 msg,
             }) => {
                 // Given a message is marked as read
-                await util.goTo(room2);
-                await util.receiveMessages(room2, ["Msg1"]);
-                await util.assertRead(room2);
                 await util.goTo(room1);
+                await util.receiveMessages(room2, ["Msg1"]);
+                await util.assertUnread(room2, 1);
+                await util.markAsRead(room2);
+                await util.assertRead(room2);
 
                 // When an edit appears in the room
                 await util.receiveMessages(room2, [msg.editOf("Msg1", "Msg1 Edit1")]);
