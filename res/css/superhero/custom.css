@@ -1,62 +1,63 @@
-.sh_RoomTokenGatedRoom {
+.sh_RoomTokenGatedRoom,
+.mx_InviteDialog_tile_nameStack_name {
     align-items: center;
     display: flex;
 }
 
-.sh_RoomTokenGatedRoomIcon {
+.sh_RoomTokenGatedRoomIcon,
+.sh_VerifiedIcon {
     width: 16px;
     height: 16px;
     margin-right: 4px;
 }
 
-h2 .sh_RoomTokenGatedRoomIcon {
+h2 .sh_RoomTokenGatedRoomIcon,
+h2 .sh_VerifiedIcon {
     width: 26px;
     height: 26px;
 }
 
+.sh_VerifiedIcon {
+    margin-right: 4px;
+    margin-left: 4px;
+}
+
+.mx_UserInfo_profile .sh_VerifiedIcon {
+    width: 18px;
+    height: 18px;
+    margin-top: 3px;
+}
+
 .mx_QuickSettingsButton.sh_SuperheroDexButton::before {
-    -webkit-mask-image: url(../../themes/superhero/img/icons/diamond.svg);
-    mask-image: url(../../themes/superhero/img/icons/diamond.svg);
+    -webkit-mask-image: url("../../themes/superhero/img/icons/diamond.svg");
+    mask-image: url("../../themes/superhero/img/icons/diamond.svg");
 }
 
 .mx_QuickSettingsButton.sh_MintTokenButton::before {
-    -webkit-mask-image: url(../../themes/superhero/img/icons/tokens.svg);
-    mask-image: url(../../themes/superhero/img/icons/tokens.svg);
+    -webkit-mask-image: url("../../themes/superhero/img/icons/tokens.svg");
+    mask-image: url("../../themes/superhero/img/icons/tokens.svg");
 }
 
-
 /* START - Update @user chat message highlighting */
-.mx_EventTile.mx_EventTile_highlight, .mx_EventTile.mx_EventTile_highlight .markdown-body, .mx_EventTile.mx_EventTile_highlight .mx_EventTile_edited {
-    color: var(--cpd-color-orange-1000)!important;
+.mx_EventTile.mx_EventTile_highlight,
+.mx_EventTile.mx_EventTile_highlight .markdown-body,
+.mx_EventTile.mx_EventTile_highlight .mx_EventTile_edited {
+    color: var(--cpd-color-orange-1000) !important;
     /* font-weight: bold; */
 }
 
-.mx_EventTile[data-layout="irc"].mx_EventTile_highlight .mx_EventTile_line, .mx_EventTile[data-layout="irc"].mx_EventTile_highlight .markdown-body .mx_EventTile_line, .mx_EventTile[data-layout="group"].mx_EventTile_highlight .mx_EventTile_line, .mx_EventTile[data-layout="group"].mx_EventTile_highlight .markdown-body .mx_EventTile_line {
-    /* background-color:var(--cpd-color-alpha-yellow-300)!important; */
-}
-
-.mx_EventTile[data-layout="group"].mx_EventTile_highlight .markdown-body .mx_EventTile_line, .mx_EventTile[data-layout="group"].mx_EventTile_highlight .mx_EventTile_line, .mx_EventTile[data-layout="irc"].mx_EventTile_highlight .markdown-body .mx_EventTile_line, .mx_EventTile[data-layout="irc"].mx_EventTile_highlight .mx_EventTile_line {
-    /* background-color:var(--cpd-color-alpha-yellow-700)!important; */
-}
-/* END - Update @user chat message highlighting */
-
-
 /* START - Custom Side Panel styling */
 .mx_SpacePanel {
-    --activeBackground-color: var(--cpd-color-alpha-gray-500)!important;
+    --activeBackground-color: var(--cpd-color-alpha-gray-500) !important;
     background-image: linear-gradient(-75deg, #cc3ae6, #6147ff);
 }
 .mx_SpacePanel .mx_UserMenu_name {
-    color: white!important;
-    margin-left: 14px!important;
-}
-
-.mx_SpacePanel .mx_SpaceButton.mx_SpaceButton_active.mx_SpaceButton_narrow .mx_SpaceButton_selectionWrapper {
-    background: white!important;
+    color: white !important;
+    margin-left: 14px !important;
 }
 
 .mx_SpaceButton_home .mx_SpaceButton_icon {
-    background: white!important;
+    background: white !important;
     outline: 1px solid white;
 }
 
@@ -72,17 +73,18 @@ h2 .sh_RoomTokenGatedRoomIcon {
 }
 
 .mx_SpacePanel .mx_SpaceButton.mx_SpaceButton_active.mx_SpaceButton_narrow .mx_SpaceButton_selectionWrapper {
-    outline: 1px rgb(36, 36, 36) solid!important;
-    border: 3px rgb(36, 36, 36) solid!important;
+    background: white !important;
+    outline: 1px rgb(36, 36, 36) solid !important;
+    border: 3px rgb(36, 36, 36) solid !important;
 }
 
 .mx_NotificationBadge.mx_NotificationBadge_visible.mx_NotificationBadge_dot {
-    background-color: var(--cpd-color-text-action-accent)!important;
+    background-color: var(--cpd-color-text-action-accent) !important;
 }
 
 .mx_NotificationBadge_visible {
-    background-color: black!important;
-    font-weight: 700!important;
+    background-color: black !important;
+    font-weight: 700 !important;
 }
 
 .mx_SpacePanel .mx_SpaceButton_active .mx_SpaceButton_avatarWrapper .mx_BaseAvatar {
@@ -90,107 +92,106 @@ h2 .sh_RoomTokenGatedRoomIcon {
 }
 
 .mx_SpacePanel .mx_SpaceButton .mx_SpaceButton_name {
-    color: white!important;
-    margin-left: 14px!important;
+    color: white !important;
+    margin-left: 14px !important;
 }
 
 .mx_SpacePanel .mx_SpaceButton .mx_SpaceButton_selectionWrapper {
-    padding-right: 20px!important;
+    padding-right: 20px !important;
 }
 
 .mx_SpacePanel.collapsed .mx_SpaceButton .mx_SpaceButton_selectionWrapper {
-    padding-right: 0px!important;
+    padding-right: 0px !important;
 }
 
 .mx_SpacePanel .mx_AccessibleButton.mx_SpacePanel_toggleCollapse {
-    background-color: rgb(36, 36, 36)!important;
+    background-color: rgb(36, 36, 36) !important;
 }
 
 .cpd-theme-dark .mx_SpacePanel .mx_AccessibleButton.mx_SpacePanel_toggleCollapse {
-    background-color: white!important;
+    background-color: white !important;
 }
 
 .mx_SpacePanel .mx_QuickSettingsButton {
-    color: white!important;
+    color: white !important;
 }
 
 .mx_SpacePanel .mx_QuickSettingsButton::before {
-    background-color: white!important;
+    background-color: white !important;
 }
 
 .mx_SpacePanel .mx_QuickSettingsButton:not(.expanded):hover {
-    background-color: rgba(255, 255, 255, 0.3)!important;
+    background-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 .mx_ToastContainer {
-    top: 3px!important;
-    left: 72px!important;
+    top: 3px !important;
+    left: 72px !important;
 }
 
 .mx_Toast_toast {
-    background: var(--cpd-color-theme-bg)!important;
+    background: var(--cpd-color-theme-bg) !important;
     width: 260px;
 }
 /* END - Custom Side Panel styling */
 
 .cpd-theme-light {
-    --cpd-color-text-primary: black!important;
+    --cpd-color-text-primary: black !important;
     /* --cpd-color-text-secondary: black!important; */
 }
 
 .mx_LegacyRoomHeader_button:hover {
-    background: rgba(0, 0, 0, 0.06)!important;
+    background: rgba(0, 0, 0, 0.06) !important;
 }
 
 /* START - Custom Room Info Panel styling */
 .mx_BaseCard {
-    background-color: rgba(0, 0, 0, 0.025)!important;
+    background-color: rgba(0, 0, 0, 0.025) !important;
 }
 
 .mx_BaseCard ._item_zxa40_17 {
-    background: transparent!important;
+    background: transparent !important;
 }
 
 .cpd-theme-dark .mx_BaseCard {
-    background-color: rgba(0, 0, 0, 0.13)!important;
+    background-color: rgba(0, 0, 0, 0.13) !important;
 }
 /* END - Custom Room Info Panel styling */
 
 .cpd-theme-dark .mx_LeftPanel_wrapper .mx_LeftPanel_wrapper--user {
-    background-color: rgba(0, 0, 0, 0.74)!important;
+    background-color: rgba(0, 0, 0, 0.74) !important;
 }
 
 .cpd-theme-dark .mx_LeftPanel .mx_LeftPanel_roomListContainer {
-    background-color: rgba(38, 40, 45, 0.9)!important;
+    background-color: rgba(38, 40, 45, 0.9) !important;
 }
 
 .cpd-theme-dark {
-    --cpd-color-text-primary: white!important;
-    --cpd-color-text-secondary: var(--cpd-color-gray-1200)!important;
+    --cpd-color-text-primary: white !important;
+    --cpd-color-text-secondary: var(--cpd-color-gray-1200) !important;
 }
 
 .cpd-theme-dark .mx_SpacePanel {
     /* --activeBackground-color: var(--cpd-color-alpha-gray-500)!important; */
     /* background-image: linear-gradient(25deg, #700483, #110177)!important; */
-    background: linear-gradient(25deg, rgba(204, 58, 230, 0.20) 0%, rgba(97, 71, 255, 0.20) 100%), #313338;
+    background: linear-gradient(25deg, rgba(204, 58, 230, 0.2) 0%, rgba(97, 71, 255, 0.2) 100%), #313338;
 }
 
 .cpd-theme-dark .mx_SpacePanel .mx_SpaceButton.mx_SpaceButton_home .mx_SpaceButton_icon::before {
-    background-color: #393559!important;
+    background-color: #393559 !important;
 }
 
 .cpd-theme-dark .mx_NotificationBadge_visible {
-    background-color: white!important;
+    background-color: white !important;
 }
 
 .cpd-theme-dark .mx_NotificationBadge_visible .mx_NotificationBadge_count {
-    color: black!important;
+    color: black !important;
 }
-
 
 /* CPD Light Theme Overwrite */
 .cpd-theme-light.cpd-theme-light {
-    --cpd-color-text-action-accent: #6147ff!important;
+    --cpd-color-text-action-accent: #6147ff !important;
     /* --cpd-color-alpha-pink-1400: hsl(339, 100%, 13%, 1);
     --cpd-color-alpha-pink-1300: hsl(333, 100%, 19%, 1);
     --cpd-color-alpha-pink-1200: hsla(330, 98%, 24%, 0.98);
@@ -347,7 +348,7 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-alpha-gray-100: hsla(210, 48%, 41%, 0.02);
     --cpd-color-pink-1400: #430017;
     --cpd-color-pink-1300: #5f002b; */
-    --cpd-color-pink-1200: #a80298!important;
+    --cpd-color-pink-1200: #a80298 !important;
     /* --cpd-color-pink-1100: #9f0850;
     --cpd-color-pink-1000: #b80a5b;
     --cpd-color-pink-900: #d20c65;
@@ -361,7 +362,7 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-pink-100: #fffafb;
     --cpd-color-fuchsia-1400: #34004c;
     --cpd-color-fuchsia-1300: #4e0068; */
-    --cpd-color-fuchsia-1200: #8201aa!important; 
+    --cpd-color-fuchsia-1200: #8201aa !important;
     /* --cpd-color-fuchsia-1100: #822198;
     --cpd-color-fuchsia-1000: #972aaa;
     --cpd-color-fuchsia-900: #ad33bd;
@@ -375,7 +376,7 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-fuchsia-100: #fefafe;
     --cpd-color-purple-1400: #200066;
     --cpd-color-purple-1300: #33008d; */
-    --cpd-color-purple-1200: #5f01ed!important;
+    --cpd-color-purple-1200: #5f01ed !important;
     /* --cpd-color-purple-1100: #5d26cd;
     --cpd-color-purple-1000: #6b37de;
     --cpd-color-purple-900: #7a47f1;
@@ -389,7 +390,7 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-purple-100: #fbfbff;
     --cpd-color-blue-1400: #000e65;
     --cpd-color-blue-1300: #012478; */
-    --cpd-color-blue-1200: #0530cd!important;
+    --cpd-color-blue-1200: #0530cd !important;
     /* --cpd-color-blue-1100: #064ab1;
     --cpd-color-blue-1000: #0558c7;
     --cpd-color-blue-900: #0467dd;
@@ -403,7 +404,7 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-blue-100: #f9fcff;
     --cpd-color-cyan-1400: #00194f;
     --cpd-color-cyan-1300: #002b61; */
-    --cpd-color-cyan-1200: #02b5c5!important;
+    --cpd-color-cyan-1200: #02b5c5 !important;
     /* --cpd-color-cyan-1100: #00548c;
     --cpd-color-cyan-1000: #00629c;
     --cpd-color-cyan-900: #0072ac;
@@ -417,10 +418,10 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-cyan-100: #f8fdfd;
     --cpd-color-green-1400: #002311;
     --cpd-color-green-1300: #003420; */
-    --cpd-color-green-1200: #009e3d!important;
+    --cpd-color-green-1200: #009e3d !important;
     /* --cpd-color-green-1100: #005c45;
     --cpd-color-green-1000: #006b52; */
-    --cpd-color-green-900: #02a769!important;
+    --cpd-color-green-900: #02a769 !important;
     /* --cpd-color-green-800: #009b78;
     --cpd-color-green-700: #0bc491;
     --cpd-color-green-600: #71d7ae;
@@ -431,7 +432,7 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-green-100: #f8fdfb;
     --cpd-color-lime-1400: #002400;
     --cpd-color-lime-1300: #003600; */
-    --cpd-color-lime-1200: #00b300!important;
+    --cpd-color-lime-1200: #00b300 !important;
     /* --cpd-color-lime-1100: #005f00;
     --cpd-color-lime-1000: #006e00;
     --cpd-color-lime-900: #197d0c;
@@ -445,7 +446,7 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-lime-100: #f8fdf6;
     --cpd-color-yellow-1400: #410600;
     --cpd-color-yellow-1300: #541a00; */
-    --cpd-color-yellow-1200: #c09000!important;
+    --cpd-color-yellow-1200: #c09000 !important;
     /* --cpd-color-yellow-1100: #803f00;
     --cpd-color-yellow-1000: #8f4d00;
     --cpd-color-yellow-900: #9f5b00;
@@ -459,7 +460,7 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-yellow-100: #fffcf0;
     --cpd-color-orange-1400: #450000;
     --cpd-color-orange-1300: #620000; */
-    --cpd-color-orange-1200: #d4570f!important;
+    --cpd-color-orange-1200: #d4570f !important;
     /* --cpd-color-orange-1100: #9b2200;
     --cpd-color-orange-1000: #ac3300;
     --cpd-color-orange-900: #bc4500;
@@ -474,7 +475,7 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-red-1400: #450000;
     --cpd-color-red-1300: #620000;
     --cpd-color-red-1200: #c5000a; */
-    --cpd-color-red-1100: #a4041d!important;
+    --cpd-color-red-1100: #a4041d !important;
     /* --cpd-color-red-1000: #bc0f22;
     --cpd-color-red-900: #d51928;
     --cpd-color-red-800: #ff3d3d;
@@ -502,15 +503,15 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-theme-bg: #ffffff; */
     --cpd-color-bg-subtle-secondary-level-0: var(--cpd-color-gray-300);
     --cpd-color-bg-canvas-default-level-1: var(--cpd-color-theme-bg);
-  }
-  
+}
+
 /* CPD Dark Theme Overwrite */
 .cpd-theme-dark.cpd-theme-dark {
-    --cpd-color-text-action-accent: #6147ff!important;
-    --cpd-color-theme-bg: #313338!important;
-    --cpd-color-text-link-external: rgb(141, 149, 255)!important;
+    --cpd-color-text-action-accent: #6147ff !important;
+    --cpd-color-theme-bg: #313338 !important;
+    --cpd-color-text-link-external: rgb(141, 149, 255) !important;
     --cpd-color-bg-subtle-secondary-level-0: var(--cpd-color-theme-bg);
-    --cpd-color-bg-subtle-primary:rgba(0, 0, 0, 0.075)!important;
+    --cpd-color-bg-subtle-primary: rgba(0, 0, 0, 0.075) !important;
     --cpd-color-bg-canvas-default-level-1: var(--cpd-color-gray-300);
     /* --cpd-color-alpha-pink-1400: hsl(347, 100%, 96%, 1);
     --cpd-color-alpha-pink-1300: hsl(347, 100%, 91%, 1);
@@ -668,7 +669,7 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-alpha-gray-100: hsla(214, 10%, 86%, 0.02);
     --cpd-color-pink-1400: #ffe8ed;
     --cpd-color-pink-1300: #ffd2dc;  */
-    --cpd-color-pink-1200: #c81fb7!important;
+    --cpd-color-pink-1200: #c81fb7 !important;
     /* --cpd-color-pink-1100: #fe84a2;
     --cpd-color-pink-1000: #fa658f;
     --cpd-color-pink-900: #f4427d;
@@ -677,12 +678,12 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-pink-600: #7c0c41;
     --cpd-color-pink-500: #6d0036;
     --cpd-color-pink-400: #550024; */
-    --cpd-color-pink-300: #544352!important;
+    --cpd-color-pink-300: #544352 !important;
     /* --cpd-color-pink-200: #3c0012;
     --cpd-color-pink-100: #37000f;
     --cpd-color-fuchsia-1400: #f8e9f9;
     --cpd-color-fuchsia-1300: #f1d4f3; */
-    --cpd-color-fuchsia-1200: #b11c91!important;
+    --cpd-color-fuchsia-1200: #b11c91 !important;
     /* --cpd-color-fuchsia-1100: #d991de;
     --cpd-color-fuchsia-1000: #cf78d7;
     --cpd-color-fuchsia-900: #c560cf;
@@ -691,12 +692,12 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-fuchsia-600: #65177d;
     --cpd-color-fuchsia-500: #560f6f;
     --cpd-color-fuchsia-400: #46005e; */
-    --cpd-color-fuchsia-300: #52424f!important;
+    --cpd-color-fuchsia-300: #52424f !important;
     /* --cpd-color-fuchsia-200: #2e0044;
     --cpd-color-fuchsia-100: #28003d;
     --cpd-color-purple-1400: #eeebff;
     --cpd-color-purple-1300: #dedaff; */
-    --cpd-color-purple-1200: #9a30fd!important;
+    --cpd-color-purple-1200: #9a30fd !important;
     /* --cpd-color-purple-1100: #ad9cfe;
     --cpd-color-purple-1000: #9e87fc;
     --cpd-color-purple-900: #9171f9;
@@ -705,12 +706,12 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-purple-600: #4a0db1;
     --cpd-color-purple-500: #3d009e;
     --cpd-color-purple-400: #2c0080; */
-    --cpd-color-purple-300: #443f4c!important;
+    --cpd-color-purple-300: #443f4c !important;
     /* --cpd-color-purple-200: #1c005a;
     --cpd-color-purple-100: #1a0055;
     --cpd-color-blue-1400: #e4eefe;
     --cpd-color-blue-1300: #cbdffc; */
-    --cpd-color-blue-1200: #006aff!important;
+    --cpd-color-blue-1200: #006aff !important;
     /* --cpd-color-blue-1100: #7aacf4;
     --cpd-color-blue-1000: #5e99f0;
     --cpd-color-blue-900: #4187eb;
@@ -719,12 +720,12 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-blue-600: #083891;
     --cpd-color-blue-500: #062d80;
     --cpd-color-blue-400: #001e6f; */
-    --cpd-color-blue-300: #414852!important;
+    --cpd-color-blue-300: #414852 !important;
     /* --cpd-color-blue-200: #00095d;
     --cpd-color-blue-100: #00055a;
     --cpd-color-cyan-1400: #dbf2f5;
     --cpd-color-cyan-1300: #b8e5eb; */
-    --cpd-color-cyan-1200: #08eaff!important;
+    --cpd-color-cyan-1200: #08eaff !important;
     /* --cpd-color-cyan-1100: #21bacd;
     --cpd-color-cyan-1000: #02a7c6;
     --cpd-color-cyan-900: #0093be;
@@ -733,26 +734,26 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-cyan-600: #003f75;
     --cpd-color-cyan-500: #003468;
     --cpd-color-cyan-400: #002559; */
-    --cpd-color-cyan-300: #374445!important;
+    --cpd-color-cyan-300: #374445 !important;
     /* --cpd-color-cyan-200: #001448;
     --cpd-color-cyan-100: #001144;
     --cpd-color-green-1400: #d9f4e7;
     --cpd-color-green-1300: #b5e8d1; */
-    --cpd-color-green-1200: #00ff80!important;
+    --cpd-color-green-1200: #00ff80 !important;
     /* --cpd-color-green-1100: #1fc090;
     --cpd-color-green-1000: #17ac84; */
-    --cpd-color-green-900: #00ff80!important;
+    --cpd-color-green-900: #00ff80 !important;
     /* --cpd-color-green-800: #007a62;
     --cpd-color-green-700: #005a43;
     --cpd-color-green-600: #004832;
     --cpd-color-green-500: #003d29; */
-    --cpd-color-green-400: #3f4d46!important;
-    --cpd-color-green-300: #3f4d46!important;
+    --cpd-color-green-400: #3f4d46 !important;
+    --cpd-color-green-300: #3f4d46 !important;
     /* --cpd-color-green-200: #001f0e;
     --cpd-color-green-100: #001c0b;
     --cpd-color-lime-1400: #daf6d0;
     --cpd-color-lime-1300: #b6eca3; */
-    --cpd-color-lime-1200: #48ff00!important;
+    --cpd-color-lime-1200: #48ff00 !important;
     /* --cpd-color-lime-1100: #56c02c;
     --cpd-color-lime-1000: #47ad26;
     --cpd-color-lime-900: #389b20;
@@ -761,12 +762,12 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-lime-600: #004a00;
     --cpd-color-lime-500: #003e00;
     --cpd-color-lime-400: #003000; */
-    --cpd-color-lime-300: #414d3c!important;
+    --cpd-color-lime-300: #414d3c !important;
     /* --cpd-color-lime-200: #002000;
     --cpd-color-lime-100: #001b00;
     --cpd-color-yellow-1400: #ffedb1;
     --cpd-color-yellow-1300: #fef358; */
-    --cpd-color-yellow-1200: #ffe100!important;
+    --cpd-color-yellow-1200: #ffe100 !important;
     /* --cpd-color-yellow-1100: #db9f00;
     --cpd-color-yellow-1000: #cc8c00;
     --cpd-color-yellow-900: #bc7a00;
@@ -775,12 +776,12 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-yellow-600: #682e03;
     --cpd-color-yellow-500: #5c2400;
     --cpd-color-yellow-400: #4c1400; */
-    --cpd-color-yellow-300: #514e3e!important;
+    --cpd-color-yellow-300: #514e3e !important;
     /* --cpd-color-yellow-200: #3a0300;
     --cpd-color-yellow-100: #360000;
     --cpd-color-orange-1400: #ffeadb;
     --cpd-color-orange-1300: #ffd5b9; */
-    --cpd-color-orange-1200: #ff7700!important;
+    --cpd-color-orange-1200: #ff7700 !important;
     /* --cpd-color-orange-1100: #f6913d;
     --cpd-color-orange-1000: #eb7a12;
     --cpd-color-orange-900: #da670d;
@@ -789,12 +790,12 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-orange-600: #830500;
     --cpd-color-orange-500: #710000;
     --cpd-color-orange-400: #580000; */
-    --cpd-color-orange-300: #574c42!important;
+    --cpd-color-orange-300: #574c42 !important;
     /* --cpd-color-orange-200: #3c0000;
     --cpd-color-orange-100: #380000;
     --cpd-color-red-1400: #ffe9e6;
     --cpd-color-red-1300: #ffd4cd; */
-    --cpd-color-red-1200: #ff2600!important;
+    --cpd-color-red-1200: #ff2600 !important;
     /* --cpd-color-red-1100: #ff877c;
     --cpd-color-red-1000: #ff665d;
     --cpd-color-red-900: #fd3e3c;
@@ -803,7 +804,7 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-red-600: #830009;
     --cpd-color-red-500: #710000;
     --cpd-color-red-400: #590000; */
-    --cpd-color-red-300: #51423f!important;
+    --cpd-color-red-300: #51423f !important;
     /* --cpd-color-red-200: #3e0000;
     --cpd-color-red-100: #370000;
     --cpd-color-gray-1400: #ebeef2;
@@ -820,5 +821,4 @@ h2 .sh_RoomTokenGatedRoomIcon {
     --cpd-color-gray-300: #1d1f24;
     --cpd-color-gray-200: #181a1f;
     --cpd-color-gray-100: #14171b; */
-  }
-  
+}

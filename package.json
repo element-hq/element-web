@@ -74,6 +74,7 @@
         "@matrix-org/olm": "3.2.15",
         "@matrix-org/react-sdk-module-api": "^2.2.1",
         "gfm.css": "^1.1.2",
+        "jotai": "^2.6.0",
         "jsrsasign": "^10.5.25",
         "katex": "^0.16.0",
         "lodash": "^4.17.21",

@@ -10,5 +10,7 @@
     "src/components/views/spaces/SpacePanel.tsx": "src/components/views/spaces/SpacePanel.tsx",
     "src/hooks/useRoomName.ts": "src/hooks/useRoomName.ts",
     "src/editor/commands.tsx": "src/editor/commands.tsx",
-    "src/autocomplete/Autocompleter.ts": "src/autocomplete/Autocompleter.ts"
+    "src/autocomplete/Autocompleter.ts": "src/autocomplete/Autocompleter.ts",
+    "src/components/views/dialogs/InviteDialog.tsx": "src/components/views/dialogs/InviteDialog.tsx",
+    "src/components/views/right_panel/UserInfo.tsx": "src/components/views/right_panel/UserInfo.tsx"
 }

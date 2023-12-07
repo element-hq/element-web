@@ -18,7 +18,9 @@ import { IPublicRoomsChunkRoom, Room } from "matrix-js-sdk/src/matrix";
 import React, { useCallback, useMemo } from "react";
 
 import { Icon as TokenGatedRoomIcon } from "../../../../res/themes/superhero/img/icons/tokengated-room.svg";
-import { isTokenGatedRoom, useRoomName } from "../../../hooks/useRoomName";
+import { useRoomName } from "../../../hooks/useRoomName";
+import { useVerifiedRoom } from "../../../hooks/useVerifiedRoom";
+import { UserVerifiedBadge } from "./UserVerifiedBadge";
 
 interface IProps {
     room?: Room | IPublicRoomsChunkRoom;
@@ -28,9 +30,13 @@ interface IProps {
 
 export const RoomName = ({ room, children, maxLength }: IProps): JSX.Element => {
     const roomName = useRoomName(room);
+    const isVerifiedRoom = useVerifiedRoom(room);
 
-    const isVerifiedRoom = useMemo(() => {
-        return isTokenGatedRoom(room);
+    const roomUsers: string[] = useMemo(() => {
+        return (room as Room)
+            .getMembers()
+            .map((m) => m.userId)
+            .filter((userId) => !!userId && userId != (room as Room).myUserId);
     }, [room]);
 
     const truncatedRoomName = useMemo(() => {
@@ -45,9 +51,10 @@ export const RoomName = ({ room, children, maxLength }: IProps): JSX.Element => 
             <span className="sh_RoomTokenGatedRoom">
                 {isVerifiedRoom && <TokenGatedRoomIcon className="sh_RoomTokenGatedRoomIcon" />}
                 <span dir="auto">{truncatedRoomName}</span>
+                {roomUsers?.length && <UserVerifiedBadge userId={roomUsers[0]} />}
             </span>
         ),
-        [truncatedRoomName, isVerifiedRoom],
+        [truncatedRoomName, isVerifiedRoom, roomUsers],
     );
 
     if (children) return children(renderRoomName());
