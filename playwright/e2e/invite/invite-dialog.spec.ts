@@ -48,9 +48,7 @@ test.describe("Invite dialog", function () {
         // Assert that the bar is rendered
         await expect(other.locator(".mx_InviteDialog_addressBar")).toBeVisible();
 
-        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-room-without-user.png", {
-            mask: [page.locator(".mx_InviteDialog_helpText_userId")],
-        });
+        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-room-without-user.png");
 
         await expect(other.locator(".mx_InviteDialog_identityServer")).not.toBeVisible();
 
@@ -71,9 +69,7 @@ test.describe("Invite dialog", function () {
         ).toBeVisible();
 
         // Take a snapshot of the invite dialog with a user pill
-        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-room-with-user-pill.png", {
-            mask: [page.locator(".mx_InviteDialog_helpText_userId")],
-        });
+        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-room-with-user-pill.png");
 
         // Invite the bot
         await other.getByRole("button", { name: "Invite" }).click();
@@ -96,9 +92,7 @@ test.describe("Invite dialog", function () {
         await expect(other.locator(".mx_InviteDialog_addressBar")).toBeVisible();
 
         // Take a snapshot of the invite dialog
-        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-dm-without-user.png", {
-            mask: [page.locator(".mx_InviteDialog_footer_link, .mx_InviteDialog_helpText a")],
-        });
+        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-dm-without-user.png");
 
         await other.getByTestId("invite-dialog-input").fill(bot.credentials.userId);
 
@@ -110,9 +104,7 @@ test.describe("Invite dialog", function () {
         ).toBeVisible();
 
         // Take a snapshot of the invite dialog with a user pill
-        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-dm-with-user-pill.png", {
-            mask: [page.locator(".mx_InviteDialog_footer_link, .mx_InviteDialog_helpText a")],
-        });
+        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-dm-with-user-pill.png");
 
         // Open a direct message UI
         await other.getByRole("button", { name: "Go" }).click();

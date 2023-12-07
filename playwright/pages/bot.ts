@@ -70,7 +70,12 @@ export class Bot extends Client {
 
     private async getCredentials(): Promise<Credentials> {
         if (this.credentials) return this.credentials;
-        const username = uniqueId(this.opts.userIdPrefix);
+        // We want to pad the uniqueId but not the prefix
+        const username =
+            this.opts.userIdPrefix +
+            uniqueId(this.opts.userIdPrefix)
+                .substring(this.opts.userIdPrefix?.length ?? 0)
+                .padStart(4, "0");
         const password = uniqueId("password_");
         console.log(`getBot: Create bot user ${username} with opts ${JSON.stringify(this.opts)}`);
         this.credentials = await this.homeserver.registerUser(username, password, this.opts.displayName);
