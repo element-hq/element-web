@@ -470,7 +470,13 @@ class Helpers {
      */
     async assertUnreadLessThan(room: string | { name: string }, lessThan: number) {
         const tile = this.getRoomListTile(room);
-        expect(parseInt(await tile.locator(".mx_NotificationBadge_count").textContent(), 10)).toBeLessThan(lessThan);
+        // https://playwright.dev/docs/test-assertions#expectpoll
+        // .toBeLessThan doesn't have a retry mechanism, so we use .poll
+        await expect
+            .poll(async () => {
+                return parseInt(await tile.locator(".mx_NotificationBadge_count").textContent(), 10);
+            })
+            .toBeLessThan(lessThan);
     }
 
     /**
@@ -482,9 +488,13 @@ class Helpers {
      */
     async assertUnreadGreaterThan(room: string | { name: string }, greaterThan: number) {
         const tile = this.getRoomListTile(room);
-        expect(parseInt(await tile.locator(".mx_NotificationBadge_count").textContent(), 10)).toBeGreaterThan(
-            greaterThan,
-        );
+        // https://playwright.dev/docs/test-assertions#expectpoll
+        // .toBeGreaterThan doesn't have a retry mechanism, so we use .poll
+        await expect
+            .poll(async () => {
+                return parseInt(await tile.locator(".mx_NotificationBadge_count").textContent(), 10);
+            })
+            .toBeGreaterThan(greaterThan);
     }
 
     /**
