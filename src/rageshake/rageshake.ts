@@ -529,6 +529,14 @@ export function tryInitStorage(): Promise<void> {
     if (indexedDB) {
         global.mx_rage_store = new IndexedDBLogStore(indexedDB, global.mx_rage_logger);
         global.mx_rage_initStoragePromise = global.mx_rage_store.connect();
+
+        // Fire off a task in the background which will clean up old logs in the store
+        global.mx_rage_initStoragePromise.then(() => {
+            global.mx_rage_store.consume().catch((e) => {
+                logger.error("Error cleaning up rageshake store", e);
+            });
+        });
+
         return global.mx_rage_initStoragePromise;
     }
     global.mx_rage_initStoragePromise = Promise.resolve();
@@ -544,6 +552,10 @@ export function flush(): void {
 
 /**
  * Clean up old logs.
+ *
+ * @deprecated There is no need to call this explicitly: it will be done as a side-effect of {@link tryInitStorage},
+ * or {@link init} with `setUpPersistence: true`.
+ *
  * @return {Promise} Resolves if cleaned logs.
  */
 export async function cleanup(): Promise<void> {
