@@ -35,15 +35,6 @@ export function getRoomName(room?: Room | IPublicRoomsChunkRoom, oobName?: IOOBD
 }
 
 /**
- * Determines if a room is a token gated room
- * @param room - The room model
- * @returns {boolean} true if the room is token gated
- */
-export function isTokenGatedRoom(room?: Room | IPublicRoomsChunkRoom): boolean {
-    return !!room?.name?.includes("[TG]");
-}
-
-/**
  * Determines the room name from a combination of the room model and potential
  * out-of-band information
  * @param room - The room model

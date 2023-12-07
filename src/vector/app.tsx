@@ -40,6 +40,7 @@ import { parseQs } from "./url_utils";
 import VectorBasePlatform from "./platform/VectorBasePlatform";
 import { getInitialScreenAfterLogin, getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
 import { UserFriendlyError } from "../languageHandler";
+import { SuperheroProvider } from "../context/SuperheroProvider";
 
 // add React and ReactPerf to the global namespace, to make them easier to access via the console
 // this incidentally means we can forget our React imports in JSX files without penalty.
@@ -116,17 +117,19 @@ export async function loadApp(fragParams: {}, matrixChatRef: React.Ref<MatrixCha
 
     return (
         <wrapperOpts.Wrapper>
-            <MatrixChat
-                ref={matrixChatRef}
-                onNewScreen={onNewScreen}
-                config={config}
-                realQueryParams={params}
-                startingFragmentQueryParams={fragParams}
-                enableGuest={!config.disable_guests}
-                onTokenLoginCompleted={onTokenLoginCompleted}
-                initialScreenAfterLogin={initialScreenAfterLogin}
-                defaultDeviceDisplayName={defaultDeviceName}
-            />
+            <SuperheroProvider config={config}>
+                <MatrixChat
+                    ref={matrixChatRef}
+                    onNewScreen={onNewScreen}
+                    config={config}
+                    realQueryParams={params}
+                    startingFragmentQueryParams={fragParams}
+                    enableGuest={!config.disable_guests}
+                    onTokenLoginCompleted={onTokenLoginCompleted}
+                    initialScreenAfterLogin={initialScreenAfterLogin}
+                    defaultDeviceDisplayName={defaultDeviceName}
+                />
+            </SuperheroProvider>
         </wrapperOpts.Wrapper>
     );
 }
