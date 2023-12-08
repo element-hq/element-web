@@ -331,8 +331,8 @@ function getLogger(win: Cypress.AUTWindow, loggerName: string): Logger {
     const logger = loglevel.getLogger(loggerName);
 
     // If this is the first time this logger has been returned, turn it into a `Logger` and set the default level
-    if (!("extend" in logger)) {
-        logger["extend"] = (namespace: string) => getLogger(win, loggerName + ":" + namespace);
+    if (!("getChild" in logger)) {
+        logger["getChild"] = (namespace: string) => getLogger(win, loggerName + ":" + namespace);
         logger.methodFactory = makeLogMethodFactory(win);
         logger.setLevel(loglevel.levels.DEBUG);
     }
