@@ -340,9 +340,9 @@ h2 .sh_VerifiedIcon {
     --cpd-color-alpha-gray-900: hsla(213, 83%, 7%, 0.61);
     --cpd-color-alpha-gray-800: hsla(213, 87%, 9%, 0.5);
     --cpd-color-alpha-gray-700: hsla(215, 96%, 10%, 0.35);
-    --cpd-color-alpha-gray-600: hsla(212, 97%, 12%, 0.26);
+    --cpd-color-alpha-gray-600: hsla(212, 97%, 12%, 0.26); */
     --cpd-color-alpha-gray-500: hsla(212, 87%, 15%, 0.2);
-    --cpd-color-alpha-gray-400: hsla(213, 90%, 20%, 0.12);
+    /* --cpd-color-alpha-gray-400: hsla(213, 90%, 20%, 0.12);
     --cpd-color-alpha-gray-300: hsla(216, 89%, 18%, 0.06);
     --cpd-color-alpha-gray-200: hsla(200, 41%, 36%, 0.04);
     --cpd-color-alpha-gray-100: hsla(210, 48%, 41%, 0.02);
@@ -461,9 +461,9 @@ h2 .sh_VerifiedIcon {
     --cpd-color-orange-1400: #450000;
     --cpd-color-orange-1300: #620000; */
     --cpd-color-orange-1200: #d4570f !important;
-    /* --cpd-color-orange-1100: #9b2200;
+    /* --cpd-color-orange-1100: #9b2200; */
     --cpd-color-orange-1000: #ac3300;
-    --cpd-color-orange-900: #bc4500;
+    /* --cpd-color-orange-900: #bc4500;
     --cpd-color-orange-800: #dc6700;
     --cpd-color-orange-700: #f89440;
     --cpd-color-orange-600: #fdb37c;
@@ -487,9 +487,9 @@ h2 .sh_VerifiedIcon {
     --cpd-color-red-200: #fff7f6;
     --cpd-color-red-100: #fffaf9;
     --cpd-color-gray-1400: #1b1d22;
-    --cpd-color-gray-1300: #2b2d32;
+    --cpd-color-gray-1300: #2b2d32;  */
     --cpd-color-gray-1200: #3c4045;
-    --cpd-color-gray-1100: #4c5158;
+    /* --cpd-color-gray-1100: #4c5158;
     --cpd-color-gray-1000: #595e67;
     --cpd-color-gray-900: #656d77;
     --cpd-color-gray-800: #818a95;
@@ -499,8 +499,8 @@ h2 .sh_VerifiedIcon {
     --cpd-color-gray-400: #e1e6ec;
     --cpd-color-gray-300: #f0f2f5;
     --cpd-color-gray-200: #f7f9fa;
-    --cpd-color-gray-100: #fbfcfd;
-    --cpd-color-theme-bg: #ffffff; */
+    --cpd-color-gray-100: #fbfcfd;  */
+    --cpd-color-theme-bg: #ffffff;
     --cpd-color-bg-subtle-secondary-level-0: var(--cpd-color-gray-300);
     --cpd-color-bg-canvas-default-level-1: var(--cpd-color-theme-bg);
 }
@@ -661,9 +661,9 @@ h2 .sh_VerifiedIcon {
     --cpd-color-alpha-gray-900: hsla(211, 94%, 94%, 0.54);
     --cpd-color-alpha-gray-800: hsla(216, 100%, 94%, 0.41);
     --cpd-color-alpha-gray-700: hsla(213, 85%, 95%, 0.27);
-    --cpd-color-alpha-gray-600: hsla(225, 46%, 95%, 0.2);
+    --cpd-color-alpha-gray-600: hsla(225, 46%, 95%, 0.2); */
     --cpd-color-alpha-gray-500: hsla(214, 41%, 97%, 0.15);
-    --cpd-color-alpha-gray-400: hsla(270, 37%, 93%, 0.1);
+    /* --cpd-color-alpha-gray-400: hsla(270, 37%, 93%, 0.1);
     --cpd-color-alpha-gray-300: hsla(280, 41%, 90%, 0.06);
     --cpd-color-alpha-gray-200: hsla(286, 31%, 82%, 0.04);
     --cpd-color-alpha-gray-100: hsla(214, 10%, 86%, 0.02);
@@ -782,9 +782,9 @@ h2 .sh_VerifiedIcon {
     --cpd-color-orange-1400: #ffeadb;
     --cpd-color-orange-1300: #ffd5b9; */
     --cpd-color-orange-1200: #ff7700 !important;
-    /* --cpd-color-orange-1100: #f6913d;
+    /* --cpd-color-orange-1100: #f6913d; */
     --cpd-color-orange-1000: #eb7a12;
-    --cpd-color-orange-900: #da670d;
+    /* --cpd-color-orange-900: #da670d;
     --cpd-color-orange-800: #b94607;
     --cpd-color-orange-700: #972206;
     --cpd-color-orange-600: #830500;
@@ -808,9 +808,9 @@ h2 .sh_VerifiedIcon {
     /* --cpd-color-red-200: #3e0000;
     --cpd-color-red-100: #370000;
     --cpd-color-gray-1400: #ebeef2;
-    --cpd-color-gray-1300: #d9dee4;
+    --cpd-color-gray-1300: #d9dee4; */
     --cpd-color-gray-1200: #bdc3cc;
-    --cpd-color-gray-1100: #a3aab4;
+    /* --cpd-color-gray-1100: #a3aab4;
     --cpd-color-gray-1000: #9199a4;
     --cpd-color-gray-900: #808994;
     --cpd-color-gray-800: #656c76;
