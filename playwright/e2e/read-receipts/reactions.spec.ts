@@ -119,8 +119,7 @@ test.describe("Read receipts", () => {
                 // Then the room remains read
                 await util.assertStillRead(room2);
             });
-            // XXX: fails because the room is still "bold" even though the notification counts all disappear
-            test.skip("Marking a room as read after a reaction in a thread makes it read", async ({
+            test("Marking a room as read after a reaction in a thread makes it read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -142,8 +141,7 @@ test.describe("Read receipts", () => {
                 // Then it becomes read
                 await util.assertRead(room2);
             });
-            // XXX: fails because the room is still "bold" even though the notification counts all disappear
-            test.skip("Reacting to a thread message after marking as read does not make the room unread", async ({
+            test("Reacting to a thread message after marking as read does not make the room unread", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -167,7 +165,7 @@ test.describe("Read receipts", () => {
                 // Then the room remains read
                 await util.assertStillRead(room2);
             });
-            test.skip("A room with a reaction to a threaded message is still unread after restart", async ({
+            test("A room with a reaction to a threaded message is still unread after restart", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -329,8 +327,7 @@ test.describe("Read receipts", () => {
                 // Then the room is still read
                 await util.assertRead(room2);
             });
-            // XXX: fails because the room is still "bold" even though the notification counts all disappear
-            test.skip("Reacting to a thread root after marking as read makes the room unread but not the thread", async ({
+            test("Reacting to a thread root after marking as read makes the room unread but not the thread", async ({
                 page,
                 roomAlpha: room1,
                 roomBeta: room2,
