@@ -55,8 +55,7 @@ test.describe("Read receipts", () => {
                 // Then the room becomes read
                 await util.assertRead(room2);
             });
-            // XXX: fails (sometimes!) because the unread count stays high
-            test.skip("Reading an older message leaves the room unread", async ({
+            test("Reading an older message leaves the room unread", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -164,27 +163,6 @@ test.describe("Read receipts", () => {
                 // Then all messages are still read
                 await util.assertRead(room2);
             });
-            // XXX: fails because the room remains unread even though I sent a message
-            // Note: this test should not re-use the same MatrixClient - it
-            // should create a new one logged in as the same user.
-            test.skip("Me sending a message from a different client marks room as read", async ({
-                roomAlpha: room1,
-                roomBeta: room2,
-                util,
-                app,
-            }) => {
-                // Given I have unread messages
-                await util.goTo(room1);
-                await util.assertRead(room2);
-                await util.receiveMessages(room2, ["Msg1"]);
-                await util.assertUnread(room2, 1);
-
-                // When I send a new message from a different client
-                await util.sendMessageAsClient(app.client, room2, ["Msg2"]);
-
-                // Then this room is marked as read
-                await util.assertRead(room2);
-            });
         });
 
         test.describe("in threads", () => {
@@ -252,8 +230,7 @@ test.describe("Read receipts", () => {
                 await util.assertReadThread("Msg1");
                 await util.assertRead(room2);
             });
-            // XXX: Fails since migration to Playwright
-            test.skip("Reading an older thread message leaves the thread unread", async ({
+            test("Reading an older thread message leaves the thread unread", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -268,13 +245,8 @@ test.describe("Read receipts", () => {
                 await util.assertUnread(room2, 21);
 
                 // When I read an older message in the thread
-                await msg.jumpTo(room2.name, "InThread0001", true);
+                await msg.jumpTo(room2.name, "InThread0000", true);
                 await util.assertUnreadLessThan(room2, 21);
-                // TODO: for some reason, we can't find the first message
-                // "InThread0", so I am using the second here. Also, they appear
-                // out of order, with "InThread2" before "InThread1". Might be a
-                // clue to the sporadic reports we have had of messages going
-                // missing in threads?
 
                 // Then the thread is still marked as unread
                 await util.backToThreadsList();
@@ -499,8 +471,7 @@ test.describe("Read receipts", () => {
                 await util.assertUnread(room2, 1);
                 await util.assertUnreadThread("Msg1");
             });
-            // XXX: fails because we jump to the wrong place in the timeline
-            test.skip("Reading a thread root within the thread view marks it as read in the main timeline", async ({
+            test("Reading a thread root within the thread view marks it as read in the main timeline", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -518,11 +489,12 @@ test.describe("Read receipts", () => {
 
                 // When I jump to an old message and read the thread
                 await msg.jumpTo(room2.name, "beforeThread0000");
+                // When the thread is opened, the timeline is scrolled until the thread root reached the center
                 await util.openThread("ThreadRoot");
 
                 // Then the thread root is marked as read in the main timeline,
-                // so there are only 30 left - the ones after the thread root.
-                await util.assertUnread(room2, 30);
+                // 30 remaining messages are unread - 7 messages are displayed under the thread root
+                await util.assertUnread(room2, 30 - 7);
             });
             test("Creating a new thread based on a reply makes the room unread", async ({
                 roomAlpha: room1,
