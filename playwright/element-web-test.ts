@@ -43,6 +43,11 @@ const CONFIG_JSON: Partial<IConfigOptions> = {
         },
     },
 
+    // The default language is set here for test consistency
+    setting_defaults: {
+        language: "en-GB",
+    },
+
     // the location tests want a map style url.
     map_style_url: "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx",
 };
