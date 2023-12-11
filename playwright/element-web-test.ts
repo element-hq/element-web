@@ -211,7 +211,17 @@ export const test = base.extend<
 });
 
 export const expect = baseExpect.extend({
-    async toMatchScreenshot(this: ExpectMatcherState, receiver: Page | Locator, ...args) {
+    async toMatchScreenshot(
+        this: ExpectMatcherState,
+        receiver: Page | Locator,
+        name?: `${string}.png`,
+        options?: {
+            mask?: Array<Locator>;
+            omitBackground?: boolean;
+            timeout?: number;
+            css?: string;
+        },
+    ) {
         const page = "page" in receiver ? receiver.page() : receiver;
 
         // We add a custom style tag before taking screenshots
@@ -233,10 +243,11 @@ export const expect = baseExpect.extend({
                 .mx_ReplyChain {
                     border-left-color: var(--cpd-color-blue-1200) !important;
                 }
+                ${options?.css ?? ""}
             `,
         })) as ElementHandle<Element>;
 
-        await baseExpect(receiver).toHaveScreenshot(...args);
+        await baseExpect(receiver).toHaveScreenshot(name, options);
 
         await style.evaluate((tag) => tag.remove());
         return { pass: true, message: () => "", name: "toMatchScreenshot" };
