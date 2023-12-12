@@ -81,19 +81,25 @@ export const test = base.extend<
         uut?: Locator; // Unit Under Test, useful place to refer a prepared locator
         botCreateOpts: CreateBotOpts;
         bot: Bot;
+        labsFlags: string[];
         webserver: Webserver;
     }
 >({
     cryptoBackend: ["legacy", { option: true }],
     config: CONFIG_JSON,
-    page: async ({ context, page, config, cryptoBackend }, use) => {
+    page: async ({ context, page, config, cryptoBackend, labsFlags }, use) => {
         await context.route(`http://localhost:8080/config.json*`, async (route) => {
             const json = { ...CONFIG_JSON, ...config };
+            json["features"] = {
+                ...json["features"],
+                // Enable the lab features
+                ...labsFlags.reduce((obj, flag) => {
+                    obj[flag] = true;
+                    return obj;
+                }, {}),
+            };
             if (cryptoBackend === "rust") {
-                json["features"] = {
-                    ...json["features"],
-                    feature_rust_crypto: true,
-                };
+                json.features.feature_rust_crypto = true;
             }
             await route.fulfill({ json });
         });
@@ -145,6 +151,7 @@ export const test = base.extend<
             displayName,
         });
     },
+    labsFlags: [],
     user: async ({ page, homeserver, credentials }, use) => {
         await page.addInitScript(
             ({ baseUrl, credentials }) => {

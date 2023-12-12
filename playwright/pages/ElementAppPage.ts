@@ -19,6 +19,7 @@ import { type Locator, type Page, expect } from "@playwright/test";
 import { Settings } from "./settings";
 import { Client } from "./client";
 import { Labs } from "./labs";
+import { Spotlight } from "./Spotlight";
 
 export class ElementAppPage {
     public constructor(public readonly page: Page) {}
@@ -147,5 +148,11 @@ export class ElementAppPage {
 
     public async getClipboardText(): Promise<string> {
         return this.page.evaluate("navigator.clipboard.readText()");
+    }
+
+    public async openSpotlight(): Promise<Spotlight> {
+        const spotlight = new Spotlight(this.page);
+        await spotlight.open();
+        return spotlight;
     }
 }

@@ -26,6 +26,8 @@ import type {
     MatrixEvent,
     ReceiptType,
     IRoomDirectoryOptions,
+    KnockRoomOpts,
+    Visibility,
 } from "matrix-js-sdk/src/matrix";
 import { Credentials } from "../plugins/homeserver";
 
@@ -216,6 +218,56 @@ export class Client {
     }
 
     /**
+     * Knocks the given room.
+     * @param roomId the id of the room to knock
+     * @param opts the options to use when knocking
+     */
+    public async knockRoom(roomId: string, opts?: KnockRoomOpts): Promise<void> {
+        const client = await this.prepareClient();
+        await client.evaluate((client, { roomId, opts }) => client.knockRoom(roomId, opts), { roomId, opts });
+    }
+
+    /**
+     * Kicks the given user from the given room.
+     * @param roomId the id of the room to kick from
+     * @param userId the id of the user to kick
+     * @param reason the reason for the kick
+     */
+    public async kick(roomId: string, userId: string, reason?: string): Promise<void> {
+        const client = await this.prepareClient();
+        await client.evaluate((client, { roomId, userId, reason }) => client.kick(roomId, userId, reason), {
+            roomId,
+            userId,
+            reason,
+        });
+    }
+
+    /**
+     * Bans the given user from the given room.
+     * @param roomId the id of the room to ban from
+     * @param userId the id of the user to ban
+     * @param reason the reason for the ban
+     */
+    public async ban(roomId: string, userId: string, reason?: string): Promise<void> {
+        const client = await this.prepareClient();
+        await client.evaluate((client, { roomId, userId, reason }) => client.ban(roomId, userId, reason), {
+            roomId,
+            userId,
+            reason,
+        });
+    }
+
+    /**
+     * Unban the given user from the given room.
+     * @param roomId the id of the room to unban from
+     * @param userId the id of the user to unban
+     */
+    public async unban(roomId: string, userId: string): Promise<void> {
+        const client = await this.prepareClient();
+        await client.evaluate((client, { roomId, userId }) => client.unban(roomId, userId), { roomId, userId });
+    }
+
+    /**
      * @param {MatrixEvent} event
      * @param {ReceiptType} receiptType
      * @param {boolean} unthreaded
@@ -260,5 +312,20 @@ export class Client {
                 },
             });
         }, credentials);
+    }
+
+    /**
+     * Sets the directory visibility for a room.
+     * @param roomId ID of the room to set the directory visibility for
+     * @param visibility The new visibility for the room
+     */
+    public async setRoomDirectoryVisibility(roomId: string, visibility: Visibility): Promise<void> {
+        const client = await this.prepareClient();
+        return client.evaluate(
+            async (client, { roomId, visibility }) => {
+                await client.setRoomDirectoryVisibility(roomId, visibility);
+            },
+            { roomId, visibility },
+        );
     }
 }
