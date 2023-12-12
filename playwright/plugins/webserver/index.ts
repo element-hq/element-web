@@ -33,7 +33,7 @@ export class Webserver {
 
         const address = this.server.address() as AddressInfo;
         console.log(`Started webserver at ${address.address}:${address.port}`);
-        return `http://localhost:${address.port}/`;
+        return `http://localhost:${address.port}`;
     }
 
     public stop(): void {

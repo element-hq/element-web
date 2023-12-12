@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/// <reference types="cypress" />
-
-import { HomeserverInstance } from "../../plugins/utils/homeserver";
+import type { Page } from "@playwright/test";
+import { test, expect } from "../../element-web-test";
+import { ElementAppPage } from "../../pages/ElementAppPage";
 
 const STICKER_PICKER_WIDGET_ID = "fake-sticker-picker";
 const STICKER_PICKER_WIDGET_NAME = "Fake Stickers";
@@ -33,7 +33,7 @@ const STICKER_MESSAGE = JSON.stringify({
         content: {
             body: STICKER_NAME,
             msgtype: "m.sticker",
-            url: "mxc://somewhere",
+            url: "mxc://localhost/somewhere",
         },
     },
     requestId: "1",
@@ -66,108 +66,86 @@ const WIDGET_HTML = `
     </html>
 `;
 
-function openStickerPicker() {
-    cy.openMessageComposerOptions().findByRole("menuitem", { name: "Sticker" }).click();
+async function openStickerPicker(app: ElementAppPage) {
+    const options = await app.openMessageComposerOptions();
+    await options.getByRole("menuitem", { name: "Sticker" }).click();
 }
 
-function sendStickerFromPicker() {
-    // Note: Until https://github.com/cypress-io/cypress/issues/136 is fixed we will need
-    // to use `chromeWebSecurity: false` in our cypress config. Not even cy.origin() can
-    // break into the iframe for us :(
-    cy.accessIframe(`iframe[title="${STICKER_PICKER_WIDGET_NAME}"]`).within({}, () => {
-        cy.get("#sendsticker").should("exist").click();
-    });
+async function sendStickerFromPicker(page: Page) {
+    const iframe = page.frameLocator(`iframe[title="${STICKER_PICKER_WIDGET_NAME}"]`);
+    await iframe.locator("#sendsticker").click();
 
     // Sticker picker should close itself after sending.
-    cy.get(".mx_AppTileFullWidth#stickers").should("not.exist");
+    await expect(page.locator(".mx_AppTileFullWidth#stickers")).not.toBeVisible();
 }
 
-function expectTimelineSticker(roomId: string) {
+async function expectTimelineSticker(page: Page, roomId: string) {
     // Make sure it's in the right room
-    cy.get(".mx_EventTile_sticker > a").should("have.attr", "href").and("include", `/${roomId}/`);
+    await expect(page.locator(".mx_EventTile_sticker > a")).toHaveAttribute("href", new RegExp(`/${roomId}/`));
 
     // Make sure the image points at the sticker image. We will briefly show it
     // using the thumbnail URL, but as soon as that fails, we will switch to the
     // download URL.
-    cy.get<HTMLImageElement>(`img[alt="${STICKER_NAME}"][src*="download/somewhere"]`).should("exist");
+    await expect(page.locator(`img[alt="${STICKER_NAME}"]`)).toHaveAttribute(
+        "src",
+        new RegExp("/download/localhost/somewhere"),
+    );
 }
 
-describe("Stickers", () => {
+test.describe("Stickers", () => {
+    test.use({
+        displayName: "Sally",
+    });
+
     // We spin up a web server for the sticker picker so that we're not testing to see if
     // sysadmins can deploy sticker pickers on the same Element domain - we actually want
     // to make sure that cross-origin postMessage works properly. This makes it difficult
     // to write the test though, as we have to juggle iframe logistics.
     //
     // See sendStickerFromPicker() for more detail on iframe comms.
-
     let stickerPickerUrl: string;
-    let homeserver: HomeserverInstance;
-    let userId: string;
-
-    beforeEach(() => {
-        cy.startHomeserver("default").then((data) => {
-            homeserver = data;
-
-            cy.initTestUser(homeserver, "Sally").then((user) => (userId = user.userId));
-        });
-        cy.serveHtmlFile(WIDGET_HTML).then((url) => {
-            stickerPickerUrl = url;
-        });
+    test.beforeEach(async ({ webserver }) => {
+        stickerPickerUrl = webserver.start(WIDGET_HTML);
     });
 
-    afterEach(() => {
-        cy.stopHomeserver(homeserver);
-        cy.stopWebServers();
-    });
+    test("should send a sticker to multiple rooms", async ({ page, app, user }) => {
+        const roomId1 = await app.client.createRoom({ name: ROOM_NAME_1 });
+        const roomId2 = await app.client.createRoom({ name: ROOM_NAME_2 });
 
-    it("should send a sticker to multiple rooms", () => {
-        cy.createRoom({
-            name: ROOM_NAME_1,
-        }).as("roomId1");
-        cy.createRoom({
-            name: ROOM_NAME_2,
-        }).as("roomId2");
-        cy.setAccountData("m.widgets", {
+        await app.client.setAccountData("m.widgets", {
             [STICKER_PICKER_WIDGET_ID]: {
                 content: {
                     type: "m.stickerpicker",
                     name: STICKER_PICKER_WIDGET_NAME,
                     url: stickerPickerUrl,
-                    creatorUserId: userId,
+                    creatorUserId: user.userId,
                 },
-                sender: userId,
+                sender: user.userId,
                 state_key: STICKER_PICKER_WIDGET_ID,
                 type: "m.widget",
                 id: STICKER_PICKER_WIDGET_ID,
             },
-        }).as("stickers");
-
-        cy.all([
-            cy.get<string>("@roomId1"),
-            cy.get<string>("@roomId2"),
-            cy.get<{}>("@stickers"), // just want to wait for it to be set up
-        ]).then(([roomId1, roomId2]) => {
-            cy.viewRoomByName(ROOM_NAME_1);
-            cy.url().should("contain", `/#/room/${roomId1}`);
-            openStickerPicker();
-            sendStickerFromPicker();
-            expectTimelineSticker(roomId1);
-
-            // Ensure that when we switch to a different room that the sticker
-            // goes to the right place
-            cy.viewRoomByName(ROOM_NAME_2);
-            cy.url().should("contain", `/#/room/${roomId2}`);
-            openStickerPicker();
-            sendStickerFromPicker();
-            expectTimelineSticker(roomId2);
         });
+
+        await app.viewRoomByName(ROOM_NAME_1);
+        await expect(page).toHaveURL(`/#/room/${roomId1}`);
+        await openStickerPicker(app);
+        await sendStickerFromPicker(page);
+        await expectTimelineSticker(page, roomId1);
+
+        // Ensure that when we switch to a different room that the sticker
+        // goes to the right place
+        await app.viewRoomByName(ROOM_NAME_2);
+        await expect(page).toHaveURL(`/#/room/${roomId2}`);
+        await openStickerPicker(app);
+        await sendStickerFromPicker(page);
+        await expectTimelineSticker(page, roomId2);
     });
 
-    it("should handle a sticker picker widget missing creatorUserId", () => {
-        cy.createRoom({
-            name: ROOM_NAME_1,
-        }).as("roomId1");
-        cy.setAccountData("m.widgets", {
+    test("should handle a sticker picker widget missing creatorUserId", async ({ page, app, user }) => {
+        const roomId1 = await app.client.createRoom({ name: ROOM_NAME_1 });
+
+        await app.client.setAccountData("m.widgets", {
             [STICKER_PICKER_WIDGET_ID]: {
                 content: {
                     type: "m.stickerpicker",
@@ -175,19 +153,17 @@ describe("Stickers", () => {
                     url: stickerPickerUrl,
                     // No creatorUserId
                 },
-                sender: userId,
+                sender: user.userId,
                 state_key: STICKER_PICKER_WIDGET_ID,
                 type: "m.widget",
                 id: STICKER_PICKER_WIDGET_ID,
             },
-        }).as("stickers");
-
-        cy.all([cy.get<string>("@roomId1"), cy.get<{}>("@stickers")]).then(([roomId1]) => {
-            cy.viewRoomByName(ROOM_NAME_1);
-            cy.url().should("contain", `/#/room/${roomId1}`);
-            openStickerPicker();
-            sendStickerFromPicker();
-            expectTimelineSticker(roomId1);
         });
+
+        await app.viewRoomByName(ROOM_NAME_1);
+        await expect(page).toHaveURL(`/#/room/${roomId1}`);
+        await openStickerPicker(app);
+        await sendStickerFromPicker(page);
+        await expectTimelineSticker(page, roomId1);
     });
 });

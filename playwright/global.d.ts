@@ -25,6 +25,9 @@ declare global {
         mxSettingsStore: {
             setValue(settingName: string, roomId: string | null, level: SettingLevel, value: any): Promise<void>;
         };
+        mxActiveWidgetStore: {
+            setWidgetPersistence(widgetId: string, roomId: string | null, val: boolean): void;
+        };
         matrixcs: typeof Matrix;
     }
 }
