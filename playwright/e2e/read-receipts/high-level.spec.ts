@@ -255,10 +255,6 @@ test.describe("Read receipts", () => {
             msg,
         }) => {
             test.slow();
-            test.skip(
-                cryptoBackend === "rust",
-                "Flaky with rust crypto - see https://github.com/vector-im/element-web/issues/26539",
-            );
 
             // Given lots of messages in threads that are unread
             await util.goTo(room1);
@@ -346,10 +342,6 @@ test.describe("Read receipts", () => {
             msg,
         }) => {
             test.slow();
-            test.skip(
-                cryptoBackend === "rust",
-                "Flaky with rust crypto - see https://github.com/vector-im/element-web/issues/26341",
-            );
 
             // Given lots of messages in threads that are unread but I marked as read on a main timeline message
             await util.goTo(room1);
