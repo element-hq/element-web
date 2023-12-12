@@ -13,7 +13,7 @@ jobs:
     build:
         name: "Build & Deploy develop.element.io"
         # Only respect triggers from our develop branch, ignore that of forks
-        if: github.repository == 'vector-im/element-web'
+        if: github.repository == 'element-hq/element-web'
         runs-on: ubuntu-latest
         environment: develop
         env:
