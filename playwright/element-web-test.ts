@@ -196,7 +196,7 @@ export const test = base.extend<
     },
 
     botCreateOpts: {},
-    bot: async ({ page, homeserver, botCreateOpts }, use) => {
+    bot: async ({ page, homeserver, botCreateOpts, user }, use) => {
         const bot = new Bot(page, homeserver, botCreateOpts);
         await bot.prepareClient(); // eagerly register the bot
         await use(bot);

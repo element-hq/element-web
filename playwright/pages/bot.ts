@@ -18,8 +18,10 @@ import { JSHandle, Page } from "@playwright/test";
 import { uniqueId } from "lodash";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { Logger } from "matrix-js-sdk/src/logger";
 import type { AddSecretStorageKeyOpts } from "matrix-js-sdk/src/secret-storage";
 import type { Credentials, HomeserverInstance } from "../plugins/homeserver";
+import type { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import { Client } from "./client";
 
 export interface CreateBotOpts {
@@ -60,12 +62,25 @@ const defaultCreateBotOptions = {
     bootstrapCrossSigning: true,
 } satisfies CreateBotOpts;
 
+type ExtendedMatrixClient = MatrixClient & { __playwright_recovery_key: GeneratedSecretStorageKey };
+
 export class Bot extends Client {
     public credentials?: Credentials;
+    private handlePromise: Promise<JSHandle<ExtendedMatrixClient>>;
 
     constructor(page: Page, private homeserver: HomeserverInstance, private readonly opts: CreateBotOpts) {
         super(page);
         this.opts = Object.assign({}, defaultCreateBotOptions, opts);
+    }
+
+    public setCredentials(credentials: Credentials): void {
+        if (this.credentials) throw new Error("Bot has already started");
+        this.credentials = credentials;
+    }
+
+    public async getRecoveryKey(): Promise<GeneratedSecretStorageKey> {
+        const client = await this.getClientHandle();
+        return client.evaluate((cli) => cli.__playwright_recovery_key);
     }
 
     private async getCredentials(): Promise<Credentials> {
@@ -82,9 +97,36 @@ export class Bot extends Client {
         return this.credentials;
     }
 
-    protected async getClientHandle(): Promise<JSHandle<MatrixClient>> {
-        return this.page.evaluateHandle(
+    protected async getClientHandle(): Promise<JSHandle<ExtendedMatrixClient>> {
+        if (this.handlePromise) return this.handlePromise;
+
+        this.handlePromise = this.page.evaluateHandle(
             async ({ homeserver, credentials, opts }) => {
+                function getLogger(loggerName: string): Logger {
+                    const logger = {
+                        getChild: (namespace: string) => getLogger(`${loggerName}:${namespace}`),
+                        trace(...msg: any[]): void {
+                            console.trace(loggerName, ...msg);
+                        },
+                        debug(...msg: any[]): void {
+                            console.debug(loggerName, ...msg);
+                        },
+                        info(...msg: any[]): void {
+                            console.info(loggerName, ...msg);
+                        },
+                        warn(...msg: any[]): void {
+                            console.warn(loggerName, ...msg);
+                        },
+                        error(...msg: any[]): void {
+                            console.error(loggerName, ...msg);
+                        },
+                    } satisfies Logger;
+
+                    return logger as unknown as Logger;
+                }
+
+                const logger = getLogger(`cypress bot ${credentials.userId}`);
+
                 const keys = {};
 
                 const getCrossSigningKey = (type: string) => {
@@ -123,7 +165,8 @@ export class Bot extends Client {
                     scheduler: new window.matrixcs.MatrixScheduler(),
                     cryptoStore: new window.matrixcs.MemoryCryptoStore(),
                     cryptoCallbacks,
-                });
+                    logger,
+                }) as ExtendedMatrixClient;
 
                 if (opts.autoAcceptInvites) {
                     cli.on(window.matrixcs.RoomMemberEvent.Membership, (event, member) => {
@@ -180,5 +223,6 @@ export class Bot extends Client {
                 opts: this.opts,
             },
         );
+        return this.handlePromise;
     }
 }

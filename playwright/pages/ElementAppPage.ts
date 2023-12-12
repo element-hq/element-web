@@ -21,7 +21,7 @@ import { Client } from "./client";
 import { Labs } from "./labs";
 
 export class ElementAppPage {
-    public constructor(private readonly page: Page) {}
+    public constructor(public readonly page: Page) {}
 
     public labs = new Labs(this.page);
     public settings = new Settings(this.page);
@@ -89,6 +89,10 @@ export class ElementAppPage {
             .locator(`[title="${name}"],[aria-label="${name}"]`)
             .first()
             .click();
+    }
+
+    public async viewRoomById(roomId: string): Promise<void> {
+        await this.page.goto(`/#/room/${roomId}`);
     }
 
     /**

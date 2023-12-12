@@ -27,6 +27,7 @@ import type {
     ReceiptType,
     IRoomDirectoryOptions,
 } from "matrix-js-sdk/src/matrix";
+import { Credentials } from "../plugins/homeserver";
 
 export class Client {
     protected client: JSHandle<MatrixClient>;
@@ -100,7 +101,14 @@ export class Client {
      * @param roomId ID of the room to send the message into
      * @param content the event content to send
      */
-    public async sendMessage(roomId: string, content: IContent): Promise<ISendEventResponse> {
+    public async sendMessage(roomId: string, content: IContent | string): Promise<ISendEventResponse> {
+        if (typeof content === "string") {
+            content = {
+                body: content,
+                msgtype: "m.text",
+            };
+        }
+
         const client = await this.prepareClient();
         return client.evaluate(
             (client, { roomId, content }) => {
@@ -177,13 +185,14 @@ export class Client {
      * Make this bot join a room by name
      * @param roomName Name of the room to join
      */
-    public async joinRoomByName(roomName: string): Promise<void> {
+    public async joinRoomByName(roomName: string): Promise<string> {
         const client = await this.prepareClient();
-        await client.evaluate(
-            (client, { roomName }) => {
+        return client.evaluate(
+            async (client, { roomName }) => {
                 const room = client.getRooms().find((r) => r.getDefaultRoomName(client.getUserId()) === roomName);
                 if (room) {
-                    return client.joinRoom(room.roomId);
+                    await client.joinRoom(room.roomId);
+                    return room.roomId;
                 }
                 throw new Error(`Bot room join failed. Cannot find room '${roomName}'`);
             },
@@ -227,8 +236,29 @@ export class Client {
 
     public async publicRooms(options?: IRoomDirectoryOptions): ReturnType<MatrixClient["publicRooms"]> {
         const client = await this.prepareClient();
-        return await client.evaluate((client, options) => {
+        return client.evaluate((client, options) => {
             return client.publicRooms(options);
         }, options);
+    }
+
+    /**
+     * Boostraps cross-signing.
+     */
+    public async bootstrapCrossSigning(credentials: Credentials): Promise<void> {
+        const client = await this.prepareClient();
+        return client.evaluate(async (client, credentials) => {
+            await client.getCrypto().bootstrapCrossSigning({
+                authUploadDeviceSigningKeys: async (func) => {
+                    await func({
+                        type: "m.login.password",
+                        identifier: {
+                            type: "m.id.user",
+                            user: credentials.userId,
+                        },
+                        password: credentials.password,
+                    });
+                },
+            });
+        }, credentials);
     }
 }
