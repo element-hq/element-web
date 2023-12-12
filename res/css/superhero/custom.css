@@ -822,3 +822,62 @@ h2 .sh_VerifiedIcon {
     --cpd-color-gray-200: #181a1f;
     --cpd-color-gray-100: #14171b; */
 }
+
+.mx_HomePage_title {
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 45px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #1b1d22;
+    margin-bottom: 24px;
+    align-items: center;
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 1250px) {
+    .mx_HomePage_title {
+        flex-direction: column;
+    }
+}
+
+.cpd-theme-dark .mx_HomePage_title {
+    color: #ffffff;
+}
+
+.mx_HomePage_title svg {
+    heigh: 44px;
+    width: 173.99px;
+    margin-right: 8px;
+}
+
+.mx_HomePage_default_buttons_title {
+    font-size: 32px;
+}
+.cpd-theme-dark .mx_HomePage_default_buttons_title {
+    opacity: 0.7;
+}
+
+.mx_HomePage_default .mx_HomePage_default_buttons {
+    margin: 10px auto 0 !important;
+}
+
+.mx_HomePage_default .mx_HomePage_default_buttons .mx_AccessibleButton.mx_HomePage_button_custom {
+    width: auto !important;
+    min-height: auto !important;
+    padding: 16px 30px !important;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+.mx_HomePage_default .mx_HomePage_default_buttons .mx_AccessibleButton.mx_HomePage_button_custom svg {
+    width: 50px !important;
+    height: 50px !important;
+    display: block !important;
+    margin-bottom: 4px;
+}
+
+.mx_HomePage_default .mx_HomePage_default_buttons .mx_AccessibleButton.mx_HomePage_button_custom::before {
+    display: none !important;
+}
