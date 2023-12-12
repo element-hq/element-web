@@ -94,8 +94,8 @@ jobs:
             matrix:
                 # Run tests using both crypto stacks
                 crypto: [legacy, rust]
-                ci_node_total: [3]
-                ci_node_index: [0, 1, 2]
+                ci_node_total: [2]
+                ci_node_index: [0, 1]
         steps:
             # The version of chrome shipped by default may not be consistent across runners
             # so we explicitly use a specific version of chrome here.
