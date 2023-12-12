@@ -1759,7 +1759,7 @@
     emojibase "^15.0.0"
     emojibase-data "^15.0.0"
 
-"@matrix-org/matrix-sdk-crypto-wasm@^3.2.0", "@matrix-org/matrix-sdk-crypto-wasm@^3.4.0":
+"@matrix-org/matrix-sdk-crypto-wasm@^3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-3.4.0.tgz#fc4474c220320687857e1f54f709944e78d48824"
   integrity sha512-noO6QnH+ypT//CxewoQdlK/z2iuyQo1Ecp1PDaYyr/NV5yXkWvGfGIIcShXqrQJfL5kuWxg/14edNplXsaXoDQ==
@@ -8369,25 +8369,6 @@ matrix-js-sdk@30.3.0-rc.0:
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^3.4.0"
-    another-json "^0.2.0"
-    bs58 "^5.0.0"
-    content-type "^1.0.4"
-    jwt-decode "^3.1.2"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.6.0"
-    oidc-client-ts "^2.2.4"
-    p-retry "4"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-    uuid "9"
-
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "30.2.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/103617c70ef218d9dfffabac8802e626341d11a1"
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^3.2.0"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"
