@@ -329,8 +329,7 @@ test.describe("Read receipts", () => {
         });
 
         test.describe("in threads", () => {
-            // XXX: fails because it flakes saying the room is unread when it should be read
-            test.skip("Redacting the threaded message pointed to by my receipt leaves the room read", async ({
+            test("Redacting the threaded message pointed to by my receipt leaves the room read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -339,9 +338,9 @@ test.describe("Read receipts", () => {
                 // Given I have some threads
                 await util.goTo(room1);
                 await util.receiveMessages(room2, [
-                    "Root",
-                    msg.threadedOff("Root", "ThreadMsg1"),
-                    msg.threadedOff("Root", "ThreadMsg2"),
+                    "Root1",
+                    msg.threadedOff("Root1", "ThreadMsg1"),
+                    msg.threadedOff("Root1", "ThreadMsg2"),
                     "Root2",
                     msg.threadedOff("Root2", "Root2->A"),
                 ]);
@@ -349,8 +348,8 @@ test.describe("Read receipts", () => {
 
                 // And I have read them
                 await util.goTo(room2);
-                await util.assertUnreadThread("Root");
-                await util.openThread("Root");
+                await util.assertUnreadThread("Root1");
+                await util.openThread("Root1");
                 await util.assertUnreadLessThan(room2, 4);
                 await util.openThread("Root2");
                 await util.assertRead(room2);
@@ -364,7 +363,7 @@ test.describe("Read receipts", () => {
                 // Then the room and thread are still read
                 await util.assertStillRead(room2);
                 await util.goTo(room2);
-                await util.assertReadThread("Root");
+                await util.assertReadThread("Root1");
             });
             test("Reading an unread thread after a redaction of the latest message makes it read", async ({
                 roomAlpha: room1,
@@ -536,8 +535,7 @@ test.describe("Read receipts", () => {
                 await util.goTo(room2);
                 await util.assertReadThread("Root");
             });
-            // XXX: fails because it flakes - sometimes the room is still unread after opening the thread (initially)
-            test.skip("Reacting to a redacted message leaves the thread read", async ({
+            test("Reacting to a redacted message leaves the thread read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -726,8 +724,7 @@ test.describe("Read receipts", () => {
                 await util.goTo(room2);
                 await util.assertReadThread("Root");
             });
-            // XXX: fails because it flakes
-            test.skip("A thread with a read redaction is still read after restart", async ({
+            test("A thread with a read redaction is still read after restart", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -736,16 +733,16 @@ test.describe("Read receipts", () => {
                 // Given my receipt points at a redacted thread message
                 await util.goTo(room1);
                 await util.receiveMessages(room2, [
-                    "Root",
-                    msg.threadedOff("Root", "ThreadMsg1"),
-                    msg.threadedOff("Root", "ThreadMsg2"),
+                    "Root1",
+                    msg.threadedOff("Root1", "ThreadMsg1"),
+                    msg.threadedOff("Root1", "ThreadMsg2"),
                     "Root2",
                     msg.threadedOff("Root2", "Root2->A"),
                 ]);
                 await util.assertUnread(room2, 5);
                 await util.goTo(room2);
-                await util.assertUnreadThread("Root");
-                await util.openThread("Root");
+                await util.assertUnreadThread("Root1");
+                await util.openThread("Root1");
                 await util.assertUnreadLessThan(room2, 4);
                 await util.openThread("Root2");
                 await util.assertRead(room2);
@@ -755,7 +752,7 @@ test.describe("Read receipts", () => {
                 await util.receiveMessages(room2, [msg.redactionOf("ThreadMsg2")]);
                 await util.assertStillRead(room2);
                 await util.goTo(room2);
-                await util.assertReadThread("Root");
+                await util.assertReadThread("Root1");
 
                 // When I restart
                 await util.saveAndReload();
