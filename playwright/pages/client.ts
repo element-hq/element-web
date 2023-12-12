@@ -104,8 +104,8 @@ export class Client {
     public async sendMessage(roomId: string, content: IContent | string): Promise<ISendEventResponse> {
         if (typeof content === "string") {
             content = {
-                body: content,
                 msgtype: "m.text",
+                body: content,
             };
         }
 

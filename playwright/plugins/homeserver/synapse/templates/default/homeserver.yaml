@@ -92,3 +92,8 @@ oidc_providers:
       user_mapping_provider:
           config:
               display_name_template: "{{ user.name }}"
+
+# Inhibit background updates as this Synapse isn't long-lived
+background_updates:
+    min_batch_size: 100000
+    sleep_duration_ms: 100000
