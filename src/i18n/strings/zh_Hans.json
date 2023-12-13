@@ -271,7 +271,7 @@
         "reset_password_button": "忘记密码？",
         "reset_password_email_field_description": "使用邮件地址恢复你的账户",
         "reset_password_email_field_required_invalid": "输入邮件地址（此家服务器上必须）",
-        "reset_password_email_not_associated": "你的电子邮件地址似乎未与此家服务器上的Matrix ID关联。",
+        "reset_password_email_not_associated": "你的电子邮件地址似乎未与服务器上的Matrix ID关联。",
         "reset_password_email_not_found_title": "未找到此邮箱地址",
         "server_picker_custom": "其他家服务器",
         "server_picker_description": "你可以使用自定义服务器选项来指定不同的家服务器URL以登录其他Matrix服务器。这让你能把%(brand)s和不同家服务器上的已有Matrix账户搭配使用。",
@@ -304,8 +304,8 @@
         "sign_in_with_sso": "使用单点登录",
         "soft_logout": {
             "clear_data_button": "清除所有数据",
-            "clear_data_description": "清除此会话中的所有数据是永久的。加密消息会丢失，除非其密钥已被备份。",
-            "clear_data_title": "是否清除此会话中的所有数据？"
+            "clear_data_description": "清除此设备中的所有数据是永久的。加密消息会丢失，除非其密钥已被备份。",
+            "clear_data_title": "是否清除此设备中的所有数据？"
         },
         "soft_logout_heading": "你已登出",
         "soft_logout_intro_password": "输入你的密码以登录并重新获取访问你账户的权限。",
@@ -313,7 +313,7 @@
         "soft_logout_intro_unsupported_auth": "你不能登录到你的账户。请联系你的家服务器管理员以获取更多信息。",
         "soft_logout_subheading": "清除个人数据",
         "sso": "单点登录",
-        "sso_failed_missing_storage": "我们已要求浏览器记住你使用的家服务器，但不幸的是你的浏览器已忘记。请前往登录页面重试。",
+        "sso_failed_missing_storage": "我们已请求浏览器记住你使用的服务器，但是你的浏览器貌似已经忘记了。请前往登录页面重试。",
         "sso_or_username_password": "%(ssoButtons)s 或 %(usernamePassword)s",
         "sync_footer_subtitle": "如果你加入了很多房间，可能会消耗一些时间",
         "uia": {
@@ -327,7 +327,7 @@
             "msisdn_token_incorrect": "令牌错误",
             "msisdn_token_prompt": "请输入其包含的代码：",
             "password_prompt": "在下方输入账户密码以确认你的身份。",
-            "recaptcha_missing_params": "在家服务器配置中缺少验证码公钥。请将此报告给你的家服务器管理员。",
+            "recaptcha_missing_params": "在服务器配置中缺少验证码公钥。请将此问题报告给你的服务器管理员。",
             "registration_token_prompt": "输入由服务器管理员所提供的注册密钥。",
             "sso_body": "使用单一登入证明你的身份，以确认添加此电子邮件地址。",
             "sso_failed": "确认你的身份时出了一点问题。取消并重试。",
@@ -335,8 +335,8 @@
             "sso_postauth_title": "确认以继续",
             "sso_preauth_body": "要继续，请使用单点登录证明你的身份。",
             "sso_title": "使用单点登录继续",
-            "terms": "请阅读并接受此家服务器的政策：",
-            "terms_invalid": "请阅读并接受此家服务器的所有政策"
+            "terms": "请阅读并接受此服务器的政策：",
+            "terms_invalid": "请阅读并接受此服务器的所有政策"
         },
         "unsupported_auth": "此服务器未提供客户端支持的任何登录流程。",
         "unsupported_auth_email": "此家服务器不支持使用电子邮箱地址登录。",
@@ -2277,7 +2277,7 @@
                 "confirm_security_phrase": "确认你的安全短语",
                 "description": "通过在你的服务器上备份加密密钥来防止丢失你对加密消息和数据的访问权。",
                 "download_or_copy": "%(downloadButton)s或%(copyButton)s",
-                "enter_phrase_title": "输入一个安全密码",
+                "enter_phrase_title": "输入安全短语",
                 "enter_phrase_to_confirm": "再次输入你的安全短语进行确认。",
                 "generate_security_key_description": "我们将为您生成一个安全密钥，将其存储在安全的地方，例如密码管理器或保险箱。",
                 "generate_security_key_title": "生成一个安全密钥",
@@ -2486,8 +2486,7 @@
             "security_recommendations_description": "按照以下建议来提高您的帐户安全性。",
             "session_id": "会话 ID",
             "sign_out_confirm_description": {
-                "one": "你确定要登出%(count)s个会话吗？",
-                "other": "你确定要退出这 %(count)s 个会话吗？"
+                "other": "你确定要从这 %(count)s 个会话中退出吗？"
             },
             "title": "会话",
             "unverified_session": "未验证的会话",

@@ -2569,6 +2569,11 @@
         },
         "notifications": {
             "default_setting_description": "Denna inställning kommer att tillämpas som standard för alla dina rum.",
+            "default_setting_section": "Jag vill bli meddelad för (Standardinställning)",
+            "desktop_notification_message_preview": "Visa förhandsgranskning av meddelanden i skrivbordsmeddelanden",
+            "email_description": "Få en sammanfattning av missade aviseringar via e-post",
+            "email_section": "E-postsammanfattning",
+            "email_select": "Välj vilka e-postadresser du vill skicka sammanfattningar till. Hantera dina e-postadresser i <button>Allmänt</button>.",
             "enable_audible_notifications_session": "Aktivera ljudaviseringar för den här sessionen",
             "enable_desktop_notifications_session": "Aktivera skrivbordsaviseringar för den här sessionen",
             "enable_email_notifications": "Aktivera e-postaviseringar för %(email)s",
@@ -2582,9 +2587,20 @@
             "error_saving_detail": "Ett fel inträffade när dina aviseringsinställningar sparades.",
             "error_title": "Det går inte att aktivera aviseringar",
             "error_updating": "Ett fel uppstod när du uppdaterade dina aviseringsinställningar. Pröva att växla alternativet igen.",
+            "invites": "Inbjuden till ett rum",
+            "labs_notice_prompt": "<strong>Uppdatering:</strong> Vi har förenklat aviseringsinställningarna för att göra alternativen enklare att hitta. Vissa anpassade inställningar som du har valt tidigare visas inte här, men de är fortfarande aktiva. Om du fortsätter kan vissa av dina inställningar ändras. <a>Läs mer</a>",
+            "mentions_keywords": "Omnämnanden och nyckelord",
+            "mentions_keywords_only": "Endast omnämnanden och nyckelord",
             "messages_containing_keywords": "Meddelanden som innehåller nyckelord",
             "noisy": "Högljudd",
+            "notices": "Meddelanden skickade av bottar",
+            "notify_at_room": "Meddela när någon nämner genom att använda @room",
+            "other_section": "Andra saker vi tror att du kan vara intresserad av:",
+            "people_mentions_keywords": "Personer, omnämnanden och nyckelord",
+            "play_sound_for_description": "Tillämpas som standard för alla rum på alla enheter.",
+            "play_sound_for_section": "Spela ett ljud för",
             "push_targets": "Aviseringsmål",
+            "room_activity": "Ny rumsaktivitet, uppgraderingar och statusmeddelanden inträffar",
             "rule_call": "Inbjudan till samtal",
             "rule_contains_display_name": "Meddelanden som innehåller mitt visningsnamn",
             "rule_contains_user_name": "Meddelanden som innehåller mitt användarnamn",
@@ -2596,7 +2612,8 @@
             "rule_roomnotif": "Meddelanden som innehåller @room",
             "rule_suppress_notices": "Meddelanden från bottar",
             "rule_tombstone": "När rum uppgraderas",
-            "show_message_desktop_notification": "Visa meddelande i skrivbordsavisering"
+            "show_message_desktop_notification": "Visa meddelande i skrivbordsavisering",
+            "voip": "Ljud- och videosamtal"
         },
         "preferences": {
             "always_show_menu_bar": "Visa alltid fönstermenyn",
@@ -2895,6 +2912,7 @@
         "me": "Visar åtgärd",
         "msg": "Skickar ett meddelande till den valda användaren",
         "myavatar": "Byter din profilbild i alla rum",
+        "myroomavatar": "Byter din profilbild endast i det aktuella rummet",
         "myroomnick": "Byter ditt visningsnamn endast i detta rum",
         "nick": "Byter ditt visningsnamn",
         "no_active_call": "Inget aktivt samtal i det här rummet",
@@ -3125,9 +3143,13 @@
         "n_hours_ago": "%(num)s timmar sedan",
         "n_minutes_ago": "%(num)s minuter sedan",
         "seconds_left": "%(seconds)ss kvar",
+        "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)st %(minutes)sm %(seconds)ss",
         "short_hours": "%(value)st",
-        "short_hours_minutes_seconds": "%(hours)st %(minutes)sm %(seconds)ss"
+        "short_hours_minutes_seconds": "%(hours)st %(minutes)sm %(seconds)ss",
+        "short_minutes": "%(value)sm",
+        "short_minutes_seconds": "%(minutes)sm %(seconds)ss",
+        "short_seconds": "%(value)ss"
     },
     "timeline": {
         "context_menu": {
@@ -3437,6 +3459,7 @@
                 "other": "%(severalUsers)sbytte namn %(count)s gånger",
                 "one": "%(severalUsers)sbytte namn"
             },
+            "format": "%(nameList)s %(transitionList)s",
             "hidden_event": {
                 "one": "%(oneUser)sskickade ett dolt meddelande",
                 "other": "%(oneUser)sskickade %(count)s dolda meddelanden"

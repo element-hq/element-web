@@ -1115,20 +1115,24 @@
         "export_successful": "Export úspešný!",
         "exported_n_events_in_time": {
             "one": "Exportovaná %(count)s udalosť za %(seconds)s sekúnd",
+            "few": "Exportovaných %(count)s udalosti za %(seconds)s sekúnd",
             "other": "Exportovaných %(count)s udalostí za %(seconds)s sekúnd"
         },
         "exporting_your_data": "Exportovanie vašich údajov",
         "fetched_n_events": {
             "one": "Zatiaľ získaná %(count)s udalosť",
-            "other": "Zatiaľ získané %(count)s udalosti"
+            "few": "Zatiaľ získané %(count)s udalosti",
+            "other": "Zatiaľ získaných %(count)s udalostí"
         },
         "fetched_n_events_in_time": {
             "one": "Načítaná %(count)s udalosť za %(seconds)ss",
+            "few": "Načítané %(count)s udaloszi za %(seconds)ss",
             "other": "Načítaných %(count)s udalostí za %(seconds)ss"
         },
         "fetched_n_events_with_total": {
             "one": "Získaná %(count)s udalosť z %(total)s",
-            "other": "Získané %(count)s udalosti z %(total)s"
+            "few": "Získané %(count)s udalosti z %(total)s",
+            "other": "Získaných %(count)s udalostí z %(total)s"
         },
         "fetching_events": "Získavanie udalostí…",
         "file_attached": "Priložený súbor",
@@ -1651,6 +1655,7 @@
         "no_avatar_label": "Pridajte fotografiu, aby ľudia vedeli, že ste to vy.",
         "only_n_steps_to_go": {
             "one": "Zostáva už len %(count)s krok",
+            "few": "Zostávajú už len %(count)s kroky",
             "other": "Zostáva už len %(count)s krokov"
         },
         "personal_messaging_action": "Spustite svoju prvú konverzáciu",
