@@ -15,7 +15,7 @@ jobs:
                   headers: '{"GraphQL-Features": "projects_next_graphql"}'
                   query: |
                       query find_team_members($team: String!) {
-                        organization(login: "vector-im") {
+                        organization(login: "element-hq") {
                           team(slug: $team) {
                             members {
                               nodes {
@@ -83,7 +83,7 @@ jobs:
                   headers: '{"GraphQL-Features": "projects_next_graphql"}'
                   query: |
                       query find_team_members($team: String!) {
-                        organization(login: "vector-im") {
+                        organization(login: "element-hq") {
                           team(slug: $team) {
                             members {
                               nodes {
