@@ -9,6 +9,7 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Browser öffnen, um die Anmeldung abzuschließen"
     },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Herunterladen fertiggestellt",
     "error": {
         "app_launch_unexpected_error": "Unerwarteter Fehler bei der Vorbereitung der App; mehr Details in der Konsole.",
