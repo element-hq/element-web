@@ -140,7 +140,7 @@
         "@typescript-eslint/parser": "^5.45.0",
         "allchange": "^1.0.6",
         "babel-jest": "^29.0.0",
-        "babel-loader": "^8.2.2",
+        "babel-loader": "^9.0.0",
         "buffer": "^6.0.3",
         "chokidar": "^3.5.1",
         "concurrently": "^8.0.0",
