@@ -121,6 +121,7 @@
         "@types/jsrsasign": "^10.5.4",
         "@types/katex": "^0.16.7",
         "@types/lodash": "^4.14.197",
+        "@types/minimist": "^1.2.5",
         "@types/modernizr": "^3.5.6",
         "@types/node": "^16",
         "@types/node-fetch": "^2.6.4",
