@@ -26,7 +26,10 @@ export default defineConfig<TestOptions>({
         ignoreHTTPSErrors: true,
         video: "retain-on-failure",
         baseURL,
-        permissions: ["clipboard-write", "clipboard-read"],
+        permissions: ["clipboard-write", "clipboard-read", "microphone"],
+        launchOptions: {
+            args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
+        },
         trace: "on-first-retry",
     },
     webServer: {
