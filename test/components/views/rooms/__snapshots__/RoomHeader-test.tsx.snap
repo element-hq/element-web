@@ -44,28 +44,34 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
     >
       <button
+        aria-disabled="true"
         aria-label="There's no one here to call"
-        class="_icon-button_1qjaf_17"
+        class="_icon-button_ur2sw_17"
         data-state="closed"
-        disabled=""
+        role="button"
         style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
       >
         <div />
       </button>
       <button
+        aria-disabled="true"
         aria-label="There's no one here to call"
-        class="_icon-button_1qjaf_17"
+        class="_icon-button_ur2sw_17"
         data-state="closed"
-        disabled=""
+        role="button"
         style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
       >
         <div />
       </button>
       <button
         aria-label="Threads"
-        class="_icon-button_1qjaf_17"
+        class="_icon-button_ur2sw_17"
         data-state="closed"
+        role="button"
         style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
       >
         <div />
       </button>

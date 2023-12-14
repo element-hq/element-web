@@ -34,6 +34,10 @@ import { PollHistoryDialog } from "../../../../src/components/views/dialogs/Poll
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { _t } from "../../../../src/languageHandler";
 import SettingsStore from "../../../../src/settings/SettingsStore";
+import { tagRoom } from "../../../../src/utils/room/tagRoom";
+import { DefaultTagID } from "../../../../src/stores/room-list/models";
+
+jest.mock("../../../../src/utils/room/tagRoom");
 
 describe("<RoomSummaryCard />", () => {
     const userId = "@alice:domain.org";
@@ -63,6 +67,9 @@ describe("<RoomSummaryCard />", () => {
             isRoomEncrypted: jest.fn(),
             getOrCreateFilter: jest.fn().mockResolvedValue({ filterId: 1 }),
             getRoom: jest.fn(),
+            isGuest: jest.fn().mockReturnValue(false),
+            deleteRoomTag: jest.fn().mockResolvedValue({}),
+            setRoomTag: jest.fn().mockResolvedValue({}),
         });
         room = new Room(roomId, mockClient, userId);
         const roomCreateEvent = new MatrixEvent({
@@ -76,6 +83,7 @@ describe("<RoomSummaryCard />", () => {
             state_key: "",
         });
         room.currentState.setStateEvents([roomCreateEvent]);
+        room.updateMyMembership("join");
 
         jest.spyOn(Modal, "createDialog");
         jest.spyOn(RightPanelStore.instance, "pushCard");
@@ -131,6 +139,22 @@ describe("<RoomSummaryCard />", () => {
         fireEvent.click(getByText(_t("action|copy_link")));
 
         expect(Modal.createDialog).toHaveBeenCalledWith(ShareDialog, { target: room });
+    });
+
+    it("opens invite dialog on button click", () => {
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText(_t("action|invite")));
+
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "view_invite", roomId: room.roomId });
+    });
+
+    it("fires favourite dispatch on button click", () => {
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText(_t("room|context_menu|favourite")));
+
+        expect(tagRoom).toHaveBeenCalledWith(room, DefaultTagID.Favourite);
     });
 
     it("opens room settings on button click", () => {

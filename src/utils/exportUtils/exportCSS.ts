@@ -33,7 +33,7 @@ function mutateCssText(css: string): string {
 }
 
 function isLightTheme(sheet: CSSStyleSheet): boolean {
-    return (<HTMLStyleElement>sheet.ownerNode).dataset.mxTheme?.toLowerCase() === "light";
+    return (<HTMLStyleElement>sheet.ownerNode)?.dataset.mxTheme?.toLowerCase() === "light";
 }
 
 async function getRulesFromCssFile(path: string): Promise<CSSStyleSheet> {

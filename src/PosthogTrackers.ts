@@ -91,7 +91,7 @@ export default class PosthogTrackers {
         this.trackPage();
     }
 
-    public static trackInteraction(name: InteractionName, ev?: SyntheticEvent, index?: number): void {
+    public static trackInteraction(name: InteractionName, ev?: SyntheticEvent | Event, index?: number): void {
         let interactionType: InteractionEvent["interactionType"];
         if (ev?.type === "click") {
             interactionType = "Pointer";

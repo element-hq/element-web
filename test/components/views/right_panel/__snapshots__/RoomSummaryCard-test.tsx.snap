@@ -71,24 +71,24 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </section>
       </header>
       <div
-        class="_separator_1uqhh_17"
+        class="_separator_1dey0_17"
         data-orientation="horizontal"
         role="separator"
       />
       <label
-        class="_item_zxa40_17 _interactive_zxa40_36"
+        class="_item_1bcsk_17 _interactive_1bcsk_36"
         data-kind="primary"
         for=":r1:"
         role="menuitemcheckbox"
       >
         <div
           aria-hidden="true"
-          class="_icon_zxa40_49"
+          class="_icon_1bcsk_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
         >
           Favourite
         </span>
@@ -106,25 +106,24 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </div>
       </label>
       <button
-        class="_item_zxa40_17 _interactive_zxa40_36 _disabled_zxa40_125"
+        class="_item_1bcsk_17 _interactive_1bcsk_36"
         data-kind="primary"
-        disabled=""
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_zxa40_49"
+          class="_icon_1bcsk_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
         >
           Invite
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_zxa40_65"
+          class="_nav-hint_1bcsk_60"
           fill="none"
           height="24"
           viewBox="0 0 24 24"
@@ -138,24 +137,24 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <button
-        class="_item_zxa40_17 _interactive_zxa40_36"
+        class="_item_1bcsk_17 _interactive_1bcsk_36"
         data-kind="primary"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_zxa40_49"
+          class="_icon_1bcsk_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
         >
           Copy link
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_zxa40_65"
+          class="_nav-hint_1bcsk_60"
           fill="none"
           height="24"
           viewBox="0 0 24 24"
@@ -169,24 +168,24 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <button
-        class="_item_zxa40_17 _interactive_zxa40_36"
+        class="_item_1bcsk_17 _interactive_1bcsk_36"
         data-kind="primary"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_zxa40_49"
+          class="_icon_1bcsk_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
         >
           Settings
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_zxa40_65"
+          class="_nav-hint_1bcsk_60"
           fill="none"
           height="24"
           viewBox="0 0 24 24"
@@ -200,29 +199,29 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <div
-        class="_separator_1uqhh_17"
+        class="_separator_1dey0_17"
         data-orientation="horizontal"
         role="separator"
       />
       <button
-        class="_item_zxa40_17 _interactive_zxa40_36"
+        class="_item_1bcsk_17 _interactive_1bcsk_36"
         data-kind="primary"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_zxa40_49"
+          class="_icon_1bcsk_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
         >
           People
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_zxa40_65"
+          class="_nav-hint_1bcsk_60"
           fill="none"
           height="24"
           viewBox="0 0 24 24"
@@ -236,24 +235,24 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <button
-        class="_item_zxa40_17 _interactive_zxa40_36"
+        class="_item_1bcsk_17 _interactive_1bcsk_36"
         data-kind="primary"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_zxa40_49"
+          class="_icon_1bcsk_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
         >
           Files
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_zxa40_65"
+          class="_nav-hint_1bcsk_60"
           fill="none"
           height="24"
           viewBox="0 0 24 24"
@@ -267,24 +266,24 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <button
-        class="_item_zxa40_17 _interactive_zxa40_36"
+        class="_item_1bcsk_17 _interactive_1bcsk_36"
         data-kind="primary"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_zxa40_49"
+          class="_icon_1bcsk_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
         >
           Poll history
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_zxa40_65"
+          class="_nav-hint_1bcsk_60"
           fill="none"
           height="24"
           viewBox="0 0 24 24"
@@ -298,24 +297,24 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <button
-        class="_item_zxa40_17 _interactive_zxa40_36"
+        class="_item_1bcsk_17 _interactive_1bcsk_36"
         data-kind="primary"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_zxa40_49"
+          class="_icon_1bcsk_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
         >
           Export Chat
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_zxa40_65"
+          class="_nav-hint_1bcsk_60"
           fill="none"
           height="24"
           viewBox="0 0 24 24"
@@ -329,29 +328,29 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <div
-        class="_separator_1uqhh_17"
+        class="_separator_1dey0_17"
         data-orientation="horizontal"
         role="separator"
       />
       <button
-        class="_item_zxa40_17 _interactive_zxa40_36"
+        class="_item_1bcsk_17 _interactive_1bcsk_36"
         data-kind="critical"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_zxa40_49"
+          class="_icon_1bcsk_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_zxa40_58"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
         >
           Leave room
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_zxa40_65"
+          class="_nav-hint_1bcsk_60"
           fill="none"
           height="24"
           viewBox="0 0 24 24"

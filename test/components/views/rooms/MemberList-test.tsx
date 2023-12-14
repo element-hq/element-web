@@ -406,7 +406,7 @@ describe("MemberList", () => {
                 await flushPromises();
 
                 // button rendered but disabled
-                expect(screen.getByText("Invite to this room")).toBeDisabled();
+                expect(screen.getByText("Invite to this room")).toHaveAttribute("aria-disabled", "true");
             });
 
             it("renders enabled invite button when current user is a member and has rights to invite", async () => {
