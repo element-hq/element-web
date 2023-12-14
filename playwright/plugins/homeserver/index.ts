@@ -53,7 +53,12 @@ export interface StartHomeserverOpts {
 
 export interface Homeserver {
     start(opts: StartHomeserverOpts): Promise<HomeserverInstance>;
-    stop(): Promise<void>;
+    /**
+     * Stop this test homeserver instance.
+     *
+     * @returns A list of paths relative to the cwd for logfiles generated during this test run.
+     */
+    stop(): Promise<string[]>;
 }
 
 export interface Credentials {

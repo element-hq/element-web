@@ -81,7 +81,7 @@ export class Dendrite extends Synapse implements Homeserver, HomeserverInstance 
         return this;
     }
 
-    public async stop(): Promise<void> {
+    public async stop(): Promise<string[]> {
         if (!this.config) throw new Error("Missing existing dendrite instance, did you call stop() before start()?");
 
         const dendriteLogsPath = path.join("playwright", "dendritelogs", this.config.serverId);
@@ -97,6 +97,8 @@ export class Dendrite extends Synapse implements Homeserver, HomeserverInstance 
         await fse.remove(this.config.configDir);
 
         console.log(`Stopped dendrite id ${this.config.serverId}.`);
+
+        return [path.join(dendriteLogsPath, "stdout.log"), path.join(dendriteLogsPath, "stderr.log")];
     }
 }
 

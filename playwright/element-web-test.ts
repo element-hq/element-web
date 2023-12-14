@@ -17,6 +17,7 @@ limitations under the License.
 import { test as base, expect as baseExpect, Locator, Page, ExpectMatcherState, ElementHandle } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import _ from "lodash";
+import { basename } from "node:path";
 
 import type mailhog from "mailhog";
 import type { IConfigOptions } from "../src/IConfigOptions";
@@ -108,7 +109,7 @@ export const test = base.extend<
     },
 
     startHomeserverOpts: "default",
-    homeserver: async ({ request, startHomeserverOpts: opts }, use) => {
+    homeserver: async ({ request, startHomeserverOpts: opts }, use, testInfo) => {
         if (typeof opts === "string") {
             opts = { template: opts };
         }
@@ -127,7 +128,16 @@ export const test = base.extend<
         }
 
         await use(await server.start(opts));
-        await server.stop();
+        const logs = await server.stop();
+
+        if (testInfo.status !== "passed") {
+            for (const path of logs) {
+                await testInfo.attach(`homeserver-${basename(path)}`, {
+                    path,
+                    contentType: "text/plain",
+                });
+            }
+        }
     },
     // eslint-disable-next-line no-empty-pattern
     oAuthServer: async ({}, use) => {
