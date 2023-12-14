@@ -33,10 +33,12 @@ export const RoomName = ({ room, children, maxLength }: IProps): JSX.Element => 
     const isVerifiedRoom = useVerifiedRoom(room);
 
     const roomUsers: string[] = useMemo(() => {
-        return (room as Room)
-            .getMembers()
-            .map((m) => m.userId)
-            .filter((userId) => !!userId && userId != (room as Room).myUserId);
+        return (
+            (room as Room)
+                ?.getMembers?.()
+                .map((m: { userId: string }) => m.userId)
+                .filter((userId: string) => !!userId && userId !== (room as Room)?.myUserId) || []
+        );
     }, [room]);
 
     const truncatedRoomName = useMemo(() => {

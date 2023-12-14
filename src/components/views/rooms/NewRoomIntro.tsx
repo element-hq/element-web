@@ -69,6 +69,24 @@ const NewRoomIntro: React.FC = () => {
     const isLocalRoom = room instanceof LocalRoom;
     const dmPartner = isLocalRoom ? room.targets[0]?.userId : DMRoomMap.shared().getUserIdForRoomId(roomId);
 
+    const onSendHelloClick = (): void => {
+        if (!dmPartner) return;
+        cli.sendEvent(roomId, EventType.RoomMessage, {
+            body: "👋",
+            msgtype: "m.text",
+        });
+    };
+
+    const sendHelloButton = !room.getLastActiveTimestamp() && (
+        <AccessibleButton
+            kind="primary_outline"
+            onClick={onSendHelloClick}
+            style={{ marginTop: "5px", fontSize: "30px" }}
+        >
+            👋
+        </AccessibleButton>
+    );
+
     let body: JSX.Element;
     if (dmPartner) {
         const { shouldEncrypt: encryptedSingle3rdPartyInvite } = shouldEncryptRoomWithSingle3rdPartyInvite(room);
@@ -113,6 +131,7 @@ const NewRoomIntro: React.FC = () => {
                     )}
                 </p>
                 {caption && <p>{caption}</p>}
+                {sendHelloButton}
             </React.Fragment>
         );
     } else {
@@ -262,6 +281,7 @@ const NewRoomIntro: React.FC = () => {
                 </p>
                 <p>{topicText}</p>
                 {buttons}
+                {sendHelloButton}
             </React.Fragment>
         );
     }
