@@ -22,7 +22,7 @@ import Timeoutable = Cypress.Timeoutable;
 import Withinable = Cypress.Withinable;
 import Shadow = Cypress.Shadow;
 import type { SettingLevel } from "../../src/settings/SettingLevel";
-import type SettingsStore from "../../src/settings/SettingsStore";
+import ApplicationWindow = Cypress.ApplicationWindow;
 
 export enum Filter {
     People = "people",
@@ -36,7 +36,7 @@ declare global {
             /**
              * Returns the SettingsStore
              */
-            getSettingsStore(): Chainable<typeof SettingsStore | undefined>; // XXX: Importing SettingsStore causes a bunch of type lint errors
+            getSettingsStore(): Chainable<ApplicationWindow["mxSettingsStore"] | undefined>;
             /**
              * Open the top left user menu, returning a handle to the resulting context menu.
              */
@@ -49,17 +49,6 @@ declare global {
             openUserSettings(tab?: string): Chainable<JQuery<HTMLElement>>;
 
             /**
-             * Open room creation dialog.
-             */
-            openCreateRoomDialog(): Chainable<JQuery<HTMLElement>>;
-
-            /**
-             * Open room settings (via room header menu), returning a handle to the resulting dialog.
-             * @param tab the name of the tab to switch to after opening, optional.
-             */
-            openRoomSettings(tab?: string): Chainable<JQuery<HTMLElement>>;
-
-            /**
              * Switch settings tab to the one by the given name, ideally call this in the context of the dialog.
              * @param tab the name of the tab to switch to.
              */
@@ -69,20 +58,6 @@ declare global {
              * Close dialog, ideally call this in the context of the dialog.
              */
             closeDialog(): Chainable<JQuery<HTMLElement>>;
-
-            /**
-             * Join the given beta, the `Labs` tab must already be opened,
-             * ideally call this in the context of the dialog.
-             * @param name the name of the beta to join.
-             */
-            joinBeta(name: string): Chainable<JQuery<HTMLElement>>;
-
-            /**
-             * Leave the given beta, the `Labs` tab must already be opened,
-             * ideally call this in the context of the dialog.
-             * @param name the name of the beta to leave.
-             */
-            leaveBeta(name: string): Chainable<JQuery<HTMLElement>>;
 
             /**
              * Sets the value for a setting. The room ID is optional if the
@@ -97,20 +72,6 @@ declare global {
              * @return {Promise} Resolves when the setting has been changed.
              */
             setSettingValue(settingName: string, roomId: string, level: SettingLevel, value: any): Chainable<void>;
-
-            /**
-             * Gets the value of a setting. The room ID is optional if the
-             * setting is not to be applied to any particular room, otherwise it
-             * should be supplied.
-             * @param {string} settingName The name of the setting to read the
-             * value of.
-             * @param {String} roomId The room ID to read the setting value in,
-             * may be null.
-             * @param {boolean} excludeDefault True to disable using the default
-             * value.
-             * @return {*} The value, or null if not found
-             */
-            getSettingValue<T>(settingName: string, roomId?: string, excludeDefault?: boolean): Chainable<T>;
 
             /**
              * Opens the spotlight dialog
@@ -135,25 +96,15 @@ declare global {
     }
 }
 
-Cypress.Commands.add("getSettingsStore", (): Chainable<typeof SettingsStore> => {
+Cypress.Commands.add("getSettingsStore", (): Chainable<ApplicationWindow["mxSettingsStore"]> => {
     return cy.window({ log: false }).then((win) => win.mxSettingsStore);
 });
 
 Cypress.Commands.add(
     "setSettingValue",
     (name: string, roomId: string, level: SettingLevel, value: any): Chainable<void> => {
-        return cy.getSettingsStore().then((store: typeof SettingsStore) => {
+        return cy.getSettingsStore().then((store: ApplicationWindow["mxSettingsStore"]) => {
             return cy.wrap(store.setValue(name, roomId, level, value));
-        });
-    },
-);
-
-// eslint-disable-next-line max-len
-Cypress.Commands.add(
-    "getSettingValue",
-    <T = any>(name: string, roomId?: string, excludeDefault?: boolean): Chainable<T> => {
-        return cy.getSettingsStore().then((store: typeof SettingsStore) => {
-            return store.getValue(name, roomId, excludeDefault);
         });
     },
 );
@@ -174,24 +125,6 @@ Cypress.Commands.add("openUserSettings", (tab?: string): Chainable<JQuery<HTMLEl
     });
 });
 
-Cypress.Commands.add("openCreateRoomDialog", (): Chainable<JQuery<HTMLElement>> => {
-    cy.findByRole("button", { name: "Add room" }).click();
-    cy.findByRole("menuitem", { name: "New room" }).click();
-    return cy.get(".mx_CreateRoomDialog");
-});
-
-Cypress.Commands.add("openRoomSettings", (tab?: string): Chainable<JQuery<HTMLElement>> => {
-    cy.findByRole("button", { name: "Room options" }).click();
-    cy.get(".mx_RoomTile_contextMenu").within(() => {
-        cy.findByRole("menuitem", { name: "Settings" }).click();
-    });
-    return cy.get(".mx_RoomSettingsDialog").within(() => {
-        if (tab) {
-            cy.switchTab(tab);
-        }
-    });
-});
-
 Cypress.Commands.add("switchTab", (tab: string): Chainable<JQuery<HTMLElement>> => {
     return cy.get(".mx_TabbedView_tabLabels").within(() => {
         cy.contains(".mx_TabbedView_tabLabel", tab).click();
@@ -200,24 +133,6 @@ Cypress.Commands.add("switchTab", (tab: string): Chainable<JQuery<HTMLElement>> 
 
 Cypress.Commands.add("closeDialog", (): Chainable<JQuery<HTMLElement>> => {
     return cy.findByRole("button", { name: "Close dialog" }).click();
-});
-
-Cypress.Commands.add("joinBeta", (name: string): Chainable<JQuery<HTMLElement>> => {
-    return cy
-        .contains(".mx_BetaCard_title", name)
-        .closest(".mx_BetaCard")
-        .within(() => {
-            return cy.get(".mx_BetaCard_buttons").findByRole("button", { name: "Join the beta" }).click();
-        });
-});
-
-Cypress.Commands.add("leaveBeta", (name: string): Chainable<JQuery<HTMLElement>> => {
-    return cy
-        .contains(".mx_BetaCard_title", name)
-        .closest(".mx_BetaCard")
-        .within(() => {
-            return cy.get(".mx_BetaCard_buttons").findByRole("button", { name: "Leave the beta" }).click();
-        });
 });
 
 Cypress.Commands.add(
