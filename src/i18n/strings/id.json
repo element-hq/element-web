@@ -718,6 +718,7 @@
         "failed_to_load": "Gagal untuk dimuat.",
         "failed_to_save": "Gagal menyimpan pengaturan.",
         "failed_to_send": "Gagal mengirimkan pertistiwa!",
+        "id": "ID: ",
         "invalid_json": "Tidak terlihat seperti JSON yang absah.",
         "level": "Tingkat",
         "low_bandwidth_mode": "Mode bandwidth rendah",
@@ -1078,10 +1079,13 @@
             "user": "%(senderName)s memulai sebuah panggilan",
             "you": "Anda memulai sebuah panggilan"
         },
+        "m.emote": "* %(senderName)s %(emote)s",
         "m.reaction": {
             "user": "%(sender)s bereaksi %(reaction)s ke %(message)s",
             "you": "Anda bereaksi %(reaction)s ke %(message)s"
-        }
+        },
+        "m.sticker": "%(senderName)s: %(stickerName)s",
+        "m.text": "%(senderName)s: %(message)s"
     },
     "export_chat": {
         "cancelled": "Ekspor Dibatalkan",
@@ -1282,10 +1286,12 @@
     },
     "keyboard": {
         "activate_button": "Aktivasi tombol yang dipilih",
+        "alt": "Alt",
         "autocomplete_cancel": "Batalkan penyelesaian otomatis",
         "autocomplete_force": "Selesaikan dengan paksa",
         "autocomplete_navigate_next": "Saran penyelesaian otomatis berikutnya",
         "autocomplete_navigate_prev": "Saran penyelesaian otomatis sebelumnya",
+        "backspace": "Hapus",
         "cancel_reply": "Batalkan membalas ke pesan",
         "category_autocomplete": "Pelengkapan Otomatis",
         "category_calls": "Panggilan",
@@ -1304,7 +1310,10 @@
         "composer_toggle_link": "Alih Tautan",
         "composer_toggle_quote": "Kutip",
         "composer_undo": "Urungkan editan",
+        "control": "Ctrl",
         "dismiss_read_marker_and_jump_bottom": "Abaikan penanda baca dan pergi ke bawah",
+        "end": "End",
+        "escape": "Esc",
         "go_home_view": "Pergi ke Tampilan Beranda",
         "home": "Beranda",
         "jump_first_message": "Pergi ke pesan pertama",
@@ -1331,6 +1340,8 @@
         "scroll_up_timeline": "Gulir ke atas di lini masa",
         "search": "Cari (harus diaktifkan)",
         "send_sticker": "Kirim sebuah stiker",
+        "shift": "Shift",
+        "space": "Spasi",
         "switch_to_space": "Ganti ke space oleh nomor",
         "toggle_hidden_events": "Alih visibilitas peristiwa tersembunyi",
         "toggle_microphone_mute": "Bisukan/suarakan mikrofon",
@@ -2824,6 +2835,7 @@
         "addwidget_no_permissions": "Anda tidak dapat mengubah widget di ruangan ini.",
         "ban": "Blokir pengguna dengan id yang dicantumkan",
         "category_actions": "Aksi",
+        "category_admin": "Admin",
         "category_advanced": "Tingkat Lanjut",
         "category_effects": "Efek",
         "category_messages": "Pesan",
@@ -3406,6 +3418,7 @@
                 "one": "%(severalUsers)smengubah namanya",
                 "other": "%(severalUsers)smengubah namanya %(count)s kali"
             },
+            "format": "%(nameList)s %(transitionList)s",
             "hidden_event": {
                 "other": "%(oneUser)s sent %(count)s hidden messages",
                 "one": "%(oneUser)s mengirim sebuah pesan tersembunyi"
@@ -3714,6 +3727,7 @@
         "connection_lost_description": "Anda tidak dapat membuat panggilan tanpa terhubung ke server.",
         "consulting": "Mengkonsultasi dengan %(transferTarget)s. <a>Transfer ke %(transferee)s</a>",
         "default_device": "Perangkat Bawaan",
+        "dial": "Panggil",
         "dialpad": "Tombol Penyetel",
         "disable_camera": "Matikan kamera",
         "disable_microphone": "Bisukan mikrofon",

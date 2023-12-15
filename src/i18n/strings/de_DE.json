@@ -163,6 +163,7 @@
         "autodiscovery_invalid_is_base_url": "Ungültige base_url für m.identity_server",
         "autodiscovery_invalid_is_response": "Ungültige Antwort beim Aufspüren des Identitäts-Servers",
         "autodiscovery_invalid_json": "Ungültiges JSON",
+        "autodiscovery_no_well_known": "Keine .well-known-JSON-Datei gefunden",
         "autodiscovery_unexpected_error_hs": "Ein unerwarteter Fehler ist beim Laden der Heim-Server-Konfiguration aufgetreten",
         "autodiscovery_unexpected_error_is": "Ein unerwarteter Fehler ist beim Laden der Identitäts-Server-Konfiguration aufgetreten",
         "captcha_description": "Dieser Heim-Server möchte sicherstellen, dass du kein Roboter bist.",
@@ -228,6 +229,7 @@
         "no_hs_url_provided": "Keine Heim-Server-URL angegeben",
         "oidc": {
             "error_title": "Wir konnten dich nicht anmelden",
+            "logout_redirect_warning": "Sie werden zum Server Authentifizierungsanbieter weitergeleitet, um die Abmeldung abzuschließen.",
             "missing_or_invalid_stored_state": "Wir haben deinen Browser gebeten, sich zu merken, bei welchem Heim-Server du dich anmeldest, aber dein Browser hat dies leider vergessen. Gehe zur Anmeldeseite und versuche es erneut."
         },
         "password_field_keep_going_prompt": "Fortfahren …",
@@ -285,6 +287,7 @@
             "sign_out_other_devices": "Auf allen Geräten abmelden"
         },
         "reset_password_action": "Passwort zurücksetzen",
+        "reset_password_button": "Passwort vergessen?",
         "reset_password_email_field_description": "Verwende eine E-Mail-Adresse, um dein Konto wiederherzustellen",
         "reset_password_email_field_required_invalid": "E-Mail-Adresse eingeben (auf diesem Heim-Server erforderlich)",
         "reset_password_email_not_associated": "Deine E-Mail-Adresse scheint nicht mit einer Matrix-ID auf diesem Heim-Server verknüpft zu sein.",
@@ -429,6 +432,7 @@
         "are_you_sure": "Bist du sicher?",
         "attachment": "Anhang",
         "authentication": "Authentifizierung",
+        "avatar": "Profilbild",
         "beta": "Beta",
         "camera": "Kamera",
         "cameras": "Kameras",
@@ -719,7 +723,9 @@
         "failed_to_load": "Fehler beim Laden.",
         "failed_to_save": "Speichern der Einstellungen fehlgeschlagen.",
         "failed_to_send": "Übertragung des Ereignisses fehlgeschlagen!",
+        "id": "ID: ",
         "invalid_json": "Scheint kein gültiges JSON zu sein.",
+        "level": "Level",
         "low_bandwidth_mode": "Modus für geringe Bandbreite",
         "low_bandwidth_mode_description": "Benötigt kompatiblen Heim-Server.",
         "main_timeline": "Hauptverlauf",
@@ -731,6 +737,7 @@
         "number_of_users": "Benutzeranzahl",
         "observe_only": "Nur beobachten",
         "original_event_source": "Ursprüngliche Rohdaten",
+        "phase": "Phase",
         "phase_cancelled": "Abgebrochen",
         "phase_ready": "Bereit",
         "phase_requested": "Angefragt",
@@ -858,6 +865,9 @@
         },
         "event_shield_reason_authenticity_not_guaranteed": "Die Echtheit dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden.",
         "event_shield_reason_mismatched_sender_key": "Von einer nicht verifizierten Sitzung verschlüsselt",
+        "event_shield_reason_unknown_device": "Durch ein unbekanntes oder gelöschtes Gerät verschlüsselt.",
+        "event_shield_reason_unsigned_device": "Durch ein von Besitzer nicht verifiziertes Gerät verschlüsselt.",
+        "event_shield_reason_unverified_identity": "Durch einen nicht verifizierten Benutzer verschlüsselt.",
         "export_unsupported": "Dein Browser unterstützt die benötigten Verschlüsselungserweiterungen nicht",
         "import_invalid_keyfile": "Keine gültige %(brand)s-Schlüsseldatei",
         "import_invalid_passphrase": "Authentifizierung fehlgeschlagen: Falsches Passwort?",
@@ -1077,10 +1087,13 @@
             "user": "%(senderName)s hat einen Anruf gestartet",
             "you": "Du hast einen Anruf gestartet"
         },
+        "m.emote": "* %(senderName)s %(emote)s",
         "m.reaction": {
             "user": "%(sender)s reagierte mit %(reaction)s auf %(message)s",
             "you": "Du reagiertest mit %(reaction)s auf %(message)s"
-        }
+        },
+        "m.sticker": "%(senderName)s: %(stickerName)s",
+        "m.text": "%(senderName)s: %(message)s"
     },
     "export_chat": {
         "cancelled": "Exportieren abgebrochen",
@@ -1280,6 +1293,7 @@
     },
     "keyboard": {
         "activate_button": "Ausgewählten Button aktivieren",
+        "alt": "Alt",
         "autocomplete_cancel": "Autovervollständigung deaktivieren",
         "autocomplete_force": "Vervollständigung erzwingen",
         "autocomplete_navigate_next": "Nächster Vorschlag der Autovervollständigung",
@@ -1334,6 +1348,7 @@
         "search": "Suchen (muss in den Einstellungen aktiviert sein)",
         "send_sticker": "Sticker senden",
         "shift": "Umschalt",
+        "space": "Leertaste",
         "switch_to_space": "Mit Nummer zu Space springen",
         "toggle_hidden_events": "Sichtbarkeit versteckter Ereignisse umschalten",
         "toggle_microphone_mute": "Mikrofon an-/ausschalten",
@@ -2573,6 +2588,7 @@
             "voip": "Audio- und Videoanrufe"
         },
         "preferences": {
+            "Electron.enableHardwareAcceleration": "Hardwarebeschleunigung einschalten (Neustart von %(appName)s notwendig)",
             "always_show_menu_bar": "Fenstermenüleiste immer anzeigen",
             "autocomplete_delay": "Verzögerung vor Autovervollständigung (ms)",
             "code_blocks_heading": "Quelltextblöcke",
@@ -2599,6 +2615,7 @@
         "security": {
             "4s_public_key_in_account_data": "in den Kontodaten",
             "4s_public_key_status": "Öffentlicher Schlüssel des sicheren Speichers:",
+            "analytics_description": "Anonym Daten teilen um bei der Identifizierung von Fehlern zu helfen. Keine persönlichen Daten. Keine Daten von Dritt-Anbietern.",
             "backup_key_cached_status": "Sicherungsschlüssel zwischengespeichert:",
             "backup_key_stored_status": "Sicherungsschlüssel gespeichert:",
             "backup_key_unexpected_type": "unbekannter Typ",
@@ -2634,14 +2651,17 @@
             "ignore_users_section": "Blockierte Benutzer",
             "import_megolm_keys": "E2E-Raumschlüssel importieren",
             "key_backup_active": "Diese Sitzung sichert deine Schlüssel.",
+            "key_backup_active_version": "Aktive Backup-Version:",
             "key_backup_active_version_none": "Nichts",
             "key_backup_algorithm": "Algorithmus:",
+            "key_backup_can_be_restored": "Dieses Backup kann in dieser Sitzung wiederhergestellt werden",
             "key_backup_complete": "Alle Schlüssel gesichert",
             "key_backup_connect": "Verbinde diese Sitzung mit einer Schlüsselsicherung",
             "key_backup_connect_prompt": "Verbinde diese Sitzung mit deiner Schlüsselsicherung bevor du dich abmeldest, um den Verlust von Schlüsseln zu vermeiden.",
             "key_backup_in_progress": "Sichere %(sessionsRemaining)s Schlüssel …",
             "key_backup_inactive": "Diese Sitzung <b>sichert deine Schlüssel nicht</b>, aber du hast eine vorhandene Sicherung, die du wiederherstellen und in Zukunft hinzufügen kannst.",
             "key_backup_inactive_warning": "Deine Schlüssel werden von dieser Sitzung <b>nicht gesichert</b>.",
+            "key_backup_latest_version": "Letzte Backup-Version auf diesen Server:",
             "manually_verify_all_sessions": "Indirekte Sitzungen manuell verifizieren",
             "message_search_disable_warning": "Wenn deaktiviert, werden Nachrichten von verschlüsselten Räumen nicht in den Ergebnissen auftauchen.",
             "message_search_disabled": "Speichere verschlüsselte Nachrichten lokal, sodass sie deinen Suchergebnissen erscheinen können.",
@@ -2675,6 +2695,8 @@
         "send_read_receipts_unsupported": "Dein Server unterstützt das Deaktivieren von Lesebestätigungen nicht.",
         "send_typing_notifications": "Tippbenachrichtigungen senden",
         "sessions": {
+            "best_security_note": "Um die beste Sicherheit zu gewährleisten, verifizieren Sie Ihre Sitzungen und melden Sie sich von jeder Sitzung ab, die Sie nicht mehr kennen oder nicht mehr verwenden.",
+            "browser": "Internet Browser",
             "confirm_sign_out": {
                 "one": "Abmelden des Geräts bestätigen",
                 "other": "Abmelden dieser Geräte bestätigen"
@@ -2699,6 +2721,7 @@
             "device_verified_description": "Diese Sitzung ist für sichere Kommunikation bereit.",
             "device_verified_description_current": "Deine aktuelle Sitzung ist für sichere Kommunikation bereit.",
             "error_pusher_state": "Konfigurieren des Push-Dienstes fehlgeschlagen",
+            "error_set_name": "Es konnte kein Sitzungsname gesetzt werden",
             "filter_all": "Alle",
             "filter_inactive": "Inaktiv",
             "filter_inactive_description": "Seit %(inactiveAgeDays)s oder mehr Tagen inaktiv",
@@ -2759,6 +2782,7 @@
             "unverified_sessions_explainer_1": "Nicht verifizierte Sitzungen sind jene, die mit deinen Daten angemeldet, aber nicht quer signiert wurden.",
             "unverified_sessions_explainer_2": "Du solltest besonders sicher gehen, dass du diese Sitzungen kennst, da sie die unbefugte Nutzung deines Kontos durch Dritte bedeuten könnten.",
             "unverified_sessions_list_description": "Für besonders sichere Kommunikation verifiziere deine Sitzungen oder melde dich von ihnen ab, falls du sie nicht mehr identifizieren kannst.",
+            "url": "Link",
             "verified_session": "Verifizierte Sitzung",
             "verified_sessions": "Verifizierte Sitzungen",
             "verified_sessions_explainer_1": "Auf verifizierte Sitzungen kannst du überall mit deinem Konto zugreifen, wenn du deine Passphrase eingegeben oder deine Identität mit einer anderen Sitzung verifiziert hast.",
@@ -2786,6 +2810,7 @@
             "metaspaces_orphans_description": "Gruppiere all deine Räume, die nicht Teil eines Spaces sind, an einem Ort.",
             "metaspaces_people_description": "Gruppiere all deine Direktnachrichten an einem Ort.",
             "metaspaces_subsection": "Anzuzeigende Spaces",
+            "spaces_explainer": "Räume sind Möglichkeiten, Personen zu gruppieren. Neben den Räumen, in denen du dich befindest, kannst du auch einige vorgefertigte verwenden.",
             "title": "Seitenleiste"
         },
         "start_automatically": "Nach Systemstart automatisch starten",
@@ -2835,6 +2860,7 @@
         "addwidget_no_permissions": "Du darfst in diesem Raum keine Widgets verändern.",
         "ban": "Verbannt den Benutzer mit der angegebenen ID",
         "category_actions": "Aktionen",
+        "category_admin": "Administrator",
         "category_advanced": "Erweitert",
         "category_effects": "Effekte",
         "category_messages": "Nachrichten",
@@ -2847,6 +2873,7 @@
         "devtools": "Öffnet die Entwicklungswerkzeuge",
         "discardsession": "Erzwingt, dass die aktuell ausgehende Gruppensitzung in einem verschlüsseltem Raum verworfen wird",
         "error_invalid_rendering_type": "Befehlsfehler: Rendering-Typ kann nicht gefunden werden (%(renderingType)s)",
+        "error_invalid_room": "Eingabe fehlgeschlagen: Raum (%(roomId)s) nicht auffindbar",
         "error_invalid_runfn": "Befehlsfehler: Slash-Befehl kann nicht verarbeitet werden.",
         "help": "Zeigt die Liste verfügbarer Befehle mit Verwendungen und Beschreibungen an",
         "help_dialog_title": "Befehl Hilfe",
@@ -3416,6 +3443,7 @@
                 "other": "%(severalUsers)s haben %(count)s-mal ihren Namen geändert",
                 "one": "%(severalUsers)shaben ihren Namen geändert"
             },
+            "format": "%(nameList)s %(transitionList)s",
             "hidden_event": {
                 "one": "%(oneUser)s hat eine versteckte Nachricht gesendet",
                 "other": "%(oneUser)s hat %(count)s versteckte Nachrichten gesendet"
@@ -3905,6 +3933,7 @@
         "shared_data_name": "Dein Anzeigename",
         "shared_data_room_id": "Raum-ID",
         "shared_data_theme": "Dein Design",
+        "shared_data_url": "%(brand)s URL",
         "shared_data_warning": "Wenn du dieses Widget verwendest, können Daten <helpIcon /> zu %(widgetDomain)s übertragen werden.",
         "shared_data_warning_im": "Wenn du dieses Widget verwendest, können Daten <helpIcon /> zu %(widgetDomain)s und deinem Integrationsmanager übertragen werden.",
         "shared_data_widget_id": "Widget-ID",

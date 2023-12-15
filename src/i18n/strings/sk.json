@@ -780,6 +780,7 @@
         "show_hidden_events": "Zobrazovať skryté udalosti v histórii obsahu miestností",
         "spaces": {
             "one": "<priestor>",
+            "few": "<%(count)s priestory>",
             "other": "<%(count)s priestorov>"
         },
         "state_key": "Stavový kľúč",
@@ -3469,28 +3470,33 @@
         "send_state_sent": "Vaša správa bola odoslaná",
         "summary": {
             "banned": {
-                "other": "mal %(count)s krát zakázaný vstup",
-                "one": "mal zakázaný vstup"
+                "one": "mal zakázaný vstup",
+                "few": "mal %(count)s-krát zakázaný vstup",
+                "other": "mal %(count)s-krát zakázaný vstup"
             },
             "banned_multiple": {
-                "other": "mali %(count)s krát zakázaný vstup",
-                "one": "mali zakázaný vstup"
+                "one": "mali zakázaný vstup",
+                "few": "mali %(count)s-krát zakázaný vstup",
+                "other": "mali %(count)s-krát zakázaný vstup"
             },
             "changed_avatar": {
                 "other": "%(oneUser)s si zmenil svoj profilový obrázok %(count)s-krát",
                 "one": "%(oneUser)s zmenil/a svoj profilový obrázok"
             },
             "changed_avatar_multiple": {
-                "other": "%(severalUsers)ssi zmenili %(count)s-krát profilový obrázok",
-                "one": "%(severalUsers)szmenilo svoj profilový obrázok"
+                "one": "%(severalUsers)szmenilo svoj profilový obrázok",
+                "few": "%(severalUsers)ssi zmenili %(count)s-krát profilový obrázok",
+                "other": "%(severalUsers)ssi zmenilo %(count)s-krát profilový obrázok"
             },
             "changed_name": {
-                "other": "%(oneUser)ssi %(count)s krát zmenil meno",
-                "one": "%(oneUser)ssi zmenil meno"
+                "one": "%(oneUser)ssi zmenil meno",
+                "few": "%(oneUser)ssi %(count)s-krát zmenil meno",
+                "other": "%(oneUser)ssi %(count)s-krát zmenil meno"
             },
             "changed_name_multiple": {
-                "other": "%(severalUsers)ssi %(count)s krát zmenili meno",
-                "one": "%(severalUsers)ssi zmenili meno"
+                "one": "%(severalUsers)ssi zmenili meno",
+                "few": "%(severalUsers)ssi %(count)s-krát zmenili meno",
+                "other": "%(severalUsers)ssi %(count)s-krát zmenili meno"
             },
             "format": "%(nameList)s %(transitionList)s",
             "hidden_event": {
@@ -3502,52 +3508,64 @@
                 "one": "%(severalUsers)sposlalo skrytú správu"
             },
             "invite_withdrawn": {
-                "other": "%(oneUser)smal %(count)s krát stiahnuté pozvanie",
-                "one": "%(oneUser)smal stiahnuté pozvanie"
+                "one": "%(oneUser)s ",
+                "few": "%(oneUser)s odvolal svoje pozvanie %(count)s-krát",
+                "other": "%(oneUser)s odvolal svoje pozvanie %(count)s-krát"
             },
             "invite_withdrawn_multiple": {
-                "other": "%(severalUsers)smali %(count)s krát stiahnuté pozvanie",
-                "one": "%(severalUsers)smali stiahnuté pozvanie"
+                "one": "%(severalUsers)s odvolali svoje pozvanie",
+                "few": "%(severalUsers)s odvolali svoje pozvanie %(count)s-krát",
+                "other": "%(severalUsers)s odvolali svoje pozvanie %(count)s-krát"
             },
             "invited": {
-                "other": "bol %(count)s krát pozvaný",
-                "one": "bol pozvaný"
+                "one": "bol pozvaný",
+                "few": "bol %(count)s-krát pozvaný",
+                "other": "bol %(count)s-krát pozvaný"
             },
             "invited_multiple": {
-                "other": "boli %(count)s krát pozvaní",
-                "one": "boli pozvaní"
+                "one": "boli pozvaní",
+                "few": "boli %(count)s-krát pozvaní",
+                "other": "boli %(count)s-krát pozvaní"
             },
             "joined": {
-                "other": "%(oneUser)s%(count)s krát vstúpil",
-                "one": "%(oneUser)svstúpil"
+                "one": "%(oneUser)ssa pripojil",
+                "few": "%(oneUser)ssa pripojil %(count)s-krát",
+                "other": "%(oneUser)ssa pripojil %(count)s-krát"
             },
             "joined_and_left": {
-                "other": "%(oneUser)s%(count)s krát vstúpil a opustil",
-                "one": "%(oneUser)svstúpil a opustil"
+                "one": "%(oneUser)svstúpil a odišiel",
+                "few": "%(oneUser)s%(count)s-krát vstúpil a odišiel",
+                "other": "%(oneUser)s%(count)s-krát vstúpil a odišiel"
             },
             "joined_and_left_multiple": {
-                "other": "%(severalUsers)s%(count)s krát vstúpili a opustili",
-                "one": "%(severalUsers)svstúpili a opustili"
+                "one": "%(severalUsers)svstúpili a odišli",
+                "few": "%(severalUsers)s%(count)s-krát vstúpili a odišli",
+                "other": "%(severalUsers)s%(count)s-krát vstúpili a odišli"
             },
             "joined_multiple": {
-                "other": "%(severalUsers)s%(count)s krát vstúpili",
-                "one": "%(severalUsers)svstúpili"
+                "one": "%(severalUsers)svstúpili",
+                "few": "%(severalUsers)s%(count)s-krát vstúpili",
+                "other": "%(severalUsers)s%(count)s-krát vstúpili"
             },
             "kicked": {
-                "other": "bol odstránený %(count)s krát",
-                "one": "bol odstránený"
+                "one": "bol odstránený",
+                "few": "bol odstránený %(count)s-krát",
+                "other": "bol odstránený %(count)s-krát"
             },
             "kicked_multiple": {
                 "one": "bol odstránený",
-                "other": "boli odstránení %(count)s krát"
+                "few": "boli odstránení %(count)s-krát",
+                "other": "boli odstránení %(count)s-krát"
             },
             "left": {
-                "other": "%(oneUser)s%(count)s krát opustil",
-                "one": "%(oneUser)sodišiel/a"
+                "one": "%(oneUser)sodišiel/a",
+                "few": "%(oneUser)s%(count)s-krát odišiel",
+                "other": "%(oneUser)s%(count)s-krát odišiel"
             },
             "left_multiple": {
-                "other": "%(severalUsers)s%(count)s krát opustili",
-                "one": "%(severalUsers)sopustili"
+                "one": "%(severalUsers)sopustili",
+                "few": "%(severalUsers)s%(count)s-krát opustili",
+                "other": "%(severalUsers)s%(count)s-krát opustili"
             },
             "no_change": {
                 "one": "%(oneUser)snespravil žiadne zmeny",
@@ -3574,20 +3592,24 @@
                 "one": "%(severalUsers)s odstránili správu"
             },
             "rejected_invite": {
-                "other": "%(oneUser)s%(count)s krát odmietol pozvanie",
-                "one": "%(oneUser)sodmietol pozvanie"
+                "one": "%(oneUser)sodmietol pozvanie",
+                "few": "%(oneUser)s%(count)s-krát odmietol pozvanie",
+                "other": "%(oneUser)s%(count)s-krát odmietol pozvanie"
             },
             "rejected_invite_multiple": {
-                "other": "%(severalUsers)s%(count)s krát odmietli pozvanie",
-                "one": "%(severalUsers)sodmietly pozvanie"
+                "one": "%(severalUsers)sodmietli pozvanie",
+                "few": "%(severalUsers)s%(count)s-krát odmietli pozvanie",
+                "other": "%(severalUsers)s%(count)s-krát odmietli pozvanie"
             },
             "rejoined": {
-                "other": "%(oneUser)s%(count)s krát opustil a znovu vstúpil",
-                "one": "%(oneUser)sopustil a znovu vstúpil"
+                "one": "%(oneUser)sodišiel a znovu vstúpil",
+                "few": "%(oneUser)s%(count)s-krát odišiel a znovu vstúpil",
+                "other": "%(oneUser)s%(count)s-krát odišiel a znovu vstúpil"
             },
             "rejoined_multiple": {
-                "other": "%(severalUsers)s%(count)s krát opustili a znovu vstúpili",
-                "one": "%(severalUsers)sopustili a znovu vstúpili"
+                "one": "%(severalUsers)sopustili a znovu vstúpili",
+                "few": "%(severalUsers)s%(count)s-krát odišli a znovu vstúpili",
+                "other": "%(severalUsers)s%(count)s-krát odišli a znovu vstúpili"
             },
             "server_acls": {
                 "other": "%(oneUser)szmenil ACL servera %(count)s krát",
