@@ -26,7 +26,7 @@ import Spinner from "../elements/Spinner";
 import InteractiveAuthDialog from "../dialogs/InteractiveAuthDialog";
 import ConfirmDestroyCrossSigningDialog from "../dialogs/security/ConfirmDestroyCrossSigningDialog";
 import SetupEncryptionDialog from "../dialogs/security/SetupEncryptionDialog";
-import { accessSecretStorage } from "../../../SecurityManager";
+import { accessSecretStorage, withSecretStorageKeyCache } from "../../../SecurityManager";
 import AccessibleButton from "../elements/AccessibleButton";
 import { SettingsSubsectionText } from "./shared/SettingsSubsection";
 
@@ -118,31 +118,27 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
     }
 
     /**
-     * Bootstrapping cross-signing take one of these paths:
-     * 1. Create cross-signing keys locally and store in secret storage (if it
-     *    already exists on the account).
-     * 2. Access existing secret storage by requesting passphrase and accessing
-     *    cross-signing keys as needed.
-     * 3. All keys are loaded and there's nothing to do.
-     * @param {bool} [forceReset] Bootstrap again even if keys already present
+     * Reset the user's cross-signing keys.
      */
-    private bootstrapCrossSigning = async ({ forceReset = false }): Promise<void> => {
+    private async resetCrossSigning(): Promise<void> {
         this.setState({ error: false });
         try {
             const cli = MatrixClientPeg.safeGet();
-            await cli.bootstrapCrossSigning({
-                authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
-                    const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-                        title: _t("encryption|bootstrap_title"),
-                        matrixClient: cli,
-                        makeRequest,
-                    });
-                    const [confirmed] = await finished;
-                    if (!confirmed) {
-                        throw new Error("Cross-signing key upload auth canceled");
-                    }
-                },
-                setupNewCrossSigning: forceReset,
+            await withSecretStorageKeyCache(async () => {
+                await cli.getCrypto()!.bootstrapCrossSigning({
+                    authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
+                        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
+                            title: _t("encryption|bootstrap_title"),
+                            matrixClient: cli,
+                            makeRequest,
+                        });
+                        const [confirmed] = await finished;
+                        if (!confirmed) {
+                            throw new Error("Cross-signing key upload auth canceled");
+                        }
+                    },
+                    setupNewCrossSigning: true,
+                });
             });
         } catch (e) {
             this.setState({ error: true });
@@ -150,13 +146,18 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         }
         if (this.unmounted) return;
         this.getUpdatedStatus();
-    };
+    }
 
-    private resetCrossSigning = (): void => {
+    /**
+     * Callback for when the user clicks the "reset cross signing" button.
+     *
+     * Shows a confirmation dialog, and then does the reset if confirmed.
+     */
+    private onResetCrossSigningClick = (): void => {
         Modal.createDialog(ConfirmDestroyCrossSigningDialog, {
-            onFinished: (act) => {
+            onFinished: async (act) => {
                 if (!act) return;
-                this.bootstrapCrossSigning({ forceReset: true });
+                this.resetCrossSigning();
             },
         });
     };
@@ -243,7 +244,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
 
         if (keysExistAnywhere) {
             actions.push(
-                <AccessibleButton key="reset" kind="danger" onClick={this.resetCrossSigning}>
+                <AccessibleButton key="reset" kind="danger" onClick={this.onResetCrossSigningClick}>
                     {_t("action|reset")}
                 </AccessibleButton>,
             );
@@ -260,54 +261,56 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
                 <details>
                     <summary className="mx_CrossSigningPanel_advanced">{_t("common|advanced")}</summary>
                     <table className="mx_CrossSigningPanel_statusList">
-                        <tr>
-                            <th scope="row">{_t("settings|security|cross_signing_public_keys")}</th>
-                            <td>
-                                {crossSigningPublicKeysOnDevice
-                                    ? _t("settings|security|cross_signing_in_memory")
-                                    : _t("settings|security|cross_signing_not_found")}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">{_t("settings|security|cross_signing_private_keys")}</th>
-                            <td>
-                                {crossSigningPrivateKeysInStorage
-                                    ? _t("settings|security|cross_signing_in_4s")
-                                    : _t("settings|security|cross_signing_not_in_4s")}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">{_t("settings|security|cross_signing_master_private_Key")}</th>
-                            <td>
-                                {masterPrivateKeyCached
-                                    ? _t("settings|security|cross_signing_cached")
-                                    : _t("settings|security|cross_signing_not_cached")}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">{_t("settings|security|cross_signing_self_signing_private_key")}</th>
-                            <td>
-                                {selfSigningPrivateKeyCached
-                                    ? _t("settings|security|cross_signing_cached")
-                                    : _t("settings|security|cross_signing_not_cached")}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">{_t("settings|security|cross_signing_user_signing_private_key")}</th>
-                            <td>
-                                {userSigningPrivateKeyCached
-                                    ? _t("settings|security|cross_signing_cached")
-                                    : _t("settings|security|cross_signing_not_cached")}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">{_t("settings|security|cross_signing_homeserver_support")}</th>
-                            <td>
-                                {homeserverSupportsCrossSigning
-                                    ? _t("settings|security|cross_signing_homeserver_support_exists")
-                                    : _t("settings|security|cross_signing_not_found")}
-                            </td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <th scope="row">{_t("settings|security|cross_signing_public_keys")}</th>
+                                <td>
+                                    {crossSigningPublicKeysOnDevice
+                                        ? _t("settings|security|cross_signing_in_memory")
+                                        : _t("settings|security|cross_signing_not_found")}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">{_t("settings|security|cross_signing_private_keys")}</th>
+                                <td>
+                                    {crossSigningPrivateKeysInStorage
+                                        ? _t("settings|security|cross_signing_in_4s")
+                                        : _t("settings|security|cross_signing_not_in_4s")}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">{_t("settings|security|cross_signing_master_private_Key")}</th>
+                                <td>
+                                    {masterPrivateKeyCached
+                                        ? _t("settings|security|cross_signing_cached")
+                                        : _t("settings|security|cross_signing_not_cached")}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">{_t("settings|security|cross_signing_self_signing_private_key")}</th>
+                                <td>
+                                    {selfSigningPrivateKeyCached
+                                        ? _t("settings|security|cross_signing_cached")
+                                        : _t("settings|security|cross_signing_not_cached")}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">{_t("settings|security|cross_signing_user_signing_private_key")}</th>
+                                <td>
+                                    {userSigningPrivateKeyCached
+                                        ? _t("settings|security|cross_signing_cached")
+                                        : _t("settings|security|cross_signing_not_cached")}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">{_t("settings|security|cross_signing_homeserver_support")}</th>
+                                <td>
+                                    {homeserverSupportsCrossSigning
+                                        ? _t("settings|security|cross_signing_homeserver_support_exists")
+                                        : _t("settings|security|cross_signing_not_found")}
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </details>
                 {errorSection}

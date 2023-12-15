@@ -26,6 +26,8 @@ import {
     mockClientMethodsCrypto,
     mockClientMethodsUser,
 } from "../../../test-utils";
+import Modal from "../../../../src/Modal";
+import ConfirmDestroyCrossSigningDialog from "../../../../src/components/views/dialogs/security/ConfirmDestroyCrossSigningDialog";
 
 describe("<CrossSigningPanel />", () => {
     const userId = "@alice:server.org";
@@ -41,6 +43,10 @@ describe("<CrossSigningPanel />", () => {
 
         mockClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
         mockClient.isCrossSigningReady.mockResolvedValue(false);
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
     });
 
     it("should render a spinner while loading", () => {
@@ -84,6 +90,21 @@ describe("<CrossSigningPanel />", () => {
 
             expect(screen.getByTestId("summarised-status").innerHTML).toEqual("✅ Cross-signing is ready for use.");
             expect(screen.getByText("Cross-signing private keys:").parentElement!).toMatchSnapshot();
+        });
+
+        it("should allow reset of cross-signing", async () => {
+            mockClient.getCrypto()!.bootstrapCrossSigning = jest.fn().mockResolvedValue(undefined);
+            getComponent();
+            await flushPromises();
+
+            const modalSpy = jest.spyOn(Modal, "createDialog");
+
+            screen.getByRole("button", { name: "Reset" }).click();
+            expect(modalSpy).toHaveBeenCalledWith(ConfirmDestroyCrossSigningDialog, expect.any(Object));
+            modalSpy.mock.lastCall![1]!.onFinished(true);
+            expect(mockClient.getCrypto()!.bootstrapCrossSigning).toHaveBeenCalledWith(
+                expect.objectContaining({ setupNewCrossSigning: true }),
+            );
         });
     });
 

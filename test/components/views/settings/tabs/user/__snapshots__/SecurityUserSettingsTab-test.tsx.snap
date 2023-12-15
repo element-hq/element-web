@@ -175,66 +175,68 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                 <table
                   class="mx_CrossSigningPanel_statusList"
                 >
-                  <tr>
-                    <th
-                      scope="row"
-                    >
-                      Cross-signing public keys:
-                    </th>
-                    <td>
-                      not found
-                    </td>
-                  </tr>
-                  <tr>
-                    <th
-                      scope="row"
-                    >
-                      Cross-signing private keys:
-                    </th>
-                    <td>
-                      not found in storage
-                    </td>
-                  </tr>
-                  <tr>
-                    <th
-                      scope="row"
-                    >
-                      Master private key:
-                    </th>
-                    <td>
-                      not found locally
-                    </td>
-                  </tr>
-                  <tr>
-                    <th
-                      scope="row"
-                    >
-                      Self signing private key:
-                    </th>
-                    <td>
-                      not found locally
-                    </td>
-                  </tr>
-                  <tr>
-                    <th
-                      scope="row"
-                    >
-                      User signing private key:
-                    </th>
-                    <td>
-                      not found locally
-                    </td>
-                  </tr>
-                  <tr>
-                    <th
-                      scope="row"
-                    >
-                      Homeserver feature support:
-                    </th>
-                    <td>
-                      not found
-                    </td>
-                  </tr>
+                  <tbody>
+                    <tr>
+                      <th
+                        scope="row"
+                      >
+                        Cross-signing public keys:
+                      </th>
+                      <td>
+                        not found
+                      </td>
+                    </tr>
+                    <tr>
+                      <th
+                        scope="row"
+                      >
+                        Cross-signing private keys:
+                      </th>
+                      <td>
+                        not found in storage
+                      </td>
+                    </tr>
+                    <tr>
+                      <th
+                        scope="row"
+                      >
+                        Master private key:
+                      </th>
+                      <td>
+                        not found locally
+                      </td>
+                    </tr>
+                    <tr>
+                      <th
+                        scope="row"
+                      >
+                        Self signing private key:
+                      </th>
+                      <td>
+                        not found locally
+                      </td>
+                    </tr>
+                    <tr>
+                      <th
+                        scope="row"
+                      >
+                        User signing private key:
+                      </th>
+                      <td>
+                        not found locally
+                      </td>
+                    </tr>
+                    <tr>
+                      <th
+                        scope="row"
+                      >
+                        Homeserver feature support:
+                      </th>
+                      <td>
+                        not found
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
               </details>
             </div>
