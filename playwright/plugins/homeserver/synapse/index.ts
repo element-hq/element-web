@@ -84,6 +84,10 @@ async function cfgDirFromTemplate(opts: StartHomeserverOpts): Promise<Homeserver
     console.log(`Gen -> ${outputSigningKey}`);
     await fse.writeFile(outputSigningKey, `ed25519 x ${signingKey}`);
 
+    // Allow anyone to read, write and execute in the /temp/react-sdk-synapsedocker-xxx directory
+    // so that the DIND setup that we use to update the playwright screenshots work without any issues.
+    await fse.chmod(tempDir, 0o757);
+
     return {
         port,
         baseUrl,

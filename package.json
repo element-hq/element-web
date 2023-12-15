@@ -156,7 +156,7 @@
         "@peculiar/webcrypto": "^1.4.3",
         "@percy/cli": "^1.11.0",
         "@percy/cypress": "^3.1.2",
-        "@playwright/test": "^1.40.0",
+        "@playwright/test": "^1.40.1",
         "@testing-library/cypress": "^9.0.0",
         "@testing-library/dom": "^9.0.0",
         "@testing-library/jest-dom": "^6.0.0",
