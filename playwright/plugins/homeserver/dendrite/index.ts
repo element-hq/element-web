@@ -74,9 +74,11 @@ export class Dendrite extends Synapse implements Homeserver, HomeserverInstance 
             "http://localhost:8008/_matrix/client/versions",
         ]);
 
+        const dockerUrl = `http://${await this.docker.getContainerIp()}:8008`;
         this.config = {
             ...denCfg,
             serverId: dendriteId,
+            dockerUrl,
         };
         return this;
     }
@@ -107,7 +109,10 @@ export class Pinecone extends Dendrite {
     protected entrypoint = "/usr/bin/dendrite-demo-pinecone";
 }
 
-async function cfgDirFromTemplate(dendriteImage: string, opts: StartHomeserverOpts): Promise<HomeserverConfig> {
+async function cfgDirFromTemplate(
+    dendriteImage: string,
+    opts: StartHomeserverOpts,
+): Promise<Omit<HomeserverConfig, "dockerUrl">> {
     const template = "default"; // XXX: for now we only have one template
     const templateDir = path.join(__dirname, "templates", template);
 

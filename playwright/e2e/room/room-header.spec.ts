@@ -25,10 +25,9 @@ test.describe("Room Header", () => {
     });
 
     test.describe("with feature_notifications enabled", () => {
-        test.beforeEach(async ({ app }) => {
-            await app.labs.enableLabsFeature("feature_notifications");
+        test.use({
+            labsFlags: ["feature_notifications"],
         });
-
         test("should render default buttons properly", async ({ page, app, user }) => {
             await app.client.createRoom({ name: "Test Room" });
             await app.viewRoomByName("Test Room");
@@ -101,9 +100,7 @@ test.describe("Room Header", () => {
     });
 
     test.describe("with feature_pinning enabled", () => {
-        test.beforeEach(async ({ app }) => {
-            await app.labs.enableLabsFeature("feature_pinning");
-        });
+        test.use({ labsFlags: ["feature_pinning"] });
 
         test("should render the pin button for pinned messages card", async ({ page, app, user }) => {
             await app.client.createRoom({ name: "Test Room" });
@@ -126,9 +123,7 @@ test.describe("Room Header", () => {
     });
 
     test.describe("with a video room", () => {
-        test.beforeEach(async ({ app }) => {
-            await app.labs.enableLabsFeature("feature_video_rooms");
-        });
+        test.use({ labsFlags: ["feature_video_rooms"] });
 
         const createVideoRoom = async (page: Page, app: ElementAppPage) => {
             await page.locator(".mx_LeftPanel_roomListContainer").getByRole("button", { name: "Add room" }).click();
@@ -142,33 +137,36 @@ test.describe("Room Header", () => {
             await app.viewRoomByName("Test video room");
         };
 
-        test("should render buttons for room options, beta pill, invite, chat, and room info", async ({
-            page,
-            app,
-            user,
-        }) => {
-            await app.labs.enableLabsFeature("feature_notifications");
-            await createVideoRoom(page, app);
+        test.describe("and with feature_notifications enabled", () => {
+            test.use({ labsFlags: ["feature_video_rooms", "feature_notifications"] });
 
-            const header = page.locator(".mx_LegacyRoomHeader");
-            // Names (aria-label) of the buttons on the video room header
-            const expectedButtonNames = [
-                "Room options",
-                "Video rooms are a beta feature Click for more info", // Beta pill
-                "Invite",
-                "Chat",
-                "Room info",
-            ];
+            test("should render buttons for room options, beta pill, invite, chat, and room info", async ({
+                page,
+                app,
+                user,
+            }) => {
+                await createVideoRoom(page, app);
 
-            // Assert they are found and visible
-            for (const name of expectedButtonNames) {
-                await expect(header.getByRole("button", { name })).toBeVisible();
-            }
+                const header = page.locator(".mx_LegacyRoomHeader");
+                // Names (aria-label) of the buttons on the video room header
+                const expectedButtonNames = [
+                    "Room options",
+                    "Video rooms are a beta feature Click for more info", // Beta pill
+                    "Invite",
+                    "Chat",
+                    "Room info",
+                ];
 
-            // Assert that there is not a button except those buttons
-            await expect(header.getByRole("button")).toHaveCount(7);
+                // Assert they are found and visible
+                for (const name of expectedButtonNames) {
+                    await expect(header.getByRole("button", { name })).toBeVisible();
+                }
 
-            await expect(header).toMatchScreenshot("room-header-video-room.png");
+                // Assert that there is not a button except those buttons
+                await expect(header.getByRole("button")).toHaveCount(7);
+
+                await expect(header).toMatchScreenshot("room-header-video-room.png");
+            });
         });
 
         test("should render a working chat button which opens the timeline on a right panel", async ({

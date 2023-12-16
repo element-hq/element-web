@@ -19,6 +19,7 @@ export interface HomeserverConfig {
     readonly baseUrl: string;
     readonly port: number;
     readonly registrationSecret: string;
+    readonly dockerUrl: string;
 }
 
 export interface HomeserverInstance {

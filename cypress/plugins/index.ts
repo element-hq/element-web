@@ -22,7 +22,6 @@ import PluginEvents = Cypress.PluginEvents;
 import PluginConfigOptions = Cypress.PluginConfigOptions;
 import { synapseDocker } from "./synapsedocker";
 import { dendriteDocker } from "./dendritedocker";
-import { slidingSyncProxyDocker } from "./sliding-sync";
 import { webserver } from "./webserver";
 import { docker } from "./docker";
 import { log } from "./log";
@@ -31,7 +30,7 @@ import { log } from "./log";
  * @type {Cypress.PluginConfig}
  */
 export default function (on: PluginEvents, config: PluginConfigOptions) {
-    initPlugins(on, [docker, synapseDocker, dendriteDocker, slidingSyncProxyDocker, webserver, log], config);
+    initPlugins(on, [docker, synapseDocker, dendriteDocker, webserver, log], config);
     installLogsPrinter(on, {
         printLogsToConsole: "never",
 
