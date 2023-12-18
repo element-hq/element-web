@@ -10,7 +10,7 @@ import { useMemo } from "react";
  * @returns {string}
  */
 export function getSafeRoomName(roomName?: string): string {
-    return roomName?.replace(/^(\s|\[TG\])*/, "") || "";
+    return roomName?.replace(/^(\s|\[TG\])*/, "").replace(/^(\s|\$)*/, "") || "";
 }
 
 /**
