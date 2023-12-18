@@ -642,8 +642,7 @@ test.describe("Read receipts", () => {
                 await util.assertRead(room2);
                 await util.assertReadThread("Root");
             });
-            // XXX: fails because the read count drops to 1 but not to zero (this is a genuine stuck unread case)
-            test.skip("Reading a reply to a redacted message marks the thread as read", async ({
+            test("Reading a reply to a redacted message marks the thread as read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -760,8 +759,7 @@ test.describe("Read receipts", () => {
                 // Then the room is still read
                 await util.assertRead(room2);
             });
-            // XXX: fails for the same reason as "Reading a reply to a redacted message marks the thread as read"
-            test.skip("A thread with an unread reply to a redacted message is still unread after restart", async ({
+            test("A thread with an unread reply to a redacted message is still unread after restart", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -791,8 +789,7 @@ test.describe("Read receipts", () => {
                 await util.assertRead(room2);
                 await util.assertReadThread("Root");
             });
-            // XXX: fails for the same reason as "Reading a reply to a redacted message marks the thread as read
-            test.skip("A thread with a read reply to a redacted message is still read after restart", async ({
+            test("A thread with a read reply to a redacted message is still read after restart", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,

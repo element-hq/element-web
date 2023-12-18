@@ -155,10 +155,19 @@ export class MessageBuilder {
             public async getContent(room: JSHandle<Room>): Promise<Record<string, unknown>> {
                 const ev = await this.messageFinder.getMessage(room, targetMessage, true);
                 return ev.evaluate((ev, newMessage) => {
+                    const threadRel =
+                        ev.getRelation()?.rel_type === "m.thread"
+                            ? {
+                                  rel_type: "m.thread",
+                                  event_id: ev.getRelation().event_id,
+                              }
+                            : {};
+
                     return {
                         "msgtype": "m.text",
                         "body": newMessage,
                         "m.relates_to": {
+                            ...threadRel,
                             "m.in_reply_to": {
                                 event_id: ev.getId(),
                             },
