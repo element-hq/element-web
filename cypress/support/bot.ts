@@ -20,7 +20,7 @@ import * as loglevel from "loglevel";
 
 import type { ISendEventResponse, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import type { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
-import type { AddSecretStorageKeyOpts } from "matrix-js-sdk/src/secret-storage";
+import type { SecretStorageKeyDescription } from "matrix-js-sdk/src/secret-storage";
 import { HomeserverInstance } from "../plugins/utils/homeserver";
 import { Credentials } from "./homeserver";
 import { collapseLastLogGroup } from "./log";
@@ -157,7 +157,7 @@ function setupBotClient(
 
             // Store the cached secret storage key and return it when `getSecretStorageKey` is called
             let cachedKey: { keyId: string; key: Uint8Array };
-            const cacheSecretStorageKey = (keyId: string, keyInfo: AddSecretStorageKeyOpts, key: Uint8Array) => {
+            const cacheSecretStorageKey = (keyId: string, keyInfo: SecretStorageKeyDescription, key: Uint8Array) => {
                 cachedKey = {
                     keyId,
                     key,

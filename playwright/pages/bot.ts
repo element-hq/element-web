@@ -19,7 +19,7 @@ import { uniqueId } from "lodash";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { Logger } from "matrix-js-sdk/src/logger";
-import type { AddSecretStorageKeyOpts } from "matrix-js-sdk/src/secret-storage";
+import type { SecretStorageKeyDescription } from "matrix-js-sdk/src/secret-storage";
 import type { Credentials, HomeserverInstance } from "../plugins/homeserver";
 import type { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import { Client } from "./client";
@@ -139,7 +139,11 @@ export class Bot extends Client {
 
                 // Store the cached secret storage key and return it when `getSecretStorageKey` is called
                 let cachedKey: { keyId: string; key: Uint8Array };
-                const cacheSecretStorageKey = (keyId: string, keyInfo: AddSecretStorageKeyOpts, key: Uint8Array) => {
+                const cacheSecretStorageKey = (
+                    keyId: string,
+                    keyInfo: SecretStorageKeyDescription,
+                    key: Uint8Array,
+                ) => {
                     cachedKey = {
                         keyId,
                         key,
