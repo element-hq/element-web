@@ -52,6 +52,11 @@ limitations under the License.
     --dialog-zIndex-standard: calc(var(--dialog-zIndex-standard-background) + 1); /* 4012 */
 }
 
+#matrixchat {
+    /* This is required to ensure Compound tooltips correctly draw where they should with z-index: auto */
+    contain: strict;
+}
+
 /**
  * We need to increase the specificity of the selector to override the
  * custom property set by the design tokens package

@@ -27,9 +27,9 @@ import MemberAvatar from "../avatars/MemberAvatar";
 import BaseAvatar from "../avatars/BaseAvatar";
 import Heading from "../typography/Heading";
 import AccessibleButton from "./AccessibleButton";
-import TextWithTooltip from "./TextWithTooltip";
 import { parseUrl } from "../../../utils/UrlUtils";
 import { Icon as HelpIcon } from "../../../../res/img/feather-customised/help-circle.svg";
+import TooltipTarget from "./TooltipTarget";
 
 interface IProps {
     url: string;
@@ -116,13 +116,14 @@ export default class AppPermission extends React.Component<IProps, IState> {
             </div>
         );
         const warningTooltip = (
-            <TextWithTooltip
-                tooltip={warningTooltipText}
-                tooltipClass="mx_Tooltip--appPermission mx_Tooltip--appPermission--dark"
-                class="mx_TextWithTooltip_target--helpIcon"
+            <TooltipTarget
+                label={warningTooltipText}
+                tooltipClassName="mx_Tooltip--appPermission mx_Tooltip--appPermission--dark"
+                tooltipTargetClassName="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
+                className="mx_TextWithTooltip_tooltip"
             >
                 <HelpIcon className="mx_Icon mx_Icon_12" />
-            </TextWithTooltip>
+            </TooltipTarget>
         );
 
         // Due to i18n limitations, we can't dedupe the code for variables in these two messages.

@@ -182,7 +182,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
         let defaultServerName: React.ReactNode = this.defaultServer.hsName;
         if (this.defaultServer.hsNameIsDifferent) {
             defaultServerName = (
-                <TextWithTooltip class="mx_Login_underlinedServerName" tooltip={this.defaultServer.hsUrl}>
+                <TextWithTooltip className="mx_Login_underlinedServerName" tooltip={this.defaultServer.hsUrl}>
                     {this.defaultServer.hsName}
                 </TextWithTooltip>
             );

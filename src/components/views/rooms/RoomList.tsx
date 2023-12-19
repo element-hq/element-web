@@ -170,7 +170,6 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                     tabIndex={tabIndex}
                     onClick={openMenu}
                     className="mx_RoomSublist_auxButton"
-                    tooltipClassName="mx_RoomSublist_addRoomTooltip"
                     aria-label={_t("action|add_people")}
                     title={_t("action|add_people")}
                     isExpanded={menuDisplayed}
@@ -189,7 +188,6 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                     PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuCreateChatItem", e);
                 }}
                 className="mx_RoomSublist_auxButton"
-                tooltipClassName="mx_RoomSublist_addRoomTooltip"
                 aria-label={_t("action|start_chat")}
                 title={_t("action|start_chat")}
             />
@@ -355,7 +353,6 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                     tabIndex={tabIndex}
                     onClick={openMenu}
                     className="mx_RoomSublist_auxButton"
-                    tooltipClassName="mx_RoomSublist_addRoomTooltip"
                     aria-label={_t("room_list|add_room_label")}
                     title={_t("room_list|add_room_label")}
                     isExpanded={menuDisplayed}

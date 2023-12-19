@@ -55,13 +55,13 @@ exports[`<ServerPickerDialog /> should render dialog 1`] = `
         <div
           class="mx_StyledRadioButton_content"
         >
-          <div
-            aria-describedby="mx_TooltipTarget_vY7Q4uEh"
-            class="mx_TextWithTooltip_target mx_Login_underlinedServerName"
+          <span
+            class="mx_Login_underlinedServerName"
+            data-state="closed"
             tabindex="0"
           >
             matrix.org
-          </div>
+          </span>
         </div>
         <div
           class="mx_StyledRadioButton_spacer"

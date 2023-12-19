@@ -16,8 +16,9 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
-import { Room, RoomEvent, MatrixEvent, User, UserEvent, EventType, JoinRule } from "matrix-js-sdk/src/matrix";
+import { EventType, JoinRule, MatrixEvent, Room, RoomEvent, User, UserEvent } from "matrix-js-sdk/src/matrix";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
+import { Tooltip } from "@vector-im/compound-web";
 
 import RoomAvatar from "./RoomAvatar";
 import NotificationBadge from "../rooms/NotificationBadge";
@@ -26,10 +27,8 @@ import { NotificationState } from "../../../stores/notifications/NotificationSta
 import { isPresenceEnabled } from "../../../utils/presence";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
-import TextWithTooltip from "../elements/TextWithTooltip";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
-import TooltipTarget from "../elements/TooltipTarget";
 
 interface IProps {
     room: Room;
@@ -38,7 +37,9 @@ interface IProps {
     forceCount?: boolean;
     oobData?: IOOBData;
     viewAvatarOnClick?: boolean;
-    tooltipProps?: Omit<React.ComponentProps<typeof TooltipTarget>, "label" | "tooltipClassName" | "className">;
+    tooltipProps?: {
+        tabIndex?: number;
+    };
 }
 
 interface IState {
@@ -94,9 +95,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
     }
 
     private get isPublicRoom(): boolean {
-        const joinRules = this.props.room.currentState.getStateEvents(EventType.RoomJoinRules, "");
-        const joinRule = joinRules && joinRules.getContent().join_rule;
-        return joinRule === JoinRule.Public;
+        return this.props.room.getJoinRule() === JoinRule.Public;
     }
 
     private get dmUser(): User | null {
@@ -191,10 +190,9 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
         let icon: JSX.Element | undefined;
         if (this.state.icon !== Icon.None) {
             icon = (
-                <TextWithTooltip
-                    tooltip={tooltipText(this.state.icon)}
-                    tooltipProps={this.props.tooltipProps}
-                    class={`mx_DecoratedRoomAvatar_icon mx_DecoratedRoomAvatar_icon_${this.state.icon.toLowerCase()}`}
+                <div
+                    tabIndex={this.props.tooltipProps?.tabIndex ?? 0}
+                    className={`mx_DecoratedRoomAvatar_icon mx_DecoratedRoomAvatar_icon_${this.state.icon.toLowerCase()}`}
                 />
             );
         }
@@ -211,7 +209,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
                     oobData={this.props.oobData}
                     viewAvatarOnClick={this.props.viewAvatarOnClick}
                 />
-                {icon}
+                {icon && <Tooltip label={tooltipText(this.state.icon)!}>{icon}</Tooltip>}
                 {badge}
             </div>
         );
