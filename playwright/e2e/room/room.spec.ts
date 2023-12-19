@@ -60,4 +60,43 @@ test.describe("Room Directory", () => {
         // confirm the room was loaded
         await expect(page.getByText("Charlie joined the room")).toBeVisible();
     });
+
+    test("should memorize the timeline position when switch Room A -> Room B -> Room A", async ({
+        page,
+        app,
+        user,
+    }) => {
+        // Create the two rooms
+        const roomAId = await app.client.createRoom({ name: "Room A" });
+        const roomBId = await app.client.createRoom({ name: "Room B" });
+        // Display Room A
+        await app.viewRoomById(roomAId);
+
+        // Send the first message and get the event ID
+        const { event_id: eventId } = await app.client.sendMessage(roomAId, { body: "test0", msgtype: "m.text" });
+        // Send 49 more messages
+        for (let i = 1; i < 50; i++) {
+            await app.client.sendMessage(roomAId, { body: `test${i}`, msgtype: "m.text" });
+        }
+
+        // Wait for all the messages to be displayed
+        await expect(
+            page.locator(".mx_EventTile_last .mx_MTextBody .mx_EventTile_body").getByText("test49"),
+        ).toBeVisible();
+
+        // Display the first message
+        await page.goto(`/#/room/${roomAId}/${eventId}`);
+
+        // Wait for the first message to be displayed
+        await expect(page.locator(".mx_MTextBody .mx_EventTile_body").getByText("test0")).toBeInViewport();
+
+        // Display Room B
+        await app.viewRoomById(roomBId);
+        // Display Room A
+        await app.viewRoomById(roomAId);
+
+        // The timeline should display the first message
+        // The previous position before switching to Room B should be remembered
+        await expect(page.locator(".mx_MTextBody .mx_EventTile_body").getByText("test0")).toBeInViewport();
+    });
 });

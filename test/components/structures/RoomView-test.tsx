@@ -585,10 +585,4 @@ describe("RoomView", () => {
             expect(dis.dispatch).toHaveBeenCalledWith({ action: "cancel_ask_to_join", roomId: room.roomId });
         });
     });
-
-    it("fires Action.RoomLoaded", async () => {
-        jest.spyOn(dis, "dispatch");
-        await mountRoomView();
-        expect(dis.dispatch).toHaveBeenCalledWith({ action: Action.RoomLoaded });
-    });
 });
