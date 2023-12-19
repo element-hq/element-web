@@ -371,6 +371,15 @@ class Helpers {
     }
 
     /**
+     * Expand the message with the supplied index in the timeline.
+     * @param index
+     */
+    async openCollapsedMessage(index: number) {
+        const button = this.page.locator(".mx_GenericEventListSummary_toggle");
+        await button.nth(index).click();
+    }
+
+    /**
      * Click the thread with the supplied content in the thread root to open it in
      * the Threads panel.
      */

@@ -849,8 +849,7 @@ test.describe("Read receipts", () => {
                 // Then the room is still read
                 await util.assertStillRead(room2);
             });
-            // TODO: Can't open a thread on a redacted thread root
-            test.skip("Redacting a thread root still allows us to read the thread", async ({
+            test("Redacting a thread root still allows us to read the thread", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -874,12 +873,13 @@ test.describe("Read receipts", () => {
                 // And I can open the thread and read it
                 await util.goTo(room2);
                 await util.assertUnread(room2, 2);
-                await util.openThread("Root");
+                // The redacted message gets collapsed into, "foo was invited, joined and removed a message"
+                await util.openCollapsedMessage(1);
+                await util.openThread("Message deleted");
                 await util.assertRead(room2);
                 await util.assertReadThread("Root");
             });
-            // TODO: Can't open a thread on a redacted thread root
-            test.skip("Sending a threaded message onto a redacted thread root leaves the room unread", async ({
+            test("Sending a threaded message onto a redacted thread root leaves the room unread", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -905,7 +905,7 @@ test.describe("Read receipts", () => {
                 // Then the room and thread are unread
                 await util.assertUnread(room2, 1);
                 await util.goTo(room2);
-                await util.assertUnreadThread("Root");
+                await util.assertUnreadThread("Message deleted");
             });
             test("Reacting to a redacted thread root leaves the room read", async ({
                 roomAlpha: room1,
