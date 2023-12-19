@@ -17,6 +17,7 @@ limitations under the License.
 import { JSHandle, Page } from "@playwright/test";
 import { PageFunctionOn } from "playwright-core/types/structs";
 
+import { Network } from "./network";
 import type {
     IContent,
     ICreateRoomOpts,
@@ -34,6 +35,7 @@ import type {
 import { Credentials } from "../plugins/homeserver";
 
 export class Client {
+    public network: Network;
     protected client: JSHandle<MatrixClient>;
 
     protected getClientHandle(): Promise<JSHandle<MatrixClient>> {
@@ -51,6 +53,7 @@ export class Client {
         page.on("framenavigated", async () => {
             this.client = null;
         });
+        this.network = new Network(page, this);
     }
 
     public evaluate<R, Arg, O extends MatrixClient = MatrixClient>(
@@ -135,15 +138,6 @@ export class Client {
     }
 
     /**
-     * Send a text message into a room
-     * @param roomId ID of the room to send the message into
-     * @param content the event content to send
-     */
-    public async sendTextMessage(roomId: string, message: string): Promise<ISendEventResponse> {
-        return await this.sendMessage(roomId, { msgtype: "m.text", body: message });
-    }
-
-    /**
      * Create a room with given options.
      * @param options the options to apply when creating the room
      * @return the ID of the newly created room
@@ -213,6 +207,17 @@ export class Client {
                 roomName,
             },
         );
+    }
+
+    /**
+     * Wait until next sync from this client
+     */
+    public async waitForNextSync(): Promise<void> {
+        await this.page.waitForResponse(async (response) => {
+            const accessToken = await this.evaluate((client) => client.getAccessToken());
+            const authHeader = await response.request().headerValue("authorization");
+            return response.url().includes("/sync") && authHeader.includes(accessToken);
+        });
     }
 
     /**

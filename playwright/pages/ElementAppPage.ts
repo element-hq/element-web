@@ -18,6 +18,7 @@ import { type Locator, type Page, expect } from "@playwright/test";
 
 import { Settings } from "./settings";
 import { Client } from "./client";
+import { Timeline } from "./timeline";
 import { Spotlight } from "./Spotlight";
 
 export class ElementAppPage {
@@ -25,6 +26,7 @@ export class ElementAppPage {
 
     public settings = new Settings(this.page);
     public client: Client = new Client(this.page);
+    public timeline: Timeline = new Timeline(this.page);
 
     /**
      * Open the top left user menu, returning a Locator to the resulting context menu.
@@ -160,11 +162,5 @@ export class ElementAppPage {
         const spotlight = new Spotlight(this.page);
         await spotlight.open();
         return spotlight;
-    }
-
-    public async scrollToBottom(page: Page): Promise<void> {
-        await page
-            .locator(".mx_ScrollPanel")
-            .evaluate((scrollPanel) => scrollPanel.scrollTo(0, scrollPanel.scrollHeight));
     }
 }

@@ -134,7 +134,7 @@ test.describe("Sliding Sync", () => {
         const bob = await createAndJoinBot(app, bot);
 
         // send a message in the test room: unread notification count should increment
-        await bob.sendTextMessage(roomId, "Hello World");
+        await bob.sendMessage(roomId, "Hello World");
 
         const treeItemLocator1 = page.getByRole("treeitem", { name: "Test Room 1 unread message." });
         await expect(treeItemLocator1.locator(".mx_NotificationBadge_count")).toHaveText("1");
@@ -144,7 +144,7 @@ test.describe("Sliding Sync", () => {
         );
 
         // send an @mention: highlight count (red) should be 2.
-        await bob.sendTextMessage(roomId, `Hello ${user.displayName}`);
+        await bob.sendMessage(roomId, `Hello ${user.displayName}`);
         const treeItemLocator2 = page.getByRole("treeitem", {
             name: "Test Room 2 unread messages including mentions.",
         });
@@ -173,7 +173,7 @@ test.describe("Sliding Sync", () => {
 
         await checkOrder(["Dummy", "Test Room"], page);
 
-        await bot.sendTextMessage(roomId, "Do you read me?");
+        await bot.sendMessage(roomId, "Do you read me?");
 
         // wait for this message to arrive, tell by the room list resorting
         await checkOrder(["Test Room", "Dummy"], page);
@@ -273,7 +273,7 @@ test.describe("Sliding Sync", () => {
     test.skip("should clear the reply to field when swapping rooms", async ({ page, app }) => {
         await app.client.createRoom({ name: "Other Room" });
         await expect(page.getByRole("treeitem", { name: "Other Room" })).toBeVisible();
-        await app.client.sendTextMessage(roomId, "Hello world");
+        await app.client.sendMessage(roomId, "Hello world");
 
         // select the room
         await page.getByRole("treeitem", { name: "Test Room" }).click();
@@ -304,9 +304,9 @@ test.describe("Sliding Sync", () => {
     // Regression test for https://github.com/vector-im/element-web/issues/21462
     test.skip("should not cancel replies when permalinks are clicked", async ({ page, app }) => {
         // we require a first message as you cannot click the permalink text with the avatar in the way
-        await app.client.sendTextMessage(roomId, "First message");
-        await app.client.sendTextMessage(roomId, "Permalink me");
-        await app.client.sendTextMessage(roomId, "Reply to me");
+        await app.client.sendMessage(roomId, "First message");
+        await app.client.sendMessage(roomId, "Permalink me");
+        await app.client.sendMessage(roomId, "Reply to me");
 
         // select the room
         await page.getByRole("treeitem", { name: "Test Room" }).click();
