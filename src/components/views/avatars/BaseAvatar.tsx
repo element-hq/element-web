@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { forwardRef, useCallback, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
 import { Avatar } from "@vector-im/compound-web";
@@ -38,7 +38,6 @@ interface IProps {
     type?: React.ComponentProps<typeof Avatar>["type"];
     size: string;
     onClick?: (ev: ButtonEvent) => void;
-    inputRef?: React.RefObject<HTMLSpanElement>;
     className?: string;
     tabIndex?: number;
     altText?: string;
@@ -95,7 +94,7 @@ const useImageUrl = ({ url, urls }: { url?: string | null; urls?: string[] }): [
     return [imageUrl, onError];
 };
 
-const BaseAvatar: React.FC<IProps> = (props) => {
+const BaseAvatar = forwardRef<HTMLElement, IProps>((props, ref) => {
     const {
         name,
         idName,
@@ -104,7 +103,6 @@ const BaseAvatar: React.FC<IProps> = (props) => {
         urls,
         size = "40px",
         onClick,
-        inputRef,
         className,
         type = "round",
         altText = _t("common|avatar"),
@@ -127,7 +125,7 @@ const BaseAvatar: React.FC<IProps> = (props) => {
 
     return (
         <Avatar
-            ref={inputRef}
+            ref={ref}
             src={imageUrl}
             id={idName ?? ""}
             name={name ?? ""}
@@ -143,7 +141,7 @@ const BaseAvatar: React.FC<IProps> = (props) => {
             data-testid="avatar-img"
         />
     );
-};
+});
 
 export default BaseAvatar;
 export type BaseAvatarType = React.FC<IProps>;

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, useContext } from "react";
+import React, { forwardRef, ReactNode, Ref, useContext } from "react";
 import { RoomMember, ResizeMethod } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../dispatcher/dispatcher";
@@ -42,16 +42,19 @@ interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | 
     children?: ReactNode;
 }
 
-export default function MemberAvatar({
-    size,
-    resizeMethod = "crop",
-    viewUserOnClick,
-    forceHistorical,
-    fallbackUserId,
-    hideTitle,
-    member: propsMember,
-    ...props
-}: IProps): JSX.Element {
+function MemberAvatar(
+    {
+        size,
+        resizeMethod = "crop",
+        viewUserOnClick,
+        forceHistorical,
+        fallbackUserId,
+        hideTitle,
+        member: propsMember,
+        ...props
+    }: IProps,
+    ref: Ref<HTMLElement>,
+): JSX.Element {
     const card = useContext(CardContext);
 
     const member = useRoomMemberProfile({
@@ -100,12 +103,9 @@ export default function MemberAvatar({
                     : props.onClick
             }
             altText={_t("common|user_avatar")}
+            ref={ref}
         />
     );
 }
 
-export class LegacyMemberAvatar extends React.Component<IProps> {
-    public render(): React.ReactNode {
-        return <MemberAvatar {...this.props}>{this.props.children}</MemberAvatar>;
-    }
-}
+export default forwardRef(MemberAvatar);

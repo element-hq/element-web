@@ -21,7 +21,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import NodeAnimator from "../../../NodeAnimator";
 import { toPx } from "../../../utils/units";
-import { LegacyMemberAvatar as MemberAvatar } from "../avatars/MemberAvatar";
+import MemberAvatar from "../avatars/MemberAvatar";
 import { READ_AVATAR_SIZE } from "./ReadReceiptGroup";
 
 export interface IReadReceiptInfo {
@@ -216,7 +216,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
                     aria-live="off"
                     size="14px"
                     style={style}
-                    inputRef={this.avatar as RefObject<HTMLImageElement>}
+                    ref={this.avatar}
                     hideTitle
                     tabIndex={-1}
                 />
