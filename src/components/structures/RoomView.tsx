@@ -186,6 +186,9 @@ export interface IRoomState {
     initialEventScrollIntoView?: boolean;
     replyToEvent?: MatrixEvent;
     numUnreadMessages: number;
+    /**
+     * The state of an ongoing search if there is one.
+     */
     search?: ISearchInfo;
     callState?: CallState;
     activeCall: Call | null;
@@ -1208,12 +1211,33 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case Action.EditEvent: {
                 // Quit early if we're trying to edit events in wrong rendering context
                 if (payload.timelineRenderingType !== this.state.timelineRenderingType) return;
+                if (payload.event && payload.event.getRoomId() !== this.state.roomId) {
+                    // If the event is in a different room (e.g. because the event to be edited is being displayed
+                    // in the results of an all-rooms search), we need to view that room first.
+                    dis.dispatch<ViewRoomPayload>({
+                        action: Action.ViewRoom,
+                        room_id: payload.event.getRoomId(),
+                        metricsTrigger: undefined,
+                        deferred_action: payload,
+                    });
+                    return;
+                }
+
                 const editState = payload.event ? new EditorStateTransfer(payload.event) : undefined;
-                this.setState({ editState }, () => {
-                    if (payload.event) {
-                        this.messagePanel?.scrollToEventIfNeeded(payload.event.getId());
-                    }
-                });
+                this.setState(
+                    {
+                        editState,
+                        // If a search is active (implying that the "edit" button has been pressed on one of the
+                        // events in the search result), we need to close that search, because RoomSearchView
+                        // doesn't handle editing and won't render the composer.
+                        search: undefined,
+                    },
+                    () => {
+                        if (payload.event) {
+                            this.messagePanel?.scrollToEventIfNeeded(payload.event.getId());
+                        }
+                    },
+                );
                 break;
             }
 
