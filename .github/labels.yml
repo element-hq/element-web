@@ -119,7 +119,7 @@
   description: "Also known as Sync v3 - https://github.com/matrix-org/sliding-sync"
   color: "bfd4f2"
 - name: "A-Soft-Logout"
-  description: "https://github.com/vector-im/element-web/issues/10224"
+  description: "https://github.com/element-hq/element-web/issues/10224"
   color: "bfd4f2"
 - name: "A-Spaces-Settings"
   color: "bfd4f2"

@@ -5,7 +5,7 @@
     "author": "New Vector Ltd.",
     "repository": {
         "type": "git",
-        "url": "https://github.com/vector-im/element-web"
+        "url": "https://github.com/element-hq/element-web"
     },
     "license": "Apache-2.0",
     "files": [

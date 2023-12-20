@@ -459,7 +459,7 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
         // normal conference calls, since in video rooms we control exactly what
         // set of controls appear, but in normal calls we need to leave that up
         // to the deployment's configuration.
-        // https://github.com/vector-im/element-web/issues/4880#issuecomment-940002464
+        // https://github.com/element-hq/element-web/issues/4880#issuecomment-940002464
         if (supportsScreensharing) options.configOverwrite!.toolbarButtons.splice(2, 0, "desktop");
         // Hide all top bar elements
         options.configOverwrite!.conferenceInfo = { autoHide: [] };

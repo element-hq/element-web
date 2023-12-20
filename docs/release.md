@@ -82,8 +82,8 @@ This label will automagically convert to `X-Release-Blocker` at the conclusion o
 
 This release process revolves around our four main repositories:
 
--   [Element Desktop](https://github.com/vector-im/element-desktop/)
--   [Element Web](https://github.com/vector-im/element-web/)
+-   [Element Desktop](https://github.com/element-hq/element-desktop/)
+-   [Element Web](https://github.com/element-hq/element-web/)
 -   [Matrix React SDK](https://github.com/matrix-org/matrix-react-sdk/)
 -   [Matrix JS SDK](https://github.com/matrix-org/matrix-js-sdk/)
 
@@ -97,7 +97,7 @@ We own other repositories, but they have more ad-hoc releases and are not part o
 <details><summary><h1>Prerequisites</h1></summary><blockquote>
 
 -   You must be part of the 2 Releasers GitHub groups:
-    -   <https://github.com/orgs/vector-im/teams/element-web-releasers>
+    -   <https://github.com/orgs/element-hq/teams/element-web-releasers>
     -   <https://github.com/orgs/matrix-org/teams/element-web-releasers>
 -   You will need access to the **VPN** ([docs](https://gitlab.matrix.org/new-vector/internal/-/wikis/SRE/Tailscale)) to be able to follow the instructions under Deploy below.
 -   You will need the ability to **SSH** in to the production machines to be able to follow the instructions under Deploy below. Ensure that your SSH key has a non-empty passphrase, and you registered your SSH key with Ops. Log a ticket at https://github.com/matrix-org/matrix-ansible-private and ask for:
@@ -168,7 +168,7 @@ The goal of this stage is to get the code you want to ship onto the `staging` br
 There are multiple ways to accomplish this depending on the type of release you need to perform.
 
 For the first RC in a given release cycle the easiest way to prepare branches is using the
-[Cut branches automation](https://github.com/vector-im/element-web/actions/workflows/release_prepare.yml) -
+[Cut branches automation](https://github.com/element-hq/element-web/actions/workflows/release_prepare.yml) -
 this will take `develop` and merge it into the `staging` on the chosen repositories.
 
 For subsequent RCs, if you need to include a change you may PR it directly to the `staging` branch or rely on the
@@ -204,13 +204,13 @@ The next stop is matrix-react-sdk; kick off a release using [the automation](htt
 
 ### Element Web
 
-The next stop is element-web; kick off a release using [the automation](https://github.com/vector-im/element-web/actions/workflows/release.yml) - making sure to select the right type of release. For anything other than an RC: choose final. In the SDK version fields enter the versions you wish to use, for typical releases including all the layers this would be the versions released in the stages above.
+The next stop is element-web; kick off a release using [the automation](https://github.com/element-hq/element-web/actions/workflows/release.yml) - making sure to select the right type of release. For anything other than an RC: choose final. In the SDK version fields enter the versions you wish to use, for typical releases including all the layers this would be the versions released in the stages above.
 
 -   [ ] Element Web has been released
 
 ### Element Desktop
 
-The next stop is element-desktop; kick off a release using [the automation](https://github.com/vector-im/element-desktop/actions/workflows/release.yml) - making sure to select the right type of release. For anything other than an RC: choose final. In the JS SDK version field enter the version of the JS SDK you wish to use, for typical releases including all the layers this would be the version released in the stage above.
+The next stop is element-desktop; kick off a release using [the automation](https://github.com/element-hq/element-desktop/actions/workflows/release.yml) - making sure to select the right type of release. For anything other than an RC: choose final. In the JS SDK version field enter the version of the JS SDK you wish to use, for typical releases including all the layers this would be the version released in the stage above.
 
 -   [ ] Element Desktop has been released
 
@@ -235,7 +235,7 @@ For final releases additionally do these steps:
 
 We have some manual housekeeping to do in order to prepare for the next release.
 
--   [ ] Update topics using [the automation](https://github.com/vector-im/element-web/actions/workflows/update-topics.yaml). It will autodetect the current latest version. Don't forget the date you supply should be e.g. September 5th (including the "th") for the script to work.
+-   [ ] Update topics using [the automation](https://github.com/element-hq/element-web/actions/workflows/update-topics.yaml). It will autodetect the current latest version. Don't forget the date you supply should be e.g. September 5th (including the "th") for the script to work.
 -   [ ] Announce the release in [#element-web-announcements:matrix.org](https://matrix.to/#/#element-web-announcements:matrix.org)
 
 <details><summary>(show)</summary>
@@ -246,7 +246,7 @@ With wording like:
 >
 > This version adds ... and fixes bugs ...
 >
-> Check it out at app.element.io, in Element Desktop, or from Docker Hub. Changelog and more details at https://github.com/vector-im/element-web/releases/tag/v1.11.24
+> Check it out at app.element.io, in Element Desktop, or from Docker Hub. Changelog and more details at https://github.com/element-hq/element-web/releases/tag/v1.11.24
 
 </details>
 
@@ -256,13 +256,13 @@ For the first RC of a given release cycle do these steps:
 
 -   [ ] Go to the [matrix-react-sdk Renovate dashboard](https://github.com/matrix-org/matrix-react-sdk/issues/9667) and click the checkbox to create/update its PRs.
 
--   [ ] Go to the [element-web Renovate dashboard](https://github.com/vector-im/element-web/issues/22941) and click the checkbox to create/update its PRs.
+-   [ ] Go to the [element-web Renovate dashboard](https://github.com/element-hq/element-web/issues/22941) and click the checkbox to create/update its PRs.
 
--   [ ] Go to the [element-desktop Renovate dashboard](https://github.com/vector-im/element-desktop/issues/465) and click the checkbox to create/update its PRs.
+-   [ ] Go to the [element-desktop Renovate dashboard](https://github.com/element-hq/element-desktop/issues/465) and click the checkbox to create/update its PRs.
 
 -   [ ] Later, check back and merge the PRs that succeeded to build. The ones that failed will get picked up by the [maintainer](https://docs.google.com/document/d/1V5VINWXATMpz9UBw4IKmVVB8aw3CxM0Jt7igtHnDfSk/edit#).
 
 For final releases additionally do these steps:
 
--   [ ] Archive done column on the [team board](https://github.com/orgs/vector-im/projects/67/views/34) _Note: this should be automated_
+-   [ ] Archive done column on the [team board](https://github.com/orgs/element-hq/projects/67/views/34) _Note: this should be automated_
 -   [ ] Add entry to the [milestones diary](https://docs.google.com/document/d/1cpRFJdfNCo2Ps6jqzQmatzbYEToSrQpyBug0aP_iwZE/edit#heading=h.6y55fw4t283z). The document says only to add significant releases, but we add all of them just in case.
