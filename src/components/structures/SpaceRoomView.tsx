@@ -16,7 +16,7 @@ limitations under the License.
 
 import { EventType, RoomType, JoinRule, Preset, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import React, { RefObject, useCallback, useContext, useRef, useState } from "react";
+import React, { useCallback, useContext, useRef, useState } from "react";
 
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import createRoom, { IOpts } from "../../createRoom";
@@ -499,7 +499,7 @@ const SpaceSetupPrivateInvite: React.FC<{
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
     const numFields = 3;
-    const fieldRefs = [useRef(), useRef(), useRef()] as RefObject<Field>[];
+    const fieldRefs = [useRef<Field>(null), useRef<Field>(null), useRef<Field>(null)];
     const [emailAddresses, setEmailAddress] = useStateArray(numFields, "");
     const fields = new Array(numFields).fill(0).map((x, i) => {
         const name = "emailAddress" + i;

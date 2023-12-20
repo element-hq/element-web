@@ -26,7 +26,10 @@ import {
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import getEntryComponentForLoginType, { IStageComponent } from "../views/auth/InteractiveAuthEntryComponents";
+import getEntryComponentForLoginType, {
+    ContinueKind,
+    IStageComponent,
+} from "../views/auth/InteractiveAuthEntryComponents";
 import Spinner from "../views/elements/Spinner";
 
 export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
@@ -59,7 +62,7 @@ export interface InteractiveAuthProps<T> {
     continueIsManaged?: boolean;
     // continueText and continueKind are passed straight through to the AuthEntryComponent.
     continueText?: string;
-    continueKind?: string;
+    continueKind?: ContinueKind;
     // callback
     makeRequest(auth: IAuthDict | null): Promise<T>;
     // callback called when the auth process has finished,

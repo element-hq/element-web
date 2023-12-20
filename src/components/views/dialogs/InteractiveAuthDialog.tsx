@@ -27,7 +27,7 @@ import InteractiveAuth, {
     InteractiveAuthCallback,
     InteractiveAuthProps,
 } from "../../structures/InteractiveAuth";
-import { SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
+import { ContinueKind, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import BaseDialog from "./BaseDialog";
 
 type DialogAesthetics = Partial<{
@@ -36,7 +36,7 @@ type DialogAesthetics = Partial<{
             title: string;
             body: string;
             continueText: string;
-            continueKind: string;
+            continueKind: ContinueKind;
         };
     };
 }>;
@@ -146,7 +146,7 @@ export default class InteractiveAuthDialog<T> extends React.Component<Interactiv
         let title = this.state.authError ? "Error" : this.props.title || _t("common|authentication");
         let body = this.state.authError ? null : this.props.body;
         let continueText: string | undefined;
-        let continueKind: string | undefined;
+        let continueKind: ContinueKind | undefined;
         const dialogAesthetics = this.props.aestheticsForStagePhases || this.getDefaultDialogAesthetics();
         if (!this.state.authError && dialogAesthetics) {
             if (

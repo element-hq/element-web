@@ -25,7 +25,7 @@ import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import { LocalisedPolicy, Policies } from "../../../Terms";
 import { AuthHeaderModifier } from "../../structures/auth/header/AuthHeaderModifier";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { AccessibleButtonKind, ButtonEvent } from "../elements/AccessibleButton";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import Field from "../elements/Field";
 import Spinner from "../elements/Spinner";
@@ -780,9 +780,12 @@ export class RegistrationTokenAuthEntry extends React.Component<IAuthEntryProps,
     }
 }
 
+// Subset of AccessibleButtonKind which can be specified for the continue button
+export type ContinueKind = Extract<AccessibleButtonKind, "primary" | "danger">;
+
 interface ISSOAuthEntryProps extends IAuthEntryProps {
     continueText?: string;
-    continueKind?: string;
+    continueKind?: ContinueKind;
     onCancel?: () => void;
 }
 
@@ -866,7 +869,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
         const cancelButton = (
             <AccessibleButton
                 onClick={this.props.onCancel ?? null}
-                kind={this.props.continueKind ? this.props.continueKind + "_outline" : "primary_outline"}
+                kind={this.props.continueKind ? `${this.props.continueKind}_outline` : "primary_outline"}
             >
                 {_t("action|cancel")}
             </AccessibleButton>
@@ -985,7 +988,7 @@ export interface IStageComponentProps extends IAuthEntryProps {
     inputs?: IInputs;
     stageState?: IStageStatus;
     continueText?: string;
-    continueKind?: string;
+    continueKind?: ContinueKind;
     setEmailSid?(sid: string): void;
     onCancel?(): void;
     requestEmailToken?(): Promise<void>;

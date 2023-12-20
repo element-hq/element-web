@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import React, { HTMLAttributes, InputHTMLAttributes, ReactNode } from "react";
+import React, { HTMLAttributes, InputHTMLAttributes } from "react";
 import classnames from "classnames";
 
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
@@ -22,7 +22,10 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Element> | React.FormEvent<Element>;
 
-type AccessibleButtonKind =
+/**
+ * The kind of button, similar to how Bootstrap works.
+ */
+export type AccessibleButtonKind =
     | "primary"
     | "primary_outline"
     | "primary_sm"
@@ -58,25 +61,31 @@ type DynamicElementProps<T extends keyof JSX.IntrinsicElements> = Partial<
     Omit<InputHTMLAttributes<Element>, "onClick">;
 
 /**
- * children: React's magic prop. Represents all children given to the element.
- * element:  (optional) The base element type. "div" by default.
- * onClick:  (required) Event handler for button activation. Should be
- *           implemented exactly like a normal onClick handler.
+ * Type of props accepted by {@link AccessibleButton}.
+ *
+ * Extends props accepted by the underlying element specified using the `element` prop.
  */
-type IProps<T extends keyof JSX.IntrinsicElements> = DynamicHtmlElementProps<T> & {
+type Props<T extends keyof JSX.IntrinsicElements> = DynamicHtmlElementProps<T> & {
     inputRef?: React.Ref<Element>;
+    /**
+     * The base element type. "div" by default.
+     */
     element?: T;
-    children?: ReactNode;
-    // The kind of button, similar to how Bootstrap works.
-    // See available classes for AccessibleButton for options.
-    kind?: AccessibleButtonKind | string;
-    // The ARIA role
-    role?: string;
-    // The tabIndex
-    tabIndex?: number;
+    /**
+     * The kind of button, similar to how Bootstrap works.
+     */
+    kind?: AccessibleButtonKind;
+    /**
+     * Whether the button should be disabled.
+     */
     disabled?: boolean;
-    className?: string;
+    /**
+     * Whether the button should trigger on mousedown event instead of on click event. Defaults to false (click event).
+     */
     triggerOnMouseDown?: boolean;
+    /**
+     * Event handler for button activation. Should be implemented exactly like a normal `onClick` handler.
+     */
     onClick: ((e: ButtonEvent) => void | Promise<void>) | null;
 };
 
@@ -104,7 +113,7 @@ export default function AccessibleButton<T extends keyof JSX.IntrinsicElements>(
     onKeyUp,
     triggerOnMouseDown,
     ...restProps
-}: IProps<T>): JSX.Element {
+}: Props<T>): JSX.Element {
     const newProps: IAccessibleButtonProps = restProps;
     if (disabled) {
         newProps["aria-disabled"] = true;

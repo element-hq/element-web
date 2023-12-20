@@ -20,7 +20,7 @@ import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import Field from "../elements/Field";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { AccessibleButtonKind } from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import { UserFriendlyError, _t, _td } from "../../../languageHandler";
@@ -45,7 +45,7 @@ interface IProps {
     onError: (error: Error) => void;
     rowClassName?: string;
     buttonClassName?: string;
-    buttonKind?: string;
+    buttonKind?: AccessibleButtonKind;
     buttonLabel?: string;
     confirm?: boolean;
     // Whether to autoFocus the new password input

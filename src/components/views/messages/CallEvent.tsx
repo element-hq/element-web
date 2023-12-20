@@ -28,13 +28,14 @@ import {
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
-import type { ButtonEvent } from "../elements/AccessibleButton";
+import { AccessibleButtonKind, ButtonEvent } from "../elements/AccessibleButton";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { LiveContentSummary, LiveContentType } from "../rooms/LiveContentSummary";
 import FacePile from "../elements/FacePile";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { CallDuration, SessionDuration } from "../voip/CallDuration";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { ContinueKind } from "../auth/InteractiveAuthEntryComponents";
 
 const MAX_FACES = 8;
 
@@ -43,7 +44,7 @@ interface ActiveCallEventProps {
     call: ElementCall | null;
     participatingMembers: RoomMember[];
     buttonText: string;
-    buttonKind: string;
+    buttonKind: AccessibleButtonKind;
     buttonDisabledTooltip?: string;
     onButtonClick: ((ev: ButtonEvent) => void) | null;
 }
@@ -125,7 +126,9 @@ const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxE
         [call],
     );
 
-    const [buttonText, buttonKind, onButtonClick] = useMemo(() => {
+    const [buttonText, buttonKind, onButtonClick] = useMemo<
+        [string, ContinueKind, null | ((ev: ButtonEvent) => void)]
+    >(() => {
         switch (connectionState) {
             case ConnectionState.Disconnected:
                 return [_t("action|join"), "primary", connect];

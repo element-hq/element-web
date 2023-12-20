@@ -33,7 +33,7 @@ import {
 
 import BaseDialog from "./BaseDialog";
 import { _t, getUserLanguage } from "../../../languageHandler";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { AccessibleButtonKind } from "../elements/AccessibleButton";
 import { StopGapWidgetDriver } from "../../../stores/widgets/StopGapWidgetDriver";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
@@ -158,7 +158,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                 .slice(0, MAX_BUTTONS)
                 .reverse()
                 .map((def) => {
-                    let kind = "secondary";
+                    let kind: AccessibleButtonKind = "secondary";
                     switch (def.kind) {
                         case ModalButtonKind.Primary:
                             kind = "primary";
