@@ -377,7 +377,7 @@ describe("loading:", function () {
             it("does not show a login view", async function () {
                 await awaitRoomView(matrixChat);
 
-                await screen.findByLabelText("Spaces");
+                await screen.getByRole("tree", { name: "Spaces" });
                 expect(screen.queryAllByText("Sign in")).toHaveLength(0);
             });
         });
