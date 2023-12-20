@@ -16,25 +16,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 
 import AccessibleButton from "../../components/views/elements/AccessibleButton";
 
-interface IProps extends React.ComponentProps<typeof AccessibleButton> {
+type Props<T extends keyof JSX.IntrinsicElements> = ComponentProps<typeof AccessibleButton<T>> & {
     label?: string;
-    // whether or not the context menu is currently open
+    // whether the context menu is currently open
     isExpanded: boolean;
-}
+};
 
 // Semantic component for representing the AccessibleButton which launches a <ContextMenu />
-export const ContextMenuButton: React.FC<IProps> = ({
+export const ContextMenuButton = <T extends keyof JSX.IntrinsicElements>({
     label,
     isExpanded,
     children,
     onClick,
     onContextMenu,
     ...props
-}) => {
+}: Props<T>): JSX.Element => {
     return (
         <AccessibleButton
             {...props}

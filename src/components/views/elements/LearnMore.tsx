@@ -14,19 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import InfoDialog from "../dialogs/InfoDialog";
-import AccessibleButton, { IAccessibleButtonProps } from "./AccessibleButton";
+import AccessibleButton from "./AccessibleButton";
 
-export interface LearnMoreProps extends IAccessibleButtonProps {
+type Props = Omit<ComponentProps<typeof AccessibleButton>, "kind" | "onClick" | "className"> & {
     title: string;
     description: string | React.ReactNode;
-}
+};
 
-const LearnMore: React.FC<LearnMoreProps> = ({ title, description, ...rest }) => {
+const LearnMore: React.FC<Props> = ({ title, description, ...rest }) => {
     const onClick = (): void => {
         Modal.createDialog(InfoDialog, {
             title,

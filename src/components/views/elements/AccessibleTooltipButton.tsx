@@ -25,7 +25,7 @@ import Tooltip, { Alignment } from "./Tooltip";
  *
  * Extends that of {@link AccessibleButton}.
  */
-interface Props extends React.ComponentProps<typeof AccessibleButton> {
+type Props<T extends keyof JSX.IntrinsicElements> = React.ComponentProps<typeof AccessibleButton<T>> & {
     /**
      * Title to show in the tooltip and use as aria-label
      */
@@ -58,9 +58,9 @@ interface Props extends React.ComponentProps<typeof AccessibleButton> {
      * Function to call when the tooltip goes from shown to hidden.
      */
     onHideTooltip?(ev: SyntheticEvent): void;
-}
+};
 
-function AccessibleTooltipButton({
+function AccessibleTooltipButton<T extends keyof JSX.IntrinsicElements>({
     title,
     tooltip,
     children,
@@ -69,7 +69,7 @@ function AccessibleTooltipButton({
     onHideTooltip,
     tooltipClassName,
     ...props
-}: Props): JSX.Element {
+}: Props<T>): JSX.Element {
     const [hover, setHover] = useState(false);
 
     useEffect(() => {

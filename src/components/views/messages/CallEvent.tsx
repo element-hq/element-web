@@ -35,7 +35,6 @@ import FacePile from "../elements/FacePile";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { CallDuration, SessionDuration } from "../voip/CallDuration";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { ContinueKind } from "../auth/InteractiveAuthEntryComponents";
 
 const MAX_FACES = 8;
 
@@ -127,7 +126,7 @@ const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxE
     );
 
     const [buttonText, buttonKind, onButtonClick] = useMemo<
-        [string, ContinueKind, null | ((ev: ButtonEvent) => void)]
+        [string, AccessibleButtonKind, null | ((ev: ButtonEvent) => void)]
     >(() => {
         switch (connectionState) {
             case ConnectionState.Disconnected:

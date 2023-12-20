@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, useState } from "react";
+import React, { ComponentProps, createRef, useState } from "react";
 import classNames from "classnames";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
@@ -42,14 +42,13 @@ const CONTEXT_MENU_VPADDING = 8; // How far the context menu sits above the butt
 
 const CONTROLS_HIDE_DELAY = 2000;
 
-interface IButtonProps extends Omit<React.ComponentProps<typeof AccessibleTooltipButton>, "title"> {
+type ButtonProps = Omit<ComponentProps<typeof AccessibleTooltipButton>, "title" | "element"> & {
     state: boolean;
-    className: string;
     onLabel?: string;
     offLabel?: string;
-}
+};
 
-const LegacyCallViewToggleButton: React.FC<IButtonProps> = ({
+const LegacyCallViewToggleButton: React.FC<ButtonProps> = ({
     children,
     state: isOn,
     className,
@@ -74,7 +73,7 @@ const LegacyCallViewToggleButton: React.FC<IButtonProps> = ({
     );
 };
 
-interface IDropdownButtonProps extends IButtonProps {
+interface IDropdownButtonProps extends ButtonProps {
     deviceKinds: MediaDeviceKindEnum[];
 }
 

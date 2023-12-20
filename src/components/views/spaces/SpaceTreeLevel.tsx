@@ -48,7 +48,10 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
-interface IButtonProps extends Omit<ComponentProps<typeof AccessibleTooltipButton>, "title" | "onClick" | "size"> {
+type ButtonProps<T extends keyof JSX.IntrinsicElements> = Omit<
+    ComponentProps<typeof AccessibleTooltipButton<T>>,
+    "title" | "onClick" | "size"
+> & {
     space?: Room;
     spaceKey?: SpaceKey;
     className?: string;
@@ -61,9 +64,9 @@ interface IButtonProps extends Omit<ComponentProps<typeof AccessibleTooltipButto
     innerRef?: RefObject<HTMLElement>;
     ContextMenuComponent?: ComponentType<ComponentProps<typeof SpaceContextMenu>>;
     onClick?(ev?: ButtonEvent): void;
-}
+};
 
-export const SpaceButton: React.FC<IButtonProps> = ({
+export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
     space,
     spaceKey: _spaceKey,
     className,
@@ -77,7 +80,7 @@ export const SpaceButton: React.FC<IButtonProps> = ({
     innerRef,
     ContextMenuComponent,
     ...props
-}) => {
+}: ButtonProps<T>): JSX.Element => {
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLElement>(innerRef);
     const [onFocus, isActive] = useRovingTabIndex(handle);
     const tabIndex = isActive ? 0 : -1;

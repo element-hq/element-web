@@ -16,23 +16,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 
 import AccessibleTooltipButton from "../../components/views/elements/AccessibleTooltipButton";
 
-interface IProps extends React.ComponentProps<typeof AccessibleTooltipButton> {
-    // whether or not the context menu is currently open
+type Props<T extends keyof JSX.IntrinsicElements> = ComponentProps<typeof AccessibleTooltipButton<T>> & {
+    // whether the context menu is currently open
     isExpanded: boolean;
-}
+};
 
 // Semantic component for representing the AccessibleButton which launches a <ContextMenu />
-export const ContextMenuTooltipButton: React.FC<IProps> = ({
+export const ContextMenuTooltipButton = <T extends keyof JSX.IntrinsicElements>({
     isExpanded,
     children,
     onClick,
     onContextMenu,
     ...props
-}) => {
+}: Props<T>): JSX.Element => {
     return (
         <AccessibleTooltipButton
             {...props}

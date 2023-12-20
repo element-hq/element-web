@@ -89,7 +89,10 @@ type Props<T extends keyof JSX.IntrinsicElements> = DynamicHtmlElementProps<T> &
     onClick: ((e: ButtonEvent) => void | Promise<void>) | null;
 };
 
-export interface IAccessibleButtonProps extends React.InputHTMLAttributes<Element> {
+/**
+ * Type of the props passed to the element that is rendered by AccessibleButton.
+ */
+interface RenderedElementProps extends React.InputHTMLAttributes<Element> {
     ref?: React.Ref<Element>;
 }
 
@@ -114,7 +117,7 @@ export default function AccessibleButton<T extends keyof JSX.IntrinsicElements>(
     triggerOnMouseDown,
     ...restProps
 }: Props<T>): JSX.Element {
-    const newProps: IAccessibleButtonProps = restProps;
+    const newProps: RenderedElementProps = restProps;
     if (disabled) {
         newProps["aria-disabled"] = true;
         newProps["disabled"] = true;

@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 
 import { _t } from "../../../../languageHandler";
-import LearnMore, { LearnMoreProps } from "../../elements/LearnMore";
+import LearnMore from "../../elements/LearnMore";
 import { DeviceSecurityVariation } from "./types";
 
-interface Props extends Omit<LearnMoreProps, "title" | "description"> {
+type Props = Omit<ComponentProps<typeof LearnMore>, "title" | "description"> & {
     variation: DeviceSecurityVariation;
-}
+};
 
 const securityCardContent: Record<
     DeviceSecurityVariation,

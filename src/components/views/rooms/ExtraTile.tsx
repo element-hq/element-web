@@ -73,11 +73,7 @@ export default function ExtraTile({
     );
     if (isMinimized) nameContainer = null;
 
-    let Button = RovingAccessibleButton;
-    if (isMinimized) {
-        Button = RovingAccessibleTooltipButton;
-    }
-
+    const Button = isMinimized ? RovingAccessibleTooltipButton : RovingAccessibleButton;
     return (
         <Button
             className={classes}

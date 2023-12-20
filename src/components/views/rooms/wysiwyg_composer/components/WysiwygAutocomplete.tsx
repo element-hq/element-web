@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ForwardedRef, forwardRef } from "react";
+import React, { ForwardedRef, forwardRef, FunctionComponent } from "react";
 import { FormattingFunctions, MappedSuggestion } from "@matrix-org/matrix-wysiwyg";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -120,6 +120,6 @@ const WysiwygAutocomplete = forwardRef(
     },
 );
 
-WysiwygAutocomplete.displayName = "WysiwygAutocomplete";
+(WysiwygAutocomplete as FunctionComponent).displayName = "WysiwygAutocomplete";
 
 export { WysiwygAutocomplete };
