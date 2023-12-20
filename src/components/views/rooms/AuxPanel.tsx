@@ -65,7 +65,7 @@ export default class AuxPanel extends React.Component<IProps> {
         }
 
         return (
-            <AutoHideScrollbar className="mx_AuxPanel">
+            <AutoHideScrollbar role="region" className="mx_AuxPanel">
                 {this.props.children}
                 {appsDrawer}
                 {callView}

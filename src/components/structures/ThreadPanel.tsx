@@ -180,11 +180,11 @@ const EmptyThread: React.FC<EmptyThreadIProps> = ({ hasThreads, filterOption, sh
     }
 
     return (
-        <aside className="mx_ThreadPanel_empty">
+        <div className="mx_ThreadPanel_empty">
             <div className="mx_ThreadPanel_largeIcon" />
             <h2>{_t("threads|empty_heading")}</h2>
             {body}
-        </aside>
+        </div>
     );
 };
 

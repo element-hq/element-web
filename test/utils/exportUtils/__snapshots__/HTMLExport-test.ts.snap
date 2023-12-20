@@ -13,7 +13,7 @@ exports[`HTMLExport should export 1`] = `
                 <title>Exported Data</title>
             </head>
             <body style="height: 100vh;">
-                <section
+                <div
                 id="matrixchat"
                 style="height: 100%; overflow: auto"
                 class="notranslate"
@@ -82,7 +82,7 @@ exports[`HTMLExport should export 1`] = `
                     </main>
                     </div>
                 </div>
-                </section>
+                </div>
                 <div id="snackbar"/>
             </body>
         </html>"

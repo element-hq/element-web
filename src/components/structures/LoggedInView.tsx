@@ -683,7 +683,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     <div className={bodyClasses}>
                         <div className="mx_LeftPanel_outerWrapper">
                             <LeftPanelLiveShareWarning isMinimized={this.props.collapseLhs || false} />
-                            <nav className="mx_LeftPanel_wrapper">
+                            <div className="mx_LeftPanel_wrapper">
                                 <BackdropPanel blurMultiplier={0.5} backgroundImage={this.state.backgroundImage} />
                                 <SpacePanel />
                                 <BackdropPanel backgroundImage={this.state.backgroundImage} />
@@ -698,7 +698,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                                         resizeNotifier={this.props.resizeNotifier}
                                     />
                                 </div>
-                            </nav>
+                            </div>
                         </div>
                         <ResizeHandle passRef={this.resizeHandler} id="lp-resizer" />
                         <div className="mx_RoomView_wrapper">{pageElement}</div>

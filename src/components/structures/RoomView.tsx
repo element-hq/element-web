@@ -406,7 +406,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private unmounted = false;
     private permalinkCreators: Record<string, RoomPermalinkCreator> = {};
 
-    private roomView = createRef<HTMLElement>();
+    private roomView = createRef<HTMLDivElement>();
     private searchResultsPanel = createRef<ScrollPanel>();
     private messagePanel: TimelinePanel | null = null;
     private roomViewBody = createRef<HTMLDivElement>();
@@ -2302,7 +2302,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // if statusBar does not exist then statusBarArea is blank and takes up unnecessary space on the screen
         // show statusBarArea only if statusBar is present
         const statusBarArea = statusBar && (
-            <div className={statusBarAreaClass}>
+            <div role="region" className={statusBarAreaClass} aria-label={_t("a11y|room_status_bar")}>
                 <div className="mx_RoomView_statusAreaBox">
                     <div className="mx_RoomView_statusAreaBox_line" />
                     {statusBar}
@@ -2528,13 +2528,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             <Measured sensor={this.roomViewBody.current} onMeasurement={this.onMeasurement} />
                         )}
                         {auxPanel}
-                        <div className={timelineClasses}>
+                        <main className={timelineClasses}>
                             <FileDropTarget parent={this.roomView.current} onFileDrop={this.onFileDrop} />
                             {topUnreadMessagesBar}
                             {jumpToBottom}
                             {messagePanel}
                             {searchResultsPanel}
-                        </div>
+                        </main>
                         {statusBarArea}
                         {previewBar}
                         {messageComposer}
@@ -2550,6 +2550,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             userId={this.context.client.getSafeUserId()}
                             resizeNotifier={this.props.resizeNotifier}
                             showApps={true}
+                            role="main"
                         />
                         {previewBar}
                     </>
@@ -2563,6 +2564,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             room={this.state.room}
                             resizing={this.state.resizing}
                             waitForCall={isVideoRoom(this.state.room)}
+                            role="main"
                         />
                         {previewBar}
                     </>
@@ -2603,7 +2605,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         return (
             <RoomContext.Provider value={this.state}>
-                <main
+                <div
                     className={mainClasses}
                     ref={this.roomView}
                     onKeyDown={this.onReactKeyDown}
@@ -2655,7 +2657,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             </div>
                         </MainSplit>
                     </ErrorBoundary>
-                </main>
+                </div>
             </RoomContext.Provider>
         );
     }

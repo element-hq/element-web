@@ -164,7 +164,7 @@ export default class HTMLExporter extends Exporter {
                 <title>${_t("export_chat|html_title")}</title>
             </head>
             <body style="height: 100vh;">
-                <section
+                <div
                 id="matrixchat"
                 style="height: 100%; overflow: auto"
                 class="notranslate"
@@ -237,7 +237,7 @@ export default class HTMLExporter extends Exporter {
                     </main>
                     </div>
                 </div>
-                </section>
+                </div>
                 <div id="snackbar"/>
             </body>
         </html>`;

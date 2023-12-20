@@ -39,7 +39,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
         </div>
       </div>
     </button>
-    <nav
+    <div
       class="mx_Flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
     >
@@ -75,7 +75,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       >
         <div />
       </button>
-    </nav>
+    </div>
   </header>
 </DocumentFragment>
 `;

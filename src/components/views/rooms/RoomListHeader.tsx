@@ -409,7 +409,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
     }
 
     return (
-        <div className="mx_RoomListHeader">
+        <aside className="mx_RoomListHeader" aria-label={_t("room|context_menu|title")}>
             {contextMenuButton}
             {pendingActionSummary ? (
                 <TooltipTarget label={pendingActionSummary}>
@@ -427,7 +427,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             )}
 
             {contextMenu}
-        </div>
+        </aside>
     );
 };
 

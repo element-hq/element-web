@@ -25,7 +25,7 @@ test.describe("UserView", () => {
     test("should render the user view as expected", async ({ page, homeserver, user, bot }) => {
         await page.goto(`/#/user/${bot.credentials.userId}`);
 
-        const rightPanel = page.getByRole("complementary");
+        const rightPanel = page.locator("#mx_RightPanel");
         await expect(rightPanel.getByRole("heading", { name: bot.credentials.displayName, exact: true })).toBeVisible();
         await expect(rightPanel.getByText("1 session")).toBeVisible();
         await expect(rightPanel).toMatchScreenshot("user-info.png", {

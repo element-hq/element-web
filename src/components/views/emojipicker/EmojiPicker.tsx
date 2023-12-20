@@ -362,7 +362,12 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 {({ onKeyDownHandler }) => {
                     let heightBefore = 0;
                     return (
-                        <div className="mx_EmojiPicker" data-testid="mx_EmojiPicker" onKeyDown={onKeyDownHandler}>
+                        <section
+                            className="mx_EmojiPicker"
+                            data-testid="mx_EmojiPicker"
+                            onKeyDown={onKeyDownHandler}
+                            aria-label={_t("a11y|emoji_picker")}
+                        >
                             <Header categories={this.categories} onAnchorClick={this.scrollToCategory} />
                             <Search
                                 query={this.state.filter}
@@ -407,7 +412,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                                     selectedEmojis={this.props.selectedEmojis}
                                 />
                             )}
-                        </div>
+                        </section>
                     );
                 }}
             </RovingTabIndexProvider>

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { FC, ReactNode, useState, useContext, useEffect, useMemo, useRef, useCallback } from "react";
+import React, { FC, ReactNode, useState, useContext, useEffect, useMemo, useRef, useCallback, AriaRole } from "react";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 import { defer, IDeferred } from "matrix-js-sdk/src/utils";
@@ -297,9 +297,10 @@ interface StartCallViewProps {
     resizing: boolean;
     call: Call | null;
     setStartingCall: (value: boolean) => void;
+    role?: AriaRole;
 }
 
-const StartCallView: FC<StartCallViewProps> = ({ room, resizing, call, setStartingCall }) => {
+const StartCallView: FC<StartCallViewProps> = ({ room, resizing, call, setStartingCall, role }) => {
     const cli = useContext(MatrixClientContext);
 
     // Since connection has to be split across two different callbacks, we
@@ -348,7 +349,7 @@ const StartCallView: FC<StartCallViewProps> = ({ room, resizing, call, setStarti
     }, [call, connectDeferred]);
 
     return (
-        <div className="mx_CallView">
+        <div className="mx_CallView" role={role}>
             {connected ? null : <Lobby room={room} connect={connect} />}
             {call !== null && (
                 <AppTile
@@ -369,9 +370,10 @@ interface JoinCallViewProps {
     room: Room;
     resizing: boolean;
     call: Call;
+    role?: AriaRole;
 }
 
-const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call }) => {
+const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role }) => {
     const cli = useContext(MatrixClientContext);
     const connected = isConnected(useConnectionState(call));
     const members = useParticipatingMembers(call);
@@ -415,7 +417,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call }) => {
     }
 
     return (
-        <div className="mx_CallView">
+        <div className="mx_CallView" role={role}>
             {lobby}
             {/* We render the widget even if we're disconnected, so it stays loaded */}
             <AppTile
@@ -439,16 +441,19 @@ interface CallViewProps {
      * button will create a call if there isn't already one.
      */
     waitForCall: boolean;
+    role?: AriaRole;
 }
 
-export const CallView: FC<CallViewProps> = ({ room, resizing, waitForCall }) => {
+export const CallView: FC<CallViewProps> = ({ room, resizing, waitForCall, role }) => {
     const call = useCall(room.roomId);
     const [startingCall, setStartingCall] = useState(false);
 
     if (call === null || startingCall) {
         if (waitForCall) return null;
-        return <StartCallView room={room} resizing={resizing} call={call} setStartingCall={setStartingCall} />;
+        return (
+            <StartCallView room={room} resizing={resizing} call={call} setStartingCall={setStartingCall} role={role} />
+        );
     } else {
-        return <JoinCallView room={room} resizing={resizing} call={call} />;
+        return <JoinCallView room={room} resizing={resizing} call={call} role={role} />;
     }
 };

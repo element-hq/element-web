@@ -182,7 +182,7 @@ export default function RoomHeader({
                     )}
                 </Box>
             </button>
-            <Flex as="nav" align="center" gap="var(--cpd-space-2x)">
+            <Flex align="center" gap="var(--cpd-space-2x)">
                 {additionalButtons?.map((props) => {
                     const label = props.label();
 

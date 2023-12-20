@@ -720,7 +720,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         );
 
         return (
-            <div className={classes}>
+            <div role="complementary" className={classes}>
                 <div className="mx_RoomPreviewBar_message">
                     {titleElement}
                     {subTitleElements}

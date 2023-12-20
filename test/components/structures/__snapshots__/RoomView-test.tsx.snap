@@ -373,7 +373,9 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
         </div>
       </div>
       <div
+        aria-label="Message composer"
         class="mx_MessageComposer"
+        role="region"
       >
         <div
           class="mx_MessageComposer_wrapper"
@@ -614,7 +616,9 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
         </div>
       </div>
       <div
+        aria-label="Message composer"
         class="mx_MessageComposer"
+        role="region"
       >
         <div
           class="mx_MessageComposer_wrapper"
@@ -740,6 +744,7 @@ exports[`RoomView should show error view if failed to look up room alias 1`] = `
   >
     <div
       class="mx_RoomPreviewBar mx_RoomPreviewBar_RoomNotFound mx_RoomPreviewBar_dialog"
+      role="complementary"
     >
       <div
         class="mx_RoomPreviewBar_message"
