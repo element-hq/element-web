@@ -478,7 +478,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
                             {...props}
                             onFocus={onFocus}
                             tabIndex={isActive ? 0 : -1}
-                            inputRef={ref}
+                            ref={ref}
                             className={classes}
                             onClick={this.onTileClick}
                             onContextMenu={this.onContextMenu}

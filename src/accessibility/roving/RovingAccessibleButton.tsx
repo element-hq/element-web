@@ -48,7 +48,7 @@ export const RovingAccessibleButton = <T extends keyof JSX.IntrinsicElements>({
                 if (focusOnMouseOver) onFocusInternal();
                 onMouseOver?.(event);
             }}
-            inputRef={ref}
+            ref={ref}
             tabIndex={isActive ? 0 : -1}
         />
     );

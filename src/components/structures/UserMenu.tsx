@@ -453,7 +453,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 <ContextMenuButton
                     className="mx_UserMenu_contextMenuButton"
                     onClick={this.onOpenMenuClick}
-                    inputRef={this.buttonRef}
+                    ref={this.buttonRef}
                     label={_t("a11y|user_menu")}
                     isExpanded={!!this.state.contextMenuPosition}
                     onContextMenu={this.onContextMenu}

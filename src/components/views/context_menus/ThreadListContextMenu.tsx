@@ -94,7 +94,7 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
                 onClick={openMenu}
                 title={_t("right_panel|thread_list|context_menu_label")}
                 isExpanded={menuDisplayed}
-                inputRef={button}
+                ref={button}
                 data-testid="threadlist-dropdown-button"
             />
             {menuDisplayed && (

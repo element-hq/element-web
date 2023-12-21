@@ -709,7 +709,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                 <div className="mx_RoomSublist_stickable">
                                     <Button
                                         onFocus={onFocus}
-                                        inputRef={ref}
+                                        ref={ref}
                                         tabIndex={tabIndex}
                                         className="mx_RoomSublist_headerText"
                                         aria-expanded={this.state.isExpanded}

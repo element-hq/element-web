@@ -28,7 +28,7 @@ import {
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
-import { AccessibleButtonKind, ButtonEvent } from "../elements/AccessibleButton";
+import type { AccessibleButtonKind, ButtonEvent } from "../elements/AccessibleButton";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { LiveContentSummary, LiveContentType } from "../rooms/LiveContentSummary";
 import FacePile from "../elements/FacePile";

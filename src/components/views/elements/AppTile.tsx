@@ -789,7 +789,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                                         className="mx_AppTileMenuBar_widgets_button"
                                         label={_t("common|options")}
                                         isExpanded={this.state.menuDisplayed}
-                                        inputRef={this.contextMenuButton}
+                                        ref={this.contextMenuButton}
                                         onClick={this.onContextMenuClick}
                                     >
                                         <MenuIcon className="mx_Icon mx_Icon_12" />

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, {
+    ComponentProps,
     Dispatch,
     KeyboardEvent,
     KeyboardEventHandler,
@@ -349,7 +350,7 @@ const Tile: React.FC<ITileProps> = ({
                 })}
                 onClick={hasPermissions && onToggleClick ? onToggleClick : onPreviewClick}
                 onKeyDown={onKeyDown}
-                inputRef={ref}
+                ref={ref}
                 onFocus={onFocus}
                 tabIndex={isActive ? 0 : -1}
             >
@@ -664,7 +665,7 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
     const disabled = !selectedRelations.length || removing || saving;
 
     let Button: React.ComponentType<React.ComponentProps<typeof AccessibleButton>> = AccessibleButton;
-    let props = {};
+    let props: Partial<ComponentProps<typeof AccessibleTooltipButton>> = {};
     if (!selectedRelations.length) {
         Button = AccessibleTooltipButton;
         props = {

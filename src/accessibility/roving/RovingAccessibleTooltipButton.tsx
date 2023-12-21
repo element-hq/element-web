@@ -41,7 +41,7 @@ export const RovingAccessibleTooltipButton = <T extends keyof JSX.IntrinsicEleme
                 onFocusInternal();
                 onFocus?.(event);
             }}
-            inputRef={ref}
+            ref={ref}
             tabIndex={isActive ? 0 : -1}
         />
     );

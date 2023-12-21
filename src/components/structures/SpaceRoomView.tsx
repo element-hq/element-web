@@ -196,7 +196,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
         <>
             <ContextMenuButton
                 kind="primary"
-                inputRef={handle}
+                ref={handle}
                 onClick={openMenu}
                 isExpanded={menuDisplayed}
                 label={_t("action|add")}

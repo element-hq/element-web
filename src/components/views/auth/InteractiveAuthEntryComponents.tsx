@@ -974,7 +974,7 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
         }
         return (
             <div>
-                <AccessibleButton kind="link" inputRef={this.fallbackButton} onClick={this.onShowFallbackClick}>
+                <AccessibleButton kind="link" ref={this.fallbackButton} onClick={this.onShowFallbackClick}>
                     {_t("auth|uia|fallback_button")}
                 </AccessibleButton>
                 {errorSection}

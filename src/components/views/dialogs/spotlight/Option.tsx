@@ -35,7 +35,7 @@ export const Option: React.FC<OptionProps> = ({ inputRef, children, endAdornment
             {...props}
             className={classNames(className, "mx_SpotlightDialog_option")}
             onFocus={onFocus}
-            inputRef={ref}
+            ref={ref}
             tabIndex={-1}
             aria-selected={isActive}
             role="option"

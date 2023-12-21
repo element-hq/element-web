@@ -118,7 +118,7 @@ export const ThreadPanelHeader: React.FC<{
                 <>
                     <ContextMenuButton
                         className="mx_ThreadPanel_dropdown"
-                        inputRef={button}
+                        ref={button}
                         isExpanded={menuDisplayed}
                         onClick={(ev: ButtonEvent) => {
                             openMenu();

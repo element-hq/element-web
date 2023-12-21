@@ -54,7 +54,7 @@ const RoomBreadcrumbTile: React.FC<{ room: Room; onClick: (ev: ButtonEvent) => v
             title={room.name}
             tooltipClassName="mx_RoomBreadcrumbs_Tooltip"
             onFocus={onFocus}
-            inputRef={ref}
+            ref={ref}
             tabIndex={isActive ? 0 : -1}
         >
             <DecoratedRoomAvatar

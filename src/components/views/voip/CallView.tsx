@@ -101,7 +101,7 @@ const DeviceButton: FC<DeviceButtonProps> = ({
         >
             <AccessibleTooltipButton
                 className={`mx_CallView_deviceButton mx_CallView_deviceButton_${kind}`}
-                inputRef={buttonRef}
+                ref={buttonRef}
                 title={muted ? mutedTitle : unmutedTitle}
                 alignment={Alignment.Top}
                 onClick={toggle}

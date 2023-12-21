@@ -173,7 +173,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                     aria-label={_t("action|add_people")}
                     title={_t("action|add_people")}
                     isExpanded={menuDisplayed}
-                    inputRef={handle}
+                    ref={handle}
                 />
 
                 {contextMenu}
@@ -356,7 +356,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                     aria-label={_t("room_list|add_room_label")}
                     title={_t("room_list|add_room_label")}
                     isExpanded={menuDisplayed}
-                    inputRef={handle}
+                    ref={handle}
                 />
 
                 {contextMenu}

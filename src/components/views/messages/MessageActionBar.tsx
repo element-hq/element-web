@@ -126,7 +126,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
                 onClick={onOptionsClick}
                 onContextMenu={onOptionsClick}
                 isExpanded={menuDisplayed}
-                inputRef={button}
+                ref={button}
                 onFocus={onFocus}
                 tabIndex={isActive ? 0 : -1}
             >
@@ -183,7 +183,7 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
                 onClick={onClick}
                 onContextMenu={onClick}
                 isExpanded={menuDisplayed}
-                inputRef={button}
+                ref={button}
                 onFocus={onFocus}
                 tabIndex={isActive ? 0 : -1}
             >

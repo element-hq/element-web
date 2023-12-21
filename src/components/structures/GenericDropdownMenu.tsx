@@ -195,7 +195,7 @@ export function GenericDropdownMenu<T>({
         <>
             <ContextMenuButton
                 className="mx_GenericDropdownMenu_button"
-                inputRef={button}
+                ref={button}
                 isExpanded={menuDisplayed}
                 onClick={(ev: ButtonEvent) => {
                     openMenu();

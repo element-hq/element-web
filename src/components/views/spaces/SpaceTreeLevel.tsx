@@ -154,7 +154,7 @@ export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
             onClick={onClick}
             onContextMenu={openMenu}
             forceHide={!isNarrow || menuDisplayed}
-            inputRef={handle}
+            ref={handle}
             tabIndex={tabIndex}
             onFocus={onFocus}
         >

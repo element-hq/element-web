@@ -92,7 +92,7 @@ const LegacyCallViewDropdownButton: React.FC<IDropdownButtonProps> = ({ state, d
 
     return (
         <LegacyCallViewToggleButton
-            inputRef={buttonRef}
+            ref={buttonRef}
             forceHide={menuDisplayed || hoveringDropdown}
             state={state}
             {...props}
@@ -265,7 +265,7 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                 {this.props.buttonsVisibility.dialpad && (
                     <ContextMenuTooltipButton
                         className="mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_dialpad"
-                        inputRef={this.dialpadButton}
+                        ref={this.dialpadButton}
                         onClick={this.onDialpadClick}
                         isExpanded={this.state.showDialpad}
                         title={_t("voip|dialpad")}
@@ -312,7 +312,7 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                     <ContextMenuTooltipButton
                         className="mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button_more"
                         onClick={this.onMoreClick}
-                        inputRef={this.contextMenuButton}
+                        ref={this.contextMenuButton}
                         isExpanded={this.state.showMoreMenu}
                         title={_t("voip|more_button")}
                         alignment={Alignment.Top}

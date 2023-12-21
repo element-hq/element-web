@@ -32,7 +32,7 @@ export const TooltipOption: React.FC<TooltipOptionProps> = ({ inputRef, classNam
             {...props}
             className={classNames(className, "mx_SpotlightDialog_option")}
             onFocus={onFocus}
-            inputRef={ref}
+            ref={ref}
             tabIndex={-1}
             aria-selected={isActive}
             role="option"

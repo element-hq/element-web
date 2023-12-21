@@ -61,7 +61,7 @@ const ReactButton: React.FC<IProps> = ({ mxEvent, reactions }) => {
                     openMenu();
                 }}
                 isExpanded={menuDisplayed}
-                inputRef={button}
+                ref={button}
             />
 
             {contextMenu}

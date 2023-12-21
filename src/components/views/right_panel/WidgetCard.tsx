@@ -78,7 +78,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
             </Heading>
             <ContextMenuButton
                 className="mx_BaseCard_header_title_button--option"
-                inputRef={handle}
+                ref={handle}
                 onClick={openMenu}
                 isExpanded={menuDisplayed}
                 label={_t("common|options")}

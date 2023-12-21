@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps } from "react";
+import React, { ComponentProps, forwardRef, Ref } from "react";
 
 import AccessibleTooltipButton from "../../components/views/elements/AccessibleTooltipButton";
 
@@ -26,13 +26,10 @@ type Props<T extends keyof JSX.IntrinsicElements> = ComponentProps<typeof Access
 };
 
 // Semantic component for representing the AccessibleButton which launches a <ContextMenu />
-export const ContextMenuTooltipButton = <T extends keyof JSX.IntrinsicElements>({
-    isExpanded,
-    children,
-    onClick,
-    onContextMenu,
-    ...props
-}: Props<T>): JSX.Element => {
+export const ContextMenuTooltipButton = forwardRef(function <T extends keyof JSX.IntrinsicElements>(
+    { isExpanded, children, onClick, onContextMenu, ...props }: Props<T>,
+    ref: Ref<HTMLElement>,
+) {
     return (
         <AccessibleTooltipButton
             {...props}
@@ -41,8 +38,9 @@ export const ContextMenuTooltipButton = <T extends keyof JSX.IntrinsicElements>(
             aria-haspopup={true}
             aria-expanded={isExpanded}
             forceHide={isExpanded}
+            ref={ref}
         >
             {children}
         </AccessibleTooltipButton>
     );
-};
+});

@@ -188,7 +188,7 @@ export function ReadReceiptGroup({
             <div className="mx_ReadReceiptGroup" role="group" aria-label={_t("timeline|read_receipts_label")}>
                 <AccessibleButton
                     className="mx_ReadReceiptGroup_button"
-                    inputRef={button}
+                    ref={button}
                     aria-label={tooltipText}
                     aria-haspopup="true"
                     onClick={openMenu}

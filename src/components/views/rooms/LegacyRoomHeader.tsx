@@ -234,7 +234,7 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
     return (
         <>
             <AccessibleTooltipButton
-                inputRef={buttonRef}
+                ref={buttonRef}
                 className="mx_LegacyRoomHeader_button mx_LegacyRoomHeader_videoCallButton"
                 onClick={onClick}
                 title={_t("voip|video_call")}
@@ -439,7 +439,7 @@ const CallLayoutSelector: FC<CallLayoutSelectorProps> = ({ call }) => {
     return (
         <>
             <AccessibleTooltipButton
-                inputRef={buttonRef}
+                ref={buttonRef}
                 className={classNames("mx_LegacyRoomHeader_button", {
                     "mx_LegacyRoomHeader_layoutButton--freedom": layout === Layout.Tile,
                     "mx_LegacyRoomHeader_layoutButton--spotlight": layout === Layout.Spotlight,

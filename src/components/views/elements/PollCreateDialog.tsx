@@ -248,7 +248,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                     disabled={this.state.busy || this.state.options.length >= MAX_OPTIONS}
                     kind="secondary"
                     className="mx_PollCreateDialog_addOption"
-                    inputRef={this.addOptionRef}
+                    ref={this.addOptionRef}
                 >
                     {_t("poll|options_add_button")}
                 </AccessibleButton>
