@@ -193,6 +193,10 @@ export class Bot extends Client {
                 await cli.startClient();
 
                 if (opts.bootstrapCrossSigning) {
+                    // XXX: workaround https://github.com/element-hq/element-web/issues/26755
+                    //   wait for out device list to be available, as a proxy for the device keys having been uploaded.
+                    await cli.getCrypto()!.getUserDeviceInfo([credentials.userId]);
+
                     await cli.getCrypto()!.bootstrapCrossSigning({
                         authUploadDeviceSigningKeys: async (func) => {
                             await func({
