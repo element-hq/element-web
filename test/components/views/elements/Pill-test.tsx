@@ -142,8 +142,8 @@ describe("<Pill>", () => {
                 await userEvent.hover(screen.getByText("Room 1"));
             });
 
-            it("should show a tooltip with the room Id", () => {
-                expect(screen.getByRole("tooltip", { name: room1Id })).toBeInTheDocument();
+            it("should show a tooltip with the room Id", async () => {
+                expect(await screen.findByRole("tooltip", { name: room1Id })).toBeInTheDocument();
             });
 
             describe("when not hovering the pill any more", () => {

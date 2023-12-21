@@ -780,11 +780,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         const icon = this.props.viewingCall ? (
             <div className="mx_LegacyRoomHeader_icon mx_LegacyRoomHeader_icon_video" />
         ) : this.props.e2eStatus ? (
-            <E2EIcon
-                className="mx_LegacyRoomHeader_icon"
-                status={this.props.e2eStatus}
-                tooltipAlignment={Alignment.Bottom}
-            />
+            <E2EIcon className="mx_LegacyRoomHeader_icon" status={this.props.e2eStatus} tooltipSide="bottom" />
         ) : // If we're expecting an E2EE status to come in, but it hasn't
         // yet been loaded, insert a blank div to reserve space
         this.client.isRoomEncrypted(this.props.room.roomId) && this.client.isCryptoEnabled() ? (

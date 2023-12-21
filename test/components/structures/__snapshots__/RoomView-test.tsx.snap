@@ -522,10 +522,14 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
             </span>
           </div>
         </div>
-        <div
-          aria-label="This room is end-to-end encrypted"
-          class="mx_E2EIcon mx_E2EIcon_normal mx_LegacyRoomHeader_icon"
-        />
+        <span
+          data-state="closed"
+          tabindex="0"
+        >
+          <div
+            class="mx_E2EIcon mx_E2EIcon_normal mx_LegacyRoomHeader_icon"
+          />
+        </span>
         <div
           class="mx_LegacyRoomHeader_name mx_LegacyRoomHeader_name--textonly"
         >

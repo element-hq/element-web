@@ -50,8 +50,8 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for an 
   <span>
     <bdi>
       <a
-        aria-describedby="mx_Pill_0.123456"
         class="mx_Pill mx_UserPill"
+        data-state="closed"
         href="https://matrix.to/#/@user:example.com"
       >
         <span
@@ -99,8 +99,8 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
       <span>
         <bdi>
           <a
-            aria-describedby="mx_Pill_0.123456"
             class="mx_Pill mx_EventPill"
+            data-state="closed"
             href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/$16085560162aNpaH:example.com?via=example.com"
           >
             <span
@@ -150,8 +150,8 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
       <span>
         <bdi>
           <a
-            aria-describedby="mx_Pill_0.123456"
             class="mx_Pill mx_RoomPill"
+            data-state="closed"
             href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com?via=example.com&via=bob.com"
           >
             <span
@@ -260,8 +260,8 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
   <span>
     <bdi>
       <a
-        aria-describedby="mx_Pill_0.123456"
         class="mx_Pill mx_UserPill"
+        data-state="closed"
         href="https://matrix.to/#/@user:server"
       >
         <span
@@ -303,7 +303,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
     ><a
       class="mx_Pill mx_EventPill"
       href="https://matrix.to/#/!room1:example.com/%event_id%"
-      aria-describedby="mx_Pill_0.123456"
+      data-state="closed"
       ><span
         aria-label="Profile picture"
         aria-hidden="true"
@@ -336,7 +336,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
     ><a
       class="mx_Pill mx_EventPill"
       href="https://matrix.to/#/!room2:example.com/%event_id%"
-      aria-describedby="mx_Pill_0.123456"
+      data-state="closed"
       ><span
         aria-label="Avatar"
         aria-hidden="true"
@@ -371,8 +371,8 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
   <span>
     <bdi>
       <a
-        aria-describedby="mx_Pill_0.123456"
         class="mx_Pill mx_EventPill"
+        data-state="closed"
         href="https://matrix.to/#/!room1:example.com/!abc123"
       >
         <div

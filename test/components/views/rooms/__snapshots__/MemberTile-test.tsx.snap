@@ -24,10 +24,6 @@ exports[`MemberTile should display an verified E2EIcon when the e2E status = Ver
         >
           u
         </span>
-        <div
-          aria-label="You have verified this user. This user has verified all of their sessions."
-          class="mx_E2EIcon mx_E2EIcon_bordered mx_E2EIcon_verified"
-        />
       </div>
       <div
         class="mx_EntityTile_details"
@@ -81,10 +77,6 @@ exports[`MemberTile should display an warning E2EIcon when the e2E status = Warn
         >
           u
         </span>
-        <div
-          aria-label="This user has not verified all of their sessions."
-          class="mx_E2EIcon mx_E2EIcon_bordered mx_E2EIcon_warning"
-        />
       </div>
       <div
         class="mx_EntityTile_details"

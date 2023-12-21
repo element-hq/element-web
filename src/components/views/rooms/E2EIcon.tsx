@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { CSSProperties, useState } from "react";
+import React, { ComponentProps, CSSProperties } from "react";
 import classNames from "classnames";
+import { Tooltip } from "@vector-im/compound-web";
 
 import { _t, _td, TranslationKey } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
-import Tooltip, { Alignment } from "../elements/Tooltip";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import { XOR } from "../../../@types/common";
 
@@ -48,7 +48,7 @@ interface Props {
     size?: number;
     onClick?: () => void;
     hideTooltip?: boolean;
-    tooltipAlignment?: Alignment;
+    tooltipSide?: ComponentProps<typeof Tooltip>["side"];
     bordered?: boolean;
 }
 
@@ -69,11 +69,9 @@ const E2EIcon: React.FC<XOR<UserProps, RoomProps>> = ({
     size,
     onClick,
     hideTooltip,
-    tooltipAlignment,
+    tooltipSide,
     bordered,
 }) => {
-    const [hover, setHover] = useState(false);
-
     const classes = classNames(
         {
             mx_E2EIcon: true,
@@ -97,35 +95,23 @@ const E2EIcon: React.FC<XOR<UserProps, RoomProps>> = ({
         style = { width: `${size}px`, height: `${size}px` };
     }
 
-    const onMouseOver = (): void => setHover(true);
-    const onMouseLeave = (): void => setHover(false);
-
     const label = e2eTitle ? _t(e2eTitle) : "";
 
-    let tip: JSX.Element | undefined;
-    if (hover && !hideTooltip && label) {
-        tip = <Tooltip label={label} alignment={tooltipAlignment} />;
+    let content: JSX.Element;
+    if (onClick) {
+        content = <AccessibleButton onClick={onClick} className={classes} style={style} />;
+    } else {
+        content = <div className={classes} style={style} />;
     }
 
-    if (onClick) {
-        return (
-            <AccessibleButton
-                onClick={onClick}
-                onMouseOver={onMouseOver}
-                onMouseLeave={onMouseLeave}
-                className={classes}
-                style={style}
-                aria-label={label}
-            >
-                {tip}
-            </AccessibleButton>
-        );
+    if (!e2eTitle || hideTooltip) {
+        return content;
     }
 
     return (
-        <div onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} className={classes} style={style} aria-label={label}>
-            {tip}
-        </div>
+        <Tooltip label={label} side={tooltipSide} isTriggerInteractive={!!onClick}>
+            {content}
+        </Tooltip>
     );
 };
 
