@@ -688,8 +688,7 @@ test.describe("Read receipts", () => {
                 // Then the room is read
                 await util.assertRead(room2);
             });
-            // XXX: fails because flakes with matrix-js-sdk#3798 (only when all other tests are enabled!)
-            test.skip("A thread with a redacted unread is still read after restart", async ({
+            test("A thread with a redacted unread is still read after restart", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
