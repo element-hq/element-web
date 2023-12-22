@@ -42,6 +42,7 @@ yarn install --frozen-lockfile
 # Finally, set up element-web
 scripts/fetchdep.sh vector-im element-web develop
 pushd element-web
+[ -n "$ELEMENT_WEB_GITHUB_BASE_REF" ] && git fetch --depth 1 origin $ELEMENT_WEB_GITHUB_BASE_REF && git checkout $ELEMENT_WEB_GITHUB_BASE_REF
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
 yarn install --frozen-lockfile

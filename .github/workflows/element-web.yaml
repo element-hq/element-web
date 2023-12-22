@@ -29,6 +29,10 @@ on:
                 type: string
                 required: false
                 description: "The Git SHA of matrix-js-sdk to build against. By default, will use a matching branch name if it exists, or develop."
+            element-web-sha:
+                type: string
+                required: false
+                description: "The Git SHA of element-web to build against. By default, will use a matching branch name if it exists, or develop."
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
@@ -55,8 +59,9 @@ jobs:
             - name: Fetch layered build
               id: layered_build
               env:
-                  # tell layered.sh to check out the right sha of the JS-SDK, if we were given one
+                  # tell layered.sh to check out the right sha of the JS-SDK & EW, if they were given one
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
+                  ELEMENT_WEB_GITHUB_BASE_REF: ${{ inputs.element-web-sha }}
               run: |
                   scripts/ci/layered.sh
                   JSSDK_SHA=$(git -C matrix-js-sdk rev-parse --short=12 HEAD)
