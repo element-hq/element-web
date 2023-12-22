@@ -761,6 +761,8 @@
         "room_status": "Stav miestnosti",
         "room_unread_status": "Stav neprečítaných v miestnosti: <strong>%(status)s</strong>",
         "room_unread_status_count": {
+            "one": "Stav neprečítaných v miestnosti: <strong>%(status)s</strong>, počet: <strong>%(count)s</strong>",
+            "few": "Stav neprečítaných v miestnosti: <strong>%(status)s</strong>, počet: <strong>%(count)s</strong>",
             "other": "Stav neprečítaných v miestnosti: <strong>%(status)s</strong>, počet: <strong>%(count)s</strong>"
         },
         "save_setting_values": "Uložiť hodnoty nastavenia",
@@ -1058,6 +1060,7 @@
         "update_power_level": "Nepodarilo sa zmeniť úroveň oprávnenia"
     },
     "error_app_open_in_another_tab": "Aplikácia %(brand)s bola otvorená na inej karte.",
+    "error_app_open_in_another_tab_title": "%(brand)s je pripojený na inej karte",
     "error_app_opened_in_another_window": "%(brand)s je otvorený v inom okne. Kliknutím na \"%(label)s\" použijete túto aplikáciu %(brand)s a odpojíte druhé okno.",
     "error_database_closed_description": "Môže to byť spôsobené otvorením aplikácie na viacerých kartách alebo vymazaním údajov prehliadača.",
     "error_database_closed_title": "Databáza sa neočakávane zatvorila",
@@ -1402,6 +1405,7 @@
         "element_call_video_rooms": "Element Call video miestnosti",
         "experimental_description": "Chcete experimentovať? Vyskúšajte naše najnovšie nápady vo vývojovom štádiu. Tieto funkcie nie sú dokončené; môžu byť nestabilné, môžu sa zmeniť alebo môžu byť úplne zrušené. <a>Zistiť viac</a>.",
         "experimental_section": "Predbežné ukážky",
+        "feature_disable_call_per_sender_encryption": "Zakázať šifrovanie pre jednotlivých odosielateľov pre Element Call",
         "feature_wysiwyg_composer_description": "Použiť rozšírený text namiesto Markdown v správach.",
         "group_calls": "Nový zážitok zo skupinových hovorov",
         "group_developer": "Vývojárske",
@@ -1938,6 +1942,7 @@
             "show_widgets_button": "Zobraziť widgety",
             "video_call_button_ec": "Videohovor (%(brand)s)",
             "video_call_button_jitsi": "Videohovor (Jitsi)",
+            "video_call_button_legacy": "Starší typ videohovoru",
             "video_call_ec_change_layout": "Zmeniť rozloženie",
             "video_call_ec_layout_freedom": "Sloboda",
             "video_call_ec_layout_spotlight": "Stredobod",
@@ -2403,6 +2408,7 @@
         "all_rooms_home_description": "Všetky miestnosti, v ktorých sa nachádzate, sa zobrazia na domovskej obrazovke.",
         "always_show_message_timestamps": "Vždy zobrazovať časovú značku správ",
         "appearance": {
+            "bundled_emoji_font": "Použiť pribalené písmo emotikonov",
             "custom_font": "Použiť systémové písmo",
             "custom_font_description": "Nastavte názov písma, ktoré máte nainštalované na vašom systéme & %(brand)s sa ho pokúsi použiť.",
             "custom_font_name": "Meno systémového písma",
@@ -3480,8 +3486,9 @@
                 "other": "mali %(count)s-krát zakázaný vstup"
             },
             "changed_avatar": {
-                "other": "%(oneUser)s si zmenil svoj profilový obrázok %(count)s-krát",
-                "one": "%(oneUser)s zmenil/a svoj profilový obrázok"
+                "one": "%(oneUser)s zmenil/a svoj profilový obrázok",
+                "few": "%(oneUser)s si zmenil svoj profilový obrázok %(count)s-krát",
+                "other": "%(oneUser)s si zmenil svoj profilový obrázok %(count)s-krát"
             },
             "changed_avatar_multiple": {
                 "one": "%(severalUsers)szmenilo svoj profilový obrázok",
@@ -3573,7 +3580,8 @@
             },
             "no_change_multiple": {
                 "one": "%(severalUsers)snespravili žiadne zmeny",
-                "other": "%(severalUsers)s nevykonali žiadne zmeny %(count)s krát"
+                "few": "%(severalUsers)s nevykonali žiadne zmeny %(count)s-krát",
+                "other": "%(severalUsers)s nevykonali žiadne zmeny %(count)s-krát"
             },
             "pinned_events": {
                 "other": "%(oneUser)szmenil <a>pripnuté správy</a> v miestnosti %(count)s krát",

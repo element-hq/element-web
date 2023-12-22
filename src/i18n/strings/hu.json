@@ -94,7 +94,7 @@
         "reply": "Válasz",
         "reply_in_thread": "Válasz üzenetszálban",
         "report_content": "Tartalom jelentése",
-        "resend": "Újraküdés",
+        "resend": "Újraküldés",
         "reset": "Visszaállítás",
         "restore": "Visszaállítás",
         "resume": "Folytatás",
@@ -110,7 +110,7 @@
         "show_all": "Összes megjelenítése",
         "sign_in": "Bejelentkezés",
         "sign_out": "Kijelentkezés",
-        "skip": "Kihagy",
+        "skip": "Kihagyás",
         "start": "Indítás",
         "start_chat": "Csevegés indítása",
         "start_new_chat": "Új beszélgetés indítása",
@@ -480,7 +480,7 @@
         "microphone": "Mikrofon",
         "model": "Modell",
         "modern": "Modern",
-        "mute": "Elnémít",
+        "mute": "Némítás",
         "n_members": {
             "one": "%(count)s tag",
             "other": "%(count)s tag"

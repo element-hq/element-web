@@ -1126,6 +1126,7 @@
         },
         "fetching_events": "Rufe Ereignisse ab …",
         "file_attached": "Datei angehängt",
+        "format": "Format",
         "from_the_beginning": "Von Anfang an",
         "generating_zip": "ZIP-Archiv wird generiert",
         "html": "HTML",
@@ -1145,6 +1146,7 @@
         "select_option": "Wähle die gewünschten Optionen für den Export des Verlaufs",
         "size_limit": "Größenlimit",
         "size_limit_min_max": "Die Größe muss eine Zahl zwischen %(min)s MB und %(max)s MB sein",
+        "size_limit_postfix": "MB",
         "starting_export": "Beginne Export …",
         "successful": "Exportieren erfolgreich",
         "successful_detail": "Export erfolgreich. Du kannst ihn in deinem Download-Verzeichnis finden.",
@@ -1557,6 +1559,7 @@
         "toast_description": "%(brand)s ist in mobilen Browsern experimentell. Für eine bessere Erfahrung nutze unsere App.",
         "toast_title": "Nutze die App für eine bessere Erfahrung"
     },
+    "name_and_id": "%(name)s (%(userId)s)",
     "no_more_results": "Keine weiteren Ergebnisse",
     "notif_panel": {
         "empty_description": "Du hast keine sichtbaren Benachrichtigungen.",
@@ -1565,9 +1568,11 @@
     "notifications": {
         "all_messages": "Alle Nachrichten",
         "all_messages_description": "Bei jeder Nachricht benachrichtigen",
+        "class_global": "Global",
         "class_other": "Sonstiges",
         "colour_bold": "Fett",
         "colour_grey": "Grau",
+        "colour_muted": "Stumm",
         "colour_none": "Nichts",
         "colour_red": "Rot",
         "colour_unsent": "Nicht gesendet",
@@ -1904,6 +1909,7 @@
             "video_call_ec_layout_spotlight": "Rampenlicht",
             "video_room_view_chat_button": "Nachrichtenverlauf anzeigen"
         },
+        "header_untrusted_label": "Nicht vertrauenswürdig",
         "inaccessible": "Dieser Raum oder Space ist im Moment nicht zugänglich.",
         "inaccessible_name": "Auf %(roomName)s kann momentan nicht zugegriffen werden.",
         "inaccessible_subtitle_1": "Versuche es später erneut oder bitte einen Raum- oder Space-Admin um eine Zutrittserlaubnis.",
@@ -2000,7 +2006,7 @@
             "server_connectivity_lost_title": "Verbindung zum Server wurde unterbrochen.",
             "some_messages_not_sent": "Einige Nachrichten konnten nicht gesendet werden"
         },
-        "unknown_status_code_for_timeline_jump": "Unbekannter Statuscode",
+        "unknown_status_code_for_timeline_jump": "unbekannter Statuscode",
         "unread_notifications_predecessor": {
             "one": "Du hast %(count)s ungelesene Benachrichtigungen in einer früheren Version dieses Raumes.",
             "other": "Du hast %(count)s ungelesene Benachrichtigungen in einer früheren Version dieses Raums."
@@ -2875,6 +2881,7 @@
         "error_invalid_rendering_type": "Befehlsfehler: Rendering-Typ kann nicht gefunden werden (%(renderingType)s)",
         "error_invalid_room": "Eingabe fehlgeschlagen: Raum (%(roomId)s) nicht auffindbar",
         "error_invalid_runfn": "Befehlsfehler: Slash-Befehl kann nicht verarbeitet werden.",
+        "error_invalid_user_in_room": "Kann Benutzer in Raum nicht finden",
         "help": "Zeigt die Liste verfügbarer Befehle mit Verwendungen und Beschreibungen an",
         "help_dialog_title": "Befehl Hilfe",
         "holdcall": "Den aktuellen Anruf halten",
@@ -3148,6 +3155,7 @@
         "creation_summary_dm": "%(creator)s hat diese Direktnachricht erstellt.",
         "creation_summary_room": "%(creator)s hat den Raum erstellt und konfiguriert.",
         "decryption_failure_blocked": "Der Absender hat dich vom Erhalt dieser Nachricht ausgeschlossen",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Entschlüsseln",
         "download_action_downloading": "Herunterladen",
         "edits": {
@@ -3159,6 +3167,7 @@
         "error_no_renderer": "Dieses Ereignis konnte nicht angezeigt werden",
         "error_rendering_message": "Diese Nachricht kann nicht geladen werden",
         "historical_messages_unavailable": "Du kannst keine älteren Nachrichten lesen",
+        "in_room_name": " in <strong>%(room)s</strong>",
         "io.element.voice_broadcast_info": {
             "user": "%(senderName)s beendete eine <a>Sprachübertragung</a>",
             "you": "Du hast eine <a>Sprachübertragung</a> beendet"
@@ -3392,6 +3401,7 @@
         "pending_moderation_reason": "Nachricht erwartet Moderation: %(reason)s",
         "reactions": {
             "add_reaction_prompt": "Reaktion hinzufügen",
+            "custom_reaction_fallback_label": "Benutzerdefinierte Reaktion",
             "label": "%(reactors)s hat mit %(content)s reagiert",
             "tooltip": "<reactors/><reactedWith>hat mit %(shortName)s reagiert</reactedWith>"
         },
@@ -3951,6 +3961,7 @@
             "l33t": "Vorhersagbare Ersetzungen wie „@“ anstelle von „a“ helfen nicht besonders",
             "longerKeyboardPattern": "Nutze ein längeres Tastaturmuster mit mehr Abwechslung",
             "noNeed": "Kein Bedarf an Symbolen, Zahlen oder Großbuchstaben",
+            "pwned": "Wenn Sie dieses Passwort woanders verwenden, sollten Sie es ändern.",
             "recentYears": "Vermeide die letzten Jahre",
             "repeated": "Vermeide wiederholte Worte und Zeichen",
             "reverseWords": "Umgedrehte Worte sind nicht schwerer zu erraten",

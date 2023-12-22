@@ -1057,6 +1057,7 @@
         "update_power_level": "Misslyckades att ändra behörighetsnivå"
     },
     "error_app_open_in_another_tab": "%(brand)s har öppnats in en annan flik.",
+    "error_app_open_in_another_tab_title": "%(brand)s är ansluten i en annan flik",
     "error_app_opened_in_another_window": "%(brand)s är öppen i ett annat fönster. Klicka på \"%(label)s\" för att använda %(brand)s här och koppla bort det andra fönstret.",
     "error_database_closed_description": "Det här kan orsakas av att ha appen öppen i flera flikar eller av rensning av webbläsardata.",
     "error_database_closed_title": "Databasen stängdes oväntat",
@@ -1932,6 +1933,7 @@
             "show_widgets_button": "Visa widgets",
             "video_call_button_ec": "Videosamtal (%(brand)s)",
             "video_call_button_jitsi": "Videosamtal (Jitsi)",
+            "video_call_button_legacy": "Äldre videosamtalsmetod",
             "video_call_ec_change_layout": "Byt utseende",
             "video_call_ec_layout_freedom": "Frihet",
             "video_call_ec_layout_spotlight": "Rampljus",
@@ -2397,6 +2399,7 @@
         "all_rooms_home_description": "Alla rum du är in kommer att visas i Hem.",
         "always_show_message_timestamps": "Visa alltid tidsstämplar för meddelanden",
         "appearance": {
+            "bundled_emoji_font": "Använd medföljande emoji-teckensnitt",
             "custom_font": "Använd systemets teckensnitt",
             "custom_font_description": "Sätt namnet för ett teckensnitt installerat på ditt system så kommer %(brand)s att försöka använda det.",
             "custom_font_name": "Namn på systemets teckensnitt",
@@ -2649,6 +2652,7 @@
         "security": {
             "4s_public_key_in_account_data": "i kontodata",
             "4s_public_key_status": "Publik nyckel för hemlig lagring:",
+            "analytics_description": "Dela anonyma data för att hjälpa oss att identifiera problem. Inget personligt. Inga tredje parter.",
             "backup_key_cached_status": "Cachad säkerhetskopieringsnyckel:",
             "backup_key_stored_status": "Lagrad säkerhetskopieringsnyckel:",
             "backup_key_unexpected_type": "oväntad typ",
@@ -2684,14 +2688,17 @@
             "ignore_users_section": "Ignorerade användare",
             "import_megolm_keys": "Importera rumskrypteringsnycklar",
             "key_backup_active": "Den här sessionen säkerhetskopierar dina nycklar.",
+            "key_backup_active_version": "Aktiv säkerhetskopieringsversion:",
             "key_backup_active_version_none": "Ingen",
             "key_backup_algorithm": "Algoritm:",
+            "key_backup_can_be_restored": "Säkerhetskopian kan återställas på den här sessionen",
             "key_backup_complete": "Alla nycklar säkerhetskopierade",
             "key_backup_connect": "Anslut den här sessionen till nyckelsäkerhetskopiering",
             "key_backup_connect_prompt": "Anslut den här sessionen till nyckelsäkerhetskopiering innan du loggar ut för att undvika att du blir av med nycklar som kanske bara finns på den här sessionen.",
             "key_backup_in_progress": "Säkerhetskopierar %(sessionsRemaining)s nycklar …",
             "key_backup_inactive": "Den här servern <b>säkerhetskopierar inte dina nycklar</b>, men du har en existerande säkerhetskopia du kan återställa ifrån och lägga till till i framtiden.",
             "key_backup_inactive_warning": "Dina nycklar <b>säkerhetskopieras inte från den här sessionen</b>.",
+            "key_backup_latest_version": "Senaste säkerhetskopieringsversionen på servern:",
             "manually_verify_all_sessions": "Verifiera alla fjärrsessioner manuellt",
             "message_search_disable_warning": "Om den är inaktiverad visas inte meddelanden från krypterade rum i sökresultaten.",
             "message_search_disabled": "Cachar krypterade meddelanden säkert lokalt för att de ska visas i sökresultat.",
@@ -2725,6 +2732,7 @@
         "send_read_receipts_unsupported": "Din server stöder inte inaktivering av läskvitton.",
         "send_typing_notifications": "Skicka \"skriver\"-statusar",
         "sessions": {
+            "best_security_note": "För bästa säkerhet, verifiera dina sessioner och logga ut från sessioner som du inte känner igen eller använder längre.",
             "browser": "Webbläsare",
             "confirm_sign_out": {
                 "one": "Bekräfta utloggning av denna enhet",
@@ -2750,6 +2758,7 @@
             "device_verified_description": "Den här sessionen är redo för säkra meddelanden.",
             "device_verified_description_current": "Din nuvarande session är redo för säkra meddelanden.",
             "error_pusher_state": "Misslyckades att sätta pusharläge",
+            "error_set_name": "Misslyckades att ange sessionsnamn",
             "filter_all": "Alla",
             "filter_inactive": "Inaktiv",
             "filter_inactive_description": "Inaktiv i %(inactiveAgeDays)s dagar eller längre",
@@ -2810,6 +2819,7 @@
             "unverified_sessions_explainer_1": "Overifierade sessioner är sessioner där du har loggat in med dina uppgifter men som inte har korsverifierats.",
             "unverified_sessions_explainer_2": "Du bör speciellt försäkra dig om att du känner igen alla dessa sessioner eftersom att de kan representera en oauktoriserad användning av ditt konto.",
             "unverified_sessions_list_description": "Verifiera dina sessioner för förbättrad säker meddelandehantering eller logga ut ur de du inte känner igen eller använder längre.",
+            "url": "URL",
             "verified_session": "Verifierad session",
             "verified_sessions": "Verifierade sessioner",
             "verified_sessions_explainer_1": "Verifierade sessioner är alla ställen där du använder det här kontot efter att ha angett din lösenfras eller bekräftat din identitet med en annan verifierad session.",
@@ -2837,6 +2847,7 @@
             "metaspaces_orphans_description": "Gruppera alla dina rum som inte är en del av ett utrymme på ett ställe.",
             "metaspaces_people_description": "Gruppera alla dina personer på ett ställe.",
             "metaspaces_subsection": "Utrymmen att visa",
+            "spaces_explainer": "Utrymmen är sätt att gruppera rum och personer. Vid sidan av de utrymmen du befinner dig i kan du också använda några förbyggda.",
             "title": "Sidofält"
         },
         "start_automatically": "Starta automatiskt vid systeminloggning",
@@ -2899,7 +2910,9 @@
         "devtools": "Öppna dialogrutan Utvecklarverktyg",
         "discardsession": "Tvingar den aktuella externa gruppsessionen i ett krypterat rum att överges",
         "error_invalid_rendering_type": "Kommandofel: Kunde inte hitta renderingstyp (%(renderingType)s)",
+        "error_invalid_room": "Kommandot misslyckades: Kunde inte hitta rum (%(roomId)s)",
         "error_invalid_runfn": "Kommandofel: Kunde inte hantera snedstreckskommando.",
+        "error_invalid_user_in_room": "Kunde inte hitta användaren i rummet",
         "help": "Visar lista över kommandon med användande beskrivningar",
         "help_dialog_title": "Kommandohjälp",
         "holdcall": "Parkerar samtalet i det aktuella rummet",
@@ -3067,6 +3080,8 @@
             "other": "%(count)s medlemmar"
         },
         "create_new_room_button": "Skapa nytt rum",
+        "failed_querying_public_rooms": "Misslyckades med att fråga efter offentliga rum",
+        "failed_querying_public_spaces": "Underlåtit att fråga efter offentliga utrymmen",
         "group_chat_section_title": "Andra alternativ",
         "heading_with_query": "Använd \"%(query)s\" för att söka",
         "heading_without_query": "Sök efter",
@@ -3075,6 +3090,7 @@
         "message_search_section_title": "Andra sökningar",
         "other_rooms_in_space": "Andra rum i %(spaceName)s",
         "public_rooms_label": "Offentliga rum",
+        "public_spaces_label": "Offentliga utrymmen",
         "recent_searches_section_title": "Nyliga sökningar",
         "recently_viewed_section_title": "Nyligen sedda",
         "remove_filter": "Ta bort sökfilter för %(filter)s",
@@ -3172,6 +3188,7 @@
         "creation_summary_dm": "%(creator)s skapade den här DM:en.",
         "creation_summary_room": "%(creator)s skapade och konfigurerade rummet.",
         "decryption_failure_blocked": "Avsändaren har blockerat dig från att ta emot det här meddelandet",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Avkrypterar",
         "download_action_downloading": "Laddar ner",
         "edits": {
@@ -3189,6 +3206,7 @@
             "you": "Du avslutade en <a>röstsändning</a>"
         },
         "io.element.widgets.layout": "%(senderName)s har uppdaterat rummets arrangemang",
+        "late_event_separator": "Ursprungligen skickad %(dateTime)s",
         "load_error": {
             "no_permission": "Försökte ladda en viss punkt i det här rummets tidslinje, men du är inte behörig att visa det aktuella meddelandet.",
             "title": "Misslyckades att hämta positionen på tidslinjen",
@@ -3292,6 +3310,8 @@
         "m.room.encryption": {
             "disable_attempt": "Ignorerade försök att inaktivera kryptering",
             "disabled": "Kryptering är inte aktiverad",
+            "enabled": "Meddelanden i det här rummet är totalsträckskrypterade. När personer går med kan du verifiera dem i deras profil genom att trycka på deras profilbild.",
+            "enabled_dm": "Meddelanden här är totalsträckskrypterade. Verifiera %(displayName)s i deras profil - tryck på deras profilbild.",
             "enabled_local": "Meddelanden i den här chatten kommer att vara totalsträckskypterade.",
             "parameters_changed": "Vissa krypteringsparametrar har ändrats.",
             "unsupported": "Krypteringen som används i det här rummet stöds inte."
@@ -3389,6 +3409,8 @@
             "label": "Meddelandeåtgärder",
             "view_in_room": "Visa i rum"
         },
+        "message_timestamp_received_at": "Mottagen vid: %(dateTime)s",
+        "message_timestamp_sent_at": "Skickat vid: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s uppdaterade en bannregel som matchade %(oldGlob)s till att matcha %(newGlob)s på grund av %(reason)s",
             "changed_rule_rooms": "%(senderName)s ändrade en regel som bannade rum som matchade %(oldGlob)s till att matcha %(newGlob)s på grund av %(reason)s",
@@ -3415,6 +3437,7 @@
         "pending_moderation_reason": "Meddelandet inväntar moderering: %(reason)s",
         "reactions": {
             "add_reaction_prompt": "Lägg till reaktion",
+            "custom_reaction_fallback_label": "Anpassad reaktion",
             "label": "%(reactors)s reagerade med %(content)s",
             "tooltip": "<reactors/><reactedWith>reagerade med %(shortName)s</reactedWith>"
         },
@@ -3950,6 +3973,7 @@
         },
         "popout": "Poppa ut widget",
         "set_room_layout": "Sätt mitt rumsarrangemang för alla",
+        "shared_data_avatar": "URL för din profilbild",
         "shared_data_device_id": "Ditt enhets-ID",
         "shared_data_lang": "Ditt språk",
         "shared_data_mxid": "Ditt användar-ID",
@@ -3974,6 +3998,7 @@
             "l33t": "Förutsägbara ersättningar som '@' istället för 'a' hjälper inte särskilt mycket",
             "longerKeyboardPattern": "Använd ett längre tangentbordsmönster med fler riktningsbyten",
             "noNeed": "Specialtecken, siffror eller stora bokstäver behövs inte",
+            "pwned": "Om du använder det här lösenordet någon annanstans bör du ändra det.",
             "recentYears": "Undvik nyliga år",
             "repeated": "Undvik upprepade ord och bokstäver",
             "reverseWords": "Ord skrivna baklänges är inte mycket svårare att gissa",
@@ -3987,6 +4012,7 @@
             "extendedRepeat": "Upprepningar som \"abcabcabc\" är bara aningen svårare att gissa än \"abc\"",
             "keyPattern": "Korta tangentbordsmönster är enkla att gissa",
             "namesByThemselves": "Enstaka för- och efternamn är enkla att gissa",
+            "pwned": "Ditt lösenord avslöjades av ett dataintrång på Internet.",
             "recentYears": "Nyliga årtal är enkla att gissa",
             "sequences": "Sekvenser som abc eller 6543 är enkla att gissa",
             "similarToCommon": "Det här liknar ett vanligt lösenord",
@@ -3994,6 +4020,7 @@
             "straightRow": "Raka rader på tangentbordet är enkla att gissa",
             "topHundred": "Det här är ett av de 100 vanligaste lösenorden",
             "topTen": "Det här är ett av de 10 vanligaste lösenorden",
+            "userInputs": "Det bör inte finnas några personliga eller sidrelaterade data.",
             "wordByItself": "Enstaka ord är enkla att gissa"
         }
     }
