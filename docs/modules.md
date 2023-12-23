@@ -6,14 +6,14 @@ at runtime.
 
 ## Installing modules
 
-If you already have a module you want to install, such as our [ILAG Module](https://github.com/vector-im/element-web-ilag-module),
+If you already have a module you want to install, such as our [ILAG Module](https://github.com/element-hq/element-web-ilag-module),
 then copy `build_config.sample.yaml` to `build_config.yaml` in the same directory. In your new `build_config.yaml` simply
 add the reference to the module as described by the sample file, using the same syntax you would for `yarn add`:
 
 ```yaml
 modules:
     # Our module happens to be published on NPM, so we use that syntax to reference it.
-    - "@vector-im/element-web-ilag-module@latest"
+    - "@element-hq/element-web-ilag-module@latest"
 ```
 
 Then build the app as you normally would: `yarn build` or `yarn dist` (if compatible on your platform). If you are building
