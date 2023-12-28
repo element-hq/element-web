@@ -431,7 +431,7 @@ test.describe("Cryptography", function () {
             await expect(lastE2eIcon).toHaveAttribute("aria-label", "Encrypted by an unknown or deleted device.");
         });
 
-        // XXX: Failed since migration to Playwright
+        // XXX: Failed since migration to Playwright (https://github.com/element-hq/element-web/issues/26811)
         test.skip("Should show a grey padlock for a key restored from backup", async ({
             page,
             app,
