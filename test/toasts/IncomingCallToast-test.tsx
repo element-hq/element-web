@@ -136,7 +136,7 @@ describe("IncomingCallEvent", () => {
             ({
                 ...notifyContent,
                 notify_type: "ring",
-            } as any);
+            }) as any;
         const playMock = jest.fn();
         const audio = { play: playMock, paused: true };
 

@@ -79,7 +79,10 @@ export class Singleflight {
 }
 
 class SingleflightContext {
-    public constructor(private instance: Object, private key: string) {}
+    public constructor(
+        private instance: Object,
+        private key: string,
+    ) {}
 
     /**
      * Forget this particular instance and key combination, discarding the result.

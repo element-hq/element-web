@@ -227,7 +227,7 @@ describe("WysiwygComposer", () => {
                 getCompletions: jest.fn().mockImplementation(async () => data),
                 getName: jest.fn().mockReturnValue("test provider"),
                 renderCompletions: jest.fn().mockImplementation((components) => components),
-            } as unknown as AutocompleteProvider);
+            }) as unknown as AutocompleteProvider;
 
         // for each test we will insert input simulating a user mention
         const initialInput = "@abc";

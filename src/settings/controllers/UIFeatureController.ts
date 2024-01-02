@@ -26,7 +26,10 @@ import SettingsStore from "../SettingsStore";
  * Settings using this controller are assumed to return `false` when disabled.
  */
 export default class UIFeatureController extends SettingController {
-    public constructor(private uiFeatureName: string, private forcedValue = false) {
+    public constructor(
+        private uiFeatureName: string,
+        private forcedValue = false,
+    ) {
         super();
     }
 

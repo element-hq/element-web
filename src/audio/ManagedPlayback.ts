@@ -22,7 +22,11 @@ import { DEFAULT_WAVEFORM } from "./consts";
  * A managed playback is a Playback instance that is guided by a PlaybackManager.
  */
 export class ManagedPlayback extends Playback {
-    public constructor(private manager: PlaybackManager, buf: ArrayBuffer, seedWaveform = DEFAULT_WAVEFORM) {
+    public constructor(
+        private manager: PlaybackManager,
+        buf: ArrayBuffer,
+        seedWaveform = DEFAULT_WAVEFORM,
+    ) {
         super(buf, seedWaveform);
     }
 

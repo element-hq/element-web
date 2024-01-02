@@ -68,7 +68,11 @@ export const test = base.extend<{
  * which finds a message and then constructs a reply to it.
  */
 export class MessageBuilder {
-    constructor(private page: Page, private app: ElementAppPage, private helpers: Helpers) {}
+    constructor(
+        private page: Page,
+        private app: ElementAppPage,
+        private helpers: Helpers,
+    ) {}
 
     /**
      * Map of message content -> event.
@@ -334,7 +338,11 @@ export abstract class BotActionSpec {
 export type Message = string | MessageContentSpec | BotActionSpec;
 
 class Helpers {
-    constructor(private page: Page, private app: ElementAppPage, private bot: Bot) {}
+    constructor(
+        private page: Page,
+        private app: ElementAppPage,
+        private bot: Bot,
+    ) {}
 
     /**
      * Use the supplied client to send messages or perform actions as specified by

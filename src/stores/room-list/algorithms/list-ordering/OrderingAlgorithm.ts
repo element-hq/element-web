@@ -30,7 +30,10 @@ export abstract class OrderingAlgorithm {
     // set by setSortAlgorithm() in ctor
     protected sortingAlgorithm!: SortAlgorithm;
 
-    protected constructor(protected tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
+    protected constructor(
+        protected tagId: TagID,
+        initialSortingAlgorithm: SortAlgorithm,
+    ) {
         // noinspection JSIgnoredPromiseFromCall
         this.setSortAlgorithm(initialSortingAlgorithm); // we use the setter for validation
     }

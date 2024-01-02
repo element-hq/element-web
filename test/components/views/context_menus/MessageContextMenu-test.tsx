@@ -480,7 +480,7 @@ describe("MessageContextMenu", () => {
         it("shows view in room button when the event is a thread root", () => {
             const eventContent = createMessageEventContent("hello");
             const mxEvent = new MatrixEvent({ type: EventType.RoomMessage, content: eventContent });
-            mxEvent.getThread = () => ({ rootEvent: mxEvent } as Thread);
+            mxEvent.getThread = () => ({ rootEvent: mxEvent }) as Thread;
             const props = {
                 rightClick: true,
             };

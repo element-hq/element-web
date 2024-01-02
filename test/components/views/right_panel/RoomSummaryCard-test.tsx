@@ -255,7 +255,7 @@ describe("<RoomSummaryCard />", () => {
                                 "@ernie:sesame.st": ["some-other-room-id", room.roomId],
                             },
                         }),
-                    }[eventType]),
+                    })[eventType],
             );
             getComponent();
 

@@ -160,7 +160,10 @@ export class RoomViewStore extends EventEmitter {
     private dis?: MatrixDispatcher;
     private dispatchToken?: string;
 
-    public constructor(dis: MatrixDispatcher, private readonly stores: SdkContextClass) {
+    public constructor(
+        dis: MatrixDispatcher,
+        private readonly stores: SdkContextClass,
+    ) {
         super();
         this.resetDispatcher(dis);
         this.stores.voiceBroadcastRecordingsStore.addListener(
@@ -319,14 +322,14 @@ export class RoomViewStore extends EventEmitter {
                         numMembers > 1000
                             ? "MoreThanAThousand"
                             : numMembers > 100
-                            ? "OneHundredAndOneToAThousand"
-                            : numMembers > 10
-                            ? "ElevenToOneHundred"
-                            : numMembers > 2
-                            ? "ThreeToTen"
-                            : numMembers > 1
-                            ? "Two"
-                            : "One";
+                              ? "OneHundredAndOneToAThousand"
+                              : numMembers > 10
+                                ? "ElevenToOneHundred"
+                                : numMembers > 2
+                                  ? "ThreeToTen"
+                                  : numMembers > 1
+                                    ? "Two"
+                                    : "One";
 
                     this.stores.posthogAnalytics.trackEvent<JoinedRoomEvent>({
                         eventName: "JoinedRoom",

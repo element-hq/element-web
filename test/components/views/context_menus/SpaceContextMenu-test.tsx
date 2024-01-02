@@ -69,7 +69,7 @@ describe("<SpaceContextMenu />", () => {
             client: mockClient,
             getMyMembership: jest.fn(),
             ...props,
-        } as unknown as Room);
+        }) as unknown as Room;
 
     const defaultProps = {
         space: makeMockSpace(),

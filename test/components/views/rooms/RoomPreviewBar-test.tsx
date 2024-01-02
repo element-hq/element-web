@@ -68,7 +68,7 @@ const makeMockRoomMember = ({
                 getPrevContent: jest.fn().mockReturnValue({ membership: oldMembership, ...memberContent }),
             },
         },
-    } as unknown as RoomMember);
+    }) as unknown as RoomMember;
 
 describe("<RoomPreviewBar />", () => {
     const roomId = "RoomPreviewBar-test-room";

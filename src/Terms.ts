@@ -33,7 +33,11 @@ export class Service {
      * @param {string} baseUrl The Base URL of the service (ie. before '/_matrix')
      * @param {string} accessToken The user's access token for the service
      */
-    public constructor(public serviceType: SERVICE_TYPES, public baseUrl: string, public accessToken: string) {}
+    public constructor(
+        public serviceType: SERVICE_TYPES,
+        public baseUrl: string,
+        public accessToken: string,
+    ) {}
 }
 
 export interface LocalisedPolicy {

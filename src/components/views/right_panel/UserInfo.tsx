@@ -650,8 +650,8 @@ export const RoomKickButton = ({
                     ? _t("user_info|disinvite_button_space")
                     : _t("user_info|kick_button_space")
                 : member.membership === "invite"
-                ? _t("user_info|disinvite_button_room")
-                : _t("user_info|kick_button_room"),
+                  ? _t("user_info|disinvite_button_room")
+                  : _t("user_info|kick_button_room"),
             title:
                 member.membership === "invite"
                     ? _t("user_info|disinvite_button_room_name", { roomName: room.name })
@@ -721,8 +721,8 @@ export const RoomKickButton = ({
             ? _t("user_info|disinvite_button_space")
             : _t("user_info|kick_button_space")
         : member.membership === "invite"
-        ? _t("user_info|disinvite_button_room")
-        : _t("user_info|kick_button_room");
+          ? _t("user_info|disinvite_button_room")
+          : _t("user_info|kick_button_room");
 
     return (
         <AccessibleButton
@@ -782,8 +782,8 @@ export const BanToggleButton = ({
                     ? _t("user_info|unban_button_space")
                     : _t("user_info|ban_button_space")
                 : isBanned
-                ? _t("user_info|unban_button_room")
-                : _t("user_info|ban_button_room"),
+                  ? _t("user_info|unban_button_room")
+                  : _t("user_info|ban_button_room"),
             title: isBanned
                 ? _t("user_info|unban_room_confirm_title", { roomName: room.name })
                 : _t("user_info|ban_room_confirm_title", { roomName: room.name }),

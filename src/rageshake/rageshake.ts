@@ -138,7 +138,10 @@ export class IndexedDBLogStore {
     private flushPromise: Promise<void> | null = null;
     private flushAgainPromise: Promise<void> | null = null;
 
-    public constructor(private indexedDB: IDBFactory, private logger: ConsoleLogger) {
+    public constructor(
+        private indexedDB: IDBFactory,
+        private logger: ConsoleLogger,
+    ) {
         this.id = "instance-" + randomString(16);
     }
 

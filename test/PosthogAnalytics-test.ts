@@ -39,7 +39,7 @@ const getFakePosthog = (): PostHog =>
             get_user_state: jest.fn(),
         },
         identifyUser: jest.fn(),
-    } as unknown as PostHog);
+    }) as unknown as PostHog;
 
 interface ITestEvent extends IPosthogEvent {
     eventName: "JestTestEvents";
@@ -288,7 +288,7 @@ describe("PosthogAnalytics", () => {
                     id: "0000000",
                     pseudonymousAnalyticsOptIn: true,
                 }),
-            } as unknown as MatrixClient);
+            }) as unknown as MatrixClient;
 
         beforeEach(async () => {
             SdkConfig.put({

@@ -55,7 +55,9 @@ limitations under the License.
             width: 14px;
             height: 14px;
             will-change: left, top;
-            transition: left var(--transition-short) ease-out, top var(--transition-standard) ease-out;
+            transition:
+                left var(--transition-short) ease-out,
+                top var(--transition-standard) ease-out;
         }
     }
 }
@@ -109,7 +111,7 @@ limitations under the License.
                 margin: 6px 8px;
                 align-self: center;
                 justify-self: center;
-                flex-shrink: 0; // Long names should not shrink the picture
+                flex-shrink: 0; /* Long names should not shrink the picture */
             }
 
             .mx_ReadReceiptGroup_name {

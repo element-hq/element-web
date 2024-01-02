@@ -21,7 +21,10 @@ export class Network {
     private isOffline = false;
     private readonly setupPromise: Promise<void>;
 
-    constructor(private page: Page, private client: Client) {
+    constructor(
+        private page: Page,
+        private client: Client,
+    ) {
         this.setupPromise = this.setupRoute();
     }
 

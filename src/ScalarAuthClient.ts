@@ -34,7 +34,10 @@ export default class ScalarAuthClient {
     private termsInteractionCallback?: TermsInteractionCallback;
     private isDefaultManager: boolean;
 
-    public constructor(private apiUrl: string, private uiUrl: string) {
+    public constructor(
+        private apiUrl: string,
+        private uiUrl: string,
+    ) {
         this.scalarToken = null;
         // `undefined` to allow `startTermsFlow` to fallback to a default
         // callback if this is unset.

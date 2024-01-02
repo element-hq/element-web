@@ -296,71 +296,9 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
 </span>
 `;
 
-exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to a message in the same room with the label »Message from Member« 1`] = `
-"Visit
-<span
-  ><bdi
-    ><a
-      class="mx_Pill mx_EventPill"
-      href="https://matrix.to/#/!room1:example.com/%event_id%"
-      data-state="closed"
-      ><span
-        aria-label="Profile picture"
-        aria-hidden="true"
-        data-testid="avatar-img"
-        data-type="round"
-        data-color="8"
-        class="_avatar_1o69u_17 mx_BaseAvatar"
-        style="--cpd-avatar-size: 16px"
-        ><img
-          loading="lazy"
-          alt=""
-          src="mxc://avatar.url/image.png"
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer"
-          class="_image_1o69u_49"
-          data-type="round"
-          width="16px"
-          height="16px" /></span
-      ><span class="mx_Pill_text">Message from Member</span></a
-    ></bdi
-  ></span
->
-"
-`;
+exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to a message in the same room with the label »Message from Member« 1`] = `"Visit <span><bdi><a class="mx_Pill mx_EventPill" href="https://matrix.to/#/!room1:example.com/%event_id%" data-state="closed"><span aria-label="Profile picture" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="8" class="_avatar_1o69u_17 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" src="mxc://avatar.url/image.png" crossorigin="anonymous" referrerpolicy="no-referrer" class="_image_1o69u_49" data-type="round" width="16px" height="16px"></span><span class="mx_Pill_text">Message from Member</span></a></bdi></span>"`;
 
-exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an event in another room with the label »Message in Room 2« 1`] = `
-"Visit
-<span
-  ><bdi
-    ><a
-      class="mx_Pill mx_EventPill"
-      href="https://matrix.to/#/!room2:example.com/%event_id%"
-      data-state="closed"
-      ><span
-        aria-label="Avatar"
-        aria-hidden="true"
-        data-testid="avatar-img"
-        data-type="round"
-        data-color="4"
-        class="_avatar_1o69u_17 mx_BaseAvatar"
-        style="--cpd-avatar-size: 16px"
-        ><img
-          loading="lazy"
-          alt=""
-          src="mxc://avatar.url/room.png"
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer"
-          class="_image_1o69u_49"
-          data-type="round"
-          width="16px"
-          height="16px" /></span
-      ><span class="mx_Pill_text">Message in Room 2</span></a
-    ></bdi
-  ></span
->
-"
-`;
+exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an event in another room with the label »Message in Room 2« 1`] = `"Visit <span><bdi><a class="mx_Pill mx_EventPill" href="https://matrix.to/#/!room2:example.com/%event_id%" data-state="closed"><span aria-label="Avatar" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="4" class="_avatar_1o69u_17 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" src="mxc://avatar.url/room.png" crossorigin="anonymous" referrerpolicy="no-referrer" class="_image_1o69u_49" data-type="round" width="16px" height="16px"></span><span class="mx_Pill_text">Message in Room 2</span></a></bdi></span>"`;
 
 exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an unknown message in the same room with the label »Message« 1`] = `
 <span

@@ -68,7 +68,11 @@ export class Bot extends Client {
     public credentials?: Credentials;
     private handlePromise: Promise<JSHandle<ExtendedMatrixClient>>;
 
-    constructor(page: Page, private homeserver: HomeserverInstance, private readonly opts: CreateBotOpts) {
+    constructor(
+        page: Page,
+        private homeserver: HomeserverInstance,
+        private readonly opts: CreateBotOpts,
+    ) {
         super(page);
         this.opts = Object.assign({}, defaultCreateBotOptions, opts);
     }

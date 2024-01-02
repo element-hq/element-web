@@ -327,7 +327,10 @@ const topicSanitizeHtmlParams: IExtendedSanitizeOptions = {
 };
 
 abstract class BaseHighlighter<T extends React.ReactNode> {
-    public constructor(public highlightClass: string, public highlightLink?: string) {}
+    public constructor(
+        public highlightClass: string,
+        public highlightLink?: string,
+    ) {}
 
     /**
      * Apply the highlights to a section of text

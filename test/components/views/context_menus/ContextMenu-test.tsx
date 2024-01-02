@@ -31,7 +31,7 @@ describe("<ContextMenu />", () => {
             ({
                 windowWidth: windowSize,
                 windowHeight: windowSize,
-            } as unknown as UIStore),
+            }) as unknown as UIStore,
     );
     window.Element.prototype.getBoundingClientRect = jest.fn().mockReturnValue({
         width: menuSize,

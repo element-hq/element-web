@@ -17,7 +17,11 @@ limitations under the License.
 import React from "react";
 
 class ItemRange {
-    public constructor(public topCount: number, public renderCount: number, public bottomCount: number) {}
+    public constructor(
+        public topCount: number,
+        public renderCount: number,
+        public bottomCount: number,
+    ) {}
 
     public contains(range: ItemRange): boolean {
         // don't contain empty ranges

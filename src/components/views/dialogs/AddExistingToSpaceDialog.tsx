@@ -362,32 +362,31 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
 
 const defaultRendererFactory =
     (title: TranslationKey): Renderer =>
-    (rooms, selectedToAdd, { scrollTop, height }, onChange) =>
-        (
-            <div className="mx_AddExistingToSpace_section">
-                <h3>{_t(title)}</h3>
-                <LazyRenderList
-                    itemHeight={ROW_HEIGHT}
-                    items={rooms}
-                    scrollTop={scrollTop}
-                    height={height}
-                    renderItem={(room) => (
-                        <Entry
-                            key={room.roomId}
-                            room={room}
-                            checked={selectedToAdd.has(room)}
-                            onChange={
-                                onChange
-                                    ? (checked: boolean) => {
-                                          onChange(checked, room);
-                                      }
-                                    : undefined
-                            }
-                        />
-                    )}
-                />
-            </div>
-        );
+    (rooms, selectedToAdd, { scrollTop, height }, onChange) => (
+        <div className="mx_AddExistingToSpace_section">
+            <h3>{_t(title)}</h3>
+            <LazyRenderList
+                itemHeight={ROW_HEIGHT}
+                items={rooms}
+                scrollTop={scrollTop}
+                height={height}
+                renderItem={(room) => (
+                    <Entry
+                        key={room.roomId}
+                        room={room}
+                        checked={selectedToAdd.has(room)}
+                        onChange={
+                            onChange
+                                ? (checked: boolean) => {
+                                      onChange(checked, room);
+                                  }
+                                : undefined
+                        }
+                    />
+                )}
+            />
+        </div>
+    );
 
 export const defaultRoomsRenderer = defaultRendererFactory(_td("common|rooms"));
 export const defaultSpacesRenderer = defaultRendererFactory(_td("common|spaces"));

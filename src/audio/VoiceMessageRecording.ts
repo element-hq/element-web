@@ -37,7 +37,10 @@ export class VoiceMessageRecording implements IDestroyable {
     private buffer = new Uint8Array(0); // use this.audioBuffer to access
     private playback?: Playback;
 
-    public constructor(private matrixClient: MatrixClient, private voiceRecording: VoiceRecording) {
+    public constructor(
+        private matrixClient: MatrixClient,
+        private voiceRecording: VoiceRecording,
+    ) {
         this.voiceRecording.onDataAvailable = this.onDataAvailable;
     }
 

@@ -45,7 +45,10 @@ export default class UserActivity {
     private lastScreenX = 0;
     private lastScreenY = 0;
 
-    public constructor(private readonly window: Window, private readonly document: Document) {
+    public constructor(
+        private readonly window: Window,
+        private readonly document: Document,
+    ) {
         this.activeNowTimeout = new Timer(CURRENTLY_ACTIVE_THRESHOLD_MS);
         this.activeRecentlyTimeout = new Timer(RECENTLY_ACTIVE_THRESHOLD_MS);
     }

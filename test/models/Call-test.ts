@@ -984,7 +984,7 @@ describe("ElementCall", () => {
     });
     describe("create call", () => {
         function setRoomMembers(memberIds: string[]) {
-            jest.spyOn(room, "getJoinedMembers").mockReturnValue(memberIds.map((id) => ({ userId: id } as RoomMember)));
+            jest.spyOn(room, "getJoinedMembers").mockReturnValue(memberIds.map((id) => ({ userId: id }) as RoomMember));
         }
         beforeEach(async () => {
             setRoomMembers(["@user:example.com", "@user2:example.com", "@user4:example.com"]);

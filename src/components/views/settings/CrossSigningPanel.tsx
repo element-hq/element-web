@@ -101,9 +101,8 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         const masterPrivateKeyCached = crossSigningStatus.privateKeysCachedLocally.masterKey;
         const selfSigningPrivateKeyCached = crossSigningStatus.privateKeysCachedLocally.selfSigningKey;
         const userSigningPrivateKeyCached = crossSigningStatus.privateKeysCachedLocally.userSigningKey;
-        const homeserverSupportsCrossSigning = await cli.doesServerSupportUnstableFeature(
-            "org.matrix.e2e_cross_signing",
-        );
+        const homeserverSupportsCrossSigning =
+            await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
         const crossSigningReady = await crypto.isCrossSigningReady();
 
         this.setState({

@@ -28,7 +28,10 @@ import { TimelineRenderingType } from "../contexts/RoomContext";
 const AT_ROOM_REGEX = /@\S*/g;
 
 export default class NotifProvider extends AutocompleteProvider {
-    public constructor(public room: Room, renderingType?: TimelineRenderingType) {
+    public constructor(
+        public room: Room,
+        renderingType?: TimelineRenderingType,
+    ) {
         super({ commandRegex: AT_ROOM_REGEX, renderingType });
     }
 

@@ -25,7 +25,10 @@ export class MockedCall extends Call {
     public static readonly EVENT_TYPE = "org.example.mocked_call";
     public readonly STUCK_DEVICE_TIMEOUT_MS = 1000 * 60 * 60; // 1 hour
 
-    private constructor(room: Room, public readonly event: MatrixEvent) {
+    private constructor(
+        room: Room,
+        public readonly event: MatrixEvent,
+    ) {
         super(
             {
                 id: event.getStateKey()!,

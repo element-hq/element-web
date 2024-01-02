@@ -29,8 +29,8 @@ export type RecursivePartial<T> = {
     [P in keyof T]?: T[P] extends (infer U)[]
         ? RecursivePartial<U>[]
         : T[P] extends object
-        ? RecursivePartial<T[P]>
-        : T[P];
+          ? RecursivePartial<T[P]>
+          : T[P];
 };
 
 export type KeysStartingWith<Input extends object, Str extends string> = {
@@ -51,10 +51,10 @@ export type Defaultize<P, D> = P extends any
 export type DeepReadonly<T> = T extends (infer R)[]
     ? DeepReadonlyArray<R>
     : T extends Function
-    ? T
-    : T extends object
-    ? DeepReadonlyObject<T>
-    : T;
+      ? T
+      : T extends object
+        ? DeepReadonlyObject<T>
+        : T;
 
 interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> {}
 

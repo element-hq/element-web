@@ -30,7 +30,10 @@ export abstract class GenericEchoChamber<C extends EchoContext, K, V> extends Ev
     private cache = new Map<K, { txn: EchoTransaction; val: V }>();
     protected matrixClient: MatrixClient | null = null;
 
-    protected constructor(public readonly context: C, private lookupFn: (key: K) => V) {
+    protected constructor(
+        public readonly context: C,
+        private lookupFn: (key: K) => V,
+    ) {
         super();
     }
 

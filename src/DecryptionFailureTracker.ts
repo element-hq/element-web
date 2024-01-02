@@ -23,7 +23,10 @@ import { PosthogAnalytics } from "./PosthogAnalytics";
 export class DecryptionFailure {
     public readonly ts: number;
 
-    public constructor(public readonly failedEventId: string, public readonly errorCode: string) {
+    public constructor(
+        public readonly failedEventId: string,
+        public readonly errorCode: string,
+    ) {
         this.ts = Date.now();
     }
 }
@@ -110,7 +113,10 @@ export class DecryptionFailureTracker {
      * @param {function?} errorCodeMapFn The function used to map error codes to the
      * trackedErrorCode. If not provided, the `.code` of errors will be used.
      */
-    private constructor(private readonly fn: TrackingFn, private readonly errorCodeMapFn: ErrCodeMapFn) {
+    private constructor(
+        private readonly fn: TrackingFn,
+        private readonly errorCodeMapFn: ErrCodeMapFn,
+    ) {
         if (!fn || typeof fn !== "function") {
             throw new Error("DecryptionFailureTracker requires tracking function");
         }

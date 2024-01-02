@@ -570,10 +570,13 @@ export class JitsiCall extends Call {
             // Tell others that we're connected, by adding our device to room state
             await this.addOurDevice();
             // Re-add this device every so often so our video member event doesn't become stale
-            this.resendDevicesTimer = window.setInterval(async (): Promise<void> => {
-                logger.log(`Resending video member event for ${this.roomId}`);
-                await this.addOurDevice();
-            }, (this.STUCK_DEVICE_TIMEOUT_MS * 3) / 4);
+            this.resendDevicesTimer = window.setInterval(
+                async (): Promise<void> => {
+                    logger.log(`Resending video member event for ${this.roomId}`);
+                    await this.addOurDevice();
+                },
+                (this.STUCK_DEVICE_TIMEOUT_MS * 3) / 4,
+            );
         } else if (state === ConnectionState.Disconnected && isConnected(prevState)) {
             this.updateParticipants(); // Local echo
 
@@ -717,7 +720,11 @@ export class ElementCall extends Call {
         this.widget.url = ElementCall.generateWidgetUrl(this.client, this.roomId).toString();
     }
 
-    private constructor(public session: MatrixRTCSession, widget: IApp, client: MatrixClient) {
+    private constructor(
+        public session: MatrixRTCSession,
+        widget: IApp,
+        client: MatrixClient,
+    ) {
         super(widget, client);
 
         this.session.on(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);

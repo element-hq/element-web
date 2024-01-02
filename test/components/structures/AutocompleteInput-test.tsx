@@ -43,7 +43,7 @@ describe("AutocompleteInput", () => {
     const constructMockProvider = (data: ICompletion[]) =>
         ({
             getCompletions: jest.fn().mockImplementation(async () => data),
-        } as unknown as AutocompleteProvider);
+        }) as unknown as AutocompleteProvider;
 
     beforeEach(() => {
         TestUtils.stubClient();

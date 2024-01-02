@@ -52,7 +52,10 @@ export abstract class AsyncStore<T extends Object> extends EventEmitter {
      * @param {Dispatcher<ActionPayload>} dispatcher The dispatcher to rely upon.
      * @param {T} initialState The initial state for the store.
      */
-    protected constructor(private dispatcher: MatrixDispatcher, initialState: T = <T>{}) {
+    protected constructor(
+        private dispatcher: MatrixDispatcher,
+        initialState: T = <T>{},
+    ) {
         super();
 
         this.dispatcherRef = dispatcher.register(this.onDispatch.bind(this));

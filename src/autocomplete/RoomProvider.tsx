@@ -57,7 +57,10 @@ function matcherObject(
 export default class RoomProvider extends AutocompleteProvider {
     protected matcher: QueryMatcher<ReturnType<typeof matcherObject>>;
 
-    public constructor(private readonly room: Room, renderingType?: TimelineRenderingType) {
+    public constructor(
+        private readonly room: Room,
+        renderingType?: TimelineRenderingType,
+    ) {
         super({ commandRegex: ROOM_REGEX, renderingType });
         this.matcher = new QueryMatcher<ReturnType<typeof matcherObject>>([], {
             keys: ["displayedAlias", "matchName"],

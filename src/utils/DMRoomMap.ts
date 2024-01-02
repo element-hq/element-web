@@ -202,15 +202,18 @@ export default class DMRoomMap {
     public getUniqueRoomsWithIndividuals(): { [userId: string]: Room } {
         if (!this.roomToUser) return {}; // No rooms means no map.
         // map roomToUser to valid rooms with two participants
-        return Object.keys(this.roomToUser).reduce((acc, roomId: string) => {
-            const userId = this.getUserIdForRoomId(roomId);
-            const room = this.matrixClient.getRoom(roomId);
-            const hasTwoMembers = room?.getInvitedAndJoinedMemberCount() === 2;
-            if (userId && room && hasTwoMembers) {
-                acc[userId] = room;
-            }
-            return acc;
-        }, {} as Record<string, Room>);
+        return Object.keys(this.roomToUser).reduce(
+            (acc, roomId: string) => {
+                const userId = this.getUserIdForRoomId(roomId);
+                const room = this.matrixClient.getRoom(roomId);
+                const hasTwoMembers = room?.getInvitedAndJoinedMemberCount() === 2;
+                if (userId && room && hasTwoMembers) {
+                    acc[userId] = room;
+                }
+                return acc;
+            },
+            {} as Record<string, Room>,
+        );
     }
 
     /**

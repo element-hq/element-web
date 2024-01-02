@@ -63,7 +63,10 @@ export class VoiceBroadcastRecorder
     // current chunk length in seconds
     private currentChunkLength = 0;
 
-    public constructor(private voiceRecording: VoiceRecording, public readonly targetChunkLength: number) {
+    public constructor(
+        private voiceRecording: VoiceRecording,
+        public readonly targetChunkLength: number,
+    ) {
         super();
         this.voiceRecording.onDataAvailable = this.onDataAvailable;
     }

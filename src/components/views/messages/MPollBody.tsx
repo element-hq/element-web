@@ -366,7 +366,11 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     }
 }
 export class UserVote {
-    public constructor(public readonly ts: number, public readonly sender: string, public readonly answers: string[]) {}
+    public constructor(
+        public readonly ts: number,
+        public readonly sender: string,
+        public readonly answers: string[],
+    ) {}
 }
 
 function userResponseFromPollResponseEvent(event: MatrixEvent): UserVote {

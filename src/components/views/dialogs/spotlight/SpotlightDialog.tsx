@@ -252,12 +252,15 @@ const findVisibleRoomMembers = (visibleRooms: Room[], cli: MatrixClient, filterD
     return Object.values(
         visibleRooms
             .filter((room) => !filterDMs || !DMRoomMap.shared().getUserIdForRoomId(room.roomId))
-            .reduce((members, room) => {
-                for (const member of room.getJoinedMembers()) {
-                    members[member.userId] = member;
-                }
-                return members;
-            }, {} as Record<string, RoomMember>),
+            .reduce(
+                (members, room) => {
+                    for (const member of room.getJoinedMembers()) {
+                        members[member.userId] = member;
+                    }
+                    return members;
+                },
+                {} as Record<string, RoomMember>,
+            ),
     ).filter((it) => it.userId !== cli.getUserId());
 };
 

@@ -27,7 +27,10 @@ export default class DefaultSettingsHandler extends SettingsHandler {
      * @param {object} defaults The default setting values, keyed by setting name.
      * @param {object} invertedDefaults The default inverted setting values, keyed by setting name.
      */
-    public constructor(private defaults: Record<string, any>, private invertedDefaults: Record<string, any>) {
+    public constructor(
+        private defaults: Record<string, any>,
+        private invertedDefaults: Record<string, any>,
+    ) {
         super();
     }
 

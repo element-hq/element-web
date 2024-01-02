@@ -18,7 +18,6 @@ import React from "react";
 import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { mocked, MockedObject } from "jest-mock";
 import { render } from "@testing-library/react";
-import * as prettier from "prettier";
 
 import { getMockClientWithEventEmitter, mkEvent, mkMessage, mkStubRoom } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -225,11 +224,7 @@ describe("<TextualBody />", () => {
             const ev = mkRoomTextMessage(`Visit https://matrix.to/#/${room1Id}/${defaultEvent.getId()}`);
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
-            expect(
-                prettier.format(content.innerHTML.replace(defaultEvent.getId(), "%event_id%"), {
-                    parser: "html",
-                }),
-            ).toMatchSnapshot();
+            expect(content.innerHTML.replace(defaultEvent.getId(), "%event_id%")).toMatchSnapshot();
         });
 
         it("should pillify a permalink to an unknown message in the same room with the label »Message«", () => {
@@ -243,11 +238,7 @@ describe("<TextualBody />", () => {
             const ev = mkRoomTextMessage(`Visit https://matrix.to/#/${room2Id}/${defaultEvent.getId()}`);
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
-            expect(
-                prettier.format(content.innerHTML.replace(defaultEvent.getId(), "%event_id%"), {
-                    parser: "html",
-                }),
-            ).toMatchSnapshot();
+            expect(content.innerHTML.replace(defaultEvent.getId(), "%event_id%")).toMatchSnapshot();
         });
     });
 

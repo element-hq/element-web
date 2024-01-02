@@ -72,7 +72,7 @@ describe("<PinnedMessagesCard />", () => {
                 getTimelineForEvent: () => ({
                     getEvents: () => localPins,
                 }),
-            } as unknown as EventTimelineSet);
+            }) as unknown as EventTimelineSet;
 
         // Return all pins over fetchRoomEvent
         cli.fetchRoomEvent.mockImplementation((roomId, eventId) => {
