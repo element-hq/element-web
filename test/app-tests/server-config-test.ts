@@ -21,6 +21,9 @@ import fetchMock from "fetch-mock-jest";
 import { loadApp } from "../../src/vector/app";
 import WebPlatform from "../../src/vector/platform/WebPlatform";
 
+/** The matrix versions our mock server claims to support */
+const SERVER_SUPPORTED_MATRIX_VERSIONS = ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"];
+
 fetchMock.config.overwriteRoutes = true;
 
 describe("Loading server config", function () {
@@ -29,7 +32,7 @@ describe("Loading server config", function () {
         PlatformPeg.set(new WebPlatform());
         fetchMock.get("https://matrix-client.matrix.org/_matrix/client/versions", {
             unstable_features: {},
-            versions: ["v1.1"],
+            versions: SERVER_SUPPORTED_MATRIX_VERSIONS,
         });
         fetchMock.get("https://matrix.org/.well-known/matrix/client", {
             "m.homeserver": {
