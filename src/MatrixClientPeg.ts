@@ -51,6 +51,7 @@ import MatrixClientBackedController from "./settings/controllers/MatrixClientBac
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import PlatformPeg from "./PlatformPeg";
 import { formatList } from "./utils/FormattingUtils";
+import SdkConfig from "./SdkConfig";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -212,12 +213,21 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             // If the user is not a guest then prompt them to reload rather than doing it for them
             // For guests this is likely to happen during e-mail verification as part of registration
 
-            const { finished } = Modal.createDialog(ErrorDialog, {
-                title: _t("error_database_closed_title"),
-                description: _t("error_database_closed_description"),
+            const brand = SdkConfig.get().brand;
+            const platform = PlatformPeg.get()?.getHumanReadableName();
+
+            // Determine the description based on the platform
+            const description =
+                platform === "Web Platform"
+                    ? _t("error_database_closed_description|for_web", { brand })
+                    : _t("error_database_closed_description|for_desktop");
+
+            const [reload] = await Modal.createDialog(ErrorDialog, {
+                title: _t("error_database_closed_title", { brand }),
+                description,
                 button: _t("action|reload"),
-            });
-            const [reload] = await finished;
+            }).finished;
+
             if (!reload) return;
         }
 

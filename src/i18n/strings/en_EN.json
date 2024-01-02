@@ -1063,8 +1063,11 @@
     "error_app_open_in_another_tab": "Switch to the other tab to connect to %(brand)s. This tab can now be closed.",
     "error_app_open_in_another_tab_title": "%(brand)s is connected in another tab",
     "error_app_opened_in_another_window": "%(brand)s is open in another window. Click \"%(label)s\" to use %(brand)s here and disconnect the other window.",
-    "error_database_closed_description": "This may be caused by having the app open in multiple tabs or due to clearing browser data.",
-    "error_database_closed_title": "Database unexpectedly closed",
+    "error_database_closed_description": {
+        "for_desktop": "Your disk may be full. Please clear up some space and reload.",
+        "for_web": "If you cleared browsing data then this message is expected. %(brand)s may also be open in another tab, or your disk is full. Please clear up some space and reload"
+    },
+    "error_database_closed_title": "%(brand)s stopped working",
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "Unable to copy a link to the room to the clipboard.",
