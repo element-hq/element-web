@@ -293,6 +293,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
+                  for="mx_SettingsFlag_vY7Q4uEh9K38"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -305,6 +306,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                   aria-disabled="false"
                   aria-label="Never send encrypted messages to unverified sessions from this session"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+                  id="mx_SettingsFlag_vY7Q4uEh9K38"
                   role="switch"
                   tabindex="0"
                 >
@@ -370,6 +372,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
+                  for="mx_SettingsFlag_QgU2PomxwKpa"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -382,6 +385,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                   aria-disabled="false"
                   aria-label="Manually verify all remote sessions"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+                  id="mx_SettingsFlag_QgU2PomxwKpa"
                   role="switch"
                   tabindex="0"
                 >

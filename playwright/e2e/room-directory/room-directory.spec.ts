@@ -41,9 +41,9 @@ test.describe("Room Directory", () => {
         // Publish into the public rooms directory
         const publishedAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Published Addresses" });
         await expect(publishedAddresses.locator("#canonicalAlias")).toHaveValue("#gaming:localhost");
-        const checkbox = publishedAddresses.getByLabel(
-            "Publish this room to the public in localhost's room directory?",
-        );
+        const checkbox = publishedAddresses
+            .locator(".mx_SettingsFlag", { hasText: "Publish this room to the public in localhost's room directory?" })
+            .getByRole("switch");
         await checkbox.check();
         await expect(checkbox).toBeChecked();
 

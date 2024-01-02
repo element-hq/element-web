@@ -74,11 +74,11 @@ exports[`FontScalingPanel renders the font scaling UI 1`] = `
         class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
       >
         <input
-          id="checkbox_vY7Q4uEh9K"
+          id="checkbox_QgU2PomxwK"
           type="checkbox"
         />
         <label
-          for="checkbox_vY7Q4uEh9K"
+          for="checkbox_QgU2PomxwK"
         >
           <div
             class="mx_Checkbox_background"

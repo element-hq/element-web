@@ -120,6 +120,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         >
           <label
             class="mx_SettingsFlag_label"
+            for="mx_SettingsFlag_vY7Q4uEh9K38"
           >
             <span
               class="mx_SettingsFlag_labelText"
@@ -132,6 +133,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             aria-disabled="false"
             aria-label="Developer mode"
             class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+            id="mx_SettingsFlag_vY7Q4uEh9K38"
             role="switch"
             tabindex="0"
           >
@@ -145,6 +147,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         >
           <label
             class="mx_SettingsFlag_label"
+            for="mx_SettingsFlag_QgU2PomxwKpa"
           >
             <span
               class="mx_SettingsFlag_labelText"
@@ -157,6 +160,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             aria-disabled="false"
             aria-label="Show hidden events in timeline"
             class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+            id="mx_SettingsFlag_QgU2PomxwKpa"
             role="switch"
             tabindex="0"
           >
@@ -170,6 +174,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         >
           <label
             class="mx_SettingsFlag_label"
+            for="mx_SettingsFlag_6hpi3YEetmBG"
           >
             <span
               class="mx_SettingsFlag_labelText"
@@ -182,6 +187,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             aria-disabled="false"
             aria-label="Enable widget screenshots on supported widgets"
             class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+            id="mx_SettingsFlag_6hpi3YEetmBG"
             role="switch"
             tabindex="0"
           >
@@ -195,6 +201,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         >
           <label
             class="mx_SettingsFlag_label"
+            for="mx_SettingsFlag_4yVCeEefiPqp"
           >
             <span
               class="mx_SettingsFlag_labelText"
@@ -207,6 +214,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             aria-disabled="false"
             aria-label="Force 15s voice broadcast chunk length"
             class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+            id="mx_SettingsFlag_4yVCeEefiPqp"
             role="switch"
             tabindex="0"
           >

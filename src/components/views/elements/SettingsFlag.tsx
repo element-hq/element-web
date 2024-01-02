@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from "react";
+import { randomString } from "matrix-js-sdk/src/randomstring";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
@@ -44,6 +45,8 @@ interface IState {
 }
 
 export default class SettingsFlag extends React.Component<IProps, IState> {
+    private readonly id = `mx_SettingsFlag_${randomString(12)}`;
+
     public constructor(props: IProps) {
         super(props);
 
@@ -119,7 +122,7 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
         } else {
             return (
                 <div className="mx_SettingsFlag">
-                    <label className="mx_SettingsFlag_label">
+                    <label className="mx_SettingsFlag_label" htmlFor={this.id}>
                         <span className="mx_SettingsFlag_labelText">{label}</span>
                         {description && (
                             <div className="mx_SettingsFlag_microcopy">
@@ -139,6 +142,7 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
                         )}
                     </label>
                     <ToggleSwitch
+                        id={this.id}
                         checked={this.state.value}
                         onChange={this.onChange}
                         disabled={disabled}

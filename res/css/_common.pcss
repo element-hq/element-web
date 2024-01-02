@@ -56,6 +56,11 @@ limitations under the License.
     /* This is required to ensure Compound tooltips correctly draw where they should with z-index: auto */
     contain: strict;
 }
+.mx_Dialog_StaticContainer,
+.mx_Dialog_Container {
+    /* This is required to ensure Compound tooltips correctly draw where they should with z-index: auto */
+    isolation: isolate;
+}
 
 /**
  * We need to increase the specificity of the selector to override the
