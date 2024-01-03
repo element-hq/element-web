@@ -46,7 +46,7 @@ jobs:
 
             - name: Docker meta
               id: meta
-              uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5
+              uses: docker/metadata-action@31cebacef4805868f9ce9a0cb03ee36c32df2ac4 # v5
               with:
                   images: |
                       vectorim/element-web
@@ -58,7 +58,7 @@ jobs:
                       ${{ matrix.flavor }}
 
             - name: Build and push
-              uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5
+              uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5
               with:
                   context: .
                   push: true

@@ -17,8 +17,8 @@ jobs:
 
             - name: Download package
               run: |
-                  wget "https://github.com/vector-im/element-web/releases/download/$VERSION/element-$VERSION.tar.gz"
-                  wget "https://github.com/vector-im/element-web/releases/download/$VERSION/element-$VERSION.tar.gz.asc"
+                  wget "https://github.com/element-hq/element-web/releases/download/$VERSION/element-$VERSION.tar.gz"
+                  wget "https://github.com/element-hq/element-web/releases/download/$VERSION/element-$VERSION.tar.gz.asc"
 
             - name: Check GPG signature
               run: |
@@ -69,7 +69,7 @@ jobs:
 
             - name: Publish to packages.element.io
               if: github.event.release.prerelease == false
-              uses: vector-im/packages.element.io@master
+              uses: element-hq/packages.element.io@master
               with:
                   file: element-web.deb
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

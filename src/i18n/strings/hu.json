@@ -22,7 +22,7 @@
         "misconfigured": "Az Element hibásan van beállítva"
     },
     "failed_to_start": "Az indítás sikertelen",
-    "go_to_element_io": "Irány a element.io",
+    "go_to_element_io": "Irány az element.io",
     "incompatible_browser": {
         "browser_links": "A legjobb élmény érdékében telepítsen <chromeLink>Chrome-ot</chromeLink>, <firefoxLink>Firefoxot</firefoxLink> vagy <safariLink>Safarit</safariLink>.",
         "continue_warning": "Megértettem a kockázatot és folytatom",

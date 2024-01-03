@@ -2,7 +2,7 @@
 
 ### 🦖 DEPRECATED
 
-Customisations have been deprecated in favour of the [Module API](https://github.com/vector-im/element-web/blob/develop/docs/modules.md).
+Customisations have been deprecated in favour of the [Module API](https://github.com/element-hq/element-web/blob/develop/docs/modules.md).
 If you have use cases from customisations which are not yet available via the Module API please open an issue.
 Customisations will be removed from the codebase in a future release.
 

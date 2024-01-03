@@ -30,7 +30,7 @@ jobs:
               uses: actions/checkout@v4
               if: inputs.element-desktop
               with:
-                  repository: vector-im/element-desktop
+                  repository: element-hq/element-desktop
                   path: element-desktop
                   ref: staging
                   fetch-depth: 0
@@ -40,7 +40,7 @@ jobs:
               uses: actions/checkout@v4
               if: inputs.element-web
               with:
-                  repository: vector-im/element-web
+                  repository: element-hq/element-web
                   path: element-web
                   ref: staging
                   fetch-depth: 0

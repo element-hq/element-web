@@ -6,7 +6,7 @@ at runtime.
 
 ## Installing modules
 
-If you already have a module you want to install, such as our [ILAG Module](https://github.com/vector-im/element-web-ilag-module),
+If you already have a module you want to install, such as our [ILAG Module](https://github.com/element-hq/element-web-ilag-module),
 then copy `build_config.sample.yaml` to `build_config.yaml` in the same directory. In your new `build_config.yaml` simply
 add the reference to the module as described by the sample file, using the same syntax you would for `yarn add`:
 
@@ -30,7 +30,7 @@ Once your change to the module API is accepted, the `@matrix-org/react-sdk-modul
 `matrix-react-sdk` and `element-web` layers (usually by us, the maintainers) to ensure your module can operate.
 
 If you're not adding anything to the module API, or your change was accepted per above, then start off with a clone of
-our [ILAG module](https://github.com/vector-im/element-web-ilag-module) which will give you a general idea for what the
+our [ILAG module](https://github.com/element-hq/element-web-ilag-module) which will give you a general idea for what the
 structure of a module is and how it works.
 
 The following requirements are key for any module:

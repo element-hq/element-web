@@ -61,7 +61,7 @@ jobs:
             - uses: konradpabjan/move-labeled-or-milestoned-issue@190352295fe309fcb113b49193bc81d9aaa9cb01
               with:
                   action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
-                  project-url: "https://github.com/vector-im/element-web/projects/27"
+                  project-url: "https://github.com/element-hq/element-web/projects/27"
                   column-name: "Need info"
                   label-name: "X-Needs-Info"
 
@@ -79,7 +79,7 @@ jobs:
         steps:
             - uses: actions/add-to-project@main
               with:
-                  project-url: https://github.com/orgs/vector-im/projects/18
+                  project-url: https://github.com/orgs/element-hq/projects/18
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
     add_product_issues:
@@ -90,7 +90,7 @@ jobs:
         steps:
             - uses: actions/add-to-project@main
               with:
-                  project-url: https://github.com/orgs/vector-im/projects/28
+                  project-url: https://github.com/orgs/element-hq/projects/28
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
     Search_issues_to_board:
@@ -101,7 +101,7 @@ jobs:
         steps:
             - uses: actions/add-to-project@main
               with:
-                  project-url: https://github.com/orgs/vector-im/projects/48
+                  project-url: https://github.com/orgs/element-hq/projects/48
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
     voip:
@@ -112,7 +112,7 @@ jobs:
         steps:
             - uses: actions/add-to-project@main
               with:
-                  project-url: https://github.com/orgs/vector-im/projects/41
+                  project-url: https://github.com/orgs/element-hq/projects/41
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
     verticals_feature:
@@ -123,7 +123,7 @@ jobs:
         steps:
             - uses: actions/add-to-project@main
               with:
-                  project-url: https://github.com/orgs/vector-im/projects/57
+                  project-url: https://github.com/orgs/element-hq/projects/57
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
     tech_debt:
@@ -139,7 +139,7 @@ jobs:
         steps:
             - uses: actions/add-to-project@main
               with:
-                  project-url: https://github.com/orgs/vector-im/projects/101
+                  project-url: https://github.com/orgs/element-hq/projects/101
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
     element_r:
@@ -163,4 +163,4 @@ jobs:
                   field-keys: Workstream,module
                   field-values: Element-R,web
         env:
-            PROJECT_URL: https://github.com/orgs/vector-im/projects/76
+            PROJECT_URL: https://github.com/orgs/element-hq/projects/76
