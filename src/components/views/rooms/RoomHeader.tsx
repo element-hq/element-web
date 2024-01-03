@@ -51,6 +51,7 @@ import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { Linkify, topicToHtml } from "../../../HtmlUtils";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { VideoRoomChatButton } from "./RoomHeader/VideoRoomChatButton";
+import { RoomKnocksBar } from "./RoomKnocksBar";
 
 /**
  * A helper to transform a notification color to the what the Compound Icon Button
@@ -115,165 +116,170 @@ export default function RoomHeader({
         [roomTopic?.html, roomTopic?.text],
     );
 
+    const askToJoinEnabled = useFeatureEnabled("feature_ask_to_join");
+
     return (
-        <Flex as="header" align="center" gap="var(--cpd-space-3x)" className="mx_RoomHeader light-panel">
-            <button
-                aria-label={_t("right_panel|room_summary_card|title")}
-                tabIndex={0}
-                onClick={() => {
-                    RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary);
-                }}
-                className="mx_RoomHeader_infoWrapper"
-            >
-                <RoomAvatar room={room} size="40px" />
-                <Box flex="1" className="mx_RoomHeader_info">
-                    <BodyText
-                        as="div"
-                        size="lg"
-                        weight="semibold"
-                        dir="auto"
-                        role="heading"
-                        aria-level={1}
-                        className="mx_RoomHeader_heading"
-                    >
-                        <span className="mx_RoomHeader_truncated mx_lineClamp">{roomName}</span>
-
-                        {!isDirectMessage && roomState.getJoinRule() === JoinRule.Public && (
-                            <Tooltip label={_t("common|public_room")} side="right">
-                                <PublicIcon
-                                    width="16px"
-                                    height="16px"
-                                    className="mx_RoomHeader_icon text-secondary"
-                                    aria-label={_t("common|public_room")}
-                                />
-                            </Tooltip>
-                        )}
-
-                        {isDirectMessage && e2eStatus === E2EStatus.Verified && (
-                            <Tooltip label={_t("common|verified")} side="right">
-                                <VerifiedIcon
-                                    width="16px"
-                                    height="16px"
-                                    className="mx_RoomHeader_icon mx_Verified"
-                                    aria-label={_t("common|verified")}
-                                />
-                            </Tooltip>
-                        )}
-
-                        {isDirectMessage && e2eStatus === E2EStatus.Warning && (
-                            <Tooltip label={_t("room|header_untrusted_label")} side="right">
-                                <ErrorIcon
-                                    width="16px"
-                                    height="16px"
-                                    className="mx_RoomHeader_icon mx_Untrusted"
-                                    aria-label={_t("room|header_untrusted_label")}
-                                />
-                            </Tooltip>
-                        )}
-                    </BodyText>
-                    {roomTopic && (
+        <>
+            <Flex as="header" align="center" gap="var(--cpd-space-3x)" className="mx_RoomHeader light-panel">
+                <button
+                    aria-label={_t("right_panel|room_summary_card|title")}
+                    tabIndex={0}
+                    onClick={() => {
+                        RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary);
+                    }}
+                    className="mx_RoomHeader_infoWrapper"
+                >
+                    <RoomAvatar room={room} size="40px" />
+                    <Box flex="1" className="mx_RoomHeader_info">
                         <BodyText
                             as="div"
-                            size="sm"
-                            className="mx_RoomHeader_topic mx_RoomHeader_truncated mx_lineClamp"
+                            size="lg"
+                            weight="semibold"
+                            dir="auto"
+                            role="heading"
+                            aria-level={1}
+                            className="mx_RoomHeader_heading"
                         >
-                            <Linkify>{roomTopicBody}</Linkify>
-                        </BodyText>
-                    )}
-                </Box>
-            </button>
-            <Flex align="center" gap="var(--cpd-space-2x)">
-                {additionalButtons?.map((props) => {
-                    const label = props.label();
+                            <span className="mx_RoomHeader_truncated mx_lineClamp">{roomName}</span>
 
-                    return (
-                        <Tooltip label={label} key={props.id}>
-                            <IconButton
-                                aria-label={label}
-                                onClick={(event) => {
-                                    event.stopPropagation();
-                                    props.onClick();
-                                }}
+                            {!isDirectMessage && roomState.getJoinRule() === JoinRule.Public && (
+                                <Tooltip label={_t("common|public_room")} side="right">
+                                    <PublicIcon
+                                        width="16px"
+                                        height="16px"
+                                        className="mx_RoomHeader_icon text-secondary"
+                                        aria-label={_t("common|public_room")}
+                                    />
+                                </Tooltip>
+                            )}
+
+                            {isDirectMessage && e2eStatus === E2EStatus.Verified && (
+                                <Tooltip label={_t("common|verified")} side="right">
+                                    <VerifiedIcon
+                                        width="16px"
+                                        height="16px"
+                                        className="mx_RoomHeader_icon mx_Verified"
+                                        aria-label={_t("common|verified")}
+                                    />
+                                </Tooltip>
+                            )}
+
+                            {isDirectMessage && e2eStatus === E2EStatus.Warning && (
+                                <Tooltip label={_t("room|header_untrusted_label")} side="right">
+                                    <ErrorIcon
+                                        width="16px"
+                                        height="16px"
+                                        className="mx_RoomHeader_icon mx_Untrusted"
+                                        aria-label={_t("room|header_untrusted_label")}
+                                    />
+                                </Tooltip>
+                            )}
+                        </BodyText>
+                        {roomTopic && (
+                            <BodyText
+                                as="div"
+                                size="sm"
+                                className="mx_RoomHeader_topic mx_RoomHeader_truncated mx_lineClamp"
                             >
-                                {typeof props.icon === "function" ? props.icon() : props.icon}
+                                <Linkify>{roomTopicBody}</Linkify>
+                            </BodyText>
+                        )}
+                    </Box>
+                </button>
+                <Flex align="center" gap="var(--cpd-space-2x)">
+                    {additionalButtons?.map((props) => {
+                        const label = props.label();
+
+                        return (
+                            <Tooltip label={label} key={props.id}>
+                                <IconButton
+                                    aria-label={label}
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        props.onClick();
+                                    }}
+                                >
+                                    {typeof props.icon === "function" ? props.icon() : props.icon}
+                                </IconButton>
+                            </Tooltip>
+                        );
+                    })}
+                    <Tooltip label={!videoCallDisabledReason ? _t("voip|video_call") : videoCallDisabledReason!}>
+                        <IconButton
+                            disabled={!!videoCallDisabledReason}
+                            aria-label={!videoCallDisabledReason ? _t("voip|video_call") : videoCallDisabledReason!}
+                            onClick={videoCallClick}
+                        >
+                            <VideoCallIcon />
+                        </IconButton>
+                    </Tooltip>
+                    {!useElementCallExclusively && (
+                        <Tooltip label={!voiceCallDisabledReason ? _t("voip|voice_call") : voiceCallDisabledReason!}>
+                            <IconButton
+                                disabled={!!voiceCallDisabledReason}
+                                aria-label={!voiceCallDisabledReason ? _t("voip|voice_call") : voiceCallDisabledReason!}
+                                onClick={voiceCallClick}
+                            >
+                                <VoiceCallIcon />
                             </IconButton>
                         </Tooltip>
-                    );
-                })}
-                <Tooltip label={!videoCallDisabledReason ? _t("voip|video_call") : videoCallDisabledReason!}>
-                    <IconButton
-                        disabled={!!videoCallDisabledReason}
-                        aria-label={!videoCallDisabledReason ? _t("voip|video_call") : videoCallDisabledReason!}
-                        onClick={videoCallClick}
-                    >
-                        <VideoCallIcon />
-                    </IconButton>
-                </Tooltip>
-                {!useElementCallExclusively && (
-                    <Tooltip label={!voiceCallDisabledReason ? _t("voip|voice_call") : voiceCallDisabledReason!}>
-                        <IconButton
-                            disabled={!!voiceCallDisabledReason}
-                            aria-label={!voiceCallDisabledReason ? _t("voip|voice_call") : voiceCallDisabledReason!}
-                            onClick={voiceCallClick}
-                        >
-                            <VoiceCallIcon />
-                        </IconButton>
-                    </Tooltip>
-                )}
+                    )}
 
-                {/* Renders nothing when room is not a video room */}
-                <VideoRoomChatButton room={room} />
+                    {/* Renders nothing when room is not a video room */}
+                    <VideoRoomChatButton room={room} />
 
-                <Tooltip label={_t("common|threads")}>
-                    <IconButton
-                        indicator={notificationColorToIndicator(threadNotifications)}
-                        onClick={(evt) => {
-                            evt.stopPropagation();
-                            RightPanelStore.instance.showOrHidePanel(RightPanelPhases.ThreadPanel);
-                            PosthogTrackers.trackInteraction("WebRoomHeaderButtonsThreadsButton", evt);
-                        }}
-                        aria-label={_t("common|threads")}
-                    >
-                        <ThreadsIcon />
-                    </IconButton>
-                </Tooltip>
-                {notificationsEnabled && (
-                    <Tooltip label={_t("notifications|enable_prompt_toast_title")}>
+                    <Tooltip label={_t("common|threads")}>
                         <IconButton
-                            indicator={notificationColorToIndicator(globalNotificationState.color)}
+                            indicator={notificationColorToIndicator(threadNotifications)}
                             onClick={(evt) => {
                                 evt.stopPropagation();
-                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.NotificationPanel);
+                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.ThreadPanel);
+                                PosthogTrackers.trackInteraction("WebRoomHeaderButtonsThreadsButton", evt);
                             }}
-                            aria-label={_t("notifications|enable_prompt_toast_title")}
+                            aria-label={_t("common|threads")}
                         >
-                            <NotificationsIcon />
+                            <ThreadsIcon />
                         </IconButton>
                     </Tooltip>
+                    {notificationsEnabled && (
+                        <Tooltip label={_t("notifications|enable_prompt_toast_title")}>
+                            <IconButton
+                                indicator={notificationColorToIndicator(globalNotificationState.color)}
+                                onClick={(evt) => {
+                                    evt.stopPropagation();
+                                    RightPanelStore.instance.showOrHidePanel(RightPanelPhases.NotificationPanel);
+                                }}
+                                aria-label={_t("notifications|enable_prompt_toast_title")}
+                            >
+                                <NotificationsIcon />
+                            </IconButton>
+                        </Tooltip>
+                    )}
+                </Flex>
+                {!isDirectMessage && (
+                    <BodyText
+                        as="div"
+                        size="sm"
+                        weight="medium"
+                        aria-label={_t("common|n_members", { count: memberCount })}
+                        onClick={(e: React.MouseEvent) => {
+                            RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
+                            e.stopPropagation();
+                        }}
+                    >
+                        <FacePile
+                            className="mx_RoomHeader_members"
+                            members={members.slice(0, 3)}
+                            size="20px"
+                            overflow={false}
+                            viewUserOnClick={false}
+                        >
+                            {formatCount(memberCount)}
+                        </FacePile>
+                    </BodyText>
                 )}
             </Flex>
-            {!isDirectMessage && (
-                <BodyText
-                    as="div"
-                    size="sm"
-                    weight="medium"
-                    aria-label={_t("common|n_members", { count: memberCount })}
-                    onClick={(e: React.MouseEvent) => {
-                        RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
-                        e.stopPropagation();
-                    }}
-                >
-                    <FacePile
-                        className="mx_RoomHeader_members"
-                        members={members.slice(0, 3)}
-                        size="20px"
-                        overflow={false}
-                        viewUserOnClick={false}
-                    >
-                        {formatCount(memberCount)}
-                    </FacePile>
-                </BodyText>
-            )}
-        </Flex>
+            {askToJoinEnabled && <RoomKnocksBar room={room} />}
+        </>
     );
 }

@@ -16,7 +16,15 @@ limitations under the License.
 
 import React from "react";
 import { CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import { EventType, JoinRule, MatrixClient, MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import {
+    EventType,
+    JoinRule,
+    MatrixClient,
+    MatrixEvent,
+    PendingEventOrdering,
+    Room,
+    RoomMember,
+} from "matrix-js-sdk/src/matrix";
 import {
     createEvent,
     fireEvent,
@@ -561,6 +569,25 @@ describe("RoomHeader", () => {
 
         expect(callback).toHaveBeenCalled();
         expect(event.stopPropagation).toHaveBeenCalled();
+    });
+
+    describe("ask to join disabled", () => {
+        it("does not render the RoomKnocksBar", () => {
+            render(<RoomHeader room={room} />, withClientContextRenderOptions(MatrixClientPeg.get()!));
+            expect(screen.queryByRole("heading", { name: "Asking to join" })).not.toBeInTheDocument();
+        });
+    });
+
+    describe("ask to join enabled", () => {
+        it("does render the RoomKnocksBar", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((feature) => feature === "feature_ask_to_join");
+            jest.spyOn(room, "canInvite").mockReturnValue(true);
+            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Knock);
+            jest.spyOn(room, "getMembersWithMembership").mockReturnValue([new RoomMember(room.roomId, "@foo")]);
+
+            render(<RoomHeader room={room} />, withClientContextRenderOptions(MatrixClientPeg.get()!));
+            expect(screen.getByRole("heading", { name: "Asking to join" })).toBeInTheDocument();
+        });
     });
 });
 
