@@ -66,10 +66,10 @@ jobs:
                           "matrix-org/matrix-js-sdk",
                       ];
                       const teams = [
-                          "matrix-org/element-web-app-team",
-                          "matrix-org/element-web",
-                          "element-hq/element-web-app-team",
-                          "element-hq/element-web",
+                          "matrix-org/element-web-team",
+                          "matrix-org/element-web-reviewers",
+                          "element-hq/element-web-team",
+                          "element-hq/element-web-reviewers",
                       ];
 
                       let issueCount = 0;
