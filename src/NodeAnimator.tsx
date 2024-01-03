@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { Key, ReactElement, ReactFragment, ReactInstance, ReactPortal } from "react";
+import React, { Key, MutableRefObject, ReactElement, ReactFragment, ReactInstance, ReactPortal } from "react";
 import ReactDom from "react-dom";
 
 interface IChildProps {
@@ -31,6 +31,8 @@ interface IProps {
 
     // a list of state objects to apply to each child node in turn
     startStyles: React.CSSProperties[];
+
+    innerRef?: MutableRefObject<any>;
 }
 
 function isReactElement(c: ReactElement | ReactFragment | ReactPortal): c is ReactElement {
@@ -123,6 +125,10 @@ export default class NodeAnimator extends React.Component<IProps> {
             }, 0);
         }
         this.nodes[k] = node;
+
+        if (this.props.innerRef) {
+            this.props.innerRef.current = node;
+        }
     }
 
     public render(): React.ReactNode {

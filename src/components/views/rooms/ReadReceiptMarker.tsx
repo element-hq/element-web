@@ -208,7 +208,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
         };
 
         return (
-            <NodeAnimator startStyles={this.state.startStyles}>
+            <NodeAnimator startStyles={this.state.startStyles} innerRef={this.avatar}>
                 <MemberAvatar
                     member={this.props.member ?? null}
                     fallbackUserId={this.props.fallbackUserId}
@@ -216,7 +216,6 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
                     aria-live="off"
                     size="14px"
                     style={style}
-                    ref={this.avatar}
                     hideTitle
                     tabIndex={-1}
                 />
