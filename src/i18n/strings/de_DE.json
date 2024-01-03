@@ -1052,7 +1052,6 @@
         "unknown_error_code": "Unbekannter Fehlercode",
         "update_power_level": "Ändern der Berechtigungsstufe fehlgeschlagen"
     },
-    "error_database_closed_description": "Dies wurde eventuell durch das Öffnen der App in mehreren Tabs oder das Löschen der Browser-Daten verursacht.",
     "error_database_closed_title": "Datenbank unerwartet geschlossen",
     "error_dialog": {
         "copy_room_link_failed": {

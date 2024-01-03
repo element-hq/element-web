@@ -1043,7 +1043,6 @@
         "unknown_error_code": "невідомий код помилки",
         "update_power_level": "Не вдалося змінити рівень повноважень"
     },
-    "error_database_closed_description": "Це може бути пов'язано з тим, що застосунок відкрито в кількох вкладках, або з очищенням даних браузера.",
     "error_database_closed_title": "База даних несподівано закрилася",
     "error_dialog": {
         "copy_room_link_failed": {

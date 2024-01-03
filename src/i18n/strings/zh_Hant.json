@@ -1042,7 +1042,6 @@
         "unknown_error_code": "未知的錯誤代碼",
         "update_power_level": "無法變更權限等級"
     },
-    "error_database_closed_description": "這個問題可能是因為在多個分頁中開啟此應用程式，或是清除瀏覽資料所導致。",
     "error_database_closed_title": "資料庫意外關閉",
     "error_dialog": {
         "copy_room_link_failed": {

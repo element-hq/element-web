@@ -950,7 +950,6 @@
         "unknown_error_code": "mã lỗi không xác định",
         "update_power_level": "Không thay đổi được mức công suất"
     },
-    "error_database_closed_description": "Mở ứng dụng trên nhiều thẻ hay xóa dữ liệu trình duyệt có thể là nguyên nhân.",
     "error_database_closed_title": "Cơ sở dữ liệu đột nhiên bị đóng",
     "error_dialog": {
         "copy_room_link_failed": {

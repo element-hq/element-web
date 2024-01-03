@@ -972,7 +972,6 @@
         "update_power_level": "权力级别修改失败"
     },
     "error_app_opened_in_another_window": "%(brand)s已在另一个窗口中打开。单击“%(label)s”以在此处使用%(brand)s并断开其他窗口的连接。",
-    "error_database_closed_description": "这可能是由于在多个标签页中打开此应用，或由于清除浏览器数据。",
     "error_database_closed_title": "数据库意外关闭",
     "error_dialog": {
         "copy_room_link_failed": {

@@ -1061,7 +1061,6 @@
     },
     "error_app_open_in_another_tab": "%(brand)s был открыт в другой вкладке.",
     "error_app_opened_in_another_window": "%(brand)s открыт в другом окне. Нажмите \"%(label)s\" чтобы использовать %(brand)s в данном окне и отключить другое.",
-    "error_database_closed_description": "Это может быть вызвано открытием приложения на нескольких вкладках или очисткой данных браузера.",
     "error_database_closed_title": "База данных неожиданно закрылась",
     "error_dialog": {
         "copy_room_link_failed": {

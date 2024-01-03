@@ -1062,7 +1062,6 @@
     "error_app_open_in_another_tab": "Aplikácia %(brand)s bola otvorená na inej karte.",
     "error_app_open_in_another_tab_title": "%(brand)s je pripojený na inej karte",
     "error_app_opened_in_another_window": "%(brand)s je otvorený v inom okne. Kliknutím na \"%(label)s\" použijete túto aplikáciu %(brand)s a odpojíte druhé okno.",
-    "error_database_closed_description": "Môže to byť spôsobené otvorením aplikácie na viacerých kartách alebo vymazaním údajov prehliadača.",
     "error_database_closed_title": "Databáza sa neočakávane zatvorila",
     "error_dialog": {
         "copy_room_link_failed": {

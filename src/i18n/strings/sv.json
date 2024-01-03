@@ -1059,7 +1059,6 @@
     "error_app_open_in_another_tab": "%(brand)s har öppnats in en annan flik.",
     "error_app_open_in_another_tab_title": "%(brand)s är ansluten i en annan flik",
     "error_app_opened_in_another_window": "%(brand)s är öppen i ett annat fönster. Klicka på \"%(label)s\" för att använda %(brand)s här och koppla bort det andra fönstret.",
-    "error_database_closed_description": "Det här kan orsakas av att ha appen öppen i flera flikar eller av rensning av webbläsardata.",
     "error_database_closed_title": "Databasen stängdes oväntat",
     "error_dialog": {
         "copy_room_link_failed": {

@@ -1058,7 +1058,6 @@
     },
     "error_app_open_in_another_tab": "%(brand)s on avatud teises vahekaardis.",
     "error_app_opened_in_another_window": "%(brand)s on avatud teises aknas. Klõpsa \"%(label)s\", et kasutada siin %(brand)s ja katkestada teise akna ühendus.",
-    "error_database_closed_description": "See võib olla seotud asjaoluga, et rakendus on avatud mitmes brauseriaknas korraga või brauseri andmete kustutamise tõttu.",
     "error_database_closed_title": "Andmebaasiühendus sulgus ootamatult",
     "error_dialog": {
         "copy_room_link_failed": {

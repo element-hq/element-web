@@ -735,7 +735,6 @@
         "unknown_error_code": "کد خطای ناشناخته",
         "update_power_level": "تغییر سطح قدرت انجام نشد"
     },
-    "error_database_closed_description": "این ممکن است به دلیل باز بودن برنامه در چندین برگه یا به دلیل پاک کردن داده های مرورگر باشد.",
     "error_database_closed_title": "پایگاه داده به طور غیرمنتظره ای بسته شد",
     "error_dialog": {
         "error_loading_user_profile": "امکان نمایش پروفایل کاربر میسر نیست",

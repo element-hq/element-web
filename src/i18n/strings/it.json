@@ -1045,7 +1045,6 @@
         "unknown_error_code": "codice errore sconosciuto",
         "update_power_level": "Cambio di livello poteri fallito"
     },
-    "error_database_closed_description": "Potrebbe essere causato dall'apertura dell'app in schede multiple o dalla cancellazione dei dati del browser.",
     "error_database_closed_title": "Database chiuso inaspettatamente",
     "error_dialog": {
         "copy_room_link_failed": {

@@ -1056,7 +1056,6 @@
         "unknown_error_code": "code d’erreur inconnu",
         "update_power_level": "Échec du changement de rang"
     },
-    "error_database_closed_description": "Cela peut être causé par l’application ouverte dans plusieurs onglets, ou après un nettoyage des données du navigateur.",
     "error_database_closed_title": "La base de données s’est fermée de manière inattendue",
     "error_dialog": {
         "copy_room_link_failed": {

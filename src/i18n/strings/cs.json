@@ -1059,7 +1059,6 @@
     "error_app_open_in_another_tab": "Přepněte na jiný panel a připojte se k %(brand)s. Tuto kartu nyní můžete zavřít.",
     "error_app_open_in_another_tab_title": "%(brand)s je připojen na jiném panelu",
     "error_app_opened_in_another_window": "%(brand)s je otevřen v jiném okně. Klikněte na \"%(label)s\" pro přepnutí na %(brand)s zde a zavřete druhé okno.",
-    "error_database_closed_description": "To může být způsobeno otevřením aplikace na více kartách nebo vymazáním dat prohlížeče.",
     "error_database_closed_title": "Databáze byla neočekávaně uzavřena",
     "error_dialog": {
         "copy_room_link_failed": {

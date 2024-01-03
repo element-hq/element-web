@@ -1064,7 +1064,6 @@
     "error_app_open_in_another_tab": "Zmień kartę aby połączyć się do %(brand)s. Ta karta może zostać zamknięta.",
     "error_app_open_in_another_tab_title": "%(brand)s jest włączony na innej karcie",
     "error_app_opened_in_another_window": "%(brand)s jest już otwarty w innym oknie. Kliknij \"%(label)s\", aby otworzyć tutaj %(brand)s i odłączyć drugie okno.",
-    "error_database_closed_description": "Może być to spowodowane przez aplikacje otwartą w wielu kartach lub po wyczyszczeniu danych przeglądarki.",
     "error_database_closed_title": "Baza danych została nieoczekiwanie zamknięta",
     "error_dialog": {
         "copy_room_link_failed": {

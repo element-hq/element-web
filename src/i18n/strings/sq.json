@@ -1016,7 +1016,6 @@
         "unknown_error_code": "kod gabimi të panjohur",
         "update_power_level": "S’u arrit të ndryshohej shkalla e pushtetit"
     },
-    "error_database_closed_description": "Kjo mund të jetë e shkaktuar nga pasja e aplikacionit hapur në shumë skeda, ose për shkak të spastrimit të të dhënave të shfletuesit.",
     "error_database_closed_title": "Baza e të dhënave u mbyll papritur",
     "error_dialog": {
         "copy_room_link_failed": {

@@ -1044,7 +1044,6 @@
         "unknown_error_code": "kode kesalahan tidak diketahui",
         "update_power_level": "Gagal untuk mengubah tingkat daya"
     },
-    "error_database_closed_description": "Ini mungkin terjadi karena memiliki aplikasinya terbuka di beberapa tab atau karena menghapus data peramban.",
     "error_database_closed_title": "Basis data ditutup secara tidak terduga",
     "error_dialog": {
         "copy_room_link_failed": {

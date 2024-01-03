@@ -1054,7 +1054,6 @@
         "unknown_error_code": "ismeretlen hibakód",
         "update_power_level": "A hozzáférési szint megváltoztatása sikertelen"
     },
-    "error_database_closed_description": "Ez lehet attól, hogy az alkalmazás több lapon is nyitva van, vagy hogy a böngészőadatok törölve lettek.",
     "error_database_closed_title": "Az adatbázis váratlanul lezárult",
     "error_dialog": {
         "copy_room_link_failed": {
