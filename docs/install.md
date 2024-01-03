@@ -8,7 +8,7 @@ There are some exceptions like when using localhost, which is considered a [secu
 
 ## Release tarball
 
-1. Download the latest version from <https://github.com/vector-im/element-web/releases>
+1. Download the latest version from <https://github.com/element-hq/element-web/releases>
 1. Untar the tarball on your web server
 1. Move (or symlink) the `element-x.x.x` directory to an appropriate name
 1. Configure the correct caching headers in your webserver (see below)
@@ -55,7 +55,7 @@ docker run -p 80:80 -v /etc/element-web/config.json:/app/config.json vectorim/el
 To build the image yourself:
 
 ```bash
-git clone https://github.com/vector-im/element-web.git element-web
+git clone https://github.com/element-hq/element-web.git element-web
 cd element-web
 git checkout master
 docker build .

@@ -21,7 +21,7 @@ exports[`<VectorAuthFooter /> should match snapshot 1`] = `
       Twitter
     </a>
     <a
-      href="https://github.com/vector-im/element-web"
+      href="https://github.com/element-hq/element-web"
       rel="noreferrer noopener"
       target="_blank"
     >
