@@ -1,3 +1,9 @@
+Changes in [3.88.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.88.0) (2024-01-04)
+=====================================================================================================
+## 🐛 Bug Fixes
+
+* Fix a fresh login creating a new key backup ([#12106](https://github.com/matrix-org/matrix-react-sdk/pull/12106)).
+
 Changes in [3.87.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.87.0) (2023-12-19)
 =====================================================================================================
 ## ✨ Features
