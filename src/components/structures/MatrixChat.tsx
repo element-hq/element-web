@@ -1,5 +1,5 @@
 /*
-Copyright 2015-2022 The Matrix.org Foundation C.I.C.
+Copyright 2015-2024 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -60,7 +60,6 @@ import { _t, _td, getCurrentLanguage } from "../../languageHandler";
 import SettingsStore from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
-import { messageForSyncError } from "../../utils/ErrorUtils";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
 import DMRoomMap from "../../utils/DMRoomMap";
@@ -113,7 +112,7 @@ import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { initSentry } from "../../sentry";
 import LegacyCallHandler from "../../LegacyCallHandler";
 import { showSpaceInvite } from "../../utils/space";
-import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
+import { ButtonEvent } from "../views/elements/AccessibleButton";
 import { ActionPayload } from "../../dispatcher/payloads";
 import { SummarizedNotificationState } from "../../stores/notifications/SummarizedNotificationState";
 import Views from "../../Views";
@@ -147,6 +146,7 @@ import { Filter } from "../views/dialogs/spotlight/Filter";
 import { checkSessionLockFree, getSessionLock } from "../../utils/SessionLock";
 import { SessionLockStolenView } from "./auth/SessionLockStolenView";
 import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView";
+import { LoginSplashView } from "./auth/LoginSplashView";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -2119,22 +2119,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 );
             } else {
                 // we think we are logged in, but are still waiting for the /sync to complete
-                let errorBox;
-                if (this.state.syncError && !isStoreError) {
-                    errorBox = (
-                        <div className="mx_MatrixChat_syncError">{messageForSyncError(this.state.syncError)}</div>
-                    );
-                }
+                // Suppress `InvalidStoreError`s here, since they have their own error dialog.
                 view = (
-                    <div className="mx_MatrixChat_splash">
-                        {errorBox}
-                        <Spinner />
-                        <div className="mx_MatrixChat_splashButtons">
-                            <AccessibleButton kind="link_inline" onClick={this.onLogoutClick}>
-                                {_t("action|logout")}
-                            </AccessibleButton>
-                        </div>
-                    </div>
+                    <LoginSplashView
+                        onLogoutClick={this.onLogoutClick}
+                        syncError={isStoreError ? null : this.state.syncError}
+                    />
                 );
             }
         } else if (this.state.view === Views.WELCOME) {

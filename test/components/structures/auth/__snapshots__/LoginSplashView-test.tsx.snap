@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LoginSplashView /> Renders a spinner 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_MatrixChat_splash"
+  >
+    <div
+      class="mx_Spinner"
+    >
+      <div
+        aria-label="Loading…"
+        class="mx_Spinner_icon"
+        data-testid="spinner"
+        role="progressbar"
+        style="width: 32px; height: 32px;"
+      />
+    </div>
+    <div
+      class="mx_LoginSplashView_splashButtons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+        role="button"
+        tabindex="0"
+      >
+        Logout
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<LoginSplashView /> Renders an error message 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_MatrixChat_splash"
+  >
+    <div
+      class="mx_LoginSplashView_syncError"
+    >
+      <div>
+        Unable to connect to Homeserver. Retrying…
+      </div>
+    </div>
+    <div
+      class="mx_Spinner"
+    >
+      <div
+        aria-label="Loading…"
+        class="mx_Spinner_icon"
+        data-testid="spinner"
+        role="progressbar"
+        style="width: 32px; height: 32px;"
+      />
+    </div>
+    <div
+      class="mx_LoginSplashView_splashButtons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+        role="button"
+        tabindex="0"
+      >
+        Logout
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
