@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, createRef, useState } from "react";
+import React, { ComponentProps, createRef, useState, forwardRef } from "react";
 import classNames from "classnames";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
@@ -48,30 +48,26 @@ type ButtonProps = Omit<ComponentProps<typeof AccessibleTooltipButton>, "title" 
     offLabel?: string;
 };
 
-const LegacyCallViewToggleButton: React.FC<ButtonProps> = ({
-    children,
-    state: isOn,
-    className,
-    onLabel,
-    offLabel,
-    ...props
-}) => {
-    const classes = classNames("mx_LegacyCallViewButtons_button", className, {
-        mx_LegacyCallViewButtons_button_on: isOn,
-        mx_LegacyCallViewButtons_button_off: !isOn,
-    });
+const LegacyCallViewToggleButton = forwardRef<HTMLElement, ButtonProps>(
+    ({ children, state: isOn, className, onLabel, offLabel, ...props }, ref) => {
+        const classes = classNames("mx_LegacyCallViewButtons_button", className, {
+            mx_LegacyCallViewButtons_button_on: isOn,
+            mx_LegacyCallViewButtons_button_off: !isOn,
+        });
 
-    return (
-        <AccessibleTooltipButton
-            className={classes}
-            title={isOn ? onLabel : offLabel}
-            alignment={Alignment.Top}
-            {...props}
-        >
-            {children}
-        </AccessibleTooltipButton>
-    );
-};
+        return (
+            <AccessibleTooltipButton
+                ref={ref}
+                className={classes}
+                title={isOn ? onLabel : offLabel}
+                alignment={Alignment.Top}
+                {...props}
+            >
+                {children}
+            </AccessibleTooltipButton>
+        );
+    },
+);
 
 interface IDropdownButtonProps extends ButtonProps {
     deviceKinds: MediaDeviceKindEnum[];
