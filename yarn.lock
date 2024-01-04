@@ -8584,8 +8584,8 @@ matrix-mock-request@^2.5.0:
     expect "^28.1.0"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.87.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/d2f7b4a2bf0a7bdf6d12fd0b814a2e6ce784c54a"
+  version "3.88.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/9350583ecf151811c8377879af0b08d4db701c30"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.9.0"
