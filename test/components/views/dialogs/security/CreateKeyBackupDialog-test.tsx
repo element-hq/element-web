@@ -19,13 +19,11 @@ import React from "react";
 import { mocked } from "jest-mock";
 
 import CreateKeyBackupDialog from "../../../../../src/async-components/views/dialogs/security/CreateKeyBackupDialog";
-import { createTestClient, filterConsole } from "../../../../test-utils";
+import { createTestClient } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 
 jest.mock("../../../../../src/SecurityManager", () => ({
-    accessSecretStorage: async (func = async () => Promise<void>) => {
-        await func();
-    },
+    accessSecretStorage: jest.fn().mockResolvedValue(undefined),
 }));
 
 describe("CreateKeyBackupDialog", () => {
@@ -41,33 +39,16 @@ describe("CreateKeyBackupDialog", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    describe("expecting failure", () => {
-        filterConsole("Error creating key backup");
+    it("should display the error message when backup creation failed", async () => {
+        const matrixClient = createTestClient();
+        mocked(matrixClient.scheduleAllGroupSessionsForBackup).mockRejectedValue("my error");
+        MatrixClientPeg.safeGet = MatrixClientPeg.get = () => matrixClient;
 
-        it("should display an error message when backup creation failed", async () => {
-            const matrixClient = createTestClient();
-            mocked(matrixClient.getCrypto()!.resetKeyBackup).mockImplementation(() => {
-                throw new Error("failed");
-            });
-            MatrixClientPeg.safeGet = MatrixClientPeg.get = () => matrixClient;
+        const { asFragment } = render(<CreateKeyBackupDialog onFinished={jest.fn()} />);
 
-            const { asFragment } = render(<CreateKeyBackupDialog onFinished={jest.fn()} />);
-
-            // Check if the error message is displayed
-            await waitFor(() => expect(screen.getByText("Unable to create key backup")).toBeDefined());
-            expect(asFragment()).toMatchSnapshot();
-        });
-
-        it("should display an error message when there is no Crypto available", async () => {
-            const matrixClient = createTestClient();
-            mocked(matrixClient.getCrypto).mockReturnValue(undefined);
-            MatrixClientPeg.safeGet = MatrixClientPeg.get = () => matrixClient;
-
-            render(<CreateKeyBackupDialog onFinished={jest.fn()} />);
-
-            // Check if the error message is displayed
-            await waitFor(() => expect(screen.getByText("Unable to create key backup")).toBeDefined());
-        });
+        // Check if the error message is displayed
+        await waitFor(() => expect(screen.getByText("Unable to create key backup")).toBeDefined());
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("should display the success dialog when the key backup is finished", async () => {

@@ -260,7 +260,3 @@ export const expect = baseExpect.extend({
         return { pass: true, message: () => "", name: "toMatchScreenshot" };
     },
 });
-
-test.use({
-    permissions: ["clipboard-read"],
-});

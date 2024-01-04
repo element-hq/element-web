@@ -132,7 +132,6 @@ export function createTestClient(): MatrixClient {
             getUserDeviceInfo: jest.fn(),
             getUserVerificationStatus: jest.fn(),
             getDeviceVerificationStatus: jest.fn(),
-            resetKeyBackup: jest.fn(),
         }),
 
         getPushActionsForEvent: jest.fn(),

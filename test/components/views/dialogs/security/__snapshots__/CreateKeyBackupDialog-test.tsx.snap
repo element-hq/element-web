@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CreateKeyBackupDialog expecting failure should display an error message when backup creation failed 1`] = `
+exports[`CreateKeyBackupDialog should display the error message when backup creation failed 1`] = `
 <DocumentFragment>
   <div
     data-focus-guard="true"

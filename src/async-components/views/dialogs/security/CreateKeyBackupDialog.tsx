@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { _t } from "../../../../languageHandler";
@@ -74,25 +75,24 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         this.setState({
             error: undefined,
         });
+        let info: IKeyBackupInfo | undefined;
         const cli = MatrixClientPeg.safeGet();
         try {
-            // We don't want accessSecretStorage to create a backup for us - we
-            // will create one ourselves in the closure we pass in by calling
-            // resetKeyBackup.
-            const setupNewKeyBackup = false;
-            const forceReset = false;
-
-            await accessSecretStorage(
-                async (): Promise<void> => {
-                    const crypto = cli.getCrypto();
-                    if (!crypto) {
-                        throw new Error("End-to-end encryption is disabled - unable to create backup.");
-                    }
-                    await crypto.resetKeyBackup();
-                },
-                forceReset,
-                setupNewKeyBackup,
-            );
+            await accessSecretStorage(async (): Promise<void> => {
+                // `accessSecretStorage` will have bootstrapped secret storage if necessary, so we can now
+                // set up key backup.
+                //
+                // XXX: `bootstrapSecretStorage` also sets up key backup as a side effect, so there is a 90% chance
+                // this is actually redundant.
+                //
+                // The only time it would *not* be redundant would be if, for some reason, we had working 4S but no
+                // working key backup. (For example, if the user clicked "Delete Backup".)
+                info = await cli.prepareKeyBackupVersion(null /* random key */, {
+                    secureSecretStorage: true,
+                });
+                info = await cli.createKeyBackupVersion(info);
+            });
+            await cli.scheduleAllGroupSessionsForBackup();
             this.setState({
                 phase: Phase.Done,
             });
@@ -102,6 +102,9 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
             // delete the version, disable backup, or do nothing?  If we just
             // disable without deleting, we'll enable on next app reload since
             // it is trusted.
+            if (info?.version) {
+                cli.deleteKeyBackupVersion(info.version);
+            }
             this.setState({
                 error: true,
             });

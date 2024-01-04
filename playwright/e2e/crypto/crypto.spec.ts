@@ -212,6 +212,43 @@ test.describe("Cryptography", function () {
         });
     }
 
+    test("Can reset cross-signing keys", async ({ page, app, user: aliceCredentials }) => {
+        const secretStorageKey = await enableKeyBackup(app);
+
+        // Fetch the current cross-signing keys
+        async function fetchMasterKey() {
+            return await test.step("Fetch master key from server", async () => {
+                const k = await app.client.evaluate(async (cli) => {
+                    const userId = cli.getUserId();
+                    const keys = await cli.downloadKeysForUsers([userId]);
+                    return Object.values(keys.master_keys[userId].keys)[0];
+                });
+                console.log(`fetchMasterKey: ${k}`);
+                return k;
+            });
+        }
+        const masterKey1 = await fetchMasterKey();
+
+        // Find the "reset cross signing" button, and click it
+        await app.settings.openUserSettings("Security & Privacy");
+        await page.locator("div.mx_CrossSigningPanel_buttonRow").getByRole("button", { name: "Reset" }).click();
+
+        // Confirm
+        await page.getByRole("button", { name: "Clear cross-signing keys" }).click();
+
+        // Enter the 4S key
+        await page.getByPlaceholder("Security Key").fill(secretStorageKey);
+        await page.getByRole("button", { name: "Continue" }).click();
+
+        await expect(async () => {
+            const masterKey2 = await fetchMasterKey();
+            expect(masterKey1).not.toEqual(masterKey2);
+        }).toPass();
+
+        // The dialog should have gone away
+        await expect(page.locator(".mx_Dialog")).toHaveCount(1);
+    });
+
     test("creating a DM should work, being e2e-encrypted / user verification", async ({
         page,
         app,
