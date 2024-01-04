@@ -341,22 +341,13 @@ export async function withSecretStorageKeyCache<T>(func: () => Promise<T>): Prom
  * @param {Function} [func] An operation to perform once secret storage has been
  * bootstrapped. Optional.
  * @param {bool} [forceReset] Reset secret storage even if it's already set up
- * @param {bool} [setupNewKeyBackup] Reset secret storage even if it's already set up
  */
-export async function accessSecretStorage(
-    func = async (): Promise<void> => {},
-    forceReset = false,
-    setupNewKeyBackup = true,
-): Promise<void> {
-    await withSecretStorageKeyCache(() => doAccessSecretStorage(func, forceReset, setupNewKeyBackup));
+export async function accessSecretStorage(func = async (): Promise<void> => {}, forceReset = false): Promise<void> {
+    await withSecretStorageKeyCache(() => doAccessSecretStorage(func, forceReset));
 }
 
 /** Helper for {@link #accessSecretStorage} */
-async function doAccessSecretStorage(
-    func: () => Promise<void>,
-    forceReset: boolean,
-    setupNewKeyBackup: boolean,
-): Promise<void> {
+export async function doAccessSecretStorage(func = async (): Promise<void> => {}, forceReset = false): Promise<void> {
     try {
         const cli = MatrixClientPeg.safeGet();
         if (!(await cli.hasSecretStorageKey()) || forceReset) {
@@ -387,12 +378,7 @@ async function doAccessSecretStorage(
                 throw new Error("Secret storage creation canceled");
             }
         } else {
-            const crypto = cli.getCrypto();
-            if (!crypto) {
-                throw new Error("End-to-end encryption is disabled - unable to access secret storage.");
-            }
-
-            await crypto.bootstrapCrossSigning({
+            await cli.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
                     const { finished } = Modal.createDialog(InteractiveAuthDialog, {
                         title: _t("encryption|bootstrap_title"),
@@ -405,9 +391,8 @@ async function doAccessSecretStorage(
                     }
                 },
             });
-            await crypto.bootstrapSecretStorage({
+            await cli.bootstrapSecretStorage({
                 getKeyBackupPassphrase: promptForBackupPassphrase,
-                setupNewKeyBackup,
             });
 
             const keyId = Object.keys(secretStorageKeys)[0];
