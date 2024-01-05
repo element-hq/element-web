@@ -1014,4 +1014,4 @@ Changes in [1.11.18](https://github.com/vector-im/element-web/releases/tag/v1.11
  * Correctly handle limited sync responses by resetting the thread timeline ([\#3056](https://github.com/matrix-org/matrix-js-sdk/pull/3056)). Fixes vector-im/element-web#23952.
  * Fix failure to start in firefox private browser ([\#3058](https://github.com/matrix-org/matrix-js-sdk/pull/3058)). Fixes vector-im/element-web#24216.
 
-**Changelogs for older versions can be found [here](CHANGELOG-pre-2023.md).**
+**Changelogs for older versions can be found [here](CHANGELOG-2022.md).**
