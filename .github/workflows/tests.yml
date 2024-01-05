@@ -30,6 +30,11 @@ jobs:
     jest:
         name: Jest
         runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                # Run multiple instances in parallel to speed up the tests
+                runner: [1, 2]
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -62,7 +67,17 @@ jobs:
                       --coverage=${{ env.ENABLE_COVERAGE }} \
                       --ci \
                       --max-workers ${{ steps.cpu-cores.outputs.count }} \
+                      --shard ${{ matrix.runner }}/${{ strategy.job-total }} \
                       --cacheDirectory /tmp/jest_cache
+              env:
+                  JEST_SONAR_UNIQUE_OUTPUT_NAME: true
+
+                  # tell jest to use coloured output
+                  FORCE_COLOR: true
+
+            - name: Move coverage files into place
+              if: env.ENABLE_COVERAGE == 'true'
+              run: mv coverage/lcov.info coverage/${{ steps.setupNode.outputs.node-version }}-${{ matrix.runner }}.lcov.info
 
             - name: Upload Artifact
               if: env.ENABLE_COVERAGE == 'true'

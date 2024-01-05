@@ -10,7 +10,9 @@ concurrency:
 jobs:
     sonarqube:
         name: 🩻 SonarQube
-        if: github.event.workflow_run.event != 'merge_group'
+        if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'merge_group'
         uses: matrix-org/matrix-js-sdk/.github/workflows/sonarcloud.yml@develop
         secrets:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+            sharded: true
