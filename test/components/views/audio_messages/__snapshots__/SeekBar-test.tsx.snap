@@ -3,6 +3,7 @@
 exports[`SeekBar when rendering a SeekBar and the playback proceeds should render as expected 1`] = `
 <div>
   <input
+    aria-label="Audio seek bar"
     class="mx_SeekBar"
     max="1"
     min="0"
@@ -18,6 +19,7 @@ exports[`SeekBar when rendering a SeekBar and the playback proceeds should rende
 exports[`SeekBar when rendering a SeekBar for an empty playback should render correctly 1`] = `
 <div>
   <input
+    aria-label="Audio seek bar"
     class="mx_SeekBar"
     max="1"
     min="0"
@@ -33,6 +35,7 @@ exports[`SeekBar when rendering a SeekBar for an empty playback should render co
 exports[`SeekBar when rendering a SeekBar should render the initial position 1`] = `
 <div>
   <input
+    aria-label="Audio seek bar"
     class="mx_SeekBar"
     max="1"
     min="0"
@@ -48,6 +51,7 @@ exports[`SeekBar when rendering a SeekBar should render the initial position 1`]
 exports[`SeekBar when rendering a disabled SeekBar should render as expected 1`] = `
 <div>
   <input
+    aria-label="Audio seek bar"
     class="mx_SeekBar"
     disabled=""
     max="1"

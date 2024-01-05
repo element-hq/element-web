@@ -100,6 +100,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
       </div>
     </div>
     <input
+      aria-label="Audio seek bar"
       class="mx_SeekBar"
       max="1"
       min="0"
@@ -213,6 +214,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a pause/not-live broadcast sh
       </div>
     </div>
     <input
+      aria-label="Audio seek bar"
       class="mx_SeekBar"
       max="1"
       min="0"
@@ -338,6 +340,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast in pip mo
       </div>
     </div>
     <input
+      aria-label="Audio seek bar"
       class="mx_SeekBar"
       max="1"
       min="0"
@@ -451,6 +454,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast should re
       </div>
     </div>
     <input
+      aria-label="Audio seek bar"
       class="mx_SeekBar"
       max="1"
       min="0"
@@ -572,6 +576,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing/live broadcast shou
       </div>
     </div>
     <input
+      aria-label="Audio seek bar"
       class="mx_SeekBar"
       max="1"
       min="0"
@@ -665,6 +670,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a stopped broadcast should re
       </div>
     </div>
     <input
+      aria-label="Audio seek bar"
       class="mx_SeekBar"
       max="1"
       min="0"

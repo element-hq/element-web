@@ -14,6 +14,7 @@
         "recent_rooms": "Recent rooms",
         "room_name": "Room %(name)s",
         "room_status_bar": "Room status bar",
+        "seek_bar_label": "Audio seek bar",
         "unread_messages": "Unread messages.",
         "user_menu": "User menu"
     },
@@ -1946,6 +1947,7 @@
             "video_call_ec_layout_spotlight": "Spotlight",
             "video_room_view_chat_button": "View chat timeline"
         },
+        "header_face_pile_tooltip": "Toggle member list",
         "header_untrusted_label": "Untrusted",
         "inaccessible": "This room or space is not accessible at this time.",
         "inaccessible_name": "%(roomName)s is not accessible at this time.",
