@@ -57,8 +57,13 @@ export default class IdentityAuthClient {
         }
     }
 
+    // This client must not be used for general operations as it may not have a baseUrl or be running (tempClient).
+    private get identityClient(): MatrixClient {
+        return this.tempClient ?? this.matrixClient;
+    }
+
     private get matrixClient(): MatrixClient {
-        return this.tempClient ? this.tempClient : MatrixClientPeg.safeGet();
+        return MatrixClientPeg.safeGet();
     }
 
     private writeToken(): void {
@@ -117,10 +122,10 @@ export default class IdentityAuthClient {
     }
 
     private async checkToken(token: string): Promise<void> {
-        const identityServerUrl = this.matrixClient.getIdentityServerUrl()!;
+        const identityServerUrl = this.identityClient.getIdentityServerUrl()!;
 
         try {
-            await this.matrixClient.getIdentityAccount(token);
+            await this.identityClient.getIdentityAccount(token);
         } catch (e) {
             if (e instanceof MatrixError && e.errcode === "M_TERMS_NOT_SIGNED") {
                 logger.log("Identity server requires new terms to be agreed to");
@@ -171,7 +176,8 @@ export default class IdentityAuthClient {
     public async registerForToken(check = true): Promise<string> {
         const hsOpenIdToken = await MatrixClientPeg.safeGet().getOpenIdToken();
         // XXX: The spec is `token`, but we used `access_token` for a Sydent release.
-        const { access_token: accessToken, token } = await this.matrixClient.registerWithIdentityServer(hsOpenIdToken);
+        const { access_token: accessToken, token } =
+            await this.identityClient.registerWithIdentityServer(hsOpenIdToken);
         const identityAccessToken = token ? token : accessToken;
         if (check) await this.checkToken(identityAccessToken);
         return identityAccessToken;
