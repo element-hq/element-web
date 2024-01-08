@@ -2,4 +2,13 @@
 /.github/workflows/**     @matrix-org/element-web-team
 /package.json             @matrix-org/element-web-team
 /yarn.lock                @matrix-org/element-web-team
+
+/src/SecurityManager.ts                           @matrix-org/element-crypto-web-reviewers
+/test/SecurityManager-test.ts                     @matrix-org/element-crypto-web-reviewers
+/src/async-components/views/dialogs/security/     @matrix-org/element-crypto-web-reviewers
+/src/components/views/dialogs/security/           @matrix-org/element-crypto-web-reviewers
+/test/components/views/dialogs/security/          @matrix-org/element-crypto-web-reviewers
+/src/stores/SetupEncryptionStore.ts               @matrix-org/element-crypto-web-reviewers
+/test/stores/SetupEncryptionStore-test.ts         @matrix-org/element-crypto-web-reviewers
+
 /src/i18n/strings
