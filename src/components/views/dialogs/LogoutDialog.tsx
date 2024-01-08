@@ -228,7 +228,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
                         hasCancel={true}
                         onFinished={this.onFinished}
                     >
-                        <Spinner />;
+                        <Spinner />
                     </BaseDialog>
                 );
 
