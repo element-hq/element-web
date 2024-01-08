@@ -107,34 +107,37 @@ export const WidgetPip: FC<Props> = ({ widgetId, room, viewingRoom, onStartMovin
 
     return (
         <div className="mx_WidgetPip" onMouseDown={onStartMoving} onClick={onBackClick}>
-            <Toolbar className="mx_WidgetPip_header">
-                <RovingAccessibleButton
-                    onClick={onBackClick}
-                    className="mx_WidgetPip_backButton"
-                    aria-label={_t("action|back")}
-                >
-                    <BackIcon className="mx_Icon mx_Icon_16" />
-                    {roomName}
-                </RovingAccessibleButton>
-            </Toolbar>
             <PersistentApp
                 persistentWidgetId={widgetId}
                 persistentRoomId={room.roomId}
                 pointerEvents="none"
                 movePersistedElement={movePersistedElement}
-            />
-            {(call !== null || WidgetType.JITSI.matches(widget?.type)) && (
-                <Toolbar className="mx_WidgetPip_footer">
-                    <RovingAccessibleTooltipButton
-                        onClick={onLeaveClick}
-                        tooltip={_t("action|leave")}
-                        aria-label={_t("action|leave")}
-                        alignment={Alignment.Top}
-                    >
-                        <HangupIcon className="mx_Icon mx_Icon_24" />
-                    </RovingAccessibleTooltipButton>
-                </Toolbar>
-            )}
+            >
+                <div onMouseDown={onStartMoving} className="mx_WidgetPip_overlay">
+                    <Toolbar className="mx_WidgetPip_header">
+                        <RovingAccessibleButton
+                            onClick={onBackClick}
+                            className="mx_WidgetPip_backButton"
+                            aria-label={_t("action|back")}
+                        >
+                            <BackIcon className="mx_Icon mx_Icon_16" />
+                            {roomName}
+                        </RovingAccessibleButton>
+                    </Toolbar>
+                    {(call !== null || WidgetType.JITSI.matches(widget?.type)) && (
+                        <Toolbar className="mx_WidgetPip_footer">
+                            <RovingAccessibleTooltipButton
+                                onClick={onLeaveClick}
+                                tooltip={_t("action|leave")}
+                                aria-label={_t("action|leave")}
+                                alignment={Alignment.Top}
+                            >
+                                <HangupIcon className="mx_Icon mx_Icon_24" />
+                            </RovingAccessibleTooltipButton>
+                        </Toolbar>
+                    )}
+                </div>
+            </PersistentApp>
         </div>
     );
 };

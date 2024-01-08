@@ -58,6 +58,7 @@ export default class PersistentApp extends React.Component<IProps> {
                 showMenubar={false}
                 pointerEvents={this.props.pointerEvents}
                 movePersistedElement={this.props.movePersistedElement}
+                overlay={this.props.children}
             />
         );
     }

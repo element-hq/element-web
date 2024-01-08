@@ -29,6 +29,19 @@ export const getPersistKey = (appId: string): string => "widget_" + appId;
 // of doing reusable widgets like dialog boxes & menus where we go and
 // pass in a custom control as the actual body.
 
+// We contain all persisted elements within a master container to allow them all to be within the same
+// CSS stacking context, and thus be able to control their z-indexes relative to each other.
+function getOrCreateMasterContainer(): HTMLDivElement {
+    let container = getContainer("mx_PersistedElement_container");
+    if (!container) {
+        container = document.createElement("div");
+        container.id = "mx_PersistedElement_container";
+        document.body.appendChild(container);
+    }
+
+    return container;
+}
+
 function getContainer(containerId: string): HTMLDivElement {
     return document.getElementById(containerId) as HTMLDivElement;
 }
@@ -39,7 +52,7 @@ function getOrCreateContainer(containerId: string): HTMLDivElement {
     if (!container) {
         container = document.createElement("div");
         container.id = containerId;
-        document.body.appendChild(container);
+        getOrCreateMasterContainer().appendChild(container);
     }
 
     return container;

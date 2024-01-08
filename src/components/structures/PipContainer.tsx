@@ -305,6 +305,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
             const call = this.state.primaryCall;
             pipContent.push(({ onStartMoving, onResize }) => (
                 <LegacyCallView
+                    key="call-view"
                     onMouseDownOnHeader={onStartMoving}
                     call={call}
                     secondaryCall={this.state.secondaryCall}
@@ -317,6 +318,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         if (this.state.showWidgetInPip && this.state.persistentWidgetId) {
             pipContent.push(({ onStartMoving }) => (
                 <WidgetPip
+                    key="widget-pip"
                     widgetId={this.state.persistentWidgetId!}
                     room={MatrixClientPeg.safeGet().getRoom(this.state.persistentRoomId ?? undefined)!}
                     viewingRoom={this.state.viewedRoomId === this.state.persistentRoomId}

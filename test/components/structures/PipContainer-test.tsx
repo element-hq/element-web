@@ -64,6 +64,16 @@ import { WidgetType } from "../../../src/widgets/WidgetType";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { ElementWidgetActions } from "../../../src/stores/widgets/ElementWidgetActions";
 
+jest.mock("../../../src/stores/OwnProfileStore", () => ({
+    OwnProfileStore: {
+        instance: {
+            isProfileInfoFetched: true,
+            removeListener: jest.fn(),
+            getHttpAvatarUrl: jest.fn().mockReturnValue("http://avatar_url"),
+        },
+    },
+}));
+
 describe("PipContainer", () => {
     useMockedCalls();
     jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(async () => {});
@@ -91,6 +101,8 @@ describe("PipContainer", () => {
 
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
+        client.getUserId.mockReturnValue("@alice:example.org");
+        client.getSafeUserId.mockReturnValue("@alice:example.org");
         DMRoomMap.makeShared(client);
 
         room = new Room("!1:example.org", client, "@alice:example.org", {
@@ -161,6 +173,7 @@ describe("PipContainer", () => {
         if (!(call instanceof MockedCall)) throw new Error("Failed to create call");
 
         const widget = new Widget(call.widget);
+        WidgetStore.instance.addVirtualWidget(call.widget, room.roomId);
         WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
             stop: () => {},
         } as unknown as ClientWidgetApi);
@@ -175,6 +188,7 @@ describe("PipContainer", () => {
         cleanup();
         call.destroy();
         ActiveWidgetStore.instance.destroyPersistentWidget(widget.id, room.roomId);
+        WidgetStore.instance.removeVirtualWidget(widget.id, room.roomId);
     };
 
     const withWidget = async (fn: () => Promise<void>): Promise<void> => {
@@ -265,7 +279,7 @@ describe("PipContainer", () => {
         const widget = WidgetStore.instance.addVirtualWidget(
             {
                 id: "1",
-                creatorUserId: "@alice:exaxmple.org",
+                creatorUserId: "@alice:example.org",
                 type: WidgetType.CUSTOM.preferred,
                 url: "https://example.org",
                 name: "Example widget",
@@ -279,7 +293,7 @@ describe("PipContainer", () => {
 
             // The return button should maximize the widget
             const moveSpy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
-            await user.click(screen.getByRole("button", { name: "Back" }));
+            await user.click(await screen.findByRole("button", { name: "Back" }));
             expect(moveSpy).toHaveBeenCalledWith(room, widget, Container.Center);
 
             expect(screen.queryByRole("button", { name: "Leave" })).toBeNull();
@@ -295,7 +309,7 @@ describe("PipContainer", () => {
         const widget = WidgetStore.instance.addVirtualWidget(
             {
                 id: "1",
-                creatorUserId: "@alice:exaxmple.org",
+                creatorUserId: "@alice:example.org",
                 type: WidgetType.JITSI.preferred,
                 url: "https://meet.example.org",
                 name: "Jitsi example",
@@ -310,7 +324,7 @@ describe("PipContainer", () => {
             // The return button should view the room
             const dispatcherSpy = jest.fn();
             const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
-            await user.click(screen.getByRole("button", { name: "Back" }));
+            await user.click(await screen.findByRole("button", { name: "Back" }));
             expect(dispatcherSpy).toHaveBeenCalledWith({
                 action: Action.ViewRoom,
                 room_id: room.roomId,

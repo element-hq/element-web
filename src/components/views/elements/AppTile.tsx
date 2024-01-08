@@ -93,6 +93,8 @@ interface IProps {
     showLayoutButtons?: boolean;
     // Handle to manually notify the PersistedElement that it needs to move
     movePersistedElement?: MutableRefObject<(() => void) | undefined>;
+    // An element to render after the iframe as an overlay
+    overlay?: ReactNode;
 }
 
 interface IState {
@@ -663,17 +665,20 @@ export default class AppTile extends React.Component<IProps, IState> {
                 );
             } else {
                 appTileBody = (
-                    <div className={appTileBodyClass} style={appTileBodyStyles}>
-                        {this.state.loading && loadingElement}
-                        <iframe
-                            title={widgetTitle}
-                            allow={iframeFeatures}
-                            ref={this.iframeRefChange}
-                            src={this.sgWidget.embedUrl}
-                            allowFullScreen={true}
-                            sandbox={sandboxFlags}
-                        />
-                    </div>
+                    <>
+                        <div className={appTileBodyClass} style={appTileBodyStyles}>
+                            {this.state.loading && loadingElement}
+                            <iframe
+                                title={widgetTitle}
+                                allow={iframeFeatures}
+                                ref={this.iframeRefChange}
+                                src={this.sgWidget.embedUrl}
+                                allowFullScreen={true}
+                                sandbox={sandboxFlags}
+                            />
+                        </div>
+                        {this.props.overlay}
+                    </>
                 );
 
                 if (!this.props.userWidget) {
