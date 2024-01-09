@@ -15,11 +15,10 @@ limitations under the License.
 */
 
 import React, { HTMLProps } from "react";
+import { Tooltip } from "@vector-im/compound-web";
 
 import { _t } from "../../../../languageHandler";
 import StyledCheckbox, { CheckboxStyle } from "../../elements/StyledCheckbox";
-import { Alignment } from "../../elements/Tooltip";
-import TooltipTarget from "../../elements/TooltipTarget";
 
 interface Props extends Omit<HTMLProps<HTMLDivElement>, "className"> {
     selectedDeviceCount: number;
@@ -41,7 +40,7 @@ const FilteredDeviceListHeader: React.FC<Props> = ({
     return (
         <div className="mx_FilteredDeviceListHeader" {...rest}>
             {!isSelectDisabled && (
-                <TooltipTarget label={checkboxLabel} alignment={Alignment.Top}>
+                <Tooltip label={checkboxLabel} side="top" isTriggerInteractive={false}>
                     <StyledCheckbox
                         kind={CheckboxStyle.Solid}
                         checked={isAllSelected}
@@ -50,7 +49,7 @@ const FilteredDeviceListHeader: React.FC<Props> = ({
                         data-testid="device-select-all-checkbox"
                         aria-label={checkboxLabel}
                     />
-                </TooltipTarget>
+                </Tooltip>
             )}
             <span className="mx_FilteredDeviceListHeader_label">
                 {selectedDeviceCount > 0

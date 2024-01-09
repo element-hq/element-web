@@ -16,12 +16,12 @@ limitations under the License.
 
 import React, { useEffect, useState } from "react";
 import { ContentHelpers } from "matrix-js-sdk/src/matrix";
+import { Tooltip } from "@vector-im/compound-web";
 
 import { Icon as ExternalLinkIcon } from "../../../../res/img/external-link.svg";
 import { _t } from "../../../languageHandler";
 import { makeMapSiteLink, parseGeoUri } from "../../../utils/location";
 import CopyableText from "../elements/CopyableText";
-import TooltipTarget from "../elements/TooltipTarget";
 
 interface Props {
     latestLocationState?: ContentHelpers.BeaconLocationState;
@@ -46,11 +46,11 @@ const ShareLatestLocation: React.FC<Props> = ({ latestLocationState }) => {
 
     return (
         <>
-            <TooltipTarget label={_t("timeline|context_menu|open_in_osm")}>
+            <Tooltip label={_t("timeline|context_menu|open_in_osm")}>
                 <a data-testid="open-location-in-osm" href={mapLink} target="_blank" rel="noreferrer noopener">
                     <ExternalLinkIcon className="mx_ShareLatestLocation_icon" />
                 </a>
-            </TooltipTarget>
+            </Tooltip>
             <CopyableText className="mx_ShareLatestLocation_copy" border={false} getTextToCopy={() => latLonString} />
         </>
     );

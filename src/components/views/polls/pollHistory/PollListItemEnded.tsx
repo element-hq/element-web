@@ -17,6 +17,7 @@ limitations under the License.
 import React, { useEffect, useState } from "react";
 import { PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { MatrixEvent, Poll, PollEvent, Relations } from "matrix-js-sdk/src/matrix";
+import { Tooltip } from "@vector-im/compound-web";
 
 import { Icon as PollIcon } from "../../../../../res/img/element-icons/room/composer/poll.svg";
 import { _t } from "../../../../languageHandler";
@@ -24,8 +25,6 @@ import { formatLocalDateShort } from "../../../../DateUtils";
 import { allVotes, collectUserVotes, countVotes } from "../../messages/MPollBody";
 import { PollOption } from "../../polls/PollOption";
 import { Caption } from "../../typography/Caption";
-import TooltipTarget from "../../elements/TooltipTarget";
-import { Alignment } from "../../elements/Tooltip";
 
 interface Props {
     event: MatrixEvent;
@@ -100,7 +99,7 @@ export const PollListItemEnded: React.FC<Props> = ({ event, poll, onClick }) => 
 
     return (
         <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItemEnded" onClick={onClick}>
-            <TooltipTarget label={_t("right_panel|poll|view_poll")} alignment={Alignment.Top}>
+            <Tooltip label={_t("right_panel|poll|view_poll")} side="top" isTriggerInteractive={false}>
                 <div className="mx_PollListItemEnded_content">
                     <div className="mx_PollListItemEnded_title">
                         <PollIcon className="mx_PollListItemEnded_icon" />
@@ -127,7 +126,7 @@ export const PollListItemEnded: React.FC<Props> = ({ event, poll, onClick }) => 
                         <Caption>{_t("right_panel|poll|final_result", { count: totalVoteCount })}</Caption>
                     </div>
                 </div>
-            </TooltipTarget>
+            </Tooltip>
         </li>
     );
 };

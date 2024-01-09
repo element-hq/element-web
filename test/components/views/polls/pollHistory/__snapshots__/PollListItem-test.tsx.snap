@@ -6,8 +6,8 @@ exports[`<PollListItem /> renders a poll 1`] = `
     class="mx_PollListItem"
     data-testid="pollListItem-$mypoll"
   >
-    <div
-      aria-describedby="mx_TooltipTarget_vY7Q4uEh"
+    <span
+      data-state="closed"
       tabindex="0"
     >
       <div
@@ -25,7 +25,7 @@ exports[`<PollListItem /> renders a poll 1`] = `
           Question?
         </span>
       </div>
-    </div>
+    </span>
   </li>
 </div>
 `;

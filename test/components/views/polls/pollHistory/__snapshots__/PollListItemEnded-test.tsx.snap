@@ -6,8 +6,8 @@ exports[`<PollListItemEnded /> renders a poll with no responses 1`] = `
     class="mx_PollListItemEnded"
     data-testid="pollListItem-1"
   >
-    <div
-      aria-describedby="mx_TooltipTarget_vY7Q4uEh"
+    <span
+      data-state="closed"
       tabindex="0"
     >
       <div
@@ -40,7 +40,7 @@ exports[`<PollListItemEnded /> renders a poll with no responses 1`] = `
           </span>
         </div>
       </div>
-    </div>
+    </span>
   </li>
 </div>
 `;

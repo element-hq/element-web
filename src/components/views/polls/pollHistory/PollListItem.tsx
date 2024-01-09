@@ -17,12 +17,11 @@ limitations under the License.
 import React from "react";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { Tooltip } from "@vector-im/compound-web";
 
 import { Icon as PollIcon } from "../../../../../res/img/element-icons/room/composer/poll.svg";
 import { formatLocalDateShort } from "../../../../DateUtils";
 import { _t } from "../../../../languageHandler";
-import TooltipTarget from "../../elements/TooltipTarget";
-import { Alignment } from "../../elements/Tooltip";
 
 interface Props {
     event: MatrixEvent;
@@ -37,13 +36,13 @@ export const PollListItem: React.FC<Props> = ({ event, onClick }) => {
     const formattedDate = formatLocalDateShort(event.getTs());
     return (
         <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItem" onClick={onClick}>
-            <TooltipTarget label={_t("right_panel|poll|view_poll")} alignment={Alignment.Top}>
+            <Tooltip label={_t("right_panel|poll|view_poll")} side="top" isTriggerInteractive={false}>
                 <div className="mx_PollListItem_content">
                     <span>{formattedDate}</span>
                     <PollIcon className="mx_PollListItem_icon" />
                     <span className="mx_PollListItem_question">{pollEvent.question.text}</span>
                 </div>
-            </TooltipTarget>
+            </Tooltip>
         </li>
     );
 };

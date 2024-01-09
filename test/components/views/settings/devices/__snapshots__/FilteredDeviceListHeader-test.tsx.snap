@@ -6,8 +6,8 @@ exports[`<FilteredDeviceListHeader /> renders correctly when all devices are sel
     class="mx_FilteredDeviceListHeader"
     data-testid="test123"
   >
-    <div
-      aria-describedby="mx_TooltipTarget_vY7Q4uEh"
+    <span
+      data-state="closed"
       tabindex="0"
     >
       <span
@@ -32,7 +32,7 @@ exports[`<FilteredDeviceListHeader /> renders correctly when all devices are sel
           </div>
         </label>
       </span>
-    </div>
+    </span>
     <span
       class="mx_FilteredDeviceListHeader_label"
     >
@@ -51,8 +51,8 @@ exports[`<FilteredDeviceListHeader /> renders correctly when no devices are sele
     class="mx_FilteredDeviceListHeader"
     data-testid="test123"
   >
-    <div
-      aria-describedby="mx_TooltipTarget_vY7Q4uEh"
+    <span
+      data-state="closed"
       tabindex="0"
     >
       <span
@@ -76,7 +76,7 @@ exports[`<FilteredDeviceListHeader /> renders correctly when no devices are sele
           </div>
         </label>
       </span>
-    </div>
+    </span>
     <span
       class="mx_FilteredDeviceListHeader_label"
     >

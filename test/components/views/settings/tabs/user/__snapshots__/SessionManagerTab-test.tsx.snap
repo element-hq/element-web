@@ -342,8 +342,8 @@ exports[`<SessionManagerTab /> goes to filtered list from security recommendatio
 <div
   class="mx_FilteredDeviceListHeader"
 >
-  <div
-    aria-describedby="mx_TooltipTarget_vY7Q4uEh"
+  <span
+    data-state="closed"
     tabindex="0"
   >
     <span
@@ -367,7 +367,7 @@ exports[`<SessionManagerTab /> goes to filtered list from security recommendatio
         </div>
       </label>
     </span>
-  </div>
+  </span>
   <span
     class="mx_FilteredDeviceListHeader_label"
   >

@@ -31,21 +31,17 @@ exports[`<BeaconListItem /> when a beacon is live and has locations renders beac
         <div
           class="mx_BeaconListItem_interactions"
         >
-          <div
-            aria-describedby="mx_TooltipTarget_vY7Q4uEh"
-            tabindex="0"
+          <a
+            data-state="closed"
+            data-testid="open-location-in-osm"
+            href="https://www.openstreetmap.org/?mlat=51&mlon=41#map=16/51/41"
+            rel="noreferrer noopener"
+            target="_blank"
           >
-            <a
-              data-testid="open-location-in-osm"
-              href="https://www.openstreetmap.org/?mlat=51&mlon=41#map=16/51/41"
-              rel="noreferrer noopener"
-              target="_blank"
-            >
-              <div
-                class="mx_ShareLatestLocation_icon"
-              />
-            </a>
-          </div>
+            <div
+              class="mx_ShareLatestLocation_icon"
+            />
+          </a>
           <div
             class="mx_CopyableText mx_ShareLatestLocation_copy"
           >
