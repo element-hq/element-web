@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MouseEvent, ReactNode } from "react";
+import React, { forwardRef } from "react";
 import classNames from "classnames";
 
 import { formatCount } from "../../../../utils/FormattingUtils";
@@ -28,10 +28,6 @@ interface Props {
     count: number;
     color: NotificationColor;
     knocked?: boolean;
-    onMouseOver?: (ev: MouseEvent) => void;
-    onMouseLeave?: (ev: MouseEvent) => void;
-    children?: ReactNode;
-    label?: string;
 }
 
 interface ClickableProps extends Props {
@@ -42,57 +38,46 @@ interface ClickableProps extends Props {
     tabIndex?: number;
 }
 
-export function StatelessNotificationBadge({
-    symbol,
-    count,
-    color,
-    knocked,
-    ...props
-}: XOR<Props, ClickableProps>): JSX.Element {
-    const hideBold = useSettingValue("feature_hidebold");
+export const StatelessNotificationBadge = forwardRef<HTMLDivElement, XOR<Props, ClickableProps>>(
+    ({ symbol, count, color, knocked, ...props }, ref) => {
+        const hideBold = useSettingValue("feature_hidebold");
 
-    // Don't show a badge if we don't need to
-    if ((color === NotificationColor.None || (hideBold && color == NotificationColor.Bold)) && !knocked) {
-        return <></>;
-    }
+        // Don't show a badge if we don't need to
+        if ((color === NotificationColor.None || (hideBold && color == NotificationColor.Bold)) && !knocked) {
+            return <></>;
+        }
 
-    const hasUnreadCount = color >= NotificationColor.Grey && (!!count || !!symbol);
+        const hasUnreadCount = color >= NotificationColor.Grey && (!!count || !!symbol);
 
-    const isEmptyBadge = symbol === null && count === 0;
+        const isEmptyBadge = symbol === null && count === 0;
 
-    if (symbol === null && count > 0) {
-        symbol = formatCount(count);
-    }
+        if (symbol === null && count > 0) {
+            symbol = formatCount(count);
+        }
 
-    const classes = classNames({
-        mx_NotificationBadge: true,
-        mx_NotificationBadge_visible: isEmptyBadge || knocked ? true : hasUnreadCount,
-        mx_NotificationBadge_highlighted: color >= NotificationColor.Red,
-        mx_NotificationBadge_dot: isEmptyBadge && !knocked,
-        mx_NotificationBadge_knocked: knocked,
-        mx_NotificationBadge_2char: symbol && symbol.length > 0 && symbol.length < 3,
-        mx_NotificationBadge_3char: symbol && symbol.length > 2,
-    });
+        const classes = classNames({
+            mx_NotificationBadge: true,
+            mx_NotificationBadge_visible: isEmptyBadge || knocked ? true : hasUnreadCount,
+            mx_NotificationBadge_highlighted: color >= NotificationColor.Red,
+            mx_NotificationBadge_dot: isEmptyBadge && !knocked,
+            mx_NotificationBadge_knocked: knocked,
+            mx_NotificationBadge_2char: symbol && symbol.length > 0 && symbol.length < 3,
+            mx_NotificationBadge_3char: symbol && symbol.length > 2,
+        });
 
-    if (props.onClick) {
+        if (props.onClick) {
+            return (
+                <AccessibleButton {...props} className={classes} onClick={props.onClick} ref={ref}>
+                    <span className="mx_NotificationBadge_count">{symbol}</span>
+                    {props.children}
+                </AccessibleButton>
+            );
+        }
+
         return (
-            <AccessibleButton
-                aria-label={props.label}
-                {...props}
-                className={classes}
-                onClick={props.onClick}
-                onMouseOver={props.onMouseOver}
-                onMouseLeave={props.onMouseLeave}
-            >
+            <div className={classes} ref={ref}>
                 <span className="mx_NotificationBadge_count">{symbol}</span>
-                {props.children}
-            </AccessibleButton>
+            </div>
         );
-    }
-
-    return (
-        <div className={classes}>
-            <span className="mx_NotificationBadge_count">{symbol}</span>
-        </div>
-    );
-}
+    },
+);

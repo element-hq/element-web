@@ -235,7 +235,9 @@ describe("<ForgotPassword>", () => {
                         expect.any(String),
                         2, // second send attempt
                     );
-                    expect(screen.getByText("Verification link email resent!")).toBeInTheDocument();
+                    expect(
+                        screen.getByRole("tooltip", { name: "Verification link email resent!" }),
+                    ).toBeInTheDocument();
                 });
             });
 

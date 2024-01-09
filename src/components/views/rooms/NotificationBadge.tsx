@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MouseEvent, ReactNode } from "react";
+import React, { ReactNode } from "react";
+import { Tooltip } from "@vector-im/compound-web";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { XOR } from "../../../@types/common";
 import { NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
-import Tooltip from "../elements/Tooltip";
 import { _t } from "../../../languageHandler";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { StatelessNotificationBadge } from "./NotificationBadge/StatelessNotificationBadge";
@@ -48,8 +48,7 @@ interface IClickableProps extends IProps, React.InputHTMLAttributes<Element> {
 }
 
 interface IState {
-    showCounts: boolean; // whether or not to show counts. Independent of props.forceCount
-    showTooltip: boolean;
+    showCounts: boolean; // whether to show counts. Independent of props.forceCount
 }
 
 export default class NotificationBadge extends React.PureComponent<XOR<IProps, IClickableProps>, IState> {
@@ -61,7 +60,6 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
 
         this.state = {
             showCounts: SettingsStore.getValue("Notifications.alwaysShowBadgeCounts", this.roomId),
-            showTooltip: false,
         };
 
         this.countWatcherRef = SettingsStore.watchSetting(
@@ -97,19 +95,6 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
         this.forceUpdate(); // notification state changed - update
     };
 
-    private onMouseOver = (e: MouseEvent): void => {
-        e.stopPropagation();
-        this.setState({
-            showTooltip: true,
-        });
-    };
-
-    private onMouseLeave = (): void => {
-        this.setState({
-            showTooltip: false,
-        });
-    };
-
     public render(): ReactNode {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const { notification, showUnsentTooltip, forceCount, onClick, tabIndex } = this.props;
@@ -119,31 +104,28 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
             if (!notification.hasUnreadCount) return null; // Can't render a badge
         }
 
-        let label: string | undefined;
-        let tooltip: JSX.Element | undefined;
-        if (showUnsentTooltip && this.state.showTooltip && notification.color === NotificationColor.Unsent) {
-            label = _t("notifications|message_didnt_send");
-            tooltip = <Tooltip className="mx_NotificationBadge_tooltip" label={label} />;
-        }
-
         const commonProps: React.ComponentProps<typeof StatelessNotificationBadge> = {
-            label,
             symbol: notification.symbol,
             count: notification.count,
             color: notification.color,
             knocked: notification.knocked,
-            onMouseOver: this.onMouseOver,
-            onMouseLeave: this.onMouseLeave,
         };
 
+        let badge: JSX.Element;
         if (onClick) {
+            badge = <StatelessNotificationBadge {...commonProps} onClick={onClick} tabIndex={tabIndex} />;
+        } else {
+            badge = <StatelessNotificationBadge {...commonProps} />;
+        }
+
+        if (showUnsentTooltip && notification.color === NotificationColor.Unsent) {
             return (
-                <StatelessNotificationBadge {...commonProps} onClick={onClick} tabIndex={tabIndex}>
-                    {tooltip}
-                </StatelessNotificationBadge>
+                <Tooltip label={_t("notifications|message_didnt_send")} side="right">
+                    {badge}
+                </Tooltip>
             );
         }
 
-        return <StatelessNotificationBadge {...commonProps}>{tooltip}</StatelessNotificationBadge>;
+        return badge;
     }
 }
