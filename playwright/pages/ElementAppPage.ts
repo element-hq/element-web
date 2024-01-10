@@ -51,6 +51,10 @@ export class ElementAppPage {
         return this.settings.closeDialog();
     }
 
+    public async getClipboard(): Promise<string> {
+        return await this.page.evaluate(() => navigator.clipboard.readText());
+    }
+
     /**
      * Opens the given room by name. The room must be visible in the
      * room list, but the room list may be folded horizontally, and the

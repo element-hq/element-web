@@ -17,11 +17,10 @@ limitations under the License.
 
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { _t } from "../../../../languageHandler";
-import { accessSecretStorage } from "../../../../SecurityManager";
+import { accessSecretStorage, withSecretStorageKeyCache } from "../../../../SecurityManager";
 import Spinner from "../../../../components/views/elements/Spinner";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
@@ -75,24 +74,36 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         this.setState({
             error: undefined,
         });
-        let info: IKeyBackupInfo | undefined;
         const cli = MatrixClientPeg.safeGet();
         try {
-            await accessSecretStorage(async (): Promise<void> => {
-                // `accessSecretStorage` will have bootstrapped secret storage if necessary, so we can now
-                // set up key backup.
-                //
-                // XXX: `bootstrapSecretStorage` also sets up key backup as a side effect, so there is a 90% chance
-                // this is actually redundant.
-                //
-                // The only time it would *not* be redundant would be if, for some reason, we had working 4S but no
-                // working key backup. (For example, if the user clicked "Delete Backup".)
-                info = await cli.prepareKeyBackupVersion(null /* random key */, {
-                    secureSecretStorage: true,
+            // Check if 4S already set up
+            const secretStorageAlreadySetup = await cli.hasSecretStorageKey();
+
+            if (!secretStorageAlreadySetup) {
+                // bootstrap secret storage; that will also create a backup version
+                await accessSecretStorage(async (): Promise<void> => {
+                    // do nothing, all is now set up correctly
                 });
-                info = await cli.createKeyBackupVersion(info);
-            });
-            await cli.scheduleAllGroupSessionsForBackup();
+            } else {
+                await withSecretStorageKeyCache(async () => {
+                    const crypto = cli.getCrypto();
+                    if (!crypto) {
+                        throw new Error("End-to-end encryption is disabled - unable to create backup.");
+                    }
+
+                    // Before we reset the backup, let's make sure we can access secret storage, to
+                    // reduce the chance of us getting into a broken state where we have an outdated
+                    // secret in secret storage.
+                    // `SecretStorage.get` will ask the user to enter their passphrase/key if necessary;
+                    // it will then be cached for the actual backup reset operation.
+                    await cli.secretStorage.get("m.megolm_backup.v1");
+
+                    // We now know we can store the new backup key in secret storage, so it is safe to
+                    // go ahead with the reset.
+                    await crypto.resetKeyBackup();
+                });
+            }
+
             this.setState({
                 phase: Phase.Done,
             });
@@ -102,9 +113,6 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
             // delete the version, disable backup, or do nothing?  If we just
             // disable without deleting, we'll enable on next app reload since
             // it is trusted.
-            if (info?.version) {
-                cli.deleteKeyBackupVersion(info.version);
-            }
             this.setState({
                 error: true,
             });
