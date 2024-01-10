@@ -356,6 +356,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                 menuPaddingLeft={0}
                 menuPaddingRight={0}
                 zIndex={STICKERPICKER_Z_INDEX}
+                mountAsChild={true}
                 {...this.props.menuPosition}
             >
                 <GenericElementContextMenu element={this.getStickerpickerContent()} onResize={this.onFinished} />
