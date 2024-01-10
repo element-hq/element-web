@@ -89,6 +89,7 @@ oidc_providers:
       discover: false
       scopes: ["profile"]
       skip_verification: true
+      client_auth_method: none
       user_mapping_provider:
           config:
               display_name_template: "{{ user.name }}"
