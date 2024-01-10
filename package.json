@@ -191,7 +191,7 @@
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
         "allchange": "^1.1.0",
-        "axe-core": "4.8.2",
+        "axe-core": "4.8.3",
         "babel-jest": "^29.0.0",
         "blob-polyfill": "^7.0.0",
         "cypress": "^12.0.0",
