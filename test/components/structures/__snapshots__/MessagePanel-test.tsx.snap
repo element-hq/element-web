@@ -16,7 +16,6 @@ exports[`MessagePanel should handle large numbers of hidden events quickly 1`] =
       />
     </div>
   </div>
-  );
 </DocumentFragment>
 `;
 
@@ -119,7 +118,6 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
       </ol>
     </div>
   </div>
-  );
 </DocumentFragment>
 `;
 
@@ -139,6 +137,5 @@ exports[`MessagePanel should handle lots of room creation events quickly 1`] = `
       />
     </div>
   </div>
-  );
 </DocumentFragment>
 `;

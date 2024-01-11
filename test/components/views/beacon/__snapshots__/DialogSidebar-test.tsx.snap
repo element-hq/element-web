@@ -96,7 +96,6 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
       </li>
     </ol>
   </div>
-  );
 </div>
 `;
 
@@ -131,6 +130,5 @@ exports[`<DialogSidebar /> renders sidebar correctly without beacons 1`] = `
       No live locations
     </div>
   </div>
-  );
 </div>
 `;

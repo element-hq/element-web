@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { ComponentProps } from "react";
 import { act, fireEvent, render } from "@testing-library/react";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import { FilteredDeviceList } from "../../../../../src/components/views/settings/devices/FilteredDeviceList";
 import { DeviceSecurityVariation } from "../../../../../src/components/views/settings/devices/types";
@@ -81,7 +82,11 @@ describe("<FilteredDeviceList />", () => {
         supportsMSC3881: true,
     };
 
-    const getComponent = (props = {}) => <FilteredDeviceList {...defaultProps} {...props} />;
+    const getComponent = (props = {}) => (
+        <TooltipProvider>
+            <FilteredDeviceList {...defaultProps} {...props} />
+        </TooltipProvider>
+    );
 
     afterAll(() => {
         jest.spyOn(global.Date, "now").mockRestore();

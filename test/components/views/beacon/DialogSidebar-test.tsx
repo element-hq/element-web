@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { ComponentProps } from "react";
 import { act, fireEvent, render } from "@testing-library/react";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import DialogSidebar from "../../../../src/components/views/beacon/DialogSidebar";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
@@ -52,8 +53,9 @@ describe("<DialogSidebar />", () => {
 
     const getComponent = (props = {}) => (
         <MatrixClientContext.Provider value={client}>
-            <DialogSidebar {...defaultProps} {...props} />
-            );
+            <TooltipProvider>
+                <DialogSidebar {...defaultProps} {...props} />
+            </TooltipProvider>
         </MatrixClientContext.Provider>
     );
 

@@ -17,6 +17,7 @@ limitations under the License.
 import React from "react";
 import { act, fireEvent, render } from "@testing-library/react";
 import { Beacon, RoomMember, MatrixEvent, LocationAssetType } from "matrix-js-sdk/src/matrix";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import BeaconListItem from "../../../../src/components/views/beacon/BeaconListItem";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
@@ -75,6 +76,7 @@ describe("<BeaconListItem />", () => {
             <MatrixClientContext.Provider value={mockClient}>
                 <BeaconListItem {...defaultProps} {...props} />
             </MatrixClientContext.Provider>,
+            { wrapper: TooltipProvider },
         );
 
     const setupRoomWithBeacons = (beaconInfoEvents: MatrixEvent[], locationEvents?: MatrixEvent[]): Beacon[] => {

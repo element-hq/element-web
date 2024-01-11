@@ -18,6 +18,7 @@ import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 import { EventType, MatrixEvent, Room, MatrixClient, JoinRule } from "matrix-js-sdk/src/matrix";
 import { mocked, MockedObject } from "jest-mock";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import RoomSummaryCard from "../../../../src/components/views/right_panel/RoomSummaryCard";
@@ -55,7 +56,9 @@ describe("<RoomSummaryCard />", () => {
 
         return render(<RoomSummaryCard {...defaultProps} {...props} />, {
             wrapper: ({ children }) => (
-                <MatrixClientContext.Provider value={mockClient}>{children}</MatrixClientContext.Provider>
+                <MatrixClientContext.Provider value={mockClient}>
+                    <TooltipProvider>{children}</TooltipProvider>
+                </MatrixClientContext.Provider>
             ),
         });
     };

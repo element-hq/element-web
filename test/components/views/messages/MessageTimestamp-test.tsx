@@ -17,6 +17,7 @@ limitations under the License.
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import MessageTimestamp from "../../../../src/components/views/messages/MessageTimestamp";
 
@@ -30,7 +31,7 @@ describe("MessageTimestamp", () => {
     const DAY_MS = HOUR_MS * 24;
 
     it("should render HH:MM", () => {
-        const { asFragment } = render(<MessageTimestamp ts={nowDate.getTime()} />);
+        const { asFragment } = render(<MessageTimestamp ts={nowDate.getTime()} />, { wrapper: TooltipProvider });
         expect(asFragment()).toMatchInlineSnapshot(`
             <DocumentFragment>
               <span
@@ -46,7 +47,7 @@ describe("MessageTimestamp", () => {
     });
 
     it("should show full date & time on hover", async () => {
-        const { container } = render(<MessageTimestamp ts={nowDate.getTime()} />);
+        const { container } = render(<MessageTimestamp ts={nowDate.getTime()} />, { wrapper: TooltipProvider });
         await userEvent.hover(container.querySelector(".mx_MessageTimestamp")!);
         expect((await screen.findByRole("tooltip")).textContent).toMatchInlineSnapshot(`"Fri, Dec 17, 2021, 08:09:00"`);
     });
@@ -54,6 +55,7 @@ describe("MessageTimestamp", () => {
     it("should show sent & received time on hover if passed", async () => {
         const { container } = render(
             <MessageTimestamp ts={nowDate.getTime()} receivedTs={nowDate.getTime() + DAY_MS} />,
+            { wrapper: TooltipProvider },
         );
         await userEvent.hover(container.querySelector(".mx_MessageTimestamp")!);
         expect((await screen.findByRole("tooltip")).textContent).toMatchInlineSnapshot(

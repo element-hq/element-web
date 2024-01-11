@@ -34,6 +34,7 @@ import { throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { DecryptionError } from "matrix-js-sdk/src/crypto/algorithms";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 // what-input helps improve keyboard accessibility
 import "what-input";
@@ -2189,7 +2190,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         return (
             <ErrorBoundary>
-                <SDKContext.Provider value={this.stores}>{view}</SDKContext.Provider>
+                <SDKContext.Provider value={this.stores}>
+                    <TooltipProvider>{view}</TooltipProvider>
+                </SDKContext.Provider>
             </ErrorBoundary>
         );
     }

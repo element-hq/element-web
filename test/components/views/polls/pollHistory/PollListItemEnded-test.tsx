@@ -17,6 +17,7 @@ limitations under the License.
 import React from "react";
 import { render } from "@testing-library/react";
 import { MatrixEvent, Poll, Room, M_TEXT } from "matrix-js-sdk/src/matrix";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import { PollListItemEnded } from "../../../../../src/components/views/polls/pollHistory/PollListItemEnded";
 import {
@@ -60,7 +61,7 @@ describe("<PollListItemEnded />", () => {
     const pollEndEvent = makePollEndEvent(pollId, roomId, userId, timestamp + 60000);
 
     const getComponent = (props: { event: MatrixEvent; poll: Poll }) =>
-        render(<PollListItemEnded {...props} onClick={jest.fn()} />);
+        render(<PollListItemEnded {...props} onClick={jest.fn()} />, { wrapper: TooltipProvider });
 
     beforeAll(() => {
         // mock default locale to en-GB and set timezone

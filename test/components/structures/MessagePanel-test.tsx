@@ -19,6 +19,7 @@ import React from "react";
 import { EventEmitter } from "events";
 import { MatrixEvent, Room, RoomMember, Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { render } from "@testing-library/react";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import MessagePanel, { shouldFormContinuation } from "../../../src/components/structures/MessagePanel";
 import SettingsStore from "../../../src/settings/SettingsStore";
@@ -97,9 +98,10 @@ describe("MessagePanel", function () {
     const getComponent = (props = {}, roomContext: Partial<IRoomState> = {}) => (
         <MatrixClientContext.Provider value={client}>
             <RoomContext.Provider value={{ ...defaultRoomContext, ...roomContext }}>
-                <MessagePanel {...defaultProps} {...props} />
+                <TooltipProvider>
+                    <MessagePanel {...defaultProps} {...props} />
+                </TooltipProvider>
             </RoomContext.Provider>
-            );
         </MatrixClientContext.Provider>
     );
 

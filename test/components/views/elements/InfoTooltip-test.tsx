@@ -17,12 +17,15 @@ limitations under the License.
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { render, waitFor } from "@testing-library/react";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import InfoTooltip from "../../../../src/components/views/elements/InfoTooltip";
 
 describe("InfoTooltip", () => {
     it("should show tooltip on hover", async () => {
-        const { getByText, asFragment } = render(<InfoTooltip tooltip="Tooltip text">Trigger text</InfoTooltip>);
+        const { getByText, asFragment } = render(<InfoTooltip tooltip="Tooltip text">Trigger text</InfoTooltip>, {
+            wrapper: TooltipProvider,
+        });
 
         const trigger = getByText("Trigger text");
         expect(trigger).toBeVisible();

@@ -20,6 +20,7 @@ import { act, fireEvent, render, RenderResult, screen } from "@testing-library/r
 import { Room, MatrixClient, RoomState, RoomMember, User, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { compare } from "matrix-js-sdk/src/utils";
 import { mocked, MockedObject } from "jest-mock";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import * as TestUtils from "../../../test-utils";
@@ -229,6 +230,7 @@ describe("MemberList", () => {
                     ref={gatherWrappedRef}
                 />
             </SDKContext.Provider>,
+            { wrapper: TooltipProvider },
         );
     }
 
@@ -380,6 +382,7 @@ describe("MemberList", () => {
                             roomId={room.roomId}
                         />
                     </SDKContext.Provider>,
+                    { wrapper: TooltipProvider },
                 );
             };
 

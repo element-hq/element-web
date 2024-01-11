@@ -19,6 +19,7 @@ import { render, screen } from "@testing-library/react";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 import userEvent from "@testing-library/user-event";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import {
@@ -85,7 +86,7 @@ describe("<MStickerBody/>", () => {
     it("should show a tooltip on hover", async () => {
         fetchMock.getOnce(url, { status: 200 });
 
-        render(<MStickerBody {...props} mxEvent={mediaEvent} />);
+        render(<MStickerBody {...props} mxEvent={mediaEvent} />, { wrapper: TooltipProvider });
 
         expect(screen.queryByRole("tooltip")).toBeNull();
         await userEvent.hover(screen.getByRole("img"));

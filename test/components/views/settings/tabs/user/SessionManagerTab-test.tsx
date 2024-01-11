@@ -35,6 +35,7 @@ import {
     MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { mocked, MockedObject } from "jest-mock";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import {
     clearAllModals,
@@ -97,9 +98,11 @@ describe("<SessionManagerTab />", () => {
 
     const defaultProps = {};
     const getComponent = (props = {}): React.ReactElement => (
-        <SDKContext.Provider value={sdkContext}>
-            <SessionManagerTab {...defaultProps} {...props} />
-        </SDKContext.Provider>
+        <TooltipProvider>
+            <SDKContext.Provider value={sdkContext}>
+                <SessionManagerTab {...defaultProps} {...props} />
+            </SDKContext.Provider>
+        </TooltipProvider>
     );
 
     const toggleDeviceDetails = (

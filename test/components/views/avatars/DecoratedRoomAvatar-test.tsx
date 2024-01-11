@@ -19,6 +19,7 @@ import { mocked } from "jest-mock";
 import { JoinRule, MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { stubClient } from "../../../test-utils";
@@ -47,7 +48,9 @@ describe("DecoratedRoomAvatar", () => {
 
     it("shows an avatar with globe icon and tooltip for public room", async () => {
         room.getJoinRule = jest.fn().mockReturnValue(JoinRule.Public);
-        const { container, asFragment } = render(<DecoratedRoomAvatar room={room} size="32px" />);
+        const { container, asFragment } = render(<DecoratedRoomAvatar room={room} size="32px" />, {
+            wrapper: TooltipProvider,
+        });
 
         const globe = container.querySelector(".mx_DecoratedRoomAvatar_icon_globe")!;
         expect(globe).toBeVisible();

@@ -20,6 +20,7 @@ import { render, screen, act, fireEvent, waitFor, cleanup } from "@testing-libra
 import { mocked, Mocked } from "jest-mock";
 import { MatrixClient, PendingEventOrdering, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { Widget } from "matrix-widget-api";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import type { ClientWidgetApi } from "matrix-widget-api";
@@ -75,7 +76,7 @@ describe("CallView", () => {
     });
 
     const renderView = async (): Promise<void> => {
-        render(<CallView room={room} resizing={false} waitForCall={false} />);
+        render(<CallView room={room} resizing={false} waitForCall={false} />, { wrapper: TooltipProvider });
         await act(() => Promise.resolve()); // Let effects settle
     };
 

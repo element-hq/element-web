@@ -32,6 +32,7 @@ import {
 import { MEGOLM_ALGORITHM } from "matrix-js-sdk/src/crypto/olmlib";
 import { fireEvent, render, screen, RenderResult, waitForElementToBeRemoved, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import {
     stubClient,
@@ -143,6 +144,7 @@ describe("RoomView", () => {
                     wrappedRef={ref as any}
                 />
             </SDKContext.Provider>,
+            { wrapper: TooltipProvider },
         );
         await flushPromises();
         return roomView;
@@ -180,6 +182,7 @@ describe("RoomView", () => {
                     onRegistered={jest.fn()}
                 />
             </SDKContext.Provider>,
+            { wrapper: TooltipProvider },
         );
         await flushPromises();
         return roomView;

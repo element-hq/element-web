@@ -25,6 +25,7 @@ import {
     FeatureSupport,
     Thread,
 } from "matrix-js-sdk/src/matrix";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import ThreadPanel, { ThreadFilterType, ThreadPanelHeader } from "../../../src/components/structures/ThreadPanel";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
@@ -58,6 +59,7 @@ describe("ThreadPanel", () => {
                     filterOption={ThreadFilterType.My}
                     setFilterOption={() => undefined}
                 />,
+                { wrapper: TooltipProvider },
             );
             expect(asFragment()).toMatchSnapshot();
         });
@@ -69,6 +71,7 @@ describe("ThreadPanel", () => {
                     filterOption={ThreadFilterType.All}
                     setFilterOption={() => undefined}
                 />,
+                { wrapper: TooltipProvider },
             );
             const found = container.querySelector(".mx_ThreadPanel_dropdown");
             expect(found).toBeTruthy();
@@ -84,6 +87,7 @@ describe("ThreadPanel", () => {
                     filterOption={ThreadFilterType.All}
                     setFilterOption={() => undefined}
                 />,
+                { wrapper: TooltipProvider },
             );
             fireEvent.click(container.querySelector(".mx_ThreadPanel_dropdown")!);
             const found = screen.queryAllByRole("menuitemradio");
@@ -207,7 +211,7 @@ describe("ThreadPanel", () => {
             myThreads!.addLiveEvent(ownThread.rootEvent);
 
             let events: EventData[] = [];
-            const renderResult = render(<TestThreadPanel />);
+            const renderResult = render(<TestThreadPanel />, { wrapper: TooltipProvider });
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
             await waitFor(() => {
                 events = findEvents(renderResult.container);
@@ -253,7 +257,7 @@ describe("ThreadPanel", () => {
             allThreads!.addLiveEvent(otherThread.rootEvent);
 
             let events: EventData[] = [];
-            const renderResult = render(<TestThreadPanel />);
+            const renderResult = render(<TestThreadPanel />, { wrapper: TooltipProvider });
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
             await waitFor(() => {
                 events = findEvents(renderResult.container);

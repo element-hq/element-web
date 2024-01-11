@@ -14,6 +14,7 @@ limitations under the License.
 
 import { render } from "@testing-library/react";
 import React from "react";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import { mkRoom, mkRoomMember, stubClient, withClientContextRenderOptions } from "../../../test-utils";
 import RoomFacePile from "../../../../src/components/views/elements/RoomFacePile";
@@ -29,7 +30,9 @@ describe("<RoomFacePile />", () => {
         jest.spyOn(room, "getJoinedMembers").mockReturnValue([mkRoomMember(room.roomId, "@bob:example.org", "join")]);
 
         const { asFragment } = render(
-            <RoomFacePile onlyKnownUsers={false} room={room} />,
+            <TooltipProvider>
+                <RoomFacePile onlyKnownUsers={false} room={room} />
+            </TooltipProvider>,
             withClientContextRenderOptions(MatrixClientPeg.get()!),
         );
 

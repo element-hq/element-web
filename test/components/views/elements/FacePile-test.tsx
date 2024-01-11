@@ -14,6 +14,7 @@ limitations under the License.
 
 import { render } from "@testing-library/react";
 import React from "react";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import FacePile from "../../../../src/components/views/elements/FacePile";
 import { mkRoomMember } from "../../../test-utils";
@@ -24,6 +25,7 @@ describe("<FacePile />", () => {
 
         const { asFragment } = render(
             <FacePile members={[member]} size="36px" overflow={false} tooltipLabel="tooltip" />,
+            { wrapper: TooltipProvider },
         );
 
         expect(asFragment()).toMatchSnapshot();

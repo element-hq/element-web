@@ -19,6 +19,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { jest } from "@jest/globals";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import _RightPanel from "../../../src/components/structures/RightPanel";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
@@ -122,6 +123,7 @@ describe("RightPanel", () => {
                 resizeNotifier={resizeNotifier}
                 permalinkCreator={new RoomPermalinkCreator(r1, r1.roomId)}
             />,
+            { wrapper: TooltipProvider },
         );
         // Wait for RPS room 1 updates to fire
         const rpsUpdated = waitForRpsUpdate();

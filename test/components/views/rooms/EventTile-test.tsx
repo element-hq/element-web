@@ -30,6 +30,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { EventEncryptionInfo, EventShieldColour, EventShieldReason } from "matrix-js-sdk/src/crypto-api";
 import { CryptoBackend } from "matrix-js-sdk/src/common-crypto/CryptoBackend";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import EventTile, { EventTileProps } from "../../../../src/components/views/rooms/EventTile";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
@@ -66,11 +67,13 @@ describe("EventTile", () => {
         return (
             <MatrixClientContext.Provider value={client}>
                 <RoomContext.Provider value={props.roomContext}>
-                    <EventTile
-                        mxEvent={mxEvent}
-                        replacingEventId={mxEvent.replacingEventId()}
-                        {...(props.eventTilePropertyOverrides ?? {})}
-                    />
+                    <TooltipProvider>
+                        <EventTile
+                            mxEvent={mxEvent}
+                            replacingEventId={mxEvent.replacingEventId()}
+                            {...(props.eventTilePropertyOverrides ?? {})}
+                        />
+                    </TooltipProvider>
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>
         );

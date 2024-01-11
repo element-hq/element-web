@@ -37,6 +37,7 @@ import {
 import { defer } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";
 import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import UserInfo, {
     BanToggleButton,
@@ -195,7 +196,11 @@ describe("<UserInfo />", () => {
 
     const renderComponent = (props = {}) => {
         const Wrapper = (wrapperProps = {}) => {
-            return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
+            return (
+                <TooltipProvider>
+                    <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />
+                </TooltipProvider>
+            );
         };
 
         return render(<UserInfo {...defaultProps} {...props} />, {
@@ -412,7 +417,11 @@ describe("<UserInfoHeader />", () => {
 
     const renderComponent = (props = {}) => {
         const Wrapper = (wrapperProps = {}) => {
-            return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
+            return (
+                <TooltipProvider>
+                    <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />
+                </TooltipProvider>
+            );
         };
 
         return render(<UserInfoHeader {...defaultProps} {...props} />, {

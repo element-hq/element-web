@@ -17,6 +17,7 @@ limitations under the License.
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import fetchMock from "fetch-mock-jest";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import ServerPickerDialog from "../../../../src/components/views/dialogs/ServerPickerDialog";
 import SdkConfig from "../../../../src/SdkConfig";
@@ -55,7 +56,7 @@ describe("<ServerPickerDialog />", () => {
             onFinished: any;
             serverConfig: ValidatedServerConfig;
         }> = {},
-    ) => render(<ServerPickerDialog {...defaultProps} {...props} />);
+    ) => render(<ServerPickerDialog {...defaultProps} {...props} />, { wrapper: TooltipProvider });
 
     beforeEach(() => {
         SdkConfig.add({

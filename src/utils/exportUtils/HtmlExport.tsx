@@ -20,6 +20,7 @@ import { Room, MatrixEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix"
 import { renderToStaticMarkup } from "react-dom/server";
 import { logger } from "matrix-js-sdk/src/logger";
 import escapeHtml from "escape-html";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
@@ -283,25 +284,27 @@ export default class HTMLExporter extends Exporter {
         return (
             <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
                 <MatrixClientContext.Provider value={this.room.client}>
-                    <EventTile
-                        mxEvent={mxEv}
-                        continuation={continuation}
-                        isRedacted={mxEv.isRedacted()}
-                        replacingEventId={mxEv.replacingEventId()}
-                        forExport={true}
-                        alwaysShowTimestamps={true}
-                        showUrlPreview={false}
-                        checkUnmounting={() => false}
-                        isTwelveHour={false}
-                        last={false}
-                        lastInSection={false}
-                        permalinkCreator={this.permalinkCreator}
-                        lastSuccessful={false}
-                        isSelectedEvent={false}
-                        showReactions={false}
-                        layout={Layout.Group}
-                        showReadReceipts={false}
-                    />
+                    <TooltipProvider>
+                        <EventTile
+                            mxEvent={mxEv}
+                            continuation={continuation}
+                            isRedacted={mxEv.isRedacted()}
+                            replacingEventId={mxEv.replacingEventId()}
+                            forExport={true}
+                            alwaysShowTimestamps={true}
+                            showUrlPreview={false}
+                            checkUnmounting={() => false}
+                            isTwelveHour={false}
+                            last={false}
+                            lastInSection={false}
+                            permalinkCreator={this.permalinkCreator}
+                            lastSuccessful={false}
+                            isSelectedEvent={false}
+                            showReactions={false}
+                            layout={Layout.Group}
+                            showReadReceipts={false}
+                        />
+                    </TooltipProvider>
                 </MatrixClientContext.Provider>
             </div>
         );

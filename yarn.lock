@@ -3362,10 +3362,10 @@
   dependencies:
     svg2vectordrawable "^2.9.1"
 
-"@vector-im/compound-web@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-1.0.0.tgz#cee4a1c1d7df50951ebb1c167bfab26311b68d5d"
-  integrity sha512-TwohQjgQilndkg+PTfRH8s98onHOj9MdmrLEObozN3oLZ0Awx0LsyQf/+tcm2ZwpCotWuP9DEzuRXOQgSU4OLg==
+"@vector-im/compound-web@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-2.0.0.tgz#9ffc621f32be11acabe74bb3ff59cc4d8bc845ac"
+  integrity sha512-vEhGayoBSq4WLf86VmFoX9h0KIxaAjlG+kmcJLWitsqnPEDOG0XPhScYqzEshFqdJFLWX6gBOnXYLeq065t57w==
   dependencies:
     "@radix-ui/react-context-menu" "^2.1.5"
     "@radix-ui/react-dropdown-menu" "^2.0.6"

@@ -18,6 +18,7 @@ import React from "react";
 import { MockedObject } from "jest-mock";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render, screen } from "@testing-library/react";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import { VideoRoomChatButton } from "../../../../../src/components/views/rooms/RoomHeader/VideoRoomChatButton";
 import { SDKContext, SdkContextClass } from "../../../../../src/contexts/SDKContext";
@@ -56,7 +57,11 @@ describe("<VideoRoomChatButton />", () => {
 
     const getComponent = (room: Room) =>
         render(<VideoRoomChatButton room={room} />, {
-            wrapper: ({ children }) => <SDKContext.Provider value={sdkContext}>{children}</SDKContext.Provider>,
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={sdkContext}>
+                    <TooltipProvider>{children}</TooltipProvider>
+                </SDKContext.Provider>
+            ),
         });
 
     beforeEach(() => {

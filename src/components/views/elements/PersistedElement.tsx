@@ -17,6 +17,7 @@ limitations under the License.
 import React, { MutableRefObject, ReactNode } from "react";
 import ReactDOM from "react-dom";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import dis from "../../../dispatcher/dispatcher";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -176,9 +177,11 @@ export default class PersistedElement extends React.Component<IProps> {
     private renderApp(): void {
         const content = (
             <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
-                <div ref={this.collectChild} style={this.props.style}>
-                    {this.props.children}
-                </div>
+                <TooltipProvider>
+                    <div ref={this.collectChild} style={this.props.style}>
+                        {this.props.children}
+                    </div>
+                </TooltipProvider>
             </MatrixClientContext.Provider>
         );
 

@@ -19,6 +19,7 @@ import { mocked } from "jest-mock";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
 import { MatrixClient, Room, HierarchyRoom } from "matrix-js-sdk/src/matrix";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { mkStubRoom, stubClient } from "../../test-utils";
@@ -262,7 +263,9 @@ describe("SpaceHierarchy", () => {
         };
         const getComponent = (props = {}): React.ReactElement => (
             <MatrixClientContext.Provider value={client}>
-                <SpaceHierarchy {...defaultProps} {...props} />;
+                <TooltipProvider>
+                    <SpaceHierarchy {...defaultProps} {...props} />
+                </TooltipProvider>
             </MatrixClientContext.Provider>
         );
 
