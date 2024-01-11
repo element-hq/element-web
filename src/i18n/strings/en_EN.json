@@ -256,6 +256,7 @@
             "error_homeserver_lacks_support": "The homeserver doesn't support signing in another device.",
             "error_invalid_scanned_code": "The scanned code is invalid.",
             "error_linking_incomplete": "The linking wasn't completed in the required time.",
+            "error_rate_limited": "Too many attempts in a short time. Wait some time before trying again.",
             "error_request_cancelled": "The request was cancelled.",
             "error_request_declined": "The request was declined on the other device.",
             "error_unexpected": "An unexpected error occurred.",

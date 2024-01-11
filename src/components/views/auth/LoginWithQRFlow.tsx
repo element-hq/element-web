@@ -25,13 +25,13 @@ import { Icon as BackButtonIcon } from "../../../../res/img/element-icons/back.s
 import { Icon as DevicesIcon } from "../../../../res/img/element-icons/devices.svg";
 import { Icon as WarningBadge } from "../../../../res/img/element-icons/warning-badge.svg";
 import { Icon as InfoIcon } from "../../../../res/img/element-icons/i.svg";
-import { Click, Phase } from "./LoginWithQR";
+import { Click, FailureReason, LoginWithQRFailureReason, Phase } from "./LoginWithQR";
 
 interface IProps {
     phase: Phase;
     code?: string;
     onClick(type: Click): Promise<void>;
-    failureReason?: RendezvousFailureReason;
+    failureReason?: FailureReason;
     confirmationDigits?: string;
 }
 
@@ -101,6 +101,9 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                         break;
                     case RendezvousFailureReason.UserCancelled:
                         cancellationMessage = _t("auth|qr_code_login|error_request_cancelled");
+                        break;
+                    case LoginWithQRFailureReason.RateLimited:
+                        cancellationMessage = _t("auth|qr_code_login|error_rate_limited");
                         break;
                     case RendezvousFailureReason.Unknown:
                         cancellationMessage = _t("auth|qr_code_login|error_unexpected");

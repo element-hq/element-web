@@ -294,6 +294,55 @@ exports[`<LoginWithQRFlow /> errors renders other_device_not_signed_in 1`] = `
 </div>
 `;
 
+exports[`<LoginWithQRFlow /> errors renders rate_limited 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_centreTitle"
+    >
+      <h1>
+        <div
+          class="error"
+        />
+        Connection failed
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p
+        data-testid="cancellation-message"
+      >
+        Too many attempts in a short time. Wait some time before trying again.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="try-again-button"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`<LoginWithQRFlow /> errors renders unknown 1`] = `
 <div>
   <div

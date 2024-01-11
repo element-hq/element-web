@@ -19,7 +19,12 @@ import React from "react";
 import { RendezvousFailureReason } from "matrix-js-sdk/src/rendezvous";
 
 import LoginWithQRFlow from "../../../../../src/components/views/auth/LoginWithQRFlow";
-import { Click, Phase } from "../../../../../src/components/views/auth/LoginWithQR";
+import {
+    Click,
+    Phase,
+    LoginWithQRFailureReason,
+    FailureReason,
+} from "../../../../../src/components/views/auth/LoginWithQR";
 
 describe("<LoginWithQRFlow />", () => {
     const onClick = jest.fn();
@@ -31,7 +36,7 @@ describe("<LoginWithQRFlow />", () => {
     const getComponent = (props: {
         phase: Phase;
         onClick?: () => Promise<void>;
-        failureReason?: RendezvousFailureReason;
+        failureReason?: FailureReason;
         code?: string;
         confirmationDigits?: string;
     }) => <LoginWithQRFlow {...defaultProps} {...props} />;
@@ -97,7 +102,10 @@ describe("<LoginWithQRFlow />", () => {
     });
 
     describe("errors", () => {
-        for (const failureReason of Object.values(RendezvousFailureReason)) {
+        for (const failureReason of [
+            ...Object.values(RendezvousFailureReason),
+            ...Object.values(LoginWithQRFailureReason),
+        ]) {
             it(`renders ${failureReason}`, async () => {
                 const { container } = render(
                     getComponent({

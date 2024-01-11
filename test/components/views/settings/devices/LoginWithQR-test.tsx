@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import { cleanup, render, waitFor } from "@testing-library/react";
-import { mocked } from "jest-mock";
+import { MockedObject, mocked } from "jest-mock";
 import React from "react";
 import { MSC3906Rendezvous, RendezvousFailureReason } from "matrix-js-sdk/src/rendezvous";
-import { LoginTokenPostResponse } from "matrix-js-sdk/src/matrix";
+import { HTTPError, LoginTokenPostResponse } from "matrix-js-sdk/src/matrix";
 
 import LoginWithQR, { Click, Mode, Phase } from "../../../../../src/components/views/auth/LoginWithQR";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
@@ -52,6 +52,8 @@ function makeClient() {
             on: jest.fn(),
         },
         getClientWellKnown: jest.fn().mockReturnValue({}),
+        getCrypto: jest.fn().mockReturnValue({}),
+        crypto: {},
     } as unknown as MatrixClient);
 }
 
@@ -60,7 +62,7 @@ function unresolvedPromise<T>(): Promise<T> {
 }
 
 describe("<LoginWithQR />", () => {
-    let client = makeClient();
+    let client!: MockedObject<MatrixClient>;
     const defaultProps = {
         mode: Mode.Show,
         onFinished: jest.fn(),
@@ -78,6 +80,7 @@ describe("<LoginWithQR />", () => {
     beforeEach(() => {
         mockedFlow.mockReset();
         jest.resetAllMocks();
+        client = makeClient();
         jest.spyOn(MSC3906Rendezvous.prototype, "generateCode").mockResolvedValue();
         // @ts-ignore
         // workaround for https://github.com/facebook/jest/issues/9675
@@ -233,10 +236,9 @@ describe("<LoginWithQR />", () => {
     });
 
     test("approve - no crypto", async () => {
-        // @ts-ignore
-        client.crypto = undefined;
+        (client as any).crypto = undefined;
+        (client as any).getCrypto = () => undefined;
         const onFinished = jest.fn();
-        // jest.spyOn(MSC3906Rendezvous.prototype, 'approveLoginOnExistingDevice').mockReturnValue(unresolvedPromise());
         render(getComponent({ client, onFinished }));
         const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
 
@@ -274,8 +276,6 @@ describe("<LoginWithQR />", () => {
 
     test("approve + verifying", async () => {
         const onFinished = jest.fn();
-        // @ts-ignore
-        client.crypto = {};
         jest.spyOn(MSC3906Rendezvous.prototype, "verifyNewDeviceOnExistingDevice").mockImplementation(() =>
             unresolvedPromise(),
         );
@@ -316,8 +316,6 @@ describe("<LoginWithQR />", () => {
 
     test("approve + verify", async () => {
         const onFinished = jest.fn();
-        // @ts-ignore
-        client.crypto = {};
         render(getComponent({ client, onFinished }));
         const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
 
@@ -341,6 +339,43 @@ describe("<LoginWithQR />", () => {
         await onClick(Click.Approve);
         expect(rendezvous.approveLoginOnExistingDevice).toHaveBeenCalledWith("token");
         expect(rendezvous.verifyNewDeviceOnExistingDevice).toHaveBeenCalled();
+        expect(rendezvous.close).toHaveBeenCalled();
         expect(onFinished).toHaveBeenCalledWith(true);
+    });
+
+    test("approve - rate limited", async () => {
+        mocked(client.requestLoginToken).mockRejectedValue(new HTTPError("rate limit reached", 429));
+        const onFinished = jest.fn();
+        render(getComponent({ client, onFinished }));
+        const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
+
+        await waitFor(() =>
+            expect(mockedFlow).toHaveBeenLastCalledWith(
+                expect.objectContaining({
+                    phase: Phase.Connected,
+                }),
+            ),
+        );
+        expect(mockedFlow).toHaveBeenLastCalledWith({
+            phase: Phase.Connected,
+            confirmationDigits: mockConfirmationDigits,
+            onClick: expect.any(Function),
+        });
+        expect(rendezvous.generateCode).toHaveBeenCalled();
+        expect(rendezvous.startAfterShowingCode).toHaveBeenCalled();
+
+        // approve
+        const onClick = mockedFlow.mock.calls[0][0].onClick;
+        await onClick(Click.Approve);
+
+        // the 429 error should be handled and mapped
+        await waitFor(() =>
+            expect(mockedFlow).toHaveBeenLastCalledWith(
+                expect.objectContaining({
+                    phase: Phase.Error,
+                    failureReason: "rate_limited",
+                }),
+            ),
+        );
     });
 });
