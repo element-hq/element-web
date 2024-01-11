@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
+import React, { ComponentProps, ReactNode } from "react";
+import { Tooltip } from "@vector-im/compound-web";
 
 import MImageBody from "./MImageBody";
 import { BLURHASH_FIELD } from "../../../utils/image-media";
-import Tooltip from "../elements/Tooltip";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 
 export default class MStickerBody extends MImageBody {
@@ -63,16 +63,16 @@ export default class MStickerBody extends MImageBody {
     }
 
     // Tooltip to show on mouse over
-    protected getTooltip(): ReactNode {
+    protected getTooltipProps(): ComponentProps<typeof Tooltip> | null {
         const content = this.props.mxEvent && this.props.mxEvent.getContent();
 
-        if (!content || !content.body || !content.info || !content.info.w) return null;
+        if (!content?.body || !content.info?.w) return null;
 
-        return (
-            <div style={{ left: content.info.w + "px" }} className="mx_MStickerBody_tooltip">
-                <Tooltip label={content.body} />
-            </div>
-        );
+        return {
+            align: "center",
+            side: "right",
+            label: content.body,
+        };
     }
 
     // Don't show "Download this_file.png ..."

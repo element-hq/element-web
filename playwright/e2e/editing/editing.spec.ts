@@ -291,6 +291,7 @@ test.describe("Editing", () => {
             await editComposer.press("Backspace");
             await editComposer.press("Backspace");
             await editComposer.press("Enter");
+            await app.getComposerField().hover(); // XXX: move the hover to get rid of the "Edit" tooltip
             await checkA11y();
         }
         await expect(

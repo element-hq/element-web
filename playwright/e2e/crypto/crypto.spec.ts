@@ -336,7 +336,8 @@ test.describe("Cryptography", function () {
             await expect(last).toContainText("Unable to decrypt message");
             const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
             await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_decryption_failure/);
-            await expect(lastE2eIcon).toHaveAttribute("aria-label", "This message could not be decrypted");
+            await lastE2eIcon.hover();
+            await expect(page.getByRole("tooltip")).toContainText("This message could not be decrypted");
 
             /* Should show a red padlock for an unencrypted message in an e2e room */
             await bob.evaluate(
@@ -355,7 +356,8 @@ test.describe("Cryptography", function () {
 
             await expect(last).toContainText("test unencrypted");
             await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
-            await expect(lastE2eIcon).toHaveAttribute("aria-label", "Not encrypted");
+            await lastE2eIcon.hover();
+            await expect(page.getByRole("tooltip")).toContainText("Not encrypted");
 
             /* Should show no padlock for an unverified user */
             // bob sends a valid event
@@ -387,10 +389,8 @@ test.describe("Cryptography", function () {
             await bobSecondDevice.sendMessage(testRoomId, "test encrypted from unverified");
             await expect(lastTile).toContainText("test encrypted from unverified");
             await expect(lastTileE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
-            await expect(lastTileE2eIcon).toHaveAttribute(
-                "aria-label",
-                "Encrypted by a device not verified by its owner.",
-            );
+            await lastTileE2eIcon.hover();
+            await expect(page.getByRole("tooltip")).toContainText("Encrypted by a device not verified by its owner.");
 
             /* Should show a grey padlock for a message from an unknown device */
             // bob deletes his second device
@@ -428,7 +428,8 @@ test.describe("Cryptography", function () {
             } else {
                 await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_normal/);
             }
-            await expect(lastE2eIcon).toHaveAttribute("aria-label", "Encrypted by an unknown or deleted device.");
+            await lastE2eIcon.hover();
+            await expect(page.getByRole("tooltip")).toContainText("Encrypted by an unknown or deleted device.");
         });
 
         // XXX: Failed since migration to Playwright (https://github.com/element-hq/element-web/issues/26811)
@@ -462,7 +463,8 @@ test.describe("Cryptography", function () {
             await app.viewRoomById(testRoomId);
             await expect(lastTile).toContainText("test encrypted 1");
             await expect(lastTileE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
-            await expect(lastTileE2eIcon).toHaveAttribute("aria-label", "Encrypted by an unknown or deleted device.");
+            await lastTileE2eIcon.hover();
+            await expect(page.getByRole("tooltip")).toContainText("Encrypted by an unknown or deleted device.");
         });
 
         test("should show the correct shield on edited e2e events", async ({ page, app, bot: bob, homeserver }) => {

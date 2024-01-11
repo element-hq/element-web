@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, forwardRef, MouseEvent, ReactNode, useRef } from "react";
+import React, { createRef, forwardRef, MouseEvent, ReactNode } from "react";
 import classNames from "classnames";
 import {
     EventStatus,
@@ -37,6 +37,7 @@ import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { EventShieldColour, EventShieldReason } from "matrix-js-sdk/src/crypto-api";
+import { Tooltip } from "@vector-im/compound-web";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -49,7 +50,6 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
 import { aboveRightOf } from "../../structures/ContextMenu";
 import { objectHasDiff } from "../../../utils/objects";
-import Tooltip, { Alignment } from "../elements/Tooltip";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
@@ -79,7 +79,6 @@ import TileErrorBoundary from "../messages/TileErrorBoundary";
 import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../events/EventTileFactory";
 import ThreadSummary, { ThreadMessagePreview } from "./ThreadSummary";
 import { ReadReceiptGroup } from "./ReadReceiptGroup";
-import { useTooltip } from "../../../utils/useTooltip";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { ElementCall } from "../../../models/Call";
@@ -1493,11 +1492,7 @@ interface IE2ePadlockProps {
     title: string;
 }
 
-interface IE2ePadlockState {
-    hover: boolean;
-}
-
-class E2ePadlock extends React.Component<IE2ePadlockProps, IE2ePadlockState> {
+class E2ePadlock extends React.Component<IE2ePadlockProps> {
     public constructor(props: IE2ePadlockProps) {
         super(props);
 
@@ -1506,30 +1501,14 @@ class E2ePadlock extends React.Component<IE2ePadlockProps, IE2ePadlockState> {
         };
     }
 
-    private onHoverStart = (): void => {
-        this.setState({ hover: true });
-    };
-
-    private onHoverEnd = (): void => {
-        this.setState({ hover: false });
-    };
-
-    public render(): React.ReactNode {
-        let tooltip: JSX.Element | undefined;
-        if (this.state.hover) {
-            tooltip = <Tooltip className="mx_EventTile_e2eIcon_tooltip" label={this.props.title} />;
-        }
-
+    public render(): ReactNode {
         const classes = `mx_EventTile_e2eIcon mx_EventTile_e2eIcon_${this.props.icon}`;
+        // We specify isTriggerInteractive=true and make the div interactive manually as a workaround for
+        // https://github.com/element-hq/compound/issues/294
         return (
-            <div
-                className={classes}
-                onMouseEnter={this.onHoverStart}
-                onMouseLeave={this.onHoverEnd}
-                aria-label={this.props.title}
-            >
-                {tooltip}
-            </div>
+            <Tooltip label={this.props.title} isTriggerInteractive={true}>
+                <div className={classes} tabIndex={0} />
+            </Tooltip>
         );
     }
 }
@@ -1539,7 +1518,6 @@ interface ISentReceiptProps {
 }
 
 function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
-    const tooltipId = useRef(`mx_SentReceipt_${Math.random()}`).current;
     const isSent = !messageState || messageState === "sent";
     const isFailed = messageState === "not_sent";
     const receiptClasses = classNames({
@@ -1560,28 +1538,17 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
     } else if (isFailed) {
         label = _t("timeline|send_state_failed");
     }
-    const [{ showTooltip, hideTooltip }, tooltip] = useTooltip({
-        id: tooltipId,
-        label: label,
-        alignment: Alignment.TopRight,
-    });
 
     return (
         <div className="mx_EventTile_msgOption">
             <div className="mx_ReadReceiptGroup">
-                <div
-                    className="mx_ReadReceiptGroup_button"
-                    onMouseOver={showTooltip}
-                    onMouseLeave={hideTooltip}
-                    onFocus={showTooltip}
-                    onBlur={hideTooltip}
-                    aria-describedby={tooltipId}
-                >
-                    <span className="mx_ReadReceiptGroup_container">
-                        <span className={receiptClasses}>{nonCssBadge}</span>
-                    </span>
-                </div>
-                {tooltip}
+                <Tooltip label={label} side="top" align="end">
+                    <div className="mx_ReadReceiptGroup_button">
+                        <span className="mx_ReadReceiptGroup_container">
+                            <span className={receiptClasses}>{nonCssBadge}</span>
+                        </span>
+                    </div>
+                </Tooltip>
             </div>
         </div>
     );

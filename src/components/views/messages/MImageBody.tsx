@@ -21,6 +21,7 @@ import classNames from "classnames";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
+import { Tooltip } from "@vector-im/compound-web";
 
 import MFileBody from "./MFileBody";
 import Modal from "../../../Modal";
@@ -520,10 +521,12 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             );
         }
 
-        const thumbnail = (
+        const tooltipProps = this.getTooltipProps();
+        let thumbnail = (
             <div
                 className="mx_MImageBody_thumbnail_container"
                 style={{ maxHeight, maxWidth, aspectRatio: `${infoWidth}/${infoHeight}` }}
+                tabIndex={tooltipProps ? 0 : undefined}
             >
                 {placeholder}
 
@@ -537,10 +540,18 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 {!this.props.forExport && !this.state.imgLoaded && (
                     <div style={{ height: maxHeight, width: maxWidth }} />
                 )}
-
-                {this.state.hover && this.getTooltip()}
             </div>
         );
+
+        if (tooltipProps) {
+            // We specify isTriggerInteractive=true and make the div interactive manually as a workaround for
+            // https://github.com/element-hq/compound/issues/294
+            thumbnail = (
+                <Tooltip {...tooltipProps} isTriggerInteractive={true}>
+                    {thumbnail}
+                </Tooltip>
+            );
+        }
 
         return this.wrapImage(contentUrl, thumbnail);
     }
@@ -578,7 +589,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     }
 
     // Overridden by MStickerBody
-    protected getTooltip(): ReactNode {
+    protected getTooltipProps(): ComponentProps<typeof Tooltip> | null {
         return null;
     }
 

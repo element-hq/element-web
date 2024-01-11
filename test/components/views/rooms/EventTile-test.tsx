@@ -294,7 +294,11 @@ describe("EventTile", () => {
             const e2eIcons = container.getElementsByClassName("mx_EventTile_e2eIcon");
             expect(e2eIcons).toHaveLength(1);
             expect(e2eIcons[0].classList).toContain("mx_EventTile_e2eIcon_normal");
-            expect(e2eIcons[0].getAttribute("aria-label")).toContain(expectedText);
+            fireEvent.focus(e2eIcons[0]);
+            expect(e2eIcons[0].getAttribute("aria-describedby")).toBeTruthy();
+            expect(document.getElementById(e2eIcons[0].getAttribute("aria-describedby")!)).toHaveTextContent(
+                expectedText,
+            );
         });
 
         describe("undecryptable event", () => {
