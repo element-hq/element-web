@@ -115,7 +115,7 @@
         "opus-recorder": "^8.0.3",
         "pako": "^2.0.3",
         "png-chunks-extract": "^1.0.0",
-        "posthog-js": "1.96.1",
+        "posthog-js": "1.98.0",
         "proposal-temporal": "^0.9.0",
         "qrcode": "1.5.3",
         "re-resizable": "^6.9.0",
