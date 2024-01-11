@@ -85,7 +85,7 @@
         "classnames": "^2.2.6",
         "commonmark": "^0.30.0",
         "counterpart": "^0.18.6",
-        "diff-dom": "^4.2.2",
+        "diff-dom": "^5.0.0",
         "diff-match-patch": "^1.0.5",
         "emojibase-regex": "15.3.0",
         "escape-html": "^1.0.3",

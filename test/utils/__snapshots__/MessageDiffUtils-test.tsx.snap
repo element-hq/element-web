@@ -347,19 +347,21 @@ exports[`editBodyDiffToHtml renders element replacements 1`] = `
     dir="auto"
   >
     hi 
-    <span
-      class="mx_EditHistoryMessage_deletion"
-    >
-      <i>
-        there
-      </i>
-    </span>
-    <span
-      class="mx_EditHistoryMessage_insertion"
-    >
-      <em>
-        there
-      </em>
+    <span>
+      <span
+        class="mx_EditHistoryMessage_deletion"
+      >
+        <i>
+          there
+        </i>
+      </span>
+      <span
+        class="mx_EditHistoryMessage_insertion"
+      >
+        <em>
+          there
+        </em>
+      </span>
     </span>
   </span>
 </div>

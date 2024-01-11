@@ -4851,10 +4851,10 @@ detect-node-es@^1.1.0:
   resolved "https://registry.yarnpkg.com/detect-node-es/-/detect-node-es-1.1.0.tgz#163acdf643330caa0b4cd7c21e7ee7755d6fa493"
   integrity sha512-ypdmJU/TbBby2Dxibuv7ZLW3Bs1QEmM7nHjEANfohJLvE0XVujisn1qPJcZxg+qDucsr+bP6fLD1rPS3AhJ7EQ==
 
-diff-dom@^4.2.2:
-  version "4.2.8"
-  resolved "https://registry.yarnpkg.com/diff-dom/-/diff-dom-4.2.8.tgz#4280b28c4dc1da951c40ee6969d895f782b8edbc"
-  integrity sha512-OIL+sf1bFBQ/Z1gjo3xlHyDViVaRiDVMOM5jTM30aFATu3tLlNloeixKCg7p7nFyTjI1eQmdlVu1admV/BwVJw==
+diff-dom@^5.0.0:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/diff-dom/-/diff-dom-5.1.2.tgz#951627784bc45e32999f0c97cd42e4cf8c35791f"
+  integrity sha512-ayOX+pBYzyLdt7iXFd+8jvWzhrcWk+9gQqYk7Zz8/0hpIsqSbtk6MNbtds+Ox6B8ONsdtIcfPmk3NXPdgb3+xQ==
 
 diff-match-patch@^1.0.5:
   version "1.0.5"
