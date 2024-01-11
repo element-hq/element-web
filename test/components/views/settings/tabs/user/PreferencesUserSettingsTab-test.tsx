@@ -42,7 +42,6 @@ describe("PreferencesUserSettingsTab", () => {
         beforeEach(() => {
             stubClient();
             jest.spyOn(SettingsStore, "setValue");
-            jest.spyOn(SettingsStore, "canSetValue").mockReturnValue(true);
             jest.spyOn(window, "matchMedia").mockReturnValue({ matches: false } as MediaQueryList);
         });
 

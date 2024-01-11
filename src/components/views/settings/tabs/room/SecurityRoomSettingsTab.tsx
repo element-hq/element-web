@@ -427,7 +427,10 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const canEnableEncryption = !isEncrypted && !isEncryptionForceDisabled && hasEncryptionPermission;
 
         let encryptionSettings: JSX.Element | undefined;
-        if (isEncrypted && SettingsStore.isEnabled("blacklistUnverifiedDevices")) {
+        if (
+            isEncrypted &&
+            SettingsStore.canSetValue("blacklistUnverifiedDevices", this.props.room.roomId, SettingLevel.ROOM_DEVICE)
+        ) {
             encryptionSettings = (
                 <SettingsFlag
                     name="blacklistUnverifiedDevices"

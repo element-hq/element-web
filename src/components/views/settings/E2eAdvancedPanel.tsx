@@ -38,5 +38,5 @@ const E2eAdvancedPanel: React.FC = () => {
 export default E2eAdvancedPanel;
 
 export function isE2eAdvancedPanelPossible(): boolean {
-    return SettingsStore.isEnabled(SETTING_MANUALLY_VERIFY_ALL_SESSIONS);
+    return SettingsStore.canSetValue(SETTING_MANUALLY_VERIFY_ALL_SESSIONS, null, SettingLevel.DEVICE);
 }

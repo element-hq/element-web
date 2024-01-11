@@ -40,8 +40,6 @@ interface IProps {
 
 interface IState {
     value: boolean;
-    /** true if `SettingsStore.isEnabled` returned false. */
-    disabled: boolean;
 }
 
 export default class SettingsFlag extends React.Component<IProps, IState> {
@@ -52,7 +50,6 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
 
         this.state = {
             value: this.getSettingValue(),
-            disabled: this.isSettingDisabled(),
         };
     }
 
@@ -72,15 +69,9 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
             this.props.isExplicit,
         );
     }
-
-    private isSettingDisabled(): boolean {
-        return !SettingsStore.isEnabled(this.props.name);
-    }
-
     private onSettingChange = (): void => {
         this.setState({
             value: this.getSettingValue(),
-            disabled: this.isSettingDisabled(),
         });
     };
 
@@ -104,14 +95,13 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
     };
 
     public render(): React.ReactNode {
-        const canChange = SettingsStore.canSetValue(this.props.name, this.props.roomId ?? null, this.props.level);
+        const disabled = !SettingsStore.canSetValue(this.props.name, this.props.roomId ?? null, this.props.level);
 
-        if (!canChange && this.props.hideIfCannotSet) return null;
+        if (disabled && this.props.hideIfCannotSet) return null;
 
         const label = this.props.label ?? SettingsStore.getDisplayName(this.props.name, this.props.level);
         const description = SettingsStore.getDescription(this.props.name);
         const shouldWarn = SettingsStore.shouldHaveWarning(this.props.name);
-        const disabled = this.state.disabled || !canChange;
 
         if (this.props.useCheckbox) {
             return (

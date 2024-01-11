@@ -62,7 +62,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
         }
 
         let noSendUnverifiedSetting: JSX.Element | undefined;
-        if (SettingsStore.isEnabled("blacklistUnverifiedDevices")) {
+        if (SettingsStore.canSetValue("blacklistUnverifiedDevices", null, SettingLevel.DEVICE)) {
             noSendUnverifiedSetting = (
                 <SettingsFlag
                     name="blacklistUnverifiedDevices"
