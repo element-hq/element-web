@@ -8,7 +8,7 @@ jobs:
     web-app-team:
         runs-on: ubuntu-latest
         if: |
-            github.repository == 'vector-im/element-web' && (
+            github.repository == 'element-hq/element-web' && (
             contains(github.event.issue.assignees.*.login, 't3chguy') ||
             contains(github.event.issue.assignees.*.login, 'andybalaam') ||
             contains(github.event.issue.assignees.*.login, 'justjanne')

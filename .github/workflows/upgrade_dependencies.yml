@@ -4,6 +4,6 @@ on:
 jobs:
     upgrade:
         uses: matrix-org/matrix-js-sdk/.github/workflows/upgrade_dependencies.yml@develop
-        if: github.repository == 'vector-im/element-web'
+        if: github.repository == 'element-hq/element-web'
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}

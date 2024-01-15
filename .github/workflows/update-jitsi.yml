@@ -6,7 +6,7 @@ on:
         - cron: "0 3 * * 0" # 3am every Sunday
 jobs:
     update:
-        if: github.repository == 'vector-im/element-web'
+        if: github.repository == 'element-hq/element-web'
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4

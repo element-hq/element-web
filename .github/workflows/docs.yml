@@ -18,7 +18,7 @@ jobs:
     build:
         name: GitHub Pages
         # Only respect triggers from our develop branch, ignore that of forks
-        if: github.repository == 'vector-im/element-web'
+        if: github.repository == 'element-hq/element-web'
         runs-on: ubuntu-latest
         steps:
             - name: Fetch element-desktop
