@@ -16,30 +16,30 @@ limitations under the License.
 
 import { _t } from "../../languageHandler";
 
-export enum NotificationColor {
+export enum NotificationLevel {
     Muted,
     // Inverted (None -> Red) because we do integer comparisons on this
     None, // nothing special
     // TODO: Remove bold with notifications: https://github.com/vector-im/element-web/issues/14227
-    Bold, // no badge, show as unread
-    Grey, // unread notified messages
-    Red, // unread pings
+    Activity, // no badge, show as unread
+    Notification, // unread notified messages
+    Highlight, // unread pings
     Unsent, // some messages failed to send
 }
 
-export function humanReadableNotificationColor(color: NotificationColor): string {
-    switch (color) {
-        case NotificationColor.None:
-            return _t("notifications|colour_none");
-        case NotificationColor.Bold:
-            return _t("notifications|colour_bold");
-        case NotificationColor.Grey:
-            return _t("notifications|colour_grey");
-        case NotificationColor.Red:
-            return _t("notifications|colour_red");
-        case NotificationColor.Unsent:
-            return _t("notifications|colour_unsent");
-        case NotificationColor.Muted:
-            return _t("notifications|colour_muted");
+export function humanReadableNotificationLevel(level: NotificationLevel): string {
+    switch (level) {
+        case NotificationLevel.None:
+            return _t("notifications|level_none");
+        case NotificationLevel.Activity:
+            return _t("notifications|level_activity");
+        case NotificationLevel.Notification:
+            return _t("notifications|level_notification");
+        case NotificationLevel.Highlight:
+            return _t("notifications|level_highlight");
+        case NotificationLevel.Unsent:
+            return _t("notifications|level_unsent");
+        case NotificationLevel.Muted:
+            return _t("notifications|level_muted");
     }
 }

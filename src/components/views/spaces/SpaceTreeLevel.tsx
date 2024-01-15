@@ -40,7 +40,7 @@ import { toRightOf, useContextMenu } from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
@@ -329,7 +329,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         const isInvite = space.getMyMembership() === "invite";
 
         const notificationState = isInvite
-            ? StaticNotificationState.forSymbol("!", NotificationColor.Red)
+            ? StaticNotificationState.forSymbol("!", NotificationLevel.Highlight)
             : SpaceStore.instance.getNotificationState(space.roomId);
 
         const hasChildren = this.state.childSpaces?.length;

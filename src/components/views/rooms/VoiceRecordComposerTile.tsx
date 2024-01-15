@@ -33,7 +33,7 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
 import NotificationBadge from "./NotificationBadge";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import InlineSpinner from "../elements/InlineSpinner";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
 import { doMaybeLocalRoomAction } from "../../../utils/local-room";
@@ -305,7 +305,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                     <span className="mx_VoiceRecordComposerTile_uploadState_badge">
                         {/* Need to stick the badge in a span to ensure it doesn't create a block component */}
                         <NotificationBadge
-                            notification={StaticNotificationState.forSymbol("!", NotificationColor.Red)}
+                            notification={StaticNotificationState.forSymbol("!", NotificationLevel.Highlight)}
                         />
                     </span>
                     <span className="text-warning">{_t("timeline|send_state_failed")}</span>

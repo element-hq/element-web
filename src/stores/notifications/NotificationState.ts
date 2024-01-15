@@ -16,14 +16,14 @@ limitations under the License.
 
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
-import { NotificationColor } from "./NotificationColor";
+import { NotificationLevel } from "./NotificationLevel";
 import { IDestroyable } from "../../utils/IDestroyable";
 import SettingsStore from "../../settings/SettingsStore";
 
 export interface INotificationStateSnapshotParams {
     symbol: string | null;
     count: number;
-    color: NotificationColor;
+    level: NotificationLevel;
     muted: boolean;
     knocked: boolean;
 }
@@ -43,7 +43,7 @@ export abstract class NotificationState
     //
     protected _symbol: string | null = null;
     protected _count = 0;
-    protected _color: NotificationColor = NotificationColor.None;
+    protected _level: NotificationLevel = NotificationLevel.None;
     protected _muted = false;
     protected _knocked = false;
 
@@ -66,8 +66,8 @@ export abstract class NotificationState
         return this._count;
     }
 
-    public get color(): NotificationColor {
-        return this._color;
+    public get level(): NotificationLevel {
+        return this._level;
     }
 
     public get muted(): boolean {
@@ -79,24 +79,24 @@ export abstract class NotificationState
     }
 
     public get isIdle(): boolean {
-        return this.color <= NotificationColor.None;
+        return this.level <= NotificationLevel.None;
     }
 
     public get isUnread(): boolean {
-        if (this.color > NotificationColor.Bold) {
+        if (this.level > NotificationLevel.Activity) {
             return true;
         } else {
             const hideBold = SettingsStore.getValue("feature_hidebold");
-            return this.color === NotificationColor.Bold && !hideBold;
+            return this.level === NotificationLevel.Activity && !hideBold;
         }
     }
 
     public get hasUnreadCount(): boolean {
-        return this.color >= NotificationColor.Grey && (!!this.count || !!this.symbol);
+        return this.level >= NotificationLevel.Notification && (!!this.count || !!this.symbol);
     }
 
     public get hasMentions(): boolean {
-        return this.color >= NotificationColor.Red;
+        return this.level >= NotificationLevel.Highlight;
     }
 
     protected emitIfUpdated(snapshot: NotificationStateSnapshot): void {
@@ -121,14 +121,14 @@ export abstract class NotificationState
 export class NotificationStateSnapshot {
     private readonly symbol: string | null;
     private readonly count: number;
-    private readonly color: NotificationColor;
+    private readonly level: NotificationLevel;
     private readonly muted: boolean;
     private readonly knocked: boolean;
 
     public constructor(state: INotificationStateSnapshotParams) {
         this.symbol = state.symbol;
         this.count = state.count;
-        this.color = state.color;
+        this.level = state.level;
         this.muted = state.muted;
         this.knocked = state.knocked;
     }
@@ -137,14 +137,14 @@ export class NotificationStateSnapshot {
         const before = {
             count: this.count,
             symbol: this.symbol,
-            color: this.color,
+            level: this.level,
             muted: this.muted,
             knocked: this.knocked,
         };
         const after = {
             count: other.count,
             symbol: other.symbol,
-            color: other.color,
+            level: other.level,
             muted: other.muted,
             knocked: other.knocked,
         };

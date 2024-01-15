@@ -21,7 +21,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { XOR } from "../../../@types/common";
 import { NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import { _t } from "../../../languageHandler";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { StatelessNotificationBadge } from "./NotificationBadge/StatelessNotificationBadge";
 
 interface IProps {
@@ -107,7 +107,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
         const commonProps: React.ComponentProps<typeof StatelessNotificationBadge> = {
             symbol: notification.symbol,
             count: notification.count,
-            color: notification.color,
+            level: notification.level,
             knocked: notification.knocked,
         };
 
@@ -118,7 +118,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
             badge = <StatelessNotificationBadge {...commonProps} />;
         }
 
-        if (showUnsentTooltip && notification.color === NotificationColor.Unsent) {
+        if (showUnsentTooltip && notification.level === NotificationLevel.Unsent) {
             return (
                 <Tooltip label={_t("notifications|message_didnt_send")} side="right">
                     {badge}

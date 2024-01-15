@@ -19,7 +19,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import type { NotificationCount, Room } from "matrix-js-sdk/src/matrix";
 import { determineUnreadState } from "../RoomNotifs";
-import { NotificationColor } from "../stores/notifications/NotificationColor";
+import { NotificationLevel } from "../stores/notifications/NotificationLevel";
 import { useEventEmitter } from "./useEventEmitter";
 
 export const useUnreadNotifications = (
@@ -28,11 +28,11 @@ export const useUnreadNotifications = (
 ): {
     symbol: string | null;
     count: number;
-    color: NotificationColor;
+    level: NotificationLevel;
 } => {
     const [symbol, setSymbol] = useState<string | null>(null);
     const [count, setCount] = useState<number>(0);
-    const [color, setColor] = useState<NotificationColor>(NotificationColor.None);
+    const [level, setLevel] = useState<NotificationLevel>(NotificationLevel.None);
 
     useEventEmitter(
         room,
@@ -50,10 +50,10 @@ export const useUnreadNotifications = (
     useEventEmitter(room, RoomEvent.MyMembership, () => updateNotificationState());
 
     const updateNotificationState = useCallback(() => {
-        const { symbol, count, color } = determineUnreadState(room, threadId);
+        const { symbol, count, level } = determineUnreadState(room, threadId);
         setSymbol(symbol);
         setCount(count);
-        setColor(color);
+        setLevel(level);
     }, [room, threadId]);
 
     useEffect(() => {
@@ -63,6 +63,6 @@ export const useUnreadNotifications = (
     return {
         symbol,
         count,
-        color,
+        level,
     };
 };

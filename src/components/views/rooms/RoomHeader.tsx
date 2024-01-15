@@ -37,7 +37,7 @@ import { Flex } from "../../utils/Flex";
 import { Box } from "../../utils/Box";
 import { useRoomCall } from "../../../hooks/room/useRoomCall";
 import { useRoomThreadNotifications } from "../../../hooks/room/useRoomThreadNotifications";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { useGlobalNotificationState } from "../../../hooks/useGlobalNotificationState";
 import SdkConfig from "../../../SdkConfig";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
@@ -57,10 +57,10 @@ import { RoomKnocksBar } from "./RoomKnocksBar";
  * A helper to transform a notification color to the what the Compound Icon Button
  * expects
  */
-function notificationColorToIndicator(color: NotificationColor): React.ComponentProps<typeof IconButton>["indicator"] {
-    if (color <= NotificationColor.None) {
+function notificationLevelToIndicator(color: NotificationLevel): React.ComponentProps<typeof IconButton>["indicator"] {
+    if (color <= NotificationLevel.None) {
         return undefined;
-    } else if (color <= NotificationColor.Grey) {
+    } else if (color <= NotificationLevel.Notification) {
         return "default";
     } else {
         return "highlight";
@@ -230,7 +230,7 @@ export default function RoomHeader({
 
                     <Tooltip label={_t("common|threads")}>
                         <IconButton
-                            indicator={notificationColorToIndicator(threadNotifications)}
+                            indicator={notificationLevelToIndicator(threadNotifications)}
                             onClick={(evt) => {
                                 evt.stopPropagation();
                                 RightPanelStore.instance.showOrHidePanel(RightPanelPhases.ThreadPanel);
@@ -244,7 +244,7 @@ export default function RoomHeader({
                     {notificationsEnabled && (
                         <Tooltip label={_t("notifications|enable_prompt_toast_title")}>
                             <IconButton
-                                indicator={notificationColorToIndicator(globalNotificationState.color)}
+                                indicator={notificationLevelToIndicator(globalNotificationState.level)}
                                 onClick={(evt) => {
                                     evt.stopPropagation();
                                     RightPanelStore.instance.showOrHidePanel(RightPanelPhases.NotificationPanel);

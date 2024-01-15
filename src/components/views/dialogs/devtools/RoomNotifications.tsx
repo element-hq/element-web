@@ -22,7 +22,7 @@ import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { useNotificationState } from "../../../../hooks/useRoomNotificationState";
 import { _t, _td } from "../../../../languageHandler";
 import { determineUnreadState } from "../../../../RoomNotifs";
-import { humanReadableNotificationColor } from "../../../../stores/notifications/NotificationColor";
+import { humanReadableNotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { doesRoomOrThreadHaveUnreadMessages } from "../../../../Unread";
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 
@@ -68,7 +68,7 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
     const { room } = useContext(DevtoolsContext);
     const cli = useContext(MatrixClientContext);
 
-    const { color, count } = determineUnreadState(room);
+    const { level, count } = determineUnreadState(room);
     const [notificationState] = useNotificationState(room);
 
     return (
@@ -81,7 +81,7 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
                             ? _t(
                                   "devtools|room_unread_status_count",
                                   {
-                                      status: humanReadableNotificationColor(color),
+                                      status: humanReadableNotificationLevel(level),
                                       count,
                                   },
                                   {
@@ -91,7 +91,7 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
                             : _t(
                                   "devtools|room_unread_status",
                                   {
-                                      status: humanReadableNotificationColor(color),
+                                      status: humanReadableNotificationLevel(level),
                                   },
                                   {
                                       strong: (sub) => <strong>{sub}</strong>,

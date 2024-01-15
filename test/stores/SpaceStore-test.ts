@@ -46,7 +46,7 @@ import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import RoomListStore from "../../src/stores/room-list/RoomListStore";
 import { DefaultTagID } from "../../src/stores/room-list/models";
 import { RoomNotificationStateStore } from "../../src/stores/notifications/RoomNotificationStateStore";
-import { NotificationColor } from "../../src/stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../src/stores/notifications/NotificationLevel";
 
 jest.useFakeTimers();
 
@@ -1467,7 +1467,7 @@ describe("SpaceStore", () => {
             const room = mkRoom(room1);
             const state = RoomNotificationStateStore.instance.getRoomState(room);
             // @ts-ignore
-            state._color = NotificationColor.Grey;
+            state._level = NotificationLevel.Notification;
             jest.spyOn(RoomListStore.instance, "orderedLists", "get").mockReturnValue({
                 [DefaultTagID.Untagged]: [room],
             });

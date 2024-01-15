@@ -140,7 +140,7 @@ import GenericToast from "../views/toasts/GenericToast";
 import RovingSpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
 import { findDMForUser } from "../../utils/dm/findDMForUser";
 import { Linkify } from "../../HtmlUtils";
-import { NotificationColor } from "../../stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
 import { UserTab } from "../views/dialogs/UserTab";
 import { shouldSkipSetupEncryption } from "../../utils/crypto/shouldSkipSetupEncryption";
 import { Filter } from "../views/dialogs/spotlight/Filter";
@@ -2019,7 +2019,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
         if (numUnreadRooms > 0) {
             this.subTitleStatus += `[${numUnreadRooms}]`;
-        } else if (notificationState.color >= NotificationColor.Bold) {
+        } else if (notificationState.level >= NotificationLevel.Activity) {
             this.subTitleStatus += `*`;
         }
 

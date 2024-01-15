@@ -16,7 +16,7 @@ limitations under the License.
 
 import { Room } from "matrix-js-sdk/src/matrix";
 
-import { NotificationColor } from "./NotificationColor";
+import { NotificationLevel } from "./NotificationLevel";
 import { arrayDiff } from "../../utils/arrays";
 import { RoomNotificationState } from "./RoomNotificationState";
 import { NotificationState, NotificationStateEvents } from "./NotificationState";
@@ -33,7 +33,7 @@ export class SpaceNotificationState extends NotificationState {
     }
 
     public get symbol(): string | null {
-        return this._color === NotificationColor.Unsent ? "!" : null;
+        return this._level === NotificationLevel.Unsent ? "!" : null;
     }
 
     public setRooms(rooms: Room[]): void {
@@ -56,7 +56,7 @@ export class SpaceNotificationState extends NotificationState {
     }
 
     public getFirstRoomWithNotifications(): string | undefined {
-        return Object.values(this.states).find((state) => state.color >= this.color)?.room.roomId;
+        return Object.values(this.states).find((state) => state.level >= this.level)?.room.roomId;
     }
 
     public destroy(): void {
@@ -75,16 +75,16 @@ export class SpaceNotificationState extends NotificationState {
         const snapshot = this.snapshot();
 
         this._count = 0;
-        this._color = NotificationColor.None;
+        this._level = NotificationLevel.None;
         for (const [roomId, state] of Object.entries(this.states)) {
             const room = this.rooms.find((r) => r.roomId === roomId);
             const roomTags = room ? RoomListStore.instance.getTagsForRoom(room) : [];
 
             // We ignore unreads in LowPriority rooms, see https://github.com/vector-im/element-web/issues/16836
-            if (roomTags.includes(DefaultTagID.LowPriority) && state.color === NotificationColor.Bold) continue;
+            if (roomTags.includes(DefaultTagID.LowPriority) && state.level === NotificationLevel.Activity) continue;
 
             this._count += state.count;
-            this._color = Math.max(this.color, state.color);
+            this._level = Math.max(this.level, state.level);
         }
 
         // finally, publish an update if needed

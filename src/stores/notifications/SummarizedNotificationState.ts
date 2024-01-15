@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { NotificationColor } from "./NotificationColor";
+import { NotificationLevel } from "./NotificationLevel";
 import { NotificationState } from "./NotificationState";
 
 /**
@@ -30,7 +30,7 @@ export class SummarizedNotificationState extends NotificationState {
         super();
         this._symbol = null;
         this._count = 0;
-        this._color = NotificationColor.None;
+        this._level = NotificationLevel.None;
     }
 
     public get numUnreadStates(): number {
@@ -52,8 +52,8 @@ export class SummarizedNotificationState extends NotificationState {
         if (other.count) {
             this._count += other.count;
         }
-        if (other.color > this.color) {
-            this._color = other.color;
+        if (other.level > this.level) {
+            this._level = other.level;
         }
         if (other.hasUnreadCount) {
             this.totalStatesWithUnread++;

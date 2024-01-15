@@ -23,7 +23,7 @@ import { isVideoRoom as calcIsVideoRoom } from "../../../../utils/video-rooms";
 import { _t } from "../../../../languageHandler";
 import { useEventEmitterState } from "../../../../hooks/useEventEmitter";
 import { NotificationStateEvents } from "../../../../stores/notifications/NotificationState";
-import { NotificationColor } from "../../../../stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases";
 import { SDKContext } from "../../../../contexts/SDKContext";
 import { ButtonEvent } from "../../elements/AccessibleButton";
@@ -43,7 +43,7 @@ export const VideoRoomChatButton: React.FC<{ room: Room }> = ({ room }) => {
     const notificationColor = useEventEmitterState(
         notificationState,
         NotificationStateEvents.Update,
-        () => notificationState?.color,
+        () => notificationState?.level,
     );
 
     if (!isVideoRoom) {
@@ -52,7 +52,9 @@ export const VideoRoomChatButton: React.FC<{ room: Room }> = ({ room }) => {
 
     const displayUnreadIndicator =
         !!notificationColor &&
-        [NotificationColor.Bold, NotificationColor.Grey, NotificationColor.Red].includes(notificationColor);
+        [NotificationLevel.Activity, NotificationLevel.Notification, NotificationLevel.Highlight].includes(
+            notificationColor,
+        );
 
     const onClick = (event: ButtonEvent): void => {
         // stop event propagating up and triggering RoomHeader bar click

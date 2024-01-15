@@ -28,7 +28,7 @@ import {
 import { RoomNotifState } from "../../../../RoomNotifs";
 import { SettingLevel } from "../../../../settings/SettingLevel";
 import SettingsStore from "../../../../settings/SettingsStore";
-import { NotificationColor } from "../../../../stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { clearAllNotifications } from "../../../../utils/notifications";
 import AccessibleButton from "../../elements/AccessibleButton";
 import ExternalLink from "../../elements/ExternalLink";
@@ -278,7 +278,13 @@ export default function NotificationSettings2(): JSX.Element {
                         "settings|notifications|keywords",
                         {},
                         {
-                            badge: <StatelessNotificationBadge symbol="1" count={1} color={NotificationColor.Grey} />,
+                            badge: (
+                                <StatelessNotificationBadge
+                                    symbol="1"
+                                    count={1}
+                                    level={NotificationLevel.Notification}
+                                />
+                            ),
                         },
                     )}
                 >

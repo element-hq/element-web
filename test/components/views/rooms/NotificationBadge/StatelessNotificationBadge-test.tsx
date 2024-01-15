@@ -18,19 +18,19 @@ import React from "react";
 import { render } from "@testing-library/react";
 
 import { StatelessNotificationBadge } from "../../../../../src/components/views/rooms/NotificationBadge/StatelessNotificationBadge";
-import { NotificationColor } from "../../../../../src/stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../../../src/stores/notifications/NotificationLevel";
 
 describe("StatelessNotificationBadge", () => {
     it("is highlighted when unsent", () => {
         const { container } = render(
-            <StatelessNotificationBadge symbol="!" count={0} color={NotificationColor.Unsent} />,
+            <StatelessNotificationBadge symbol="!" count={0} level={NotificationLevel.Unsent} />,
         );
         expect(container.querySelector(".mx_NotificationBadge_highlighted")).not.toBe(null);
     });
 
     it("has knock style", () => {
         const { container } = render(
-            <StatelessNotificationBadge symbol="!" count={0} color={NotificationColor.Red} knocked={true} />,
+            <StatelessNotificationBadge symbol="!" count={0} level={NotificationLevel.Highlight} knocked={true} />,
         );
         expect(container.querySelector(".mx_NotificationBadge_dot")).not.toBeInTheDocument();
         expect(container.querySelector(".mx_NotificationBadge_knocked")).toBeInTheDocument();

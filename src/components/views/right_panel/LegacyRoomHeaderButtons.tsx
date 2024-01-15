@@ -35,7 +35,7 @@ import {
     RoomNotificationStateStore,
     UPDATE_STATUS_INDICATOR,
 } from "../../../stores/notifications/RoomNotificationStateStore";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { SummarizedNotificationState } from "../../../stores/notifications/SummarizedNotificationState";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ButtonEvent } from "../elements/AccessibleButton";
@@ -52,20 +52,20 @@ const ROOM_INFO_PHASES = [
 ];
 
 interface IUnreadIndicatorProps {
-    color?: NotificationColor;
+    color?: NotificationLevel;
 }
 
 const UnreadIndicator: React.FC<IUnreadIndicatorProps> = ({ color }) => {
-    if (color === NotificationColor.None) {
+    if (color === NotificationLevel.None) {
         return null;
     }
 
     const classes = classNames({
         mx_Indicator: true,
         mx_LegacyRoomHeader_button_unreadIndicator: true,
-        mx_Indicator_bold: color === NotificationColor.Bold,
-        mx_Indicator_gray: color === NotificationColor.Grey,
-        mx_Indicator_red: color === NotificationColor.Red,
+        mx_Indicator_activity: color === NotificationLevel.Activity,
+        mx_Indicator_notification: color === NotificationLevel.Notification,
+        mx_Indicator_highlight: color === NotificationLevel.Highlight,
     });
     return (
         <>
@@ -106,11 +106,11 @@ const PinnedMessagesHeaderButton: React.FC<IHeaderButtonProps> = ({ room, isHigh
 
 const TimelineCardHeaderButton: React.FC<IHeaderButtonProps> = ({ room, isHighlighted, onClick }) => {
     let unreadIndicator;
-    const color = RoomNotificationStateStore.instance.getRoomState(room).color;
+    const color = RoomNotificationStateStore.instance.getRoomState(room).level;
     switch (color) {
-        case NotificationColor.Bold:
-        case NotificationColor.Grey:
-        case NotificationColor.Red:
+        case NotificationLevel.Activity:
+        case NotificationLevel.Notification:
+        case NotificationLevel.Highlight:
             unreadIndicator = <UnreadIndicator color={color} />;
     }
     return (
@@ -174,36 +174,36 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
 
     private onNotificationUpdate = (): void => {
         // console.log
-        // XXX: why don't we read from this.state.threadNotificationColor in the render methods?
+        // XXX: why don't we read from this.state.threadNotificationLevel in the render methods?
         this.setState({
-            threadNotificationColor: this.notificationColor,
+            threadNotificationLevel: this.notificationLevel,
         });
     };
 
-    private get notificationColor(): NotificationColor {
+    private get notificationLevel(): NotificationLevel {
         switch (this.props.room?.threadsAggregateNotificationType) {
             case NotificationCountType.Highlight:
-                return NotificationColor.Red;
+                return NotificationLevel.Highlight;
             case NotificationCountType.Total:
-                return NotificationColor.Grey;
+                return NotificationLevel.Notification;
         }
         // We don't have any notified messages, but we might have unread messages. Let's
         // find out.
         for (const thread of this.props.room!.getThreads()) {
             // If the current thread has unread messages, we're done.
             if (doesRoomOrThreadHaveUnreadMessages(thread)) {
-                return NotificationColor.Bold;
+                return NotificationLevel.Activity;
             }
         }
         // Otherwise, no notification color.
-        return NotificationColor.None;
+        return NotificationLevel.None;
     }
 
     private onUpdateStatus = (notificationState: SummarizedNotificationState): void => {
         // XXX: why don't we read from this.state.globalNotificationCount in the render methods?
         this.globalNotificationState = notificationState;
         this.setState({
-            globalNotificationColor: notificationState.color,
+            globalNotificationLevel: notificationState.level,
         });
     };
 
@@ -282,9 +282,9 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
                 title={_t("common|threads")}
                 onClick={this.onThreadsPanelClicked}
                 isHighlighted={this.isPhase(LegacyRoomHeaderButtons.THREAD_PHASES)}
-                isUnread={this.state.threadNotificationColor > NotificationColor.None}
+                isUnread={this.state.threadNotificationLevel > NotificationLevel.None}
             >
-                <UnreadIndicator color={this.state.threadNotificationColor} />
+                <UnreadIndicator color={this.state.threadNotificationLevel} />
             </HeaderButton>,
         );
         if (this.state.notificationsEnabled) {
@@ -296,10 +296,10 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
                     title={_t("notifications|enable_prompt_toast_title")}
                     isHighlighted={this.isPhase(RightPanelPhases.NotificationPanel)}
                     onClick={this.onNotificationsClicked}
-                    isUnread={this.globalNotificationState.color === NotificationColor.Red}
+                    isUnread={this.globalNotificationState.level === NotificationLevel.Highlight}
                 >
-                    {this.globalNotificationState.color === NotificationColor.Red ? (
-                        <UnreadIndicator color={this.globalNotificationState.color} />
+                    {this.globalNotificationState.level === NotificationLevel.Highlight ? (
+                        <UnreadIndicator color={this.globalNotificationState.level} />
                     ) : null}
                 </HeaderButton>,
             );

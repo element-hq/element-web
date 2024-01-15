@@ -20,7 +20,7 @@ import { MatrixClient, NotificationCountType, Room } from "matrix-js-sdk/src/mat
 import { useRoomThreadNotifications } from "../../../src/hooks/room/useRoomThreadNotifications";
 import { stubClient } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { NotificationColor } from "../../../src/stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
 import { populateThread } from "../../test-utils/threads";
 
 function render(room: Room) {
@@ -41,21 +41,21 @@ describe("useRoomThreadNotifications", () => {
     it("returns none if no thread in the room has notifications", async () => {
         const { result } = render(room);
 
-        expect(result.current).toBe(NotificationColor.None);
+        expect(result.current).toBe(NotificationLevel.None);
     });
 
     it("returns red if a thread in the room has a highlight notification", async () => {
         room.setThreadUnreadNotificationCount("flooble", NotificationCountType.Highlight, 1);
         const { result } = render(room);
 
-        expect(result.current).toBe(NotificationColor.Red);
+        expect(result.current).toBe(NotificationLevel.Highlight);
     });
 
     it("returns grey if a thread in the room has a normal notification", async () => {
         room.setThreadUnreadNotificationCount("flooble", NotificationCountType.Total, 1);
         const { result } = render(room);
 
-        expect(result.current).toBe(NotificationColor.Grey);
+        expect(result.current).toBe(NotificationLevel.Notification);
     });
 
     it("returns bold if a thread in the room unread messages", async () => {
@@ -68,6 +68,6 @@ describe("useRoomThreadNotifications", () => {
 
         const { result } = render(room);
 
-        expect(result.current).toBe(NotificationColor.Bold);
+        expect(result.current).toBe(NotificationLevel.Activity);
     });
 });

@@ -17,7 +17,7 @@ limitations under the License.
 import { NotificationCountType, Room, RoomEvent, ThreadEvent } from "matrix-js-sdk/src/matrix";
 import { useCallback, useEffect, useState } from "react";
 
-import { NotificationColor } from "../../stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
 import { doesRoomOrThreadHaveUnreadMessages } from "../../Unread";
 import { useEventEmitter } from "../useEventEmitter";
 
@@ -26,16 +26,16 @@ import { useEventEmitter } from "../useEventEmitter";
  * @param room the room to track
  * @returns the type of notification for this room
  */
-export const useRoomThreadNotifications = (room: Room): NotificationColor => {
-    const [notificationColor, setNotificationColor] = useState(NotificationColor.None);
+export const useRoomThreadNotifications = (room: Room): NotificationLevel => {
+    const [notificationLevel, setNotificationLevel] = useState(NotificationLevel.None);
 
     const updateNotification = useCallback(() => {
         switch (room?.threadsAggregateNotificationType) {
             case NotificationCountType.Highlight:
-                setNotificationColor(NotificationColor.Red);
+                setNotificationLevel(NotificationLevel.Highlight);
                 break;
             case NotificationCountType.Total:
-                setNotificationColor(NotificationColor.Grey);
+                setNotificationLevel(NotificationLevel.Notification);
                 break;
         }
         // We don't have any notified messages, but we might have unread messages. Let's
@@ -43,7 +43,7 @@ export const useRoomThreadNotifications = (room: Room): NotificationColor => {
         for (const thread of room!.getThreads()) {
             // If the current thread has unread messages, we're done.
             if (doesRoomOrThreadHaveUnreadMessages(thread)) {
-                setNotificationColor(NotificationColor.Bold);
+                setNotificationLevel(NotificationLevel.Activity);
                 break;
             }
         }
@@ -63,5 +63,5 @@ export const useRoomThreadNotifications = (room: Room): NotificationColor => {
         updateNotification();
     }, [updateNotification]);
 
-    return notificationColor;
+    return notificationLevel;
 };

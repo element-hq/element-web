@@ -34,7 +34,7 @@ import {
     getUnreadNotificationCount,
     determineUnreadState,
 } from "../src/RoomNotifs";
-import { NotificationColor } from "../src/stores/notifications/NotificationColor";
+import { NotificationLevel } from "../src/stores/notifications/NotificationLevel";
 import SettingsStore from "../src/settings/SettingsStore";
 import { MatrixClientPeg } from "../src/MatrixClientPeg";
 
@@ -252,10 +252,10 @@ describe("RoomNotifs test", () => {
         });
 
         it("shows nothing by default", async () => {
-            const { color, symbol, count } = determineUnreadState(room);
+            const { level, symbol, count } = determineUnreadState(room);
 
             expect(symbol).toBe(null);
-            expect(color).toBe(NotificationColor.None);
+            expect(level).toBe(NotificationLevel.None);
             expect(count).toBe(0);
         });
 
@@ -269,20 +269,20 @@ describe("RoomNotifs test", () => {
             event.status = EventStatus.NOT_SENT;
             room.addPendingEvent(event, "txn");
 
-            const { color, symbol, count } = determineUnreadState(room);
+            const { level, symbol, count } = determineUnreadState(room);
 
             expect(symbol).toBe("!");
-            expect(color).toBe(NotificationColor.Unsent);
+            expect(level).toBe(NotificationLevel.Unsent);
             expect(count).toBeGreaterThan(0);
         });
 
         it("indicates the user has been invited to a channel", async () => {
             room.updateMyMembership("invite");
 
-            const { color, symbol, count } = determineUnreadState(room);
+            const { level, symbol, count } = determineUnreadState(room);
 
             expect(symbol).toBe("!");
-            expect(color).toBe(NotificationColor.Red);
+            expect(level).toBe(NotificationLevel.Highlight);
             expect(count).toBeGreaterThan(0);
         });
 
@@ -294,10 +294,10 @@ describe("RoomNotifs test", () => {
                 membership: "knock",
             });
             jest.spyOn(room, "getMember").mockReturnValue(roomMember);
-            const { color, symbol, count } = determineUnreadState(room);
+            const { level, symbol, count } = determineUnreadState(room);
 
             expect(symbol).toBe("!");
-            expect(color).toBe(NotificationColor.Red);
+            expect(level).toBe(NotificationLevel.Highlight);
             expect(count).toBeGreaterThan(0);
         });
 
@@ -306,27 +306,27 @@ describe("RoomNotifs test", () => {
             room.setUnreadNotificationCount(NotificationCountType.Total, 99);
             muteRoom(room);
 
-            const { color, count } = determineUnreadState(room);
+            const { level, count } = determineUnreadState(room);
 
-            expect(color).toBe(NotificationColor.None);
+            expect(level).toBe(NotificationLevel.None);
             expect(count).toBe(0);
         });
 
         it("uses the correct number of unreads", async () => {
             room.setUnreadNotificationCount(NotificationCountType.Total, 999);
 
-            const { color, count } = determineUnreadState(room);
+            const { level, count } = determineUnreadState(room);
 
-            expect(color).toBe(NotificationColor.Grey);
+            expect(level).toBe(NotificationLevel.Notification);
             expect(count).toBe(999);
         });
 
         it("uses the correct number of highlights", async () => {
             room.setUnreadNotificationCount(NotificationCountType.Highlight, 888);
 
-            const { color, count } = determineUnreadState(room);
+            const { level, count } = determineUnreadState(room);
 
-            expect(color).toBe(NotificationColor.Red);
+            expect(level).toBe(NotificationLevel.Highlight);
             expect(count).toBe(888);
         });
     });

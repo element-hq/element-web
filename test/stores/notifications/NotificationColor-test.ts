@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { humanReadableNotificationColor, NotificationColor } from "../../../src/stores/notifications/NotificationColor";
+import { humanReadableNotificationLevel, NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
 
-describe("NotificationColor", () => {
-    describe("humanReadableNotificationColor", () => {
+describe("NotificationLevel", () => {
+    describe("humanReadableNotificationLevel", () => {
         it.each([
-            [NotificationColor.None, "None"],
-            [NotificationColor.Bold, "Bold"],
-            [NotificationColor.Grey, "Grey"],
-            [NotificationColor.Red, "Red"],
-            [NotificationColor.Unsent, "Unsent"],
+            [NotificationLevel.None, "None"],
+            [NotificationLevel.Activity, "Activity"],
+            [NotificationLevel.Notification, "Notification"],
+            [NotificationLevel.Highlight, "Highlight"],
+            [NotificationLevel.Unsent, "Unsent"],
         ])("correctly maps the output", (color, output) => {
-            expect(humanReadableNotificationColor(color)).toBe(output);
+            expect(humanReadableNotificationLevel(color)).toBe(output);
         });
     });
 });

@@ -16,7 +16,7 @@ limitations under the License.
 
 import { Room } from "matrix-js-sdk/src/matrix";
 
-import { NotificationColor } from "./NotificationColor";
+import { NotificationLevel } from "./NotificationLevel";
 import { arrayDiff } from "../../utils/arrays";
 import { RoomNotificationState } from "./RoomNotificationState";
 import { NotificationState, NotificationStateEvents } from "./NotificationState";
@@ -35,7 +35,7 @@ export class ListNotificationState extends NotificationState {
     }
 
     public get symbol(): string | null {
-        return this._color === NotificationColor.Unsent ? "!" : null;
+        return this._level === NotificationLevel.Unsent ? "!" : null;
     }
 
     public setRooms(rooms: Room[]): void {
@@ -86,14 +86,14 @@ export class ListNotificationState extends NotificationState {
         const snapshot = this.snapshot();
 
         if (this.byTileCount) {
-            this._color = NotificationColor.Red;
+            this._level = NotificationLevel.Highlight;
             this._count = this.rooms.length;
         } else {
             this._count = 0;
-            this._color = NotificationColor.None;
+            this._level = NotificationLevel.None;
             for (const state of Object.values(this.states)) {
                 this._count += state.count;
-                this._color = Math.max(this.color, state.color);
+                this._level = Math.max(this.level, state.level);
             }
         }
 

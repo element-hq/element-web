@@ -26,7 +26,7 @@ import { RoomNotificationStateStore } from "../../../../../src/stores/notificati
 import * as RoomNotifs from "../../../../../src/RoomNotifs";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../test-utils";
 import { DEFAULT_PUSH_RULES, makePushRule } from "../../../../test-utils/pushRules";
-import { NotificationColor } from "../../../../../src/stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../../../src/stores/notifications/NotificationLevel";
 
 describe("NaturalAlgorithm", () => {
     const userId = "@alice:server.org";
@@ -197,7 +197,7 @@ describe("NaturalAlgorithm", () => {
             jest.spyOn(RoomNotifs, "determineUnreadState").mockReturnValue({
                 symbol: null,
                 count: 0,
-                color: NotificationColor.None,
+                level: NotificationLevel.None,
             });
         });
 

@@ -24,7 +24,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 
 import type { IPushRule, Room, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { NotificationColor } from "./stores/notifications/NotificationColor";
+import { NotificationLevel } from "./stores/notifications/NotificationLevel";
 import { getUnsentMessages } from "./components/structures/RoomStatusBar";
 import { doesRoomHaveUnreadMessages, doesRoomOrThreadHaveUnreadMessages } from "./Unread";
 import { EffectiveMembership, getEffectiveMembership, isKnockDenied } from "./utils/membership";
@@ -227,25 +227,25 @@ function isMuteRule(rule: IPushRule): boolean {
 export function determineUnreadState(
     room?: Room,
     threadId?: string,
-): { color: NotificationColor; symbol: string | null; count: number } {
+): { level: NotificationLevel; symbol: string | null; count: number } {
     if (!room) {
-        return { symbol: null, count: 0, color: NotificationColor.None };
+        return { symbol: null, count: 0, level: NotificationLevel.None };
     }
 
     if (getUnsentMessages(room, threadId).length > 0) {
-        return { symbol: "!", count: 1, color: NotificationColor.Unsent };
+        return { symbol: "!", count: 1, level: NotificationLevel.Unsent };
     }
 
     if (getEffectiveMembership(room.getMyMembership()) === EffectiveMembership.Invite) {
-        return { symbol: "!", count: 1, color: NotificationColor.Red };
+        return { symbol: "!", count: 1, level: NotificationLevel.Highlight };
     }
 
     if (SettingsStore.getValue("feature_ask_to_join") && isKnockDenied(room)) {
-        return { symbol: "!", count: 1, color: NotificationColor.Red };
+        return { symbol: "!", count: 1, level: NotificationLevel.Highlight };
     }
 
     if (getRoomNotifsState(room.client, room.roomId) === RoomNotifState.Mute) {
-        return { symbol: null, count: 0, color: NotificationColor.None };
+        return { symbol: null, count: 0, level: NotificationLevel.None };
     }
 
     const redNotifs = getUnreadNotificationCount(room, NotificationCountType.Highlight, threadId);
@@ -253,11 +253,11 @@ export function determineUnreadState(
 
     const trueCount = greyNotifs || redNotifs;
     if (redNotifs > 0) {
-        return { symbol: null, count: trueCount, color: NotificationColor.Red };
+        return { symbol: null, count: trueCount, level: NotificationLevel.Highlight };
     }
 
     if (greyNotifs > 0) {
-        return { symbol: null, count: trueCount, color: NotificationColor.Grey };
+        return { symbol: null, count: trueCount, level: NotificationLevel.Notification };
     }
 
     // We don't have any notified messages, but we might have unread messages. Let's find out.
@@ -275,6 +275,6 @@ export function determineUnreadState(
     return {
         symbol: null,
         count: trueCount,
-        color: hasUnread ? NotificationColor.Bold : NotificationColor.None,
+        level: hasUnread ? NotificationLevel.Activity : NotificationLevel.None,
     };
 }

@@ -56,7 +56,7 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
         return container.querySelector(".mx_RightPanel_threadsButton");
     }
 
-    function isIndicatorOfType(container: HTMLElement, type: "red" | "gray" | "bold") {
+    function isIndicatorOfType(container: HTMLElement, type: "highlight" | "notification" | "activity") {
         return container.querySelector(".mx_RightPanel_threadsButton .mx_Indicator")!.className.includes(type);
     }
 
@@ -85,10 +85,10 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
 
         room.setThreadUnreadNotificationCount("$123", NotificationCountType.Total, 1);
         expect(getThreadButton(container)!.className.includes("mx_LegacyRoomHeader_button--unread")).toBeTruthy();
-        expect(isIndicatorOfType(container, "gray")).toBe(true);
+        expect(isIndicatorOfType(container, "notification")).toBe(true);
 
         room.setThreadUnreadNotificationCount("$123", NotificationCountType.Highlight, 1);
-        expect(isIndicatorOfType(container, "red")).toBe(true);
+        expect(isIndicatorOfType(container, "highlight")).toBe(true);
 
         room.setThreadUnreadNotificationCount("$123", NotificationCountType.Total, 0);
         room.setThreadUnreadNotificationCount("$123", NotificationCountType.Highlight, 0);
@@ -122,7 +122,7 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
             },
         });
         room.addReceipt(receipt);
-        expect(isIndicatorOfType(container, "bold")).toBe(true);
+        expect(isIndicatorOfType(container, "activity")).toBe(true);
 
         // Sending the last event should clear the notification.
         let event = mkEvent({
@@ -158,7 +158,7 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
             },
         });
         room.addLiveEvents([event]);
-        expect(isIndicatorOfType(container, "bold")).toBe(true);
+        expect(isIndicatorOfType(container, "activity")).toBe(true);
 
         // Sending a read receipt on an earlier event shouldn't do anything.
         receipt = new MatrixEvent({
@@ -173,7 +173,7 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
             },
         });
         room.addReceipt(receipt);
-        expect(isIndicatorOfType(container, "bold")).toBe(true);
+        expect(isIndicatorOfType(container, "activity")).toBe(true);
 
         // Sending a receipt on the latest event should clear the notification.
         receipt = new MatrixEvent({

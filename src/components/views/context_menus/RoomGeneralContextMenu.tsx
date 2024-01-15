@@ -26,7 +26,7 @@ import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { useUnreadNotifications } from "../../../hooks/useUnreadNotifications";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { _t } from "../../../languageHandler";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
@@ -212,9 +212,9 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
         );
     }
 
-    const { color } = useUnreadNotifications(room);
+    const { level } = useUnreadNotifications(room);
     const markAsReadOption: JSX.Element | null =
-        color > NotificationColor.None ? (
+        level > NotificationLevel.None ? (
             <IconizedContextMenuCheckbox
                 onClick={() => {
                     clearRoomNotification(room, cli);

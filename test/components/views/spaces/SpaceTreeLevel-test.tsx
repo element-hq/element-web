@@ -26,7 +26,7 @@ import { SpaceButton } from "../../../../src/components/views/spaces/SpaceTreeLe
 import { MetaSpace, SpaceKey } from "../../../../src/stores/spaces";
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 import { StaticNotificationState } from "../../../../src/stores/notifications/StaticNotificationState";
-import { NotificationColor } from "../../../../src/stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../../src/stores/notifications/NotificationLevel";
 
 jest.mock("../../../../src/stores/spaces/SpaceStore", () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -117,7 +117,7 @@ describe("SpaceButton", () => {
         });
 
         it("should render notificationState if one is provided", () => {
-            const notificationState = new StaticNotificationState(null, 8, NotificationColor.Grey);
+            const notificationState = new StaticNotificationState(null, 8, NotificationLevel.Notification);
 
             const { container, asFragment } = render(
                 <SpaceButton

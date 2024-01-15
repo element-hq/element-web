@@ -24,7 +24,7 @@ import dis from "../../../dispatcher/dispatcher";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import SettingsStore from "../../../settings/SettingsStore";
 
 export enum HeaderKind {
@@ -34,8 +34,8 @@ export enum HeaderKind {
 interface IState {
     headerKind: HeaderKind;
     phase: RightPanelPhases | null;
-    threadNotificationColor: NotificationColor;
-    globalNotificationColor: NotificationColor;
+    threadNotificationLevel: NotificationLevel;
+    globalNotificationLevel: NotificationLevel;
     notificationsEnabled?: boolean;
 }
 
@@ -53,8 +53,8 @@ export default abstract class HeaderButtons<P = {}> extends React.Component<IPro
         this.state = {
             headerKind: kind,
             phase: rps.currentCard.phase,
-            threadNotificationColor: NotificationColor.None,
-            globalNotificationColor: NotificationColor.None,
+            threadNotificationLevel: NotificationLevel.None,
+            globalNotificationLevel: NotificationLevel.None,
             notificationsEnabled: SettingsStore.getValue("feature_notifications"),
         };
         this.watcherRef = SettingsStore.watchSetting("feature_notifications", null, (...[, , , value]) =>

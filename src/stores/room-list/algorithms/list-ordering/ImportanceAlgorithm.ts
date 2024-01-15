@@ -22,27 +22,27 @@ import { RoomUpdateCause, TagID } from "../../models";
 import { SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
 import { OrderingAlgorithm } from "./OrderingAlgorithm";
-import { NotificationColor } from "../../../notifications/NotificationColor";
+import { NotificationLevel } from "../../../notifications/NotificationLevel";
 import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
 
 type CategorizedRoomMap = {
-    [category in NotificationColor]: Room[];
+    [category in NotificationLevel]: Room[];
 };
 
 type CategoryIndex = Partial<{
-    [category in NotificationColor]: number; // integer
+    [category in NotificationLevel]: number; // integer
 }>;
 
 // Caution: changing this means you'll need to update a bunch of assumptions and
 // comments! Check the usage of Category carefully to figure out what needs changing
 // if you're going to change this array's order.
 const CATEGORY_ORDER = [
-    NotificationColor.Unsent,
-    NotificationColor.Red,
-    NotificationColor.Grey,
-    NotificationColor.Bold,
-    NotificationColor.None, // idle
-    NotificationColor.Muted,
+    NotificationLevel.Unsent,
+    NotificationLevel.Highlight,
+    NotificationLevel.Notification,
+    NotificationLevel.Activity,
+    NotificationLevel.None, // idle
+    NotificationLevel.Muted,
 ];
 
 /**
@@ -77,12 +77,12 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     // noinspection JSMethodCanBeStatic
     private categorizeRooms(rooms: Room[]): CategorizedRoomMap {
         const map: CategorizedRoomMap = {
-            [NotificationColor.Unsent]: [],
-            [NotificationColor.Red]: [],
-            [NotificationColor.Grey]: [],
-            [NotificationColor.Bold]: [],
-            [NotificationColor.None]: [],
-            [NotificationColor.Muted]: [],
+            [NotificationLevel.Unsent]: [],
+            [NotificationLevel.Highlight]: [],
+            [NotificationLevel.Notification]: [],
+            [NotificationLevel.Activity]: [],
+            [NotificationLevel.None]: [],
+            [NotificationLevel.Muted]: [],
         };
         for (const room of rooms) {
             const category = this.getRoomCategory(room);
@@ -92,11 +92,11 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     }
 
     // noinspection JSMethodCanBeStatic
-    private getRoomCategory(room: Room): NotificationColor {
+    private getRoomCategory(room: Room): NotificationLevel {
         // It's fine for us to call this a lot because it's cached, and we shouldn't be
         // wasting anything by doing so as the store holds single references
         const state = RoomNotificationStateStore.instance.getRoomState(room);
-        return this.isMutedToBottom && state.muted ? NotificationColor.Muted : state.color;
+        return this.isMutedToBottom && state.muted ? NotificationLevel.Muted : state.level;
     }
 
     public setRooms(rooms: Room[]): void {
@@ -106,7 +106,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
             // Every other sorting type affects the categories, not the whole tag.
             const categorized = this.categorizeRooms(rooms);
             for (const category of Object.keys(categorized)) {
-                const notificationColor = category as unknown as NotificationColor;
+                const notificationColor = category as unknown as NotificationLevel;
                 const roomsToOrder = categorized[notificationColor];
                 categorized[notificationColor] = sortRoomsWithAlgorithm(
                     roomsToOrder,
@@ -128,7 +128,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         }
     }
 
-    private getCategoryIndex(category: NotificationColor): number {
+    private getCategoryIndex(category: NotificationLevel): number {
         const categoryIndex = this.indices[category];
 
         if (categoryIndex === undefined) {
@@ -213,7 +213,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         return true; // change made
     }
 
-    private sortCategory(category: NotificationColor): void {
+    private sortCategory(category: NotificationLevel): void {
         // This should be relatively quick because the room is usually inserted at the top of the
         // category, and most popular sorting algorithms will deal with trying to keep the active
         // room at the top/start of the category. For the few algorithms that will have to move the
@@ -231,7 +231,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     }
 
     // noinspection JSMethodCanBeStatic
-    private getCategoryFromIndices(index: number, indices: CategoryIndex): NotificationColor {
+    private getCategoryFromIndices(index: number, indices: CategoryIndex): NotificationLevel {
         for (let i = 0; i < CATEGORY_ORDER.length; i++) {
             const category = CATEGORY_ORDER[i];
             const isLast = i === CATEGORY_ORDER.length - 1;
@@ -252,8 +252,8 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     // noinspection JSMethodCanBeStatic
     private moveRoomIndexes(
         nRooms: number,
-        fromCategory: NotificationColor,
-        toCategory: NotificationColor,
+        fromCategory: NotificationLevel,
+        toCategory: NotificationLevel,
         indices: CategoryIndex,
     ): void {
         // We have to update the index of the category *after* the from/toCategory variables
@@ -266,7 +266,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         this.alterCategoryPositionBy(toCategory, +nRooms, indices);
     }
 
-    private alterCategoryPositionBy(category: NotificationColor, n: number, indices: CategoryIndex): void {
+    private alterCategoryPositionBy(category: NotificationLevel, n: number, indices: CategoryIndex): void {
         // Note: when we alter a category's index, we actually have to modify the ones following
         // the target and not the target itself.
 

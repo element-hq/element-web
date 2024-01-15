@@ -22,7 +22,7 @@ import { ImportanceAlgorithm } from "../../../../../src/stores/room-list/algorit
 import { SortAlgorithm } from "../../../../../src/stores/room-list/algorithms/models";
 import * as RoomNotifs from "../../../../../src/RoomNotifs";
 import { DefaultTagID, RoomUpdateCause } from "../../../../../src/stores/room-list/models";
-import { NotificationColor } from "../../../../../src/stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../../../src/stores/notifications/NotificationLevel";
 import { AlphabeticAlgorithm } from "../../../../../src/stores/room-list/algorithms/tag-sorting/AlphabeticAlgorithm";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../test-utils";
 import { RecentAlgorithm } from "../../../../../src/stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
@@ -75,16 +75,16 @@ describe("ImportanceAlgorithm", () => {
     };
 
     const unreadStates: Record<string, ReturnType<(typeof RoomNotifs)["determineUnreadState"]>> = {
-        red: { symbol: null, count: 1, color: NotificationColor.Red },
-        grey: { symbol: null, count: 1, color: NotificationColor.Grey },
-        none: { symbol: null, count: 0, color: NotificationColor.None },
+        red: { symbol: null, count: 1, level: NotificationLevel.Highlight },
+        grey: { symbol: null, count: 1, level: NotificationLevel.Notification },
+        none: { symbol: null, count: 0, level: NotificationLevel.None },
     };
 
     beforeEach(() => {
         jest.spyOn(RoomNotifs, "determineUnreadState").mockReturnValue({
             symbol: null,
             count: 0,
-            color: NotificationColor.None,
+            level: NotificationLevel.None,
         });
     });
 
@@ -190,7 +190,7 @@ describe("ImportanceAlgorithm", () => {
             jest.spyOn(RoomNotifs, "determineUnreadState").mockReturnValue({
                 symbol: null,
                 count: 0,
-                color: NotificationColor.None,
+                level: NotificationLevel.None,
             });
             const algorithm = setupAlgorithm(sortAlgorithm);
 
@@ -360,7 +360,7 @@ describe("ImportanceAlgorithm", () => {
             jest.spyOn(RoomNotifs, "determineUnreadState").mockReturnValue({
                 symbol: null,
                 count: 0,
-                color: NotificationColor.None,
+                level: NotificationLevel.None,
             });
             const algorithm = setupAlgorithm(sortAlgorithm);
 

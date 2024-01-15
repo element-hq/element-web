@@ -26,7 +26,7 @@ interface Props {
 }
 
 export function UnreadNotificationBadge({ room, threadId }: Props): JSX.Element {
-    const { symbol, count, color } = useUnreadNotifications(room, threadId);
+    const { symbol, count, level } = useUnreadNotifications(room, threadId);
 
-    return <StatelessNotificationBadge symbol={symbol} count={count} color={color} />;
+    return <StatelessNotificationBadge symbol={symbol} count={count} level={level} />;
 }

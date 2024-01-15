@@ -19,7 +19,7 @@ import { EventStatus, NotificationCountType, PendingEventOrdering, Room } from "
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { useUnreadNotifications } from "../../src/hooks/useUnreadNotifications";
-import { NotificationColor } from "../../src/stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../src/stores/notifications/NotificationLevel";
 import { mkEvent, muteRoom, stubClient } from "../test-utils";
 
 describe("useUnreadNotifications", () => {
@@ -40,10 +40,10 @@ describe("useUnreadNotifications", () => {
 
     it("shows nothing by default", async () => {
         const { result } = renderHook(() => useUnreadNotifications(room));
-        const { color, symbol, count } = result.current;
+        const { level, symbol, count } = result.current;
 
         expect(symbol).toBe(null);
-        expect(color).toBe(NotificationColor.None);
+        expect(level).toBe(NotificationLevel.None);
         expect(count).toBe(0);
     });
 
@@ -58,10 +58,10 @@ describe("useUnreadNotifications", () => {
         room.addPendingEvent(event, "txn");
 
         const { result } = renderHook(() => useUnreadNotifications(room));
-        const { color, symbol, count } = result.current;
+        const { level, symbol, count } = result.current;
 
         expect(symbol).toBe("!");
-        expect(color).toBe(NotificationColor.Unsent);
+        expect(level).toBe(NotificationLevel.Unsent);
         expect(count).toBeGreaterThan(0);
     });
 
@@ -69,10 +69,10 @@ describe("useUnreadNotifications", () => {
         room.updateMyMembership("invite");
 
         const { result } = renderHook(() => useUnreadNotifications(room));
-        const { color, symbol, count } = result.current;
+        const { level, symbol, count } = result.current;
 
         expect(symbol).toBe("!");
-        expect(color).toBe(NotificationColor.Red);
+        expect(level).toBe(NotificationLevel.Highlight);
         expect(count).toBeGreaterThan(0);
     });
 
@@ -81,9 +81,9 @@ describe("useUnreadNotifications", () => {
         muteRoom(room);
 
         const { result } = renderHook(() => useUnreadNotifications(room));
-        const { color, count } = result.current;
+        const { level, count } = result.current;
 
-        expect(color).toBe(NotificationColor.None);
+        expect(level).toBe(NotificationLevel.None);
         expect(count).toBe(0);
     });
 
@@ -91,9 +91,9 @@ describe("useUnreadNotifications", () => {
         setUnreads(999, 0);
 
         const { result } = renderHook(() => useUnreadNotifications(room));
-        const { color, count } = result.current;
+        const { level, count } = result.current;
 
-        expect(color).toBe(NotificationColor.Grey);
+        expect(level).toBe(NotificationLevel.Notification);
         expect(count).toBe(999);
     });
 
@@ -101,9 +101,9 @@ describe("useUnreadNotifications", () => {
         setUnreads(0, 888);
 
         const { result } = renderHook(() => useUnreadNotifications(room));
-        const { color, count } = result.current;
+        const { level, count } = result.current;
 
-        expect(color).toBe(NotificationColor.Red);
+        expect(level).toBe(NotificationLevel.Highlight);
         expect(count).toBe(888);
     });
 });
