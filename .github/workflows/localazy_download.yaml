@@ -5,6 +5,7 @@ on:
         - cron: "0 6 * * 1,3,5" # Every Monday, Wednesday and Friday at 6am UTC
 jobs:
     download:
+        if: github.repository == 'vector-im/element-web'
         uses: matrix-org/matrix-web-i18n/.github/workflows/localazy_download.yaml@main
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}

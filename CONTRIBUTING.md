@@ -284,7 +284,7 @@ be required.
 
 # Review expectations
 
-See https://github.com/vector-im/element-meta/wiki/Review-process
+See https://github.com/element-hq/element-meta/wiki/Review-process
 
 # Merge Strategy
 

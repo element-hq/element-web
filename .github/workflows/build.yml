@@ -3,6 +3,8 @@ on:
     pull_request: {}
     push:
         branches: [develop, master]
+    merge_group:
+        types: [checks_requested]
 # develop pushes and repository_dispatch handled in build_develop.yaml
 env:
     # These must be set for fetchdep.sh to get the right branch

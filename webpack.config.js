@@ -67,7 +67,7 @@ try {
         console.log(""); // blank line
         console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         console.warn("!! Customisations have been deprecated and will be removed in a future release      !!");
-        console.warn("!! See https://github.com/vector-im/element-web/blob/develop/docs/customisations.md !!");
+        console.warn("!! See https://github.com/element-hq/element-web/blob/develop/docs/customisations.md !!");
         console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         console.log(""); // blank line
     });
@@ -319,6 +319,7 @@ module.exports = (env, argv) => {
                     loader: "babel-loader",
                     options: {
                         cacheDirectory: true,
+                        plugins: enableMinification ? ["babel-plugin-jsx-remove-data-test-id"] : [],
                     },
                 },
                 {
@@ -810,7 +811,7 @@ function getAssetOutputPath(url, resourcePath) {
     const prefix = /^.*[/\\](dist|res)[/\\]/;
 
     /**
-     * Only needed for https://github.com/vector-im/element-web/pull/15939
+     * Only needed for https://github.com/element-hq/element-web/pull/15939
      * If keeping this, we are not able to load external assets such as SVG
      * images coming from @vector-im/compound-web.
      */

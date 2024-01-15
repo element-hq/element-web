@@ -3,6 +3,8 @@ on:
     pull_request: {}
     push:
         branches: [develop, master]
+    merge_group:
+        types: [checks_requested]
     repository_dispatch:
         types: [element-web-notify]
 env:

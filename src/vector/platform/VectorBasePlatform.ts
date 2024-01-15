@@ -41,7 +41,7 @@ export default abstract class VectorBasePlatform extends BasePlatform {
     /**
      * Delay creating the `Favicon` instance until first use (on the first notification) as
      * it uses canvas, which can trigger a permission prompt in Firefox's resist fingerprinting mode.
-     * See https://github.com/vector-im/element-web/issues/9605.
+     * See https://github.com/element-hq/element-web/issues/9605.
      */
     public get favicon(): Favicon {
         if (this._favicon) {

@@ -1,0 +1,56 @@
+# Triggers after the "Downstream artifacts" build has finished, to run the
+# matrix-react-sdk playwright tests (with access to repo secrets)
+
+name: matrix-react-sdk End to End Tests
+on:
+    workflow_run:
+        workflows: ["Build downstream artifacts"]
+        types:
+            - completed
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.run_id }}
+    cancel-in-progress: ${{ github.event.workflow_run.event == 'pull_request' }}
+
+jobs:
+    playwright:
+        name: Playwright
+        # We only want to run the playwright tests on merge queue to prevent regressions
+        # from creeping in. They take a long time to run and consume multiple concurrent runners.
+        if: github.event.workflow_run.event == 'merge_group'
+        uses: matrix-org/matrix-react-sdk/.github/workflows/end-to-end-tests.yaml@develop
+        permissions:
+            actions: read
+            issues: read
+            statuses: write
+            pull-requests: read
+            deployments: write
+        with:
+            react-sdk-repository: matrix-org/matrix-react-sdk
+
+    # We want to make the Playwright tests a required check for the merge queue.
+    #
+    # Unfortunately, github doesn't distinguish between "checks needed for branch
+    # protection" (ie, the things that must pass before the PR will even be added
+    # to the merge queue) and "checks needed in the merge queue". We just have to add
+    # the check to the branch protection list.
+    #
+    # Ergo, if we know we're not going to run the Playwright tests, we need to add a
+    # passing status check manually.
+    mark_skipped:
+        if: github.event.workflow_run.event != 'merge_group'
+        permissions:
+            statuses: write
+        runs-on: ubuntu-latest
+        steps:
+            - uses: Sibz/github-status-action@071b5370da85afbb16637d6eed8524a06bc2053e # v1
+              with:
+                  authToken: "${{ secrets.GITHUB_TOKEN }}"
+                  state: success
+                  description: Playwright skipped
+
+                  # Keep in step with the `context` that is updated by `Sibz/github-status-action`
+                  # in matrix-org/matrix-react-sdk/.github/workflows/end-to-end-tests.yaml.
+                  context: "${{ github.workflow }} / end-to-end-tests"
+
+                  sha: "${{ github.event.workflow_run.head_sha }}"

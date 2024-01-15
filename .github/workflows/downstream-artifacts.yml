@@ -1,0 +1,17 @@
+name: Build downstream artifacts
+on:
+    merge_group:
+        types: [checks_requested]
+    pull_request: {}
+    push:
+        branches: [develop, master]
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+jobs:
+    build-element-web:
+        name: Build element-web
+        uses: matrix-org/matrix-react-sdk/.github/workflows/element-web.yaml@develop
+        with:
+            element-web-sha: ${{ github.sha }}
+            react-sdk-repository: matrix-org/matrix-react-sdk
