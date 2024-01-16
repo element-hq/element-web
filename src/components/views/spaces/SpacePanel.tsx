@@ -74,7 +74,6 @@ import React, {
 import { DragDropContext, Draggable, Droppable, DroppableProvidedProps } from "react-beautiful-dnd";
 
 import SuperheroDexButton from "./SuperheroDexButton";
-import MintTokenButton from "./MintTokenButton";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -409,7 +408,6 @@ const SpacePanel: React.FC = () => {
                         </Droppable>
 
                         <SuperheroDexButton isPanelCollapsed={isPanelCollapsed} />
-                        <MintTokenButton isPanelCollapsed={isPanelCollapsed} />
                         <QuickSettingsButton isPanelCollapsed={isPanelCollapsed} />
                     </div>
                 </DragDropContext>

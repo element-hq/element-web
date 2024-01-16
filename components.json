@@ -13,5 +13,6 @@
     "src/autocomplete/Autocompleter.ts": "src/autocomplete/Autocompleter.ts",
     "src/components/views/dialogs/InviteDialog.tsx": "src/components/views/dialogs/InviteDialog.tsx",
     "src/components/views/right_panel/UserInfo.tsx": "src/components/views/right_panel/UserInfo.tsx",
-    "src/components/structures/HomePage.tsx": "src/components/structures/HomePage.tsx"
+    "src/components/structures/HomePage.tsx": "src/components/structures/HomePage.tsx",
+    "src/components/views/dialogs/spotlight/SpotlightDialog.tsx": "src/components/views/dialogs/spotlight/SpotlightDialog.tsx"
 }

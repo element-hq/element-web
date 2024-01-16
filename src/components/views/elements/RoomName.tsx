@@ -58,9 +58,9 @@ export const RoomName = ({ room, children, maxLength }: IProps): JSX.Element => 
                 {isCommunityRoom && <CommunityRoomIcon className="sh_RoomTokenGatedRoomIcon" />}
                 {isTokenGatedRoom && <TokenGatedRoomIcon className="sh_RoomTokenGatedRoomIcon" />}
                 <span dir="auto">{truncatedRoomName}</span>
-                {roomUsers?.length && !isTokenGatedRoom && !isCommunityRoom && (
+                {(roomUsers?.length && !isTokenGatedRoom && !isCommunityRoom) ? (
                     <UserVerifiedBadge userId={roomUsers[0]} />
-                )}
+                ) : null}
             </span>
         ),
         [truncatedRoomName, isCommunityRoom, isTokenGatedRoom, roomUsers],
