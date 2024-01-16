@@ -294,7 +294,7 @@ function toggleConferenceVisibility(inConference: boolean): void {
     document.getElementById("jitsiContainer")!.style.visibility = inConference ? "unset" : "hidden";
     // Video rooms have a separate UI for joining, so they should never show our join button
     document.getElementById("joinButtonContainer")!.style.visibility =
-        inConference || isVideoChannel ? "hidden" : "unset";
+        inConference ? "hidden" : "unset";
 }
 
 function skipToJitsiSplashScreen(): void {
@@ -452,7 +452,7 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
     if (isVideoChannel) {
         // Ensure that we skip Jitsi Meet's native prejoin screen, for
         // deployments that have it enabled
-        options.configOverwrite!.prejoinConfig = { enabled: false };
+        options.configOverwrite!.prejoinConfig = { enabled: true };
         // Use a simplified set of toolbar buttons
         options.configOverwrite!.toolbarButtons = ["microphone", "camera", "tileview", "hangup"];
         // Note: We can hide the screenshare button in video rooms but not in
