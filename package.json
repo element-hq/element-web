@@ -215,5 +215,6 @@
         "outputDirectory": "coverage",
         "outputName": "jest-sonar-report.xml",
         "relativePaths": true
-    }
+    },
+    "packageManager": "yarn@1.22.21"
 }
