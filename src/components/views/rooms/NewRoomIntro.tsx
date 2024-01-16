@@ -74,16 +74,19 @@ const NewRoomIntro: React.FC = () => {
         cli.sendEvent(roomId, EventType.RoomMessage, {
             body: "👋",
             msgtype: "m.text",
-        });
+        }, (new Date()).toString());
     };
 
-    const sendHelloButton = !room.getLastActiveTimestamp() && (
+    const sendHelloButton = (!room.getLastActiveTimestamp()) && (
         <AccessibleButton
             kind="primary_outline"
             onClick={onSendHelloClick}
             style={{ marginTop: "5px", fontSize: "30px" }}
         >
             👋
+            <span style={{ fontSize: '18px', paddingLeft: '15px' }}>
+                Say Hello
+            </span>
         </AccessibleButton>
     );
 
