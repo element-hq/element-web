@@ -59,7 +59,7 @@ export class SlidingSyncProxy {
 
         const postgresId = await this.postgresDocker.run({
             image: "postgres",
-            containerName: "react-sdk-cypress-sliding-sync-postgres",
+            containerName: "react-sdk-playwright-sliding-sync-postgres",
             params: ["--rm", "-e", `POSTGRES_PASSWORD=${PG_PASSWORD}`],
         });
 
@@ -72,7 +72,7 @@ export class SlidingSyncProxy {
         console.log(new Date(), "starting proxy container...", SLIDING_SYNC_PROXY_TAG);
         const containerId = await this.proxyDocker.run({
             image: "ghcr.io/matrix-org/sliding-sync:" + SLIDING_SYNC_PROXY_TAG,
-            containerName: "react-sdk-cypress-sliding-sync-proxy",
+            containerName: "react-sdk-playwright-sliding-sync-proxy",
             params: [
                 "--rm",
                 "-p",

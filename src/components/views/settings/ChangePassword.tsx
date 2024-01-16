@@ -250,7 +250,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         const newPassword = this.state.newPassword;
         const confirmPassword = this.state.newPasswordConfirm;
         try {
-            // TODO: We can remove this check (but should add some Cypress tests to
+            // TODO: We can remove this check (but should add some Playwright tests to
             // sanity check this flow). This logic is redundant with the input field
             // validation we do and `verifyFieldsBeforeSubmit()` above. See
             // https://github.com/matrix-org/matrix-react-sdk/pull/10615#discussion_r1167364214

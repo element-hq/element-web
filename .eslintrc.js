@@ -169,7 +169,7 @@ module.exports = {
     },
     overrides: [
         {
-            files: ["src/**/*.{ts,tsx}", "test/**/*.{ts,tsx}", "cypress/**/*.ts", "playwright/**/*.ts"],
+            files: ["src/**/*.{ts,tsx}", "test/**/*.{ts,tsx}", "playwright/**/*.ts"],
             extends: ["plugin:matrix-org/typescript", "plugin:matrix-org/react"],
             rules: {
                 "@typescript-eslint/explicit-function-return-type": [
@@ -233,14 +233,14 @@ module.exports = {
             },
         },
         {
-            files: ["test/**/*.{ts,tsx}", "cypress/**/*.ts", "playwright/**/*.ts"],
+            files: ["test/**/*.{ts,tsx}", "playwright/**/*.ts"],
             extends: ["plugin:matrix-org/jest"],
             rules: {
                 // We don't need super strict typing in test utilities
                 "@typescript-eslint/explicit-function-return-type": "off",
                 "@typescript-eslint/explicit-member-accessibility": "off",
 
-                // Jest/Cypress specific
+                // Jest/Playwright specific
 
                 // Disabled tests are a reality for now but as soon as all of the xits are
                 // eliminated, we should enforce this.
@@ -256,27 +256,9 @@ module.exports = {
             },
         },
         {
-            files: ["cypress/**/*.ts"],
-            parserOptions: {
-                project: ["./cypress/tsconfig.json"],
-            },
-            rules: {
-                // Cypress "promises" work differently - disable some related rules
-                "jest/valid-expect": "off",
-                "jest/valid-expect-in-promise": "off",
-                "jest/no-done-callback": "off",
-            },
-        },
-        {
             files: ["playwright/**/*.ts"],
             parserOptions: {
                 project: ["./playwright/tsconfig.json"],
-            },
-            rules: {
-                // Cypress "promises" work differently - disable some related rules
-                "jest/valid-expect": "off",
-                "jest/valid-expect-in-promise": "off",
-                "jest/no-done-callback": "off",
             },
         },
     ],

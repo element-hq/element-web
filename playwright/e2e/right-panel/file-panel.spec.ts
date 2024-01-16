@@ -58,9 +58,9 @@ test.describe("FilePanel", () => {
 
         test("should list tiles on the panel", async ({ page }) => {
             // Upload multiple files
-            await uploadFile(page, "cypress/fixtures/riot.png"); // Image
-            await uploadFile(page, "cypress/fixtures/1sec.ogg"); // Audio
-            await uploadFile(page, "cypress/fixtures/matrix-org-client-versions.json"); // JSON
+            await uploadFile(page, "playwright/sample-files/riot.png"); // Image
+            await uploadFile(page, "playwright/sample-files/1sec.ogg"); // Audio
+            await uploadFile(page, "playwright/sample-files/matrix-org-client-versions.json"); // JSON
 
             const roomViewBody = page.locator(".mx_RoomView_body");
             // Assert that all of the file were uploaded and rendered
@@ -143,7 +143,7 @@ test.describe("FilePanel", () => {
 
         test("should render the audio player and play the audio file on the panel", async ({ page }) => {
             // Upload an image file
-            await uploadFile(page, "cypress/fixtures/1sec.ogg");
+            await uploadFile(page, "playwright/sample-files/1sec.ogg");
 
             const audioBody = page.locator(
                 ".mx_FilePanel .mx_RoomView_MessageList .mx_EventTile_mediaLine .mx_MAudioBody .mx_AudioPlayer_container",
@@ -178,7 +178,7 @@ test.describe("FilePanel", () => {
             const size = "1.12 KB"; // actual file size in kibibytes (1024 bytes)
 
             // Upload a file
-            await uploadFile(page, "cypress/fixtures/matrix-org-client-versions.json");
+            await uploadFile(page, "playwright/sample-files/matrix-org-client-versions.json");
 
             const tile = page.locator(".mx_FilePanel .mx_EventTile");
             // Assert that the file size is displayed in kibibytes, not kilobytes (1000 bytes)
@@ -192,7 +192,7 @@ test.describe("FilePanel", () => {
     test.describe("download", () => {
         test("should download an image via the link on the panel", async ({ page, context }) => {
             // Upload an image file
-            await uploadFile(page, "cypress/fixtures/riot.png");
+            await uploadFile(page, "playwright/sample-files/riot.png");
 
             // Detect the image file on the panel
             const imageBody = page.locator(

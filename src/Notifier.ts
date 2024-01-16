@@ -481,7 +481,7 @@ class NotifierClass {
         const room = MatrixClientPeg.safeGet().getRoom(roomId);
         if (!room) {
             // e.g we are in the process of joining a room.
-            // Seen in the cypress lazy-loading test.
+            // Seen in the Playwright lazy-loading test.
             return;
         }
 

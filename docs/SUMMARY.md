@@ -20,4 +20,4 @@
 
 # Testing
 
--   [Cypress end to end](cypress.md)
+-   [Playwright end to end](playwright.md)

@@ -139,12 +139,12 @@ test.describe("Audio player", () => {
     });
 
     test("should be correctly rendered - light theme", async ({ page, app }) => {
-        await uploadFile(page, "cypress/fixtures/1sec-long-name-audio-file.ogg");
+        await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");
         await takeSnapshots(page, app, "Selected EventTile of audio player (light theme)");
     });
 
     test("should be correctly rendered - light theme with monospace font", async ({ page, app }) => {
-        await uploadFile(page, "cypress/fixtures/1sec-long-name-audio-file.ogg");
+        await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");
 
         await takeSnapshots(page, app, "Selected EventTile of audio player (light theme, monospace font)", true); // Enable monospace
     });
@@ -160,7 +160,7 @@ test.describe("Audio player", () => {
 
         await app.closeDialog();
 
-        await uploadFile(page, "cypress/fixtures/1sec-long-name-audio-file.ogg");
+        await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");
 
         await takeSnapshots(page, app, "Selected EventTile of audio player (high contrast)");
     });
@@ -169,13 +169,13 @@ test.describe("Audio player", () => {
         // Enable dark theme
         await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "dark");
 
-        await uploadFile(page, "cypress/fixtures/1sec-long-name-audio-file.ogg");
+        await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");
 
         await takeSnapshots(page, app, "Selected EventTile of audio player (dark theme)");
     });
 
     test("should play an audio file", async ({ page, app }) => {
-        await uploadFile(page, "cypress/fixtures/1sec.ogg");
+        await uploadFile(page, "playwright/sample-files/1sec.ogg");
 
         // Assert that the audio player is rendered
         const container = page.locator(".mx_EventTile_last .mx_AudioPlayer_container");
@@ -197,7 +197,7 @@ test.describe("Audio player", () => {
     });
 
     test("should support downloading an audio file", async ({ page, app }) => {
-        await uploadFile(page, "cypress/fixtures/1sec.ogg");
+        await uploadFile(page, "playwright/sample-files/1sec.ogg");
 
         const downloadPromise = page.waitForEvent("download");
 
@@ -212,7 +212,7 @@ test.describe("Audio player", () => {
     });
 
     test("should support replying to audio file with another audio file", async ({ page, app }) => {
-        await uploadFile(page, "cypress/fixtures/1sec.ogg");
+        await uploadFile(page, "playwright/sample-files/1sec.ogg");
 
         // Assert the audio player is rendered
         await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
@@ -223,7 +223,7 @@ test.describe("Audio player", () => {
         await tile.getByRole("button", { name: "Reply", exact: true }).click();
 
         // Reply to the player with another audio file
-        await uploadFile(page, "cypress/fixtures/1sec.ogg");
+        await uploadFile(page, "playwright/sample-files/1sec.ogg");
 
         // Assert that the audio player is rendered
         await expect(tile.locator(".mx_AudioPlayer_container")).toBeVisible();
@@ -250,7 +250,7 @@ test.describe("Audio player", () => {
             await tile.getByRole("button", { name: "Reply", exact: true }).click();
         };
 
-        await uploadFile(page, "cypress/fixtures/upload-first.ogg");
+        await uploadFile(page, "playwright/sample-files/upload-first.ogg");
 
         // Assert that the audio player is rendered
         await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
@@ -258,7 +258,7 @@ test.describe("Audio player", () => {
         await clickButtonReply();
 
         // Reply to the player with another audio file
-        await uploadFile(page, "cypress/fixtures/upload-second.ogg");
+        await uploadFile(page, "playwright/sample-files/upload-second.ogg");
 
         // Assert that the audio player is rendered
         await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
@@ -266,7 +266,7 @@ test.describe("Audio player", () => {
         await clickButtonReply();
 
         // Reply to the player with yet another audio file to create a reply chain
-        await uploadFile(page, "cypress/fixtures/upload-third.ogg");
+        await uploadFile(page, "playwright/sample-files/upload-third.ogg");
 
         // Assert that the audio player is rendered
         await expect(tile.locator(".mx_AudioPlayer_container")).toBeVisible();
@@ -299,7 +299,7 @@ test.describe("Audio player", () => {
     });
 
     test("should be rendered, play, and support replying on a thread", async ({ page, app }) => {
-        await uploadFile(page, "cypress/fixtures/1sec-long-name-audio-file.ogg");
+        await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");
 
         // On the main timeline
         const messageList = page.locator(".mx_RoomView_MessageList");

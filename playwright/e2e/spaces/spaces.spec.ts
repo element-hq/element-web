@@ -71,7 +71,7 @@ test.describe("Spaces", () => {
 
         await contextMenu
             .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
-            .setInputFiles("cypress/fixtures/riot.png");
+            .setInputFiles("playwright/sample-files/riot.png");
         await contextMenu.getByRole("textbox", { name: "Name" }).fill("Let's have a Riot");
         await expect(contextMenu.getByRole("textbox", { name: "Address" })).toHaveValue("lets-have-a-riot");
         await contextMenu.getByRole("textbox", { name: "Description" }).fill("This is a space to reminisce Riot.im!");
@@ -102,7 +102,7 @@ test.describe("Spaces", () => {
 
         await menu
             .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
-            .setInputFiles("cypress/fixtures/riot.png");
+            .setInputFiles("playwright/sample-files/riot.png");
         await menu.getByRole("textbox", { name: "Name" }).fill("This is not a Riot");
         await expect(menu.getByRole("textbox", { name: "Address" })).not.toBeVisible();
         await menu.getByRole("textbox", { name: "Description" }).fill("This is a private space of mourning Riot.im...");
@@ -147,7 +147,7 @@ test.describe("Spaces", () => {
 
         await menu
             .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
-            .setInputFiles("cypress/fixtures/riot.png");
+            .setInputFiles("playwright/sample-files/riot.png");
         await expect(menu.getByRole("textbox", { name: "Address" })).not.toBeVisible();
         await menu.getByRole("textbox", { name: "Description" }).fill("This is a personal space to mourn Riot.im...");
         await menu.getByRole("textbox", { name: "Name" }).fill("This is my Riot");
