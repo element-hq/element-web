@@ -479,12 +479,11 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
         return (
             <React.Fragment>
                 <RovingTabIndexWrapper inputRef={this.roomTileRef}>
-                    {({ onFocus, isActive, ref }): ReactElement => (
+                    {({ onFocus, isActive }): ReactElement<any, any> => (
                         <Button
                             {...props}
                             onFocus={onFocus}
                             tabIndex={isActive ? 0 : -1}
-                            inputRef={ref}
                             className={classes}
                             onClick={this.onTileClick}
                             onContextMenu={this.onContextMenu}

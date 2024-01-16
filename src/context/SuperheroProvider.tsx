@@ -17,7 +17,10 @@ export const SuperheroProvider = ({ children, config }: any): any => {
                 method: "POST",
             })
                 .then((res) => res.json())
-                .then(setVerifiedAccounts);
+                .then(setVerifiedAccounts)
+                .catch(() => {
+                    //
+                });
         }
     }
 

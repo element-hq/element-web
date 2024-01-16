@@ -33,11 +33,6 @@ h2 .sh_VerifiedIcon {
     mask-image: url("../../themes/superhero/img/icons/diamond.svg");
 }
 
-.mx_QuickSettingsButton.sh_MintTokenButton::before {
-    -webkit-mask-image: url("../../themes/superhero/img/icons/tokens.svg");
-    mask-image: url("../../themes/superhero/img/icons/tokens.svg");
-}
-
 /* START - Update @user chat message highlighting */
 .mx_EventTile.mx_EventTile_highlight,
 .mx_EventTile.mx_EventTile_highlight .markdown-body,

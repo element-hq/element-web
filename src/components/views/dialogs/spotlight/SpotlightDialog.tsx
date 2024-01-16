@@ -253,12 +253,15 @@ const findVisibleRoomMembers = (visibleRooms: Room[], cli: MatrixClient, filterD
     return Object.values(
         visibleRooms
             .filter((room) => !filterDMs || !DMRoomMap.shared().getUserIdForRoomId(room.roomId))
-            .reduce((members, room) => {
-                for (const member of room.getJoinedMembers()) {
-                    members[member.userId] = member;
-                }
-                return members;
-            }, {} as Record<string, RoomMember>),
+            .reduce(
+                (members, room) => {
+                    for (const member of room.getJoinedMembers()) {
+                        members[member.userId] = member;
+                    }
+                    return members;
+                },
+                {} as Record<string, RoomMember>,
+            ),
     ).filter((it) => it.userId !== cli.getUserId());
 };
 
@@ -630,8 +633,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         {...ariaProperties}
                     >
                         <DecoratedRoomAvatar room={result.room} size={AVATAR_SIZE} tooltipProps={{ tabIndex: -1 }} />
-                        <RoomName room={result.room} /> {' '}
-                        <NotificationBadge notification={notification} />
+                        <RoomName room={result.room} /> <NotificationBadge notification={notification} />
                         <RoomContextDetails
                             id={`mx_SpotlightDialog_button_result_${result.room.roomId}_details`}
                             className="mx_SpotlightDialog_result_details"
@@ -1071,8 +1073,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                         size={AVATAR_SIZE}
                                         tooltipProps={{ tabIndex: -1 }}
                                     />
-                                    <RoomName room={room} /> {' '}
-                                    <NotificationBadge notification={notification} />
+                                    <RoomName room={room} /> <NotificationBadge notification={notification} />
                                     <RoomContextDetails
                                         id={`mx_SpotlightDialog_button_recentSearch_${room.roomId}_details`}
                                         className="mx_SpotlightDialog_result_details"
