@@ -528,7 +528,8 @@ export default class SettingsStore {
             return false;
         }
 
-        // When non-beta features are specified in the config.json, we force them as enabled or disabled.
+        // For some config settings (mostly: non-beta features), a value in config.json overrides the local setting
+        // (ie: we force them as enabled or disabled).
         if (SETTINGS[settingName]?.configDisablesSetting) {
             const configVal = SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, roomId, true, true);
             if (configVal === true || configVal === false) return false;

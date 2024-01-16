@@ -127,9 +127,9 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     /**
      * If true, then the presence of this setting in `config.json` will disable the option in the UI.
      *
-     * In other words, we prevent the user overriding the setting if an explicit value is given in `config.json`;
-     * though note that users who have already set a non-default value before `config.json` is update will continue
-     * to use that value (and, indeed, won't be able to change it!)
+     * In other words, we prevent the user overriding the setting if an explicit value is given in `config.json`.
+     * XXX:  note that users who have already set a non-default value before `config.json` is update will continue
+     * to use that value (and, indeed, won't be able to change it!): https://github.com/element-hq/element-web/issues/26877
      *
      * Obviously, this only really makes sense if `supportedLevels` includes {@link SettingLevel.CONFIG}.
      */
