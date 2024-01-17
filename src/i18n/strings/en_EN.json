@@ -1587,6 +1587,7 @@
     },
     "member_list_back_action_label": "Room members",
     "message_edit_dialog_title": "Message edits",
+    "migrating_crypto": "Hang tight. We are updating Element to make encryption faster and more reliable.",
     "mobile_guide": {
         "toast_accept": "Use app",
         "toast_description": "%(brand)s is experimental on a mobile web browser. For a better experience and the latest features, use our free native app.",

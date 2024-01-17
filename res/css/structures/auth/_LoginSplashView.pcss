@@ -14,6 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_LoginSplashView_migrationProgress {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    .mx_ProgressBar {
+        height: 8px;
+        width: 600px;
+
+        @mixin ProgressBarBorderRadius 8px;
+    }
+}
+
 .mx_LoginSplashView_splashButtons {
     text-align: center;
     width: 100%;

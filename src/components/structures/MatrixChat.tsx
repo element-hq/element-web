@@ -2123,6 +2123,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // Suppress `InvalidStoreError`s here, since they have their own error dialog.
                 view = (
                     <LoginSplashView
+                        matrixClient={MatrixClientPeg.safeGet()}
                         onLogoutClick={this.onLogoutClick}
                         syncError={isStoreError ? null : this.state.syncError}
                     />
