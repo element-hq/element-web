@@ -47,7 +47,7 @@ jobs:
 
             - run: mv dist/element-*.tar.gz dist/develop.tar.gz
 
-            - uses: actions/upload-artifact@v3
+            - uses: actions/upload-artifact@v4
               with:
                   name: webapp
                   path: dist/develop.tar.gz
