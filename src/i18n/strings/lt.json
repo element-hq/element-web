@@ -965,8 +965,6 @@
         "all_messages_description": "Būkite pranešti apie kiekvieną žinutę",
         "class_global": "Globalus",
         "class_other": "Kitas",
-        "colour_bold": "Pusjuodis",
-        "colour_none": "Nė vienas",
         "default": "Numatytas",
         "enable_prompt_toast_description": "Įjungti darbalaukio pranešimus",
         "enable_prompt_toast_title": "Pranešimai",

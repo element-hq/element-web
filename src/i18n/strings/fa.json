@@ -1072,8 +1072,6 @@
     "notifications": {
         "all_messages": "همه‌ی پیام‌ها",
         "class_other": "دیگر",
-        "colour_bold": "پررنگ",
-        "colour_none": "هیچ‌کدام",
         "default": "پیشفرض",
         "enable_prompt_toast_description": "فعال‌کردن اعلان‌های دسکتاپ",
         "enable_prompt_toast_title": "آگاهی‌ها",

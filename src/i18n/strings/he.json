@@ -1112,8 +1112,6 @@
         "all_messages_description": "קבלת התראות על כל הודעה",
         "class_global": "כללי",
         "class_other": "אחר",
-        "colour_bold": "מודגש",
-        "colour_none": "ללא",
         "default": "ברירת מחדל",
         "enable_prompt_toast_description": "אשרו התראות שולחן עבודה",
         "enable_prompt_toast_title": "התראות",

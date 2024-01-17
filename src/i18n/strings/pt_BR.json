@@ -1084,8 +1084,6 @@
         "all_messages": "Todas as mensagens novas",
         "all_messages_description": "Seja notificado para cada mensagem",
         "class_other": "Outros",
-        "colour_bold": "Negrito",
-        "colour_none": "Nenhuma",
         "default": "Padrão",
         "enable_prompt_toast_description": "Ativar notificações na área de trabalho",
         "enable_prompt_toast_title": "Notificações",
