@@ -93,7 +93,9 @@ jobs:
               run: yarn install --frozen-lockfile
 
             - name: Get installed Playwright version
-              run: echo "PLAYWRIGHT_VERSION=$(yarn info @playwright/test -A --json | jq -r .data.version)" >> $GITHUB_ENV
+              id: playwright
+              working-directory: matrix-react-sdk
+              run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
               uses: actions/cache@v3
@@ -101,7 +103,7 @@ jobs:
               with:
                   path: |
                       ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+                  key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}
 
             - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
