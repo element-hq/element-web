@@ -19,6 +19,7 @@ import AutoHideScrollbar from "matrix-react-sdk/src/components/structures/AutoHi
 import EmbeddedPage from "matrix-react-sdk/src/components/structures/EmbeddedPage";
 import AccessibleButton from "matrix-react-sdk/src/components/views/elements/AccessibleButton";
 import { useMatrixClientContext } from "matrix-react-sdk/src/contexts/MatrixClientContext";
+import { DirectoryMember, startDmOnFirstMessage } from "matrix-react-sdk/src/utils/direct-messages";
 import { getHomePageUrl } from "matrix-react-sdk/src/utils/pages";
 import * as React from "react";
 
@@ -48,7 +49,9 @@ const HomePage: React.FC<IProps> = () => {
                     <SuperheroLogo />
                     <div>is so much better with our Wallet</div>
                 </div>
-                <div className="mx_HomePage_default_buttons_title">Download extension for your browser</div>
+                <div className="mx_HomePage_default_buttons_title">
+                    <span style={{ fontWeight: "bold" }}>1. </span>Download extension for your browser
+                </div>
                 <div className="mx_HomePage_default_buttons">
                     <AccessibleButton
                         onClick={(): void => {
@@ -70,6 +73,19 @@ const HomePage: React.FC<IProps> = () => {
                     >
                         <ChromeIcon />
                         from Chrome Web Store
+                    </AccessibleButton>
+                </div>
+                <div className="mx_HomePage_default_buttons_title">
+                    <span style={{ fontWeight: "bold" }}>2.</span>Connect your wallet with $uperhero Bot
+                </div>
+                <div className="mx_HomePage_default_buttons">
+                    <AccessibleButton
+                        onClick={(): void => {
+                            startDmOnFirstMessage(cli, [new DirectoryMember({ user_id: "@walletbot:superhero.com" })]);
+                        }}
+                        className="mx_HomePage_button_custom"
+                    >
+                        Chat with $uperhero Bot
                     </AccessibleButton>
                 </div>
             </div>

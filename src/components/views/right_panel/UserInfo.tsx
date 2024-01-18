@@ -84,6 +84,7 @@ import { asyncSome } from "matrix-react-sdk/src/utils/arrays";
 import UIStore from "matrix-react-sdk/src/stores/UIStore";
 
 import { UserVerifiedBadge } from "../elements/UserVerifiedBadge";
+import { Icon as SendMessage } from "../../../../res/themes/superhero/img/icons/send.svg";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -364,7 +365,7 @@ const MessageButton = ({ member }: { member: Member }): JSX.Element => {
 
     return (
         <AccessibleButton
-            kind="link"
+            kind="primary"
             onClick={async (): Promise<void> => {
                 if (busy) return;
                 setBusy(true);
@@ -374,7 +375,8 @@ const MessageButton = ({ member }: { member: Member }): JSX.Element => {
             className="mx_UserInfo_field"
             disabled={busy}
         >
-            {_t("common|message")}
+            <SendMessage width="16px" height="16px" />
+            <span style={{ marginLeft: "5px" }}>Send Message</span>
         </AccessibleButton>
     );
 };
@@ -523,13 +525,10 @@ export const UserOptionsSection: React.FC<{
         </AccessibleButton>
     );
 
-    const directMessageButton = isMe ? null : <MessageButton member={member} />;
-
     return (
         <div className="mx_UserInfo_container">
             <h3>{_t("common|options")}</h3>
             <div>
-                {directMessageButton}
                 {readReceiptButton}
                 {shareUserButton}
                 {insertPillButton}
@@ -1667,6 +1666,9 @@ export const UserInfoHeader: React.FC<{
                         })}
                     </div>
                     <div className="mx_UserInfo_profileStatus">{presenceLabel}</div>
+                    <div style={{ marginTop: "10px", marginBottom: "10px" }}>
+                        <MessageButton member={member} />
+                    </div>
                 </div>
             </div>
         </React.Fragment>
