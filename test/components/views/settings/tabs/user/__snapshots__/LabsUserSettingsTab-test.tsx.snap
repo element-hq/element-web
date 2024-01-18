@@ -15,7 +15,7 @@ exports[`<LabsUserSettingsTab /> renders settings marked as beta as beta cards 1
     <div
       class="mx_SettingsSubsection_text"
     >
-      What's next for false? Labs are the best way to get things early, test out new features and help shape them before they actually launch.
+      What's next for BrandedClient? Labs are the best way to get things early, test out new features and help shape them before they actually launch.
     </div>
     <div
       class="mx_BetaCard"
@@ -42,10 +42,10 @@ exports[`<LabsUserSettingsTab /> renders settings marked as beta as beta cards 1
             class="mx_BetaCard_caption"
           >
             <p>
-              A new way to chat over voice and video in .
+              A new way to chat over voice and video in BrandedClient.
             </p>
             <p>
-              Video rooms are always-on VoIP channels embedded within a room in .
+              Video rooms are always-on VoIP channels embedded within a room in BrandedClient.
             </p>
           </div>
           <div
@@ -62,7 +62,7 @@ exports[`<LabsUserSettingsTab /> renders settings marked as beta as beta cards 1
           <div
             class="mx_BetaCard_refreshWarning"
           >
-            Joining the beta will reload .
+            Joining the beta will reload BrandedClient.
           </div>
           <div
             class="mx_BetaCard_faq"
@@ -104,7 +104,7 @@ exports[`<LabsUserSettingsTab /> renders settings marked as beta as beta cards 1
             class="mx_BetaCard_caption"
           >
             <p>
-              Introducing a simpler way to change your notification settings. Customize your , just the way you like.
+              Introducing a simpler way to change your notification settings. Customize your BrandedClient, just the way you like.
             </p>
           </div>
           <div

@@ -38,6 +38,9 @@ describe("MatrixClientPeg", () => {
     afterEach(() => {
         localStorage.clear();
         jest.restoreAllMocks();
+
+        // some of the tests assign `MatrixClientPeg.matrixClient`: clear it, to prevent leakage between tests
+        peg.unset();
     });
 
     it("setJustRegisteredUserId", () => {

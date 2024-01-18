@@ -46,6 +46,7 @@ import RustCryptoSdkController from "./controllers/RustCryptoSdkController";
 import ServerSupportUnstableFeatureController from "./controllers/ServerSupportUnstableFeatureController";
 import { WatchManager } from "./WatchManager";
 import { CustomTheme } from "../theme";
+import SettingsStore from "./SettingsStore";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -94,6 +95,7 @@ export enum Features {
     VoiceBroadcastForceSmallChunks = "feature_voice_broadcast_force_small_chunks",
     NotificationSettings2 = "feature_notification_settings2",
     OidcNativeFlow = "feature_oidc_native_flow",
+    RustCrypto = "feature_rust_crypto",
 }
 
 export const labGroupNames: Record<LabGroup, TranslationKey> = {
@@ -480,15 +482,22 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         description: _td("labs|oidc_native_flow_description"),
         default: false,
     },
-    "feature_rust_crypto": {
-        // use the rust matrix-sdk-crypto-js for crypto.
+    [Features.RustCrypto]: {
+        // use the rust matrix-sdk-crypto-wasm for crypto.
         isFeature: true,
         labsGroup: LabGroup.Developer,
-        configDisablesSetting: true,
+        // unlike most features, `configDisablesSetting` is false here.
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td("labs|rust_crypto"),
-        description: _td("labs|under_active_development"),
-        // shouldWarn: true,
+        description: () => {
+            if (SettingsStore.getValueAt(SettingLevel.CONFIG, Features.RustCrypto)) {
+                // It's enabled in the config, so you can't get rid of it even by logging out.
+                return _t("labs|rust_crypto_in_config_description");
+            } else {
+                return _t("labs|rust_crypto_optin_warning");
+            }
+        },
+        shouldWarn: true,
         default: false,
         controller: new RustCryptoSdkController(),
     },

@@ -52,6 +52,7 @@ import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import PlatformPeg from "./PlatformPeg";
 import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
+import { Features } from "./settings/Settings";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -301,7 +302,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             throw new Error("createClient must be called first");
         }
 
-        const useRustCrypto = SettingsStore.getValue("feature_rust_crypto");
+        const useRustCrypto = SettingsStore.getValue(Features.RustCrypto);
 
         // we want to make sure that the same crypto implementation is used throughout the lifetime of a device,
         // so persist the setting at the device layer

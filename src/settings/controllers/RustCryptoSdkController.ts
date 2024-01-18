@@ -15,12 +15,35 @@ limitations under the License.
 */
 
 import { _t } from "../../languageHandler";
+import SettingsStore from "../SettingsStore";
+import { SettingLevel } from "../SettingLevel";
+import PlatformPeg from "../../PlatformPeg";
 import SettingController from "./SettingController";
+import { Features } from "../Settings";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import SdkConfig from "../../SdkConfig";
 
 export default class RustCryptoSdkController extends SettingController {
+    public onChange(level: SettingLevel, roomId: string | null, newValue: any): void {
+        // If the crypto stack has already been initialized, we'll need to reload the app to make it take effect.
+        if (MatrixClientPeg.get()?.getCrypto()) {
+            PlatformPeg.get()?.reload();
+        }
+    }
+
     public get settingDisabled(): boolean | string {
-        // Currently this can only be changed via config.json. In future, we'll allow the user to *enable* this setting
-        // via labs, which will migrate their existing device to the rust-sdk implementation.
-        return _t("labs|rust_crypto_disabled_notice");
+        if (!SettingsStore.getValueAt(SettingLevel.DEVICE, Features.RustCrypto)) {
+            // If rust crypto has not yet been enabled for this device, you can turn it on, IF YOU DARE
+            return false;
+        }
+
+        if (SettingsStore.getValueAt(SettingLevel.CONFIG, Features.RustCrypto)) {
+            // It's enabled in the config, so you can't get rid of it even by logging out.
+            return _t("labs|rust_crypto_in_config", { brand: SdkConfig.get().brand });
+        }
+
+        // The setting is enabled at the device level, but not mandated at the config level.
+        // You can only turn it off by logging out and in again.
+        return _t("labs|rust_crypto_requires_logout");
     }
 }
