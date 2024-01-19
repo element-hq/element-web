@@ -453,10 +453,7 @@ describe("Lifecycle", () => {
 
             it("should show a toast if the matrix server version is unsupported", async () => {
                 const toastSpy = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
-                mockClient.getVersions.mockResolvedValue({
-                    versions: ["r0.6.0"],
-                    unstable_features: {},
-                });
+                mockClient.isVersionSupported.mockImplementation(async (version) => version == "r0.6.0");
                 initLocalStorageMock({ ...localStorageSession });
 
                 expect(await restoreFromLocalStorage()).toEqual(true);
