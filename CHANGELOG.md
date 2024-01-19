@@ -1,3 +1,16 @@
+Changes in [1.11.55](https://github.com/element-hq/element-web/releases/tag/v1.11.55) (2024-01-19)
+==================================================================================================
+
+
+## ✨ Features
+
+* Broaden support for matrix spec versions ([#12159](https://github.com/matrix-org/matrix-react-sdk/pull/12159)). Contributed by @RiotRobot.
+
+## 🐛 Bug Fixes
+
+* Fixed shield alignment on message Input ([#12155](https://github.com/matrix-org/matrix-react-sdk/pull/12155)). Contributed by @RiotRobot.
+
+
 Changes in [1.11.54](https://github.com/element-hq/element-web/releases/tag/v1.11.54) (2024-01-16)
 ==================================================================================================
 ## 🐛 Bug Fixes
