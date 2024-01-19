@@ -24,11 +24,10 @@ jobs:
                       Do you trust the author of this PR? Maybe this build will steal your keys or give you malware.
                       Exercise caution. Use test accounts.
 
-            # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
-            # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
             - name: 📥 Download artifact
               uses: actions/download-artifact@v4
               with:
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   run-id: ${{ github.event.workflow_run.id }}
                   name: previewbuild
                   path: webapp
