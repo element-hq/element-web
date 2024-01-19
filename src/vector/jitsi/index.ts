@@ -292,8 +292,6 @@ function switchVisibleContainers(): void {
 
 function toggleConferenceVisibility(inConference: boolean): void {
     document.getElementById("jitsiContainer")!.style.visibility = inConference ? "unset" : "hidden";
-    // Video rooms have a separate UI for joining, so they should never show our join button
-    document.getElementById("joinButtonContainer")!.style.visibility = inConference ? "hidden" : "unset";
 }
 
 function skipToJitsiSplashScreen(): void {
