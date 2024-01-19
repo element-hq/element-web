@@ -1,3 +1,14 @@
+Changes in [3.90.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.90.0) (2024-01-19)
+=====================================================================================================
+## ✨ Features
+
+* Broaden support for matrix spec versions ([#12159](https://github.com/matrix-org/matrix-react-sdk/pull/12159)). Contributed by @RiotRobot.
+
+## 🐛 Bug Fixes
+
+* Fixed shield alignment on message Input ([#12155](https://github.com/matrix-org/matrix-react-sdk/pull/12155)). Contributed by @RiotRobot.
+
+
 Changes in [3.89.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.89.0) (2024-01-16)
 =====================================================================================================
 ## ✨ Features
