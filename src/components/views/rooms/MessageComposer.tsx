@@ -25,8 +25,6 @@ import {
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
 import { Optional } from "matrix-events-sdk";
-
-import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 import { ButtonEvent } from "matrix-react-sdk/src/components/views/elements/AccessibleButton";
 import AccessibleTooltipButton from "matrix-react-sdk/src/components/views/elements/AccessibleTooltipButton";
@@ -65,6 +63,9 @@ import ReplyPreview from "matrix-react-sdk/src/components/views/rooms/ReplyPrevi
 import MessageComposerButtons from "matrix-react-sdk/src/components/views/rooms/MessageComposerButtons";
 import { UIFeature } from "matrix-react-sdk/src/settings/UIFeature";
 import { setUpVoiceBroadcastPreRecording } from "matrix-react-sdk/src/voice-broadcast/utils/setUpVoiceBroadcastPreRecording";
+import { Icon as RoomReplacedIcon } from "matrix-react-sdk/res/img/room_replaced.svg";
+
+import { _t } from "../../../languageHandler";
 import { DisabledMessageField } from "../elements/DisabledMessageField";
 
 let instanceCount = 0;
@@ -545,11 +546,9 @@ export class MessageComposer extends React.Component<IProps, IState> {
             controls.push(
                 <div className="mx_MessageComposer_replaced_wrapper" key="room_replaced">
                     <div className="mx_MessageComposer_replaced_valign">
-                        <img
+                        <RoomReplacedIcon
                             aria-hidden
-                            alt=""
                             className="mx_MessageComposer_roomReplaced_icon"
-                            src={require("matrix-react-sdk/res/img/room_replaced.svg").default}
                         />
                         <span className="mx_MessageComposer_roomReplaced_header">
                             {_t("composer|room_upgraded_notice")}

@@ -1,9 +1,10 @@
 import { useAtom } from "jotai";
+import React from "react";
+import { Room } from "matrix-js-sdk/src/matrix";
+
 import { minimumTokenThresholdAtom } from "../../../atoms";
 import { _t } from "../../../languageHandler";
-import React from "react";
 import { useVerifiedRoom } from "../../../hooks/useVerifiedRoom";
-import { Room } from "matrix-js-sdk/src/matrix";
 import {  MessageCommunityBotButton } from "./MessageButton";
 
 export function DisabledMessageField({ room }: { room: Room }): JSX.Element {
@@ -28,8 +29,8 @@ export function DisabledMessageField({ room }: { room: Room }): JSX.Element {
                 {_t("composer|no_perms_token_notice", tokenThreshold)}
                 { isCommunityRoom ? (
                     <>
-                        <span style={{'marginLeft': '1rem', display: 'block'}}></span>
-                        <MessageCommunityBotButton text={'Get room tokens'} />
+                        <span style={{'marginLeft': '1rem', display: 'block'}} />
+                        <MessageCommunityBotButton text="Get room tokens" />
                     </>
                 ) : null }
             </div>

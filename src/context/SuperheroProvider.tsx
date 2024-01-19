@@ -3,8 +3,8 @@ import React, { useCallback, useEffect } from "react";
 
 import { communityBotAtom, minimumTokenThresholdAtom, verifiedAccountsAtom } from "../atoms";
 
-const useMinimumTokenThreshold = (config: any) => {
-    const [_, setMinimumTokenThreshold] = useAtom(minimumTokenThresholdAtom);
+const useMinimumTokenThreshold = (config: any): void => {
+    const [, setMinimumTokenThreshold] = useAtom(minimumTokenThresholdAtom);
     const [isLoading, setIsLoading] = React.useState(false);
 
     const loadMinimumTokenThreshold = useCallback(() => {
@@ -22,7 +22,7 @@ const useMinimumTokenThreshold = (config: any) => {
                     setIsLoading(false);
                 });
         }
-    }, [config.bots_backend_url, setMinimumTokenThreshold]);
+    }, [config.bots_backend_url, isLoading, setMinimumTokenThreshold]);
 
     useEffect(() => {
         loadMinimumTokenThreshold();
@@ -31,7 +31,7 @@ const useMinimumTokenThreshold = (config: any) => {
             loadMinimumTokenThreshold();
         }, 10000);
 
-        return () => clearInterval(interval);
+        return (): void => clearInterval(interval);
     }, [loadMinimumTokenThreshold]);
 }
 
@@ -44,14 +44,14 @@ const useMinimumTokenThreshold = (config: any) => {
  */
 export const SuperheroProvider = ({ children, config }: any): any => {
     const [verifiedAccounts, setVerifiedAccounts] = useAtom(verifiedAccountsAtom);
-    const [_, setCommunityBot] = useAtom(communityBotAtom);
+    const [, setCommunityBot] = useAtom(communityBotAtom);
 
     useEffect(() => {
         setCommunityBot({
             userId: config.community_bot_user_id,
             rawDisplayName: 'Community DAO Room Bot',
         });
-    }, []);
+    }, [setCommunityBot, config.community_bot_user_id]);
 
     function loadVerifiedAccounts(): void {
         if (config.bots_backend_url) {

@@ -23,7 +23,7 @@ export function useVerifiedRoom(room?: Room | IPublicRoomsChunkRoom): {
     };
 }
 
-export function cleanRoomName(roomName: string) {
+export const cleanRoomName = (roomName: string): string => {
     // remove # in the beginning
     let parsedName = roomName.startsWith('#') ? roomName.slice(1) : roomName;
 
@@ -33,8 +33,11 @@ export function cleanRoomName(roomName: string) {
     return parsedName;
 }
 
-export function isVerifiedRoom(roomName: string) {
-    let parsedRoomName = cleanRoomName(roomName);
+export const isVerifiedRoom = (roomName: string): {
+    isTokenGatedRoom: boolean;
+    isCommunityRoom: boolean;
+} =>  {
+    const parsedRoomName = cleanRoomName(roomName);
     return {
         isTokenGatedRoom: parsedRoomName.startsWith("[TG]"),
         isCommunityRoom: parsedRoomName.startsWith("$"),

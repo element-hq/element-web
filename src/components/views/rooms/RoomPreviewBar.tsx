@@ -26,14 +26,12 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { RoomPreviewOpts, RoomViewLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
-
 import { Icon as AskToJoinIcon } from "matrix-react-sdk/res/img/element-icons/ask-to-join.svg";
 import { IOOBData } from "matrix-react-sdk/src/stores/ThreepidInviteStore";
 import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 import IdentityAuthClient from "matrix-react-sdk/src/IdentityAuthClient";
 import { UserFriendlyError } from "matrix-react-sdk/src/languageHandler";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import { _t } from "../../../languageHandler";
 import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import { UIFeature } from "matrix-react-sdk/src/settings/UIFeature";
@@ -43,6 +41,8 @@ import InviteReason from "matrix-react-sdk/src/components/views/elements/InviteR
 import AccessibleButton from "matrix-react-sdk/src/components/views/elements/AccessibleButton";
 import Field from "matrix-react-sdk/src/components/views/elements/Field";
 import dis from "matrix-react-sdk/src/dispatcher/dispatcher";
+
+import { _t } from "../../../languageHandler";
 import { isVerifiedRoom } from "../../../hooks/useVerifiedRoom";
 import { MessageCommunityBotButton } from "../elements/MessageButton";
 import { CommunityRoomPeekMessage } from "../elements/CommunityRoomPeekMessage";
@@ -127,7 +127,7 @@ interface IState {
 
 export default class RoomPreviewBar extends React.Component<IProps, IState> {
     public static defaultProps = {
-        onJoinClick() {},
+        onJoinClick(): void {},
     };
 
     public constructor(props: IProps) {
@@ -365,7 +365,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 if (opts.canJoin) {
                     title = _t("room|join_title");
                     primaryActionLabel = _t("action|join");
-                    primaryActionHandler = () => {
+                    primaryActionHandler = (): void => {
                         ModuleRunner.instance.invoke(RoomViewLifecycle.JoinFromRoomPreview, this.props.roomId);
                     };
                 } else {
@@ -643,7 +643,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                     />
                 );
 
-                primaryActionHandler = () =>
+                primaryActionHandler = (): void =>
                     this.props.onSubmitAskToJoin && this.props.onSubmitAskToJoin(this.state.reason);
                 primaryActionLabel = _t("room|knock_send_action");
 
@@ -706,7 +706,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
 
         if(isCommunityRoom) {
             secondaryButton = primaryButton;
-            primaryButton = (<MessageCommunityBotButton text={'Message Superhero Bot to get tokens'} />);
+            primaryButton = (<MessageCommunityBotButton text="Message Superhero Bot to get tokens" />);
             titleElement = (<CommunityRoomPeekMessage roomName={roomName} />);
         }
 

@@ -1,13 +1,14 @@
 import React, { useContext, useState } from "react";
 import MatrixClientContext from "matrix-react-sdk/src/contexts/MatrixClientContext";
 import AccessibleButton from "matrix-react-sdk/src/components/views/elements/AccessibleButton";
-import { Member } from "../right_panel/UserInfo";
-import { Icon as SendMessage } from "../../../../res/themes/superhero/img/icons/send.svg";
 import { MatrixClient, RoomMember, User } from "matrix-js-sdk/src/matrix";
 import { DirectoryMember, startDmOnFirstMessage } from "matrix-react-sdk/src/utils/direct-messages";
-
-import { BareUser, communityBotAtom } from "../../../atoms";
 import { useAtom } from "jotai";
+
+import { Member } from "../right_panel/UserInfo";
+import { Icon as SendMessage } from "../../../../res/themes/superhero/img/icons/send.svg";
+import { BareUser, communityBotAtom } from "../../../atoms";
+
 /**
  * Converts the member to a DirectoryMember and starts a DM with them.
  */
