@@ -13,3 +13,4 @@ jobs:
         uses: matrix-org/matrix-js-sdk/.github/workflows/sonarcloud.yml@develop
         secrets:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}

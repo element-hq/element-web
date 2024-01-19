@@ -1805,10 +1805,10 @@
     emojibase "^15.0.0"
     emojibase-data "^15.0.0"
 
-"@matrix-org/matrix-sdk-crypto-wasm@^3.5.0":
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-3.5.0.tgz#997d63ae12304142513fe93c5e0872ff10ca30b4"
-  integrity sha512-7as0jJTje+rFu9AF8LEO0tmhtHcou2YQnZOtpiP+lS5rDfIPv5CL8/eb45fzDnbQybt9Jm5zdjBdiLBEaUg2dQ==
+"@matrix-org/matrix-sdk-crypto-wasm@^3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-3.6.0.tgz#385aa579d7b7546d85c9b20bf6ba780f799bdda3"
+  integrity sha512-fvuYczcp/r/MOkOAUbK+tMaTerEe7/QHGQcRJz3W3JuEma0YN59d35zTBlts7EkN6Ichw1vLSyM+GkcbuosuyA==
 
 "@matrix-org/matrix-wysiwyg@2.17.0":
   version "2.17.0"
@@ -2021,6 +2021,19 @@
   integrity sha512-fDSBgd44FKHa1FRMU59qBMPFcl2PZE+2nmqunj+BWFyYYjnhIDWL2ItDs3rrbJDQOtzt5nIebLCQc4QRfz6LJw==
   dependencies:
     "@babel/runtime" "^7.13.10"
+
+"@radix-ui/react-context-menu@^2.1.5":
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-context-menu/-/react-context-menu-2.1.5.tgz#1bdbd72761439f9166f75dc4598f276265785c83"
+  integrity sha512-R5XaDj06Xul1KGb+WP8qiOh7tKJNz2durpLBXAGZjSVtctcRFCuEvy2gtMwRJGePwQQE5nV77gs4FwRi8T+r2g==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "1.0.1"
+    "@radix-ui/react-context" "1.0.1"
+    "@radix-ui/react-menu" "2.0.6"
+    "@radix-ui/react-primitive" "1.0.3"
+    "@radix-ui/react-use-callback-ref" "1.0.1"
+    "@radix-ui/react-use-controllable-state" "1.0.1"
 
 "@radix-ui/react-context@1.0.1":
   version "1.0.1"
@@ -3289,11 +3302,12 @@
   dependencies:
     svg2vectordrawable "^2.9.1"
 
-"@vector-im/compound-web@0.9.4":
-  version "0.9.4"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-0.9.4.tgz#89ac6d136c5f9d553de0e8540398a8a4b6cdeb6f"
-  integrity sha512-L1N0xe3G7k35b3i+5teYg1nplsbz8p+VOxIGWIPU4H7D4PBCxhf9i7ft8aJjLsIdIaInJkqjvKwPU+Yb/yvgUQ==
+"@vector-im/compound-web@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-2.0.0.tgz#9ffc621f32be11acabe74bb3ff59cc4d8bc845ac"
+  integrity sha512-vEhGayoBSq4WLf86VmFoX9h0KIxaAjlG+kmcJLWitsqnPEDOG0XPhScYqzEshFqdJFLWX6gBOnXYLeq065t57w==
   dependencies:
+    "@radix-ui/react-context-menu" "^2.1.5"
     "@radix-ui/react-dropdown-menu" "^2.0.6"
     "@radix-ui/react-form" "^0.0.3"
     "@radix-ui/react-separator" "^1.0.3"
@@ -4621,9 +4635,9 @@ copy-descriptor@^0.1.0:
   integrity sha512-XgZ0pFcakEUlbwQEVNg3+QAis1FyTL3Qel9FYy8pSkQqoG3PNoT0bOCQtOXcOkur21r2Eq2kI+IE+gsmAEVlYw==
 
 copy-webpack-plugin@^12.0.0:
-  version "12.0.0"
-  resolved "https://registry.yarnpkg.com/copy-webpack-plugin/-/copy-webpack-plugin-12.0.0.tgz#8694c97dec19a05c9c93e7aebb93a976699dcd0e"
-  integrity sha512-WQfxZKgoRB94/g0BP/cjADvE6jXQKoSk0lFFeIC5HZlE1JuabYPwhQUtOZsGI0cI+QMsi6vhdIDy4eNXKcTgFg==
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/copy-webpack-plugin/-/copy-webpack-plugin-12.0.1.tgz#6a09fe53402eb800e7f52b55f1eb6981f1a59257"
+  integrity sha512-dhMfjJMYKDmmbG6Yn2pRSs1g8FgeQRtbE/JM6VAM9Xouk3KO1UVrwlLHLXxaI5F+o9WgnRfhFZzY9eV34O2gZQ==
   dependencies:
     fast-glob "^3.3.2"
     glob-parent "^6.0.1"
@@ -5203,10 +5217,10 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
   integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
 
-diff-dom@^4.2.2:
-  version "4.2.8"
-  resolved "https://registry.yarnpkg.com/diff-dom/-/diff-dom-4.2.8.tgz#4280b28c4dc1da951c40ee6969d895f782b8edbc"
-  integrity sha512-OIL+sf1bFBQ/Z1gjo3xlHyDViVaRiDVMOM5jTM30aFATu3tLlNloeixKCg7p7nFyTjI1eQmdlVu1admV/BwVJw==
+diff-dom@^5.0.0:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/diff-dom/-/diff-dom-5.1.2.tgz#951627784bc45e32999f0c97cd42e4cf8c35791f"
+  integrity sha512-ayOX+pBYzyLdt7iXFd+8jvWzhrcWk+9gQqYk7Zz8/0hpIsqSbtk6MNbtds+Ox6B8ONsdtIcfPmk3NXPdgb3+xQ==
 
 diff-match-patch@^1.0.5:
   version "1.0.5"
@@ -5440,10 +5454,10 @@ emojibase-data@^15.0.0:
   resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-15.2.0.tgz#475a786c091a101ef4bcf57227771c6260ee39b2"
   integrity sha512-hDiw4ugxnI4pcVQO+73NlKx6aZP/A+BAPfDgK/3A83RVbHZa0Ut6GHpd5r5XUV9G7BZhKejlIRuxhXialpbt6Q==
 
-emojibase-regex@15.2.0:
-  version "15.2.0"
-  resolved "https://registry.yarnpkg.com/emojibase-regex/-/emojibase-regex-15.2.0.tgz#71e91ab162ef8b3de42788d40bb8621d655273d8"
-  integrity sha512-65H5YepRW3gdrghV/Ed9kW3Qry8/qeKJmMlm31nTsOrEZfuAgyr28FmloXpyak86+chR8cukZA7dlafZzrJXbw==
+emojibase-regex@15.3.0:
+  version "15.3.0"
+  resolved "https://registry.yarnpkg.com/emojibase-regex/-/emojibase-regex-15.3.0.tgz#98c9683a481ccb1fe6aefddb495b2d692bbf5368"
+  integrity sha512-EBz/292VBF9naBPBsGzkZUccgIv1xJibTXIINl8SezgVRnTCpKJx7MgZcR+UAd2RwjGkRJJZ/lhP7riOFZLicA==
 
 emojibase@^15.0.0:
   version "15.2.0"
@@ -8586,11 +8600,11 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "30.3.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ffc9fb34d057b7258e40891f8614ec09321d82d7"
+  version "31.0.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/76b9c3950bfdfca922bec7f70502ff2da93bd731"
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^3.5.0"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^3.6.0"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"
@@ -8612,8 +8626,8 @@ matrix-mock-request@^2.5.0:
     expect "^28.1.0"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.88.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/9350583ecf151811c8377879af0b08d4db701c30"
+  version "3.89.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/3c405ac34d217bba86f7dc2690ef9125181d2e58"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.9.0"
@@ -8625,7 +8639,7 @@ matrix-mock-request@^2.5.0:
     "@sentry/browser" "^7.0.0"
     "@testing-library/react-hooks" "^8.0.1"
     "@vector-im/compound-design-tokens" "^0.1.0"
-    "@vector-im/compound-web" "0.9.4"
+    "@vector-im/compound-web" "2.0.0"
     "@zxcvbn-ts/core" "^3.0.4"
     "@zxcvbn-ts/language-common" "^3.0.4"
     "@zxcvbn-ts/language-en" "^3.0.2"
@@ -8634,9 +8648,9 @@ matrix-mock-request@^2.5.0:
     classnames "^2.2.6"
     commonmark "^0.30.0"
     counterpart "^0.18.6"
-    diff-dom "^4.2.2"
+    diff-dom "^5.0.0"
     diff-match-patch "^1.0.5"
-    emojibase-regex "15.2.0"
+    emojibase-regex "15.3.0"
     escape-html "^1.0.3"
     file-saver "^2.0.5"
     filesize "10.1.0"
@@ -8664,7 +8678,7 @@ matrix-mock-request@^2.5.0:
     opus-recorder "^8.0.3"
     pako "^2.0.3"
     png-chunks-extract "^1.0.0"
-    posthog-js "1.93.2"
+    posthog-js "1.98.0"
     proposal-temporal "^0.9.0"
     qrcode "1.5.3"
     re-resizable "^6.9.0"
@@ -10262,10 +10276,10 @@ postcss@^8.2.15, postcss@^8.3.11, postcss@^8.4.24, postcss@^8.4.31, postcss@^8.4
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-posthog-js@1.93.2:
-  version "1.93.2"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.93.2.tgz#f3ab11983c558ad36966b552bb4ad98526cdcff6"
-  integrity sha512-0e2kqlb4kB1/Q9poLFlMF+SUrW+DCzNBHTJuUKl177euE4LChkJipSjy2vpq98qtJ2K3Hxw7ylHf2C+dZCx4RA==
+posthog-js@1.98.0:
+  version "1.98.0"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.98.0.tgz#127ff2b6234eeeed847c201329a80a486bef7106"
+  integrity sha512-vMAzOBE0cmt+dDGuml8ITwjmbbMej/GdmX3NuXhyNr7DzXgxvTYp4D7gJwYxH09metgyEOTOWdy7XbzsaRipTg==
   dependencies:
     fflate "^0.4.1"
 
@@ -10279,10 +10293,10 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prettier@3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.1.1.tgz#6ba9f23165d690b6cbdaa88cb0807278f7019848"
-  integrity sha512-22UbSzg8luF4UuZtzgiUOfcGM8s4tjBv6dJRT7j275NXsy2jb4aJa4NNveul5x4eqlF1wuhuR2RElK71RvmVaw==
+prettier@3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.2.2.tgz#96e580f7ca9c96090ad054616c0c4597e2844b65"
+  integrity sha512-HTByuKZzw7utPiDO523Tt2pLtEyK7OibUD9suEJQrPUCYQqrHr74GGX6VidMrovbf/I50mPqr8j/II6oBAuc5A==
 
 pretty-error@^4.0.0:
   version "4.0.0"

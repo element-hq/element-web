@@ -61,7 +61,7 @@ jobs:
                   dpkg-gencontrol -v"$VERSION" -ldebian/tmp/DEBIAN/changelog
                   dpkg-deb -Zxz --root-owner-group --build debian/tmp element-web.deb
 
-            - uses: actions/upload-artifact@v3
+            - uses: actions/upload-artifact@v4
               with:
                   name: element-web.deb
                   path: element-web.deb
