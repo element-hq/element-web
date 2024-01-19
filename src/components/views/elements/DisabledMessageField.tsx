@@ -1,14 +1,13 @@
 import { useAtom } from "jotai";
-import { communityBotAtom, minimumTokenThresholdAtom } from "../../../atoms";
+import { minimumTokenThresholdAtom } from "../../../atoms";
 import { _t } from "../../../languageHandler";
 import React from "react";
 import { useVerifiedRoom } from "../../../hooks/useVerifiedRoom";
 import { Room } from "matrix-js-sdk/src/matrix";
-import { MessageButton } from "./MessageButton";
+import {  MessageCommunityBotButton } from "./MessageButton";
 
 export function DisabledMessageField({ room }: { room: Room }): JSX.Element {
     const [allTokens] = useAtom(minimumTokenThresholdAtom)
-    const [communityBot] = useAtom(communityBotAtom)
     const { isTokenGatedRoom, isCommunityRoom,  } = useVerifiedRoom(room);
 
     let tokenThreshold = allTokens[room.name];
@@ -26,11 +25,11 @@ export function DisabledMessageField({ room }: { room: Room }): JSX.Element {
     if (tokenThreshold) {
         return (
             <div key="controls_error" className="mx_MessageComposer_noperm_error">
-                You need at least {tokenThreshold.threshold} {tokenThreshold.symbol} to join this
-                community.{ isCommunityRoom ? (
+                {_t("composer|no_perms_token_notice", tokenThreshold)}
+                { isCommunityRoom ? (
                     <>
                         <span style={{'marginLeft': '1rem', display: 'block'}}></span>
-                        <MessageButton text={'Get room tokens'} member={communityBot}></MessageButton>
+                        <MessageCommunityBotButton text={'Get room tokens'} />
                     </>
                 ) : null }
             </div>

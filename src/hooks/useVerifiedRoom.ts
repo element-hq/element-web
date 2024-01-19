@@ -22,3 +22,21 @@ export function useVerifiedRoom(room?: Room | IPublicRoomsChunkRoom): {
         isCommunityRoom,
     };
 }
+
+export function cleanRoomName(roomName: string) {
+    // remove # in the beginning
+    let parsedName = roomName.startsWith('#') ? roomName.slice(1) : roomName;
+
+    // remove domain
+    parsedName = parsedName.split(':')[0];
+
+    return parsedName;
+}
+
+export function isVerifiedRoom(roomName: string) {
+    let parsedRoomName = cleanRoomName(roomName);
+    return {
+        isTokenGatedRoom: parsedRoomName.startsWith("[TG]"),
+        isCommunityRoom: parsedRoomName.startsWith("$"),
+    }
+}

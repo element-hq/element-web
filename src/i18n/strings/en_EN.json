@@ -40,6 +40,10 @@
     "superhero_dex": "Superhero DEX",
     "mint_a_token": "Mint a token",
     "composer": {
-        "no_perms_notice": "You need to own the room token to be able to post in this room."
+        "no_perms_token_notice": "You need to own more than ~ %(threshold)s %(symbol)s tokens to be able to post in this room."
+    },
+    "room": {
+        "no_peek_join_prompt_community": "%(roomName)s is a private token-gated room.",
+        "no_peek_join_prompt_community_threshold": "You need to own %(threshold)s %(symbol)s tokens to access it."
     }
 }

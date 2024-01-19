@@ -6,7 +6,8 @@ import { Icon as SendMessage } from "../../../../res/themes/superhero/img/icons/
 import { MatrixClient, RoomMember, User } from "matrix-js-sdk/src/matrix";
 import { DirectoryMember, startDmOnFirstMessage } from "matrix-react-sdk/src/utils/direct-messages";
 
-import { BareUser } from "../../../atoms";
+import { BareUser, communityBotAtom } from "../../../atoms";
+import { useAtom } from "jotai";
 /**
  * Converts the member to a DirectoryMember and starts a DM with them.
  */
@@ -41,3 +42,13 @@ export const MessageButton = ({ member, text = 'Send Message' }: { member: Membe
         </AccessibleButton>
     );
 };
+
+export const MessageCommunityBotButton = ({ text = 'Send Message' }: { text?: string }): JSX.Element => {
+    const [communityBot] = useAtom(communityBotAtom)
+
+    return (
+       <MessageButton member={communityBot} text={text} />
+    );
+};
+
+
