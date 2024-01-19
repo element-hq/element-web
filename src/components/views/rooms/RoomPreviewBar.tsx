@@ -334,7 +334,6 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
 
         const { isCommunityRoom } = isVerifiedRoom(roomName);
 
-
         const messageCase = this.getMessageCase();
         switch (messageCase) {
             case MessageCase.Joining: {
@@ -704,10 +703,10 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             );
         }
 
-        if(isCommunityRoom) {
+        if (isCommunityRoom) {
             secondaryButton = primaryButton;
-            primaryButton = (<MessageCommunityBotButton text="Message Superhero Bot to get tokens" />);
-            titleElement = (<CommunityRoomPeekMessage roomName={roomName} />);
+            primaryButton = <MessageCommunityBotButton text="Message Superhero Bot to get tokens" />;
+            titleElement = <CommunityRoomPeekMessage roomName={roomName} />;
         }
 
         const isPanel = this.props.canPreview;

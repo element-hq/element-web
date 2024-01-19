@@ -13,7 +13,7 @@ import { BareUser, communityBotAtom } from "../../../atoms";
  * Converts the member to a DirectoryMember and starts a DM with them.
  */
 async function openDmForUser(matrixClient: MatrixClient, user: Member | BareUser): Promise<void> {
-    const avatarUrl = user instanceof User ? user.avatarUrl : user instanceof RoomMember ? user.getMxcAvatarUrl() : '';
+    const avatarUrl = user instanceof User ? user.avatarUrl : user instanceof RoomMember ? user.getMxcAvatarUrl() : "";
     const startDmUser = new DirectoryMember({
         user_id: user.userId,
         display_name: user.rawDisplayName,
@@ -22,7 +22,13 @@ async function openDmForUser(matrixClient: MatrixClient, user: Member | BareUser
     await startDmOnFirstMessage(matrixClient, [startDmUser]);
 }
 
-export const MessageButton = ({ member, text = 'Send Message' }: { member: Member | BareUser, text?: string }): JSX.Element => {
+export const MessageButton = ({
+    member,
+    text = "Send Message",
+}: {
+    member: Member | BareUser;
+    text?: string;
+}): JSX.Element => {
     const cli = useContext(MatrixClientContext);
     const [busy, setBusy] = useState(false);
 
@@ -44,12 +50,8 @@ export const MessageButton = ({ member, text = 'Send Message' }: { member: Membe
     );
 };
 
-export const MessageCommunityBotButton = ({ text = 'Send Message' }: { text?: string }): JSX.Element => {
-    const [communityBot] = useAtom(communityBotAtom)
+export const MessageCommunityBotButton = ({ text = "Send Message" }: { text?: string }): JSX.Element => {
+    const [communityBot] = useAtom(communityBotAtom);
 
-    return (
-       <MessageButton member={communityBot} text={text} />
-    );
+    return <MessageButton member={communityBot} text={text} />;
 };
-
-

@@ -16,7 +16,7 @@ const useMinimumTokenThreshold = (config: any): void => {
                 .then((res) => res.json())
                 .then(setMinimumTokenThreshold)
                 .catch((e) => {
-                    console.error('Error loading minimum token threshold', e);
+                    console.error("Error loading minimum token threshold", e);
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -33,8 +33,7 @@ const useMinimumTokenThreshold = (config: any): void => {
 
         return (): void => clearInterval(interval);
     }, [loadMinimumTokenThreshold]);
-}
-
+};
 
 /**
  * Provides the superhero context to its children components.
@@ -49,7 +48,7 @@ export const SuperheroProvider = ({ children, config }: any): any => {
     useEffect(() => {
         setCommunityBot({
             userId: config.community_bot_user_id,
-            rawDisplayName: 'Community DAO Room Bot',
+            rawDisplayName: "Community DAO Room Bot",
         });
     }, [setCommunityBot, config.community_bot_user_id]);
 

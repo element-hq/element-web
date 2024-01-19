@@ -47,7 +47,11 @@ import { Action } from "matrix-react-sdk/src/dispatcher/actions";
 import { SettingUpdatedPayload } from "matrix-react-sdk/src/dispatcher/payloads/SettingUpdatedPayload";
 import { ViewRoomPayload } from "matrix-react-sdk/src/dispatcher/payloads/ViewRoomPayload";
 import { ComposerInsertPayload } from "matrix-react-sdk/src/dispatcher/payloads/ComposerInsertPayload";
-import { getConversionFunctions, sendMessage, SendWysiwygComposer } from "matrix-react-sdk/src/components/views/rooms/wysiwyg_composer";
+import {
+    getConversionFunctions,
+    sendMessage,
+    SendWysiwygComposer,
+} from "matrix-react-sdk/src/components/views/rooms/wysiwyg_composer";
 import EditorModel from "matrix-react-sdk/src/editor/model";
 import { isLocalRoom } from "matrix-react-sdk/src/utils/localRoom/isLocalRoom";
 import { aboveLeftOf, MenuProps } from "matrix-react-sdk/src/components/structures/ContextMenu";
@@ -55,7 +59,9 @@ import { SdkContextClass } from "matrix-react-sdk/src/contexts/SDKContext";
 import { VoiceBroadcastInfoState } from "matrix-react-sdk/src/voice-broadcast";
 import { createCantStartVoiceMessageBroadcastDialog } from "matrix-react-sdk/src/components/views/dialogs/CantStartVoiceMessageBroadcastDialog";
 import E2EIcon from "matrix-react-sdk/src/components/views/rooms/E2EIcon";
-import SendMessageComposer, { SendMessageComposer as SendMessageComposerClass } from "matrix-react-sdk/src/components/views/rooms/SendMessageComposer";
+import SendMessageComposer, {
+    SendMessageComposer as SendMessageComposerClass,
+} from "matrix-react-sdk/src/components/views/rooms/SendMessageComposer";
 import Tooltip, { Alignment } from "matrix-react-sdk/src/components/views/elements/Tooltip";
 import { formatTimeLeft } from "matrix-react-sdk/src/DateUtils";
 import Stickerpicker from "matrix-react-sdk/src/components/views/rooms/Stickerpicker";
@@ -546,10 +552,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             controls.push(
                 <div className="mx_MessageComposer_replaced_wrapper" key="room_replaced">
                     <div className="mx_MessageComposer_replaced_valign">
-                        <RoomReplacedIcon
-                            aria-hidden
-                            className="mx_MessageComposer_roomReplaced_icon"
-                        />
+                        <RoomReplacedIcon aria-hidden className="mx_MessageComposer_roomReplaced_icon" />
                         <span className="mx_MessageComposer_roomReplaced_header">
                             {_t("composer|room_upgraded_notice")}
                         </span>
@@ -559,9 +562,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 </div>,
             );
         } else {
-            controls.push(
-                <DisabledMessageField room={this.props.room} key="controls_error" />,
-            );
+            controls.push(<DisabledMessageField room={this.props.room} key="controls_error" />);
         }
 
         let recordingTooltip: JSX.Element | undefined;
