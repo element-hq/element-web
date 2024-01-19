@@ -27,9 +27,9 @@ jobs:
             # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
             # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
             - name: 📥 Download artifact
-              uses: dawidd6/action-download-artifact@f29d1b6a8930683e80acedfbe6baa2930cd646b4 # v2
+              uses: actions/download-artifact@v4
               with:
-                  run_id: ${{ github.event.workflow_run.id }}
+                  run-id: ${{ github.event.workflow_run.id }}
                   name: previewbuild
                   path: webapp
 

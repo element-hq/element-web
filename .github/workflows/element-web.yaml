@@ -82,7 +82,7 @@ jobs:
                   git rev-parse HEAD > element-web/webapp/sha
 
             - name: Upload Artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: previewbuild
                   path: element-web/webapp
