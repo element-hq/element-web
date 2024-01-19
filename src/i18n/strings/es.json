@@ -1329,7 +1329,6 @@
         "report_to_moderators": "Denunciar ante los moderadores",
         "report_to_moderators_description": "En las salas que sean compatible con la moderación, el botón de «Denunciar» avisará a los moderadores de la sala.",
         "rust_crypto": "Implementación de la criptografía en Rust",
-        "rust_crypto_disabled_notice": "Ahora mismo solo se puede activar a través de config.json",
         "sliding_sync": "Modo de sincronización progresiva",
         "sliding_sync_checking": "Comprobando…",
         "sliding_sync_configuration": "Configuración de la sincronización progresiva",

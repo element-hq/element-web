@@ -1399,7 +1399,6 @@
         "report_to_moderators": "回報給版主",
         "report_to_moderators_description": "在支援審核的聊天室中，「回報」按鈕讓您可以回報濫用行為給聊天室管理員。",
         "rust_crypto": "Rust 密碼學實作",
-        "rust_crypto_disabled_notice": "目前僅能透過 config.json 啟用",
         "sliding_sync": "滑動同步模式",
         "sliding_sync_checking": "正在檢查…",
         "sliding_sync_configuration": "滑動同步設定",

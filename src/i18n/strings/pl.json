@@ -1447,7 +1447,6 @@
         "report_to_moderators": "Zgłoś do moderatorów",
         "report_to_moderators_description": "W pokojach, które wspierają moderacje, przycisk \"Zgłoś\" pozwoli Ci zgłosić nadużycia moderatorom.",
         "rust_crypto": "Implementacja kryptografii Rust",
-        "rust_crypto_disabled_notice": "Można go tylko włączyć przez config.json",
         "sliding_sync": "Tryb synchronizacji przesuwanej",
         "sliding_sync_checking": "Sprawdzanie…",
         "sliding_sync_configuration": "Konfiguracja synchronizacji przesuwanej",

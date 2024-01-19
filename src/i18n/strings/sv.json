@@ -1437,7 +1437,6 @@
         "report_to_moderators": "Rapportera till moderatorer",
         "report_to_moderators_description": "I rum som stöder moderering så låter \"Rapportera\"-knappen dig rapportera trakasseri till rumsmoderatorer.",
         "rust_crypto": "Kryptografiimplementering i Rust",
-        "rust_crypto_disabled_notice": "Kan för närvarande endast aktiveras via config.json",
         "sliding_sync": "Glidande synkroniseringsläge",
         "sliding_sync_checking": "Kontrollerar …",
         "sliding_sync_configuration": "Glidande synk-läge",

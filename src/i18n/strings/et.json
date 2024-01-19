@@ -1421,7 +1421,6 @@
         "report_to_moderators": "Teata moderaatoritele",
         "report_to_moderators_description": "Kui jututoas on modereerimine kasutusel, siis nupust „Teata sisust“ avaneva vormi abil saad jututoa reegleid rikkuvast sisust teatada moderaatoritele.",
         "rust_crypto": "Rust'is teostatud krüptolahendus",
-        "rust_crypto_disabled_notice": "Seda võimalust saab hetkel sisse lülitada vaid config.json failist",
         "sliding_sync": "Järkjärgulise sünkroniseerimise režiim",
         "sliding_sync_checking": "Kontrollin…",
         "sliding_sync_configuration": "Sliding Sync konfiguratsioon",

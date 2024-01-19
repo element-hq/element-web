@@ -1411,7 +1411,6 @@
         "report_to_moderators": "Segnala ai moderatori",
         "report_to_moderators_description": "Nelle stanze che supportano la moderazione, il pulsante \"Segnala\" ti permetterà di segnalare abusi ai moderatori della stanza.",
         "rust_crypto": "Implementazione crittografia Rust",
-        "rust_crypto_disabled_notice": "Attualmente può essere attivato solo via config.json",
         "sliding_sync": "Modalità di sincr. con slide",
         "sliding_sync_checking": "Controllo…",
         "sliding_sync_configuration": "Configurazione sincr. Sliding",

@@ -1400,7 +1400,6 @@
         "report_to_moderators": "Поскаржитись модераторам",
         "report_to_moderators_description": "У кімнатах, які підтримують модерацію, кнопка «Поскаржитися» дає змогу повідомити про зловживання модераторам кімнати.",
         "rust_crypto": "Реалізація криптографії Rust",
-        "rust_crypto_disabled_notice": "Наразі можна ввімкнути лише через config.json",
         "sliding_sync": "Режим ковзної синхронізації",
         "sliding_sync_checking": "Перевірка…",
         "sliding_sync_configuration": "Конфігурація ковзної синхронізації",

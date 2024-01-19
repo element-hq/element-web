@@ -1439,7 +1439,6 @@
         "report_to_moderators": "Пожаловаться модераторам",
         "report_to_moderators_description": "В поддерживающих модерирование комнатах, кнопка \"Пожаловаться\" позволит вам сообщить о нарушении модераторам комнаты.",
         "rust_crypto": "Реализация криптографии Rust",
-        "rust_crypto_disabled_notice": "В настоящее время можно включить только через config.json",
         "sliding_sync": "Режим Sliding Sync",
         "sliding_sync_checking": "Проверка…",
         "sliding_sync_configuration": "Настройка Sliding sync",

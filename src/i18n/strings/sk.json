@@ -1444,7 +1444,6 @@
         "report_to_moderators": "Nahlásiť moderátorom",
         "report_to_moderators_description": "V miestnostiach, ktoré podporujú moderovanie, môžete pomocou tlačidla \"Nahlásiť\" nahlásiť porušovanie pravidiel moderátorom miestnosti.",
         "rust_crypto": "Implementácia kryptografie Rust",
-        "rust_crypto_disabled_notice": "V súčasnosti sa dá povoliť len prostredníctvom súboru config.json",
         "sliding_sync": "Režim kĺzavej synchronizácie",
         "sliding_sync_checking": "Kontrolovanie…",
         "sliding_sync_configuration": "Konfigurácia kĺzavej synchronizácie",

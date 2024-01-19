@@ -1437,7 +1437,6 @@
         "report_to_moderators": "Nahlásit moderátorům",
         "report_to_moderators_description": "V místnostech, které podporují moderování, můžete pomocí tlačítka \"Nahlásit\" nahlásit zneužití moderátorům místnosti.",
         "rust_crypto": "Implementace kryptografie v jazyce Rust",
-        "rust_crypto_disabled_notice": "Aktuálně lze povolit pouze v souboru config.json",
         "sliding_sync": "Režim klouzavé synchronizace",
         "sliding_sync_checking": "Kontrola…",
         "sliding_sync_configuration": "Nastavení klouzavé synchronizace",

@@ -1291,7 +1291,6 @@
         "report_to_moderators": "Báo cáo cho điều phối viên",
         "report_to_moderators_description": "Trong các phòng hỗ trợ điều phối, nút \"Báo cáo\" sẽ giúp bạn báo cáo lạm dụng cho điều phối viên của phòng.",
         "rust_crypto": "Mã hóa dựa trên Rust",
-        "rust_crypto_disabled_notice": "Hiện chỉ có thể bật bằng tập tin cấu hình config.json",
         "sliding_sync": "Chế độ đồng bộ tối ưu (Sync v3)",
         "sliding_sync_description": "Đang được phát triển tích cực, không thể vô hiệu.",
         "sliding_sync_disabled_notice": "Đăng xuất và đăng nhập lại để vô hiệu hóa",

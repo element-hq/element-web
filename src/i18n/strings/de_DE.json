@@ -1415,7 +1415,6 @@
         "report_to_moderators": "An Raummoderation melden",
         "report_to_moderators_description": "In Räumen, die Moderation unterstützen, lässt dich die Schaltfläche „Melden“ missbräuchliche Verwendung an die Raummoderation melden.",
         "rust_crypto": "Rust-Verschlüsselungsumsetzung",
-        "rust_crypto_disabled_notice": "Dies kann aktuell nur per config.json aktiviert werden",
         "sliding_sync": "Sliding-Sync-Modus",
         "sliding_sync_checking": "Überprüfe …",
         "sliding_sync_configuration": "Sliding-Sync-Konfiguration",

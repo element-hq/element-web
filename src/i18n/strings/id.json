@@ -1409,7 +1409,6 @@
         "report_to_moderators": "Laporkan ke moderator",
         "report_to_moderators_description": "Dalam ruangan yang mendukung moderasi, tombol “Laporkan” memungkinkan Anda untuk melaporkan penyalahgunaan ke moderator ruangan.",
         "rust_crypto": "Implementasi kriptografi Rust",
-        "rust_crypto_disabled_notice": "Saat ini hanya dapat diaktifkan melalui config.json",
         "sliding_sync": "Mode Sinkronisasi Geser",
         "sliding_sync_checking": "Memeriksa…",
         "sliding_sync_configuration": "Konfigurasi Penyinkronan Bergeser",

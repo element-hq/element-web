@@ -1432,7 +1432,6 @@
         "report_to_moderators": "Signaler aux modérateurs",
         "report_to_moderators_description": "Dans les salons prenant en charge la modération, le bouton « Signaler » vous permet de signaler des abus aux modérateurs du salon.",
         "rust_crypto": "Implémentation cryptographique en Rust",
-        "rust_crypto_disabled_notice": "Ne peut pour l’instant être activé que dans config.json",
         "sliding_sync": "Mode synchronisation progressive",
         "sliding_sync_checking": "Vérification…",
         "sliding_sync_configuration": "Configuration de la synchronisation progressive",

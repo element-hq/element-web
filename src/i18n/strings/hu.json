@@ -1421,7 +1421,6 @@
         "report_to_moderators": "Jelentés a moderátoroknak",
         "report_to_moderators_description": "A moderálást támogató szobákban a problémás tartalmat a „Jelentés” gombbal lehet a moderátorok felé jelezni.",
         "rust_crypto": "Rust titkosítási implementáció",
-        "rust_crypto_disabled_notice": "Jelenleg csak a config.json fájlban lehet engedélyezni",
         "sliding_sync": "Csúszó szinkronizációs mód",
         "sliding_sync_checking": "Ellenőrzés…",
         "sliding_sync_configuration": "Csúszó szinkronizáció beállítása",
