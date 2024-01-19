@@ -35,6 +35,7 @@ import DMRoomMap from "matrix-react-sdk/src/utils/DMRoomMap";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "matrix-react-sdk/src/utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
 import { privateShouldBeEncrypted } from "matrix-react-sdk/src/utils/rooms";
 import { showSpaceInvite } from "matrix-react-sdk/src/utils/space";
+import { sendMessage } from "matrix-react-sdk/src/components/views/rooms/wysiwyg_composer/utils/message";
 import React, { useContext } from "react";
 
 import { getRoomName } from "../../../hooks/useRoomName";
@@ -60,7 +61,8 @@ const determineIntroMessage = (room: Room, encryptedSingle3rdPartyInvite: boolea
 
 const NewRoomIntro: React.FC = () => {
     const cli = useContext(MatrixClientContext);
-    const { room, roomId } = useContext(RoomContext);
+    const roomContext = useContext(RoomContext);
+    const { room, roomId } = roomContext;
 
     if (!room || !roomId) {
         throw new Error("Unable to create a NewRoomIntro without room and roomId");
@@ -71,22 +73,20 @@ const NewRoomIntro: React.FC = () => {
 
     const onSendHelloClick = (): void => {
         if (!dmPartner) return;
-        cli.sendEvent(roomId, EventType.RoomMessage, {
-            body: "👋",
-            msgtype: "m.text",
-        }, (new Date()).toString());
+        sendMessage("👋", false, {
+            mxClient: cli,
+            roomContext: roomContext,
+        });
     };
 
-    const sendHelloButton = (!room.getLastActiveTimestamp()) && (
+    const sendHelloButton = !room.getLastActiveTimestamp() && (
         <AccessibleButton
             kind="primary_outline"
             onClick={onSendHelloClick}
             style={{ marginTop: "5px", fontSize: "30px" }}
         >
             👋
-            <span style={{ fontSize: '18px', paddingLeft: '15px' }}>
-                Say Hello
-            </span>
+            <span style={{ fontSize: "18px", paddingLeft: "15px" }}>Say Hello</span>
         </AccessibleButton>
     );
 
