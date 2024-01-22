@@ -1,6 +1,8 @@
 {
     "a11y": {
+        "emoji_picker": "Emojiväljare",
         "jump_first_invite": "Hoppa till första inbjudan.",
+        "message_composer": "Meddelanderedigerare",
         "n_unread_messages": {
             "other": "%(count)s olästa meddelanden.",
             "one": "1 oläst meddelande."
@@ -9,7 +11,10 @@
             "other": "%(count)s olästa meddelanden inklusive omnämnanden.",
             "one": "1 oläst omnämnande."
         },
+        "recent_rooms": "Nyliga rum",
         "room_name": "Rum %(name)s",
+        "room_status_bar": "Rumsstatusfält",
+        "seek_bar_label": "Förloppsfält för ljud",
         "unread_messages": "Olästa meddelanden.",
         "user_menu": "Användarmeny"
     },
@@ -251,6 +256,7 @@
             "error_homeserver_lacks_support": "Hemservern stöder inte inloggning av en annan enhet.",
             "error_invalid_scanned_code": "Den skannade koden är ogiltig.",
             "error_linking_incomplete": "Länkningen slutfördes inte inom den krävda tiden.",
+            "error_rate_limited": "För många försök under för kort tid. Vänta ett tag innan du försöker igen.",
             "error_request_cancelled": "Förfrågan avbröts.",
             "error_request_declined": "Förfrågan nekades på den andra enheten.",
             "error_unexpected": "Ett oväntade fel inträffade.",
@@ -1056,10 +1062,14 @@
         "unknown_error_code": "okänd felkod",
         "update_power_level": "Misslyckades att ändra behörighetsnivå"
     },
-    "error_app_open_in_another_tab": "%(brand)s har öppnats in en annan flik.",
+    "error_app_open_in_another_tab": "Byt till den andra fliken för att ansluta till %(brand)s. Den här fliken kan nu stängas",
     "error_app_open_in_another_tab_title": "%(brand)s är ansluten i en annan flik",
     "error_app_opened_in_another_window": "%(brand)s är öppen i ett annat fönster. Klicka på \"%(label)s\" för att använda %(brand)s här och koppla bort det andra fönstret.",
-    "error_database_closed_title": "Databasen stängdes oväntat",
+    "error_database_closed_description": {
+        "for_desktop": "Din hårddisk kan vara full. Vänligen frigör lite utrymme och ladda om.",
+        "for_web": "Om du rensade webbläsardata förväntas detta meddelande. %(brand)s kanske också är öppen i en annan flik, eller så är din hårddisk är full. Vänligen rensa lite utrymme och ladda om"
+    },
+    "error_database_closed_title": "%(brand)s slutade fungera",
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "Kunde inte kopiera en länk till rummet till klippbordet.",
@@ -1429,7 +1439,7 @@
         "notification_settings_beta_caption": "Vi introducerar ett enklare sätt att ändra dina aviseringsinställningar. Anpassa din %(brand)s precis som du vill ha den.",
         "notification_settings_beta_title": "Aviseringsinställningar",
         "notifications": "Aktivera aviseringspanelen i rumshuvudet",
-        "oidc_native_flow": "Aktivera nya inbyggda OIDC-flöden (Under aktiv utveckling)",
+        "oidc_native_flow": "Inbyggd OIDC-autentisering",
         "oidc_native_flow_description": "⚠ VARNING: Experimentellt. Använd inbyggd OIDC-autentisering när den stöds av servern.",
         "pinning": "Fastnålning av meddelanden",
         "render_reaction_images": "Återge anpassade bilder i reaktioner",
@@ -1576,6 +1586,7 @@
     },
     "member_list_back_action_label": "Rumsmedlemmar",
     "message_edit_dialog_title": "Meddelanderedigeringar",
+    "migrating_crypto": "Häng kvar. Vi uppdaterar Element för att göra kryptering snabbare och mer tillförlitlig.",
     "mobile_guide": {
         "toast_accept": "Använd app",
         "toast_description": "%(brand)s är experimentell i mobila webbläsare. För en bättre upplevelse och de senaste funktionerna använd våran nativa app.",
@@ -1600,6 +1611,12 @@
         "error_change_title": "Ändra aviseringsinställningar",
         "keyword": "Nyckelord",
         "keyword_new": "Nytt nyckelord",
+        "level_activity": "Aktivitet",
+        "level_highlight": "Markera",
+        "level_muted": "Tystad",
+        "level_none": "Ingen",
+        "level_notification": "Avisering",
+        "level_unsent": "Oskickad",
         "mark_all_read": "Markera alla som lästa",
         "mentions_and_keywords": "@omnämnanden och nyckelord",
         "mentions_and_keywords_description": "Bli endast aviserad om omnämnanden och nyckelord i enlighet med dina <a>inställningar</a>",
@@ -1931,6 +1948,7 @@
             "video_call_ec_layout_spotlight": "Rampljus",
             "video_room_view_chat_button": "Visa chattidslinje"
         },
+        "header_face_pile_tooltip": "Växla medlemslista",
         "header_untrusted_label": "Ej betrodd",
         "inaccessible": "Det är rummet eller utrymmet är inte åtkomligt för tillfället.",
         "inaccessible_name": "%(roomName)s är inte tillgängligt för tillfället.",
@@ -2583,6 +2601,7 @@
             "error_title": "Det går inte att aktivera aviseringar",
             "error_updating": "Ett fel uppstod när du uppdaterade dina aviseringsinställningar. Pröva att växla alternativet igen.",
             "invites": "Inbjuden till ett rum",
+            "keywords": "Visa ett märke <badge/> när nyckelord används i ett rum.",
             "keywords_prompt": "Ange nyckelord här, eller använd för stavningsvariationer eller smeknamn",
             "labs_notice_prompt": "<strong>Uppdatering:</strong> Vi har förenklat aviseringsinställningarna för att göra alternativen enklare att hitta. Vissa anpassade inställningar som du har valt tidigare visas inte här, men de är fortfarande aktiva. Om du fortsätter kan vissa av dina inställningar ändras. <a>Läs mer</a>",
             "mentions_keywords": "Omnämnanden och nyckelord",

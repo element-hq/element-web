@@ -1119,6 +1119,8 @@
         "error_change_title": "שינוי הגדרת התרעות",
         "keyword": "מילת מפתח",
         "keyword_new": "מילת מפתח חדשה",
+        "level_activity": "פעילות",
+        "level_none": "ללא",
         "mark_all_read": "סמן הכל כנקרא",
         "mentions_and_keywords": "אזכורים ומילות מפתח",
         "mentions_and_keywords_description": "קבלו התראה רק עם אזכורים ומילות מפתח כפי שהוגדרו ב<a>הגדרות</a> שלכם",

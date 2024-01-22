@@ -972,6 +972,8 @@
         "error_change_title": "Keisti pranešimų nustatymus",
         "keyword": "Raktažodis",
         "keyword_new": "Naujas raktažodis",
+        "level_activity": "Aktyvumą",
+        "level_none": "Nė vienas",
         "mark_all_read": "Pažymėti viską kaip perskaitytą",
         "mentions_and_keywords": "@paminėjimai & raktažodžiai",
         "mentions_and_keywords_description": "Gaukite pranešimus tik apie paminėjimus ir raktinius žodžius, kaip nustatyta jūsų <a>nustatymuose</a>",

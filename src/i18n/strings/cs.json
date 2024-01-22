@@ -1,6 +1,8 @@
 {
     "a11y": {
+        "emoji_picker": "Výběr emodži",
         "jump_first_invite": "Přejít na první pozvánku.",
+        "message_composer": "Editor zprávy",
         "n_unread_messages": {
             "other": "%(count)s nepřečtených zpráv.",
             "one": "Nepřečtená zpráva."
@@ -9,7 +11,10 @@
             "other": "%(count)s nepřečtených zpráv a zmínek.",
             "one": "Nepřečtená zmínka."
         },
+        "recent_rooms": "Nedávné místnosti",
         "room_name": "Místnost %(name)s",
+        "room_status_bar": "Stavový řádek místnosti",
+        "seek_bar_label": "Panel posunu zvuku",
         "unread_messages": "Nepřečtené zprávy.",
         "user_menu": "Uživatelská nabídka"
     },
@@ -251,6 +256,7 @@
             "error_homeserver_lacks_support": "Domovský server nepodporuje přihlášení pomocí jiného zařízení.",
             "error_invalid_scanned_code": "Naskenovaný kód je neplatný.",
             "error_linking_incomplete": "Propojení nebylo dokončeno v požadovaném čase.",
+            "error_rate_limited": "Příliš mnoho pokusů v krátkém čase. Počkejte chvíli, než to zkusíte znovu.",
             "error_request_cancelled": "Požadavek byl zrušen.",
             "error_request_declined": "Požadavek byl na druhém zařízení odmítnut.",
             "error_unexpected": "Došlo k neočekávané chybě.",
@@ -1059,7 +1065,11 @@
     "error_app_open_in_another_tab": "Přepněte na jiný panel a připojte se k %(brand)s. Tuto kartu nyní můžete zavřít.",
     "error_app_open_in_another_tab_title": "%(brand)s je připojen na jiném panelu",
     "error_app_opened_in_another_window": "%(brand)s je otevřen v jiném okně. Klikněte na \"%(label)s\" pro přepnutí na %(brand)s zde a zavřete druhé okno.",
-    "error_database_closed_title": "Databáze byla neočekávaně uzavřena",
+    "error_database_closed_description": {
+        "for_desktop": "Váš disk může být plný. Uvolněte prosím místo a znovu načtěte.",
+        "for_web": "Pokud jste vymazali data prohlížeče, je tato zpráva očekávaná. %(brand)s může být také otevřený na jiné kartě, nebo je váš disk plný. Uvolněte prosím místo a znovu načtěte"
+    },
+    "error_database_closed_title": "%(brand)s přestal fungovat",
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "Nelze zkopírovat odkaz na místnost do schránky.",
@@ -1437,6 +1447,10 @@
         "report_to_moderators": "Nahlásit moderátorům",
         "report_to_moderators_description": "V místnostech, které podporují moderování, můžete pomocí tlačítka \"Nahlásit\" nahlásit zneužití moderátorům místnosti.",
         "rust_crypto": "Implementace kryptografie v jazyce Rust",
+        "rust_crypto_in_config": "Rust kryptografii nelze v tomto %(brand)s deaktivovat",
+        "rust_crypto_in_config_description": "Přechod na Rust kryptografii vyžaduje proces migrace, který může trvat několik minut. Nelze jej vypnout; používejte jej s opatrností!",
+        "rust_crypto_optin_warning": "Přechod na Rust kryptografii vyžaduje proces migrace, který může trvat několik minut. Pro deaktivaci se budete muset odhlásit a znovu přihlásit; používejte s opatrností!",
+        "rust_crypto_requires_logout": "Jakmile je Rust kryptografie povolena, lze ji vypnout pouze odhlášením a opětovným přihlášením.",
         "sliding_sync": "Režim klouzavé synchronizace",
         "sliding_sync_checking": "Kontrola…",
         "sliding_sync_configuration": "Nastavení klouzavé synchronizace",
@@ -1576,6 +1590,7 @@
     },
     "member_list_back_action_label": "Členové místnosti",
     "message_edit_dialog_title": "Úpravy zpráv",
+    "migrating_crypto": "Vydržte. Aktualizujeme Element, aby bylo šifrování rychlejší a spolehlivější.",
     "mobile_guide": {
         "toast_accept": "Použijte aplikaci",
         "toast_description": "%(brand)s je experimentální v mobilním webovém prohlížeči. Chcete-li získat lepší zážitek a nejnovější funkce, použijte naši bezplatnou nativní aplikaci.",
@@ -1600,6 +1615,12 @@
         "error_change_title": "Upravit nastavení oznámení",
         "keyword": "Klíčové slovo",
         "keyword_new": "Nové klíčové slovo",
+        "level_activity": "Aktivita",
+        "level_highlight": "Zvýraznit",
+        "level_muted": "Ztišeno",
+        "level_none": "Žádné",
+        "level_notification": "Oznámení",
+        "level_unsent": "Neodeslané",
         "mark_all_read": "Označit vše jako přečtené",
         "mentions_and_keywords": "@zmínky a klíčová slova",
         "mentions_and_keywords_description": "Dostávat oznámení pouze o zmínkách a klíčových slovech podle <a>nastavení</a>",
@@ -1932,6 +1953,7 @@
             "video_call_ec_layout_spotlight": "Reflektor",
             "video_room_view_chat_button": "Zobrazit časovou osu konverzace"
         },
+        "header_face_pile_tooltip": "Přepnout seznam členů",
         "header_untrusted_label": "Nedůvěryhodné",
         "inaccessible": "Tato místnost nebo prostor není v tuto chvíli přístupná.",
         "inaccessible_name": "Místnost %(roomName)s není v tuto chvíli dostupná.",

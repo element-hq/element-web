@@ -1693,6 +1693,7 @@
     "presence": {
         "away": "Idle",
         "busy": "Sibuk",
+        "idle": "Diam",
         "idle_for": "Idle untuk %(duration)s",
         "offline": "Luring",
         "offline_for": "Luring selama %(duration)s",

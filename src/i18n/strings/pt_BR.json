@@ -1091,6 +1091,8 @@
         "error_change_title": "Alterar configuração de notificações",
         "keyword": "Palavra-chave",
         "keyword_new": "Nova palavra-chave",
+        "level_activity": "Atividade recente",
+        "level_none": "Nenhuma",
         "mark_all_read": "Marcar tudo como lido",
         "mentions_and_keywords": "@menções e palavras-chave",
         "mentions_and_keywords_description": "Receba notificações apenas com menções e palavras-chave conforme definido em suas <a>configurações</a>",

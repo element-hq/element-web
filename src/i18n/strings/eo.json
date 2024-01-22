@@ -1175,6 +1175,8 @@
         "error_change_title": "Ŝanĝi agordojn pri sciigoj",
         "keyword": "Ĉefvorto",
         "keyword_new": "Nova ĉefvorto",
+        "level_activity": "Aktiveco",
+        "level_none": "Neniu",
         "mark_all_read": "Marki ĉion legita",
         "mentions_keywords": "Mencioj kaj ĉefvortoj",
         "message_didnt_send": "Mesaĝo ne sendiĝis. Klaku por akiri informojn."
