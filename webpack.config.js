@@ -8,7 +8,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackInjectPreload = require("@principalstudio/html-webpack-inject-preload");
-const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 // Environment variables
@@ -701,9 +700,11 @@ module.exports = (env, argv) => {
                 files: [{ match: /.*Inter.*\.woff2$/ }],
             }),
 
-            // upload to sentry if sentry env is present
+            // Upload to sentry if sentry env is present
+            // This plugin throws an error on import on some platforms like ppc64le & s390x even if the plugin isn't called,
+            // so we require it conditionally.
             process.env.SENTRY_DSN &&
-                sentryWebpackPlugin({
+                require("@sentry/webpack-plugin").sentryWebpackPlugin({
                     release: process.env.VERSION,
                     sourcemaps: {
                         paths: "./webapp/bundles/**",
