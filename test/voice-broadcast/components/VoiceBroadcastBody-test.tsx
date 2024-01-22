@@ -44,6 +44,8 @@ jest.mock("../../../src/voice-broadcast/components/molecules/VoiceBroadcastPlayb
 
 jest.mock("../../../src/utils/permalinks/Permalinks");
 jest.mock("../../../src/utils/MediaEventHelper");
+jest.mock("../../../src/stores/WidgetStore");
+jest.mock("../../../src/stores/widgets/WidgetLayoutStore");
 
 describe("VoiceBroadcastBody", () => {
     const roomId = "!room:example.com";

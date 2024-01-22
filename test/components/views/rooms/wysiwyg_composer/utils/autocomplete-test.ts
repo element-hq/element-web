@@ -41,6 +41,8 @@ const createMockCompletion = (props: Partial<ICompletion>): ICompletion => {
 };
 
 jest.mock("../../../../../../src/Avatar");
+jest.mock("../../../../../../src/stores/WidgetStore");
+jest.mock("../../../../../../src/stores/widgets/WidgetLayoutStore");
 
 beforeEach(() => jest.clearAllMocks());
 afterAll(() => jest.restoreAllMocks());

@@ -20,14 +20,18 @@ import { AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/Acco
 import { DialogContent, DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Mocked } from "jest-mock";
 
 import { ProxiedModuleApi } from "../../src/modules/ProxiedModuleApi";
-import { stubClient } from "../test-utils";
+import { getMockClientWithEventEmitter, mkRoom, stubClient } from "../test-utils";
 import { setLanguage } from "../../src/languageHandler";
 import { ModuleRunner } from "../../src/modules/ModuleRunner";
 import { registerMockModule } from "./MockModule";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
 import { Action } from "../../src/dispatcher/actions";
+import WidgetStore, { IApp } from "../../src/stores/WidgetStore";
+import { Container, WidgetLayoutStore } from "../../src/stores/widgets/WidgetLayoutStore";
 
 describe("ProxiedApiModule", () => {
     afterEach(() => {
@@ -252,6 +256,105 @@ describe("ProxiedApiModule", () => {
             });
 
             expect(dialog).not.toBeInTheDocument();
+        });
+    });
+
+    describe("getApps", () => {
+        it("should return apps from the widget store", () => {
+            const api = new ProxiedModuleApi();
+            const app = {} as unknown as IApp;
+            const apps: IApp[] = [app];
+
+            jest.spyOn(WidgetStore.instance, "getApps").mockReturnValue(apps);
+            expect(api.getApps("!room:example.com")).toEqual(apps);
+        });
+    });
+
+    describe("getAppAvatarUrl", () => {
+        const app = {} as unknown as IApp;
+        const avatarUrl = "https://example.com/avatar.png";
+
+        let api: ProxiedModuleApi;
+        let client: Mocked<MatrixClient>;
+
+        beforeEach(() => {
+            api = new ProxiedModuleApi();
+            client = getMockClientWithEventEmitter({ mxcUrlToHttp: jest.fn().mockReturnValue(avatarUrl) });
+        });
+
+        it("should return null if the app has no avatar URL", () => {
+            expect(api.getAppAvatarUrl(app)).toBeNull();
+        });
+
+        it("should return the app avatar URL", () => {
+            expect(api.getAppAvatarUrl({ ...app, avatar_url: avatarUrl })).toBe(avatarUrl);
+        });
+
+        it("should support optional thumbnail params", () => {
+            api.getAppAvatarUrl({ ...app, avatar_url: avatarUrl }, 1, 2, "3");
+            // eslint-disable-next-line no-restricted-properties
+            expect(client.mxcUrlToHttp).toHaveBeenCalledWith(avatarUrl, 1, 2, "3");
+        });
+    });
+
+    describe("isAppInContainer", () => {
+        const app = {} as unknown as IApp;
+        const roomId = "!room:example.com";
+
+        let api: ProxiedModuleApi;
+        let client: MatrixClient;
+
+        beforeEach(() => {
+            api = new ProxiedModuleApi();
+            client = stubClient();
+
+            jest.spyOn(WidgetLayoutStore.instance, "isInContainer");
+        });
+
+        it("should return false if there is no room", () => {
+            client.getRoom = jest.fn().mockReturnValue(null);
+
+            expect(api.isAppInContainer(app, Container.Top, roomId)).toBe(false);
+            expect(WidgetLayoutStore.instance.isInContainer).not.toHaveBeenCalled();
+        });
+
+        it("should return false if the app is not in the container", () => {
+            jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(false);
+            expect(api.isAppInContainer(app, Container.Top, roomId)).toBe(false);
+        });
+
+        it("should return true if the app is in the container", () => {
+            jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(true);
+            expect(api.isAppInContainer(app, Container.Top, roomId)).toBe(true);
+        });
+    });
+
+    describe("moveAppToContainer", () => {
+        const app = {} as unknown as IApp;
+        const roomId = "!room:example.com";
+
+        let api: ProxiedModuleApi;
+        let client: MatrixClient;
+
+        beforeEach(() => {
+            api = new ProxiedModuleApi();
+            client = stubClient();
+
+            jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
+        });
+
+        it("should not move if there is no room", () => {
+            client.getRoom = jest.fn().mockReturnValue(null);
+            api.moveAppToContainer(app, Container.Top, roomId);
+            expect(WidgetLayoutStore.instance.moveToContainer).not.toHaveBeenCalled();
+        });
+
+        it("should move if there is a room", () => {
+            const room = mkRoom(client, roomId);
+            client.getRoom = jest.fn().mockReturnValue(room);
+
+            api.moveAppToContainer(app, Container.Top, roomId);
+            expect(WidgetLayoutStore.instance.moveToContainer).toHaveBeenCalledWith(room, app, Container.Top);
         });
     });
 });

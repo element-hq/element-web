@@ -69,7 +69,7 @@
         "@matrix-org/emojibase-bindings": "^1.1.2",
         "@matrix-org/matrix-wysiwyg": "2.17.0",
         "@matrix-org/olm": "3.2.15",
-        "@matrix-org/react-sdk-module-api": "^2.2.1",
+        "@matrix-org/react-sdk-module-api": "^2.3.0",
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^7.0.0",
         "@testing-library/react-hooks": "^8.0.1",

@@ -29,6 +29,8 @@ import AutoRageshakeStore from "../../src/stores/AutoRageshakeStore";
 import { mkEvent, stubClient } from "../test-utils";
 
 jest.mock("../../src/rageshake/submit-rageshake");
+jest.mock("../../src/stores/WidgetStore");
+jest.mock("../../src/stores/widgets/WidgetLayoutStore");
 
 describe("AutoRageshakeStore", () => {
     const roomId = "!room:example.com";

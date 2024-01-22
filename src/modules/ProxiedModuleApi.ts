@@ -38,6 +38,8 @@ import { Action } from "../dispatcher/actions";
 import { OverwriteLoginPayload } from "../dispatcher/payloads/OverwriteLoginPayload";
 import { ActionPayload } from "../dispatcher/payloads";
 import SettingsStore from "../settings/SettingsStore";
+import WidgetStore, { IApp } from "../stores/WidgetStore";
+import { Container, WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 
 /**
  * Glue between the `ModuleApi` interface and the react-sdk. Anticipates one instance
@@ -217,5 +219,39 @@ export class ProxiedModuleApi implements ModuleApi {
         const maybeObj = SdkConfig.get(namespace as any);
         if (!maybeObj || !(typeof maybeObj === "object")) return undefined;
         return maybeObj[key];
+    }
+
+    /**
+     * @override
+     */
+    public getApps(roomId: string): IApp[] {
+        return WidgetStore.instance.getApps(roomId);
+    }
+
+    /**
+     * @override
+     */
+    public getAppAvatarUrl(app: IApp, width?: number, height?: number, resizeMethod?: string): string | null {
+        if (!app.avatar_url) return null;
+        // eslint-disable-next-line no-restricted-properties
+        return MatrixClientPeg.safeGet().mxcUrlToHttp(app.avatar_url, width, height, resizeMethod);
+    }
+
+    /**
+     * @override
+     */
+    public isAppInContainer(app: IApp, container: Container, roomId: string): boolean {
+        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        if (!room) return false;
+        return WidgetLayoutStore.instance.isInContainer(room, app, container);
+    }
+
+    /**
+     * @override
+     */
+    public moveAppToContainer(app: IApp, container: Container, roomId: string): void {
+        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        if (!room) return;
+        WidgetLayoutStore.instance.moveToContainer(room, app, container);
     }
 }

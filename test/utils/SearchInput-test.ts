@@ -19,6 +19,8 @@ import { parsePermalink } from "../../src/utils/permalinks/Permalinks";
 import { transformSearchTerm } from "../../src/utils/SearchInput";
 
 jest.mock("../../src/utils/permalinks/Permalinks");
+jest.mock("../../src/stores/WidgetStore");
+jest.mock("../../src/stores/widgets/WidgetLayoutStore");
 
 describe("transforming search term", () => {
     it("should return the primaryEntityId if the search term was a permalink", () => {

@@ -84,6 +84,9 @@ jest.mock("../../src/utils/DMRoomMap", () => {
     };
 });
 
+jest.mock("../../src/stores/WidgetStore");
+jest.mock("../../src/stores/widgets/WidgetLayoutStore");
+
 describe("RoomViewStore", function () {
     const userId = "@alice:server";
     const roomId = "!randomcharacters:aser.ver";

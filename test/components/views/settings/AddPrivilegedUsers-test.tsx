@@ -30,6 +30,8 @@ import UserProvider from "../../../../src/autocomplete/UserProvider";
 import { ICompletion } from "../../../../src/autocomplete/Autocompleter";
 
 jest.mock("../../../../src/autocomplete/UserProvider");
+jest.mock("../../../../src/stores/WidgetStore");
+jest.mock("../../../../src/stores/widgets/WidgetLayoutStore");
 
 const completions: ICompletion[] = [
     {
