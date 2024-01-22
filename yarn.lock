@@ -8202,10 +8202,10 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jsrsasign@^10.5.25:
-  version "10.9.0"
-  resolved "https://registry.yarnpkg.com/jsrsasign/-/jsrsasign-10.9.0.tgz#cc3f316e7e4c112a976193f9d2c93deb5a0745ee"
-  integrity sha512-QWLUikj1SBJGuyGK8tjKSx3K7Y69KYJnrs/pQ1KZ6wvZIkHkWjZ1PJDpuvc1/28c1uP0KW9qn1eI1LzHQqDOwQ==
+jsrsasign@^11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/jsrsasign/-/jsrsasign-11.0.0.tgz#766570c21f87d68075a142f5188f7e583cee9d70"
+  integrity sha512-BtRwVKS+5dsgPpAtzJcpo5OoWjSs1/zllSBG0+8o8/aV0Ki76m6iZwHnwnsqoTdhfFZDN1XIdcaZr5ZkP+H2gg==
 
 "jsx-ast-utils@^2.4.1 || ^3.0.0":
   version "3.3.5"
@@ -8600,8 +8600,8 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "31.0.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/76b9c3950bfdfca922bec7f70502ff2da93bd731"
+  version "31.1.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2337d5a7af6265bbcabbd42c1594cd8b1829b00b"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^3.6.0"
@@ -8626,8 +8626,8 @@ matrix-mock-request@^2.5.0:
     expect "^28.1.0"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.89.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/3c405ac34d217bba86f7dc2690ef9125181d2e58"
+  version "3.90.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/d8202be772ca081e38a2183b31df82d4dd8f2e4e"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.9.0"
