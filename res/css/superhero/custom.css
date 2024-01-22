@@ -876,3 +876,18 @@ h2 .sh_VerifiedIcon {
 .mx_HomePage_default .mx_HomePage_default_buttons .mx_AccessibleButton.mx_HomePage_button_custom::before {
     display: none !important;
 }
+
+.mx_RoomGeneralContextMenu_iconSignOut::before {
+    -webkit-mask-image: url("../../themes/superhero/img/icons/leave.svg") !important;
+    mask-image: url("../../themes/superhero/img/icons/leave.svg") !important;
+}
+
+.mx_RoomTile_contextMenu .mx_RoomTile_iconSignOut::before {
+    -webkit-mask-image: url("../../themes/superhero/img/icons/leave.svg") !important;
+    mask-image: url("../../themes/superhero/img/icons/leave.svg") !important;
+}
+
+.mx_IconizedContextMenu .mx_IconizedContextMenu_option_red .mx_IconizedContextMenu_icon::before {
+    -webkit-mask-image: url("../../themes/superhero/img/icons/leave.svg") !important;
+    mask-image: url("../../themes/superhero/img/icons/leave.svg") !important;
+}
