@@ -707,7 +707,7 @@ module.exports = (env, argv) => {
             }),
 
             // Upload to sentry if sentry env is present
-            // This plugin fails to import on some platforms like ppc64le & s390x even if the plugin isn't called,
+            // This plugin throws an error on import on some platforms like ppc64le & s390x even if the plugin isn't called,
             // so we require it conditionally.
             process.env.SENTRY_DSN &&
                 require("@sentry/webpack-plugin").sentryWebpackPlugin({
