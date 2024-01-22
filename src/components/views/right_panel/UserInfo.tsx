@@ -78,13 +78,12 @@ import { IRightPanelCardState } from "matrix-react-sdk/src/stores/right-panel/Ri
 import UserIdentifierCustomisations from "matrix-react-sdk/src/customisations/UserIdentifier";
 import PosthogTrackers from "matrix-react-sdk/src/PosthogTrackers";
 import { ViewRoomPayload } from "matrix-react-sdk/src/dispatcher/payloads/ViewRoomPayload";
-import { DirectoryMember, startDmOnFirstMessage } from "matrix-react-sdk/src/utils/direct-messages";
 import { SdkContextClass } from "matrix-react-sdk/src/contexts/SDKContext";
 import { asyncSome } from "matrix-react-sdk/src/utils/arrays";
 import UIStore from "matrix-react-sdk/src/stores/UIStore";
 
 import { UserVerifiedBadge } from "../elements/UserVerifiedBadge";
-import { Icon as SendMessage } from "../../../../res/themes/superhero/img/icons/send.svg";
+import { MessageButton } from "../elements/MessageButton";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -132,19 +131,6 @@ export const getE2EStatus = async (
     });
     return anyDeviceUnverified ? E2EStatus.Warning : E2EStatus.Verified;
 };
-
-/**
- * Converts the member to a DirectoryMember and starts a DM with them.
- */
-async function openDmForUser(matrixClient: MatrixClient, user: Member): Promise<void> {
-    const avatarUrl = user instanceof User ? user.avatarUrl : user.getMxcAvatarUrl();
-    const startDmUser = new DirectoryMember({
-        user_id: user.userId,
-        display_name: user.rawDisplayName,
-        avatar_url: avatarUrl,
-    });
-    await startDmOnFirstMessage(matrixClient, [startDmUser]);
-}
 
 type SetUpdating = (updating: boolean) => void;
 
@@ -358,28 +344,6 @@ function DevicesSection({
         </div>
     );
 }
-
-const MessageButton = ({ member }: { member: Member }): JSX.Element => {
-    const cli = useContext(MatrixClientContext);
-    const [busy, setBusy] = useState(false);
-
-    return (
-        <AccessibleButton
-            kind="primary"
-            onClick={async (): Promise<void> => {
-                if (busy) return;
-                setBusy(true);
-                await openDmForUser(cli, member);
-                setBusy(false);
-            }}
-            className="mx_UserInfo_field"
-            disabled={busy}
-        >
-            <SendMessage width="16px" height="16px" />
-            <span style={{ marginLeft: "5px" }}>Send Message</span>
-        </AccessibleButton>
-    );
-};
 
 export const UserOptionsSection: React.FC<{
     member: Member;
