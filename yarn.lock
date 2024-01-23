@@ -1810,6 +1810,11 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-3.6.0.tgz#385aa579d7b7546d85c9b20bf6ba780f799bdda3"
   integrity sha512-fvuYczcp/r/MOkOAUbK+tMaTerEe7/QHGQcRJz3W3JuEma0YN59d35zTBlts7EkN6Ichw1vLSyM+GkcbuosuyA==
 
+"@matrix-org/matrix-sdk-crypto-wasm@^4.0.0":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-4.0.1.tgz#b1d3848a6adc120622e5225045330d253273b117"
+  integrity sha512-0B4QQ9kop8AocmQDcOfROCQ6QyGZeogpsvTYfEB9ZIBtndCCwy/C3mkxzJD6+gEo1bJ4TdYnblhN7hEQlAG50g==
+
 "@matrix-org/matrix-wysiwyg@2.17.0":
   version "2.17.0"
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.17.0.tgz#68c83da17826fb43828f0c1ddd8d6e0b9d155ae5"
@@ -1824,6 +1829,13 @@
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-2.2.1.tgz#308bcb42a780200d3e7994235376784b51819379"
   integrity sha512-+MXTMEapzGmhArUt86GYDQirOvm19+wvQLDApmHpUQvSZvYm7wOo1EwR9FFvSKve53fu+v6gI1grnj7YLzGQ9Q==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+
+"@matrix-org/react-sdk-module-api@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-2.3.0.tgz#85be5cfc73be0494c13d4dc9050cb70c58d7a08b"
+  integrity sha512-x/ie44yaXNtE5AKcmQiW5yINVEIJ7IjjEc35vj6j52fM8tZ9XbJx9PANKSWsdd0NJp3OqyaeHftmN6ESfx4YoQ==
   dependencies:
     "@babel/runtime" "^7.17.9"
 
@@ -8599,6 +8611,26 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
+matrix-js-sdk@31.2.0-rc.0:
+  version "31.2.0-rc.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-31.2.0-rc.0.tgz#cc36f36d8209702b62bb5c311f3b0fc9a190948d"
+  integrity sha512-bTtLUapKGdhrqzKcenYsrnKsuT10Ax2Z476DZjdYCjooHeSfDAjDdWUsMUqG7HzrueyipbnSR0uj1E8UwJyiKw==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^4.0.0"
+    another-json "^0.2.0"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    jwt-decode "^3.1.2"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.6.0"
+    oidc-client-ts "^2.2.4"
+    p-retry "4"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+    uuid "9"
+
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "31.1.0"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2337d5a7af6265bbcabbd42c1594cd8b1829b00b"
@@ -8625,16 +8657,17 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.90.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/d8202be772ca081e38a2183b31df82d4dd8f2e4e"
+matrix-react-sdk@3.91.0-rc.0:
+  version "3.91.0-rc.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.91.0-rc.0.tgz#776d6405c98a43f62943dde851aa62c5916aa0b0"
+  integrity sha512-2DhlxlB/RuntuUkgl8Gp3L4cLxrnZgX0WzFnqLi+Zo5vrQOI2Hd4qyTI3wlnD3HLwiUsPen3Kgy2AsNL7C7Btg==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.9.0"
     "@matrix-org/emojibase-bindings" "^1.1.2"
     "@matrix-org/matrix-wysiwyg" "2.17.0"
     "@matrix-org/olm" "3.2.15"
-    "@matrix-org/react-sdk-module-api" "^2.2.1"
+    "@matrix-org/react-sdk-module-api" "^2.3.0"
     "@matrix-org/spec" "^1.7.0"
     "@sentry/browser" "^7.0.0"
     "@testing-library/react-hooks" "^8.0.1"
@@ -8670,7 +8703,7 @@ matrix-mock-request@^2.5.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "31.2.0-rc.0"
     matrix-widget-api "^1.5.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
