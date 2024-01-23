@@ -24,10 +24,11 @@ import {
 } from "../../../src/utils/oidc/persistOidcSettings";
 
 describe("persist OIDC settings", () => {
-    beforeEach(() => {
-        jest.spyOn(sessionStorage.__proto__, "getItem").mockClear().mockReturnValue(null);
+    jest.spyOn(Storage.prototype, "getItem");
+    jest.spyOn(Storage.prototype, "setItem");
 
-        jest.spyOn(sessionStorage.__proto__, "setItem").mockClear();
+    beforeEach(() => {
+        localStorage.clear();
     });
 
     const clientId = "test-client-id";
@@ -45,20 +46,17 @@ describe("persist OIDC settings", () => {
     describe("persistOidcAuthenticatedSettings", () => {
         it("should set clientId and issuer in session storage", () => {
             persistOidcAuthenticatedSettings(clientId, issuer, idTokenClaims);
-            expect(sessionStorage.setItem).toHaveBeenCalledWith("mx_oidc_client_id", clientId);
-            expect(sessionStorage.setItem).toHaveBeenCalledWith("mx_oidc_token_issuer", issuer);
-            expect(sessionStorage.setItem).toHaveBeenCalledWith(
-                "mx_oidc_id_token_claims",
-                JSON.stringify(idTokenClaims),
-            );
+            expect(localStorage.setItem).toHaveBeenCalledWith("mx_oidc_client_id", clientId);
+            expect(localStorage.setItem).toHaveBeenCalledWith("mx_oidc_token_issuer", issuer);
+            expect(localStorage.setItem).toHaveBeenCalledWith("mx_oidc_id_token_claims", JSON.stringify(idTokenClaims));
         });
     });
 
     describe("getStoredOidcTokenIssuer()", () => {
         it("should return issuer from session storage", () => {
-            jest.spyOn(sessionStorage.__proto__, "getItem").mockReturnValue(issuer);
+            localStorage.setItem("mx_oidc_token_issuer", issuer);
             expect(getStoredOidcTokenIssuer()).toEqual(issuer);
-            expect(sessionStorage.getItem).toHaveBeenCalledWith("mx_oidc_token_issuer");
+            expect(localStorage.getItem).toHaveBeenCalledWith("mx_oidc_token_issuer");
         });
 
         it("should return undefined when no issuer in session storage", () => {
@@ -68,9 +66,9 @@ describe("persist OIDC settings", () => {
 
     describe("getStoredOidcClientId()", () => {
         it("should return clientId from session storage", () => {
-            jest.spyOn(sessionStorage.__proto__, "getItem").mockReturnValue(clientId);
+            localStorage.setItem("mx_oidc_client_id", clientId);
             expect(getStoredOidcClientId()).toEqual(clientId);
-            expect(sessionStorage.getItem).toHaveBeenCalledWith("mx_oidc_client_id");
+            expect(localStorage.getItem).toHaveBeenCalledWith("mx_oidc_client_id");
         });
         it("should throw when no clientId in session storage", () => {
             expect(() => getStoredOidcClientId()).toThrow("Oidc client id not found in storage");
@@ -79,9 +77,9 @@ describe("persist OIDC settings", () => {
 
     describe("getStoredOidcIdTokenClaims()", () => {
         it("should return issuer from session storage", () => {
-            jest.spyOn(sessionStorage.__proto__, "getItem").mockReturnValue(JSON.stringify(idTokenClaims));
+            localStorage.setItem("mx_oidc_id_token_claims", JSON.stringify(idTokenClaims));
             expect(getStoredOidcIdTokenClaims()).toEqual(idTokenClaims);
-            expect(sessionStorage.getItem).toHaveBeenCalledWith("mx_oidc_id_token_claims");
+            expect(localStorage.getItem).toHaveBeenCalledWith("mx_oidc_id_token_claims");
         });
 
         it("should return undefined when no issuer in session storage", () => {

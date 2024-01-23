@@ -449,8 +449,8 @@ describe("<MatrixChat />", () => {
 
                 await flushPromises();
 
-                expect(sessionStorage.getItem("mx_oidc_client_id")).toEqual(clientId);
-                expect(sessionStorage.getItem("mx_oidc_token_issuer")).toEqual(issuer);
+                expect(localStorage.getItem("mx_oidc_client_id")).toEqual(clientId);
+                expect(localStorage.getItem("mx_oidc_token_issuer")).toEqual(issuer);
             });
 
             it("should set logged in and start MatrixClient", async () => {

@@ -21,7 +21,7 @@ const tokenIssuerStorageKey = "mx_oidc_token_issuer";
 const idTokenClaimsStorageKey = "mx_oidc_id_token_claims";
 
 /**
- * Persists oidc clientId and issuer in session storage
+ * Persists oidc clientId and issuer in local storage
  * Only set after successful authentication
  * @param clientId
  * @param issuer
@@ -31,27 +31,27 @@ export const persistOidcAuthenticatedSettings = (
     issuer: string,
     idTokenClaims: IdTokenClaims,
 ): void => {
-    sessionStorage.setItem(clientIdStorageKey, clientId);
-    sessionStorage.setItem(tokenIssuerStorageKey, issuer);
-    sessionStorage.setItem(idTokenClaimsStorageKey, JSON.stringify(idTokenClaims));
+    localStorage.setItem(clientIdStorageKey, clientId);
+    localStorage.setItem(tokenIssuerStorageKey, issuer);
+    localStorage.setItem(idTokenClaimsStorageKey, JSON.stringify(idTokenClaims));
 };
 
 /**
- * Retrieve stored oidc issuer from session storage
+ * Retrieve stored oidc issuer from local storage
  * When user has token from OIDC issuer, this will be set
  * @returns issuer or undefined
  */
 export const getStoredOidcTokenIssuer = (): string | undefined => {
-    return sessionStorage.getItem(tokenIssuerStorageKey) ?? undefined;
+    return localStorage.getItem(tokenIssuerStorageKey) ?? undefined;
 };
 
 /**
- * Retrieves stored oidc client id from session storage
+ * Retrieves stored oidc client id from local storage
  * @returns clientId
- * @throws when clientId is not found in session storage
+ * @throws when clientId is not found in local storage
  */
 export const getStoredOidcClientId = (): string => {
-    const clientId = sessionStorage.getItem(clientIdStorageKey);
+    const clientId = localStorage.getItem(clientIdStorageKey);
     if (!clientId) {
         throw new Error("Oidc client id not found in storage");
     }
@@ -59,11 +59,11 @@ export const getStoredOidcClientId = (): string => {
 };
 
 /**
- * Retrieve stored id token claims from session storage
+ * Retrieve stored id token claims from local storage
  * @returns idtokenclaims or undefined
  */
 export const getStoredOidcIdTokenClaims = (): IdTokenClaims | undefined => {
-    const idTokenClaims = sessionStorage.getItem(idTokenClaimsStorageKey);
+    const idTokenClaims = localStorage.getItem(idTokenClaimsStorageKey);
     if (!idTokenClaims) {
         return;
     }
