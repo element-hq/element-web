@@ -23,10 +23,11 @@ import { StatelessNotificationBadge } from "./StatelessNotificationBadge";
 interface Props {
     room?: Room;
     threadId?: string;
+    type?: "badge" | "dot";
 }
 
-export function UnreadNotificationBadge({ room, threadId }: Props): JSX.Element {
+export function UnreadNotificationBadge({ room, threadId, type }: Props): JSX.Element {
     const { symbol, count, level } = useUnreadNotifications(room, threadId);
 
-    return <StatelessNotificationBadge symbol={symbol} count={count} level={level} />;
+    return <StatelessNotificationBadge symbol={symbol} count={count} level={level} type={type} />;
 }

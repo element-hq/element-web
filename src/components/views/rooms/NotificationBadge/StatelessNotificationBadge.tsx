@@ -28,6 +28,7 @@ interface Props {
     count: number;
     level: NotificationLevel;
     knocked?: boolean;
+    type?: "badge" | "dot";
 }
 
 interface ClickableProps extends Props {
@@ -39,7 +40,7 @@ interface ClickableProps extends Props {
 }
 
 export const StatelessNotificationBadge = forwardRef<HTMLDivElement, XOR<Props, ClickableProps>>(
-    ({ symbol, count, level, knocked, ...props }, ref) => {
+    ({ symbol, count, level, knocked, type = "badge", ...props }, ref) => {
         const hideBold = useSettingValue("feature_hidebold");
 
         // Don't show a badge if we don't need to
@@ -59,10 +60,10 @@ export const StatelessNotificationBadge = forwardRef<HTMLDivElement, XOR<Props, 
             mx_NotificationBadge: true,
             mx_NotificationBadge_visible: isEmptyBadge || knocked ? true : hasUnreadCount,
             mx_NotificationBadge_highlighted: level >= NotificationLevel.Highlight,
-            mx_NotificationBadge_dot: isEmptyBadge && !knocked,
+            mx_NotificationBadge_dot: (isEmptyBadge && !knocked) || type === "dot",
             mx_NotificationBadge_knocked: knocked,
-            mx_NotificationBadge_2char: symbol && symbol.length > 0 && symbol.length < 3,
-            mx_NotificationBadge_3char: symbol && symbol.length > 2,
+            mx_NotificationBadge_2char: type === "badge" && symbol && symbol.length > 0 && symbol.length < 3,
+            mx_NotificationBadge_3char: type === "badge" && symbol && symbol.length > 2,
         });
 
         if (props.onClick) {

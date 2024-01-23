@@ -1053,23 +1053,6 @@ $left-gutter: 64px;
         pointer-events: none; /* ensures the title for the sender name can be correctly displayed */
     }
 
-    /* Display notification dot */
-    &[data-notification]::before,
-    .mx_NotificationBadge {
-        position: absolute;
-        $notification-inset-block-start: 14px; /* 14px: align the dot with the timestamp row */
-
-        /* !important to fix overly specific CSS selector applied on mx_NotificationBadge */
-        width: $notification-dot-size !important;
-        height: $notification-dot-size !important;
-        border-radius: 50%;
-        inset: $notification-inset-block-start $spacing-8 auto auto;
-    }
-
-    .mx_NotificationBadge_count {
-        display: none;
-    }
-
     &[data-notification="total"]::before {
         background-color: $room-icon-unread-color;
     }
@@ -1440,14 +1423,6 @@ $left-gutter: 64px;
             table {
                 margin-bottom: $spacing-4; /* 1/4 of the non-compact margin-bottom */
             }
-        }
-
-        &[data-shape="ThreadsList"][data-notification]::before,
-        .mx_NotificationBadge {
-            /* stylelint-disable-next-line declaration-colon-space-after */
-            inset-block-start: calc(
-                $notification-inset-block-start - var(--MatrixChat_useCompactLayout_group-padding-top)
-            );
         }
     }
 }

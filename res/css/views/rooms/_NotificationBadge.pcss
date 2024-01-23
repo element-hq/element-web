@@ -41,11 +41,13 @@ limitations under the License.
         /* These are the 3 background types */
 
         &.mx_NotificationBadge_dot {
-            background-color: $primary-content; /* increased visibility */
+            width: 8px;
+            height: 8px;
+            border-radius: 8px;
 
-            width: 6px;
-            height: 6px;
-            border-radius: 6px;
+            .mx_NotificationBadge_count {
+                display: none;
+            }
         }
 
         &.mx_NotificationBadge_knocked {
