@@ -1827,6 +1827,13 @@
   dependencies:
     "@babel/runtime" "^7.17.9"
 
+"@matrix-org/react-sdk-module-api@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-2.3.0.tgz#85be5cfc73be0494c13d4dc9050cb70c58d7a08b"
+  integrity sha512-x/ie44yaXNtE5AKcmQiW5yINVEIJ7IjjEc35vj6j52fM8tZ9XbJx9PANKSWsdd0NJp3OqyaeHftmN6ESfx4YoQ==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+
 "@matrix-org/spec@^1.7.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@matrix-org/spec/-/spec-1.8.0.tgz#5d46f0ddcdff01934a63aa1f070f0ce960326acc"
