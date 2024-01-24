@@ -103,6 +103,10 @@ h2 .sh_VerifiedIcon {
     background-color: rgb(36, 36, 36) !important;
 }
 
+.mx_AccessibleButton.mx_LegacyRoomHeader_button.mx_AccessibleButton_disabled {
+    display: none;
+  }
+
 .cpd-theme-dark .mx_SpacePanel .mx_AccessibleButton.mx_SpacePanel_toggleCollapse {
     background-color: white !important;
 }
@@ -678,7 +682,7 @@ h2 .sh_VerifiedIcon {
     --cpd-color-pink-100: #37000f;
     --cpd-color-fuchsia-1400: #f8e9f9;
     --cpd-color-fuchsia-1300: #f1d4f3; */
-    --cpd-color-fuchsia-1200: #b11c91 !important;
+    --cpd-color-fuchsia-1200: #D538EE !important;
     /* --cpd-color-fuchsia-1100: #d991de;
     --cpd-color-fuchsia-1000: #cf78d7;
     --cpd-color-fuchsia-900: #c560cf;
