@@ -16,6 +16,7 @@ limitations under the License.
 
 import * as Sentry from "@sentry/browser";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type Integration } from "@sentry/types/types/integration";
 
 import SdkConfig from "./SdkConfig";
 import { MatrixClientPeg } from "./MatrixClientPeg";
@@ -203,7 +204,7 @@ export function setSentryUser(mxid: string): void {
 export async function initSentry(sentryConfig: IConfigOptions["sentry"]): Promise<void> {
     if (!sentryConfig) return;
     // Only enable Integrations.GlobalHandlers, which hooks uncaught exceptions, if automaticErrorReporting is true
-    const integrations = [
+    const integrations: Integration[] = [
         new Sentry.Integrations.InboundFilters(),
         new Sentry.Integrations.FunctionToString(),
         new Sentry.Integrations.Breadcrumbs(),
