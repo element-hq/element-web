@@ -55,7 +55,12 @@ export const RoomName = ({ room, children, maxLength }: IProps): JSX.Element => 
     const renderRoomName = useCallback(
         () => (
             <span className="sh_RoomTokenGatedRoom">
-                {isCommunityRoom && <CommunityRoomIcon className="sh_RoomTokenGatedRoomIcon" />}
+                {isCommunityRoom && (
+                    <>
+                        <CommunityRoomIcon className="sh_RoomTokenGatedRoomIcon" />
+                        <span>$</span>
+                    </>
+                )}
                 {isTokenGatedRoom && <TokenGatedRoomIcon className="sh_RoomTokenGatedRoomIcon" />}
                 <span dir="auto">{truncatedRoomName}</span>
                 {roomUsers?.length && !isTokenGatedRoom && !isCommunityRoom ? (
