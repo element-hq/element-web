@@ -194,14 +194,13 @@ const SessionManagerTab: React.FC = () => {
         setFilter(filter);
         clearTimeout(scrollIntoViewTimeoutRef.current);
         // wait a tick for the filtered section to rerender with different height
-        scrollIntoViewTimeoutRef.current = window.setTimeout(
-            () =>
-                filteredDeviceListRef.current?.scrollIntoView({
-                    // align element to top of scrollbox
-                    block: "start",
-                    inline: "nearest",
-                    behavior: "smooth",
-                }),
+        scrollIntoViewTimeoutRef.current = window.setTimeout(() =>
+            filteredDeviceListRef.current?.scrollIntoView({
+                // align element to top of scrollbox
+                block: "start",
+                inline: "nearest",
+                behavior: "smooth",
+            }),
         );
     };
 

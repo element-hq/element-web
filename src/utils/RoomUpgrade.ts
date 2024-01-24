@@ -76,8 +76,8 @@ export async function upgradeRoom(
     if (updateSpaces) {
         parentsToRelink = Array.from(SpaceStore.instance.getKnownParents(room.roomId))
             .map((roomId) => cli.getRoom(roomId))
-            .filter(
-                (parent) => parent?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId()!),
+            .filter((parent) =>
+                parent?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId()!),
             ) as Room[];
     }
 
