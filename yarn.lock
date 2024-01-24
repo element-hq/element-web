@@ -1335,17 +1335,17 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@csstools/css-parser-algorithms@^2.4.0":
+"@csstools/css-parser-algorithms@^2.5.0":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@csstools/css-parser-algorithms/-/css-parser-algorithms-2.5.0.tgz#0c03cd5418a9f404a05ff2ffcb1b69d04e8ec532"
   integrity sha512-abypo6m9re3clXA00eu5syw+oaPHbJTPapu9C4pzNsJ4hdZDzushT50Zhu+iIYXgEe1CxnRMn7ngsbV+MLrlpQ==
 
-"@csstools/css-tokenizer@^2.2.2":
+"@csstools/css-tokenizer@^2.2.3":
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@csstools/css-tokenizer/-/css-tokenizer-2.2.3.tgz#b099d543ea57b64f495915a095ead583866c50c6"
   integrity sha512-pp//EvZ9dUmGuGtG1p+n17gTHEOqu9jO+FiCUjNN3BDmyhdA2Jq9QsVeR7K8/2QCK17HSsioPlTW9ZkzoWb3Lg==
 
-"@csstools/media-query-list-parser@^2.1.6":
+"@csstools/media-query-list-parser@^2.1.7":
   version "2.1.7"
   resolved "https://registry.yarnpkg.com/@csstools/media-query-list-parser/-/media-query-list-parser-2.1.7.tgz#a4836e3dbd693081a30b32ce9c2a781e1be16788"
   integrity sha512-lHPKJDkPUECsyAvD60joYfDmp8UERYxHGkFfyLJFTVK/ERJe0sVlIFLXU5XFxdjNDTerp5L4KeaKG+Z5S94qxQ==
@@ -8783,7 +8783,7 @@ memoizee@^0.4.15:
     next-tick "^1.1.0"
     timers-ext "^0.1.7"
 
-meow@^13.0.0:
+meow@^13.1.0:
   version "13.1.0"
   resolved "https://registry.yarnpkg.com/meow/-/meow-13.1.0.tgz#62995b0e8c3951739fe6e0a4becdd4d0df23eb37"
   integrity sha512-o5R/R3Tzxq0PJ3v3qcQJtSvSE9nKOLSAaDuuoMzDVuGTwHdccMWcYomh9Xolng2tjT6O/Y83d+0coVGof6tqmA==
@@ -10217,7 +10217,7 @@ postcss-selector-parser@^6.0.11, postcss-selector-parser@^6.0.2, postcss-selecto
     cssesc "^3.0.0"
     util-deprecate "^1.0.2"
 
-postcss-selector-parser@^6.0.13:
+postcss-selector-parser@^6.0.13, postcss-selector-parser@^6.0.15:
   version "6.0.15"
   resolved "https://registry.yarnpkg.com/postcss-selector-parser/-/postcss-selector-parser-6.0.15.tgz#11cc2b21eebc0b99ea374ffb9887174855a01535"
   integrity sha512-rEYkQOMUCEMhsKbK66tbEU9QVIxbhN18YiniAwA7XQYTVBqrBy+P2p5JcdqsHgKM2zWylp8d7J6eszocfds5Sw==
@@ -10274,7 +10274,7 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.17, postcss@^7.0.1
     picocolors "^0.2.1"
     source-map "^0.6.1"
 
-postcss@^8.2.15, postcss@^8.3.11, postcss@^8.4.24, postcss@^8.4.31, postcss@^8.4.32:
+postcss@^8.2.15, postcss@^8.3.11, postcss@^8.4.24, postcss@^8.4.31, postcss@^8.4.33:
   version "8.4.33"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.33.tgz#1378e859c9f69bf6f638b990a0212f43e2aaa742"
   integrity sha512-Kkpbhhdjw2qQs2O2DGX+8m5OVqEcbB9HRBvuYM9pgrjEFUg30A9LmXNlTAUj4S9kgtGyrMbTzVjH7E+s5Re2yg==
@@ -11660,13 +11660,13 @@ stylelint-scss@^6.0.0:
     postcss-value-parser "^4.2.0"
 
 stylelint@^16.1.0:
-  version "16.1.0"
-  resolved "https://registry.yarnpkg.com/stylelint/-/stylelint-16.1.0.tgz#d289c36b0dd344a65c55897d636b3b8b213dc908"
-  integrity sha512-Sh1rRV0lN1qxz/QsuuooLWsIZ/ona7NKw/fRZd6y6PyXYdD2W0EAzJ8yJcwSx4Iw/muz0CF09VZ+z4EiTAcKmg==
+  version "16.2.0"
+  resolved "https://registry.yarnpkg.com/stylelint/-/stylelint-16.2.0.tgz#60678f64d7660350fdd06415fd449f332b4fcbf6"
+  integrity sha512-gwqU5AkIb52wrAzzn+359S3NIJDMl02TXLUaV2tzA/L6jUdpTwNt+MCxHlc8+Hb2bUHlYVo92YeSIryF2gJthA==
   dependencies:
-    "@csstools/css-parser-algorithms" "^2.4.0"
-    "@csstools/css-tokenizer" "^2.2.2"
-    "@csstools/media-query-list-parser" "^2.1.6"
+    "@csstools/css-parser-algorithms" "^2.5.0"
+    "@csstools/css-tokenizer" "^2.2.3"
+    "@csstools/media-query-list-parser" "^2.1.7"
     "@csstools/selector-specificity" "^3.0.1"
     balanced-match "^2.0.0"
     colord "^2.9.3"
@@ -11686,14 +11686,14 @@ stylelint@^16.1.0:
     is-plain-object "^5.0.0"
     known-css-properties "^0.29.0"
     mathml-tag-names "^2.1.3"
-    meow "^13.0.0"
+    meow "^13.1.0"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     picocolors "^1.0.0"
-    postcss "^8.4.32"
+    postcss "^8.4.33"
     postcss-resolve-nested-selector "^0.1.1"
     postcss-safe-parser "^7.0.0"
-    postcss-selector-parser "^6.0.13"
+    postcss-selector-parser "^6.0.15"
     postcss-value-parser "^4.2.0"
     resolve-from "^5.0.0"
     string-width "^4.2.3"
