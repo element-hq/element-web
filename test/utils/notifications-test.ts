@@ -24,11 +24,13 @@ import {
     deviceNotificationSettingsKeys,
     clearAllNotifications,
     clearRoomNotification,
+    notificationLevelToIndicator,
 } from "../../src/utils/notifications";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { getMockClientWithEventEmitter } from "../test-utils/client";
 import { mkMessage, stubClient } from "../test-utils/test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
+import { NotificationLevel } from "../../src/stores/notifications/NotificationLevel";
 
 jest.mock("../../src/settings/SettingsStore");
 
@@ -213,6 +215,24 @@ describe("notifications", () => {
             clearAllNotifications(client);
 
             expect(sendReadReceiptSpy).toHaveBeenCalledWith(message, ReceiptType.ReadPrivate, true);
+        });
+    });
+
+    describe("notificationLevelToIndicator", () => {
+        it("returns undefined if notification level is None", () => {
+            expect(notificationLevelToIndicator(NotificationLevel.None)).toBeUndefined();
+        });
+
+        it("returns default if notification level is Activity", () => {
+            expect(notificationLevelToIndicator(NotificationLevel.Activity)).toEqual("default");
+        });
+
+        it("returns success if notification level is Notification", () => {
+            expect(notificationLevelToIndicator(NotificationLevel.Notification)).toEqual("success");
+        });
+
+        it("returns critical if notification level is Highlight", () => {
+            expect(notificationLevelToIndicator(NotificationLevel.Highlight)).toEqual("critical");
         });
     });
 });

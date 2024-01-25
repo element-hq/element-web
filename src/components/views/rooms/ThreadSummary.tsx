@@ -16,6 +16,8 @@ limitations under the License.
 
 import React, { useContext, useState } from "react";
 import { Thread, ThreadEvent, IContent, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { IndicatorIcon } from "@vector-im/compound-web";
+import { Icon as ThreadIconSolid } from "@vector-im/compound-design-tokens/icons/threads-solid.svg";
 
 import { _t } from "../../../languageHandler";
 import { CardContext } from "../right_panel/context";
@@ -30,6 +32,8 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Action } from "../../../dispatcher/actions";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { useUnreadNotifications } from "../../../hooks/useUnreadNotifications";
+import { notificationLevelToIndicator } from "../../../utils/notifications";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -40,6 +44,8 @@ const ThreadSummary: React.FC<IProps> = ({ mxEvent, thread, ...props }) => {
     const roomContext = useContext(RoomContext);
     const cardContext = useContext(CardContext);
     const count = useTypedEventEmitterState(thread, ThreadEvent.Update, () => thread.length);
+    const { level } = useUnreadNotifications(thread.room, thread.id);
+
     if (!count) return null; // We don't want to show a thread summary if the thread doesn't have replies yet
 
     let countSection: string | number = count;
@@ -61,6 +67,9 @@ const ThreadSummary: React.FC<IProps> = ({ mxEvent, thread, ...props }) => {
             }}
             aria-label={_t("threads|open_thread")}
         >
+            <IndicatorIcon size="24px" indicator={notificationLevelToIndicator(level)}>
+                <ThreadIconSolid />
+            </IndicatorIcon>
             <span className="mx_ThreadSummary_replies_amount">{countSection}</span>
             <ThreadMessagePreview thread={thread} showDisplayname={!roomContext.narrow} />
             <div className="mx_ThreadSummary_chevron" />

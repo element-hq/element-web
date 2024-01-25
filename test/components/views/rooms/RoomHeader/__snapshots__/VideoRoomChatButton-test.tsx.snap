@@ -3,26 +3,37 @@
 exports[`<VideoRoomChatButton /> renders button when room is a video room 1`] = `
 <button
   aria-label="Chat"
-  class="_icon-button_ur2sw_17"
+  class="_icon-button_16nk7_17"
   data-state="closed"
   role="button"
   style="--cpd-icon-button-size: 32px;"
   tabindex="0"
 >
-  <div />
+  <div
+    class="_indicator-icon_jtb4d_26"
+    style="--cpd-icon-button-size: 100%;"
+  >
+    <div />
+  </div>
 </button>
 `;
 
 exports[`<VideoRoomChatButton /> renders button with an unread marker when room is unread 1`] = `
 <button
   aria-label="Chat"
-  class="_icon-button_ur2sw_17"
+  class="_icon-button_16nk7_17"
   data-indicator="default"
   data-state="closed"
   role="button"
   style="--cpd-icon-button-size: 32px;"
   tabindex="0"
 >
-  <div />
+  <div
+    class="_indicator-icon_jtb4d_26"
+    data-indicator="default"
+    style="--cpd-icon-button-size: 100%;"
+  >
+    <div />
+  </div>
 </button>
 `;

@@ -33,10 +33,10 @@ export const useRoomThreadNotifications = (room: Room): NotificationLevel => {
         switch (room?.threadsAggregateNotificationType) {
             case NotificationCountType.Highlight:
                 setNotificationLevel(NotificationLevel.Highlight);
-                break;
+                return;
             case NotificationCountType.Total:
                 setNotificationLevel(NotificationLevel.Notification);
-                break;
+                return;
         }
         // We don't have any notified messages, but we might have unread messages. Let's
         // find out.

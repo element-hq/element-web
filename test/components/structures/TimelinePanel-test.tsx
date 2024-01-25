@@ -817,7 +817,7 @@ describe("TimelinePanel", () => {
             client = MatrixClientPeg.safeGet();
 
             Thread.hasServerSideSupport = FeatureSupport.Stable;
-            room = new Room("roomId", client, "userId");
+            room = new Room("roomId", client, "userId", { pendingEventOrdering: PendingEventOrdering.Detached });
             allThreads = new EventTimelineSet(
                 room,
                 {

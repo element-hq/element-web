@@ -26,7 +26,7 @@ exports[`SpaceButton metaspace should render notificationState if one is provide
           class="mx_SpacePanel_badgeContainer"
         >
           <div
-            class="mx_AccessibleButton mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_2char"
+            class="mx_AccessibleButton mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_notification mx_NotificationBadge_2char"
             role="button"
             tabindex="-1"
           >

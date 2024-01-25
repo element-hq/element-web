@@ -25,7 +25,7 @@ describe("StatelessNotificationBadge", () => {
         const { container } = render(
             <StatelessNotificationBadge symbol="!" count={0} level={NotificationLevel.Unsent} />,
         );
-        expect(container.querySelector(".mx_NotificationBadge_highlighted")).not.toBe(null);
+        expect(container.querySelector(".mx_NotificationBadge_level_highlight")).not.toBe(null);
     });
 
     it("has knock style", () => {

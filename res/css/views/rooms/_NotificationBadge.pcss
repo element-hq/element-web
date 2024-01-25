@@ -33,21 +33,34 @@ limitations under the License.
         align-items: center;
         justify-content: center;
 
-        &.mx_NotificationBadge_highlighted {
-            /* TODO: Use a more specific variable */
-            background-color: $alert;
-        }
-
         /* These are the 3 background types */
 
         &.mx_NotificationBadge_dot {
             width: 8px;
             height: 8px;
             border-radius: 8px;
+            background-color: var(--cpd-color-text-primary);
 
             .mx_NotificationBadge_count {
                 display: none;
             }
+
+            /* Redundant sounding name, but a notification badge that indicates there is a regular,
+             * non-highlight notification
+             * The green colour only applies for notification dot: badges indicating the same notification
+             * level are the standard grey.
+             */
+            &.mx_NotificationBadge_level_notification {
+                background-color: var(--cpd-color-icon-success-primary);
+            }
+        }
+
+        /* Badges for highlight notifications. Style for notification level
+         * badges is in _EventTile.scss because it applies only to notification
+         * dots, not badges.
+         */
+        &.mx_NotificationBadge_level_highlight {
+            background-color: var(--cpd-color-icon-critical-primary);
         }
 
         &.mx_NotificationBadge_knocked {

@@ -163,14 +163,14 @@ describe("EventTile", () => {
             });
 
             expect(container.getElementsByClassName("mx_NotificationBadge")).toHaveLength(1);
-            expect(container.getElementsByClassName("mx_NotificationBadge_highlighted")).toHaveLength(0);
+            expect(container.getElementsByClassName("mx_NotificationBadge_level_highlight")).toHaveLength(0);
 
             act(() => {
                 room.setThreadUnreadNotificationCount(mxEvent.getId()!, NotificationCountType.Highlight, 1);
             });
 
             expect(container.getElementsByClassName("mx_NotificationBadge")).toHaveLength(1);
-            expect(container.getElementsByClassName("mx_NotificationBadge_highlighted")).toHaveLength(1);
+            expect(container.getElementsByClassName("mx_NotificationBadge_level_highlight")).toHaveLength(1);
         });
     });
 

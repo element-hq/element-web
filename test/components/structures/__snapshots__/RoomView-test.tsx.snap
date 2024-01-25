@@ -215,7 +215,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
             class="mx_RoomStatusBar_unsentBadge"
           >
             <div
-              class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_highlighted mx_NotificationBadge_2char"
+              class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_2char"
             >
               <span
                 class="mx_NotificationBadge_count"

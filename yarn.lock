@@ -2276,7 +2276,7 @@
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-primitive" "1.0.3"
 
-"@radix-ui/react-slot@1.0.2":
+"@radix-ui/react-slot@1.0.2", "@radix-ui/react-slot@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-slot/-/react-slot-1.0.2.tgz#a9ff4423eade67f501ffb32ec22064bc9d3099ab"
   integrity sha512-YeTpuq4deV+6DusvVUW4ivBgnkHwECUu0BiN43L5UCDFgdhsRUWAghhTF5MbvNTPzmiFOx90asDSUjWuCNapwg==
@@ -3120,15 +3120,16 @@
   dependencies:
     svg2vectordrawable "^2.9.1"
 
-"@vector-im/compound-web@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-2.0.0.tgz#9ffc621f32be11acabe74bb3ff59cc4d8bc845ac"
-  integrity sha512-vEhGayoBSq4WLf86VmFoX9h0KIxaAjlG+kmcJLWitsqnPEDOG0XPhScYqzEshFqdJFLWX6gBOnXYLeq065t57w==
+"@vector-im/compound-web@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-3.0.0.tgz#8843c1c6a40891f89fdb3dbccf972e2fc2e1e387"
+  integrity sha512-6wkFoByaiXvwrqNmF0W9K5/krThpczPnYeJOBG3FM90RoC3MrqNB6fBPTvsd17pzJWN6fEV2B11JUeqAFW0z5A==
   dependencies:
     "@radix-ui/react-context-menu" "^2.1.5"
     "@radix-ui/react-dropdown-menu" "^2.0.6"
     "@radix-ui/react-form" "^0.0.3"
     "@radix-ui/react-separator" "^1.0.3"
+    "@radix-ui/react-slot" "^1.0.2"
     "@radix-ui/react-tooltip" "^1.0.6"
     classnames "^2.3.2"
     graphemer "^1.4.0"
