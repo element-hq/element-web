@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import React, { useCallback, useEffect } from "react";
 
-import { communityBotAtom, minimumTokenThresholdAtom, verifiedAccountsAtom } from "../atoms";
+import { communityBotAtom, minimumTokenThresholdAtom, verifiedAccountsAtom, verifiedBotsAtom } from "../atoms";
 
 const useMinimumTokenThreshold = (config: any): void => {
     const [, setMinimumTokenThreshold] = useAtom(minimumTokenThresholdAtom);
@@ -43,6 +43,7 @@ const useMinimumTokenThreshold = (config: any): void => {
  */
 export const SuperheroProvider = ({ children, config }: any): any => {
     const [verifiedAccounts, setVerifiedAccounts] = useAtom(verifiedAccountsAtom);
+    const [, setVerifiedBots] = useAtom(verifiedBotsAtom);
     const [, setCommunityBot] = useAtom(communityBotAtom);
 
     useEffect(() => {
@@ -65,7 +66,24 @@ export const SuperheroProvider = ({ children, config }: any): any => {
         }
     }
 
+    function loadVerifiedBots(): void {
+        if (config.bots_backend_url) {
+            fetch(`${config.bots_backend_url}/ui/get-verified-bots`, {
+                method: "POST",
+            })
+                .then((res) => res.json())
+                .then(setVerifiedBots)
+                .catch(() => {
+                    setVerifiedBots({
+                        "@walletbot:superhero.chat": "true",
+                        "@communitybot:superhero.chat": "true",
+                    });
+                });
+        }
+    }
+
     useEffect(() => {
+        loadVerifiedBots();
         if (!verifiedAccounts?.length) {
             loadVerifiedAccounts();
         }

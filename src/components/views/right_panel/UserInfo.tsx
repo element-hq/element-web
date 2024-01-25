@@ -84,6 +84,7 @@ import UIStore from "matrix-react-sdk/src/stores/UIStore";
 
 import { UserVerifiedBadge } from "../elements/UserVerifiedBadge";
 import { MessageButton } from "../elements/MessageButton";
+import { BotVerifiedBadge } from "../elements/BotVerifiedBadge";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -1617,6 +1618,7 @@ export const UserInfoHeader: React.FC<{
                     <div>
                         <h2>
                             <UserVerifiedBadge userId={member.userId} />
+                            <BotVerifiedBadge userId={member.userId} />
                             <span title={displayName} aria-label={displayName} dir="auto">
                                 {displayName}
                             </span>

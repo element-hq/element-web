@@ -11,6 +11,7 @@ export type BareUser = {
 };
 
 export const verifiedAccountsAtom = atomWithStorage<Record<string, string>>("VERIFIED_ACCOUNTS", {});
+export const verifiedBotsAtom = atomWithStorage<Record<string, string>>("VERIFIED_BOTS", {});
 export const minimumTokenThresholdAtom = atomWithStorage<Record<string, TokenThreshold>>("TOKEN_THRESHOLD", {});
 export const communityBotAtom = atomWithStorage<BareUser>("COMMUNITY_BOT", {
     userId: "",
