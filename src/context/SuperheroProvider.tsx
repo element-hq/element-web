@@ -67,19 +67,10 @@ export const SuperheroProvider = ({ children, config }: any): any => {
     }
 
     function loadVerifiedBots(): void {
-        if (config.bots_backend_url) {
-            fetch(`${config.bots_backend_url}/ui/get-verified-bots`, {
-                method: "POST",
-            })
-                .then((res) => res.json())
-                .then(setVerifiedBots)
-                .catch(() => {
-                    setVerifiedBots({
-                        "@walletbot:superhero.chat": "true",
-                        "@communitybot:superhero.chat": "true",
-                    });
-                });
-        }
+        setVerifiedBots({
+            [config.community_bot_user_id]: "true",
+            [config.wallet_bot_user_id]: "true",
+        });
     }
 
     useEffect(() => {
