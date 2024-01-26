@@ -22,6 +22,7 @@ import { Icon as CommunityRoomIcon } from "../../../../res/themes/superhero/img/
 import { useRoomName } from "../../../hooks/useRoomName";
 import { useVerifiedRoom } from "../../../hooks/useVerifiedRoom";
 import { UserVerifiedBadge } from "./UserVerifiedBadge";
+import { BotVerifiedBadge } from "./BotVerifiedBadge";
 
 interface IProps {
     room?: Room | IPublicRoomsChunkRoom;
@@ -33,16 +34,18 @@ export const RoomName = ({ room, children, maxLength }: IProps): JSX.Element => 
     const roomName = useRoomName(room);
     const { isTokenGatedRoom, isCommunityRoom } = useVerifiedRoom(room);
 
-    const roomUsers: string[] = useMemo(() => {
-        if ((room as Room).getJoinedMemberCount?.() > 2 || (room as IPublicRoomsChunkRoom).num_joined_members > 2) {
-            return [];
+    const roomUser: string | undefined = useMemo(() => {
+        // check if this is a DM room and if so, return the other user's ID
+        const dmUserId = (room as Room)?.guessDMUserId?.();
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        // need to access the private summaryHeroes property, to know if it's a DM room
+        if (!(room as Room)?.summaryHeroes) {
+            return undefined;
         }
-        return (
-            (room as Room)
-                ?.getMembers?.()
-                .map((m: { userId: string }) => m.userId)
-                .filter((userId: string) => !!userId && userId !== (room as Room)?.myUserId) || []
-        );
+
+        return dmUserId && dmUserId !== (room as Room).myUserId ? dmUserId : undefined;
     }, [room]);
 
     const truncatedRoomName = useMemo(() => {
@@ -63,12 +66,11 @@ export const RoomName = ({ room, children, maxLength }: IProps): JSX.Element => 
                 )}
                 {isTokenGatedRoom && <TokenGatedRoomIcon className="sh_RoomTokenGatedRoomIcon" />}
                 <span dir="auto">{truncatedRoomName}</span>
-                {roomUsers?.length && !isTokenGatedRoom && !isCommunityRoom ? (
-                    <UserVerifiedBadge userId={roomUsers[0]} />
-                ) : null}
+                {roomUser && !isTokenGatedRoom && !isCommunityRoom ? <UserVerifiedBadge userId={roomUser} /> : null}
+                {roomUser && !isTokenGatedRoom && !isCommunityRoom ? <BotVerifiedBadge userId={roomUser} /> : null}
             </span>
         ),
-        [truncatedRoomName, isCommunityRoom, isTokenGatedRoom, roomUsers],
+        [truncatedRoomName, isCommunityRoom, isTokenGatedRoom, roomUser],
     );
 
     if (children) return children(renderRoomName());

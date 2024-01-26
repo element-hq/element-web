@@ -81,6 +81,7 @@ import { SdkContextClass } from "matrix-react-sdk/src/contexts/SDKContext";
 import { UserProfilesStore } from "matrix-react-sdk/src/stores/UserProfilesStore";
 
 import { UserVerifiedBadge } from "../elements/UserVerifiedBadge";
+import { BotVerifiedBadge } from "../elements/BotVerifiedBadge";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -288,6 +289,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                     <div className="mx_InviteDialog_tile_nameStack_name">
                         {this.highlightName(this.props.member.name)}
                         <UserVerifiedBadge userId={this.props.member.userId} />
+                        <BotVerifiedBadge userId={this.props.member.userId} />
                     </div>
                     <div className="mx_InviteDialog_tile_nameStack_userId">{caption}</div>
                 </span>

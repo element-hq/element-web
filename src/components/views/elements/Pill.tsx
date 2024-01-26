@@ -156,12 +156,12 @@ export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room
             <>
                 {isCommunityRoom ? (
                     <>
-                        <CommunityRoomIcon className="sh_RoomTokenGatedRoomIcon" style={{ marginLeft: "5px" }} />
+                        <CommunityRoomIcon className="sh_RoomTokenGatedRoomIcon" style={{ marginLeft: "2px" }} />
                         <span>$</span>
                     </>
                 ) : null}
                 {isTokenGatedRoom ? (
-                    <TokenGatedRoomIcon className="sh_RoomTokenGatedRoomIcon" style={{ marginLeft: "5px" }} />
+                    <TokenGatedRoomIcon className="sh_RoomTokenGatedRoomIcon" style={{ marginLeft: "2px" }} />
                 ) : null}
                 <span className="mx_Pill_text">{getSafeRoomName(pillText || "")}</span>
             </>

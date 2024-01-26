@@ -1,19 +1,20 @@
 {
     "default_server_config": {
         "m.homeserver": {
-            "base_url": "https://matrix-client.matrix.org",
-            "server_name": "matrix.org"
+            "base_url": "https://matrix.superhero.com",
+            "server_name": "superhero.com"
         },
         "m.identity_server": {
             "base_url": "https://vector.im"
         }
     },
-    "bots_backend_url": "https://http://matrix.superhero.com/wallet",
+    "bots_backend_url": "https://matrix.superhero.com/walletbot",
+    "permalink_prefix": "https://chat.superhero.com",
     "disable_custom_urls": false,
     "disable_guests": false,
     "disable_login_language_selector": false,
     "disable_3pid_login": false,
-    "brand": "Element",
+    "brand": "Superhero",
     "integrations_ui_url": "https://scalar.vector.im/",
     "integrations_rest_url": "https://scalar.vector.im/api",
     "integrations_widgets_urls": [
@@ -47,5 +48,6 @@
         "brand": "Element Call"
     },
     "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx",
-    "community_bot_user_id": "@communitybot:superhero.com"
+    "community_bot_user_id": "@communitybot:superhero.com",
+    "wallet_bot_user_id": "@walletbot:superhero.com"
 }

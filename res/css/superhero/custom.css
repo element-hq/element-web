@@ -105,7 +105,7 @@ h2 .sh_VerifiedIcon {
 
 .mx_AccessibleButton.mx_LegacyRoomHeader_button.mx_AccessibleButton_disabled {
     display: none;
-  }
+}
 
 .cpd-theme-dark .mx_SpacePanel .mx_AccessibleButton.mx_SpacePanel_toggleCollapse {
     background-color: white !important;
@@ -221,7 +221,7 @@ h2 .sh_VerifiedIcon {
     --cpd-color-alpha-gray-500: hsla(214, 41%, 97%, 0.15);
     --cpd-color-pink-1200: #c81fb7 !important;
     --cpd-color-pink-300: #544352 !important;
-    --cpd-color-fuchsia-1200: #D538EE !important;
+    --cpd-color-fuchsia-1200: #d538ee !important;
     --cpd-color-fuchsia-300: #52424f !important;
     --cpd-color-purple-1200: #9a30fd !important;
     --cpd-color-purple-300: #443f4c !important;
@@ -269,20 +269,33 @@ h2 .sh_VerifiedIcon {
 }
 
 .mx_HomePage_title svg {
-    heigh: 44px;
+    height: 44px;
     width: 173.99px;
     margin-right: 8px;
+}
+
+.mx_HomePage_default_wrapper .chat_screen_shot {
+    max-width: 70%;
 }
 
 .mx_HomePage_default_buttons_title {
     font-size: 30px;
 }
+
 .cpd-theme-dark .mx_HomePage_default_buttons_title {
-    opacity: 0.7;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.cpd-theme-dark .mx_HomePage_default_buttons_title span {
+    color: rgba(255, 255, 255, 1);
 }
 
 .mx_HomePage_default .mx_HomePage_default_buttons {
     margin: 10px auto 0 !important;
+}
+
+.cpd-theme-dark .mx_HomePage_default .mx_HomePage_default_buttons.browsers .mx_HomePage_button_custom {
+    background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 .mx_HomePage_default .mx_HomePage_default_buttons .mx_AccessibleButton.mx_HomePage_button_custom {

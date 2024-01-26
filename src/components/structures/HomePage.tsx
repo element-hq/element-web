@@ -34,7 +34,7 @@ interface IProps {
 
 const HomePage: React.FC<IProps> = () => {
     const cli = useMatrixClientContext();
-    const config = SdkConfig.get();
+    const config: any = SdkConfig.get();
     const pageUrl = getHomePageUrl(config, cli);
 
     if (pageUrl) {
@@ -44,7 +44,7 @@ const HomePage: React.FC<IProps> = () => {
     return (
         <AutoHideScrollbar className="mx_HomePage mx_HomePage_default" element="main">
             <div className="mx_HomePage_default_wrapper">
-                <ChatScreenShot />
+                <ChatScreenShot className="chat_screen_shot" />
                 <div className="mx_HomePage_title">
                     <SuperheroLogo />
                     <div>is so much better with our Wallet</div>
@@ -52,7 +52,7 @@ const HomePage: React.FC<IProps> = () => {
                 <div className="mx_HomePage_default_buttons_title">
                     <span style={{ fontWeight: "bold" }}>1. </span>Download extension for your browser
                 </div>
-                <div className="mx_HomePage_default_buttons">
+                <div className="mx_HomePage_default_buttons browsers">
                     <AccessibleButton
                         onClick={(): void => {
                             window.open("https://addons.mozilla.org/en-US/firefox/addon/superhero-wallet/", "_blank");
@@ -81,7 +81,7 @@ const HomePage: React.FC<IProps> = () => {
                 <div className="mx_HomePage_default_buttons">
                     <AccessibleButton
                         onClick={(): void => {
-                            startDmOnFirstMessage(cli, [new DirectoryMember({ user_id: "@walletbot:superhero.com" })]);
+                            startDmOnFirstMessage(cli, [new DirectoryMember({ user_id: config.wallet_bot_user_id })]);
                         }}
                         className="mx_HomePage_button_custom"
                     >
