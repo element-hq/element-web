@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 import { RoomEvent } from "matrix-js-sdk/src/matrix";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { NotificationCount, Room } from "matrix-js-sdk/src/matrix";
 import { determineUnreadState } from "../RoomNotifs";
 import { NotificationLevel } from "../stores/notifications/NotificationLevel";
 import { useEventEmitter } from "./useEventEmitter";
+import SettingsStore from "../settings/SettingsStore";
 
 export const useUnreadNotifications = (
     room?: Room,
@@ -30,6 +31,8 @@ export const useUnreadNotifications = (
     count: number;
     level: NotificationLevel;
 } => {
+    const tacEnabled = useMemo(() => SettingsStore.getValue("threadsActivityCentre"), []);
+
     const [symbol, setSymbol] = useState<string | null>(null);
     const [count, setCount] = useState<number>(0);
     const [level, setLevel] = useState<NotificationLevel>(NotificationLevel.None);
@@ -50,11 +53,11 @@ export const useUnreadNotifications = (
     useEventEmitter(room, RoomEvent.MyMembership, () => updateNotificationState());
 
     const updateNotificationState = useCallback(() => {
-        const { symbol, count, level } = determineUnreadState(room, threadId);
+        const { symbol, count, level } = determineUnreadState(room, threadId, !tacEnabled);
         setSymbol(symbol);
         setCount(count);
         setLevel(level);
-    }, [room, threadId]);
+    }, [room, threadId, tacEnabled]);
 
     useEffect(() => {
         updateNotificationState();

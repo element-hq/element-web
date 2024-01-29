@@ -81,6 +81,7 @@ export enum LabGroup {
     Spaces,
     Widgets,
     Rooms,
+    Threads,
     VoiceAndVideo,
     Moderation,
     Analytics,
@@ -104,6 +105,7 @@ export const labGroupNames: Record<LabGroup, TranslationKey> = {
     [LabGroup.Spaces]: _td("labs|group_spaces"),
     [LabGroup.Widgets]: _td("labs|group_widgets"),
     [LabGroup.Rooms]: _td("labs|group_rooms"),
+    [LabGroup.Threads]: _td("labs|group_threads"),
     [LabGroup.VoiceAndVideo]: _td("labs|group_voip"),
     [LabGroup.Moderation]: _td("labs|group_moderation"),
     [LabGroup.Analytics]: _td("common|analytics"),
@@ -1112,6 +1114,14 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "activeCallRoomIds": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: [],
+    },
+    "threadsActivityCentre": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        labsGroup: LabGroup.Threads,
+        controller: new ReloadOnChangeController(),
+        displayName: _td("labs|threads_activity_centre"),
+        default: false,
+        isFeature: true,
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,

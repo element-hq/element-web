@@ -42,6 +42,8 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     private listMap = new Map<TagID, ListNotificationState>();
     private _globalState = new SummarizedNotificationState();
 
+    private tacEnabled = SettingsStore.getValue("threadsActivityCentre");
+
     private constructor(dispatcher = defaultDispatcher) {
         super(dispatcher, {});
         SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, () => {
@@ -97,7 +99,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
      */
     public getRoomState(room: Room): RoomNotificationState {
         if (!this.roomMap.has(room)) {
-            this.roomMap.set(room, new RoomNotificationState(room));
+            this.roomMap.set(room, new RoomNotificationState(room, !this.tacEnabled));
         }
         return this.roomMap.get(room)!;
     }

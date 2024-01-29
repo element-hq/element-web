@@ -812,8 +812,11 @@ function createRoom(info: IRoomCreationInfo) {
     const userId = client.getUserId()!;
     if (info.isDm) {
         client.getAccountData = (eventType) => {
-            expect(eventType).toEqual("m.direct");
-            return mkDirectEvent(roomId, userId, info.userIds);
+            if (eventType === "m.direct") {
+                return mkDirectEvent(roomId, userId, info.userIds);
+            } else {
+                return undefined;
+            }
         };
     }
 

@@ -47,7 +47,7 @@ describe("<VideoRoomChatButton />", () => {
     };
 
     const mockRoomNotificationState = (room: Room, level: NotificationLevel): RoomNotificationState => {
-        const roomNotificationState = new RoomNotificationState(room);
+        const roomNotificationState = new RoomNotificationState(room, false);
 
         // @ts-ignore ugly mocking
         roomNotificationState._level = level;

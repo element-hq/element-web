@@ -109,16 +109,16 @@ describe("RoomNotifs test", () => {
         });
 
         it("counts room notification type", () => {
-            expect(getUnreadNotificationCount(room, NotificationCountType.Total)).toBe(0);
-            expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(0);
+            expect(getUnreadNotificationCount(room, NotificationCountType.Total, false)).toBe(0);
+            expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false)).toBe(0);
         });
 
         it("counts notifications type", () => {
             room.setUnreadNotificationCount(NotificationCountType.Total, 2);
             room.setUnreadNotificationCount(NotificationCountType.Highlight, 1);
 
-            expect(getUnreadNotificationCount(room, NotificationCountType.Total)).toBe(2);
-            expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(1);
+            expect(getUnreadNotificationCount(room, NotificationCountType.Total, false)).toBe(2);
+            expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false)).toBe(1);
         });
 
         describe("when there is a room predecessor", () => {
@@ -156,8 +156,8 @@ describe("RoomNotifs test", () => {
                 it("and there is a predecessor in the create event, it should count predecessor highlight", () => {
                     room.addLiveEvents([mkCreateEvent(OLD_ROOM_ID)]);
 
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Total)).toBe(8);
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(7);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Total, false)).toBe(8);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false)).toBe(7);
                 });
             };
 
@@ -167,8 +167,8 @@ describe("RoomNotifs test", () => {
                     room.addLiveEvents([mkCreateEvent(OLD_ROOM_ID)]);
                     upsertRoomStateEvents(room, [mkPredecessorEvent(OLD_ROOM_ID)]);
 
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Total)).toBe(8);
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(7);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Total, false)).toBe(8);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false)).toBe(7);
                 });
             };
 
@@ -195,8 +195,8 @@ describe("RoomNotifs test", () => {
                     room.addLiveEvents([mkCreateEvent()]);
                     upsertRoomStateEvents(room, [mkPredecessorEvent(OLD_ROOM_ID)]);
 
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Total)).toBe(2);
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(1);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Total, false)).toBe(2);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false)).toBe(1);
                 });
             });
 
@@ -214,31 +214,31 @@ describe("RoomNotifs test", () => {
                     room.addLiveEvents([mkCreateEvent()]);
                     upsertRoomStateEvents(room, [mkPredecessorEvent(OLD_ROOM_ID)]);
 
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Total)).toBe(8);
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(7);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Total, false)).toBe(8);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false)).toBe(7);
                 });
 
                 it("and there is an unknown room in the predecessor event, it should not count predecessor highlight", () => {
                     room.addLiveEvents([mkCreateEvent()]);
                     upsertRoomStateEvents(room, [mkPredecessorEvent("!unknon:example.com")]);
 
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Total)).toBe(2);
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(1);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Total, false)).toBe(2);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false)).toBe(1);
                 });
             });
         });
 
         it("counts thread notification type", () => {
-            expect(getUnreadNotificationCount(room, NotificationCountType.Total, THREAD_ID)).toBe(0);
-            expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, THREAD_ID)).toBe(0);
+            expect(getUnreadNotificationCount(room, NotificationCountType.Total, false, THREAD_ID)).toBe(0);
+            expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false, THREAD_ID)).toBe(0);
         });
 
         it("counts thread notifications type", () => {
             room.setThreadUnreadNotificationCount(THREAD_ID, NotificationCountType.Total, 2);
             room.setThreadUnreadNotificationCount(THREAD_ID, NotificationCountType.Highlight, 1);
 
-            expect(getUnreadNotificationCount(room, NotificationCountType.Total, THREAD_ID)).toBe(2);
-            expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, THREAD_ID)).toBe(1);
+            expect(getUnreadNotificationCount(room, NotificationCountType.Total, false, THREAD_ID)).toBe(2);
+            expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false, THREAD_ID)).toBe(1);
         });
     });
 

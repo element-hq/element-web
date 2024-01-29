@@ -152,7 +152,7 @@ describe("Unread", () => {
             });
 
             it("returns true for a room with no receipts", () => {
-                expect(doesRoomHaveUnreadMessages(room)).toBe(true);
+                expect(doesRoomHaveUnreadMessages(room, false)).toBe(true);
             });
 
             it("returns false for a room when the latest event was sent by the current user", () => {
@@ -166,7 +166,7 @@ describe("Unread", () => {
                 // Only for timeline events.
                 room.addLiveEvents([event]);
 
-                expect(doesRoomHaveUnreadMessages(room)).toBe(false);
+                expect(doesRoomHaveUnreadMessages(room, false)).toBe(false);
             });
 
             it("returns false for a room when the read receipt is at the latest event", () => {
@@ -183,7 +183,7 @@ describe("Unread", () => {
                 });
                 room.addReceipt(receipt);
 
-                expect(doesRoomHaveUnreadMessages(room)).toBe(false);
+                expect(doesRoomHaveUnreadMessages(room, false)).toBe(false);
             });
 
             it("returns true for a room when the read receipt is earlier than the latest event", () => {
@@ -210,7 +210,7 @@ describe("Unread", () => {
                 // Only for timeline events.
                 room.addLiveEvents([event2]);
 
-                expect(doesRoomHaveUnreadMessages(room)).toBe(true);
+                expect(doesRoomHaveUnreadMessages(room, false)).toBe(true);
             });
 
             it("returns true for a room with an unread message in a thread", async () => {
@@ -247,7 +247,7 @@ describe("Unread", () => {
                 // Create a thread as a different user.
                 await populateThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
 
-                expect(doesRoomHaveUnreadMessages(room)).toBe(true);
+                expect(doesRoomHaveUnreadMessages(room, true)).toBe(true);
             });
 
             it("returns false for a room when the latest thread event was sent by the current user", async () => {
@@ -268,7 +268,7 @@ describe("Unread", () => {
                 // Create a thread as the current user.
                 await populateThread({ room, client, authorId: myId, participantUserIds: [myId] });
 
-                expect(doesRoomHaveUnreadMessages(room)).toBe(false);
+                expect(doesRoomHaveUnreadMessages(room, true)).toBe(false);
             });
 
             it("returns false for a room with read thread messages", async () => {
@@ -308,7 +308,7 @@ describe("Unread", () => {
                 });
                 room.addReceipt(receipt);
 
-                expect(doesRoomHaveUnreadMessages(room)).toBe(false);
+                expect(doesRoomHaveUnreadMessages(room, true)).toBe(false);
             });
 
             it("returns true for a room when read receipt is not on the latest thread messages", async () => {
@@ -348,7 +348,7 @@ describe("Unread", () => {
                 });
                 room.addReceipt(receipt);
 
-                expect(doesRoomHaveUnreadMessages(room)).toBe(true);
+                expect(doesRoomHaveUnreadMessages(room, true)).toBe(true);
             });
 
             it("returns true when the event for a thread receipt can't be found", async () => {
@@ -394,7 +394,7 @@ describe("Unread", () => {
                 });
                 room.addReceipt(receipt);
 
-                expect(doesRoomHaveUnreadMessages(room)).toBe(true);
+                expect(doesRoomHaveUnreadMessages(room, true)).toBe(true);
             });
         });
 
@@ -412,7 +412,7 @@ describe("Unread", () => {
             // Only for timeline events.
             room.addLiveEvents([redactedEvent]);
 
-            expect(doesRoomHaveUnreadMessages(room)).toBe(true);
+            expect(doesRoomHaveUnreadMessages(room, true)).toBe(true);
             expect(logger.warn).toHaveBeenCalledWith(
                 "Falling back to unread room because of no read receipt or counting message found",
                 {

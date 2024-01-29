@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { NotificationCountType, Room, Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { ReadReceipt } from "matrix-js-sdk/src/models/read-receipt";
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
@@ -25,6 +25,7 @@ import { determineUnreadState } from "../../../../RoomNotifs";
 import { humanReadableNotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { doesRoomOrThreadHaveUnreadMessages } from "../../../../Unread";
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
+import SettingsStore from "../../../../settings/SettingsStore";
 
 function UserReadUpTo({ target }: { target: ReadReceipt<any, any> }): JSX.Element {
     const cli = useContext(MatrixClientContext);
@@ -65,10 +66,12 @@ function UserReadUpTo({ target }: { target: ReadReceipt<any, any> }): JSX.Elemen
 }
 
 export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Element {
+    const tacEnabled = useMemo(() => SettingsStore.getValue("threadsActivityCentre"), []);
+
     const { room } = useContext(DevtoolsContext);
     const cli = useContext(MatrixClientContext);
 
-    const { level, count } = determineUnreadState(room);
+    const { level, count } = determineUnreadState(room, undefined, !tacEnabled);
     const [notificationState] = useNotificationState(room);
 
     return (

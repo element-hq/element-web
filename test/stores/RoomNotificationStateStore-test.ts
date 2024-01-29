@@ -125,6 +125,7 @@ describe("RoomNotificationStateStore", function () {
         ret.getPendingEvents = jest.fn().mockReturnValue([]);
         ret.isSpaceRoom = jest.fn().mockReturnValue(false);
         ret.getUnreadNotificationCount = jest.fn().mockReturnValue(numUnreads);
+        ret.getRoomUnreadNotificationCount = jest.fn().mockReturnValue(numUnreads);
         return ret;
     }
 });
