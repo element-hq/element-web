@@ -765,8 +765,8 @@
         "room_notifications_total": "Total: ",
         "room_notifications_type": "Type: ",
         "room_status": "Room status",
-        "room_unread_status": "Room unread status: <strong>%(status)s</strong>",
         "room_unread_status_count": {
+            "one": "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>",
             "other": "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>"
         },
         "save_setting_values": "Save setting values",
