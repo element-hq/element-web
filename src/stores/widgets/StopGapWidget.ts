@@ -75,6 +75,7 @@ interface IAppTileProps {
     waitForIframeLoad: boolean;
     whitelistCapabilities?: string[];
     userWidget: boolean;
+    stickyPromise?: () => Promise<void>;
 }
 
 // TODO: Don't use this because it's wrong
@@ -160,6 +161,7 @@ export class StopGapWidget extends EventEmitter {
     private kind: WidgetKind;
     private readonly virtual: boolean;
     private readUpToMap: { [roomId: string]: string } = {}; // room ID to event ID
+    private stickyPromise?: () => Promise<void>; // This promise will be called and needs to resolve before the widget will actually become sticky.
 
     public constructor(private appTileProps: IAppTileProps) {
         super();
@@ -176,6 +178,7 @@ export class StopGapWidget extends EventEmitter {
         this.roomId = appTileProps.room?.roomId;
         this.kind = appTileProps.userWidget ? WidgetKind.Account : WidgetKind.Room; // probably
         this.virtual = isAppWidget(app) && app.eventId === undefined;
+        this.stickyPromise = appTileProps.stickyPromise;
     }
 
     private get eventListenerRoomId(): Optional<string> {
@@ -338,15 +341,17 @@ export class StopGapWidget extends EventEmitter {
 
         this.messaging.on(
             `action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`,
-            (ev: CustomEvent<IStickyActionRequest>) => {
+            async (ev: CustomEvent<IStickyActionRequest>) => {
                 if (this.messaging?.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
+                    ev.preventDefault();
+                    this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack
+
+                    if (this.stickyPromise) await this.stickyPromise();
                     ActiveWidgetStore.instance.setWidgetPersistence(
                         this.mockWidget.id,
                         this.roomId ?? null,
                         ev.detail.data.value,
                     );
-                    ev.preventDefault();
-                    this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack
                 }
             },
         );

@@ -40,6 +40,9 @@ export interface IApp extends IWidget {
 export function isAppWidget(widget: IWidget | IApp): widget is IApp {
     return "roomId" in widget && typeof widget.roomId === "string";
 }
+export function isVirtualWidget(widget: IApp): boolean {
+    return widget.eventId === undefined;
+}
 
 interface IRoomWidgets {
     widgets: IApp[];
@@ -127,7 +130,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         // otherwise we are out of sync with the rest of the app with stale widget events during removal
         Array.from(this.widgetMap.values()).forEach((app) => {
             if (app.roomId !== room.roomId) return; // skip - wrong room
-            if (app.eventId === undefined) {
+            if (isVirtualWidget(app)) {
                 // virtual widget - keep it
                 roomInfo.widgets.push(app);
             } else {

@@ -331,12 +331,12 @@ describe("RoomHeader", () => {
 
         it("clicking on ongoing (unpinned) call re-pins it", () => {
             jest.spyOn(SdkConfig, "get").mockReturnValue({ use_exclusively: true });
-            // allow element calls
+            // allow calls
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
             jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(false);
             const spy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
 
-            const widget = {};
+            const widget = { eventId: "some_id_so_it_is_interpreted_as_non_virtual_widget" };
             jest.spyOn(CallStore.instance, "getCall").mockReturnValue({ widget } as Call);
 
             const { container } = render(<RoomHeader room={room} />, getWrapper());
@@ -405,7 +405,7 @@ describe("RoomHeader", () => {
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Video);
         });
 
-        it("calls using element calls for large rooms", async () => {
+        it("calls using element call for large rooms", async () => {
             mockRoomMembers(room, 3);
 
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockImplementation((key) => {

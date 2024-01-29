@@ -100,7 +100,7 @@ describe("Algorithm", () => {
         // End of setup
 
         expect(algorithm.getOrderedRooms()[DefaultTagID.Untagged]).toEqual([room, roomWithCall]);
-        await call.connect();
+        await call.start();
         expect(algorithm.getOrderedRooms()[DefaultTagID.Untagged]).toEqual([roomWithCall, room]);
         await call.disconnect();
         expect(algorithm.getOrderedRooms()[DefaultTagID.Untagged]).toEqual([room, roomWithCall]);

@@ -17,7 +17,8 @@ limitations under the License.
 import { mocked, MockedObject } from "jest-mock";
 import { last } from "lodash";
 import { MatrixEvent, MatrixClient, ClientEvent } from "matrix-js-sdk/src/matrix";
-import { ClientWidgetApi } from "matrix-widget-api";
+import { ClientWidgetApi, WidgetApiFromWidgetAction } from "matrix-widget-api";
+import { waitFor } from "@testing-library/react";
 
 import { stubClient, mkRoom, mkEvent } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
@@ -25,6 +26,7 @@ import { StopGapWidget } from "../../../src/stores/widgets/StopGapWidget";
 import { ElementWidgetActions } from "../../../src/stores/widgets/ElementWidgetActions";
 import { VoiceBroadcastInfoEventType, VoiceBroadcastRecording } from "../../../src/voice-broadcast";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import ActiveWidgetStore from "../../../src/stores/ActiveWidgetStore";
 
 jest.mock("matrix-widget-api/lib/ClientWidgetApi");
 
@@ -112,5 +114,70 @@ describe("StopGapWidget", () => {
                 expect(voiceBroadcastRecording.pause).toHaveBeenCalled();
             });
         });
+    });
+});
+describe("StopGapWidget with stickyPromise", () => {
+    let client: MockedObject<MatrixClient>;
+    let widget: StopGapWidget;
+    let messaging: MockedObject<ClientWidgetApi>;
+
+    beforeEach(() => {
+        stubClient();
+        client = mocked(MatrixClientPeg.safeGet());
+    });
+
+    afterEach(() => {
+        widget.stopMessaging();
+    });
+    it("should wait for the sticky promise to resolve before starting messaging", async () => {
+        jest.useFakeTimers();
+        const getStickyPromise = async () => {
+            return new Promise<void>((resolve) => {
+                setTimeout(() => {
+                    resolve();
+                }, 1000);
+            });
+        };
+        widget = new StopGapWidget({
+            app: {
+                id: "test",
+                creatorUserId: "@alice:example.org",
+                type: "example",
+                url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url",
+                roomId: "!1:example.org",
+            },
+            room: mkRoom(client, "!1:example.org"),
+            userId: "@alice:example.org",
+            creatorUserId: "@alice:example.org",
+            waitForIframeLoad: true,
+            userWidget: false,
+            stickyPromise: getStickyPromise,
+        });
+
+        const setPersistenceSpy = jest.spyOn(ActiveWidgetStore.instance, "setWidgetPersistence");
+
+        // Start messaging without an iframe, since ClientWidgetApi is mocked
+        widget.startMessaging(null as unknown as HTMLIFrameElement);
+        const emitSticky = async () => {
+            messaging = mocked(last(mocked(ClientWidgetApi).mock.instances)!);
+            messaging?.hasCapability.mockReturnValue(true);
+            // messaging.transport.reply will be called but transport is undefined in this test environment
+            // This just makes sure the call doesn't throw
+            Object.defineProperty(messaging, "transport", { value: { reply: () => {} } });
+            messaging.on.mock.calls.find(([event, listener]) => {
+                if (event === `action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`) {
+                    listener({ preventDefault: () => {}, detail: { data: { value: true } } });
+                    return true;
+                }
+            });
+        };
+        await emitSticky();
+        expect(setPersistenceSpy).not.toHaveBeenCalled();
+        // Advance the fake timer so that the sticky promise resolves
+        jest.runAllTimers();
+        // Use a real timer and wait for the next tick so the sticky promise can resolve
+        jest.useRealTimers();
+
+        waitFor(() => expect(setPersistenceSpy).toHaveBeenCalled(), { interval: 5 });
     });
 });

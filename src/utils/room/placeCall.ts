@@ -29,7 +29,12 @@ import { Action } from "../../dispatcher/actions";
  * @param callType the type of call
  * @param platformCallType the platform to pass the call on
  */
-export const placeCall = async (room: Room, callType: CallType, platformCallType: PlatformCallType): Promise<void> => {
+export const placeCall = async (
+    room: Room,
+    callType: CallType,
+    platformCallType: PlatformCallType,
+    skipLobby: boolean,
+): Promise<void> => {
     switch (platformCallType) {
         case "legacy_or_jitsi":
             await LegacyCallHandler.instance.placeCall(room.roomId, callType);
@@ -43,6 +48,7 @@ export const placeCall = async (room: Room, callType: CallType, platformCallType
                 room_id: room.roomId,
                 view_call: true,
                 metricsTrigger: undefined,
+                skipLobby,
             });
             break;
 

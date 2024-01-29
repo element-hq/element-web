@@ -2564,6 +2564,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             room={this.state.room}
                             resizing={this.state.resizing}
                             waitForCall={isVideoRoom(this.state.room)}
+                            skipLobby={this.context.roomViewStore.skipCallLobby() ?? false}
                             role="main"
                         />
                         {previewBar}

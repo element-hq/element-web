@@ -178,8 +178,8 @@ test.describe("Room Header", () => {
 
             await page.locator(".mx_LegacyRoomHeader").getByRole("button", { name: "Chat" }).click();
 
-            // Assert that the video is rendered
-            await expect(page.locator(".mx_CallView video")).toBeVisible();
+            // Assert that the call view is still visible
+            await expect(page.locator(".mx_CallView")).toBeVisible();
 
             // Assert that GELS is visible
             await expect(

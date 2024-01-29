@@ -143,16 +143,20 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
         setBusy(false);
     }, [setBusy, room]);
 
-    const startElementCall = useCallback(() => {
-        setBusy(true);
-        defaultDispatcher.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            room_id: room.roomId,
-            view_call: true,
-            metricsTrigger: undefined,
-        });
-        setBusy(false);
-    }, [setBusy, room]);
+    const startElementCall = useCallback(
+        (skipLobby: boolean) => {
+            setBusy(true);
+            defaultDispatcher.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                view_call: true,
+                skipLobby: skipLobby,
+                metricsTrigger: undefined,
+            });
+            setBusy(false);
+        },
+        [setBusy, room],
+    );
 
     const { onClick, tooltip, disabled } = useMemo(() => {
         if (behavior instanceof DisabledWithReason) {
@@ -173,7 +177,7 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
             return {
                 onClick: async (ev: ButtonEvent): Promise<void> => {
                     ev.preventDefault();
-                    startElementCall();
+                    startElementCall("shiftKey" in ev ? ev.shiftKey : false);
                 },
                 disabled: false,
             };
@@ -202,7 +206,7 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
         (ev: ButtonEvent) => {
             ev.preventDefault();
             closeMenu();
-            startElementCall();
+            startElementCall("shiftKey" in ev ? ev.shiftKey : false);
         },
         [closeMenu, startElementCall],
     );
@@ -305,7 +309,7 @@ const CallButtons: FC<CallButtonsProps> = ({ room }) => {
             } else {
                 return makeVideoCallButton(new DisabledWithReason(_t("voip|disabled_no_perms_start_video_call")));
             }
-        } else if (hasLegacyCall || hasJitsiWidget || hasGroupCall) {
+        } else if (hasLegacyCall || hasJitsiWidget) {
             return (
                 <>
                     {makeVoiceCallButton(new DisabledWithReason(_t("voip|disabled_ongoing_call")))}

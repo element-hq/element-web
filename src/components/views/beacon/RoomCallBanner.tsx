@@ -43,6 +43,7 @@ const RoomCallBannerInner: React.FC<RoomCallBannerProps> = ({ roomId, call }) =>
                 action: Action.ViewRoom,
                 room_id: roomId,
                 view_call: true,
+                skipLobby: "shiftKey" in ev ? ev.shiftKey : false,
                 metricsTrigger: undefined,
             });
         },

@@ -123,7 +123,9 @@ export const useRoomCall = (
 
     const [canPinWidget, setCanPinWidget] = useState(false);
     const [widgetPinned, setWidgetPinned] = useState(false);
-    const promptPinWidget = canPinWidget && !widgetPinned;
+    // We only want to prompt to pin the widget if it's not element call based.
+    const isECWidget = WidgetType.CALL.matches(widget?.type ?? "");
+    const promptPinWidget = !isECWidget && canPinWidget && !widgetPinned;
 
     const updateWidgetState = useCallback((): void => {
         setCanPinWidget(WidgetLayoutStore.instance.canAddToContainer(room, Container.Top));
@@ -169,7 +171,7 @@ export const useRoomCall = (
             if (widget && promptPinWidget) {
                 WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
             } else {
-                placeCall(room, CallType.Voice, callType);
+                placeCall(room, CallType.Voice, callType, evt.shiftKey);
             }
         },
         [promptPinWidget, room, widget, callType],
@@ -180,7 +182,7 @@ export const useRoomCall = (
             if (widget && promptPinWidget) {
                 WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
             } else {
-                placeCall(room, CallType.Video, callType);
+                placeCall(room, CallType.Video, callType, evt.shiftKey);
             }
         },
         [widget, promptPinWidget, room, callType],

@@ -32,12 +32,14 @@ import { IWidgetApiRequest } from "matrix-widget-api";
 // eslint-disable-next-line no-restricted-imports
 import { MatrixRTCSession, MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
 // eslint-disable-next-line no-restricted-imports
+import { CallMembership } from "matrix-js-sdk/src/matrixrtc/CallMembership";
+// eslint-disable-next-line no-restricted-imports
 import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
 // eslint-disable-next-line no-restricted-imports
 import { ICallNotifyContent } from "matrix-js-sdk/src/matrixrtc/types";
 
 import type EventEmitter from "events";
-import type { ClientWidgetApi } from "matrix-widget-api";
+import type { ClientWidgetApi, IWidgetData } from "matrix-widget-api";
 import type { IApp } from "../stores/WidgetStore";
 import SdkConfig, { DEFAULTS } from "../SdkConfig";
 import SettingsStore from "../settings/SettingsStore";
@@ -54,6 +56,7 @@ import { FontWatcher } from "../settings/watchers/FontWatcher";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctionalMembers";
+import { isVideoRoom } from "../utils/video-rooms";
 
 const TIMEOUT_MS = 16000;
 
@@ -77,7 +80,12 @@ const waitForEvent = async (
 };
 
 export enum ConnectionState {
+    // Widget related states that are equivalent to disconnected,
+    // but hold additional information about the state of the widget.
+    Lobby = "lobby",
+    WidgetLoading = "widget_loading",
     Disconnected = "disconnected",
+
     Connecting = "connecting",
     Connected = "connected",
     Disconnecting = "disconnecting",
@@ -188,7 +196,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     public abstract clean(): Promise<void>;
 
     /**
-     * Contacts the widget to connect to the call.
+     * Contacts the widget to connect to the call or prompt the user to connect to the call.
      * @param {MediaDeviceInfo | null} audioInput The audio input to use, or
      *   null to start muted.
      * @param {MediaDeviceInfo | null} audioInput The video input to use, or
@@ -205,12 +213,16 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     protected abstract performDisconnection(): Promise<void>;
 
     /**
-     * Connects the user to the call using the media devices set in
-     * MediaDeviceHandler. The widget associated with the call must be active
+     * Starts the communication between the widget and the call.
+     * The call then waits for the necessary requirements to actually perform the connection
+     * or connects right away depending on the call type. (Jitsi, Legacy, ElementCall...)
+     * It uses the media devices set in MediaDeviceHandler.
+     * The widget associated with the call must be active
      * for this to succeed.
+     * Only call this if the call state is: ConnectionState.Disconnected.
      */
-    public async connect(): Promise<void> {
-        this.connectionState = ConnectionState.Connecting;
+    public async start(): Promise<void> {
+        this.connectionState = ConnectionState.WidgetLoading;
 
         const { [MediaDeviceKindEnum.AudioInput]: audioInputs, [MediaDeviceKindEnum.VideoInput]: videoInputs } =
             (await MediaDeviceHandler.getDevices())!;
@@ -246,7 +258,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
                 throw new Error(`Failed to bind call widget in room ${this.roomId}: ${e}`);
             }
         }
-
+        this.connectionState = ConnectionState.Connecting;
         try {
             await this.performConnection(audioInput, videoInput);
         } catch (e) {
@@ -264,7 +276,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      * Disconnects the user from the call.
      */
     public async disconnect(): Promise<void> {
-        if (this.connectionState !== ConnectionState.Connected) throw new Error("Not connected");
+        if (!this.connected) throw new Error("Not connected");
 
         this.connectionState = ConnectionState.Disconnecting;
         await this.performDisconnection();
@@ -460,6 +472,7 @@ export class JitsiCall extends Call {
         audioInput: MediaDeviceInfo | null,
         videoInput: MediaDeviceInfo | null,
     ): Promise<void> {
+        this.connectionState = ConnectionState.Lobby;
         // Ensure that the messaging doesn't get stopped while we're waiting for responses
         const dontStopMessaging = new Promise<void>((resolve, reject) => {
             const messagingStore = WidgetMessagingStore.instance;
@@ -539,7 +552,8 @@ export class JitsiCall extends Call {
     }
 
     public setDisconnected(): void {
-        this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        // During tests this.messaging can be undefined
+        this.messaging?.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Dock, this.onDock);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Undock, this.onUndock);
 
@@ -615,6 +629,11 @@ export class JitsiCall extends Call {
 
         await this.messaging!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected();
+        // In video rooms we immediately want to restart the call after hangup
+        // The lobby will be shown again and it connects to all signals from EC and Jitsi.
+        if (isVideoRoom(this.room)) {
+            this.start();
+        }
     };
 }
 
@@ -623,7 +642,7 @@ export class JitsiCall extends Call {
  * (somewhat cheekily named)
  */
 export class ElementCall extends Call {
-    // TODO this is only there to support backwards compatiblity in timeline rendering
+    // TODO this is only there to support backwards compatibility in timeline rendering
     // this should not be part of this class since it has nothing to do with it.
     public static readonly CALL_EVENT_TYPE = new NamespacedValue(null, EventType.GroupCallPrefix);
     public static readonly MEMBER_EVENT_TYPE = new NamespacedValue(null, EventType.GroupCallMemberPrefix);
@@ -652,8 +671,11 @@ export class ElementCall extends Call {
         // Splice together the Element Call URL for this call
         const params = new URLSearchParams({
             embed: "true", // We're embedding EC within another application
-            preload: "true", // We want it to load in the background
-            skipLobby: "true", // Skip the lobby since we show a lobby component of our own
+            // Template variables are used, so that this can be configured using the widget data.
+            preload: "$preload", // We want it to load in the background.
+            skipLobby: "$skipLobby", // Skip the lobby in case we show a lobby component of our own.
+            returnToLobby: "$returnToLobby", // Returns to the lobby (instead of blank screen) when the call ends. (For video rooms)
+            perParticipantE2EE: "$perParticipantE2EE",
             hideHeader: "true", // Hide the header since our room header is enough
             userId: client.getUserId()!,
             deviceId: client.getDeviceId()!,
@@ -664,8 +686,6 @@ export class ElementCall extends Call {
             analyticsID,
         });
 
-        if (client.isRoomEncrypted(roomId) && !SettingsStore.getValue("feature_disable_call_per_sender_encryption"))
-            params.append("perParticipantE2EE", "true");
         if (SettingsStore.getValue("fallbackICEServerAllowed")) params.append("allowIceFallback", "true");
         if (SettingsStore.getValue("feature_allow_screen_share_only_mode"))
             params.append("allowVoipWithNoMedia", "true");
@@ -685,24 +705,46 @@ export class ElementCall extends Call {
 
         const url = new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url!);
         url.pathname = "/room";
-        url.hash = `#?${params.toString()}`;
+        const replacedUrl = params.toString().replace(/%24/g, "$");
+        url.hash = `#?${replacedUrl}`;
         return url;
     }
 
-    private static createOrGetCallWidget(roomId: string, client: MatrixClient): IApp {
+    // Creates a new widget if there isn't any widget of typ Call in this room.
+    // Defaults for creating a new widget are: skipLobby = false, preload = false
+    // When there is already a widget the current widget configuration will be used or can be overwritten
+    // by passing the according parameters (skipLobby, preload).
+    //
+    // `preload` is deprecated. We used it for optimizing EC by using a custom EW call lobby and preloading the iframe.
+    // now it should always be false.
+    private static createOrGetCallWidget(
+        roomId: string,
+        client: MatrixClient,
+        skipLobby: boolean | undefined,
+        preload: boolean | undefined,
+        returnToLobby: boolean | undefined,
+    ): IApp {
         const ecWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
-        const url = ElementCall.generateWidgetUrl(client, roomId);
-
         if (ecWidget) {
-            // always update the url because even if the widget is already created
+            // Always update the widget data because even if the widget is already created,
             // we might have settings changes that update the widget.
-            ecWidget.url = url.toString();
-
+            const overwrites: IWidgetData = {};
+            if (skipLobby !== undefined) {
+                overwrites.skipLobby = skipLobby;
+            }
+            if (preload !== undefined) {
+                overwrites.preload = preload;
+            }
+            if (returnToLobby !== undefined) {
+                overwrites.returnToLobby = returnToLobby;
+            }
+            ecWidget.data = ElementCall.getWidgetData(client, roomId, ecWidget?.data ?? {}, overwrites);
             return ecWidget;
         }
 
         // To use Element Call without touching room state, we create a virtual
         // widget (one that doesn't have a corresponding state event)
+        const url = ElementCall.generateWidgetUrl(client, roomId);
         return WidgetStore.instance.addVirtualWidget(
             {
                 id: randomString(24), // So that it's globally unique
@@ -711,13 +753,39 @@ export class ElementCall extends Call {
                 type: WidgetType.CALL.preferred,
                 url: url.toString(),
                 // waitForIframeLoad: false,
+                data: ElementCall.getWidgetData(
+                    client,
+                    roomId,
+                    {},
+                    {
+                        skipLobby: skipLobby ?? false,
+                        preload: preload ?? false,
+                        returnToLobby: returnToLobby ?? false,
+                    },
+                ),
             },
             roomId,
         );
     }
 
+    private static getWidgetData(
+        client: MatrixClient,
+        roomId: string,
+        currentData: IWidgetData,
+        overwriteData: IWidgetData,
+    ): IWidgetData {
+        let perParticipantE2EE = false;
+        if (client.isRoomEncrypted(roomId) && !SettingsStore.getValue("feature_disable_call_per_sender_encryption"))
+            perParticipantE2EE = true;
+        return {
+            ...currentData,
+            ...overwriteData,
+            perParticipantE2EE,
+        };
+    }
+
     private onCallEncryptionSettingsChange(): void {
-        this.widget.url = ElementCall.generateWidgetUrl(this.client, this.roomId).toString();
+        this.widget.data = ElementCall.getWidgetData(this.client, this.roomId, this.widget.data ?? {}, {});
     }
 
     private constructor(
@@ -739,6 +807,7 @@ export class ElementCall extends Call {
 
     public static get(room: Room): ElementCall | null {
         // Only supported in the new group call experience or in video rooms.
+
         if (
             SettingsStore.getValue("feature_group_calls") ||
             (SettingsStore.getValue("feature_video_rooms") &&
@@ -752,10 +821,16 @@ export class ElementCall extends Call {
             // A call is present if we
             // - have a widget: This means the create function was called.
             // - or there is a running session where we have not yet created a widget for.
-            // - or this this is a call room. Then we also always want to show a call.
+            // - or this is a call room. Then we also always want to show a call.
             if (hasEcWidget || session.memberships.length !== 0 || room.isCallRoom()) {
                 // create a widget for the case we are joining a running call and don't have on yet.
-                const availableOrCreatedWidget = ElementCall.createOrGetCallWidget(room.roomId, room.client);
+                const availableOrCreatedWidget = ElementCall.createOrGetCallWidget(
+                    room.roomId,
+                    room.client,
+                    undefined,
+                    undefined,
+                    isVideoRoom(room),
+                );
                 return new ElementCall(session, availableOrCreatedWidget, room.client);
             }
         }
@@ -763,23 +838,20 @@ export class ElementCall extends Call {
         return null;
     }
 
-    public static async create(room: Room): Promise<void> {
-        const isVideoRoom =
-            SettingsStore.getValue("feature_video_rooms") &&
-            SettingsStore.getValue("feature_element_call_video_rooms") &&
-            room.isCallRoom();
-        ElementCall.createOrGetCallWidget(room.roomId, room.client);
+    public static async create(room: Room, skipLobby = false): Promise<void> {
+        ElementCall.createOrGetCallWidget(room.roomId, room.client, skipLobby, false, isVideoRoom(room));
         WidgetStore.instance.emit(UPDATE_EVENT, null);
+    }
 
-        // Send Call notify
-
+    protected async sendCallNotify(): Promise<void> {
+        const room = this.room;
         const existingRoomCallMembers = MatrixRTCSession.callMembershipsForRoom(room).filter(
             // filter all memberships where the application is m.call and the call_id is ""
             (m) => m.application === "m.call" && m.callId === "",
         );
 
         const memberCount = getJoinedNonFunctionalMembers(room).length;
-        if (!isVideoRoom && existingRoomCallMembers.length == 0) {
+        if (!isVideoRoom(room) && existingRoomCallMembers.length == 0) {
             // send ringing event
             const content: ICallNotifyContent = {
                 "application": "m.call",
@@ -796,30 +868,64 @@ export class ElementCall extends Call {
         audioInput: MediaDeviceInfo | null,
         videoInput: MediaDeviceInfo | null,
     ): Promise<void> {
-        try {
-            await this.messaging!.transport.send(ElementWidgetActions.JoinCall, {
-                audioInput: audioInput?.label ?? null,
-                videoInput: videoInput?.label ?? null,
-            });
-        } catch (e) {
-            throw new Error(`Failed to join call in room ${this.roomId}: ${e}`);
+        // The JoinCall action is only send if the widget is waiting for it.
+        if (this.widget.data?.preload) {
+            try {
+                await this.messaging!.transport.send(ElementWidgetActions.JoinCall, {
+                    audioInput: audioInput?.label ?? null,
+                    videoInput: videoInput?.label ?? null,
+                });
+            } catch (e) {
+                throw new Error(`Failed to join call in room ${this.roomId}: ${e}`);
+            }
         }
-
-        this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
         this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
+        this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+
+        if (!this.widget.data?.skipLobby) {
+            // If we do not skip the lobby we need to wait until the widget has
+            // connected to matrixRTC. This is either observed through the session state
+            // or the MatrixRTCSessionManager session started event.
+            this.connectionState = ConnectionState.Lobby;
+        }
+        // TODO: if the widget informs us when the join button is clicked (widget action), so we can
+        // - set state to connecting
+        // - send call notify
+        const session = this.client.matrixRTC.getActiveRoomSession(this.room);
+        if (session) {
+            await waitForEvent(
+                session,
+                MatrixRTCSessionEvent.MembershipsChanged,
+                (_, newMemberships: CallMembership[]) =>
+                    newMemberships.some((m) => m.sender === this.client.getUserId()),
+            );
+        } else {
+            await waitForEvent(
+                this.client.matrixRTC,
+                MatrixRTCSessionManagerEvents.SessionStarted,
+                (roomId: string, session: MatrixRTCSession) =>
+                    this.session.callId === session.callId && roomId === this.roomId,
+            );
+        }
+        this.sendCallNotify();
     }
 
     protected async performDisconnection(): Promise<void> {
         try {
             await this.messaging!.transport.send(ElementWidgetActions.HangupCall, {});
+            await waitForEvent(
+                this.session,
+                MatrixRTCSessionEvent.MembershipsChanged,
+                (_, newMemberships: CallMembership[]) =>
+                    !newMemberships.some((m) => m.sender === this.client.getUserId()),
+            );
         } catch (e) {
             throw new Error(`Failed to hangup call in room ${this.roomId}: ${e}`);
         }
     }
 
     public setDisconnected(): void {
-        this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.messaging!.off(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
         this.messaging!.off(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
         super.setDisconnected();
@@ -828,7 +934,7 @@ export class ElementCall extends Call {
     public destroy(): void {
         ActiveWidgetStore.instance.destroyPersistentWidget(this.widget.id, this.widget.roomId);
         WidgetStore.instance.removeVirtualWidget(this.widget.id, this.widget.roomId);
-
+        this.messaging?.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.session.off(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);
         this.client.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionEnded, this.onRTCSessionEnded);
 
@@ -844,7 +950,7 @@ export class ElementCall extends Call {
     }
 
     private onRTCSessionEnded = (roomId: string, session: MatrixRTCSession): void => {
-        // Don't destroy widget on hangup for video call rooms.
+        // Don't destroy the call on hangup for video call rooms.
         if (roomId == this.roomId && !this.room.isCallRoom()) {
             this.destroy();
         }
@@ -883,6 +989,11 @@ export class ElementCall extends Call {
         ev.preventDefault();
         await this.messaging!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected();
+        // In video rooms we immediately want to reconnect after hangup
+        // This starts the lobby again and connects to all signals from EC.
+        if (isVideoRoom(this.room)) {
+            this.start();
+        }
     };
 
     private onTileLayout = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {

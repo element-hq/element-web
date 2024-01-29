@@ -95,6 +95,11 @@ interface IProps {
     movePersistedElement?: MutableRefObject<(() => void) | undefined>;
     // An element to render after the iframe as an overlay
     overlay?: ReactNode;
+    // If defined this async method will be called when the widget requests to become sticky.
+    // It will only become sticky once the returned promise resolves.
+    // This is useful because: Widget B is sticky. Making widget A sticky will kill widget B immediately.
+    // This promise allows to do Widget B related cleanup before Widget A becomes sticky. (e.g. hangup a Voip call)
+    stickyPromise?: () => Promise<void>;
 }
 
 interface IState {
@@ -610,11 +615,11 @@ export default class AppTile extends React.Component<IProps, IState> {
             "microphone; camera; encrypted-media; autoplay; display-capture; clipboard-write; " + "clipboard-read;";
 
         const appTileBodyClass = classNames({
-            // We don't want mx_AppTileBody (rounded corners) for call widgets
             "mx_AppTileBody": true,
             "mx_AppTileBody--large": !this.props.miniMode,
             "mx_AppTileBody--mini": this.props.miniMode,
             "mx_AppTileBody--loading": this.state.loading,
+            // We don't want mx_AppTileBody (rounded corners) for call widgets
             "mx_AppTileBody--call": this.props.app.type === WidgetType.CALL.preferred,
         });
         const appTileBodyStyles: CSSProperties = {};

@@ -179,7 +179,7 @@ describe("PipContainer", () => {
         } as unknown as ClientWidgetApi);
 
         await act(async () => {
-            await call.connect();
+            await call.start();
             ActiveWidgetStore.instance.setWidgetPersistence(widget.id, room.roomId, true);
         });
 

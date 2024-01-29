@@ -51,7 +51,7 @@ export const LiveContentSummary: FC<Props> = ({ type, text, active, participantC
                 {" • "}
                 <span
                     className="mx_LiveContentSummary_participants"
-                    aria-label={_t("common|n_participants", { count: participantCount })}
+                    aria-label={_t("voip|n_people_joined", { count: participantCount })}
                 >
                     {participantCount}
                 </span>

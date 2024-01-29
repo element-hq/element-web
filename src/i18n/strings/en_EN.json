@@ -479,6 +479,7 @@
         "legal": "Legal",
         "light": "Light",
         "loading": "Loading…",
+        "lobby": "Lobby",
         "location": "Location",
         "low_priority": "Low priority",
         "matrix": "Matrix",
@@ -491,10 +492,6 @@
         "n_members": {
             "one": "%(count)s member",
             "other": "%(count)s members"
-        },
-        "n_participants": {
-            "one": "1 participant",
-            "other": "%(count)s participants"
         },
         "n_rooms": {
             "one": "%(count)s room",
@@ -3793,7 +3790,6 @@
         "already_in_call_person": "You're already in a call with this person.",
         "answered_elsewhere": "Answered Elsewhere",
         "answered_elsewhere_description": "The call was answered on another device.",
-        "audio_devices": "Audio devices",
         "call_failed": "Call Failed",
         "call_failed_description": "The call could not be established",
         "call_failed_media": "Call failed because webcam or microphone could not be accessed. Check that:",
@@ -3880,7 +3876,6 @@
         "user_is_presenting": "%(sharerName)s is presenting",
         "video_call": "Video call",
         "video_call_started": "Video call started",
-        "video_devices": "Video devices",
         "voice_call": "Voice call",
         "you_are_presenting": "You are presenting"
     },
