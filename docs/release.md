@@ -192,35 +192,38 @@ _Note: we should add a step here to write summaries atop the changelogs manually
 
 ### Matrix JS SDK
 
-The first stop is the matrix-js-sdk; kick off a release using [the automation](https://github.com/matrix-org/matrix-js-sdk/actions/workflows/release.yml) - making sure to select the right type of release. For anything other than an RC: choose final. You should not need to ever switch off either of the Publishing options.
+The first stop is the matrix-js-sdk; draft a release using [the automation](https://github.com/matrix-org/matrix-js-sdk/actions/workflows/release-drafter.yml) - making sure to select the right type of release.
 
--   [ ] matrix-js-sdk has been released & published to npm
+-   [ ] Check the release notes & artifacts for the draft release, publish when ready
+-   [ ] Check that matrix-js-sdk has been published to npm
+-   [ ] Check that the docs have published successfully
 
 ### Matrix React SDK
 
-The next stop is matrix-react-sdk; kick off a release using [the automation](https://github.com/matrix-org/matrix-react-sdk/actions/workflows/release.yml) - making sure to select the right type of release. For anything other than an RC: choose final. In the JS SDK version field enter the version of the JS SDK you wish to use, for typical releases including all the layers this would be the version released in the stage above.
+The next stop is matrix-react-sdk; draft a release using [the automation](https://github.com/matrix-org/matrix-react-sdk/actions/workflows/release-drafter.yml) - making sure to select the right type of release. In the JS SDK version field enter the version of the JS SDK you wish to use, for typical releases including all the layers this would be the version released in the stage above.
 
--   [ ] matrix-react-sdk has been released & published to npm
+-   [ ] Check the release notes & artifacts for the draft release, publish when ready
+-   [ ] Check that matrix-react-sdk has been published to npm
 
 ### Element Web
 
-The next stop is element-web; kick off a release using [the automation](https://github.com/element-hq/element-web/actions/workflows/release.yml) - making sure to select the right type of release. For anything other than an RC: choose final. In the SDK version fields enter the versions you wish to use, for typical releases including all the layers this would be the versions released in the stages above.
+The next stop is element-web; draft a release using [the automation](https://github.com/element-hq/element-web/actions/workflows/release-drafter.yml) - making sure to select the right type of release. In the SDK version fields enter the versions you wish to use, for typical releases including all the layers this would be the versions released in the stages above.
 
--   [ ] Element Web has been released
+-   [ ] Check the release notes & artifacts for the draft release, publish when ready
 
 ### Element Desktop
 
-The next stop is element-desktop; kick off a release using [the automation](https://github.com/element-hq/element-desktop/actions/workflows/release.yml) - making sure to select the right type of release. For anything other than an RC: choose final. In the JS SDK version field enter the version of the JS SDK you wish to use, for typical releases including all the layers this would be the version released in the stage above.
+The next stop is element-desktop; draft a release using [the automation](https://github.com/element-hq/element-desktop/actions/workflows/release-drafter.yml) - making sure to select the right type of release.
 
--   [ ] Element Desktop has been released
+-   [ ] Check the release notes & artifacts for the draft release, publish when ready
 
 # Deploying
 
-We ship the SDKs to npm, this happens as part of the release process.
+We ship the SDKs to npm, this happens as part of the release process once the draft is published.
 We ship Element Web to dockerhub, `*.element.io`, and packages.element.io.
 We ship Element Desktop to packages.element.io.
 
--   [ ] Check that element-web has shipped to dockerhub
+-   [ ] Check that Element Web has shipped to dockerhub
 -   [ ] Deploy staging.element.io. [See docs.](https://handbook.element.io/books/element-web-team/page/deploying-appstagingelementio)
 -   [ ] Test staging.element.io
 
@@ -228,7 +231,7 @@ For final releases additionally do these steps:
 
 -   [ ] Deploy app.element.io. [See docs.](https://handbook.element.io/books/element-web-team/page/deploying-appstagingelementio)
 -   [ ] Test app.element.io
--   [ ] Ensure Element Web package has shipped to packages.element.io
+-   [ ] Ensure `element-web` debian package has shipped to packages.element.io
 -   [ ] Ensure Element Desktop packages have shipped to packages.element.io
 
 # Housekeeping

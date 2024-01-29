@@ -1,21 +1,53 @@
 name: Release Drafter
 on:
-    push:
-        branches: [staging]
     workflow_dispatch:
         inputs:
+            version-bump:
+                description: The scale of the version bump required for semver compatibility
+                required: true
+                default: automatic
+                type: choice
+                options:
+                    - automatic
+                    - patch
+                    - minor
+                    - major
+            type:
+                description: The type of release to make
+                required: true
+                default: release-candidate
+                type: choice
+                options:
+                    - release-candidate
+                    - release
+                    - hotfix
             previous-version:
-                description: What release to use as a base for release note purposes
+                description: What release to use as a base for release note purposes, defaults to the latest stable release.
                 required: false
+                type: string
+            matrix-react-sdk:
+                description: React SDK version to use (current|X.Y.Z)
+                required: false
+                default: current
+                type: string
+            matrix-js-sdk:
+                description: JS SDK version to use (current|X.Y.Z)
+                required: false
+                default: current
                 type: string
 concurrency: ${{ github.workflow }}
 jobs:
     draft:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: release-drafter/release-drafter@e64b19c4c46173209ed9f2e5a2f4ca7de89a0e86 # v5
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  disable-autolabeler: true
-                  previous-version: ${{ inputs.previous-version }}
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-drafter-action.yml@develop
+        secrets: inherit
+        with:
+            version-bump: ${{ inputs.version-bump }}
+            previous-version: ${{ inputs.previous-version }}
+            final: ${{ inputs.type != 'release-candidate' }}
+            include-changes: matrix-react-sdk
+            gpg-fingerprint: ${{ vars.GPG_FINGERPRINT }}
+            asset-path: dist/*.tar.gz
+            expected-asset-count: 3
+            dependencies: |
+                matrix-react-sdk=${{ inputs.matrix-react-sdk }}
+                matrix-js-sdk=${{ inputs.matrix-js-sdk }}
