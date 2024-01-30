@@ -5,6 +5,6 @@ on:
 concurrency: ${{ github.workflow }}
 jobs:
     release:
-        uses: matrix-org/matrix-js-sdk/.github/workflows/release-action.yml@develop
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-workflow.yml@develop
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}

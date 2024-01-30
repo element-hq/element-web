@@ -38,7 +38,7 @@ on:
 concurrency: ${{ github.workflow }}
 jobs:
     draft:
-        uses: matrix-org/matrix-js-sdk/.github/workflows/release-drafter-action.yml@develop
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-drafter-workflow.yml@develop
         secrets: inherit
         with:
             version-bump: ${{ inputs.version-bump }}
