@@ -45,7 +45,8 @@ import PageType from "matrix-react-sdk/src/PageTypes";
 import { UserOnboardingButton } from "matrix-react-sdk/src/components/views/user-onboarding/UserOnboardingButton";
 
 import RoomList from "../views/rooms/RoomList";
-import { Icon as Superhero } from "../../../res/themes/superhero/img/logos/superhero.svg";
+import { Icon as SuperheroDark } from "../../../res/themes/superhero/img/logos/superhero-dark.svg";
+import { Icon as SuperheroLight } from "../../../res/themes/superhero/img/logos/superhero-light.svg";
 
 interface IProps {
     isMinimized: boolean;
@@ -370,6 +371,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
+        console.log("render changedd");
         const roomList = (
             <RoomList
                 onKeyDown={this.onKeyDown}
@@ -401,7 +403,16 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             marginLeft: "10px",
                         }}
                     >
-                        <Superhero
+                        <SuperheroLight
+                            className="light_logo"
+                            style={{
+                                width: "112px",
+                                height: "32px",
+                                display: "block",
+                            }}
+                        />
+                        <SuperheroDark
+                            className="dark_logo"
                             style={{
                                 width: "112px",
                                 height: "32px",
