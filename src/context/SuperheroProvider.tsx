@@ -5,11 +5,9 @@ import { communityBotAtom, minimumTokenThresholdAtom, verifiedAccountsAtom, veri
 
 const useMinimumTokenThreshold = (config: any): void => {
     const [, setMinimumTokenThreshold] = useAtom(minimumTokenThresholdAtom);
-    const [isLoading, setIsLoading] = React.useState(false);
 
     const loadMinimumTokenThreshold = useCallback(() => {
-        if (config.bots_backend_url && !isLoading) {
-            setIsLoading(true);
+        if (config.bots_backend_url) {
             fetch(`${config.bots_backend_url}/ui/minimum-token-threshold`, {
                 method: "GET",
             })
@@ -17,12 +15,9 @@ const useMinimumTokenThreshold = (config: any): void => {
                 .then(setMinimumTokenThreshold)
                 .catch((e) => {
                     console.error("Error loading minimum token threshold", e);
-                })
-                .finally(() => {
-                    setIsLoading(false);
                 });
         }
-    }, [config.bots_backend_url, isLoading, setMinimumTokenThreshold]);
+    }, [setMinimumTokenThreshold, config.bots_backend_url]);
 
     useEffect(() => {
         loadMinimumTokenThreshold();
