@@ -19,7 +19,6 @@ import { createRef } from "react";
 import classNames from "classnames";
 import dis from "matrix-react-sdk/src/dispatcher/dispatcher";
 import { _t } from "matrix-react-sdk/src/languageHandler";
-import RoomList from "matrix-react-sdk/src/components/views/rooms/RoomList";
 import LegacyCallHandler from "matrix-react-sdk/src/LegacyCallHandler";
 import { HEADER_HEIGHT } from "matrix-react-sdk/src/components/views/rooms/RoomSublist";
 import { Action } from "matrix-react-sdk/src/dispatcher/actions";
@@ -45,6 +44,7 @@ import PosthogTrackers from "matrix-react-sdk/src/PosthogTrackers";
 import PageType from "matrix-react-sdk/src/PageTypes";
 import { UserOnboardingButton } from "matrix-react-sdk/src/components/views/user-onboarding/UserOnboardingButton";
 
+import RoomList from "../views/rooms/RoomList";
 import { Icon as Superhero } from "../../../res/themes/superhero/img/logos/superhero.svg";
 
 interface IProps {
