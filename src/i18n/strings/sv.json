@@ -492,10 +492,6 @@
             "one": "%(count)s medlem",
             "other": "%(count)s medlemmar"
         },
-        "n_participants": {
-            "one": "1 deltagare",
-            "other": "%(count)s deltagare"
-        },
         "n_rooms": {
             "one": "%(count)s rum",
             "other": "%(count)s rum"
@@ -765,7 +761,6 @@
         "room_notifications_total": "Totalt: ",
         "room_notifications_type": "Typ: ",
         "room_status": "Rumsstatus",
-        "room_unread_status": "Rummets oläst-status: <strong>%(status)s</strong>",
         "room_unread_status_count": {
             "other": "Rummets oläst-status: <strong>%(status)s</strong>, antal: <strong>%(count)s</strong>"
         },
@@ -3789,7 +3784,6 @@
         "already_in_call_person": "Du är redan i ett samtal med den här personen.",
         "answered_elsewhere": "Mottaget någon annanstans",
         "answered_elsewhere_description": "Samtalet mottogs på en annan enhet.",
-        "audio_devices": "Ljudenheter",
         "call_failed": "Samtal misslyckades",
         "call_failed_description": "Samtalet kunde inte etableras",
         "call_failed_media": "Samtal misslyckades eftersom webbkamera eller mikrofon inte kunde kommas åt. Kolla att:",
@@ -3876,7 +3870,6 @@
         "user_is_presenting": "%(sharerName)s presenterar",
         "video_call": "Videosamtal",
         "video_call_started": "Videosamtal startat",
-        "video_devices": "Videoenheter",
         "voice_call": "Röstsamtal",
         "you_are_presenting": "Du presenterar"
     },

@@ -436,10 +436,6 @@
             "one": "%(count)s thành viên",
             "other": "%(count)s thành viên"
         },
-        "n_participants": {
-            "one": "1 người tham gia",
-            "other": "%(count)s người tham gia"
-        },
         "n_rooms": {
             "one": "%(count)s phòng",
             "other": "%(count)s phòng"
@@ -3397,7 +3393,6 @@
         "already_in_call_person": "Bạn đang trong cuộc gọi với người này rồi.",
         "answered_elsewhere": "Đã trả lời ở nơi khác",
         "answered_elsewhere_description": "Cuộc gọi đã được trả lời trên một thiết bị khác.",
-        "audio_devices": "Thiết bị âm thanh",
         "call_failed": "Không gọi được",
         "call_failed_description": "Không thể khởi tạo cuộc gọi",
         "call_failed_media": "Thực hiện cuộc gọi thất bại vì không thể truy cập máy ảnh hoặc micrô. Kiểm tra xem:",
@@ -3484,7 +3479,6 @@
         "user_is_presenting": "%(sharerName)s đang trình bày",
         "video_call": "Gọi video",
         "video_call_started": "Cuộc gọi truyền hình đã bắt đầu",
-        "video_devices": "Thiết bị ghi hình",
         "voice_call": "Gọi thoại",
         "you_are_presenting": "Bạn đang trình bày"
     },

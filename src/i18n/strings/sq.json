@@ -467,10 +467,6 @@
             "one": "%(count)s anëtar",
             "other": "%(count)s anëtarë"
         },
-        "n_participants": {
-            "one": "1 pjesëmarrës",
-            "other": "%(count)s pjesëmarrës"
-        },
         "n_rooms": {
             "one": "%(count)s dhomë",
             "other": "%(count)s dhoma"
@@ -729,7 +725,6 @@
         "room_notifications_total": "Gjithsej: ",
         "room_notifications_type": "Lloj: ",
         "room_status": "Gjendje dhome",
-        "room_unread_status": "Gjendje e palexuar në dhomë: <strong>%(status)s</strong>",
         "room_unread_status_count": {
             "other": "Gjendje të palexuara në dhomë: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>"
         },
@@ -3568,7 +3563,6 @@
         "already_in_call_person": "Gjendeni tashmë në thirrje me këtë person.",
         "answered_elsewhere": "Përgjigjur Gjetkë",
         "answered_elsewhere_description": "Thirrjes iu përgjigj në një tjetër pajisje.",
-        "audio_devices": "Pajisje audio",
         "call_failed": "Thirrja Dështoi",
         "call_failed_description": "Thirrja s’u nis dot",
         "call_failed_media": "Thirrja dështoi, ngaqë s’u hy dot kamera ose mikrofoni. Kontrolloni që:",
@@ -3652,7 +3646,6 @@
         "user_is_presenting": "%(sharerName)s përfaqëson",
         "video_call": "Thirrje video",
         "video_call_started": "Nisi thirrje me video",
-        "video_devices": "Pajisje video",
         "voice_call": "Thirrje audio",
         "you_are_presenting": "Përfaqësoni"
     },

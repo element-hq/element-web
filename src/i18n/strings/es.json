@@ -453,10 +453,6 @@
             "one": "%(count)s miembro",
             "other": "%(count)s miembros"
         },
-        "n_participants": {
-            "one": "1 participante",
-            "other": "%(count)s participantes"
-        },
         "n_rooms": {
             "one": "%(count)s sala",
             "other": "%(count)s salas"
@@ -3484,7 +3480,6 @@
         "already_in_call_person": "Ya estás en una llamada con esta persona.",
         "answered_elsewhere": "Respondida en otra parte",
         "answered_elsewhere_description": "Esta llamada fue respondida en otro dispositivo.",
-        "audio_devices": "Dispositivos de audio",
         "call_failed": "Llamada fallida",
         "call_failed_description": "No se ha podido establecer la llamada",
         "call_failed_media": "La llamada ha fallado porque no se ha podido acceder a la cámara o al micrófono. Comprueba que:",
@@ -3570,7 +3565,6 @@
         "user_is_presenting": "%(sharerName)s está presentando",
         "video_call": "Llamada de vídeo",
         "video_call_started": "Videollamada iniciada",
-        "video_devices": "Dispositivos de vídeo",
         "voice_call": "Llamada de voz",
         "you_are_presenting": "Estás presentando"
     },

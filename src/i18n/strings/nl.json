@@ -426,10 +426,6 @@
             "other": "%(count)s personen",
             "one": "%(count)s persoon"
         },
-        "n_participants": {
-            "one": "1 deelnemer",
-            "other": "%(count)s deelnemers"
-        },
         "n_rooms": {
             "one": "%(count)s kamer",
             "other": "%(count)s kamers"
@@ -3250,7 +3246,6 @@
         "already_in_call_person": "Je bent al in gesprek met deze persoon.",
         "answered_elsewhere": "Ergens anders beantwoord",
         "answered_elsewhere_description": "De oproep werd op een ander toestel beantwoord.",
-        "audio_devices": "Audio-apparaten",
         "call_failed": "Oproep mislukt",
         "call_failed_description": "De oproep kon niet worden volbracht",
         "call_failed_media": "Oproep mislukt omdat er geen toegang is tot de webcam of de microfoon. Kijk na dat:",
@@ -3332,7 +3327,6 @@
         "user_is_presenting": "%(sharerName)s is aan het presenteren",
         "video_call": "Video-oproep",
         "video_call_started": "Videogesprek gestart",
-        "video_devices": "Video-apparaten",
         "voice_call": "Spraakoproep",
         "you_are_presenting": "Je bent aan het presenteren"
     },

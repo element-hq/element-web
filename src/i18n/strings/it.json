@@ -479,10 +479,6 @@
             "one": "%(count)s membro",
             "other": "%(count)s membri"
         },
-        "n_participants": {
-            "one": "1 partecipante",
-            "other": "%(count)s partecipanti"
-        },
         "n_rooms": {
             "one": "%(count)s stanza",
             "other": "%(count)s stanze"
@@ -752,7 +748,6 @@
         "room_notifications_total": "Totale: ",
         "room_notifications_type": "Tipo: ",
         "room_status": "Stato della stanza",
-        "room_unread_status": "Stato \"non letto\" nella stanza: <strong>%(status)s</strong>",
         "room_unread_status_count": {
             "other": "Stato \"non letto\" nella stanza: <strong>%(status)s</strong>, conteggio: <strong>%(count)s</strong>"
         },
@@ -3730,7 +3725,6 @@
         "already_in_call_person": "Sei già in una chiamata con questa persona.",
         "answered_elsewhere": "Risposto altrove",
         "answered_elsewhere_description": "La chiamata è stata accettata su un altro dispositivo.",
-        "audio_devices": "Dispositivi audio",
         "call_failed": "Chiamata fallita",
         "call_failed_description": "Impossibile stabilire la chiamata",
         "call_failed_media": "Chiamata fallita perchè la webcam o il microfono non sono accessibili. Controlla che:",
@@ -3817,7 +3811,6 @@
         "user_is_presenting": "%(sharerName)s sta presentando",
         "video_call": "Videochiamata",
         "video_call_started": "Videochiamata iniziata",
-        "video_devices": "Dispositivi video",
         "voice_call": "Telefonata",
         "you_are_presenting": "Stai presentando"
     },

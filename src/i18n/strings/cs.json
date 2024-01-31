@@ -492,10 +492,6 @@
             "one": "%(count)s člen",
             "other": "%(count)s členů"
         },
-        "n_participants": {
-            "one": "1 účastník",
-            "other": "%(count)s účastníků"
-        },
         "n_rooms": {
             "one": "%(count)s místnost",
             "other": "%(count)s místností"
@@ -765,7 +761,6 @@
         "room_notifications_total": "Celkem: ",
         "room_notifications_type": "Typ: ",
         "room_status": "Stav místnosti",
-        "room_unread_status": "Stav nepřečtení místnosti: <strong>%(status)s</strong>",
         "room_unread_status_count": {
             "other": "Stav nepřečtení místnosti: <strong>%(status)s</strong>, počet: <strong>%(count)s</strong>"
         },
@@ -3795,7 +3790,6 @@
         "already_in_call_person": "S touto osobou již telefonujete.",
         "answered_elsewhere": "Zodpovězeno jinde",
         "answered_elsewhere_description": "Hovor byl přijat na jiném zařízení.",
-        "audio_devices": "Zvuková zařízení",
         "call_failed": "Hovor selhal",
         "call_failed_description": "Hovor se nepovedlo navázat",
         "call_failed_media": "Hovor selhal, protože nešlo použít mikrofon nebo webkameru. Zkontrolujte, že:",
@@ -3882,7 +3876,6 @@
         "user_is_presenting": "%(sharerName)s prezentuje",
         "video_call": "Videohovor",
         "video_call_started": "Videohovor byl zahájen",
-        "video_devices": "Video zařízení",
         "voice_call": "Hlasový hovor",
         "you_are_presenting": "Prezentujete"
     },

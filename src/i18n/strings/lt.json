@@ -342,10 +342,6 @@
             "one": "%(count)s narys",
             "other": "%(count)s nariai"
         },
-        "n_participants": {
-            "one": "1 dalyvis",
-            "other": "%(count)s dalyviai"
-        },
         "name": "Pavadinimas",
         "no_results": "Jokių rezultatų",
         "not_trusted": "Nepatikimas",
@@ -2466,7 +2462,6 @@
         "already_in_call_person": "Jūs jau esate pokalbyje su šiuo asmeniu.",
         "answered_elsewhere": "Atsiliepta Kitur",
         "answered_elsewhere_description": "Į skambutį buvo atsiliepta kitame įrenginyje.",
-        "audio_devices": "Garso įrenginiai",
         "call_failed": "Skambutis Nepavyko",
         "call_failed_description": "Nepavyko pradėti skambučio",
         "call_failed_media": "Skambutis nepavyko, nes kamera arba mikrofonas negali būti pasiekta. Patikrinkite tai:",
@@ -2532,7 +2527,6 @@
         "user_busy_description": "Vartotojas kuriam skambinate yra užsiėmęs.",
         "user_is_presenting": "%(sharerName)s pristato",
         "video_call": "Vaizdo skambutis",
-        "video_devices": "Vaizdo įrenginiai",
         "voice_call": "Balso skambutis",
         "you_are_presenting": "Jūs pristatote"
     },

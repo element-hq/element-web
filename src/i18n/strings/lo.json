@@ -410,10 +410,6 @@
             "one": "ສະມາຊິກ %(count)s",
             "other": "ສະມາຊິກ %(count)s"
         },
-        "n_participants": {
-            "one": "ຜູ້ເຂົ້າຮ່ວມ 1ຄົນ",
-            "other": "ຜູ້ເຂົ້າຮ່ວມ %(count)s ຄົນ"
-        },
         "n_rooms": {
             "one": "%(count)s ຫ້ອງ",
             "other": "%(count)s ຫ້ອງ"
@@ -3048,7 +3044,6 @@
         "already_in_call_person": "ທ່ານຢູ່ໃນການໂທກັບບຸກຄົນນີ້ແລ້ວ.",
         "answered_elsewhere": "ຕອບຢູ່ບ່ອນອື່ນແລ້ວ",
         "answered_elsewhere_description": "ການຮັບສາຍຢູ່ໃນອຸປະກອນອື່ນ.",
-        "audio_devices": "ອຸປະກອນສຽງ",
         "call_failed": "ໂທບໍ່ສຳເລັດ",
         "call_failed_description": "ບໍ່ສາມາດໂທຫາໄດ້",
         "call_failed_media": "ການໂທບໍ່ສຳເລັດ ເນື່ອງຈາກເວັບແຄມ ຫຼື ບໍ່ສາມາດເຂົ້າເຖິງ ໄມໂຄຣໂຟນໄດ້. ກະລຸນາກວດເບິ່ງ:",
@@ -3121,7 +3116,6 @@
         "user_busy_description": "ຜູ້ໃຊ້ທີ່ທ່ານໂທຫາຍັງບໍ່ຫວ່າງ.",
         "user_is_presenting": "%(sharerName)s ກຳລັງນຳສະເໜີ",
         "video_call": "ໂທດ້ວວິດີໂອ",
-        "video_devices": "ອຸປະກອນວິດີໂອ",
         "voice_call": "ໂທດ້ວຍສຽງ",
         "you_are_presenting": "ທ່ານກໍາລັງນໍາສະເຫນີ"
     },

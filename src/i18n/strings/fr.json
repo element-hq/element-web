@@ -487,10 +487,6 @@
             "one": "%(count)s membre",
             "other": "%(count)s membres"
         },
-        "n_participants": {
-            "one": "1 participant",
-            "other": "%(count)s participants"
-        },
         "n_rooms": {
             "one": "%(count)s salon",
             "other": "%(count)s salons"
@@ -760,7 +756,6 @@
         "room_notifications_total": "Total : ",
         "room_notifications_type": "Type : ",
         "room_status": "Statut du salon",
-        "room_unread_status": "Statut non-lus du salon : <strong>%(status)s</strong>",
         "room_unread_status_count": {
             "other": "Statut non-lus du salon : <strong>%(status)s</strong>, total : <strong>%(count)s</strong>"
         },
@@ -3740,7 +3735,6 @@
         "already_in_call_person": "Vous êtes déjà en cours d’appel avec cette personne.",
         "answered_elsewhere": "Répondu autre-part",
         "answered_elsewhere_description": "L’appel a été décroché sur un autre appareil.",
-        "audio_devices": "Périphériques audio",
         "call_failed": "L’appel a échoué",
         "call_failed_description": "L’appel n’a pas pu être établi",
         "call_failed_media": "La fonction a échoué faute de pouvoir accéder à la caméra ou au microphone. Vérifiez que :",
@@ -3827,7 +3821,6 @@
         "user_is_presenting": "%(sharerName)s est à l’écran",
         "video_call": "Appel vidéo",
         "video_call_started": "Appel vidéo commencé",
-        "video_devices": "Périphériques vidéo",
         "voice_call": "Appel audio",
         "you_are_presenting": "Vous êtes à l’écran"
     },

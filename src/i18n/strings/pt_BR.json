@@ -373,10 +373,6 @@
             "one": "%(count)s integrante",
             "other": "%(count)s integrantes"
         },
-        "n_participants": {
-            "other": "%(count)s participantes",
-            "one": "1 participante"
-        },
         "name": "Nome",
         "no_results": "Nenhum resultado",
         "not_trusted": "Não confiável",
@@ -2621,7 +2617,6 @@
         "already_in_call_person": "Você já está em uma chamada com essa pessoa.",
         "answered_elsewhere": "Respondido em algum lugar",
         "answered_elsewhere_description": "A chamada foi atendida em outro aparelho.",
-        "audio_devices": "Dispositivos de áudio",
         "call_failed": "A chamada falhou",
         "call_failed_description": "Não foi possível iniciar a chamada",
         "call_failed_media": "A chamada falhou porque a câmera ou o microfone não puderam ser acessados. Verifique se:",
@@ -2694,7 +2689,6 @@
         "user_is_presenting": "%(sharerName)s está apresentando",
         "video_call": "Chamada de vídeo",
         "video_call_started": "Videochamada iniciada",
-        "video_devices": "Dispositivos de vídeo",
         "voice_call": "Chamada de voz",
         "you_are_presenting": "Você está apresentando"
     },

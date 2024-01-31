@@ -450,10 +450,6 @@
             "one": "%(count)s jäsen",
             "other": "%(count)s jäsentä"
         },
-        "n_participants": {
-            "one": "1 osallistuja",
-            "other": "%(count)s osallistujaa"
-        },
         "n_rooms": {
             "one": "%(count)s huone",
             "other": "%(count)s huonetta"
@@ -3327,7 +3323,6 @@
         "already_in_call_person": "Olet jo puhelussa tämän henkilön kanssa.",
         "answered_elsewhere": "Vastattu muualla",
         "answered_elsewhere_description": "Puheluun vastattiin toisessa laitteessa.",
-        "audio_devices": "Äänilaitteet",
         "call_failed": "Puhelu epäonnistui",
         "call_failed_description": "Puhelua ei voitu muodostaa",
         "call_failed_media": "Puhelu epäonnistui, koska kameraa tai mikrofonia ei voitu käyttää. Tarkista että:",
@@ -3409,7 +3404,6 @@
         "user_is_presenting": "%(sharerName)s esittää",
         "video_call": "Videopuhelu",
         "video_call_started": "Videopuhelu aloitettu",
-        "video_devices": "Videolaitteet",
         "voice_call": "Äänipuhelu",
         "you_are_presenting": "Esität parhaillaan"
     },

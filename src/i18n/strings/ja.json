@@ -468,10 +468,6 @@
             "one": "%(count)s人",
             "other": "%(count)s人"
         },
-        "n_participants": {
-            "other": "%(count)s人の参加者",
-            "one": "1人の参加者"
-        },
         "n_rooms": {
             "one": "%(count)s個のルーム",
             "other": "%(count)s個のルーム"
@@ -3505,7 +3501,6 @@
         "already_in_call_person": "既にこの人と通話中です。",
         "answered_elsewhere": "他の端末で応答しました",
         "answered_elsewhere_description": "他の端末で呼び出しに応答しました。",
-        "audio_devices": "オーディオ装置",
         "call_failed": "呼び出しに失敗しました",
         "call_failed_description": "通話を確立できませんでした",
         "call_failed_media": "Webカメラまたはマイクを使用できなかったため、通話に失敗しました。以下を確認してください：",
@@ -3590,7 +3585,6 @@
         "user_is_presenting": "%(sharerName)sが画面を共有しています",
         "video_call": "ビデオ通話",
         "video_call_started": "ビデオ通話を開始しました",
-        "video_devices": "ビデオ装置",
         "voice_call": "音声通話",
         "you_are_presenting": "あなたが画面を共有しています"
     },

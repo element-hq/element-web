@@ -487,10 +487,6 @@
             "other": "%(count)s Mitglieder",
             "one": "%(count)s Mitglied"
         },
-        "n_participants": {
-            "one": "1 Teilnehmer",
-            "other": "%(count)s Teilnehmer"
-        },
         "n_rooms": {
             "one": "%(count)s Raum",
             "other": "%(count)s Räume"
@@ -759,7 +755,6 @@
         "room_notifications_total": "Insgesamt: ",
         "room_notifications_type": "Typ: ",
         "room_status": "Raumstatus",
-        "room_unread_status": "Ungelesen-Status im Raum: <strong>%(status)s</strong>",
         "room_unread_status_count": {
             "other": "Ungelesen-Status im Raum: <strong>%(status)s</strong>, Anzahl: <strong>%(count)s</strong>"
         },
@@ -3770,7 +3765,6 @@
         "already_in_call_person": "Du bist schon in einem Anruf mit dieser Person.",
         "answered_elsewhere": "Anderswo beantwortet",
         "answered_elsewhere_description": "Der Anruf wurde auf einem anderen Gerät angenommen.",
-        "audio_devices": "Audiogeräte",
         "call_failed": "Anruf fehlgeschlagen",
         "call_failed_description": "Der Anruf kann nicht getätigt werden",
         "call_failed_media": "Der Anruf ist fehlgeschlagen, weil nicht auf die Webcam oder der das Mikrofon zugegriffen werden konnte. Prüfe nach, ob:",
@@ -3857,7 +3851,6 @@
         "user_is_presenting": "%(sharerName)s präsentiert",
         "video_call": "Videoanruf",
         "video_call_started": "Videoanruf hat begonnen",
-        "video_devices": "Kameras",
         "voice_call": "Sprachanruf",
         "you_are_presenting": "Du präsentierst"
     },

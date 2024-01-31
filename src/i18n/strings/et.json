@@ -487,10 +487,6 @@
             "other": "%(count)s liiget",
             "one": "%(count)s liige"
         },
-        "n_participants": {
-            "one": "1 osaleja",
-            "other": "%(count)s oselejat"
-        },
         "n_rooms": {
             "other": "%(count)s jututuba",
             "one": "%(count)s jututuba"
@@ -760,7 +756,6 @@
         "room_notifications_total": "Kokku: ",
         "room_notifications_type": "Tüüp: ",
         "room_status": "Jututoa sõnumite olek",
-        "room_unread_status": "Lugemata sõnumite olek jututoas: <strong>%(status)s</strong>",
         "room_unread_status_count": {
             "other": "Lugemata sõnumite olek jututoas: <strong>%(status)s</strong>, kokku: <strong>%(count)s</strong>"
         },
@@ -3715,7 +3710,6 @@
         "already_in_call_person": "Sinul juba kõne käsil selle osapoolega.",
         "answered_elsewhere": "Vastatud mujal",
         "answered_elsewhere_description": "Kõnele vastati teises seadmes.",
-        "audio_devices": "Heliseadmed",
         "call_failed": "Kõne ebaõnnestus",
         "call_failed_description": "Kõnet ei saa korraldada",
         "call_failed_media": "Kuna veebikaamerat või mikrofoni kasutada ei saanud, siis kõne ei õnnestunud. Palun kontrolli, et:",
@@ -3802,7 +3796,6 @@
         "user_is_presenting": "%(sharerName)s esitab",
         "video_call": "Videokõne",
         "video_call_started": "Videokõne algas",
-        "video_devices": "Videoseadmed",
         "voice_call": "Häälkõne",
         "you_are_presenting": "Sina esitad"
     },

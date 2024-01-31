@@ -486,10 +486,6 @@
             "one": "%(count)s člen",
             "other": "%(count)s členov"
         },
-        "n_participants": {
-            "one": "1 účastník",
-            "other": "%(count)s účastníkov"
-        },
         "n_rooms": {
             "one": "%(count)s miestnosť",
             "other": "%(count)s miestností"
@@ -759,7 +755,6 @@
         "room_notifications_total": "Celkom: ",
         "room_notifications_type": "Typ: ",
         "room_status": "Stav miestnosti",
-        "room_unread_status": "Stav neprečítaných v miestnosti: <strong>%(status)s</strong>",
         "room_unread_status_count": {
             "one": "Stav neprečítaných v miestnosti: <strong>%(status)s</strong>, počet: <strong>%(count)s</strong>",
             "few": "Stav neprečítaných v miestnosti: <strong>%(status)s</strong>, počet: <strong>%(count)s</strong>",
@@ -3809,7 +3804,6 @@
         "already_in_call_person": "S touto osobou už hovor prebieha.",
         "answered_elsewhere": "Hovor prijatý inde",
         "answered_elsewhere_description": "Hovor bol prijatý na inom zariadení.",
-        "audio_devices": "Zvukové zariadenia",
         "call_failed": "Zlyhanie hovoru",
         "call_failed_description": "Hovor nemohol byť realizovaný",
         "call_failed_media": "Hovor zlyhal, pretože nebolo možné získať prístup k webkamere alebo mikrofónu. Skontrolujte, či:",
@@ -3896,7 +3890,6 @@
         "user_is_presenting": "%(sharerName)s prezentuje",
         "video_call": "Video hovor",
         "video_call_started": "Videohovor bol spustený",
-        "video_devices": "Video zariadenia",
         "voice_call": "Hlasový hovor",
         "you_are_presenting": "Prezentujete"
     },

@@ -459,10 +459,6 @@
             "one": "%(count)s 位成员",
             "other": "%(count)s 位成员"
         },
-        "n_participants": {
-            "other": "%(count)s 名参与者",
-            "one": "一名参与者"
-        },
         "n_rooms": {
             "one": "%(count)s 个房间",
             "other": "%(count)s 个房间"
@@ -3385,7 +3381,6 @@
         "already_in_call_person": "你正在与其通话。",
         "answered_elsewhere": "已在别处接听",
         "answered_elsewhere_description": "已在另一台设备上接听了此通话。",
-        "audio_devices": "音频设备",
         "call_failed": "呼叫失败",
         "call_failed_description": "无法建立通话",
         "call_failed_media": "通话失败，因为无法使用摄像头或麦克风。请检查：",
@@ -3469,7 +3464,6 @@
         "user_is_presenting": "%(sharerName)s 正在展示",
         "video_call": "视频通话",
         "video_call_started": "视频通话已开始",
-        "video_devices": "视频设备",
         "voice_call": "语音通话",
         "you_are_presenting": "你正在展示"
     },

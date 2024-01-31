@@ -481,10 +481,6 @@
             "one": "%(count)s учасник",
             "other": "%(count)s учасників"
         },
-        "n_participants": {
-            "one": "1 учасник",
-            "other": "%(count)s учасників"
-        },
         "n_rooms": {
             "one": "%(count)s кімната",
             "other": "%(count)s кімнат"
@@ -752,7 +748,6 @@
         "room_notifications_total": "Загалом: ",
         "room_notifications_type": "Тип: ",
         "room_status": "Статус кімнати",
-        "room_unread_status": "Стан непрочитаного в кімнаті: <strong>%(status)s</strong>",
         "room_unread_status_count": {
             "other": "Стан непрочитаного в кімнаті: <strong>%(status)s</strong>, кількість: <strong>%(count)s</strong>"
         },
@@ -3705,7 +3700,6 @@
         "already_in_call_person": "Ви вже спілкуєтесь із цією особою.",
         "answered_elsewhere": "Відповіли деінде",
         "answered_elsewhere_description": "На виклик відповіли на іншому пристрої.",
-        "audio_devices": "Аудіопристрої",
         "call_failed": "Виклик не вдався",
         "call_failed_description": "Не вдалося встановити зв'язок",
         "call_failed_media": "Збій виклику, оскільки не вдалося отримати доступ до вебкамери або мікрофона. Перевірте, що:",
@@ -3792,7 +3786,6 @@
         "user_is_presenting": "%(sharerName)s показує",
         "video_call": "Відеовиклик",
         "video_call_started": "Відеовиклик розпочато",
-        "video_devices": "Відеопристрої",
         "voice_call": "Голосовий виклик",
         "you_are_presenting": "Ви показуєте"
     },

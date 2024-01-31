@@ -486,10 +486,6 @@
             "one": "%(count)s участник",
             "other": "%(count)s участников"
         },
-        "n_participants": {
-            "one": "1 участник",
-            "other": "%(count)s участников"
-        },
         "n_rooms": {
             "one": "%(count)s комната",
             "other": "%(count)s комнат"
@@ -759,7 +755,6 @@
         "room_notifications_total": "Всего: ",
         "room_notifications_type": "Тип: ",
         "room_status": "Статус комнаты",
-        "room_unread_status": "Статус непрочитанной комнаты: <strong>%(status)s</strong>",
         "room_unread_status_count": {
             "one": "Статус непрочитанной комнаты: %(status)s%(status)s</strong>, количество: <strong>%(count)s</strong>",
             "few": "Статус непрочитанных комнат: %(status)s%(status)s</strong>, количество: <strong>%(count)s</strong>",
@@ -3779,7 +3774,6 @@
         "already_in_call_person": "Вы уже разговариваете с этим человеком.",
         "answered_elsewhere": "Ответил в другом месте",
         "answered_elsewhere_description": "На звонок ответили на другом устройстве.",
-        "audio_devices": "Аудиоустройства",
         "call_failed": "Звонок не удался",
         "call_failed_description": "Звонок не может быть установлен",
         "call_failed_media": "Вызов не удался, потому что не удалось получить доступ к веб-камере или микрофону. Проверь это:",
@@ -3866,7 +3860,6 @@
         "user_is_presenting": "%(sharerName)s показывает",
         "video_call": "Видеовызов",
         "video_call_started": "Начался видеозвонок",
-        "video_devices": "Видеоустройства",
         "voice_call": "Голосовой вызов",
         "you_are_presenting": "Вы представляете"
     },

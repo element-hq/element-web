@@ -485,10 +485,6 @@
             "one": "%(count)s tag",
             "other": "%(count)s tag"
         },
-        "n_participants": {
-            "one": "1 résztvevő",
-            "other": "%(count)s résztvevő"
-        },
         "n_rooms": {
             "one": "%(count)s szoba",
             "other": "%(count)s szoba"
@@ -757,7 +753,6 @@
         "room_notifications_total": "Összesen: ",
         "room_notifications_type": "Típus: ",
         "room_status": "Szoba állapota",
-        "room_unread_status": "Szoba olvasatlan állapota: <strong>%(status)s</strong>",
         "room_unread_status_count": {
             "other": "Szoba olvasatlan állapota: <strong>%(status)s</strong>, darabszám: <strong>%(count)s</strong>"
         },
@@ -3712,7 +3707,6 @@
         "already_in_call_person": "Már hívásban van ezzel a személlyel.",
         "answered_elsewhere": "Máshol lett felvéve",
         "answered_elsewhere_description": "A hívás másik eszközön lett fogadva.",
-        "audio_devices": "Hangeszközök",
         "call_failed": "Sikertelen hívás",
         "call_failed_description": "A hívás felépítése sikertelen",
         "call_failed_media": "A hívás sikertelen, mert a webkamera, vagy a mikrofon nem érhető el. Ellenőrizze a következőket:",
@@ -3799,7 +3793,6 @@
         "user_is_presenting": "%(sharerName)s tartja a bemutatót",
         "video_call": "Videóhívás",
         "video_call_started": "A videóhívás elindult",
-        "video_devices": "Videóeszközök",
         "voice_call": "Hanghívás",
         "you_are_presenting": "Ön tartja a bemutatót"
     },

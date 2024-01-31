@@ -479,10 +479,6 @@
             "one": "%(count)s anggota",
             "other": "%(count)s anggota"
         },
-        "n_participants": {
-            "one": "1 perserta",
-            "other": "%(count)s perserta"
-        },
         "n_rooms": {
             "one": "%(count)s ruangan",
             "other": "%(count)s ruangan"
@@ -750,7 +746,6 @@
         "room_notifications_total": "Jumlah: ",
         "room_notifications_type": "Jenis: ",
         "room_status": "Keadaan ruangan",
-        "room_unread_status": "Keadaan belum dibaca ruangan: <strong>%(status)s</strong>",
         "room_unread_status_count": {
             "other": "Keadaan belum dibaca ruangan: <strong>%(status)s</strong>, jumlah: <strong>%(count)s</strong>"
         },
@@ -3700,7 +3695,6 @@
         "already_in_call_person": "Anda sudah ada di panggilan dengan orang itu.",
         "answered_elsewhere": "Dijawab di Perangkat Lain",
         "answered_elsewhere_description": "Panggilan dijawab di perangkat lainnya.",
-        "audio_devices": "Perangkat audio",
         "call_failed": "Panggilan Gagal",
         "call_failed_description": "Panggilan tidak dapat dilakukan",
         "call_failed_media": "Panggilan gagal karena webcam atau mikrofon tidak dapat diakses. Periksa bahwa:",
@@ -3787,7 +3781,6 @@
         "user_is_presenting": "%(sharerName)s sedang mempresentasi",
         "video_call": "Panggilan video",
         "video_call_started": "Panggilan video dimulai",
-        "video_devices": "Perangkat video",
         "voice_call": "Panggilan suara",
         "you_are_presenting": "Anda sedang mempresentasi"
     },

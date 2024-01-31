@@ -416,10 +416,6 @@
             "one": "%(count)s þátttakandi",
             "other": "%(count)s þátttakendur"
         },
-        "n_participants": {
-            "one": "1 þáttakandi",
-            "other": "%(count)s þátttakendur"
-        },
         "n_rooms": {
             "one": "%(count)s spjallrás",
             "other": "%(count)s spjallrásir"
@@ -3103,7 +3099,6 @@
         "already_in_call_person": "Þú ert nú þegar í símtali við þennan aðila.",
         "answered_elsewhere": "Svarað annars staðar",
         "answered_elsewhere_description": "Símtalinu var svarað á öðru tæki.",
-        "audio_devices": "Hljóðtæki",
         "call_failed": "Símtal mistókst",
         "call_failed_description": "Ekki tókst að koma símtalinu á",
         "call_failed_media": "Símtal mistókst þar sem ekki tókst að fá aðgang að vefmyndavél eða hljóðnema. Athugaðu þetta:",
@@ -3186,7 +3181,6 @@
         "user_is_presenting": "%(sharerName)s er að kynna",
         "video_call": "Myndsímtal",
         "video_call_started": "Myndsímtal er byrjað",
-        "video_devices": "Myndmerkistæki",
         "voice_call": "Raddsímtal",
         "you_are_presenting": "Þú ert að kynna"
     },

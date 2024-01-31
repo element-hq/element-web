@@ -478,10 +478,6 @@
             "one": "%(count)s 位成員",
             "other": "%(count)s 位成員"
         },
-        "n_participants": {
-            "one": "1 位成員",
-            "other": "%(count)s 個參與者"
-        },
         "n_rooms": {
             "one": "%(count)s 個聊天室",
             "other": "%(count)s 個聊天室"
@@ -749,7 +745,6 @@
         "room_notifications_total": "總共： ",
         "room_notifications_type": "類型： ",
         "room_status": "聊天室狀態",
-        "room_unread_status": "聊天室未讀狀態：<strong>%(status)s</strong>",
         "room_unread_status_count": {
             "other": "聊天室未讀狀態：<strong>%(status)s</strong>，數量：<strong>%(count)s</strong>"
         },
@@ -3689,7 +3684,6 @@
         "already_in_call_person": "您正在與此人通話。",
         "answered_elsewhere": "在其他地方回答",
         "answered_elsewhere_description": "通話已在其他裝置上回應。",
-        "audio_devices": "音訊裝置",
         "call_failed": "無法通話",
         "call_failed_description": "無法建立通話",
         "call_failed_media": "無法通話，因為無法存取網路攝影機或麥克風。請檢查：",
@@ -3776,7 +3770,6 @@
         "user_is_presenting": "%(sharerName)s 正在投影",
         "video_call": "視訊通話",
         "video_call_started": "視訊通話已開始",
-        "video_devices": "視訊裝置",
         "voice_call": "語音通話",
         "you_are_presenting": "您正在投影"
     },

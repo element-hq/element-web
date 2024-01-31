@@ -401,10 +401,6 @@
             "one": "%(count)s μέλος",
             "other": "%(count)s μέλη"
         },
-        "n_participants": {
-            "one": "1 συμμετέχων",
-            "other": "%(count)s συμμετέχοντες"
-        },
         "n_rooms": {
             "one": "%(count)s δωμάτιο",
             "other": "%(count)s δωμάτια"
@@ -3028,7 +3024,6 @@
         "already_in_call_person": "Είστε ήδη σε κλήση με αυτόν τον χρήστη.",
         "answered_elsewhere": "Απαντήθηκε αλλού",
         "answered_elsewhere_description": "Η κλήση απαντήθηκε σε μια άλλη συσκευή.",
-        "audio_devices": "Συσκευές ήχου",
         "call_failed": "Η κλήση απέτυχε",
         "call_failed_description": "Η κλήση δεν μπόρεσε να πραγματοποιηθεί",
         "call_failed_media": "Η κλήση απέτυχε επειδή δεν μπόρεσε να βρεθεί κάμερα ή μικρόφωνο. Ελέγξτε ότι:",
@@ -3097,7 +3092,6 @@
         "user_busy_description": "Ο χρήστης που καλέσατε είναι απασχολημένος.",
         "user_is_presenting": "%(sharerName)s παρουσιάζει",
         "video_call": "Βιντεοκλήση",
-        "video_devices": "Συσκευές βίντεο",
         "voice_call": "Φωνητική κλήση",
         "you_are_presenting": "Παρουσιάζετε"
     },
