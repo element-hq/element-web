@@ -44,9 +44,12 @@ export const useRoomThreadNotifications = (room: Room): NotificationLevel => {
             // If the current thread has unread messages, we're done.
             if (doesRoomOrThreadHaveUnreadMessages(thread)) {
                 setNotificationLevel(NotificationLevel.Activity);
-                break;
+                return;
             }
         }
+
+        // default case
+        setNotificationLevel(NotificationLevel.None);
     }, [room]);
 
     useEventEmitter(room, RoomEvent.UnreadNotifications, updateNotification);

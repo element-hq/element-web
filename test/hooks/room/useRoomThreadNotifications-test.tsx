@@ -44,6 +44,13 @@ describe("useRoomThreadNotifications", () => {
         expect(result.current).toBe(NotificationLevel.None);
     });
 
+    it("returns none if the thread hasn't a notification anymore", async () => {
+        room.setThreadUnreadNotificationCount("flooble", NotificationCountType.Highlight, 0);
+        const { result } = render(room);
+
+        expect(result.current).toBe(NotificationLevel.None);
+    });
+
     it("returns red if a thread in the room has a highlight notification", async () => {
         room.setThreadUnreadNotificationCount("flooble", NotificationCountType.Highlight, 1);
         const { result } = render(room);
@@ -58,7 +65,7 @@ describe("useRoomThreadNotifications", () => {
         expect(result.current).toBe(NotificationLevel.Notification);
     });
 
-    it("returns bold if a thread in the room unread messages", async () => {
+    it("returns activity if a thread in the room unread messages", async () => {
         await populateThread({
             room,
             client: cli,
