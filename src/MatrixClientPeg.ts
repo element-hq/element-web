@@ -18,15 +18,15 @@ limitations under the License.
 */
 
 import {
-    ICreateClientOpts,
-    PendingEventOrdering,
-    RoomNameState,
-    RoomNameType,
     EventTimeline,
     EventTimelineSet,
+    ICreateClientOpts,
     IStartClientOpts,
     MatrixClient,
     MemoryStore,
+    PendingEventOrdering,
+    RoomNameState,
+    RoomNameType,
     TokenRefreshFunction,
 } from "matrix-js-sdk/src/matrix";
 import * as utils from "matrix-js-sdk/src/utils";
@@ -53,6 +53,7 @@ import PlatformPeg from "./PlatformPeg";
 import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
 import { Features } from "./settings/Settings";
+import { PhasedRolloutFeature } from "./utils/PhasedRolloutFeature";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -302,13 +303,34 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             throw new Error("createClient must be called first");
         }
 
-        const useRustCrypto = SettingsStore.getValue(Features.RustCrypto);
+        let useRustCrypto = SettingsStore.getValue(Features.RustCrypto);
+
+        // We want the value that is set in the config.json for that web instance
+        const defaultUseRustCrypto = SettingsStore.getValueAt(SettingLevel.CONFIG, Features.RustCrypto);
+        const migrationPercent = SettingsStore.getValueAt(SettingLevel.CONFIG, "RustCrypto.staged_rollout_percent");
+
+        // If the default config is to use rust crypto, and the user is on legacy crypto,
+        // we want to check if we should migrate the current user.
+        if (!useRustCrypto && defaultUseRustCrypto && Number.isInteger(migrationPercent)) {
+            // The user is not on rust crypto, but the default stack is now rust; Let's check if we should migrate
+            // the current user to rust crypto.
+            try {
+                const stagedRollout = new PhasedRolloutFeature("RustCrypto.staged_rollout_percent", migrationPercent);
+                // Device id should not be null at that point, or init crypto will fail anyhow
+                const deviceId = this.matrixClient.getDeviceId()!;
+                // we use deviceId rather than userId because we don't particularly want all devices
+                // of a user to be migrated at the same time.
+                useRustCrypto = stagedRollout.isFeatureEnabled(deviceId);
+            } catch (e) {
+                logger.warn("Failed to create staged rollout feature for rust crypto migration", e);
+            }
+        }
 
         // we want to make sure that the same crypto implementation is used throughout the lifetime of a device,
         // so persist the setting at the device layer
         // (At some point, we'll allow the user to *enable* the setting via labs, which will migrate their existing
         // device to the rust-sdk implementation, but that won't change anything here).
-        await SettingsStore.setValue("feature_rust_crypto", null, SettingLevel.DEVICE, useRustCrypto);
+        await SettingsStore.setValue(Features.RustCrypto, null, SettingLevel.DEVICE, useRustCrypto);
 
         // Now we can initialise the right crypto impl.
         if (useRustCrypto) {

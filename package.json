@@ -95,6 +95,7 @@
         "highlight.js": "^11.3.1",
         "html-entities": "^2.0.0",
         "is-ip": "^3.1.0",
+        "js-xxhash": "^3.0.1",
         "jszip": "^3.7.0",
         "katex": "^0.16.0",
         "linkify-element": "4.1.3",

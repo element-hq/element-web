@@ -6527,6 +6527,11 @@ jest@^29.6.2:
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
+js-xxhash@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/js-xxhash/-/js-xxhash-3.0.1.tgz#e093b53d02cd80a830d61f58290c206aaa877b24"
+  integrity sha512-Y2NSC77RIxJrvi2NoXjMi2LYsVDTlVqBoQRi8PXQg4PtP29wdtIOhsp8Ujw4EjEkBFheCPx8bMOmI9zoxx/3jQ==
+
 js-yaml@^3.13.1:
   version "3.14.1"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.14.1.tgz#dae812fdb3825fa306609a8717383c50c36a0537"

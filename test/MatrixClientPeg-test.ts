@@ -144,6 +144,117 @@ describe("MatrixClientPeg", () => {
             expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, true);
         });
 
+        describe("Rust staged rollout", () => {
+            function mockSettingStore(
+                userIsUsingRust: boolean,
+                newLoginShouldUseRust: boolean,
+                rolloutPercent: number | null,
+            ) {
+                const originalGetValue = SettingsStore.getValue;
+                jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                    (settingName: string, roomId: string | null = null, excludeDefault = false) => {
+                        if (settingName === "feature_rust_crypto") {
+                            return userIsUsingRust;
+                        }
+                        return originalGetValue(settingName, roomId, excludeDefault);
+                    },
+                );
+                const originalGetValueAt = SettingsStore.getValueAt;
+                jest.spyOn(SettingsStore, "getValueAt").mockImplementation(
+                    (level: SettingLevel, settingName: string) => {
+                        if (settingName === "feature_rust_crypto") {
+                            return newLoginShouldUseRust;
+                        }
+                        // if null we let the original implementation handle it to get the default
+                        if (settingName === "RustCrypto.staged_rollout_percent" && rolloutPercent !== null) {
+                            return rolloutPercent;
+                        }
+                        return originalGetValueAt(level, settingName);
+                    },
+                );
+            }
+
+            let mockSetValue: jest.SpyInstance;
+            let mockInitCrypto: jest.SpyInstance;
+            let mockInitRustCrypto: jest.SpyInstance;
+
+            beforeEach(() => {
+                mockSetValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+                mockInitCrypto = jest.spyOn(testPeg.safeGet(), "initCrypto").mockResolvedValue(undefined);
+                mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
+            });
+
+            it("Should not migrate existing login if rollout is 0", async () => {
+                mockSettingStore(false, true, 0);
+
+                await testPeg.start();
+                expect(mockInitCrypto).toHaveBeenCalled();
+                expect(mockInitRustCrypto).not.toHaveBeenCalledTimes(1);
+
+                // we should have stashed the setting in the settings store
+                expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, false);
+            });
+
+            it("Should migrate existing login if rollout is 100", async () => {
+                mockSettingStore(false, true, 100);
+                await testPeg.start();
+                expect(mockInitCrypto).not.toHaveBeenCalled();
+                expect(mockInitRustCrypto).toHaveBeenCalledTimes(1);
+
+                // we should have stashed the setting in the settings store
+                expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, true);
+            });
+
+            it("Should migrate existing login if user is in rollout bucket", async () => {
+                mockSettingStore(false, true, 30);
+
+                // Use a device id that is known to be in the 30% bucket (hash modulo 100 < 30)
+                const spy = jest.spyOn(testPeg.get()!, "getDeviceId").mockReturnValue("AAA");
+
+                await testPeg.start();
+                expect(mockInitCrypto).not.toHaveBeenCalled();
+                expect(mockInitRustCrypto).toHaveBeenCalledTimes(1);
+
+                // we should have stashed the setting in the settings store
+                expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, true);
+
+                spy.mockReset();
+            });
+
+            it("Should not migrate existing login if rollout is malformed", async () => {
+                mockSettingStore(false, true, 100.1);
+
+                await testPeg.start();
+                expect(mockInitCrypto).toHaveBeenCalled();
+                expect(mockInitRustCrypto).not.toHaveBeenCalledTimes(1);
+
+                // we should have stashed the setting in the settings store
+                expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, false);
+            });
+
+            it("Default is to not migrate", async () => {
+                mockSettingStore(false, true, null);
+
+                await testPeg.start();
+                expect(mockInitCrypto).toHaveBeenCalled();
+                expect(mockInitRustCrypto).not.toHaveBeenCalledTimes(1);
+
+                // we should have stashed the setting in the settings store
+                expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, false);
+            });
+
+            it("Should not migrate if feature_rust_crypto is false", async () => {
+                mockSettingStore(false, false, 100);
+
+                await testPeg.start();
+                expect(mockInitCrypto).toHaveBeenCalled();
+                expect(mockInitRustCrypto).not.toHaveBeenCalledTimes(1);
+
+                // we should have stashed the setting in the settings store
+                expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, false);
+            });
+        });
+
         it("should reload when store database closes for a guest user", async () => {
             testPeg.safeGet().isGuest = () => true;
             const emitter = new EventEmitter();
