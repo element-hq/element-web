@@ -1806,9 +1806,9 @@
     emojibase-data "^15.0.0"
 
 "@matrix-org/matrix-sdk-crypto-wasm@^4.0.0":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-4.0.1.tgz#b1d3848a6adc120622e5225045330d253273b117"
-  integrity sha512-0B4QQ9kop8AocmQDcOfROCQ6QyGZeogpsvTYfEB9ZIBtndCCwy/C3mkxzJD6+gEo1bJ4TdYnblhN7hEQlAG50g==
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-4.3.0.tgz#ef08e7eafae6e9e85658c14a41f0d74a48c03f4a"
+  integrity sha512-05+NO78pXda/MTxi05NJwBbbAsOmU6WywBOcAk9GarPzgvrj4GvOuYTY6VR5PD7Gzb3AI+vNx/Ho4V0GFKPW/w==
 
 "@matrix-org/matrix-wysiwyg@2.17.0":
   version "2.17.0"
@@ -8450,9 +8450,9 @@ lodash@^4.17.20, lodash@^4.17.21:
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 loglevel@^1.7.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.8.1.tgz#5c621f83d5b48c54ae93b6156353f555963377b4"
-  integrity sha512-tCRIJM51SHjAayKwC+QAg8hT8vg6z7GSgLJKGvzuPb1Wc+hLzqtuVLxp6/HzSPOozuK+8ErAhy7U/sVzw8Dgfg==
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.9.1.tgz#d63976ac9bcd03c7c873116d41c2a85bafff1be7"
+  integrity sha512-hP3I3kCrDIMuRwAwHltphhDM1r8i55H33GgqjXbrisuJhF4kRhW1dNuxsRklp4bXl8DSdLaNLuiL4A/LWRfxvg==
 
 loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
@@ -8610,26 +8610,6 @@ matrix-js-sdk@31.2.0:
   version "31.2.0"
   resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-31.2.0.tgz#0ac5126a20d4f5fa5faa1cd438bed224d58eb64f"
   integrity sha512-NhTjP3KPA+IzJKpJjXp7CZzNgkQCL+qIKax3FMor0UUASeIV67gUbezG4kAtVcyCWJlAq0koVeUITnqgAXl7AA==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^4.0.0"
-    another-json "^0.2.0"
-    bs58 "^5.0.0"
-    content-type "^1.0.4"
-    jwt-decode "^3.1.2"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.6.0"
-    oidc-client-ts "^2.2.4"
-    p-retry "4"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-    uuid "9"
-
-matrix-js-sdk@31.2.0-rc.0:
-  version "31.2.0-rc.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-31.2.0-rc.0.tgz#cc36f36d8209702b62bb5c311f3b0fc9a190948d"
-  integrity sha512-bTtLUapKGdhrqzKcenYsrnKsuT10Ax2Z476DZjdYCjooHeSfDAjDdWUsMUqG7HzrueyipbnSR0uj1E8UwJyiKw==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^4.0.0"
@@ -11081,9 +11061,9 @@ schema-utils@^4.0.0, schema-utils@^4.0.1, schema-utils@^4.2.0:
     ajv-keywords "^5.1.0"
 
 sdp-transform@^2.14.1:
-  version "2.14.1"
-  resolved "https://registry.yarnpkg.com/sdp-transform/-/sdp-transform-2.14.1.tgz#2bb443583d478dee217df4caa284c46b870d5827"
-  integrity sha512-RjZyX3nVwJyCuTo5tGPx+PZWkDMCg7oOLpSlhjDdZfwUoNqG1mM8nyj31IGHyaPWXhjbP7cdK3qZ2bmkJ1GzRw==
+  version "2.14.2"
+  resolved "https://registry.yarnpkg.com/sdp-transform/-/sdp-transform-2.14.2.tgz#d2cee6a1f7abe44e6332ac6cbb94e8600f32d813"
+  integrity sha512-icY6jVao7MfKCieyo1AyxFYm1baiM+fA00qW/KrNNVlkxHAd34riEKuEkUe4bBb3gJwLJZM+xT60Yj1QL8rHiA==
 
 select-hose@^2.0.0:
   version "2.0.0"
