@@ -323,7 +323,7 @@ describe("RoomHeader", () => {
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
             jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(true);
 
-            jest.spyOn(CallStore.instance, "getCall").mockReturnValue({ widget: {} } as Call);
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue({ widget: {}, on: () => {} } as unknown as Call);
 
             const { container } = render(<RoomHeader room={room} />, getWrapper());
             expect(getByLabelText(container, "Ongoing call")).toHaveAttribute("aria-disabled", "true");
@@ -336,8 +336,11 @@ describe("RoomHeader", () => {
             jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(false);
             const spy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
 
-            const widget = { eventId: "some_id_so_it_is_interpreted_as_non_virtual_widget" };
-            jest.spyOn(CallStore.instance, "getCall").mockReturnValue({ widget } as Call);
+            const widget = {};
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue({
+                widget,
+                on: () => {},
+            } as unknown as Call);
 
             const { container } = render(<RoomHeader room={room} />, getWrapper());
             expect(getByLabelText(container, "Video call")).not.toHaveAttribute("aria-disabled", "true");
@@ -367,6 +370,10 @@ describe("RoomHeader", () => {
 
         it("calls using legacy or jitsi", async () => {
             mockRoomMembers(room, 2);
+            jest.spyOn(room.currentState, "mayClientSendStateEvent").mockImplementation((key) => {
+                if (key === "im.vector.modular.widgets") return true;
+                return false;
+            });
             const { container } = render(<RoomHeader room={room} />, getWrapper());
 
             const voiceButton = getByLabelText(container, "Voice call");
@@ -409,8 +416,7 @@ describe("RoomHeader", () => {
             mockRoomMembers(room, 3);
 
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockImplementation((key) => {
-                if (key === "im.vector.modular.widgets") return true;
-                if (key === ElementCall.CALL_EVENT_TYPE.name) return true;
+                if (key === ElementCall.MEMBER_EVENT_TYPE.name) return true;
                 return false;
             });
 

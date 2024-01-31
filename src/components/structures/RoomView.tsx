@@ -821,7 +821,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private onActiveCalls = (): void => {
         if (this.state.roomId === undefined) return;
         const activeCall = CallStore.instance.getActiveCall(this.state.roomId);
-
         if (activeCall === null) {
             // We disconnected from the call, so stop viewing it
             dis.dispatch<ViewRoomPayload>(

@@ -20,6 +20,8 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
 // eslint-disable-next-line no-restricted-imports
 import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
+import { Button } from "@vector-im/compound-web";
+import { Icon as VideoCallIcon } from "@vector-im/compound-design-tokens/icons/video-call-solid.svg";
 
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
@@ -28,7 +30,6 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
 import ToastStore from "../stores/ToastStore";
-import AccessibleTooltipButton from "../components/views/elements/AccessibleTooltipButton";
 import {
     LiveContentSummary,
     LiveContentSummaryWithCall,
@@ -41,6 +42,7 @@ import { ActionPayload } from "../dispatcher/payloads";
 import { Call } from "../models/Call";
 import { AudioID } from "../LegacyCallHandler";
 import { useTypedEventEmitter } from "../hooks/useEventEmitter";
+import AccessibleTooltipButton from "../components/views/elements/AccessibleTooltipButton";
 
 export const getIncomingCallToastKey = (callId: string, roomId: string): string => `call_${callId}_${roomId}`;
 const MAX_RING_TIME_MS = 10 * 1000;
@@ -54,15 +56,15 @@ function JoinCallButtonWithCall({ onClick, call }: JoinCallButtonWithCallProps):
     const disabledTooltip = useJoinCallButtonDisabledTooltip(call);
 
     return (
-        <AccessibleTooltipButton
+        <Button
             className="mx_IncomingCallToast_joinButton"
             onClick={onClick}
             disabled={disabledTooltip !== null}
-            tooltip={disabledTooltip ?? undefined}
             kind="primary"
+            size="sm"
         >
             {_t("action|join")}
-        </AccessibleTooltipButton>
+        </Button>
     );
 }
 
@@ -179,13 +181,15 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
                 {call ? (
                     <JoinCallButtonWithCall onClick={onJoinClick} call={call} />
                 ) : (
-                    <AccessibleTooltipButton
+                    <Button
                         className="mx_IncomingCallToast_joinButton"
                         onClick={onJoinClick}
                         kind="primary"
+                        size="sm"
+                        Icon={VideoCallIcon}
                     >
                         {_t("action|join")}
-                    </AccessibleTooltipButton>
+                    </Button>
                 )}
             </div>
             <AccessibleTooltipButton

@@ -19,7 +19,6 @@ import { Icon as ChatIcon } from "@vector-im/compound-design-tokens/icons/chat-s
 import { Room } from "matrix-js-sdk/src/matrix";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 
-import { isVideoRoom as calcIsVideoRoom } from "../../../../utils/video-rooms";
 import { _t } from "../../../../languageHandler";
 import { useEventEmitterState } from "../../../../hooks/useEventEmitter";
 import { NotificationStateEvents } from "../../../../stores/notifications/NotificationState";
@@ -31,24 +30,17 @@ import { ButtonEvent } from "../../elements/AccessibleButton";
 /**
  * Display a button to toggle timeline for video rooms
  * @param room
- * @returns for a video room: a button to toggle timeline in the right panel
- *          otherwise null
+ * @returns A button to toggle timeline in the right panel.
  */
 export const VideoRoomChatButton: React.FC<{ room: Room }> = ({ room }) => {
     const sdkContext = useContext(SDKContext);
 
-    const isVideoRoom = calcIsVideoRoom(room);
-
-    const notificationState = isVideoRoom ? sdkContext.roomNotificationStateStore.getRoomState(room) : undefined;
+    const notificationState = sdkContext.roomNotificationStateStore.getRoomState(room);
     const notificationColor = useEventEmitterState(
         notificationState,
         NotificationStateEvents.Update,
         () => notificationState?.level,
     );
-
-    if (!isVideoRoom) {
-        return null;
-    }
 
     const displayUnreadIndicator =
         !!notificationColor &&

@@ -80,20 +80,6 @@ describe("<VideoRoomChatButton />", () => {
         jest.restoreAllMocks();
     });
 
-    it("does not render button when room is not a video room", () => {
-        const room = makeRoom(false);
-        getComponent(room);
-
-        expect(screen.queryByLabelText("Chat")).not.toBeInTheDocument();
-    });
-
-    it("renders button when room is a video room", () => {
-        const room = makeRoom();
-        getComponent(room);
-
-        expect(screen.getByLabelText("Chat")).toMatchSnapshot();
-    });
-
     it("toggles timeline in right panel on click", () => {
         const room = makeRoom();
         getComponent(room);

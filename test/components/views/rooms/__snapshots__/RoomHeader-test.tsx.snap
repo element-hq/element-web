@@ -47,7 +47,6 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
         aria-disabled="true"
         aria-label="There's no one here to call"
         class="_icon-button_16nk7_17"
-        data-state="closed"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
@@ -56,7 +55,9 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
           class="_indicator-icon_jtb4d_26"
           style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
         >
-          <div />
+          <div
+            data-state="closed"
+          />
         </div>
       </button>
       <button

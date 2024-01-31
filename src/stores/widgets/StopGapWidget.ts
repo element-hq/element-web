@@ -345,8 +345,11 @@ export class StopGapWidget extends EventEmitter {
                 if (this.messaging?.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
                     ev.preventDefault();
                     this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack
-
-                    if (this.stickyPromise) await this.stickyPromise();
+                    if (ev.detail.data.value) {
+                        // If the widget wants to become sticky we wait for the stickyPromise to resolve
+                        if (this.stickyPromise) await this.stickyPromise();
+                    }
+                    // Stop being persistent can be done instantly
                     ActiveWidgetStore.instance.setWidgetPersistence(
                         this.mockWidget.id,
                         this.roomId ?? null,

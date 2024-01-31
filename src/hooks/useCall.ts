@@ -36,21 +36,22 @@ export const useCallForWidget = (widgetId: string, roomId: string): Call | null 
     return call?.widget.id === widgetId ? call : null;
 };
 
-export const useConnectionState = (call: Call): ConnectionState =>
+export const useConnectionState = (call: Call | null): ConnectionState =>
     useTypedEventEmitterState(
-        call,
+        call ?? undefined,
         CallEvent.ConnectionState,
-        useCallback((state) => state ?? call.connectionState, [call]),
+        useCallback((state) => state ?? call?.connectionState ?? ConnectionState.Disconnected, [call]),
     );
 
-export const useParticipants = (call: Call): Map<RoomMember, Set<string>> =>
-    useTypedEventEmitterState(
-        call,
+export const useParticipants = (call: Call | null): Map<RoomMember, Set<string>> => {
+    return useTypedEventEmitterState(
+        call ?? undefined,
         CallEvent.Participants,
-        useCallback((state) => state ?? call.participants, [call]),
+        useCallback((state) => state ?? call?.participants ?? [], [call]),
     );
+};
 
-export const useParticipantCount = (call: Call): number => {
+export const useParticipantCount = (call: Call | null): number => {
     const participants = useParticipants(call);
 
     return useMemo(() => {
