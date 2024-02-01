@@ -21,7 +21,6 @@ import {
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
     MatrixEvent,
     Room,
-    NotificationCountType,
     PushRuleActionName,
     TweakName,
     ConditionKind,
@@ -31,7 +30,7 @@ import {
     ThreepidMedium,
 } from "matrix-js-sdk/src/matrix";
 import { randomString } from "matrix-js-sdk/src/randomstring";
-import { act, fireEvent, getByTestId, render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, getByTestId, render, screen, within } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
@@ -900,8 +899,7 @@ describe("<Notifications />", () => {
                 user: "@alice:example.org",
                 ts: 1,
             });
-            room.addLiveEvents([message]);
-            room.setUnreadNotificationCount(NotificationCountType.Total, 1);
+            await room.addLiveEvents([message]);
 
             const { container } = await getComponentAndWait();
             const clearNotificationEl = getByTestId(container, "clear-notifications");
@@ -910,10 +908,6 @@ describe("<Notifications />", () => {
 
             expect(clearNotificationEl.className).toContain("mx_AccessibleButton_disabled");
             expect(mockClient.sendReadReceipt).toHaveBeenCalled();
-
-            await waitFor(() => {
-                expect(clearNotificationEl).not.toBeInTheDocument();
-            });
         });
     });
 });

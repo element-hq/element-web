@@ -57,6 +57,7 @@ import {
 import { Caption } from "../typography/Caption";
 import { SettingsSubsectionHeading } from "./shared/SettingsSubsectionHeading";
 import SettingsSubsection from "./shared/SettingsSubsection";
+import { doesRoomHaveUnreadMessages } from "../../../Unread";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -739,7 +740,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             category === RuleClass.VectorOther &&
             MatrixClientPeg.safeGet()
                 .getRooms()
-                .some((r) => r.getUnreadNotificationCount() > 0)
+                .some((r) => doesRoomHaveUnreadMessages(r, true))
         ) {
             clearNotifsButton = (
                 <AccessibleButton

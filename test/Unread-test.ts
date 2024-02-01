@@ -421,6 +421,11 @@ describe("Unread", () => {
                 },
             );
         });
+
+        it("returns false for space", () => {
+            jest.spyOn(room, "isSpaceRoom").mockReturnValue(true);
+            expect(doesRoomHaveUnreadMessages(room, false)).toBe(false);
+        });
     });
 
     describe("doesRoomOrThreadHaveUnreadMessages()", () => {

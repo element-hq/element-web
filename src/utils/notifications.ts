@@ -26,6 +26,7 @@ import { IndicatorIcon } from "@vector-im/compound-web";
 
 import SettingsStore from "../settings/SettingsStore";
 import { NotificationLevel } from "../stores/notifications/NotificationLevel";
+import { doesRoomHaveUnreadMessages } from "../Unread";
 
 export const deviceNotificationSettingsKeys = [
     "notificationsEnabled",
@@ -105,7 +106,7 @@ export async function clearRoomNotification(room: Room, client: MatrixClient): P
  */
 export function clearAllNotifications(client: MatrixClient): Promise<Array<{} | undefined>> {
     const receiptPromises = client.getRooms().reduce((promises: Array<Promise<{} | undefined>>, room: Room) => {
-        if (room.getUnreadNotificationCount() > 0) {
+        if (doesRoomHaveUnreadMessages(room, true)) {
             const promise = clearRoomNotification(room, client);
             promises.push(promise);
         }

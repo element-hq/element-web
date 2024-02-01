@@ -34,7 +34,8 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
     public async start(): Promise<void> {
         this.dispatcherRef = this.dispatcher.register(this.onAction);
 
-        const matrixClient = MatrixClientPeg.get();
+        // MatrixClientPeg can be undefined in tests because of circular dependencies with other stores
+        const matrixClient = MatrixClientPeg?.get();
         if (matrixClient) {
             this.matrixClient = matrixClient;
             await this.onReady();
