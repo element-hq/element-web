@@ -31,7 +31,7 @@
         "UserFriendlyError"
     ],
     "scripts": {
-        "prepublishOnly": "yarn build",
+        "prepack": "yarn build",
         "i18n": "matrix-gen-i18n && yarn i18n:sort && yarn i18n:lint",
         "i18n:sort": "jq --sort-keys '.' src/i18n/strings/en_EN.json > src/i18n/strings/en_EN.json.tmp && mv src/i18n/strings/en_EN.json.tmp src/i18n/strings/en_EN.json",
         "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null",
