@@ -336,6 +336,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         if (useRustCrypto) {
             await this.matrixClient.initRustCrypto();
 
+            StorageManager.setCryptoInitialised(true);
             // TODO: device dehydration and whathaveyou
             return;
         }

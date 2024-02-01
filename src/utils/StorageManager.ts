@@ -17,6 +17,9 @@ limitations under the License.
 import { LocalStorageCryptoStore, IndexedDBStore, IndexedDBCryptoStore } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import SettingsStore from "../settings/SettingsStore";
+import { Features } from "../settings/Settings";
+
 const localStorage = window.localStorage;
 
 // just *accessing* indexedDB throws an exception in firefox with
@@ -28,7 +31,16 @@ try {
 
 // The JS SDK will add a prefix of "matrix-js-sdk:" to the sync store name.
 const SYNC_STORE_NAME = "riot-web-sync";
-const CRYPTO_STORE_NAME = "matrix-js-sdk:crypto";
+const LEGACY_CRYPTO_STORE_NAME = "matrix-js-sdk:crypto";
+const RUST_CRYPTO_STORE_NAME = "matrix-js-sdk::matrix-sdk-crypto";
+
+function cryptoStoreName(): string {
+    if (SettingsStore.getValue(Features.RustCrypto)) {
+        return RUST_CRYPTO_STORE_NAME;
+    } else {
+        return LEGACY_CRYPTO_STORE_NAME;
+    }
+}
 
 function log(msg: string): void {
     logger.log(`StorageManager: ${msg}`);
@@ -145,7 +157,7 @@ async function checkSyncStore(): Promise<StoreCheck> {
 async function checkCryptoStore(): Promise<StoreCheck> {
     let exists = false;
     try {
-        exists = await IndexedDBCryptoStore.exists(indexedDB, CRYPTO_STORE_NAME);
+        exists = await IndexedDBCryptoStore.exists(indexedDB, cryptoStoreName());
         log(`Crypto store using IndexedDB contains data? ${exists}`);
         return { exists, healthy: true };
     } catch (e) {
