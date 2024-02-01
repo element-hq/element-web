@@ -2,20 +2,8 @@ name: Release Drafter
 on:
     push:
         branches: [staging]
-    workflow_dispatch:
-        inputs:
-            previous-version:
-                description: What release to use as a base for release note purposes
-                required: false
-                type: string
+    workflow_dispatch: {}
 concurrency: ${{ github.workflow }}
 jobs:
     draft:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: release-drafter/release-drafter@e64b19c4c46173209ed9f2e5a2f4ca7de89a0e86 # v5
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  disable-autolabeler: true
-                  previous-version: ${{ inputs.previous-version }}
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-drafter-workflow.yml@develop

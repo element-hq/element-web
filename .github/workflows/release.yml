@@ -28,5 +28,6 @@ jobs:
         with:
             final: ${{ inputs.mode == 'final' }}
             npm: ${{ inputs.npm }}
+            downstreams: '["element-hq/element-web"]'
             dependencies: |
                 matrix-js-sdk=${{ inputs.matrix-js-sdk }}
