@@ -70,21 +70,18 @@ const waitForEvent = async (
     let listener: (...args: any[]) => void;
     const wait = new Promise<void>((resolve) => {
         listener = (...args) => {
-            if (pred(...args)) {
-                resolve();
-                if (customTimeout === false) {
-                    emitter.off(event, listener!);
-                }
-            }
+            if (pred(...args)) resolve();
         };
         emitter.on(event, listener);
     });
 
     if (customTimeout !== false) {
         const timedOut = (await timeout(wait, false, customTimeout ?? TIMEOUT_MS)) === false;
-        emitter.off(event, listener!);
         if (timedOut) throw new Error("Timed out");
+    } else {
+        await wait;
     }
+    emitter.off(event, listener!);
 };
 
 export enum ConnectionState {
