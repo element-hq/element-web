@@ -850,13 +850,17 @@ export class ElementCall extends Call {
 
     protected async sendCallNotify(): Promise<void> {
         const room = this.room;
-        const existingRoomCallMembers = MatrixRTCSession.callMembershipsForRoom(room).filter(
+        const existingOtherRoomCallMembers = MatrixRTCSession.callMembershipsForRoom(room).filter(
             // filter all memberships where the application is m.call and the call_id is ""
-            (m) => m.application === "m.call" && m.callId === "",
+            (m) => {
+                const isRoomCallMember = m.application === "m.call" && m.callId === "";
+                const isThisDevice = m.deviceId === this.client.deviceId;
+                return isRoomCallMember && !isThisDevice;
+            },
         );
 
         const memberCount = getJoinedNonFunctionalMembers(room).length;
-        if (!isVideoRoom(room) && existingRoomCallMembers.length == 0) {
+        if (!isVideoRoom(room) && existingOtherRoomCallMembers.length === 0) {
             // send ringing event
             const content: ICallNotifyContent = {
                 "application": "m.call",
