@@ -258,16 +258,35 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        const cli = MatrixClientPeg.get();
-        if (!cli || !cli.isCryptoEnabled() || !(await cli.exportRoomKeys())?.length) {
-            // log out without user prompt if they have no local megolm sessions
-            defaultDispatcher.dispatch({ action: "logout" });
-        } else {
+        if (await this.shouldShowLogoutDialog()) {
             Modal.createDialog(LogoutDialog);
+        } else {
+            defaultDispatcher.dispatch({ action: "logout" });
         }
 
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
+
+    /**
+     * Checks if the `LogoutDialog` should be shown instead of the simple logout flow.
+     * The `LogoutDialog` will check the crypto recovery status of the account and
+     * help the user setup recovery properly if needed.
+     * @private
+     */
+    private async shouldShowLogoutDialog(): Promise<boolean> {
+        const cli = MatrixClientPeg.get();
+        const crypto = cli?.getCrypto();
+        if (!crypto) return false;
+
+        // If any room is encrypted, we need to show the advanced logout flow
+        const allRooms = cli!.getRooms();
+        for (const room of allRooms) {
+            const isE2e = await crypto.isEncryptionEnabledInRoom(room.roomId);
+            if (isE2e) return true;
+        }
+
+        return false;
+    }
 
     private onSignInClick = (): void => {
         defaultDispatcher.dispatch({ action: "start_login" });

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<UserMenu> when rendered should render as expected 1`] = `
+exports[`<UserMenu> <UserMenu> when video broadcast when rendered should render as expected 1`] = `
 <div>
   <div
     class="mx_UserMenu"
