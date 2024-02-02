@@ -27,6 +27,7 @@ jobs:
 
     check:
         name: Post release checks
+        needs: release
         runs-on: ubuntu-latest
         steps:
             - name: Wait for dockerhub
