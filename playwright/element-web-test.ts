@@ -111,8 +111,9 @@ export const test = base.extend<
                     return obj;
                 }, {}),
             };
-            if (cryptoBackend === "rust") {
-                json.features.feature_rust_crypto = true;
+            // the default is to use rust now, so set to `false` if on legacy backend
+            if (cryptoBackend === "legacy") {
+                json.features.feature_rust_crypto = false;
             }
             await route.fulfill({ json });
         });

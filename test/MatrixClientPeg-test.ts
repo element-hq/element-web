@@ -24,6 +24,7 @@ import SettingsStore from "../src/settings/SettingsStore";
 import Modal from "../src/Modal";
 import PlatformPeg from "../src/PlatformPeg";
 import { SettingLevel } from "../src/settings/SettingLevel";
+import { Features } from "../src/settings/Settings";
 
 jest.useFakeTimers();
 
@@ -91,45 +92,74 @@ describe("MatrixClientPeg", () => {
             });
         });
 
-        it("should initialise client crypto", async () => {
-            const mockInitCrypto = jest.spyOn(testPeg.safeGet(), "initCrypto").mockResolvedValue(undefined);
-            const mockSetTrustCrossSignedDevices = jest
-                .spyOn(testPeg.safeGet(), "setCryptoTrustCrossSignedDevices")
-                .mockImplementation(() => {});
-            const mockStartClient = jest.spyOn(testPeg.safeGet(), "startClient").mockResolvedValue(undefined);
+        describe("legacy crypto", () => {
+            beforeEach(() => {
+                const originalGetValue = SettingsStore.getValue;
+                jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                    (settingName: string, roomId: string | null = null, excludeDefault = false) => {
+                        if (settingName === "feature_rust_crypto") {
+                            return false;
+                        }
+                        return originalGetValue(settingName, roomId, excludeDefault);
+                    },
+                );
+            });
 
-            await testPeg.start();
-            expect(mockInitCrypto).toHaveBeenCalledTimes(1);
-            expect(mockSetTrustCrossSignedDevices).toHaveBeenCalledTimes(1);
-            expect(mockStartClient).toHaveBeenCalledTimes(1);
+            it("should initialise client crypto", async () => {
+                const mockInitCrypto = jest.spyOn(testPeg.safeGet(), "initCrypto").mockResolvedValue(undefined);
+                const mockSetTrustCrossSignedDevices = jest
+                    .spyOn(testPeg.safeGet(), "setCryptoTrustCrossSignedDevices")
+                    .mockImplementation(() => {});
+                const mockStartClient = jest.spyOn(testPeg.safeGet(), "startClient").mockResolvedValue(undefined);
+
+                await testPeg.start();
+                expect(mockInitCrypto).toHaveBeenCalledTimes(1);
+                expect(mockSetTrustCrossSignedDevices).toHaveBeenCalledTimes(1);
+                expect(mockStartClient).toHaveBeenCalledTimes(1);
+            });
+
+            it("should carry on regardless if there is an error initialising crypto", async () => {
+                const e2eError = new Error("nope nope nope");
+                const mockInitCrypto = jest.spyOn(testPeg.safeGet(), "initCrypto").mockRejectedValue(e2eError);
+                const mockSetTrustCrossSignedDevices = jest
+                    .spyOn(testPeg.safeGet(), "setCryptoTrustCrossSignedDevices")
+                    .mockImplementation(() => {});
+                const mockStartClient = jest.spyOn(testPeg.safeGet(), "startClient").mockResolvedValue(undefined);
+                const mockWarning = jest.spyOn(logger, "warn").mockReturnValue(undefined);
+
+                await testPeg.start();
+                expect(mockInitCrypto).toHaveBeenCalledTimes(1);
+                expect(mockSetTrustCrossSignedDevices).not.toHaveBeenCalled();
+                expect(mockStartClient).toHaveBeenCalledTimes(1);
+                expect(mockWarning).toHaveBeenCalledWith(expect.stringMatching("Unable to initialise e2e"), e2eError);
+            });
+
+            it("should reload when store database closes for a guest user", async () => {
+                testPeg.safeGet().isGuest = () => true;
+                const emitter = new EventEmitter();
+                testPeg.safeGet().store.on = emitter.on.bind(emitter);
+                const platform: any = { reload: jest.fn() };
+                PlatformPeg.set(platform);
+                await testPeg.assign();
+                emitter.emit("closed" as any);
+                expect(platform.reload).toHaveBeenCalled();
+            });
+
+            it("should show error modal when store database closes", async () => {
+                testPeg.safeGet().isGuest = () => false;
+                const emitter = new EventEmitter();
+                const platform: any = { getHumanReadableName: jest.fn() };
+                PlatformPeg.set(platform);
+                testPeg.safeGet().store.on = emitter.on.bind(emitter);
+                const spy = jest.spyOn(Modal, "createDialog");
+                await testPeg.assign();
+                emitter.emit("closed" as any);
+                expect(spy).toHaveBeenCalled();
+            });
         });
 
-        it("should carry on regardless if there is an error initialising crypto", async () => {
-            const e2eError = new Error("nope nope nope");
-            const mockInitCrypto = jest.spyOn(testPeg.safeGet(), "initCrypto").mockRejectedValue(e2eError);
-            const mockSetTrustCrossSignedDevices = jest
-                .spyOn(testPeg.safeGet(), "setCryptoTrustCrossSignedDevices")
-                .mockImplementation(() => {});
-            const mockStartClient = jest.spyOn(testPeg.safeGet(), "startClient").mockResolvedValue(undefined);
-            const mockWarning = jest.spyOn(logger, "warn").mockReturnValue(undefined);
-
-            await testPeg.start();
-            expect(mockInitCrypto).toHaveBeenCalledTimes(1);
-            expect(mockSetTrustCrossSignedDevices).not.toHaveBeenCalled();
-            expect(mockStartClient).toHaveBeenCalledTimes(1);
-            expect(mockWarning).toHaveBeenCalledWith(expect.stringMatching("Unable to initialise e2e"), e2eError);
-        });
-
-        it("should initialise the rust crypto library, if enabled", async () => {
-            const originalGetValue = SettingsStore.getValue;
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName: string, roomId: string | null = null, excludeDefault = false) => {
-                    if (settingName === "feature_rust_crypto") {
-                        return true;
-                    }
-                    return originalGetValue(settingName, roomId, excludeDefault);
-                },
-            );
+        it("should initialise the rust crypto library by default", async () => {
+            await SettingsStore.setValue(Features.RustCrypto, null, SettingLevel.DEVICE, null);
 
             const mockSetValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
 
@@ -142,6 +172,32 @@ describe("MatrixClientPeg", () => {
 
             // we should have stashed the setting in the settings store
             expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, true);
+        });
+
+        it("should initialise the legacy crypto library if set", async () => {
+            await SettingsStore.setValue(Features.RustCrypto, null, SettingLevel.DEVICE, null);
+
+            const originalGetValue = SettingsStore.getValue;
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName: string, roomId: string | null = null, excludeDefault = false) => {
+                    if (settingName === "feature_rust_crypto") {
+                        return false;
+                    }
+                    return originalGetValue(settingName, roomId, excludeDefault);
+                },
+            );
+
+            const mockSetValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+
+            const mockInitCrypto = jest.spyOn(testPeg.safeGet(), "initCrypto").mockResolvedValue(undefined);
+            const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
+
+            await testPeg.start();
+            expect(mockInitCrypto).toHaveBeenCalled();
+            expect(mockInitRustCrypto).not.toHaveBeenCalledTimes(1);
+
+            // we should have stashed the setting in the settings store
+            expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, false);
         });
 
         describe("Rust staged rollout", () => {
@@ -178,10 +234,12 @@ describe("MatrixClientPeg", () => {
             let mockInitCrypto: jest.SpyInstance;
             let mockInitRustCrypto: jest.SpyInstance;
 
-            beforeEach(() => {
+            beforeEach(async () => {
                 mockSetValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
                 mockInitCrypto = jest.spyOn(testPeg.safeGet(), "initCrypto").mockResolvedValue(undefined);
                 mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
+
+                await SettingsStore.setValue(Features.RustCrypto, null, SettingLevel.DEVICE, null);
             });
 
             it("Should not migrate existing login if rollout is 0", async () => {
@@ -253,29 +311,6 @@ describe("MatrixClientPeg", () => {
                 // we should have stashed the setting in the settings store
                 expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, false);
             });
-        });
-
-        it("should reload when store database closes for a guest user", async () => {
-            testPeg.safeGet().isGuest = () => true;
-            const emitter = new EventEmitter();
-            testPeg.safeGet().store.on = emitter.on.bind(emitter);
-            const platform: any = { reload: jest.fn() };
-            PlatformPeg.set(platform);
-            await testPeg.assign();
-            emitter.emit("closed" as any);
-            expect(platform.reload).toHaveBeenCalled();
-        });
-
-        it("should show error modal when store database closes", async () => {
-            testPeg.safeGet().isGuest = () => false;
-            const emitter = new EventEmitter();
-            const platform: any = { getHumanReadableName: jest.fn() };
-            PlatformPeg.set(platform);
-            testPeg.safeGet().store.on = emitter.on.bind(emitter);
-            const spy = jest.spyOn(Modal, "createDialog");
-            await testPeg.assign();
-            emitter.emit("closed" as any);
-            expect(spy).toHaveBeenCalled();
         });
     });
 });
