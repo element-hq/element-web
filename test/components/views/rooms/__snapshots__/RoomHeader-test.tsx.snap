@@ -52,7 +52,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_jtb4d_26"
+          class="_indicator-icon_133tf_26"
           style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
         >
           <div
@@ -70,7 +70,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_jtb4d_26"
+          class="_indicator-icon_133tf_26"
           style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
         >
           <div />
@@ -85,7 +85,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_jtb4d_26"
+          class="_indicator-icon_133tf_26"
           style="--cpd-icon-button-size: 100%;"
         >
           <div />

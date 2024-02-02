@@ -71,7 +71,8 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </section>
       </header>
       <div
-        class="_separator_1dey0_17"
+        class="_separator_144s5_17"
+        data-kind="primary"
         data-orientation="horizontal"
         role="separator"
       />
@@ -199,7 +200,8 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <div
-        class="_separator_1dey0_17"
+        class="_separator_144s5_17"
+        data-kind="primary"
         data-orientation="horizontal"
         role="separator"
       />
@@ -328,7 +330,8 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <div
-        class="_separator_1dey0_17"
+        class="_separator_144s5_17"
+        data-kind="primary"
         data-orientation="horizontal"
         role="separator"
       />

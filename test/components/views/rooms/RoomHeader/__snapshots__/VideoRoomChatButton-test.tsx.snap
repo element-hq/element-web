@@ -11,7 +11,7 @@ exports[`<VideoRoomChatButton /> renders button with an unread marker when room 
   tabindex="0"
 >
   <div
-    class="_indicator-icon_jtb4d_26"
+    class="_indicator-icon_133tf_26"
     data-indicator="default"
     style="--cpd-icon-button-size: 100%;"
   >
