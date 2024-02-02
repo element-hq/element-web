@@ -52,7 +52,7 @@ jobs:
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
 
             - name: Jest Cache
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: /tmp/jest_cache
                   key: ${{ hashFiles('**/yarn.lock') }}
