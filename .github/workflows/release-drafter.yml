@@ -9,5 +9,3 @@ jobs:
         uses: matrix-org/matrix-js-sdk/.github/workflows/release-drafter-workflow.yml@develop
         with:
             include-changes: matrix-react-sdk
-        secrets:
-            ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
