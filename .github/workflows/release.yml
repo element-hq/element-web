@@ -37,3 +37,25 @@ jobs:
             dependencies: |
                 matrix-react-sdk=${{ inputs.matrix-react-sdk }}
                 matrix-js-sdk=${{ inputs.matrix-js-sdk }}
+
+    check:
+        name: Post release checks
+        runs-on: ubuntu-latest
+        steps:
+            - name: Wait for dockerhub
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              with:
+                  ref: master
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  wait-interval: 10
+                  check-name: "Docker Buildx (vanilla)"
+                  allowed-conclusions: success
+
+            - name: Wait for debian package
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              with:
+                  ref: master
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  wait-interval: 10
+                  check-name: Build package
+                  allowed-conclusions: success
