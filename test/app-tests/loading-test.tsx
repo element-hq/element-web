@@ -129,6 +129,9 @@ describe("loading:", function () {
             embedded_pages: {
                 home_url: "data:text/html;charset=utf-8;base64,PGh0bWw+PC9odG1sPg==",
             },
+            features: {
+                feature_rust_crypto: false,
+            },
             ...(opts.config ?? {}),
         } as IConfigOptions;
 
@@ -304,6 +307,7 @@ describe("loading:", function () {
             localStorage.setItem("mx_is_url", "http://localhost");
             localStorage.setItem("mx_access_token", "access_token");
             localStorage.setItem("mx_user_id", "@me:localhost");
+            localStorage.setItem("mx_device_id", "QWERTYUIOP");
             localStorage.setItem("mx_last_room_id", "!last_room:id");
 
             // Create a crypto store as well to satisfy storage consistency checks
@@ -403,6 +407,7 @@ describe("loading:", function () {
                         })
                         .respond(200, {
                             user_id: "@guest:localhost",
+                            device_id: "QWERTYUIOP",
                             access_token: "secret_token",
                         });
 

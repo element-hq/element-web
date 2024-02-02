@@ -1805,10 +1805,10 @@
     emojibase "^15.0.0"
     emojibase-data "^15.0.0"
 
-"@matrix-org/matrix-sdk-crypto-wasm@^3.6.0":
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-3.6.0.tgz#385aa579d7b7546d85c9b20bf6ba780f799bdda3"
-  integrity sha512-fvuYczcp/r/MOkOAUbK+tMaTerEe7/QHGQcRJz3W3JuEma0YN59d35zTBlts7EkN6Ichw1vLSyM+GkcbuosuyA==
+"@matrix-org/matrix-sdk-crypto-wasm@^4.1.0":
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-4.3.0.tgz#ef08e7eafae6e9e85658c14a41f0d74a48c03f4a"
+  integrity sha512-05+NO78pXda/MTxi05NJwBbbAsOmU6WywBOcAk9GarPzgvrj4GvOuYTY6VR5PD7Gzb3AI+vNx/Ho4V0GFKPW/w==
 
 "@matrix-org/matrix-wysiwyg@2.17.0":
   version "2.17.0"
@@ -1819,13 +1819,6 @@
   version "3.2.15"
   resolved "https://registry.yarnpkg.com/@matrix-org/olm/-/olm-3.2.15.tgz#55f3c1b70a21bbee3f9195cecd6846b1083451ec"
   integrity sha512-S7lOrndAK9/8qOtaTq/WhttJC/o4GAzdfK0MUPpo8ApzsJEC0QjtwrkC3KBXdFP1cD1MXi/mlKR7aaoVMKgs6Q==
-
-"@matrix-org/react-sdk-module-api@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-2.2.1.tgz#308bcb42a780200d3e7994235376784b51819379"
-  integrity sha512-+MXTMEapzGmhArUt86GYDQirOvm19+wvQLDApmHpUQvSZvYm7wOo1EwR9FFvSKve53fu+v6gI1grnj7YLzGQ9Q==
-  dependencies:
-    "@babel/runtime" "^7.17.9"
 
 "@matrix-org/react-sdk-module-api@^2.3.0":
   version "2.3.0"
@@ -2240,7 +2233,7 @@
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-primitive" "1.0.3"
 
-"@radix-ui/react-slot@1.0.2":
+"@radix-ui/react-slot@1.0.2", "@radix-ui/react-slot@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-slot/-/react-slot-1.0.2.tgz#a9ff4423eade67f501ffb32ec22064bc9d3099ab"
   integrity sha512-YeTpuq4deV+6DusvVUW4ivBgnkHwECUu0BiN43L5UCDFgdhsRUWAghhTF5MbvNTPzmiFOx90asDSUjWuCNapwg==
@@ -3309,15 +3302,16 @@
   dependencies:
     svg2vectordrawable "^2.9.1"
 
-"@vector-im/compound-web@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-2.0.0.tgz#9ffc621f32be11acabe74bb3ff59cc4d8bc845ac"
-  integrity sha512-vEhGayoBSq4WLf86VmFoX9h0KIxaAjlG+kmcJLWitsqnPEDOG0XPhScYqzEshFqdJFLWX6gBOnXYLeq065t57w==
+"@vector-im/compound-web@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-3.0.0.tgz#8843c1c6a40891f89fdb3dbccf972e2fc2e1e387"
+  integrity sha512-6wkFoByaiXvwrqNmF0W9K5/krThpczPnYeJOBG3FM90RoC3MrqNB6fBPTvsd17pzJWN6fEV2B11JUeqAFW0z5A==
   dependencies:
     "@radix-ui/react-context-menu" "^2.1.5"
     "@radix-ui/react-dropdown-menu" "^2.0.6"
     "@radix-ui/react-form" "^0.0.3"
     "@radix-ui/react-separator" "^1.0.3"
+    "@radix-ui/react-slot" "^1.0.2"
     "@radix-ui/react-tooltip" "^1.0.6"
     classnames "^2.3.2"
     graphemer "^1.4.0"
@@ -8450,9 +8444,9 @@ lodash@^4.17.20, lodash@^4.17.21:
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 loglevel@^1.7.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.8.1.tgz#5c621f83d5b48c54ae93b6156353f555963377b4"
-  integrity sha512-tCRIJM51SHjAayKwC+QAg8hT8vg6z7GSgLJKGvzuPb1Wc+hLzqtuVLxp6/HzSPOozuK+8ErAhy7U/sVzw8Dgfg==
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.9.1.tgz#d63976ac9bcd03c7c873116d41c2a85bafff1be7"
+  integrity sha512-hP3I3kCrDIMuRwAwHltphhDM1r8i55H33GgqjXbrisuJhF4kRhW1dNuxsRklp4bXl8DSdLaNLuiL4A/LWRfxvg==
 
 loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
@@ -8607,11 +8601,11 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "31.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2337d5a7af6265bbcabbd42c1594cd8b1829b00b"
+  version "31.2.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1a364c93c3e2d4c211dc9cf374fb80038bab1214"
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^3.6.0"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^4.1.0"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"
@@ -8633,20 +8627,20 @@ matrix-mock-request@^2.5.0:
     expect "^28.1.0"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.90.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/d8202be772ca081e38a2183b31df82d4dd8f2e4e"
+  version "3.91.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/31449d6f80a08816d384cf1131c70c69c64d51b6"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.9.0"
     "@matrix-org/emojibase-bindings" "^1.1.2"
     "@matrix-org/matrix-wysiwyg" "2.17.0"
     "@matrix-org/olm" "3.2.15"
-    "@matrix-org/react-sdk-module-api" "^2.2.1"
+    "@matrix-org/react-sdk-module-api" "^2.3.0"
     "@matrix-org/spec" "^1.7.0"
     "@sentry/browser" "^7.0.0"
     "@testing-library/react-hooks" "^8.0.1"
     "@vector-im/compound-design-tokens" "^0.1.0"
-    "@vector-im/compound-web" "2.0.0"
+    "@vector-im/compound-web" "3.0.0"
     "@zxcvbn-ts/core" "^3.0.4"
     "@zxcvbn-ts/language-common" "^3.0.4"
     "@zxcvbn-ts/language-en" "^3.0.2"
@@ -8685,7 +8679,7 @@ matrix-mock-request@^2.5.0:
     opus-recorder "^8.0.3"
     pako "^2.0.3"
     png-chunks-extract "^1.0.0"
-    posthog-js "1.98.0"
+    posthog-js "1.100.0"
     proposal-temporal "^0.9.0"
     qrcode "1.5.3"
     re-resizable "^6.9.0"
@@ -10283,10 +10277,10 @@ postcss@^8.2.15, postcss@^8.3.11, postcss@^8.4.24, postcss@^8.4.31, postcss@^8.4
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-posthog-js@1.98.0:
-  version "1.98.0"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.98.0.tgz#127ff2b6234eeeed847c201329a80a486bef7106"
-  integrity sha512-vMAzOBE0cmt+dDGuml8ITwjmbbMej/GdmX3NuXhyNr7DzXgxvTYp4D7gJwYxH09metgyEOTOWdy7XbzsaRipTg==
+posthog-js@1.100.0:
+  version "1.100.0"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.100.0.tgz#687b9a6e4ed226aa6572f4040b418ea0c8b3d353"
+  integrity sha512-r2XZEiHQ9mBK7D1G9k57I8uYZ2kZTAJ0OCX6K/OOdCWN8jKPhw3h5F9No5weilP6eVAn+hrsy7NvPV7SCX7gMg==
   dependencies:
     fflate "^0.4.1"
 
@@ -11059,9 +11053,9 @@ schema-utils@^4.0.0, schema-utils@^4.0.1, schema-utils@^4.2.0:
     ajv-keywords "^5.1.0"
 
 sdp-transform@^2.14.1:
-  version "2.14.1"
-  resolved "https://registry.yarnpkg.com/sdp-transform/-/sdp-transform-2.14.1.tgz#2bb443583d478dee217df4caa284c46b870d5827"
-  integrity sha512-RjZyX3nVwJyCuTo5tGPx+PZWkDMCg7oOLpSlhjDdZfwUoNqG1mM8nyj31IGHyaPWXhjbP7cdK3qZ2bmkJ1GzRw==
+  version "2.14.2"
+  resolved "https://registry.yarnpkg.com/sdp-transform/-/sdp-transform-2.14.2.tgz#d2cee6a1f7abe44e6332ac6cbb94e8600f32d813"
+  integrity sha512-icY6jVao7MfKCieyo1AyxFYm1baiM+fA00qW/KrNNVlkxHAd34riEKuEkUe4bBb3gJwLJZM+xT60Yj1QL8rHiA==
 
 select-hose@^2.0.0:
   version "2.0.0"
