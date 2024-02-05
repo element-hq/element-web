@@ -151,6 +151,7 @@
         "@babel/preset-typescript": "^7.12.7",
         "@babel/register": "^7.12.10",
         "@casualbot/jest-sonar-reporter": "2.2.7",
+        "fake-indexeddb": "^5.0.2",
         "@peculiar/webcrypto": "^1.4.3",
         "@playwright/test": "^1.40.1",
         "@testing-library/dom": "^9.0.0",
