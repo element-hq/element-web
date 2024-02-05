@@ -331,3 +331,19 @@ h2 .sh_VerifiedIcon {
     -webkit-mask-image: url("../../themes/superhero/img/icons/leave.svg") !important;
     mask-image: url("../../themes/superhero/img/icons/leave.svg") !important;
 }
+
+.cpd-theme-dark svg.light_logo {
+    display: none !important;
+}
+
+.cpd-theme-dark svg.dark_logo {
+    display: block !important;
+}
+
+.cpd-theme-light svg.dark_logo {
+    display: none !important;
+}
+
+.cpd-theme-light svg.light_logo {
+    display: block !important;
+}

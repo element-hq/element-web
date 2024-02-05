@@ -19,7 +19,6 @@ import { createRef } from "react";
 import classNames from "classnames";
 import dis from "matrix-react-sdk/src/dispatcher/dispatcher";
 import { _t } from "matrix-react-sdk/src/languageHandler";
-import RoomList from "matrix-react-sdk/src/components/views/rooms/RoomList";
 import LegacyCallHandler from "matrix-react-sdk/src/LegacyCallHandler";
 import { HEADER_HEIGHT } from "matrix-react-sdk/src/components/views/rooms/RoomSublist";
 import { Action } from "matrix-react-sdk/src/dispatcher/actions";
@@ -45,7 +44,9 @@ import PosthogTrackers from "matrix-react-sdk/src/PosthogTrackers";
 import PageType from "matrix-react-sdk/src/PageTypes";
 import { UserOnboardingButton } from "matrix-react-sdk/src/components/views/user-onboarding/UserOnboardingButton";
 
-import { Icon as Superhero } from "../../../res/themes/superhero/img/logos/superhero.svg";
+import RoomList from "../views/rooms/RoomList";
+import { Icon as SuperheroDark } from "../../../res/themes/superhero/img/logos/superhero-dark.svg";
+import { Icon as SuperheroLight } from "../../../res/themes/superhero/img/logos/superhero-light.svg";
 
 interface IProps {
     isMinimized: boolean;
@@ -370,6 +371,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
+        console.log("render changedd");
         const roomList = (
             <RoomList
                 onKeyDown={this.onKeyDown}
@@ -401,7 +403,16 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             marginLeft: "10px",
                         }}
                     >
-                        <Superhero
+                        <SuperheroLight
+                            className="light_logo"
+                            style={{
+                                width: "112px",
+                                height: "32px",
+                                display: "block",
+                            }}
+                        />
+                        <SuperheroDark
+                            className="dark_logo"
                             style={{
                                 width: "112px",
                                 height: "32px",
