@@ -16,6 +16,7 @@ limitations under the License.
 
 import { test, expect } from "../../element-web-test";
 import { logIntoElement } from "./utils";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
 
 test.describe("Adoption of rust stack", () => {
     test("Test migration of existing logins when rollout is 100%", async ({
@@ -30,6 +31,7 @@ test.describe("Adoption of rust stack", () => {
             "No need to test this on Rust Crypto as we override the config manually",
         );
         await page.goto("/#/login");
+        test.slow();
 
         let featureRustCrypto = false;
         let stagedRolloutPercent = 0;
@@ -86,6 +88,7 @@ test.describe("Adoption of rust stack", () => {
             workerInfo.project.name === "Rust Crypto",
             "No need to test this on Rust Crypto as we override the config manually",
         );
+        test.slow();
         await page.goto("/#/login");
 
         await context.route(`http://localhost:8080/config.json*`, async (route) => {
@@ -123,6 +126,7 @@ test.describe("Adoption of rust stack", () => {
             workerInfo.project.name === "Rust Crypto",
             "No need to test this on Rust Crypto as we override the config manually",
         );
+        test.slow();
 
         await page.goto("/#/login");
 
@@ -149,5 +153,48 @@ test.describe("Adoption of rust stack", () => {
 
         await app.settings.openUserSettings("Help & About");
         await expect(page.getByText("Crypto version: Olm")).toBeVisible();
+    });
+
+    test("Migrate using labflag should work", async ({ page, context, app, credentials, homeserver }, workerInfo) => {
+        test.skip(
+            workerInfo.project.name === "Rust Crypto",
+            "No need to test this on Rust Crypto as we override the config manually",
+        );
+        test.slow();
+
+        await page.goto("/#/login");
+
+        // In the project.name = "Legacy crypto" it will be olm crypto
+        await logIntoElement(page, homeserver, credentials);
+
+        await app.settings.openUserSettings("Help & About");
+        await expect(page.getByText("Crypto version: Olm")).toBeVisible();
+
+        // We need to enable devtools for this test
+        await app.settings.setValue("developerMode", null, SettingLevel.ACCOUNT, true);
+
+        // Now simulate a refresh with `feature_rust_crypto` enabled but ensure no automatic migration
+        await context.route(`http://localhost:8080/config.json*`, async (route) => {
+            const json = {};
+            json["features"] = {
+                feature_rust_crypto: true,
+            };
+            json["setting_defaults"] = {
+                "RustCrypto.staged_rollout_percent": 0,
+            };
+            await route.fulfill({ json });
+        });
+
+        await page.reload();
+
+        // Go to the labs flag and enable the migration
+        await app.settings.openUserSettings("Labs");
+        await page.getByRole("switch", { name: "Rust cryptography implementation" }).click();
+
+        // Fixes a bug where a missing session data was shown
+        // https://github.com/element-hq/element-web/issues/26970
+
+        await app.settings.openUserSettings("Help & About");
+        await expect(page.getByText("Crypto version: Rust SDK")).toBeVisible();
     });
 });
