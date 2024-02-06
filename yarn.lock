@@ -3122,10 +3122,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vector-im/compound-design-tokens@^0.1.0":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-0.1.1.tgz#4fcf1212e6cc11256c443dc3bb02a9cdd8f2356c"
-  integrity sha512-cZJFQS8FknJB2B9cgLmw1fqU1Dr3x/Bt9ZQu/zgioIRHpwnvhe/5EyBXgZY18UIp/+sks95tt5js+W3tjtcO1A==
+"@vector-im/compound-design-tokens@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-1.0.0.tgz#4fe7744bbe0bd093b064d42ca8bb475862bb2ce7"
+  integrity sha512-/hKAxE/WsmnNZamlSmLoFeAhNDhRpFdJYuY8NrPLaS/dKS/QRnty6UYzs9yWOVNFeiBfkNsrb7wYIFMrYWSRJw==
   dependencies:
     svg2vectordrawable "^2.9.1"
 
