@@ -78,3 +78,47 @@ jobs:
 
             - name: Push staging
               run: for REPO in $REPOS; do [ -d "$REPO" ] && git -C "$REPO" push origin staging; done
+
+            - name: Wait for matrix-js-sdk draft
+              if: inputs.matrix-js-sdk
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              with:
+                  ref: staging
+                  repo: matrix-org/matrix-js-sdk
+                  repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  wait-interval: 10
+                  check-name: draft
+                  allowed-conclusions: success
+
+            - name: Wait for matrix-react-sdk draft
+              if: inputs.matrix-react-sdk
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              with:
+                  ref: staging
+                  repo: matrix-org/matrix-react-sdk
+                  repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  wait-interval: 10
+                  check-name: draft
+                  allowed-conclusions: success
+
+            - name: Wait for element-web draft
+              if: inputs.element-web
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              with:
+                  ref: staging
+                  repo: element-hq/element-web
+                  repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  wait-interval: 10
+                  check-name: draft
+                  allowed-conclusions: success
+
+            - name: Wait for element-desktop draft
+              if: inputs.element-desktop
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              with:
+                  ref: staging
+                  repo: element-hq/element-desktop
+                  repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  wait-interval: 10
+                  check-name: draft
+                  allowed-conclusions: success

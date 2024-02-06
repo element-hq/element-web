@@ -129,6 +129,9 @@ describe("loading:", function () {
             embedded_pages: {
                 home_url: "data:text/html;charset=utf-8;base64,PGh0bWw+PC9odG1sPg==",
             },
+            features: {
+                feature_rust_crypto: false,
+            },
             ...(opts.config ?? {}),
         } as IConfigOptions;
 
