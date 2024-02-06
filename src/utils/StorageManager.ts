@@ -22,25 +22,19 @@ import { Features } from "../settings/Settings";
 
 const localStorage = window.localStorage;
 
-// just *accessing* indexedDB throws an exception in firefox with
-// indexeddb disabled.
-let indexedDB: IDBFactory;
-try {
-    indexedDB = window.indexedDB;
-} catch (e) {}
+// make this lazy in order to make testing easier
+function getIndexedDb(): IDBFactory | undefined {
+    // just *accessing* _indexedDB throws an exception in firefox with
+    // indexeddb disabled.
+    try {
+        return window.indexedDB;
+    } catch (e) {}
+}
 
 // The JS SDK will add a prefix of "matrix-js-sdk:" to the sync store name.
 const SYNC_STORE_NAME = "riot-web-sync";
 const LEGACY_CRYPTO_STORE_NAME = "matrix-js-sdk:crypto";
 const RUST_CRYPTO_STORE_NAME = "matrix-js-sdk::matrix-sdk-crypto";
-
-function cryptoStoreName(): string {
-    if (SettingsStore.getValue(Features.RustCrypto)) {
-        return RUST_CRYPTO_STORE_NAME;
-    } else {
-        return LEGACY_CRYPTO_STORE_NAME;
-    }
-}
 
 function log(msg: string): void {
     logger.log(`StorageManager: ${msg}`);
@@ -74,7 +68,7 @@ export async function checkConsistency(): Promise<{
 }> {
     log("Checking storage consistency");
     log(`Local storage supported? ${!!localStorage}`);
-    log(`IndexedDB supported? ${!!indexedDB}`);
+    log(`IndexedDB supported? ${!!getIndexedDb()}`);
 
     let dataInLocalStorage = false;
     let dataInCryptoStore = false;
@@ -92,7 +86,7 @@ export async function checkConsistency(): Promise<{
         error("Local storage cannot be used on this browser");
     }
 
-    if (indexedDB && localStorage) {
+    if (getIndexedDb() && localStorage) {
         const results = await checkSyncStore();
         if (!results.healthy) {
             healthy = false;
@@ -102,7 +96,7 @@ export async function checkConsistency(): Promise<{
         error("Sync store cannot be used on this browser");
     }
 
-    if (indexedDB) {
+    if (getIndexedDb()) {
         const results = await checkCryptoStore();
         dataInCryptoStore = results.exists;
         if (!results.healthy) {
@@ -144,7 +138,7 @@ interface StoreCheck {
 async function checkSyncStore(): Promise<StoreCheck> {
     let exists = false;
     try {
-        exists = await IndexedDBStore.exists(indexedDB, SYNC_STORE_NAME);
+        exists = await IndexedDBStore.exists(getIndexedDb()!, SYNC_STORE_NAME);
         log(`Sync store using IndexedDB contains data? ${exists}`);
         return { exists, healthy: true };
     } catch (e) {
@@ -155,23 +149,56 @@ async function checkSyncStore(): Promise<StoreCheck> {
 }
 
 async function checkCryptoStore(): Promise<StoreCheck> {
-    let exists = false;
-    try {
-        exists = await IndexedDBCryptoStore.exists(indexedDB, cryptoStoreName());
-        log(`Crypto store using IndexedDB contains data? ${exists}`);
-        return { exists, healthy: true };
-    } catch (e) {
-        error("Crypto store using IndexedDB inaccessible", e);
+    if (await SettingsStore.getValue(Features.RustCrypto)) {
+        // check first if there is a rust crypto store
+        try {
+            const rustDbExists = await IndexedDBCryptoStore.exists(getIndexedDb()!, RUST_CRYPTO_STORE_NAME);
+            log(`Rust Crypto store using IndexedDB contains data? ${rustDbExists}`);
+
+            if (rustDbExists) {
+                // There was an existing rust database, so consider it healthy.
+                return { exists: true, healthy: true };
+            } else {
+                // No rust store, so let's check if there is a legacy store not yet migrated.
+                try {
+                    const legacyIdbExists = await IndexedDBCryptoStore.existsAndIsNotMigrated(
+                        getIndexedDb()!,
+                        LEGACY_CRYPTO_STORE_NAME,
+                    );
+                    log(`Legacy Crypto store using IndexedDB contains non migrated data? ${legacyIdbExists}`);
+                    return { exists: legacyIdbExists, healthy: true };
+                } catch (e) {
+                    error("Legacy crypto store using IndexedDB inaccessible", e);
+                }
+
+                // No need to check local storage or memory as rust stack doesn't support them.
+                // Given that rust stack requires indexeddb, set healthy to false.
+                return { exists: false, healthy: false };
+            }
+        } catch (e) {
+            error("Rust crypto store using IndexedDB inaccessible", e);
+            return { exists: false, healthy: false };
+        }
+    } else {
+        let exists = false;
+        // legacy checks
+        try {
+            exists = await IndexedDBCryptoStore.exists(getIndexedDb()!, LEGACY_CRYPTO_STORE_NAME);
+            log(`Crypto store using IndexedDB contains data? ${exists}`);
+            return { exists, healthy: true };
+        } catch (e) {
+            error("Crypto store using IndexedDB inaccessible", e);
+        }
+        try {
+            exists = LocalStorageCryptoStore.exists(localStorage);
+            log(`Crypto store using local storage contains data? ${exists}`);
+            return { exists, healthy: true };
+        } catch (e) {
+            error("Crypto store using local storage inaccessible", e);
+        }
+        log("Crypto store using memory only");
+        return { exists, healthy: false };
     }
-    try {
-        exists = LocalStorageCryptoStore.exists(localStorage);
-        log(`Crypto store using local storage contains data? ${exists}`);
-        return { exists, healthy: true };
-    } catch (e) {
-        error("Crypto store using local storage inaccessible", e);
-    }
-    log("Crypto store using memory only");
-    return { exists, healthy: false };
 }
 
 /**
@@ -194,11 +221,11 @@ export function setCryptoInitialised(cryptoInited: boolean): void {
 let idb: IDBDatabase | null = null;
 
 async function idbInit(): Promise<void> {
-    if (!indexedDB) {
+    if (!getIndexedDb()) {
         throw new Error("IndexedDB not available");
     }
     idb = await new Promise((resolve, reject) => {
-        const request = indexedDB.open("matrix-react-sdk", 1);
+        const request = getIndexedDb()!.open("matrix-react-sdk", 1);
         request.onerror = reject;
         request.onsuccess = (): void => {
             resolve(request.result);
