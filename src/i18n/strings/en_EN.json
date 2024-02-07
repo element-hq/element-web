@@ -1460,7 +1460,8 @@
         "sliding_sync_server_no_support": "Your server lacks native support",
         "sliding_sync_server_specify_proxy": "Your server lacks native support, you must specify a proxy",
         "sliding_sync_server_support": "Your server has native support",
-        "threads_activity_centre": "Threads Activity Centre (in development). Currently this just removes thread notification counts from the count total in the room list",
+        "threads_activity_centre": "Threads Activity Centre (in development)",
+        "threads_activity_centre_description": "Warning: Under active development; reloads Element.",
         "under_active_development": "Under active development.",
         "unrealiable_e2e": "Unreliable in encrypted rooms",
         "video_rooms": "Video rooms",
@@ -3159,6 +3160,10 @@
         "show_all_threads": "Show all threads",
         "show_thread_filter": "Show:",
         "unable_to_decrypt": "Unable to decrypt message"
+    },
+    "threads_activity_centre": {
+        "header": "Threads activity",
+        "no_rooms_with_unreads_threads": "You don't have rooms with unread threads yet."
     },
     "time": {
         "about_day_ago": "about a day ago",

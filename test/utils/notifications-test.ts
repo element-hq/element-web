@@ -25,6 +25,7 @@ import {
     clearAllNotifications,
     clearRoomNotification,
     notificationLevelToIndicator,
+    getThreadNotificationLevel,
 } from "../../src/utils/notifications";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { getMockClientWithEventEmitter } from "../test-utils/client";
@@ -234,5 +235,28 @@ describe("notifications", () => {
         it("returns critical if notification level is Highlight", () => {
             expect(notificationLevelToIndicator(NotificationLevel.Highlight)).toEqual("critical");
         });
+    });
+
+    describe("getThreadNotificationLevel", () => {
+        let room: Room;
+
+        const ROOM_ID = "123";
+        const USER_ID = "@bob:example.org";
+
+        beforeEach(() => {
+            room = new Room(ROOM_ID, MatrixClientPeg.safeGet(), USER_ID);
+        });
+
+        it.each([
+            { notificationCountType: NotificationCountType.Highlight, expected: NotificationLevel.Highlight },
+            { notificationCountType: NotificationCountType.Total, expected: NotificationLevel.Notification },
+            { notificationCountType: null, expected: NotificationLevel.Activity },
+        ])(
+            "returns NotificationLevel $expected when notificationCountType is $expected",
+            ({ notificationCountType, expected }) => {
+                jest.spyOn(room, "threadsAggregateNotificationType", "get").mockReturnValue(notificationCountType);
+                expect(getThreadNotificationLevel(room)).toEqual(expected);
+            },
+        );
     });
 });

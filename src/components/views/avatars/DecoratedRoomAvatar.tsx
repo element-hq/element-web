@@ -176,6 +176,9 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
     }
 
     public render(): React.ReactNode {
+        // Spread the remaining props to make it work with compound component
+        const { room, size, displayBadge, forceCount, oobData, viewAvatarOnClick, tooltipProps, ...props } = this.props;
+
         let badge: React.ReactNode;
         if (this.props.displayBadge && this.state.notificationState) {
             badge = (
@@ -202,7 +205,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
         });
 
         return (
-            <div className={classes}>
+            <div className={classes} {...props}>
                 <RoomAvatar
                     room={this.props.room}
                     size={this.props.size}

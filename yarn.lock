@@ -1828,10 +1828,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@matrix-org/analytics-events@^0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.9.0.tgz#ac958b1f49ab84af6325da0264df2f459e87a985"
-  integrity sha512-pKhIspX2lHNe3sUdi42T8lL3RPFqI0kHkxfrF9R0jneJska6GNBzQwPENMY1SjM3YnGYdhz5GZ/QMm6gozuiJg==
+"@matrix-org/analytics-events@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.10.0.tgz#d4d8b7859a516e888050d616ebbb0da539a15b1e"
+  integrity sha512-qzi7szEWxcl3nW2LDfq+SvFH/of/B/lwhfFUelhihGfr5TBPwgqM95Euc9GeYMZkU8Xm/2f5hYfA0ZleD6RKaA==
 
 "@matrix-org/emojibase-bindings@^1.1.2":
   version "1.1.3"

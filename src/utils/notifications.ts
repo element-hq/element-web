@@ -134,3 +134,20 @@ export function notificationLevelToIndicator(
         return "critical";
     }
 }
+
+/**
+ * Return the thread notification level for a room
+ * @param room
+ * @returns {NotificationLevel}
+ */
+export function getThreadNotificationLevel(room: Room): NotificationLevel {
+    const notificationCountType = room.threadsAggregateNotificationType;
+    switch (notificationCountType) {
+        case NotificationCountType.Highlight:
+            return NotificationLevel.Highlight;
+        case NotificationCountType.Total:
+            return NotificationLevel.Notification;
+        default:
+            return NotificationLevel.Activity;
+    }
+}
