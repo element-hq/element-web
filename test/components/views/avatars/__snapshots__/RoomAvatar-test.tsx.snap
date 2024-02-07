@@ -3,7 +3,7 @@
 exports[`RoomAvatar should render as expected for a DM room 1`] = `
 <div>
   <span
-    class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
+    class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
     data-color="1"
     data-testid="avatar-img"
     data-type="round"
@@ -18,8 +18,8 @@ exports[`RoomAvatar should render as expected for a DM room 1`] = `
 exports[`RoomAvatar should render as expected for a LocalRoom 1`] = `
 <div>
   <span
-    class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
-    data-color="7"
+    class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+    data-color="3"
     data-testid="avatar-img"
     data-type="round"
     role="presentation"
@@ -33,8 +33,8 @@ exports[`RoomAvatar should render as expected for a LocalRoom 1`] = `
 exports[`RoomAvatar should render as expected for a Room 1`] = `
 <div>
   <span
-    class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
-    data-color="2"
+    class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+    data-color="6"
     data-testid="avatar-img"
     data-type="round"
     role="presentation"

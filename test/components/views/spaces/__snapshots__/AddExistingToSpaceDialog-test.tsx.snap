@@ -26,15 +26,15 @@ exports[`<AddExistingToSpaceDialog /> looks as expected 1`] = `
         >
           <span
             aria-label="Avatar"
-            class="_avatar_1o69u_17 mx_BaseAvatar"
-            data-color="6"
+            class="_avatar_k41ul_17 mx_BaseAvatar"
+            data-color="2"
             data-testid="avatar-img"
             data-type="square"
             style="--cpd-avatar-size: 40px;"
           >
             <img
               alt=""
-              class="_image_1o69u_49"
+              class="_image_k41ul_49"
               crossorigin="anonymous"
               data-type="square"
               height="40px"

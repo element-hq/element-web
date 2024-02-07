@@ -83,8 +83,8 @@ exports[`MLocationBody <MLocationBody> without error renders marker correctly fo
               class="mx_Marker_border"
             >
               <span
-                class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
-                data-color="1"
+                class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+                data-color="3"
                 data-testid="avatar-img"
                 data-type="round"
                 role="presentation"

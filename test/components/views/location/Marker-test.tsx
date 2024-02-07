@@ -39,7 +39,7 @@ describe("<Marker />", () => {
     it("uses member color class", () => {
         const member = new RoomMember("!room:server", "@user:server");
         const { container } = getComponent({ useMemberColor: true, roomMember: member });
-        expect(container.querySelector(".mx_Marker.mx_Username_color1")).toBeInTheDocument();
+        expect(container.querySelector(".mx_Marker.mx_Username_color3")).toBeInTheDocument();
     });
 
     it("renders member avatar when roomMember is truthy", () => {

@@ -37,8 +37,8 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         class="_icon_1bcsk_44"
       >
         <span
-          class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
-          data-color="8"
+          class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+          data-color="6"
           data-testid="avatar-img"
           data-type="round"
           role="presentation"
@@ -55,15 +55,14 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       <svg
         aria-hidden="true"
         class="_nav-hint_1bcsk_60"
-        fill="none"
+        fill="currentColor"
         height="24"
         viewBox="0 0 24 24"
         width="24"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M8.70005 17.3C8.51672 17.1167 8.42505 16.8834 8.42505 16.6C8.42505 16.3167 8.51672 16.0834 8.70005 15.9L12.6 12L8.70005 8.10005C8.51672 7.91672 8.42505 7.68338 8.42505 7.40005C8.42505 7.11672 8.51672 6.88338 8.70005 6.70005C8.88338 6.51672 9.11672 6.42505 9.40005 6.42505C9.68338 6.42505 9.91672 6.51672 10.1 6.70005L14.7 11.3C14.8 11.4 14.8709 11.5084 14.9125 11.625C14.9542 11.7417 14.975 11.8667 14.975 12C14.975 12.1334 14.9542 12.2584 14.9125 12.375C14.8709 12.4917 14.8 12.6 14.7 12.7L10.1 17.3C9.91672 17.4834 9.68338 17.575 9.40005 17.575C9.11672 17.575 8.88338 17.4834 8.70005 17.3Z"
-          fill="currentColor"
+          d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
         />
       </svg>
       <div
@@ -86,8 +85,8 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         class="_icon_1bcsk_44"
       >
         <span
-          class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
-          data-color="8"
+          class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+          data-color="6"
           data-testid="avatar-img"
           data-type="round"
           role="presentation"
@@ -104,15 +103,14 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       <svg
         aria-hidden="true"
         class="_nav-hint_1bcsk_60"
-        fill="none"
+        fill="currentColor"
         height="24"
         viewBox="0 0 24 24"
         width="24"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M8.70005 17.3C8.51672 17.1167 8.42505 16.8834 8.42505 16.6C8.42505 16.3167 8.51672 16.0834 8.70005 15.9L12.6 12L8.70005 8.10005C8.51672 7.91672 8.42505 7.68338 8.42505 7.40005C8.42505 7.11672 8.51672 6.88338 8.70005 6.70005C8.88338 6.51672 9.11672 6.42505 9.40005 6.42505C9.68338 6.42505 9.91672 6.51672 10.1 6.70005L14.7 11.3C14.8 11.4 14.8709 11.5084 14.9125 11.625C14.9542 11.7417 14.975 11.8667 14.975 12C14.975 12.1334 14.9542 12.2584 14.9125 12.375C14.8709 12.4917 14.8 12.6 14.7 12.7L10.1 17.3C9.91672 17.4834 9.68338 17.575 9.40005 17.575C9.11672 17.575 8.88338 17.4834 8.70005 17.3Z"
-          fill="currentColor"
+          d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
         />
       </svg>
       <div
@@ -135,8 +133,8 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         class="_icon_1bcsk_44"
       >
         <span
-          class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
-          data-color="8"
+          class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+          data-color="6"
           data-testid="avatar-img"
           data-type="round"
           role="presentation"
@@ -153,15 +151,14 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       <svg
         aria-hidden="true"
         class="_nav-hint_1bcsk_60"
-        fill="none"
+        fill="currentColor"
         height="24"
         viewBox="0 0 24 24"
         width="24"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M8.70005 17.3C8.51672 17.1167 8.42505 16.8834 8.42505 16.6C8.42505 16.3167 8.51672 16.0834 8.70005 15.9L12.6 12L8.70005 8.10005C8.51672 7.91672 8.42505 7.68338 8.42505 7.40005C8.42505 7.11672 8.51672 6.88338 8.70005 6.70005C8.88338 6.51672 9.11672 6.42505 9.40005 6.42505C9.68338 6.42505 9.91672 6.51672 10.1 6.70005L14.7 11.3C14.8 11.4 14.8709 11.5084 14.9125 11.625C14.9542 11.7417 14.975 11.8667 14.975 12C14.975 12.1334 14.9542 12.2584 14.9125 12.375C14.8709 12.4917 14.8 12.6 14.7 12.7L10.1 17.3C9.91672 17.4834 9.68338 17.575 9.40005 17.575C9.11672 17.575 8.88338 17.4834 8.70005 17.3Z"
-          fill="currentColor"
+          d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
         />
       </svg>
       <div

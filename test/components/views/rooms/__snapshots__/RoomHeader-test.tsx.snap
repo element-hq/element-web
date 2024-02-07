@@ -12,8 +12,8 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       tabindex="0"
     >
       <span
-        class="_avatar_1o69u_17 mx_BaseAvatar _avatar-imageless_1o69u_60"
-        data-color="7"
+        class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+        data-color="3"
         data-testid="avatar-img"
         data-type="round"
         role="presentation"
