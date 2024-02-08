@@ -125,30 +125,45 @@ export default function RoomHeader({
             </IconButton>
         </Tooltip>
     );
+
     const joinCallButton = (
-        <Button
-            size="sm"
-            onClick={videoClick}
-            Icon={VideoCallIcon}
-            className="mx_RoomHeader_join_button"
-            color="primary"
-        >
-            {_t("action|join")}
-        </Button>
+        <Tooltip label={videoCallDisabledReason ?? _t("voip|video_call")}>
+            <Button
+                size="sm"
+                onClick={videoClick}
+                Icon={VideoCallIcon}
+                className="mx_RoomHeader_join_button"
+                disabled={!!videoCallDisabledReason}
+                color="primary"
+                aria-label={videoCallDisabledReason ?? _t("action|join")}
+            >
+                {_t("action|join")}
+            </Button>
+        </Tooltip>
     );
-    const [menuOpen, setMenuOpen] = useState(false);
+
     const callIconWithTooltip = (
         <Tooltip label={videoCallDisabledReason ?? _t("voip|video_call")}>
             <VideoCallIcon />
         </Tooltip>
     );
+
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const onOpenChange = useCallback(
+        (newOpen: boolean) => {
+            if (!videoCallDisabledReason) setMenuOpen(newOpen);
+        },
+        [videoCallDisabledReason],
+    );
+
     const startVideoCallButton = (
         <>
             {/* Can be either a menu or just a button depending on the number of call options.*/}
             {callOptions.length > 1 ? (
                 <Menu
                     open={menuOpen}
-                    onOpenChange={setMenuOpen}
+                    onOpenChange={onOpenChange}
                     title={_t("voip|video_call_using")}
                     trigger={
                         <IconButton
@@ -165,6 +180,7 @@ export default function RoomHeader({
                         <MenuItem
                             key={option}
                             label={getPlatformCallTypeLabel(option)}
+                            aria-label={getPlatformCallTypeLabel(option)}
                             onClick={(ev) => videoCallClick(ev, option)}
                             Icon={VideoCallIcon}
                             onSelect={() => {} /* Dummy handler since we want the click event.*/}
@@ -195,7 +211,7 @@ export default function RoomHeader({
     );
     const closeLobbyButton = (
         <Tooltip label={_t("voip|close_lobby")}>
-            <IconButton onClick={toggleCall}>
+            <IconButton onClick={toggleCall} aria-label={_t("voip|close_lobby")}>
                 <CloseCallIcon />
             </IconButton>
         </Tooltip>
@@ -296,7 +312,7 @@ export default function RoomHeader({
 
                     {((isConnectedToCall && isViewingCall) || isVideoRoom(room)) && <VideoRoomChatButton room={room} />}
 
-                    {hasActiveCallSession && !isConnectedToCall ? (
+                    {hasActiveCallSession && !isConnectedToCall && !isViewingCall ? (
                         joinCallButton
                     ) : (
                         <>

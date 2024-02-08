@@ -74,14 +74,14 @@ export const useParticipatingMembers = (call: Call): RoomMember[] => {
     }, [participants]);
 };
 
-export const useFull = (call: Call): boolean => {
+export const useFull = (call: Call | null): boolean => {
     return (
         useParticipantCount(call) >=
         (SdkConfig.get("element_call").participant_limit ?? DEFAULTS.element_call.participant_limit!)
     );
 };
 
-export const useJoinCallButtonDisabledTooltip = (call: Call): string | null => {
+export const useJoinCallButtonDisabledTooltip = (call: Call | null): string | null => {
     const isFull = useFull(call);
     const state = useConnectionState(call);
 
