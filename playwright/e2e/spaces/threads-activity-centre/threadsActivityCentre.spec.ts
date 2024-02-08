@@ -25,6 +25,15 @@ test.describe("Threads Activity Centre", () => {
         labsFlags: ["threadsActivityCentre"],
     });
 
+    test("should have the button correctly aligned and displayed in the space panel when expanded", async ({
+        util,
+    }) => {
+        // Open the space panel
+        await util.expandSpacePanel();
+        // The buttons in the space panel should be aligned when expanded
+        await expect(util.getSpacePanel()).toMatchScreenshot("tac-button-expanded.png");
+    });
+
     test("should not show indicator when there is no thread", async ({ roomAlpha: room1, util }) => {
         // No indicator should be shown
         await util.assertNoTacIndicator();

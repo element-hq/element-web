@@ -350,6 +350,20 @@ export class Helpers {
         await this.receiveMessages(room2, ["Msg2", msg.threadedOff("Msg2", "Resp2")]);
         await this.receiveMessages(room1, ["Msg3", msg.threadedOff("Msg3", "Resp3")]);
     }
+
+    /**
+     * Get the space panel
+     */
+    getSpacePanel() {
+        return this.page.getByRole("navigation", { name: "Spaces" });
+    }
+
+    /**
+     * Expand the space panel
+     */
+    expandSpacePanel() {
+        return this.page.getByRole("button", { name: "Expand" }).click();
+    }
 }
 
 export { expect };
