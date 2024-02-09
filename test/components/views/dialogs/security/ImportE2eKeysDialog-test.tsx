@@ -15,10 +15,12 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { CryptoApi } from "matrix-js-sdk/src/matrix";
 
 import ImportE2eKeysDialog from "../../../../../src/async-components/views/dialogs/security/ImportE2eKeysDialog";
+import * as MegolmExportEncryption from "../../../../../src/utils/MegolmExportEncryption";
 import { createTestClient } from "../../../../test-utils";
 
 describe("ImportE2eKeysDialog", () => {
@@ -63,5 +65,31 @@ describe("ImportE2eKeysDialog", () => {
         await userEvent.click(container.querySelector("[type=password]")!);
         await userEvent.paste("passphrase");
         expect(container.querySelector("[type=submit]")!).toBeEnabled();
+    });
+
+    it("should import exported keys on submit", async () => {
+        const cli = createTestClient();
+        const onFinished = jest.fn();
+        const file = new File(["test"], "file.txt", { type: "text/plain" });
+        const importRoomKeys = jest.fn();
+        cli.getCrypto = () => {
+            return {
+                importRoomKeys,
+            } as unknown as CryptoApi;
+        };
+
+        // Mock the result of decrypting the sessions, to avoid needing to
+        // create encrypted input data.
+        jest.spyOn(MegolmExportEncryption, "decryptMegolmKeyFile").mockResolvedValue("[]");
+
+        const { container } = render(<ImportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />);
+        fireEvent.change(container.querySelector("[type=file]")!, {
+            target: { files: [file] },
+        });
+        await userEvent.click(container.querySelector("[type=password]")!);
+        await userEvent.paste("passphrase");
+        fireEvent.click(container.querySelector("[type=submit]")!);
+
+        await waitFor(() => expect(importRoomKeys).toHaveBeenCalled());
     });
 });
