@@ -49,7 +49,7 @@ const expectAvatar = async (cli: Client, e: Locator, avatarUrl: string): Promise
     const url = await cli.evaluate(
         (client, { avatarUrl, size, resizeMethod }) => {
             // eslint-disable-next-line no-restricted-properties
-            return client.mxcUrlToHttp(avatarUrl, size, size, resizeMethod);
+            return client.mxcUrlToHttp(avatarUrl, size, size, resizeMethod, false, true);
         },
         { avatarUrl, size, resizeMethod: AVATAR_RESIZE_METHOD },
     );

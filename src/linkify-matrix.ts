@@ -184,7 +184,15 @@ export const options: Opts = {
         switch (type) {
             case "url":
                 if (href.startsWith("mxc://") && MatrixClientPeg.get()) {
-                    return getHttpUriForMxc(MatrixClientPeg.get()!.baseUrl, href);
+                    return getHttpUriForMxc(
+                        MatrixClientPeg.get()!.baseUrl,
+                        href,
+                        undefined,
+                        undefined,
+                        undefined,
+                        false,
+                        true,
+                    );
                 }
             // fallthrough
             case Type.RoomAlias:
