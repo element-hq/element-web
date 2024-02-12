@@ -479,7 +479,6 @@ describe("InviteDialog", () => {
     });
 
     it("should not suggest users from other server when room has m.federate=false", async () => {
-        SdkConfig.add({ welcome_user_id: "@bot:example.org" });
         room.currentState.setStateEvents([mkRoomCreateEvent(bobId, roomId, { "m.federate": false })]);
 
         render(

@@ -57,13 +57,12 @@ import "../../stores/LifecycleStore";
 import "../../stores/AutoRageshakeStore";
 import PageType from "../../PageTypes";
 import createRoom, { IOpts } from "../../createRoom";
-import { _t, _td, getCurrentLanguage } from "../../languageHandler";
+import { _t, _td } from "../../languageHandler";
 import SettingsStore from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
-import DMRoomMap from "../../utils/DMRoomMap";
 import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 import { FontWatcher } from "../../settings/watchers/FontWatcher";
 import { storeRoomAliasInCache } from "../../RoomAliasCache";
@@ -122,7 +121,6 @@ import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePaylo
 import { AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
 import { DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
 import { ViewStartChatOrReusePayload } from "../../dispatcher/payloads/ViewStartChatOrReusePayload";
-import { SnakedObject } from "../../utils/SnakedObject";
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
 import { CallStore } from "../../stores/CallStore";
 import { IRoomStateEventsActionPayload } from "../../actions/MatrixActionCreators";
@@ -1138,30 +1136,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private chatCreateOrReuse(userId: string): void {
-        const snakedConfig = new SnakedObject(this.props.config);
         // Use a deferred action to reshow the dialog once the user has registered
         if (MatrixClientPeg.safeGet().isGuest()) {
-            // No point in making 2 DMs with welcome bot. This assumes view_set_mxid will
-            // result in a new DM with the welcome user.
-            if (userId !== snakedConfig.get("welcome_user_id")) {
-                dis.dispatch<DoAfterSyncPreparedPayload<ViewStartChatOrReusePayload>>({
-                    action: Action.DoAfterSyncPrepared,
-                    deferred_action: {
-                        action: Action.ViewStartChatOrReuse,
-                        user_id: userId,
-                    },
-                });
-            }
-            dis.dispatch({
-                action: "require_registration",
-                // If the set_mxid dialog is cancelled, view /welcome because if the
-                // browser was pointing at /user/@someone:domain?action=chat, the URL
-                // needs to be reset so that they can revisit /user/.. // (and trigger
-                // `_chatCreateOrReuse` again)
-                go_welcome_on_cancel: true,
-                screen_after: {
-                    screen: `user/${snakedConfig.get("welcome_user_id")}`,
-                    params: { action: "chat" },
+            dis.dispatch<DoAfterSyncPreparedPayload<ViewStartChatOrReusePayload>>({
+                action: Action.DoAfterSyncPrepared,
+                deferred_action: {
+                    action: Action.ViewStartChatOrReuse,
+                    user_id: userId,
                 },
             });
             return;
@@ -1291,57 +1272,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     /**
-     * Starts a chat with the welcome user, if the user doesn't already have one
-     * @returns {string} The room ID of the new room, or null if no room was created
-     */
-    private async startWelcomeUserChat(): Promise<string | null> {
-        const snakedConfig = new SnakedObject(this.props.config);
-        const welcomeUserId = snakedConfig.get("welcome_user_id");
-        if (!welcomeUserId) return null;
-
-        // We can end up with multiple tabs post-registration where the user
-        // might then end up with a session and we don't want them all making
-        // a chat with the welcome user: try to de-dupe.
-        // We need to wait for the first sync to complete for this to
-        // work though.
-        let waitFor: Promise<void>;
-        if (!this.firstSyncComplete) {
-            waitFor = this.firstSyncPromise.promise;
-        } else {
-            waitFor = Promise.resolve();
-        }
-        await waitFor;
-
-        const welcomeUserRooms = DMRoomMap.shared().getDMRoomsForUserId(welcomeUserId);
-        if (welcomeUserRooms.length === 0) {
-            const roomId = await createRoom(MatrixClientPeg.safeGet(), {
-                dmUserId: snakedConfig.get("welcome_user_id"),
-                // Only view the welcome user if we're NOT looking at a room
-                andView: !this.state.currentRoomId,
-                spinner: false, // we're already showing one: we don't need another one
-            });
-            // This is a bit of a hack, but since the deduplication relies
-            // on m.direct being up to date, we need to force a sync
-            // of the database, otherwise if the user goes to the other
-            // tab before the next save happens (a few minutes), the
-            // saved sync will be restored from the db and this code will
-            // run without the update to m.direct, making another welcome
-            // user room (it doesn't wait for new data from the server, just
-            // the saved sync to be loaded).
-            const saveWelcomeUser = (ev: MatrixEvent): void => {
-                if (ev.getType() === EventType.Direct && ev.getContent()[welcomeUserId]) {
-                    MatrixClientPeg.safeGet().store.save(true);
-                    MatrixClientPeg.safeGet().removeListener(ClientEvent.AccountData, saveWelcomeUser);
-                }
-            };
-            MatrixClientPeg.safeGet().on(ClientEvent.AccountData, saveWelcomeUser);
-
-            return roomId;
-        }
-        return null;
-    }
-
-    /**
      * Called when a new logged in session has started
      */
     private async onLoggedIn(): Promise<void> {
@@ -1390,15 +1320,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (MatrixClientPeg.currentUserIsJustRegistered()) {
             MatrixClientPeg.setJustRegisteredUserId(null);
 
-            const snakedConfig = new SnakedObject(this.props.config);
-            if (snakedConfig.get("welcome_user_id") && getCurrentLanguage().startsWith("en")) {
-                const welcomeUserRoom = await this.startWelcomeUserChat();
-                if (welcomeUserRoom === null) {
-                    // We didn't redirect to the welcome user room, so show
-                    // the homepage.
-                    dis.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage, justRegistered: true });
-                }
-            } else if (ThreepidInviteStore.instance.pickBestInvite()) {
+            if (ThreepidInviteStore.instance.pickBestInvite()) {
                 // The user has a 3pid invite pending - show them that
                 const threepidInvite = ThreepidInviteStore.instance.pickBestInvite();
 

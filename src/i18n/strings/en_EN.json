@@ -2397,11 +2397,9 @@
         "help_about": {
             "access_token_detail": "Your access token gives full access to your account. Do not share it with anyone.",
             "brand_version": "%(brand)s version:",
-            "chat_bot": "Chat with %(brand)s Bot",
             "clear_cache_reload": "Clear cache and reload",
             "crypto_version": "Crypto version:",
             "help_link": "For help with using %(brand)s, click <a>here</a>.",
-            "help_link_chat_bot": "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.",
             "homeserver": "Homeserver is <code>%(homeserverUrl)s</code>",
             "identity_server": "Identity server is <code>%(identityServerUrl)s</code>",
             "title": "Help & About",

@@ -189,7 +189,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 UserTab.Help,
                 _td("setting|help_about|title"),
                 "mx_UserSettingsDialog_helpIcon",
-                <HelpUserSettingsTab closeSettingsFn={() => this.props.onFinished()} />,
+                <HelpUserSettingsTab />,
                 "UserSettingsHelpAbout",
             ),
         );

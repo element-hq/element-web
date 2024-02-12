@@ -27,7 +27,6 @@ import { _t, _td } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { makeRoomPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import SdkConfig from "../../../SdkConfig";
 import * as Email from "../../../email";
 import { getDefaultIdentityServerUrl, setToDefaultIdentityServer } from "../../../utils/IdentityServerUtils";
 import { buildActivityScores, buildMemberScores, compareMembers } from "../../../utils/SortMembers";
@@ -369,9 +368,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.profilesStore = SdkContextClass.instance.userProfilesStore;
 
         const excludedIds = new Set([MatrixClientPeg.safeGet().getUserId()!]);
-        const welcomeUserId = SdkConfig.get("welcome_user_id");
-        if (welcomeUserId) excludedIds.add(welcomeUserId);
-
         if (isRoomInvite(props)) {
             const room = MatrixClientPeg.safeGet().getRoom(props.roomId);
             const isFederated = room?.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent()["m.federate"];

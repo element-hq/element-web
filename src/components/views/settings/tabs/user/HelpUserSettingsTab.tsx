@@ -18,9 +18,8 @@ import React, { ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import AccessibleButton from "../../../elements/AccessibleButton";
-import { _t, getCurrentLanguage } from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
-import createRoom from "../../../../../createRoom";
 import Modal from "../../../../../Modal";
 import PlatformPeg from "../../../../../PlatformPeg";
 import UpdateCheckButton from "../../UpdateCheckButton";
@@ -32,9 +31,7 @@ import SettingsSubsection, { SettingsSubsectionText } from "../../shared/Setting
 import ExternalLink from "../../../elements/ExternalLink";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
-interface IProps {
-    closeSettingsFn: () => void;
-}
+interface IProps {}
 
 interface IState {
     appVersion: string | null;
@@ -94,14 +91,6 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
 
     private onBugReport = (): void => {
         Modal.createDialog(BugReportDialog, {});
-    };
-
-    private onStartBotChat = (): void => {
-        this.props.closeSettingsFn();
-        createRoom(this.context, {
-            dmUserId: SdkConfig.get("welcome_user_id"),
-            andView: true,
-        });
     };
 
     private renderLegal(): ReactNode {
@@ -224,7 +213,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
     public render(): React.ReactNode {
         const brand = SdkConfig.get().brand;
 
-        let faqText = _t(
+        const faqText = _t(
             "setting|help_about|help_link",
             {
                 brand,
@@ -233,34 +222,6 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                 a: (sub) => <ExternalLink href={SdkConfig.get("help_url")}>{sub}</ExternalLink>,
             },
         );
-        if (SdkConfig.get("welcome_user_id") && getCurrentLanguage().startsWith("en")) {
-            faqText = (
-                <div>
-                    {_t(
-                        "setting|help_about|help_link_chat_bot",
-                        {
-                            brand,
-                        },
-                        {
-                            a: (sub) => (
-                                <ExternalLink
-                                    href={SdkConfig.get("help_url")}
-                                    rel="noreferrer noopener"
-                                    target="_blank"
-                                >
-                                    {sub}
-                                </ExternalLink>
-                            ),
-                        },
-                    )}
-                    <div>
-                        <AccessibleButton onClick={this.onStartBotChat} kind="primary">
-                            {_t("setting|help_about|chat_bot", { brand })}
-                        </AccessibleButton>
-                    </div>
-                </div>
-            );
-        }
 
         let updateButton: JSX.Element | undefined;
         if (this.state.canUpdate) {

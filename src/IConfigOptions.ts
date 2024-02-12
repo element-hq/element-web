@@ -136,8 +136,6 @@ export interface IConfigOptions {
         admin_message_md: string; // message for how to contact the server owner when reporting an event
     };
 
-    welcome_user_id?: string;
-
     room_directory?: {
         servers: string[];
     };
