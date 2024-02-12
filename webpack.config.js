@@ -330,35 +330,37 @@ module.exports = (env, argv) => {
                             loader: "postcss-loader",
                             ident: "postcss",
                             options: {
-                                "sourceMap": true,
-                                "plugins": () => [
-                                    // Note that we use significantly fewer plugins on the plain
-                                    // CSS parser. If we start to parse plain CSS, we end with all
-                                    // kinds of nasty problems (like stylesheets not loading).
-                                    //
-                                    // You might have noticed that we're also sending regular CSS
-                                    // through PostCSS. This looks weird, and in fact is probably
-                                    // not what you'd expect, however in order for our CSS build
-                                    // to work nicely we have to do this. Because down the line
-                                    // our SCSS stylesheets reference plain CSS we have to load
-                                    // the plain CSS through PostCSS so it can find it safely. This
-                                    // also acts like a babel-for-css by transpiling our (S)CSS
-                                    // down/up to the right browser support (prefixes, etc).
-                                    // Further, if we don't do this then PostCSS assumes that our
-                                    // plain CSS is SCSS and it really doesn't like that, even
-                                    // though plain CSS should be compatible. The chunking options
-                                    // at the top of this webpack config help group the SCSS and
-                                    // plain CSS together for the bundler.
+                                sourceMap: true,
+                                postcssOptions: () => ({
+                                    "plugins": [
+                                        // Note that we use significantly fewer plugins on the plain
+                                        // CSS parser. If we start to parse plain CSS, we end with all
+                                        // kinds of nasty problems (like stylesheets not loading).
+                                        //
+                                        // You might have noticed that we're also sending regular CSS
+                                        // through PostCSS. This looks weird, and in fact is probably
+                                        // not what you'd expect, however in order for our CSS build
+                                        // to work nicely we have to do this. Because down the line
+                                        // our SCSS stylesheets reference plain CSS we have to load
+                                        // the plain CSS through PostCSS so it can find it safely. This
+                                        // also acts like a babel-for-css by transpiling our (S)CSS
+                                        // down/up to the right browser support (prefixes, etc).
+                                        // Further, if we don't do this then PostCSS assumes that our
+                                        // plain CSS is SCSS and it really doesn't like that, even
+                                        // though plain CSS should be compatible. The chunking options
+                                        // at the top of this webpack config help group the SCSS and
+                                        // plain CSS together for the bundler.
 
-                                    require("postcss-simple-vars")(),
-                                    require("postcss-hexrgba")(),
+                                        require("postcss-simple-vars")(),
+                                        require("postcss-hexrgba")(),
 
-                                    // It's important that this plugin is last otherwise we end
-                                    // up with broken CSS.
-                                    require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
-                                ],
-                                "parser": "postcss-scss",
-                                "local-plugins": true,
+                                        // It's important that this plugin is last otherwise we end
+                                        // up with broken CSS.
+                                        require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
+                                    ],
+                                    "parser": "postcss-scss",
+                                    "local-plugins": true,
+                                }),
                             },
                         },
                     ],
@@ -413,22 +415,24 @@ module.exports = (env, argv) => {
                             loader: "postcss-loader",
                             ident: "postcss",
                             options: {
-                                "sourceMap": true,
-                                "plugins": () => [
-                                    // Note that we use slightly different plugins for PostCSS.
-                                    require("postcss-import")(),
-                                    require("postcss-mixins")(),
-                                    require("postcss-simple-vars")(),
-                                    require("postcss-nested")(),
-                                    require("postcss-easings")(),
-                                    require("postcss-hexrgba")(),
+                                sourceMap: true,
+                                postcssOptions: () => ({
+                                    "plugins": [
+                                        // Note that we use slightly different plugins for PostCSS.
+                                        require("postcss-import")(),
+                                        require("postcss-mixins")(),
+                                        require("postcss-simple-vars")(),
+                                        require("postcss-nested")(),
+                                        require("postcss-easings")(),
+                                        require("postcss-hexrgba")(),
 
-                                    // It's important that this plugin is last otherwise we end
-                                    // up with broken CSS.
-                                    require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
-                                ],
-                                "parser": "postcss-scss",
-                                "local-plugins": true,
+                                        // It's important that this plugin is last otherwise we end
+                                        // up with broken CSS.
+                                        require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
+                                    ],
+                                    "parser": "postcss-scss",
+                                    "local-plugins": true,
+                                }),
                             },
                         },
                     ],
