@@ -38,6 +38,7 @@ import {
     filterConsole,
     flushPromises,
     getMockClientWithEventEmitter,
+    mockClientMethodsServer,
     mockClientMethodsUser,
     MockClientWithEventEmitter,
     mockPlatformPeg,
@@ -73,6 +74,7 @@ describe("<MatrixChat />", () => {
     // reused in createClient mock below
     const getMockClientMethods = () => ({
         ...mockClientMethodsUser(userId),
+        ...mockClientMethodsServer(),
         getVersions: jest.fn().mockResolvedValue({ versions: SERVER_SUPPORTED_MATRIX_VERSIONS }),
         startClient: jest.fn(),
         stopClient: jest.fn(),
