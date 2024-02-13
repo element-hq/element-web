@@ -16,8 +16,9 @@
  * /
  */
 
-import { useEffect, useState } from "react";
-import { ClientEvent, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { useCallback, useEffect, useState } from "react";
+import { ClientEvent, MatrixClient, MatrixEventEvent, Room } from "matrix-js-sdk/src/matrix";
+import { throttle } from "lodash";
 
 import { doesRoomHaveUnreadThreads } from "../../../../Unread";
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
@@ -26,6 +27,8 @@ import { useSettingValue } from "../../../../hooks/useSettings";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { useEventEmitter } from "../../../../hooks/useEventEmitter";
 import { VisibilityProvider } from "../../../../stores/room-list/filters/VisibilityProvider";
+
+const MIN_UPDATE_INTERVAL_MS = 500;
 
 type Result = {
     greatestNotificationLevel: NotificationLevel;
@@ -44,17 +47,33 @@ export function useUnreadThreadRooms(forceComputation: boolean): Result {
 
     const [result, setResult] = useState<Result>({ greatestNotificationLevel: NotificationLevel.None, rooms: [] });
 
-    // Listen to sync events to update the result
-    useEventEmitter(mxClient, ClientEvent.Sync, () => {
+    const doUpdate = useCallback(() => {
         setResult(computeUnreadThreadRooms(mxClient, msc3946ProcessDynamicPredecessor));
-    });
+    }, [mxClient, msc3946ProcessDynamicPredecessor]);
+
+    // The exhautive deps lint rule can't compute dependencies here since it's not a plain inline func.
+    // We make this as simple as possible so its only dep is doUpdate itself.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const scheduleUpdate = useCallback(
+        throttle(doUpdate, MIN_UPDATE_INTERVAL_MS, {
+            leading: false,
+            trailing: true,
+        }),
+        [doUpdate],
+    );
+
+    // Listen to sync events to update the result
+    useEventEmitter(mxClient, ClientEvent.Sync, scheduleUpdate);
+    // and also when events get decrypted, since this will often happen after the sync
+    // event and may change notifications.
+    useEventEmitter(mxClient, MatrixEventEvent.Decrypted, scheduleUpdate);
 
     // Force the list computation
     useEffect(() => {
         if (forceComputation) {
-            setResult(computeUnreadThreadRooms(mxClient, msc3946ProcessDynamicPredecessor));
+            doUpdate();
         }
-    }, [mxClient, msc3946ProcessDynamicPredecessor, forceComputation]);
+    }, [doUpdate, forceComputation]);
 
     return result;
 }
