@@ -3123,9 +3123,9 @@
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
 "@vector-im/compound-design-tokens@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-1.0.0.tgz#4fe7744bbe0bd093b064d42ca8bb475862bb2ce7"
-  integrity sha512-/hKAxE/WsmnNZamlSmLoFeAhNDhRpFdJYuY8NrPLaS/dKS/QRnty6UYzs9yWOVNFeiBfkNsrb7wYIFMrYWSRJw==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-1.1.0.tgz#9b1a91317c404a1cd0d76d2fd5a7f2df5f1bf0a6"
+  integrity sha512-1HcCm6YsOda98rGXO4fg0WjEdrMnx/0tdtFmYIlnYkDYTbnfpFg+ffIDY7jgammWbOYwUZpZhM5q9ofb7/EgkA==
   dependencies:
     svg2vectordrawable "^2.9.1"
 

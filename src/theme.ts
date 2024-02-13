@@ -35,17 +35,22 @@ interface IFontFaces extends Omit<Record<(typeof allowedFontFaceProps)[number], 
     }[];
 }
 
+interface CompoundTheme {
+    [token: string]: string;
+}
+
 export type CustomTheme = {
     name: string;
-    colors: {
+    is_dark?: boolean; // eslint-disable-line camelcase
+    colors?: {
         [key: string]: string;
     };
-    fonts: {
+    fonts?: {
         faces: IFontFaces[];
         general: string;
         monospace: string;
     };
-    is_dark?: boolean; // eslint-disable-line camelcase
+    compound?: CompoundTheme;
 };
 
 /**
@@ -120,10 +125,10 @@ function clearCustomTheme(): void {
             document.body.style.removeProperty(prop);
         }
     }
-    const customFontFaceStyle = document.querySelector("head > style[title='custom-theme-font-faces']");
-    if (customFontFaceStyle) {
-        customFontFaceStyle.remove();
-    }
+
+    // remove the custom style sheets
+    document.querySelector("head > style[title='custom-theme-font-faces']")?.remove();
+    document.querySelector("head > style[title='custom-theme-compound']")?.remove();
 }
 
 const allowedFontFaceProps = [
@@ -177,6 +182,22 @@ function generateCustomFontFaceCSS(faces: IFontFaces[]): string {
         .join("\n");
 }
 
+const COMPOUND_TOKEN = /^--cpd-[a-z0-9-]+$/;
+
+/**
+ * Generates a style sheet to override Compound design tokens as specified in
+ * the given theme.
+ */
+function generateCustomCompoundCSS(theme: CompoundTheme): string {
+    const properties: string[] = [];
+    for (const [token, value] of Object.entries(theme))
+        if (COMPOUND_TOKEN.test(token)) properties.push(`${token}: ${value};`);
+        else logger.warn(`'${token}' is not a valid Compound token`);
+    // Insert the design token overrides into the 'custom' cascade layer as
+    // documented at https://compound.element.io/?path=/docs/develop-theming--docs
+    return `@layer compound.custom { :root, [class*="cpd-theme-"] { ${properties.join(" ")} } }`;
+}
+
 function setCustomThemeVars(customTheme: CustomTheme): void {
     const { style } = document.body;
 
@@ -217,6 +238,14 @@ function setCustomThemeVars(customTheme: CustomTheme): void {
         if (fonts.monospace) {
             style.setProperty("--font-family-monospace", fonts.monospace);
         }
+    }
+    if (customTheme.compound) {
+        const css = generateCustomCompoundCSS(customTheme.compound);
+        const style = document.createElement("style");
+        style.setAttribute("title", "custom-theme-compound");
+        style.setAttribute("type", "text/css");
+        style.appendChild(document.createTextNode(css));
+        document.head.appendChild(style);
     }
 }
 
@@ -284,9 +313,6 @@ export async function setTheme(theme?: string): Promise<void> {
      * Adds the Compound theme class to the top-most element in the document
      * This will automatically refresh the colour scales based on the OS or user
      * preferences
-     *
-     * Note: Theming through Compound is not yet established. Brand theming should
-     * be done in a similar manner as it used to be done.
      */
     document.body.classList.remove("cpd-theme-light", "cpd-theme-dark", "cpd-theme-light-hc", "cpd-theme-dark-hc");
 

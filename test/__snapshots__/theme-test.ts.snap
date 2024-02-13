@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`theme setTheme applies a custom Compound theme 1`] = `"@layer compound.custom { :root, [class*="cpd-theme-"] { --cpd-color-icon-accent-tertiary: var(--cpd-color-blue-800); --cpd-color-text-action-accent: var(--cpd-color-blue-900); } }"`;
