@@ -41,7 +41,7 @@ import {
     isSecureBackupRequired,
     SecureBackupSetupMethod,
 } from "../../../../utils/WellKnownUtils";
-import SecurityCustomisations from "../../../../customisations/Security";
+import { ModuleRunner } from "../../../../modules/ModuleRunner";
 import Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
@@ -181,9 +181,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     }
 
     private getInitialPhase(): void {
-        const keyFromCustomisations = SecurityCustomisations.createSecretStorageKey?.();
+        //const keyFromCustomisations = SecurityCustomisations.createSecretStorageKey?.();
+        const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup?.createSecretStorageKey();
         if (keyFromCustomisations) {
-            logger.log("Created key via customisations, jumping to bootstrap step");
+            logger.log("CryptoSetupExtension: Created key via extension, jumping to bootstrap step");
             this.recoveryKey = {
                 privateKey: keyFromCustomisations,
             };
