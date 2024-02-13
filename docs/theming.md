@@ -31,7 +31,7 @@ To avoid name collisions, the internal name of a theme is
 `custom-${theme.name}`. So if you want to set the custom theme below as the
 default theme, you would use `default_theme: "custom-Electric Blue"`.
 
-eg. in config.json:
+e.g. in config.json:
 
 ```
 "setting_defaults": {
@@ -63,8 +63,10 @@ eg. in config.json:
                     "timeline-text-color": "#2e2f32",
                     "timeline-text-secondary-color": "#61708b",
                     "timeline-highlights-color": "#f3f8fd",
-                    "username-colors": ["#ff0000", ...]
-                    "avatar-background-colors": ["#cc0000", ...]
+                },
+                "compound": {
+                    "--cpd-color-icon-accent-tertiary": "var(--cpd-color-blue-800)",
+                    "--cpd-color-text-action-accent": "var(--cpd-color-blue-900)"
                 }
             }, {
                 "name": "Deep Purple",
@@ -89,8 +91,6 @@ eg. in config.json:
     }
 ```
 
-`username-colors` is expected to contain 6 colors. `avatar-background-colors` is expected to contain 3 colors. Both values are optional and have fallbacks from the built-in theme.
-
-These are exposed as `--username-colors_0`, ... and `--avatar-background-colors_0`, ... respectively in CSS.
+`compound` may contain overrides for any [semantic design token](https://compound.element.io/?path=/docs/tokens-semantic-colors--docs) belonging to our design system. The above example shows how you might change the accent color to blue by setting the relevant semantic tokens to refer to blue [base tokens](https://compound.element.io/?path=/docs/tokens-color-palettes--docs).
 
 All properties in `fonts` are optional, and will default to the standard Riot fonts.
