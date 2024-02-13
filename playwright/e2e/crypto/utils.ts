@@ -260,3 +260,35 @@ export async function createSharedRoomWithUser(
 
     return roomId;
 }
+
+/**
+ * Send a message in the current room
+ * @param page
+ * @param message - The message text to send
+ */
+export async function sendMessageInCurrentRoom(page: Page, message: string): Promise<void> {
+    await page.locator(".mx_MessageComposer").getByRole("textbox").fill(message);
+    await page.getByTestId("sendmessagebtn").click();
+}
+
+/**
+ * Create a room with the given name and encryption status using the room creation dialog.
+ *
+ * @param roomName - The name of the room to create
+ * @param isEncrypted - Whether the room should be encrypted
+ */
+export async function createRoom(page: Page, roomName: string, isEncrypted: boolean): Promise<void> {
+    await page.getByRole("button", { name: "Add room" }).click();
+    await page.locator(".mx_IconizedContextMenu").getByRole("menuitem", { name: "New room" }).click();
+
+    const dialog = page.locator(".mx_Dialog");
+
+    await dialog.getByLabel("Name").fill(roomName);
+
+    if (!isEncrypted) {
+        // it's enabled by default
+        await page.getByLabel("Enable end-to-end encryption").click();
+    }
+
+    await dialog.getByRole("button", { name: "Create room" }).click();
+}

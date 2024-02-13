@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { test, expect } from "../../element-web-test";
-import { logIntoElement } from "./utils";
+import { createRoom, enableKeyBackup, logIntoElement, logOutOfElement, sendMessageInCurrentRoom } from "./utils";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 
 test.describe("Adoption of rust stack", () => {
@@ -193,6 +193,96 @@ test.describe("Adoption of rust stack", () => {
 
         // Fixes a bug where a missing session data was shown
         // https://github.com/element-hq/element-web/issues/26970
+
+        await app.settings.openUserSettings("Help & About");
+        await expect(page.getByText("Crypto version: Rust SDK")).toBeVisible();
+    });
+
+    test("Test migration of room shields", async ({ page, context, app, credentials, homeserver }, workerInfo) => {
+        test.skip(
+            workerInfo.project.name === "Rust Crypto",
+            "No need to test this on Rust Crypto as we override the config manually",
+        );
+        test.slow();
+
+        await page.goto("/#/login");
+
+        // In the project.name = "Legacy crypto" it will be olm crypto
+        await logIntoElement(page, homeserver, credentials);
+
+        // create a room and send a message
+        await createRoom(page, "Room1", true);
+        await sendMessageInCurrentRoom(page, "Hello");
+
+        // enable backup to save this room key
+        const securityKey = await enableKeyBackup(app);
+
+        // wait a bit for upload to complete, there is a random timout on key upload
+        await page.waitForTimeout(6000);
+
+        // logout
+        await logOutOfElement(page);
+
+        // We logout and log back in in order to get the historical key from backup and have a gray shield
+        await page.reload();
+        await page.goto("/#/login");
+        // login again and verify
+        await logIntoElement(page, homeserver, credentials, securityKey);
+
+        await app.viewRoomByName("Room1");
+
+        {
+            const messageDiv = page.locator(".mx_EventTile_line").filter({ hasText: "Hello" });
+            // there should be a shield
+            await expect(messageDiv.locator(".mx_EventTile_e2eIcon")).toBeVisible();
+        }
+
+        // Now type a new  message
+        await sendMessageInCurrentRoom(page, "World");
+
+        // wait a bit for the message to be sent
+        await expect(
+            page
+                .locator(".mx_EventTile_line")
+                .filter({ hasText: "World" })
+                .locator("..")
+                .locator(".mx_EventTile_receiptSent"),
+        ).toBeVisible();
+        {
+            const messageDiv = page.locator(".mx_EventTile_line").filter({ hasText: "World" });
+            // there should not be a shield
+            expect(await messageDiv.locator(".mx_EventTile_e2eIcon").count()).toEqual(0);
+        }
+
+        // trigger a migration
+        await context.route(`http://localhost:8080/config.json*`, async (route) => {
+            const json = {};
+            json["features"] = {
+                feature_rust_crypto: true,
+            };
+            json["setting_defaults"] = {
+                "RustCrypto.staged_rollout_percent": 100,
+            };
+            await route.fulfill({ json });
+        });
+
+        await page.reload();
+
+        await app.viewRoomByName("Room1");
+
+        // The shields should be migrated properly
+        {
+            const messageDiv = page.locator(".mx_EventTile_line").filter({ hasText: "Hello" });
+            await expect(messageDiv).toBeVisible();
+            // there should be a shield
+            await expect(messageDiv.locator(".mx_EventTile_e2eIcon")).toBeVisible();
+        }
+        {
+            const messageDiv = page.locator(".mx_EventTile_line").filter({ hasText: "World" });
+            await expect(messageDiv).toBeVisible();
+            // there should not be a shield
+            expect(await messageDiv.locator(".mx_EventTile_e2eIcon").count()).toEqual(0);
+        }
 
         await app.settings.openUserSettings("Help & About");
         await expect(page.getByText("Crypto version: Rust SDK")).toBeVisible();

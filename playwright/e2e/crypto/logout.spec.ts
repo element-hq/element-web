@@ -14,55 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Page } from "@playwright/test";
-
 import { test, expect } from "../../element-web-test";
-import { logIntoElement } from "./utils";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { createRoom, enableKeyBackup, logIntoElement, sendMessageInCurrentRoom } from "./utils";
 
 test.describe("Logout tests", () => {
     test.beforeEach(async ({ page, homeserver, credentials }) => {
         await logIntoElement(page, homeserver, credentials);
     });
-
-    async function createRoom(page: Page, roomName: string, isEncrypted: boolean): Promise<void> {
-        await page.getByRole("button", { name: "Add room" }).click();
-        await page.locator(".mx_IconizedContextMenu").getByRole("menuitem", { name: "New room" }).click();
-
-        const dialog = page.locator(".mx_Dialog");
-
-        await dialog.getByLabel("Name").fill(roomName);
-
-        if (!isEncrypted) {
-            // it's enabled by default
-            await page.getByLabel("Enable end-to-end encryption").click();
-        }
-
-        await dialog.getByRole("button", { name: "Create room" }).click();
-    }
-
-    async function sendMessageInCurrentRoom(page: Page, message: string): Promise<void> {
-        await page.locator(".mx_MessageComposer").getByRole("textbox").fill(message);
-        await page.getByTestId("sendmessagebtn").click();
-    }
-    async function setupRecovery(app: ElementAppPage, page: Page): Promise<void> {
-        const securityTab = await app.settings.openUserSettings("Security & Privacy");
-
-        await expect(securityTab.getByRole("heading", { name: "Secure Backup" })).toBeVisible();
-        await securityTab.getByRole("button", { name: "Set up", exact: true }).click();
-
-        const currentDialogLocator = page.locator(".mx_Dialog");
-
-        // It's the first time and secure storage is not set up, so it will create one
-        await expect(currentDialogLocator.getByRole("heading", { name: "Set up Secure Backup" })).toBeVisible();
-        await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
-        await expect(currentDialogLocator.getByRole("heading", { name: "Save your Security Key" })).toBeVisible();
-        await currentDialogLocator.getByRole("button", { name: "Copy", exact: true }).click();
-        await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
-
-        await expect(currentDialogLocator.getByRole("heading", { name: "Secure Backup successful" })).toBeVisible();
-        await currentDialogLocator.getByRole("button", { name: "Done", exact: true }).click();
-    }
 
     test("Ask to set up recovery on logout if not setup", async ({ page, app }) => {
         await createRoom(page, "E2e room", true);
@@ -81,7 +39,7 @@ test.describe("Logout tests", () => {
     });
 
     test("If backup is set up show standard confirm", async ({ page, app }) => {
-        await setupRecovery(app, page);
+        await enableKeyBackup(app);
 
         await createRoom(page, "E2e room", true);
 
