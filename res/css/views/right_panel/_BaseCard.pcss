@@ -214,19 +214,19 @@ limitations under the License.
         padding-top: 10px;
         padding-bottom: 10px;
 
-        border: 1px solid $quinary-content;
-        box-shadow: 0px 1px 3px rgba(23, 25, 28, 0.05);
+        border: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
+        box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.1);
     }
 
     .mx_ContextualMenu_chevron_top {
         left: auto;
         right: 22px;
-        border-bottom-color: $quinary-content;
+        border-bottom-color: var(--cpd-color-border-interactive-secondary);
 
         &::after {
             content: "";
             border: inherit;
-            border-bottom-color: $menu-bg-color;
+            border-bottom-color: var(--cpd-color-bg-canvas-default);
             position: absolute;
             top: 1px;
             left: -8px;

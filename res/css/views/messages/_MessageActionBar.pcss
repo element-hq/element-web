@@ -18,7 +18,7 @@ limitations under the License.
 .mx_MessageActionBar {
     --MessageActionBar-size-button: 28px;
     --MessageActionBar-size-box: 32px; /* 28px + 2px (margin) * 2 */
-    --MessageActionBar-item-hover-background: $panel-actions;
+    --MessageActionBar-item-hover-background: var(--cpd-color-bg-subtle-secondary);
     --MessageActionBar-item-hover-borderRadius: 6px;
     --MessageActionBar-item-hover-zIndex: 1;
 
@@ -30,7 +30,7 @@ limitations under the License.
     line-height: $font-24px;
     border-radius: 8px;
     background: $background;
-    border: 1px solid $input-border-color;
+    border: var(--cpd-border-width-1) solid var(--cpd-color-border-disabled);
     top: -32px;
     right: 8px;
     user-select: none;
@@ -96,7 +96,7 @@ limitations under the License.
         --MessageActionBar-icon-size: 18px;
         width: var(--MessageActionBar-size-button);
         height: var(--MessageActionBar-size-button);
-        color: $secondary-content;
+        color: var(--cpd-color-icon-secondary);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -114,7 +114,7 @@ limitations under the License.
         }
 
         &:hover {
-            color: $primary-content;
+            color: var(--cpd-color-icon-primary);
         }
 
         &.mx_MessageActionBar_downloadButton {
