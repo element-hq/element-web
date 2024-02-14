@@ -1612,10 +1612,8 @@
     "setting": {
         "help_about": {
             "brand_version": "גרסאת %(brand)s:",
-            "chat_bot": "דבר עם הבוט של %(brand)s",
             "clear_cache_reload": "נקה מטמון ואתחל",
             "help_link": "בשביל לעזור בקידום ושימוש ב- %(brand)s, לחצו <a>כאן</a>.",
-            "help_link_chat_bot": "לעזרה בשימוש ב-%(brand)s לחץ על <a> כאן </a> או התחל צ'אט עם הבוט שלנו באמצעות הלחצן למטה.",
             "title": "עזרה ואודות",
             "versions": "גרסאות"
         }

@@ -2335,10 +2335,8 @@
         "help_about": {
             "access_token_detail": "Sinu pääsuluba annab täismahulise ligipääsu sinu kasutajakontole. Palun ära jaga seda teistega.",
             "brand_version": "%(brand)s'i versioon:",
-            "chat_bot": "Vestle %(brand)s'i robotiga",
             "clear_cache_reload": "Tühjenda puhver ja laadi uuesti",
             "help_link": "Kui otsid lisateavet %(brand)s'i kasutamise kohta, palun vaata <a>siia</a>.",
-            "help_link_chat_bot": "%(brand)s'i kasutamisega seotud abiteabe otsimiseks klõpsi <a>seda viidet</a> või vajutades järgnevat nuppu alusta vestlust meie robotiga.",
             "homeserver": "Koduserveri aadress <code>%(homeserverUrl)s</code>",
             "identity_server": "Isikutuvastusserveri aadress <code>%(identityServerUrl)s</code>",
             "title": "Abiteave ning info meie kohta",

@@ -2312,10 +2312,8 @@
         "help_about": {
             "access_token_detail": "您的存取權杖可提供您帳號完整的存取權限。請勿分享給任何人。",
             "brand_version": "%(brand)s 版本：",
-            "chat_bot": "與 %(brand)s 機器人聊天",
             "clear_cache_reload": "清除快取並重新載入",
             "help_link": "若需 %(brand)s 的使用說明，請點擊<a>這裡</a>。",
-            "help_link_chat_bot": "對於使用 %(brand)s 的說明，點選<a>這裡</a>或是使用下面的按鈕開始與我們的聊天機器人聊天。",
             "homeserver": "家伺服器為 <code>%(homeserverUrl)s</code>",
             "identity_server": "身分伺服器為 <code>%(identityServerUrl)s</code>",
             "title": "說明與關於",

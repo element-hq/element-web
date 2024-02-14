@@ -2379,11 +2379,9 @@
         "help_about": {
             "access_token_detail": "Váš prístupový token poskytuje úplný prístup k vášmu účtu. S nikým ho nezdieľajte.",
             "brand_version": "Verzia %(brand)s:",
-            "chat_bot": "Konverzácia s %(brand)s Bot",
             "clear_cache_reload": "Vymazať vyrovnávaciu pamäť a načítať znovu",
             "crypto_version": "Krypto verzia:",
             "help_link": "Pomoc pri používaní %(brand)s môžete získať kliknutím <a>sem</a>.",
-            "help_link_chat_bot": "Pomoc pri používaní aplikácie %(brand)s môžete získať kliknutím <a>sem</a>, alebo začnite konverzáciu s našim robotom pomocou tlačidla dole.",
             "homeserver": "Domovský server je <code>%(homeserverUrl)s</code>",
             "identity_server": "Server identity je <code>%(identityServerUrl)s</code>",
             "title": "Pomocník a o programe",
