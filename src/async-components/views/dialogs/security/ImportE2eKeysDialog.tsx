@@ -108,7 +108,7 @@ export default class ImportE2eKeysDialog extends React.Component<IProps, IState>
                 return MegolmExportEncryption.decryptMegolmKeyFile(arrayBuffer, passphrase);
             })
             .then((keys) => {
-                return this.props.matrixClient.getCrypto()!.importRoomKeys(JSON.parse(keys));
+                return this.props.matrixClient.getCrypto()!.importRoomKeysAsJson(keys);
             })
             .then(() => {
                 // TODO: it would probably be nice to give some feedback about what we've imported here.
