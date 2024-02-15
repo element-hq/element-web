@@ -23,7 +23,7 @@ export const BotVerifiedBadge = ({ userId }: UserVerifiedBadgeProps): JSX.Elemen
                         marginLeft: "15px",
                     }}
                 >
-                    Trusted Bot
+                    Verified Bot
                 </div>
             )}
         </>
