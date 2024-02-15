@@ -43,6 +43,7 @@ import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "matrix-react-sdk/src/stores/AsyncStore";
 import { avatarUrlForRoom, getInitialLetter } from "matrix-react-sdk/src/Avatar";
 import DesktopCapturerSourcePicker from "matrix-react-sdk/src/components/views/elements/DesktopCapturerSourcePicker";
+import { OidcRegistrationClientMetadata } from "matrix-js-sdk/src/matrix";
 
 import VectorBasePlatform from "./VectorBasePlatform";
 import { SeshatIndexManager } from "./SeshatIndexManager";
@@ -434,5 +435,20 @@ export default class ElectronPlatform extends VectorBasePlatform {
             await super.clearStorage();
             await this.ipc.call("clearStorage");
         } catch (e) {}
+    }
+
+    public get baseUrl(): string {
+        // This configuration is element-desktop specific so the types here do not know about it
+        return (SdkConfig.get() as unknown as Record<string, string>)["web_base_url"] ?? "https://app.element.io";
+    }
+
+    public async getOidcClientMetadata(): Promise<OidcRegistrationClientMetadata> {
+        const baseMetadata = await super.getOidcClientMetadata();
+        return {
+            ...baseMetadata,
+            applicationType: "native",
+            // XXX: This should be overridable in config
+            clientUri: "https://element.io",
+        };
     }
 }
