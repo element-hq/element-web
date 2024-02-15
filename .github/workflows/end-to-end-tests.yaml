@@ -27,6 +27,8 @@ jobs:
             deployments: write
         with:
             react-sdk-repository: matrix-org/matrix-react-sdk
+        secrets:
+            ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
     # We want to make the Playwright tests a required check for the merge queue.
     #

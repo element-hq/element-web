@@ -49,8 +49,11 @@
     "privacy_policy_url": "https://element.io/cookie-policy",
     "features": {
         "feature_video_rooms": true,
-        "feature_rust_crypto": true,
-        "feature_new_room_decoration_ui": true
+        "feature_new_room_decoration_ui": true,
+        "feature_element_call_video_rooms": true
+    },
+    "setting_defaults": {
+        "RustCrypto.staged_rollout_percent": 100
     },
     "element_call": {
         "url": "https://call.element.dev"

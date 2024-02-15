@@ -32,7 +32,7 @@
         "title": "Niewspierana przeglądarka"
     },
     "powered_by_matrix": "Zasilane przez Matrix",
-    "powered_by_matrix_with_logo": "Zdecentralizowany, szyfrowany czat i współpraca oparte na $matrixLogo",
+    "powered_by_matrix_with_logo": "Zdecentralizowany czat szyfrowany i współpraca oparta na $matrixLogo",
     "unknown_device": "Nieznane urządzenie",
     "use_brand_on_mobile": "Użyj %(brand)s w telefonie",
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
