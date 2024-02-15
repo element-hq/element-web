@@ -432,8 +432,7 @@ test.describe("Cryptography", function () {
             await expect(page.getByRole("tooltip")).toContainText("Encrypted by an unknown or deleted device.");
         });
 
-        // XXX: Failed since migration to Playwright (https://github.com/element-hq/element-web/issues/26811)
-        test.skip("Should show a grey padlock for a key restored from backup", async ({
+        test("Should show a grey padlock for a key restored from backup", async ({
             page,
             app,
             bot: bob,
@@ -462,9 +461,16 @@ test.describe("Cryptography", function () {
             /* go back to the test room and find Bob's message again */
             await app.viewRoomById(testRoomId);
             await expect(lastTile).toContainText("test encrypted 1");
-            await expect(lastTileE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
+            // The gray shield would be a mx_EventTile_e2eIcon_normal. The red shield would be a mx_EventTile_e2eIcon_warning.
+            // No shield would have no div mx_EventTile_e2eIcon at all.
+            await expect(lastTileE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_normal/);
             await lastTileE2eIcon.hover();
-            await expect(page.getByRole("tooltip")).toContainText("Encrypted by an unknown or deleted device.");
+            // The key is coming from backup, so it is not anymore possible to establish if the claimed device
+            // creator of this key is authentic. The tooltip should be "The authenticity of this encrypted message can't be guaranteed on this device."
+            // It is not "Encrypted by an unknown or deleted device." even if the claimed device is actually deleted.
+            await expect(page.getByRole("tooltip")).toContainText(
+                "The authenticity of this encrypted message can't be guaranteed on this device.",
+            );
         });
 
         test("should show the correct shield on edited e2e events", async ({ page, app, bot: bob, homeserver }) => {
