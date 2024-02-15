@@ -27,7 +27,6 @@ import { _t, _td } from "matrix-react-sdk/src/languageHandler";
 import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 import { makeRoomPermalink, makeUserPermalink } from "matrix-react-sdk/src/utils/permalinks/Permalinks";
 import DMRoomMap from "matrix-react-sdk/src/utils/DMRoomMap";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import * as Email from "matrix-react-sdk/src/email";
 import {
     getDefaultIdentityServerUrl,
@@ -379,9 +378,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.profilesStore = SdkContextClass.instance.userProfilesStore;
 
         const excludedIds = new Set([MatrixClientPeg.safeGet().getUserId()!]);
-        const welcomeUserId = SdkConfig.get("welcome_user_id");
-        if (welcomeUserId) excludedIds.add(welcomeUserId);
-
         if (isRoomInvite(props)) {
             const room = MatrixClientPeg.safeGet().getRoom(props.roomId);
             const isFederated = room?.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent()["m.federate"];
@@ -1346,9 +1342,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             footer = (
                 <div className="mx_InviteDialog_footer">
                     <h3>{_t("invite|send_link_prompt")}</h3>
-                    <CopyableText
-                        getTextToCopy={(): string => makeUserPermalink(MatrixClientPeg.safeGet().getSafeUserId())}
-                    >
+                    <CopyableText getTextToCopy={() => makeUserPermalink(MatrixClientPeg.safeGet().getSafeUserId())}>
                         <a className="mx_InviteDialog_footer_link" href={link} onClick={this.onLinkClick}>
                             {link}
                         </a>
