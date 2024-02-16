@@ -138,7 +138,6 @@
         "@types/uuid": "^9.0.7",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
-        "allchange": "^1.0.6",
         "babel-jest": "^29.0.0",
         "babel-loader": "^9.0.0",
         "babel-plugin-jsx-remove-data-test-id": "^3.0.0",
