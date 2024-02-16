@@ -22,7 +22,7 @@ import PlatformPeg from "../../src/PlatformPeg";
 // doesn't implement abstract
 // @ts-ignore
 class MockPlatform extends BasePlatform {
-    constructor(platformMocks: Partial<Record<MethodLikeKeys<BasePlatform>, unknown>>) {
+    constructor(platformMocks: Partial<Record<keyof BasePlatform, unknown>>) {
         super();
         Object.assign(this, platformMocks);
     }
