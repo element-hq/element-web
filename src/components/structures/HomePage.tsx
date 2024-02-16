@@ -22,11 +22,13 @@ import { useMatrixClientContext } from "matrix-react-sdk/src/contexts/MatrixClie
 import { DirectoryMember, startDmOnFirstMessage } from "matrix-react-sdk/src/utils/direct-messages";
 import { getHomePageUrl } from "matrix-react-sdk/src/utils/pages";
 import * as React from "react";
+import { useAtom } from "jotai";
 
 import { Icon as ChatScreenShot } from "../../../res/themes/superhero/img/arts/chat-screenshot.svg";
 import { Icon as ChromeIcon } from "../../../res/themes/superhero/img/icons/chrome.svg";
 import { Icon as FirefoxIcon } from "../../../res/themes/superhero/img/icons/firefox.svg";
 import { Icon as SuperheroLogo } from "../../../res/themes/superhero/img/logos/superhero-logo.svg";
+import { botAccountsAtom } from "../../atoms";
 
 interface IProps {
     justRegistered?: boolean;
@@ -36,6 +38,7 @@ const HomePage: React.FC<IProps> = () => {
     const cli = useMatrixClientContext();
     const config: any = SdkConfig.get();
     const pageUrl = getHomePageUrl(config, cli);
+    const [botAccounts] = useAtom(botAccountsAtom);
 
     if (pageUrl) {
         return <EmbeddedPage className="mx_HomePage" url={pageUrl} scrollbar={true} />;
@@ -81,7 +84,11 @@ const HomePage: React.FC<IProps> = () => {
                 <div className="mx_HomePage_default_buttons">
                     <AccessibleButton
                         onClick={(): void => {
-                            startDmOnFirstMessage(cli, [new DirectoryMember({ user_id: config.wallet_bot_user_id })]);
+                            startDmOnFirstMessage(cli, [
+                                new DirectoryMember({
+                                    user_id: botAccounts?.superheroBot || "",
+                                }),
+                            ]);
                         }}
                         className="mx_HomePage_button_custom"
                     >

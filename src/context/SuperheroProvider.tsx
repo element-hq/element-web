@@ -1,7 +1,20 @@
 import { useAtom } from "jotai";
 import React, { useCallback, useEffect } from "react";
 
-import { communityBotAtom, minimumTokenThresholdAtom, verifiedAccountsAtom, verifiedBotsAtom } from "../atoms";
+import { minimumTokenThresholdAtom, verifiedAccountsAtom, botAccountsAtom } from "../atoms";
+
+type BotAccounts = {
+    domain: string;
+    communityBot: {
+        userId: string;
+    };
+    superheroBot: {
+        userId: string;
+    };
+    blockchainBot: {
+        userId: string;
+    };
+};
 
 const useMinimumTokenThreshold = (config: any): void => {
     const [, setMinimumTokenThreshold] = useAtom(minimumTokenThresholdAtom);
@@ -38,15 +51,7 @@ const useMinimumTokenThreshold = (config: any): void => {
  */
 export const SuperheroProvider = ({ children, config }: any): any => {
     const [verifiedAccounts, setVerifiedAccounts] = useAtom(verifiedAccountsAtom);
-    const [, setVerifiedBots] = useAtom(verifiedBotsAtom);
-    const [, setCommunityBot] = useAtom(communityBotAtom);
-
-    useEffect(() => {
-        setCommunityBot({
-            userId: config.community_bot_user_id,
-            rawDisplayName: "Community DAO Room Bot",
-        });
-    }, [setCommunityBot, config.community_bot_user_id]);
+    const [, setBotAccounts] = useAtom(botAccountsAtom);
 
     function loadVerifiedAccounts(): void {
         if (config.bots_backend_url) {
@@ -61,15 +66,26 @@ export const SuperheroProvider = ({ children, config }: any): any => {
         }
     }
 
-    function loadVerifiedBots(): void {
-        setVerifiedBots({
-            [config.community_bot_user_id]: "true",
-            [config.wallet_bot_user_id]: "true",
-        });
-    }
+    useEffect(() => {
+        if (config.bots_backend_url) {
+            fetch(`${config.bots_backend_url}/ui/bot-accounts`, {
+                method: "GET",
+            })
+                .then((res) => res.json())
+                .then((data: BotAccounts) => {
+                    setBotAccounts({
+                        communityBot: "@" + data.communityBot.userId + ":" + data.domain,
+                        superheroBot: "@" + data.superheroBot.userId + ":" + data.domain,
+                        blockchainBot: "@" + data.blockchainBot.userId + ":" + data.domain,
+                    });
+                })
+                .catch(() => {
+                    //
+                });
+        }
+    }, [config.bots_backend_url, setBotAccounts]);
 
     useEffect(() => {
-        loadVerifiedBots();
         if (!verifiedAccounts?.length) {
             loadVerifiedAccounts();
         }
