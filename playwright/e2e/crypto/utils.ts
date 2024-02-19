@@ -36,9 +36,7 @@ import { ElementAppPage } from "../../pages/ElementAppPage";
 export async function waitForVerificationRequest(client: Client): Promise<JSHandle<VerificationRequest>> {
     return client.evaluateHandle((cli) => {
         return new Promise<VerificationRequest>((resolve) => {
-            console.log("~~");
             const onVerificationRequestEvent = async (request: VerificationRequest) => {
-                console.log("@@", request);
                 await request.accept();
                 resolve(request);
             };
