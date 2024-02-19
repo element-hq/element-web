@@ -19,6 +19,8 @@ import { completeAuthorizationCodeGrant } from "matrix-js-sdk/src/oidc/authorize
 import * as randomStringUtils from "matrix-js-sdk/src/randomstring";
 import { BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
 import { mocked } from "jest-mock";
+import { Crypto } from "@peculiar/webcrypto";
+import { getRandomValues } from "node:crypto";
 
 import { completeOidcLogin, startOidcLogin } from "../../../src/utils/oidc/authorize";
 import { makeDelegatedAuthConfig } from "../../test-utils/oidc";
@@ -31,6 +33,8 @@ jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     ...jest.requireActual("matrix-js-sdk/src/oidc/authorize"),
     completeAuthorizationCodeGrant: jest.fn(),
 }));
+
+const webCrypto = new Crypto();
 
 describe("OIDC authorization", () => {
     const issuer = "https://auth.com/";
@@ -55,6 +59,13 @@ describe("OIDC authorization", () => {
 
         jest.spyOn(randomStringUtils, "randomString").mockRestore();
         mockPlatformPeg();
+        Object.defineProperty(window, "crypto", {
+            value: {
+                getRandomValues,
+                randomUUID: jest.fn().mockReturnValue("not-random-uuid"),
+                subtle: webCrypto.subtle,
+            },
+        });
     });
 
     beforeAll(() => {
