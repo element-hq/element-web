@@ -2079,10 +2079,8 @@
         "help_about": {
             "access_token_detail": "Käyttöpolettisi (ns. token) antaa täyden pääsyn tilillesi. Älä jaa sitä kenenkään kanssa.",
             "brand_version": "%(brand)s-versio:",
-            "chat_bot": "Keskustele %(brand)s-botin kanssa",
             "clear_cache_reload": "Tyhjennä välimuisti ja lataa uudelleen",
             "help_link": "Saadaksesi apua %(brand)sin käyttämisessä, napsauta <a>tästä</a>.",
-            "help_link_chat_bot": "Saadaksesi apua %(brand)sin käytössä, napsauta <a>tästä</a> tai aloita keskustelu bottimme kanssa alla olevasta painikkeesta.",
             "homeserver": "Kotipalvelin on <code>%(homeserverUrl)s</code>",
             "identity_server": "Identiteettipalvelin on <code>%(identityServerUrl)s</code>",
             "title": "Ohje ja tietoja",

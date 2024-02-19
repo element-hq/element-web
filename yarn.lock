@@ -1841,10 +1841,10 @@
     emojibase "^15.0.0"
     emojibase-data "^15.0.0"
 
-"@matrix-org/matrix-sdk-crypto-wasm@^4.1.0":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-4.3.0.tgz#ef08e7eafae6e9e85658c14a41f0d74a48c03f4a"
-  integrity sha512-05+NO78pXda/MTxi05NJwBbbAsOmU6WywBOcAk9GarPzgvrj4GvOuYTY6VR5PD7Gzb3AI+vNx/Ho4V0GFKPW/w==
+"@matrix-org/matrix-sdk-crypto-wasm@^4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-4.5.0.tgz#f55ae28f2cd1bce14fa98069840dd31b2172732a"
+  integrity sha512-QINqNfBRrkVv9vB+hR+OW4RO6cwf8nt4GEbREiS09L5eUK6xa5REpeXyh7ty1QusYk/DBiNadNcM5ROEPk9dcQ==
 
 "@matrix-org/matrix-wysiwyg@2.17.0":
   version "2.17.0"
@@ -3123,9 +3123,9 @@
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
 "@vector-im/compound-design-tokens@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-1.0.0.tgz#4fe7744bbe0bd093b064d42ca8bb475862bb2ce7"
-  integrity sha512-/hKAxE/WsmnNZamlSmLoFeAhNDhRpFdJYuY8NrPLaS/dKS/QRnty6UYzs9yWOVNFeiBfkNsrb7wYIFMrYWSRJw==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-1.1.0.tgz#9b1a91317c404a1cd0d76d2fd5a7f2df5f1bf0a6"
+  integrity sha512-1HcCm6YsOda98rGXO4fg0WjEdrMnx/0tdtFmYIlnYkDYTbnfpFg+ffIDY7jgammWbOYwUZpZhM5q9ofb7/EgkA==
   dependencies:
     svg2vectordrawable "^2.9.1"
 
@@ -6964,11 +6964,11 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "31.2.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1a364c93c3e2d4c211dc9cf374fb80038bab1214"
+  version "31.3.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d03db1740586714a194205b9efc8cff37c3bb996"
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^4.1.0"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^4.5.0"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"

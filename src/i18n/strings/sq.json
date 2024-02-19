@@ -2245,10 +2245,8 @@
         "help_about": {
             "access_token_detail": "Tokeni-i juaj i hyrjeve jep hyrje të plotë në llogarinë tuaj. Mos ia jepni kujt.",
             "brand_version": "Version %(brand)s:",
-            "chat_bot": "Fjalosuni me Robotin %(brand)s",
             "clear_cache_reload": "Spastro fshehtinën dhe ringarko",
             "help_link": "Për ndihmë rreth përdorimit të %(brand)s-it, klikoni <a>këtu</a>.",
-            "help_link_chat_bot": "Për ndihmë rreth përdorimit të %(brand)s-it, klikoni <a>këtu</a>, ose nisni një fjalosje me robotin tonë duke përdorur butonin më poshtë.",
             "homeserver": "Shërbyes Home është <code>%(homeserverUrl)s</code>",
             "identity_server": "Shërbyes identiteti është <code>%(identityServerUrl)s</code>",
             "title": "Ndihmë & Rreth",

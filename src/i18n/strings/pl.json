@@ -479,6 +479,7 @@
         "legal": "Zasoby prawne",
         "light": "Jasny",
         "loading": "Wczytywanie…",
+        "lobby": "Poczekalnia",
         "location": "Lokalizacja",
         "low_priority": "Niski priorytet",
         "matrix": "Matrix",
@@ -763,7 +764,9 @@
         "room_notifications_type": "Typ: ",
         "room_status": "Status pokoju",
         "room_unread_status_count": {
-            "other": "Status nieprzeczytanych wiadomości pokoju: <strong>%(status)s</strong>, ilość: <strong>%(count)s</strong>"
+            "one": "Status nieprzeczytanej w pokoju: <strong>%(status)s</strong>, liczba: <strong>%(count)s</strong>",
+            "few": "Status nieprzeczytanych w pokoju: <strong>%(status)s</strong>, liczba: <strong>%(count)s</strong>",
+            "many": "Status nieprzeczytanych w pokoju: <strong>%(status)s</strong>, liczba: <strong>%(count)s</strong>"
         },
         "save_setting_values": "Zapisz ustawione wartości",
         "see_history": "Pokaż historię",
@@ -1415,6 +1418,7 @@
         "group_rooms": "Pokoje",
         "group_spaces": "Przestrzenie",
         "group_themes": "Motywy",
+        "group_threads": "Wątki",
         "group_voip": "Głos i wideo",
         "group_widgets": "Widżety",
         "hidebold": "Ukryj kropkę powiadomienia (wyświetlaj tylko licznik plakietek)",
@@ -1458,6 +1462,8 @@
         "sliding_sync_server_no_support": "Twój serwer nie posiada wsparcia natywnego",
         "sliding_sync_server_specify_proxy": "Twój serwer nie posiada wsparcia natywnego, musisz podać serwer proxy",
         "sliding_sync_server_support": "Twój serwer posiada wsparcie natywne",
+        "threads_activity_centre": "Centrum aktywności wątków (w trakcie rozwoju)",
+        "threads_activity_centre_description": "Ostrzeżenie: W trakcie aktywnego rozwoju; przeładowuje Element.",
         "under_active_development": "W trakcie aktywnego rozwoju.",
         "unrealiable_e2e": "Problematyczny w pokojach szyfrowanych",
         "video_rooms": "Pokoje wideo",
@@ -2394,11 +2400,9 @@
         "help_about": {
             "access_token_detail": "Twój token dostępu daje pełen dostęp do Twojego konta. Nie dziel się nim z nikim.",
             "brand_version": "Wersja %(brand)s:",
-            "chat_bot": "Rozmowa z Botem %(brand)s",
             "clear_cache_reload": "Wyczyść pamięć podręczną i przeładuj",
             "crypto_version": "Wersja krypto:",
             "help_link": "Aby uzyskać pomoc w używaniu %(brand)s, naciśnij <a>tutaj</a>.",
-            "help_link_chat_bot": "Aby uzyskać pomoc w korzystaniu z %(brand)s, kliknij <a>tutaj</a> lub rozpocznij czat z botem za pomocą przycisku poniżej.",
             "homeserver": "Serwer domowy to <code>%(homeserverUrl)s</code>",
             "identity_server": "Serwer tożsamości to <code>%(identityServerUrl)s</code>",
             "title": "Pomoc i o aplikacji",
@@ -3158,6 +3162,10 @@
         "show_thread_filter": "Pokaż:",
         "unable_to_decrypt": "Nie można rozszyfrować wiadomości"
     },
+    "threads_activity_centre": {
+        "header": "Aktywność wątków",
+        "no_rooms_with_unreads_threads": "Nie masz jeszcze pokoi z nieprzeczytanymi wątkami."
+    },
     "time": {
         "about_day_ago": "około dzień temu",
         "about_hour_ago": "około godziny temu",
@@ -3803,6 +3811,7 @@
         "camera_enabled": "Twoja kamera jest nadal włączona",
         "cannot_call_yourself_description": "Nie możesz wykonać połączenia do siebie.",
         "change_input_device": "Zmień urządzenie wejściowe",
+        "close_lobby": "Zamknij poczekalnię",
         "connecting": "Łączenie",
         "connection_lost": "Połączenie z serwerem zostało przerwane",
         "connection_lost_description": "Nie możesz wykonywać rozmów bez połączenia z serwerem.",
@@ -3816,6 +3825,7 @@
         "disabled_no_perms_start_video_call": "Nie posiadasz wymaganych uprawnień do rozpoczęcia rozmowy wideo",
         "disabled_no_perms_start_voice_call": "Nie posiadasz uprawnień do rozpoczęcia rozmowy głosowej",
         "disabled_ongoing_call": "Rozmowa w toku",
+        "element_call": "Element Call",
         "enable_camera": "Włącz kamerę",
         "enable_microphone": "Wyłącz wyciszenie mikrofonu",
         "expand": "Wróć do połączenia",
@@ -3824,9 +3834,13 @@
         "hangup": "Rozłącz",
         "hide_sidebar_button": "Ukryj pasek boczny",
         "input_devices": "Urządzenia wejściowe",
+        "jitsi_call": "Konferencja Jitsi",
         "join_button_tooltip_call_full": "Przepraszamy — to połączenie jest już zapełnione",
         "join_button_tooltip_connecting": "Łączenie",
+        "legacy_call": "Połączenie Legacy",
         "maximise": "Wypełnij ekran",
+        "maximise_call": "Maksymalizuj połączenie",
+        "minimise_call": "Minimalizuj połączenie",
         "misconfigured_server": "Połączenie nie udało się przez błędną konfigurację serwera",
         "misconfigured_server_description": "Poproś administratora swojego serwera głównego (<code>%(homeserverDomain)s</code>) by skonfigurował serwer TURN aby rozmowy działały bardziej niezawodnie.",
         "misconfigured_server_fallback": "Alternatywnie możesz spróbować użyć serwera publicznego <server/>, ale mogą wystąpić problemy i zostanie udostępniony Twój adres IP z serwerem. Zarządzaj tym również w Ustawieniach.",
@@ -3874,6 +3888,7 @@
         "user_is_presenting": "%(sharerName)s prezentuje",
         "video_call": "Rozmowa wideo",
         "video_call_started": "Rozpoczęto rozmowę wideo",
+        "video_call_using": "Połączenie wideo za pomocą:",
         "voice_call": "Rozmowa głosowa",
         "you_are_presenting": "Prezentujesz"
     },

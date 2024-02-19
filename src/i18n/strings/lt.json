@@ -1509,10 +1509,8 @@
         "help_about": {
             "access_token_detail": "Jūsų prieigos žetonas suteikia visišką prieigą prie paskyros. Niekam jo neduokite.",
             "brand_version": "%(brand)s versija:",
-            "chat_bot": "Kalbėtis su %(brand)s Botu",
             "clear_cache_reload": "Išvalyti podėlį ir perkrauti",
             "help_link": "Norėdami gauti pagalbos naudojant %(brand)s, paspauskite <a>čia</a>.",
-            "help_link_chat_bot": "Norėdami gauti pagalbos naudojant %(brand)s, paspauskite <a>čia</a> arba pradėkite pokalbį su mūsų botu pasinaudoję žemiau esančiu mygtuku.",
             "title": "Pagalba ir Apie",
             "versions": "Versijos"
         }

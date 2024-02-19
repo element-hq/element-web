@@ -2371,11 +2371,9 @@
         "help_about": {
             "access_token_detail": "Dein Zugriffstoken gibt vollen Zugriff auf dein Konto. Teile ihn niemals mit anderen.",
             "brand_version": "Version von %(brand)s:",
-            "chat_bot": "Unterhalte dich mit dem %(brand)s-Bot",
             "clear_cache_reload": "Zwischenspeicher löschen und neu laden",
             "crypto_version": "Krypto-Version:",
             "help_link": "<a>Um Hilfe zur Benutzung von %(brand)s zu erhalten, klicke hier</a>.",
-            "help_link_chat_bot": "Um Hilfe zur Benutzung von %(brand)s zu erhalten, klicke <a>hier</a> oder beginne eine Unterhaltung mit unserem Bot mittels nachfolgender Schaltfläche.",
             "homeserver": "Heim-Server ist <code>%(homeserverUrl)s</code>",
             "identity_server": "Identitäts-Server ist <code>%(identityServerUrl)s</code>",
             "title": "Hilfe und Info",

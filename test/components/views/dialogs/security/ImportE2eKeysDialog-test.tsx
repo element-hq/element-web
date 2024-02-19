@@ -71,10 +71,10 @@ describe("ImportE2eKeysDialog", () => {
         const cli = createTestClient();
         const onFinished = jest.fn();
         const file = new File(["test"], "file.txt", { type: "text/plain" });
-        const importRoomKeys = jest.fn();
+        const importRoomKeysAsJson = jest.fn();
         cli.getCrypto = () => {
             return {
-                importRoomKeys,
+                importRoomKeysAsJson,
             } as unknown as CryptoApi;
         };
 
@@ -90,6 +90,6 @@ describe("ImportE2eKeysDialog", () => {
         await userEvent.paste("passphrase");
         fireEvent.click(container.querySelector("[type=submit]")!);
 
-        await waitFor(() => expect(importRoomKeys).toHaveBeenCalled());
+        await waitFor(() => expect(importRoomKeysAsJson).toHaveBeenCalled());
     });
 });

@@ -42,7 +42,7 @@ limitations under the License.
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font: var(--cpd-font-body-md-regular);
+        font: var(--cpd-font-body-md-semibold);
         border: none; /* override default <button /> styles */
         word-break: keep-all; /* prevent button text in Chinese/Japanese/Korean (CJK) from being collapsed */
 
@@ -53,21 +53,23 @@ limitations under the License.
         }
 
         &.mx_AccessibleButton_kind_primary_sm {
-            color: $button-primary-fg-color;
-            background-color: $accent;
+            color: var(--cpd-color-text-on-solid-primary);
+            background-color: var(--cpd-color-bg-action-primary-rest);
         }
 
         &.mx_AccessibleButton_kind_danger_sm {
-            color: $button-danger-fg-color;
-            background-color: $alert;
+            color: var(--cpd-color-text-on-solid-primary);
+            background-color: var(--cpd-color-bg-critical-primary);
         }
 
         &.mx_AccessibleButton_kind_link_sm {
-            color: $accent;
+            color: var(--cpd-color-text-primary);
+            text-decoration: underline;
+            font-weight: var(--cpd-font-weight-semibold);
         }
 
         &.mx_AccessibleButton_kind_confirm_sm {
-            background-color: $accent;
+            background-color: var(--cpd-color-bg-action-primary-rest);
 
             &::before {
                 mask-image: url("$(res)/img/feather-customised/check.svg");
@@ -75,7 +77,7 @@ limitations under the License.
         }
 
         &.mx_AccessibleButton_kind_cancel_sm {
-            background-color: $alert;
+            background-color: var(--cpd-color-bg-critical-primary);
 
             &::before {
                 mask-image: url("$(res)/img/feather-customised/x.svg");
@@ -100,25 +102,21 @@ limitations under the License.
     }
 
     &.mx_AccessibleButton_kind_icon_primary,
-    &.mx_AccessibleButton_kind_icon_primary_outline,
-    &.mx_AccessibleButton_kind_primary,
-    &.mx_AccessibleButton_kind_primary_outline {
-        border: 1px solid $accent;
-    }
-
-    &.mx_AccessibleButton_kind_icon_primary,
     &.mx_AccessibleButton_kind_primary {
-        color: $button-primary-fg-color;
-        background-color: $accent;
+        border: 1px solid var(--cpd-color-bg-action-primary-rest);
+        color: var(--cpd-color-text-on-solid-primary);
+        background-color: var(--cpd-color-bg-action-primary-rest);
     }
 
     &.mx_AccessibleButton_kind_icon_primary_outline,
     &.mx_AccessibleButton_kind_primary_outline {
-        color: $accent;
+        border: 1px solid var(--cpd-color-border-interactive-secondary);
+        color: var(--cpd-color-text-primary);
     }
 
     &.mx_AccessibleButton_kind_secondary {
-        color: $accent;
+        color: var(--cpd-color-text-primary);
+        text-decoration: underline;
     }
 
     &.mx_AccessibleButton_kind_secondary_content {
@@ -126,30 +124,30 @@ limitations under the License.
     }
 
     &.mx_AccessibleButton_kind_danger {
-        color: $button-danger-fg-color;
-        background-color: $alert;
+        color: var(--cpd-color-text-on-solid-primary);
+        background-color: var(--cpd-color-bg-critical-primary);
 
         &.mx_AccessibleButton_disabled {
-            color: $button-danger-disabled-fg-color;
-            background-color: $button-danger-disabled-bg-color;
+            color: var(--cpd-color-text-on-solid-primary);
+            background-color: var(--cpd-color-bg-critical-primary);
         }
     }
 
     &.mx_AccessibleButton_kind_danger_outline {
-        color: $alert;
+        color: var(--cpd-color-text-critical-primary);
         background-color: transparent;
-        border: 1px solid $alert;
+        border: 1px solid var(--cpd-color-border-critical-subtle);
 
         &.mx_AccessibleButton_disabled {
-            color: $button-danger-disabled-bg-color;
-            border-color: $button-danger-disabled-bg-color;
+            color: var(--cpd-color-text-disabled);
+            border-color: var(--cpd-color-border-disabled);
         }
     }
 
     &.mx_AccessibleButton_kind_danger_sm {
         &.mx_AccessibleButton_disabled {
-            color: $button-danger-disabled-fg-color;
-            background-color: $button-danger-disabled-bg-color;
+            color: var(--cpd-color-text-disabled);
+            background-color: var(--cpd-color-bg-subtle-primary);
         }
     }
 
@@ -158,18 +156,19 @@ limitations under the License.
     &.mx_AccessibleButton_kind_danger_inline,
     &.mx_AccessibleButton_kind_content_inline {
         font-size: inherit;
-        font-weight: normal;
+        font-weight: var(--cpd-font-weight-semibold);
         line-height: inherit;
         padding: 0;
+        text-decoration: underline;
     }
 
     &.mx_AccessibleButton_kind_link,
     &.mx_AccessibleButton_kind_link_inline {
-        color: $accent;
+        color: var(--cpd-color-text-primary);
     }
 
     &.mx_AccessibleButton_kind_danger_inline {
-        color: $alert;
+        color: var(--cpd-color-text-critical-primary);
     }
 
     &.mx_AccessibleButton_kind_content_inline {

@@ -17,7 +17,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, MatrixEvent, Room, SSOAction, encodeUnpaddedBase64 } from "matrix-js-sdk/src/matrix";
+import {
+    MatrixClient,
+    MatrixEvent,
+    Room,
+    SSOAction,
+    encodeUnpaddedBase64,
+    OidcRegistrationClientMetadata,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import dis from "./dispatcher/dispatcher";
@@ -30,6 +37,7 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import { idbLoad, idbSave, idbDelete } from "./utils/StorageManager";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { IConfigOptions } from "./IConfigOptions";
+import SdkConfig from "./SdkConfig";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -426,7 +434,7 @@ export default abstract class BasePlatform {
     /**
      * Delete a previously stored pickle key from storage.
      * @param {string} userId the user ID for the user that the pickle key is for.
-     * @param {string} userId the device ID that the pickle key is for.
+     * @param {string} deviceId the device ID that the pickle key is for.
      */
     public async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
         try {
@@ -442,5 +450,32 @@ export default abstract class BasePlatform {
     public async clearStorage(): Promise<void> {
         window.sessionStorage.clear();
         window.localStorage.clear();
+    }
+
+    /**
+     * Base URL to use when generating external links for this client, for platforms e.g. Desktop this will be a different instance
+     */
+    public get baseUrl(): string {
+        return window.location.origin + window.location.pathname;
+    }
+
+    /**
+     * Metadata to use for dynamic OIDC client registrations
+     */
+    public async getOidcClientMetadata(): Promise<OidcRegistrationClientMetadata> {
+        const config = SdkConfig.get();
+        return {
+            clientName: config.brand,
+            clientUri: this.baseUrl,
+            redirectUris: [this.getSSOCallbackUrl().href],
+            logoUri: new URL("vector-icons/1024.png", this.baseUrl).href,
+            applicationType: "web",
+            // XXX: We break the spec by not consistently supplying these required fields
+            // contacts: [],
+            // @ts-ignore
+            tosUri: config.terms_and_conditions_links?.[0]?.url,
+            // @ts-ignore
+            policyUri: config.privacy_policy_url,
+        };
     }
 }

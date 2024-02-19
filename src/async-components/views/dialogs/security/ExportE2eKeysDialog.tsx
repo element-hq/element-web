@@ -109,10 +109,10 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
         // asynchronous ones.
         Promise.resolve()
             .then(() => {
-                return this.props.matrixClient.getCrypto()!.exportRoomKeys();
+                return this.props.matrixClient.getCrypto()!.exportRoomKeysAsJson();
             })
             .then((k) => {
-                return MegolmExportEncryption.encryptMegolmKeyFile(JSON.stringify(k), passphrase);
+                return MegolmExportEncryption.encryptMegolmKeyFile(k, passphrase);
             })
             .then((f) => {
                 const blob = new Blob([f], {

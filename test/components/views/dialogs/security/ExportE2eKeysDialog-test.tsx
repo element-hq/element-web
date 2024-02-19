@@ -66,10 +66,10 @@ describe("ExportE2eKeysDialog", () => {
         const cli = createTestClient();
         const keys: IMegolmSessionData[] = [];
         const passphrase = "ThisIsAMoreSecurePW123$$";
-        const exportRoomKeys = jest.fn().mockResolvedValue(keys);
+        const exportRoomKeysAsJson = jest.fn().mockResolvedValue(JSON.stringify(keys));
         cli.getCrypto = () => {
             return {
-                exportRoomKeys,
+                exportRoomKeysAsJson,
             } as unknown as CryptoApi;
         };
 
@@ -85,7 +85,7 @@ describe("ExportE2eKeysDialog", () => {
         fireEvent.click(container.querySelector("[type=submit]")!);
 
         // Then it exports keys and encrypts them
-        await waitFor(() => expect(exportRoomKeys).toHaveBeenCalled());
+        await waitFor(() => expect(exportRoomKeysAsJson).toHaveBeenCalled());
         await waitFor(() =>
             expect(MegolmExportEncryption.encryptMegolmKeyFile).toHaveBeenCalledWith(JSON.stringify(keys), passphrase),
         );

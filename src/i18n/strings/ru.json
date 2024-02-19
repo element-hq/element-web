@@ -2376,11 +2376,9 @@
         "help_about": {
             "access_token_detail": "Ваш токен доступа даёт полный доступ к вашей учётной записи. Не передавайте его никому.",
             "brand_version": "Версия %(brand)s:",
-            "chat_bot": "Чат с ботом %(brand)s",
             "clear_cache_reload": "Очистить кэш и перезагрузить",
             "crypto_version": "Криптоверсия:",
             "help_link": "Для получения помощи по использованию %(brand)s, нажмите <a>здесь</a>.",
-            "help_link_chat_bot": "Для получения помощи по использованию %(brand)s, нажмите <a>здесь</a> или начните чат с нашим ботом с помощью кнопки ниже.",
             "homeserver": "Homeserver это <code>%(homeserverUrl)s</code>",
             "identity_server": "Сервер идентификации - это <code>%(identityServerUrl)s</code>",
             "title": "Помощь и о программе",

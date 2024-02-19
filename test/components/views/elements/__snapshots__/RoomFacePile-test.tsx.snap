@@ -3,7 +3,7 @@
 exports[`<RoomFacePile /> renders 1`] = `
 <DocumentFragment>
   <div
-    class="mx_AccessibleButton mx_FacePile mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+    class="mx_AccessibleButton mx_FacePile"
     data-state="closed"
     role="button"
     tabindex="0"
