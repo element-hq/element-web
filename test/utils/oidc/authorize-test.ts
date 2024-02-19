@@ -23,6 +23,7 @@ import { mocked } from "jest-mock";
 import { completeOidcLogin, startOidcLogin } from "../../../src/utils/oidc/authorize";
 import { makeDelegatedAuthConfig } from "../../test-utils/oidc";
 import { OidcClientError } from "../../../src/utils/oidc/error";
+import { mockPlatformPeg } from "../../test-utils";
 
 jest.unmock("matrix-js-sdk/src/randomstring");
 
@@ -53,6 +54,7 @@ describe("OIDC authorization", () => {
         };
 
         jest.spyOn(randomStringUtils, "randomString").mockRestore();
+        mockPlatformPeg();
     });
 
     beforeAll(() => {

@@ -21,6 +21,7 @@ import { randomString } from "matrix-js-sdk/src/randomstring";
 import { IdTokenClaims } from "oidc-client-ts";
 
 import { OidcClientError } from "./error";
+import PlatformPeg from "../../PlatformPeg";
 
 /**
  * Start OIDC authorization code flow
@@ -39,7 +40,7 @@ export const startOidcLogin = async (
     identityServerUrl?: string,
     isRegistration?: boolean,
 ): Promise<void> => {
-    const redirectUri = window.location.origin;
+    const redirectUri = PlatformPeg.get()!.getSSOCallbackUrl().href;
 
     const nonce = randomString(10);
 
@@ -53,6 +54,7 @@ export const startOidcLogin = async (
         identityServerUrl,
         nonce,
         prompt,
+        urlState: PlatformPeg.get()?.getOidcClientState(),
     });
 
     window.location.href = authorizationUrl;

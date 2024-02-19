@@ -21,6 +21,7 @@ import { OidcClient } from "oidc-client-ts";
 
 import { getStoredOidcTokenIssuer, getStoredOidcClientId } from "../../utils/oidc/persistOidcSettings";
 import { getDelegatedAuthAccountUrl } from "../../utils/oidc/getDelegatedAuthAccountUrl";
+import PlatformPeg from "../../PlatformPeg";
 
 /**
  * @experimental
@@ -139,7 +140,7 @@ export class OidcClientStore {
                 ...metadata,
                 authority: metadata.issuer,
                 signingKeys,
-                redirect_uri: window.location.origin,
+                redirect_uri: PlatformPeg.get()!.getSSOCallbackUrl().href,
                 client_id: clientId,
             });
         } catch (error) {

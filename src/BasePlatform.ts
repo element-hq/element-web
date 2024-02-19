@@ -313,7 +313,11 @@ export default abstract class BasePlatform {
         return null;
     }
 
-    protected getSSOCallbackUrl(fragmentAfterLogin = ""): URL {
+    /**
+     * The URL to return to after a successful SSO/OIDC authentication
+     * @param fragmentAfterLogin optional fragment for specific view to return to
+     */
+    public getSSOCallbackUrl(fragmentAfterLogin = ""): URL {
         const url = new URL(window.location.href);
         url.hash = fragmentAfterLogin;
         return url;
@@ -477,5 +481,13 @@ export default abstract class BasePlatform {
             // @ts-ignore
             policyUri: config.privacy_policy_url,
         };
+    }
+
+    /**
+     * Suffix to append to the `state` parameter of OIDC /auth calls. Will be round-tripped to the callback URI.
+     * Currently only required for ElectronPlatform for passing element-desktop-ssoid.
+     */
+    public getOidcClientState(): string {
+        return "";
     }
 }
