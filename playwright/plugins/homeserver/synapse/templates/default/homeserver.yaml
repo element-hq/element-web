@@ -81,10 +81,8 @@ oidc_providers:
       issuer: "http://localhost:{{OAUTH_SERVER_PORT}}/oauth"
       authorization_endpoint: "http://localhost:{{OAUTH_SERVER_PORT}}/oauth/auth.html"
       # the token endpoint receives requests from synapse, rather than the webapp, so needs to escape the docker container.
-      # Hence, HOST_DOCKER_INTERNAL rather than localhost. This is set to
-      # host.docker.internal on Docker and host.containers.internal on Podman.
-      token_endpoint: "http://{{HOST_DOCKER_INTERNAL}}:{{OAUTH_SERVER_PORT}}/oauth/token"
-      userinfo_endpoint: "http://{{HOST_DOCKER_INTERNAL}}:{{OAUTH_SERVER_PORT}}/oauth/userinfo"
+      token_endpoint: "http://host.containers.internal:{{OAUTH_SERVER_PORT}}/oauth/token"
+      userinfo_endpoint: "http://host.containers.internal:{{OAUTH_SERVER_PORT}}/oauth/userinfo"
       client_id: "synapse"
       discover: false
       scopes: ["profile"]

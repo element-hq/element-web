@@ -25,7 +25,7 @@ test.describe("Email Registration", async () => {
             use({
                 template: "email",
                 variables: {
-                    SMTP_HOST: "{{HOST_DOCKER_INTERNAL}}", // This will get replaced in synapseStart
+                    SMTP_HOST: "host.containers.internal",
                     SMTP_PORT: mailhog.instance.smtpPort,
                 },
             }),

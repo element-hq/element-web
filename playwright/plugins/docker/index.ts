@@ -19,6 +19,37 @@ import * as crypto from "crypto";
 import * as childProcess from "child_process";
 import * as fse from "fs-extra";
 
+/**
+ * @param cmd - command to execute
+ * @param args - arguments to pass to executed command
+ * @param suppressOutput - whether to suppress the stdout and stderr resulting from this command.
+ * @return Promise which resolves to an object containing the string value of what was
+ *         written to stdout and stderr by the executed command.
+ */
+const exec = (cmd: string, args: string[], suppressOutput = false): Promise<{ stdout: string; stderr: string }> => {
+    return new Promise((resolve, reject) => {
+        if (!suppressOutput) {
+            const log = ["Running command:", cmd, ...args, "\n"].join(" ");
+            // When in CI mode we combine reports from multiple runners into a single HTML report
+            // which has separate files for stdout and stderr, so we print the executed command to both
+            process.stdout.write(log);
+            if (process.env.CI) process.stderr.write(log);
+        }
+        const { stdout, stderr } = childProcess.execFile(cmd, args, { encoding: "utf8" }, (err, stdout, stderr) => {
+            if (err) reject(err);
+            resolve({ stdout, stderr });
+            if (!suppressOutput) {
+                process.stdout.write("\n");
+                if (process.env.CI) process.stderr.write("\n");
+            }
+        });
+        if (!suppressOutput) {
+            stdout.pipe(process.stdout);
+            stderr.pipe(process.stderr);
+        }
+    });
+};
+
 export class Docker {
     public id: string;
 
@@ -26,9 +57,10 @@ export class Docker {
         const userInfo = os.userInfo();
         const params = opts.params ?? [];
 
-        if (params?.includes("-v") && userInfo.uid >= 0) {
+        const isPodman = await Docker.isPodman();
+        if (params.includes("-v") && userInfo.uid >= 0) {
             // Run the docker container as our uid:gid to prevent problems with permissions.
-            if (await Docker.isPodman()) {
+            if (isPodman) {
                 // Note: this setup is for podman rootless containers.
 
                 // In podman, run as root in the container, which maps to the current
@@ -45,75 +77,57 @@ export class Docker {
             }
         }
 
+        // Make host.containers.internal work to allow the container to talk to other services via host ports.
+        if (isPodman) {
+            params.push("--network");
+            params.push("slirp4netns:allow_host_loopback=true");
+        } else {
+            // Docker for Desktop includes a host-gateway mapping on host.docker.internal but to simplify the config
+            // we use the Podman variant host.containers.internal in all environments.
+            params.push("--add-host");
+            params.push("host.containers.internal:host-gateway");
+        }
+
+        // Provided we are not running in CI, add a `--rm` parameter.
+        // There is no need to remove containers in CI (since they are automatically removed anyway), and
+        // `--rm` means that if a container crashes this means its logs are wiped out.
+        if (!process.env.CI) params.unshift("--rm");
+
         const args = [
             "run",
             "--name",
             `${opts.containerName}-${crypto.randomBytes(4).toString("hex")}`,
             "-d",
-            "--rm",
             ...params,
             opts.image,
         ];
 
         if (opts.cmd) args.push(...opts.cmd);
 
-        this.id = await new Promise<string>((resolve, reject) => {
-            childProcess.execFile("docker", args, (err, stdout) => {
-                if (err) reject(err);
-                resolve(stdout.trim());
-            });
-        });
+        const { stdout } = await exec("docker", args);
+        this.id = stdout.trim();
         return this.id;
     }
 
-    stop(): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            childProcess.execFile("docker", ["stop", this.id], (err) => {
-                if (err) reject(err);
-                resolve();
-            });
-        });
+    async stop(): Promise<void> {
+        try {
+            await exec("docker", ["stop", this.id]);
+        } catch (err) {
+            console.error(`Failed to stop docker container`, this.id, err);
+        }
     }
 
-    exec(params: string[]): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            childProcess.execFile(
-                "docker",
-                ["exec", this.id, ...params],
-                { encoding: "utf8" },
-                (err, stdout, stderr) => {
-                    if (err) {
-                        console.log(stdout);
-                        console.log(stderr);
-                        reject(err);
-                        return;
-                    }
-                    resolve();
-                },
-            );
-        });
+    /**
+     * @param params - list of parameters to pass to `docker exec`
+     * @param suppressOutput - whether to suppress the stdout and stderr resulting from this command.
+     */
+    async exec(params: string[], suppressOutput = true): Promise<void> {
+        await exec("docker", ["exec", this.id, ...params], suppressOutput);
     }
 
-    rm(): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            childProcess.execFile("docker", ["rm", this.id], (err) => {
-                if (err) reject(err);
-                resolve();
-            });
-        });
-    }
-
-    getContainerIp(): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
-            childProcess.execFile(
-                "docker",
-                ["inspect", "-f", "{{ .NetworkSettings.IPAddress }}", this.id],
-                (err, stdout) => {
-                    if (err) reject(err);
-                    else resolve(stdout.trim());
-                },
-            );
-        });
+    async getContainerIp(): Promise<string> {
+        const { stdout } = await exec("docker", ["inspect", "-f", "{{ .NetworkSettings.IPAddress }}", this.id]);
+        return stdout.trim();
     }
 
     async persistLogsToFile(args: { stdoutFile?: string; stderrFile?: string }): Promise<void> {
@@ -134,20 +148,8 @@ export class Docker {
      * Detects whether the docker command is actually podman.
      * To do this, it looks for "podman" in the output of "docker --help".
      */
-    static isPodman(): Promise<boolean> {
-        return new Promise<boolean>((resolve, reject) => {
-            childProcess.execFile("docker", ["--help"], (err, stdout) => {
-                if (err) reject(err);
-                else resolve(stdout.toLowerCase().includes("podman"));
-            });
-        });
-    }
-
-    /**
-     * Supply the right hostname to use to talk to the host machine. On Docker this
-     * is "host.docker.internal" and on Podman this is "host.containers.internal".
-     */
-    static async hostnameOfHost(): Promise<"host.containers.internal" | "host.docker.internal"> {
-        return (await Docker.isPodman()) ? "host.containers.internal" : "host.docker.internal";
+    static async isPodman(): Promise<boolean> {
+        const { stdout } = await exec("docker", ["--help"], true);
+        return stdout.toLowerCase().includes("podman");
     }
 }

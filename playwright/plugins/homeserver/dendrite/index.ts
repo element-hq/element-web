@@ -46,7 +46,6 @@ export class Dendrite extends Synapse implements Homeserver, HomeserverInstance 
         const dendriteId = await this.docker.run({
             image: this.image,
             params: [
-                "--rm",
                 "-v",
                 `${denCfg.configDir}:` + dockerConfigDir,
                 "-p",
@@ -140,7 +139,7 @@ async function cfgDirFromTemplate(
     const docker = new Docker();
     await docker.run({
         image: dendriteImage,
-        params: ["--rm", "--entrypoint=", "-v", `${tempDir}:/mnt`],
+        params: ["--entrypoint=", "-v", `${tempDir}:/mnt`],
         containerName: `react-sdk-playwright-dendrite-keygen`,
         cmd: ["/usr/bin/generate-keys", "-private-key", "/mnt/matrix_key.pem"],
     });
