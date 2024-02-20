@@ -3,7 +3,7 @@
 exports[`<FacePile /> renders with a tooltip 1`] = `
 <DocumentFragment>
   <div
-    class="mx_AccessibleButton mx_FacePile"
+    class="mx_AccessibleButton mx_FacePile mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
     data-state="closed"
     role="button"
     tabindex="0"

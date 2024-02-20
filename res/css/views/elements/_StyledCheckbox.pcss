@@ -42,7 +42,7 @@ limitations under the License.
             height: $size;
             width: $size;
             size: 0.5rem;
-            border: 1px solid var(--cpd-color-border-interactive-primary);
+            border: 1px solid $strong-input-border-color;
             box-sizing: border-box;
             border-radius: $border-radius;
 
@@ -80,12 +80,12 @@ limitations under the License.
 
 .mx_Checkbox.mx_Checkbox_kind_solid input[type="checkbox"] {
     & + label > .mx_Checkbox_background .mx_Checkbox_checkmark {
-        background: var(--cpd-color-icon-on-solid-primary);
+        background: #ffffff;
     }
 
     &:checked + label > .mx_Checkbox_background {
-        background: var(--cpd-color-bg-action-primary-rest);
-        border-color: var(--cpd-color-bg-action-primary-rest);
+        background: $accent;
+        border-color: $accent;
     }
 
     &:checked:disabled + label > .mx_Checkbox_background {
@@ -95,11 +95,11 @@ limitations under the License.
 
 .mx_Checkbox.mx_Checkbox_kind_outline input[type="checkbox"] {
     & + label > .mx_Checkbox_background .mx_Checkbox_checkmark {
-        background: var(--cpd-color-bg-action-primary-rest);
+        background: $accent;
     }
 
     &:checked + label > .mx_Checkbox_background {
         background: transparent;
-        border-color: var(--cpd-color-bg-action-primary-rest);
+        border-color: $accent;
     }
 }

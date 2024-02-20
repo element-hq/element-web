@@ -191,7 +191,7 @@ limitations under the License.
 }
 
 .mx_MessageComposer_button {
-    @mixin composerButton 50%, var(--cpd-color-icon-secondary), var(--cpd-color-bg-subtle-secondary);
+    @mixin composerButton 50%, $accent, $accent-300;
 
     &:last-child {
         margin-right: auto;
@@ -199,11 +199,11 @@ limitations under the License.
 
     &.mx_MessageComposer_closeButtonMenu {
         &::after {
-            background: var(--cpd-color-bg-subtle-primary);
+            background: $accent-300;
         }
 
         &::before {
-            background-color: var(--cpd-color-icon-primary);
+            background-color: $accent;
             z-index: 2;
         }
     }
@@ -295,7 +295,7 @@ limitations under the License.
     width: 32px;
     height: 32px;
     border-radius: 100%;
-    background-color: var(--cpd-color-icon-accent-tertiary);
+    background-color: $accent;
 
     &::before {
         position: absolute;
@@ -309,7 +309,7 @@ limitations under the License.
         mask-size: contain;
         mask-position: center;
 
-        background-color: var(--cpd-color-icon-on-solid-primary);
+        background-color: $button-fg-color;
         content: "";
     }
 }

@@ -46,10 +46,10 @@ limitations under the License.
     }
 
     &:hover {
-        border-color: var(--cpd-color-bg-interactive-primary-rest);
+        border-color: $accent;
 
         &::before {
-            background-color: var(--cpd-color-icon-primary);
+            background-color: $accent;
         }
 
         > span {
@@ -212,7 +212,7 @@ limitations under the License.
                         left: 8px;
                         height: 16px;
                         width: 16px;
-                        background: var(--cpd-color-icon-on-solid-primary);
+                        background: #fff; /* white icon fill */
                         mask-size: 16px;
                         mask-image: url("$(res)/img/element-icons/room/invite.svg");
                     }
@@ -293,13 +293,11 @@ limitations under the License.
             }
 
             .mx_SpaceRoomView_inviteTeammates_inviteDialogButton {
-                color: var(--cpd-color-text-primary);
-                font-weight: var(--cpd-font-weight-semibold);
-                text-decoration: underline;
+                color: $accent;
 
                 &::before {
                     mask-image: url("$(res)/img/element-icons/room/invite.svg");
-                    background-color: var(--cpd-color-icon-primary);
+                    background-color: $accent;
                 }
             }
         }

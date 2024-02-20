@@ -52,26 +52,26 @@ limitations under the License.
 .mx_PollOption_winnerIcon {
     height: 12px;
     width: 12px;
-    color: var(--cpd-color-icon-accent-tertiary);
+    color: $accent;
     margin-right: $spacing-4;
     vertical-align: middle;
 }
 
 .mx_PollOption_checked {
-    border-color: var(--cpd-color-border-interactive-hovered);
+    border-color: $accent;
 
     .mx_PollOption_popularityBackground {
         .mx_PollOption_popularityAmount {
-            background-color: var(--cpd-color-icon-accent-tertiary);
+            background-color: $accent;
         }
     }
 
     /* override checked radio button styling to show checkmark instead */
     .mx_StyledRadioButton_checked {
-        input[type="radio"]:checked + div {
+        input[type="radio"] + div {
             border-width: 2px;
-            border-color: var(--cpd-color-icon-accent-tertiary);
-            background-color: var(--cpd-color-icon-accent-tertiary);
+            border-color: $accent;
+            background-color: $accent;
             background-image: url("$(res)/img/element-icons/check-white.svg");
             background-size: 12px;
             background-repeat: no-repeat;
