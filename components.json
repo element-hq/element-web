@@ -21,5 +21,6 @@
     "src/linkify-matrix.ts": "src/linkify-matrix.ts",
     "src/components/structures/LeftPanel.tsx": "src/components/structures/LeftPanel.tsx",
     "src/components/views/rooms/RoomList.tsx": "src/components/views/rooms/RoomList.tsx",
-    "src/components/views/rooms/RoomSublist.tsx": "src/components/views/rooms/RoomSublist.tsx"
+    "src/components/views/rooms/RoomSublist.tsx": "src/components/views/rooms/RoomSublist.tsx",
+    "src/components/views/dialogs/FeedbackDialog.tsx": "src/components/views/dialogs/FeedbackDialog.tsx"
 }
