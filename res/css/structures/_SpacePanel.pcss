@@ -338,20 +338,47 @@ limitations under the License.
         }
 
         &.mx_IndicatorScrollbar_topOverflow {
-            mask-image: linear-gradient(180deg, transparent, black 5%);
+            mask-image: linear-gradient(to bottom, transparent, black 16px);
         }
 
         &.mx_IndicatorScrollbar_bottomOverflow {
-            mask-image: linear-gradient(180deg, black, black 95%, transparent);
+            mask-image: linear-gradient(
+                to top,
+                transparent,
+                rgba(255, 255, 255, 30%) 4px,
+                rgba(255, 255, 255, 55%) 8px,
+                rgba(255, 255, 255, 75%) 12px,
+                black 16px
+            );
         }
 
         &.mx_IndicatorScrollbar_topOverflow.mx_IndicatorScrollbar_bottomOverflow {
-            mask-image: linear-gradient(180deg, transparent, black 5%, black 95%, transparent);
+            /* This stacks two gradients on top of one another, which lets us
+               have a fixed pixel offset from both top and bottom for the colour stops.
+               Note the top fade is much smaller because the spaces start close to the top,
+               so otherwise a large gradient suddenly appears when you scroll down.
+             */
+            mask-image: linear-gradient(to bottom, transparent, black 16px),
+                linear-gradient(
+                    to top,
+                    transparent,
+                    rgba(255, 255, 255, 30%) 4px,
+                    rgba(255, 255, 255, 55%) 8px,
+                    rgba(255, 255, 255, 75%) 12px,
+                    black 16px
+                );
+            mask-position:
+                0% 0%,
+                0% 100%;
+            mask-size:
+                calc(100% - 10px) 50%,
+                calc(100% - 10px) 50%;
+            mask-repeat: no-repeat;
         }
     }
 
     .mx_UserMenu {
-        padding: 0 2px 8px;
+        padding-bottom: 12px;
         border-bottom: 1px solid $separator;
         margin: 12px 14px 4px 18px;
         max-width: 226px;
