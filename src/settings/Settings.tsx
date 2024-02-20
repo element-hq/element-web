@@ -1128,7 +1128,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         labsGroup: LabGroup.Threads,
         controller: new ReloadOnChangeController(),
         displayName: _td("labs|threads_activity_centre"),
-        description: _td("labs|threads_activity_centre_description"),
+        description: () => _t("labs|threads_activity_centre_description", { brand: SdkConfig.get().brand }),
         default: false,
         isFeature: true,
     },

@@ -1461,7 +1461,7 @@
         "sliding_sync_server_specify_proxy": "Your server lacks native support, you must specify a proxy",
         "sliding_sync_server_support": "Your server has native support",
         "threads_activity_centre": "Threads Activity Centre (in development)",
-        "threads_activity_centre_description": "Warning: Under active development; reloads Element.",
+        "threads_activity_centre_description": "Warning: Under active development; reloads %(brand)s.",
         "under_active_development": "Under active development.",
         "unrealiable_e2e": "Unreliable in encrypted rooms",
         "video_rooms": "Video rooms",
