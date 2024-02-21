@@ -6456,7 +6456,7 @@ jszip@^3.7.0:
     readable-stream "~2.3.6"
     setimmediate "^1.0.5"
 
-jwt-decode@4.0.0, jwt-decode@^3.1.2, jwt-decode@^4.0.0:
+jwt-decode@4.0.0, jwt-decode@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-4.0.0.tgz#2270352425fd413785b2faf11f6e755c5151bd4b"
   integrity sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==
@@ -6728,20 +6728,21 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "31.3.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d03db1740586714a194205b9efc8cff37c3bb996"
+matrix-js-sdk@31.4.0-rc.0:
+  version "31.4.0-rc.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-31.4.0-rc.0.tgz#a5ab930f0e68109a29b889d9eb59636452d18ed3"
+  integrity sha512-ZymInXGbWulpdzq8SPbFMK8KKNNeh83O/8ni1ktysmzKl54CYeXZk7J50ecP5I5Rimno1BNYT+dn3NNxE+TsKA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^4.5.0"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"
-    jwt-decode "^3.1.2"
+    jwt-decode "^4.0.0"
     loglevel "^1.7.1"
     matrix-events-sdk "0.0.1"
     matrix-widget-api "^1.6.0"
-    oidc-client-ts "^2.2.4"
+    oidc-client-ts "^3.0.1"
     p-retry "4"
     sdp-transform "^2.14.1"
     unhomoglyph "^1.0.6"
@@ -7098,7 +7099,7 @@ object.values@^1.1.6, object.values@^1.1.7:
     define-properties "^1.2.0"
     es-abstract "^1.22.1"
 
-oidc-client-ts@3.0.1, oidc-client-ts@^2.2.4, oidc-client-ts@^3.0.1:
+oidc-client-ts@3.0.1, oidc-client-ts@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/oidc-client-ts/-/oidc-client-ts-3.0.1.tgz#be264fb87c89f74f73863646431c32cd06f5ceb7"
   integrity sha512-xX8unZNtmtw3sOz4FPSqDhkLFnxCDsdo2qhFEH2opgWnF/iXMFoYdBQzkwCxAZVgt3FT3DnuBY3k80EZHT0RYg==
