@@ -187,7 +187,7 @@
         "@types/uuid": "^9.0.2",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
-        "axe-core": "4.8.3",
+        "axe-core": "4.8.4",
         "babel-jest": "^29.0.0",
         "blob-polyfill": "^7.0.0",
         "eslint": "8.56.0",
