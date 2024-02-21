@@ -96,6 +96,12 @@ function computeUnreadThreadRooms(mxClient: MatrixClient, msc3946ProcessDynamicP
         if (VisibilityProvider.instance.isRoomVisible(room) && doesRoomHaveUnreadThreads(room)) {
             // Get the greatest notification level of all rooms
             const notificationLevel = getThreadNotificationLevel(room);
+
+            // If the room has an activity notification or less, we ignore it
+            if (notificationLevel <= NotificationLevel.Activity) {
+                continue;
+            }
+
             if (notificationLevel > greatestNotificationLevel) {
                 greatestNotificationLevel = notificationLevel;
             }

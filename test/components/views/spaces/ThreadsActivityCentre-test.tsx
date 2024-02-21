@@ -111,17 +111,13 @@ describe("ThreadsActivityCentre", () => {
         expect(getTACMenu()).toBeInTheDocument();
     });
 
-    it("should render a room with a activity in the TAC", async () => {
+    it("should not render a room with a activity in the TAC", async () => {
         cli.getVisibleRooms = jest.fn().mockReturnValue([roomWithActivity]);
         renderTAC();
         await userEvent.click(getTACButton());
 
-        const tacRows = screen.getAllByRole("menuitem");
-        expect(tacRows.length).toEqual(1);
-
-        getByText(tacRows[0], "Just activity");
-        expect(tacRows[0].getElementsByClassName("mx_NotificationBadge").length).toEqual(1);
-        expect(tacRows[0].getElementsByClassName("mx_NotificationBadge_level_notification").length).toEqual(0);
+        // We should not render the room with activity
+        expect(() => screen.getAllByRole("menuitem")).toThrow();
     });
 
     it("should render a room with a regular notification in the TAC", async () => {
