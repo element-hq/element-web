@@ -180,7 +180,7 @@
         "@types/react-beautiful-dnd": "^13.0.0",
         "@types/react-dom": "17.0.21",
         "@types/react-transition-group": "^4.4.0",
-        "@types/sanitize-html": "2.9.5",
+        "@types/sanitize-html": "2.11.0",
         "@types/sdp-transform": "^2.4.6",
         "@types/tar-js": "^0.3.2",
         "@types/ua-parser-js": "^0.7.36",
