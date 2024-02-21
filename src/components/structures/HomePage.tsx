@@ -17,18 +17,16 @@ limitations under the License.
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import AutoHideScrollbar from "matrix-react-sdk/src/components/structures/AutoHideScrollbar";
 import EmbeddedPage from "matrix-react-sdk/src/components/structures/EmbeddedPage";
-import AccessibleButton from "matrix-react-sdk/src/components/views/elements/AccessibleButton";
 import { useMatrixClientContext } from "matrix-react-sdk/src/contexts/MatrixClientContext";
-import { DirectoryMember, startDmOnFirstMessage } from "matrix-react-sdk/src/utils/direct-messages";
 import { getHomePageUrl } from "matrix-react-sdk/src/utils/pages";
+import { useUserOnboardingTasks } from "matrix-react-sdk/src/hooks/useUserOnboardingTasks";
+import { UserOnboardingList } from "matrix-react-sdk/src/components/views/user-onboarding/UserOnboardingList";
+import { useUserOnboardingContext } from "matrix-react-sdk/src/hooks/useUserOnboardingContext";
 import * as React from "react";
-import { useAtom } from "jotai";
 
-import { Icon as ChatScreenShot } from "../../../res/themes/superhero/img/arts/chat-screenshot.svg";
-import { Icon as ChromeIcon } from "../../../res/themes/superhero/img/icons/chrome.svg";
-import { Icon as FirefoxIcon } from "../../../res/themes/superhero/img/icons/firefox.svg";
-import { Icon as SuperheroLogo } from "../../../res/themes/superhero/img/logos/superhero-logo.svg";
-import { botAccountsAtom } from "../../atoms";
+import { UserOnboardingHeader } from "../views/user-onboarding/UserOnboardingHeader";
+
+
 
 interface IProps {
     justRegistered?: boolean;
@@ -38,64 +36,18 @@ const HomePage: React.FC<IProps> = () => {
     const cli = useMatrixClientContext();
     const config: any = SdkConfig.get();
     const pageUrl = getHomePageUrl(config, cli);
-    const [botAccounts] = useAtom(botAccountsAtom);
+
+    const context = useUserOnboardingContext();
+    const tasks = useUserOnboardingTasks(context);
 
     if (pageUrl) {
         return <EmbeddedPage className="mx_HomePage" url={pageUrl} scrollbar={true} />;
     }
 
     return (
-        <AutoHideScrollbar className="mx_HomePage mx_HomePage_default" element="main">
-            <div className="mx_HomePage_default_wrapper">
-                <ChatScreenShot className="chat_screen_shot" />
-                <div className="mx_HomePage_title">
-                    <SuperheroLogo />
-                    <div>is so much better with our Wallet</div>
-                </div>
-                <div className="mx_HomePage_default_buttons_title">
-                    <span style={{ fontWeight: "bold" }}>1. </span>Download extension for your browser
-                </div>
-                <div className="mx_HomePage_default_buttons browsers">
-                    <AccessibleButton
-                        onClick={(): void => {
-                            window.open("https://addons.mozilla.org/en-US/firefox/addon/superhero-wallet/", "_blank");
-                        }}
-                        className="mx_HomePage_button_custom"
-                    >
-                        <FirefoxIcon />
-                        from Firefox Add-ons
-                    </AccessibleButton>
-                    <AccessibleButton
-                        onClick={(): void => {
-                            window.open(
-                                "https://chromewebstore.google.com/detail/superhero/mnhmmkepfddpifjkamaligfeemcbhdne",
-                                "_blank",
-                            );
-                        }}
-                        className="mx_HomePage_button_custom"
-                    >
-                        <ChromeIcon />
-                        from Chrome Web Store
-                    </AccessibleButton>
-                </div>
-                <div className="mx_HomePage_default_buttons_title">
-                    <span style={{ fontWeight: "bold" }}>2.</span>Connect your wallet with $uperhero Bot
-                </div>
-                <div className="mx_HomePage_default_buttons">
-                    <AccessibleButton
-                        onClick={(): void => {
-                            startDmOnFirstMessage(cli, [
-                                new DirectoryMember({
-                                    user_id: botAccounts?.superheroBot || "",
-                                }),
-                            ]);
-                        }}
-                        className="mx_HomePage_button_custom"
-                    >
-                        Chat with $uperhero Bot
-                    </AccessibleButton>
-                </div>
-            </div>
+        <AutoHideScrollbar className="mx_UserOnboardingPage" style={{ maxWidth: "100%" }}>
+            <UserOnboardingHeader />
+            <UserOnboardingList tasks={tasks} />
         </AutoHideScrollbar>
     );
 };
