@@ -16,7 +16,7 @@ limitations under the License.
 
 import SettingController from "./SettingController";
 import dis from "../../dispatcher/dispatcher";
-import { UpdateFontSizePayload } from "../../dispatcher/payloads/UpdateFontSizePayload";
+import { UpdateFontSizeDeltaPayload } from "../../dispatcher/payloads/UpdateFontSizeDeltaPayload";
 import { Action } from "../../dispatcher/actions";
 import { SettingLevel } from "../SettingLevel";
 
@@ -34,9 +34,9 @@ export default class FontSizeController extends SettingController {
             dis.fire(Action.MigrateBaseFontSize);
         } else if (newValue !== "") {
             // Dispatch font size change so that everything open responds to the change.
-            dis.dispatch<UpdateFontSizePayload>({
-                action: Action.UpdateFontSize,
-                size: newValue,
+            dis.dispatch<UpdateFontSizeDeltaPayload>({
+                action: Action.UpdateFontSizeDelta,
+                delta: newValue,
             });
         }
     }

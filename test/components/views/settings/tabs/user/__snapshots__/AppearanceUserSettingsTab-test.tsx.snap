@@ -248,6 +248,117 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
             >
               <div
+                class="mx_Field mx_Field_select mx_FontScalingPanel_Dropdown"
+              >
+                <select
+                  id="mx_Field_1"
+                  label="Font size"
+                  placeholder="Font size"
+                  type="text"
+                >
+                  <option
+                    value="-7"
+                  >
+                    9
+                  </option>
+                  <option
+                    value="-6"
+                  >
+                    10
+                  </option>
+                  <option
+                    value="-5"
+                  >
+                    11
+                  </option>
+                  <option
+                    value="-4"
+                  >
+                    12
+                  </option>
+                  <option
+                    value="-3"
+                  >
+                    13
+                  </option>
+                  <option
+                    value="-2"
+                  >
+                    14
+                  </option>
+                  <option
+                    value="-1"
+                  >
+                    15
+                  </option>
+                  <option
+                    value="0"
+                  >
+                    16 (default)
+                  </option>
+                  <option
+                    value="1"
+                  >
+                    17
+                  </option>
+                  <option
+                    value="2"
+                  >
+                    18
+                  </option>
+                  <option
+                    value="4"
+                  >
+                    20
+                  </option>
+                  <option
+                    value="6"
+                  >
+                    22
+                  </option>
+                  <option
+                    value="8"
+                  >
+                    24
+                  </option>
+                  <option
+                    value="10"
+                  >
+                    26
+                  </option>
+                  <option
+                    value="12"
+                  >
+                    28
+                  </option>
+                  <option
+                    value="14"
+                  >
+                    30
+                  </option>
+                  <option
+                    value="16"
+                  >
+                    32
+                  </option>
+                  <option
+                    value="18"
+                  >
+                    34
+                  </option>
+                  <option
+                    value="20"
+                  >
+                    36
+                  </option>
+                </select>
+                <label
+                  for="mx_Field_1"
+                >
+                  Font size
+                </label>
+              </div>
+              <div
                 class="mx_FontScalingPanel_preview mx_EventTilePreview_loader"
               >
                 <div
@@ -261,83 +372,6 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     style="width: 32px; height: 32px;"
                   />
                 </div>
-              </div>
-              <div
-                class="mx_FontScalingPanel_fontSlider"
-              >
-                <div
-                  class="mx_FontScalingPanel_fontSlider_smallText"
-                >
-                  Aa
-                </div>
-                <div
-                  class="mx_Slider"
-                >
-                  <input
-                    aria-label="Font size"
-                    autocomplete="off"
-                    max="21"
-                    min="11"
-                    step="1"
-                    type="range"
-                    value="16"
-                  />
-                  <output
-                    class="mx_Slider_selection"
-                    style="left: calc(2px + 50% + 1.2em - 1.2em);"
-                  >
-                    <span
-                      class="mx_Slider_selection_label"
-                    >
-                      16
-                    </span>
-                  </output>
-                </div>
-                <div
-                  class="mx_FontScalingPanel_fontSlider_largeText"
-                >
-                  Aa
-                </div>
-              </div>
-              <span
-                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
-              >
-                <input
-                  id="checkbox_QgU2PomxwK"
-                  type="checkbox"
-                />
-                <label
-                  for="checkbox_QgU2PomxwK"
-                >
-                  <div
-                    class="mx_Checkbox_background"
-                  >
-                    <div
-                      class="mx_Checkbox_checkmark"
-                    />
-                  </div>
-                  <div>
-                    Use custom size
-                  </div>
-                </label>
-              </span>
-              <div
-                class="mx_Field mx_Field_input mx_AppearanceUserSettingsTab_checkboxControlledField"
-              >
-                <input
-                  autocomplete="off"
-                  disabled=""
-                  id="font_size_field"
-                  label="Font size"
-                  placeholder="16"
-                  type="number"
-                  value="16"
-                />
-                <label
-                  for="font_size_field"
-                >
-                  Font size
-                </label>
               </div>
             </div>
           </div>

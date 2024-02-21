@@ -107,9 +107,11 @@ export enum Action {
     MigrateBaseFontSize = "migrate_base_font_size",
 
     /**
-     * Sets the apps root font size. Should be used with UpdateFontSizePayload
+     * Sets the apps root font size delta. Should be used with UpdateFontSizeDeltaPayload
+     * It will add the delta to the current font size.
+     * The delta should be between {@link FontWatcher.MIN_DELTA} and {@link FontWatcher.MAX_DELTA}.
      */
-    UpdateFontSize = "update_font_size",
+    UpdateFontSizeDelta = "update_font_size_delta",
 
     /**
      * Sets a system font. Should be used with UpdateSystemFontPayload

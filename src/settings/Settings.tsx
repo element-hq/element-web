@@ -511,6 +511,9 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: [SettingLevel.CONFIG],
         default: 0,
     },
+    /**
+     * @deprecated in favor of {@link fontSizeDelta}
+     */
     "baseFontSize": {
         displayName: _td("settings|appearance|font_size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -530,12 +533,22 @@ export const SETTINGS: { [setting: string]: ISetting } = {
      * With the transition to Compound we are moving to a base font size
      * of 16px. We're taking the opportunity to move away from the `baseFontSize`
      * setting that had a 5px offset.
-     *
+     * @deprecated in favor {@link fontSizeDelta}
      */
     "baseFontSizeV2": {
         displayName: _td("settings|appearance|font_size"),
         supportedLevels: [SettingLevel.DEVICE],
-        default: FontWatcher.DEFAULT_SIZE,
+        default: "",
+        controller: new FontSizeController(),
+    },
+    /**
+     * This delta is added to the browser default font size
+     * Moving from `baseFontSizeV2` to `fontSizeDelta` to replace the default 16px to --cpd-font-size-root (browser default font size) + fontSizeDelta
+     */
+    "fontSizeDelta": {
+        displayName: _td("settings|appearance|font_size"),
+        supportedLevels: [SettingLevel.DEVICE],
+        default: FontWatcher.DEFAULT_DELTA,
         controller: new FontSizeController(),
     },
     "useCustomFontSize": {
