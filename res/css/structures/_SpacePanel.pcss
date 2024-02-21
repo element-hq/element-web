@@ -18,7 +18,7 @@ limitations under the License.
     --activeBackground-color: $panel-actions;
     --activeBorder-color: $primary-content;
     --activeBorder-transparent-gap: 1px;
-    --gutterSize: 16px;
+    --gutterSize: 14px;
     --height-nested: 24px;
     --height-topLevel: 32px;
 
@@ -33,6 +33,10 @@ limitations under the License.
     /* Create another flexbox so the Panel fills the container */
     display: flex;
     flex-direction: column;
+
+    &.collapsed {
+        width: 68px;
+    }
 
     .mx_SpacePanel_toggleCollapse {
         position: absolute;
@@ -147,6 +151,11 @@ limitations under the License.
             padding: 4px;
             width: calc(100% - 32px);
             min-width: 0;
+        }
+
+        &.mx_SpaceButton_narrow .mx_SpaceButton_selectionWrapper {
+            flex: initial;
+            width: 32px;
         }
 
         .mx_SpaceButton_name {
@@ -323,7 +332,8 @@ limitations under the License.
     /* root space buttons are bigger and not indented */
     & > .mx_AutoHideScrollbar {
         flex: 1;
-        padding: 0 8px 16px 0;
+        padding: 0 0 16px 0;
+        scrollbar-gutter: stable;
 
         & > .mx_SpaceButton {
             height: var(--height-topLevel);
@@ -380,7 +390,7 @@ limitations under the License.
     .mx_UserMenu {
         padding-bottom: 12px;
         border-bottom: 1px solid $separator;
-        margin: 12px 14px 4px 18px;
+        margin: 12px 14px 4px 16px;
         max-width: 226px;
     }
 }
