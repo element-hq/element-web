@@ -186,7 +186,7 @@
         "create_account_prompt": "Nouveau ici ? <a>Créez un compte</a>",
         "create_account_title": "Créer un compte",
         "email_discovery_text": "Utiliser une adresse e-mail pour pouvoir être découvert par des contacts existants.",
-        "email_field_label": "E-mail",
+        "email_field_label": "Adresse e-mail",
         "email_field_label_invalid": "Cela ne ressemble pas a une adresse e-mail valide",
         "email_field_label_required": "Saisir l’adresse e-mail",
         "email_help_text": "Ajouter une adresse e-mail pour pouvoir réinitialiser votre mot de passe.",
@@ -266,7 +266,7 @@
         "register_action": "Créer un compte",
         "registration": {
             "continue_without_email_description": "Juste une remarque, si vous n'ajoutez pas d’e-mail et que vous oubliez votre mot de passe, vous pourriez <b>perdre définitivement l’accès à votre compte</b>.",
-            "continue_without_email_field_label": "E-mail (facultatif)",
+            "continue_without_email_field_label": "Adresse e-mail (facultatif)",
             "continue_without_email_title": "Continuer sans e-mail"
         },
         "registration_disabled": "L’inscription a été désactivée sur ce serveur d’accueil.",
