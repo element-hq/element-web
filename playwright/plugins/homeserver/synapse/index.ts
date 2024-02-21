@@ -134,7 +134,7 @@ export class Synapse implements Homeserver, HomeserverInstance {
     public async stop(): Promise<string[]> {
         if (!this.config) throw new Error("Missing existing synapse instance, did you call stop() before start()?");
         const id = this.config.serverId;
-        const synapseLogsPath = path.join("playwright", "synapselogs", id);
+        const synapseLogsPath = path.join("playwright", "logs", "synapse", id);
         await fse.ensureDir(synapseLogsPath);
         await this.docker.persistLogsToFile({
             stdoutFile: path.join(synapseLogsPath, "stdout.log"),

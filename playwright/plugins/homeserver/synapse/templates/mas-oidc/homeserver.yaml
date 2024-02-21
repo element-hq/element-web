@@ -1,0 +1,194 @@
+server_name: "localhost"
+pid_file: /data/homeserver.pid
+public_baseurl: "{{PUBLIC_BASEURL}}"
+listeners:
+    - port: 8008
+      tls: false
+      bind_addresses: ["::"]
+      type: http
+      x_forwarded: true
+
+      resources:
+          - names: [client]
+            compress: false
+
+database:
+    name: "sqlite3"
+    args:
+        database: ":memory:"
+
+log_config: "/data/log.config"
+
+rc_messages_per_second: 10000
+rc_message_burst_count: 10000
+rc_registration:
+    per_second: 10000
+    burst_count: 10000
+rc_joins:
+    local:
+        per_second: 9999
+        burst_count: 9999
+    remote:
+        per_second: 9999
+        burst_count: 9999
+rc_joins_per_room:
+    per_second: 9999
+    burst_count: 9999
+rc_3pid_validation:
+    per_second: 1000
+    burst_count: 1000
+
+rc_invites:
+    per_room:
+        per_second: 1000
+        burst_count: 1000
+    per_user:
+        per_second: 1000
+        burst_count: 1000
+
+rc_login:
+    address:
+        per_second: 10000
+        burst_count: 10000
+    account:
+        per_second: 10000
+        burst_count: 10000
+    failed_attempts:
+        per_second: 10000
+        burst_count: 10000
+
+media_store_path: "/data/media_store"
+uploads_path: "/data/uploads"
+registration_shared_secret: "{{REGISTRATION_SECRET}}"
+report_stats: false
+macaroon_secret_key: "{{MACAROON_SECRET_KEY}}"
+form_secret: "{{FORM_SECRET}}"
+signing_key_path: "/data/localhost.signing.key"
+
+trusted_key_servers:
+    - server_name: "matrix.org"
+suppress_key_server_warning: true
+
+ui_auth:
+    session_timeout: "300s"
+
+# Inhibit background updates as this Synapse isn't long-lived
+background_updates:
+    min_batch_size: 100000
+    sleep_duration_ms: 100000
+
+serve_server_wellknown: true
+experimental_features:
+    msc3861:
+        enabled: true
+
+        issuer: http://localhost:%MAS_PORT%/
+        # We have to bake in the metadata here as we need to override `introspection_endpoint`
+        issuer_metadata: {
+                "issuer": "http://localhost:%MAS_PORT%/",
+                "authorization_endpoint": "http://localhost:%MAS_PORT%/authorize",
+                "token_endpoint": "http://localhost:%MAS_PORT%/oauth2/token",
+                "jwks_uri": "http://localhost:%MAS_PORT%/oauth2/keys.json",
+                "registration_endpoint": "http://localhost:%MAS_PORT%/oauth2/registration",
+                "scopes_supported": ["openid", "email"],
+                "response_types_supported": ["code", "id_token", "code id_token"],
+                "response_modes_supported": ["form_post", "query", "fragment"],
+                "grant_types_supported":
+                    [
+                        "authorization_code",
+                        "refresh_token",
+                        "client_credentials",
+                        "urn:ietf:params:oauth:grant-type:device_code",
+                    ],
+                "token_endpoint_auth_methods_supported":
+                    ["client_secret_basic", "client_secret_post", "client_secret_jwt", "private_key_jwt", "none"],
+                "token_endpoint_auth_signing_alg_values_supported":
+                    [
+                        "HS256",
+                        "HS384",
+                        "HS512",
+                        "RS256",
+                        "RS384",
+                        "RS512",
+                        "PS256",
+                        "PS384",
+                        "PS512",
+                        "ES256",
+                        "ES384",
+                        "ES256K",
+                    ],
+                "revocation_endpoint": "http://localhost:%MAS_PORT%/oauth2/revoke",
+                "revocation_endpoint_auth_methods_supported":
+                    ["client_secret_basic", "client_secret_post", "client_secret_jwt", "private_key_jwt", "none"],
+                "revocation_endpoint_auth_signing_alg_values_supported":
+                    [
+                        "HS256",
+                        "HS384",
+                        "HS512",
+                        "RS256",
+                        "RS384",
+                        "RS512",
+                        "PS256",
+                        "PS384",
+                        "PS512",
+                        "ES256",
+                        "ES384",
+                        "ES256K",
+                    ],
+                # This is the only changed value
+                "introspection_endpoint": "http://host.containers.internal:%MAS_PORT%/oauth2/introspect",
+                "introspection_endpoint_auth_methods_supported":
+                    ["client_secret_basic", "client_secret_post", "client_secret_jwt", "private_key_jwt", "none"],
+                "introspection_endpoint_auth_signing_alg_values_supported":
+                    [
+                        "HS256",
+                        "HS384",
+                        "HS512",
+                        "RS256",
+                        "RS384",
+                        "RS512",
+                        "PS256",
+                        "PS384",
+                        "PS512",
+                        "ES256",
+                        "ES384",
+                        "ES256K",
+                    ],
+                "code_challenge_methods_supported": ["plain", "S256"],
+                "userinfo_endpoint": "http://localhost:%MAS_PORT%/oauth2/userinfo",
+                "subject_types_supported": ["public"],
+                "id_token_signing_alg_values_supported":
+                    ["RS256", "RS384", "RS512", "ES256", "ES384", "PS256", "PS384", "PS512", "ES256K"],
+                "userinfo_signing_alg_values_supported":
+                    ["RS256", "RS384", "RS512", "ES256", "ES384", "PS256", "PS384", "PS512", "ES256K"],
+                "display_values_supported": ["page"],
+                "claim_types_supported": ["normal"],
+                "claims_supported": ["iss", "sub", "aud", "iat", "exp", "nonce", "auth_time", "at_hash", "c_hash"],
+                "claims_parameter_supported": false,
+                "request_parameter_supported": false,
+                "request_uri_parameter_supported": false,
+                "prompt_values_supported": ["none", "login", "create"],
+                "device_authorization_endpoint": "http://localhost:%MAS_PORT%/oauth2/device",
+                "org.matrix.matrix-authentication-service.graphql_endpoint": "http://localhost:%MAS_PORT%/graphql",
+                "account_management_uri": "http://localhost:%MAS_PORT%/account/",
+                "account_management_actions_supported":
+                    [
+                        "org.matrix.profile",
+                        "org.matrix.sessions_list",
+                        "org.matrix.session_view",
+                        "org.matrix.session_end",
+                    ],
+            }
+
+        # Matches the `client_id` in the auth service config
+        client_id: 0000000000000000000SYNAPSE
+        # Matches the `client_auth_method` in the auth service config
+        client_auth_method: client_secret_basic
+        # Matches the `client_secret` in the auth service config
+        client_secret: "SomeRandomSecret"
+
+        # Matches the `matrix.secret` in the auth service config
+        admin_token: "AnotherRandomSecret"
+
+        # URL to advertise to clients where users can self-manage their account
+        account_management_url: "http://localhost:%MAS_PORT%/account"

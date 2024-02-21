@@ -85,7 +85,7 @@ to be left with some stray containers if, for example, you terminate a test such
 that the `after()` does not run and also exit Playwright uncleanly. All the containers
 it starts are prefixed, so they are easy to recognise. They can be removed safely.
 
-After each test run, logs from the Synapse instances are saved in `playwright/synapselogs`
+After each test run, logs from the Synapse instances are saved in `playwright/logs/synapse`
 with each instance in a separate directory named after its ID. These logs are removed
 at the start of each test run.
 

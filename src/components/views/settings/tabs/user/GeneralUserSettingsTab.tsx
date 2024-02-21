@@ -175,6 +175,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         // the enabled flag value.
         const canChangePassword = !changePasswordCap || changePasswordCap["enabled"] !== false;
 
+        await this.context.oidcClientStore.readyPromise; // wait for the store to be ready
         const externalAccountManagementUrl = this.context.oidcClientStore.accountManagementEndpoint;
         // https://spec.matrix.org/v1.7/client-server-api/#m3pid_changes-capability
         // We support as far back as v1.1 which doesn't have m.3pid_changes
