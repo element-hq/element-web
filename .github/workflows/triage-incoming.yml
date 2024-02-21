@@ -13,7 +13,7 @@ jobs:
                   project: Issue triage
                   column: Incoming
                   repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-                  
+
     automate-project-columns-next:
         runs-on: ubuntu-latest
         steps:
