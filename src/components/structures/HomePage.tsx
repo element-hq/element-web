@@ -26,8 +26,6 @@ import * as React from "react";
 
 import { UserOnboardingHeader } from "../views/user-onboarding/UserOnboardingHeader";
 
-
-
 interface IProps {
     justRegistered?: boolean;
 }

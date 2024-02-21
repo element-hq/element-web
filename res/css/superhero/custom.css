@@ -348,7 +348,7 @@ h2 .sh_VerifiedIcon {
     display: block !important;
 }
 
-.sh_userOnboarding  {
+.sh_userOnboarding {
     display: flex;
     flex-direction: row-reverse;
     align-items: flex-start;
