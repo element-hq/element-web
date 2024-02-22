@@ -32,6 +32,7 @@ import ToastStore from "../src/stores/ToastStore";
 import { OidcClientStore } from "../src/stores/oidc/OidcClientStore";
 import { makeDelegatedAuthConfig } from "./test-utils/oidc";
 import { persistOidcAuthenticatedSettings } from "../src/utils/oidc/persistOidcSettings";
+import { Action } from "../src/dispatcher/actions";
 
 const webCrypto = new Crypto();
 
@@ -821,6 +822,77 @@ describe("Lifecycle", () => {
 
             expect(mockClient.logout).not.toHaveBeenCalled();
             expect(oidcClientStore.revokeTokens).toHaveBeenCalledWith(accessToken, refreshToken);
+        });
+    });
+
+    describe("overwritelogin", () => {
+        beforeEach(async () => {
+            jest.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+        });
+
+        it("should replace the current login with a new one", async () => {
+            const stopSpy = jest.spyOn(mockClient, "stopClient").mockReturnValue(undefined);
+            const dis = window.mxDispatcher;
+
+            const firstLoginEvent: Promise<void> = new Promise((resolve) => {
+                dis.register(({ action }) => {
+                    if (action === Action.OnLoggedIn) {
+                        resolve();
+                    }
+                });
+            });
+            // set a logged in state
+            await setLoggedIn(credentials);
+
+            await firstLoginEvent;
+
+            expect(stopSpy).toHaveBeenCalledTimes(1);
+            // important the overwrite action should not call unset before replacing.
+            // So spy on it and make sure it's not called.
+            jest.spyOn(MatrixClientPeg, "unset").mockReturnValue(undefined);
+
+            expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    userId,
+                }),
+                undefined,
+            );
+
+            const otherCredentials = {
+                ...credentials,
+                userId: "@bob:server.org",
+                deviceId: "def456",
+            };
+
+            const secondLoginEvent: Promise<void> = new Promise((resolve) => {
+                dis.register(({ action }) => {
+                    if (action === Action.OnLoggedIn) {
+                        resolve();
+                    }
+                });
+            });
+
+            // Trigger the overwrite login action
+            dis.dispatch(
+                {
+                    action: "overwrite_login",
+                    credentials: otherCredentials,
+                },
+                true,
+            );
+
+            await secondLoginEvent;
+            // the client should have been stopped
+            expect(stopSpy).toHaveBeenCalledTimes(2);
+
+            expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    userId: otherCredentials.userId,
+                }),
+                undefined,
+            );
+
+            expect(MatrixClientPeg.unset).not.toHaveBeenCalled();
         });
     });
 });

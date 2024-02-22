@@ -97,8 +97,20 @@ dis.register((payload) => {
         onLoggedOut();
     } else if (payload.action === Action.OverwriteLogin) {
         const typed = <OverwriteLoginPayload>payload;
-        // noinspection JSIgnoredPromiseFromCall - we don't care if it fails
-        doSetLoggedIn(typed.credentials, true);
+        // Stop the current client before overwriting the login.
+        // If not done it might be impossible to clear the storage, as the
+        // rust crypto backend might be holding an open connection to the indexeddb store.
+        // We also use the `unsetClient` flag to false, because at this point we are
+        // already in the logged in flows of the `MatrixChat` component, and it will
+        // always expect to have a client (calls to `MatrixClientPeg.safeGet()`).
+        // If we unset the client and the component is updated,  the render will fail and unmount everything.
+        // (The module dialog closes and fires a `aria_unhide_main_app` that will trigger a re-render)
+        stopMatrixClient(false);
+        doSetLoggedIn(typed.credentials, true).catch((e) => {
+            // XXX we might want to fire a new event here to let the app know that the login failed ?
+            // The module api could use it to display a message to the user.
+            logger.warn("Failed to overwrite login", e);
+        });
     }
 });
 
