@@ -13,3 +13,11 @@ jobs:
                   project: Issue triage
                   column: Incoming
                   repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    automate-project-columns-next:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/element-hq/projects/120
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
