@@ -40,6 +40,7 @@ describe("Loading server config", function () {
             },
         });
         fetchMock.get("/version", "1.10.13");
+        fetchMock.catch(404);
     });
 
     it("should use the default_server_config", async function () {

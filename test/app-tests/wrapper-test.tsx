@@ -47,6 +47,7 @@ describe("Wrapper", () => {
             },
         });
         fetchMock.get("/version", "1.10.13");
+        fetchMock.catch(404);
     });
 
     it("wrap a matrix chat with header and footer", async () => {
