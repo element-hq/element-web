@@ -14,12 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { AutoDiscovery, AutoDiscoveryAction, ClientConfig, M_AUTHENTICATION } from "matrix-js-sdk/src/matrix";
+import { AutoDiscovery, AutoDiscoveryAction, ClientConfig } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import fetchMock from "fetch-mock-jest";
 
 import AutoDiscoveryUtils from "../../src/utils/AutoDiscoveryUtils";
+import { mockOpenIdConfiguration } from "../test-utils/oidc";
 
 describe("AutoDiscoveryUtils", () => {
+    beforeEach(() => {
+        fetchMock.catch({
+            status: 404,
+            body: '{"errcode": "M_UNRECOGNIZED", "error": "Unrecognized request"}',
+            headers: { "content-type": "application/json" },
+        });
+    });
+
     describe("buildValidatedConfigFromDiscovery()", () => {
         const serverName = "my-server";
 
@@ -56,24 +66,24 @@ describe("AutoDiscoveryUtils", () => {
             isUrl: "identity.com",
         };
 
-        it("throws an error when discovery result is falsy", () => {
-            expect(() => AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, undefined as any)).toThrow(
-                "Unexpected error resolving homeserver configuration",
-            );
+        it("throws an error when discovery result is falsy", async () => {
+            await expect(() =>
+                AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, undefined as any),
+            ).rejects.toThrow("Unexpected error resolving homeserver configuration");
             expect(logger.error).toHaveBeenCalled();
         });
 
-        it("throws an error when discovery result does not include homeserver config", () => {
+        it("throws an error when discovery result does not include homeserver config", async () => {
             const discoveryResult = {
                 ...validIsConfig,
             } as unknown as ClientConfig;
-            expect(() => AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult)).toThrow(
-                "Unexpected error resolving homeserver configuration",
-            );
+            await expect(() =>
+                AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult),
+            ).rejects.toThrow("Unexpected error resolving homeserver configuration");
             expect(logger.error).toHaveBeenCalled();
         });
 
-        it("throws an error when identity server config has fail error and recognised error string", () => {
+        it("throws an error when identity server config has fail error and recognised error string", async () => {
             const discoveryResult = {
                 ...validHsConfig,
                 "m.identity_server": {
@@ -81,13 +91,13 @@ describe("AutoDiscoveryUtils", () => {
                     error: "GenericFailure",
                 },
             };
-            expect(() => AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult)).toThrow(
-                "Unexpected error resolving identity server configuration",
-            );
+            await expect(() =>
+                AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult),
+            ).rejects.toThrow("Unexpected error resolving identity server configuration");
             expect(logger.error).toHaveBeenCalled();
         });
 
-        it("throws an error when homeserver config has fail error and recognised error string", () => {
+        it("throws an error when homeserver config has fail error and recognised error string", async () => {
             const discoveryResult = {
                 ...validIsConfig,
                 "m.homeserver": {
@@ -95,25 +105,25 @@ describe("AutoDiscoveryUtils", () => {
                     error: AutoDiscovery.ERROR_INVALID_HOMESERVER,
                 },
             };
-            expect(() => AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult)).toThrow(
-                "Homeserver URL does not appear to be a valid Matrix homeserver",
-            );
+            await expect(() =>
+                AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult),
+            ).rejects.toThrow("Homeserver URL does not appear to be a valid Matrix homeserver");
             expect(logger.error).toHaveBeenCalled();
         });
 
-        it("throws an error with fallback message identity server config has fail error", () => {
+        it("throws an error with fallback message identity server config has fail error", async () => {
             const discoveryResult = {
                 ...validHsConfig,
                 "m.identity_server": {
                     state: AutoDiscoveryAction.FAIL_ERROR,
                 },
             };
-            expect(() => AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult)).toThrow(
-                "Unexpected error resolving identity server configuration",
-            );
+            await expect(() =>
+                AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult),
+            ).rejects.toThrow("Unexpected error resolving identity server configuration");
         });
 
-        it("throws an error when error is ERROR_INVALID_HOMESERVER", () => {
+        it("throws an error when error is ERROR_INVALID_HOMESERVER", async () => {
             const discoveryResult = {
                 ...validIsConfig,
                 "m.homeserver": {
@@ -121,12 +131,12 @@ describe("AutoDiscoveryUtils", () => {
                     error: AutoDiscovery.ERROR_INVALID_HOMESERVER,
                 },
             };
-            expect(() => AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult)).toThrow(
-                "Homeserver URL does not appear to be a valid Matrix homeserver",
-            );
+            await expect(() =>
+                AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult),
+            ).rejects.toThrow("Homeserver URL does not appear to be a valid Matrix homeserver");
         });
 
-        it("throws an error when homeserver base_url is falsy", () => {
+        it("throws an error when homeserver base_url is falsy", async () => {
             const discoveryResult = {
                 ...validIsConfig,
                 "m.homeserver": {
@@ -134,13 +144,13 @@ describe("AutoDiscoveryUtils", () => {
                     base_url: "",
                 },
             };
-            expect(() => AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult)).toThrow(
-                "Unexpected error resolving homeserver configuration",
-            );
+            await expect(() =>
+                AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult),
+            ).rejects.toThrow("Unexpected error resolving homeserver configuration");
             expect(logger.error).toHaveBeenCalledWith("No homeserver URL configured");
         });
 
-        it("throws an error when homeserver base_url is not a valid URL", () => {
+        it("throws an error when homeserver base_url is not a valid URL", async () => {
             const discoveryResult = {
                 ...validIsConfig,
                 "m.homeserver": {
@@ -148,24 +158,25 @@ describe("AutoDiscoveryUtils", () => {
                     base_url: "banana",
                 },
             };
-            expect(() => AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult)).toThrow(
-                "Invalid URL: banana",
-            );
+            await expect(() =>
+                AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult),
+            ).rejects.toThrow("Invalid URL: banana");
         });
 
-        it("uses hs url hostname when serverName is falsy in args and config", () => {
+        it("uses hs url hostname when serverName is falsy in args and config", async () => {
             const discoveryResult = {
                 ...validIsConfig,
                 ...validHsConfig,
             };
-            expect(AutoDiscoveryUtils.buildValidatedConfigFromDiscovery("", discoveryResult)).toEqual({
+            await expect(AutoDiscoveryUtils.buildValidatedConfigFromDiscovery("", discoveryResult)).resolves.toEqual({
                 ...expectedValidatedConfig,
                 hsNameIsDifferent: false,
                 hsName: "matrix.org",
+                warning: null,
             });
         });
 
-        it("uses serverName from props", () => {
+        it("uses serverName from props", async () => {
             const discoveryResult = {
                 ...validIsConfig,
                 "m.homeserver": {
@@ -174,16 +185,17 @@ describe("AutoDiscoveryUtils", () => {
                 },
             };
             const syntaxOnly = true;
-            expect(
+            await expect(
                 AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, syntaxOnly),
-            ).toEqual({
+            ).resolves.toEqual({
                 ...expectedValidatedConfig,
                 hsNameIsDifferent: true,
                 hsName: serverName,
+                warning: null,
             });
         });
 
-        it("ignores liveliness error when checking syntax only", () => {
+        it("ignores liveliness error when checking syntax only", async () => {
             const discoveryResult = {
                 ...validIsConfig,
                 "m.homeserver": {
@@ -193,60 +205,15 @@ describe("AutoDiscoveryUtils", () => {
                 },
             };
             const syntaxOnly = true;
-            expect(
+            await expect(
                 AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, syntaxOnly),
-            ).toEqual({
+            ).resolves.toEqual({
                 ...expectedValidatedConfig,
                 warning: "Homeserver URL does not appear to be a valid Matrix homeserver",
             });
         });
 
-        it("ignores delegated auth config when discovery was not successful", () => {
-            const discoveryResult = {
-                ...validIsConfig,
-                ...validHsConfig,
-                [M_AUTHENTICATION.stable!]: {
-                    state: AutoDiscoveryAction.FAIL_ERROR,
-                    error: "",
-                },
-            };
-            const syntaxOnly = true;
-            expect(
-                AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, syntaxOnly),
-            ).toEqual({
-                ...expectedValidatedConfig,
-                delegatedAuthentication: undefined,
-                warning: undefined,
-            });
-        });
-
-        it("sets delegated auth config when discovery was successful", () => {
-            const authConfig = {
-                issuer: "https://test.com/",
-                authorizationEndpoint: "https://test.com/auth",
-                registrationEndpoint: "https://test.com/registration",
-                tokenEndpoint: "https://test.com/token",
-            };
-            const discoveryResult: ClientConfig = {
-                ...validIsConfig,
-                ...validHsConfig,
-                [M_AUTHENTICATION.stable!]: {
-                    state: AutoDiscoveryAction.SUCCESS,
-                    error: null,
-                    ...authConfig,
-                },
-            };
-            const syntaxOnly = true;
-            expect(
-                AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, syntaxOnly),
-            ).toEqual({
-                ...expectedValidatedConfig,
-                delegatedAuthentication: authConfig,
-                warning: undefined,
-            });
-        });
-
-        it("handles homeserver too old error", () => {
+        it("handles homeserver too old error", async () => {
             const discoveryResult: ClientConfig = {
                 ...validIsConfig,
                 "m.homeserver": {
@@ -256,11 +223,164 @@ describe("AutoDiscoveryUtils", () => {
                 },
             };
             const syntaxOnly = true;
-            expect(() =>
+            await expect(() =>
                 AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, syntaxOnly),
-            ).toThrow(
+            ).rejects.toThrow(
                 "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.",
             );
+        });
+
+        it("should validate delegated oidc auth", async () => {
+            const issuer = "https://auth.matrix.org/";
+            fetchMock.get(
+                `${validHsConfig["m.homeserver"].base_url}/_matrix/client/unstable/org.matrix.msc2965/auth_issuer`,
+                {
+                    issuer,
+                },
+            );
+            fetchMock.get(`${issuer}.well-known/openid-configuration`, {
+                ...mockOpenIdConfiguration(issuer),
+                "scopes_supported": ["openid", "email"],
+                "response_modes_supported": ["form_post", "query", "fragment"],
+                "token_endpoint_auth_methods_supported": [
+                    "client_secret_basic",
+                    "client_secret_post",
+                    "client_secret_jwt",
+                    "private_key_jwt",
+                    "none",
+                ],
+                "token_endpoint_auth_signing_alg_values_supported": [
+                    "HS256",
+                    "HS384",
+                    "HS512",
+                    "RS256",
+                    "RS384",
+                    "RS512",
+                    "PS256",
+                    "PS384",
+                    "PS512",
+                    "ES256",
+                    "ES384",
+                    "ES256K",
+                ],
+                "revocation_endpoint_auth_methods_supported": [
+                    "client_secret_basic",
+                    "client_secret_post",
+                    "client_secret_jwt",
+                    "private_key_jwt",
+                    "none",
+                ],
+                "revocation_endpoint_auth_signing_alg_values_supported": [
+                    "HS256",
+                    "HS384",
+                    "HS512",
+                    "RS256",
+                    "RS384",
+                    "RS512",
+                    "PS256",
+                    "PS384",
+                    "PS512",
+                    "ES256",
+                    "ES384",
+                    "ES256K",
+                ],
+                "introspection_endpoint": `${issuer}oauth2/introspect`,
+                "introspection_endpoint_auth_methods_supported": [
+                    "client_secret_basic",
+                    "client_secret_post",
+                    "client_secret_jwt",
+                    "private_key_jwt",
+                    "none",
+                ],
+                "introspection_endpoint_auth_signing_alg_values_supported": [
+                    "HS256",
+                    "HS384",
+                    "HS512",
+                    "RS256",
+                    "RS384",
+                    "RS512",
+                    "PS256",
+                    "PS384",
+                    "PS512",
+                    "ES256",
+                    "ES384",
+                    "ES256K",
+                ],
+                "userinfo_endpoint": `${issuer}oauth2/userinfo`,
+                "subject_types_supported": ["public"],
+                "id_token_signing_alg_values_supported": [
+                    "RS256",
+                    "RS384",
+                    "RS512",
+                    "ES256",
+                    "ES384",
+                    "PS256",
+                    "PS384",
+                    "PS512",
+                    "ES256K",
+                ],
+                "userinfo_signing_alg_values_supported": [
+                    "RS256",
+                    "RS384",
+                    "RS512",
+                    "ES256",
+                    "ES384",
+                    "PS256",
+                    "PS384",
+                    "PS512",
+                    "ES256K",
+                ],
+                "display_values_supported": ["page"],
+                "claim_types_supported": ["normal"],
+                "claims_supported": ["iss", "sub", "aud", "iat", "exp", "nonce", "auth_time", "at_hash", "c_hash"],
+                "claims_parameter_supported": false,
+                "request_parameter_supported": false,
+                "request_uri_parameter_supported": false,
+                "prompt_values_supported": ["none", "login", "create"],
+                "device_authorization_endpoint": `${issuer}oauth2/device`,
+                "org.matrix.matrix-authentication-service.graphql_endpoint": `${issuer}graphql`,
+                "account_management_uri": `${issuer}account/`,
+                "account_management_actions_supported": [
+                    "org.matrix.profile",
+                    "org.matrix.sessions_list",
+                    "org.matrix.session_view",
+                    "org.matrix.session_end",
+                    "org.matrix.cross_signing_reset",
+                ],
+            });
+            fetchMock.get(`${issuer}jwks`, {
+                keys: [],
+            });
+
+            const discoveryResult = {
+                ...validIsConfig,
+                ...validHsConfig,
+            };
+            await expect(
+                AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult),
+            ).resolves.toEqual({
+                ...expectedValidatedConfig,
+                hsNameIsDifferent: true,
+                hsName: serverName,
+                delegatedAuthentication: expect.objectContaining({
+                    accountManagementActionsSupported: [
+                        "org.matrix.profile",
+                        "org.matrix.sessions_list",
+                        "org.matrix.session_view",
+                        "org.matrix.session_end",
+                        "org.matrix.cross_signing_reset",
+                    ],
+                    accountManagementEndpoint: "https://auth.matrix.org/account/",
+                    authorizationEndpoint: "https://auth.matrix.org/auth",
+                    metadata: expect.objectContaining({
+                        issuer,
+                    }),
+                    registrationEndpoint: "https://auth.matrix.org/registration",
+                    signingKeys: [],
+                    tokenEndpoint: "https://auth.matrix.org/token",
+                }),
+                warning: null,
+            });
         });
     });
 

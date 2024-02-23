@@ -80,9 +80,6 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
         this.setState({ otherHomeserver: ev.target.value });
     };
 
-    // TODO: Do we want to support .well-known lookups here?
-    // If for some reason someone enters "matrix.org" for a URL, we could do a lookup to
-    // find their homeserver without demanding they use "https://matrix.org"
     private validate = withValidation<this, { error?: string }>({
         deriveData: async ({ value }): Promise<{ error?: string }> => {
             let hsUrl = (value ?? "").trim(); // trim to account for random whitespace
@@ -91,7 +88,10 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
             if (!hsUrl.includes("://")) {
                 try {
                     const discoveryResult = await AutoDiscovery.findClientConfig(hsUrl);
-                    this.validatedConf = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(hsUrl, discoveryResult);
+                    this.validatedConf = await AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(
+                        hsUrl,
+                        discoveryResult,
+                    );
                     return {}; // we have a validated config, we don't need to try the other paths
                 } catch (e) {
                     logger.error(`Attempted ${hsUrl} as a server_name but it failed`, e);

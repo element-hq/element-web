@@ -683,10 +683,10 @@ describe("Lifecycle", () => {
 
             beforeAll(() => {
                 fetchMock.get(
-                    `${delegatedAuthConfig.issuer}.well-known/openid-configuration`,
+                    `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
                     delegatedAuthConfig.metadata,
                 );
-                fetchMock.get(`${delegatedAuthConfig.issuer}jwks`, {
+                fetchMock.get(`${delegatedAuthConfig.metadata.issuer}jwks`, {
                     status: 200,
                     headers: {
                         "Content-Type": "application/json",
@@ -696,12 +696,6 @@ describe("Lifecycle", () => {
             });
 
             beforeEach(() => {
-                // mock oidc config for oidc client initialisation
-                mockClient.waitForClientWellKnown.mockResolvedValue({
-                    "m.authentication": {
-                        issuer: issuer,
-                    },
-                });
                 initSessionStorageMock();
                 // set values in session storage as they would be after a successful oidc authentication
                 persistOidcAuthenticatedSettings(clientId, issuer, idTokenClaims);
@@ -711,7 +705,9 @@ describe("Lifecycle", () => {
                 await setLoggedIn(credentials);
 
                 // didn't try to initialise token refresher
-                expect(fetchMock).not.toHaveFetched(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`);
+                expect(fetchMock).not.toHaveFetched(
+                    `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
+                );
             });
 
             it("should not try to create a token refresher without a deviceId", async () => {
@@ -722,7 +718,9 @@ describe("Lifecycle", () => {
                 });
 
                 // didn't try to initialise token refresher
-                expect(fetchMock).not.toHaveFetched(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`);
+                expect(fetchMock).not.toHaveFetched(
+                    `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
+                );
             });
 
             it("should not try to create a token refresher without an issuer in session storage", async () => {
@@ -738,7 +736,9 @@ describe("Lifecycle", () => {
                 });
 
                 // didn't try to initialise token refresher
-                expect(fetchMock).not.toHaveFetched(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`);
+                expect(fetchMock).not.toHaveFetched(
+                    `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
+                );
             });
 
             it("should create a client with a tokenRefreshFunction", async () => {

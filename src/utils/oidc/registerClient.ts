@@ -15,10 +15,9 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { registerOidcClient } from "matrix-js-sdk/src/oidc/register";
+import { registerOidcClient, OidcClientConfig } from "matrix-js-sdk/src/matrix";
 
 import { IConfigOptions } from "../../IConfigOptions";
-import { ValidatedDelegatedAuthConfig } from "../ValidatedServerConfig";
 import PlatformPeg from "../../PlatformPeg";
 
 /**
@@ -46,12 +45,12 @@ const getStaticOidcClientId = (
  * @throws if no clientId is found
  */
 export const getOidcClientId = async (
-    delegatedAuthConfig: ValidatedDelegatedAuthConfig,
+    delegatedAuthConfig: OidcClientConfig,
     staticOidcClients?: IConfigOptions["oidc_static_clients"],
 ): Promise<string> => {
-    const staticClientId = getStaticOidcClientId(delegatedAuthConfig.issuer, staticOidcClients);
+    const staticClientId = getStaticOidcClientId(delegatedAuthConfig.metadata.issuer, staticOidcClients);
     if (staticClientId) {
-        logger.debug(`Using static clientId for issuer ${delegatedAuthConfig.issuer}`);
+        logger.debug(`Using static clientId for issuer ${delegatedAuthConfig.metadata.issuer}`);
         return staticClientId;
     }
     return await registerOidcClient(delegatedAuthConfig, await PlatformPeg.get()!.getOidcClientMetadata());

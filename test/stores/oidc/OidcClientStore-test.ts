@@ -17,17 +17,17 @@ limitations under the License.
 import fetchMock from "fetch-mock-jest";
 import { mocked } from "jest-mock";
 import { OidcClient } from "oidc-client-ts";
-import { M_AUTHENTICATION } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { discoverAndValidateAuthenticationConfig } from "matrix-js-sdk/src/oidc/discovery";
+import { discoverAndValidateOIDCIssuerWellKnown } from "matrix-js-sdk/src/matrix";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
 
 import { OidcClientStore } from "../../../src/stores/oidc/OidcClientStore";
 import { flushPromises, getMockClientWithEventEmitter, mockPlatformPeg } from "../../test-utils";
 import { mockOpenIdConfiguration } from "../../test-utils/oidc";
 
-jest.mock("matrix-js-sdk/src/oidc/discovery", () => ({
-    discoverAndValidateAuthenticationConfig: jest.fn(),
+jest.mock("matrix-js-sdk/src/matrix", () => ({
+    ...jest.requireActual("matrix-js-sdk/src/matrix"),
+    discoverAndValidateOIDCIssuerWellKnown: jest.fn(),
 }));
 
 describe("OidcClientStore", () => {
@@ -36,7 +36,7 @@ describe("OidcClientStore", () => {
     const account = metadata.issuer + "account";
 
     const mockClient = getMockClientWithEventEmitter({
-        waitForClientWellKnown: jest.fn().mockResolvedValue({}),
+        getAuthIssuer: jest.fn(),
     });
 
     beforeEach(() => {
@@ -44,20 +44,16 @@ describe("OidcClientStore", () => {
         localStorage.setItem("mx_oidc_client_id", clientId);
         localStorage.setItem("mx_oidc_token_issuer", metadata.issuer);
 
-        mocked(discoverAndValidateAuthenticationConfig).mockClear().mockResolvedValue({
+        mocked(discoverAndValidateOIDCIssuerWellKnown).mockClear().mockResolvedValue({
             metadata,
-            account,
-            issuer: metadata.issuer,
-        });
-        mockClient.waitForClientWellKnown.mockResolvedValue({
-            [M_AUTHENTICATION.stable!]: {
-                issuer: metadata.issuer,
-                account,
-            },
+            accountManagementEndpoint: account,
+            authorizationEndpoint: "authorization-endpoint",
+            tokenEndpoint: "token-endpoint",
         });
         jest.spyOn(logger, "error").mockClear();
 
         fetchMock.get(`${metadata.issuer}.well-known/openid-configuration`, metadata);
+        fetchMock.get(`${metadata.issuer}jwks`, { keys: [] });
         mockPlatformPeg();
     });
 
@@ -78,7 +74,6 @@ describe("OidcClientStore", () => {
 
     describe("initialising oidcClient", () => {
         it("should initialise oidc client from constructor", () => {
-            mockClient.waitForClientWellKnown.mockResolvedValue(undefined as any);
             const store = new OidcClientStore(mockClient);
 
             // started initialising
@@ -87,7 +82,6 @@ describe("OidcClientStore", () => {
         });
 
         it("should fallback to stored issuer when no client well known is available", async () => {
-            mockClient.waitForClientWellKnown.mockResolvedValue(undefined as any);
             const store = new OidcClientStore(mockClient);
 
             // successfully created oidc client
@@ -109,10 +103,10 @@ describe("OidcClientStore", () => {
         });
 
         it("should log and return when discovery and validation fails", async () => {
-            mocked(discoverAndValidateAuthenticationConfig).mockRejectedValue(new Error(OidcError.OpSupport));
+            mocked(discoverAndValidateOIDCIssuerWellKnown).mockRejectedValue(new Error(OidcError.OpSupport));
             const store = new OidcClientStore(mockClient);
 
-            await flushPromises();
+            await store.readyPromise;
 
             expect(logger.error).toHaveBeenCalledWith(
                 "Failed to initialise OidcClientStore",
@@ -143,15 +137,15 @@ describe("OidcClientStore", () => {
         });
 
         it("should set account management endpoint to issuer when not configured", async () => {
-            mocked(discoverAndValidateAuthenticationConfig).mockClear().mockResolvedValue({
+            mocked(discoverAndValidateOIDCIssuerWellKnown).mockClear().mockResolvedValue({
                 metadata,
-                account: undefined,
-                issuer: metadata.issuer,
+                accountManagementEndpoint: undefined,
+                authorizationEndpoint: "authorization-endpoint",
+                tokenEndpoint: "token-endpoint",
             });
             const store = new OidcClientStore(mockClient);
 
-            // @ts-ignore private property
-            await store.getOidcClient();
+            await store.readyPromise;
 
             expect(store.accountManagementEndpoint).toEqual(metadata.issuer);
         });
@@ -175,7 +169,7 @@ describe("OidcClientStore", () => {
 
             // only called once for multiple calls to getOidcClient
             // before and after initialisation is complete
-            expect(discoverAndValidateAuthenticationConfig).toHaveBeenCalledTimes(1);
+            expect(discoverAndValidateOIDCIssuerWellKnown).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -199,7 +193,6 @@ describe("OidcClientStore", () => {
 
         it("should throw when oidcClient could not be initialised", async () => {
             // make oidcClient initialisation fail
-            mockClient.waitForClientWellKnown.mockResolvedValue(undefined as any);
             localStorage.removeItem("mx_oidc_token_issuer");
 
             const store = new OidcClientStore(mockClient);
@@ -243,6 +236,19 @@ describe("OidcClientStore", () => {
 
             expect(fetchMock).toHaveFetchedTimes(2, metadata.revocation_endpoint);
             expect(OidcClient.prototype.revokeToken).toHaveBeenCalledWith(accessToken, "access_token");
+        });
+    });
+
+    describe("OIDC Aware", () => {
+        beforeEach(() => {
+            localStorage.clear();
+        });
+
+        it("should resolve account management endpoint", async () => {
+            mockClient.getAuthIssuer.mockResolvedValue({ issuer: metadata.issuer });
+            const store = new OidcClientStore(mockClient);
+            await store.readyPromise;
+            expect(store.accountManagementEndpoint).toBe(account);
         });
     });
 });

@@ -795,7 +795,7 @@ async function createOidcTokenRefresher(credentials: IMatrixClientCreds): Promis
             throw new Error("Expected deviceId in user credentials.");
         }
         const tokenRefresher = new TokenRefresher(
-            { issuer: tokenIssuer },
+            tokenIssuer,
             clientId,
             redirectUri,
             deviceId,
