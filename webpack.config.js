@@ -324,6 +324,7 @@ module.exports = (env, argv) => {
                             options: {
                                 importLoaders: 1,
                                 sourceMap: true,
+                                esModule: false,
                             },
                         },
                         {
@@ -409,6 +410,7 @@ module.exports = (env, argv) => {
                             options: {
                                 importLoaders: 1,
                                 sourceMap: true,
+                                esModule: false,
                             },
                         },
                         {
