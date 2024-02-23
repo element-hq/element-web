@@ -223,6 +223,9 @@ describe("loading:", function () {
             // Pass the liveliness checks
             httpBackend.when("GET", "/versions").respond(200, { versions: SERVER_SUPPORTED_MATRIX_VERSIONS });
             httpBackend.when("GET", "/_matrix/identity/v2").respond(200, {});
+            httpBackend
+                .when("GET", "/_matrix/client/unstable/org.matrix.msc2965/auth_issuer")
+                .respond(404, { errcode: "M_UNRECOGNIZED", error: "Unrecognized request" });
 
             return sleep(1)
                 .then(async () => {
