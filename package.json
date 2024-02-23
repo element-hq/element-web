@@ -187,7 +187,6 @@
         "postcss-simple-vars": "^7.0.1",
         "prettier": "3.2.5",
         "process": "^0.11.10",
-        "proxy-agent": "^6.3.0",
         "raw-loader": "^4.0.2",
         "rimraf": "^5.0.0",
         "semver": "^7.5.2",
