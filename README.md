@@ -28,7 +28,7 @@ Element has several tiers of support for different environments:
     -   Element as an installed PWA via current stable version of Chrome
     -   Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
 -   Not supported
-    -   Definition: Issues only affecting unsupported environments are **closed**
+    -   Definition: Issues asking for support of unsupported environments are **closed**
     -   Everything else
 
 For accessing Element on an Android or iOS device, we currently recommend the
