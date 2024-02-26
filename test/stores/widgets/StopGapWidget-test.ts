@@ -27,6 +27,7 @@ import { ElementWidgetActions } from "../../../src/stores/widgets/ElementWidgetA
 import { VoiceBroadcastInfoEventType, VoiceBroadcastRecording } from "../../../src/voice-broadcast";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import ActiveWidgetStore from "../../../src/stores/ActiveWidgetStore";
+import SettingsStore from "../../../src/settings/SettingsStore";
 
 jest.mock("matrix-widget-api/lib/ClientWidgetApi");
 
@@ -44,7 +45,7 @@ describe("StopGapWidget", () => {
                 id: "test",
                 creatorUserId: "@alice:example.org",
                 type: "example",
-                url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url",
+                url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url&theme=$org.matrix.msc2873.client_theme",
                 roomId: "!1:example.org",
             },
             room: mkRoom(client, "!1:example.org"),
@@ -63,9 +64,15 @@ describe("StopGapWidget", () => {
     });
 
     it("should replace parameters in widget url template", () => {
+        const originGetValue = SettingsStore.getValue;
+        const spy = jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            if (setting === "theme") return "my-theme-for-testing";
+            return originGetValue(setting);
+        });
         expect(widget.embedUrl).toBe(
-            "https://example.org/?user-id=%40userId%3Amatrix.org&device-id=ABCDEFGHI&base-url=https%3A%2F%2Fmatrix-client.matrix.org&widgetId=test&parentUrl=http%3A%2F%2Flocalhost%2F",
+            "https://example.org/?user-id=%40userId%3Amatrix.org&device-id=ABCDEFGHI&base-url=https%3A%2F%2Fmatrix-client.matrix.org&theme=my-theme-for-testing&widgetId=test&parentUrl=http%3A%2F%2Flocalhost%2F",
         );
+        spy.mockClear();
     });
 
     it("feeds incoming to-device messages to the widget", async () => {

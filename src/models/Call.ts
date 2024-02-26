@@ -688,7 +688,7 @@ export class ElementCall extends Call {
             baseUrl: client.baseUrl,
             lang: getCurrentLanguage().replace("_", "-"),
             fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
-
+            theme: "$org.matrix.msc2873.client_theme",
             analyticsID,
         });
 
