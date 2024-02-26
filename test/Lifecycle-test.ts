@@ -28,7 +28,6 @@ import { MatrixClientPeg } from "../src/MatrixClientPeg";
 import Modal from "../src/Modal";
 import * as StorageManager from "../src/utils/StorageManager";
 import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser, mockPlatformPeg } from "./test-utils";
-import ToastStore from "../src/stores/ToastStore";
 import { OidcClientStore } from "../src/stores/oidc/OidcClientStore";
 import { makeDelegatedAuthConfig } from "./test-utils/oidc";
 import { persistOidcAuthenticatedSettings } from "../src/utils/oidc/persistOidcSettings";
@@ -451,17 +450,10 @@ describe("Lifecycle", () => {
                 });
             });
 
-            it("should show a toast if the matrix server version is unsupported", async () => {
-                const toastSpy = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
-                mockClient.isVersionSupported.mockImplementation(async (version) => version == "r0.6.0");
-                initLocalStorageMock({ ...localStorageSession });
+            it("should proceed if server is not accessible", async () => {
+                mockClient.isVersionSupported.mockRejectedValue(new Error("Oh, noes, the server is down!"));
 
                 expect(await restoreFromLocalStorage()).toEqual(true);
-                expect(toastSpy).toHaveBeenCalledWith(
-                    expect.objectContaining({
-                        title: "Your server is unsupported",
-                    }),
-                );
             });
         });
     });
