@@ -23,7 +23,6 @@ import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { IEncryptedPayload } from "matrix-js-sdk/src/crypto/aes";
 import { QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MINIMUM_MATRIX_VERSION, SUPPORTED_MATRIX_VERSIONS } from "matrix-js-sdk/src/version-support";
 
 import { IMatrixClientCreds, MatrixClientPeg } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
@@ -74,7 +73,6 @@ import {
     getStoredOidcTokenIssuer,
     persistOidcAuthenticatedSettings,
 } from "./utils/oidc/persistOidcSettings";
-import GenericToast from "./components/views/toasts/GenericToast";
 import {
     ACCESS_TOKEN_IV,
     ACCESS_TOKEN_STORAGE_KEY,
@@ -647,43 +645,11 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
             },
             false,
         );
-        await checkServerVersions();
         return true;
     } else {
         logger.log("No previous session found.");
         return false;
     }
-}
-
-async function checkServerVersions(): Promise<void> {
-    const client = MatrixClientPeg.get();
-    if (!client) return;
-    for (const version of SUPPORTED_MATRIX_VERSIONS) {
-        // Check if the server supports this spec version. (`isVersionSupported` caches the response, so this loop will
-        // only make a single HTTP request).
-        if (await client.isVersionSupported(version)) {
-            // we found a compatible spec version
-            return;
-        }
-    }
-
-    const toastKey = "LEGACY_SERVER";
-    ToastStore.sharedInstance().addOrReplaceToast({
-        key: toastKey,
-        title: _t("unsupported_server_title"),
-        props: {
-            description: _t("unsupported_server_description", {
-                version: MINIMUM_MATRIX_VERSION,
-                brand: SdkConfig.get().brand,
-            }),
-            acceptLabel: _t("action|ok"),
-            onAccept: () => {
-                ToastStore.sharedInstance().dismissToast(toastKey);
-            },
-        },
-        component: GenericToast,
-        priority: 98,
-    });
 }
 
 async function handleLoadSessionFailure(e: unknown): Promise<boolean> {
