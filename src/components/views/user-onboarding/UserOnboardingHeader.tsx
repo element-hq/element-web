@@ -22,10 +22,12 @@ import { DirectoryMember, startDmOnFirstMessage } from "matrix-react-sdk/src/uti
 import * as React from "react";
 import { useAtom } from "jotai";
 
+//import { ChatBot } from require("../../../../res/themes/superhero/img/arts/chat-bot.png");
+
 import { botAccountsAtom } from "../../../atoms";
 import { Icon as ChromeIcon } from "../../../../res/themes/superhero/img/icons/chrome.svg";
 import { Icon as FirefoxIcon } from "../../../../res/themes/superhero/img/icons/firefox.svg";
-import { Icon as WelcomeAeBot } from "../../../../res/themes/superhero/img/arts/welcome-ae-bot.svg";
+//import { Icon as WelcomeAeBot } from "../../../../res/themes/superhero/img/arts/welcome-ae-bot.svg";
 
 export function UserOnboardingHeader(): JSX.Element {
     const cli = useMatrixClientContext();
@@ -36,67 +38,84 @@ export function UserOnboardingHeader(): JSX.Element {
 
     return (
         <div className="sh_userOnboarding">
-            <div className="sh_userOnboarding_bot_art">
-                <WelcomeAeBot />
-            </div>
+            <div className="sh_userOnboarding_container">
+                <div className="sh_userOnboarding_text">
+                    <h1>{title}</h1>
+                    <p>
+                        With free end-to-end encrypted messaging, and unlimited voice and video calls, Superhero is a
+                        great way to stay in touch. But that's not all! With Superhero Chat you will be able to access
+                        token-gated chat rooms and create your own communities.
+                    </p>
+                </div>
 
-            <div className="sh_userOnboarding_content">
-                <h1>{title}</h1>
-                <p>
-                    With free end-to-end encrypted messaging, and unlimited voice and video calls, Superhero is a great
-                    way to stay in touch. But that's not all! With Superhero Chat you will be able to access token-gated
-                    chat rooms and create your own communities.
-                </p>
+                <div className="sh_userOnboarding_content">
+                    <div className="sh_userOnboarding_bot_art">
+                        <img
+                            className="lightChatBot"
+                            src={require("../../../../res/themes/superhero/img/arts/chat-bot.png")}
+                        />
+                        <img
+                            className="darkChatBot"
+                            src={require("../../../../res/themes/superhero/img/arts/chat-bot-dark.png")}
+                        />
+                    </div>
 
-                <div>
-                    <div className="mx_Heading_h2">Let's get started!</div>
-
-                    <div>
-                        <div>
-                            <p>Download and install Superhero Wallet browser extension:</p>
-                            <div className="sh_userOnboarding_download_link">
+                    <div className="sh_userOnboarding_left">
+                        <h3>Let's get started!</h3>
+                        <div className="sh_userOnboarding_left_content">
+                            <div className="sh_userOnboarding_download">
+                                <p>Download and install Superhero Wallet browser extension:</p>
+                                <div className="sh_userOnboarding_download_link">
+                                    <AccessibleButton
+                                        onClick={(): void => {
+                                            window.open(
+                                                "https://chromewebstore.google.com/detail/superhero/mnhmmkepfddpifjkamaligfeemcbhdne",
+                                                "_blank",
+                                            );
+                                        }}
+                                        className="sh_userOnboarding_download_option"
+                                    >
+                                        <ChromeIcon
+                                            style={{ width: "22px", height: "22px", top: "7px", left: "18px" }}
+                                        />
+                                        <div className="sh_userOnboarding_download_option_label">
+                                            from Chrome Web Store
+                                        </div>
+                                    </AccessibleButton>
+                                    <AccessibleButton
+                                        onClick={(): void => {
+                                            window.open(
+                                                "https://addons.mozilla.org/en-US/firefox/addon/superhero-wallet/",
+                                                "_blank",
+                                            );
+                                        }}
+                                        className="sh_userOnboarding_download_option"
+                                    >
+                                        <FirefoxIcon
+                                            style={{ width: "22px", height: "22px", top: "7px", left: "18px" }}
+                                        />
+                                        <div className="sh_userOnboarding_download_option_label">
+                                            from Firefox Add-ons
+                                        </div>
+                                    </AccessibleButton>
+                                </div>
+                            </div>
+                            <div className="sh_userOnboarding_chat">
+                                <p>Say hello to Wallet Bot and connect your Superhero Wallet:</p>
                                 <AccessibleButton
                                     onClick={(): void => {
-                                        window.open(
-                                            "https://chromewebstore.google.com/detail/superhero/mnhmmkepfddpifjkamaligfeemcbhdne",
-                                            "_blank",
-                                        );
+                                        startDmOnFirstMessage(cli, [
+                                            new DirectoryMember({
+                                                user_id: botAccounts?.superheroBot || "",
+                                            }),
+                                        ]);
                                     }}
-                                    className="sh_userOnboarding_download_option"
+                                    kind="primary"
+                                    className="sh_userOnboarding_btn"
                                 >
-                                    <ChromeIcon style={{ width: "22px", height: "22px", top: "7px", left: "18px" }} />
-                                    <div className="sh_userOnboarding_download_option_label">from Chrome Web Store</div>
-                                </AccessibleButton>
-                                <AccessibleButton
-                                    onClick={(): void => {
-                                        window.open(
-                                            "https://addons.mozilla.org/en-US/firefox/addon/superhero-wallet/",
-                                            "_blank",
-                                        );
-                                    }}
-                                    className="sh_userOnboarding_download_option"
-                                >
-                                    <FirefoxIcon style={{ width: "22px", height: "22px", top: "7px", left: "18px" }} />
-                                    <div className="sh_userOnboarding_download_option_label">from Firefox Add-ons</div>
+                                    Chat With Wallet Bot
                                 </AccessibleButton>
                             </div>
-                        </div>
-
-                        <div>
-                            <p>Say hello to Wallet Bot and connect your Superhero Wallet:</p>
-                            <AccessibleButton
-                                onClick={(): void => {
-                                    startDmOnFirstMessage(cli, [
-                                        new DirectoryMember({
-                                            user_id: botAccounts?.superheroBot || "",
-                                        }),
-                                    ]);
-                                }}
-                                kind="primary"
-                                className="sh_userOnboarding_btn"
-                            >
-                                Chat With Wallet Bot
-                            </AccessibleButton>
                         </div>
                     </div>
                 </div>
