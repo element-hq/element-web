@@ -390,8 +390,16 @@ limitations under the License.
     .mx_UserMenu {
         padding-bottom: 12px;
         border-bottom: 1px solid $separator;
-        margin: 12px 14px 4px 16px;
+        margin: 12px 14px 4px 18px;
+        width: min-content;
         max-width: 226px;
+
+        /* Display the container and img here as block elements so they don't take
+         * up extra vertical space.
+         */
+        .mx_UserMenu_userAvatar_BaseAvatar {
+            display: block;
+        }
     }
 }
 
