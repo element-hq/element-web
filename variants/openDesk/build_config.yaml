@@ -7,5 +7,6 @@
 # The values of this are provided to `yarn add` for inclusion.
 modules:
     - "@nordeck/element-web-guest-module@1.0.0"
-    - "@nordeck/element-web-opendesk-module@0.3.0"
+    - "@nordeck/element-web-opendesk-module@0.4.0"
     - "@nordeck/element-web-widget-lifecycle-module@1.0.1"
+    - "@nordeck/element-web-widget-toggles-module@0.1.0"
