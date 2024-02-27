@@ -98,6 +98,24 @@ export const SuperheroProvider = ({ children, config }: any): any => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    /**
+     * Handles the click event on an element.
+     * If the target element's host is 'wallet.superhero.com', it prevents the default behavior and opens the target URL in a new window with specific dimensions.
+     * @param e - The MouseEvent object representing the click event.
+     */
+    function onElementClick(e: MouseEvent): void {
+        const target = e.target as HTMLAnchorElement;
+        if (target?.host === "wallet.superhero.com") {
+            e.preventDefault();
+            window.open(target.href, "superhero_wallet", "width=360,height=600");
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener("click", onElementClick);
+        return () => document.removeEventListener("click", onElementClick);
+    }, []);
+
     // Load minimum token threshold
     useMinimumTokenThreshold(config);
 
