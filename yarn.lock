@@ -8084,10 +8084,10 @@ jszip@^3.7.0:
     readable-stream "~2.3.6"
     setimmediate "^1.0.5"
 
-jwt-decode@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-3.1.2.tgz#3fb319f3675a2df0c2895c8f5e9fa4b67b04ed59"
-  integrity sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==
+jwt-decode@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-4.0.0.tgz#2270352425fd413785b2faf11f6e755c5151bd4b"
+  integrity sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==
 
 katex@^0.16.0:
   version "0.16.9"
@@ -8435,20 +8435,21 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "31.3.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d03db1740586714a194205b9efc8cff37c3bb996"
+matrix-js-sdk@31.4.0:
+  version "31.4.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-31.4.0.tgz#5ce5a9cb4cae6aed3e75b5e43c8f8be29ff4f49c"
+  integrity sha512-KtpBaI9QVL+uW1nfwXdGp2Qr9Z10pd6mCZhxxDi5lIlzx74T5p/w6tDXeQuLG4Ylt3rT8x0LB2DbamUgHUZg5Q==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^4.5.0"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"
-    jwt-decode "^3.1.2"
+    jwt-decode "^4.0.0"
     loglevel "^1.7.1"
     matrix-events-sdk "0.0.1"
     matrix-widget-api "^1.6.0"
-    oidc-client-ts "^2.2.4"
+    oidc-client-ts "^3.0.1"
     p-retry "4"
     sdp-transform "^2.14.1"
     unhomoglyph "^1.0.6"
@@ -8461,9 +8462,10 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.92.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/ee50640075c848d0066d8435c8f233624a128c08"
+matrix-react-sdk@3.93.0:
+  version "3.93.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.93.0.tgz#ca347e66f390e1fdbd384994f8dbc26176809966"
+  integrity sha512-DL+eEmPSAidVEc4+Epj5WUkb2ZzimFvEZXHoCTFFDwVSij3K/iDCnteqWPA5U/QsuEFqYecW08xXC+9O6I4CUg==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.10.0"
@@ -8507,11 +8509,11 @@ matrix-mock-request@^2.5.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "31.4.0"
     matrix-widget-api "^1.5.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
-    oidc-client-ts "^2.2.4"
+    oidc-client-ts "^3.0.1"
     opus-recorder "^8.0.3"
     pako "^2.0.3"
     png-chunks-extract "^1.0.0"
@@ -9042,13 +9044,12 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-oidc-client-ts@^2.2.4:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/oidc-client-ts/-/oidc-client-ts-2.4.0.tgz#764c8a33de542026e2798de9849ce8049047d7e5"
-  integrity sha512-WijhkTrlXK2VvgGoakWJiBdfIsVGz6CFzgjNNqZU1hPKV2kyeEaJgLs7RwuiSp2WhLfWBQuLvr2SxVlZnk3N1w==
+oidc-client-ts@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/oidc-client-ts/-/oidc-client-ts-3.0.1.tgz#be264fb87c89f74f73863646431c32cd06f5ceb7"
+  integrity sha512-xX8unZNtmtw3sOz4FPSqDhkLFnxCDsdo2qhFEH2opgWnF/iXMFoYdBQzkwCxAZVgt3FT3DnuBY3k80EZHT0RYg==
   dependencies:
-    crypto-js "^4.2.0"
-    jwt-decode "^3.1.2"
+    jwt-decode "^4.0.0"
 
 on-finished@2.4.1:
   version "2.4.1"
