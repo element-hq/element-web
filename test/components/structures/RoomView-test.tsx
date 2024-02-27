@@ -711,4 +711,10 @@ describe("RoomView", () => {
 
         await expect(prom).resolves.toEqual(expect.objectContaining({ room_id: room2.roomId }));
     });
+
+    it("fires Action.RoomLoaded", async () => {
+        jest.spyOn(dis, "dispatch");
+        await mountRoomView();
+        expect(dis.dispatch).toHaveBeenCalledWith({ action: Action.RoomLoaded });
+    });
 });

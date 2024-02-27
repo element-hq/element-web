@@ -375,6 +375,11 @@ export enum Action {
     OpenSpotlight = "open_spotlight",
 
     /**
+     * Fired when the room loaded.
+     */
+    RoomLoaded = "room_loaded",
+
+    /**
      * Opens right panel with 3pid invite information
      */
     View3pidInvite = "view_3pid_invite",
