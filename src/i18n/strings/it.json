@@ -1,6 +1,8 @@
 {
     "a11y": {
+        "emoji_picker": "Selettore di emoji",
         "jump_first_invite": "Salta al primo invito.",
+        "message_composer": "Compositore di messaggi",
         "n_unread_messages": {
             "other": "%(count)s messaggi non letti.",
             "one": "1 messaggio non letto."
@@ -9,7 +11,10 @@
             "other": "%(count)s messaggi non letti incluse le citazioni.",
             "one": "1 citazione non letta."
         },
+        "recent_rooms": "Stanze recenti",
         "room_name": "Stanza %(name)s",
+        "room_status_bar": "Barra di stato della stanza",
+        "seek_bar_label": "Barra di ricerca audio",
         "unread_messages": "Messaggi non letti.",
         "user_menu": "Menu utente"
     },
@@ -27,6 +32,7 @@
         "cancel": "Annulla",
         "change": "Cambia",
         "clear": "Svuota",
+        "click": "Clicca",
         "click_to_copy": "Clicca per copiare",
         "close": "Chiudi",
         "collapse": "Riduci",
@@ -162,6 +168,7 @@
         "autodiscovery_invalid_is_base_url": "Base_url per m.identity_server non valido",
         "autodiscovery_invalid_is_response": "Risposta non valida cercando server di identità",
         "autodiscovery_invalid_json": "JSON non valido",
+        "autodiscovery_no_well_known": "Nessun file JSON .well-known trovato",
         "autodiscovery_unexpected_error_hs": "Errore inaspettato nella risoluzione della configurazione homeserver",
         "autodiscovery_unexpected_error_is": "Errore inaspettato risolvendo la configurazione del server identità",
         "captcha_description": "Questo homeserver vorrebbe assicurarsi che non sei un robot.",
@@ -227,6 +234,8 @@
         "no_hs_url_provided": "Nessun URL homeserver fornito",
         "oidc": {
             "error_title": "Non abbiamo potuto farti accedere",
+            "generic_auth_error": "Qualcosa è andato storto durante l'autenticazione. Vai alla pagina di accesso e riprova.",
+            "logout_redirect_warning": "Verrai reindirizzato al fornitore di autenticazione del tuo server per completare la disconnessione.",
             "missing_or_invalid_stored_state": "Abbiamo chiesto al browser di ricordare quale homeserver usi per farti accedere, ma sfortunatamente l'ha dimenticato. Vai alla pagina di accesso e riprova."
         },
         "password_field_keep_going_prompt": "Continua…",
@@ -247,6 +256,7 @@
             "error_homeserver_lacks_support": "L'homeserver non supporta l'accesso in un altro dispositivo.",
             "error_invalid_scanned_code": "Il codice scansionato non è valido.",
             "error_linking_incomplete": "Il collegamento non è stato completato nel tempo previsto.",
+            "error_rate_limited": "Troppi tentativi in poco tempo. Attendi un po' prima di riprovare.",
             "error_request_cancelled": "La richiesta è stata annullata.",
             "error_request_declined": "La richiesta è stata negata sull'altro dispositivo.",
             "error_unexpected": "Si è verificato un errore imprevisto.",
@@ -331,6 +341,7 @@
         "soft_logout_intro_unsupported_auth": "Non puoi accedere al tuo account. Contatta l'admin del tuo homeserver per maggiori informazioni.",
         "soft_logout_subheading": "Elimina dati personali",
         "soft_logout_warning": "Attenzione: i tuoi dati personali (incluse le chiavi di crittografia) sono ancora memorizzati in questa sessione. Cancellali se hai finito di usare questa sessione o se vuoi accedere ad un altro account.",
+        "sso": "Single sign-on",
         "sso_failed_missing_storage": "Abbiamo chiesto al browser di ricordare quale homeserver usi per farti accedere, ma sfortunatamente l'ha dimenticato. Vai alla pagina di accesso e riprova.",
         "sso_or_username_password": "%(ssoButtons)s o %(usernamePassword)s",
         "sync_footer_subtitle": "Se sei dentro a molte stanze, potrebbe impiegarci un po'",
@@ -428,6 +439,7 @@
         "are_you_sure": "Sei sicuro?",
         "attachment": "Allegato",
         "authentication": "Autenticazione",
+        "avatar": "Avatar",
         "beta": "Beta",
         "camera": "Videocamera",
         "cameras": "Fotocamere",
@@ -448,6 +460,7 @@
         "error": "Errore",
         "faq": "Domande frequenti",
         "favourites": "Preferiti",
+        "feedback": "Commenti",
         "filter_results": "Filtra risultati",
         "forward_message": "Inoltra messaggio",
         "general": "Generale",
@@ -466,6 +479,7 @@
         "legal": "Informazioni legali",
         "light": "Chiaro",
         "loading": "Caricamento…",
+        "lobby": "Sala d’attesa",
         "location": "Posizione",
         "low_priority": "Bassa priorità",
         "matrix": "Matrix",
@@ -749,6 +763,7 @@
         "room_notifications_type": "Tipo: ",
         "room_status": "Stato della stanza",
         "room_unread_status_count": {
+            "one": "Stato \"non letto\" nella stanza: <strong>%(status)s</strong>, conteggio: <strong>%(count)s</strong>",
             "other": "Stato \"non letto\" nella stanza: <strong>%(status)s</strong>, conteggio: <strong>%(count)s</strong>"
         },
         "save_setting_values": "Salva valori impostazione",
@@ -1044,7 +1059,14 @@
         "unknown_error_code": "codice errore sconosciuto",
         "update_power_level": "Cambio di livello poteri fallito"
     },
-    "error_database_closed_title": "Database chiuso inaspettatamente",
+    "error_app_open_in_another_tab": "Passa all'altra scheda per connetterti a %(brand)s. Questa scheda può ora essere chiusa.",
+    "error_app_open_in_another_tab_title": "%(brand)s è connesso in un'altra scheda",
+    "error_app_opened_in_another_window": "%(brand)s è aperto in un'altra finestra. Clicca \"%(label)s\" per usare %(brand)s qui e scollegare l'altra finestra.",
+    "error_database_closed_description": {
+        "for_desktop": "Il disco potrebbe essere pieno. Libera spazio e ricarica.",
+        "for_web": "Se hai cancellato i dati di navigazione, questo messaggio è normale. %(brand)s potrebbe anche essere aperto in un'altra scheda o il disco è pieno. Libera spazio e ricarica"
+    },
+    "error_database_closed_title": "%(brand)s ha smesso di funzionare",
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "Impossibile copiare un collegamento alla stanza negli appunti.",
@@ -1244,6 +1266,8 @@
         "error_permissions_space": "Non hai l'autorizzazione di invitare persone in questo spazio.",
         "error_profile_undisclosed": "L'utente forse non esiste",
         "error_transfer_multiple_target": "Una chiamata può essere trasferita solo ad un singolo utente.",
+        "error_unfederated_room": "Questa stanza non è federata. Non puoi invitare persone da server esterni.",
+        "error_unfederated_space": "Questo spazio non è federato. Non puoi invitare persone da server esterni.",
         "error_unknown": "Errore sconosciuto del server",
         "error_user_not_found": "L'utente non esiste",
         "error_version_unsupported_room": "L'homeserver dell'utente non supporta la versione della stanza.",
@@ -1380,6 +1404,7 @@
         "element_call_video_rooms": "Stanze video di Element Call",
         "experimental_description": "Ti senti di sperimentare? Prova le nostre ultime idee in sviluppo. Queste funzioni non sono complete; potrebbero essere instabili, cambiare o essere scartate. <a>Maggiori informazioni</a>.",
         "experimental_section": "Anteprime",
+        "feature_disable_call_per_sender_encryption": "Disattiva la crittografia per mittente in Element Call",
         "feature_wysiwyg_composer_description": "Usa il rich text invece del Markdown nel compositore di messaggi.",
         "group_calls": "Nuova esperienza per chiamate di gruppo",
         "group_developer": "Sviluppatore",
@@ -1391,6 +1416,7 @@
         "group_rooms": "Stanze",
         "group_spaces": "Spazi",
         "group_themes": "Temi",
+        "group_threads": "Conversazioni",
         "group_voip": "Voce e video",
         "group_widgets": "Widget",
         "hidebold": "Nascondi il punto di notifica (mostra solo i contatori)",
@@ -1408,12 +1434,21 @@
         "msc3531_hide_messages_pending_moderation": "Lascia che i moderatori nascondano i messaggi in attesa di moderazione.",
         "new_room_decoration_ui": "In sviluppo attivo, nuova interfaccia per intestazione e dettagli della stanza",
         "notification_settings": "Nuove impostazioni di notifica",
+        "notification_settings_beta_caption": "Ti presentiamo un modo più semplice per modificare le impostazioni delle notifiche. Personalizza il tuo %(brand)s, proprio come piace a te.",
         "notification_settings_beta_title": "Impostazioni di notifica",
-        "oidc_native_flow": "Attiva i nuovi flussi OIDC nativi (in sviluppo attivo)",
+        "notifications": "Attiva il pannello delle notifiche nell'intestazione della stanza",
+        "oidc_native_flow": "Autenticazione nativa OIDC",
+        "oidc_native_flow_description": "⚠ ATTENZIONE: sperimentale. Usa l'autenticazione nativa OIDC se supportata dal server.",
         "pinning": "Ancoraggio messaggi",
+        "render_reaction_images": "Mostra immagini personalizzate nelle reazioni",
+        "render_reaction_images_description": "A volte chiamati \"emoji personalizzati\".",
         "report_to_moderators": "Segnala ai moderatori",
         "report_to_moderators_description": "Nelle stanze che supportano la moderazione, il pulsante \"Segnala\" ti permetterà di segnalare abusi ai moderatori della stanza.",
         "rust_crypto": "Implementazione crittografia Rust",
+        "rust_crypto_in_config": "La crittografia Rust non può essere disattivata in questa distribuzione di %(brand)s",
+        "rust_crypto_in_config_description": "Il passaggio alla crittografia Rust richiede un processo di migrazione che può impiegare diversi minuti. Non può essere disattivata, usala con cautela!",
+        "rust_crypto_optin_warning": "Il passaggio alla crittografia Rust richiede un processo di migrazione che può impiegare diversi minuti. Per disattivarla dovrai disconnetterti e poi riaccedere, usala con cautela!",
+        "rust_crypto_requires_logout": "Una volta attivata, la crittografia Rust può essere disattivata solo disconnettendoti e riaccedendo.",
         "sliding_sync": "Modalità di sincr. con slide",
         "sliding_sync_checking": "Controllo…",
         "sliding_sync_configuration": "Configurazione sincr. Sliding",
@@ -1425,7 +1460,10 @@
         "sliding_sync_server_no_support": "Il tuo server non ha il supporto nativo",
         "sliding_sync_server_specify_proxy": "Il tuo server non ha il supporto nativo, devi specificare un proxy",
         "sliding_sync_server_support": "Il tuo server ha il supporto nativo",
+        "threads_activity_centre": "Centro attività in discussioni (in sviluppo).",
+        "threads_activity_centre_description": "Attenzione: in fase di sviluppo attivo; ricarica %(brand)s.",
         "under_active_development": "In sviluppo attivo.",
+        "unrealiable_e2e": "Inaffidabile nelle stanze cifrate",
         "video_rooms": "Stanze video",
         "video_rooms_a_new_way_to_chat": "Un nuovo modo di fare chiamate audio e video in %(brand)s.",
         "video_rooms_always_on_voip_channels": "Le stanze video sono canali VoIP sempre attivi integrati all'interno della stanza in %(brand)s.",
@@ -1552,6 +1590,7 @@
     },
     "member_list_back_action_label": "Membri stanza",
     "message_edit_dialog_title": "Modifiche del messaggio",
+    "migrating_crypto": "Tieni duro. Stiamo aggiornando %(brand)s per rendere la crittografia più veloce e affidabile.",
     "mobile_guide": {
         "toast_accept": "Usa l'app",
         "toast_description": "%(brand)s è sperimentale su un browser web mobile. Per un'esperienza migliore e le ultime funzionalità, usa la nostra app nativa gratuita.",
@@ -1576,6 +1615,12 @@
         "error_change_title": "Cambia impostazioni di notifica",
         "keyword": "Parola chiave",
         "keyword_new": "Nuova parola chiave",
+        "level_activity": "Attività",
+        "level_highlight": "Evidenzia",
+        "level_muted": "Silenziato",
+        "level_none": "Nessuno",
+        "level_notification": "Notifica",
+        "level_unsent": "Non inviato",
         "mark_all_read": "Segna tutto come letto",
         "mentions_and_keywords": "@citazioni e parole chiave",
         "mentions_and_keywords_description": "Ricevi notifiche solo per citazioni e parole chiave come configurato nelle tue <a>impostazioni</a>",
@@ -1708,7 +1753,8 @@
         "online": "Online",
         "online_for": "Online per %(duration)s",
         "unknown": "Sconosciuto",
-        "unknown_for": "Sconosciuto per %(duration)s"
+        "unknown_for": "Sconosciuto per %(duration)s",
+        "unreachable": "Server dell'utente irraggiungibile"
     },
     "quick_settings": {
         "all_settings": "Tutte le impostazioni",
@@ -1736,6 +1782,7 @@
     "report_content": {
         "description": "La segnalazione di questo messaggio invierà il suo 'ID evento' univoco all'amministratore del tuo homeserver. Se i messaggi della stanza sono cifrati, l'amministratore non potrà leggere il messaggio o vedere file e immagini.",
         "disagree": "Rifiuta",
+        "error_create_room_moderation_bot": "Impossibile creare una stanza con il bot di moderazione",
         "hide_messages_from_user": "Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente.",
         "ignore_user": "Ignora utente",
         "illegal_content": "Contenuto illegale",
@@ -1743,6 +1790,8 @@
         "nature": "Scegli la natura del problema e descrivi cosa rende questo messaggio un abuso.",
         "nature_disagreement": "Questo utente sta scrivendo cose sbagliate.\nVerrà segnalato ai moderatori della stanza.",
         "nature_illegal": "Questo utente sta mostrando un comportamento illegale, ad esempio facendo doxing o minacciando violenza.\nVerrà segnalato ai moderatori della stanza che potrebbero portarlo in ambito legale.",
+        "nature_nonstandard_admin": "Questa stanza è dedicata a contenuti illegali o dannosi, oppure i moderatori non riescono a fermarli.\nVerrà segnalato agli amministratori di %(homeserver)s.",
+        "nature_nonstandard_admin_encrypted": "Questa stanza è dedicata a contenuti illegali o dannosi, oppure i moderatori non riescono a fermarli.\nVerrà segnalato agli amministratori di %(homeserver)s. Gli amministratori NON potranno leggere il contenuto criptato di questa stanza.",
         "nature_other": "Altri motivi. Si prega di descrivere il problema.\nVerrà segnalato ai moderatori della stanza.",
         "nature_spam": "Questo utente sta facendo spam nella stanza con pubblicità, collegamenti ad annunci o a propagande.\nVerrà segnalato ai moderatori della stanza.",
         "nature_toxic": "Questo utente sta mostrando un cattivo comportamento, ad esempio insultando altri utenti o condividendo contenuti per adulti in una stanza per tutti, oppure violando le regole della stessa.\nVerrà segnalato ai moderatori della stanza.",
@@ -1889,15 +1938,22 @@
             "close_call_button": "Chiudi chiamata",
             "forget_room_button": "Dimentica la stanza",
             "hide_widgets_button": "Nascondi i widget",
+            "n_people_asking_to_join": {
+                "one": "Richiesta di entrare",
+                "other": "%(count)s persone chiedono di entrare"
+            },
             "room_is_public": "Questa stanza è pubblica",
             "show_widgets_button": "Mostra i widget",
             "video_call_button_ec": "Videochiamata (%(brand)s)",
             "video_call_button_jitsi": "Videochiamata (Jitsi)",
+            "video_call_button_legacy": "Videochiamata legacy",
             "video_call_ec_change_layout": "Cambia disposizione",
             "video_call_ec_layout_freedom": "Libertà",
             "video_call_ec_layout_spotlight": "Riflettore",
             "video_room_view_chat_button": "Vedi linea temporale chat"
         },
+        "header_face_pile_tooltip": "Cambia l'elenco dei membri",
+        "header_untrusted_label": "Non fidato",
         "inaccessible": "Questa stanza o spazio non è al momento accessibile.",
         "inaccessible_name": "%(roomName)s non è al momento accessibile.",
         "inaccessible_subtitle_1": "Riprova più tardi, o chiedi ad un admin della stanza o spazio di controllare se hai l'accesso.",
@@ -1946,6 +2002,8 @@
         "kicked_by": "Sei stato rimosso da %(memberName)s",
         "kicked_from_room_by": "Sei stato rimosso da %(roomName)s da %(memberName)s",
         "knock_cancel_action": "Annulla richiesta",
+        "knock_denied_subtitle": "Poiché ti è stato negato l'accesso, non puoi rientrare a meno che tu non venga invitato dall'amministratore o dal moderatore del gruppo.",
+        "knock_denied_title": "Ti è stato negato l'accesso",
         "knock_message_field_placeholder": "Messaggio (facoltativo)",
         "knock_prompt": "Chiedi di entrare?",
         "knock_prompt_name": "Chiedi di entrare in %(roomName)s?",
@@ -2340,6 +2398,7 @@
             "access_token_detail": "Il tuo token di accesso ti dà l'accesso al tuo account. Non condividerlo con nessuno.",
             "brand_version": "versione %(brand)s:",
             "clear_cache_reload": "Svuota la cache e ricarica",
+            "crypto_version": "Versione crittografica:",
             "help_link": "Per aiuto su come usare %(brand)s, clicca <a>qui</a>.",
             "homeserver": "L'homeserver è <code>%(homeserverUrl)s</code>",
             "identity_server": "Il server d'identità è <code>%(identityServerUrl)s</code>",
@@ -2352,6 +2411,7 @@
         "all_rooms_home_description": "Tutte le stanze in cui sei appariranno nella pagina principale.",
         "always_show_message_timestamps": "Mostra sempre l'orario dei messaggi",
         "appearance": {
+            "bundled_emoji_font": "Usa i font emoji integrati",
             "custom_font": "Usa un carattere di sistema",
             "custom_font_description": "Imposta il nome di un font installato nel tuo sistema e %(brand)s proverà ad usarlo.",
             "custom_font_name": "Nome carattere di sistema",
@@ -2682,6 +2742,7 @@
         "send_read_receipts_unsupported": "Il tuo server non supporta la disattivazione delle conferme di lettura.",
         "send_typing_notifications": "Invia notifiche di scrittura",
         "sessions": {
+            "best_security_note": "Per una maggiore sicurezza, verifica le tue sessioni ed esci da quelle che non riconosci o non usi più.",
             "browser": "Browser",
             "confirm_sign_out": {
                 "one": "Conferma la disconnessione da questo dispositivo",
@@ -2796,6 +2857,7 @@
             "metaspaces_orphans_description": "Raggruppa tutte le tue stanze che non fanno parte di uno spazio in un unico posto.",
             "metaspaces_people_description": "Raggruppa tutte le tue persone in un unico posto.",
             "metaspaces_subsection": "Spazi da mostrare",
+            "spaces_explainer": "Gli spazi sono modi per raggruppare stanze e persone. Oltre agli spazi in cui ti trovi, puoi usarne anche altri già integrati.",
             "title": "Barra laterale"
         },
         "start_automatically": "Esegui automaticamente all'avvio del sistema",
@@ -2858,7 +2920,9 @@
         "devtools": "Apre la finestra di strumenti per sviluppatori",
         "discardsession": "Forza l'eliminazione dell'attuale sessione di gruppo in uscita in una stanza criptata",
         "error_invalid_rendering_type": "Errore comando: impossibile trovare il tipo di rendering (%(renderingType)s)",
+        "error_invalid_room": "Comando fallito: impossibile trovare la stanza (%(roomId)s)",
         "error_invalid_runfn": "Errore comando: impossibile gestire il comando slash.",
+        "error_invalid_user_in_room": "Impossibile trovare l'utente nella stanza",
         "help": "Visualizza l'elenco dei comandi con usi e descrizioni",
         "help_dialog_title": "Aiuto comando",
         "holdcall": "Mette in pausa la chiamata nella stanza attuale",
@@ -3027,6 +3091,7 @@
         },
         "create_new_room_button": "Crea una nuova stanza",
         "failed_querying_public_rooms": "Richiesta di stanze pubbliche fallita",
+        "failed_querying_public_spaces": "Interrogazione degli spazi pubblici fallita",
         "group_chat_section_title": "Altre opzioni",
         "heading_with_query": "Usa \"%(query)s\" per cercare",
         "heading_without_query": "Cerca",
@@ -3091,6 +3156,10 @@
         "show_thread_filter": "Mostra:",
         "unable_to_decrypt": "Impossibile decifrare il messaggio"
     },
+    "threads_activity_centre": {
+        "header": "Attività delle conversazioni",
+        "no_rooms_with_unreads_threads": "Non hai ancora stanze con conversazioni non lette."
+    },
     "time": {
         "about_day_ago": "circa un giorno fa",
         "about_hour_ago": "circa un'ora fa",
@@ -3151,6 +3220,7 @@
             "you": "Hai terminato una <a>trasmissione vocale</a>"
         },
         "io.element.widgets.layout": "%(senderName)s ha aggiornato la disposizione della stanza",
+        "late_event_separator": "Inviato originariamente il %(dateTime)s",
         "load_error": {
             "no_permission": "Si è tentato di caricare un punto specifico nella cronologia della stanza, ma non hai l'autorizzazione per vedere il messaggio in questione.",
             "title": "Caricamento posizione cronologica fallito",
@@ -3353,6 +3423,8 @@
             "label": "Azioni messaggio",
             "view_in_room": "Vedi nella stanza"
         },
+        "message_timestamp_received_at": "Ricevuto il: %(dateTime)s",
+        "message_timestamp_sent_at": "Inviato il: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s ha modificato una regola di ban che corrispondeva a %(oldGlob)s per corrispondere a %(newGlob)s perchè %(reason)s",
             "changed_rule_rooms": "%(senderName)s ha modificato una regola che bandiva stanze corrispondenti a %(oldGlob)s per corrispondere a %(newGlob)s perchè %(reason)s",
@@ -3735,6 +3807,7 @@
         "camera_enabled": "La tua fotocamera è ancora attiva",
         "cannot_call_yourself_description": "Non puoi chiamare te stesso.",
         "change_input_device": "Cambia dispositivo di input",
+        "close_lobby": "Chiudi sala d'attesa",
         "connecting": "In connessione",
         "connection_lost": "La connessione al server è stata persa",
         "connection_lost_description": "Non puoi fare chiamate senza una connessione al server.",
@@ -3748,6 +3821,7 @@
         "disabled_no_perms_start_video_call": "Non hai il permesso di avviare videochiamate",
         "disabled_no_perms_start_voice_call": "Non hai il permesso di avviare chiamate",
         "disabled_ongoing_call": "Chiamata in corso",
+        "element_call": "Element Call",
         "enable_camera": "Accendi la fotocamera",
         "enable_microphone": "Riaccendi il microfono",
         "expand": "Torna alla chiamata",
@@ -3756,9 +3830,13 @@
         "hangup": "Riaggancia",
         "hide_sidebar_button": "Nascondi barra laterale",
         "input_devices": "Dispositivi di input",
+        "jitsi_call": "Conferenza Jitsi",
         "join_button_tooltip_call_full": "Spiacenti — questa chiamata è piena",
         "join_button_tooltip_connecting": "In connessione",
+        "legacy_call": "Chiamata legacy",
         "maximise": "Riempi schermo",
+        "maximise_call": "Massimizza la chiamata",
+        "minimise_call": "Minimizza la chiamata",
         "misconfigured_server": "Chiamata non riuscita a causa di un server non configurato correttamente",
         "misconfigured_server_description": "Chiedi all'amministratore del tuo homeserver(<code>%(homeserverDomain)s</code>) per configurare un server TURN affinché le chiamate funzionino in modo affidabile.",
         "misconfigured_server_fallback": "In alternativa puoi provare ad usare il server pubblico <server/>, ma non è molto affidabile e il tuo indirizzo IP verrà condiviso con tale server. Puoi gestire questa cosa nelle impostazioni.",
@@ -3806,6 +3884,7 @@
         "user_is_presenting": "%(sharerName)s sta presentando",
         "video_call": "Videochiamata",
         "video_call_started": "Videochiamata iniziata",
+        "video_call_using": "Videochiamata usando:",
         "voice_call": "Telefonata",
         "you_are_presenting": "Stai presentando"
     },
