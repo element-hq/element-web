@@ -44,8 +44,10 @@ const HomePage: React.FC<IProps> = () => {
 
     return (
         <AutoHideScrollbar className="mx_UserOnboardingPage" style={{ maxWidth: "100%" }}>
-            <UserOnboardingHeader />
-            <UserOnboardingList tasks={tasks} />
+            <div className="container">
+                <UserOnboardingHeader />
+                <UserOnboardingList tasks={tasks} />
+            </div>
         </AutoHideScrollbar>
     );
 };
