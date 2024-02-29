@@ -6929,10 +6929,10 @@ matrix-events-sdk@0.0.1:
     unhomoglyph "^1.0.6"
     uuid "9"
 
-matrix-web-i18n@^3.1.5:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.1.5.tgz#cab9adb233b63b3760d6e40f71fff8041c648789"
-  integrity sha512-xe9Letv1KT04X7CalnK080cRUBvlVum5fSspaxPJ575W/+ZEwwN2mktF7Bl5gDMpuFLuXvP97xkr66BOB4I+3g==
+matrix-web-i18n@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.2.1.tgz#34e6b66bec71a52fddbe72db56d9e35dabbaff59"
+  integrity sha512-pBklE6Q6mAwG6N3Qtpu/e+qX0XuWEdrs4SZ+QmYJWfyLNtKAB6XcSpE5m7aBW/+11ejg8ua8Q5bNcDV2b7C9lg==
   dependencies:
     "@babel/parser" "^7.18.5"
     "@babel/traverse" "^7.18.5"
