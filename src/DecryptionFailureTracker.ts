@@ -93,11 +93,11 @@ export class DecryptionFailureTracker {
     public static TRACK_INTERVAL_MS = 60000;
 
     // Call `checkFailures` every `CHECK_INTERVAL_MS`.
-    public static CHECK_INTERVAL_MS = 5000;
+    public static CHECK_INTERVAL_MS = 40000;
 
     // Give events a chance to be decrypted by waiting `GRACE_PERIOD_MS` before counting
     // the failure in `failureCounts`.
-    public static GRACE_PERIOD_MS = 4000;
+    public static GRACE_PERIOD_MS = 30000;
 
     /**
      * Create a new DecryptionFailureTracker.
