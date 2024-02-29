@@ -16,7 +16,7 @@ limitations under the License.
 
 import { mocked, MockedObject } from "jest-mock";
 import { last } from "lodash";
-import { MatrixEvent, MatrixClient, ClientEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, MatrixClient, ClientEvent, EventTimeline } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, WidgetApiFromWidgetAction } from "matrix-widget-api";
 import { waitFor } from "@testing-library/react";
 
@@ -86,6 +86,105 @@ describe("StopGapWidget", () => {
         client.emit(ClientEvent.ToDeviceEvent, event);
         await Promise.resolve(); // flush promises
         expect(messaging.feedToDevice).toHaveBeenCalledWith(event.getEffectiveEvent(), false);
+    });
+
+    describe("feed event", () => {
+        let event1: MatrixEvent;
+        let event2: MatrixEvent;
+
+        beforeEach(() => {
+            event1 = mkEvent({
+                event: true,
+                id: "$event-id1",
+                type: "org.example.foo",
+                user: "@alice:example.org",
+                content: { hello: "world" },
+                room: "!1:example.org",
+            });
+
+            event2 = mkEvent({
+                event: true,
+                id: "$event-id2",
+                type: "org.example.foo",
+                user: "@alice:example.org",
+                content: { hello: "world" },
+                room: "!1:example.org",
+            });
+
+            const room = mkRoom(client, "!1:example.org");
+            client.getRoom.mockImplementation((roomId) => (roomId === "!1:example.org" ? room : null));
+            room.getLiveTimeline.mockReturnValue({
+                getEvents: (): MatrixEvent[] => [event1, event2],
+            } as unknown as EventTimeline);
+
+            messaging.feedEvent.mockResolvedValue();
+        });
+
+        it("feeds incoming event to the widget", async () => {
+            client.emit(ClientEvent.Event, event1);
+            expect(messaging.feedEvent).toHaveBeenCalledWith(event1.getEffectiveEvent(), "!1:example.org");
+
+            client.emit(ClientEvent.Event, event2);
+            expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2.getEffectiveEvent(), "!1:example.org");
+        });
+
+        it("should not feed incoming event to the widget if seen already", async () => {
+            client.emit(ClientEvent.Event, event1);
+            expect(messaging.feedEvent).toHaveBeenCalledWith(event1.getEffectiveEvent(), "!1:example.org");
+
+            client.emit(ClientEvent.Event, event2);
+            expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2.getEffectiveEvent(), "!1:example.org");
+
+            client.emit(ClientEvent.Event, event1);
+            expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2.getEffectiveEvent(), "!1:example.org");
+        });
+
+        it("should not feed incoming event if not in timeline", () => {
+            const event = mkEvent({
+                event: true,
+                id: "$event-id",
+                type: "org.example.foo",
+                user: "@alice:example.org",
+                content: {
+                    hello: "world",
+                },
+                room: "!1:example.org",
+            });
+
+            client.emit(ClientEvent.Event, event);
+            expect(messaging.feedEvent).toHaveBeenCalledWith(event.getEffectiveEvent(), "!1:example.org");
+        });
+
+        it("feeds incoming event that is not in timeline but relates to unknown parent to the widget", async () => {
+            const event = mkEvent({
+                event: true,
+                id: "$event-idRelation",
+                type: "org.example.foo",
+                user: "@alice:example.org",
+                content: {
+                    "hello": "world",
+                    "m.relates_to": {
+                        event_id: "$unknown-parent",
+                        rel_type: "m.reference",
+                    },
+                },
+                room: "!1:example.org",
+            });
+
+            client.emit(ClientEvent.Event, event1);
+            expect(messaging.feedEvent).toHaveBeenCalledWith(event1.getEffectiveEvent(), "!1:example.org");
+
+            client.emit(ClientEvent.Event, event);
+            expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event.getEffectiveEvent(), "!1:example.org");
+
+            client.emit(ClientEvent.Event, event1);
+            expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event.getEffectiveEvent(), "!1:example.org");
+        });
     });
 
     describe("when there is a voice broadcast recording", () => {
