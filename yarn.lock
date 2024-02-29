@@ -8698,10 +8698,10 @@ matrix-mock-request@^2.5.0:
     uuid "^9.0.0"
     what-input "^5.2.10"
 
-matrix-web-i18n@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.2.0.tgz#45df533ba6e2ae98e1d1984132a1972e6dc6e490"
-  integrity sha512-dq/1s6jxRL8OIv653WetS99Hy8WsoE8dCYqvQTngfVaUp+D0WLRssFevbPJZNftU/3ZWi8fx4jL7aoWg9iIo3A==
+matrix-web-i18n@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.2.1.tgz#34e6b66bec71a52fddbe72db56d9e35dabbaff59"
+  integrity sha512-pBklE6Q6mAwG6N3Qtpu/e+qX0XuWEdrs4SZ+QmYJWfyLNtKAB6XcSpE5m7aBW/+11ejg8ua8Q5bNcDV2b7C9lg==
   dependencies:
     "@babel/parser" "^7.18.5"
     "@babel/traverse" "^7.18.5"
