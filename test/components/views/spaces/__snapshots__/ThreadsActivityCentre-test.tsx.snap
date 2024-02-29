@@ -2,7 +2,7 @@
 
 exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] = `
 <div
-  aria-labelledby="radix-12"
+  aria-labelledby="radix-20"
   aria-orientation="vertical"
   class="_menu_1x5h1_17"
   data-align="end"
@@ -11,7 +11,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
   data-side="right"
   data-state="open"
   dir="ltr"
-  id="radix-13"
+  id="radix-21"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
@@ -127,7 +127,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
 
 exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
 <div
-  aria-labelledby="radix-18"
+  aria-labelledby="radix-28"
   aria-orientation="vertical"
   class="_menu_1x5h1_17"
   data-align="end"
@@ -136,7 +136,7 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
   data-side="right"
   data-state="open"
   dir="ltr"
-  id="radix-19"
+  id="radix-29"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"

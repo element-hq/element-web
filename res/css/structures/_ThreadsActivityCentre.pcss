@@ -17,22 +17,31 @@
  */
 
 .mx_ThreadsActivityCentreButton {
-    color: $secondary-content;
-    height: 32px;
-    min-width: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border-radius: 8px;
     margin: 18px auto auto auto;
 
     &.expanded {
         /* align with settings icon */
-        margin-left: 25px;
+        margin-left: 21px;
 
-        & > .mx_ThreadsActivityCentreButton_IndicatorIcon {
+        /**
+         * modify internal css of the compound component
+         * dirty but we need to add the `Threads` label into the indicator icon button
+         **/
+        & > div {
+            display: flex;
+            align-items: center;
+        }
+
+        & .mx_ThreadsActivityCentreButton_Icon {
             /* align with settings label */
             margin-right: 14px;
+            /* required to set the icon width when into a flex container */
+            min-width: 24px;
+        }
+
+        & .mx_ThreadsActivityCentreButton_Text {
+            color: $secondary-content;
         }
     }
 
