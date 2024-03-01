@@ -377,7 +377,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.ipc.call("getAvailableSpellCheckLanguages");
     }
 
-    public getSSOCallbackUrl(fragmentAfterLogin: string): URL {
+    public getSSOCallbackUrl(fragmentAfterLogin?: string): URL {
         const url = super.getSSOCallbackUrl(fragmentAfterLogin);
         url.protocol = "element";
         url.searchParams.set(SSO_ID_KEY, this.ssoID);
@@ -446,9 +446,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     public async getOidcClientMetadata(): Promise<OidcRegistrationClientMetadata> {
         const baseMetadata = await super.getOidcClientMetadata();
+        const redirectUri = this.getSSOCallbackUrl();
+        redirectUri.searchParams.delete(SSO_ID_KEY); // it will be shuttled via the state param instead
         return {
             ...baseMetadata,
             applicationType: "native",
+            redirectUris: [redirectUri.href],
             // XXX: This should be overridable in config
             clientUri: "https://element.io",
         };
