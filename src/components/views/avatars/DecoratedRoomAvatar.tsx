@@ -29,6 +29,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
+import { getJoinedNonFunctionalMembers } from "../../../utils/room/getJoinedNonFunctionalMembers";
 
 interface IProps {
     room: Room;
@@ -158,7 +159,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
 
         // We look at the DMRoomMap and not the tag here so that we don't exclude DMs in Favourites
         const otherUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
-        if (otherUserId && this.props.room.getJoinedMemberCount() === 2) {
+        if (otherUserId && getJoinedNonFunctionalMembers(this.props.room).length === 2) {
             // Track presence, if available
             if (isPresenceEnabled(this.props.room.client)) {
                 this.dmUser = MatrixClientPeg.safeGet().getUser(otherUserId);
