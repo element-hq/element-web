@@ -2323,10 +2323,8 @@
         "help_about": {
             "access_token_detail": "Token akses Anda memberikan akses penuh ke akun Anda. Jangan bagikan dengan siapa pun.",
             "brand_version": "Versi %(brand)s:",
-            "chat_bot": "Mulai mengobrol dengan %(brand)s Bot",
             "clear_cache_reload": "Hapus cache dan muat ulang",
             "help_link": "Untuk bantuan dengan menggunakan %(brand)s, klik <a>di sini</a>.",
-            "help_link_chat_bot": "Untuk bantuan dengan menggunakan %(brand)s, klik <a>di sini</a> atau mulai sebuah obrolan dengan bot kami dengan menggunakan tombol di bawah.",
             "homeserver": "Homeserver adalah <code>%(homeserverUrl)s</code>",
             "identity_server": "Server identitas adalah <code>%(identityServerUrl)s</code>",
             "title": "Bantuan & Tentang",

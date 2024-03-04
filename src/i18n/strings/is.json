@@ -1915,10 +1915,8 @@
         "help_about": {
             "access_token_detail": "Aðgangsteiknið þitt gefur fullan aðgang að notandaaðgangnum þínum. Ekki deila því með neinum.",
             "brand_version": "Útgáfa %(brand)s:",
-            "chat_bot": "Spjalla við %(brand)s vélmenni",
             "clear_cache_reload": "Hreinsa skyndiminni og endurhlaða",
             "help_link": "Til að fá aðstoð við að nota %(brand)s, smelltu <a>hér</a>.",
-            "help_link_chat_bot": "Til að fá aðstoð við að nota %(brand)s, smelltu <a>hér</a> eða byrjaðu að spjalla við vélmennið okkar með hnappnum hér fyrir neðan.",
             "title": "Hjálp og um hugbúnaðinn",
             "versions": "Útgáfur"
         }

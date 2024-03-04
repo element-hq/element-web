@@ -2363,11 +2363,9 @@
         "help_about": {
             "access_token_detail": "Votre jeton d’accès donne un accès intégral à votre compte. Ne le partagez avec personne.",
             "brand_version": "Version de %(brand)s :",
-            "chat_bot": "Discuter avec le bot %(brand)s",
             "clear_cache_reload": "Vider le cache et recharger",
             "crypto_version": "Version crypto :",
             "help_link": "Pour obtenir de l’aide sur l’utilisation de %(brand)s, cliquez <a>ici</a>.",
-            "help_link_chat_bot": "Pour obtenir de l’aide sur l’utilisation de %(brand)s, cliquez <a>ici</a> ou commencez une discussion avec notre bot en utilisant le bouton ci-dessous.",
             "homeserver": "Le serveur d’accueil est <code>%(homeserverUrl)s</code>",
             "identity_server": "Le serveur d’identité est <code>%(identityServerUrl)s</code>",
             "title": "Aide et À propos",

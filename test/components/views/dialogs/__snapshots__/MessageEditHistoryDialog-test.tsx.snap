@@ -16,12 +16,12 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
     <div
       class="mx_Dialog_header mx_Dialog_headerWithCancel"
     >
-      <h2
+      <h1
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
         Message edits
-      </h2>
+      </h1>
       <div
         aria-label="Close dialog"
         class="mx_AccessibleButton mx_Dialog_cancelButton"
@@ -132,12 +132,12 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
     <div
       class="mx_Dialog_header mx_Dialog_headerWithCancel"
     >
-      <h2
+      <h1
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
         Message edits
-      </h2>
+      </h1>
       <div
         aria-label="Close dialog"
         class="mx_AccessibleButton mx_Dialog_cancelButton"

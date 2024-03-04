@@ -2104,10 +2104,8 @@
         "help_about": {
             "access_token_detail": "Mã thông báo truy cập của bạn cấp quyền truy cập đầy đủ vào tài khoản của bạn. Không chia sẻ nó với bất kỳ ai.",
             "brand_version": "Phiên bản %(brand)s:",
-            "chat_bot": "Trò chuyện với Bot %(brand)s",
             "clear_cache_reload": "Xóa bộ nhớ cache và tải lại",
             "help_link": "Để được trợ giúp về cách sử dụng %(brand)s, hãy nhấp vào đây <a>here</a>.",
-            "help_link_chat_bot": "Để được trợ giúp về cách sử dụng %(brand)s, hãy nhấp vào đây <a>here</a> hoặc bắt đầu trò chuyện với bot của chúng tôi bằng nút bên dưới.",
             "homeserver": "Máy chủ nhà là <code>%(homeserverUrl)s</code>",
             "identity_server": "Máy chủ định danh là <code>%(identityServerUrl)s</code>",
             "title": "Trợ giúp & Giới thiệu",

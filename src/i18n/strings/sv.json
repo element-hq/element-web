@@ -2388,11 +2388,9 @@
         "help_about": {
             "access_token_detail": "Din åtkomsttoken ger full åtkomst till ditt konto. Dela den inte med någon.",
             "brand_version": "%(brand)s-version:",
-            "chat_bot": "Chatta med %(brand)s-bott",
             "clear_cache_reload": "Rensa cache och ladda om",
             "crypto_version": "Kryptoversion:",
             "help_link": "För hjälp med att använda %(brand)s, klicka <a>här</a>.",
-            "help_link_chat_bot": "För hjälp med att använda %(brand)s, klicka <a>här</a> eller starta en chatt med vår bott med knappen nedan.",
             "homeserver": "Hemservern är <code>%(homeserverUrl)s</code>",
             "identity_server": "Identitetsservern är <code>%(identityServerUrl)s</code>",
             "title": "Hjälp & om",

@@ -16,6 +16,8 @@ limitations under the License.
 
 import { JSXElementConstructor } from "react";
 
+export type { NonEmptyArray } from "matrix-js-sdk/src/matrix";
+
 // Based on https://stackoverflow.com/a/53229857/3532235
 export type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };
 export type XOR<T, U> = T | U extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;
@@ -37,8 +39,6 @@ export type KeysStartingWith<Input extends object, Str extends string> = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     [P in keyof Input]: P extends `${Str}${infer _X}` ? P : never; // we don't use _X
 }[keyof Input];
-
-export type NonEmptyArray<T> = [T, ...T[]];
 
 export type Defaultize<P, D> = P extends any
     ? string extends keyof P

@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-@import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css");
+@import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css") layer(compound);
 @import url("@vector-im/compound-web/dist/style.css");
 @import "./_font-sizes.pcss";
 @import "./_animations.pcss";
@@ -474,6 +474,7 @@ legend {
     display: inline-block;
     width: 100%;
     box-sizing: border-box;
+    letter-spacing: var(--cpd-font-letter-spacing-heading-lg);
 
     &.danger {
         color: $alert;
@@ -561,7 +562,7 @@ legend {
     border-radius: 8px;
     font: var(--cpd-font-body-md-regular);
     color: $button-fg-color;
-    background-color: $accent;
+    background-color: var(--cpd-color-bg-action-primary-rest);
     width: auto;
     padding: 7px;
     padding-left: 1.5em;
@@ -594,8 +595,8 @@ legend {
 
     /* flip colours for the secondary ones */
     font-weight: var(--cpd-font-weight-semibold);
-    border: 1px solid currentColor;
-    color: $accent;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    color: var(--cpd-color-text-primary);
     background-color: transparent;
     font-family: inherit;
 }
@@ -615,8 +616,9 @@ legend {
 .mx_Dialog input[type="submit"].mx_Dialog_primary,
 .mx_Dialog_buttons button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton),
 .mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
-    color: $accent-fg-color;
-    background-color: $accent;
+    color: var(--cpd-color-text-on-solid-primary);
+    background-color: var(--cpd-color-bg-action-primary-rest);
+    border-color: var(--cpd-color-bg-action-primary-rest);
     min-width: 156px;
 }
 
@@ -624,15 +626,15 @@ legend {
 .mx_Dialog input[type="submit"].danger,
 .mx_Dialog_buttons button.danger:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton),
 .mx_Dialog_buttons input[type="submit"].danger {
-    background-color: $alert;
-    border: solid 1px $alert;
-    color: $accent-fg-color;
+    background-color: var(--cpd-color-bg-critical-primary);
+    border: solid 1px var(--cpd-color-bg-critical-primary);
+    color: var(--cpd-color-text-on-solid-primary);
 }
 
 .mx_Dialog button.warning:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]),
 .mx_Dialog input[type="submit"].warning {
-    border: solid 1px $alert;
-    color: $alert;
+    border: solid 1px var(--cpd-color-border-critical-primary);
+    color: var(--cpd-color-text-critical-primary);
 }
 
 .mx_Dialog button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):disabled,
@@ -814,11 +816,9 @@ legend {
 }
 
 @define-mixin composerButtonHighLight {
-    /* TODO: Refactor as this will break for apps that override the accent color */
-    background: var(--cpd-color-green-300);
-    /* make the icon the accent color too */
+    background: var(--cpd-color-bg-subtle-primary);
     &::before {
-        background-color: $accent !important;
+        background-color: var(--cpd-color-icon-primary) !important;
     }
 }
 

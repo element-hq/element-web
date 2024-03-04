@@ -2027,10 +2027,8 @@
         "help_about": {
             "access_token_detail": "Jouw toegangstoken geeft je toegang tot je account. Deel hem niet met anderen.",
             "brand_version": "%(brand)s-versie:",
-            "chat_bot": "Met %(brand)s-robot chatten",
             "clear_cache_reload": "Cache wissen en herladen",
             "help_link": "Klik <a>hier</a> voor hulp bij het gebruiken van %(brand)s.",
-            "help_link_chat_bot": "Klik <a>hier</a> voor hulp bij het gebruiken van %(brand)s of begin een kamer met onze robot met de knop hieronder.",
             "title": "Hulp & info",
             "versions": "Versies"
         }

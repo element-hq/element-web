@@ -2146,10 +2146,8 @@
         "help_about": {
             "access_token_detail": "你的访问令牌可以完全访问你的账户。不要将其与任何人分享。",
             "brand_version": "%(brand)s 版本：",
-            "chat_bot": "与 %(brand)s 机器人聊天",
             "clear_cache_reload": "清理缓存并重载",
             "help_link": "关于 %(brand)s 的<a>使用说明</a>。",
-            "help_link_chat_bot": "关于 %(brand)s 的使用说明，请点击<a>这里</a>或者通过下方按钮同我们的机器人聊聊。",
             "homeserver": "服务器介绍：<code>%(homeserverUrl)s</code>",
             "title": "帮助及关于",
             "versions": "版本"

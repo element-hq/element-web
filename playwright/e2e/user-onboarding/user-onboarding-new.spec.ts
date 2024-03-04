@@ -43,7 +43,7 @@ test.describe("User Onboarding (new user)", () => {
     test("app download dialog", async ({ page }) => {
         await page.getByRole("button", { name: "Download apps" }).click();
         await expect(
-            page.getByRole("dialog").getByRole("heading", { level: 2, name: "Download Element" }),
+            page.getByRole("dialog").getByRole("heading", { level: 1, name: "Download Element" }),
         ).toBeVisible();
         await expect(page.locator(".mx_Dialog")).toMatchScreenshot();
     });

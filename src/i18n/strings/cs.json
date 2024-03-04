@@ -2394,11 +2394,9 @@
         "help_about": {
             "access_token_detail": "Přístupový token vám umožní plný přístup k účtu. Nikomu ho nesdělujte.",
             "brand_version": "Verze %(brand)s:",
-            "chat_bot": "Konverzovat s %(brand)s Botem",
             "clear_cache_reload": "Smazat mezipaměť a načíst znovu",
             "crypto_version": "Verze kryptografie:",
             "help_link": "Pro pomoc s používáním %(brand)su klepněte <a>sem</a>.",
-            "help_link_chat_bot": "Pro pomoc s používáním %(brand)su klepněte <a>sem</a> nebo následujícím tlačítkem zahajte konverzaci s robotem.",
             "homeserver": "Domovský server je <code>%(homeserverUrl)s</code>",
             "identity_server": "Server identit je <code>%(identityServerUrl)s</code>",
             "title": "O aplikaci a pomoc",

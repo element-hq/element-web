@@ -415,12 +415,7 @@ describe("Login", function () {
             // tried to register
             expect(fetchMock).toHaveBeenCalledWith(delegatedAuth.registrationEndpoint, expect.any(Object));
             // called with values from config
-            expect(registerClientUtils.getOidcClientId).toHaveBeenCalledWith(
-                delegatedAuth,
-                "test-brand",
-                "http://localhost",
-                oidcStaticClientsConfig,
-            );
+            expect(registerClientUtils.getOidcClientId).toHaveBeenCalledWith(delegatedAuth, oidcStaticClientsConfig);
         });
 
         it("should fallback to normal login when client registration fails", async () => {

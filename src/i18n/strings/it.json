@@ -2339,10 +2339,8 @@
         "help_about": {
             "access_token_detail": "Il tuo token di accesso ti dà l'accesso al tuo account. Non condividerlo con nessuno.",
             "brand_version": "versione %(brand)s:",
-            "chat_bot": "Chatta con %(brand)s Bot",
             "clear_cache_reload": "Svuota la cache e ricarica",
             "help_link": "Per aiuto su come usare %(brand)s, clicca <a>qui</a>.",
-            "help_link_chat_bot": "Per aiuto su come usare %(brand)s, clicca <a>qui</a> o inizia una chat con il nostro bot usando il pulsante sotto.",
             "homeserver": "L'homeserver è <code>%(homeserverUrl)s</code>",
             "identity_server": "Il server d'identità è <code>%(identityServerUrl)s</code>",
             "title": "Aiuto e informazioni",

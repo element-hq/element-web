@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { Method } from "matrix-js-sdk/src/matrix";
+import { Method, MatrixClient, CryptoApi } from "matrix-js-sdk/src/matrix";
 
 import type * as Pako from "pako";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -37,34 +37,70 @@ interface IOpts {
     customFields?: Record<string, string>;
 }
 
-async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<FormData> {
-    const progressCallback = opts.progressCallback || ((): void => {});
+/**
+ * Exported only for testing.
+ * @internal public for test
+ */
+export async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<FormData> {
+    const progressCallback = opts.progressCallback;
 
-    progressCallback(_t("bug_reporting|collecting_information"));
-    let version: string | undefined;
-    try {
-        version = await PlatformPeg.get()?.getAppVersion();
-    } catch (err) {} // PlatformPeg already logs this.
-
-    const userAgent = window.navigator?.userAgent ?? "UNKNOWN";
-
-    let installedPWA = "UNKNOWN";
-    try {
-        // Known to work at least for desktop Chrome
-        installedPWA = String(window.matchMedia("(display-mode: standalone)").matches);
-    } catch (e) {}
-
-    let touchInput = "UNKNOWN";
-    try {
-        // MDN claims broad support across browsers
-        touchInput = String(window.matchMedia("(pointer: coarse)").matches);
-    } catch (e) {}
-
-    const client = MatrixClientPeg.get();
+    progressCallback?.(_t("bug_reporting|collecting_information"));
 
     logger.log("Sending bug report.");
 
     const body = new FormData();
+
+    await collectBaseInformation(body, opts);
+
+    const client = MatrixClientPeg.get();
+
+    if (client) {
+        await collectClientInfo(client, body);
+    }
+
+    collectLabels(client, opts, body);
+
+    collectSettings(body);
+
+    await collectStorageStatInfo(body);
+
+    collectMissingFeatures(body);
+
+    if (opts.sendLogs) {
+        await collectLogs(body, gzipLogs, progressCallback);
+    }
+
+    return body;
+}
+
+async function getAppVersion(): Promise<string | undefined> {
+    try {
+        return await PlatformPeg.get()?.getAppVersion();
+    } catch (err) {
+        // this happens if no version is set i.e. in dev
+    }
+}
+
+function matchesMediaQuery(query: string): string {
+    try {
+        return String(window.matchMedia(query).matches);
+    } catch (err) {
+        // if not supported in browser
+    }
+    return "UNKNOWN";
+}
+
+/**
+ * Collects base information about the user and the app to add to the report.
+ */
+async function collectBaseInformation(body: FormData, opts: IOpts): Promise<void> {
+    const version = await getAppVersion();
+
+    const userAgent = window.navigator?.userAgent ?? "UNKNOWN";
+
+    const installedPWA = matchesMediaQuery("(display-mode: standalone)");
+    const touchInput = matchesMediaQuery("(pointer: coarse)");
+
     body.append("text", opts.userText || "User did not supply any additional text.");
     body.append("app", opts.customApp || "element-web");
     body.append("version", version ?? "UNKNOWN");
@@ -77,90 +113,116 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
             body.append(key, opts.customFields[key]);
         }
     }
+}
 
-    if (client) {
-        body.append("user_id", client.credentials.userId!);
-        body.append("device_id", client.deviceId!);
+/**
+ * Collects client and crypto related info.
+ */
+async function collectClientInfo(client: MatrixClient, body: FormData): Promise<void> {
+    body.append("user_id", client.credentials.userId!);
+    body.append("device_id", client.deviceId!);
 
-        const cryptoApi = client.getCrypto();
+    const cryptoApi = client.getCrypto();
 
-        if (cryptoApi) {
-            body.append("crypto_version", cryptoApi.getVersion());
+    if (cryptoApi) {
+        await collectCryptoInfo(cryptoApi, body);
+        await collectRecoveryInfo(client, cryptoApi, body);
+    }
 
-            const ownDeviceKeys = await cryptoApi.getOwnDeviceKeys();
-            const keys = [`curve25519:${ownDeviceKeys.curve25519}`, `ed25519:${ownDeviceKeys.ed25519}`];
+    await collectSynapseSpecific(client, body);
+}
 
-            body.append("device_keys", keys.join(", "));
-
-            // add cross-signing status information
-            const crossSigningStatus = await cryptoApi.getCrossSigningStatus();
-            const secretStorage = client.secretStorage;
-
-            body.append("cross_signing_ready", String(await cryptoApi.isCrossSigningReady()));
-            body.append("cross_signing_key", (await cryptoApi.getCrossSigningKeyId()) ?? "n/a");
-            body.append(
-                "cross_signing_privkey_in_secret_storage",
-                String(crossSigningStatus.privateKeysInSecretStorage),
-            );
-
-            body.append(
-                "cross_signing_master_privkey_cached",
-                String(crossSigningStatus.privateKeysCachedLocally.masterKey),
-            );
-            body.append(
-                "cross_signing_self_signing_privkey_cached",
-                String(crossSigningStatus.privateKeysCachedLocally.selfSigningKey),
-            );
-            body.append(
-                "cross_signing_user_signing_privkey_cached",
-                String(crossSigningStatus.privateKeysCachedLocally.userSigningKey),
-            );
-
-            body.append("secret_storage_ready", String(await cryptoApi.isSecretStorageReady()));
-            body.append("secret_storage_key_in_account", String(await secretStorage.hasKey()));
-
-            body.append("session_backup_key_in_secret_storage", String(!!(await client.isKeyBackupKeyStored())));
-            const sessionBackupKeyFromCache = await cryptoApi.getSessionBackupPrivateKey();
-            body.append("session_backup_key_cached", String(!!sessionBackupKeyFromCache));
-            body.append("session_backup_key_well_formed", String(sessionBackupKeyFromCache instanceof Uint8Array));
-        }
-
+/**
+ * Collects information about the home server.
+ */
+async function collectSynapseSpecific(client: MatrixClient, body: FormData): Promise<void> {
+    try {
+        // XXX: This is synapse-specific but better than nothing until MSC support for a server version endpoint
+        const data = await client.http.request<Record<string, any>>(
+            Method.Get,
+            "/server_version",
+            undefined,
+            undefined,
+            {
+                prefix: "/_synapse/admin/v1",
+            },
+        );
+        Object.keys(data).forEach((key) => {
+            body.append(`matrix_hs_${key}`, data[key]);
+        });
+    } catch {
         try {
-            // XXX: This is synapse-specific but better than nothing until MSC support for a server version endpoint
-            const data = await client.http.request<Record<string, any>>(
-                Method.Get,
-                "/server_version",
-                undefined,
-                undefined,
-                {
-                    prefix: "/_synapse/admin/v1",
-                },
-            );
-            Object.keys(data).forEach((key) => {
-                body.append(`matrix_hs_${key}`, data[key]);
-            });
+            // XXX: This relies on the federation listener being delegated via well-known
+            // or at the same place as the client server endpoint
+            const data = await getServerVersionFromFederationApi(client);
+            body.append("matrix_hs_name", data.server.name);
+            body.append("matrix_hs_version", data.server.version);
         } catch {
             try {
-                // XXX: This relies on the federation listener being delegated via well-known
-                // or at the same place as the client server endpoint
-                const data = await getServerVersionFromFederationApi(client);
-                body.append("matrix_hs_name", data.server.name);
-                body.append("matrix_hs_version", data.server.version);
-            } catch {
-                try {
-                    // If that fails we'll hit any endpoint and look at the server response header
-                    const res = await window.fetch(client.http.getUrl("/login"), {
-                        method: "GET",
-                        mode: "cors",
-                    });
-                    if (res.headers.has("server")) {
-                        body.append("matrix_hs_server", res.headers.get("server")!);
-                    }
-                } catch {
-                    // Could not determine server version
+                // If that fails we'll hit any endpoint and look at the server response header
+                const res = await window.fetch(client.http.getUrl("/login"), {
+                    method: "GET",
+                    mode: "cors",
+                });
+                if (res.headers.has("server")) {
+                    body.append("matrix_hs_server", res.headers.get("server")!);
                 }
+            } catch {
+                // Could not determine server version
             }
         }
+    }
+}
+
+/**
+ * Collects crypto related information.
+ */
+async function collectCryptoInfo(cryptoApi: CryptoApi, body: FormData): Promise<void> {
+    body.append("crypto_version", cryptoApi.getVersion());
+
+    const ownDeviceKeys = await cryptoApi.getOwnDeviceKeys();
+    const keys = [`curve25519:${ownDeviceKeys.curve25519}`, `ed25519:${ownDeviceKeys.ed25519}`];
+
+    body.append("device_keys", keys.join(", "));
+
+    // add cross-signing status information
+    const crossSigningStatus = await cryptoApi.getCrossSigningStatus();
+
+    body.append("cross_signing_ready", String(await cryptoApi.isCrossSigningReady()));
+    body.append("cross_signing_key", (await cryptoApi.getCrossSigningKeyId()) ?? "n/a");
+    body.append("cross_signing_privkey_in_secret_storage", String(crossSigningStatus.privateKeysInSecretStorage));
+
+    body.append("cross_signing_master_privkey_cached", String(crossSigningStatus.privateKeysCachedLocally.masterKey));
+    body.append(
+        "cross_signing_self_signing_privkey_cached",
+        String(crossSigningStatus.privateKeysCachedLocally.selfSigningKey),
+    );
+    body.append(
+        "cross_signing_user_signing_privkey_cached",
+        String(crossSigningStatus.privateKeysCachedLocally.userSigningKey),
+    );
+}
+
+/**
+ * Collects information about secret storage and backup.
+ */
+async function collectRecoveryInfo(client: MatrixClient, cryptoApi: CryptoApi, body: FormData): Promise<void> {
+    const secretStorage = client.secretStorage;
+    body.append("secret_storage_ready", String(await cryptoApi.isSecretStorageReady()));
+    body.append("secret_storage_key_in_account", String(await secretStorage.hasKey()));
+
+    body.append("session_backup_key_in_secret_storage", String(!!(await client.isKeyBackupKeyStored())));
+    const sessionBackupKeyFromCache = await cryptoApi.getSessionBackupPrivateKey();
+    body.append("session_backup_key_cached", String(!!sessionBackupKeyFromCache));
+    body.append("session_backup_key_well_formed", String(sessionBackupKeyFromCache instanceof Uint8Array));
+}
+
+/**
+ * Collects labels to add to the report.
+ */
+export function collectLabels(client: MatrixClient | null, opts: IOpts, body: FormData): void {
+    if (client?.getCrypto()?.getVersion()?.startsWith(`Rust SDK`)) {
+        body.append("label", "A-Element-R");
     }
 
     if (opts.labels) {
@@ -168,7 +230,12 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
             body.append("label", label);
         }
     }
+}
 
+/**
+ * Collects some settings (lab flags and more) to add to the report.
+ */
+export function collectSettings(body: FormData): void {
     // add labs options
     const enabledLabs = SettingsStore.getFeatureSettingNames().filter((f) => SettingsStore.getValue(f));
     if (enabledLabs.length) {
@@ -179,6 +246,13 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
         body.append("lowBandwidth", "enabled");
     }
 
+    body.append("mx_local_settings", localStorage.getItem("mx_local_settings")!);
+}
+
+/**
+ * Collects storage statistics to add to the report.
+ */
+async function collectStorageStatInfo(body: FormData): Promise<void> {
     // add storage persistence/quota information
     if (navigator.storage && navigator.storage.persisted) {
         try {
@@ -202,7 +276,9 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
             }
         } catch (e) {}
     }
+}
 
+function collectMissingFeatures(body: FormData): void {
     if (window.Modernizr) {
         const missingFeatures = (Object.keys(window.Modernizr) as [keyof ModernizrStatic]).filter(
             (key: keyof ModernizrStatic) => window.Modernizr[key] === false,
@@ -211,33 +287,35 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
             body.append("modernizr_missing_features", missingFeatures.join(", "));
         }
     }
-
-    body.append("mx_local_settings", localStorage.getItem("mx_local_settings")!);
-
-    if (opts.sendLogs) {
-        let pako: typeof Pako | undefined;
-        if (gzipLogs) {
-            pako = await import("pako");
-        }
-
-        progressCallback(_t("bug_reporting|collecting_logs"));
-        const logs = await rageshake.getLogsForReport();
-        for (const entry of logs) {
-            // encode as UTF-8
-            let buf = new TextEncoder().encode(entry.lines);
-
-            // compress
-            if (gzipLogs) {
-                buf = pako!.gzip(buf);
-            }
-
-            body.append("compressed-log", new Blob([buf]), entry.id);
-        }
-    }
-
-    return body;
 }
 
+/**
+ * Collects logs to add to the report if enabled.
+ */
+async function collectLogs(
+    body: FormData,
+    gzipLogs: boolean,
+    progressCallback: ((s: string) => void) | undefined,
+): Promise<void> {
+    let pako: typeof Pako | undefined;
+    if (gzipLogs) {
+        pako = await import("pako");
+    }
+
+    progressCallback?.(_t("bug_reporting|collecting_logs"));
+    const logs = await rageshake.getLogsForReport();
+    for (const entry of logs) {
+        // encode as UTF-8
+        let buf = new TextEncoder().encode(entry.lines);
+
+        // compress
+        if (gzipLogs) {
+            buf = pako!.gzip(buf);
+        }
+
+        body.append("compressed-log", new Blob([buf]), entry.id);
+    }
+}
 /**
  * Send a bug report.
  *

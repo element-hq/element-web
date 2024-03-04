@@ -2021,10 +2021,8 @@
         "help_about": {
             "access_token_detail": "O teu token de acceso da acceso completo á túa conta. Non o compartas con ninguén.",
             "brand_version": "versión %(brand)s:",
-            "chat_bot": "Chat co Bot %(brand)s",
             "clear_cache_reload": "Baleirar caché e recargar",
             "help_link": "Para ter axuda con %(brand)s, preme <a>aquí</a>.",
-            "help_link_chat_bot": "Se precisas axuda usando %(brand)s, preme <a>aquí</a> ou inicia unha conversa co noso bot usando o botón inferior.",
             "title": "Axuda & Acerca de",
             "versions": "Versións"
         }

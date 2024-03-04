@@ -113,7 +113,7 @@ jobs:
               run: yarn playwright install --with-deps
 
             - name: Run Playwright tests
-              uses: coactions/setup-xvfb@b6b4fcfb9f5a895edadc3bc76318fae0ac17c8b3 # v1
+              uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
               with:
                   run: yarn playwright test --shard ${{ matrix.runner }}/${{ strategy.job-total }}
                   working-directory: matrix-react-sdk
