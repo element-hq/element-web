@@ -14,8 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ClientEvent, MatrixEvent, MatrixEventEvent, SyncStateData, SyncState } from "matrix-js-sdk/src/matrix";
+import {
+    ClientEvent,
+    MatrixEvent,
+    MatrixEventEvent,
+    SyncStateData,
+    SyncState,
+    ToDeviceMessageId,
+} from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
+import { v4 as uuidv4 } from "uuid";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import SdkConfig from "../SdkConfig";
 import sendBugReport from "../rageshake/submit-rageshake";
@@ -108,20 +117,28 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
 
             const now = new Date().getTime();
             if (now - this.state.lastRageshakeTime < RAGESHAKE_INTERVAL) {
+                logger.info(
+                    `Not sending recipient-side autorageshake for event ${ev.getId()}/session ${sessionId}: last rageshake was too recent`,
+                );
                 return;
             }
 
             await this.updateState({ lastRageshakeTime: now });
 
+            const senderUserId = ev.getSender()!;
             const eventInfo = {
                 event_id: ev.getId(),
                 room_id: ev.getRoomId(),
                 session_id: sessionId,
                 device_id: wireContent.device_id,
-                user_id: ev.getSender()!,
+                user_id: senderUserId,
                 sender_key: wireContent.sender_key,
             };
 
+            logger.info(`Sending recipient-side autorageshake for event ${ev.getId()}/session ${sessionId}`);
+            // XXX: the rageshake server returns the URL for the github issue... which is typically absent for
+            //   auto-uisis, because we've disabled creation of GH issues for them. So the `recipient_rageshake`
+            //   field is broken.
             const rageshakeURL = await sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
                 userText: "Auto-reporting decryption error (recipient)",
                 sendLogs: true,
@@ -133,10 +150,11 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
             const messageContent = {
                 ...eventInfo,
                 recipient_rageshake: rageshakeURL,
+                [ToDeviceMessageId]: uuidv4(),
             };
             this.matrixClient?.sendToDevice(
                 AUTO_RS_REQUEST,
-                new Map([["messageContent.user_id", new Map([[messageContent.device_id, messageContent]])]]),
+                new Map([[senderUserId, new Map([[messageContent.device_id, messageContent]])]]),
             );
         }
     }
@@ -158,6 +176,9 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
         const now = new Date().getTime();
         if (now - this.state.lastRageshakeTime > RAGESHAKE_INTERVAL) {
             await this.updateState({ lastRageshakeTime: now });
+            logger.info(
+                `Sending sender-side autorageshake for event ${messageContent["event_id"]}/session ${messageContent["session_id"]}`,
+            );
             await sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
                 userText: `Auto-reporting decryption error (sender)\nRecipient rageshake: ${recipientRageshake}`,
                 sendLogs: true,
@@ -168,6 +189,10 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
                     auto_uisi: JSON.stringify(messageContent),
                 },
             });
+        } else {
+            logger.info(
+                `Not sending sender-side autorageshake for event ${messageContent["event_id"]}/session ${messageContent["session_id"]}: last rageshake was too recent`,
+            );
         }
     }
 
