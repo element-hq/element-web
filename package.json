@@ -128,7 +128,7 @@
         "react-transition-group": "^4.4.1",
         "rfc4648": "^1.4.0",
         "sanitize-filename": "^1.6.3",
-        "sanitize-html": "2.11.0",
+        "sanitize-html": "2.12.1",
         "tar-js": "^0.3.0",
         "ua-parser-js": "^1.0.2",
         "uuid": "^9.0.0",
