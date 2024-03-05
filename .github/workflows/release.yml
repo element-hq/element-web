@@ -25,6 +25,18 @@ jobs:
             asset-path: dist/*.tar.gz
             expected-asset-count: 3
 
+    notify-downstream:
+        name: Trigger release drafter downstream
+        needs: release
+        runs-on: ubuntu-latest
+        steps:
+            - name: Notify element-desktop repo that element-web release has completed to re-trigger release-drafter
+              uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3
+              with:
+                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  repository: element-hq/element-desktop
+                  event-type: upstream-release-notify
+
     check:
         name: Post release checks
         needs: release
