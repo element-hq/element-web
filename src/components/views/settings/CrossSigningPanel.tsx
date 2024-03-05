@@ -235,7 +235,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
                 buttonCaption = _t("encryption|verify_toast_title");
             }
             actions.push(
-                <AccessibleButton key="setup" kind="primary" onClick={this.onBootstrapClick}>
+                <AccessibleButton key="setup" kind="primary_outline" onClick={this.onBootstrapClick}>
                     {buttonCaption}
                 </AccessibleButton>,
             );
@@ -243,7 +243,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
 
         if (keysExistAnywhere) {
             actions.push(
-                <AccessibleButton key="reset" kind="danger" onClick={this.onResetCrossSigningClick}>
+                <AccessibleButton key="reset" kind="danger_outline" onClick={this.onResetCrossSigningClick}>
                     {_t("action|reset")}
                 </AccessibleButton>,
             );

@@ -30,37 +30,42 @@ limitations under the License.
     position: absolute;
 
     .mx_TabbedView_tabLabels {
-        width: 170px;
-        max-width: 170px;
+        width: 220px;
+        max-width: 220px;
         position: fixed;
         margin: 0; /* Remove the default value */
         padding: 0; /* Remove the default value */
     }
 
     .mx_TabbedView_tabPanel {
-        margin-left: 240px; /* 170px sidebar + 70px padding */
+        margin-left: 280px; /* 220px sidebar + 60px padding */
         flex-direction: column;
     }
 
+    .mx_TabbedView_tabLabel:hover,
     .mx_TabbedView_tabLabel_active {
-        background-color: $accent;
         color: $tab-label-active-fg-color;
+
+        .mx_TabbedView_maskedIcon::before {
+            background-color: var(--cpd-color-icon-primary);
+        }
     }
 
-    .mx_TabbedView_tabLabel_active .mx_TabbedView_maskedIcon::before {
-        background-color: $tab-label-active-fg-color;
+    .mx_TabbedView_tabLabel_active {
+        background-color: var(--cpd-color-bg-subtle-secondary);
     }
 
     .mx_TabbedView_maskedIcon {
-        width: 16px;
-        height: 16px;
-        margin-right: 16px;
+        width: 20px;
+        height: 20px;
+        margin-right: var(--cpd-space-3x);
     }
 
     .mx_TabbedView_maskedIcon::before {
-        mask-size: 16px;
-        width: 16px;
-        height: 16px;
+        mask-size: 20px;
+        width: 20px;
+        height: 20px;
+        transition: background-color 0.1s;
     }
 }
 
@@ -120,10 +125,16 @@ limitations under the License.
     align-items: center;
     vertical-align: text-top;
     cursor: pointer;
-    padding: 8px;
-    border-radius: 8px;
-    font-size: $font-13px;
+    padding-block: var(--cpd-space-2x);
+    padding-inline: var(--cpd-space-3x) var(--cpd-space-4x);
+    box-sizing: border-box;
+    min-block-size: 40px;
+    border-radius: 24px;
+    font: var(--cpd-font-body-md-medium);
     position: relative;
+    transition:
+        color 0.1s,
+        background-color 0.1s;
 }
 
 .mx_TabbedView_maskedIcon {
@@ -132,7 +143,7 @@ limitations under the License.
 
 .mx_TabbedView_maskedIcon::before {
     display: inline-block;
-    background-color: $icon-button-color;
+    background-color: var(--cpd-color-icon-secondary);
     mask-repeat: no-repeat;
     mask-position: center;
     content: "";

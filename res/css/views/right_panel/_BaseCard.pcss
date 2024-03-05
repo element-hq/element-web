@@ -179,6 +179,7 @@ limitations under the License.
         left: 0;
         mask-repeat: no-repeat;
         mask-position: center;
+        mask-size: 20px;
         background-color: var(--cpd-color-icon-secondary);
     }
 }
@@ -195,7 +196,7 @@ limitations under the License.
 .mx_BaseCard_close {
     order: 999; /* always last */
     &::before {
-        mask-image: url("$(res)/img/icons-close.svg");
+        mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
     }
 }
 

@@ -328,14 +328,14 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
             );
 
             actions.push(
-                <AccessibleButton key="restore" kind="primary" onClick={this.restoreBackup}>
+                <AccessibleButton key="restore" kind="primary_outline" onClick={this.restoreBackup}>
                     {restoreButtonCaption}
                 </AccessibleButton>,
             );
 
             if (!isSecureBackupRequired(MatrixClientPeg.safeGet())) {
                 actions.push(
-                    <AccessibleButton key="delete" kind="danger" onClick={this.deleteBackup}>
+                    <AccessibleButton key="delete" kind="danger_outline" onClick={this.deleteBackup}>
                         {_t("settings|security|delete_backup")}
                     </AccessibleButton>,
                 );
@@ -350,7 +350,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                 </>
             );
             actions.push(
-                <AccessibleButton key="setup" kind="primary" onClick={this.startNewBackup}>
+                <AccessibleButton key="setup" kind="primary_outline" onClick={this.startNewBackup}>
                     {_t("encryption|setup_secure_backup|title")}
                 </AccessibleButton>,
             );
@@ -358,7 +358,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
 
         if (secretStorageKeyInAccount) {
             actions.push(
-                <AccessibleButton key="reset" kind="danger" onClick={this.resetSecretStorage}>
+                <AccessibleButton key="reset" kind="danger_outline" onClick={this.resetSecretStorage}>
                     {_t("action|reset")}
                 </AccessibleButton>,
             );

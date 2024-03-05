@@ -85,7 +85,7 @@ const UpdateCheckButton: React.FC = () => {
 
     return (
         <React.Fragment>
-            <AccessibleButton onClick={onCheckForUpdateClick} kind="primary" disabled={busy}>
+            <AccessibleButton onClick={onCheckForUpdateClick} kind="primary_outline" disabled={busy}>
                 {_t("update|check_action")}
             </AccessibleButton>
             {suffix}

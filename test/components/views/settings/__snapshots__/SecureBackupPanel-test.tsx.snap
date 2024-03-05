@@ -175,14 +175,14 @@ exports[`<SecureBackupPanel /> suggests connecting session to key backup when ba
     class="mx_SecureBackupPanel_buttonRow"
   >
     <div
-      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
       role="button"
       tabindex="0"
     >
       Connect this session to Key Backup
     </div>
     <div
-      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_outline"
       role="button"
       tabindex="0"
     >
