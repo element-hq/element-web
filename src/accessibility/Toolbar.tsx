@@ -53,8 +53,9 @@ const Toolbar = forwardRef<HTMLDivElement, IProps>(({ children, ...props }, ref)
         }
     };
 
+    // We handle both up/down and left/right as is allowed in the above WAI ARIA best practices
     return (
-        <RovingTabIndexProvider handleHomeEnd handleLeftRight onKeyDown={onKeyDown}>
+        <RovingTabIndexProvider handleHomeEnd handleLeftRight handleUpDown onKeyDown={onKeyDown}>
             {({ onKeyDownHandler }) => (
                 <div {...props} onKeyDown={onKeyDownHandler} role="toolbar" ref={ref}>
                     {children}
