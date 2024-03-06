@@ -84,22 +84,23 @@ limitations under the License.
     }
 
     &:checked + label > .mx_Checkbox_background {
-        background: var(--cpd-color-bg-action-primary-rest);
-        border-color: var(--cpd-color-bg-action-primary-rest);
+        background: var(--cpd-color-bg-accent-rest);
+        border-color: var(--cpd-color-bg-accent-rest);
     }
 
     &:checked:disabled + label > .mx_Checkbox_background {
-        opacity: 0.5;
+        background: var(--cpd-color-bg-action-primary-disabled);
+        border-color: var(--cpd-color-bg-action-primary-disabled);
     }
 }
 
 .mx_Checkbox.mx_Checkbox_kind_outline input[type="checkbox"] {
     & + label > .mx_Checkbox_background .mx_Checkbox_checkmark {
-        background: var(--cpd-color-bg-action-primary-rest);
+        background: var(--cpd-color-bg-accent-rest);
     }
 
     &:checked + label > .mx_Checkbox_background {
         background: transparent;
-        border-color: var(--cpd-color-bg-action-primary-rest);
+        border-color: var(--cpd-color-bg-accent-rest);
     }
 }

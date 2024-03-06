@@ -17,11 +17,12 @@ limitations under the License.
 import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
 
-export interface UpdateFontSizePayload extends ActionPayload {
-    action: Action.UpdateFontSize;
+export interface UpdateFontSizeDeltaPayload extends ActionPayload {
+    action: Action.UpdateFontSizeDelta;
 
     /**
-     * The font size to set the root to
+     * The delta is added to the current font size.
+     * The delta should be between {@link FontWatcher.MIN_DELTA} and {@link FontWatcher.MAX_DELTA}.
      */
-    size: number;
+    delta: number;
 }

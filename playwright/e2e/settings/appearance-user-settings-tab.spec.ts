@@ -73,48 +73,18 @@ test.describe("Appearance user settings tab", () => {
         await expect(page.locator(".mx_RoomView_body[data-layout='bubble']")).toBeVisible();
     });
 
-    test("should support changing font size by clicking the font slider", async ({ page, app, user }) => {
+    test("should support changing font size by using the font size dropdown", async ({ page, app, user }) => {
         await app.settings.openUserSettings("Appearance");
 
         const tab = page.getByTestId("mx_AppearanceUserSettingsTab");
-        const fontSliderSection = tab.locator(".mx_FontScalingPanel_fontSlider");
+        const fontDropdown = tab.locator(".mx_FontScalingPanel_Dropdown");
+        await expect(fontDropdown.getByLabel("Font size")).toBeVisible();
 
-        await expect(fontSliderSection.getByLabel("Font size")).toBeVisible();
+        // Default browser font size is 16px and the select value is 0
+        // -4 value is 12px
+        await fontDropdown.getByLabel("Font size").selectOption({ value: "-4" });
 
-        const slider = fontSliderSection.getByRole("slider");
-        // Click the left position of the slider
-        await slider.click({ position: { x: 0, y: 10 } });
-
-        const MIN_FONT_SIZE = 11;
-        // Assert that the smallest font size is selected
-        await expect(fontSliderSection.locator(`input[value='${MIN_FONT_SIZE}']`)).toBeVisible();
-        await expect(
-            fontSliderSection.locator("output .mx_Slider_selection_label", { hasText: String(MIN_FONT_SIZE) }),
-        ).toBeVisible();
-
-        await expect(fontSliderSection).toMatchScreenshot(`font-slider-${MIN_FONT_SIZE}.png`);
-
-        // Click the right position of the slider
-        await slider.click({ position: { x: 572, y: 10 } });
-
-        const MAX_FONT_SIZE = 21;
-        // Assert that the largest font size is selected
-        await expect(fontSliderSection.locator(`input[value='${MAX_FONT_SIZE}']`)).toBeVisible();
-        await expect(
-            fontSliderSection.locator("output .mx_Slider_selection_label", { hasText: String(MAX_FONT_SIZE) }),
-        ).toBeVisible();
-
-        await expect(fontSliderSection).toMatchScreenshot(`font-slider-${MAX_FONT_SIZE}.png`);
-    });
-
-    test("should disable font size slider when custom font size is used", async ({ page, app, user }) => {
-        await app.settings.openUserSettings("Appearance");
-
-        const panel = page.getByTestId("mx_FontScalingPanel");
-        await panel.locator("label", { hasText: "Use custom size" }).click();
-
-        // Assert that the font slider is disabled
-        await expect(panel.locator(".mx_FontScalingPanel_fontSlider input[disabled]")).toBeVisible();
+        await expect(page).toMatchScreenshot("window-12px.png");
     });
 
     test("should support enabling compact group (modern) layout", async ({ page, app, user }) => {

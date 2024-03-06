@@ -52,11 +52,11 @@ import WidgetStore from "../stores/WidgetStore";
 import { WidgetMessagingStore, WidgetMessagingStoreEvent } from "../stores/widgets/WidgetMessagingStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidgetStore";
 import { getCurrentLanguage } from "../languageHandler";
-import { FontWatcher } from "../settings/watchers/FontWatcher";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctionalMembers";
 import { isVideoRoom } from "../utils/video-rooms";
+import { FontWatcher } from "../settings/watchers/FontWatcher";
 
 const TIMEOUT_MS = 16000;
 
@@ -687,7 +687,8 @@ export class ElementCall extends Call {
             roomId: roomId,
             baseUrl: client.baseUrl,
             lang: getCurrentLanguage().replace("_", "-"),
-            fontScale: `${(SettingsStore.getValue("baseFontSizeV2") ?? 16) / FontWatcher.DEFAULT_SIZE}`,
+            fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
+            theme: "$org.matrix.msc2873.client_theme",
             analyticsID,
         });
 

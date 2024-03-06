@@ -23,7 +23,6 @@ import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { IEncryptedPayload } from "matrix-js-sdk/src/crypto/aes";
 import { QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MINIMUM_MATRIX_VERSION, SUPPORTED_MATRIX_VERSIONS } from "matrix-js-sdk/src/version-support";
 
 import { IMatrixClientCreds, MatrixClientPeg } from "./MatrixClientPeg";
 import { ModuleRunner } from "./modules/ModuleRunner";
@@ -74,7 +73,6 @@ import {
     getStoredOidcTokenIssuer,
     persistOidcAuthenticatedSettings,
 } from "./utils/oidc/persistOidcSettings";
-import GenericToast from "./components/views/toasts/GenericToast";
 import {
     ACCESS_TOKEN_IV,
     ACCESS_TOKEN_STORAGE_KEY,
@@ -97,8 +95,20 @@ dis.register((payload) => {
         onLoggedOut();
     } else if (payload.action === Action.OverwriteLogin) {
         const typed = <OverwriteLoginPayload>payload;
-        // noinspection JSIgnoredPromiseFromCall - we don't care if it fails
-        doSetLoggedIn(typed.credentials, true);
+        // Stop the current client before overwriting the login.
+        // If not done it might be impossible to clear the storage, as the
+        // rust crypto backend might be holding an open connection to the indexeddb store.
+        // We also use the `unsetClient` flag to false, because at this point we are
+        // already in the logged in flows of the `MatrixChat` component, and it will
+        // always expect to have a client (calls to `MatrixClientPeg.safeGet()`).
+        // If we unset the client and the component is updated,  the render will fail and unmount everything.
+        // (The module dialog closes and fires a `aria_unhide_main_app` that will trigger a re-render)
+        stopMatrixClient(false);
+        doSetLoggedIn(typed.credentials, true).catch((e) => {
+            // XXX we might want to fire a new event here to let the app know that the login failed ?
+            // The module api could use it to display a message to the user.
+            logger.warn("Failed to overwrite login", e);
+        });
     }
 });
 
@@ -635,43 +645,11 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
             },
             false,
         );
-        await checkServerVersions();
         return true;
     } else {
         logger.log("No previous session found.");
         return false;
     }
-}
-
-async function checkServerVersions(): Promise<void> {
-    const client = MatrixClientPeg.get();
-    if (!client) return;
-    for (const version of SUPPORTED_MATRIX_VERSIONS) {
-        // Check if the server supports this spec version. (`isVersionSupported` caches the response, so this loop will
-        // only make a single HTTP request).
-        if (await client.isVersionSupported(version)) {
-            // we found a compatible spec version
-            return;
-        }
-    }
-
-    const toastKey = "LEGACY_SERVER";
-    ToastStore.sharedInstance().addOrReplaceToast({
-        key: toastKey,
-        title: _t("unsupported_server_title"),
-        props: {
-            description: _t("unsupported_server_description", {
-                version: MINIMUM_MATRIX_VERSION,
-                brand: SdkConfig.get().brand,
-            }),
-            acceptLabel: _t("action|ok"),
-            onAccept: () => {
-                ToastStore.sharedInstance().dismissToast(toastKey);
-            },
-        },
-        component: GenericToast,
-        priority: 98,
-    });
 }
 
 async function handleLoadSessionFailure(e: unknown): Promise<boolean> {
@@ -777,13 +755,13 @@ async function createOidcTokenRefresher(credentials: IMatrixClientCreds): Promis
     try {
         const clientId = getStoredOidcClientId();
         const idTokenClaims = getStoredOidcIdTokenClaims();
-        const redirectUri = window.location.origin;
+        const redirectUri = PlatformPeg.get()!.getSSOCallbackUrl().href;
         const deviceId = credentials.deviceId;
         if (!deviceId) {
             throw new Error("Expected deviceId in user credentials.");
         }
         const tokenRefresher = new TokenRefresher(
-            { issuer: tokenIssuer },
+            tokenIssuer,
             clientId,
             redirectUri,
             deviceId,

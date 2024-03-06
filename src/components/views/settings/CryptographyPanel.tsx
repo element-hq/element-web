@@ -51,10 +51,10 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
         if (client.isCryptoEnabled()) {
             importExportButtons = (
                 <div className="mx_CryptographyPanel_importExportButtons">
-                    <AccessibleButton kind="primary" onClick={this.onExportE2eKeysClicked}>
+                    <AccessibleButton kind="primary_outline" onClick={this.onExportE2eKeysClicked}>
                         {_t("settings|security|export_megolm_keys")}
                     </AccessibleButton>
-                    <AccessibleButton kind="primary" onClick={this.onImportE2eKeysClicked}>
+                    <AccessibleButton kind="primary_outline" onClick={this.onImportE2eKeysClicked}>
                         {_t("settings|security|import_megolm_keys")}
                     </AccessibleButton>
                 </div>

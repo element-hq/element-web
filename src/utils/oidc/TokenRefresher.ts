@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IDelegatedAuthConfig, OidcTokenRefresher, AccessTokens } from "matrix-js-sdk/src/matrix";
+import { OidcTokenRefresher, AccessTokens } from "matrix-js-sdk/src/matrix";
 import { IdTokenClaims } from "oidc-client-ts";
 
 import PlatformPeg from "../../PlatformPeg";
@@ -28,14 +28,14 @@ export class TokenRefresher extends OidcTokenRefresher {
     private readonly deviceId!: string;
 
     public constructor(
-        authConfig: IDelegatedAuthConfig,
+        issuer: string,
         clientId: string,
         redirectUri: string,
         deviceId: string,
         idTokenClaims: IdTokenClaims,
         private readonly userId: string,
     ) {
-        super(authConfig, clientId, deviceId, redirectUri, idTokenClaims);
+        super(issuer, clientId, deviceId, redirectUri, idTokenClaims);
         this.deviceId = deviceId;
     }
 

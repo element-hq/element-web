@@ -64,6 +64,11 @@ describe("<ServerPickerDialog />", () => {
         });
 
         fetchMock.resetHistory();
+        fetchMock.catch({
+            status: 404,
+            body: '{"errcode": "M_UNRECOGNIZED", "error": "Unrecognized request"}',
+            headers: { "content-type": "application/json" },
+        });
     });
 
     it("should render dialog", () => {

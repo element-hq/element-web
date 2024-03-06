@@ -23,6 +23,7 @@ import ProgressBar from "../../views/elements/ProgressBar";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import { _t } from "../../../languageHandler";
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
+import SdkConfig from "../../../SdkConfig";
 
 interface Props {
     /** The matrix client which is logging in */
@@ -65,7 +66,7 @@ export function LoginSplashView(props: Props): React.JSX.Element {
     if (migrationState.totalSteps !== -1) {
         spinnerOrProgress = (
             <div className="mx_LoginSplashView_migrationProgress">
-                <p>{_t("migrating_crypto")}</p>
+                <p>{_t("migrating_crypto", { brand: SdkConfig.get().brand })}</p>
                 <ProgressBar value={migrationState.progress} max={migrationState.totalSteps} />
             </div>
         );

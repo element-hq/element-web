@@ -123,6 +123,7 @@ describe("FontWatcher", function () {
         let watcher: FontWatcher | undefined;
 
         beforeEach(() => {
+            document.documentElement.style.fontSize = "14px";
             watcher = new FontWatcher();
         });
 
@@ -132,13 +133,35 @@ describe("FontWatcher", function () {
 
         it("should not run the migration", async () => {
             await watcher!.start();
-            expect(SettingsStore.getValue("baseFontSizeV2")).toBe(16);
+            expect(SettingsStore.getValue("fontSizeDelta")).toBe(0);
         });
 
-        it("should migrate to default font size", async () => {
+        it("should migrate from V1 font size to V3", async () => {
             await SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, 13);
             await watcher!.start();
-            expect(SettingsStore.getValue("baseFontSizeV2")).toBe(19);
+            // 13px (V1 font size) + 5px (V1 offset) + 1px (root font size increase) - 14px (default browser font size) = 5px
+            expect(SettingsStore.getValue("fontSizeDelta")).toBe(5);
+            // baseFontSize should be cleared
+            expect(SettingsStore.getValue("baseFontSize")).toBe(0);
+        });
+
+        it("should migrate from V2 font size to V3 using browser font size", async () => {
+            await SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, 18);
+            await watcher!.start();
+            // 18px - 14px (default browser font size) = 2px
+            expect(SettingsStore.getValue("fontSizeDelta")).toBe(4);
+            // baseFontSize should be cleared
+            expect(SettingsStore.getValue("baseFontSizeV2")).toBe(0);
+        });
+
+        it("should migrate from V2 font size to V3 using fallback font size", async () => {
+            document.documentElement.style.fontSize = "";
+            await SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, 18);
+            await watcher!.start();
+            // 18px - 16px (fallback) = 2px
+            expect(SettingsStore.getValue("fontSizeDelta")).toBe(2);
+            // baseFontSize should be cleared
+            expect(SettingsStore.getValue("baseFontSizeV2")).toBe(0);
         });
     });
 });

@@ -32,6 +32,8 @@ jest.mock("../../src/rageshake/submit-rageshake");
 jest.mock("../../src/stores/WidgetStore");
 jest.mock("../../src/stores/widgets/WidgetLayoutStore");
 
+const TEST_SENDER = "@sender@example.com";
+
 describe("AutoRageshakeStore", () => {
     const roomId = "!room:example.com";
     let client: MatrixClient;
@@ -59,7 +61,7 @@ describe("AutoRageshakeStore", () => {
             event: true,
             content: {},
             room: roomId,
-            user: client.getSafeUserId(),
+            user: TEST_SENDER,
             type: EventType.RoomMessage,
         });
         jest.spyOn(utdEvent, "isDecryptionFailure").mockReturnValue(true);
@@ -81,29 +83,32 @@ describe("AutoRageshakeStore", () => {
                 jest.advanceTimersByTime(5500);
             });
 
-            it("should send a rageshake", () => {
-                expect(mocked(client).sendToDevice.mock.calls).toMatchInlineSnapshot(
-                    `
+            it("should send a to-device message", () => {
+                expect(mocked(client).sendToDevice.mock.calls).toEqual([
                     [
-                      [
                         "im.vector.auto_rs_request",
-                        Map {
-                          "messageContent.user_id" => Map {
-                            undefined => {
-                              "device_id": undefined,
-                              "event_id": "utd_event_id",
-                              "recipient_rageshake": undefined,
-                              "room_id": "!room:example.com",
-                              "sender_key": undefined,
-                              "session_id": undefined,
-                              "user_id": "@userId:matrix.org",
-                            },
-                          },
-                        },
-                      ],
-                    ]
-                `.replace("utd_event_id", utdEvent.getId()!),
-                );
+                        new Map([
+                            [
+                                TEST_SENDER,
+                                new Map([
+                                    [
+                                        undefined,
+                                        {
+                                            "device_id": undefined,
+                                            "event_id": utdEvent.getId(),
+                                            "org.matrix.msgid": expect.any(String),
+                                            "recipient_rageshake": undefined,
+                                            "room_id": "!room:example.com",
+                                            "sender_key": undefined,
+                                            "session_id": undefined,
+                                            "user_id": TEST_SENDER,
+                                        },
+                                    ],
+                                ]),
+                            ],
+                        ]),
+                    ],
+                ]);
             });
         });
     });

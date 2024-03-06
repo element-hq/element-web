@@ -16,10 +16,11 @@
  * /
  */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 import { getByText, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import { ThreadsActivityCentre } from "../../../../src/components/views/spaces/threads-activity-centre";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -37,12 +38,16 @@ describe("ThreadsActivityCentre", () => {
         return screen.getByRole("menu");
     };
 
-    const renderTAC = () => {
+    const getTACDescription = () => {
+        return screen.getByText("Threads");
+    };
+
+    const renderTAC = (props?: ComponentProps<typeof ThreadsActivityCentre>) => {
         render(
             <MatrixClientContext.Provider value={cli}>
-                <ThreadsActivityCentre />
-                );
+                <ThreadsActivityCentre {...props} />
             </MatrixClientContext.Provider>,
+            { wrapper: TooltipProvider },
         );
     };
 
@@ -105,23 +110,25 @@ describe("ThreadsActivityCentre", () => {
         expect(getTACButton()).toBeInTheDocument();
     });
 
+    it("should render the threads activity centre button and the display label", async () => {
+        renderTAC({ displayButtonLabel: true });
+        expect(getTACButton()).toBeInTheDocument();
+        expect(getTACDescription()).toBeInTheDocument();
+    });
+
     it("should render the threads activity centre menu when the button is clicked", async () => {
         renderTAC();
         await userEvent.click(getTACButton());
         expect(getTACMenu()).toBeInTheDocument();
     });
 
-    it("should render a room with a activity in the TAC", async () => {
+    it("should not render a room with a activity in the TAC", async () => {
         cli.getVisibleRooms = jest.fn().mockReturnValue([roomWithActivity]);
         renderTAC();
         await userEvent.click(getTACButton());
 
-        const tacRows = screen.getAllByRole("menuitem");
-        expect(tacRows.length).toEqual(1);
-
-        getByText(tacRows[0], "Just activity");
-        expect(tacRows[0].getElementsByClassName("mx_NotificationBadge").length).toEqual(1);
-        expect(tacRows[0].getElementsByClassName("mx_NotificationBadge_level_notification").length).toEqual(0);
+        // We should not render the room with activity
+        expect(() => screen.getAllByRole("menuitem")).toThrow();
     });
 
     it("should render a room with a regular notification in the TAC", async () => {

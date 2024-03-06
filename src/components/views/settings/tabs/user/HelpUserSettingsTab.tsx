@@ -240,7 +240,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         </>
                     }
                 >
-                    <AccessibleButton onClick={this.onBugReport} kind="primary">
+                    <AccessibleButton onClick={this.onBugReport} kind="primary_outline">
                         {_t("bug_reporting|submit_debug_logs")}
                     </AccessibleButton>
                     <SettingsSubsectionText>
@@ -316,7 +316,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                 </CopyableText>
                             </details>
                         </SettingsSubsectionText>
-                        <AccessibleButton onClick={this.onClearCacheAndReload} kind="danger">
+                        <AccessibleButton onClick={this.onClearCacheAndReload} kind="danger_outline">
                             {_t("setting|help_about|clear_cache_reload")}
                         </AccessibleButton>
                     </SettingsSubsection>

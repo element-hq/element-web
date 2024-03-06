@@ -22,20 +22,19 @@ import { Action } from "../../dispatcher/actions";
 import { SettingLevel } from "../SettingLevel";
 import { UpdateSystemFontPayload } from "../../dispatcher/payloads/UpdateSystemFontPayload";
 import { ActionPayload } from "../../dispatcher/payloads";
-import { clamp } from "../../utils/numbers";
 
 export class FontWatcher implements IWatcher {
     /**
-     * Value indirectly defined by Compound.
-     * All `rem` calculations are made from a `16px` values in the
-     * @vector-im/compound-design-tokens package
-     *
-     * We might want to move to using `100%` instead so we can inherit the user
-     * preference set in the browser regarding font sizes.
+     * This Compound value is using `100%` of the default browser font size.
+     * It allows EW to use the browser's default font size instead of a fixed value.
+     * All the Compound font size are using `rem`, they are relative to the root font size
+     * and therefore of the browser font size.
      */
-    public static readonly DEFAULT_SIZE = 16;
-    public static readonly MIN_SIZE = FontWatcher.DEFAULT_SIZE - 5;
-    public static readonly MAX_SIZE = FontWatcher.DEFAULT_SIZE + 5;
+    private static readonly DEFAULT_SIZE = "var(--cpd-font-size-root)";
+    /**
+     * Default delta added to the ${@link DEFAULT_SIZE}
+     */
+    public static readonly DEFAULT_DELTA = 0;
 
     private dispatcherRef: string | null;
 
@@ -54,28 +53,106 @@ export class FontWatcher implements IWatcher {
     }
 
     /**
-     * Migrating the old `baseFontSize` for Compound.
-     * Everything will becomes slightly larger, and getting rid of the `SIZE_DIFF`
-     * weirdness for locally persisted values
+     * Migrate the base font size from the V1 and V2 version to the V3 version
+     * @private
      */
     private async migrateBaseFontSize(): Promise<void> {
-        const legacyBaseFontSize = SettingsStore.getValue("baseFontSize");
-        if (legacyBaseFontSize) {
-            console.log("Migrating base font size for Compound, current value", legacyBaseFontSize);
+        await this.migrateBaseFontV1toFontSizeDelta();
+        await this.migrateBaseFontV2toFontSizeDelta();
+    }
 
-            // For some odd reason, the persisted value in user storage has an offset
-            // of 5 pixels for all values stored under `baseFontSize`
-            const LEGACY_SIZE_DIFF = 5;
-            // Compound uses a base font size of `16px`, whereas the old Element
-            // styles based their calculations off a `15px` root font size.
-            const ROOT_FONT_SIZE_INCREASE = 1;
+    /**
+     * Migrating from the V1 version of the base font size to the new delta system.
+     * The delta system is using the default browser font size as a base
+     * Everything will become slightly larger, and getting rid of the `SIZE_DIFF`
+     * weirdness for locally persisted values
+     * @private
+     */
+    private async migrateBaseFontV1toFontSizeDelta(): Promise<void> {
+        const legacyBaseFontSize = SettingsStore.getValue<number>("baseFontSize");
+        // No baseFontV1 found, nothing to migrate
+        if (!legacyBaseFontSize) return;
 
-            const baseFontSize = legacyBaseFontSize + ROOT_FONT_SIZE_INCREASE + LEGACY_SIZE_DIFF;
+        console.log(
+            "Migrating base font size -> base font size V2 -> font size delta for Compound, current value",
+            legacyBaseFontSize,
+        );
 
-            await SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, baseFontSize);
-            await SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, "");
-            console.log("Migration complete, deleting legacy `baseFontSize`");
-        }
+        // Compute the V1 to V2 version before migrating to fontSizeDelta
+        const baseFontSizeV2 = this.computeBaseFontSizeV1toV2(legacyBaseFontSize);
+
+        // Compute the difference between the V2 and the fontSizeDelta
+        const delta = this.computeFontSizeDeltaFromV2BaseFontSize(baseFontSizeV2);
+
+        await SettingsStore.setValue("fontSizeDelta", null, SettingLevel.DEVICE, delta);
+        await SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, 0);
+        console.log("Migration complete, deleting legacy `baseFontSize`");
+    }
+
+    /**
+     * Migrating from the V2 version of the base font size to the new delta system
+     * @private
+     */
+    private async migrateBaseFontV2toFontSizeDelta(): Promise<void> {
+        const legacyBaseFontV2Size = SettingsStore.getValue<number>("baseFontSizeV2");
+        // No baseFontV2 found, nothing to migrate
+        if (!legacyBaseFontV2Size) return;
+
+        console.log("Migrating base font size V2 for Compound, current value", legacyBaseFontV2Size);
+
+        // Compute the difference between the V2 and the fontSizeDelta
+        const delta = this.computeFontSizeDeltaFromV2BaseFontSize(legacyBaseFontV2Size);
+
+        await SettingsStore.setValue("fontSizeDelta", null, SettingLevel.DEVICE, delta);
+        await SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, 0);
+        console.log("Migration complete, deleting legacy `baseFontSizeV2`");
+    }
+
+    /**
+     * Compute the V2 font size from the V1 font size
+     * @param legacyBaseFontSize
+     * @private
+     */
+    private computeBaseFontSizeV1toV2(legacyBaseFontSize: number): number {
+        // For some odd reason, the persisted value in user storage has an offset
+        // of 5 pixels for all values stored under `baseFontSize`
+        const LEGACY_SIZE_DIFF = 5;
+
+        // Compound uses a base font size of `16px`, whereas the old Element
+        // styles based their calculations off a `15px` root font size.
+        const ROOT_FONT_SIZE_INCREASE = 1;
+
+        // Compute the font size of the V2 version before migrating to V3
+        return legacyBaseFontSize + ROOT_FONT_SIZE_INCREASE + LEGACY_SIZE_DIFF;
+    }
+
+    /**
+     * Compute the difference between the V2 font size and the default browser font size
+     * @param legacyBaseFontV2Size
+     * @private
+     */
+    private computeFontSizeDeltaFromV2BaseFontSize(legacyBaseFontV2Size: number): number {
+        const browserDefaultFontSize = FontWatcher.getRootFontSize();
+
+        // Compute the difference between the V2 font size and the default browser font size
+        return legacyBaseFontV2Size - browserDefaultFontSize;
+    }
+
+    /**
+     * Get the root font size of the document
+     * Fallback to 16px if the value is not found
+     * @returns {number}
+     */
+    public static getRootFontSize(): number {
+        return parseInt(window.getComputedStyle(document.documentElement).getPropertyValue("font-size"), 10) || 16;
+    }
+
+    /**
+     * Get the browser default font size
+     * @returns {number} the default font size of the browser
+     */
+    public static getBrowserDefaultFontSize(): number {
+        return this.getRootFontSize() - SettingsStore.getValue<number>("fontSizeDelta");
     }
 
     public stop(): void {
@@ -84,7 +161,7 @@ export class FontWatcher implements IWatcher {
     }
 
     private updateFont(): void {
-        this.setRootFontSize(SettingsStore.getValue("baseFontSizeV2"));
+        this.setRootFontSize(SettingsStore.getValue<number>("fontSizeDelta"));
         this.setSystemFont({
             useBundledEmojiFont: SettingsStore.getValue("useBundledEmojiFont"),
             useSystemFont: SettingsStore.getValue("useSystemFont"),
@@ -95,13 +172,13 @@ export class FontWatcher implements IWatcher {
     private onAction = (payload: ActionPayload): void => {
         if (payload.action === Action.MigrateBaseFontSize) {
             this.migrateBaseFontSize();
-        } else if (payload.action === Action.UpdateFontSize) {
-            this.setRootFontSize(payload.size);
+        } else if (payload.action === Action.UpdateFontSizeDelta) {
+            this.setRootFontSize(payload.delta);
         } else if (payload.action === Action.UpdateSystemFont) {
             this.setSystemFont(payload as UpdateSystemFontPayload);
         } else if (payload.action === Action.OnLoggedOut) {
             // Clear font overrides when logging out
-            this.setRootFontSize(FontWatcher.DEFAULT_SIZE);
+            this.setRootFontSize(FontWatcher.DEFAULT_DELTA);
             this.setSystemFont({
                 useBundledEmojiFont: false,
                 useSystemFont: false,
@@ -113,13 +190,14 @@ export class FontWatcher implements IWatcher {
         }
     };
 
-    private setRootFontSize = async (size: number): Promise<void> => {
-        const fontSize = clamp(size, FontWatcher.MIN_SIZE, FontWatcher.MAX_SIZE);
-
-        if (fontSize !== size) {
-            await SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, fontSize);
-        }
-        document.querySelector<HTMLElement>(":root")!.style.fontSize = toPx(fontSize);
+    /**
+     * Set the root font size of the document
+     * @param delta {number} the delta to add to the default font size
+     */
+    private setRootFontSize = async (delta: number): Promise<void> => {
+        // Add the delta to the browser default font size
+        document.querySelector<HTMLElement>(":root")!.style.fontSize =
+            `calc(${FontWatcher.DEFAULT_SIZE} + ${toPx(delta)})`;
     };
 
     public static readonly FONT_FAMILY_CUSTOM_PROPERTY = "--cpd-font-family-sans";

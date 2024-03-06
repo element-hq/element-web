@@ -46,8 +46,8 @@ describe("TokenRefresher", () => {
     };
 
     beforeEach(() => {
-        fetchMock.get(`${authConfig.issuer}.well-known/openid-configuration`, authConfig.metadata);
-        fetchMock.get(`${authConfig.issuer}jwks`, {
+        fetchMock.get(`${issuer}.well-known/openid-configuration`, authConfig.metadata);
+        fetchMock.get(`${issuer}jwks`, {
             status: 200,
             headers: {
                 "Content-Type": "application/json",
@@ -68,7 +68,7 @@ describe("TokenRefresher", () => {
         const getPickleKey = jest.fn().mockResolvedValue(pickleKey);
         mockPlatformPeg({ getPickleKey });
 
-        const refresher = new TokenRefresher(authConfig, clientId, redirectUri, deviceId, idTokenClaims, userId);
+        const refresher = new TokenRefresher(issuer, clientId, redirectUri, deviceId, idTokenClaims, userId);
 
         await refresher.oidcClientReady;
 
@@ -83,7 +83,7 @@ describe("TokenRefresher", () => {
         const getPickleKey = jest.fn().mockResolvedValue(null);
         mockPlatformPeg({ getPickleKey });
 
-        const refresher = new TokenRefresher(authConfig, clientId, redirectUri, deviceId, idTokenClaims, userId);
+        const refresher = new TokenRefresher(issuer, clientId, redirectUri, deviceId, idTokenClaims, userId);
 
         await refresher.oidcClientReady;
 

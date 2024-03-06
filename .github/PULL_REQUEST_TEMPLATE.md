@@ -2,25 +2,7 @@
 
 ## Checklist
 
--   [ ] Tests written for new code (and old code if feasible)
--   [ ] Linter and other CI checks pass
--   [ ] Sign-off given on the changes (see [CONTRIBUTING.md](https://github.com/matrix-org/matrix-react-sdk/blob/develop/CONTRIBUTING.md))
-
-<!--
-If you would like to specify text for the changelog entry other than your PR title, add the following:
-
-Notes: Add super cool feature
-
-Changes in this project also generate changelogs in Element Web. To disable this, use the following:
-
-element-web notes: none
-
-or specify alternative text:
-
-element-web notes: Add super cool feature
-
-Changes to this project require tagging with the type of change. If you know the correct type, add the following:
-
-Type: [enhancement/defect/task]
-
--->
+-   [ ] Tests written for new code (and old code if feasible).
+-   [ ] New or updated `public`/`exported` symbols have accurate [TSDoc](https://tsdoc.org/) documentation.
+-   [ ] Linter and other CI checks pass.
+-   [ ] Sign-off given on the changes (see [CONTRIBUTING.md](https://github.com/matrix-org/matrix-react-sdk/blob/develop/CONTRIBUTING.md)).

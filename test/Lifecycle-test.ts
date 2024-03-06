@@ -28,10 +28,10 @@ import { MatrixClientPeg } from "../src/MatrixClientPeg";
 import Modal from "../src/Modal";
 import * as StorageManager from "../src/utils/StorageManager";
 import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser, mockPlatformPeg } from "./test-utils";
-import ToastStore from "../src/stores/ToastStore";
 import { OidcClientStore } from "../src/stores/oidc/OidcClientStore";
 import { makeDelegatedAuthConfig } from "./test-utils/oidc";
 import { persistOidcAuthenticatedSettings } from "../src/utils/oidc/persistOidcSettings";
+import { Action } from "../src/dispatcher/actions";
 
 const webCrypto = new Crypto();
 
@@ -451,17 +451,10 @@ describe("Lifecycle", () => {
                 });
             });
 
-            it("should show a toast if the matrix server version is unsupported", async () => {
-                const toastSpy = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
-                mockClient.isVersionSupported.mockImplementation(async (version) => version == "r0.6.0");
-                initLocalStorageMock({ ...localStorageSession });
+            it("should proceed if server is not accessible", async () => {
+                mockClient.isVersionSupported.mockRejectedValue(new Error("Oh, noes, the server is down!"));
 
                 expect(await restoreFromLocalStorage()).toEqual(true);
-                expect(toastSpy).toHaveBeenCalledWith(
-                    expect.objectContaining({
-                        title: "Your server is unsupported",
-                    }),
-                );
             });
         });
     });
@@ -682,10 +675,10 @@ describe("Lifecycle", () => {
 
             beforeAll(() => {
                 fetchMock.get(
-                    `${delegatedAuthConfig.issuer}.well-known/openid-configuration`,
+                    `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
                     delegatedAuthConfig.metadata,
                 );
-                fetchMock.get(`${delegatedAuthConfig.issuer}jwks`, {
+                fetchMock.get(`${delegatedAuthConfig.metadata.issuer}jwks`, {
                     status: 200,
                     headers: {
                         "Content-Type": "application/json",
@@ -695,12 +688,6 @@ describe("Lifecycle", () => {
             });
 
             beforeEach(() => {
-                // mock oidc config for oidc client initialisation
-                mockClient.waitForClientWellKnown.mockResolvedValue({
-                    "m.authentication": {
-                        issuer: issuer,
-                    },
-                });
                 initSessionStorageMock();
                 // set values in session storage as they would be after a successful oidc authentication
                 persistOidcAuthenticatedSettings(clientId, issuer, idTokenClaims);
@@ -710,7 +697,9 @@ describe("Lifecycle", () => {
                 await setLoggedIn(credentials);
 
                 // didn't try to initialise token refresher
-                expect(fetchMock).not.toHaveFetched(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`);
+                expect(fetchMock).not.toHaveFetched(
+                    `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
+                );
             });
 
             it("should not try to create a token refresher without a deviceId", async () => {
@@ -721,7 +710,9 @@ describe("Lifecycle", () => {
                 });
 
                 // didn't try to initialise token refresher
-                expect(fetchMock).not.toHaveFetched(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`);
+                expect(fetchMock).not.toHaveFetched(
+                    `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
+                );
             });
 
             it("should not try to create a token refresher without an issuer in session storage", async () => {
@@ -737,7 +728,9 @@ describe("Lifecycle", () => {
                 });
 
                 // didn't try to initialise token refresher
-                expect(fetchMock).not.toHaveFetched(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`);
+                expect(fetchMock).not.toHaveFetched(
+                    `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
+                );
             });
 
             it("should create a client with a tokenRefreshFunction", async () => {
@@ -821,6 +814,77 @@ describe("Lifecycle", () => {
 
             expect(mockClient.logout).not.toHaveBeenCalled();
             expect(oidcClientStore.revokeTokens).toHaveBeenCalledWith(accessToken, refreshToken);
+        });
+    });
+
+    describe("overwritelogin", () => {
+        beforeEach(async () => {
+            jest.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+        });
+
+        it("should replace the current login with a new one", async () => {
+            const stopSpy = jest.spyOn(mockClient, "stopClient").mockReturnValue(undefined);
+            const dis = window.mxDispatcher;
+
+            const firstLoginEvent: Promise<void> = new Promise((resolve) => {
+                dis.register(({ action }) => {
+                    if (action === Action.OnLoggedIn) {
+                        resolve();
+                    }
+                });
+            });
+            // set a logged in state
+            await setLoggedIn(credentials);
+
+            await firstLoginEvent;
+
+            expect(stopSpy).toHaveBeenCalledTimes(1);
+            // important the overwrite action should not call unset before replacing.
+            // So spy on it and make sure it's not called.
+            jest.spyOn(MatrixClientPeg, "unset").mockReturnValue(undefined);
+
+            expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    userId,
+                }),
+                undefined,
+            );
+
+            const otherCredentials = {
+                ...credentials,
+                userId: "@bob:server.org",
+                deviceId: "def456",
+            };
+
+            const secondLoginEvent: Promise<void> = new Promise((resolve) => {
+                dis.register(({ action }) => {
+                    if (action === Action.OnLoggedIn) {
+                        resolve();
+                    }
+                });
+            });
+
+            // Trigger the overwrite login action
+            dis.dispatch(
+                {
+                    action: "overwrite_login",
+                    credentials: otherCredentials,
+                },
+                true,
+            );
+
+            await secondLoginEvent;
+            // the client should have been stopped
+            expect(stopSpy).toHaveBeenCalledTimes(2);
+
+            expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    userId: otherCredentials.userId,
+                }),
+                undefined,
+            );
+
+            expect(MatrixClientPeg.unset).not.toHaveBeenCalled();
         });
     });
 });

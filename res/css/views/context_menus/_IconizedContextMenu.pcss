@@ -36,7 +36,26 @@ limitations under the License.
         /* the notFirst class is for cases where the optionList might be under a header of sorts. */
         &:nth-child(n + 2),
         .mx_IconizedContextMenu_optionList_notFirst {
-            border-top: var(--cpd-border-width-1) solid var(--cpd-color-gray-400);
+            /* This is a bit of a hack when we could just use a simple border-top property, */
+            /* however we have a (kinda) good reason for doing it this way: we need opacity. */
+            /* To get the right color, we need an opacity modifier which means we have to work */
+            /* around the problem. PostCSS doesn't support the opacity() function, and if we */
+            /* use something like postcss-functions we quickly run into an issue where the */
+            /* function we would define gets passed a CSS variable for custom themes, which */
+            /* can't be converted easily even when considering https://stackoverflow.com/a/41265350/7037379 */
+            //
+            /* Therefore, we just hack in a line and border the thing ourselves */
+            &::before {
+                border-top: 1px solid $primary-content;
+                opacity: 0.1;
+                content: "";
+
+                /* Counteract the padding problems (width: 100% ignores the 40px padding, */
+                /* unless we position it absolutely then it does the right thing). */
+                width: 100%;
+                position: absolute;
+                left: 0;
+            }
         }
 
         /* round the top corners of the top button for the hover effect to be bounded */
@@ -68,7 +87,7 @@ limitations under the License.
 
             &:hover,
             &:focus-visible {
-                background-color: var(--cpd-color-bg-action-secondary-hovered);
+                background-color: $menu-selected-color;
             }
 
             &.mx_AccessibleButton_disabled {
@@ -118,7 +137,7 @@ limitations under the License.
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
-            background-color: var(--cpd-color-icon-primary);
+            background-color: $icon-button-color;
         }
     }
 
@@ -128,7 +147,7 @@ limitations under the License.
         }
 
         .mx_IconizedContextMenu_icon::before {
-            background-color: var(--cpd-color-icon-critical-primary);
+            background-color: $alert;
         }
     }
 
@@ -153,7 +172,7 @@ limitations under the License.
 
     &.mx_IconizedContextMenu_compact {
         .mx_IconizedContextMenu_optionList > * {
-            padding: 8px 16px 8px 12px;
+            padding: 8px 16px 8px 11px;
         }
     }
 

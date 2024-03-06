@@ -225,7 +225,11 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
         if (this.state.canSetName || this.state.canSetTopic || this.state.canSetAvatar) {
             profileSettingsButtons = (
                 <div className="mx_ProfileSettings_buttons">
-                    <AccessibleButton onClick={this.cancelProfileChanges} kind="link" disabled={!this.isSaveEnabled()}>
+                    <AccessibleButton
+                        onClick={this.cancelProfileChanges}
+                        kind="primary_outline"
+                        disabled={!this.isSaveEnabled()}
+                    >
                         {_t("action|cancel")}
                     </AccessibleButton>
                     <AccessibleButton onClick={this.saveProfile} kind="primary" disabled={!this.isSaveEnabled()}>

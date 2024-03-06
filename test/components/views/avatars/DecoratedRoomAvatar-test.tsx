@@ -26,11 +26,23 @@ import { stubClient } from "../../../test-utils";
 import DecoratedRoomAvatar from "../../../../src/components/views/avatars/DecoratedRoomAvatar";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 
+jest.mock("../../../../src/utils/presence", () => ({ isPresenceEnabled: jest.fn().mockReturnValue(true) }));
+
+jest.mock("../../../../src/utils/room/getJoinedNonFunctionalMembers", () => ({
+    getJoinedNonFunctionalMembers: jest.fn().mockReturnValue([0, 1]),
+}));
+
 describe("DecoratedRoomAvatar", () => {
     const ROOM_ID = "roomId";
 
     let mockClient: MatrixClient;
     let room: Room;
+
+    function renderComponent() {
+        return render(<DecoratedRoomAvatar room={room} size="32px" />, {
+            wrapper: TooltipProvider,
+        });
+    }
 
     beforeEach(() => {
         stubClient();
@@ -39,18 +51,20 @@ describe("DecoratedRoomAvatar", () => {
         room = new Room(ROOM_ID, mockClient, mockClient.getUserId() ?? "", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
+    });
 
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
+    it("shows an avatar with globe icon and tooltip for public room", async () => {
         const dmRoomMap = {
             getUserIdForRoomId: jest.fn(),
         } as unknown as DMRoomMap;
         jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
-    });
-
-    it("shows an avatar with globe icon and tooltip for public room", async () => {
         room.getJoinRule = jest.fn().mockReturnValue(JoinRule.Public);
-        const { container, asFragment } = render(<DecoratedRoomAvatar room={room} size="32px" />, {
-            wrapper: TooltipProvider,
-        });
+
+        const { container, asFragment } = renderComponent();
 
         const globe = container.querySelector(".mx_DecoratedRoomAvatar_icon_globe")!;
         expect(globe).toBeVisible();
@@ -63,6 +77,33 @@ describe("DecoratedRoomAvatar", () => {
             return tooltip;
         });
         expect(tooltip).toHaveTextContent("This room is public");
+
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("shows the presence indicator in a DM room that also has functional members", async () => {
+        const DM_USER_ID = "@bob:foo.bar";
+        const dmRoomMap = {
+            getUserIdForRoomId: () => {
+                return DM_USER_ID;
+            },
+        } as unknown as DMRoomMap;
+        jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
+        jest.spyOn(DecoratedRoomAvatar.prototype as any, "getPresenceIcon").mockImplementation(() => "ONLINE");
+
+        const { container, asFragment } = renderComponent();
+
+        const presence = container.querySelector(".mx_DecoratedRoomAvatar_icon")!;
+        expect(presence).toBeVisible();
+        await userEvent.hover(presence!);
+
+        // wait for the tooltip to open
+        const tooltip = await waitFor(() => {
+            const tooltip = document.getElementById(presence.getAttribute("aria-describedby")!);
+            expect(tooltip).toBeVisible();
+            return tooltip;
+        });
+        expect(tooltip).toHaveTextContent("Online");
 
         expect(asFragment()).toMatchSnapshot();
     });

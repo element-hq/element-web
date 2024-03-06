@@ -160,6 +160,12 @@ export class ProxiedModuleApi implements ModuleApi {
      * @override
      */
     public async overwriteAccountAuth(accountInfo: AccountAuthInfo): Promise<void> {
+        // We want to wait for the new login to complete before returning.
+        // See `Action.OnLoggedIn` in dispatcher.
+        const awaitNewLogin = new Promise<void>((resolve) => {
+            this.overrideLoginResolve = resolve;
+        });
+
         dispatcher.dispatch<OverwriteLoginPayload>(
             {
                 action: Action.OverwriteLogin,
@@ -172,9 +178,7 @@ export class ProxiedModuleApi implements ModuleApi {
         ); // require to be sync to match inherited interface behaviour
 
         // wait for login to complete
-        await new Promise<void>((resolve) => {
-            this.overrideLoginResolve = resolve;
-        });
+        await awaitNewLogin;
     }
 
     /**

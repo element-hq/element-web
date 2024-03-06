@@ -16,10 +16,10 @@ limitations under the License.
 
 import { getFreePort } from "../utils/port";
 import { Docker } from "../docker";
+import { PG_PASSWORD, PostgresDocker } from "../postgres";
 
 // Docker tag to use for `ghcr.io/matrix-org/sliding-sync` image.
 const SLIDING_SYNC_PROXY_TAG = "v0.99.3";
-const PG_PASSWORD = "p4S5w0rD";
 
 export interface ProxyInstance {
     containerId: string;
@@ -28,45 +28,16 @@ export interface ProxyInstance {
 }
 
 export class SlidingSyncProxy {
-    private readonly postgresDocker = new Docker();
     private readonly proxyDocker = new Docker();
+    private readonly postgresDocker = new PostgresDocker("sliding-sync");
     private instance: ProxyInstance;
 
     constructor(private synapseIp: string) {}
 
-    private async waitForPostgresReady(): Promise<void> {
-        const waitTimeMillis = 30000;
-        const startTime = new Date().getTime();
-        let lastErr: Error | null = null;
-        while (new Date().getTime() - startTime < waitTimeMillis) {
-            try {
-                await this.postgresDocker.exec(["pg_isready", "-U", "postgres"]);
-                lastErr = null;
-                break;
-            } catch (err) {
-                console.log("pg_isready: failed");
-                lastErr = err;
-            }
-        }
-        if (lastErr) {
-            console.log("rethrowing");
-            throw lastErr;
-        }
-    }
-
     async start(): Promise<ProxyInstance> {
         console.log(new Date(), "Starting sliding sync proxy...");
 
-        const postgresId = await this.postgresDocker.run({
-            image: "postgres",
-            containerName: "react-sdk-playwright-sliding-sync-postgres",
-            params: ["--rm", "-e", `POSTGRES_PASSWORD=${PG_PASSWORD}`],
-        });
-
-        const postgresIp = await this.postgresDocker.getContainerIp();
-        console.log(new Date(), "postgres container up");
-
-        await this.waitForPostgresReady();
+        const { ipAddress: postgresIp, containerId: postgresId } = await this.postgresDocker.start();
 
         const port = await getFreePort();
         console.log(new Date(), "starting proxy container...", SLIDING_SYNC_PROXY_TAG);
@@ -74,7 +45,6 @@ export class SlidingSyncProxy {
             image: "ghcr.io/matrix-org/sliding-sync:" + SLIDING_SYNC_PROXY_TAG,
             containerName: "react-sdk-playwright-sliding-sync-proxy",
             params: [
-                "--rm",
                 "-p",
                 `${port}:8008/tcp`,
                 "-e",

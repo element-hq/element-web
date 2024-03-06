@@ -36,26 +36,8 @@ limitations under the License.
     }
 }
 
-.mx_FontScalingPanel_fontSlider {
-    display: flex;
-    align-items: center;
-    padding: 15px $spacing-20 35px;
-    background: $panels;
-    border-radius: 10px;
-    font-size: $font-10px;
-
-    .mx_FontScalingPanel_fontSlider_smallText,
-    .mx_FontScalingPanel_fontSlider_largeText {
-        font-weight: 500;
-    }
-
-    .mx_FontScalingPanel_fontSlider_smallText {
-        font-size: $font-15px;
-        padding-inline-end: $spacing-20;
-    }
-
-    .mx_FontScalingPanel_fontSlider_largeText {
-        font-size: $font-18px;
-        padding-inline-start: $spacing-20;
-    }
+.mx_FontScalingPanel_Dropdown {
+    width: 120px;
+    /* Override default mx_Field margin */
+    margin-bottom: var(--cpd-space-2x) !important;
 }

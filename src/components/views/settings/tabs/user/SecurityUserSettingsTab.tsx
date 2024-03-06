@@ -256,14 +256,14 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                 <div className="mx_SecurityUserSettingsTab_bulkOptions">
                     <AccessibleButton
                         onClick={this.onAcceptAllInvitesClicked}
-                        kind="primary"
+                        kind="primary_outline"
                         disabled={this.state.managingInvites}
                     >
                         {_t("settings|security|bulk_options_accept_all_invites", { invitedRooms: invitedRoomIds.size })}
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this.onRejectAllInvitesClicked}
-                        kind="danger"
+                        kind="danger_outline"
                         disabled={this.state.managingInvites}
                     >
                         {_t("settings|security|bulk_options_reject_all_invites", { invitedRooms: invitedRoomIds.size })}

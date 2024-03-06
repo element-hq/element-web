@@ -14,32 +14,54 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IDelegatedAuthConfig, MatrixClient, M_AUTHENTICATION } from "matrix-js-sdk/src/matrix";
-import { discoverAndValidateAuthenticationConfig } from "matrix-js-sdk/src/oidc/discovery";
+import { MatrixClient, discoverAndValidateOIDCIssuerWellKnown } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { OidcClient } from "oidc-client-ts";
 
 import { getStoredOidcTokenIssuer, getStoredOidcClientId } from "../../utils/oidc/persistOidcSettings";
-import { getDelegatedAuthAccountUrl } from "../../utils/oidc/getDelegatedAuthAccountUrl";
+import PlatformPeg from "../../PlatformPeg";
 
 /**
  * @experimental
  * Stores information about configured OIDC provider
+ *
+ * In OIDC Native mode the client is registered with OIDC directly and maintains an OIDC token.
+ *
+ * In OIDC Aware mode, the client is aware that the Server is using OIDC, but is using the standard Matrix APIs for most things.
+ * (Notable exceptions are account management, where a link to the account management endpoint will be provided instead.)
+ *
+ * Otherwise, the store is not operating. Auth is then in Legacy mode and everything uses normal Matrix APIs.
  */
 export class OidcClientStore {
     private oidcClient?: OidcClient;
     private initialisingOidcClientPromise: Promise<void> | undefined;
-    private authenticatedIssuer?: string;
+    private authenticatedIssuer?: string; // set only in OIDC-native mode
     private _accountManagementEndpoint?: string;
+    /**
+     * Promise which resolves once this store is read to use, which may mean there is no OIDC client if we're in legacy mode,
+     * or we just have the account management endpoint if running in OIDC-aware mode.
+     */
+    public readonly readyPromise: Promise<void>;
 
     public constructor(private readonly matrixClient: MatrixClient) {
+        this.readyPromise = this.init();
+    }
+
+    private async init(): Promise<void> {
         this.authenticatedIssuer = getStoredOidcTokenIssuer();
         if (this.authenticatedIssuer) {
-            this.getOidcClient();
+            await this.getOidcClient();
         } else {
-            matrixClient.waitForClientWellKnown().then((wellKnown) => {
-                this._accountManagementEndpoint = getDelegatedAuthAccountUrl(wellKnown);
-            });
+            // We are not in OIDC Native mode, as we have no locally stored issuer. Check if the server delegates auth to OIDC.
+            try {
+                const authIssuer = await this.matrixClient.getAuthIssuer();
+                const { accountManagementEndpoint, metadata } = await discoverAndValidateOIDCIssuerWellKnown(
+                    authIssuer.issuer,
+                );
+                this._accountManagementEndpoint = accountManagementEndpoint ?? metadata.issuer;
+            } catch (e) {
+                console.log("Auth issuer not found", e);
+            }
         }
     }
 
@@ -118,28 +140,23 @@ export class OidcClientStore {
      * @returns promise that resolves when initialising OidcClient succeeds or fails
      */
     private async initOidcClient(): Promise<void> {
-        const wellKnown = await this.matrixClient.waitForClientWellKnown();
-        if (!wellKnown && !this.authenticatedIssuer) {
+        if (!this.authenticatedIssuer) {
             logger.error("Cannot initialise OIDC client without issuer.");
             return;
         }
-        const delegatedAuthConfig =
-            (wellKnown && M_AUTHENTICATION.findIn<IDelegatedAuthConfig>(wellKnown)) ?? undefined;
 
         try {
             const clientId = getStoredOidcClientId();
-            const { account, metadata, signingKeys } = await discoverAndValidateAuthenticationConfig(
-                // if HS has valid delegated auth config in .well-known, use it
-                // otherwise fallback to the known issuer
-                delegatedAuthConfig ?? { issuer: this.authenticatedIssuer! },
+            const { accountManagementEndpoint, metadata, signingKeys } = await discoverAndValidateOIDCIssuerWellKnown(
+                this.authenticatedIssuer,
             );
             // if no account endpoint is configured default to the issuer
-            this._accountManagementEndpoint = account ?? metadata.issuer;
+            this._accountManagementEndpoint = accountManagementEndpoint ?? metadata.issuer;
             this.oidcClient = new OidcClient({
                 ...metadata,
                 authority: metadata.issuer,
                 signingKeys,
-                redirect_uri: window.location.origin,
+                redirect_uri: PlatformPeg.get()!.getSSOCallbackUrl().href,
                 client_id: clientId,
             });
         } catch (error) {

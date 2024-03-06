@@ -57,20 +57,9 @@ async function cfgDirFromTemplate(opts: StartHomeserverOpts): Promise<Omit<Homes
     if (opts.oAuthServerPort) {
         hsYaml = hsYaml.replace(/{{OAUTH_SERVER_PORT}}/g, opts.oAuthServerPort.toString());
     }
-    hsYaml = hsYaml.replace(/{{HOST_DOCKER_INTERNAL}}/g, await Docker.hostnameOfHost());
     if (opts.variables) {
-        let fetchedHostContainer: Awaited<ReturnType<typeof Docker.hostnameOfHost>> | null = null;
         for (const key in opts.variables) {
-            let value = String(opts.variables[key]);
-
-            if (value === "{{HOST_DOCKER_INTERNAL}}") {
-                if (!fetchedHostContainer) {
-                    fetchedHostContainer = await Docker.hostnameOfHost();
-                }
-                value = fetchedHostContainer;
-            }
-
-            hsYaml = hsYaml.replace(new RegExp("%" + key + "%", "g"), value);
+            hsYaml = hsYaml.replace(new RegExp("%" + key + "%", "g"), String(opts.variables[key]));
         }
     }
 
@@ -106,26 +95,13 @@ export class Synapse implements Homeserver, HomeserverInstance {
      * Start a synapse instance: the template must be the name of
      * one of the templates in the playwright/plugins/synapsedocker/templates
      * directory.
-     *
-     * Any value in `opts.variables` that is set to `{{HOST_DOCKER_INTERNAL}}'
-     * will be replaced with 'host.docker.internal' (if we are on Docker) or
-     * 'host.containers.internal' if we are on Podman.
      */
     public async start(opts: StartHomeserverOpts): Promise<HomeserverInstance> {
         if (this.config) await this.stop();
 
         const synCfg = await cfgDirFromTemplate(opts);
         console.log(`Starting synapse with config dir ${synCfg.configDir}...`);
-        const dockerSynapseParams = ["--rm", "-v", `${synCfg.configDir}:/data`, "-p", `${synCfg.port}:8008/tcp`];
-        if (await Docker.isPodman()) {
-            // Make host.containers.internal work to allow Synapse to talk to the test OIDC server.
-            dockerSynapseParams.push("--network");
-            dockerSynapseParams.push("slirp4netns:allow_host_loopback=true");
-        } else {
-            // Make host.docker.internal work to allow Synapse to talk to the test OIDC server.
-            dockerSynapseParams.push("--add-host");
-            dockerSynapseParams.push("host.docker.internal:host-gateway");
-        }
+        const dockerSynapseParams = ["-v", `${synCfg.configDir}:/data`, "-p", `${synCfg.port}:8008/tcp`];
         const synapseId = await this.docker.run({
             image: "matrixdotorg/synapse:develop",
             containerName: `react-sdk-playwright-synapse`,
@@ -158,7 +134,7 @@ export class Synapse implements Homeserver, HomeserverInstance {
     public async stop(): Promise<string[]> {
         if (!this.config) throw new Error("Missing existing synapse instance, did you call stop() before start()?");
         const id = this.config.serverId;
-        const synapseLogsPath = path.join("playwright", "synapselogs", id);
+        const synapseLogsPath = path.join("playwright", "logs", "synapse", id);
         await fse.ensureDir(synapseLogsPath);
         await this.docker.persistLogsToFile({
             stdoutFile: path.join(synapseLogsPath, "stdout.log"),

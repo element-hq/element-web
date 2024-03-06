@@ -173,7 +173,10 @@ const SessionManagerTab: React.FC = () => {
      * delegated auth provider.
      * See https://github.com/matrix-org/matrix-spec-proposals/pull/3824
      */
-    const delegatedAuthAccountUrl = sdkContext.oidcClientStore.accountManagementEndpoint;
+    const delegatedAuthAccountUrl = useAsyncMemo(async () => {
+        await sdkContext.oidcClientStore.readyPromise; // wait for the store to be ready
+        return sdkContext.oidcClientStore.accountManagementEndpoint;
+    }, [sdkContext.oidcClientStore]);
     const disableMultipleSignout = !!delegatedAuthAccountUrl;
 
     const userId = matrixClient?.getUserId();

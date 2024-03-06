@@ -498,6 +498,8 @@ export class Algorithm extends EventEmitter {
             newTags[DefaultTagID.Invite].push(room);
         }
         for (const room of memberships[EffectiveMembership.Leave]) {
+            // We may not have had an archived section previously, so make sure its there.
+            if (newTags[DefaultTagID.Archived] === undefined) newTags[DefaultTagID.Archived] = [];
             newTags[DefaultTagID.Archived].push(room);
         }
 

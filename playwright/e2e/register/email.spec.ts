@@ -15,25 +15,17 @@ limitations under the License.
 */
 
 import { test, expect } from "../../element-web-test";
-import { MailHogServer } from "../../plugins/mailhog";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Email Registration", async () => {
     test.skip(isDendrite, "not yet wired up");
 
     test.use({
-        // eslint-disable-next-line no-empty-pattern
-        mailhog: async ({}, use) => {
-            const mailhog = new MailHogServer();
-            const instance = await mailhog.start();
-            await use(instance);
-            await mailhog.stop();
-        },
         startHomeserverOpts: ({ mailhog }, use) =>
             use({
                 template: "email",
                 variables: {
-                    SMTP_HOST: "{{HOST_DOCKER_INTERNAL}}", // This will get replaced in synapseStart
+                    SMTP_HOST: "host.containers.internal",
                     SMTP_PORT: mailhog.instance.smtpPort,
                 },
             }),

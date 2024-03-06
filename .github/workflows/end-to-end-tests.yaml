@@ -156,7 +156,10 @@ jobs:
                   merge-multiple: true
 
             - name: Merge into HTML Report
-              run: yarn playwright merge-reports --reporter=html,github ./all-blob-reports
+              run: yarn playwright merge-reports --reporter=html,github,./playwright/flaky-reporter.ts ./all-blob-reports
+              env:
+                  # Only pass creds to the flaky-reporter on main branch runs
+                  GITHUB_TOKEN: ${{ github.event.workflow_run.head_branch == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
 
             - name: Upload HTML report
               uses: actions/upload-artifact@v4

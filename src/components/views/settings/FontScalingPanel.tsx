@@ -14,29 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ChangeEvent } from "react";
+import React from "react";
 
 import EventTilePreview from "../elements/EventTilePreview";
-import Field from "../elements/Field";
-import SettingsFlag from "../elements/SettingsFlag";
 import SettingsStore from "../../../settings/SettingsStore";
-import Slider from "../elements/Slider";
-import { FontWatcher } from "../../../settings/watchers/FontWatcher";
-import { IValidationResult, IFieldState } from "../elements/Validation";
 import { Layout } from "../../../settings/enums/Layout";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { _t } from "../../../languageHandler";
-import { clamp } from "../../../utils/numbers";
 import SettingsSubsection from "./shared/SettingsSubsection";
+import Field from "../elements/Field";
+import { FontWatcher } from "../../../settings/watchers/FontWatcher";
 
 interface IProps {}
 
 interface IState {
+    browserFontSize: number;
     // String displaying the current selected fontSize.
-    // Needs to be string for things like '17.' without
+    // Needs to be string for things like '1.' without
     // trailing 0s.
-    fontSize: string;
+    fontSizeDelta: number;
     useCustomFontSize: boolean;
     layout: Layout;
     // User profile data for the message preview
@@ -47,6 +44,10 @@ interface IState {
 
 export default class FontScalingPanel extends React.Component<IProps, IState> {
     private readonly MESSAGE_PREVIEW_TEXT = _t("common|preview_message");
+    /**
+     * Font sizes available (in px)
+     */
+    private readonly sizes = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36];
     private layoutWatcherRef?: string;
     private unmounted = false;
 
@@ -54,7 +55,8 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            fontSize: SettingsStore.getValue("baseFontSizeV2", null).toString(),
+            fontSizeDelta: SettingsStore.getValue<number>("fontSizeDelta", null),
+            browserFontSize: FontWatcher.getBrowserDefaultFontSize(),
             useCustomFontSize: SettingsStore.getValue("useCustomFontSize"),
             layout: SettingsStore.getValue("layout"),
         };
@@ -90,30 +92,22 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         }
     }
 
-    private onFontSizeChanged = (size: number): void => {
-        this.setState({ fontSize: size.toString() });
-        SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, size);
+    /**
+     * Save the new font size
+     * @param delta
+     */
+    private onFontSizeChanged = async (delta: string): Promise<void> => {
+        const parsedDelta = parseInt(delta, 10) || 0;
+        this.setState({ fontSizeDelta: parsedDelta });
+        await SettingsStore.setValue("fontSizeDelta", null, SettingLevel.DEVICE, parsedDelta);
     };
 
-    private onValidateFontSize = async ({ value }: Pick<IFieldState, "value">): Promise<IValidationResult> => {
-        const parsedSize = parseFloat(value!);
-        const min = FontWatcher.MIN_SIZE;
-        const max = FontWatcher.MAX_SIZE;
-
-        if (isNaN(parsedSize)) {
-            return { valid: false, feedback: _t("settings|appearance|font_size_nan") };
-        }
-
-        if (!(min <= parsedSize && parsedSize <= max)) {
-            return {
-                valid: false,
-                feedback: _t("settings|appearance|font_size_limit", { min, max }),
-            };
-        }
-
-        SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, parseInt(value!, 10));
-
-        return { valid: true, feedback: _t("settings|appearance|font_size_valid", { min, max }) };
+    /**
+     * Compute the difference between the selected font size and the browser font size
+     * @param fontSize
+     */
+    private computeDeltaFontSize = (fontSize: number): number => {
+        return fontSize - this.state.browserFontSize;
     };
 
     public render(): React.ReactNode {
@@ -123,6 +117,21 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
                 stretchContent
                 data-testid="mx_FontScalingPanel"
             >
+                <Field
+                    element="select"
+                    className="mx_FontScalingPanel_Dropdown"
+                    label={_t("settings|appearance|font_size")}
+                    value={this.state.fontSizeDelta.toString()}
+                    onChange={(e) => this.onFontSizeChanged(e.target.value)}
+                >
+                    {this.sizes.map((size) => (
+                        <option key={size} value={this.computeDeltaFontSize(size)}>
+                            {size === this.state.browserFontSize
+                                ? _t("settings|appearance|font_size_default", { fontSize: size })
+                                : size}
+                        </option>
+                    ))}
+                </Field>
                 <EventTilePreview
                     className="mx_FontScalingPanel_preview"
                     message={this.MESSAGE_PREVIEW_TEXT}
@@ -130,49 +139,6 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
                     userId={this.state.userId}
                     displayName={this.state.displayName}
                     avatarUrl={this.state.avatarUrl}
-                />
-                <div className="mx_FontScalingPanel_fontSlider">
-                    <div className="mx_FontScalingPanel_fontSlider_smallText">Aa</div>
-                    <Slider
-                        min={FontWatcher.MIN_SIZE}
-                        max={FontWatcher.MAX_SIZE}
-                        step={1}
-                        value={parseInt(this.state.fontSize, 10)}
-                        onChange={this.onFontSizeChanged}
-                        displayFunc={(_) => ""}
-                        disabled={this.state.useCustomFontSize}
-                        label={_t("settings|appearance|font_size")}
-                    />
-                    <div className="mx_FontScalingPanel_fontSlider_largeText">Aa</div>
-                </div>
-
-                <SettingsFlag
-                    name="useCustomFontSize"
-                    level={SettingLevel.ACCOUNT}
-                    onChange={(checked) => {
-                        this.setState({ useCustomFontSize: checked });
-                        if (!checked) {
-                            const size = parseInt(this.state.fontSize, 10);
-                            const clamped = clamp(size, FontWatcher.MIN_SIZE, FontWatcher.MAX_SIZE);
-                            if (clamped !== size) {
-                                this.onFontSizeChanged(clamped);
-                            }
-                        }
-                    }}
-                    useCheckbox={true}
-                />
-
-                <Field
-                    type="number"
-                    label={_t("settings|appearance|font_size")}
-                    autoComplete="off"
-                    placeholder={this.state.fontSize.toString()}
-                    value={this.state.fontSize.toString()}
-                    id="font_size_field"
-                    onValidate={this.onValidateFontSize}
-                    onChange={(value: ChangeEvent<HTMLInputElement>) => this.setState({ fontSize: value.target.value })}
-                    disabled={!this.state.useCustomFontSize}
-                    className="mx_AppearanceUserSettingsTab_checkboxControlledField"
                 />
             </SettingsSubsection>
         );

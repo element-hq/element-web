@@ -43,8 +43,8 @@ test.describe("1:1 chat room", () => {
 
         // wait till the room was left
         await expect(
-            page.getByRole("group", { name: "Historical" }).locator(".mx_RoomTile").getByText(user2.displayName),
-        ).toBeVisible();
+            page.getByRole("group", { name: "Rooms" }).locator(".mx_RoomTile").getByText(user2.displayName),
+        ).not.toBeVisible();
 
         // open new 1:1 chat room
         await page.goto(`/#/user/${user2.userId}?action=chat`);

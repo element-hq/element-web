@@ -13,13 +13,13 @@
         "declaration": true,
         "jsx": "react",
         "lib": ["es2021", "dom", "dom.iterable"],
-        "strict": true,
+        "strict": true
     },
     "include": [
         "./node_modules/matrix-js-sdk/src/@types/*.d.ts",
         "./src/**/*.ts",
         "./src/**/*.tsx",
         "./test/**/*.ts",
-        "./test/**/*.tsx",
-    ],
+        "./test/**/*.tsx"
+    ]
 }

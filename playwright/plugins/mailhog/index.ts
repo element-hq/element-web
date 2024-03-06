@@ -38,7 +38,7 @@ export class MailHogServer {
         const containerId = await this.docker.run({
             image: "mailhog/mailhog:latest",
             containerName: `react-sdk-playwright-mailhog`,
-            params: ["--rm", "-p", `${smtpPort}:1025/tcp`, "-p", `${httpPort}:8025/tcp`],
+            params: ["-p", `${smtpPort}:1025/tcp`, "-p", `${httpPort}:8025/tcp`],
         });
         console.log(`Started mailhog on ports smtp=${smtpPort} http=${httpPort}.`);
         const host = await this.docker.getContainerIp();

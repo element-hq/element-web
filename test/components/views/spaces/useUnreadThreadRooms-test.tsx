@@ -51,6 +51,28 @@ describe("useUnreadThreadRooms", () => {
         expect(rooms.length).toEqual(0);
     });
 
+    it("an activity notification is ignored", async () => {
+        const notifThreadInfo = await populateThread({
+            room: room,
+            client: client,
+            authorId: "@foo:bar",
+            participantUserIds: ["@fee:bar"],
+        });
+        room.setThreadUnreadNotificationCount(notifThreadInfo.thread.id, NotificationCountType.Total, 0);
+
+        client.getVisibleRooms = jest.fn().mockReturnValue([room]);
+
+        const wrapper = ({ children }: { children: React.ReactNode }) => (
+            <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
+        );
+
+        const { result } = renderHook(() => useUnreadThreadRooms(true), { wrapper });
+        const { greatestNotificationLevel, rooms } = result.current;
+
+        expect(greatestNotificationLevel).toBe(NotificationLevel.None);
+        expect(rooms.length).toEqual(0);
+    });
+
     it("a notification and a highlight summarise to a highlight", async () => {
         const notifThreadInfo = await populateThread({
             room: room,
@@ -107,7 +129,7 @@ describe("useUnreadThreadRooms", () => {
 
             const { result } = renderHook(() => useUnreadThreadRooms(true), { wrapper });
 
-            expect(result.current.greatestNotificationLevel).toBe(NotificationLevel.Activity);
+            expect(result.current.greatestNotificationLevel).toBe(NotificationLevel.None);
 
             act(() => {
                 room.setThreadUnreadNotificationCount(notifThreadInfo.thread.id, NotificationCountType.Highlight, 1);

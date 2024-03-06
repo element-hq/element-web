@@ -6,11 +6,11 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
-        "module": "es2022",
+        "module": "es2022"
     },
     "include": [
         "**/*.ts",
         "../node_modules/matrix-js-sdk/src/@types/*.d.ts",
-        "../node_modules/matrix-js-sdk/node_modules/@matrix-org/olm/index.d.ts",
-    ],
+        "../node_modules/matrix-js-sdk/node_modules/@matrix-org/olm/index.d.ts"
+    ]
 }

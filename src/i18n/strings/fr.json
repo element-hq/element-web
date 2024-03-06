@@ -1,6 +1,8 @@
 {
     "a11y": {
+        "emoji_picker": "Sélecteur d'emoji",
         "jump_first_invite": "Sauter à la première invitation.",
+        "message_composer": "Rédaction des messages",
         "n_unread_messages": {
             "other": "%(count)s messages non lus.",
             "one": "1 message non lu."
@@ -9,7 +11,10 @@
             "other": "%(count)s messages non lus y compris les mentions.",
             "one": "1 mention non lue."
         },
+        "recent_rooms": "Salons récents",
         "room_name": "Salon %(name)s",
+        "room_status_bar": "Barre de statut du salon",
+        "seek_bar_label": "Barre de recherche audio",
         "unread_messages": "Messages non lus.",
         "user_menu": "Menu utilisateur"
     },
@@ -186,13 +191,13 @@
         "create_account_prompt": "Nouveau ici ? <a>Créez un compte</a>",
         "create_account_title": "Créer un compte",
         "email_discovery_text": "Utiliser une adresse e-mail pour pouvoir être découvert par des contacts existants.",
-        "email_field_label": "E-mail",
+        "email_field_label": "Adresse e-mail",
         "email_field_label_invalid": "Cela ne ressemble pas a une adresse e-mail valide",
         "email_field_label_required": "Saisir l’adresse e-mail",
         "email_help_text": "Ajouter une adresse e-mail pour pouvoir réinitialiser votre mot de passe.",
         "email_phone_discovery_text": "Utiliser une adresse e-mail ou un numéro de téléphone pour pouvoir être découvert par des contacts existants.",
         "enter_email_explainer": "<b>%(homeserver)s</b> va vous envoyer un lien de vérification vous permettant de réinitialiser votre mot de passe.",
-        "enter_email_heading": "Entrez votre e-mail pour réinitialiser le mot de passe",
+        "enter_email_heading": "Entrez votre adresse e-mail pour réinitialiser le mot de passe",
         "failed_connect_identity_server": "Impossible de joindre le serveur d’identité",
         "failed_connect_identity_server_other": "Vous pouvez vous connecter, mais certaines fonctionnalités ne seront pas disponibles jusqu’au retour du serveur d’identité. Si vous continuez à voir cet avertissement, vérifiez votre configuration ou contactez un administrateur du serveur.",
         "failed_connect_identity_server_register": "Vous pouvez vous inscrire, mais certaines fonctionnalités ne seront pas disponibles jusqu’au retour du serveur d’identité. Si vous continuez à voir cet avertissement, vérifiez votre configuration ou contactez un administrateur du serveur.",
@@ -202,7 +207,7 @@
         "failed_soft_logout_auth": "Échec de la ré-authentification",
         "failed_soft_logout_homeserver": "Échec de la ré-authentification à cause d’un problème du serveur d’accueil",
         "footer_powered_by_matrix": "propulsé par Matrix",
-        "forgot_password_email_invalid": "L’adresse de courriel semble être invalide.",
+        "forgot_password_email_invalid": "L’adresse e-mail semble être invalide.",
         "forgot_password_email_required": "L’adresse e-mail liée à votre compte doit être renseignée.",
         "forgot_password_prompt": "Mot de passe oublié ?",
         "forgot_password_send_email": "Envoyer l’e-mail",
@@ -265,9 +270,9 @@
         },
         "register_action": "Créer un compte",
         "registration": {
-            "continue_without_email_description": "Juste une remarque, si vous n'ajoutez pas d’e-mail et que vous oubliez votre mot de passe, vous pourriez <b>perdre définitivement l’accès à votre compte</b>.",
-            "continue_without_email_field_label": "E-mail (facultatif)",
-            "continue_without_email_title": "Continuer sans e-mail"
+            "continue_without_email_description": "Juste une remarque, si vous n'ajoutez pas d’adresse e-mail et que vous oubliez votre mot de passe, vous pourriez <b>perdre définitivement l’accès à votre compte</b>.",
+            "continue_without_email_field_label": "Adresse e-mail (facultatif)",
+            "continue_without_email_title": "Continuer sans adresse e-mail"
         },
         "registration_disabled": "L’inscription a été désactivée sur ce serveur d’accueil.",
         "registration_msisdn_field_required_invalid": "Saisir le numéro de téléphone (obligatoire sur ce serveur d’accueil)",
@@ -294,7 +299,7 @@
         "reset_password_email_field_required_invalid": "Saisir l’adresse e-mail (obligatoire sur ce serveur d’accueil)",
         "reset_password_email_not_associated": "Votre adresse e-mail ne semble pas être associée à un identifiant Matrix sur ce serveur d’accueil.",
         "reset_password_email_not_found_title": "Cette adresse e-mail n’a pas été trouvée",
-        "reset_password_title": "Réinitialise votre mot de passe",
+        "reset_password_title": "Réinitialisez votre mot de passe",
         "server_picker_custom": "Autre serveur d’accueil",
         "server_picker_description": "Vous pouvez utiliser l’option de serveur personnalisé pour vous connecter à d'autres serveurs Matrix en spécifiant une URL de serveur d'accueil différente. Cela vous permet d’utiliser %(brand)s avec un compte Matrix existant sur un serveur d’accueil différent.",
         "server_picker_description_matrix.org": "Rejoignez des millions d’utilisateurs gratuitement sur le plus grand serveur public",
@@ -318,8 +323,8 @@
         },
         "set_email_prompt": "Souhaitez-vous configurer une adresse e-mail ?",
         "sign_in_description": "Utilisez votre compte pour continuer.",
-        "sign_in_instead": "Se connecter à la place",
-        "sign_in_instead_prompt": "Se connecter à la place",
+        "sign_in_instead": "Me connecter avec mon compte existant",
+        "sign_in_instead_prompt": "Vous avez déjà un compte ? <a>Connectez-vous ici</a>",
         "sign_in_or_register": "Se connecter ou créer un compte",
         "sign_in_or_register_description": "Utilisez votre compte ou créez en un pour continuer.",
         "sign_in_prompt": "Vous avez un compte ? <a>Connectez-vous</a>",
@@ -474,6 +479,7 @@
         "legal": "Légal",
         "light": "Clair",
         "loading": "Chargement…",
+        "lobby": "Salle d'attente",
         "location": "Position",
         "low_priority": "Priorité basse",
         "matrix": "Matrix",
@@ -1052,7 +1058,14 @@
         "unknown_error_code": "code d’erreur inconnu",
         "update_power_level": "Échec du changement de rang"
     },
-    "error_database_closed_title": "La base de données s’est fermée de manière inattendue",
+    "error_app_open_in_another_tab": "Vous pouvez fermer cet onglet déconnecté, et aller à l'autre onglet %(brand)s.",
+    "error_app_open_in_another_tab_title": "%(brand)s est connecté dans un autre onglet",
+    "error_app_opened_in_another_window": "%(brand)s est ouvert dans une autre fenêtre. Cliquez \\\"%(label)s\\\" pour utiliser %(brand)s ici et déconnecter l'autre fenêtre.",
+    "error_database_closed_description": {
+        "for_desktop": "Votre disque dur est peut-être plein. Libérez de l'espace puis rechargez la page.",
+        "for_web": "Si vous avez effacé les données de navigation, alors ce message est normal. %(brand)s est peut-être aussi ouvert dans un autre onglet, ou votre disque dur est plein. Libérez de l'espace et rechargez la page"
+    },
+    "error_database_closed_title": "%(brand)s ne fonctionne plus",
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "Impossible de copier le lien du salon dans le presse-papier.",
@@ -1086,6 +1099,7 @@
             "user": "%(senderName)s a commencé un appel",
             "you": "Vous avez commencé un appel"
         },
+        "m.emote": "* %(senderName)s %(emote)s",
         "m.reaction": {
             "user": "%(sender)s a réagi avec %(reaction)s à %(message)s",
             "you": "Vous avez réagi avec %(reaction)s à %(message)s"
@@ -1261,7 +1275,7 @@
         "failed_title": "Échec de l’invitation",
         "invalid_address": "Adresse non reconnue",
         "key_share_warning": "Les personnes invitées pourront lire les anciens messages.",
-        "name_email_mxid_share_room": "Invitez quelqu’un via son nom, e-mail ou pseudo (p. ex. <userId/>) ou <a>partagez ce salon</a>.",
+        "name_email_mxid_share_room": "Invitez quelqu’un via son nom, adresse e-mail ou pseudo (p. ex. <userId/>) ou <a>partagez ce salon</a>.",
         "name_email_mxid_share_space": "Invitez quelqu’un grâce à son nom, adresse e-mail, nom d’utilisateur (tel que <userId/>) ou <a>partagez cet espace</a>.",
         "name_mxid_share_room": "Invitez quelqu’un à partir de son nom, pseudo (comme <userId/>) ou <a>partagez ce salon</a>.",
         "name_mxid_share_space": "Invitez quelqu’un grâce à son nom, nom d’utilisateur (tel que <userId/>) ou <a>partagez cet espace</a>.",
@@ -1270,7 +1284,7 @@
         "room_failed_partial_title": "Certaines invitations n’ont pas pu être envoyées",
         "room_failed_title": "Impossible d’inviter les utilisateurs dans %(roomName)s",
         "send_link_prompt": "Ou envoyer le lien d’invitation",
-        "start_conversation_name_email_mxid_prompt": "Commencer une conversation privée avec quelqu’un via son nom, e-mail ou pseudo (comme par exemple <userId/>).",
+        "start_conversation_name_email_mxid_prompt": "Commencer une conversation privée avec quelqu’un via son nom, adresse e-mail ou pseudo (comme par exemple <userId/>).",
         "start_conversation_name_mxid_prompt": "Commencer une conversation privée avec quelqu’un en utilisant son nom ou son pseudo (comme <userId/>).",
         "suggestions_disclaimer": "Certaines suggestions pourraient être masquées pour votre confidentialité.",
         "suggestions_disclaimer_prompt": "Si vous ne trouvez pas la personne que vous cherchez, envoyez-lui le lien d’invitation ci-dessous.",
@@ -1401,6 +1415,7 @@
         "group_rooms": "Salons",
         "group_spaces": "Espaces",
         "group_themes": "Thèmes",
+        "group_threads": "Fils de discussion",
         "group_voip": "Audio et vidéo",
         "group_widgets": "Widgets",
         "hidebold": "Masquer le point de notification (affiche seulement les badges des compteurs)",
@@ -1418,6 +1433,7 @@
         "msc3531_hide_messages_pending_moderation": "Permettre aux modérateurs de cacher des messages en attente de modération.",
         "new_room_decoration_ui": "En cours de développement, nouvel en-tête de salon et interface des détails",
         "notification_settings": "Nouveaux paramètres de notification",
+        "notification_settings_beta_caption": "Introduit une manière plus simple de changer vos préférences de notifications. Customisez %(brand)s, comme ça vous convient.",
         "notification_settings_beta_title": "Paramètres de notification",
         "notifications": "Active le panneau de notifications dans l’en-tête du salon",
         "oidc_native_flow": "Authentification native OIDC",
@@ -1428,6 +1444,10 @@
         "report_to_moderators": "Signaler aux modérateurs",
         "report_to_moderators_description": "Dans les salons prenant en charge la modération, le bouton « Signaler » vous permet de signaler des abus aux modérateurs du salon.",
         "rust_crypto": "Implémentation cryptographique en Rust",
+        "rust_crypto_in_config": "La cryptographie Rust ne peut être désactivée sur ce déploiement de %(brand)s",
+        "rust_crypto_in_config_description": "Si vous passez à la cryptographie Rust, cela démarrera un processus de migration qui peut durer plusieurs minutes. Il ne peut être arrêté; à utiliser prudemment !",
+        "rust_crypto_optin_warning": "Si vous passez à la cryptographie Rust, cela démarrera un processus de migration qui peut durer plusieurs minutes. Pour la désactiver, vous devrez vous déconnecter et vous reconnecter; à utiliser prudemment !",
+        "rust_crypto_requires_logout": "Une fois activée, la cryptographie Rust ne peut être désactivée qu'en se déconnectant et se reconnectant",
         "sliding_sync": "Mode synchronisation progressive",
         "sliding_sync_checking": "Vérification…",
         "sliding_sync_configuration": "Configuration de la synchronisation progressive",
@@ -1439,6 +1459,8 @@
         "sliding_sync_server_no_support": "Votre serveur manque d’un support natif",
         "sliding_sync_server_specify_proxy": "Votre serveur manque d’un support natif, vous devez spécifier un serveur mandataire (proxy)",
         "sliding_sync_server_support": "Votre serveur a un support natif",
+        "threads_activity_centre": "Centre d'activité des fils de discussion (en développement)",
+        "threads_activity_centre_description": "Attention: en cours de développement actif. Recharge %(brand)s",
         "under_active_development": "En cours de développement.",
         "unrealiable_e2e": "Non fiable dans les salons chiffrés",
         "video_rooms": "Salons vidéo",
@@ -1567,11 +1589,13 @@
     },
     "member_list_back_action_label": "Membres du salon",
     "message_edit_dialog_title": "Modifications du message",
+    "migrating_crypto": "Accrochez-vous. Nous mettons à jour %(brand)s pour que le chiffrement soit plus rapide et plus fiable.",
     "mobile_guide": {
         "toast_accept": "Utiliser l’application",
         "toast_description": "%(brand)s est expérimental sur un navigateur mobile. Pour une meilleure expérience et bénéficier des dernières fonctionnalités, utilisez notre application native gratuite.",
         "toast_title": "Utilisez une application pour une meilleure expérience"
     },
+    "name_and_id": "%(name)s (%(userId)s)",
     "no_more_results": "Fin des résultats",
     "notif_panel": {
         "empty_description": "Vous n’avez aucune notification visible.",
@@ -1593,6 +1617,7 @@
         "level_activity": "Activité",
         "level_muted": "Muet",
         "level_none": "Aucun",
+        "level_notification": "Notification",
         "level_unsent": "Non envoyé",
         "mark_all_read": "Tout marquer comme lu",
         "mentions_and_keywords": "@mentions et mots-clés",
@@ -1763,6 +1788,7 @@
         "nature": "Veuillez choisir la nature du rapport et décrire ce qui rend ce message abusif.",
         "nature_disagreement": "Ce que cet utilisateur écrit est déplacé.\nCeci sera signalé aux modérateurs du salon.",
         "nature_illegal": "Cet utilisateur fait preuve d’un comportement illicite, par exemple en publiant des informations personnelles d’autres ou en proférant des menaces.\nCeci sera signalé aux modérateurs du salon qui pourront l’escalader aux autorités.",
+        "nature_nonstandard_admin": "Le sujet de ce salon est illégal ou toxique, ou les modérateurs ne modèrent pas le contenu illégal ou toxique.\nCe fait sera signalé aux administrateurs de %(homeserver)s.",
         "nature_other": "Toute autre raison. Veuillez décrire le problème.\nCeci sera signalé aux modérateurs du salon.",
         "nature_spam": "Cet utilisateur inonde le salon de publicités ou liens vers des publicités, ou vers de la propagande.\nCeci sera signalé aux modérateurs du salon.",
         "nature_toxic": "Cet utilisateur fait preuve d’un comportement toxique, par exemple en insultant les autres ou en partageant du contenu pour adultes dans un salon familial, ou en violant les règles de ce salon.\nCeci sera signalé aux modérateurs du salon.",
@@ -1981,7 +2007,7 @@
         "leave_server_notices_description": "Ce salon est utilisé pour les messages importants du serveur d’accueil, vous ne pouvez donc pas en partir.",
         "leave_server_notices_title": "Impossible de quitter le salon des Annonces du Serveur",
         "leave_unexpected_error": "Erreur de serveur inattendue en essayant de quitter le salon",
-        "link_email_to_receive_3pid_invite": "Liez cet e-mail à votre compte dans les paramètres pour recevoir les invitations directement dans %(brand)s.",
+        "link_email_to_receive_3pid_invite": "Associez cette adresse e-mail à votre compte dans les paramètres pour recevoir les invitations directement dans %(brand)s.",
         "loading_preview": "Chargement de l’aperçu",
         "no_peek_join_prompt": "Vous ne pouvez pas avoir d’aperçu de %(roomName)s. Voulez-vous rejoindre le salon ?",
         "no_peek_no_name_join_prompt": "Il n’y a pas d’aperçu, voulez-vous rejoindre ?",
@@ -2388,9 +2414,6 @@
             "custom_theme_success": "Thème ajouté !",
             "custom_theme_url": "URL personnalisée pour le thème",
             "font_size": "Taille de la police",
-            "font_size_limit": "La taille de police personnalisée doit être comprise entre %(min)s pt et %(max)s pt",
-            "font_size_nan": "La taille doit être un nombre",
-            "font_size_valid": "Utiliser entre %(min)s pt et %(max)s pt",
             "heading": "Personnalisez l’apparence",
             "image_size_default": "Par défaut",
             "image_size_large": "Grande",
@@ -2424,7 +2447,7 @@
             "add_msisdn_instructions": "Un SMS a été envoyé à +%(msisdn)s. Saisissez le code de vérification qu’il contient.",
             "add_msisdn_misconfigured": "L’ajout / liaison avec le flux MSISDN est mal configuré",
             "confirm_adding_email_body": "Cliquez sur le bouton ci-dessous pour confirmer l’ajout de l’adresse e-mail.",
-            "confirm_adding_email_title": "Confirmer l’ajout de l’e-mail",
+            "confirm_adding_email_title": "Confirmer l’ajout de l’adresse e-mail",
             "deactivate_confirm_body": "Voulez-vous vraiment désactiver votre compte ? Ceci est irréversible.",
             "deactivate_confirm_body_password": "Pour continuer, saisissez votre mot de passe de connexion :",
             "deactivate_confirm_body_sso": "Confirmez la désactivation de votre compte en utilisant l’authentification unique pour prouver votre identité.",
@@ -2736,6 +2759,7 @@
             "device_verified_description": "Cette session est prête pour l’envoi de messages sécurisés.",
             "device_verified_description_current": "Votre session actuelle est prête pour une messagerie sécurisée.",
             "error_pusher_state": "Échec lors de la définition de l’état push",
+            "error_set_name": "Impossible d'enregistrer le nom de la session",
             "filter_all": "Tout",
             "filter_inactive": "Inactive",
             "filter_inactive_description": "Inactive depuis au moins %(inactiveAgeDays)s jours",
@@ -3142,7 +3166,13 @@
         "n_hours_ago": "il y a %(num)s heures",
         "n_minutes_ago": "il y a %(num)s minutes",
         "seconds_left": "%(seconds)s secondes restantes",
-        "short_days_hours_minutes_seconds": "%(days)sj %(hours)sh %(minutes)sm %(seconds)ss"
+        "short_days": "%(value)sj",
+        "short_days_hours_minutes_seconds": "%(days)sj %(hours)sh %(minutes)sm %(seconds)ss",
+        "short_hours": "%(value)sh",
+        "short_hours_minutes_seconds": "%(hours)sh %(minutes)sm %(seconds)ss",
+        "short_minutes": "%(value)sm",
+        "short_minutes_seconds": "%(minutes)sm %(seconds)ss",
+        "short_seconds": "%(value)ss"
     },
     "timeline": {
         "context_menu": {
@@ -3158,6 +3188,7 @@
         "creation_summary_dm": "%(creator)s a créé cette conversation privée.",
         "creation_summary_room": "%(creator)s a créé et configuré le salon.",
         "decryption_failure_blocked": "L’expéditeur a bloqué la réception de votre message",
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Déchiffrement",
         "download_action_downloading": "Téléchargement en cours",
         "edits": {
@@ -3236,6 +3267,12 @@
             "full": "%(senderName)s a partagé sa position",
             "location": "A partagé une position : ",
             "self_location": "Ont partagé leur position : "
+        },
+        "m.poll": {
+            "count_of_votes": {
+                "one": "%(count)s vote",
+                "other": "%(count)s votes"
+            }
         },
         "m.poll.end": {
             "ended": "Sondage terminé",
@@ -3371,6 +3408,8 @@
             "label": "Actions de message",
             "view_in_room": "Voir dans le salon"
         },
+        "message_timestamp_received_at": "Reçu à : %(dateTime)s",
+        "message_timestamp_sent_at": "Envoyé à : %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s a mis à jour une règle de bannissement correspondant à %(oldGlob)s vers une règle correspondant à %(newGlob)s pour %(reason)s",
             "changed_rule_rooms": "%(senderName)s a changé une règle qui bannit les salons correspondant à %(oldGlob)s vers une règle correspondant à %(newGlob)s pour %(reason)s",
@@ -3772,6 +3811,8 @@
         "join_button_tooltip_call_full": "Désolé — Cet appel est actuellement complet",
         "join_button_tooltip_connecting": "Connexion",
         "maximise": "Remplir l’écran",
+        "maximise_call": "Plein écran",
+        "minimise_call": "Quitter le mode plein écran",
         "misconfigured_server": "L’appel a échoué à cause d’un serveur mal configuré",
         "misconfigured_server_description": "Demandez à l’administrateur de votre serveur d’accueil (<code>%(homeserverDomain)s</code>) de configurer un serveur TURN afin que les appels fonctionnent de manière fiable.",
         "misconfigured_server_fallback": "Vous pouvez sinon essayer d’utiliser le serveur public <server/>, mais ça ne sera pas aussi fiable et votre adresse IP sera partagée avec ce serveur. Vous pouvez aussi gérer ce réglage dans les paramètres.",

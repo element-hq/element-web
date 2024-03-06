@@ -19,9 +19,11 @@ import {
     AutoDiscovery,
     AutoDiscoveryError,
     ClientConfig,
-    OidcClientConfig,
-    M_AUTHENTICATION,
+    discoverAndValidateOIDCIssuerWellKnown,
     IClientWellKnown,
+    MatrixClient,
+    MatrixError,
+    OidcClientConfig,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -217,12 +219,12 @@ export default class AutoDiscoveryUtils {
      * @param {boolean} isSynthetic If true, then the discoveryResult was synthesised locally.
      * @returns {Promise<ValidatedServerConfig>} Resolves to the validated configuration.
      */
-    public static buildValidatedConfigFromDiscovery(
+    public static async buildValidatedConfigFromDiscovery(
         serverName?: string,
         discoveryResult?: ClientConfig,
         syntaxOnly = false,
         isSynthetic = false,
-    ): ValidatedServerConfig {
+    ): Promise<ValidatedServerConfig> {
         if (!discoveryResult?.["m.homeserver"]) {
             // This shouldn't happen without major misconfiguration, so we'll log a bit of information
             // in the log so we can find this bit of code but otherwise tell the user "it broke".
@@ -293,26 +295,20 @@ export default class AutoDiscoveryUtils {
             throw new UserFriendlyError("auth|autodiscovery_unexpected_error_hs");
         }
 
+        // This isn't inherently auto-discovery but used to be in an earlier incarnation of the MSC,
+        // and shuttling the data together makes a lot of sense
         let delegatedAuthentication: OidcClientConfig | undefined;
-        if (discoveryResult[M_AUTHENTICATION.stable!]?.state === AutoDiscovery.SUCCESS) {
-            const {
-                authorizationEndpoint,
-                registrationEndpoint,
-                tokenEndpoint,
-                account,
-                issuer,
-                metadata,
-                signingKeys,
-            } = discoveryResult[M_AUTHENTICATION.stable!] as OidcClientConfig;
-            delegatedAuthentication = Object.freeze({
-                authorizationEndpoint,
-                registrationEndpoint,
-                tokenEndpoint,
-                account,
-                issuer,
-                metadata,
-                signingKeys,
-            });
+        let delegatedAuthenticationError: Error | undefined;
+        try {
+            const tempClient = new MatrixClient({ baseUrl: preferredHomeserverUrl });
+            const { issuer } = await tempClient.getAuthIssuer();
+            delegatedAuthentication = await discoverAndValidateOIDCIssuerWellKnown(issuer);
+        } catch (e) {
+            if (e instanceof MatrixError && e.httpStatus === 404 && e.errcode === "M_UNRECOGNIZED") {
+                // 404 M_UNRECOGNIZED means the server does not support OIDC
+            } else {
+                delegatedAuthenticationError = e as Error;
+            }
         }
 
         return {
@@ -321,7 +317,7 @@ export default class AutoDiscoveryUtils {
             hsNameIsDifferent: url.hostname !== preferredHomeserverName,
             isUrl: preferredIdentityUrl,
             isDefault: false,
-            warning: hsResult.error,
+            warning: hsResult.error ?? delegatedAuthenticationError ?? null,
             isNameResolvable: !isSynthetic,
             delegatedAuthentication,
         } as ValidatedServerConfig;
