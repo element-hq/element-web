@@ -1841,9 +1841,10 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/olm/-/olm-3.2.15.tgz#55f3c1b70a21bbee3f9195cecd6846b1083451ec"
   integrity sha512-S7lOrndAK9/8qOtaTq/WhttJC/o4GAzdfK0MUPpo8ApzsJEC0QjtwrkC3KBXdFP1cD1MXi/mlKR7aaoVMKgs6Q==
 
-"@matrix-org/react-sdk-module-api@../matrix-react-sdk-module-api-v2/matrix-react-sdk-module-api.tgz":
+"@matrix-org/react-sdk-module-api@^2.4.0":
   version "2.4.0"
-  resolved "../matrix-react-sdk-module-api-v2/matrix-react-sdk-module-api.tgz#c1924ed44ccabbfe040d5ca9b65486b3cf6ba70a"
+  resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-2.4.0.tgz#5e4552acbe728141f42c1d54d75dcb4efea9301c"
+  integrity sha512-cPb+YaqllfJkRX0ofcG/0YdHxCvcMAvUbdNMO2olpGL8vwbBP6mHdhbZ87z9pgsRIVOqfFuLUE3WeW0hxWrklQ==
   dependencies:
     "@babel/runtime" "^7.17.9"
 
