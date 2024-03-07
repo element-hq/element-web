@@ -177,7 +177,7 @@
         "node-fetch": "^2.6.7",
         "postcss": "8.4.33",
         "postcss-easings": "^4.0.0",
-        "postcss-hexrgba": "2.0.1",
+        "postcss-hexrgba": "2.1.0",
         "postcss-import": "16.0.0",
         "postcss-loader": "8.1.0",
         "postcss-mixins": "^6.2.3",
