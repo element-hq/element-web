@@ -9843,13 +9843,12 @@ postcss-double-position-gradients@^5.0.4:
     "@csstools/utilities" "^1.0.0"
     postcss-value-parser "^4.2.0"
 
-postcss-easings@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/postcss-easings/-/postcss-easings-2.0.0.tgz#79bde7ce71c838ef7371a59d293e08b337b1802b"
-  integrity sha512-oJUmnrPwayx47y+jrRKSofHOjRjdJCOyqNXZURQkAVEra93ShqUcN8WYIuT/pWQeGe2I/pxxFfw7mOUGBrxCRQ==
+postcss-easings@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/postcss-easings/-/postcss-easings-4.0.0.tgz#bd837acadf3fb8089287559073aede820c83b594"
+  integrity sha512-KNpwHA3mTnf0UWcdwahQDaz7DDJ6QteVwdlLff98se854p6pyQW9iofwrD05vtlp33AAAxuUGCOhYwERRJGy6Q==
   dependencies:
-    postcss "^7.0.2"
-    postcss-value-parser "^3.3.0"
+    postcss-value-parser "^4.2.0"
 
 postcss-focus-visible@^9.0.1:
   version "9.0.1"
@@ -10295,11 +10294,6 @@ postcss-unique-selectors@^6.0.2:
   integrity sha512-8IZGQ94nechdG7Y9Sh9FlIY2b4uS8/k8kdKRX040XHsS3B6d1HrJAkXrBSsSu4SuARruSsUjW3nlSw8BHkaAYQ==
   dependencies:
     postcss-selector-parser "^6.0.15"
-
-postcss-value-parser@^3.3.0:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-3.3.1.tgz#9ff822547e2893213cf1c30efa51ac5fd1ba8281"
-  integrity sha512-pISE66AbVkp4fDQ7VHBwRNXzAAKJjw4Vw7nWI/+Q3vuly7SNfgYXvm6i5IgFylHGK5sP/xHAbB7N49OS4gWNyQ==
 
 postcss-value-parser@^4.0.0, postcss-value-parser@^4.1.0, postcss-value-parser@^4.2.0:
   version "4.2.0"
