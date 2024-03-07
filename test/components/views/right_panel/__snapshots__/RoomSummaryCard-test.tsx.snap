@@ -36,7 +36,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         class="mx_RoomSummaryCard_container"
       >
         <span
-          class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
           data-color="1"
           data-testid="avatar-img"
           data-type="round"
@@ -77,19 +77,19 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         role="separator"
       />
       <label
-        class="_item_1bcsk_17 _interactive_1bcsk_36"
+        class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
         for=":r1:"
         role="menuitemcheckbox"
       >
         <div
           aria-hidden="true"
-          class="_icon_1bcsk_44"
+          class="_icon_1gwvj_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
         >
           Favourite
         </span>
@@ -107,28 +107,28 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </div>
       </label>
       <button
-        class="_item_1bcsk_17 _interactive_1bcsk_36"
+        class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_1bcsk_44"
+          class="_icon_1gwvj_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
         >
           Invite
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_1bcsk_60"
+          class="_nav-hint_1gwvj_60"
           fill="currentColor"
           height="24"
-          viewBox="0 0 24 24"
-          width="24"
+          viewBox="8 0 8 24"
+          width="8"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -137,28 +137,28 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <button
-        class="_item_1bcsk_17 _interactive_1bcsk_36"
+        class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_1bcsk_44"
+          class="_icon_1gwvj_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
         >
           Copy link
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_1bcsk_60"
+          class="_nav-hint_1gwvj_60"
           fill="currentColor"
           height="24"
-          viewBox="0 0 24 24"
-          width="24"
+          viewBox="8 0 8 24"
+          width="8"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -167,28 +167,28 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <button
-        class="_item_1bcsk_17 _interactive_1bcsk_36"
+        class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_1bcsk_44"
+          class="_icon_1gwvj_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
         >
           Settings
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_1bcsk_60"
+          class="_nav-hint_1gwvj_60"
           fill="currentColor"
           height="24"
-          viewBox="0 0 24 24"
-          width="24"
+          viewBox="8 0 8 24"
+          width="8"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -203,28 +203,28 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         role="separator"
       />
       <button
-        class="_item_1bcsk_17 _interactive_1bcsk_36"
+        class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_1bcsk_44"
+          class="_icon_1gwvj_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
         >
           People
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_1bcsk_60"
+          class="_nav-hint_1gwvj_60"
           fill="currentColor"
           height="24"
-          viewBox="0 0 24 24"
-          width="24"
+          viewBox="8 0 8 24"
+          width="8"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -233,28 +233,28 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <button
-        class="_item_1bcsk_17 _interactive_1bcsk_36"
+        class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_1bcsk_44"
+          class="_icon_1gwvj_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
         >
           Files
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_1bcsk_60"
+          class="_nav-hint_1gwvj_60"
           fill="currentColor"
           height="24"
-          viewBox="0 0 24 24"
-          width="24"
+          viewBox="8 0 8 24"
+          width="8"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -263,28 +263,28 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <button
-        class="_item_1bcsk_17 _interactive_1bcsk_36"
+        class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_1bcsk_44"
+          class="_icon_1gwvj_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
         >
           Poll history
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_1bcsk_60"
+          class="_nav-hint_1gwvj_60"
           fill="currentColor"
           height="24"
-          viewBox="0 0 24 24"
-          width="24"
+          viewBox="8 0 8 24"
+          width="8"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -293,28 +293,28 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </svg>
       </button>
       <button
-        class="_item_1bcsk_17 _interactive_1bcsk_36"
+        class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_1bcsk_44"
+          class="_icon_1gwvj_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
         >
           Export Chat
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_1bcsk_60"
+          class="_nav-hint_1gwvj_60"
           fill="currentColor"
           height="24"
-          viewBox="0 0 24 24"
-          width="24"
+          viewBox="8 0 8 24"
+          width="8"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -329,28 +329,28 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         role="separator"
       />
       <button
-        class="_item_1bcsk_17 _interactive_1bcsk_36"
+        class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="critical"
         role="menuitem"
       >
         <div
           aria-hidden="true"
-          class="_icon_1bcsk_44"
+          class="_icon_1gwvj_44"
           height="24"
           width="24"
         />
         <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
         >
           Leave room
         </span>
         <svg
           aria-hidden="true"
-          class="_nav-hint_1bcsk_60"
+          class="_nav-hint_1gwvj_60"
           fill="currentColor"
           height="24"
-          viewBox="0 0 24 24"
-          width="24"
+          viewBox="8 0 8 24"
+          width="8"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path

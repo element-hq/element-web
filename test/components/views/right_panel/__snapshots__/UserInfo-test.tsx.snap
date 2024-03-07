@@ -104,7 +104,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
             <button
               aria-label="Profile picture"
               aria-live="off"
-              class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"

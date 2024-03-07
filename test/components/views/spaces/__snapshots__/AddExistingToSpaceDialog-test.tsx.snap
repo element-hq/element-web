@@ -26,7 +26,7 @@ exports[`<AddExistingToSpaceDialog /> looks as expected 1`] = `
         >
           <span
             aria-label="Avatar"
-            class="_avatar_k41ul_17 mx_BaseAvatar"
+            class="_avatar_mcap2_17 mx_BaseAvatar"
             data-color="2"
             data-testid="avatar-img"
             data-type="square"
@@ -34,7 +34,7 @@ exports[`<AddExistingToSpaceDialog /> looks as expected 1`] = `
           >
             <img
               alt=""
-              class="_image_k41ul_49"
+              class="_image_mcap2_50"
               crossorigin="anonymous"
               data-type="square"
               height="40px"

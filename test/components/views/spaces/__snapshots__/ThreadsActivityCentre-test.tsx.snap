@@ -26,7 +26,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
     class="mx_ThreadsActivity_rows"
   >
     <button
-      class="mx_ThreadsActivityRow _item_1bcsk_17 _interactive_1bcsk_36"
+      class="mx_ThreadsActivityRow _item_1gwvj_17 _interactive_1gwvj_36"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -34,10 +34,10 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       tabindex="-1"
     >
       <div
-        class="_icon_1bcsk_44"
+        class="_icon_1gwvj_44"
       >
         <span
-          class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
           data-color="6"
           data-testid="avatar-img"
           data-type="round"
@@ -48,17 +48,17 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         </span>
       </div>
       <span
-        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
       >
         This is a real highlight
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_1bcsk_60"
+        class="_nav-hint_1gwvj_60"
         fill="currentColor"
         height="24"
-        viewBox="0 0 24 24"
-        width="24"
+        viewBox="8 0 8 24"
+        width="8"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
@@ -74,7 +74,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       </div>
     </button>
     <button
-      class="mx_ThreadsActivityRow _item_1bcsk_17 _interactive_1bcsk_36"
+      class="mx_ThreadsActivityRow _item_1gwvj_17 _interactive_1gwvj_36"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -82,10 +82,10 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       tabindex="-1"
     >
       <div
-        class="_icon_1bcsk_44"
+        class="_icon_1gwvj_44"
       >
         <span
-          class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
           data-color="6"
           data-testid="avatar-img"
           data-type="round"
@@ -96,17 +96,17 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         </span>
       </div>
       <span
-        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1bcsk_53"
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
       >
         A notification
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_1bcsk_60"
+        class="_nav-hint_1gwvj_60"
         fill="currentColor"
         height="24"
-        viewBox="0 0 24 24"
-        width="24"
+        viewBox="8 0 8 24"
+        width="8"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
