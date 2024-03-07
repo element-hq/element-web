@@ -181,7 +181,7 @@
         "postcss-import": "16.0.0",
         "postcss-loader": "8.1.0",
         "postcss-mixins": "^6.2.3",
-        "postcss-nested": "^4.2.3",
+        "postcss-nested": "^6.0.0",
         "postcss-preset-env": "^9.3.0",
         "postcss-scss": "^4.0.4",
         "postcss-simple-vars": "^7.0.1",
