@@ -175,6 +175,8 @@ interface IProps {
     handleHomeEnd?: boolean;
     handleUpDown?: boolean;
     handleLeftRight?: boolean;
+    handleInputFields?: boolean;
+    scrollIntoView?: boolean | ScrollIntoViewOptions;
     children(renderProps: { onKeyDownHandler(ev: React.KeyboardEvent): void; onDragEndHandler(): void }): ReactNode;
     onKeyDown?(ev: React.KeyboardEvent, state: IState, dispatch: Dispatch<IAction>): void;
 }
@@ -212,6 +214,8 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
     handleUpDown,
     handleLeftRight,
     handleLoop,
+    handleInputFields,
+    scrollIntoView,
     onKeyDown,
 }) => {
     const [state, dispatch] = useReducer<Reducer<IState, Action>>(reducer, {
@@ -234,7 +238,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
             let focusRef: RefObject<HTMLElement> | undefined;
             // Don't interfere with input default keydown behaviour
             // but allow people to move focus from it with Tab.
-            if (checkInputableElement(ev.target as HTMLElement)) {
+            if (!handleInputFields && checkInputableElement(ev.target as HTMLElement)) {
                 switch (action) {
                     case KeyBindingAction.Tab:
                         handled = true;
@@ -311,9 +315,21 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
                         ref: focusRef,
                     },
                 });
+                if (scrollIntoView) {
+                    focusRef.current?.scrollIntoView(scrollIntoView);
+                }
             }
         },
-        [context, onKeyDown, handleHomeEnd, handleUpDown, handleLeftRight, handleLoop],
+        [
+            context,
+            onKeyDown,
+            handleHomeEnd,
+            handleUpDown,
+            handleLeftRight,
+            handleLoop,
+            handleInputFields,
+            scrollIntoView,
+        ],
     );
 
     const onDragEndHandler = useCallback(() => {

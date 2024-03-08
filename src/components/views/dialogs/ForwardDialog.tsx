@@ -57,6 +57,15 @@ import { isLocationEvent } from "../../../utils/EventUtils";
 import { isSelfLocation, locationEventGeoUri } from "../../../utils/location";
 import { RoomContextDetails } from "../rooms/RoomContextDetails";
 import { filterBoolean } from "../../../utils/arrays";
+import {
+    IState,
+    RovingTabIndexContext,
+    RovingTabIndexProvider,
+    Type,
+    useRovingTabIndex,
+} from "../../../accessibility/RovingTabIndex";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 const AVATAR_SIZE = 30;
 
@@ -87,6 +96,7 @@ enum SendState {
 
 const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, onFinished }) => {
     const [sendState, setSendState] = useState<SendState>(SendState.CanSend);
+    const [onFocus, isActive, ref] = useRovingTabIndex<HTMLDivElement>();
 
     const jumpToRoom = (ev: ButtonEvent): void => {
         dis.dispatch<ViewRoomPayload>({
@@ -134,16 +144,30 @@ const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, 
         icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
     }
 
+    const id = `mx_ForwardDialog_entry_${room.roomId}`;
     return (
-        <div className="mx_ForwardList_entry">
+        <div
+            className={classnames("mx_ForwardList_entry", {
+                mx_ForwardList_entry_active: isActive,
+            })}
+            aria-labelledby={`${id}_name`}
+            aria-describedby={`${id}_send`}
+            role="listitem"
+            ref={ref}
+            onFocus={onFocus}
+            id={id}
+        >
             <AccessibleTooltipButton
                 className="mx_ForwardList_roomButton"
                 onClick={jumpToRoom}
                 title={_t("forward|open_room")}
                 alignment={Alignment.Top}
+                tabIndex={isActive ? 0 : -1}
             >
-                <DecoratedRoomAvatar room={room} size="32px" />
-                <span className="mx_ForwardList_entry_name">{room.name}</span>
+                <DecoratedRoomAvatar room={room} size="32px" tooltipProps={{ tabIndex: isActive ? 0 : -1 }} />
+                <span className="mx_ForwardList_entry_name" id={`${id}_name`}>
+                    {room.name}
+                </span>
                 <RoomContextDetails component="span" className="mx_ForwardList_entry_detail" room={room} />
             </AccessibleTooltipButton>
             <AccessibleTooltipButton
@@ -153,6 +177,8 @@ const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, 
                 disabled={disabled}
                 title={title}
                 alignment={Alignment.Top}
+                tabIndex={isActive ? 0 : -1}
+                id={`${id}_send`}
             >
                 <div className="mx_ForwardList_sendLabel">{_t("forward|send_label")}</div>
                 {icon}
@@ -270,6 +296,26 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         );
     }
 
+    const onKeyDown = (ev: React.KeyboardEvent, state: IState): void => {
+        let handled = true;
+
+        const action = getKeyBindingsManager().getAccessibilityAction(ev);
+        switch (action) {
+            case KeyBindingAction.Enter: {
+                state.activeRef?.current?.querySelector<HTMLButtonElement>(".mx_ForwardList_sendButton")?.click();
+                break;
+            }
+
+            default:
+                handled = false;
+        }
+
+        if (handled) {
+            ev.preventDefault();
+            ev.stopPropagation();
+        }
+    };
+
     return (
         <BaseDialog
             title={_t("common|forward_message")}
@@ -293,42 +339,73 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                 />
             </div>
             <hr />
-            <div className="mx_ForwardList" id="mx_ForwardList">
-                <SearchBox
-                    className="mx_textinput_icon mx_textinput_search"
-                    placeholder={_t("forward|filter_placeholder")}
-                    onSearch={setQuery}
-                    autoFocus={true}
-                />
-                <AutoHideScrollbar className="mx_ForwardList_content">
-                    {rooms.length > 0 ? (
-                        <div className="mx_ForwardList_results">
-                            <TruncatedList
-                                className="mx_ForwardList_resultsList"
-                                truncateAt={truncateAt}
-                                createOverflowElement={overflowTile}
-                                getChildren={(start, end) =>
-                                    rooms
-                                        .slice(start, end)
-                                        .map((room) => (
-                                            <Entry
-                                                key={room.roomId}
-                                                room={room}
-                                                type={type}
-                                                content={content}
-                                                matrixClient={cli}
-                                                onFinished={onFinished}
-                                            />
-                                        ))
-                                }
-                                getChildCount={() => rooms.length}
-                            />
-                        </div>
-                    ) : (
-                        <span className="mx_ForwardList_noResults">{_t("common|no_results")}</span>
-                    )}
-                </AutoHideScrollbar>
-            </div>
+            <RovingTabIndexProvider
+                handleUpDown
+                handleInputFields
+                onKeyDown={onKeyDown}
+                scrollIntoView={{ block: "center" }}
+            >
+                {({ onKeyDownHandler }) => (
+                    <div className="mx_ForwardList" id="mx_ForwardList">
+                        <RovingTabIndexContext.Consumer>
+                            {(context) => (
+                                <SearchBox
+                                    className="mx_textinput_icon mx_textinput_search"
+                                    placeholder={_t("forward|filter_placeholder")}
+                                    onSearch={(query: string): void => {
+                                        setQuery(query);
+                                        setImmediate(() => {
+                                            const ref = context.state.refs[0];
+                                            if (ref) {
+                                                context.dispatch({
+                                                    type: Type.SetFocus,
+                                                    payload: { ref },
+                                                });
+                                                ref.current?.scrollIntoView?.({
+                                                    block: "nearest",
+                                                });
+                                            }
+                                        });
+                                    }}
+                                    autoFocus={true}
+                                    onKeyDown={onKeyDownHandler}
+                                    aria-activedescendant={context.state.activeRef?.current?.id}
+                                    aria-owns="mx_ForwardDialog_resultsList"
+                                />
+                            )}
+                        </RovingTabIndexContext.Consumer>
+                        <AutoHideScrollbar className="mx_ForwardList_content">
+                            {rooms.length > 0 ? (
+                                <div className="mx_ForwardList_results">
+                                    <TruncatedList
+                                        id="mx_ForwardDialog_resultsList"
+                                        className="mx_ForwardList_resultsList"
+                                        truncateAt={truncateAt}
+                                        createOverflowElement={overflowTile}
+                                        getChildren={(start, end) =>
+                                            rooms
+                                                .slice(start, end)
+                                                .map((room) => (
+                                                    <Entry
+                                                        key={room.roomId}
+                                                        room={room}
+                                                        type={type}
+                                                        content={content}
+                                                        matrixClient={cli}
+                                                        onFinished={onFinished}
+                                                    />
+                                                ))
+                                        }
+                                        getChildCount={() => rooms.length}
+                                    />
+                                </div>
+                            ) : (
+                                <span className="mx_ForwardList_noResults">{_t("common|no_results")}</span>
+                            )}
+                        </AutoHideScrollbar>
+                    </div>
+                )}
+            </RovingTabIndexProvider>
         </BaseDialog>
     );
 };

@@ -36,6 +36,7 @@ interface IProps {
     // This will be inserted after the children.
     createOverflowElement: (overflowCount: number, totalCount: number) => React.ReactNode;
     children?: ReactNode;
+    id?: string;
 }
 
 export default class TruncatedList extends React.Component<IProps> {
@@ -86,7 +87,7 @@ export default class TruncatedList extends React.Component<IProps> {
         const childNodes = this.getChildren(0, upperBound);
 
         return (
-            <div className={this.props.className}>
+            <div className={this.props.className} role="list" id={this.props.id}>
                 {childNodes}
                 {overflowNode}
             </div>
