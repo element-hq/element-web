@@ -195,7 +195,7 @@ export function createTestClient(): MatrixClient {
         isUserIgnored: jest.fn().mockReturnValue(false),
         getCapabilities: jest.fn().mockResolvedValue({}),
         supportsThreads: jest.fn().mockReturnValue(false),
-        supportsIntentionalMentions: () => false,
+        supportsIntentionalMentions: jest.fn().mockReturnValue(false),
         getRoomUpgradeHistory: jest.fn().mockReturnValue([]),
         getOpenIdToken: jest.fn().mockResolvedValue(undefined),
         registerWithIdentityServer: jest.fn().mockResolvedValue({}),
