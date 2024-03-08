@@ -39,7 +39,7 @@ interface Props<K extends undefined | string> {
     // The name to annotate the selector with
     label?: string;
 
-    onChange(value: number, powerLevelKey: K extends undefined ? void : K): void;
+    onChange(value: number, powerLevelKey: K extends undefined ? void : K): void | Promise<void>;
 
     // Optional key to pass as the second argument to `onChange`
     powerLevelKey: K extends undefined ? void : K;
@@ -60,6 +60,7 @@ export default class PowerSelector<K extends undefined | string> extends React.C
         maxValue: Infinity,
         usersDefault: 0,
     };
+    private unmounted = false;
 
     public constructor(props: Props<K>) {
         super(props);
@@ -84,6 +85,10 @@ export default class PowerSelector<K extends undefined | string> extends React.C
         }
     }
 
+    public componentWillUnmount(): void {
+        this.unmounted = true;
+    }
+
     private initStateFromProps(): void {
         // This needs to be done now because levelRoleMap has translated strings
         const levelRoleMap = Roles.levelRoleMap(this.props.usersDefault);
@@ -106,14 +111,20 @@ export default class PowerSelector<K extends undefined | string> extends React.C
         });
     }
 
-    private onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+    private onSelectChange = async (event: React.ChangeEvent<HTMLSelectElement>): Promise<void> => {
         const isCustom = event.target.value === CUSTOM_VALUE;
         if (isCustom) {
             this.setState({ custom: true });
         } else {
             const powerLevel = parseInt(event.target.value);
-            this.props.onChange(powerLevel, this.props.powerLevelKey);
             this.setState({ selectValue: powerLevel });
+            try {
+                await this.props.onChange(powerLevel, this.props.powerLevelKey);
+            } catch {
+                if (this.unmounted) return;
+                // If the request failed, roll back the state of the selector.
+                this.initStateFromProps();
+            }
         }
     };
 
@@ -121,12 +132,18 @@ export default class PowerSelector<K extends undefined | string> extends React.C
         this.setState({ customValue: parseInt(event.target.value) });
     };
 
-    private onCustomBlur = (event: React.FocusEvent): void => {
+    private onCustomBlur = async (event: React.FocusEvent): Promise<void> => {
         event.preventDefault();
         event.stopPropagation();
 
         if (Number.isFinite(this.state.customValue)) {
-            this.props.onChange(this.state.customValue, this.props.powerLevelKey);
+            try {
+                await this.props.onChange(this.state.customValue, this.props.powerLevelKey);
+            } catch {
+                if (this.unmounted) return;
+                // If the request failed, roll back the state of the selector.
+                this.initStateFromProps();
+            }
         } else {
             this.initStateFromProps(); // reset, invalid input
         }

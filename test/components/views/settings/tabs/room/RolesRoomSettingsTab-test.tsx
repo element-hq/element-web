@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult, screen } from "@testing-library/react";
-import { MatrixClient, EventType, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { fireEvent, render, RenderResult, screen, waitFor } from "@testing-library/react";
+import { MatrixClient, EventType, MatrixEvent, Room, RoomMember, ISendEventResponse } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import RolesRoomSettingsTab from "../../../../../../src/components/views/settings/tabs/room/RolesRoomSettingsTab";
 import { mkStubRoom, withClientContextRenderOptions, stubClient } from "../../../../../test-utils";
@@ -230,5 +231,38 @@ describe("RolesRoomSettingsTab", () => {
 
             expect(screen.getByTitle("Banned by Alice")).toBeInTheDocument();
         });
+    });
+
+    it("should roll back power level change on error", async () => {
+        const deferred = defer<ISendEventResponse>();
+        mocked(cli.sendStateEvent).mockReturnValue(deferred.promise);
+        mocked(cli.getRoom).mockReturnValue(room);
+        // @ts-ignore - mocked doesn't support overloads properly
+        mocked(room.currentState.getStateEvents).mockImplementation((type, key) => {
+            if (key === undefined) return [] as MatrixEvent[];
+            if (type === "m.room.power_levels") {
+                return new MatrixEvent({
+                    sender: "@sender:server",
+                    room_id: roomId,
+                    type: "m.room.power_levels",
+                    state_key: "",
+                    content: {
+                        users: {
+                            [cli.getUserId()!]: 100,
+                        },
+                    },
+                });
+            }
+            return null;
+        });
+        mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
+        const { container } = renderTab();
+
+        const selector = container.querySelector(`[placeholder="${cli.getUserId()}"]`)!;
+        fireEvent.change(selector, { target: { value: "50" } });
+        expect(selector).toHaveValue("50");
+
+        deferred.reject("Error");
+        await waitFor(() => expect(selector).toHaveValue("100"));
     });
 });

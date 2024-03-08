@@ -174,7 +174,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         }
     }
 
-    private onPowerLevelsChanged = (value: number, powerLevelKey: string): void => {
+    private onPowerLevelsChanged = async (value: number, powerLevelKey: string): Promise<void> => {
         const client = this.context;
         const room = this.props.room;
         const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
@@ -203,17 +203,22 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             parentObj[keyPath[keyPath.length - 1]] = value;
         }
 
-        client.sendStateEvent(this.props.room.roomId, EventType.RoomPowerLevels, plContent).catch((e) => {
+        try {
+            await client.sendStateEvent(this.props.room.roomId, EventType.RoomPowerLevels, plContent);
+        } catch (e) {
             logger.error(e);
 
             Modal.createDialog(ErrorDialog, {
                 title: _t("room_settings|permissions|error_changing_pl_reqs_title"),
                 description: _t("room_settings|permissions|error_changing_pl_reqs_description"),
             });
-        });
+
+            // Rethrow so that the PowerSelector can roll back
+            throw e;
+        }
     };
 
-    private onUserPowerLevelChanged = (value: number, powerLevelKey: string): void => {
+    private onUserPowerLevelChanged = async (value: number, powerLevelKey: string): Promise<void> => {
         const client = this.context;
         const room = this.props.room;
         const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
@@ -226,14 +231,19 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         if (!plContent["users"]) plContent["users"] = {};
         plContent["users"][powerLevelKey] = value;
 
-        client.sendStateEvent(this.props.room.roomId, EventType.RoomPowerLevels, plContent).catch((e) => {
+        try {
+            await client.sendStateEvent(this.props.room.roomId, EventType.RoomPowerLevels, plContent);
+        } catch (e) {
             logger.error(e);
 
             Modal.createDialog(ErrorDialog, {
                 title: _t("room_settings|permissions|error_changing_pl_title"),
                 description: _t("room_settings|permissions|error_changing_pl_description"),
             });
-        });
+
+            // Rethrow so that the PowerSelector can roll back
+            throw e;
+        }
     };
 
     public render(): React.ReactNode {

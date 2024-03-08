@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import PowerSelector from "../../../../src/components/views/elements/PowerSelector";
 
@@ -74,5 +75,26 @@ describe("<PowerSelector />", () => {
         const option = await screen.findByText<HTMLOptionElement>("Moderator");
         expect(option.selected).toBeTruthy();
         expect(fn).not.toHaveBeenCalled();
+    });
+
+    it("should reset when onChange promise rejects", async () => {
+        const deferred = defer<void>();
+        render(
+            <PowerSelector
+                value={25}
+                maxValue={100}
+                usersDefault={0}
+                onChange={() => deferred.promise}
+                powerLevelKey="key"
+            />,
+        );
+
+        const input = screen.getByLabelText("Power level");
+        fireEvent.change(input, { target: { value: 40 } });
+        fireEvent.blur(input);
+
+        await screen.findByDisplayValue(40);
+        deferred.reject("Some error");
+        await screen.findByDisplayValue(25);
     });
 });
