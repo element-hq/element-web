@@ -17,6 +17,7 @@
  */
 
 import { expect, test } from ".";
+import { CommandOrControl } from "../../utils";
 
 test.describe("Threads Activity Centre", () => {
     test.use({
@@ -117,5 +118,20 @@ test.describe("Threads Activity Centre", () => {
             { room: room2.name, notificationLevel: "notification" },
         ]);
         await expect(util.getTacPanel()).toMatchScreenshot("tac-panel-notification-unread.png");
+    });
+
+    test("should block the Spotlight to open when the TAC is opened", async ({ util, page }) => {
+        const toggleSpotlight = () => page.keyboard.press(`${CommandOrControl}+k`);
+
+        // Sanity check
+        // Open and close the spotlight
+        await toggleSpotlight();
+        await expect(page.locator(".mx_SpotlightDialog")).toBeVisible();
+        await toggleSpotlight();
+
+        await util.openTac();
+        // The spotlight should not be opened
+        await toggleSpotlight();
+        await expect(page.locator(".mx_SpotlightDialog")).not.toBeVisible();
     });
 });
