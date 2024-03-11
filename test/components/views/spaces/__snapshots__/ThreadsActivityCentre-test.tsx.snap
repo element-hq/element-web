@@ -23,10 +23,10 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
     Threads activity
   </h3>
   <div
-    class="mx_ThreadsActivity_rows"
+    class="mx_ThreadsActivityCentre_rows"
   >
     <button
-      class="mx_ThreadsActivityRow _item_1gwvj_17 _interactive_1gwvj_36"
+      class="mx_ThreadsActivityCentreRow _item_1gwvj_17 _interactive_1gwvj_36"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -74,7 +74,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       </div>
     </button>
     <button
-      class="mx_ThreadsActivityRow _item_1gwvj_17 _interactive_1gwvj_36"
+      class="mx_ThreadsActivityCentreRow _item_1gwvj_17 _interactive_1gwvj_36"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -148,7 +148,7 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
     Threads activity
   </h3>
   <div
-    class="mx_ThreadsActivity_rows"
+    class="mx_ThreadsActivityCentre_rows"
   >
     <div
       class="mx_ThreadsActivityCentre_emptyCaption"

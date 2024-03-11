@@ -84,9 +84,9 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
                 }
             >
                 {/* Make the content of the pop-up scrollable */}
-                <div className="mx_ThreadsActivity_rows">
+                <div className="mx_ThreadsActivityCentre_rows">
                     {roomsAndNotifications.rooms.map(({ room, notificationLevel }) => (
-                        <ThreadsActivityRow
+                        <ThreadsActivityCentreRow
                             key={room.roomId}
                             room={room}
                             notificationLevel={notificationLevel}
@@ -122,10 +122,10 @@ interface ThreadsActivityRow {
 /**
  * Display a room with unread threads.
  */
-function ThreadsActivityRow({ room, onClick, notificationLevel }: ThreadsActivityRow): JSX.Element {
+function ThreadsActivityCentreRow({ room, onClick, notificationLevel }: ThreadsActivityRow): JSX.Element {
     return (
         <MenuItem
-            className="mx_ThreadsActivityRow"
+            className="mx_ThreadsActivityCentreRow"
             onSelect={(event: Event) => {
                 onClick();
 
