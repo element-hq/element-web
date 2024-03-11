@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { Direction, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MediaEventContent } from "matrix-js-sdk/src/types";
 import { saveAs } from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import sanitizeFilename from "sanitize-filename";
@@ -24,7 +25,6 @@ import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay, formatFullDateNoDayISO } from "../../DateUtils";
 import { isVoiceMessage } from "../EventUtils";
-import { IMediaEventContent } from "../../customisations/models/IMediaEventContent";
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 
@@ -225,7 +225,7 @@ export default abstract class Exporter {
         let blob: Blob | undefined = undefined;
         try {
             const isEncrypted = event.isEncrypted();
-            const content = event.getContent<IMediaEventContent>();
+            const content = event.getContent<MediaEventContent>();
             const shouldDecrypt = isEncrypted && content.hasOwnProperty("file") && event.getType() !== "m.sticker";
             if (shouldDecrypt) {
                 blob = await decryptFile(content.file);

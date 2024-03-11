@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import { IEventRelation, UploadProgress } from "matrix-js-sdk/src/matrix";
-
-import { EncryptedFile } from "../customisations/models/IMediaEventContent";
+import { EncryptedFile } from "matrix-js-sdk/src/types";
 
 export class RoomUpload {
     public readonly abortController = new AbortController();

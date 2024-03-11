@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { AllHTMLAttributes, createRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { MediaEventContent } from "matrix-js-sdk/src/types";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -23,7 +24,6 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { mediaFromContent } from "../../../customisations/Media";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { fileSize, presentableTextForFile } from "../../../utils/FileUtils";
-import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import { IBodyProps } from "./IBodyProps";
 import { FileDownloader } from "../../../utils/FileDownloader";
 import TextWithTooltip from "../elements/TextWithTooltip";
@@ -128,8 +128,8 @@ export default class MFileBody extends React.Component<IProps, IState> {
         const media = mediaFromContent(this.props.mxEvent.getContent());
         return media.srcHttp;
     }
-    private get content(): IMediaEventContent {
-        return this.props.mxEvent.getContent<IMediaEventContent>();
+    private get content(): MediaEventContent {
+        return this.props.mxEvent.getContent<MediaEventContent>();
     }
 
     private get fileName(): string {
