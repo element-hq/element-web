@@ -1,6 +1,8 @@
 {
     "a11y": {
+        "emoji_picker": "Emojide valija",
         "jump_first_invite": "Siirdu esimese kutse juurde.",
+        "message_composer": "Sõnumikoostaja",
         "n_unread_messages": {
             "other": "%(count)s lugemata teadet.",
             "one": "1 lugemata teade."
@@ -9,7 +11,10 @@
             "one": "1 lugemata mainimine.",
             "other": "%(count)s lugemata sõnumit kaasa arvatud mainimised."
         },
+        "recent_rooms": "Hiljuti kasutatud jututoad",
         "room_name": "Jututuba %(name)s",
+        "room_status_bar": "Jututoa olekuriba",
+        "seek_bar_label": "Heli kerimisriba",
         "unread_messages": "Lugemata sõnumid.",
         "user_menu": "Kasutajamenüü"
     },
@@ -30,7 +35,7 @@
         "click": "Klõpsi",
         "click_to_copy": "Kopeerimiseks klõpsa",
         "close": "Sulge",
-        "collapse": "ahenda",
+        "collapse": "Ahenda",
         "complete": "Valmis",
         "confirm": "Kinnita",
         "continue": "Jätka",
@@ -50,7 +55,7 @@
         "enable": "Võta kasutusele",
         "enter_fullscreen": "Lülita täisekraanivaade sisse",
         "exit_fullscreeen": "Lülita täisekraanivaade välja",
-        "expand": "laienda",
+        "expand": "Laienda",
         "explore_public_rooms": "Sirvi avalikke jututubasid",
         "explore_rooms": "Tutvu jututubadega",
         "export": "Ekspordi",
@@ -319,7 +324,7 @@
         "set_email_prompt": "Kas sa soovid seadistada e-posti aadressi?",
         "sign_in_description": "Jätkamaks kasuta oma kontot.",
         "sign_in_instead": "Pigem logi sisse",
-        "sign_in_instead_prompt": "Pigem logi sisse",
+        "sign_in_instead_prompt": "Sul juba on kasutajakonto olemas? <a>Siis logi siin sisse</a>",
         "sign_in_or_register": "Logi sisse või loo uus konto",
         "sign_in_or_register_description": "Jätkamaks kasuta oma kontot või loo uus konto.",
         "sign_in_prompt": "Sul on kasutajakonto olemas? <a>Siis logi sisse</a>",
@@ -1052,9 +1057,13 @@
         "unknown_error_code": "tundmatu veakood",
         "update_power_level": "Õiguste muutmine ei õnnestunud"
     },
-    "error_app_open_in_another_tab": "%(brand)s on avatud teises vahekaardis.",
+    "error_app_open_in_another_tab": "%(brand)s'i kasutamiseks ava teine vahekaart. Selle vahekaardi võid kinni panna.",
+    "error_app_open_in_another_tab_title": "%(brand)s'i on kasutatav teisel vahekaardil",
     "error_app_opened_in_another_window": "%(brand)s on avatud teises aknas. Klõpsa \"%(label)s\", et kasutada siin %(brand)s ja katkestada teise akna ühendus.",
-    "error_database_closed_title": "Andmebaasiühendus sulgus ootamatult",
+    "error_database_closed_description": {
+        "for_desktop": "Andmekandja maht võib olla täis saanud. Palun tee ruumi juurde ja laadi leht uuesti."
+    },
+    "error_database_closed_title": "%(brand)s lõpetas ootamatult töö",
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "Jututoa lingi kopeerimine lõikelauale ei õnnestunud.",
@@ -1299,6 +1308,7 @@
     },
     "keyboard": {
         "activate_button": "Aktiveeri valitud nupp",
+        "alt": "Alt",
         "autocomplete_cancel": "Lülita automaatne sõnalõpetus välja",
         "autocomplete_force": "Sunni lõpetama",
         "autocomplete_navigate_next": "Järgmine sisestussoovitus",
@@ -1322,9 +1332,13 @@
         "composer_toggle_link": "Lülita link sisse/välja",
         "composer_toggle_quote": "Lülita tsiteerimine sisse/välja",
         "composer_undo": "Võta muudatus tagasi",
+        "control": "Ctrl",
         "dismiss_read_marker_and_jump_bottom": "Ära arvesta loetud sõnumite järjehoidjat ning mine kõige lõppu",
+        "end": "End",
+        "enter": "Enter",
+        "escape": "Esc",
         "go_home_view": "Avalehele",
-        "home": "Avaleht",
+        "home": "Home",
         "jump_first_message": "Mine esimese sõnumi juurde",
         "jump_last_message": "Mine viimase sõnumi juurde",
         "jump_room_search": "Suundu jututoa otsingusse",
@@ -1336,7 +1350,10 @@
         "navigate_prev_message_edit": "Muutmiseks liigu eelmise sõnumi juurde",
         "next_room": "Järgmine otsevestlus või jututuba",
         "next_unread_room": "Järgmine lugemata otsevestlus või jututuba",
+        "number": "[number]",
         "open_user_settings": "Ava kasutaja seadistused",
+        "page_down": "Page Down",
+        "page_up": "Page Up",
         "prev_room": "Eelmine otsevestlus või jututuba",
         "prev_unread_room": "Eelmine lugemata otsevestlus või jututuba",
         "room_list_collapse_section": "Ahenda jututubade loendi valikut",
@@ -1348,6 +1365,7 @@
         "scroll_up_timeline": "Liigu ajajoonel üles",
         "search": "Otsing (peab olema lubatud)",
         "send_sticker": "Saada kleeps",
+        "shift": "Shift",
         "space": "Tühikuklahv",
         "switch_to_space": "Vaata kogukonnakeskust tema numbri alusel",
         "toggle_hidden_events": "Lülita peidetud sündmuste näitamine sisse/välja",
@@ -1383,6 +1401,7 @@
         "element_call_video_rooms": "Element Call videotoad",
         "experimental_description": "Soovid katsetada? Proovi meie uusimaid arendusmõtteid. Need funktsionaalsused pole üldsegi veel valmis, nad võivad toimida puudulikult, võivad muutuda või sootuks lõpetamata jääda. <a>Lisateavet leiad siit</a>.",
         "experimental_section": "Varased arendusjärgud",
+        "feature_disable_call_per_sender_encryption": "Lülita Element Call'i kasutamisel krüptimine kasutajakohaselt välja",
         "feature_wysiwyg_composer_description": "Sõnumite kirjutamisel kasuta Markdown'i asemel täisfunktsionaalset küljendust.",
         "group_calls": "Uus rühmakõnede lahendus",
         "group_developer": "Arendajad",
@@ -1413,11 +1432,17 @@
         "new_room_decoration_ui": "Uus jututoa päis ja infovaade on hetkel aktiivses arenduses",
         "notification_settings": "Uued teavituste seadistused",
         "notification_settings_beta_title": "Teavituste seadistused",
-        "oidc_native_flow": "Luba OIDC liidestus (aktiivselt arendamisel)",
+        "notifications": "Kasuta jututoa päises teavituste riba",
+        "oidc_native_flow": "OIDC-põhine autentimine",
+        "oidc_native_flow_description": "⚠ HOIATUS: Kasuta OIDC liidestust, kui server seda võimaldab (aktiivselt arendamisel).",
         "pinning": "Sõnumite esiletõstmine",
         "report_to_moderators": "Teata moderaatoritele",
         "report_to_moderators_description": "Kui jututoas on modereerimine kasutusel, siis nupust „Teata sisust“ avaneva vormi abil saad jututoa reegleid rikkuvast sisust teatada moderaatoritele.",
         "rust_crypto": "Rust'is teostatud krüptolahendus",
+        "rust_crypto_in_config": "Rust'i krüptograafiat ei saa selles %(brand)s'i paigalduses välja lülitada",
+        "rust_crypto_in_config_description": "Rust'i teekidel põhineva krüptograafia kasutusele võtmine eeldab andmete ümbertõstmist ja selleks võib kuluda õige mitu minutit. Hiljem ei saa seda funktsionaalsust enam välja lülitada. Palun ole kindel, et tead, mida teed!",
+        "rust_crypto_optin_warning": "Rust'i teekidel põhineva krüptograafia kasutusele võtmine eeldab andmete ümbertõstmist ja selleks võib kuluda õige mitu minutit. Selle funktsionaalsuse väljalülitamiseks pead võrgust välja logima ning seejärel tagasi logima. Palun ole kindel, et tead, mida teed!",
+        "rust_crypto_requires_logout": "Kui Rust'i põhised teegid on kasutusel, siis selle funktsionaalsuse väljalülitamiseks pead võrgust välja logima ning seejärel tagasi logima",
         "sliding_sync": "Järkjärgulise sünkroniseerimise režiim",
         "sliding_sync_checking": "Kontrollin…",
         "sliding_sync_configuration": "Sliding Sync konfiguratsioon",
@@ -1560,6 +1585,7 @@
         "toast_description": "%(brand)s toimib nutiseadme veebibrauseris kastseliselt. Parima kasutajakogemuse ja uusima funktsionaalsuse jaoks kasuta meie rakendust.",
         "toast_title": "Rakendusega saad Matrix'is suhelda parimal viisil"
     },
+    "name_and_id": "%(name)s (%(userId)s)",
     "no_more_results": "Rohkem otsingutulemusi pole",
     "notif_panel": {
         "empty_description": "Sul pole nähtavaid teavitusi.",
@@ -2267,6 +2293,8 @@
             },
             "join_rule_upgrade_upgrading_room": "Uuendan jututoa versiooni",
             "public_without_alias_warning": "Sellele jututoale viitamiseks palun lisa talle aadress.",
+            "publish_room": "Tee see jututuba nähtavaks avalikus jututubade kataloogis.",
+            "publish_space": "Tee see kogukond nähtavaks avalikus jututubade kataloogis.",
             "strict_encryption": "Ära iialgi saada sellest sessioonist krüptitud sõnumeid verifitseerimata sessioonidesse selles jututoas",
             "title": "Turvalisus ja privaatsus"
         },
@@ -2366,7 +2394,7 @@
             "layout_irc": "IRC (katseline)",
             "match_system_theme": "Kasuta süsteemset teemat",
             "subheading": "Välimuse kohendused kehtivad vaid selles %(brand)s'i sessioonis.",
-            "timeline_image_size": "Ajajoone piltide suurus",
+            "timeline_image_size": "Piltide suurus ajajoonel",
             "use_high_contrast": "Kasuta kontrastset välimust"
         },
         "automatic_language_detection_syntax_highlight": "Kasuta süntaksi esiletõstmisel automaatset keeletuvastust",
@@ -2699,6 +2727,7 @@
             "device_verified_description": "See sessioon on valmis turvaliseks sõnumivahetuseks.",
             "device_verified_description_current": "Sinu praegune sessioon on valmis turvaliseks sõnumivahetuseks.",
             "error_pusher_state": "Tõuketeavituste teenuse oleku määramine ei õnnestunud",
+            "error_set_name": "Sessiooni nime määramine ei õnnestunud",
             "filter_all": "Kõik",
             "filter_inactive": "Pole pidevas kasutuses",
             "filter_inactive_description": "Pole olnud kasutusel %(inactiveAgeDays)s või enam päeva",
@@ -3079,6 +3108,9 @@
         "show_all_threads": "Näita kõiki jutulõngasid",
         "show_thread_filter": "Näita:",
         "unable_to_decrypt": "Sõnumi dekrüptimine ei õnnestunud"
+    },
+    "threads_activity_centre": {
+        "no_rooms_with_unreads_threads": "Sul veel pole lugemata jutulõngadega jututubasid."
     },
     "time": {
         "about_day_ago": "umbes päev tagasi",
@@ -3924,6 +3956,7 @@
             "l33t": "Ennustatavatest asendustest nagu '@' 'a' asemel pole eriti kasu",
             "longerKeyboardPattern": "Kasuta pikemaid klahvikombinatsioone, kus vajutatud klahvid pole kõrvuti ega kohakuti",
             "noNeed": "Sa ei pea sisestama erilisi tähemärke, numbreid ega suurtähti",
+            "pwned": "Kui sa kasutad seda salasõna mujalgi, siis palun muuda ta siin ära.",
             "recentYears": "Väldi hiljutisi aastaid",
             "repeated": "Väldi korduvaid sõnu ja tähemärke",
             "reverseWords": "Tagurpidi kirjutatud sõnu pole eriti keeruline ära arvata",
@@ -3937,6 +3970,7 @@
             "extendedRepeat": "Kordusi, nagu „abcabcabc“ on vaid natuke raskem ära arvata kui „abc“",
             "keyPattern": "Lühikesi klahvijärjestusi on lihtne ära arvata",
             "namesByThemselves": "Nimesid ja perenimesid on lihtne ära arvata",
+            "pwned": "Sinu salasõna on muutunud laiemas internetis toimunud ründe tõttu avalikuks.",
             "recentYears": "Hiljutisi aastaid on lihtne ära arvata",
             "sequences": "Jadasid nagu „abc“ või „6543“ on lihtne ära arvata",
             "similarToCommon": "See on sarnane tavaliselt kasutatavatele salasõnadele",
@@ -3944,6 +3978,7 @@
             "straightRow": "Klaviatuuril järjest paiknevaid klahvikombinatsioone on lihtne ära arvata",
             "topHundred": "See on saja levinuima salasõna seas",
             "topTen": "See on kümne levinuima salasõna seas",
+            "userInputs": "Siin ei tohiks olla ei isiklikku ega selle lehega seotud andmeid.",
             "wordByItself": "Üksikut sõna on lihtne ära arvata"
         }
     }
