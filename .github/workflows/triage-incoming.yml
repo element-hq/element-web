@@ -8,15 +8,6 @@ jobs:
     automate-project-columns:
         runs-on: ubuntu-latest
         steps:
-            - uses: alex-page/github-project-automation-plus@303f24a24c67ce7adf565a07e96720faf126fe36
-              with:
-                  project: Issue triage
-                  column: Incoming
-                  repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
-    automate-project-columns-next:
-        runs-on: ubuntu-latest
-        steps:
             - uses: actions/add-to-project@main
               with:
                   project-url: https://github.com/orgs/element-hq/projects/120
