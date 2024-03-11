@@ -24,8 +24,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'A-Video-Rooms') ||
             contains(github.event.issue.labels.*.name, 'A-Message-Starring') ||
             contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor') ||
-            contains(github.event.issue.labels.*.name, 'A-Element-Call') ||
-            contains(github.event.issue.labels.*.name, 'A-Element-R')
+            contains(github.event.issue.labels.*.name, 'A-Element-Call')
         steps:
             - uses: actions/github-script@v7
               with:
