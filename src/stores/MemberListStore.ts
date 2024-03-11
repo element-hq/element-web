@@ -90,7 +90,7 @@ export class MemberListStore {
             // pull straight from the server. Don't use a since token as we don't have earlier deltas
             // accumulated.
             room.currentState.markOutOfBandMembersStarted();
-            const response = await this.stores.client!.members(roomId, undefined, "leave");
+            const response = await this.stores.client!.members(roomId, undefined, Membership.Leave);
             const memberEvents = response.chunk.map(this.stores.client!.getEventMapper());
             room.currentState.setOutOfBandMembers(memberEvents);
         } else {
@@ -167,7 +167,7 @@ export class MemberListStore {
             invited: [],
         };
         members.forEach((m) => {
-            if (m.membership !== "join" && m.membership !== "invite") {
+            if (m.membership !== Membership.Join && m.membership !== Membership.Invite) {
                 return; // bail early for left/banned users
             }
             if (query) {
@@ -179,10 +179,10 @@ export class MemberListStore {
                 }
             }
             switch (m.membership) {
-                case "join":
+                case Membership.Join:
                     result.joined.push(m);
                     break;
-                case "invite":
+                case Membership.Invite:
                     result.invited.push(m);
                     break;
             }

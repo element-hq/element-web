@@ -57,7 +57,7 @@ export const useSpaceResults = (space: Room | undefined, query: string): [Hierar
         return rooms?.filter((r) => {
             return (
                 r.room_type !== RoomType.Space &&
-                cli.getRoom(r.room_id)?.getMyMembership() !== "join" &&
+                cli.getRoom(r.room_id)?.getMyMembership() !== Membership.Join &&
                 (normalize(r.name || "").includes(normalizedQuery) || (r.canonical_alias || "").includes(lcQuery))
             );
         });

@@ -48,7 +48,7 @@ export class CreationGrouper extends BaseGrouper {
         const eventType = event.getType();
         if (
             eventType === EventType.RoomMember &&
-            (event.getStateKey() !== createEvent.getSender() || event.getContent()["membership"] !== "join")
+            (event.getStateKey() !== createEvent.getSender() || event.getContent()["membership"] !== Membership.Join)
         ) {
             return false;
         }

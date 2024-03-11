@@ -607,7 +607,7 @@ export class RoomViewStore extends EventEmitter {
     private getInvitingUserId(roomId: string): string | undefined {
         const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(roomId);
-        if (room?.getMyMembership() === "invite") {
+        if (room?.getMyMembership() === Membership.Invite) {
             const myMember = room.getMember(cli.getSafeUserId());
             const inviteEvent = myMember ? myMember.events.member : null;
             return inviteEvent?.getSender();

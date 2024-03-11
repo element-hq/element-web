@@ -25,7 +25,7 @@ describe("ConfirmUserActionDialog", () => {
         const { asFragment } = render(
             <ConfirmUserActionDialog
                 onFinished={jest.fn()}
-                member={mkRoomMember("123", "@user:test.com", "join")}
+                member={mkRoomMember("123", "@user:test.com", Membership.Join)}
                 action="Ban"
                 title="Ban this " // eg. 'Ban this user?'
             />,

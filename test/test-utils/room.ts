@@ -22,7 +22,7 @@ import { TimelineRenderingType } from "../../src/contexts/RoomContext";
 import { Layout } from "../../src/settings/enums/Layout";
 import { mkEvent } from "./test-utils";
 
-export const makeMembershipEvent = (roomId: string, userId: string, membership = "join") =>
+export const makeMembershipEvent = (roomId: string, userId: string, membership = Membership.Join) =>
     mkEvent({
         event: true,
         type: EventType.RoomMember,

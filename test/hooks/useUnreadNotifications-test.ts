@@ -66,7 +66,7 @@ describe("useUnreadNotifications", () => {
     });
 
     it("indicates the user has been invited to a channel", async () => {
-        room.updateMyMembership("invite");
+        room.updateMyMembership(Membership.Invite);
 
         const { result } = renderHook(() => useUnreadNotifications(room));
         const { level, symbol, count } = result.current;

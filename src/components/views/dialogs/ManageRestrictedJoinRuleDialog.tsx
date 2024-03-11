@@ -102,7 +102,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                     if (!room) {
                         return { roomId, name: roomId } as Room;
                     }
-                    if (room.getMyMembership() !== "join" || !room.isSpaceRoom()) {
+                    if (room.getMyMembership() !== Membership.Join || !room.isSpaceRoom()) {
                         return room;
                     }
                 }),

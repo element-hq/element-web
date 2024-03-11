@@ -168,10 +168,10 @@ describe("MultiInviter", () => {
             const room = new Room(ROOMID, client, client.getSafeUserId());
             mocked(client.getRoom).mockReturnValue(room);
             const ourMember = new RoomMember(ROOMID, client.getSafeUserId());
-            ourMember.membership = "join";
+            ourMember.membership = Membership.Join;
             ourMember.powerLevel = 100;
             const member = new RoomMember(ROOMID, MXID1);
-            member.membership = "ban";
+            member.membership = Membership.Ban;
             member.powerLevel = 0;
             room.getMember = (userId: string) => {
                 if (userId === client.getSafeUserId()) return ourMember;

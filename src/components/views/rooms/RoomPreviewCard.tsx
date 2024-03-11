@@ -73,7 +73,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
 
     let inviterSection: JSX.Element | null = null;
     let joinButtons: JSX.Element;
-    if (myMembership === "join") {
+    if (myMembership === Membership.Join) {
         joinButtons = (
             <AccessibleButton
                 kind="danger_outline"
@@ -87,7 +87,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
                 {_t("action|leave")}
             </AccessibleButton>
         );
-    } else if (myMembership === "invite") {
+    } else if (myMembership === Membership.Invite) {
         const inviteSender = room.getMember(cli.getUserId()!)?.events.member?.getSender();
 
         if (inviteSender) {
@@ -178,7 +178,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
         });
     } else if (isVideoRoom && !videoRoomsEnabled) {
         notice =
-            myMembership === "join"
+            myMembership === Membership.Join
                 ? _t("room|view_failed_enable_video_rooms")
                 : _t("room|join_failed_enable_video_rooms");
 

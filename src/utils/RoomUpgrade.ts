@@ -67,7 +67,10 @@ export async function upgradeRoom(
 
     let toInvite: string[] = [];
     if (inviteUsers) {
-        toInvite = [...room.getMembersWithMembership("join"), ...room.getMembersWithMembership("invite")]
+        toInvite = [
+            ...room.getMembersWithMembership(Membership.Join),
+            ...room.getMembersWithMembership(Membership.Invite),
+        ]
             .map((m) => m.userId)
             .filter((m) => m !== cli.getUserId());
     }

@@ -241,7 +241,7 @@ export const Commands = [
             if (args) {
                 const ev = cli.getRoom(roomId)?.currentState.getStateEvents("m.room.member", cli.getSafeUserId());
                 const content = {
-                    ...(ev ? ev.getContent() : { membership: "join" }),
+                    ...(ev ? ev.getContent() : { membership: Membership.Join }),
                     displayname: args,
                 };
                 return success(cli.sendStateEvent(roomId, "m.room.member", content, cli.getSafeUserId()));
@@ -291,7 +291,7 @@ export const Commands = [
                     if (!url) return;
                     const ev = room?.currentState.getStateEvents("m.room.member", userId);
                     const content = {
-                        ...(ev ? ev.getContent() : { membership: "join" }),
+                        ...(ev ? ev.getContent() : { membership: Membership.Join }),
                         avatar_url: url,
                     };
                     return cli.sendStateEvent(roomId, "m.room.member", content, userId);

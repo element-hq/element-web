@@ -550,7 +550,7 @@ export class StopGapWidget extends EventEmitter {
         const evId = ev.getId();
         if (evRoomId && evId) {
             const room = this.client.getRoom(evRoomId);
-            if (room && room.getMyMembership() === "join" && !isRelationToUnknown) {
+            if (room && room.getMyMembership() === Membership.Join && !isRelationToUnknown) {
                 this.readUpToMap[evRoomId] = evId;
             }
         }

@@ -267,7 +267,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             sortRooms(
                 cli
                     .getVisibleRooms(msc3946DynamicRoomPredecessors)
-                    .filter((room) => room.getMyMembership() === "join" && !room.isSpaceRoom()),
+                    .filter((room) => room.getMyMembership() === Membership.Join && !room.isSpaceRoom()),
             ),
         [cli, msc3946DynamicRoomPredecessors],
     );

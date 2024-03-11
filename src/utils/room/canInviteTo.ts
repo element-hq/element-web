@@ -29,5 +29,5 @@ export function canInviteTo(room: Room): boolean {
     const canInvite =
         !!room.canInvite(client.getSafeUserId()) || !!(room.isSpaceRoom() && room.getJoinRule() === JoinRule.Public);
 
-    return canInvite && room.getMyMembership() === "join" && shouldShowComponent(UIComponent.InviteUsers);
+    return canInvite && room.getMyMembership() === Membership.Join && shouldShowComponent(UIComponent.InviteUsers);
 }

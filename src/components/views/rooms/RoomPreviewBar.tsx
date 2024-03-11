@@ -192,13 +192,13 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         if (myMember) {
             const previousMembership = myMember.events.member?.getPrevContent().membership;
             if (myMember.isKicked()) {
-                if (previousMembership === "knock") {
+                if (previousMembership === Membership.Knock) {
                     return MessageCase.RequestDenied;
                 } else if (this.props.promptAskToJoin) {
                     return MessageCase.PromptAskToJoin;
                 }
                 return MessageCase.Kicked;
-            } else if (myMember.membership === "ban") {
+            } else if (myMember.membership === Membership.Ban) {
                 return MessageCase.Banned;
             }
         }
@@ -284,7 +284,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             return false;
         }
         const memberContent = myMember.events.member?.getContent();
-        return memberContent?.membership === "invite" && memberContent.is_direct;
+        return memberContent?.membership === Membership.Invite && memberContent.is_direct;
     }
 
     private makeScreenAfterLogin(): { screen: string; params: Record<string, any> } {

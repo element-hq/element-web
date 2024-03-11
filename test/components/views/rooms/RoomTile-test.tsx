@@ -187,7 +187,7 @@ describe("RoomTile", () => {
                 return name === "feature_ask_to_join";
             });
             mocked(shouldShowComponent).mockReturnValue(true);
-            jest.spyOn(room, "getMyMembership").mockReturnValue("knock");
+            jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Knock);
             const { container } = renderRoomTile();
             expect(container.querySelector(".mx_RoomTile_sticky")).toBeInTheDocument();
             expect(screen.queryByRole("button", { name: "Room options" })).not.toBeInTheDocument();
@@ -198,9 +198,15 @@ describe("RoomTile", () => {
                 return name === "feature_ask_to_join";
             });
             mocked(shouldShowComponent).mockReturnValue(true);
-            const roomMember = mkRoomMember(room.roomId, MatrixClientPeg.get()!.getSafeUserId(), "leave", true, {
-                membership: "knock",
-            });
+            const roomMember = mkRoomMember(
+                room.roomId,
+                MatrixClientPeg.get()!.getSafeUserId(),
+                Membership.Leave,
+                true,
+                {
+                    membership: Membership.Knock,
+                },
+            );
             jest.spyOn(room, "getMember").mockReturnValue(roomMember);
             const { container } = renderRoomTile();
             expect(container.querySelector(".mx_RoomTile_sticky")).toBeInTheDocument();

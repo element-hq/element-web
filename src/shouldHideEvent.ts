@@ -39,10 +39,10 @@ function memberEventDiff(ev: MatrixEvent): IDiff {
     const prevContent = ev.getPrevContent();
 
     const isMembershipChanged = content.membership !== prevContent.membership;
-    diff.isJoin = isMembershipChanged && content.membership === "join";
-    diff.isPart = isMembershipChanged && content.membership === "leave" && ev.getStateKey() === ev.getSender();
+    diff.isJoin = isMembershipChanged && content.membership === Membership.Join;
+    diff.isPart = isMembershipChanged && content.membership === Membership.Leave && ev.getStateKey() === ev.getSender();
 
-    const isJoinToJoin = !isMembershipChanged && content.membership === "join";
+    const isJoinToJoin = !isMembershipChanged && content.membership === Membership.Join;
     diff.isDisplaynameChange = isJoinToJoin && content.displayname !== prevContent.displayname;
     diff.isAvatarChange = isJoinToJoin && content.avatar_url !== prevContent.avatar_url;
     return diff;

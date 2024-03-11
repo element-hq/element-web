@@ -172,7 +172,7 @@ export default class DMRoomMap {
 
         const joinedRooms = commonRooms
             .map((r) => this.matrixClient.getRoom(r))
-            .filter((r) => r && r.getMyMembership() === "join");
+            .filter((r) => r && r.getMyMembership() === Membership.Join);
 
         return joinedRooms[0];
     }

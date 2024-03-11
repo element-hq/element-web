@@ -144,7 +144,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
     let favouriteOption: JSX.Element | undefined;
     let lowPriorityOption: JSX.Element | undefined;
     let notificationOption: JSX.Element | undefined;
-    if (room.getMyMembership() === "join") {
+    if (room.getMyMembership() === Membership.Join) {
         const isFavorite = roomTags.includes(DefaultTagID.Favourite);
         favouriteOption = (
             <IconizedContextMenuCheckbox

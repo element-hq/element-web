@@ -83,7 +83,7 @@ export default class WidgetUtils {
             return false;
         }
 
-        if (room.getMyMembership() !== "join") {
+        if (room.getMyMembership() !== Membership.Join) {
             logger.warn(`User ${me} is not in room ${roomId}`);
             return false;
         }

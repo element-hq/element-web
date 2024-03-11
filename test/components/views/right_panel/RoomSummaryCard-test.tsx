@@ -86,7 +86,7 @@ describe("<RoomSummaryCard />", () => {
             state_key: "",
         });
         room.currentState.setStateEvents([roomCreateEvent]);
-        room.updateMyMembership("join");
+        room.updateMyMembership(Membership.Join);
 
         jest.spyOn(Modal, "createDialog");
         jest.spyOn(RightPanelStore.instance, "pushCard");

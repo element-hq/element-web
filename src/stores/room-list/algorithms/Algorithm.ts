@@ -172,7 +172,7 @@ export class Algorithm extends EventEmitter {
     }
 
     private doUpdateStickyRoom(val: Room | null): void {
-        if (val?.isSpaceRoom() && val.getMyMembership() !== "invite") {
+        if (val?.isSpaceRoom() && val.getMyMembership() !== Membership.Invite) {
             // no-op sticky rooms for spaces - they're effectively virtual rooms
             val = null;
         }

@@ -201,8 +201,8 @@ describe("export", function () {
                         getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
                     } as unknown as RoomMember,
                     ts: ts0 + i * 1000,
-                    mship: "join",
-                    prevMship: "join",
+                    mship: Membership.Join,
+                    prevMship: Membership.Join,
                     name: "A user",
                 }),
             );

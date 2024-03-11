@@ -73,7 +73,7 @@ test.describe("Knock Into Room", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === "knock" &&
+                    e.getContent()?.membership === Membership.Knock &&
                     e.getContent()?.displayname === "Alice",
             );
         });
@@ -108,7 +108,7 @@ test.describe("Knock Into Room", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === "knock" &&
+                    e.getContent()?.membership === Membership.Knock &&
                     e.getContent()?.displayname === "Alice",
             );
         });
@@ -150,7 +150,7 @@ test.describe("Knock Into Room", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === "knock" &&
+                    e.getContent()?.membership === Membership.Knock &&
                     e.getContent()?.displayname === "Alice",
             );
         });
@@ -192,7 +192,7 @@ test.describe("Knock Into Room", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === "knock" &&
+                    e.getContent()?.membership === Membership.Knock &&
                     e.getContent()?.displayname === "Alice",
             );
         });
@@ -258,7 +258,7 @@ test.describe("Knock Into Room", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === "knock" &&
+                    e.getContent()?.membership === Membership.Knock &&
                     e.getContent()?.displayname === "Alice",
             );
         });

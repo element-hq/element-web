@@ -123,8 +123,8 @@ describe("RoomListStore", () => {
         // When we tell it we joined a new room that has an old room as
         // predecessor in the create event
         const payload = {
-            oldMembership: "invite",
-            membership: "join",
+            oldMembership: Membership.Invite,
+            membership: Membership.Join,
             room: roomWithCreatePredecessor,
         };
         store.onDispatchMyMembership(payload);
@@ -142,8 +142,8 @@ describe("RoomListStore", () => {
 
         // When we tell it we joined a new room with no predecessor
         const payload = {
-            oldMembership: "invite",
-            membership: "join",
+            oldMembership: Membership.Invite,
+            membership: Membership.Join,
             room: roomNoPredecessor,
         };
         store.onDispatchMyMembership(payload);
@@ -159,9 +159,9 @@ describe("RoomListStore", () => {
         const room1 = new Room("!r1:e.com", client, userId, { pendingEventOrdering: PendingEventOrdering.Detached });
         const room2 = new Room("!r2:e.com", client, userId, { pendingEventOrdering: PendingEventOrdering.Detached });
         const room3 = new Room("!r3:e.com", client, userId, { pendingEventOrdering: PendingEventOrdering.Detached });
-        room1.updateMyMembership("join");
-        room2.updateMyMembership("join");
-        room3.updateMyMembership("join");
+        room1.updateMyMembership(Membership.Join);
+        room2.updateMyMembership(Membership.Join);
+        room3.updateMyMembership(Membership.Join);
         DMRoomMap.makeShared(client);
         const { store } = createStore();
         client.getVisibleRooms = jest.fn().mockReturnValue([room1, room2, room3]);
@@ -259,8 +259,8 @@ describe("RoomListStore", () => {
             // When we tell it we joined a new room that has an old room as
             // predecessor in the create event
             const payload = {
-                oldMembership: "invite",
-                membership: "join",
+                oldMembership: Membership.Invite,
+                membership: Membership.Join,
                 room: roomWithPredecessorEvent,
             };
             store.onDispatchMyMembership(payload);

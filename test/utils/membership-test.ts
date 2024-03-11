@@ -31,16 +31,16 @@ describe("isKnockDenied", () => {
     });
 
     it("checks that the user knock has been denied", () => {
-        const roomMember = mkRoomMember(room.roomId, userId, "leave", true, { membership: "knock" });
+        const roomMember = mkRoomMember(room.roomId, userId, Membership.Leave, true, { membership: Membership.Knock });
         jest.spyOn(room, "getMember").mockReturnValue(roomMember);
         expect(isKnockDenied(room)).toBe(true);
     });
 
     it.each([
-        { membership: "leave", isKicked: false, prevMembership: "invite" },
-        { membership: "leave", isKicked: true, prevMembership: "invite" },
-        { membership: "leave", isKicked: false, prevMembership: "join" },
-        { membership: "leave", isKicked: true, prevMembership: "join" },
+        { membership: Membership.Leave, isKicked: false, prevMembership: Membership.Invite },
+        { membership: Membership.Leave, isKicked: true, prevMembership: Membership.Invite },
+        { membership: Membership.Leave, isKicked: false, prevMembership: Membership.Join },
+        { membership: Membership.Leave, isKicked: true, prevMembership: Membership.Join },
     ])("checks that the user knock has been not denied", ({ membership, isKicked, prevMembership }) => {
         const roomMember = mkRoomMember(room.roomId, userId, membership, isKicked, { membership: prevMembership });
         jest.spyOn(room, "getMember").mockReturnValue(roomMember);

@@ -121,12 +121,12 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         MatrixClientPeg.safeGet().removeListener(RoomEvent.MyMembership, this.onMyMembership);
     }
 
-    private onMyMembership = (room: Room, membership: string): void => {
+    private onMyMembership = (room: Room, membership: Membership): void => {
         if (room.isSpaceRoom()) {
             return;
         }
 
-        if (membership === "invite") {
+        if (membership === Membership.Invite) {
             this.addInvitedRoom(room);
         } else if (this.state.invitedRoomIds.has(room.roomId)) {
             // The user isn't invited anymore
@@ -167,7 +167,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         return MatrixClientPeg.safeGet()
             .getRooms()
             .filter((r) => {
-                return r.hasMembershipState(MatrixClientPeg.safeGet().getUserId()!, "invite");
+                return r.hasMembershipState(MatrixClientPeg.safeGet().getUserId()!, Membership.Invite);
             });
     };
 

@@ -27,7 +27,7 @@ const ServersInRoom: React.FC<IDevtoolsProps> = ({ onBack }) => {
     const servers = useMemo<Record<string, number>>(() => {
         const servers: Record<string, number> = {};
         context.room.currentState.getStateEvents(EventType.RoomMember).forEach((ev) => {
-            if (ev.getContent().membership !== "join") return; // only count joined users
+            if (ev.getContent().membership !== Membership.Join) return; // only count joined users
             const server = ev.getSender()!.split(":")[1];
             servers[server] = (servers[server] ?? 0) + 1;
         });

@@ -262,7 +262,7 @@ test.describe("User verification", () => {
         const bobVerificationRequest = await bob.evaluateHandle(
             async (client, { dmRoomId, aliceCredentials }) => {
                 const room = client.getRoom(dmRoomId);
-                while (room.getMember(aliceCredentials.userId)?.membership !== "join") {
+                while (room.getMember(aliceCredentials.userId)?.membership !== Membership.Join) {
                     await new Promise((resolve) => {
                         room.once(window.matrixcs.RoomStateEvent.Members, resolve);
                     });

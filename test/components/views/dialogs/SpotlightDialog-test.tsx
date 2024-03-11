@@ -158,9 +158,9 @@ describe("Spotlight Dialog", () => {
     beforeEach(() => {
         mockedClient = mockClient({ rooms: [testPublicRoom], users: [testPerson] });
         testRoom = mkRoom(mockedClient, "!test23:example.com");
-        mocked(testRoom.getMyMembership).mockReturnValue("join");
+        mocked(testRoom.getMyMembership).mockReturnValue(Membership.Join);
         testLocalRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test23", mockedClient, mockedClient.getUserId()!);
-        testLocalRoom.updateMyMembership("join");
+        testLocalRoom.updateMyMembership(Membership.Join);
         mocked(mockedClient.getVisibleRooms).mockReturnValue([testRoom, testLocalRoom]);
 
         jest.spyOn(DMRoomMap, "shared").mockReturnValue({
@@ -169,7 +169,7 @@ describe("Spotlight Dialog", () => {
 
         testDM = mkRoom(mockedClient, testDMRoomId);
         testDM.name = "Chat with Alice";
-        mocked(testDM.getMyMembership).mockReturnValue("join");
+        mocked(testDM.getMyMembership).mockReturnValue(Membership.Join);
 
         mocked(DMRoomMap.shared().getUserIdForRoomId).mockImplementation((roomId: string) => {
             if (roomId === testDMRoomId) {

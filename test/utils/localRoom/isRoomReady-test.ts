@@ -33,7 +33,7 @@ describe("isRoomReady", () => {
     beforeEach(() => {
         client = createTestClient();
         room1 = new Room("!room1:example.com", client, userId1);
-        room1.getMyMembership = () => "join";
+        room1.getMyMembership = () => Membership.Join;
         localRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test", client, "@test:example.com");
     });
 
@@ -70,8 +70,8 @@ describe("isRoomReady", () => {
             describe("and all members have been invited or joined", () => {
                 beforeEach(() => {
                     room1.currentState.setStateEvents([
-                        makeMembershipEvent(room1.roomId, userId1, "join"),
-                        makeMembershipEvent(room1.roomId, userId2, "invite"),
+                        makeMembershipEvent(room1.roomId, userId1, Membership.Join),
+                        makeMembershipEvent(room1.roomId, userId2, Membership.Invite),
                     ]);
                 });
 

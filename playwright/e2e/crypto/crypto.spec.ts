@@ -87,7 +87,7 @@ const bobJoin = async (page: Page, bob: Bot) => {
 async function autoJoin(client: Client) {
     await client.evaluate((cli) => {
         cli.on(window.matrixcs.RoomMemberEvent.Membership, (event, member) => {
-            if (member.membership === "invite" && member.userId === cli.getUserId()) {
+            if (member.membership === Membership.Invite && member.userId === cli.getUserId()) {
                 cli.joinRoom(member.roomId);
             }
         });

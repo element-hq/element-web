@@ -556,7 +556,7 @@ describe("OwnBeaconStore", () => {
 
         it("destroys and removes beacons when current user leaves room", async () => {
             // alice leaves room1
-            const membershipEvent = makeMembershipEvent(room1Id, aliceId, "leave");
+            const membershipEvent = makeMembershipEvent(room1Id, aliceId, Membership.Leave);
             const member = new RoomMember(room1Id, aliceId);
             member.setMembershipEvent(membershipEvent);
 

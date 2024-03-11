@@ -181,7 +181,7 @@ describe("SpaceHierarchy", () => {
         mocked(client.getRoom).mockImplementation(
             (roomId) => client.getRooms().find((room) => room.roomId === roomId) ?? null,
         );
-        [room1, room2, space1, room3].forEach((r) => mocked(r.getMyMembership).mockReturnValue("leave"));
+        [room1, room2, space1, room3].forEach((r) => mocked(r.getMyMembership).mockReturnValue(Membership.Leave));
 
         const hierarchyRoot: HierarchyRoom = {
             room_id: root.roomId,

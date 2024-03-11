@@ -244,7 +244,7 @@ const findVisibleRooms = (cli: MatrixClient, msc3946ProcessDynamicPredecessor: b
         if (isLocalRoom(room)) return false;
 
         // TODO we may want to put invites in their own list
-        return room.getMyMembership() === "join" || room.getMyMembership() == "invite";
+        return room.getMyMembership() === Membership.Join || room.getMyMembership() == Membership.Invite;
     });
 };
 
@@ -675,7 +675,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 // world readable, a modal will appear asking you to register first. If
                 // it is readable, the preview appears as normal.
                 const showViewButton =
-                    clientRoom?.getMyMembership() === "join" ||
+                    clientRoom?.getMyMembership() === Membership.Join ||
                     (result.publicRoom.world_readable && !canAskToJoin(joinRule)) ||
                     cli.isGuest();
 

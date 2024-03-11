@@ -106,7 +106,7 @@ describe("RoomContextMenu", () => {
     it("should render notification option for joined rooms", () => {
         const chamber = EchoChamber.forRoom(room);
         chamber.notificationVolume = RoomNotifState.Mute;
-        jest.spyOn(room, "getMyMembership").mockReturnValue("join");
+        jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Join);
         renderComponent();
 
         expect(

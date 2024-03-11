@@ -27,7 +27,9 @@ describe("<RoomFacePile />", () => {
         DMRoomMap.makeShared(cli);
         const room = mkRoom(cli, "!123");
 
-        jest.spyOn(room, "getJoinedMembers").mockReturnValue([mkRoomMember(room.roomId, "@bob:example.org", "join")]);
+        jest.spyOn(room, "getJoinedMembers").mockReturnValue([
+            mkRoomMember(room.roomId, "@bob:example.org", Membership.Join),
+        ]);
 
         const { asFragment } = render(
             <TooltipProvider>

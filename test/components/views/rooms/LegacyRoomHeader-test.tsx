@@ -906,7 +906,7 @@ function mkJoinEvent(roomId: string, userId: string) {
         room: roomId,
         user: userId,
         content: {
-            membership: "join",
+            membership: Membership.Join,
             avatar_url: "mxc://example.org/" + userId,
         },
     });

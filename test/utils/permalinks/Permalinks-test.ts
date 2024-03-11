@@ -45,7 +45,7 @@ describe("Permalinks", function () {
         members: RoomMember[],
         serverACLContent?: { deny?: string[]; allow?: string[] },
     ): Room {
-        members.forEach((m) => (m.membership = "join"));
+        members.forEach((m) => (m.membership = Membership.Join));
         const powerLevelsUsers = members.reduce<Record<string, number>>((pl, member) => {
             if (Number.isFinite(member.powerLevel)) {
                 pl[member.userId] = member.powerLevel;
@@ -152,11 +152,11 @@ describe("Permalinks", function () {
         const creator = new RoomPermalinkCreator(room, null);
         creator.load();
         expect(creator.serverCandidates![0]).toBe("pl_95");
-        member95.membership = "left";
+        member95.membership = Membership.Leave;
         // @ts-ignore illegal private property
         creator.onRoomStateUpdate();
         expect(creator.serverCandidates![0]).toBe("pl_75");
-        member95.membership = "join";
+        member95.membership = Membership.Join;
         // @ts-ignore illegal private property
         creator.onRoomStateUpdate();
         expect(creator.serverCandidates![0]).toBe("pl_95");

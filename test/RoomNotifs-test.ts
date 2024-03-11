@@ -277,7 +277,7 @@ describe("RoomNotifs test", () => {
         });
 
         it("indicates the user has been invited to a channel", async () => {
-            room.updateMyMembership("invite");
+            room.updateMyMembership(Membership.Invite);
 
             const { level, symbol, count } = determineUnreadState(room);
 
@@ -290,9 +290,15 @@ describe("RoomNotifs test", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
                 return name === "feature_ask_to_join";
             });
-            const roomMember = mkRoomMember(room.roomId, MatrixClientPeg.get()!.getSafeUserId(), "leave", true, {
-                membership: "knock",
-            });
+            const roomMember = mkRoomMember(
+                room.roomId,
+                MatrixClientPeg.get()!.getSafeUserId(),
+                Membership.Leave,
+                true,
+                {
+                    membership: Membership.Knock,
+                },
+            );
             jest.spyOn(room, "getMember").mockReturnValue(roomMember);
             const { level, symbol, count } = determineUnreadState(room);
 

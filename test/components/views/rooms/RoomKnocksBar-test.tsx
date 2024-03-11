@@ -111,15 +111,26 @@ describe("RoomKnocksBar", () => {
         const other = new RoomMember(roomId, "@doe:example.org");
 
         bob.setMembershipEvent(
-            new MatrixEvent({ content: { displayname: "Bob", membership: "knock" }, type: EventType.RoomMember }),
+            new MatrixEvent({
+                content: { displayname: "Bob", membership: Membership.Knock },
+                type: EventType.RoomMember,
+            }),
         );
         jane.setMembershipEvent(
-            new MatrixEvent({ content: { displayname: "Jane", membership: "knock" }, type: EventType.RoomMember }),
+            new MatrixEvent({
+                content: { displayname: "Jane", membership: Membership.Knock },
+                type: EventType.RoomMember,
+            }),
         );
         john.setMembershipEvent(
-            new MatrixEvent({ content: { displayname: "John", membership: "knock" }, type: EventType.RoomMember }),
+            new MatrixEvent({
+                content: { displayname: "John", membership: Membership.Knock },
+                type: EventType.RoomMember,
+            }),
         );
-        other.setMembershipEvent(new MatrixEvent({ content: { membership: "knock" }, type: EventType.RoomMember }));
+        other.setMembershipEvent(
+            new MatrixEvent({ content: { membership: Membership.Knock }, type: EventType.RoomMember }),
+        );
 
         beforeEach(async () => {
             await clearAllModals();
@@ -178,7 +189,7 @@ describe("RoomKnocksBar", () => {
                 it("renders a link to open the room settings people tab", () => {
                     bob.setMembershipEvent(
                         new MatrixEvent({
-                            content: { displayname: "Bob", membership: "knock", reason: "some reason" },
+                            content: { displayname: "Bob", membership: Membership.Knock, reason: "some reason" },
                             type: EventType.RoomMember,
                         }),
                     );

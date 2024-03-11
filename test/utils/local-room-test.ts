@@ -36,7 +36,7 @@ describe("local-room", () => {
     beforeEach(() => {
         client = createTestClient();
         room1 = new Room("!room1:example.com", client, userId1);
-        room1.getMyMembership = () => "join";
+        room1.getMyMembership = () => Membership.Join;
         localRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test", client, "@test:example.com");
         mocked(client.getRoom).mockImplementation((roomId: string) => {
             if (roomId === localRoom.roomId) {

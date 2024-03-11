@@ -504,12 +504,12 @@ describe("TextForEvent", () => {
                         type: "m.room.member",
                         sender: "@a:foo",
                         content: {
-                            membership: "join",
+                            membership: Membership.Join,
                             avatar_url: "b",
                             displayname: "Bob",
                         },
                         prev_content: {
-                            membership: "join",
+                            membership: Membership.Join,
                             avatar_url: "a",
                             displayname: "Andy",
                         },

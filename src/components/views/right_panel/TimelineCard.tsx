@@ -217,7 +217,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         const isUploading = ContentMessages.sharedInstance().getCurrentUploads(this.props.composerRelation).length > 0;
 
         const myMembership = this.props.room.getMyMembership();
-        const showComposer = myMembership === "join";
+        const showComposer = myMembership === Membership.Join;
 
         return (
             <RoomContext.Provider

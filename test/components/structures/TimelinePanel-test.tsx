@@ -988,8 +988,8 @@ describe("TimelinePanel", () => {
         events.forEach((event) => timelineSet.getLiveTimeline().addEvent(event, { toStartOfTimeline: true }));
 
         const roomMembership = mkMembership({
-            mship: "join",
-            prevMship: "join",
+            mship: Membership.Join,
+            prevMship: Membership.Join,
             user: authorId,
             room: room.roomId,
             event: true,
@@ -999,7 +999,7 @@ describe("TimelinePanel", () => {
         events.push(roomMembership);
 
         const member = new RoomMember(room.roomId, authorId);
-        member.membership = "join";
+        member.membership = Membership.Join;
 
         const roomState = new RoomState(room.roomId);
         jest.spyOn(roomState, "getMember").mockReturnValue(member);

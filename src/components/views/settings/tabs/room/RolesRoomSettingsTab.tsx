@@ -413,7 +413,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             }
         }
 
-        const banned = room.getMembersWithMembership("ban");
+        const banned = room.getMembersWithMembership(Membership.Ban);
         let bannedUsersSection: JSX.Element | undefined;
         if (banned?.length) {
             const canBanUsers = currentUserLevel >= banLevel;

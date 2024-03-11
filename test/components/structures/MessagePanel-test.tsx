@@ -171,8 +171,8 @@ describe("MessagePanel", function () {
                     user: "@user:id",
                     target: bobMember,
                     ts: ts0 + i * 1000,
-                    mship: "join",
-                    prevMship: "join",
+                    mship: Membership.Join,
+                    prevMship: Membership.Join,
                     name: "A user",
                 }),
             );
@@ -205,8 +205,8 @@ describe("MessagePanel", function () {
                     user: "@user:id",
                     target: bobMember,
                     ts: ts0 + i * 1000,
-                    mship: "join",
-                    prevMship: "join",
+                    mship: Membership.Join,
+                    prevMship: Membership.Join,
                     name: "A user",
                 }),
             );
@@ -245,7 +245,7 @@ describe("MessagePanel", function () {
                 user: alice,
                 target: aliceMember,
                 ts: ts0 + 1,
-                mship: "join",
+                mship: Membership.Join,
                 name: "Alice",
             }),
             mkEvent({
@@ -285,7 +285,7 @@ describe("MessagePanel", function () {
                 skey: "@bob:example.org",
                 target: bobMember,
                 ts: ts0 + 5,
-                mship: "invite",
+                mship: Membership.Invite,
                 name: "Bob",
             }),
         ];
@@ -542,8 +542,8 @@ describe("MessagePanel", function () {
                 user: "@user:id",
                 target: bobMember,
                 ts: Date.now(),
-                mship: "join",
-                prevMship: "join",
+                mship: Membership.Join,
+                prevMship: Membership.Join,
                 name: "A user",
             }),
         ];
@@ -571,8 +571,8 @@ describe("MessagePanel", function () {
                 user: "@user:id",
                 target: bobMember,
                 ts: Date.now(),
-                mship: "join",
-                prevMship: "join",
+                mship: Membership.Join,
+                prevMship: Membership.Join,
                 name: "A user",
             }),
             ...events,
@@ -695,8 +695,8 @@ describe("MessagePanel", function () {
         for (let i = 0; i < 100; i++) {
             events.push(
                 TestUtilsMatrix.mkMembership({
-                    mship: "join",
-                    prevMship: "join",
+                    mship: Membership.Join,
+                    prevMship: Membership.Join,
                     room: "!room:id",
                     user: "@user:id",
                     event: true,
@@ -716,8 +716,8 @@ describe("MessagePanel", function () {
         for (let i = 0; i < 100; i++) {
             events.push(
                 TestUtilsMatrix.mkMembership({
-                    mship: "join",
-                    prevMship: "join",
+                    mship: Membership.Join,
+                    prevMship: Membership.Join,
                     room: "!room:id",
                     user: "@user:id",
                     event: true,

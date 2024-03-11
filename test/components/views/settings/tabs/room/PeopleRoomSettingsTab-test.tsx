@@ -91,7 +91,7 @@ describe("PeopleRoomSettingsTab", () => {
                     content: {
                         avatar_url: "mxc://example.org/albert-einstein.png",
                         displayname: "Albert Einstein",
-                        membership: "knock",
+                        membership: Membership.Knock,
                         reason,
                     },
                     origin_server_ts: -464140800000,
@@ -110,7 +110,7 @@ describe("PeopleRoomSettingsTab", () => {
                 new MatrixEvent({
                     content: {
                         displayname: "albert.einstein",
-                        membership: "knock",
+                        membership: Membership.Knock,
                     },
                     type: EventType.RoomMember,
                 }),
@@ -138,7 +138,7 @@ describe("PeopleRoomSettingsTab", () => {
                 new MatrixEvent({
                     content: {
                         displayname: "albert.einstein",
-                        membership: "knock",
+                        membership: Membership.Knock,
                         reason,
                     },
                     type: EventType.RoomMember,

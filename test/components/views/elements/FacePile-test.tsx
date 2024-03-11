@@ -21,7 +21,7 @@ import { mkRoomMember } from "../../../test-utils";
 
 describe("<FacePile />", () => {
     it("renders with a tooltip", () => {
-        const member = mkRoomMember("123", "456", "join");
+        const member = mkRoomMember("123", "456", Membership.Join);
 
         const { asFragment } = render(
             <FacePile members={[member]} size="36px" overflow={false} tooltipLabel="tooltip" />,

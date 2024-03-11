@@ -73,7 +73,7 @@ test.describe("Manage Knocks", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === "leave" &&
+                    e.getContent()?.membership === Membership.Leave &&
                     e.getContent()?.displayname === "Bob",
             );
         });
@@ -110,7 +110,7 @@ test.describe("Manage Knocks", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === "leave" &&
+                    e.getContent()?.membership === Membership.Leave &&
                     e.getContent()?.displayname === "Bob",
             );
         });

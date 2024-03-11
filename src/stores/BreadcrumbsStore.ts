@@ -91,7 +91,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
                 // The tests might not result in a valid room object.
                 const room = this.matrixClient.getRoom(payload.room_id);
                 const membership = room?.getMyMembership();
-                if (room && membership === "join") await this.appendRoom(room);
+                if (room && membership === Membership.Join) await this.appendRoom(room);
             }
         } else if (payload.action === Action.JoinRoom) {
             const room = this.matrixClient.getRoom(payload.roomId);

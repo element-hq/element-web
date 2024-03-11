@@ -178,7 +178,7 @@ export class RoomPermalinkCreator {
                     const entries = Object.entries(users);
                     const allowedEntries = entries.filter(([userId]) => {
                         const member = this.room?.getMember(userId);
-                        if (!member || member.membership !== "join") {
+                        if (!member || member.membership !== Membership.Join) {
                             return false;
                         }
                         const serverName = getServerName(userId);

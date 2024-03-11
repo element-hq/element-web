@@ -197,7 +197,7 @@ describe("RolesRoomSettingsTab", () => {
                 new MatrixEvent({
                     type: EventType.RoomMember,
                     content: {
-                        membership: "ban",
+                        membership: Membership.Ban,
                         reason: "just testing",
                     },
                     sender: userId,
@@ -218,7 +218,7 @@ describe("RolesRoomSettingsTab", () => {
                 new MatrixEvent({
                     type: EventType.RoomMember,
                     content: {
-                        membership: "ban",
+                        membership: Membership.Ban,
                         reason: "just testing",
                     },
                     sender: userId,

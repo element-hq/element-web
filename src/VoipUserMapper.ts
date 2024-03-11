@@ -95,7 +95,7 @@ export default class VoipUserMapper {
         if (!virtualRoomEvent || !virtualRoomEvent.getContent()) return null;
         const nativeRoomID = virtualRoomEvent.getContent()["native_room"];
         const nativeRoom = cli.getRoom(nativeRoomID);
-        if (!nativeRoom || nativeRoom.getMyMembership() !== "join") return null;
+        if (!nativeRoom || nativeRoom.getMyMembership() !== Membership.Join) return null;
 
         return nativeRoomID;
     }

@@ -237,7 +237,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
     }
 
     const hasAddRoomPermissions =
-        myMembership === "join" && space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
+        myMembership === Membership.Join && space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
 
     let addRoomButton;
     if (hasAddRoomPermissions) {
@@ -678,7 +678,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     private renderBody(): JSX.Element {
         switch (this.state.phase) {
             case Phase.Landing:
-                if (this.state.myMembership === "join") {
+                if (this.state.myMembership === Membership.Join) {
                     return <SpaceLanding space={this.props.space} />;
                 } else {
                     return (

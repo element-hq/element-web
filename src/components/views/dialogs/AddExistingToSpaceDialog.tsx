@@ -140,7 +140,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     const msc3946ProcessDynamicPredecessor = useSettingValue<boolean>("feature_dynamic_room_predecessors");
     const visibleRooms = useMemo(
         () =>
-            cli?.getVisibleRooms(msc3946ProcessDynamicPredecessor).filter((r) => r.getMyMembership() === "join") ?? [],
+            cli?.getVisibleRooms(msc3946ProcessDynamicPredecessor).filter((r) => r.getMyMembership() === Membership.Join) ?? [],
         [cli, msc3946ProcessDynamicPredecessor],
     );
 

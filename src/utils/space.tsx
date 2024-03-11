@@ -40,7 +40,7 @@ import { SdkContextClass } from "../contexts/SDKContext";
 export const shouldShowSpaceSettings = (space: Room): boolean => {
     const userId = space.client.getUserId()!;
     return (
-        space.getMyMembership() === "join" &&
+        space.getMyMembership() === Membership.Join &&
         (space.currentState.maySendStateEvent(EventType.RoomAvatar, userId) ||
             space.currentState.maySendStateEvent(EventType.RoomName, userId) ||
             space.currentState.maySendStateEvent(EventType.RoomTopic, userId) ||
@@ -85,7 +85,7 @@ export const showCreateNewRoom = async (space: Room, type?: RoomType): Promise<b
 };
 
 export const shouldShowSpaceInvite = (space: Room): boolean =>
-    ((space?.getMyMembership() === "join" && space.canInvite(space.client.getUserId()!)) ||
+    ((space?.getMyMembership() === Membership.Join && space.canInvite(space.client.getUserId()!)) ||
         space.getJoinRule() === JoinRule.Public) &&
     shouldShowComponent(UIComponent.InviteUsers);
 

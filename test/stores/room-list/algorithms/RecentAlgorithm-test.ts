@@ -53,7 +53,7 @@ describe("RecentAlgorithm", () => {
                 event: true,
             });
 
-            room.getMyMembership = () => "join";
+            room.getMyMembership = () => Membership.Join;
 
             room.addLiveEvents([event1]);
             expect(algorithm.getLastTs(room, "@jane:matrix.org")).toBe(5);
@@ -74,7 +74,7 @@ describe("RecentAlgorithm", () => {
 
         it("works when not a member", () => {
             const room = mkRoom(cli, "!new:example.org");
-            room.getMyMembership.mockReturnValue(EffectiveMembership.Invite);
+            room.getMyMembership.mockReturnValue(Membership.Invite);
             expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(Number.MAX_SAFE_INTEGER);
         });
     });
@@ -84,8 +84,8 @@ describe("RecentAlgorithm", () => {
             const room1 = new Room("room1", cli, "@bob:matrix.org");
             const room2 = new Room("room2", cli, "@bob:matrix.org");
 
-            room1.getMyMembership = () => "join";
-            room2.getMyMembership = () => "join";
+            room1.getMyMembership = () => Membership.Join;
+            room2.getMyMembership = () => Membership.Join;
 
             const evt = mkMessage({
                 room: room1.roomId,
@@ -112,8 +112,8 @@ describe("RecentAlgorithm", () => {
             const room1 = new Room("room1", cli, "@bob:matrix.org");
             const room2 = new Room("room2", cli, "@bob:matrix.org");
 
-            room1.getMyMembership = () => "join";
-            room2.getMyMembership = () => "join";
+            room1.getMyMembership = () => Membership.Join;
+            room2.getMyMembership = () => Membership.Join;
 
             const evt = mkMessage({
                 room: room1.roomId,
@@ -142,8 +142,8 @@ describe("RecentAlgorithm", () => {
             const room1 = new Room("room1", cli, "@bob:matrix.org");
             const room2 = new Room("room2", cli, "@bob:matrix.org");
 
-            room1.getMyMembership = () => "join";
-            room2.getMyMembership = () => "join";
+            room1.getMyMembership = () => Membership.Join;
+            room2.getMyMembership = () => Membership.Join;
 
             const { rootEvent, events: events1 } = mkThread({
                 room: room1,

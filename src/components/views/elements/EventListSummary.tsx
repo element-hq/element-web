@@ -416,12 +416,12 @@ export default class EventListSummary extends React.Component<
 
             case EventType.RoomMember:
                 switch (e.mxEvent.getContent().membership) {
-                    case "invite":
+                    case Membership.Invite:
                         return TransitionType.Invited;
-                    case "ban":
+                    case Membership.Ban:
                         return TransitionType.Banned;
-                    case "join":
-                        if (e.mxEvent.getPrevContent().membership === "join") {
+                    case Membership.Join:
+                        if (e.mxEvent.getPrevContent().membership === Membership.Join) {
                             if (e.mxEvent.getContent().displayname !== e.mxEvent.getPrevContent().displayname) {
                                 return TransitionType.ChangedName;
                             } else if (e.mxEvent.getContent().avatar_url !== e.mxEvent.getPrevContent().avatar_url) {
@@ -431,17 +431,17 @@ export default class EventListSummary extends React.Component<
                         } else {
                             return TransitionType.Joined;
                         }
-                    case "leave":
+                    case Membership.Leave:
                         if (e.mxEvent.getSender() === e.mxEvent.getStateKey()) {
-                            if (e.mxEvent.getPrevContent().membership === "invite") {
+                            if (e.mxEvent.getPrevContent().membership === Membership.Invite) {
                                 return TransitionType.InviteReject;
                             }
                             return TransitionType.Left;
                         }
                         switch (e.mxEvent.getPrevContent().membership) {
-                            case "invite":
+                            case Membership.Invite:
                                 return TransitionType.InviteWithdrawal;
-                            case "ban":
+                            case Membership.Ban:
                                 return TransitionType.Unbanned;
                             // sender is not target and made the target leave, if not from invite/ban then this is a kick
                             default:

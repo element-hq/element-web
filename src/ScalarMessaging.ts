@@ -357,7 +357,7 @@ function inviteUser(event: MessageEvent<any>, roomId: string, userId: string): v
     if (room) {
         // if they are already invited or joined we can resolve immediately.
         const member = room.getMember(userId);
-        if (member && ["join", "invite"].includes(member.membership!)) {
+        if (member && [Membership.Join, Membership.Invite].includes(member.membership)) {
             sendResponse(event, {
                 success: true,
             });
@@ -669,7 +669,7 @@ function canSendEvent(event: MessageEvent<any>, roomId: string): void {
         sendError(event, _t("scalar|error_room_unknown"));
         return;
     }
-    if (room.getMyMembership() !== "join") {
+    if (room.getMyMembership() !== Membership.Join) {
         sendError(event, _t("scalar|error_membership"));
         return;
     }

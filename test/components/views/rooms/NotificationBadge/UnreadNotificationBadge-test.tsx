@@ -140,7 +140,7 @@ describe("UnreadNotificationBadge", () => {
     });
 
     it("adds a warning for invites", () => {
-        room.updateMyMembership("invite");
+        room.updateMyMembership(Membership.Invite);
         render(getComponent());
         expect(screen.queryByText("!")).not.toBeNull();
     });

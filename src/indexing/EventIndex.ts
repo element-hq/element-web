@@ -533,7 +533,7 @@ export default class EventIndex extends EventEmitter {
             const profiles: Record<string, IMatrixProfile> = {};
 
             stateEvents.forEach((ev) => {
-                if (ev.getContent().membership === "join") {
+                if (ev.getContent().membership === Membership.Join) {
                     profiles[ev.getSender()!] = {
                         displayname: ev.getContent().displayname,
                         avatar_url: ev.getContent().avatar_url,
@@ -754,7 +754,7 @@ export default class EventIndex extends EventEmitter {
             // This is sets the avatar URL.
             const memberEvent = eventMapper({
                 content: {
-                    membership: "join",
+                    membership: Membership.Join,
                     avatar_url: e.profile.avatar_url,
                     displayname: e.profile.displayname,
                 },

@@ -112,7 +112,7 @@ const NewRoomIntro: React.FC = () => {
             </React.Fragment>
         );
     } else {
-        const inRoom = room && room.getMyMembership() === "join";
+        const inRoom = room && room.getMyMembership() === Membership.Join;
         const topic = room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic;
         const canAddTopic = inRoom && room.currentState.maySendStateEvent(EventType.RoomTopic, cli.getSafeUserId());
 

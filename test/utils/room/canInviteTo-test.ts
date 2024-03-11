@@ -39,7 +39,7 @@ describe("canInviteTo()", () => {
             ...mockClientMethodsUser(userId),
         });
         const room = new Room(roomId, client, userId);
-        jest.spyOn(room, "getMyMembership").mockReturnValue("join");
+        jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Join);
         jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
         jest.spyOn(room, "canInvite").mockReturnValue(true);
         return room;
@@ -54,7 +54,7 @@ describe("canInviteTo()", () => {
 
         it("should return false when current user membership is not joined", () => {
             const room = makeRoom();
-            jest.spyOn(room, "getMyMembership").mockReturnValue("invite");
+            jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Invite);
 
             expect(canInviteTo(room)).toEqual(false);
         });

@@ -76,7 +76,7 @@ export async function createDmLocalRoom(client: MatrixClient, targets: Member[])
             type: EventType.RoomMember,
             content: {
                 displayname: userId,
-                membership: "join",
+                membership: MembershipJoin,
             },
             state_key: userId,
             user_id: userId,
@@ -93,7 +93,7 @@ export async function createDmLocalRoom(client: MatrixClient, targets: Member[])
                 content: {
                     displayname: target.name,
                     avatar_url: target.getMxcAvatarUrl() ?? undefined,
-                    membership: "invite",
+                    membership: Membership.Invite,
                     isDirect: true,
                 },
                 state_key: target.userId,
@@ -108,7 +108,7 @@ export async function createDmLocalRoom(client: MatrixClient, targets: Member[])
                 content: {
                     displayname: target.name,
                     avatar_url: target.getMxcAvatarUrl() ?? undefined,
-                    membership: "join",
+                    membership: Membership.Join,
                 },
                 state_key: target.userId,
                 sender: target.userId,
@@ -118,7 +118,7 @@ export async function createDmLocalRoom(client: MatrixClient, targets: Member[])
     });
 
     localRoom.targets = targets;
-    localRoom.updateMyMembership("join");
+    localRoom.updateMyMembership(Membership.Join);
     localRoom.addLiveEvents(events);
     localRoom.currentState.setStateEvents(events);
     localRoom.name = localRoom.getDefaultRoomName(client.getUserId()!);

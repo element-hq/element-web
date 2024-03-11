@@ -159,17 +159,17 @@ export default class MultiInviter {
             if (!room) throw new Error("Room not found");
 
             const member = room.getMember(addr);
-            if (member?.membership === "join") {
+            if (member?.membership === Membership.Join) {
                 throw new MatrixError({
                     errcode: USER_ALREADY_JOINED,
                     error: "Member already joined",
                 });
-            } else if (member?.membership === "invite") {
+            } else if (member?.membership === Membership.Invite) {
                 throw new MatrixError({
                     errcode: USER_ALREADY_INVITED,
                     error: "Member already invited",
                 });
-            } else if (member?.membership === "ban") {
+            } else if (member?.membership === Membership.Ban) {
                 let proceed = false;
                 // Check if we can unban the invitee.
                 // See https://spec.matrix.org/v1.7/rooms/v10/#authorization-rules, particularly 4.5.3 and 4.5.4.
@@ -177,8 +177,8 @@ export default class MultiInviter {
                 if (
                     !!ourMember &&
                     member.powerLevel < ourMember.powerLevel &&
-                    room.currentState.hasSufficientPowerLevelFor("ban", ourMember.powerLevel) &&
-                    room.currentState.hasSufficientPowerLevelFor("kick", ourMember.powerLevel)
+                    room.currentState.hasSufficientPowerLevelFor(Membership.Ban, ourMember.powerLevel) &&
+                    room.currentState.hasSufficientPowerLevelFor(Membership.Kick, ourMember.powerLevel)
                 ) {
                     const { finished } = Modal.createDialog(ConfirmUserActionDialog, {
                         member,

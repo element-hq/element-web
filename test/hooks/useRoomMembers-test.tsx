@@ -49,7 +49,7 @@ describe("useRoomMembers", () => {
                     state_key: "!user:server",
                     room_id: room.roomId,
                     content: {
-                        membership: "join",
+                        membership: Membership.Join,
                     },
                 }),
             ]);
@@ -85,7 +85,7 @@ describe("useRoomMemberCount", () => {
                     state_key: "!user:server",
                     room_id: room.roomId,
                     content: {
-                        membership: "join",
+                        membership: Membership.Join,
                     },
                 }),
             ]);
@@ -109,14 +109,14 @@ describe("useMyRoomMembership", () => {
     });
 
     it("should update on RoomState.Members events", async () => {
-        room.updateMyMembership("join");
+        room.updateMyMembership(Membership.Join);
         const { result } = render(room);
 
-        expect(result.current).toBe("join");
+        expect(result.current).toBe(Membership.Join);
 
         act(() => {
-            room.updateMyMembership("leave");
+            room.updateMyMembership(Membership.Leave);
         });
-        await waitFor(() => expect(result.current).toBe("leave"));
+        await waitFor(() => expect(result.current).toBe(Membership.Leave));
     });
 });

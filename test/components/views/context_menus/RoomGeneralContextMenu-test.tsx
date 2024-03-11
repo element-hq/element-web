@@ -105,7 +105,7 @@ describe("RoomGeneralContextMenu", () => {
     });
 
     it("does not render invite menu item when UIComponent customisations disable room invite", () => {
-        room.updateMyMembership("join");
+        room.updateMyMembership(Membership.Join);
         jest.spyOn(room, "canInvite").mockReturnValue(true);
         mocked(shouldShowComponent).mockReturnValue(false);
 
@@ -116,7 +116,7 @@ describe("RoomGeneralContextMenu", () => {
     });
 
     it("renders invite menu item when UIComponent customisations enables room invite", () => {
-        room.updateMyMembership("join");
+        room.updateMyMembership(Membership.Join);
         jest.spyOn(room, "canInvite").mockReturnValue(true);
         mocked(shouldShowComponent).mockReturnValue(true);
 

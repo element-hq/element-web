@@ -163,7 +163,7 @@ describe("InviteDialog", () => {
             mkMembership({
                 event: true,
                 room: roomId,
-                mship: "join",
+                mship: Membership.Join,
                 user: aliceId,
                 skey: aliceId,
             }),

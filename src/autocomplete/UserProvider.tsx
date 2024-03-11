@@ -159,7 +159,7 @@ export default class UserProvider extends AutocompleteProvider {
 
         const currentUserId = MatrixClientPeg.safeGet().credentials.userId;
         this.users = this.room.getJoinedMembers().filter(({ userId }) => userId !== currentUserId);
-        this.users = this.users.concat(this.room.getMembersWithMembership("invite"));
+        this.users = this.users.concat(this.room.getMembersWithMembership(Membership.Invite));
 
         this.users = sortBy(this.users, (member) => 1e20 - lastSpoken[member.userId] || 1e20);
 

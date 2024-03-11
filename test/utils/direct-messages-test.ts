@@ -86,7 +86,7 @@ describe("direct-messages", () => {
         });
 
         room1 = new Room("!room1:example.com", mockClient, userId1);
-        room1.getMyMembership = () => "join";
+        room1.getMyMembership = () => Membership.Join;
 
         localRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test", mockClient, userId1);
 
