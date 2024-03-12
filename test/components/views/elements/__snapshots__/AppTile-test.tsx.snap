@@ -47,7 +47,7 @@ exports[`AppTile destroys non-persisted right panel widget on room change 1`] = 
         id="1"
       >
         <div
-          class="mx_AppTileBody mx_AppTileBody--large mx_AppTileBody--loading"
+          class="mx_AppTileBody mx_AppTileBody--large"
         >
           <div
             class="mx_AppTileBody_fadeInSpinner"
@@ -412,7 +412,7 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
             </span>
           </div>
           <div
-            class="mx_AppTileBody mx_AppTileBody--large mx_AppTileBody--loading"
+            class="mx_AppTileBody mx_AppTileBody--large"
           >
             <div
               class="mx_AppTileBody_fadeInSpinner"
