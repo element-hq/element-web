@@ -33,6 +33,14 @@ export const enum UIFeature {
     RoomHistorySettings = "UIFeature.roomHistorySettings",
     TimelineEnableRelativeDates = "UIFeature.timelineEnableRelativeDates",
     BulkUnverifiedSessionsReminder = "UIFeature.BulkUnverifiedSessionsReminder",
+    HomePageButtons = "UIFeature.homePageButtons",
+    UserInfoVerifyDevice = "UIFeature.userInfoVerifyDevice",
+    UserInfoShareLinkToUserButton = "UIFeature.userInfoShareLinkToUserButton",
+    UserInfoRedactButton = "UIFeature.userInfoRedactButton",
+    RoomListExplorePublicRooms = "UIFeature.roomListExplorePublicRooms",
+    CreateRoomE2eeSection = "UIFeature.createRoomE2eeSection",
+    CreateRoomShowJoinRuleDropdown = "UIFeature.createRoomShowJoinRuleDropdown",
+    CreateRoomShowAdvancedSettings = "UIFeature.createRoomShowAdvancedSettings",
 }
 
 export enum UIComponent {

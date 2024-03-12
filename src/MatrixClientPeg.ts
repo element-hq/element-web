@@ -468,9 +468,9 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         //     opts.cryptoCallbacks!.getDehydrationKey = SecurityCustomisations.getDehydrationKey;
         // }
 
-        console.log("CryptoSetupExtensions: Executing getDehydrationKeyCallback...")
+        console.log("CryptoSetupExtensions: Executing getDehydrationKeyCallback...");
         const dehydrationKeyCallback = ModuleRunner.instance.extensions.cryptoSetup?.getDehydrationKeyCallback();
-        console.log("CryptoSetupExtensions: Executing getDehydrationKeyCallback...Done")
+        console.log("CryptoSetupExtensions: Executing getDehydrationKeyCallback...Done");
         if (dehydrationKeyCallback) {
             opts.cryptoCallbacks!.getDehydrationKey = dehydrationKeyCallback;
         }

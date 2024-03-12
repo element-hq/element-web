@@ -84,10 +84,12 @@ export const showToast = (kind: Kind): void => {
     //     return;
     // }
 
-    if (ModuleRunner.instance.extensions.cryptoSetup?.setupEncryptionNeeded({
+    if (
+        ModuleRunner.instance.extensions.cryptoSetup?.setupEncryptionNeeded({
             kind: kind as any,
             storeProvider: { getInstance: () => SetupEncryptionStore.sharedInstance() },
-        })) {
+        })
+    ) {
         return;
     }
 

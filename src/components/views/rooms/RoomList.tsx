@@ -31,7 +31,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import PosthogTrackers from "../../../PosthogTrackers";
 import SettingsStore from "../../../settings/SettingsStore";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
-import { UIComponent } from "../../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
@@ -323,7 +323,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                         )}
                     </>
                 )}
-                {showExploreRooms ? (
+                {SettingsStore.getValue(UIFeature.UserInfoRedactButton) && showExploreRooms ? (
                     <IconizedContextMenuOption
                         label={_t("action|explore_public_rooms")}
                         iconClassName="mx_RoomList_iconExplore"

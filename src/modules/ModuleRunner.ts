@@ -82,7 +82,6 @@ export class ModuleRunner {
         return merged;
     }
 
-
     /**
      * Ensure we register extensions provided by the modules
      */
