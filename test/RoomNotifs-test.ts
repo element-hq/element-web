@@ -24,6 +24,7 @@ import {
     EventType,
     MatrixEvent,
     PendingEventOrdering,
+    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
@@ -277,7 +278,7 @@ describe("RoomNotifs test", () => {
         });
 
         it("indicates the user has been invited to a channel", async () => {
-            room.updateMyMembership(Membership.Invite);
+            room.updateMyMembership(KnownMembership.Invite);
 
             const { level, symbol, count } = determineUnreadState(room);
 
@@ -293,10 +294,10 @@ describe("RoomNotifs test", () => {
             const roomMember = mkRoomMember(
                 room.roomId,
                 MatrixClientPeg.get()!.getSafeUserId(),
-                Membership.Leave,
+                KnownMembership.Leave,
                 true,
                 {
-                    membership: Membership.Knock,
+                    membership: KnownMembership.Knock,
                 },
             );
             jest.spyOn(room, "getMember").mockReturnValue(roomMember);

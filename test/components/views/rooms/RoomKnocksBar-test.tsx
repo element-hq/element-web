@@ -19,6 +19,7 @@ import {
     EventTimeline,
     EventType,
     JoinRule,
+    KnownMembership,
     MatrixError,
     MatrixEvent,
     Room,
@@ -112,24 +113,24 @@ describe("RoomKnocksBar", () => {
 
         bob.setMembershipEvent(
             new MatrixEvent({
-                content: { displayname: "Bob", membership: Membership.Knock },
+                content: { displayname: "Bob", membership: KnownMembership.Knock },
                 type: EventType.RoomMember,
             }),
         );
         jane.setMembershipEvent(
             new MatrixEvent({
-                content: { displayname: "Jane", membership: Membership.Knock },
+                content: { displayname: "Jane", membership: KnownMembership.Knock },
                 type: EventType.RoomMember,
             }),
         );
         john.setMembershipEvent(
             new MatrixEvent({
-                content: { displayname: "John", membership: Membership.Knock },
+                content: { displayname: "John", membership: KnownMembership.Knock },
                 type: EventType.RoomMember,
             }),
         );
         other.setMembershipEvent(
-            new MatrixEvent({ content: { membership: Membership.Knock }, type: EventType.RoomMember }),
+            new MatrixEvent({ content: { membership: KnownMembership.Knock }, type: EventType.RoomMember }),
         );
 
         beforeEach(async () => {
@@ -189,7 +190,7 @@ describe("RoomKnocksBar", () => {
                 it("renders a link to open the room settings people tab", () => {
                     bob.setMembershipEvent(
                         new MatrixEvent({
-                            content: { displayname: "Bob", membership: Membership.Knock, reason: "some reason" },
+                            content: { displayname: "Bob", membership: KnownMembership.Knock, reason: "some reason" },
                             type: EventType.RoomMember,
                         }),
                     );

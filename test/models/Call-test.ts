@@ -17,7 +17,15 @@ limitations under the License.
 import EventEmitter from "events";
 import { mocked } from "jest-mock";
 import { waitFor } from "@testing-library/react";
-import { RoomType, Room, RoomEvent, MatrixEvent, RoomStateEvent, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
+import {
+    RoomType,
+    Room,
+    RoomEvent,
+    MatrixEvent,
+    RoomStateEvent,
+    PendingEventOrdering,
+    KnownMembership,
+} from "matrix-js-sdk/src/matrix";
 import { Widget } from "matrix-widget-api";
 // eslint-disable-next-line no-restricted-imports
 import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
@@ -95,7 +103,7 @@ const setUpClientRoomAndStores = (): {
         }
     });
 
-    jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Join);
+    jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
 
     client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
     client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
@@ -380,7 +388,7 @@ describe("JitsiCall", () => {
         it("disconnects when we leave the room", async () => {
             await call.start();
             expect(call.connectionState).toBe(ConnectionState.Connected);
-            room.emit(RoomEvent.MyMembership, room, Membership.Leave);
+            room.emit(RoomEvent.MyMembership, room, KnownMembership.Leave);
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
         });
 
@@ -395,7 +403,7 @@ describe("JitsiCall", () => {
         it("remains connected if we stay in the room", async () => {
             await call.start();
             expect(call.connectionState).toBe(ConnectionState.Connected);
-            room.emit(RoomEvent.MyMembership, room, Membership.Join);
+            room.emit(RoomEvent.MyMembership, room, KnownMembership.Join);
             expect(call.connectionState).toBe(ConnectionState.Connected);
         });
 
@@ -911,14 +919,14 @@ describe("ElementCall", () => {
         it("disconnects when we leave the room", async () => {
             await callConnectProcedure(call);
             expect(call.connectionState).toBe(ConnectionState.Connected);
-            room.emit(RoomEvent.MyMembership, room, Membership.Leave);
+            room.emit(RoomEvent.MyMembership, room, KnownMembership.Leave);
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
         });
 
         it("remains connected if we stay in the room", async () => {
             await callConnectProcedure(call);
             expect(call.connectionState).toBe(ConnectionState.Connected);
-            room.emit(RoomEvent.MyMembership, room, Membership.Join);
+            room.emit(RoomEvent.MyMembership, room, KnownMembership.Join);
             expect(call.connectionState).toBe(ConnectionState.Connected);
         });
 

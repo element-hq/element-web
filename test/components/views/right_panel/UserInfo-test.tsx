@@ -28,6 +28,7 @@ import {
     CryptoApi,
     DeviceVerificationStatus,
     Device,
+    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
 import {
     Phase,
@@ -943,8 +944,8 @@ describe("<PowerLevelEditor />", () => {
 
 describe("<RoomKickButton />", () => {
     const defaultMember = new RoomMember(defaultRoomId, defaultUserId);
-    const memberWithInviteMembership = { ...defaultMember, membership: Membership.Invite };
-    const memberWithJoinMembership = { ...defaultMember, membership: Membership.Join };
+    const memberWithInviteMembership = { ...defaultMember, membership: KnownMembership.Invite };
+    const memberWithJoinMembership = { ...defaultMember, membership: KnownMembership.Join };
 
     let defaultProps: Parameters<typeof RoomKickButton>[0];
     beforeEach(() => {
@@ -1031,7 +1032,7 @@ describe("<RoomKickButton />", () => {
         // null vs their member followed by
         // my member vs their member
         const mockMyMember = { powerLevel: 1 };
-        const mockTheirMember = { membership: Membership.Invite, powerLevel: 0 };
+        const mockTheirMember = { membership: KnownMembership.Invite, powerLevel: 0 };
 
         const mockRoom = {
             getMember: jest
@@ -1052,7 +1053,7 @@ describe("<RoomKickButton />", () => {
 
 describe("<BanToggleButton />", () => {
     const defaultMember = new RoomMember(defaultRoomId, defaultUserId);
-    const memberWithBanMembership = { ...defaultMember, membership: Membership.Ban };
+    const memberWithBanMembership = { ...defaultMember, membership: KnownMembership.Ban };
     let defaultProps: Parameters<typeof BanToggleButton>[0];
     beforeEach(() => {
         defaultProps = {
@@ -1161,7 +1162,7 @@ describe("<BanToggleButton />", () => {
         // null vs their member followed by
         // my member vs their member
         const mockMyMember = { powerLevel: 1 };
-        const mockTheirMember = { membership: Membership.Ban, powerLevel: 0 };
+        const mockTheirMember = { membership: KnownMembership.Ban, powerLevel: 0 };
 
         const mockRoom = {
             getMember: jest
@@ -1182,7 +1183,7 @@ describe("<BanToggleButton />", () => {
 
 describe("<RoomAdminToolsContainer />", () => {
     const defaultMember = new RoomMember(defaultRoomId, defaultUserId);
-    defaultMember.membership = Membership.Invite;
+    defaultMember.membership = KnownMembership.Invite;
 
     let defaultProps: Parameters<typeof RoomAdminToolsContainer>[0];
     beforeEach(() => {
@@ -1248,7 +1249,7 @@ describe("<RoomAdminToolsContainer />", () => {
         const defaultMemberWithPowerLevelAndJoinMembership = {
             ...defaultMember,
             powerLevel: 0,
-            membership: Membership.Join,
+            membership: KnownMembership.Join,
         };
 
         renderComponent({
@@ -1270,7 +1271,7 @@ describe("<RoomAdminToolsContainer />", () => {
         const defaultMemberWithPowerLevelAndJoinMembership = {
             ...defaultMember,
             powerLevel: 0,
-            membership: Membership.Join,
+            membership: KnownMembership.Join,
         };
 
         renderComponent({

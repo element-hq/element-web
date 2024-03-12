@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { KnownMembership } from "matrix-js-sdk/src/matrix";
+
 import { test, expect } from "../../element-web-test";
 import { waitForRoom } from "../utils";
 
@@ -73,7 +75,7 @@ test.describe("Manage Knocks", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === Membership.Leave &&
+                    e.getContent()?.membership === KnownMembership.Leave &&
                     e.getContent()?.displayname === "Bob",
             );
         });
@@ -110,7 +112,7 @@ test.describe("Manage Knocks", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === Membership.Leave &&
+                    e.getContent()?.membership === KnownMembership.Leave &&
                     e.getContent()?.displayname === "Bob",
             );
         });

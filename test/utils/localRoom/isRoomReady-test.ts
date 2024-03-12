@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { EventType, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, KnownMembership, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../src/models/LocalRoom";
 import { DirectoryMember } from "../../../src/utils/direct-messages";
@@ -33,7 +33,7 @@ describe("isRoomReady", () => {
     beforeEach(() => {
         client = createTestClient();
         room1 = new Room("!room1:example.com", client, userId1);
-        room1.getMyMembership = () => Membership.Join;
+        room1.getMyMembership = () => KnownMembership.Join;
         localRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test", client, "@test:example.com");
     });
 
@@ -70,8 +70,8 @@ describe("isRoomReady", () => {
             describe("and all members have been invited or joined", () => {
                 beforeEach(() => {
                     room1.currentState.setStateEvents([
-                        makeMembershipEvent(room1.roomId, userId1, Membership.Join),
-                        makeMembershipEvent(room1.roomId, userId2, Membership.Invite),
+                        makeMembershipEvent(room1.roomId, userId1, KnownMembership.Join),
+                        makeMembershipEvent(room1.roomId, userId2, KnownMembership.Invite),
                     ]);
                 });
 

@@ -20,7 +20,7 @@ limitations under the License.
 import React, { ContextType, createRef, CSSProperties, MutableRefObject, ReactNode } from "react";
 import classNames from "classnames";
 import { IWidget, MatrixCapabilities } from "matrix-widget-api";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
@@ -220,7 +220,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private onMyMembership = (room: Room, membership: string): void => {
         if (
-            (membership === Membership.Leave || membership === Membership.Ban) &&
+            (membership === KnownMembership.Leave || membership === KnownMembership.Ban) &&
             room.roomId === this.props.room?.roomId
         ) {
             this.onUserLeftRoom();

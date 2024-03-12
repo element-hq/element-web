@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { createTestClient, makeMembershipEvent, mkThirdPartyInviteEvent } from "../../test-utils";
@@ -51,32 +51,32 @@ describe("findDMForUser", () => {
         mocked(getFunctionalMembers).mockReturnValue([botId]);
 
         room1 = new Room("!room1:example.com", mockClient, userId1);
-        room1.getMyMembership = () => Membership.Join;
+        room1.getMyMembership = () => KnownMembership.Join;
         room1.currentState.setStateEvents([
-            makeMembershipEvent(room1.roomId, userId1, Membership.Join),
-            makeMembershipEvent(room1.roomId, userId2, Membership.Join),
+            makeMembershipEvent(room1.roomId, userId1, KnownMembership.Join),
+            makeMembershipEvent(room1.roomId, userId2, KnownMembership.Join),
         ]);
 
         // this should not be a DM room because it is a local room
         room2 = new LocalRoom("!room2:example.com", mockClient, userId1);
-        room2.getMyMembership = () => Membership.Join;
+        room2.getMyMembership = () => KnownMembership.Join;
         room2.getLastActiveTimestamp = () => 100;
 
         room3 = new Room("!room3:example.com", mockClient, userId1);
-        room3.getMyMembership = () => Membership.Join;
+        room3.getMyMembership = () => KnownMembership.Join;
         room3.currentState.setStateEvents([
-            makeMembershipEvent(room3.roomId, userId1, Membership.Join),
-            makeMembershipEvent(room3.roomId, userId2, Membership.Join),
+            makeMembershipEvent(room3.roomId, userId1, KnownMembership.Join),
+            makeMembershipEvent(room3.roomId, userId2, KnownMembership.Join),
             // Adding the bot user here. Should be excluded when determining if the room is a DM.
-            makeMembershipEvent(room3.roomId, botId, Membership.Join),
+            makeMembershipEvent(room3.roomId, botId, KnownMembership.Join),
         ]);
 
         // this should not be a DM room because it has only one joined user
         room4 = new Room("!room4:example.com", mockClient, userId1);
-        room4.getMyMembership = () => Membership.Join;
+        room4.getMyMembership = () => KnownMembership.Join;
         room4.currentState.setStateEvents([
-            makeMembershipEvent(room4.roomId, userId1, Membership.Invite),
-            makeMembershipEvent(room4.roomId, userId2, Membership.Join),
+            makeMembershipEvent(room4.roomId, userId1, KnownMembership.Invite),
+            makeMembershipEvent(room4.roomId, userId2, KnownMembership.Join),
         ]);
 
         // this should not be a DM room because it has no users
@@ -85,17 +85,17 @@ describe("findDMForUser", () => {
 
         // room not correctly stored in userId → room map; should be found by the "all rooms" fallback
         room6 = new Room("!room6:example.com", mockClient, userId1);
-        room6.getMyMembership = () => Membership.Join;
+        room6.getMyMembership = () => KnownMembership.Join;
         room6.currentState.setStateEvents([
-            makeMembershipEvent(room6.roomId, userId1, Membership.Join),
-            makeMembershipEvent(room6.roomId, userId3, Membership.Join),
+            makeMembershipEvent(room6.roomId, userId1, KnownMembership.Join),
+            makeMembershipEvent(room6.roomId, userId3, KnownMembership.Join),
         ]);
 
         // room with pending third-party invite
         room7 = new Room("!room7:example.com", mockClient, userId1);
-        room7.getMyMembership = () => Membership.Join;
+        room7.getMyMembership = () => KnownMembership.Join;
         room7.currentState.setStateEvents([
-            makeMembershipEvent(room7.roomId, userId1, Membership.Join),
+            makeMembershipEvent(room7.roomId, userId1, KnownMembership.Join),
             mkThirdPartyInviteEvent(thirdPartyId, "third-party", room7.roomId),
         ]);
 

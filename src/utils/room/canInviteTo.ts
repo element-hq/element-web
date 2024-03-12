@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { JoinRule, Room } from "matrix-js-sdk/src/matrix";
+import { JoinRule, KnownMembership, Room } from "matrix-js-sdk/src/matrix";
 
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../settings/UIFeature";
@@ -29,5 +29,5 @@ export function canInviteTo(room: Room): boolean {
     const canInvite =
         !!room.canInvite(client.getSafeUserId()) || !!(room.isSpaceRoom() && room.getJoinRule() === JoinRule.Public);
 
-    return canInvite && room.getMyMembership() === Membership.Join && shouldShowComponent(UIComponent.InviteUsers);
+    return canInvite && room.getMyMembership() === KnownMembership.Join && shouldShowComponent(UIComponent.InviteUsers);
 }

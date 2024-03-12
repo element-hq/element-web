@@ -26,6 +26,7 @@ import {
     EventStatus,
     PendingEventOrdering,
     ReceiptType,
+    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
@@ -140,7 +141,7 @@ describe("UnreadNotificationBadge", () => {
     });
 
     it("adds a warning for invites", () => {
-        room.updateMyMembership(Membership.Invite);
+        room.updateMyMembership(KnownMembership.Invite);
         render(getComponent());
         expect(screen.queryByText("!")).not.toBeNull();
     });

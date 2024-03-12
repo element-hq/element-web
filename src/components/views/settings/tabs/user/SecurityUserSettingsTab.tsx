@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { ReactNode } from "react";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
@@ -37,7 +37,7 @@ import InlineSpinner from "../../../elements/InlineSpinner";
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 import { showDialog as showAnalyticsLearnMoreDialog } from "../../../dialogs/AnalyticsLearnMoreDialog";
 import { privateShouldBeEncrypted } from "../../../../../utils/rooms";
-import type { IServerVersions } from "matrix-js-sdk/src/matrix";
+import type { IServerVersions, Membership } from "matrix-js-sdk/src/matrix";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
@@ -126,7 +126,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             return;
         }
 
-        if (membership === Membership.Invite) {
+        if (membership === KnownMembership.Invite) {
             this.addInvitedRoom(room);
         } else if (this.state.invitedRoomIds.has(room.roomId)) {
             // The user isn't invited anymore
@@ -167,7 +167,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         return MatrixClientPeg.safeGet()
             .getRooms()
             .filter((r) => {
-                return r.hasMembershipState(MatrixClientPeg.safeGet().getUserId()!, Membership.Invite);
+                return r.hasMembershipState(MatrixClientPeg.safeGet().getUserId()!, KnownMembership.Invite);
             });
     };
 

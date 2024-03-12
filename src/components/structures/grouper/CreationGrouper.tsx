@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { EventType, M_BEACON_INFO, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, KnownMembership, M_BEACON_INFO, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { BaseGrouper } from "./BaseGrouper";
 import MessagePanel, { WrappedEvent } from "../MessagePanel";
@@ -48,7 +48,8 @@ export class CreationGrouper extends BaseGrouper {
         const eventType = event.getType();
         if (
             eventType === EventType.RoomMember &&
-            (event.getStateKey() !== createEvent.getSender() || event.getContent()["membership"] !== Membership.Join)
+            (event.getStateKey() !== createEvent.getSender() ||
+                event.getContent()["membership"] !== KnownMembership.Join)
         ) {
             return false;
         }

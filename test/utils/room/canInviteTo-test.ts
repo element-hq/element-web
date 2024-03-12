@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { JoinRule, Room } from "matrix-js-sdk/src/matrix";
+import { JoinRule, KnownMembership, Room } from "matrix-js-sdk/src/matrix";
 
 import { shouldShowComponent } from "../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../src/settings/UIFeature";
@@ -39,7 +39,7 @@ describe("canInviteTo()", () => {
             ...mockClientMethodsUser(userId),
         });
         const room = new Room(roomId, client, userId);
-        jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Join);
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
         jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
         jest.spyOn(room, "canInvite").mockReturnValue(true);
         return room;
@@ -54,7 +54,7 @@ describe("canInviteTo()", () => {
 
         it("should return false when current user membership is not joined", () => {
             const room = makeRoom();
-            jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Invite);
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Invite);
 
             expect(canInviteTo(room)).toEqual(false);
         });

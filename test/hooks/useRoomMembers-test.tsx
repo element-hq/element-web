@@ -16,7 +16,7 @@ limitations under the License.
 
 import { waitFor } from "@testing-library/react";
 import { renderHook, act } from "@testing-library/react-hooks/dom";
-import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { stubClient } from "../test-utils";
@@ -49,7 +49,7 @@ describe("useRoomMembers", () => {
                     state_key: "!user:server",
                     room_id: room.roomId,
                     content: {
-                        membership: Membership.Join,
+                        membership: KnownMembership.Join,
                     },
                 }),
             ]);
@@ -85,7 +85,7 @@ describe("useRoomMemberCount", () => {
                     state_key: "!user:server",
                     room_id: room.roomId,
                     content: {
-                        membership: Membership.Join,
+                        membership: KnownMembership.Join,
                     },
                 }),
             ]);
@@ -109,14 +109,14 @@ describe("useMyRoomMembership", () => {
     });
 
     it("should update on RoomState.Members events", async () => {
-        room.updateMyMembership(Membership.Join);
+        room.updateMyMembership(KnownMembership.Join);
         const { result } = render(room);
 
-        expect(result.current).toBe(Membership.Join);
+        expect(result.current).toBe(KnownMembership.Join);
 
         act(() => {
-            room.updateMyMembership(Membership.Leave);
+            room.updateMyMembership(KnownMembership.Leave);
         });
-        await waitFor(() => expect(result.current).toBe(Membership.Leave));
+        await waitFor(() => expect(result.current).toBe(KnownMembership.Leave));
     });
 });

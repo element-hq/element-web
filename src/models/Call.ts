@@ -23,6 +23,8 @@ import {
     IMyDevice,
     Room,
     RoomMember,
+    Membership,
+    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { randomString } from "matrix-js-sdk/src/randomstring";
@@ -308,7 +310,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     }
 
     private onMyMembership = async (_room: Room, membership: Membership): Promise<void> => {
-        if (membership !== Membership.Join) this.setDisconnected();
+        if (membership !== KnownMembership.Join) this.setDisconnected();
     };
 
     private onStopMessaging = (uid: string): void => {
@@ -386,7 +388,7 @@ export class JitsiCall extends Call {
                 devices = devices.filter((d) => d !== this.client.getDeviceId());
             }
             // Must have a connected device and still be joined to the room
-            if (devices.length > 0 && member?.membership === Membership.Join) {
+            if (devices.length > 0 && member?.membership === KnownMembership.Join) {
                 participants.set(member, new Set(devices));
                 if (expiresAt < allExpireAt) allExpireAt = expiresAt;
             }
@@ -416,7 +418,7 @@ export class JitsiCall extends Call {
      *     returns null, the update is skipped.
      */
     private async updateDevices(fn: (devices: string[]) => string[] | null): Promise<void> {
-        if (this.room.getMyMembership() !== Membership.Join) return;
+        if (this.room.getMyMembership() !== KnownMembership.Join) return;
 
         const event = this.room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE, this.client.getUserId()!);
         const content = event?.getContent<JitsiCallMemberContent>();

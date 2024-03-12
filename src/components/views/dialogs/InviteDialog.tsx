@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { createRef, ReactNode, SyntheticEvent } from "react";
 import classNames from "classnames";
-import { RoomMember, Room, MatrixError, EventType } from "matrix-js-sdk/src/matrix";
+import { RoomMember, Room, MatrixError, EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqBy } from "lodash";
@@ -372,10 +372,10 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             const room = MatrixClientPeg.safeGet().getRoom(props.roomId);
             const isFederated = room?.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent()["m.federate"];
             if (!room) throw new Error("Room ID given to InviteDialog does not look like a room");
-            room.getMembersWithMembership(Membership.Invite).forEach((m) => excludedIds.add(m.userId));
-            room.getMembersWithMembership(Membership.Join).forEach((m) => excludedIds.add(m.userId));
+            room.getMembersWithMembership(KnownMembership.Invite).forEach((m) => excludedIds.add(m.userId));
+            room.getMembersWithMembership(KnownMembership.Join).forEach((m) => excludedIds.add(m.userId));
             // add banned users, so we don't try to invite them
-            room.getMembersWithMembership(Membership.Ban).forEach((m) => excludedIds.add(m.userId));
+            room.getMembersWithMembership(KnownMembership.Ban).forEach((m) => excludedIds.add(m.userId));
             if (isFederated === false) {
                 // exclude users from external servers
                 const homeserver = props.roomId.split(":")[1];

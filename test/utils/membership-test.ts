@@ -14,7 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, MatrixEvent, Room, RoomMember, RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import {
+    KnownMembership,
+    MatrixClient,
+    MatrixEvent,
+    Room,
+    RoomMember,
+    RoomState,
+    RoomStateEvent,
+} from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import { isKnockDenied, waitForMember } from "../../src/utils/membership";
@@ -31,16 +39,18 @@ describe("isKnockDenied", () => {
     });
 
     it("checks that the user knock has been denied", () => {
-        const roomMember = mkRoomMember(room.roomId, userId, Membership.Leave, true, { membership: Membership.Knock });
+        const roomMember = mkRoomMember(room.roomId, userId, KnownMembership.Leave, true, {
+            membership: KnownMembership.Knock,
+        });
         jest.spyOn(room, "getMember").mockReturnValue(roomMember);
         expect(isKnockDenied(room)).toBe(true);
     });
 
     it.each([
-        { membership: Membership.Leave, isKicked: false, prevMembership: Membership.Invite },
-        { membership: Membership.Leave, isKicked: true, prevMembership: Membership.Invite },
-        { membership: Membership.Leave, isKicked: false, prevMembership: Membership.Join },
-        { membership: Membership.Leave, isKicked: true, prevMembership: Membership.Join },
+        { membership: KnownMembership.Leave, isKicked: false, prevMembership: KnownMembership.Invite },
+        { membership: KnownMembership.Leave, isKicked: true, prevMembership: KnownMembership.Invite },
+        { membership: KnownMembership.Leave, isKicked: false, prevMembership: KnownMembership.Join },
+        { membership: KnownMembership.Leave, isKicked: true, prevMembership: KnownMembership.Join },
     ])("checks that the user knock has been not denied", ({ membership, isKicked, prevMembership }) => {
         const roomMember = mkRoomMember(room.roomId, userId, membership, isKicked, { membership: prevMembership });
         jest.spyOn(room, "getMember").mockReturnValue(roomMember);

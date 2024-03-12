@@ -24,6 +24,7 @@ import {
     MatrixEvent,
     RoomStateEvent,
     Thread,
+    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
 import { Widget } from "matrix-widget-api";
 
@@ -187,7 +188,7 @@ describe("RoomTile", () => {
                 return name === "feature_ask_to_join";
             });
             mocked(shouldShowComponent).mockReturnValue(true);
-            jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Knock);
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Knock);
             const { container } = renderRoomTile();
             expect(container.querySelector(".mx_RoomTile_sticky")).toBeInTheDocument();
             expect(screen.queryByRole("button", { name: "Room options" })).not.toBeInTheDocument();
@@ -201,10 +202,10 @@ describe("RoomTile", () => {
             const roomMember = mkRoomMember(
                 room.roomId,
                 MatrixClientPeg.get()!.getSafeUserId(),
-                Membership.Leave,
+                KnownMembership.Leave,
                 true,
                 {
-                    membership: Membership.Knock,
+                    membership: KnownMembership.Knock,
                 },
             );
             jest.spyOn(room, "getMember").mockReturnValue(roomMember);

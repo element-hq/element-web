@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { uniq } from "lodash";
-import { Room, MatrixEvent, EventType, ClientEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Room, MatrixEvent, EventType, ClientEvent, MatrixClient, KnownMembership } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
 
@@ -172,7 +172,7 @@ export default class DMRoomMap {
 
         const joinedRooms = commonRooms
             .map((r) => this.matrixClient.getRoom(r))
-            .filter((r) => r && r.getMyMembership() === Membership.Join);
+            .filter((r) => r && r.getMyMembership() === KnownMembership.Join);
 
         return joinedRooms[0];
     }

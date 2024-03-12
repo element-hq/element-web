@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import React, { ComponentProps, ReactNode } from "react";
-import { MatrixEvent, RoomMember, EventType } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, RoomMember, EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { formatList } from "../../../utils/FormattingUtils";
@@ -416,12 +416,12 @@ export default class EventListSummary extends React.Component<
 
             case EventType.RoomMember:
                 switch (e.mxEvent.getContent().membership) {
-                    case Membership.Invite:
+                    case KnownMembership.Invite:
                         return TransitionType.Invited;
-                    case Membership.Ban:
+                    case KnownMembership.Ban:
                         return TransitionType.Banned;
-                    case Membership.Join:
-                        if (e.mxEvent.getPrevContent().membership === Membership.Join) {
+                    case KnownMembership.Join:
+                        if (e.mxEvent.getPrevContent().membership === KnownMembership.Join) {
                             if (e.mxEvent.getContent().displayname !== e.mxEvent.getPrevContent().displayname) {
                                 return TransitionType.ChangedName;
                             } else if (e.mxEvent.getContent().avatar_url !== e.mxEvent.getPrevContent().avatar_url) {
@@ -431,17 +431,17 @@ export default class EventListSummary extends React.Component<
                         } else {
                             return TransitionType.Joined;
                         }
-                    case Membership.Leave:
+                    case KnownMembership.Leave:
                         if (e.mxEvent.getSender() === e.mxEvent.getStateKey()) {
-                            if (e.mxEvent.getPrevContent().membership === Membership.Invite) {
+                            if (e.mxEvent.getPrevContent().membership === KnownMembership.Invite) {
                                 return TransitionType.InviteReject;
                             }
                             return TransitionType.Left;
                         }
                         switch (e.mxEvent.getPrevContent().membership) {
-                            case Membership.Invite:
+                            case KnownMembership.Invite:
                                 return TransitionType.InviteWithdrawal;
-                            case Membership.Ban:
+                            case KnownMembership.Ban:
                                 return TransitionType.Unbanned;
                             // sender is not target and made the target leave, if not from invite/ban then this is a kick
                             default:

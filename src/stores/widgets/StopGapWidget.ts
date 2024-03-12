@@ -14,7 +14,14 @@
  * limitations under the License.
  */
 
-import { Room, MatrixEvent, MatrixEventEvent, MatrixClient, ClientEvent } from "matrix-js-sdk/src/matrix";
+import {
+    Room,
+    MatrixEvent,
+    MatrixEventEvent,
+    MatrixClient,
+    ClientEvent,
+    KnownMembership,
+} from "matrix-js-sdk/src/matrix";
 import {
     ClientWidgetApi,
     IModalWidgetOpenRequest,
@@ -550,7 +557,7 @@ export class StopGapWidget extends EventEmitter {
         const evId = ev.getId();
         if (evRoomId && evId) {
             const room = this.client.getRoom(evRoomId);
-            if (room && room.getMyMembership() === Membership.Join && !isRelationToUnknown) {
+            if (room && room.getMyMembership() === KnownMembership.Join && !isRelationToUnknown) {
                 this.readUpToMap[evRoomId] = evId;
             }
         }

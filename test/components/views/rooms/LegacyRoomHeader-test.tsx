@@ -24,6 +24,7 @@ import {
     RoomStateEvent,
     PendingEventOrdering,
     ISearchResults,
+    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
@@ -906,7 +907,7 @@ function mkJoinEvent(roomId: string, userId: string) {
         room: roomId,
         user: userId,
         content: {
-            membership: Membership.Join,
+            membership: KnownMembership.Join,
             avatar_url: "mxc://example.org/" + userId,
         },
     });

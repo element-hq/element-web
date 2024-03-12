@@ -18,7 +18,14 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { User, IContent, Direction, ContentHelpers, MRoomTopicEventContent } from "matrix-js-sdk/src/matrix";
+import {
+    User,
+    IContent,
+    Direction,
+    ContentHelpers,
+    MRoomTopicEventContent,
+    KnownMembership,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import dis from "./dispatcher/dispatcher";
@@ -241,7 +248,7 @@ export const Commands = [
             if (args) {
                 const ev = cli.getRoom(roomId)?.currentState.getStateEvents("m.room.member", cli.getSafeUserId());
                 const content = {
-                    ...(ev ? ev.getContent() : { membership: Membership.Join }),
+                    ...(ev ? ev.getContent() : { membership: KnownMembership.Join }),
                     displayname: args,
                 };
                 return success(cli.sendStateEvent(roomId, "m.room.member", content, cli.getSafeUserId()));
@@ -291,7 +298,7 @@ export const Commands = [
                     if (!url) return;
                     const ev = room?.currentState.getStateEvents("m.room.member", userId);
                     const content = {
-                        ...(ev ? ev.getContent() : { membership: Membership.Join }),
+                        ...(ev ? ev.getContent() : { membership: KnownMembership.Join }),
                         avatar_url: url,
                     };
                     return cli.sendStateEvent(roomId, "m.room.member", content, userId);

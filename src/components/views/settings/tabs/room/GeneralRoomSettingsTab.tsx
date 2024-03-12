@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ContextType } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
@@ -73,7 +73,7 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
         ) : null;
 
         let leaveSection;
-        if (room.getMyMembership() === Membership.Join) {
+        if (room.getMyMembership() === KnownMembership.Join) {
             leaveSection = (
                 <SettingsSubsection heading={_t("action|leave_room")}>
                     <AccessibleButton kind="danger" onClick={this.onLeaveClick}>

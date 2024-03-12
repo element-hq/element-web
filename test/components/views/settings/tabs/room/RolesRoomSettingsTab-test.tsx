@@ -16,7 +16,15 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render, RenderResult, screen, waitFor } from "@testing-library/react";
-import { MatrixClient, EventType, MatrixEvent, Room, RoomMember, ISendEventResponse } from "matrix-js-sdk/src/matrix";
+import {
+    MatrixClient,
+    EventType,
+    MatrixEvent,
+    Room,
+    RoomMember,
+    ISendEventResponse,
+    KnownMembership,
+} from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import { defer } from "matrix-js-sdk/src/utils";
 
@@ -197,7 +205,7 @@ describe("RolesRoomSettingsTab", () => {
                 new MatrixEvent({
                     type: EventType.RoomMember,
                     content: {
-                        membership: Membership.Ban,
+                        membership: KnownMembership.Ban,
                         reason: "just testing",
                     },
                     sender: userId,
@@ -218,7 +226,7 @@ describe("RolesRoomSettingsTab", () => {
                 new MatrixEvent({
                     type: EventType.RoomMember,
                     content: {
-                        membership: Membership.Ban,
+                        membership: KnownMembership.Ban,
                         reason: "just testing",
                     },
                     sender: userId,

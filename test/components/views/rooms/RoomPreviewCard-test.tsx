@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { mocked, Mocked } from "jest-mock";
 import { render, screen, act } from "@testing-library/react";
-import { PendingEventOrdering, Room, RoomStateEvent, RoomType } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, PendingEventOrdering, Room, RoomStateEvent, RoomType } from "matrix-js-sdk/src/matrix";
 
 import type { MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
 import { stubClient, wrapInMatrixClientContext, mkRoomMember } from "../../../test-utils";
@@ -68,7 +68,7 @@ describe("RoomPreviewCard", () => {
 
     it("shows a beta pill on Jitsi video room invites", async () => {
         jest.spyOn(room, "getType").mockReturnValue(RoomType.ElementVideo);
-        jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Invite);
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Invite);
         enabledFeatures = ["feature_video_rooms"];
 
         await renderPreview();
@@ -77,7 +77,7 @@ describe("RoomPreviewCard", () => {
 
     it("shows a beta pill on Element video room invites", async () => {
         jest.spyOn(room, "getType").mockReturnValue(RoomType.UnstableCall);
-        jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Invite);
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Invite);
         enabledFeatures = ["feature_video_rooms", "feature_element_call_video_rooms"];
 
         await renderPreview();
@@ -85,7 +85,7 @@ describe("RoomPreviewCard", () => {
     });
 
     it("doesn't show a beta pill on normal invites", async () => {
-        jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Invite);
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Invite);
 
         await renderPreview();
         expect(screen.queryByRole("button", { name: /beta/i })).toBeNull();
@@ -93,7 +93,7 @@ describe("RoomPreviewCard", () => {
 
     it("shows instructions on Jitsi video rooms invites if video rooms are disabled", async () => {
         jest.spyOn(room, "getType").mockReturnValue(RoomType.ElementVideo);
-        jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Invite);
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Invite);
 
         await renderPreview();
         screen.getByText(/enable video rooms in labs/i);
@@ -101,7 +101,7 @@ describe("RoomPreviewCard", () => {
 
     it("shows instructions on Element video rooms invites if video rooms are disabled", async () => {
         jest.spyOn(room, "getType").mockReturnValue(RoomType.UnstableCall);
-        jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Invite);
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Invite);
         enabledFeatures = ["feature_element_call_video_rooms"];
 
         await renderPreview();

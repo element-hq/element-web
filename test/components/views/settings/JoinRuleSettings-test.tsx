@@ -27,6 +27,7 @@ import {
     RoomMember,
     MatrixError,
     Visibility,
+    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
 import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 
@@ -177,7 +178,7 @@ describe("<JoinRuleSettings />", () => {
                 const memberBob = new RoomMember(roomId, "@bob:server.org");
                 const memberCharlie = new RoomMember(roomId, "@charlie:server.org");
                 jest.spyOn(room, "getMembersWithMembership").mockImplementation((membership) =>
-                    membership === Membership.Join ? [memberAlice, memberBob] : [memberCharlie],
+                    membership === KnownMembership.Join ? [memberAlice, memberBob] : [memberCharlie],
                 );
                 const upgradedRoom = new Room(newRoomId, client, userId);
                 setRoomStateEvents(upgradedRoom, preferredRoomVersion);

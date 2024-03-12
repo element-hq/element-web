@@ -18,6 +18,7 @@ import {
     EventType,
     HistoryVisibility,
     JoinRule,
+    KnownMembership,
     MatrixClient,
     MatrixEvent,
     Room,
@@ -504,12 +505,12 @@ describe("TextForEvent", () => {
                         type: "m.room.member",
                         sender: "@a:foo",
                         content: {
-                            membership: Membership.Join,
+                            membership: KnownMembership.Join,
                             avatar_url: "b",
                             displayname: "Bob",
                         },
                         prev_content: {
-                            membership: Membership.Join,
+                            membership: KnownMembership.Join,
                             avatar_url: "a",
                             displayname: "Andy",
                         },

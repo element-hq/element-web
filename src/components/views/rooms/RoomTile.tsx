@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React, { createRef } from "react";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import type { Call } from "../../../models/Call";
@@ -124,7 +124,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
     private get showContextMenu(): boolean {
         return (
             this.props.tag !== DefaultTagID.Invite &&
-            this.props.room.getMyMembership() !== Membership.Knock &&
+            this.props.room.getMyMembership() !== KnownMembership.Knock &&
             !isKnockDenied(this.props.room) &&
             shouldShowComponent(UIComponent.RoomOptionsMenu)
         );
@@ -387,7 +387,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
             mx_RoomTile: true,
             mx_RoomTile_sticky:
                 SettingsStore.getValue("feature_ask_to_join") &&
-                (this.props.room.getMyMembership() === Membership.Knock || isKnockDenied(this.props.room)),
+                (this.props.room.getMyMembership() === KnownMembership.Knock || isKnockDenied(this.props.room)),
             mx_RoomTile_selected: this.state.selected,
             mx_RoomTile_hasMenuOpen: !!(this.state.generalMenuPosition || this.state.notificationsMenuPosition),
             mx_RoomTile_minimized: this.props.isMinimized,

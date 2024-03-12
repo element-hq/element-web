@@ -19,7 +19,7 @@ limitations under the License.
 import { render, screen } from "@testing-library/react";
 import React, { ComponentProps } from "react";
 import { mocked } from "jest-mock";
-import { MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import RoomContextMenu from "../../../../src/components/views/context_menus/RoomContextMenu";
@@ -106,7 +106,7 @@ describe("RoomContextMenu", () => {
     it("should render notification option for joined rooms", () => {
         const chamber = EchoChamber.forRoom(room);
         chamber.notificationVolume = RoomNotifState.Mute;
-        jest.spyOn(room, "getMyMembership").mockReturnValue(Membership.Join);
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
         renderComponent();
 
         expect(

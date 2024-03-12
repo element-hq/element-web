@@ -22,6 +22,7 @@ import {
     Room,
     EventTimelineSet,
     Thread,
+    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
 
 import BaseCard from "./BaseCard";
@@ -217,7 +218,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         const isUploading = ContentMessages.sharedInstance().getCurrentUploads(this.props.composerRelation).length > 0;
 
         const myMembership = this.props.room.getMyMembership();
-        const showComposer = myMembership === Membership.Join;
+        const showComposer = myMembership === KnownMembership.Join;
 
         return (
             <RoomContext.Provider

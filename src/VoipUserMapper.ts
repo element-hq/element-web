@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room, EventType } from "matrix-js-sdk/src/matrix";
+import { Room, EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { ensureVirtualRoomExists } from "./createRoom";
@@ -95,7 +95,7 @@ export default class VoipUserMapper {
         if (!virtualRoomEvent || !virtualRoomEvent.getContent()) return null;
         const nativeRoomID = virtualRoomEvent.getContent()["native_room"];
         const nativeRoom = cli.getRoom(nativeRoomID);
-        if (!nativeRoom || nativeRoom.getMyMembership() !== Membership.Join) return null;
+        if (!nativeRoom || nativeRoom.getMyMembership() !== KnownMembership.Join) return null;
 
         return nativeRoomID;
     }

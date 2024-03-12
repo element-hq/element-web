@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { FC, useContext, useState } from "react";
-import { Room, JoinRule } from "matrix-js-sdk/src/matrix";
+import { Room, JoinRule, KnownMembership } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -73,7 +73,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
 
     let inviterSection: JSX.Element | null = null;
     let joinButtons: JSX.Element;
-    if (myMembership === Membership.Join) {
+    if (myMembership === KnownMembership.Join) {
         joinButtons = (
             <AccessibleButton
                 kind="danger_outline"
@@ -87,7 +87,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
                 {_t("action|leave")}
             </AccessibleButton>
         );
-    } else if (myMembership === Membership.Invite) {
+    } else if (myMembership === KnownMembership.Invite) {
         const inviteSender = room.getMember(cli.getUserId()!)?.events.member?.getSender();
 
         if (inviteSender) {
@@ -178,7 +178,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
         });
     } else if (isVideoRoom && !videoRoomsEnabled) {
         notice =
-            myMembership === Membership.Join
+            myMembership === KnownMembership.Join
                 ? _t("room|view_failed_enable_video_rooms")
                 : _t("room|join_failed_enable_video_rooms");
 

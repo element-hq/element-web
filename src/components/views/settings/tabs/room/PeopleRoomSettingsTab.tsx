@@ -14,7 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventTimeline, MatrixError, Room, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import {
+    EventTimeline,
+    KnownMembership,
+    MatrixError,
+    Room,
+    RoomMember,
+    RoomStateEvent,
+} from "matrix-js-sdk/src/matrix";
 import React, { useCallback, useState, VFC } from "react";
 
 import { Icon as CheckIcon } from "../../../../../../res/img/feather-customised/check.svg";
@@ -145,7 +152,7 @@ export const PeopleRoomSettingsTab: VFC<{ room: Room }> = ({ room }) => {
     const knockMembers = useTypedEventEmitterState(
         room,
         RoomStateEvent.Update,
-        useCallback(() => room.getMembersWithMembership(Membership.Knock), [room]),
+        useCallback(() => room.getMembersWithMembership(KnownMembership.Knock), [room]),
     );
 
     return (

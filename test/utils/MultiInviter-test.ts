@@ -15,7 +15,15 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { EventType, MatrixClient, MatrixError, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import {
+    EventType,
+    KnownMembership,
+    MatrixClient,
+    MatrixError,
+    MatrixEvent,
+    Room,
+    RoomMember,
+} from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import Modal, { ComponentType, ComponentProps } from "../../src/Modal";
@@ -168,10 +176,10 @@ describe("MultiInviter", () => {
             const room = new Room(ROOMID, client, client.getSafeUserId());
             mocked(client.getRoom).mockReturnValue(room);
             const ourMember = new RoomMember(ROOMID, client.getSafeUserId());
-            ourMember.membership = Membership.Join;
+            ourMember.membership = KnownMembership.Join;
             ourMember.powerLevel = 100;
             const member = new RoomMember(ROOMID, MXID1);
-            member.membership = Membership.Ban;
+            member.membership = KnownMembership.Ban;
             member.powerLevel = 0;
             room.getMember = (userId: string) => {
                 if (userId === client.getSafeUserId()) return ourMember;

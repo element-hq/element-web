@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { groupBy, mapValues, maxBy, minBy, sumBy, takeRight } from "lodash";
-import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { Member } from "./direct-messages";
 import DMRoomMap from "./DMRoomMap";
@@ -52,7 +52,7 @@ function joinedRooms(cli: MatrixClient): Room[] {
     return (
         cli
             .getRooms()
-            .filter((r) => r.getMyMembership() === Membership.Join)
+            .filter((r) => r.getMyMembership() === KnownMembership.Join)
             // Skip low priority rooms and DMs
             .filter((r) => !DMRoomMap.shared().getUserIdForRoomId(r.roomId))
             .filter((r) => !Object.keys(r.tags).includes("m.lowpriority"))

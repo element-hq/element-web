@@ -23,6 +23,7 @@ import {
     RoomMember,
     RelationType,
     EventType,
+    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
@@ -201,8 +202,8 @@ describe("export", function () {
                         getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
                     } as unknown as RoomMember,
                     ts: ts0 + i * 1000,
-                    mship: Membership.Join,
-                    prevMship: Membership.Join,
+                    mship: KnownMembership.Join,
+                    prevMship: KnownMembership.Join,
                     name: "A user",
                 }),
             );

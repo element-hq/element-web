@@ -24,6 +24,7 @@ import {
     RoomMember,
     ContentHelpers,
     M_BEACON,
+    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Mocked } from "jest-mock";
@@ -556,7 +557,7 @@ describe("OwnBeaconStore", () => {
 
         it("destroys and removes beacons when current user leaves room", async () => {
             // alice leaves room1
-            const membershipEvent = makeMembershipEvent(room1Id, aliceId, Membership.Leave);
+            const membershipEvent = makeMembershipEvent(room1Id, aliceId, KnownMembership.Leave);
             const member = new RoomMember(room1Id, aliceId);
             member.setMembershipEvent(membershipEvent);
 

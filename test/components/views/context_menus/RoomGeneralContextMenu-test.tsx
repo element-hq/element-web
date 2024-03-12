@@ -16,7 +16,7 @@ limitations under the License.
 
 import { fireEvent, getByLabelText, render, screen } from "@testing-library/react";
 import { mocked } from "jest-mock";
-import { ReceiptType, MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { ReceiptType, MatrixClient, PendingEventOrdering, Room, KnownMembership } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import userEvent from "@testing-library/user-event";
 
@@ -105,7 +105,7 @@ describe("RoomGeneralContextMenu", () => {
     });
 
     it("does not render invite menu item when UIComponent customisations disable room invite", () => {
-        room.updateMyMembership(Membership.Join);
+        room.updateMyMembership(KnownMembership.Join);
         jest.spyOn(room, "canInvite").mockReturnValue(true);
         mocked(shouldShowComponent).mockReturnValue(false);
 
@@ -116,7 +116,7 @@ describe("RoomGeneralContextMenu", () => {
     });
 
     it("renders invite menu item when UIComponent customisations enables room invite", () => {
-        room.updateMyMembership(Membership.Join);
+        room.updateMyMembership(KnownMembership.Join);
         jest.spyOn(room, "canInvite").mockReturnValue(true);
         mocked(shouldShowComponent).mockReturnValue(true);
 

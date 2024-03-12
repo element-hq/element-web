@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { FC, HTMLAttributes, useContext } from "react";
-import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { sortBy } from "lodash";
 
 import { _t } from "../../../languageHandler";
@@ -38,7 +38,7 @@ interface IProps extends HTMLAttributes<HTMLSpanElement> {
 
 const RoomFacePile: FC<IProps> = ({ room, onlyKnownUsers = true, numShown = DEFAULT_NUM_FACES, ...props }) => {
     const cli = useContext(MatrixClientContext);
-    const isJoined = room.getMyMembership() === Membership.Join;
+    const isJoined = room.getMyMembership() === KnownMembership.Join;
     let members = useRoomMembers(room);
     const count = members.length;
 

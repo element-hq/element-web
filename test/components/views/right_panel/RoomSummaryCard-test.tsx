@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
-import { EventType, MatrixEvent, Room, MatrixClient, JoinRule } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, Room, MatrixClient, JoinRule, KnownMembership } from "matrix-js-sdk/src/matrix";
 import { mocked, MockedObject } from "jest-mock";
 import { TooltipProvider } from "@vector-im/compound-web";
 
@@ -86,7 +86,7 @@ describe("<RoomSummaryCard />", () => {
             state_key: "",
         });
         room.currentState.setStateEvents([roomCreateEvent]);
-        room.updateMyMembership(Membership.Join);
+        room.updateMyMembership(KnownMembership.Join);
 
         jest.spyOn(Modal, "createDialog");
         jest.spyOn(RightPanelStore.instance, "pushCard");

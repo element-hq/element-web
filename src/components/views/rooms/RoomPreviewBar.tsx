@@ -23,6 +23,7 @@ import {
     IJoinRuleEventContent,
     JoinRule,
     MatrixError,
+    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { RoomPreviewOpts, RoomViewLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
@@ -192,13 +193,13 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         if (myMember) {
             const previousMembership = myMember.events.member?.getPrevContent().membership;
             if (myMember.isKicked()) {
-                if (previousMembership === Membership.Knock) {
+                if (previousMembership === KnownMembership.Knock) {
                     return MessageCase.RequestDenied;
                 } else if (this.props.promptAskToJoin) {
                     return MessageCase.PromptAskToJoin;
                 }
                 return MessageCase.Kicked;
-            } else if (myMember.membership === Membership.Ban) {
+            } else if (myMember.membership === KnownMembership.Ban) {
                 return MessageCase.Banned;
             }
         }
@@ -284,7 +285,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             return false;
         }
         const memberContent = myMember.events.member?.getContent();
-        return memberContent?.membership === Membership.Invite && memberContent.is_direct;
+        return memberContent?.membership === KnownMembership.Invite && memberContent.is_direct;
     }
 
     private makeScreenAfterLogin(): { screen: string; params: Record<string, any> } {

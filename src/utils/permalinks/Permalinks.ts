@@ -16,7 +16,7 @@ limitations under the License.
 
 import isIp from "is-ip";
 import * as utils from "matrix-js-sdk/src/utils";
-import { Room, MatrixClient, RoomStateEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { Room, MatrixClient, RoomStateEvent, EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import MatrixToPermalinkConstructor, {
@@ -178,7 +178,7 @@ export class RoomPermalinkCreator {
                     const entries = Object.entries(users);
                     const allowedEntries = entries.filter(([userId]) => {
                         const member = this.room?.getMember(userId);
-                        if (!member || member.membership !== Membership.Join) {
+                        if (!member || member.membership !== KnownMembership.Join) {
                             return false;
                         }
                         const serverName = getServerName(userId);

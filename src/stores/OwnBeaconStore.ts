@@ -27,6 +27,7 @@ import {
     ContentHelpers,
     MBeaconInfoEventContent,
     M_BEACON,
+    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -313,7 +314,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         // in PSF-797
 
         // stop watching beacons in rooms where user is no longer a member
-        if (member.membership === Membership.Leave || member.membership === Membership.Ban) {
+        if (member.membership === KnownMembership.Leave || member.membership === KnownMembership.Ban) {
             this.beaconsByRoomId.get(roomState.roomId)?.forEach(this.removeBeacon);
             this.beaconsByRoomId.delete(roomState.roomId);
         }

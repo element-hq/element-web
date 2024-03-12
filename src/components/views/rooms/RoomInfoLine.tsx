@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { FC } from "react";
-import { Room, JoinRule, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Room, JoinRule, MatrixClient, KnownMembership } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
@@ -33,7 +33,7 @@ interface IProps {
 const RoomInfoLine: FC<IProps> = ({ room }) => {
     // summary will begin as undefined whilst loading and go null if it fails to load or we are not invited.
     const summary = useAsyncMemo(async (): Promise<Awaited<ReturnType<MatrixClient["getRoomSummary"]>> | null> => {
-        if (room.getMyMembership() !== Membership.Invite) return null;
+        if (room.getMyMembership() !== KnownMembership.Invite) return null;
         try {
             return await room.client.getRoomSummary(room.roomId);
         } catch (e) {
@@ -61,7 +61,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
     }
 
     let members: JSX.Element | undefined;
-    if (membership === Membership.Invite && summary) {
+    if (membership === KnownMembership.Invite && summary) {
         // Don't trust local state and instead use the summary API
         members = (
             <span className="mx_RoomInfoLine_members">

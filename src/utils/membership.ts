@@ -14,7 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room, RoomMember, RoomState, RoomStateEvent, MatrixEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
+import {
+    Room,
+    RoomMember,
+    RoomState,
+    RoomStateEvent,
+    MatrixEvent,
+    MatrixClient,
+    Membership,
+    KnownMembership,
+} from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
@@ -66,11 +75,11 @@ export function splitRoomsByMembership(rooms: Room[]): MembershipSplit {
 }
 
 export function getEffectiveMembership(membership: Membership): EffectiveMembership {
-    if (membership === Membership.Invite) {
+    if (membership === KnownMembership.Invite) {
         return EffectiveMembership.Invite;
     } else if (
-        membership === Membership.Join ||
-        (SettingsStore.getValue("feature_ask_to_join") && membership === Membership.Knock)
+        membership === KnownMembership.Join ||
+        (SettingsStore.getValue("feature_ask_to_join") && membership === KnownMembership.Knock)
     ) {
         return EffectiveMembership.Join;
     } else {
@@ -84,7 +93,7 @@ export function isKnockDenied(room: Room): boolean | undefined {
     const member = memberId ? room.getMember(memberId) : null;
     const previousMembership = member?.events.member?.getPrevContent().membership;
 
-    return member?.isKicked() && previousMembership === Membership.Knock;
+    return member?.isKicked() && previousMembership === KnownMembership.Knock;
 }
 
 export function getEffectiveMembershipTag(room: Room, membership?: string): EffectiveMembership {

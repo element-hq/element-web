@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { mocked } from "jest-mock";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
-import { MatrixClient, Room, HierarchyRoom } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, Room, HierarchyRoom, KnownMembership } from "matrix-js-sdk/src/matrix";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import { TooltipProvider } from "@vector-im/compound-web";
 
@@ -181,7 +181,7 @@ describe("SpaceHierarchy", () => {
         mocked(client.getRoom).mockImplementation(
             (roomId) => client.getRooms().find((room) => room.roomId === roomId) ?? null,
         );
-        [room1, room2, space1, room3].forEach((r) => mocked(r.getMyMembership).mockReturnValue(Membership.Leave));
+        [room1, room2, space1, room3].forEach((r) => mocked(r.getMyMembership).mockReturnValue(KnownMembership.Leave));
 
         const hierarchyRoot: HierarchyRoom = {
             room_id: root.roomId,
