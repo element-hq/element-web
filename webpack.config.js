@@ -543,10 +543,20 @@ module.exports = (env, argv) => {
                                 // props set on the svg will override defaults
                                 expandProps: "end",
                                 svgoConfig: {
-                                    plugins: {
+                                    plugins: [
+                                        {
+                                            name: "preset-default",
+                                            params: {
+                                                overrides: {
+                                                    removeViewBox: false,
+                                                },
+                                            },
+                                        },
                                         // generates a viewbox if missing
-                                        removeDimensions: true,
-                                    },
+                                        { name: "removeDimensions" },
+                                        // https://github.com/facebook/docusaurus/issues/8297
+                                        { name: "prefixIds" },
+                                    ],
                                 },
                                 /**
                                  * Forwards the React ref to the root SVG element
