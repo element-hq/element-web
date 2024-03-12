@@ -8725,9 +8725,10 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "31.4.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6176faef48e5f952a8be82354874fd87358e97a7"
+matrix-js-sdk@31.5.0:
+  version "31.5.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-31.5.0.tgz#42ddb6b7a914c2e403cb85d6c59e023f1166f224"
+  integrity sha512-d8Y/Vt6PdX8leSOQ06yoArJ1xMwCzxSb1H2GzW9mtOgXnHpeYvrAuPrYr32k5hfdUAJp0xPibSqDP+/+2kCnpg==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^4.6.0"
@@ -8751,9 +8752,10 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.93.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/db6f7da2b20e3b676697c0c703b57bdf2746f0d6"
+matrix-react-sdk@3.94.0:
+  version "3.94.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.94.0.tgz#25c39caab65af7c531018d0967e8ad4e6b7097c4"
+  integrity sha512-qVu5MdgU/tY3dQOEepE2Qz/zw/FINKMwoMzPNBuCitV1yilM/UWfMHZhBOyqqLeA3qJoeP+1O+XByg3aks9J/Q==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.10.0"
@@ -8797,7 +8799,7 @@ matrix-mock-request@^2.5.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "31.5.0"
     matrix-widget-api "^1.5.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
@@ -8817,7 +8819,7 @@ matrix-mock-request@^2.5.0:
     react-transition-group "^4.4.1"
     rfc4648 "^1.4.0"
     sanitize-filename "^1.6.3"
-    sanitize-html "2.11.0"
+    sanitize-html "2.12.1"
     tar-js "^0.3.0"
     ua-parser-js "^1.0.2"
     uuid "^9.0.0"
@@ -11061,10 +11063,10 @@ sanitize-filename@^1.6.3:
   dependencies:
     truncate-utf8-bytes "^1.0.0"
 
-sanitize-html@2.11.0:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/sanitize-html/-/sanitize-html-2.11.0.tgz#9a6434ee8fcaeddc740d8ae7cd5dd71d3981f8f6"
-  integrity sha512-BG68EDHRaGKqlsNjJ2xUB7gpInPA8gVx/mvjO743hZaeMCZ2DwzW7xvsqZ+KNU4QKwj86HJ3uu2liISf2qBBUA==
+sanitize-html@2.12.1:
+  version "2.12.1"
+  resolved "https://registry.yarnpkg.com/sanitize-html/-/sanitize-html-2.12.1.tgz#280a0f5c37305222921f6f9d605be1f6558914c7"
+  integrity sha512-Plh+JAn0UVDpBRP/xEjsk+xDCoOvMBwQUf/K+/cBAVuTbtX8bj2VB7S1sL1dssVpykqp0/KPSesHrqXtokVBpA==
   dependencies:
     deepmerge "^4.2.2"
     escape-string-regexp "^4.0.0"
