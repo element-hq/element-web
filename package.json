@@ -180,7 +180,7 @@
         "postcss-hexrgba": "2.1.0",
         "postcss-import": "16.0.0",
         "postcss-loader": "8.1.0",
-        "postcss-mixins": "^6.2.3",
+        "postcss-mixins": "^10.0.0",
         "postcss-nested": "^6.0.0",
         "postcss-preset-env": "^9.3.0",
         "postcss-scss": "^4.0.4",
