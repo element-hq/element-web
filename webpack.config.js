@@ -554,6 +554,8 @@ module.exports = (env, argv) => {
                                         },
                                         // generates a viewbox if missing
                                         { name: "removeDimensions" },
+                                        // https://github.com/facebook/docusaurus/issues/8297
+                                        { name: "prefixIds" },
                                     ],
                                 },
                                 /**
