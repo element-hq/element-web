@@ -542,12 +542,6 @@ module.exports = (env, argv) => {
                                 },
                                 // props set on the svg will override defaults
                                 expandProps: "end",
-                                svgoConfig: {
-                                    plugins: {
-                                        // generates a viewbox if missing
-                                        removeDimensions: true,
-                                    },
-                                },
                                 /**
                                  * Forwards the React ref to the root SVG element
                                  * Useful when using things like `asChild` in
