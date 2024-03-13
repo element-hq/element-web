@@ -44,7 +44,6 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { OwnProfileStore } from "../OwnProfileStore";
 import WidgetUtils from "../../utils/WidgetUtils";
 import { IntegrationManagers } from "../../integrations/IntegrationManagers";
-import SettingsStore from "../../settings/SettingsStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import ActiveWidgetStore from "../ActiveWidgetStore";
 import { objectShallowClone } from "../../utils/objects";
@@ -162,6 +161,7 @@ export class StopGapWidget extends EventEmitter {
     private readonly virtual: boolean;
     private readUpToMap: { [roomId: string]: string } = {}; // room ID to event ID
     private stickyPromise?: () => Promise<void>; // This promise will be called and needs to resolve before the widget will actually become sticky.
+    private themeWatcher = new ThemeWatcher();
 
     public constructor(private appTileProps: IAppTileProps) {
         super();
@@ -212,13 +212,19 @@ export class StopGapWidget extends EventEmitter {
 
     private runUrlTemplate(opts = { asPopout: false }): string {
         const fromCustomisation = WidgetVariableCustomisations?.provideVariables?.() ?? {};
+        let theme = this.themeWatcher.getEffectiveTheme();
+        if (theme.startsWith("custom-")) {
+            // simplify custom theme to only light/dark
+            const customTheme = getCustomTheme(theme.slice(7));
+            theme = customTheme.is_dark ? "dark" : "light";
+        }
         const defaults: ITemplateParams = {
             widgetRoomId: this.roomId,
             currentUserId: this.client.getUserId()!,
             userDisplayName: OwnProfileStore.instance.displayName ?? undefined,
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
             clientId: ELEMENT_CLIENT_ID,
-            clientTheme: SettingsStore.getValue("theme"),
+            clientTheme: theme,
             clientLanguage: getUserLanguage(),
             deviceId: this.client.getDeviceId() ?? undefined,
             baseUrl: this.client.baseUrl,

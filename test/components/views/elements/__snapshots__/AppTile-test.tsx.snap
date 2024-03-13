@@ -85,6 +85,8 @@ exports[`AppTile for a persistent app should render 1`] = `
   >
     <div
       class="mx_AppTile_persistedWrapper"
+      data-test-widget-url="https://example.com/?widgetId=1&parentUrl=http%3A%2F%2Flocalhost%2F"
+      data-testid="widget-app-tile"
     >
       <div />
     </div>
@@ -172,6 +174,8 @@ exports[`AppTile for a pinned widget should render 1`] = `
     </div>
     <div
       class="mx_AppTile_persistedWrapper"
+      data-test-widget-url="https://example.com/?widgetId=1&parentUrl=http%3A%2F%2Flocalhost%2F"
+      data-testid="widget-app-tile"
     >
       <div />
     </div>
