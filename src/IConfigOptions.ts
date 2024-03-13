@@ -119,6 +119,7 @@ export interface IConfigOptions {
     };
     element_call: {
         url?: string;
+        guest_spa_url?: string;
         use_exclusively?: boolean;
         participant_limit?: number;
         brand?: string;

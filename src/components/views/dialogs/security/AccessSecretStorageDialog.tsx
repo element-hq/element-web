@@ -278,8 +278,8 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
     public render(): React.ReactNode {
         const hasPassphrase = this.props.keyInfo?.passphrase?.salt && this.props.keyInfo?.passphrase?.iterations;
 
-        const resetButton = (
-            <div className="mx_AccessSecretStorageDialog_reset">
+        const resetLine = (
+            <strong className="mx_AccessSecretStorageDialog_reset">
                 {_t("encryption|reset_all_button", undefined, {
                     a: (sub) => (
                         <AccessibleButton
@@ -291,7 +291,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                         </AccessibleButton>
                     ),
                 })}
-            </div>
+            </strong>
         );
 
         let content;
@@ -366,7 +366,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                             onCancel={this.onCancel}
                             focus={false}
                             primaryDisabled={this.state.passPhrase.length === 0}
-                            additive={resetButton}
+                            additive={resetLine}
                         />
                     </form>
                 </div>
@@ -434,7 +434,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                             onCancel={this.onCancel}
                             focus={false}
                             primaryDisabled={!this.state.recoveryKeyValid}
-                            additive={resetButton}
+                            additive={resetLine}
                         />
                     </form>
                 </div>

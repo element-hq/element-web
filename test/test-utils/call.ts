@@ -38,9 +38,8 @@ export class MockedCall extends Call {
                 url: "https://example.org",
                 name: "Group call",
                 creatorUserId: "@alice:example.org",
-                // waitForIframeLoad = false, makes the widget API wait for the 'contentLoaded' event instead.
-                // This is how the EC is designed, but for backwards compatibility (full mesh) we currently need to use waitForIframeLoad = true
-                // waitForIframeLoad: false
+                // waitForIframeLoad = false, makes the widget API wait for the 'contentLoaded' event.
+                waitForIframeLoad: false,
             },
             room.client,
         );

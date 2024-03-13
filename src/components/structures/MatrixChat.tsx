@@ -1179,10 +1179,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const memberCount = roomToLeave?.currentState.getJoinedMemberCount();
         if (memberCount === 1) {
             warnings.push(
-                <span className="warning" key="only_member_warning">
+                <strong className="warning" key="only_member_warning">
                     {" " /* Whitespace, otherwise the sentences get smashed together */}
                     {_t("leave_room_dialog|last_person_warning")}
-                </span>,
+                </strong>,
             );
 
             return warnings;
@@ -1193,12 +1193,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             const rule = joinRules.getContent().join_rule;
             if (rule !== "public") {
                 warnings.push(
-                    <span className="warning" key="non_public_warning">
+                    <strong className="warning" key="non_public_warning">
                         {" " /* Whitespace, otherwise the sentences get smashed together */}
                         {isSpace
                             ? _t("leave_room_dialog|space_rejoin_warning")
                             : _t("leave_room_dialog|room_rejoin_warning")}
-                    </span>,
+                    </strong>,
                 );
             }
         }

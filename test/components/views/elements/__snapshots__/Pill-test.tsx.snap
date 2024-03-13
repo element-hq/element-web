@@ -42,7 +42,7 @@ exports[`<Pill> should render the expected pill for @room 1`] = `
         >
           <span
             aria-hidden="true"
-            class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+            class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -74,7 +74,7 @@ exports[`<Pill> should render the expected pill for a known user not in the room
       >
         <span
           aria-hidden="true"
-          class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
           data-color="5"
           data-testid="avatar-img"
           data-type="round"
@@ -105,7 +105,7 @@ exports[`<Pill> should render the expected pill for a message in another room 1`
       >
         <span
           aria-hidden="true"
-          class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
           data-color="1"
           data-testid="avatar-img"
           data-type="round"
@@ -136,7 +136,7 @@ exports[`<Pill> should render the expected pill for a message in the same room 1
       >
         <span
           aria-hidden="true"
-          class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
           data-color="4"
           data-testid="avatar-img"
           data-type="round"
@@ -167,7 +167,7 @@ exports[`<Pill> should render the expected pill for a room alias 1`] = `
       >
         <span
           aria-hidden="true"
-          class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
           data-color="1"
           data-testid="avatar-img"
           data-type="round"
@@ -198,7 +198,7 @@ exports[`<Pill> should render the expected pill for a space 1`] = `
       >
         <span
           aria-hidden="true"
-          class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
           data-color="2"
           data-testid="avatar-img"
           data-type="round"
@@ -252,7 +252,7 @@ exports[`<Pill> when rendering a pill for a room should render the expected pill
       >
         <span
           aria-hidden="true"
-          class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
           data-color="1"
           data-testid="avatar-img"
           data-type="round"
@@ -283,7 +283,7 @@ exports[`<Pill> when rendering a pill for a user in the room should render as ex
       >
         <span
           aria-hidden="true"
-          class="_avatar_k41ul_17 mx_BaseAvatar _avatar-imageless_k41ul_60"
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
           data-color="4"
           data-testid="avatar-img"
           data-type="round"

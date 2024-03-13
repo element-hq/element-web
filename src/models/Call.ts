@@ -758,7 +758,7 @@ export class ElementCall extends Call {
                 name: "Element Call",
                 type: WidgetType.CALL.preferred,
                 url: url.toString(),
-                // waitForIframeLoad: false,
+                waitForIframeLoad: false,
                 data: ElementCall.getWidgetData(
                     client,
                     roomId,

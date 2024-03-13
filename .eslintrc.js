@@ -76,6 +76,7 @@ module.exports = {
                         group: [
                             "matrix-js-sdk/src/**",
                             "!matrix-js-sdk/src/matrix",
+                            "!matrix-js-sdk/src/types",
                             "matrix-js-sdk/lib",
                             "matrix-js-sdk/lib/",
                             "matrix-js-sdk/lib/**",
@@ -125,8 +126,6 @@ module.exports = {
                             "!matrix-js-sdk/src/crypto/verification/QRCode",
                             "!matrix-js-sdk/src/crypto/verification/request",
                             "!matrix-js-sdk/src/crypto/verification/request/VerificationRequest",
-                            "!matrix-js-sdk/src/common-crypto",
-                            "!matrix-js-sdk/src/common-crypto/CryptoBackend",
                             "!matrix-js-sdk/src/oidc",
                             "!matrix-js-sdk/src/oidc/discovery",
                             "!matrix-js-sdk/src/oidc/authorize",

@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import React from "react";
+import { ImageContent } from "matrix-js-sdk/src/types";
 
 import MImageBody from "./MImageBody";
-import { ImageContent } from "../../../customisations/models/IMediaEventContent";
 
 const FORCED_IMAGE_HEIGHT = 44;
 

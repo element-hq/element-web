@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import { MatrixEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
+import { FileContent, ImageContent, MediaEventContent } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { LazyValue } from "./LazyValue";
 import { Media, mediaFromContent } from "../customisations/Media";
 import { decryptFile } from "./DecryptFile";
-import { FileContent, ImageContent, IMediaEventContent } from "../customisations/models/IMediaEventContent";
 import { IDestroyable } from "./IDestroyable";
 
 // TODO: We should consider caching the blobs. https://github.com/vector-im/element-web/issues/17192
@@ -48,7 +48,7 @@ export class MediaEventHelper implements IDestroyable {
     public get fileName(): string {
         return (
             this.event.getContent<FileContent>().filename ||
-            this.event.getContent<IMediaEventContent>().body ||
+            this.event.getContent<MediaEventContent>().body ||
             "download"
         );
     }
@@ -81,7 +81,7 @@ export class MediaEventHelper implements IDestroyable {
 
     private fetchSource = (): Promise<Blob> => {
         if (this.media.isEncrypted) {
-            const content = this.event.getContent<IMediaEventContent>();
+            const content = this.event.getContent<MediaEventContent>();
             return decryptFile(content.file!, content.info);
         }
         return this.media.downloadSource().then((r) => r.blob());

@@ -137,7 +137,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 </div>
             );
         } else if (this.state.error) {
-            return <span className="warning">{this.state.error}</span>;
+            return <strong className="warning">{this.state.error}</strong>;
         } else {
             return null;
         }
@@ -226,7 +226,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             title: _t("terms|identity_server_no_terms_title"),
             description: (
                 <div>
-                    <span className="warning">{_t("identity_server|no_terms")}</span>
+                    <strong className="warning">{_t("identity_server|no_terms")}</strong>
                     <span>&nbsp;{_t("terms|identity_server_no_terms_description_2")}</span>
                 </div>
             ),

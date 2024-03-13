@@ -17,9 +17,9 @@ limitations under the License.
 // Pull in the encryption lib so that we can decrypt attachments.
 import encrypt from "matrix-encrypt-attachment";
 import { parseErrorResponse } from "matrix-js-sdk/src/matrix";
+import { EncryptedFile, MediaEventInfo } from "matrix-js-sdk/src/types";
 
 import { mediaFromContent } from "../customisations/Media";
-import { EncryptedFile, IMediaEventInfo } from "../customisations/models/IMediaEventContent";
 import { getBlobSafeMimeType } from "./blobs";
 
 export class DownloadError extends Error {
@@ -44,10 +44,10 @@ export class DecryptError extends Error {
  *   This passed to [link]{@link https://github.com/matrix-org/matrix-encrypt-attachment}
  *   as the encryption info object, so will also have the those keys in addition to
  *   the keys below.
- * @param {IMediaEventInfo} info The info parameter taken from the matrix event.
+ * @param {MediaEventInfo} info The info parameter taken from the matrix event.
  * @returns {Promise<Blob>} Resolves to a Blob of the file.
  */
-export async function decryptFile(file?: EncryptedFile, info?: IMediaEventInfo): Promise<Blob> {
+export async function decryptFile(file?: EncryptedFile, info?: MediaEventInfo): Promise<Blob> {
     // throws if file is falsy
     const media = mediaFromContent({ file });
 

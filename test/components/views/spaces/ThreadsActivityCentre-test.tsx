@@ -180,4 +180,31 @@ describe("ThreadsActivityCentre", () => {
 
         expect(screen.getByRole("menu")).toMatchSnapshot();
     });
+
+    it("should block Ctrl/CMD + k shortcut", async () => {
+        cli.getVisibleRooms = jest.fn().mockReturnValue([roomWithHighlight]);
+
+        const keyDownHandler = jest.fn();
+        render(
+            <div
+                onKeyDown={(evt) => {
+                    keyDownHandler(evt.key, evt.ctrlKey);
+                }}
+            >
+                <MatrixClientContext.Provider value={cli}>
+                    <ThreadsActivityCentre />
+                </MatrixClientContext.Provider>
+            </div>,
+            { wrapper: TooltipProvider },
+        );
+        await userEvent.click(getTACButton());
+
+        // CTRL/CMD + k should be blocked
+        await userEvent.keyboard("{Control>}k{/Control}");
+        expect(keyDownHandler).not.toHaveBeenCalledWith("k", true);
+
+        // Sanity test
+        await userEvent.keyboard("{Control>}a{/Control}");
+        expect(keyDownHandler).toHaveBeenCalledWith("a", true);
+    });
 });

@@ -63,7 +63,9 @@ export default class NewRecoveryMethodDialog extends React.PureComponent<IProps>
 
         const newMethodDetected = <p>{_t("encryption|new_recovery_method_detected|description_1")}</p>;
 
-        const hackWarning = <p className="warning">{_t("encryption|new_recovery_method_detected|warning")}</p>;
+        const hackWarning = (
+            <strong className="warning">{_t("encryption|new_recovery_method_detected|warning")}</strong>
+        );
 
         let content: JSX.Element | undefined;
         if (MatrixClientPeg.safeGet().getKeyBackupEnabled()) {

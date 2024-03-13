@@ -2896,6 +2896,9 @@
         "link_title": "Link to room",
         "permalink_message": "Link to selected message",
         "permalink_most_recent": "Link to most recent message",
+        "share_call": "Conference invite link",
+        "share_call_subtitle": "Link for external users to join the call without a matrix account:",
+        "title_link": "Share Link",
         "title_message": "Share Room Message",
         "title_room": "Share Room",
         "title_user": "Share User"
@@ -3828,6 +3831,7 @@
         "expand": "Return to call",
         "failed_call_live_broadcast_description": "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.",
         "failed_call_live_broadcast_title": "Can’t start a call",
+        "get_call_link": "Share call link",
         "hangup": "Hangup",
         "hide_sidebar_button": "Hide sidebar",
         "input_devices": "Input devices",

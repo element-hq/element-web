@@ -55,7 +55,7 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent<IPr
                 <div>
                     <p>{_t("encryption|recovery_method_removed|description_1")}</p>
                     <p>{_t("encryption|recovery_method_removed|description_2")}</p>
-                    <p className="warning">{_t("encryption|recovery_method_removed|warning")}</p>
+                    <strong className="warning">{_t("encryption|recovery_method_removed|warning")}</strong>
                     <DialogButtons
                         primaryButton={_t("common|setup_secure_messages")}
                         onPrimaryButtonClick={this.onSetupClick}

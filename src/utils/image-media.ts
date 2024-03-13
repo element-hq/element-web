@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { EncryptedFile } from "matrix-js-sdk/src/types";
+
 import { BlurhashEncoder } from "../BlurhashEncoder";
-import { EncryptedFile } from "../customisations/models/IMediaEventContent";
 
 type ThumbnailableElement = HTMLImageElement | HTMLVideoElement;
 

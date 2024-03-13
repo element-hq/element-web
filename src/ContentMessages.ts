@@ -28,19 +28,19 @@ import {
     UploadProgress,
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
+import {
+    ImageInfo,
+    AudioInfo,
+    VideoInfo,
+    EncryptedFile,
+    MediaEventContent,
+    MediaEventInfo,
+} from "matrix-js-sdk/src/types";
 import encrypt from "matrix-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
 import { logger } from "matrix-js-sdk/src/logger";
 import { removeElement } from "matrix-js-sdk/src/utils";
 
-import {
-    AudioInfo,
-    EncryptedFile,
-    ImageInfo,
-    IMediaEventContent,
-    IMediaEventInfo,
-    VideoInfo,
-} from "./customisations/models/IMediaEventContent";
 import dis from "./dispatcher/dispatcher";
 import { _t } from "./languageHandler";
 import Modal from "./Modal";
@@ -537,7 +537,7 @@ export default class ContentMessages {
         promBefore?: Promise<any>,
     ): Promise<void> {
         const fileName = file.name || _t("common|attachment");
-        const content: Omit<IMediaEventContent, "info"> & { info: Partial<IMediaEventInfo> } = {
+        const content: Omit<MediaEventContent, "info"> & { info: Partial<MediaEventInfo> } = {
             body: fileName,
             info: {
                 size: file.size,

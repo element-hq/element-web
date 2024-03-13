@@ -22,11 +22,11 @@ exports[`<MjolnirUserSettingsTab /> renders correctly when user has no ignored u
           <div
             class="mx_SettingsSubsection_text"
           >
-            <span
+            <strong
               class="warning"
             >
               ⚠ These settings are meant for advanced users.
-            </span>
+            </strong>
             <p>
               <span>
                 Add users and servers you want to ignore here. Use asterisks to have Element match any characters. For example, 
@@ -115,11 +115,11 @@ exports[`<MjolnirUserSettingsTab /> renders correctly when user has no ignored u
               <div
                 class="mx_SettingsSubsection_text"
               >
-                <span
+                <strong
                   class="warning"
                 >
                   Subscribing to a ban list will cause you to join it!
-                </span>
+                </strong>
                  
                 <span>
                   If this isn't what you want, please use a different tool to ignore users.
