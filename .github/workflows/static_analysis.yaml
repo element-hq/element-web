@@ -55,8 +55,8 @@ jobs:
 
     i18n_lint:
         name: "i18n Check"
+        if: ${{ github.ref_name != 'verji-develop' }}
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
-        if: github.ref_name != 'verji-develop'            # We allow language files to change in verji-develop
         with:
             hardcoded-words: "Element"
             allowed-hardcoded-keys: |
