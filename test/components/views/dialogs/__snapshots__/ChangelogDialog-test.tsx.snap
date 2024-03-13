@@ -15,7 +15,7 @@ exports[`<ChangelogDialog /> should fetch github proxy url for each repo with ol
     role="dialog"
   >
     <div
-      class="mx_Dialog_header mx_Dialog_headerWithCancel"
+      class="mx_Dialog_header"
     >
       <h1
         class="mx_Heading_h3 mx_Dialog_title"
@@ -23,13 +23,13 @@ exports[`<ChangelogDialog /> should fetch github proxy url for each repo with ol
       >
         Changelog
       </h1>
-      <div
-        aria-label="Close dialog"
-        class="mx_AccessibleButton mx_Dialog_cancelButton"
-        role="button"
-        tabindex="0"
-      />
     </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
     <div
       class="mx_Dialog_content"
       id="mx_Dialog_content"

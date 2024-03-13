@@ -119,7 +119,7 @@ exports[`<SecurityRoomSettingsTab /> join rule handles error when updating join 
   role="dialog"
 >
   <div
-    class="mx_Dialog_header mx_Dialog_headerWithCancel"
+    class="mx_Dialog_header"
   >
     <h1
       class="mx_Heading_h3 mx_Dialog_title"
@@ -127,13 +127,13 @@ exports[`<SecurityRoomSettingsTab /> join rule handles error when updating join 
     >
       Failed to update the join rules
     </h1>
-    <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
   </div>
+  <div
+    aria-label="Close dialog"
+    class="mx_AccessibleButton mx_Dialog_cancelButton"
+    role="button"
+    tabindex="0"
+  />
   <div
     class="mx_Dialog_content"
     id="mx_Dialog_content"
@@ -161,7 +161,7 @@ exports[`<SecurityRoomSettingsTab /> join rule warns when trying to make an encr
   role="dialog"
 >
   <div
-    class="mx_Dialog_header mx_Dialog_headerWithCancel"
+    class="mx_Dialog_header"
   >
     <h1
       class="mx_Heading_h3 mx_Dialog_title"
@@ -169,13 +169,13 @@ exports[`<SecurityRoomSettingsTab /> join rule warns when trying to make an encr
     >
       Are you sure you want to make this encrypted room public?
     </h1>
-    <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
   </div>
+  <div
+    aria-label="Close dialog"
+    class="mx_AccessibleButton mx_Dialog_cancelButton"
+    role="button"
+    tabindex="0"
+  />
   <div
     class="mx_Dialog_content"
     id="mx_Dialog_content"

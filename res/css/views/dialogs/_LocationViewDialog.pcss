@@ -16,11 +16,6 @@ limitations under the License.
 
 .mx_LocationViewDialog_wrapper .mx_Dialog {
     padding: 0px;
-
-    /* Unset contain and position to allow the close button
-    to appear outside the dialog */
-    contain: unset;
-    position: unset;
 }
 
 .mx_LocationViewDialog {
@@ -37,16 +32,13 @@ limitations under the License.
         .mx_Dialog_title {
             display: none;
         }
+    }
 
-        .mx_Dialog_cancelButton {
-            z-index: 4010;
-            position: absolute;
-            right: 5vw;
-            top: 5vh;
-            width: 20px;
-            height: 20px;
-            background-color: $dialog-close-external-color;
-        }
+    .mx_Dialog_cancelButton {
+        z-index: 4010;
+        position: absolute;
+        left: var(--cpd-space-4x);
+        top: var(--cpd-space-4x);
     }
 }
 
