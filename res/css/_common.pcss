@@ -329,16 +329,21 @@ legend {
     justify-content: center;
 }
 
+.mx_Dialog_border {
+    z-index: var(--dialog-zIndex-standard);
+    position: relative;
+    max-height: calc(100% - var(--cpd-space-12x));
+    display: flex;
+    flex-direction: column;
+}
+
 .mx_Dialog {
     background-color: $background;
     color: $light-fg-color;
-    z-index: var(--dialog-zIndex-standard);
     font-size: $font-15px;
     position: relative;
-    padding: 24px;
-    max-height: 80%;
-    box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
-    border-radius: 8px;
+    padding: var(--cpd-space-8x) var(--cpd-space-10x);
+    box-sizing: border-box;
     overflow-y: auto;
 
     .mx_Dialog_staticWrapper & {
@@ -439,7 +444,6 @@ legend {
     width: 100%;
     height: 100%;
     background-color: $dialog-backdrop-color;
-    opacity: 0.8;
     z-index: var(--dialog-zIndex-standard-background);
 
     &.mx_Dialog_staticBackground {
@@ -483,20 +487,12 @@ legend {
 
 .mx_Dialog_header {
     position: relative;
-    padding: 3px 0;
-    margin-bottom: 10px;
+    padding: 0;
+    padding-inline-end: 20px; /* Reserve room for the close button */
+    margin-bottom: var(--cpd-space-2x);
 
     &.mx_Dialog_headerWithButton > .mx_Dialog_title {
         text-align: center;
-    }
-
-    &.mx_Dialog_headerWithCancel {
-        padding-right: 20px; /* leave space for the 'X' cancel button */
-    }
-
-    &.mx_Dialog_headerWithCancelOnly {
-        padding: 0 20px 0 0;
-        margin: 0;
     }
 }
 
@@ -528,8 +524,8 @@ legend {
 .mx_Dialog_cancelButton {
     @mixin customisedCancelButton;
     position: absolute;
-    top: 4px;
-    right: 0;
+    top: var(--cpd-space-4x);
+    right: var(--cpd-space-4x);
 }
 
 .mx_Dialog_content {

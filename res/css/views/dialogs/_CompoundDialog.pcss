@@ -21,7 +21,7 @@ limitations under the License.
 /* -------------------------------------------------------------------------------- */
 
 /* Override legacy/default styles for dialogs */
-.mx_Dialog_wrapper.mx_CompoundDialog > .mx_Dialog {
+.mx_Dialog_wrapper.mx_CompoundDialog .mx_Dialog {
     padding: 0; /* we'll manage it ourselves */
     color: $primary-content;
 }
@@ -41,14 +41,14 @@ limitations under the License.
             font-size: $font-24px;
             margin: 0; /* managed by header class */
         }
+    }
 
-        .mx_CompoundDialog_cancelButton {
-            @mixin customisedCancelButton;
-            /* Align with middle of title, 30px from right edge */
-            position: absolute;
-            top: 30px;
-            right: 30px;
-        }
+    .mx_CompoundDialog_cancelButton {
+        @mixin customisedCancelButton;
+        /* Align with corner radius of dialog */
+        position: absolute;
+        top: var(--cpd-space-4x);
+        right: var(--cpd-space-4x);
     }
 
     .mx_CompoundDialog_form {
