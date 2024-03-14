@@ -22,7 +22,7 @@ limitations under the License.
     cursor: pointer;
     border-radius: 8px;
     background-color: $background;
-    border: 1px solid $input-border-color;
+    border: var(--cpd-border-width-1) solid var(--cpd-color-border-disabled);
     user-select: none;
     /* equal to z-index of mx_ReplyPreview and mx_RoomView_statusArea (1000) */
     /* but as it appears after them in the DOM, will appear on top. */
@@ -48,7 +48,7 @@ limitations under the License.
         border: none;
 
         &:hover {
-            background: $panel-actions;
+            background: var(--cpd-color-bg-subtle-secondary);
             border-radius: 6px;
             z-index: 1;
         }
@@ -63,11 +63,11 @@ limitations under the License.
         width: 100%;
         mask-repeat: no-repeat;
         mask-position: center;
-        background-color: $secondary-content;
+        background-color: var(--cpd-color-icon-secondary);
     }
 
     .mx_MessageComposerFormatBar_button:hover::after {
-        background-color: $primary-content;
+        background-color: var(--cpd-color-icon-primary);
     }
 
     .mx_MessageComposerFormatBar_buttonIconBold::after {

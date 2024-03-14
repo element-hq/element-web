@@ -20,13 +20,13 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
       <h1>
         Create poll
       </h1>
-      <div
-        aria-label="Close dialog"
-        class="mx_AccessibleButton mx_CompoundDialog_cancelButton"
-        role="button"
-        tabindex="0"
-      />
     </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_CompoundDialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
     <form
       class="mx_CompoundDialog_form"
     >
@@ -199,13 +199,13 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
       <h1>
         Create poll
       </h1>
-      <div
-        aria-label="Close dialog"
-        class="mx_AccessibleButton mx_CompoundDialog_cancelButton"
-        role="button"
-        tabindex="0"
-      />
     </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_CompoundDialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
     <form
       class="mx_CompoundDialog_form"
     >
@@ -402,13 +402,13 @@ exports[`PollCreateDialog renders info from a previous event 1`] = `
       <h1>
         Edit poll
       </h1>
-      <div
-        aria-label="Close dialog"
-        class="mx_AccessibleButton mx_CompoundDialog_cancelButton"
-        role="button"
-        tabindex="0"
-      />
     </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_CompoundDialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
     <form
       class="mx_CompoundDialog_form"
     >

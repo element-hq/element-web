@@ -14,38 +14,46 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SpotlightDialog_wrapper .mx_Dialog {
-    border-radius: 8px;
-    overflow-y: initial;
-    position: relative;
-    height: 60%;
-    padding: 0;
-    contain: unset; /* needed for #mx_SpotlightDialog_keyboardPrompt to not be culled */
+.mx_SpotlightDialog_wrapper {
+    .mx_Dialog_border {
+        /* Disable the glass border as this dialog wasn't designed with it in mind */
+        display: contents;
+    }
 
-    #mx_SpotlightDialog_keyboardPrompt {
-        position: absolute;
-        padding: $spacing-8;
+    .mx_Dialog {
+        width: fit-content;
         border-radius: 8px;
-        background-color: $background;
-        top: -60px; /* relative to the top of the modal */
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: $font-12px;
-        line-height: $font-15px;
-        color: $secondary-content;
+        overflow-y: initial;
+        position: relative;
+        height: 60%;
+        padding: 0;
+        contain: unset; /* needed for #mx_SpotlightDialog_keyboardPrompt to not be culled */
 
-        kbd {
-            display: inline-block;
-            padding: 2px $spacing-4;
-            margin: 0 $spacing-4;
-            border-radius: 6px;
-            background-color: $quinary-content;
-            vertical-align: middle;
-            color: $tertiary-content;
-            /* To avoid any styling inherent with <kbd> elements */
-            font-family: inherit;
-            font-weight: inherit;
-            font-size: inherit;
+        #mx_SpotlightDialog_keyboardPrompt {
+            position: absolute;
+            padding: $spacing-8;
+            border-radius: 8px;
+            background-color: $background;
+            top: -60px; /* relative to the top of the modal */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $secondary-content;
+
+            kbd {
+                display: inline-block;
+                padding: 2px $spacing-4;
+                margin: 0 $spacing-4;
+                border-radius: 6px;
+                background-color: $quinary-content;
+                vertical-align: middle;
+                color: $tertiary-content;
+                /* To avoid any styling inherent with <kbd> elements */
+                font-family: inherit;
+                font-weight: inherit;
+                font-size: inherit;
+            }
         }
     }
 }

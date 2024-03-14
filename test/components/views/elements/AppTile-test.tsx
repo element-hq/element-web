@@ -19,7 +19,7 @@ import { jest } from "@jest/globals";
 import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, IWidget, MatrixWidgetType } from "matrix-widget-api";
 import { Optional } from "matrix-events-sdk";
-import { act, render, RenderResult } from "@testing-library/react";
+import { act, render, RenderResult, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SpiedFunction } from "jest-mock";
 import {
@@ -50,6 +50,8 @@ import { ElementWidget } from "../../../../src/stores/widgets/StopGapWidget";
 import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessagingStore";
 import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
+import { WidgetType } from "../../../../src/widgets/WidgetType";
 
 jest.mock("../../../../src/stores/OwnProfileStore", () => ({
     OwnProfileStore: {
@@ -68,6 +70,7 @@ describe("AppTile", () => {
     const resizeNotifier = new ResizeNotifier();
     let app1: IApp;
     let app2: IApp;
+    let appElementCall: IApp;
 
     const waitForRps = (roomId: string) =>
         new Promise<void>((resolve) => {
@@ -120,6 +123,17 @@ describe("AppTile", () => {
             creatorUserId: cli.getSafeUserId(),
             avatar_url: undefined,
         };
+        appElementCall = {
+            id: "1",
+            eventId: "2",
+            roomId: "r2",
+            type: WidgetType.CALL.preferred,
+            url: "https://example.com#theme=$org.matrix.msc2873.client_theme",
+            name: "Element Call",
+            creatorUserId: cli.getSafeUserId(),
+            avatar_url: undefined,
+        };
+
         jest.spyOn(WidgetStore.instance, "getApps").mockImplementation((roomId: string): Array<IApp> => {
             if (roomId === "r1") return [app1];
             if (roomId === "r2") return [app2];
@@ -439,7 +453,6 @@ describe("AppTile", () => {
                 expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, Container.Top);
             });
         });
-
         describe("with an existing widgetApi with requiresClient = false", () => {
             beforeEach(() => {
                 const api = {
@@ -462,6 +475,68 @@ describe("AppTile", () => {
 
             it("should display the »Popout widget« button", () => {
                 expect(renderResult.getByTitle("Popout widget")).toBeInTheDocument();
+            });
+        });
+    });
+
+    describe("with an element call widget", () => {
+        beforeEach(() => {
+            document.body.style.setProperty("--custom-color", "red");
+            document.body.style.setProperty("normal-color", "blue");
+        });
+        it("should update the widget url on theme change", async () => {
+            const renderResult = render(
+                <MatrixClientContext.Provider value={cli}>
+                    <a href="http://themeb" data-mx-theme="light">
+                        A
+                    </a>
+                    <a href="http://themeA" data-mx-theme="dark">
+                        B
+                    </a>
+                    <AppTile key={appElementCall.id} app={appElementCall} room={r1} />
+                </MatrixClientContext.Provider>,
+            );
+            await waitFor(() => {
+                expect(renderResult.getByTestId("widget-app-tile").dataset.testWidgetUrl).toEqual(
+                    "https://example.com/?widgetId=1&parentUrl=http%3A%2F%2Flocalhost%2F#theme=light",
+                );
+            });
+            await SettingsStore.setValue("theme", null, SettingLevel.DEVICE, "dark");
+            await waitFor(() => {
+                expect(renderResult.getByTestId("widget-app-tile").dataset.testWidgetUrl).toEqual(
+                    "https://example.com/?widgetId=1&parentUrl=http%3A%2F%2Flocalhost%2F#theme=dark",
+                );
+            });
+            await SettingsStore.setValue("theme", null, SettingLevel.DEVICE, "light");
+            await waitFor(() => {
+                expect(renderResult.getByTestId("widget-app-tile").dataset.testWidgetUrl).toEqual(
+                    "https://example.com/?widgetId=1&parentUrl=http%3A%2F%2Flocalhost%2F#theme=light",
+                );
+            });
+        });
+        it("should not update the widget url for non Element Call widgets on theme change", async () => {
+            const appNonElementCall = { ...appElementCall, type: MatrixWidgetType.Custom };
+            const renderResult = render(
+                <MatrixClientContext.Provider value={cli}>
+                    <a href="http://themeb" data-mx-theme="light">
+                        A
+                    </a>
+                    <a href="http://themeA" data-mx-theme="dark">
+                        B
+                    </a>
+                    <AppTile key={appNonElementCall.id} app={appNonElementCall} room={r1} />
+                </MatrixClientContext.Provider>,
+            );
+            await waitFor(() => {
+                expect(renderResult.getByTestId("widget-app-tile").dataset.testWidgetUrl).toEqual(
+                    "https://example.com/?widgetId=1&parentUrl=http%3A%2F%2Flocalhost%2F#theme=light",
+                );
+            });
+            await SettingsStore.setValue("theme", null, SettingLevel.DEVICE, "dark");
+            await waitFor(() => {
+                expect(renderResult.getByTestId("widget-app-tile").dataset.testWidgetUrl).toEqual(
+                    "https://example.com/?widgetId=1&parentUrl=http%3A%2F%2Flocalhost%2F#theme=light",
+                );
             });
         });
     });
