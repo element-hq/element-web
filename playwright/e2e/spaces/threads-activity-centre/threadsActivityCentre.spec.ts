@@ -134,4 +134,14 @@ test.describe("Threads Activity Centre", () => {
         await toggleSpotlight();
         await expect(page.locator(".mx_SpotlightDialog")).not.toBeVisible();
     });
+
+    test("should have the correct hover state", async ({ util, page }) => {
+        await util.hoverTacButton();
+        await expect(util.getSpacePanel()).toMatchScreenshot("tac-hovered.png");
+
+        // Expand the space panel, hover the button and take a screenshot
+        await util.expandSpacePanel();
+        await util.hoverTacButton();
+        await expect(util.getSpacePanel()).toMatchScreenshot("tac-hovered-expanded.png");
+    });
 });

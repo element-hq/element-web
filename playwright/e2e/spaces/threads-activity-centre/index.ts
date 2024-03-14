@@ -266,6 +266,13 @@ export class Helpers {
     }
 
     /**
+     * Hover over the Threads Activity Centre button
+     */
+    hoverTacButton() {
+        return this.getTacButton().hover();
+    }
+
+    /**
      * Click on a room in the Threads Activity Centre
      * @param name - room name
      */
