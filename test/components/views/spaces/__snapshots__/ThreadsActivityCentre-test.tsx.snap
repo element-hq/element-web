@@ -38,7 +38,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       >
         <span
           class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
-          data-color="6"
+          data-color="3"
           data-testid="avatar-img"
           data-type="round"
           role="presentation"
@@ -86,7 +86,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       >
         <span
           class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
-          data-color="6"
+          data-color="2"
           data-testid="avatar-img"
           data-type="round"
           role="presentation"
@@ -155,6 +155,179 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
     >
       You don't have rooms with unread threads yet.
     </div>
+  </div>
+</div>
+`;
+
+exports[`ThreadsActivityCentre should order the room with the same notification level by most recent 1`] = `
+<div
+  aria-labelledby="radix-31"
+  aria-orientation="vertical"
+  class="_menu_1x5h1_17"
+  data-align="end"
+  data-orientation="vertical"
+  data-radix-menu-content=""
+  data-side="right"
+  data-state="open"
+  dir="ltr"
+  id="radix-32"
+  role="menu"
+  style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
+  tabindex="-1"
+>
+  <h3
+    class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
+    id=":r8:"
+  >
+    Threads activity
+  </h3>
+  <div
+    class="mx_ThreadsActivityCentre_rows"
+  >
+    <button
+      class="mx_ThreadsActivityCentreRow _item_1gwvj_17 _interactive_1gwvj_36"
+      data-kind="primary"
+      data-orientation="vertical"
+      data-radix-collection-item=""
+      role="menuitem"
+      tabindex="-1"
+    >
+      <div
+        class="_icon_1gwvj_44"
+      >
+        <span
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          data-color="5"
+          data-testid="avatar-img"
+          data-type="round"
+          role="presentation"
+          style="--cpd-avatar-size: 32px;"
+        >
+          T
+        </span>
+      </div>
+      <span
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+      >
+        This is a third real highlight
+      </span>
+      <svg
+        aria-hidden="true"
+        class="_nav-hint_1gwvj_60"
+        fill="currentColor"
+        height="24"
+        viewBox="8 0 8 24"
+        width="8"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+        />
+      </svg>
+      <div
+        class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_dot"
+      >
+        <span
+          class="mx_NotificationBadge_count"
+        />
+      </div>
+    </button>
+    <button
+      class="mx_ThreadsActivityCentreRow _item_1gwvj_17 _interactive_1gwvj_36"
+      data-kind="primary"
+      data-orientation="vertical"
+      data-radix-collection-item=""
+      role="menuitem"
+      tabindex="-1"
+    >
+      <div
+        class="_icon_1gwvj_44"
+      >
+        <span
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          data-color="3"
+          data-testid="avatar-img"
+          data-type="round"
+          role="presentation"
+          style="--cpd-avatar-size: 32px;"
+        >
+          T
+        </span>
+      </div>
+      <span
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+      >
+        This is a real highlight
+      </span>
+      <svg
+        aria-hidden="true"
+        class="_nav-hint_1gwvj_60"
+        fill="currentColor"
+        height="24"
+        viewBox="8 0 8 24"
+        width="8"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+        />
+      </svg>
+      <div
+        class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_dot"
+      >
+        <span
+          class="mx_NotificationBadge_count"
+        />
+      </div>
+    </button>
+    <button
+      class="mx_ThreadsActivityCentreRow _item_1gwvj_17 _interactive_1gwvj_36"
+      data-kind="primary"
+      data-orientation="vertical"
+      data-radix-collection-item=""
+      role="menuitem"
+      tabindex="-1"
+    >
+      <div
+        class="_icon_1gwvj_44"
+      >
+        <span
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          data-color="4"
+          data-testid="avatar-img"
+          data-type="round"
+          role="presentation"
+          style="--cpd-avatar-size: 32px;"
+        >
+          T
+        </span>
+      </div>
+      <span
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+      >
+        This is a second real highlight
+      </span>
+      <svg
+        aria-hidden="true"
+        class="_nav-hint_1gwvj_60"
+        fill="currentColor"
+        height="24"
+        viewBox="8 0 8 24"
+        width="8"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+        />
+      </svg>
+      <div
+        class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_dot"
+      >
+        <span
+          class="mx_NotificationBadge_count"
+        />
+      </div>
+    </button>
   </div>
 </div>
 `;
