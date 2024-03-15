@@ -113,7 +113,6 @@ export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
             <div className="mx_SpacePanel_badgeContainer">
                 <NotificationBadge
                     onClick={jumpToNotification}
-                    forceCount={false}
                     notification={notificationState}
                     aria-label={ariaLabel}
                     tabIndex={tabIndex}

@@ -61,7 +61,7 @@ const RoomBreadcrumbTile: React.FC<{ room: Room; onClick: (ev: ButtonEvent) => v
                 room={room}
                 size="32px"
                 displayBadge={true}
-                forceCount={true}
+                hideIfDot={true}
                 tooltipProps={{ tabIndex: isActive ? 0 : -1 }}
             />
         </AccessibleTooltipButton>
