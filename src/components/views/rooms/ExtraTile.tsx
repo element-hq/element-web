@@ -52,7 +52,7 @@ export default function ExtraTile({
 
     let badge: JSX.Element | null = null;
     if (notificationState) {
-        badge = <NotificationBadge notification={notificationState} forceCount={false} />;
+        badge = <NotificationBadge notification={notificationState} />;
     }
 
     let name = displayName;

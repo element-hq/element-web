@@ -28,7 +28,12 @@ interface Props {
     count: number;
     level: NotificationLevel;
     knocked?: boolean;
-    type?: "badge" | "dot";
+    /**
+     * If true, where we would normally show a badge, we instead show a dot. No numeric count will
+     * be displayed (but may affect whether the the dot is displayed). See class doc
+     * for the difference between the two.
+     */
+    forceDot?: boolean;
 }
 
 interface ClickableProps extends Props {
@@ -39,8 +44,17 @@ interface ClickableProps extends Props {
     tabIndex?: number;
 }
 
+/**
+ * A notification indicator that conveys what activity / notifications the user has in whatever
+ * context it is being used.
+ *
+ * Can either be a 'badge': a small circle with a number in it (the 'count'), or a 'dot': a smaller, empty circle.
+ * The two can be used to convey the same meaning but in different contexts, for example: for unread
+ * notifications in the room list, it may have a green badge with the number of unread notifications,
+ * but somewhere else it may just have a green dot as a more compact representation of the same information.
+ */
 export const StatelessNotificationBadge = forwardRef<HTMLDivElement, XOR<Props, ClickableProps>>(
-    ({ symbol, count, level, knocked, type = "badge", ...props }, ref) => {
+    ({ symbol, count, level, knocked, forceDot = false, ...props }, ref) => {
         const hideBold = useSettingValue("feature_hidebold");
 
         // Don't show a badge if we don't need to
@@ -61,10 +75,12 @@ export const StatelessNotificationBadge = forwardRef<HTMLDivElement, XOR<Props, 
             mx_NotificationBadge_visible: isEmptyBadge || knocked ? true : hasUnreadCount,
             mx_NotificationBadge_level_notification: level == NotificationLevel.Notification,
             mx_NotificationBadge_level_highlight: level >= NotificationLevel.Highlight,
-            mx_NotificationBadge_dot: (isEmptyBadge && !knocked) || type === "dot",
             mx_NotificationBadge_knocked: knocked,
-            mx_NotificationBadge_2char: type === "badge" && symbol && symbol.length > 0 && symbol.length < 3,
-            mx_NotificationBadge_3char: type === "badge" && symbol && symbol.length > 2,
+
+            // At most one of mx_NotificationBadge_dot, mx_NotificationBadge_2char, mx_NotificationBadge_3char
+            mx_NotificationBadge_dot: (isEmptyBadge && !knocked) || forceDot,
+            mx_NotificationBadge_2char: !forceDot && symbol && symbol.length > 0 && symbol.length < 3,
+            mx_NotificationBadge_3char: !forceDot && symbol && symbol.length > 2,
         });
 
         if (props.onClick) {

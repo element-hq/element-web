@@ -402,11 +402,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
             // aria-hidden because we summarise the unread count/highlight status in a manual aria-label below
             badge = (
                 <div className="mx_RoomTile_badgeContainer" aria-hidden="true">
-                    <NotificationBadge
-                        notification={this.notificationState}
-                        forceCount={false}
-                        roomId={this.props.room.roomId}
-                    />
+                    <NotificationBadge notification={this.notificationState} roomId={this.props.room.roomId} />
                 </div>
             );
         }

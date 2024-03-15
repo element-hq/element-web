@@ -35,4 +35,23 @@ describe("StatelessNotificationBadge", () => {
         expect(container.querySelector(".mx_NotificationBadge_dot")).not.toBeInTheDocument();
         expect(container.querySelector(".mx_NotificationBadge_knocked")).toBeInTheDocument();
     });
+
+    it("has badge style for notification", () => {
+        const { container } = render(
+            <StatelessNotificationBadge symbol={null} count={3} level={NotificationLevel.Notification} />,
+        );
+        expect(container.querySelector(".mx_NotificationBadge_dot")).not.toBeInTheDocument();
+    });
+
+    it("has dot style for notification when forced", () => {
+        const { container } = render(
+            <StatelessNotificationBadge
+                symbol={null}
+                count={3}
+                level={NotificationLevel.Notification}
+                forceDot={true}
+            />,
+        );
+        expect(container.querySelector(".mx_NotificationBadge_dot")).toBeInTheDocument();
+    });
 });

@@ -35,7 +35,11 @@ interface IProps {
     room: Room;
     size: string;
     displayBadge?: boolean;
-    forceCount?: boolean;
+    /**
+     * If true, show nothing if the notification would only cause a dot to be shown rather than
+     * a badge. That is: only display badges and not dots. Default: false.
+     */
+    hideIfDot?: boolean;
     oobData?: IOOBData;
     viewAvatarOnClick?: boolean;
     tooltipProps?: {
@@ -178,14 +182,14 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
 
     public render(): React.ReactNode {
         // Spread the remaining props to make it work with compound component
-        const { room, size, displayBadge, forceCount, oobData, viewAvatarOnClick, tooltipProps, ...props } = this.props;
+        const { room, size, displayBadge, hideIfDot, oobData, viewAvatarOnClick, tooltipProps, ...props } = this.props;
 
         let badge: React.ReactNode;
         if (this.props.displayBadge && this.state.notificationState) {
             badge = (
                 <NotificationBadge
                     notification={this.state.notificationState}
-                    forceCount={this.props.forceCount}
+                    hideIfDot={this.props.hideIfDot}
                     roomId={this.props.room.roomId}
                 />
             );

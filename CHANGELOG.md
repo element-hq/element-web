@@ -1,3 +1,9 @@
+Changes in [3.95.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.95.0) (2024-03-14)
+=====================================================================================================
+## 🐛 Bug Fixes
+
+* Update `@vector-im/compound-design-tokens` in package.json ([#12340](https://github.com/matrix-org/matrix-react-sdk/pull/12340)).
+
 Changes in [3.94.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.94.0) (2024-03-12)
 =====================================================================================================
 ## ✨ Features

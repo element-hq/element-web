@@ -28,10 +28,10 @@ interface IProps {
     notification: NotificationState;
 
     /**
-     * If true, the badge will show a count if at all possible. This is typically
-     * used to override the user's preference for things like room sublists.
+     * If true, show nothing if the notification would only cause a dot to be shown rather than
+     * a badge. That is: only display badges and not dots. Default: false.
      */
-    forceCount?: boolean;
+    hideIfDot?: boolean;
 
     /**
      * The room ID, if any, the badge represents.
@@ -48,7 +48,7 @@ interface IClickableProps extends IProps, React.InputHTMLAttributes<Element> {
 }
 
 interface IState {
-    showCounts: boolean; // whether to show counts. Independent of props.forceCount
+    showCounts: boolean; // whether to show counts.
 }
 
 export default class NotificationBadge extends React.PureComponent<XOR<IProps, IClickableProps>, IState> {
@@ -97,11 +97,12 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
 
     public render(): ReactNode {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
-        const { notification, showUnsentTooltip, forceCount, onClick, tabIndex } = this.props;
+        const { notification, showUnsentTooltip, hideIfDot, onClick, tabIndex } = this.props;
 
         if (notification.isIdle && !notification.knocked) return null;
-        if (forceCount) {
-            if (!notification.hasUnreadCount) return null; // Can't render a badge
+        if (hideIfDot && notification.level < NotificationLevel.Notification) {
+            // This would just be a dot and we've been told not to show dots, so don't show it
+            if (!notification.hasUnreadCount) return null;
         }
 
         const commonProps: React.ComponentProps<typeof StatelessNotificationBadge> = {

@@ -1,6 +1,6 @@
 {
     "name": "matrix-react-sdk",
-    "version": "3.94.0",
+    "version": "3.95.0",
     "description": "SDK for matrix.org using React",
     "author": "matrix.org",
     "repository": {
@@ -75,7 +75,7 @@
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^7.0.0",
         "@testing-library/react-hooks": "^8.0.1",
-        "@vector-im/compound-design-tokens": "^1.0.0",
+        "@vector-im/compound-design-tokens": "^1.2.0",
         "@vector-im/compound-web": "^3.1.1",
         "@zxcvbn-ts/core": "^3.0.4",
         "@zxcvbn-ts/language-common": "^3.0.4",

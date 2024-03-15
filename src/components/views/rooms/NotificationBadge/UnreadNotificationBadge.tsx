@@ -23,11 +23,15 @@ import { StatelessNotificationBadge } from "./StatelessNotificationBadge";
 interface Props {
     room?: Room;
     threadId?: string;
-    type?: "badge" | "dot";
+    /**
+     * If true, where we would normally show a badge, we instead show a dot. No numeric count will
+     * be displayed.
+     */
+    forceDot?: boolean;
 }
 
-export function UnreadNotificationBadge({ room, threadId, type }: Props): JSX.Element {
+export function UnreadNotificationBadge({ room, threadId, forceDot }: Props): JSX.Element {
     const { symbol, count, level } = useUnreadNotifications(room, threadId);
 
-    return <StatelessNotificationBadge symbol={symbol} count={count} level={level} type={type} />;
+    return <StatelessNotificationBadge symbol={symbol} count={count} level={level} forceDot={forceDot} />;
 }

@@ -1311,7 +1311,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             <UnreadNotificationBadge
                                 room={room || undefined}
                                 threadId={this.props.mxEvent.getId()}
-                                type="dot"
+                                forceDot={true}
                             />
                         </div>
                         {isRenderingNotification && room ? (
