@@ -1045,7 +1045,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
 
         if (
-            !(await client.doesServerSupportUnstableFeature("org.matrix.msc2285.stable")) ||
+            !(await client.doesServerSupportUnstableFeature("org.matrix.msc2285.stable")) &&
             !(await client.isVersionSupported("v1.4"))
         ) {
             logger.warn(
