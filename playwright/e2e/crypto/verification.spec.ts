@@ -16,7 +16,6 @@ limitations under the License.
 
 import jsQR from "jsqr";
 import { type Preset, type Visibility } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import type { JSHandle, Locator, Page } from "@playwright/test";
 import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api";
@@ -263,7 +262,7 @@ test.describe("User verification", () => {
         const bobVerificationRequest = await bob.evaluateHandle(
             async (client, { dmRoomId, aliceCredentials }) => {
                 const room = client.getRoom(dmRoomId);
-                while (room.getMember(aliceCredentials.userId)?.membership !== KnownMembership.Join) {
+                while (room.getMember(aliceCredentials.userId)?.membership !== "join") {
                     await new Promise((resolve) => {
                         room.once(window.matrixcs.RoomStateEvent.Members, resolve);
                     });

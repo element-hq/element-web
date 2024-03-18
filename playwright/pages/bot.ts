@@ -17,7 +17,6 @@ limitations under the License.
 import { JSHandle, Page } from "@playwright/test";
 import { uniqueId } from "lodash";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import type { Logger } from "matrix-js-sdk/src/logger";
 import type { SecretStorageKeyDescription } from "matrix-js-sdk/src/secret-storage";
@@ -179,7 +178,7 @@ export class Bot extends Client {
 
                 if (opts.autoAcceptInvites) {
                     cli.on(window.matrixcs.RoomMemberEvent.Membership, (event, member) => {
-                        if (member.membership === KnownMembership.Invite && member.userId === cli.getUserId()) {
+                        if (member.membership === "invite" && member.userId === cli.getUserId()) {
                             cli.joinRoom(member.roomId);
                         }
                     });

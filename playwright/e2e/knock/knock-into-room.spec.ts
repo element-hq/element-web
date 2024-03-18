@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import { type Visibility } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { test, expect } from "../../element-web-test";
 import { waitForRoom } from "../utils";
@@ -75,7 +74,7 @@ test.describe("Knock Into Room", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === KnownMembership.Knock &&
+                    e.getContent()?.membership === "knock" &&
                     e.getContent()?.displayname === "Alice",
             );
         });
@@ -110,7 +109,7 @@ test.describe("Knock Into Room", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === KnownMembership.Knock &&
+                    e.getContent()?.membership === "knock" &&
                     e.getContent()?.displayname === "Alice",
             );
         });
@@ -152,7 +151,7 @@ test.describe("Knock Into Room", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === KnownMembership.Knock &&
+                    e.getContent()?.membership === "knock" &&
                     e.getContent()?.displayname === "Alice",
             );
         });
@@ -194,7 +193,7 @@ test.describe("Knock Into Room", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === KnownMembership.Knock &&
+                    e.getContent()?.membership === "knock" &&
                     e.getContent()?.displayname === "Alice",
             );
         });
@@ -260,7 +259,7 @@ test.describe("Knock Into Room", () => {
             return events.some(
                 (e) =>
                     e.getType() === "m.room.member" &&
-                    e.getContent()?.membership === KnownMembership.Knock &&
+                    e.getContent()?.membership === "knock" &&
                     e.getContent()?.displayname === "Alice",
             );
         });

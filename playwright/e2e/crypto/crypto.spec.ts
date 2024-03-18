@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { KnownMembership } from "matrix-js-sdk/src/types";
-
 import type { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import {
@@ -89,7 +87,7 @@ const bobJoin = async (page: Page, bob: Bot) => {
 async function autoJoin(client: Client) {
     await client.evaluate((cli) => {
         cli.on(window.matrixcs.RoomMemberEvent.Membership, (event, member) => {
-            if (member.membership === KnownMembership.Invite && member.userId === cli.getUserId()) {
+            if (member.membership === "invite" && member.userId === cli.getUserId()) {
                 cli.joinRoom(member.roomId);
             }
         });
