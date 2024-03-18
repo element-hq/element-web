@@ -16,7 +16,8 @@ limitations under the License.
 */
 
 import React, { createRef } from "react";
-import { KnownMembership, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import classNames from "classnames";
 
 import type { Call } from "../../../models/Call";

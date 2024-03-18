@@ -16,7 +16,8 @@ limitations under the License.
 
 import React, { ReactElement, ReactNode, useContext, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
-import { Room, EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { Room, EventType } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 

@@ -24,8 +24,8 @@ import {
     RoomStateEvent,
     PendingEventOrdering,
     ISearchResults,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
 import EventEmitter from "events";

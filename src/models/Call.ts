@@ -23,9 +23,8 @@ import {
     IMyDevice,
     Room,
     RoomMember,
-    Membership,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { randomString } from "matrix-js-sdk/src/randomstring";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";

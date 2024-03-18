@@ -18,7 +18,8 @@ limitations under the License.
 
 import React, { ReactNode } from "react";
 import * as utils from "matrix-js-sdk/src/utils";
-import { MatrixError, JoinRule, Room, MatrixEvent, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { MatrixError, JoinRule, Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
 import { JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";

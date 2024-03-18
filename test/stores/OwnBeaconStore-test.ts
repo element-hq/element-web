@@ -24,8 +24,8 @@ import {
     RoomMember,
     ContentHelpers,
     M_BEACON,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Mocked } from "jest-mock";
 

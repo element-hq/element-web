@@ -17,7 +17,8 @@ limitations under the License.
 
 import React from "react";
 import { EventEmitter } from "events";
-import { MatrixEvent, Room, RoomMember, Thread, ReceiptType, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, Room, RoomMember, Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { render } from "@testing-library/react";
 import { TooltipProvider } from "@vector-im/compound-web";
 

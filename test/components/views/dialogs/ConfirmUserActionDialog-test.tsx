@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { render } from "@testing-library/react";
-import { KnownMembership } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import ConfirmUserActionDialog from "../../../../src/components/views/dialogs/ConfirmUserActionDialog";
 import { mkRoomMember } from "../../../test-utils";

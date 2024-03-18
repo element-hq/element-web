@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { mocked, MockedObject } from "jest-mock";
-import { KnownMembership, PendingEventOrdering, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { PendingEventOrdering, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";

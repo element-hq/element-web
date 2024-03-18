@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import React, { useMemo, useState } from "react";
-import { KnownMembership, Room } from "matrix-js-sdk/src/matrix";
+import { Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";

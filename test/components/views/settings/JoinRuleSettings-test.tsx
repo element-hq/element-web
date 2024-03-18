@@ -27,8 +27,8 @@ import {
     RoomMember,
     MatrixError,
     Visibility,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 
 import {

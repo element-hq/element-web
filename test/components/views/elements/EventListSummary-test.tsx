@@ -16,7 +16,8 @@ limitations under the License.
 
 import React, { ComponentProps } from "react";
 import { render, RenderResult } from "@testing-library/react";
-import { KnownMembership, MatrixEvent, Membership, RoomMember } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, Membership } from "matrix-js-sdk/src/types";
 
 import {
     getMockClientWithEventEmitter,

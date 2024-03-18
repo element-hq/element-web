@@ -14,14 +14,8 @@
  * limitations under the License.
  */
 
-import {
-    Room,
-    MatrixEvent,
-    MatrixEventEvent,
-    MatrixClient,
-    ClientEvent,
-    KnownMembership,
-} from "matrix-js-sdk/src/matrix";
+import { Room, MatrixEvent, MatrixEventEvent, MatrixClient, ClientEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     ClientWidgetApi,
     IModalWidgetOpenRequest,

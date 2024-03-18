@@ -28,8 +28,8 @@ import {
     CryptoApi,
     DeviceVerificationStatus,
     Device,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     Phase,
     VerificationRequest,

@@ -18,13 +18,13 @@ import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import {
     EventTimeline,
     EventType,
-    KnownMembership,
     MatrixError,
     MatrixEvent,
     Room,
     RoomMember,
     RoomStateEvent,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import React from "react";
 
 import ErrorDialog from "../../../../../../src/components/views/dialogs/ErrorDialog";

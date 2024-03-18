@@ -38,8 +38,8 @@ import {
     JoinRule,
     IEventDecryptionResult,
     OidcClientConfig,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
@@ -50,7 +50,8 @@ import { MatrixRTCSessionManager } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSe
 // eslint-disable-next-line no-restricted-imports
 import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
 
-import type { GroupCall, Membership } from "matrix-js-sdk/src/matrix";
+import type { GroupCall } from "matrix-js-sdk/src/matrix";
+import type { Membership } from "matrix-js-sdk/src/types";
 import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
 import { ValidatedServerConfig } from "../../src/utils/ValidatedServerConfig";
 import { EnhancedMap } from "../../src/utils/maps";

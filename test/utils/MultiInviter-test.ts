@@ -15,15 +15,8 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import {
-    EventType,
-    KnownMembership,
-    MatrixClient,
-    MatrixError,
-    MatrixEvent,
-    Room,
-    RoomMember,
-} from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixClient, MatrixError, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import Modal, { ComponentType, ComponentProps } from "../../src/Modal";

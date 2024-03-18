@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import jsQR from "jsqr";
-import { KnownMembership, type Preset, type Visibility } from "matrix-js-sdk/src/matrix";
+import { type Preset, type Visibility } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import type { JSHandle, Locator, Page } from "@playwright/test";
 import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api";

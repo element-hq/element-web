@@ -291,7 +291,8 @@ Response:
 
 */
 
-import { IContent, MatrixEvent, IEvent, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { IContent, MatrixEvent, IEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";

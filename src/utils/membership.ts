@@ -14,16 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {
-    Room,
-    RoomMember,
-    RoomState,
-    RoomStateEvent,
-    MatrixEvent,
-    MatrixClient,
-    Membership,
-    KnownMembership,
-} from "matrix-js-sdk/src/matrix";
+import { Room, RoomMember, RoomState, RoomStateEvent, MatrixEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, Membership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";

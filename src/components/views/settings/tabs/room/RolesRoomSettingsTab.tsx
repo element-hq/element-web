@@ -15,15 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
-import {
-    EventType,
-    RoomMember,
-    RoomState,
-    RoomStateEvent,
-    Room,
-    IContent,
-    KnownMembership,
-} from "matrix-js-sdk/src/matrix";
+import { EventType, RoomMember, RoomState, RoomStateEvent, Room, IContent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle, get } from "lodash";
 import { compare } from "matrix-js-sdk/src/utils";

@@ -14,7 +14,8 @@ limitations under the License.
 */
 
 import { EventEmitter } from "events";
-import { Room, RoomMember, EventType, MatrixEvent, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { Room, RoomMember, EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { PermalinkParts } from "../../../src/utils/permalinks/PermalinkConstructor";

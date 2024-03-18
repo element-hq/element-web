@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { EventType, KnownMembership, M_BEACON_INFO, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, M_BEACON_INFO, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { BaseGrouper } from "./BaseGrouper";
 import MessagePanel, { WrappedEvent } from "../MessagePanel";

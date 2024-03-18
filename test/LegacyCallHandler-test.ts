@@ -16,7 +16,6 @@ limitations under the License.
 
 import {
     IProtocol,
-    KnownMembership,
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
     MatrixEvent,
     PushRuleKind,
@@ -24,6 +23,7 @@ import {
     RuleId,
     TweakName,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import EventEmitter from "events";
 import { mocked } from "jest-mock";

@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventTimeline, JoinRule, KnownMembership, MatrixError, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { EventTimeline, JoinRule, MatrixError, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import React, { ReactElement, ReactNode, useCallback, useState, VFC } from "react";
 
 import { Icon as CheckIcon } from "../../../../res/img/feather-customised/check.svg";

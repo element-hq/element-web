@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { groupBy, mapValues, maxBy, minBy, sumBy, takeRight } from "lodash";
-import { KnownMembership, MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { Member } from "./direct-messages";
 import DMRoomMap from "./DMRoomMap";

@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { KnownMembership, MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
 
 import { Command, Commands, getCommand } from "../src/SlashCommands";

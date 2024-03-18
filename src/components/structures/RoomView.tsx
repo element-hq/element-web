@@ -37,8 +37,8 @@ import {
     MatrixError,
     ISearchResults,
     THREAD_RELATION_TYPE,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { throttle } from "lodash";

@@ -15,13 +15,8 @@ limitations under the License.
 */
 
 import { MEGOLM_ALGORITHM } from "matrix-js-sdk/src/crypto/olmlib";
-import {
-    EventType,
-    KNOWN_SAFE_ROOM_VERSION,
-    KnownMembership,
-    MatrixClient,
-    MatrixEvent,
-} from "matrix-js-sdk/src/matrix";
+import { EventType, KNOWN_SAFE_ROOM_VERSION, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../src/models/LocalRoom";
 import { determineCreateRoomEncryptionOption, Member } from "../../../src/utils/direct-messages";

@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { JoinRule, KnownMembership, Room } from "matrix-js-sdk/src/matrix";
+import { JoinRule, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../settings/UIFeature";

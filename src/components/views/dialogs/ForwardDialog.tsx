@@ -28,8 +28,8 @@ import {
     LocationAssetType,
     M_TIMESTAMP,
     M_BEACON,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";

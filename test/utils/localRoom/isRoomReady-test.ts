@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { EventType, KnownMembership, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../src/models/LocalRoom";
 import { DirectoryMember } from "../../../src/utils/direct-messages";

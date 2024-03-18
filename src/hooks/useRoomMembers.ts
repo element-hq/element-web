@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { useMemo, useState } from "react";
-import { Membership, Room, RoomEvent, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { Room, RoomEvent, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { Membership } from "matrix-js-sdk/src/types";
 import { throttle } from "lodash";
 
 import { useTypedEventEmitter } from "./useEventEmitter";

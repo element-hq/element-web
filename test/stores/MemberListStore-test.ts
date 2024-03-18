@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { EventType, IContent, KnownMembership, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import SdkConfig from "../../src/SdkConfig";
 import SettingsStore from "../../src/settings/SettingsStore";

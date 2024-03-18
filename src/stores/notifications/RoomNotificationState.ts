@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEventEvent, RoomEvent, ClientEvent, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { MatrixEventEvent, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import type { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import type { IDestroyable } from "../../utils/IDestroyable";

@@ -21,11 +21,11 @@ import {
     IProtocol,
     IPublicRoomsChunkRoom,
     JoinRule,
-    KnownMembership,
     MatrixClient,
     Room,
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import sanitizeHtml from "sanitize-html";
 import { fireEvent, render, screen } from "@testing-library/react";
 

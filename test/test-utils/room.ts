@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { MockedObject } from "jest-mock";
-import { MatrixClient, MatrixEvent, EventType, Room, EventTimeline, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, EventType, Room, EventTimeline } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { IRoomState } from "../../src/components/structures/RoomView";
 import { TimelineRenderingType } from "../../src/contexts/RoomContext";

@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { KnownMembership, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { createTestClient, makeMembershipEvent, mkThirdPartyInviteEvent } from "../../test-utils";

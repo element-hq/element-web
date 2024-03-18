@@ -18,14 +18,8 @@ limitations under the License.
 */
 
 import * as React from "react";
-import {
-    User,
-    IContent,
-    Direction,
-    ContentHelpers,
-    MRoomTopicEventContent,
-    KnownMembership,
-} from "matrix-js-sdk/src/matrix";
+import { User, IContent, Direction, ContentHelpers, MRoomTopicEventContent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import dis from "./dispatcher/dispatcher";

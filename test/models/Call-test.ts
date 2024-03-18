@@ -17,15 +17,8 @@ limitations under the License.
 import EventEmitter from "events";
 import { mocked } from "jest-mock";
 import { waitFor } from "@testing-library/react";
-import {
-    RoomType,
-    Room,
-    RoomEvent,
-    MatrixEvent,
-    RoomStateEvent,
-    PendingEventOrdering,
-    KnownMembership,
-} from "matrix-js-sdk/src/matrix";
+import { RoomType, Room, RoomEvent, MatrixEvent, RoomStateEvent, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 // eslint-disable-next-line no-restricted-imports
 import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";

@@ -16,7 +16,8 @@ limitations under the License.
 
 import React, { ComponentProps } from "react";
 import { render, fireEvent, RenderResult, waitFor } from "@testing-library/react";
-import { Room, RoomMember, MatrixError, IContent, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { Room, RoomMember, MatrixError, IContent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { withClientContextRenderOptions, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";

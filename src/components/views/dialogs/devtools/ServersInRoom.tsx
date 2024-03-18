@@ -16,7 +16,8 @@ limitations under the License.
 */
 
 import React, { useContext, useMemo } from "react";
-import { EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { EventType } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import { _t } from "../../../../languageHandler";

@@ -22,8 +22,8 @@ import {
     Room,
     EventTimelineSet,
     Thread,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import BaseCard from "./BaseCard";
 import ResizeNotifier from "../../../utils/ResizeNotifier";

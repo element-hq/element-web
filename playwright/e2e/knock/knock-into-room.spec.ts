@@ -16,7 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { KnownMembership, type Visibility } from "matrix-js-sdk/src/matrix";
+import { type Visibility } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { test, expect } from "../../element-web-test";
 import { waitForRoom } from "../utils";

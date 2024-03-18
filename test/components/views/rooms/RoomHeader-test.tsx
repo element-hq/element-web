@@ -19,13 +19,13 @@ import { CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import {
     EventType,
     JoinRule,
-    KnownMembership,
     MatrixClient,
     MatrixEvent,
     PendingEventOrdering,
     Room,
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     createEvent,
     fireEvent,

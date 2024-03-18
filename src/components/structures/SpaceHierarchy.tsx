@@ -41,8 +41,8 @@ import {
     HistoryVisibility,
     HierarchyRelation,
     HierarchyRoom,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import classNames from "classnames";
 import { sortBy, uniqBy } from "lodash";

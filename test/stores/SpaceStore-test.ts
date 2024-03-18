@@ -24,8 +24,8 @@ import {
     MatrixEvent,
     Room,
     RoomEvent,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { defer } from "matrix-js-sdk/src/utils";
 
 import SpaceStore from "../../src/stores/spaces/SpaceStore";

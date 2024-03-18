@@ -30,8 +30,8 @@ import {
     UserEvent,
     EventType,
     ClientEvent,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { throttle } from "lodash";
 import { Button, Tooltip } from "@vector-im/compound-web";
 import { Icon as UserAddIcon } from "@vector-im/compound-design-tokens/icons/user-add-solid.svg";

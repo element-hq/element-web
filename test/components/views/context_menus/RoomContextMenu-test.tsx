@@ -19,7 +19,8 @@ limitations under the License.
 import { render, screen } from "@testing-library/react";
 import React, { ComponentProps } from "react";
 import { mocked } from "jest-mock";
-import { KnownMembership, MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import RoomContextMenu from "../../../../src/components/views/context_menus/RoomContextMenu";

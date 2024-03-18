@@ -24,8 +24,8 @@ import {
     MatrixEvent,
     RoomStateEvent,
     Thread,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 
 import type { RoomMember } from "matrix-js-sdk/src/matrix";

@@ -14,15 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {
-    KnownMembership,
-    MatrixClient,
-    MatrixEvent,
-    Room,
-    RoomMember,
-    RoomState,
-    RoomStateEvent,
-} from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Room, RoomMember, RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
 
 import { isKnockDenied, waitForMember } from "../../src/utils/membership";

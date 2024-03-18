@@ -23,8 +23,8 @@ import {
     RoomMember,
     RelationType,
     EventType,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { IExportOptions, ExportType, ExportFormat } from "../../src/utils/exportUtils/exportUtils";

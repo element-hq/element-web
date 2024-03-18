@@ -18,12 +18,12 @@ import {
     ConditionKind,
     EventType,
     IPushRule,
-    KnownMembership,
     MatrixEvent,
     PendingEventOrdering,
     PushRuleActionName,
     Room,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import defaultDispatcher, { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import { SettingLevel } from "../../../src/settings/SettingLevel";

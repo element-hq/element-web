@@ -16,7 +16,8 @@ limitations under the License.
 
 import React, { ReactNode } from "react";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { KnownMembership, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
@@ -37,7 +38,7 @@ import InlineSpinner from "../../../elements/InlineSpinner";
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 import { showDialog as showAnalyticsLearnMoreDialog } from "../../../dialogs/AnalyticsLearnMoreDialog";
 import { privateShouldBeEncrypted } from "../../../../../utils/rooms";
-import type { IServerVersions, Membership } from "matrix-js-sdk/src/matrix";
+import type { IServerVersions } from "matrix-js-sdk/src/matrix";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";

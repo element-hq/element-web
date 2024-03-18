@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { JoinRule, KnownMembership, Room } from "matrix-js-sdk/src/matrix";
+import { JoinRule, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { shouldShowComponent } from "../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../src/settings/UIFeature";

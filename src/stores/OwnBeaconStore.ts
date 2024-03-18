@@ -27,8 +27,8 @@ import {
     ContentHelpers,
     MBeaconInfoEventContent,
     M_BEACON,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import defaultDispatcher from "../dispatcher/dispatcher";

@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Room, RoomType, HierarchyRoom, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { Room, RoomType, HierarchyRoom } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import { normalize } from "matrix-js-sdk/src/utils";
 

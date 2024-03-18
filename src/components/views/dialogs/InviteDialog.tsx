@@ -16,7 +16,8 @@ limitations under the License.
 
 import React, { createRef, ReactNode, SyntheticEvent } from "react";
 import classNames from "classnames";
-import { RoomMember, Room, MatrixError, EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { RoomMember, Room, MatrixError, EventType } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqBy } from "lodash";

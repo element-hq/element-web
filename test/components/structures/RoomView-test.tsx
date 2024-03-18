@@ -28,8 +28,8 @@ import {
     MatrixEvent,
     SearchResult,
     IEvent,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { MEGOLM_ALGORITHM } from "matrix-js-sdk/src/crypto/olmlib";
 import { fireEvent, render, screen, RenderResult, waitForElementToBeRemoved, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

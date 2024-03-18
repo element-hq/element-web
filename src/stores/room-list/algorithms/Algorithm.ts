@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { KnownMembership, Room } from "matrix-js-sdk/src/matrix";
+import { Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";
 import { logger } from "matrix-js-sdk/src/logger";

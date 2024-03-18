@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { uniq } from "lodash";
-import { Room, MatrixEvent, EventType, ClientEvent, MatrixClient, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { Room, MatrixEvent, EventType, ClientEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
 

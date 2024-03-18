@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixError, MatrixClient, EventType, HistoryVisibility, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { MatrixError, MatrixClient, EventType, HistoryVisibility } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 

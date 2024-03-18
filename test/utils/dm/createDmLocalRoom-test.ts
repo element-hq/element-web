@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { EventType, KNOWN_SAFE_ROOM_VERSION, KnownMembership, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { EventType, KNOWN_SAFE_ROOM_VERSION, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { canEncryptToAllUsers } from "../../../src/createRoom";
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../src/models/LocalRoom";

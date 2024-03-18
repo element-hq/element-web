@@ -18,12 +18,12 @@ import {
     EventType,
     HistoryVisibility,
     JoinRule,
-    KnownMembership,
     MatrixClient,
     MatrixEvent,
     Room,
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { render } from "@testing-library/react";
 import { ReactElement } from "react";
 import { Mocked, mocked } from "jest-mock";

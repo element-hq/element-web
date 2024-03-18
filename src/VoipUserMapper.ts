@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room, EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { Room, EventType } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { ensureVirtualRoomExists } from "./createRoom";

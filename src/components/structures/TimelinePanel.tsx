@@ -38,9 +38,8 @@ import {
     Thread,
     ThreadEvent,
     ReceiptType,
-    KnownMembership,
-    Membership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, Membership } from "matrix-js-sdk/src/types";
 import { debounce, findLastIndex, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 

@@ -25,8 +25,8 @@ import {
     MatrixEvent,
     ClientEvent,
     ISendEventResponse,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";

@@ -17,15 +17,8 @@ limitations under the License.
 
 import React from "react";
 import { act, fireEvent, render, RenderResult, screen } from "@testing-library/react";
-import {
-    Room,
-    MatrixClient,
-    RoomState,
-    RoomMember,
-    User,
-    MatrixEvent,
-    KnownMembership,
-} from "matrix-js-sdk/src/matrix";
+import { Room, MatrixClient, RoomState, RoomMember, User, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { compare } from "matrix-js-sdk/src/utils";
 import { mocked, MockedObject } from "jest-mock";
 import { TooltipProvider } from "@vector-im/compound-web";

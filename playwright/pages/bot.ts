@@ -16,7 +16,8 @@ limitations under the License.
 
 import { JSHandle, Page } from "@playwright/test";
 import { uniqueId } from "lodash";
-import { KnownMembership, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import type { Logger } from "matrix-js-sdk/src/logger";
 import type { SecretStorageKeyDescription } from "matrix-js-sdk/src/secret-storage";

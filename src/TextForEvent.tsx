@@ -25,8 +25,8 @@ import {
     MsgType,
     M_POLL_START,
     M_POLL_END,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { removeDirectionOverrideChars } from "matrix-js-sdk/src/utils";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";

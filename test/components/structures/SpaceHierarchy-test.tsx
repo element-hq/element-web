@@ -17,7 +17,8 @@ limitations under the License.
 import React from "react";
 import { mocked } from "jest-mock";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
-import { MatrixClient, Room, HierarchyRoom, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, Room, HierarchyRoom } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import { TooltipProvider } from "@vector-im/compound-web";
 

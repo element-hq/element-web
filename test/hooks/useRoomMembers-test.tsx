@@ -16,7 +16,8 @@ limitations under the License.
 
 import { waitFor } from "@testing-library/react";
 import { renderHook, act } from "@testing-library/react-hooks/dom";
-import { KnownMembership, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { stubClient } from "../test-utils";

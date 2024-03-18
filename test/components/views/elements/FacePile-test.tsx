@@ -15,7 +15,7 @@ limitations under the License.
 import { render } from "@testing-library/react";
 import React from "react";
 import { TooltipProvider } from "@vector-im/compound-web";
-import { KnownMembership } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import FacePile from "../../../../src/components/views/elements/FacePile";
 import { mkRoomMember } from "../../../test-utils";

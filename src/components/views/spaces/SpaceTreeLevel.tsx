@@ -24,7 +24,8 @@ import React, {
     RefObject,
 } from "react";
 import classNames from "classnames";
-import { KnownMembership, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
 import RoomAvatar from "../avatars/RoomAvatar";

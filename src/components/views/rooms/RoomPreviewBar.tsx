@@ -23,8 +23,8 @@ import {
     IJoinRuleEventContent,
     JoinRule,
     MatrixError,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import classNames from "classnames";
 import { RoomPreviewOpts, RoomViewLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 

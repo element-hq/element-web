@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventType, RoomType, JoinRule, Preset, Room, RoomEvent, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { EventType, RoomType, JoinRule, Preset, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import React, { useCallback, useContext, useRef, useState } from "react";
 

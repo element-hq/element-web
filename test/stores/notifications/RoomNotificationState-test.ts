@@ -22,8 +22,8 @@ import {
     NotificationCountType,
     EventType,
     MatrixEvent,
-    KnownMembership,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mkEvent, muteRoom, stubClient } from "../../test-utils";
