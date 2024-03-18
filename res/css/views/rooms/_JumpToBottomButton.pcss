@@ -39,13 +39,12 @@ limitations under the License.
     /* with text-align in parent */
     display: inline-block;
     padding: 0 4px;
-    color: $accent-fg-color;
-    background-color: $muted-fg-color;
+    color: var(--cpd-color-text-on-solid-primary);
+    background-color: var(--cpd-color-icon-secondary);
 }
 
 .mx_JumpToBottomButton_highlight .mx_JumpToBottomButton_badge {
-    color: $secondary-accent-color;
-    background-color: $alert;
+    background-color: var(--cpd-color-icon-critical-primary);
 }
 
 .mx_JumpToBottomButton_scrollDown {
@@ -55,7 +54,7 @@ limitations under the License.
     border-radius: 19px;
     box-sizing: border-box;
     background: $background;
-    border: 1.3px solid $muted-fg-color;
+    border: 1.3px solid var(--cpd-color-icon-tertiary);
     cursor: pointer;
 }
 
@@ -68,5 +67,5 @@ limitations under the License.
     mask-size: 20px;
     mask-position: center 6px;
     transform: rotate(180deg);
-    background: $muted-fg-color;
+    background: var(--cpd-color-icon-tertiary);
 }
