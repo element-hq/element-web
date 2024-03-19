@@ -2097,10 +2097,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@matrix-org/analytics-events@^0.10.0":
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.10.0.tgz#d4d8b7859a516e888050d616ebbb0da539a15b1e"
-  integrity sha512-qzi7szEWxcl3nW2LDfq+SvFH/of/B/lwhfFUelhihGfr5TBPwgqM95Euc9GeYMZkU8Xm/2f5hYfA0ZleD6RKaA==
+"@matrix-org/analytics-events@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.12.0.tgz#2e48c75eb39c38cbb52f0cd479eed4c835064e9f"
+  integrity sha512-J/rP11P2Q9PbH7iUzHIthnAQlJL1HEorUjtdd/yCrXDSk0Gw4dNe1FM2P75E6m2lUl2yJQhzGuahMmqe9xOWaw==
 
 "@matrix-org/emojibase-bindings@^1.1.2":
   version "1.1.3"
@@ -8258,25 +8258,6 @@ matrix-js-sdk@31.6.0-rc.0:
     unhomoglyph "^1.0.6"
     uuid "9"
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "31.5.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/8e0ef5ff2cd927efa1bd22cabb075a14b10e39d5"
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^4.6.0"
-    another-json "^0.2.0"
-    bs58 "^5.0.0"
-    content-type "^1.0.4"
-    jwt-decode "^4.0.0"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.6.0"
-    oidc-client-ts "^3.0.1"
-    p-retry "4"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-    uuid "9"
-
 matrix-mock-request@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.6.0.tgz#0855c10b250668ce542b697251087be2bcc23f92"
@@ -8284,12 +8265,13 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.95.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/94bd7989b77947c051ecb8cf8332528787fac5ca"
+matrix-react-sdk@3.96.0-rc.0:
+  version "3.96.0-rc.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.96.0-rc.0.tgz#8a309ff67a298044191d2f0727b56d51baa4ffed"
+  integrity sha512-Z3CoprCh6DMg5F2t7I2LZ2xaY8rTF7E8O+P1DNrROfDZ5aM40HpdJZ5DSA4v6Kvsu44a9b195qhu+Sj3th2M0A==
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/analytics-events" "^0.10.0"
+    "@matrix-org/analytics-events" "^0.12.0"
     "@matrix-org/emojibase-bindings" "^1.1.2"
     "@matrix-org/matrix-wysiwyg" "2.17.0"
     "@matrix-org/olm" "3.2.15"
@@ -8330,7 +8312,7 @@ matrix-mock-request@^2.5.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "31.6.0-rc.0"
     matrix-widget-api "^1.5.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
