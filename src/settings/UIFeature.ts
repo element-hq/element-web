@@ -41,6 +41,9 @@ export const enum UIFeature {
     CreateRoomE2eeSection = "UIFeature.createRoomE2eeSection",
     CreateRoomShowJoinRuleDropdown = "UIFeature.createRoomShowJoinRuleDropdown",
     CreateRoomShowAdvancedSettings = "UIFeature.createRoomShowAdvancedSettings",
+    RoomSummaryFilesOption = "UIFeature.roomSummaryFilesOption",
+    RoomSummaryCopyLink = "UIFeature.roomSummaryCopyLink",
+    NewRoomIntroInviteThisRoom = "UIFeature.newRoomIntroInviteThisRoom",
 }
 
 export enum UIComponent {

@@ -33,10 +33,11 @@ import EventTileBubble from "../messages/EventTileBubble";
 import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import { LocalRoom } from "../../../models/LocalRoom";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
+import SettingsStore from "../../../settings/SettingsStore";
 
 function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): boolean {
     const isEncrypted: boolean = matrixClient.isRoomEncrypted(room.roomId);
@@ -208,15 +209,19 @@ const NewRoomIntro: React.FC = () => {
         } else if (room.canInvite(cli.getSafeUserId()) && shouldShowComponent(UIComponent.InviteUsers)) {
             buttons = (
                 <div className="mx_NewRoomIntro_buttons">
-                    <AccessibleButton
-                        className="mx_NewRoomIntro_inviteButton"
-                        kind="primary"
-                        onClick={() => {
-                            defaultDispatcher.dispatch({ action: "view_invite", roomId });
-                        }}
-                    >
-                        {_t("room|invite_this_room")}
-                    </AccessibleButton>
+                    {SettingsStore.getValue(UIFeature.NewRoomIntroInviteThisRoom) && (
+                        <>
+                            <AccessibleButton
+                                className="mx_NewRoomIntro_inviteButton"
+                                kind="primary"
+                                onClick={() => {
+                                    defaultDispatcher.dispatch({ action: "view_invite", roomId });
+                                }}
+                            >
+                                {_t("room|invite_this_room")}
+                            </AccessibleButton>
+                        </>
+                    )}
                 </div>
             );
         }
