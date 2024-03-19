@@ -57,6 +57,7 @@ import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctionalMembers";
 import { isVideoRoom } from "../utils/video-rooms";
 import { FontWatcher } from "../settings/watchers/FontWatcher";
+import { JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-types";
 
 const TIMEOUT_MS = 16000;
 
@@ -321,18 +322,13 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     private beforeUnload = (): void => this.setDisconnected();
 }
 
-export interface JitsiCallMemberContent {
-    // Connected device IDs
-    devices: string[];
-    // Time at which this state event should be considered stale
-    expires_ts: number;
-}
+export type { JitsiCallMemberContent };
 
 /**
  * A group call using Jitsi as a backend.
  */
 export class JitsiCall extends Call {
-    public static readonly MEMBER_EVENT_TYPE = "io.element.video.member";
+    public static readonly MEMBER_EVENT_TYPE = JitsiCallMemberEventType;
     public readonly STUCK_DEVICE_TIMEOUT_MS = 1000 * 60 * 60; // 1 hour
 
     private resendDevicesTimer: number | null = null;
