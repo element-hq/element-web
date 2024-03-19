@@ -223,7 +223,7 @@
         "stylelint-config-standard": "^36.0.0",
         "stylelint-scss": "^6.0.0",
         "ts-node": "^10.9.1",
-        "typescript": "5.3.3"
+        "typescript": "5.4.2"
     },
     "peerDependencies": {
         "postcss": "^8.4.19",
