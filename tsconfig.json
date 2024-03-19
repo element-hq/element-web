@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "useDefineForClassFields": true,
         "experimentalDecorators": false,
         "emitDecoratorMetadata": false,
         "resolveJsonModule": true,

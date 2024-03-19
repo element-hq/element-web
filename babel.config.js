@@ -10,18 +10,20 @@ module.exports = {
                     "last 2 Safari versions",
                     "last 2 Edge versions",
                 ],
+                include: [
+                    "@babel/plugin-proposal-nullish-coalescing-operator",
+                    "@babel/plugin-proposal-class-properties",
+                ],
             },
         ],
-        "@babel/preset-typescript",
+        ["@babel/preset-typescript", { allowDeclareFields: true }],
         "@babel/preset-react",
     ],
     plugins: [
         "@babel/plugin-proposal-export-default-from",
         "@babel/plugin-proposal-numeric-separator",
-        "@babel/plugin-proposal-class-properties",
         "@babel/plugin-proposal-object-rest-spread",
         "@babel/plugin-proposal-optional-chaining",
-        "@babel/plugin-proposal-nullish-coalescing-operator",
 
         // transform logical assignment (??=, ||=, &&=). preset-env doesn't
         // normally bother with these (presumably because all the target
