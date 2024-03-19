@@ -1892,6 +1892,7 @@
             "forget": "Forget Room",
             "low_priority": "Low Priority",
             "mark_read": "Mark as read",
+            "mark_unread": "Mark as unread",
             "mentions_only": "Mentions only",
             "notifications_default": "Match default setting",
             "notifications_mute": "Mute room",
