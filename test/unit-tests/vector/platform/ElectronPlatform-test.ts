@@ -284,6 +284,41 @@ describe("ElectronPlatform", () => {
         });
     });
 
+    describe("generic secrets", () => {
+        const secretKey = "secret-key";
+        const secretValue = "secret-value";
+
+        it("makes correct ipc call to get secret", () => {
+            const platform = new ElectronPlatform();
+            mockElectron.send.mockClear();
+            platform.getPlatformSecret(secretKey);
+
+            const [, { name, args }] = mockElectron.send.mock.calls[0];
+            expect(name).toEqual("getSecret");
+            expect(args).toEqual([secretKey]);
+        });
+
+        it("makes correct ipc call to save secret", () => {
+            const platform = new ElectronPlatform();
+            mockElectron.send.mockClear();
+            platform.savePlatformSecret(secretKey, secretValue);
+
+            const [, { name, args }] = mockElectron.send.mock.calls[0];
+            expect(name).toEqual("saveSecret");
+            expect(args).toEqual([secretKey, secretValue]);
+        });
+
+        it("makes correct ipc call to destroy pickle key", () => {
+            const platform = new ElectronPlatform();
+            mockElectron.send.mockClear();
+            platform.destroyPlatformSecret(secretKey);
+
+            const [, { name, args }] = mockElectron.send.mock.calls[0];
+            expect(name).toEqual("destroySecret");
+            expect(args).toEqual([secretKey]);
+        });
+    });
+
     describe("versions", () => {
         it("calls install update", () => {
             const platform = new ElectronPlatform();
