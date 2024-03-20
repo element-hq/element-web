@@ -46,6 +46,7 @@ import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import classNames from "classnames";
 import { sortBy, uniqBy } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
+import { SpaceChildEventContent } from "matrix-js-sdk/src/types";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
@@ -726,7 +727,7 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
                             const existingContent = hierarchy.getRelation(parentId, childId)?.content;
                             if (!existingContent || existingContent.suggested === suggested) continue;
 
-                            const content = {
+                            const content: SpaceChildEventContent = {
                                 ...existingContent,
                                 suggested: !selectionAllSuggested,
                             };

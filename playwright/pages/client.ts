@@ -31,6 +31,7 @@ import type {
     Visibility,
     UploadOpts,
     Upload,
+    StateEvents,
 } from "matrix-js-sdk/src/matrix";
 import { Credentials } from "../plugins/homeserver";
 
@@ -407,7 +408,7 @@ export class Client {
         const client = await this.prepareClient();
         return client.evaluate(
             async (client, { roomId, eventType, content, stateKey }) => {
-                return client.sendStateEvent(roomId, eventType, content, stateKey);
+                return client.sendStateEvent(roomId, eventType as keyof StateEvents, content, stateKey);
             },
             { roomId, eventType, content, stateKey },
         );

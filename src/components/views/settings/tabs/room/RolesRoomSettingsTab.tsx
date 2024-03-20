@@ -18,6 +18,7 @@ import React from "react";
 import { EventType, RoomMember, RoomState, RoomStateEvent, Room, IContent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle, get } from "lodash";
+import { RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
 
 import { _t, _td, TranslationKey } from "../../../../../languageHandler";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -178,7 +179,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         const client = this.context;
         const room = this.props.room;
         const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
-        let plContent = plEvent?.getContent() ?? {};
+        let plContent = plEvent?.getContent<RoomPowerLevelsEventContent>() ?? {};
 
         // Clone the power levels just in case
         plContent = Object.assign({}, plContent);
@@ -192,7 +193,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         } else {
             const keyPath = powerLevelKey.split(".");
             let parentObj: IContent = {};
-            let currentObj = plContent;
+            let currentObj: IContent = plContent;
             for (const key of keyPath) {
                 if (!currentObj[key]) {
                     currentObj[key] = {};
@@ -222,7 +223,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         const client = this.context;
         const room = this.props.room;
         const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
-        let plContent = plEvent?.getContent() ?? {};
+        let plContent = plEvent?.getContent<RoomPowerLevelsEventContent>() ?? {};
 
         // Clone the power levels just in case
         plContent = Object.assign({}, plContent);

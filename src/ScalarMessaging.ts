@@ -291,7 +291,7 @@ Response:
 
 */
 
-import { IContent, MatrixEvent, IEvent } from "matrix-js-sdk/src/matrix";
+import { IContent, MatrixEvent, IEvent, StateEvents } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
@@ -721,7 +721,7 @@ async function getOpenIdToken(event: MessageEvent<any>): Promise<void> {
 
 async function sendEvent(
     event: MessageEvent<{
-        type: string;
+        type: keyof StateEvents;
         state_key?: string;
         content?: IContent;
     }>,

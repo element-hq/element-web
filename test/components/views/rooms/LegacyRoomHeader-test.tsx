@@ -24,6 +24,7 @@ import {
     RoomStateEvent,
     PendingEventOrdering,
     ISearchResults,
+    IContent,
 } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
@@ -111,7 +112,7 @@ describe("LegacyRoomHeader", () => {
                 room: roomId,
                 user: alice.userId,
                 skey: stateKey,
-                content,
+                content: content as IContent,
             });
             room.addLiveEvents([event]);
             return { event_id: event.getId()! };
