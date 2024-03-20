@@ -26,7 +26,7 @@ limitations under the License.
     overflow: hidden;
     cursor: pointer;
 
-    color: $accent-fg-color !important; /* To override .markdown-body */
+    color: var(--cpd-color-text-on-solid-primary) !important; /* To override .markdown-body */
     background-color: $pill-bg-color !important; /* To override .markdown-body */
 
     > * {
@@ -35,7 +35,7 @@ limitations under the License.
 
     &.mx_UserPill_me,
     &.mx_AtRoomPill {
-        background-color: $alert !important; /* To override .markdown-body */
+        background-color: var(--cpd-color-bg-critical-primary) !important; /* To override .markdown-body */
     }
 
     &:hover {
@@ -43,12 +43,14 @@ limitations under the License.
     }
 
     &.mx_UserPill_me:hover {
-        background-color: #ff6b75 !important; /* To override .markdown-body | same on both themes */
+        background-color: var(
+            --cpd-color-bg-critical-hovered
+        ) !important; /* To override .markdown-body | same on both themes */
     }
 
     /* We don't want to indicate clickability */
     &.mx_AtRoomPill:hover {
-        background-color: $alert !important; /* To override .markdown-body */
+        background-color: var(--cpd-color-bg-critical-primary) !important; /* To override .markdown-body */
         cursor: unset;
     }
 

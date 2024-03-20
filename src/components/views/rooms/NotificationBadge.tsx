@@ -102,7 +102,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
         if (notification.isIdle && !notification.knocked) return null;
         if (hideIfDot && notification.level < NotificationLevel.Notification) {
             // This would just be a dot and we've been told not to show dots, so don't show it
-            if (!notification.hasUnreadCount) return null;
+            return null;
         }
 
         const commonProps: React.ComponentProps<typeof StatelessNotificationBadge> = {

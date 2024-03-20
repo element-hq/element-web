@@ -31,3 +31,10 @@ declare global {
         matrixcs: typeof Matrix;
     }
 }
+
+// Workaround for lack of strict mode not resolving complex types correctly
+declare module "matrix-js-sdk/src/http-api/index.ts" {
+    interface UploadResponse {
+        json(): Promise<object>;
+    }
+}

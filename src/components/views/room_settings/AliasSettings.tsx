@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 import React, { ChangeEvent, ContextType, createRef, SyntheticEvent } from "react";
-import { IContent, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { RoomCanonicalAliasEventContent } from "matrix-js-sdk/src/types";
 
 import EditableItemList from "../elements/EditableItemList";
 import { _t } from "../../../languageHandler";
@@ -169,7 +170,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
             updatingCanonicalAlias: true,
         });
 
-        const eventContent: IContent = {
+        const eventContent: RoomCanonicalAliasEventContent = {
             alt_aliases: this.state.altAliases,
         };
 
@@ -197,7 +198,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
             updatingCanonicalAlias: true,
         });
 
-        const eventContent: IContent = {};
+        const eventContent: RoomCanonicalAliasEventContent = {};
 
         if (this.state.canonicalAlias) {
             eventContent["alias"] = this.state.canonicalAlias;

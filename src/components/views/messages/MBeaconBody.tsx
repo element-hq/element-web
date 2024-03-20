@@ -38,12 +38,11 @@ import { isSelfLocation, LocationShareError } from "../../../utils/location";
 import { BeaconDisplayStatus, getBeaconDisplayStatus } from "../beacon/displayStatus";
 import BeaconStatus from "../beacon/BeaconStatus";
 import OwnBeaconStatus from "../beacon/OwnBeaconStatus";
-import Map from "../location/Map";
+import { Map, SmartMarker } from "../location";
 import { MapError } from "../location/MapError";
 import MapFallback from "../location/MapFallback";
-import SmartMarker from "../location/SmartMarker";
 import { GetRelationsForEvent } from "../rooms/EventTile";
-import BeaconViewDialog from "../beacon/BeaconViewDialog";
+import { BeaconViewDialog } from "../beacon";
 import { IBodyProps } from "./IBodyProps";
 
 const useBeaconState = (

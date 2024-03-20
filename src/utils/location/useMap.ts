@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import { useEffect, useState } from "react";
-import { Map as MapLibreMap } from "maplibre-gl";
 
+import type { Map as MapLibreMap } from "maplibre-gl";
 import { createMap } from "./map";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 

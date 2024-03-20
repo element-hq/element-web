@@ -22,6 +22,7 @@ import {
     NotificationCountType,
     EventType,
     MatrixEvent,
+    RoomEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
@@ -81,7 +82,7 @@ describe("RoomNotificationState", () => {
         room.setUnreadNotificationCount(NotificationCountType.Total, greys);
     }
 
-    it("Updates on event decryption", () => {
+    it("updates on event decryption", () => {
         const roomNotifState = new RoomNotificationState(room, true);
         const listener = jest.fn();
         roomNotifState.addListener(NotificationStateEvents.Update, listener);
@@ -91,6 +92,36 @@ describe("RoomNotificationState", () => {
         room.getUnreadNotificationCount = jest.fn().mockReturnValue(1);
         client.emit(MatrixEventEvent.Decrypted, testEvent);
         expect(listener).toHaveBeenCalled();
+    });
+
+    it("emits an Update event on marked unread room account data", () => {
+        const roomNotifState = new RoomNotificationState(room, true);
+        const listener = jest.fn();
+        roomNotifState.addListener(NotificationStateEvents.Update, listener);
+        const accountDataEvent = {
+            getType: () => "com.famedly.marked_unread",
+            getContent: () => {
+                return { unread: true };
+            },
+        } as unknown as MatrixEvent;
+        room.getAccountData = jest.fn().mockReturnValue(accountDataEvent);
+        room.emit(RoomEvent.AccountData, accountDataEvent, room);
+        expect(listener).toHaveBeenCalled();
+    });
+
+    it("does not update on other account data", () => {
+        const roomNotifState = new RoomNotificationState(room, true);
+        const listener = jest.fn();
+        roomNotifState.addListener(NotificationStateEvents.Update, listener);
+        const accountDataEvent = {
+            getType: () => "else.something",
+            getContent: () => {
+                return {};
+            },
+        } as unknown as MatrixEvent;
+        room.getAccountData = jest.fn().mockReturnValue(accountDataEvent);
+        room.emit(RoomEvent.AccountData, accountDataEvent, room);
+        expect(listener).not.toHaveBeenCalled();
     });
 
     it("removes listeners", () => {

@@ -18,7 +18,7 @@ import { textToHtmlRainbow } from "../../src/utils/colour";
 
 describe("textToHtmlRainbow", () => {
     it("correctly transform text to html without splitting the emoji in two", () => {
-        expect(textToHtmlRainbow("🐻")).toBe('<font color="#ff00be">🐻</font>');
-        expect(textToHtmlRainbow("🐕‍🦺")).toBe('<font color="#ff00be">🐕‍🦺</font>');
+        expect(textToHtmlRainbow("🐻")).toBe('<span data-mx-color="#ff00be">🐻</span>');
+        expect(textToHtmlRainbow("🐕‍🦺")).toBe('<span data-mx-color="#ff00be">🐕‍🦺</span>');
     });
 });

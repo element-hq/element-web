@@ -17,7 +17,15 @@ limitations under the License.
 import EventEmitter from "events";
 import { mocked } from "jest-mock";
 import { waitFor } from "@testing-library/react";
-import { RoomType, Room, RoomEvent, MatrixEvent, RoomStateEvent, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
+import {
+    RoomType,
+    Room,
+    RoomEvent,
+    MatrixEvent,
+    RoomStateEvent,
+    PendingEventOrdering,
+    IContent,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 // eslint-disable-next-line no-restricted-imports
@@ -117,7 +125,7 @@ const setUpClientRoomAndStores = (): {
             room: roomId,
             user: alice.userId,
             skey: stateKey,
-            content,
+            content: content as IContent,
         });
         room.addLiveEvents([event]);
         return { event_id: event.getId()! };

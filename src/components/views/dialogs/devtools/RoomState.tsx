@@ -38,7 +38,7 @@ export const StateEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) =>
     );
 
     const onSend = async ([eventType, stateKey]: string[], content: IContent): Promise<void> => {
-        await cli.sendStateEvent(context.room.roomId, eventType, content, stateKey);
+        await cli.sendStateEvent(context.room.roomId, eventType as any, content, stateKey);
     };
 
     const defaultContent = mxEvent ? stringify(mxEvent.getContent()) : undefined;

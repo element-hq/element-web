@@ -291,7 +291,7 @@ Response:
 
 */
 
-import { IContent, MatrixEvent, IEvent } from "matrix-js-sdk/src/matrix";
+import { IContent, MatrixEvent, IEvent, StateEvents } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -725,7 +725,7 @@ async function getOpenIdToken(event: MessageEvent<any>): Promise<void> {
 
 async function sendEvent(
     event: MessageEvent<{
-        type: string;
+        type: keyof StateEvents;
         state_key?: string;
         content?: IContent;
     }>,

@@ -67,7 +67,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
-        "@matrix-org/analytics-events": "^0.10.0",
+        "@matrix-org/analytics-events": "^0.12.0",
         "@matrix-org/emojibase-bindings": "^1.1.2",
         "@matrix-org/matrix-wysiwyg": "2.17.0",
         "@matrix-org/olm": "3.2.15",
@@ -116,7 +116,7 @@
         "opus-recorder": "^8.0.3",
         "pako": "^2.0.3",
         "png-chunks-extract": "^1.0.0",
-        "posthog-js": "1.110.0",
+        "posthog-js": "1.116.0",
         "proposal-temporal": "^0.9.0",
         "qrcode": "1.5.3",
         "re-resizable": "^6.9.0",
@@ -223,7 +223,7 @@
         "stylelint-config-standard": "^36.0.0",
         "stylelint-scss": "^6.0.0",
         "ts-node": "^10.9.1",
-        "typescript": "5.3.3"
+        "typescript": "5.4.2"
     },
     "peerDependencies": {
         "postcss": "^8.4.19",

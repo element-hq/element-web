@@ -21,12 +21,26 @@ import {
     Room,
     LocalNotificationSettings,
     ReceiptType,
+    IMarkedUnreadEvent,
 } from "matrix-js-sdk/src/matrix";
 import { IndicatorIcon } from "@vector-im/compound-web";
 
 import SettingsStore from "../settings/SettingsStore";
 import { NotificationLevel } from "../stores/notifications/NotificationLevel";
 import { doesRoomHaveUnreadMessages } from "../Unread";
+
+// MSC2867 is not yet spec at time of writing. We read from both stable
+// and unstable prefixes and accept the risk that the format may change,
+// since the stable prefix is not actually defined yet.
+
+/**
+ * Unstable identifier for the marked_unread event, per MSC2867
+ */
+export const MARKED_UNREAD_TYPE_UNSTABLE = "com.famedly.marked_unread";
+/**
+ * Stable identifier for the marked_unread event
+ */
+export const MARKED_UNREAD_TYPE_STABLE = "m.marked_unread";
 
 export const deviceNotificationSettingsKeys = [
     "notificationsEnabled",
@@ -74,6 +88,8 @@ export function localNotificationsAreSilenced(cli: MatrixClient): boolean {
 export async function clearRoomNotification(room: Room, client: MatrixClient): Promise<{} | undefined> {
     const lastEvent = room.getLastLiveEvent();
 
+    await setMarkedUnreadState(room, client, false);
+
     try {
         if (lastEvent) {
             const receiptType = SettingsStore.getValue("sendReadReceipts", room.roomId)
@@ -115,6 +131,39 @@ export function clearAllNotifications(client: MatrixClient): Promise<Array<{} | 
     }, []);
 
     return Promise.all(receiptPromises);
+}
+
+/**
+ * Gives the marked_unread state of the given room
+ * @param room The room to check
+ * @returns - The marked_unread state of the room, or undefined if no explicit state is set.
+ */
+export function getMarkedUnreadState(room: Room): boolean | undefined {
+    const currentStateStable = room.getAccountData(MARKED_UNREAD_TYPE_STABLE)?.getContent<IMarkedUnreadEvent>()?.unread;
+    const currentStateUnstable = room
+        .getAccountData(MARKED_UNREAD_TYPE_UNSTABLE)
+        ?.getContent<IMarkedUnreadEvent>()?.unread;
+    return currentStateStable ?? currentStateUnstable;
+}
+
+/**
+ * Sets the marked_unread state of the given room. This sets some room account data that indicates to
+ * clients that the user considers this room to be 'unread', but without any actual notifications.
+ *
+ * @param room The room to set
+ * @param client MatrixClient object to use
+ * @param unread The new marked_unread state of the room
+ */
+export async function setMarkedUnreadState(room: Room, client: MatrixClient, unread: boolean): Promise<void> {
+    // if there's no event, treat this as false as we don't need to send the flag to clear it if the event isn't there
+    const currentState = getMarkedUnreadState(room);
+
+    if (Boolean(currentState) !== unread) {
+        // Assuming MSC2867 passes FCP with no changes, we should update to start writing
+        // the flag to the stable prefix (or both) and then ultimately use only the
+        // stable prefix.
+        await client.setRoomAccountData(room.roomId, MARKED_UNREAD_TYPE_UNSTABLE, { unread });
+    }
 }
 
 /**

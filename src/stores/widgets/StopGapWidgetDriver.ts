@@ -43,6 +43,7 @@ import {
     Room,
     Direction,
     THREAD_RELATION_TYPE,
+    StateEvents,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
@@ -241,7 +242,19 @@ export class StopGapWidgetDriver extends WidgetDriver {
         return allAllowed;
     }
 
+    public async sendEvent<K extends keyof StateEvents>(
+        eventType: K,
+        content: StateEvents[K],
+        stateKey?: string,
+        targetRoomId?: string,
+    ): Promise<ISendEventDetails>;
     public async sendEvent(
+        eventType: Exclude<EventType, keyof StateEvents>,
+        content: IContent,
+        stateKey: null,
+        targetRoomId?: string,
+    ): Promise<ISendEventDetails>;
+    public async sendEvent<K extends keyof StateEvents>(
         eventType: string,
         content: IContent,
         stateKey?: string | null,
@@ -255,7 +268,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         let r: { event_id: string } | null;
         if (stateKey !== null) {
             // state event
-            r = await client.sendStateEvent(roomId, eventType, content, stateKey);
+            r = await client.sendStateEvent(roomId, eventType as K, content as StateEvents[K], stateKey);
         } else if (eventType === EventType.RoomRedaction) {
             // special case: extract the `redacts` property and call redact
             r = await client.redactEvent(roomId, content["redacts"]);

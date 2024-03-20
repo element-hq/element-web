@@ -30,7 +30,7 @@ import { NotificationLevel } from "../../../stores/notifications/NotificationLev
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import { clearRoomNotification } from "../../../utils/notifications";
+import { clearRoomNotification, setMarkedUnreadState } from "../../../utils/notifications";
 import { IProps as IContextMenuProps } from "../../structures/ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuCheckbox,
@@ -45,13 +45,60 @@ import { useSettingValue } from "../../../hooks/useSettings";
 
 export interface RoomGeneralContextMenuProps extends IContextMenuProps {
     room: Room;
+    /**
+     * Called when the 'favourite' option is selected, after the menu has processed
+     * the mouse or keyboard event.
+     * @param event The event that caused the option to be selected.
+     */
     onPostFavoriteClick?: (event: ButtonEvent) => void;
+    /**
+     * Called when the 'low priority' option is selected, after the menu has processed
+     * the mouse or keyboard event.
+     * @param event The event that caused the option to be selected.
+     */
     onPostLowPriorityClick?: (event: ButtonEvent) => void;
+    /**
+     * Called when the 'invite' option is selected, after the menu has processed
+     * the mouse or keyboard event.
+     * @param event The event that caused the option to be selected.
+     */
     onPostInviteClick?: (event: ButtonEvent) => void;
+    /**
+     * Called when the 'copy link' option is selected, after the menu has processed
+     * the mouse or keyboard event.
+     * @param event The event that caused the option to be selected.
+     */
     onPostCopyLinkClick?: (event: ButtonEvent) => void;
+    /**
+     * Called when the 'settings' option is selected, after the menu has processed
+     * the mouse or keyboard event.
+     * @param event The event that caused the option to be selected.
+     */
     onPostSettingsClick?: (event: ButtonEvent) => void;
+    /**
+     * Called when the 'forget room' option is selected, after the menu has processed
+     * the mouse or keyboard event.
+     * @param event The event that caused the option to be selected.
+     */
     onPostForgetClick?: (event: ButtonEvent) => void;
+    /**
+     * Called when the 'leave' option is selected, after the menu has processed
+     * the mouse or keyboard event.
+     * @param event The event that caused the option to be selected.
+     */
     onPostLeaveClick?: (event: ButtonEvent) => void;
+    /**
+     * Called when the 'mark as read' option is selected, after the menu has processed
+     * the mouse or keyboard event.
+     * @param event The event that caused the option to be selected.
+     */
+    onPostMarkAsReadClick?: (event: ButtonEvent) => void;
+    /**
+     * Called when the 'mark as unread' option is selected, after the menu has processed
+     * the mouse or keyboard event.
+     * @param event The event that caused the option to be selected.
+     */
+    onPostMarkAsUnreadClick?: (event: ButtonEvent) => void;
 }
 
 /**
@@ -67,6 +114,8 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
     onPostSettingsClick,
     onPostLeaveClick,
     onPostForgetClick,
+    onPostMarkAsReadClick,
+    onPostMarkAsUnreadClick,
     ...props
 }) => {
     const cli = useContext(MatrixClientContext);
@@ -213,18 +262,33 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
     }
 
     const { level } = useUnreadNotifications(room);
-    const markAsReadOption: JSX.Element | null =
-        level > NotificationLevel.None ? (
-            <IconizedContextMenuCheckbox
-                onClick={() => {
-                    clearRoomNotification(room, cli);
-                    onFinished?.();
-                }}
-                active={false}
-                label={_t("room|context_menu|mark_read")}
-                iconClassName="mx_RoomGeneralContextMenu_iconMarkAsRead"
-            />
-        ) : null;
+    const markAsReadOption: JSX.Element | null = (() => {
+        if (level > NotificationLevel.None) {
+            return (
+                <IconizedContextMenuOption
+                    onClick={wrapHandler(() => {
+                        clearRoomNotification(room, cli);
+                        onFinished?.();
+                    }, onPostMarkAsReadClick)}
+                    label={_t("room|context_menu|mark_read")}
+                    iconClassName="mx_RoomGeneralContextMenu_iconMarkAsRead"
+                />
+            );
+        } else if (!roomTags.includes(DefaultTagID.Archived)) {
+            return (
+                <IconizedContextMenuOption
+                    onClick={wrapHandler(() => {
+                        setMarkedUnreadState(room, cli, true);
+                        onFinished?.();
+                    }, onPostMarkAsUnreadClick)}
+                    label={_t("room|context_menu|mark_unread")}
+                    iconClassName="mx_RoomGeneralContextMenu_iconMarkAsUnread"
+                />
+            );
+        } else {
+            return null;
+        }
+    })();
 
     const developerModeEnabled = useSettingValue<boolean>("developerMode");
     const developerToolsOption = developerModeEnabled ? (
