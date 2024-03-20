@@ -15,11 +15,10 @@ limitations under the License.
 */
 
 import * as maplibregl from "maplibre-gl";
-import { MatrixClient, MatrixEvent, M_LOCATION } from "matrix-js-sdk/src/matrix";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../languageHandler";
-import { parseGeoUri } from "./parseGeoUri";
 import { findMapStyleUrl } from "./findMapStyleUrl";
 import { LocationShareError } from "./LocationShareErrors";
 
@@ -74,32 +73,4 @@ export const createMarker = (coords: GeolocationCoordinates, element: HTMLElemen
         offset: [0, -1],
     }).setLngLat({ lon: coords.longitude, lat: coords.latitude });
     return marker;
-};
-
-export const makeMapSiteLink = (coords: GeolocationCoordinates): string => {
-    return (
-        "https://www.openstreetmap.org/" +
-        `?mlat=${coords.latitude}` +
-        `&mlon=${coords.longitude}` +
-        `#map=16/${coords.latitude}/${coords.longitude}`
-    );
-};
-
-export const createMapSiteLinkFromEvent = (event: MatrixEvent): string | null => {
-    const content = event.getContent();
-    const mLocation = content[M_LOCATION.name];
-    if (mLocation !== undefined) {
-        const uri = mLocation["uri"];
-        if (uri !== undefined) {
-            const geoCoords = parseGeoUri(uri);
-            return geoCoords ? makeMapSiteLink(geoCoords) : null;
-        }
-    } else {
-        const geoUri = content["geo_uri"];
-        if (geoUri) {
-            const geoCoords = parseGeoUri(geoUri);
-            return geoCoords ? makeMapSiteLink(geoCoords) : null;
-        }
-    }
-    return null;
 };

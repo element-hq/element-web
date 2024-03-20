@@ -24,7 +24,7 @@ import { CollapsibleButton } from "./CollapsibleButton";
 import { MenuProps } from "../../structures/ContextMenu";
 import dis from "../../../dispatcher/dispatcher";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import LocationButton from "../location/LocationButton";
+import { LocationButton } from "../location";
 import Modal from "../../../Modal";
 import PollCreateDialog from "../elements/PollCreateDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

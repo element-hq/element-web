@@ -16,22 +16,23 @@ limitations under the License.
 */
 
 import React from "react";
-import hljs from "highlight.js";
 
-interface IProps {
+import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
+
+interface Props {
     language?: string;
     children: string;
 }
 
-export default class SyntaxHighlight extends React.PureComponent<IProps> {
-    public render(): React.ReactNode {
-        const { children: content, language } = this.props;
-        const highlighted = language ? hljs.highlight(content, { language }) : hljs.highlightAuto(content);
+export default function SyntaxHighlight({ children, language }: Props): JSX.Element {
+    const highlighted = useAsyncMemo(async () => {
+        const { default: highlight } = await import("highlight.js");
+        return language ? highlight.highlight(children, { language }) : highlight.highlightAuto(children);
+    }, [language, children]);
 
-        return (
-            <pre className={`mx_SyntaxHighlight hljs language-${highlighted.language}`}>
-                <code dangerouslySetInnerHTML={{ __html: highlighted.value }} />
-            </pre>
-        );
-    }
+    return (
+        <pre className={`mx_SyntaxHighlight hljs language-${highlighted?.language}`}>
+            {highlighted ? <code dangerouslySetInnerHTML={{ __html: highlighted.value }} /> : children}
+        </pre>
+    );
 }

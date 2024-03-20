@@ -18,7 +18,8 @@ import React, { ReactNode, useCallback, useEffect, useState } from "react";
 import * as maplibregl from "maplibre-gl";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 
-import { createMarker, parseGeoUri } from "../../../utils/location";
+import { parseGeoUri } from "../../../utils/location";
+import { createMarker } from "../../../utils/location/map";
 import Marker from "./Marker";
 
 const useMapMarker = (
@@ -66,7 +67,7 @@ const useMapMarker = (
     };
 };
 
-interface SmartMarkerProps {
+export interface SmartMarkerProps {
     map: maplibregl.Map;
     geoUri: string;
     id?: string;

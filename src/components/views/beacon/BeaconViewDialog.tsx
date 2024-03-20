@@ -36,7 +36,7 @@ import MapFallback from "../location/MapFallback";
 import { MapError } from "../location/MapError";
 import { LocationShareError } from "../../../utils/location";
 
-interface IProps {
+export interface IProps {
     roomId: Room["roomId"];
     matrixClient: MatrixClient;
     // open the map centered on this beacon's location
