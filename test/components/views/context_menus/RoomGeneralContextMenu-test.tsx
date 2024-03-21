@@ -140,7 +140,25 @@ describe("RoomGeneralContextMenu", () => {
         const markAsReadBtn = getByLabelText(container, "Mark as read");
         fireEvent.click(markAsReadBtn);
 
+        await new Promise(setImmediate);
+
         expect(mockClient.sendReadReceipt).toHaveBeenCalledWith(event, ReceiptType.Read, true);
+        expect(onFinished).toHaveBeenCalled();
+    });
+
+    it("marks the room as unread", async () => {
+        room.updateMyMembership("join");
+
+        const { container } = getComponent({});
+
+        const markAsUnreadBtn = getByLabelText(container, "Mark as unread");
+        fireEvent.click(markAsUnreadBtn);
+
+        await new Promise(setImmediate);
+
+        expect(mockClient.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "com.famedly.marked_unread", {
+            unread: true,
+        });
         expect(onFinished).toHaveBeenCalled();
     });
 

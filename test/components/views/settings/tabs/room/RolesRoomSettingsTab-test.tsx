@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult, screen, waitFor } from "@testing-library/react";
+import { fireEvent, getByRole, render, RenderResult, screen, waitFor } from "@testing-library/react";
 import { MatrixClient, EventType, MatrixEvent, Room, RoomMember, ISendEventResponse } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import { defer } from "matrix-js-sdk/src/utils";
+import userEvent from "@testing-library/user-event";
 
 import RolesRoomSettingsTab from "../../../../../../src/components/views/settings/tabs/room/RolesRoomSettingsTab";
 import { mkStubRoom, withClientContextRenderOptions, stubClient } from "../../../../../test-utils";
@@ -261,6 +262,11 @@ describe("RolesRoomSettingsTab", () => {
         const selector = container.querySelector(`[placeholder="${cli.getUserId()}"]`)!;
         fireEvent.change(selector, { target: { value: "50" } });
         expect(selector).toHaveValue("50");
+
+        // Get the apply button of the privileged user section and click on it
+        const privilegedUsersSection = screen.getByRole("group", { name: "Privileged Users" });
+        const applyButton = getByRole(privilegedUsersSection, "button", { name: "Apply" });
+        await userEvent.click(applyButton);
 
         deferred.reject("Error");
         await waitFor(() => expect(selector).toHaveValue("100"));

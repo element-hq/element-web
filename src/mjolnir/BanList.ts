@@ -16,12 +16,14 @@ limitations under the License.
 
 // Inspiration largely taken from Mjolnir itself
 
+import { EventType } from "matrix-js-sdk/src/matrix";
+
 import { ListRule, RECOMMENDATION_BAN, recommendationToStable } from "./ListRule";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
-export const RULE_USER = "m.policy.rule.user";
-export const RULE_ROOM = "m.policy.rule.room";
-export const RULE_SERVER = "m.policy.rule.server";
+export const RULE_USER = EventType.PolicyRuleUser;
+export const RULE_ROOM = EventType.PolicyRuleRoom;
+export const RULE_SERVER = EventType.PolicyRuleServer;
 
 // m.room.* events are legacy from when MSC2313 changed to m.policy.* last minute.
 export const USER_RULE_TYPES = [RULE_USER, "m.room.rule.user", "org.matrix.mjolnir.rule.user"];
@@ -29,7 +31,9 @@ export const ROOM_RULE_TYPES = [RULE_ROOM, "m.room.rule.room", "org.matrix.mjoln
 export const SERVER_RULE_TYPES = [RULE_SERVER, "m.room.rule.server", "org.matrix.mjolnir.rule.server"];
 export const ALL_RULE_TYPES = [...USER_RULE_TYPES, ...ROOM_RULE_TYPES, ...SERVER_RULE_TYPES];
 
-export function ruleTypeToStable(rule: string): string | null {
+export function ruleTypeToStable(
+    rule: string,
+): EventType.PolicyRuleUser | EventType.PolicyRuleRoom | EventType.PolicyRuleServer | null {
     if (USER_RULE_TYPES.includes(rule)) {
         return RULE_USER;
     }
@@ -72,7 +76,7 @@ export class BanList {
             {
                 entity: entity,
                 reason: reason,
-                recommendation: recommendationToStable(RECOMMENDATION_BAN, true),
+                recommendation: recommendationToStable(RECOMMENDATION_BAN, true)!,
             },
             "rule:" + entity,
         );

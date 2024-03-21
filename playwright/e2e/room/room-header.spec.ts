@@ -18,6 +18,7 @@ import { Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { ElementAppPage } from "../../pages/ElementAppPage";
+import type { Container } from "../../../src/stores/widgets/types";
 
 test.describe("Room Header", () => {
     test.use({
@@ -227,7 +228,7 @@ test.describe("Room Header", () => {
                         {
                             widgets: {
                                 [id]: {
-                                    container: "top",
+                                    container: "top" as Container,
                                     index: 1,
                                     width: 100,
                                     height: 0,

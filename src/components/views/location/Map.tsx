@@ -139,7 +139,7 @@ const onGeolocateError = (e: GeolocationPositionError): void => {
     });
 };
 
-interface MapProps {
+export interface MapProps {
     id: string;
     interactive?: boolean;
     /**

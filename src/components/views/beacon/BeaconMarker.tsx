@@ -20,7 +20,7 @@ import { Beacon, BeaconEvent, LocationAssetType } from "matrix-js-sdk/src/matrix
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
-import SmartMarker from "../location/SmartMarker";
+import { SmartMarker } from "../location";
 
 interface Props {
     map: maplibregl.Map;

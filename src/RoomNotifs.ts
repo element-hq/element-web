@@ -29,6 +29,7 @@ import { getUnsentMessages } from "./components/structures/RoomStatusBar";
 import { doesRoomHaveUnreadMessages, doesRoomOrThreadHaveUnreadMessages } from "./Unread";
 import { EffectiveMembership, getEffectiveMembership, isKnockDenied } from "./utils/membership";
 import SettingsStore from "./settings/SettingsStore";
+import { getMarkedUnreadState } from "./utils/notifications";
 
 export enum RoomNotifState {
     AllMessagesLoud = "all_messages_loud",
@@ -279,7 +280,8 @@ export function determineUnreadState(
         return { symbol: null, count: trueCount, level: NotificationLevel.Highlight };
     }
 
-    if (greyNotifs > 0) {
+    const markedUnreadState = getMarkedUnreadState(room);
+    if (greyNotifs > 0 || markedUnreadState) {
         return { symbol: null, count: trueCount, level: NotificationLevel.Notification };
     }
 

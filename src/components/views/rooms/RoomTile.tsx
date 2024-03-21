@@ -362,6 +362,12 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
                         onPostLeaveClick={(ev: ButtonEvent) =>
                             PosthogTrackers.trackInteraction("WebRoomListRoomTileContextMenuLeaveItem", ev)
                         }
+                        onPostMarkAsReadClick={(ev: ButtonEvent) =>
+                            PosthogTrackers.trackInteraction("WebRoomListRoomTileContextMenuMarkRead", ev)
+                        }
+                        onPostMarkAsUnreadClick={(ev: ButtonEvent) =>
+                            PosthogTrackers.trackInteraction("WebRoomListRoomTileContextMenuMarkUnread", ev)
+                        }
                     />
                 )}
             </React.Fragment>

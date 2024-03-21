@@ -24,7 +24,7 @@ import { aboveLeftOf, useContextMenu, MenuProps } from "../../structures/Context
 import { OverflowMenuContext } from "../rooms/MessageComposerButtons";
 import LocationShareMenu from "./LocationShareMenu";
 
-interface IProps {
+export interface IProps {
     roomId: string;
     sender: RoomMember;
     menuPosition?: MenuProps;

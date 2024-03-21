@@ -36,6 +36,13 @@ describe("StatelessNotificationBadge", () => {
         expect(container.querySelector(".mx_NotificationBadge_knocked")).toBeInTheDocument();
     });
 
+    it("has dot style for activity", () => {
+        const { container } = render(
+            <StatelessNotificationBadge symbol={null} count={3} level={NotificationLevel.Activity} />,
+        );
+        expect(container.querySelector(".mx_NotificationBadge_dot")).toBeInTheDocument();
+    });
+
     it("has badge style for notification", () => {
         const { container } = render(
             <StatelessNotificationBadge symbol={null} count={3} level={NotificationLevel.Notification} />,

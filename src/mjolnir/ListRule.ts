@@ -14,14 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// We are using experimental APIs here, so we need to disable the linter
+// eslint-disable-next-line no-restricted-imports
+import { PolicyRecommendation } from "matrix-js-sdk/src/models/invites-ignorer";
+
 import { MatrixGlob } from "../utils/MatrixGlob";
 
 // Inspiration largely taken from Mjolnir itself
 
-export const RECOMMENDATION_BAN = "m.ban";
-export const RECOMMENDATION_BAN_TYPES = [RECOMMENDATION_BAN, "org.matrix.mjolnir.ban"];
+export const RECOMMENDATION_BAN = PolicyRecommendation.Ban;
+export const RECOMMENDATION_BAN_TYPES: PolicyRecommendation[] = [
+    RECOMMENDATION_BAN,
+    "org.matrix.mjolnir.ban" as PolicyRecommendation,
+];
 
-export function recommendationToStable(recommendation: string, unstable = true): string | null {
+export function recommendationToStable(
+    recommendation: PolicyRecommendation,
+    unstable = true,
+): PolicyRecommendation | null {
     if (RECOMMENDATION_BAN_TYPES.includes(recommendation)) {
         return unstable ? RECOMMENDATION_BAN_TYPES[RECOMMENDATION_BAN_TYPES.length - 1] : RECOMMENDATION_BAN;
     }
@@ -35,7 +45,7 @@ export class ListRule {
     private readonly _reason: string;
     private readonly _kind: string;
 
-    public constructor(entity: string, action: string, reason: string, kind: string) {
+    public constructor(entity: string, action: PolicyRecommendation, reason: string, kind: string) {
         this._glob = new MatrixGlob(entity);
         this._entity = entity;
         this._action = recommendationToStable(action, false);

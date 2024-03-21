@@ -29,9 +29,7 @@ import {
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import TooltipTarget from "../elements/TooltipTarget";
 import { Alignment } from "../elements/Tooltip";
-import LocationViewDialog from "../location/LocationViewDialog";
-import Map from "../location/Map";
-import SmartMarker from "../location/SmartMarker";
+import { SmartMarker, Map, LocationViewDialog } from "../location";
 import { IBodyProps } from "./IBodyProps";
 import { createReconnectedListener } from "../../../utils/connection";
 

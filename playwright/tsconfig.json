@@ -10,6 +10,7 @@
     },
     "include": [
         "**/*.ts",
+        "../src/@types/matrix-js-sdk.d.ts",
         "../node_modules/matrix-js-sdk/src/@types/*.d.ts",
         "../node_modules/matrix-js-sdk/node_modules/@matrix-org/olm/index.d.ts"
     ]

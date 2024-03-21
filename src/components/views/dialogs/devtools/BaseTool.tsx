@@ -60,7 +60,7 @@ const BaseTool: React.FC<XOR<IMinProps, IProps>> = ({
     let actionButton: ReactNode = null;
     if (message) {
         children = message;
-    } else if (onAction) {
+    } else if (onAction && actionLabel) {
         const onActionClick = (): void => {
             onAction().then((msg) => {
                 if (typeof msg === "string") {

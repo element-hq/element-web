@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { ThreepidMedium } from "matrix-js-sdk/src/matrix";
+import { IAuthData, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, UserFriendlyError } from "../../../../languageHandler";
@@ -216,7 +216,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
         const address = this.state.verifyMsisdn;
         this.state.addTask
             ?.haveMsisdnToken(token)
-            .then(([finished] = []) => {
+            .then(([finished]: [success?: boolean, result?: IAuthData | Error | null] = []) => {
                 let newPhoneNumber = this.state.newPhoneNumber;
                 if (finished !== false) {
                     const msisdns = [...this.props.msisdns, { address, medium: ThreepidMedium.Phone }];

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, MatrixEvent, RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, RoomState, RoomStateEvent, StateEvents } from "matrix-js-sdk/src/matrix";
 import { defer } from "matrix-js-sdk/src/utils";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
@@ -24,6 +24,9 @@ import { SettingLevel } from "../SettingLevel";
 import { WatchManager } from "../WatchManager";
 
 const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
+const PREVIEW_URLS_EVENT_TYPE = "org.matrix.room.preview_urls";
+
+type RoomSettingsEventType = typeof DEFAULT_SETTINGS_EVENT_TYPE | typeof PREVIEW_URLS_EVENT_TYPE;
 
 /**
  * Gets and sets settings at the "room" level.
@@ -88,7 +91,12 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
     }
 
     // helper function to send state event then await it being echoed back
-    private async sendStateEvent(roomId: string, eventType: string, field: string, value: any): Promise<void> {
+    private async sendStateEvent<K extends RoomSettingsEventType, F extends keyof StateEvents[K]>(
+        roomId: string,
+        eventType: K,
+        field: F,
+        value: StateEvents[K][F],
+    ): Promise<void> {
         const content = this.getSettings(roomId, eventType) || {};
         content[field] = value;
 

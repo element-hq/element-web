@@ -62,6 +62,7 @@ import { ActionPayload } from "../dispatcher/payloads";
 import { CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
 import { SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
 import { ModuleRunner } from "../modules/ModuleRunner";
+import { setMarkedUnreadState } from "../utils/notifications";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -497,6 +498,8 @@ export class RoomViewStore extends EventEmitter {
             if (room) {
                 pauseNonLiveBroadcastFromOtherRoom(room, this.stores.voiceBroadcastPlaybacksStore);
                 this.doMaybeSetCurrentVoiceBroadcastPlayback(room);
+
+                await setMarkedUnreadState(room, MatrixClientPeg.safeGet(), false);
             }
         } else if (payload.room_alias) {
             // Try the room alias to room ID navigation cache first to avoid

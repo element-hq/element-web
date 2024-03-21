@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent, Room, RoomStateEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Button, Text } from "@vector-im/compound-web";
 
@@ -101,7 +101,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
 
     public onKickClick = (): void => {
         MatrixClientPeg.safeGet()
-            .sendStateEvent(this.state.roomId, "m.room.third_party_invite", {}, this.state.stateKey)
+            .sendStateEvent(this.state.roomId, EventType.RoomThirdPartyInvite, {}, this.state.stateKey)
             .catch((err) => {
                 logger.error(err);
 

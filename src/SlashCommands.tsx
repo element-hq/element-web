@@ -18,8 +18,9 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { User, IContent, Direction, ContentHelpers, MRoomTopicEventContent } from "matrix-js-sdk/src/matrix";
+import { ContentHelpers, Direction, EventType, IContent, MRoomTopicEventContent, User } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { RoomMemberEventContent } from "matrix-js-sdk/src/types";
 
 import dis from "./dispatcher/dispatcher";
 import { _t, _td, UserFriendlyError } from "./languageHandler";
@@ -239,12 +240,12 @@ export const Commands = [
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
-                const ev = cli.getRoom(roomId)?.currentState.getStateEvents("m.room.member", cli.getSafeUserId());
-                const content = {
+                const ev = cli.getRoom(roomId)?.currentState.getStateEvents(EventType.RoomMember, cli.getSafeUserId());
+                const content: RoomMemberEventContent = {
                     ...(ev ? ev.getContent() : { membership: "join" }),
                     displayname: args,
                 };
-                return success(cli.sendStateEvent(roomId, "m.room.member", content, cli.getSafeUserId()));
+                return success(cli.sendStateEvent(roomId, EventType.RoomMember, content, cli.getSafeUserId()));
             }
             return reject(this.getUsage());
         },
@@ -265,7 +266,7 @@ export const Commands = [
             return success(
                 promise.then((url) => {
                     if (!url) return;
-                    return cli.sendStateEvent(roomId, "m.room.avatar", { url }, "");
+                    return cli.sendStateEvent(roomId, EventType.RoomAvatar, { url }, "");
                 }),
             );
         },
@@ -289,12 +290,12 @@ export const Commands = [
             return success(
                 promise.then((url) => {
                     if (!url) return;
-                    const ev = room?.currentState.getStateEvents("m.room.member", userId);
-                    const content = {
+                    const ev = room?.currentState.getStateEvents(EventType.RoomMember, userId);
+                    const content: RoomMemberEventContent = {
                         ...(ev ? ev.getContent() : { membership: "join" }),
                         avatar_url: url,
                     };
-                    return cli.sendStateEvent(roomId, "m.room.member", content, userId);
+                    return cli.sendStateEvent(roomId, EventType.RoomMember, content, userId);
                 }),
             );
         },
